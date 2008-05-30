@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+  <object id="FrozenProxyCreator" type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
+    <property name="ObjectNames">
+      <list>
+        <value>frozen</value>
+      </list>
+    </property>
+    <property name="InterceptorNames">
+      <list>
+        <value>nopInterceptor</value>
+      </list>
+    </property>
+    <property name="IsFrozen" value="true"/>
+  </object>
+  
+  <object id="ProxyCreator" type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
+    <property name="ObjectNames">
+      <list>
+       <value>*Wildcards*</value>
+        <value>testObject</value>
+        <value>myTestObj*</value>
+        <value>*FamilyMember</value>
+        <value>doubleProxy</value>
+      </list>
+    </property>
+    <property name="InterceptorNames">
+      <list>
+        <value>nopInterceptor</value>
+      </list>
+    </property>
+  </object>
+
+  <object id="FactoryProxyCreator" type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
+    <property name="ObjectNames">
+      <list>
+        <value>factoryObject</value>
+      </list>
+    </property>
+    <property name="InterceptorNames">
+      <list>
+        <value>nopInterceptor</value>
+      </list>
+    </property>
+  </object>
+
+  <object id="DoubleFactoryProxyCreator" type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
+    <property name="ObjectNames">
+      <list>
+        <value>doubleProxy</value>
+      </list>
+    </property>
+    <property name="InterceptorNames">
+      <list>
+        <value>nopInterceptor</value>
+      </list>
+    </property>
+  </object>
+
+  <object id="DecoratorFactoryProxyCreator" type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
+    <property name="ObjectNames">
+      <list>
+        <value>decoratorProx*</value>
+      </list>
+    </property>
+    <property name="ProxyTargetType" value="true"/>
+    <property name="InterceptorNames">
+      <list>
+        <value>nopInterceptor</value>
+        <value>countingBeforeAdvice</value>
+      </list>
+    </property>
+  </object>
+
+  
+  <object id="IntroductionBeanNameProxyCreator" type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
+    <property name="ObjectNames">
+      <list>
+        <value>*introductionUsingDecorator</value>
+      </list>
+    </property>
+    <property name="InterceptorNames">
+      <list>
+        <value>introductionNopInterceptor</value>
+        <value>isModifiedAdvisor</value>
+      </list>
+    </property>
+  </object>
+  
+
+  <object id="factoryObject" type="Spring.Aop.Framework.AutoProxy.CreatesTestObject, Spring.Aop.Tests">
+    
+  </object>
+
+  <object id="noproxy" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="noproxy"/>
+  </object>
+
+  <object id="testObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="SimpleTestObject"/>
+  </object>
+
+  <object id="myTestObj1Name" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="SimpleTestObject1"/>
+  </object>
+
+  <object id="SmithFamilyMember" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="John Smith"/>
+  </object>
+
+  <object id="twoWildcardsTestObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="Damjan Tomic"/>
+  </object>
+  
+  <object id="doubleProxy" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="doubleProxy"/>
+  </object>
+
+  <object id="decoratorProxy" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="decoratorProxy"/>
+  </object>
+
+  <object id="frozen" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="frozen"/>
+  </object>
+
+
+  <object id="introductionUsingDecorator" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="introductionUsingDecorator"/>
+  </object>
+
+  <object id="second-introductionUsingDecorator" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="second-introductionUsingDecorator"/>
+  </object>
+
+
+  <object id="nopInterceptor" type="Spring.Aop.Interceptor.NopInterceptor, Spring.Aop.Tests"/>
+
+  <object id="countingBeforeAdvice" type="Spring.Aop.Framework.CountingBeforeAdvice, Spring.Aop.Tests"/>
+
+  <!--
+  <object id="factory-introductionUsingDecorator" type="Spring.Aop.Framework.AutoProxy.CreatesTestObject, Spring.Aop.Tests"/>
+  -->
+  
+  <object id="isModifiedAdvisor" type="Spring.Aop.Framework.IsModifiedAdvisor, Spring.Aop.Tests"/>
+
+  <object id="introductionNopInterceptor" type="Spring.Aop.Interceptor.NopInterceptor, Spring.Aop.Tests"/>
+  
+  
+</objects>

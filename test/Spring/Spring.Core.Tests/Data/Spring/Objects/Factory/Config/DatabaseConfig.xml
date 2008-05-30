@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<configuration> 
+
+  <DatabaseConfiguration>
+
+    <add key="connection.string" value="Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=Ernie;"/>
+  </DatabaseConfiguration>
+    
+</configuration>

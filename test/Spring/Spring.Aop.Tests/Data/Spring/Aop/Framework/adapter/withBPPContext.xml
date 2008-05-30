@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net">
+	<object id="testObjectTarget" type="Spring.Objects.TestObject"/>
+	
+	<object id="simpleBeforeAdvice" type="Spring.Aop.SimpleBeforeAdviceImpl"/>
+	
+	<object id="simpleBeforeAdviceAdvisor" type="Spring.Aop.Support.DefaultPointcutAdvisor">
+		<constructor-arg><ref local="simpleBeforeAdvice"/></constructor-arg>
+  </object>
+   	
+  <object id="testObject" type="Spring.Aop.Framework.ProxyFactoryObject">
+  	<property name="targetName"><value>testObjectTarget</value></property>
+    <property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>
+    <property name="interceptorNames"><value>simpleBeforeAdviceAdvisor</value></property>
+	</object>
+	
+	<object id="testAdvisorAdapter" type="Spring.Aop.SimpleBeforeAdviceAdapter"/>
+	
+	<object id="adapterRegistrationManager" type="Spring.Aop.Framework.Adapter.AdvisorAdapterRegistrationManager"/>
+
+</objects>

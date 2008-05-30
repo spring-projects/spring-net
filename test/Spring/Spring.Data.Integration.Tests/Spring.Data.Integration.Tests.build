@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<project name="Spring.Data.Integration.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<!--
+    Required properties:
+      * current.bin.dir           - (path) root level to build to
+      * current.build.debug       - (true|false) debug build?
+      * current.build.defines.csc - framework-specific build defines for C# compiler
+ -->
+	<target name="build">
+		<!-- build Spring.Data.Integration.Tests -->
+		<csc target="library" define="${current.build.defines.csc}"
+		     warnaserror="true"
+		     debug="${current.build.debug}"
+                     output="${current.bin.dir}/${project::get-name()}.dll"
+		     doc="${current.bin.dir}/${project::get-name()}.xml">
+			<nowarn>
+				<warning number="${nowarn.numbers.test}" />
+			</nowarn>
+			<sources failonempty="true">
+				<include name="**/*.cs" />
+				<include name="../CommonAssemblyInfo.cs" />
+			</sources>
+			<resources basedir="Resources">
+				<include name="**/*" />
+			</resources>
+			<references basedir="${current.bin.dir}">
+				<include name="*.dll" />
+				<include name="System.Data.OracleClient.dll" />
+				<exclude name="${project::get-name()}.dll" />
+				<exclude name="CloverRuntime.dll" />
+			</references>
+		</csc>
+	</target>
+	<target name="test" depends="build">
+	        <!-- skipping running of tests for now
+		<nunit2outproc>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml"
+			           outputdir="${current.bin.dir}/results" />
+			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll" />
+		</nunit2outproc>
+		-->
+	</target>
+</project>

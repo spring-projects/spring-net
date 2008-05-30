@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="resources">
+  <title>Resources</title>
+
+  <section id="objects-iresource">
+    <title>Introduction</title>
+
+    <para>The <literal>IResource</literal> interface contained in the
+    <literal>Spring.Core.IO</literal> namespace provides a common interface to
+    describe and access data from diverse resource locations. This abstraction
+    lets you treat the <classname>InputStream</classname> from a file and from
+    a URL in a polymorphic and protocol-independent manner... the .NET BCL
+    does not provide such an abstraction. The <literal>IResource</literal>
+    interface inherits from <literal>IInputStream</literal> that provides a
+    single property <literal>Stream InputStream</literal>. The
+    <literal>IResource</literal> interface adds descriptive information about
+    the resource via a number of additional properties. Several
+    implementations for common resource locations, i.e. file, assembly, uri,
+    are provided and you may also register custom IResource
+    implementations.</para>
+  </section>
+
+  <section>
+    <title>The <interfacename>IResource</interfacename> interface</title>
+
+    <para>The IResource interface is shown below</para>
+
+    <programlisting>public interface IResource : IInputStreamSource
+{
+  bool IsOpen { get; }
+
+  Uri Uri { get; }
+
+  FileInfo File { get; }
+
+  string Description { get; }
+
+  bool Exists { get; }
+
+  IResource CreateRelative(string relativePath);
+}</programlisting>
+
+    <table frame="all">
+      <title>IResource Properties</title>
+
+      <tgroup cols="2">
+        <colspec colname="c1" colwidth="2*" />
+
+        <colspec colname="c2" colwidth="5*" />
+
+        <thead>
+          <row>
+            <entry>Property</entry>
+
+            <entry>Explanation</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><literal>InputStream</literal></entry>
+
+            <entry>Inherited from IInputStream. Opens and returns a
+            <classname>System.IO.Stream</classname>. It is expected that each
+            invocation returns a fresh Stream. It is the responsibility of the
+            caller to close the stream.</entry>
+          </row>
+
+          <row>
+            <entry><literal>Exists</literal></entry>
+
+            <entry>returns a boolean indicating whether this resource actually
+            exists in physical form.</entry>
+          </row>
+
+          <row>
+            <entry><literal>IsOpen</literal></entry>
+
+            <entry>returns a boolean indicating whether this resource
+            represents a handle with an open stream. If true, the InputStream
+            cannot be read multiple times, and must be read once only and then
+            closed to avoid resource leaks. Will be false for all usual
+            resource implementations, with the exception of
+            <interfacename>InputStreamResource</interfacename>.</entry>
+          </row>
+
+          <row>
+            <entry><literal>Description</literal></entry>
+
+            <entry>Returns a description of the resource, such as the fully
+            qualified file name or the actual URL.</entry>
+          </row>
+
+          <row>
+            <entry><literal>Uri</literal></entry>
+
+            <entry>The Uri representation of the resource.</entry>
+          </row>
+
+          <row>
+            <entry><literal>File</literal></entry>
+
+            <entry>Returns a <classname>System.IO.FileInfo</classname> for
+            this resource if it can be resolved to an absolute file
+            path.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>and the methods</para>
+
+    <table frame="all">
+      <title>IResource Methods</title>
+
+      <tgroup cols="2">
+        <colspec colname="c1" colwidth="2*" />
+
+        <colspec colname="c2" colwidth="5*" />
+
+        <thead>
+          <row>
+            <entry>Method</entry>
+
+            <entry>Explanation</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><literal>IResource CreateRelative (string
+            relativePath)</literal></entry>
+
+            <entry>Creates a resource relative to this resource using relative
+            path like notation (./ and ../).</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>You can obtain an actual URL or File object representing the
+    resource if the underlying implementation is compatible and supports that
+    functionality.</para>
+
+    <para>The Resource abstraction is used extensively in Spring itself, as an
+    argument type in many method signatures when a resource is needed. Other
+    methods in some Spring APIs (such as the constructors to various
+    <interfacename>IApplicationContext</interfacename> implementations), take
+    a String which is used to create a Resource appropriate to that context
+    implementation</para>
+
+    <para>While the Resource interface is used a lot with Spring and by
+    Spring, it's actually very useful to use as a general utility class by
+    itself in your own code, for access to resources, even when your code
+    doesn't know or care about any other parts of Spring. While this couples
+    your code to Spring, it really only couples it to this small set of
+    utility classes and can be considered equivalent to any other library you
+    would use for this purpose</para>
+  </section>
+
+  <section>
+    <title>Built-in IResource implementations</title>
+
+    <para>The resource implementations provided are <itemizedlist
+        spacing="compact">
+        <listitem>
+           
+
+          <literal>AssemblyResource</literal>
+
+           accesses data stored as .NET resources inside an assembly. Uri syntax is 
+
+          <literal>assembly://&lt;AssemblyName&gt;/&lt;NameSpace&gt;/&lt;ResourceName&gt;</literal>
+
+           
+        </listitem>
+
+        <listitem>
+           
+
+          <literal>ConfigSectionResource</literal>
+
+           accesses Spring.NET configuration data stored in a custom configuration section in the .NET application configuration file (i.e. App.config). Uri syntax is 
+
+          <literal>config://&lt;path to section&gt;</literal>
+
+           
+        </listitem>
+
+        <listitem>
+           
+
+          <literal>FileSystemResource</literal>
+
+           accesses file system data. Uri syntax is 
+
+          <literal>file://&lt;filename&gt;</literal>
+
+           
+        </listitem>
+
+        <listitem>
+           
+
+          <literal>InputStreamResource</literal>
+
+           a wrapper around a raw 
+
+          <classname>System.IO.Stream</classname>
+
+           . Uri syntax is not supported. 
+        </listitem>
+
+        <listitem>
+           
+
+          <literal>UriResource</literal>
+
+           accesses data from the standard System.Uri protocols such as http and https. In .NET 2.0 you can use this also for the ftp protocol. Standard Uri syntax is supported. 
+        </listitem>
+      </itemizedlist> Refer to the MSDN documentation for more information on
+    <ulink
+    url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemurimemberstopic.asp">supported
+    Uri scheme types</ulink>.</para>
+
+    <section>
+      <title>Registering custom IResource implementations</title>
+
+      <para>The configuration section handler,
+      <classname>ResourceHandlersSectionHandler</classname>, is used to
+      register any custom <interfacename>IResource</interfacename>
+      implementations you have created. In the configuration section you list
+      the type of <interfacename>IResource</interfacename> implementation and
+      the protocol prefix. Your custom
+      <interfacename>IResource</interfacename> implementation must provide a
+      constructor that takes a string as it's sole argument that represents
+      the URI string. Refer to the SDK documentation for
+      <classname>ResourceHandlersSectionHandler</classname> for more
+      information. An example of the
+      <classname>ResourceHandlersSectionHandler</classname> is shown below for
+      a fictional <interfacename>IResource</interfacename> implementation that
+      interfaces with a database.</para>
+
+      <programlisting>&lt;configuration&gt;
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+
+      &lt;section name='context' type='Spring.Context.Support.ContextHandler, Spring.Core'/&gt;
+
+<emphasis role="bold">      &lt;section name="resourceHandlers" 
+               type="Spring.Context.Support.ResourceHandlersSectionHandler, Spring.Core"/&gt;</emphasis>
+
+    &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+
+<emphasis role="bold">    &lt;resourceHandlers&gt;
+      &lt;handler protocol="db" type="MyCompany.MyApp.Resources.MyDbResource, MyAssembly"/&gt;
+    &lt;/resourceHandlers&gt;</emphasis>
+
+    &lt;context&gt;
+      &lt;resource uri="db://user:pass@dbName/MyDefinitionsTable"/&gt;
+    &lt;/context&gt;
+
+  &lt;/spring&gt;
+&lt;/configuration&gt;</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>The <interfacename>IResourceLoader</interfacename></title>
+
+    <para>To load resources given their Uri syntax, an implementation of the
+    <classname>IResourceLoader</classname> is used. The default implementation
+    is <classname>ConfigurableResourceLoader</classname>. Typically you will
+    not need to access this class directly since the
+    <classname>IApplicationContext</classname> implements the
+    <classname>IResourceLoader</classname> interface that contains the single
+    method <literal>IResource GetResource(string location)</literal>. The
+    provided implementations of <literal>IApplicationContext</literal>
+    delegate this method to an instance of
+    <classname>ConfigurableResourceLoader</classname> which supports the Uri
+    protocols/schemes listed previously. If you do not specify a protocol then
+    the file protocol is used. The following shows some sample
+    usage.<programlisting>IResource resource = appContext.GetResource("http://www.springframework.net/license.html");
+resource = appContext.GetResource("assembly://Spring.Core.Tests/Spring/TestResource.txt");
+resource = appContext.GetResource("https://sourceforge.net/");
+resource = appContext.GetResource("file:///C:/WINDOWS/ODBC.INI");
+
+StreamReader reader = new StreamReader(resource.InputStream);
+Console.WriteLine(reader.ReadToEnd());</programlisting> Other protocols can be
+    registered along with a new implementations of an IResource that must
+    correctly parse a Uri string in its constructor. An example of this can be
+    seen in the <literal>Spring.Web</literal> namespace that uses
+    <literal>Server.MapPath</literal> to resolve the filename of a
+    resource.</para>
+
+    <para>The <literal>CreateRelative</literal> method allows you to easily
+    load resources based on a relative path name. In the case of relative
+    assembly resources, the relative path navigates the namespace within an
+    assembly. For example: <programlisting>IResource res = new AssemblyResource("assembly://Spring.Core.Tests/Spring/TestResource.txt");
+IResource res2 = res.CreateRelative("./IO/TestIOResource.txt");</programlisting>
+    This loads the resource <literal>TestResource.txt</literal> and then
+    navigates to the <literal>Spring.Core.IO</literal> namespace and loads the
+    resource <literal>TestIOResource.txt</literal></para>
+  </section>
+
+  <section>
+    <title>The <interfacename>IResourceLoaderAware</interfacename>
+    interface</title>
+
+    <para>The <interfacename>IResourceLoaderAware</interfacename> interface is
+    a special marker interface, identifying objects that expect to be provided
+    with a <interfacename>IResourceLoader</interfacename> reference.</para>
+
+    <programlisting>public interface IResourceLoaderAware
+{
+  IResourceLoader ResourceLoader
+  {
+    set;
+    get;
+  }
+}</programlisting>
+
+    <para>When a class implements
+    <interfacename>IResourceLoaderAware</interfacename> and is deployed into
+    an application context (as a Spring-managed object), it is recognized as
+    <interfacename>IResourceLoaderAware</interfacename> by the application
+    context. The application context will then invoke the ResourceLoader
+    property, supplying itself as the argument (remember, all application
+    contexts in Spring implement the
+    <interfacename>IResourceLoader</interfacename> interface).</para>
+
+    <para>Of course, since an
+    <interfacename>IApplicationContext</interfacename> is a
+    <interfacename>IResourceLoader</interfacename>, the object could also
+    implement the <interfacename>IApplicationContextAware</interfacename>
+    interface and use the supplied application context directly to load
+    resources, but in general, it's better to use the specialized
+    <interfacename>IResourceLoader</interfacename> interface if that's all
+    that's needed. The code would just be coupled to the resource loading
+    interface, which can be considered a utility interface, and not the whole
+    Spring <interfacename>IApplicationContext</interfacename>
+    interface.</para>
+  </section>
+
+  <section>
+    <title>Application contexts and <interfacename>IResource</interfacename>
+    paths</title>
+
+    <para>An application context constructor (for a specific application
+    context type) generally takes a string or array of strings as the location
+    path(s) of the resource(s) such as XML files that make up the definition
+    of the context. For example, you can create an XmlApplicationContext from
+    two resources as follows:</para>
+
+    <programlisting>IApplicationContext context = new XmlApplicationContext(
+	"file://objects.xml", "assembly://MyAssembly/MyProject/objects-dal-layer.xml");
+</programlisting>
+  </section>
+</chapter>

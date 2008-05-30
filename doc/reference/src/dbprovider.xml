@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="dbprovider">
+  <title>DbProvider</title>
+
+  <section id="dbprovider-introduction">
+    <title>Introduction</title>
+
+    <para>Spring provides a generic factory for creating ADO.NET API artifacts
+    such as <code><classname>IDbConnection</classname></code> and
+    <code><classname>IDbCommand</classname></code>. The factory API is very
+    similar to the one introduced in .NET 2.0 but adds extra metadata needed
+    by Spring to support features provided by its DAO/ADO.NET framework such
+    as error code translation to a DAO exception hierarchy. The factory itself
+    is configured by using a standard Spring XML based configuration file
+    though it is unlikely you will need to modify those settings yourself, you
+    only need be concerned with using the factory. Out of the box several
+    popular databases are supported and an extension mechanism is available
+    for defining new database providers or modifying existing ones. A custom
+    database namespace for configuration aids in making terse XML based
+    declarations of Spring's database objects you wish to use.</para>
+
+    <para>The downside of Spring's factory as compared to the one in .NET 2.0
+    is that the types returned are lower level interfaces and not the abstract
+    base classes in System.Data.Common. However, there are still 'holes' in
+    the current .NET 2.0 provider classes that are 'plugged' with Spring's
+    provider implementation. One of the most prominent is the that the top
+    level DbException exposes the HRESULT of the remote procedure call, which
+    is not what you are commonly looking for when things go wrong. As such
+    Spring's provider factory exposes the vendor sql error code and also maps
+    that error code onto a consistent data access exception hierarchy. This
+    makes writing portable exception handlers much easier. In addition, the
+    DbParameter class doesn't provide the most common convenient methods you
+    would expect as when using say the SqlServer provider. If you need to
+    access the BCL provider abstraction, you still can through Spring's
+    provider class. Furthermore, a small wrapper around the standard BCL
+    provider abstraction allows for integration with Spring's transaction
+    management facilities, allowing you to create a DbCommand with its
+    connection and transaction properties already set based on the transaction
+    calling context.</para>
+  </section>
+
+  <section id="dbprovider-dbprovider">
+    <title>IDbProvider and DbProviderFactory</title>
+
+    <para>The <code><interfacename>IDbProvider</interfacename></code> API is
+    shown below and should look familiar to anyone using .NET 2.0 data
+    providers. Note that Spring's DbProvider abstraction can be used on .NET
+    1.1 in addition to .NET 2.0</para>
+
+    <programlisting>    public interface IDbProvider
+    {
+        IDbCommand CreateCommand();
+
+        object CreateCommandBuilder();        
+        
+        IDbConnection CreateConnection();
+
+        IDbDataAdapter CreateDataAdapter();
+        
+        IDbDataParameter CreateParameter();
+        
+        string CreateParameterName(string name);
+
+        string CreateParameterNameForCollection(string name);
+
+        IDbMetadata DbMetadata
+        {
+            get;
+        }               
+
+        string ConnectionString
+        {
+            set;
+            get;
+        }
+        
+        string ExtractError(Exception e);
+
+        bool IsDataAccessException(Exception e);
+        
+    }</programlisting>
+
+    <para>ExtractError is used to return an error string for translation into
+    a DAO exception. On .NET 1.1 the method IsDataAccessException is used to
+    determine if the thrown exception is related to data access since in .NET
+    1.1 there isn't a common base class for database exceptions.
+    CreateParameterName is used to create the string for parameters used in a
+    CommandText object while CreateParameterNameForCollection is used to
+    create the string for a IDataParameter.ParameterName, typically contained
+    inside a IDataParameterCollection.</para>
+
+    <para>The class <classname>DbProviderFactory</classname> creates
+    IDbProvider instances given a provider name. The connection string
+    property will be used to set the IDbConnection returned by the factory if
+    present. The provider names, and corresponding database, currently
+    configured are listed below.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>SqlServer-1.1</code> - Microsoft SQL Server, provider
+        V1.0.5000.0 in framework .NET V1.1</para>
+      </listitem>
+
+      <listitem>
+        <para><code>SqlServer-2.0</code> (aliased to
+        <code>System.Data.SqlClient</code>) - Microsoft SQL Server, provider
+        V2.0.0.0 in framework .NET V2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SqlServerCe-3.1</literal> (aliased to
+        <literal>System.Data.SqlServerCe</literal>) - Microsoft SQL Server
+        Compact Edition, provider V9.0.242.0</para>
+      </listitem>
+
+      <listitem>
+        <para><code>OleDb-1.1</code> - OleDb, provider V1.0.5000.0 in
+        framework .NET V1.1</para>
+      </listitem>
+
+      <listitem>
+        <para><code>OleDb-2.0</code> (aliased to
+        <code>System.Data.OleDb</code>) - OleDb, provider V2.0.0.0 in
+        framework .NET V2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><code>OracleClient-2.0</code> (aliased to
+        <code>System.Data.OracleClient</code>) - Oracle, Microsoft provider
+        V2.0.0.0</para>
+      </listitem>
+
+      <listitem>
+        <para><code>OracleODP-2.0</code> (aliased to
+        <code>System.DataAccess.Client</code>) - Oracle, Oracle provider
+        V2.102.2.20</para>
+      </listitem>
+
+      <listitem>
+        <para><code>MySql</code> - MySQL, MySQL provider 1.0.10.1</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>MySql-1.0.9</literal> - MySQL, MySQL provider
+        1.0.9</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>MySql-5.0</literal> - MySQL, MySQL provider
+        5.0.7.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>MySql-5.0.8.1</literal> - MySQL, MySQL provider
+        5.0.8.1</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>MySql-5.1 </literal>- MySQL, MySQL provider
+        5.1.2.2</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>MySql-5.1.4</literal> - (aliased to
+        <literal>MySql.Data.MySqlClient</literal>) MySQL, MySQL provider
+        5.1.2.2</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>Npgsql-1.0</literal> - Postgresql provider 1.0.0.0 (and
+        1.0.0.1 - were build with same version info)</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>Npgsql-2.0-beta1</literal> - Postgresql provider
+        1.98.1.0 beta 1</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>DB2-9.0.0-1.1</literal> - IBM DB2 Data Provider 9.0.0
+        for .NET Framework 1.1</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>DB2-9.0.0-2.0 </literal>- (aliased to
+        <literal>IBM.Data.DB2</literal>) - IBM DB2 Data Provider 9.0.0 for
+        .NET Framework 2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>DB2-9.1.0-1.1</literal> - IBM DB2 Data Provider 9.1.0
+        for .NET Framework 1.1</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>DB2-9.1.0.2</literal> - (aliased to
+        <literal>IBM.Data.DB2.9.1.0</literal>) - IBM DB2 Data Provider 9.1.0
+        for .NET Framework 2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SQLite-1.0.43 </literal>SQLite provider 1.0.43 for .NET
+        Framework 2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SQLite-1.0.47 </literal>- (aliased to
+        System.Data.SQLite) - SQLite provider 1.0.43 for .NET Framework
+        2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SybaseAse-12</literal> - Sybase ASE provider for ASE
+        12.x</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SybaseAse-15</literal> - Sybase ASE provider for ASE
+        15.x</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>Odbc-1.1</literal> - ODBC provider V1.0.5000.0 in
+        framework .NET V1.1</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>Odbc-2.0</literal> - ODBC provider V2.0.0.0 in
+        framework .NET V2</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>An example using DbProviderFactory is shown below</para>
+
+    <programlisting>IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");</programlisting>
+
+    <para>The default definitions of the providers are contained in the
+    assembly resource
+    <code>assembly://Spring.Data/Spring.Data.Common/dbproviders.xml</code>.
+    Future additions to round out the database coverage are forthcoming. The
+    current crude mechanism to add additional providers, or to apply any
+    standard Spring <interfacename>IApplicationContext</interfacename>
+    functionality, such as applying AOP advice, is to set the public static
+    property DBPROVIDER_ADDITIONAL_RESOURCE_NAME in
+    <classname>DbProviderFactory</classname> to a Spring resource location.
+    The default value is <code>file://dbProviders.xml</code>. (That isn't a
+    typo, there is a difference in case with the name of the embedded
+    resource). This crude mechanism will eventually be replaced with one based
+    on a custom configuration section in App.config/Web.config.</para>
+
+    <para>It may happen that the version number of an assembly you have
+    downloaded is different than the one listed above. If it is a point
+    release, i.e. the API hasn't changed in anyway that is material to your
+    application, you should add an assembly redirect of the form shown
+    below.</para>
+
+    <programlisting>&lt;dependentAssembly&gt;
+  &lt;assemblyIdentity name="MySql.Data" 
+                           publicKeyToken="c5687fc88969c44d" 
+                           culture="neutral"/&gt;
+  &lt;bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535"
+                         newVersion="1.0.10.1"/&gt;
+&lt;/dependentAssembly&gt;</programlisting>
+
+    <para>This redirects any reference to an older version of the assembly
+    MySql.Data to the version 1.0.10.1.</para>
+  </section>
+
+  <section>
+    <title>XML based configuration</title>
+
+    <para>Creating a DbProvider in Spring's XML configuration file is shown
+    below in the typical case of using it to specify the DbProvider property
+    on an AdoTemplate.</para>
+
+    <programlisting>&lt;objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"&gt;
+
+  &lt;db:provider id="DbProvider" 
+                provider="System.Data.SqlClient" 
+                connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/&gt;
+  
+  &lt;object id="adoTemplate" type="Spring.Data.AdoTemplate, Spring.Data"&gt;  
+    &lt;property name="DbProvider" ref="DbProvider"/&gt;                
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+
+    <para>A custom namespace should be registered in the main application
+    configuration file to use this syntax. This configuration, only for the
+    parsers, is shown below. Additional section handlers are needed to specify
+    the rest of the Spring configuration locations as described in previous
+    chapters.</para>
+
+    <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core" /&gt;
+    &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt;
+      &lt;parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" /&gt;
+    &lt;/parsers&gt;
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
+  </section>
+
+  <section>
+    <title>Connection String management</title>
+
+    <para>There are a few options available to help manage your connection
+    strings.</para>
+
+    <para>The first option is to leverage the Spring property replacement
+    functionality, as described in <xref
+    linkend="objects-factory-placeholderconfigurer" />. This lets you insert
+    variable names as placeholders for values in a Spring configuration file.
+    In the following example specific parts of a connection string have been
+    parameterized but you can also use a variable to set the entire connection
+    string.</para>
+
+    <para>An example of such a setting is shown below</para>
+
+    <programlisting>&lt;configuration&gt;
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;section name='context' type='Spring.Context.Support.ContextHandler, Spring.Core'/&gt;
+    &lt;/sectionGroup&gt;
+
+    &lt;section name="databaseSettings" type="System.Configuration.NameValueSectionHandler, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" /&gt;
+       
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;context&gt;      
+      &lt;resource uri="Aspects.xml" /&gt;
+      &lt;resource uri="Services.xml" /&gt;
+      &lt;resource uri="Dao.xml" /&gt;
+    &lt;/context&gt;
+  &lt;/spring&gt;
+
+  &lt;!-- These properties are referenced in Dao.xml --&gt;
+  &lt;databaseSettings&gt;
+    &lt;add key="db.datasource" value="(local)" /&gt;
+    &lt;add key="db.user" value="springqa" /&gt;
+    &lt;add key="db.password" value="springqa" /&gt;
+    &lt;add key="db.database" value="Northwind" /&gt;
+  &lt;/databaseSettings&gt;
+
+
+&lt;/configuration&gt;</programlisting>
+
+    <para>Where <literal>Dao.xml</literal> has a connection string as shown
+    below</para>
+
+    <programlisting>&lt;objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"&gt;
+
+  &lt;db:provider id="DbProvider" 
+                provider="System.Data.SqlClient" 
+                connectionString="${db.datasource};Database=${db.database};User ID=${db.user};Password=${db.password};Trusted_Connection=False"/&gt;
+  
+  &lt;object id="adoTemplate" type="Spring.Data.AdoTemplate, Spring.Data"&gt;  
+    &lt;property name="DbProvider" ref="DbProvider"/&gt;                
+  &lt;/object&gt;
+
+  &lt;!-- configuration of what values to substitute for ${ } variables listed above --&gt;
+  &lt;object name="appConfigPropertyHolder"
+          type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core"&gt;
+    &lt;property name="configSections" value="DatabaseConfiguration"/&gt;
+  &lt;/object&gt; 
+
+&lt;/objects&gt;</programlisting>
+
+    <para>Please refer to the Section <xref
+    linkend="objects-factory-placeholderconfigurer" /> for more
+    information.</para>
+  </section>
+
+  <section id="dbprovider-additional">
+    <title>Additional IDbProvider implementations</title>
+
+    <para>Spring provides some convenient implementations of the IDbProvider
+    interface that add addtional behavior on top of the standard
+    implementation.</para>
+
+    <section id="dbprovider-usercredentials">
+      <title>UserCredentialsDbProvider</title>
+
+      <para>This <classname>UserCredentialsDbProvider</classname> will allow
+      you to change the username and password of a database connection at
+      runtime. The API contains the properties <literal>Username</literal> and
+      <literal>Password</literal> which are used as the default strings
+      representing the user and password in the connection string. You can
+      then change the value of these properties in the connection string by
+      calling the method <literal>SetCredentialsForCurrentThread</literal> and
+      fall back to the default values by calling the method
+      <literal>RemoveCredentialsFromCurrentThread</literal>. You call the
+      <literal>SetCredentialsForCurrentThread</literal> method at runtime,
+      before any data access occurs, to determine which database user should
+      be used for the current user-case. Which user to select is up to you.
+      You may retrieve the user information from an HTTP session for example.
+      Example configuration and usage is shown below</para>
+
+      <programlisting>&lt;object id="DbProvider" type="Spring.Data.Common.UserCredentialsDbProvider, Spring.Data"&gt;
+  &lt;property name="TargetDbProvider" ref="targetDbProvider"/&gt;
+  &lt;property name="Username" value="User ID=defaultName"/&gt;
+  &lt;property name="Password" value="Password=defaultPass"/&gt;
+&lt;/object&gt;
+ 
+&lt;db:provider id="targetDbProvider" provider="SqlServer-2.0"
+    connectionString="Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False"/&gt;</programlisting>
+
+      <para>If you use dependency injection to configure a class with a
+      property of the type <literal>IDbProvider</literal>, you will need to
+      downcast to the subtype or you can change your class to have a property
+      of the type <literal>UserCredentialsDbProvider</literal> instead of
+      <literal>IDbProvider</literal>.</para>
+
+      <programlisting>userCredentialsDbProvider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");</programlisting>
+
+      <para><literal>UserCredentialsDbProvider's</literal> has a base class,
+      <literal>DelegatingDbProvider</literal>, and is intended for you to use
+      in your own implementations that delegate calls to a target
+      <literal>IDbProvider</literal> instance. This class in meant to be
+      subclassed with subclasses overriding only those methods, such as
+      <literal>CreateConnection()</literal>, that should not simply delegate
+      to the target <literal>IDbProvider</literal>.</para>
+    </section>
+
+    <section id="dbprovider-multidelegating">
+      <title>MultiDelegatingDbProvider</title>
+
+      <para>There are use-cases in which there will need to be a runtime
+      selection of the database to connect to among many possible candidates.
+      This is often the case where the same schema is installed in separate
+      databases for different clients. The
+      <classname>MultiDelegatingDbProvider</classname> implements the
+      <classname>IDbProvider</classname> interface and provides an abstraction
+      to the multiple databases and can be used in DAO layer such that the DAO
+      layer is unaware of the switching between databases.
+      <classname>MultiDelegatingDbProvider</classname> does its job by looking
+      into thread local storage under the key dbProviderName. This storage
+      location stores the name of the dbProvider that is to be used for
+      processing the request. <classname>MultiDelegatingDbProvider</classname>
+      is configured using the dictionary property
+      <literal>TargetDbProviders</literal>. The key of this dictionary
+      contains the name of a dbProvider and its value is a dbProvider object.
+      (You can also provide this dictionary as a constructor argument.) During
+      request processing, once you have determined which target dbProvider
+      should be use, in this example database1ProviderName, you should execute
+      the following code
+      <literal>LogicalThreadContext.SetData("dbProviderName",
+      "database1ProviderName")</literal> and then call the data access
+      layer.</para>
+
+      <para></para>
+    </section>
+  </section>
+</chapter>

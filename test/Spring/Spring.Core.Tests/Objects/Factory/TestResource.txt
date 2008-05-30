@@ -1,0 +1,1 @@
+Spring.Objects.Factory.TestResource.txt

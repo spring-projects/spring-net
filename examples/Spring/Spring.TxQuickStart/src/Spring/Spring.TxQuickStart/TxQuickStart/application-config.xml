@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns='http://www.springframework.net'>
+
+  <!-- DAO Implementations -->
+  <object id="accountCreditDao" type="Spring.TxQuickStart.Dao.Ado.AccountCreditDao, Spring.TxQuickStart">
+    <property name="DbProvider" ref="CreditDbProvider"/>
+  </object>
+
+  <object id="accountDebitDao" type="Spring.TxQuickStart.Dao.Ado.AccountDebitDao, Spring.TxQuickStart">
+    <property name="DbProvider" ref="DebitDbProvider"/>
+  </object>
+
+
+  <!-- The service that performs multiple data access operations -->
+  <object id="accountManager"
+          type="Spring.TxQuickStart.Services.AccountManager, Spring.TxQuickStart">
+    <constructor-arg name="accountCreditDao" ref="accountCreditDao"/>
+    <constructor-arg name="accountDebitDao" ref="accountDebitDao"/>
+  </object>
+
+</objects>

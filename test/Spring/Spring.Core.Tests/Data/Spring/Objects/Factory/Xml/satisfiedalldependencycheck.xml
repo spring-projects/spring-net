@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	
+  <object id="a" type="Spring.Objects.Factory.Xml.DependenciesObject, Spring.Core.Tests"
+      dependency-check="objects">
+    <property name="spouse">
+      <ref local="kerry"/>
+    </property>
+    <property name="age">
+      <value>33</value>
+    </property>
+    <property name="name">
+      <value>Rod</value>
+    </property>
+  </object>
+	
+  <object id="kerry" type="Spring.Objects.TestObject, Spring.Core.Tests"
+      dependency-check="none"/>
+
+</objects>

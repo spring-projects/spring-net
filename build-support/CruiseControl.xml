@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<!-- Bootstrap build file for ccnet -->
+
+<project name="ccnetlaunch" default="go">
+
+        <!-- These properties will be set via CCNET as defined in -->
+        <!-- ccnet.config, but they are set the the same values   -->
+	<!-- stand alone usage -->
+        <property name="cvs.executable" value="C:\Program Files\TortoiseCVS\cvs.exe"/>
+        <property name="build.file" value="Spring.build"/>
+
+	<!-- Get all the latest code and do the build+test -->
+        <target name="go" depends="cleansrc,update,build"/>
+
+        <target name="daily" depends="cleansrc,update,build-daily"/>
+
+
+        <target name="cleansrc" description="Deletes source code">
+	   <echo message="Deleting src directory" />
+           <delete dir="./src" failonerror="false" />
+           <mkdir dir="./src" verbose="true" />
+
+	   <echo message="Deleting test directory" />
+           <delete dir="./test" failonerror="false" />
+	   <mkdir dir="./test" verbose="true" />
+
+	   <echo message="Deleting examples directory" />
+           <delete dir="./examples" failonerror="false" />
+	   <mkdir dir="./examples" verbose="true" />
+
+	   <echo message="Deleting sandbox directory" />
+           <delete dir="./sandbox" failonerror="false" />
+	   <mkdir dir="./sandbox" verbose="true" />
+
+	   <echo message="Deleting Clover HTML report directory" />
+           <delete dir="./report" failonerror="false" />
+	   <mkdir dir="./report" verbose="true" />
+
+           <nant buildfile="${build.file}" 
+                 target="cleanall"      
+                 inheritall="true"/>
+
+        </target>
+
+        <target name="update">
+		<if test="${not property::exists('cvs.executable')}">
+                        <fail message="cvs.executable property not set, so can't update" />
+                </if>
+                <echo message="CVS Executable at [${cvs.executable}]" />
+                <exec basedir="." program="${cvs.executable}" 
+                        commandline="-q update -P -d"/>
+        </target>
+
+	<!-- Call the default NAnt target -->
+        <target name="build">
+                <nant buildfile="${build.file}" 
+                      target="test"      
+                      inheritall="true"/>
+        </target>
+
+	<!-- Call the default NAnt target -->
+        <target name="build-daily">
+                <nant buildfile="${build.file}" 
+                      target="dailysnapshot"      
+                      inheritall="true"/>
+        </target>
+</project>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns='http://www.springframework.net'>
+  <object id="MySqlPersonal" type="Spring.Data.Common.DbProvider, Spring.Data" lazy-init="true">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="MySQL, MySQL provider 1.0.7.30072"  />
+        <constructor-arg name="assemblyName" value="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="connectionType" value="MySql.Data.MySqlClient.MySqlConnection"/>
+        <constructor-arg name="commandType" value="MySql.Data.MySqlClient.MySqlCommand"/>
+        <constructor-arg name="parameterType" value="MySql.Data.MySqlClient.MySqlParameter"/>
+        <constructor-arg name="dataAdapterType" value="MySql.Data.MySqlClient.MySqlDataAdapter"/>
+        <constructor-arg name="commandBuilderType" value="MySql.Data.MySqlClient.MySqlCommandBuilder"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="MySql.Data.MySqlClient.MySqlDbType"/>
+        <constructor-arg name="parameterDbTypeProperty" value="MySqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="?"/>
+        <constructor-arg name="exceptionType" value="MySql.Data.MySqlClient.MySqlException"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Number.ToString()"/>
+
+        <property name="ErrorCodes.badSqlGrammarCodes">
+          <value>1054,1064,1146</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>1</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>1062</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>1205</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>1213</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+</objects>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	
+  <object id="source" type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+
+  <object id="prototypeSource" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false"/>
+
+  <object id="staticEventListener" type="Spring.Objects.TestEventHandler, Spring.Core.Tests">
+    <!-- wired up to a static event -->
+    <listener event="StaticClick" method="HandleEvent">
+        <ref type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+    </listener>
+  </object>
+
+  <object id="instanceEventListener" type="Spring.Objects.TestEventHandler, Spring.Core.Tests">
+    <!-- wired up to an event exposed on an instance -->
+    <listener event="Click" method="HandleEvent">
+        <ref object="source"/>
+    </listener>
+  </object>
+
+
+  <object id="prototypeEventListener" type="Spring.Objects.TestEventHandler, Spring.Core.Tests" singleton="false">
+    <!-- wired up to an event exposed on an object created as a prototype -->
+    <listener event="Click" method="HandleEvent">
+        <ref object="source"/>
+    </listener>
+  </object>
+
+  <object id="autowiredEventListener" type="Spring.Objects.TestEventHandler, Spring.Core.Tests">
+    <!--
+    autowired up to all events exposed on an instance
+    listener method signature defaults to 'On${event}', e.g. 'OnClick', 'OnFoo', etc
+    -->
+    <!--
+    <listener>
+        <ref object="source"/>
+    </listener>
+    -->
+    <!--
+    autowired up to the named event exposed on an instance...
+    searches for appropriately named method with matching signature (in this case 'OnClick')
+    -->
+    <!--
+    <listener event="Click">
+        <ref object="source"/>
+    </listener>
+    -->
+    <!--
+    autowired up to all events exposed on an instance, limiting the search for
+    hander methods to those matching the supplied regex (in this case, starting with 'Handle'
+    and ending with the name of any event exposed on the source, e.g. 'HandleClick',
+    HandleSubmitted', etc)
+    -->
+    <listener method="Handle.+">
+        <ref object="source"/>
+    </listener>
+    <!--
+    autowired up to the named event exposed on an instance, limiting the search for
+    hander methods to those matching the supplied regex (in this case, starting with 'My',
+    ending with 'Listener', and having the name of the named event, e.g. 'MyClickListener', etc)
+    inbetween
+    -->
+    <!--
+    <listener event="Click" method="My${event}Listener">
+        <ref object="source"/>
+    </listener>
+    -->
+    <!--
+    autowired up to those events starting with 'My' exposed on an instance
+    -->
+    <!--
+    <listener event="My.*">
+        <ref object="source"/>
+    </listener>
+    -->
+  </object>
+
+</objects>

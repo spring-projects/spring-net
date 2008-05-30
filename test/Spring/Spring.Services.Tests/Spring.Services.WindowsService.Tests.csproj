@@ -1,0 +1,322 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{F39DE556-EAFB-41A0-AB2F-F02F2E038E62}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "Spring.Services.WindowsService.Tests"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = 'xcopy /I /E /Y "$(ProjectDir)Data" "$(TargetDir)Data"&#xd;&#xa;copy "$(ProjectDir)..\..\..\src\Spring\Spring.Services\WindowsService\Process\*.xml" "$(TargetDir)Data\Xml"'
+                RootNamespace = "Spring.Services"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "..\..\..\build\VS.Net\Spring.Services.Tests\Debug\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "..\..\..\build\VS.Net\Spring.Services.WindowsService.Tests\Release\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "Spring.Services.WindowsService.Common"
+                    Project = "{B8381347-51A1-4850-828C-3170FA93846C}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Spring.Core"
+                    Project = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "DotNetMock"
+                    AssemblyName = "DotNetMock"
+                    HintPath = "..\..\..\lib\Net\1.1\DotNetMock.dll"
+                />
+                <Reference
+                    Name = "DotNetMock.Framework"
+                    AssemblyName = "DotNetMock.Framework"
+                    HintPath = "..\..\..\lib\Net\1.1\DotNetMock.Framework.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\..\lib\Net\1.1\log4net.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\lib\Net\1.1\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "NUnitForms"
+                    AssemblyName = "NUnitForms"
+                    HintPath = "..\..\..\lib\Net\1.1\NUnitForms.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "AgileDocs.Core"
+                    AssemblyName = "AgileDocs.Core"
+                    HintPath = "..\..\..\doc\reference\src\templated\AgileDocs.Core.dll"
+                />
+                <Reference
+                    Name = "Spring.Threading"
+                    Project = "{4640D873-95DC-4130-98E2-2B931D390C20}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "System.Web.Services"
+                    AssemblyName = "System.Web.Services"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.Services.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "tests.config"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Cassini\localizer.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Cassini\service.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Cassini\service.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Cassini\watcher.xml"
+                    BuildAction = "Content"
+                />
+                <Folder RelPath = "Data\Spring\WindowsService\Cassini\wwwroot\" />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Echo\service.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Echo\service.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Echo\watcher.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Simple\service.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Simple\service.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\WindowsService\Simple\watcher.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Xml\watcher-0.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Xml\watcher-1.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Xml\watcher-simple.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "WindowsService\IntegrationTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\TestUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\ApplicationHostTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\ApplicationTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\LocalizerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\ServiceSupportTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\UtilsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\AggregatedDeployEventDispatcherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\ApplicationWatcherManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\DeployEventAggregatorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\DeployManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\NullSync.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\SpringAssembliesDeployerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\TestingHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\FileSystem\DefaultApplicationWatcherFactoryTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\FileSystem\FileSystemApplicationWatcherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\FileSystem\FileSystemDeployLocationTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\FileSystem\FileSystemMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Deploy\FileSystem\RegularExpressionFilterConfigurerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Common\Gui\ApplicationMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Samples\Echo\Echo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindowsService\Samples\Simple\Simple.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

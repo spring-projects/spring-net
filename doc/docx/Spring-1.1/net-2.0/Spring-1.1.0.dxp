@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXProject Version="5.0" CompileHelpFile="True" RefreshIfExists="False" DocumentSourceCode="False" AlwaysCopySupportFiles="True" PropertyCommentsFrom="0" RelationshipsFrom="2" DefaultRelsOnlyForCollections="True" ProjectGroupName="Spring-1.1.2" HTMLHelpVersion="2" HHNamespace="Spring.NET" HHIdentifier="Spring.NET-1.1.2" H2PlugIn="True" H2PlugInNamespace="MS.VSIPCC.v80" LocaleID="0" ExcludeFiltersRegExp="False" OutputFileExtension=".html">
+    <OutputLocation OutputFolder="L:\release\Spring.Net\doc\sdk\Spring-1.1\net-2.0\web\" HelpFileName="L:\release\Spring.Net\doc\sdk\Spring-1.1\net-2.0\htmlhelp1and2\Spring.NET.hxs" UseFilenameAliases="True" StripMetadata="False" ClearBeforeBuild="True" RemoveOutputFilesAfterCompile="False"/>
+    <HTMLHelpOptions UseALinkMenus="False"/>
+    <OtherOptions CreateContextLinks="True" WriteHelpDescriptions="True" CopySourceCode="False" CreateWinHelpStub="False" Language="English"/>
+    <IncludeFilters IncludePrivate="False" IncludeFriend="False" IncludeProtected="True" IdentifyVisibility="False">
+        <Namespaces>
+            <Property Name="DX.NET:Method">True</Property>
+            <Property Name="DX.NET:Property">True</Property>
+            <Property Name="DX.NET:Field">True</Property>
+            <Property Name="DX.NET:Event">True</Property>
+            <Property Name="DX.NET:Constructor">True</Property>
+            <Property Name="DX.NET:Operator">True</Property>
+        </Namespaces>
+    </IncludeFilters>
+    <CommentExtraction UnTaggedBlocks="False" UnTaggedEnumerations="False" UnTaggedEvents="False" UnTaggedModules="False" UnTaggedUDTs="False" UnTaggedVariables="False" HelpDescriptionImport="3"/>
+    <Diagrams PageNestingLevels="2" OverviewNestingLevels="3" SupressSingleObjectDiagrams="True" DiagramStyleSource="0" ObjFillColor="0" ObjTextColor="0" ObjBorderColor="0" ColFillColor="0" ColTextColor="0" ColBorderColor="0" UseDropShadow="False" CenterCaptions="False" DiagramBold="False" BorderWidth="0" UseDiagramShapes="False"/>
+    <VariableValues>
+        <VariableValue Name="CopyrightNotice" Value="&amp;copy; 2004-2009 Spring.NET Authors. All Rights Reserved."/>
+        <VariableValue Name="FeedbackLink" Value="&lt;a href=&quot;forum.springframework.net&quot;&gt;Send comments&lt;/a&gt; on this topic."/>
+    </VariableValues>
+    <AdditionalFiles/>
+    <ModelComments/>
+    <IgnoreRelationships/>
+    <NamespaceExclusions>
+        <e>Spring.Core~__Delegates</e>
+        <e>Spring.Web~__Delegates</e>
+        <e>Spring.Web~Spring.Util.VirtualEnvironment+HttpRuntimeEnvironment</e>
+        <e>Spring.Web~Spring.Web.Services.WebServiceExporter+WebServiceProxyTypeBuilder</e>
+        <e>Spring.Web~Spring.Web.Support.Script</e>
+        <e>Spring.Web~Spring.Web.Support.ScriptBlock</e>
+        <e>Spring.Web~Spring.Web.Support.ScriptFile</e>
+        <e>Spring.Web~Spring.Web.Support.ScriptEvent</e>
+        <e>Spring.Web~Spring.Globalization_namespace</e>
+        <e>Spring.Aop~Spring.Aop.Framework.Adapter.AfterReturningAdviceAdapter</e>
+        <e>Spring.Aop~Spring.Aop.Framework.Adapter.BeforeAdviceAdapter</e>
+        <e>Spring.Aop~Spring.Aop.Framework.Adapter.MethodBeforeAdviceInterceptor</e>
+        <e>Spring.Aop~Spring.Aop.Framework.Adapter.ThrowsAdviceAdapter</e>
+        <e>Spring.Aop~Spring.Aop.Framework.DynamicProxy.References</e>
+        <e>Spring.Aop~Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher</e>
+        <e>Spring.Aop~Spring.Aop.Support.MethodMatchers+UnionMethodMatcher</e>
+        <e>Spring.Aop~Spring.Aop.Support.MethodMatchers+IntersectionMethodMatcher</e>
+        <e>Spring.Aop~Spring.Aop.Support.TypeFilters+UnionTypeFilter</e>
+        <e>Spring.Aop~Spring.Aop.Support.TypeFilters+IntersectionTypeFilter</e>
+        <e>Spring.Aop~Spring.Aop.Support.UnionPointcut</e>
+        <e>Spring.Aop~Spring.Aop.Support.UnionPointcut+PointcutUnionMethodMatcher</e>
+        <e>Spring.Aop~Spring.Aop.Target.EmptyTargetSource+EmptyTargetSourceObjectReference</e>
+        <e>Spring.Aop~Spring.Aop.TrueMethodMatcher+TrueMethodMatcherObjectReference</e>
+        <e>Spring.Aop~Spring.Aop.TruePointcut+TruePointcutObjectReference</e>
+        <e>Spring.Aop~Spring.Aop.TrueTypeFilter+TrueTypeFilterObjectReference</e>
+        <e>Spring.Core~Spring.Collections.DictionarySet+DictionarySetEnumerator</e>
+        <e>Spring.Core~Spring.Collections.LinkedList+Node</e>
+        <e>Spring.Core~Spring.Collections.LinkedList+NodeHolder</e>
+        <e>Spring.Core~Spring.Collections.LinkedList+LinkedListEnumerator</e>
+        <e>Spring.Core~Spring.Collections.PriorityQueue+PriorityQueueEnumerator</e>
+        <e>Spring.Core~Spring.Collections.SynchronizedEnumerator</e>
+        <e>Spring.Core~Spring.Collections.SynchronizedDictionaryEnumerator</e>
+        <e>Spring.Core~Spring.Context.Support.AbstractApplicationContext+ObjectPostProcessorChecker</e>
+        <e>Spring.Core~Spring.Context.Support.ContextHandler+ContextInstantiator</e>
+        <e>Spring.Core~Spring.Context.Support.ContextHandler+RootContextInstantiator</e>
+        <e>Spring.Core~Spring.Context.Support.ContextHandler+DescendantContextInstantiator</e>
+        <e>Spring.Core~Spring.Context.Support.ContextHandler+ContextSchema</e>
+        <e>Spring.Core~Spring.Context.Support.DelegatingMessageSource+SpecialCaseNullMessageSource</e>
+        <e>Spring.Core~Spring.Core.ControlFlowFactory+DefaultControlFlow</e>
+        <e>Spring.Core~Spring.Core.ControlFlowFactory+DefaultControlFlow+MethodsDeclaredTypeCriteria</e>
+        <e>Spring.Core~Spring.Expressions.ExpressionLexer</e>
+        <e>Spring.Core~Spring.Expressions.ExpressionParser</e>
+        <e>Spring.Core~Spring.Expressions.NodeWithArguments</e>
+        <e>Spring.Core~Spring.Expressions.ArrayConstructorNode</e>
+        <e>Spring.Core~Spring.Expressions.AssignNode</e>
+        <e>Spring.Core~Spring.Expressions.BinaryOperator</e>
+        <e>Spring.Core~Spring.Expressions.BooleanLiteralNode</e>
+        <e>Spring.Core~Spring.Expressions.ConstructorNode</e>
+        <e>Spring.Core~Spring.Expressions.DateLiteralNode</e>
+        <e>Spring.Core~Spring.Expressions.ExpressionListNode</e>
+        <e>Spring.Core~Spring.Expressions.HexLiteralNode</e>
+        <e>Spring.Core~Spring.Expressions.IndexerNode</e>
+        <e>Spring.Core~Spring.Expressions.IntLiteralNode</e>
+        <e>Spring.Core~Spring.Expressions.MethodNode</e>
+        <e>Spring.Core~Spring.Expressions.NullLiteralNode</e>
+        <e>Spring.Core~Spring.Expressions.OpADD</e>
+        <e>Spring.Core~Spring.Expressions.OpAND</e>
+        <e>Spring.Core~Spring.Expressions.OpDIVIDE</e>
+        <e>Spring.Core~Spring.Expressions.OpEqual</e>
+        <e>Spring.Core~Spring.Expressions.OpGreater</e>
+        <e>Spring.Core~Spring.Expressions.OpGreaterOrEqual</e>
+        <e>Spring.Core~Spring.Expressions.OpLess</e>
+        <e>Spring.Core~Spring.Expressions.OpLessOrEqual</e>
+        <e>Spring.Core~Spring.Expressions.OpMODULUS</e>
+        <e>Spring.Core~Spring.Expressions.OpMULTIPLY</e>
+        <e>Spring.Core~Spring.Expressions.UnaryOperator</e>
+        <e>Spring.Core~Spring.Expressions.OpNOT</e>
+        <e>Spring.Core~Spring.Expressions.OpNotEqual</e>
+        <e>Spring.Core~Spring.Expressions.OpOR</e>
+        <e>Spring.Core~Spring.Expressions.OpPOWER</e>
+        <e>Spring.Core~Spring.Expressions.OpSUBTRACT</e>
+        <e>Spring.Core~Spring.Expressions.OpUnaryMinus</e>
+        <e>Spring.Core~Spring.Expressions.OpUnaryPlus</e>
+        <e>Spring.Core~Spring.Expressions.ProjectionNode</e>
+        <e>Spring.Core~Spring.Expressions.PropertyOrFieldNode</e>
+        <e>Spring.Core~Spring.Expressions.RealLiteralNode</e>
+        <e>Spring.Core~Spring.Expressions.StringLiteralNode</e>
+        <e>Spring.Core~Spring.Expressions.TernaryNode</e>
+        <e>Spring.Core~Spring.Expressions.TypeNode</e>
+        <e>Spring.Core~Spring.Expressions.VariableNode</e>
+        <e>Spring.Core~Spring.Objects.Factory.Config.ObjectFactoryCreatingFactoryObject+GenericObjectFactory</e>
+        <e>Spring.Core~Spring.Objects.Factory.Support.AutowireUtils+ConstructorComparer</e>
+        <e>Spring.Core~Spring.Objects.Factory.Support.AutowireUtils+MinimumArgumentCountCriteria</e>
+        <e>Spring.Core~Spring.Objects.Factory.Support.MethodInjectingInstantiationStrategy+MethodInjectingTypeBuilder</e>
+        <e>Spring.Core~Spring.Objects.Support.AutoWiringEventHandlerValue+AutoWirer</e>
+        <e>Spring.Data~Spring.Data.Objects.MappingAdoQueryWithContext+RowMapperImpl</e>
+        <e>Spring.Data~Spring.Transaction.Support.AbstractPlatformTransactionManager+SuspendedResourcesHolder</e>
+        <e>Spring.Data~__Delegates</e>
+        <e>Spring.Data~Spring.Data.IDbCommandCreatorFactory+CommandCreatorWithParamValues</e>
+        <e>Spring.Data~Spring.Data.IDbCommandCreatorFactory+CommandCreatorImpl</e>
+        <e>Spring.Data~Spring.Transaction.Interceptor.TransactionAspectSupport+TransactionInfo</e>
+        <e>Spring.Data~Spring.Transaction.Interceptor.TransactionAttributeSourceEditor+PropertiesEditor</e>
+        <e>Spring.Services~Spring.Remoting.CaoExporter+CaoRemoteFactory</e>
+    </NamespaceExclusions>
+    <DotNetProperties IncludeRelationshipDiagrams="True" IncludeInheritanceHierarchies="True" IncludeBaseMembers="False" StandardInterfaces="System.*,Microsoft.*" OnlyLinkInherited="True" ExternalDocs="True" UseCommentFiles="True" DrillCommentFiles="True" GenerateXMLLinks="False" XMLIsland="" NoInheritedTopics="True" NoInheritedInLists="False" CreateXMLCommentFile="False" ExcludedLanguages="Delphi,JScript,CPP,CPP2005" GenerateAttributes="True" AttributeFilter="" AttributeFilterInclude="False" VBNETDefaultConstructor="False" LinkOverridenMembersToBaseImplementation="False" UseOverloadSummaryForMasterSummary="False" ExcludeEditorBrowsable="True" GenerateBreadCrumbs="True" IncludeAssemblyBreadCrumb="False"/>
+    <DatabaseProperties DocumentViewSource="True" DocumentTriggerSource="True" DocumentProcedureSource="True" RetainTaggedComments="False"/>
+    <XSDProperties UseCustomSettings="False" PageNestingLevels="2" SuppressSingleObjectDiagrams="True" ElementFillColor="15780518" ElementTextColor="0" ElementBorderColor="10789024" ElementBorders="True" ElementRefFillColor="12648447" ElementRefTextColor="0" ElementRefBorderColor="10789024" ElementRefBorders="True" ComplexTypeFillColor="15780518" ComplexTypeTextColor="0" ComplexTypeBorderColor="10789024" ComplexTypeBorders="True" AnyFillColor="13421772" AnyTextColor="0" AnyBorderColor="10789024" AnyBorders="True" NotationTextColor="8421504" RootLinesColor="10789024" DropShadows="False" BoldCaptions="True" GroupParticleSequenceImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\sequence.gif" GroupParticleChoiceImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\choice.gif" GroupParticleAllImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\all.gif"/>
+    <CommentFiles>
+        <CommentFile FileName="..\net-1.1\Spring.Aop.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Aop.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Core.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Core.dll"/>
+        <CommentFile FileName="Spring.Data.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Data.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Services.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Services.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Web.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Web.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Data.NHibernate.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\bin\net\2.0\debug\Spring.Data.NHibernate12.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Testing.NUnit.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\bin\net\2.0\debug\Spring.Testing.NUnit.dll"/>
+        <CommentFile FileName="Spring.Web.Extensions.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\bin\net\2.0\debug\Spring.Web.Extensions.dll"/>
+    </CommentFiles>
+    <DocType Name="dx.net" Template="Visual Studio 2005 Style" UseHelpTemplates="False">
+        <TOCSource TOCSource="0" SpecificTOCName=""/>
+        <ModelCommentProfile Version="5.0" Namespace="dx.net" Name="" Description=""/>
+    </DocType>
+    <NetAssemblies RootAssemblyName="">
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Aop.dll" mRootModule="" AssemblyName="Spring.Aop" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Core.dll" mRootModule="" AssemblyName="Spring.Core" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Data.dll" mRootModule="" AssemblyName="Spring.Data" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Services.dll" mRootModule="" AssemblyName="Spring.Services" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\build\net\2.0\debug\Spring.Web.dll" mRootModule="" AssemblyName="Spring.Web" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\bin\net\2.0\debug\Spring.Data.NHibernate12.dll" mRootModule="" AssemblyName="Spring.Data.NHibernate12" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\bin\net\2.0\debug\Spring.Testing.NUnit.dll" mRootModule="" AssemblyName="Spring.Testing.NUnit" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\bin\net\2.0\debug\Spring.Web.Extensions.dll" mRootModule="" AssemblyName="Spring.Web.Extensions" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+    </NetAssemblies>
+    <PropertyBag/>
+</DocumentXProject>

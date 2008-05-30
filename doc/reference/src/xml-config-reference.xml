@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="xml-config-reference">
+  <title>XML Configuration Reference</title>
+
+  <sect1>
+    <title>Introduction</title>
+
+    <para>This chapter contains an exhaustive listing for pretty much every
+    possible XML configuration scenario for Spring.NET's XML based
+    configuration. If you need to configure an object in a Spring.NET IoC
+    container, and you are using Spring.NET's XML configuration option to do
+    so (which, short of programmatic configuration, is pretty much all you can
+    use for configuration right now), then this chapter will most probably
+    have an example XML fragment that can illustrate what you need to
+    do.</para>
+
+    <para>Please note that this chapter is not a knee-jerk or belated response
+    to addressing any perceived complexity in the Spring.NET XML
+    configuration. Spring.NET's XML configuration syntax is, in the opinion of
+    the developers (for what that's worth), eminently readable... one has
+    <literal>&lt;objects/&gt;</literal>, these objects have zero or more
+    <literal>&lt;constructor-arg/&gt;</literal> or
+    <literal>&lt;property/&gt;</literal> elements that are generally
+    <literal>&lt;ref/&gt;erences</literal> to other
+    <literal>&lt;object/&gt;s</literal>. To use an analogy, Spring.NET's XML
+    configuration reads like a William Weaver translation of an Umberto Eco
+    novel... the words (the XML elements) are easy, but the devil (and
+    salvation) is in the detail.</para>
+  </sect1>
+
+  <sect1>
+    <title>Object Configuration</title>
+
+    <para>This section details the configuration of one's object definitions.
+    It contains fragments of XML that illustrate the absolute basics, such as
+    how to create a simple object with no dependencies, all the way through to
+    often overlooked features such as instantiating an object from of a method
+    call to another object.</para>
+
+    <sect2>
+      <title>Objects</title>
+
+      <para>This section details how to define an object in Spring.NET XML. If
+      you need somewhere to start, this is the place.</para>
+
+      <para>The section starts off with the absolute basics of defining an
+      object (the &lt;object/&gt; element), and then describes the setting of
+      constructor arguments and properties. Once you are down with those three
+      cornerstones of configuration (yes, that is really it), the rest of the
+      text in this reference is spent describing the values that one can
+      supply to those constructor arguments and property values.</para>
+
+      <sect3>
+        <title>Plain Object Definition</title>
+
+        <para>Find below an example of defining an object that has no
+        dependencies.</para>
+
+        <programlisting>&lt;object name="service" <co
+            id="xcf-plain-vanilla-object-name" />
+        type="Example.Foo, FooAssembly"/&gt; <co
+            id="xcf-plain-vanilla-object-type" /> <co
+            id="xcf-plain-vanilla-object-scope" /></programlisting>
+
+        <calloutlist>
+          <callout arearefs="xcf-plain-vanilla-object-name">
+             This is the name of the object (
+
+            <xref linkend="objects-objectname" />
+
+            ). 
+          </callout>
+
+          <callout arearefs="xcf-plain-vanilla-object-type">
+             This is the assembly qualified name of the object's Type or class (
+
+            <xref linkend="objects-factory-class" />
+
+            ). 
+          </callout>
+
+          <callout arearefs="xcf-plain-vanilla-object-scope">
+             Please note that the 
+
+            <literal>scope</literal>
+
+             of the object is implicitly 
+
+            <literal>singleton</literal>
+
+             (see 
+
+            <xref linkend="xcf-singleton" />
+
+             of this chapter and 
+
+            <xref linkend="objects-factory-modes" />
+
+             in the reference documentation). 
+          </callout>
+        </calloutlist>
+
+        <para>Defining this object in one's context and then retrieving said
+        object from said context will result in the creation of an instance of
+        the <classname>Foo</classname> class. The default constructor of the
+        <classname>Foo</classname> class will be invoked, and since no
+        properties and other other configuration elementts are present, the
+        resulting object will be returned as is. The simple case really is as
+        simple as that.</para>
+
+        <para>Further (un-annotated) examples of defining an object that has
+        no dependencies can be found below...</para>
+
+        <programlisting>&lt;object id="anException" type="System.ArgumentException, Mscorlib"/&gt;</programlisting>
+
+        <programlisting>&lt;object id="anEmptyList" type="System.Collections.ArrayList, Mscorlib"/&gt;</programlisting>
+
+        <programlisting>&lt;object id="anSqlCommand" type="System.Data.SqlClient.SqlCommand, System.Data"/&gt;</programlisting>
+      </sect3>
+
+      <sect3>
+        <title>Constructor Arguments</title>
+
+        <para></para>
+
+        <programlisting></programlisting>
+      </sect3>
+
+      <sect3>
+        <title>Properties</title>
+
+        <para></para>
+
+        <programlisting></programlisting>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title>Object Types</title>
+
+      <para></para>
+
+      <sect3 id="xcf-primitives">
+        <title>Primitives</title>
+
+        <para>This section details the various configuration options available
+        for injecting, handoing, and otherwise defining the classic primitive
+        types. The <classname>string</classname> and
+        <classname>date</classname> types are not primitives, but they are
+        described here nevertheless.</para>
+
+        <para>Spring.NET uses the <classname>TypeConverter</classname>
+        mechanism that is part of the SDK to handle the conversion from string
+        values in one's XML configuration to the appropriate type. This
+        reference does not go into detail about this mechanism, so you may
+        wish to consult the attendant section of the reference material proper
+        if you are having type conversion issues... <xref
+        linkend="objects-objects-conversion" /></para>
+
+        <sect4 id="xcf-numbers">
+          <title>Numbers</title>
+
+          <para>This section describes configuring the various numeric types
+          supported by the CLR. Any numeric type can be injected into an
+          object, or made available as an object definition in its own
+          right.</para>
+
+          <para>Find below the class definition that is used to illustrate
+          configuring numeric values in the following examples.</para>
+
+          <programlisting>[C#]
+namespace Example
+{
+    public class Gauge
+    {
+        private int setting;
+        private float sensitivity;
+        
+        public int Setting 
+        {
+            set { this.setting = value; }
+        }
+        
+        public float Sensitivity 
+        {
+            set { this.sensitivity = value; }
+        }
+    }    
+}</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="setting" value="213"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <para>We can also use any of the normal supported conventions (such
+          as hexadecimal) to set values, as shown below.</para>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="setting" value="0x10"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="sensitivity" value="31000.00"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <para>Given the above examples, it is trivial to extrapolate the
+          configuration of longs and the various unsigned variants of the
+          numeric types, so no examples of such configuration will be
+          given.</para>
+        </sect4>
+
+        <sect4>
+          <title>Dates</title>
+
+          <para></para>
+
+          <para>Find below the class definition that is used to illustrate
+          configuring date values in the following examples.</para>
+
+          <programlisting>[C#]
+namespace Example
+{
+    public class Gauge
+    {
+        private DateTime lastChecked;
+        
+        public DateTime LastChecked 
+        {
+            set { this.lastChecked = value; }
+        }
+    }    
+}</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="lastChecked" value=""/&gt;
+&lt;/object&gt;</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="lastChecked" value=""/&gt;
+&lt;/object&gt;</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="lastChecked" value=""/&gt;
+&lt;/object&gt;</programlisting>
+        </sect4>
+
+        <sect4 id="xcf-booleans">
+          <title>Booleans</title>
+
+          <para>Configuring boolean values in one's configuration file (s) is
+          pretty much the same as configuring numeric and date values... one
+          simply uses the <literal>value</literal> attribute or
+          <literal>&lt;value/&gt;</literal> element (as appropriate). The only
+          caveat (if indeed it can be considered to be a caveat) is that the
+          value <emphasis role="bold">must</emphasis> be one of the following
+          two values... <itemizedlist>
+              <listitem>
+                <para><emphasis role="bold">true</emphasis></para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">false</emphasis></para>
+              </listitem>
+            </itemizedlist></para>
+
+          <para>Find below the class definition that is used to illustrate
+          configuring boolean values in the following examples.</para>
+
+          <programlisting>[C#]
+namespace Example
+{
+    public class Gauge
+    {
+        private bool isSwitchedOn;
+        
+        public bool IsSwitchedOn 
+        {
+            set { this.isSwitchedOn = value; }
+        }
+    }    
+}</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="IsSwitchedOn" value="true"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="IsSwitchedOn" value="false"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <para>Please note that as with pretty much everything in Spring.NET,
+          the <literal>true</literal> and <literal>false</literal> string
+          values are not case sensitive. The string values
+          <literal>TRUE</literal>, <literal>FALSE</literal>,
+          <literal>True</literal>, etc. are all valid.</para>
+
+          <para>If you wanted to use different values for the
+          <literal>true</literal> and <literal>false</literal> string values
+          (perhaps <literal>on</literal> and <literal>off</literal> values in
+          the case of the preceding <classname>Gauge</classname> example), you
+          would need to register a custom <classname>TypeConverter</classname>
+          implementation (see <xref
+          linkend="objects-objects-conversion" />).</para>
+        </sect4>
+
+        <sect4 id="xcf-strings">
+          <title>Strings</title>
+
+          <para>Unsurprisingly, <classname>String</classname> values are the
+          easiest to configure. Consider the following example of strings that
+          are defined as top level objects...</para>
+
+          <programlisting>&lt;object id="supportTeamEmail" type="string"&gt;
+    &lt;constructor-arg index="0" value="support@my.company.com"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <programlisting>&lt;object id="projectManagerEmail" type="string"&gt;
+    &lt;constructor-arg index="0" value="projectManager@my.company.com"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <para>The <literal>index="0"</literal> attribute value pair of the
+          <literal>constructor-arg</literal> element is required so that the
+          correct constructor of the <classname>String</classname> class can
+          be invoked... don't forget to put it in. (If you do forget to put it
+          in, then a not-very-helpful
+          <classname>UnsatisfiedDependencyException</classname> will be thrown
+          by the Spring.NET container).</para>
+        </sect4>
+
+        <sect4 id="xcf-enums">
+          <title>Enumerations</title>
+
+          <para>Find below the class definition and XML snippets that
+          illustrate the configuration of enumerations.</para>
+
+          <programlisting>[C#]
+namespace Example
+{
+    public enum RunningMode
+    {
+        Off,
+        Starting,
+        Started,
+        SwitchingOff,
+        Off
+    }
+
+    public class Gauge
+    {
+        private RunningMode runMode;
+        
+        public RunningMode RunMode 
+        {
+            set { this.runMode = value; }
+        }
+    }    
+}</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="RunMode" value="Starting"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+    &lt;property name="RunMode" value="SwitchingOff"/&gt;
+&lt;/object&gt;</programlisting>
+
+          <para>Please note that as with pretty much everything in Spring.NET,
+          the string passed to the value of the <literal>value</literal>
+          attribute is not case sensitive. In the case of this specific
+          example, the string values <literal>starting</literal> and
+          <literal>SWITCHINGOFF</literal> are both valid (though not
+          recommended; it's always best to stick to the casing of the original
+          enum, to aid in refactorings).</para>
+
+          <para>See also <xref
+          linkend="objects-type-conversion-enums" />.</para>
+        </sect4>
+      </sect3>
+
+      <sect3>
+        <title>Collections</title>
+
+        <para></para>
+
+        <sect4>
+          <title>Arrays</title>
+
+          <para></para>
+        </sect4>
+
+        <sect4>
+          <title>Lists</title>
+
+          <para></para>
+        </sect4>
+
+        <sect4>
+          <title>Dictionaries</title>
+
+          <para></para>
+        </sect4>
+
+        <sect4>
+          <title>Sets</title>
+
+          <para></para>
+        </sect4>
+
+        <sect4>
+          <title>Custom Collection Types</title>
+
+          <para></para>
+        </sect4>
+
+        <sect4>
+          <title>Everything Else</title>
+
+          <para></para>
+        </sect4>
+      </sect3>
+
+      <sect3>
+        <title>Nulls</title>
+
+        <para></para>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title>Scope</title>
+
+      <para></para>
+
+      <sect3 id="xcf-singleton">
+        <title>Singleton</title>
+
+        <para></para>
+      </sect3>
+
+      <sect3 id="xcf-prototype">
+        <title>Prototype</title>
+
+        <para></para>
+      </sect3>
+
+      <sect3>
+        <title>Everything Else Scope Related</title>
+
+        <para></para>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title>Factories</title>
+
+      <para>Perhaps unsurprisingly, implementations of the classic Factory
+      pattern can be found all over the Spring.NET codebase... indeed, the
+      core <classname>IApplicationContext</classname> class is a compelling
+      example of a factory implementation (albeit a very sophisticated
+      example). Spring.NET's support for the factory pattern extends into two
+      distinct areas... supporting factories that are external to the
+      framework, and factories that are internal to the framework.</para>
+
+      <para>External factory classes would include any factory classes that
+      you may have written: examples of this would include (perhaps)
+      <classname>IWiGFactory</classname> (to create
+      <classname>IWiG</classname> implementations), etc. You can integrate any
+      such existing factory classes directly into the Spring.NET container
+      using the factory method support provided by the Spring IoC container.
+      Examples of such integration are are provided below, but do see <xref
+      linkend="objects-factory-class-static-factory-method" /> and <xref
+      linkend="objects-factory-class-instance-factory-method" /> for the full
+      lowdown.</para>
+
+      <para>Spring.NET also has the notion of a special <emphasis>Factory
+      Object</emphasis> (and this notion is encapsulated by the
+      <classname>IFactoryObject</classname> interface). The
+      <classname>IFactoryObject</classname> interface is (unsurprisingly) a
+      factory for creating one or more objects. Please do read <xref
+      linkend="objects-factory-class-instance-factory-method" /> for a
+      comprehensive explanation of the <classname>IFactoryObject</classname>
+      interface and the Spring.NET container's special treatment of objects
+      that implement said interface. This section of the documentation will
+      show some example configuration for all (well, most) of the
+      <classname>IFactoryObject</classname> implementations that come provided
+      out of the box with every Spring.NET release.</para>
+
+      <sect3>
+        <title>Factory Methods</title>
+
+        <para></para>
+      </sect3>
+
+      <sect3>
+        <title>Factory Objects</title>
+
+        <para>This section of the documentation presents examples for most of
+        the <classname>IFactoryObject</classname> implementations that come
+        out of the box with every Spring.NET release. A notable exception to
+        this catalogue of <classname>IFactoryObject</classname> configuration
+        examples is the AOP-specific
+        <classname>ProxyFactoryObject</classname>... see <xref
+        linkend="aop-quickstart" /> for more details regarding that particular
+        <classname>IFactoryObject</classname> implementation.</para>
+
+        <para>Most (if not all) of the <classname>IFactoryObject</classname>
+        implementations referenced in the following configuration examples can
+        be found in the <literal>Spring.Objects.Factory.Config</literal>
+        namespace; do also consult the attendant API documentation (because
+        most of the <classname>IFactoryObject</classname> implementations
+        carry configuration examples specific to the objects that they
+        create).</para>
+
+        <sect4>
+          <title>DelegateFactoryObject</title>
+
+          <para>One can use the <classname>DelegateFactoryObject</classname>
+          to (unsurprisingly) create and configure
+          <classname>Delegate</classname> objects. One trenchant use case for
+          this <classname>IFactoryObject</classname> (and indeed the very
+          reason that prompted it's creation) is to create declaratively a
+          <classname>ConfigListener</classname> delegate for use with the
+          IBatis.NET project's <classname>SqlMapper</classname> class. This
+          approach (of using the <classname>DelegateFactoryObject</classname>)
+          allows one to keep all of one's <classname>SqlMapper</classname>
+          configuration together, nice and tidy, in the one place.</para>
+
+          <para>So lets say we have a service object that we need to inject
+          with a delegate; class definitions for the class that has the
+          dependency on the delegate, the delegate class itself, and a class
+          that supplies the method that will be passed to the delegate when it
+          is created can be found below.</para>
+
+          <programlisting>[C#]
+namespace Example		
+{
+    public delegate void GaugeCallback (object sender, GuageEventArgs e);
+
+    public class Gauge
+    {
+        private GaugeCallback callback;
+        
+        public GaugeCallback Callback 
+        {
+            set { this.callback = value; }
+        }
+        
+        public void SomeOperation() {
+			// some logic...
+			callback(this, new GaugeEventArgs());
+        }
+    }
+    
+    public class MyGaugeListener() {
+    
+		public void HandleGaugeOperation(object sender, GuageEventArgs e) {
+			// do something...
+		}
+    }
+}</programlisting>
+
+          <para>The attendant configuration to supply an instance of the
+          <classname>Gauge</classname> class with a configured
+          <classname>GuageCallback</classname> delegate would look like
+          so...</para>
+
+          <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;object id="gauge" type="Example.Gauge, FooAssembly"&gt;
+		&lt;property name="callback"&gt;
+			&lt;object type="Spring.Objects.Factory.Config.DelegateFactoryObject"&gt;
+				&lt;property name="delegateType" value="Example.GaugeCallback, FooAssembly"/&gt;
+				&lt;property name="targetObject"&gt;
+					&lt;object type="Example.MyGaugeCallback, FooAssembly"/&gt;
+				&lt;/property&gt;
+			&lt;/object&gt;
+		&lt;/property&gt;
+    &lt;/object&gt;
+&lt;/objects&gt;</programlisting>
+        </sect4>
+
+        <sect4>
+          <title>DictionaryFactoryObject</title>
+
+          <para></para>
+        </sect4>
+
+        <sect4>
+          <title>Log4NetFactoryObject</title>
+
+          <para></para>
+        </sect4>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title></title>
+
+      <para></para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Context Configuration</title>
+
+    <para>This section details the configuration of one or more contexts...
+    i.e. not the objects themselves, but rather of the hierarchy of contexts
+    in which one's object definitions are contained.</para>
+  </sect1>
+</chapter>

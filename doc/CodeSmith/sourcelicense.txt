@@ -1,0 +1,45 @@
+CODESMITH SOURCE CODE LICENSE AGREEMENT
+
+IMPORTANT--READ CAREFULLY: This End-User License Agreement ("EULA") is a legal agreement between you (either an individual or an entity) and Eric J. Smith ("SMITH") for the CodeSmith template based code generator software product source code and any included components or materials ("SOURCE CODE").  BY INSTALLING, COPYING, OR OTHERWISE USING THE SOURCE CODE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS EULA.  IF YOU DO NOT AGREE TO THE TERMS OF THIS EULA, YOU ARE NOT AUTHORIZED TO INSTALL, COPY, OR OTHERWISE USE THE SOURCE CODE.
+
+SOURCE CODE LICENSE
+
+The SOURCE CODE is protected by United States copyright laws and international copyright treaties, as well as other intellectual property laws and treaties.  The SOURCE CODE is licensed, not sold.
+
+1. GRANT OF LICENSE. This EULA grants you the following rights:
+a. Source Code. You may install and compile one copy of the SOURCE CODE on a single computer. The primary user of the computer on which the SOURCE CODE is installed may make a second copy for his or her exclusive use on a portable computer.
+b. Storage/Network Use. You may also store or install a copy of the SOURCE CODE on a storage device, such as a network server, used only to install or compile the SOURCE CODE on your other computers over an internal network; however, you must acquire and dedicate a license for each separate computer on which the SOURCE CODE is installed or compiled from the storage device. A license for the SOURCE CODE may not be shared or used concurrently on different computers.
+c. Use and Modification.  SMITH grants you the right to use and modify the SOURCE CODE to better fit your needs.  You may not distribute the SOURCE CODE, or any modified version of the SOURCE CODE, in any form. Any modifications made to the SOURCE CODE will continue to be subject to the terms and conditions of this EULA.  Any modified versions of the SOURCE CODE may only be executed in object form by users also owning a SOURCE CODE LICENSE or by users owning a CodeSmith Professional license. 
+d. Use of Generated Output.  You may distribute the output of your custom templates or the included templates in any way.
+
+2. DESCRIPTION OF OTHER RIGHTS AND LIMITATIONS. 
+a. Separation of Components. The SOURCE CODE is licensed as a single product.
+b. Redistribution. The SOURCE CODE may not be redistributed in any way.
+c. Custom Template Distribution.  You may distribute your custom templates for the SOURCE CODE only if they are offered free of charge.
+d. No Rental.  You may not rent, lease, lend or provide commercial hosting services to third parties with the SOURCE CODE.
+e. Non-Transferable. This license may not be transfered or sold in any way.
+f. Termination. Without prejudice to any other rights, SMITH may terminate this EULA if you fail to comply with the terms and conditions of this EULA. In such event, you must destroy all copies of the SOURCE CODE and all of its component parts.
+
+3. ADDITIONAL SOFTWARE/SERVICES.
+a. Support Services. SMITH may, but is not obligated to,  provide you with support services related to the SOURCE CODE.
+b. Supplements.  This EULA applies to additional software and updates of the SOURCE CODE, including without limitation supplements, service packages, hot fixes, or add-on components (collectively "Supplements") that SMITH may provide to you or make available to you after the date you obtain your initial copy of the SOURCE CODE, unless other terms are provided along with such Supplements.
+
+4. COPYRIGHT. All title and copyrights in and to the SOURCE CODE (including but not limited to any images, photographs, animations, video, audio, music, text, SAMPLE CODE, and "applets" incorporated into the SOURCE CODE) and any copies of the SOURCE CODE are owned by SMITH. The SOURCE CODE is protected by copyright laws and international treaty provisions. Therefore, you must treat the SOURCE CODE like any other copyrighted material except that you may install the SOURCE CODE.
+
+5. NON-DISCLOSURE. Under this agreement you are strictly forbidden to disclose any information about the SOURCE CODE to any third party, or publish in any form the SOURCE CODE, or any of its parts. SMITH understands that releasing SOURCE CODE means disclosing SMITH's know-how, and bears many potential risks to SMITH's position in software technology. SMITH is taking these risks to provide you with additional opportunities to facilitate your development process and improve your final products. In return SMITH expects you to act responsibly and not to disclose, either intentionally or not, to public or any third party the information you are provided with. SMITH expects you to treat the SOURCE CODE as your own confidential material.
+
+5. U.S. GOVERNMENT RESTRICTED RIGHTS. All SOURCE CODE provided to the U.S. Government pursuant to solicitations issued on or after December 1, 1995 is provided with the commercial license rights and restrictions described elsewhere herein. All SOURCE CODE provided to the U.S. Government pursuant to solicitations issued prior to December 1, 1995 is provided with "Restricted Rights" as provided for in FAR, 48 CFR 52.227-14 (JUNE 1987) or DFAR,48 CFR 252.227-7013 (OCT 1988), as applicable.
+
+6. EXPORT RESTRICTIONS. You acknowledge that the SOURCE CODE is subject to U.S. export jurisdiction. You agree to comply with all applicable international and national laws that apply to these products, including the U.S. Export Administration Regulations, as well as end-user, end-use and destination restrictions issued by U.S. and other governments.
+
+7. DISCLAIMER OF WARRANTY
+To the maximum extent permitted by applicable law, SMITH provides the SOURCE CODE and support services (if any) AS IS AND WITH ALL FAULTS, and hereby disclaim all other warranties and conditions, whether express, implied, or statutory, including, but not limited to, any (if any) implied warranties, duties or conditions of merchantability, of fitness for a particular purpose, of reliability or availability, of accuracy or completeness of responses, of results, of workmanlike effort, of lack of viruses, and of lack of negligence, all with regard to the SOURCE CODE, and the provision of or failure to provide support or other services, information, software, and related content through the SOURCE CODE or otherwise arising out of the use of the SOURCE CODE. ALSO, THERE IS NO WARRANTY OR CONDITION OF TITLE, QUIET ENJOYMENT, QUIET POSSESSION, CORRESPONDENCE TO DESCRIPTION, OR NON-INFRINGEMENT WITH REGARD TO THE SOURCE CODE.
+
+8.  EXCLUSION OF INCIDENTAL, CONSEQUENTIAL, AND CERTAIN OTHER DAMAGES. 
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL SMITH BE LIABLE FOR ANY SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS OR CONFIDENTIAL OR OTHER INFORMATION, FOR BUSINESS INTERRUPTION, FOR PERSONAL INJURY, FOR LOSS OF PRIVACY, FOR FAILURE TO MEET ANY DUTY INCLUDING OF GOOD FAITH OR OF REASONABLE CARE, FOR NEGLIGENCE, AND FOR ANY OTHER PECUNIARY OR OTHER LOSS WHATSOEVER) ARISING OUT OF OR IN ANY WAY RELATED TO THE USE OF OR INABILITY TO USE THE SOURCE CODE, THE PROVISION OF OR FAILURE TO PROVIDE SUPPORT OR OTHER SERVICES, INFORMATION, SOFTWARE, AND RELATED CONTENT THROUGH THE SOURCE CODE OR OTHERWISE ARISING OUT OF THE USE OF THE SOURCE CODE, OR OTHERWISE UNDER OR IN CONNECTION WITH ANY PROVISION OF THIS EULA, EVEN IN THE EVENT OF THE FAULT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY, BREACH OF CONTRACT, OR BREACH OF WARRANTY OF SMITH, AND EVEN IF SMITH HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+9. LIMITATION OF LIABILITY AND REMEDIES. NOTWITHSTANDING ANY DAMAGES THAT YOU MIGHT INCUR FOR ANY REASON WHATSOEVER (INCLUDING, WITHOUT LIMITATION, ALL DAMAGES REFERENCED ABOVE AND ALL DIRECT OR GENERAL DAMAGES), THE ENTIRE LIABILITY OF SMITH UNDER ANY PROVISION OF THIS EULA AND YOUR EXCLUSIVE REMEDY FOR ALL OF THE FOREGOING SHALL BE LIMITED TO THE GREATER OF THE AMOUNT ACTUALLY PAID BY YOU FOR THE SOURCE CODE OR U.S.$5.00.  THE FOREGOING LIMITATIONS, EXCLUSIONS AND DISCLAIMERS SHALL APPLY TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, EVEN IF ANY REMEDY FAILS ITS ESSENTIAL PURPOSE.
+
+10. APPLICABLE LAW. This EULA is governed by the laws of the State of Texas.
+
+11. ENTIRE AGREEMENT. This EULA (including any addendum or amendment to this EULA which is included with the SOURCE CODE) is the entire agreement between you and SMITH relating to the SOURCE CODE and support services (if any), and it supersedes all prior or contemporaneous oral or written communications, proposals, and representations with respect to the SOURCE CODE or any other subject matter covered by this EULA. To the extent the terms of any SMITH policies or programs for support services conflict with the terms of this EULA, the terms of this EULA shall control.

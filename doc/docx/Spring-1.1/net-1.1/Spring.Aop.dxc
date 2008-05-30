@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\Spring.Net\build\package\Spring.NET\bin\net\1.1\debug\Spring.Aop.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Aop" RelatedProject="Spring-1.0-net-1.1.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="True" LoadOnDemand="False" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Aop" tid="##PROJECT_INTRODUCTION" q="" cd="38813.6247569444"><![CDATA[<P><SPAN class=emphasis><EM>Aspect-Oriented Programming</EM></SPAN> (<SPAN class=emphasis><EM>AOP</EM></SPAN>) complements OOP by providing another way of thinking about program structure. Whereas OO decomposes applications into a hierarchy of objects, AOP decomposes programs into <SPAN class=emphasis><EM>aspects</EM></SPAN> or <SPAN class=emphasis><EM>concerns.&nbsp;</EM> This enables the modularization of concerns such as transaction management that would otherwise cut across multiple objects (such concerns are often termed <SPAN class=emphasis><EM>crosscutting</EM></SPAN> concerns).</SPAN></P>]]></c>
+<c eid="Spring.Aop" tid="##PROJECT_GETTINGSTARTED" q="" cd="39245.5270833333"><![CDATA[The <A href="http://www.springframework.net/doc-latest/reference/html/aop-quickstart.html">AOP Quickstart</A> included in the distribution is a good starting point to explore the functionality offered in Spring.NET's AOP Framework.]]></c>
+<c eid="Spring.Aop~AopAlliance.Aop_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[AOP framework interfaces based on the <A href="http://aopalliance.sourceforge.net/">AOP Alliance</A> API.]]></c>
+<c eid="Spring.Aop~AopAlliance.Intercept_namespace" tid="##SUMMARY" q="" cd="38813.6244675926">AOP Alliance interception interfaces.</c>
+<c eid="Spring.Aop~Spring.Aop_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[<P>Core Spring.NET AOP interfaces, built on top of and implementing all of the AOP Alliance AOP interoperability interfaces.</P>
+<P>Spring.NET AOP also offers:</P>
+<OL>
+<LI>Introduction support</LI>
+<LI>A pointcut abstraction, supporting "static" pointcuts (class and method-based) and "dynamic" pointcuts (also considering method arguments).</LI>
+<LI>A&nbsp;full range of advice types, including around, before, after returning and throws advice.</LI>
+<LI>Extensibility points allowing arbitrary custom advice types to be plugged in without modifying the core framework.</LI></OL>
+<P>Spring.NET AOP can be used programmatically or (preferably) in conjunction with the Spring.NET IoC container.</P>]]></c>
+<c eid="Spring.Aop~Spring.Aop.Config_namespace" tid="##SUMMARY" q="" cd="39423.6115856481">Custom schema for configuration</c>
+<c eid="Spring.Aop~Spring.Aop.Framework_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[<P>Basic AOP infrastructure compliant with the <A href="http://aopalliance.sourceforge.net/">AOP Alliance</A>&nbsp;interfaces.</P>
+<P>Spring.NET AOP supports proxying interfaces or classes, introductions, and offers static and dynamic pointcuts.<BR></P>
+<P>Any Spring.NET AOP proxy can be cast to the %ProxyConfig:Spring.Aop~Spring.Aop.Framework.ProxyConfig% AOP configuration interface in this namespace to add or remove interceptors.</P>
+<P>The %ProxyFactoryObject:Spring.Aop~Spring.Aop.Framework.ProxyFactoryObject% is a convenient way to create AOP proxies in an IObjectFactory or IApplicationContext. However, proxies can be created programmatically using the %ProxyFactory:Spring.Aop~Spring.Aop.Framework.ProxyFactory% class.</P>]]></c>
+<c eid="Spring.Aop~Spring.Aop.Framework.Adapter_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[<P>Service Provider Interface (SPI) namespace allowing Spring.NET AOP framework to handle arbitrary advice types.<BR></P>
+<P>Users who want to use the Spring.NET AOP framework, rather than extend its capabilities, don't need to concern themselves with this namespace.</P>]]></c>
+<c eid="Spring.Aop~Spring.Aop.Framework.AutoProxy_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[Object&nbsp;post-processors for use in IApplicationContexts to simplify AOP usage by automatically creating AOP proxies without the need to use a ProxyFactoryObject. 
+<P>&nbsp; 
+<P>The various post-processors in this package need only be added to an IApplicationContext (typically in an XML object definition document) to automatically proxy selected objects. </P>]]></c>
+<c eid="Spring.Aop~Spring.Aop.Framework.AutoProxy.Target_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[<P>Generic support classes for target source creation. </P>]]></c>
+<c eid="Spring.Aop~Spring.Aop.Framework.DynamicProxy_namespace" tid="##SUMMARY" q="" cd="38813.6245717593">Contains functionality relating to the creation of dynamic proxy instances.</c>
+<c eid="Spring.Aop~Spring.Aop.Support_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[Convenience classes for using Spring.NET's AOP API.]]></c>
+<c eid="Spring.Aop~Spring.Aop.Target_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[<P>This namespace contains implementations of the %Spring.Aop.ITargetSource:Spring.Aop~Spring.Aop.ITargetSource% interface.<BR></P>
+<P>The simplest implementation is the %SingletonTargetSource:Spring.Aop~Spring.Aop.Target.SingletonTargetSource%, which is used in the AOP framework to wrap a single target instance. This is normally appropriate, and is the current default.</P>
+<P>Other features include pooling implementations, that provides a target from a pool for each request, ensuring a single threaded programming model; and a&nbsp;"prototype" implementation, that uses a new target instance for each invocation. (Much like single-call .NET remoting semanics).</P>]]></c>
+<c eid="Spring.Aop~Spring.Aspects_namespace" tid="##SUMMARY" q="" cd="39423.514537037">Reusable aspects</c>
+<c eid="Spring.Aop~Spring.Aspects.Cache_namespace" tid="##SUMMARY" q="" cd="39423.5146412037">Caching asepct</c>
+<c eid="Spring.Aop~Spring.Aspects.Exceptions_namespace" tid="##SUMMARY" q="" cd="39423.514837963">Exception handling aspect</c>
+<c eid="Spring.Aop~Spring.Aspects.Logging_namespace" tid="##SUMMARY" q="" cd="39423.5148611111">Logging aspect</c>
+    </DocumentXComments>

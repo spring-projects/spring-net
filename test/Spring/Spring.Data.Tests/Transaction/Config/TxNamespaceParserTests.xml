@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+	       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:tx="http://www.springframework.net/tx"
+         xmlns:aop="http://www.springframework.net/aop"
+         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects.xsd
+         http://www.springframework.net/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd">
+
+  <object id="testObjectOperation" type="Spring.Aop.Support.SdkRegularExpressionMethodPointcut, Spring.Aop">
+    <property name="pattern" value="Spring.Objects.TestObject.*"/>
+  </object>
+  
+  <tx:advice id="txAdvice">
+    <tx:attributes>
+      <tx:method name="Get*" read-only="true"/>
+      <tx:method name="Exceptional"/>
+    </tx:attributes>
+  </tx:advice>
+
+  <!-- this advice is not applied, just testing advice definition itself. -->
+  <tx:advice id="txRollbackAdvice">
+    <tx:attributes>
+      <tx:method name="Get*" rollback-for="System.ApplicationException"/>
+      <tx:method name="Exceptional" no-rollback-for="System.ArithmeticException"/>
+    </tx:attributes>
+  </tx:advice>
+  
+  <!-- this will not match any object in the context, just used to check internal registration -->
+  <tx:attribute-driven/>  
+
+
+  <aop:config>
+
+    <aop:advisor pointcut-ref="testObjectOperation" advice-ref="txAdvice"/>
+
+  </aop:config>
+
+
+  <object name="transactionManager" type="Spring.Transaction.CallCountingTransactionManager, Spring.Data.Tests"/>
+
+  <object name="testObject" type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+
+</objects>

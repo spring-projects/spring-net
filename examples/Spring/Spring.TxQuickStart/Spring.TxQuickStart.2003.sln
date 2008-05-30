@@ -1,0 +1,41 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.TxQuickStart.2003", "src\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2003.csproj", "{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.TxQuickStart.Tests.2003", "test\Spring\Spring.TxQuickStart.Tests\Spring.TxQuickStart.Tests.2003.csproj", "{026EED0B-267B-4518-AD3B-B3D4291CC2F8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Debug-1.1 = Debug-1.1
+		Release = Release
+		Release-1.1 = Release-1.1
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}.Debug.ActiveCfg = Debug|.NET
+		{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}.Debug.Build.0 = Debug|.NET
+		{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}.Debug-1.1.ActiveCfg = Debug|.NET
+		{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}.Debug-1.1.Build.0 = Debug|.NET
+		{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}.Release.ActiveCfg = Release|.NET
+		{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}.Release.Build.0 = Release|.NET
+		{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}.Release-1.1.ActiveCfg = Release|.NET
+		{B3C676F7-52DA-41D7-953C-38C9E62FFDF6}.Release-1.1.Build.0 = Release|.NET
+		{026EED0B-267B-4518-AD3B-B3D4291CC2F8}.Debug.ActiveCfg = Debug|.NET
+		{026EED0B-267B-4518-AD3B-B3D4291CC2F8}.Debug.Build.0 = Debug|.NET
+		{026EED0B-267B-4518-AD3B-B3D4291CC2F8}.Debug-1.1.ActiveCfg = Debug|.NET
+		{026EED0B-267B-4518-AD3B-B3D4291CC2F8}.Debug-1.1.Build.0 = Debug|.NET
+		{026EED0B-267B-4518-AD3B-B3D4291CC2F8}.Release.ActiveCfg = Release|.NET
+		{026EED0B-267B-4518-AD3B-B3D4291CC2F8}.Release.Build.0 = Release|.NET
+		{026EED0B-267B-4518-AD3B-B3D4291CC2F8}.Release-1.1.ActiveCfg = Release|.NET
+		{026EED0B-267B-4518-AD3B-B3D4291CC2F8}.Release-1.1.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="webservices">
+  <title>Web Services</title>
+
+  <sect1>
+    <title>Introduction</title>
+
+    <para>While the out-of-the-box support for web services in .NET is
+    excellent, there are a few areas that the Spring.NET thought could use
+    some improvement. Spring adds the ability to perform dependency injection
+    on standard asmx web services. Spring's .NET Web Services support also
+    allows you to export a 'plain .NET object' as a .NET web service By "plain
+    .NET object" we mean classes that do not contain infrastructure specific
+    attributes, such as WebMethod. On the server side, Spring's .NET web
+    service exporters will automatically create a proxy that adds web service
+    attributes. On the client side you can use Spring IoC container to
+    configure a client side proxy that you generated with standard command
+    line tools. Additionally, Spring provides the functionality to create the
+    web service proxy dynamically at runtime (much like running the command
+    line tools but at runtime and without some of the tools quirks) and use
+    dependency injection to configure the resulting proxy class. On both the
+    server and client side, you can apply AOP advice to add behavior such as
+    logging, exception handling, etc. that is not easily encapsulated within
+    an inheritance hierarchy across the application.</para>
+  </sect1>
+
+  <sect1 id="server-side">
+    <title>Server-side</title>
+
+    <para>One thing that the Spring.NET team didn't like much is that we had
+    to have all these .asmx files lying around when all said files did was
+    specify which class to instantiate to handle web service requests.</para>
+
+    <para>Second, the Spring.NET team also wanted to be able to use the
+    Spring.NET IoC container to inject dependencies into our web service
+    instances. Typically, a web service will rely on other objects, service
+    objects for example, so being able to configure which service object
+    implementation to use is very useful.</para>
+
+    <para>Last, but not least, the Spring.NET team did not like the fact that
+    creating a web service is an implementation task. Most (although not all)
+    services are best implemented as normal classes that use coarse-grained
+    service interfaces, and the decision as to whether a particular service
+    should be exposed as a remote object, web service, or even an enterprise
+    (COM+) component, should only be a matter of configuration, and not
+    implementation.</para>
+
+    <para>An example using the web service exporter can be found in quickstart
+    example named 'calculator'. More information can be found here '<link
+    linkend="websvc-example">Web Services example</link>'.</para>
+
+    <sect2>
+      <title>Removing the need for .asmx files</title>
+
+      <para>Unlike web pages, which use <literal>.aspx</literal> files to
+      store presentation code, and code-behind classes for the logic, web
+      services are completely implemented within the code-behind class. This
+      means that .asmx files serve no useful purpose, and as such they should
+      neither be necessary nor indeed required at all.</para>
+
+      <para>Spring.NET allows application developers to expose existing web
+      services easily by registering a custom implementation of the
+      <classname>WebServiceHandlerFactory</classname> class and by creating a
+      standard Spring.NET object definition for the service.</para>
+
+      <para>By way of an example, consider the following web service...</para>
+
+      <programlisting>
+namespace MyComany.MyApp.Services
+{
+    [WebService(Namespace="http://myCompany/services")]
+    public class HelloWorldService
+    {
+        [WebMethod]
+        public string HelloWorld()
+        {
+            return "Hello World!";
+        }
+    }
+}
+      </programlisting>
+
+      <para>This is just a standard class that has methods decorated with the
+      <classname>WebMethod</classname> attribute and (at the class-level) the
+      <classname>WebService</classname> attribute. Application developers can
+      create this web service within Visual Studio just like any other
+      class.</para>
+
+      <para>All that one need to do in order to publish this web service
+      is:</para>
+
+      <para><emphasis> 1. Register the
+      <classname>Spring.Web.Services.WebServiceFactoryHandler</classname> as
+      the HTTP handler for <literal>*.asmx</literal> requests within one's
+      <literal>web.config</literal> file. </emphasis></para>
+
+      <programlisting>
+&lt;system.web&gt;
+    &lt;httpHandlers&gt;
+        &lt;add verb="*" path="*.asmx" type="Spring.Web.Services.WebServiceHandlerFactory, Spring.Web"/&gt;
+    &lt;/httpHandlers&gt;
+&lt;/system.web&gt;
+      </programlisting>
+
+      <para>Of course, one can register any other extension as well, but
+      typically there is no need as Spring.NET's handler factory will behave
+      exactly the same as a standard handler factory if said handler factory
+      cannot find the object definition for the specified service name. In
+      that case the handler factory will simply look for an .asmx file.</para>
+
+      <para>If you are using IIS7 the following configuration is needed</para>
+
+      <programlisting>&lt;system.webServer&gt;
+  &lt;validation validateIntegratedModeConfiguration="false"/&gt;
+  &lt;handlers&gt;
+    &lt;add name="SpringWebServiceSupport" verb="*" path="*.asmx" type="Spring.Web.Services.WebServiceHandlerFactory, Spring.Web"/&gt;
+  &lt;/handlers&gt;
+&lt;/system.webServer&gt;</programlisting>
+
+      <para><emphasis>2. Create an object definition for one's web
+      service.</emphasis></para>
+
+      <programlisting>&lt;object name="HelloWorld" type="MyComany.MyApp.Services.HelloWorldService, MyAssembly" abstract="true"/&gt;</programlisting>
+
+      <para>Note that one is not absolutely required to make the web service
+      object definition <literal>abstract</literal> (via the
+      <literal>abstract="true"</literal> attribute), but this is a recommended
+      best practice in order to avoid creating an unnecessary instance of the
+      service. Because the .NET infrastructure creates instances of the target
+      service object internally for each request, all Spring.NET needs to
+      provide is the <classname>System.Type</classname> of the service class,
+      which can be retrieved from the object definition even if it is marked
+      as <literal>abstract</literal>.</para>
+
+      <para>That's pretty much it as we can access this web service using the
+      value specified for the <literal>name</literal> attribute of the object
+      definition as the service name:</para>
+
+      <programlisting>http://localhost/MyWebApp/HelloWorld.asmx</programlisting>
+    </sect2>
+
+    <sect2>
+      <title>Injecting dependencies into web services</title>
+
+      <para>For arguments sake, let's say that we want to change the
+      implementation of the <literal>HelloWorld</literal> method to make the
+      returned message configurable.</para>
+
+      <para>One way to do it would be to use some kind of message locator to
+      retrieve an appropriate message, but that locator needs to implemented.
+      Also, it would certainly be an odd architecture that used dependency
+      injection throughout the application to configure objects, but that
+      resorted to the service locator approach when dealing with web
+      services.</para>
+
+      <para>Ideally, one should be able to define a property for the message
+      within one's web service class and have Spring.NET inject the message
+      value into it:</para>
+
+      <programlisting>
+namespace MyApp.Services
+{
+    public interface IHelloWorld
+    {
+        string HelloWorld();
+    }
+
+    [WebService(Namespace="http://myCompany/services")]
+    public class HelloWorldService : IHelloWorld
+    {
+        private string message;
+        public string Message
+        {
+            set { message = value; }
+        }
+    
+        [WebMethod]
+        public string HelloWorld()
+        {
+            return this.message;
+        }
+    }
+}
+      </programlisting>
+
+      <para>The problem with standard Spring.NET DI usage in this case is that
+      Spring.NET does not control the instantiation of the web service. This
+      happens deep in the internals of the .NET framework, thus making it
+      quite difficult to plug in the code that will perform the
+      configuration.</para>
+
+      <para>The solution is to create a dynamic server-side proxy that will
+      wrap the web service and configure it. That way, the .NET framework gets
+      a reference to a proxy type from Spring.NET and instantiates it. The
+      proxy then asks a Spring.NET application context for the actual web
+      service instance that will process requests.</para>
+
+      <para>This proxying requires that one export the web service explicitly
+      using the <classname>Spring.Web.Services.WebServiceExporter</classname>
+      class; in the specific case of this example, one must also not forget to
+      configure the <literal>Message</literal> property for said
+      service:</para>
+
+      <programlisting>
+&lt;object id="HelloWorld" type="MyApp.Services.HelloWorldService, MyApp"&gt;
+    &lt;property name="Message" value="Hello, World!"/&gt;
+&lt;/object&gt;
+
+&lt;object id="HelloWorldExporter" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
+    &lt;property name="TargetName" value="HelloWorld"/&gt;
+&lt;/object&gt;
+      </programlisting>
+
+      <para>The <classname>WebServiceExporter</classname> copies the existing
+      web service and method attribute values to the proxy implementation (if
+      indeed any are defined). Please note however that existing values can be
+      overridden by setting properties on the
+      <classname>WebServiceExporter</classname>.</para>
+
+      <tip>
+        <title>Interface Requirements</title>
+
+        <para>In order to support some advanced usage scenarios, such as the
+        ability to expose an AOP proxy as a web service (allowing the addition
+        of AOP advices to web service methods), Spring.NET requires those
+        objects that need to be exported as web services to implement a
+        (service) interface.</para>
+
+        <para>Only methods that belong to an interface will be exported by the
+        <classname>WebServiceExporter</classname>.</para>
+      </tip>
+    </sect2>
+
+    <sect2>
+      <title>Exposing PONOs as Web Services</title>
+
+      <para>Now that we are generating a server-side proxy for the service,
+      there is really no need for it to have all the attributes that web
+      services need to have, such as <classname>WebMethod</classname>. Because
+      .NET infrastructure code never really sees the "real" service, those
+      attributes are redundant as the proxy needs to have them on its methods,
+      because that's what .NET deals with, but they are not necessary on the
+      target service's methods.</para>
+
+      <para>This means that we can safely remove the
+      <classname>WebService</classname> and <classname>WebMethod</classname>
+      attribute declarations from the service implementation, and what we are
+      left with is a plain old .NET object (a PONO). The example above would
+      still work, because the proxy generator will automatically add
+      <classname>WebMethod</classname> attributes to all methods of the
+      exported interfaces.</para>
+
+      <para>However, that is still not the ideal solution. You would lose
+      information that the optional <classname>WebService</classname> and
+      <classname>WebMethod</classname> attributes provide, such as service
+      namespace, description, transaction mode, etc. One way to keep those
+      values is to leave them within the service class and the proxy generator
+      will simply copy them to the proxy class instead of creating empty ones,
+      but that really does defeat the purpose.</para>
+
+      <para>To add specific attributes to the exported web service, you can
+      set all the necessary values within the definition of the service
+      exporter, like so...</para>
+
+      <programlisting>
+&lt;object id="HelloWorldExporter" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
+    &lt;property name="TargetName" value="HelloWorld"/&gt;
+    &lt;property name="Namespace" value="http://myCompany/services"/&gt;
+    &lt;property name="Description" value="My exported HelloWorld web service"/&gt;
+    &lt;property name="MemberAttributes"&gt;
+        &lt;dictionary&gt;
+            &lt;entry key="HelloWorld"&gt;
+                &lt;object type="System.Web.Services.WebMethodAttribute, System.Web.Services"&gt;
+                    &lt;property name="Description" value="My Spring-configured HelloWorld method."/&gt;
+                    &lt;property name="MessageName" value="ZdravoSvete"/&gt;
+                &lt;/object&gt;
+            &lt;/entry&gt;
+        &lt;/dictionary&gt;
+    &lt;/property&gt;
+&lt;/object&gt;
+
+// or, once configuration improvements are implemented...
+&lt;web:service targetName="HelloWorld" namespace="http://myCompany/services"&gt;
+    &lt;description&gt;My exported HelloWorld web service.&lt;/description&gt;
+    &lt;methods&gt;
+        &lt;method name="HelloWorld" messageName="ZdravoSvete"&gt;
+            &lt;description&gt;My Spring-configured HelloWorld method.&lt;/description&gt;
+        &lt;/method&gt;
+    &lt;/methods&gt;
+&lt;/web:service&gt;
+      </programlisting>
+
+      <para>Based on the configuration above, Spring.NET will generate a web
+      service proxy for all the interfaces implemented by a target and add
+      attributes as necessary. This accomplishes the same goal while at the
+      same time moving web service metadata from implementation class to
+      configuration, which allows one to export pretty much
+      <emphasis>any</emphasis> class as a web service.</para>
+
+      <para>The WebServiceExporter also has a
+      <literal>TypeAttributes</literal> IList property for applying attributes
+      at the type level.<note>
+          <para>The attribute to confirms to the WSI basic profile 1.1 is not
+          added by default. This will be added in a future release. In the
+          meantime use the TypeAttributes IList property to add
+          <literal>[WebServiceBinding(ConformsTo=WsiProfiles.BasicProfile1_1)]</literal>
+          to the generated proxy.</para>
+        </note></para>
+
+      <para>One can also export only certain interfaces that a service class
+      implements by setting the <literal>Interfaces</literal> property of the
+      <classname>WebServiceExporter</classname>.</para>
+
+      <warning>
+        <title>Distributed Objects Warning</title>
+
+        <para>Distributed Objects Warning</para>
+
+        <para>Just because you <emphasis>can</emphasis> export any object as a
+        web service, doesn't mean that you <emphasis>should</emphasis>.
+        Distributed computing principles still apply and you need to make sure
+        that your services are not chatty and that arguments and return values
+        are Serializable.</para>
+
+        <para>You still need to exercise common sense when deciding whether to
+        use web services (or remoting in general) at all, or if local service
+        objects are all you need.</para>
+      </warning>
+    </sect2>
+
+    <sect2>
+      <title>Exporting an AOP Proxy as a Web Service</title>
+
+      <para>It is often useful to be able to export an AOP proxy as a web
+      service. For example, consider the case where you have a service that is
+      wrapped with an AOP proxy that you want to access both locally and
+      remotely (as a web service). The local client would simply obtain a
+      reference to an AOP proxy directly, but any remote client needs to
+      obtain a reference to an exported web service proxy, that delegates
+      calls to an AOP proxy, that in turn delegates them to a target object
+      while applying any configured AOP advice.</para>
+
+      <para>Effecting this setup is actually fairly straightforward; because
+      an AOP proxy is an object just like any other object, all you need to do
+      is set the <classname>WebServiceExporter</classname>'s
+      <literal>TargetName</literal> property to the <literal>id</literal> (or
+      indeed the <literal>name</literal> or <literal>alias</literal>) of the
+      AOP proxy. The following code snippets show how to do this...</para>
+
+      <programlisting>
+&lt;object id="DebugAdvice" type="MyApp.AOP.DebugAdvice, MyApp"/&gt;
+
+&lt;object id="TimerAdvice" type="MyApp.AOP.TimerAdvice, MyApp"/&gt;
+
+&lt;object id="MyService" type="MyApp.Services.MyService, MyApp"/&gt;
+
+&lt;object id="MyServiceProxy" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
+    &lt;property name="TargetName" value="MyService"/&gt; 
+    &lt;property name="IsSingleton" value="true"/&gt;
+    &lt;property name="InterceptorNames"&gt;
+        &lt;list&gt;
+            &lt;value&gt;DebugAdvice&lt;/value&gt;
+            &lt;value&gt;TimerAdvice&lt;/value&gt;
+       &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/object&gt;
+
+&lt;object id="MyServiceExporter" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
+    &lt;property name="TargetName" value="MyServiceProxy"/&gt;
+    &lt;property name="Name" value="MyService"/&gt;
+    &lt;property name="Namespace" value="http://myApp/webservices"/&gt;
+    &lt;property name="Description" value="My web service"/&gt;
+&lt;/object&gt; 
+      </programlisting>
+
+      <para>That's it as every call to the methods of the exported web service
+      will be intercepted by the target AOP proxy, which in turn will apply
+      the configured debugging and timing advice to it.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="client-side">
+    <title>Client-side</title>
+
+    <para>On the client side, the main objection the Spring.NET team has is
+    that client code becomes tied to a proxy <emphasis>class</emphasis>, and
+    not to a service <emphasis>interface</emphasis>. Unless you make the proxy
+    class implement the service interface manually, as described by Juval Lowy
+    in his book "Programming .NET Components", application code will be less
+    flexible and it becomes very difficult to plug in different service
+    implementation in the case when one decides to use a new and improved web
+    service implementation or a local service instead of a web service.</para>
+
+    <para>The goal for Spring.NET's web services support is to enable the easy
+    generation of client-side proxies that implement a specific service
+    interface.</para>
+
+    <sect2>
+      <title>Using VS.NET generated proxy</title>
+
+      <para>The problem with the web-service proxy classes that are generated
+      by VS.NET or the WSDL command line utility is that they don't implement
+      a service interface. This tightly couples client code with web services
+      and makes it impossible to change the implementation at a later date
+      without modifying and recompiling the client.</para>
+
+      <para>Spring.NET provides a simple <classname>IFactoryObject</classname>
+      implementation that will generate a <emphasis>"proxy for
+      proxy"</emphasis> (however obtuse that may sound). Basically, the
+      <classname>Spring.Web.Services.WebServiceProxyFactory</classname> class
+      will create a proxy for the VS.NET- / WSDL-generated proxy that
+      implements a specified service interface (thus solving the problem with
+      the web-service proxy classes mentioned in the preceding
+      paragraph).</para>
+
+      <para>At this point, an example may well be more illustrative in
+      conveying what is happening; consider the following interface definition
+      that we wish to expose as a web service...</para>
+
+      <programlisting>
+namespace MyCompany.Services
+{
+    public interface IHelloWorld 
+    {
+        string HelloWorld();
+    }
+} 
+      </programlisting>
+
+      <para>In order to be able to reference a web service endpoint through
+      this interface, you need to add a definition similar to the example
+      shown below to your client's application context:</para>
+
+      <programlisting>
+&lt;object id="HelloWorld" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services"&gt;
+    &lt;property name="ProxyType" value="MyCompany.WebServices.HelloWorld, MyClientApp"/&gt;
+    &lt;property name="ServiceInterface" value="MyCompany.Services.IHelloWorld, MyServices"/&gt;
+&lt;/object&gt;
+      </programlisting>
+
+      <para>What is important to notice is that the underlying implementation
+      class for the web service does not have to implement the same
+      <classname>IHelloWorld</classname> service interface... so long as
+      matching methods with compliant signatures exist (a kind of duck
+      typing), Spring.NET will be able to create a proxy and delegate method
+      calls appropriately. If a matching method cannot be found, the
+      Spring.NET infrastructure code will throw an exception.</para>
+
+      <para>That said, if you control both the client and the server it is
+      probably a good idea to make sure that the web service class on the
+      server implements the service interface, especially if you plan on
+      exporting it using Spring.NET's
+      <classname>WebServiceExporter</classname>, which requires an interface
+      in order to work.</para>
+    </sect2>
+
+    <sect2>
+      <title>Generating proxies dynamically</title>
+
+      <para>The <classname>WebServiceProxyFactory</classname> can also
+      dynamically generate a web-service proxy. The XML object definition for
+      this factory object is shown below</para>
+
+      <programlisting>
+        &lt;object id="calculatorService" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services"&gt;
+          &lt;property name="ServiceUri" value="http://myServer/Calculator/calculatorService.asmx"/&gt;
+          &lt;!--&lt;property name="ServiceUri" value="file://~/calculatorService.wsdl"/&gt;--&gt;
+          &lt;property name="ServiceInterface" value="Spring.Calculator.Interfaces.IAdvancedCalculator, Spring.Calculator.Contract"/&gt;
+          &lt;!-- Dependency injection on Factory's product : the proxy instance of type SoapHttpClientProtocol --&gt;
+          &lt;property name="ProductTemplate"&gt;
+            &lt;object&gt;
+              &lt;property name="Timeout" value="10000" /&gt; &lt;!-- 10s --&gt;
+            &lt;/object&gt;
+          &lt;/property&gt;
+        &lt;/object&gt;
+        
+      </programlisting>
+
+      <para>One use-case where this proxy is very useful is when dealing with
+      typed data sets through a web service. Leaving the pros and cons of this
+      approach aside, the current behavior of the proxy generator in .NET is
+      to create wrapper types for the typed dataset. This not only pollutes
+      the solution with extraneous classes but also results in multiple
+      wrapper types being created, one for each web service that uses the
+      typed dataset. This can quickly get confusing. The proxy created by
+      Spring allows you to reference you typed datasets directly, avoiding the
+      above mentioned issues.</para>
+    </sect2>
+
+    <sect2>
+      <title>Configuring the proxy instance</title>
+
+      <para>The <classname>WebServiceProxyFactory</classname> also implements
+      the interface,
+      <classname>Spring.Objects.Factory.IConfigurableFactoryObject</classname>,
+      allowing to specify configuration for the product that the
+      <classname>WebServiceProxyFactory</classname> creates. This is done by
+      specifying the ProductTemplate property. This is particularly useful for
+      securing the web service. An example is shown below.</para>
+
+      <programlisting>
+ &lt;object id="PublicarAltasWebService" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services"&gt;
+    &lt;property name="ProxyType" value="My.WebService" /&gt;
+    &lt;property name="ServiceInterface" value="My.IWebServiceInterface" /&gt;
+    <emphasis role="bold">&lt;property name="ProductTemplate"&gt; </emphasis>
+      &lt;object&gt;
+        &lt;!-- Configure the web service URL --&gt;
+        &lt;property name="Url" value="https://localhost/MyApp/webservice.jws" /&gt;
+        <emphasis role="bold"> &lt;!-- Configure the Username and password for the web service --&gt; </emphasis>
+        &lt;property name="Credentials"&gt;
+          &lt;object type="System.Net.NetworkCredential, System"&gt;
+            &lt;property name="UserName" value="user"/&gt;
+            &lt;property name="Password" value="password"/&gt;
+          &lt;/object&gt;
+        &lt;/property&gt;
+        <emphasis role="bold">&lt;!-- Configure client certificate for the web service --&gt; </emphasis>
+        &lt;property name="ClientCertificates"&gt;
+          &lt;list&gt;
+            &lt;object id="MyCertificate" type="System.Security.Cryptography.X509Certificates.X509Certificate2, System"&gt;
+              &lt;constructor-arg name="fileName" value="Certificate.p12" /&gt;
+              &lt;constructor-arg name="password" value="notgoingtotellyou" /&gt;
+            &lt;/object&gt;
+          &lt;/list&gt;
+        &lt;/property&gt;
+      &lt;/object&gt;
+    &lt;/property&gt;
+&lt;/object&gt;
+      </programlisting>
+
+      <para>For an example of how using SOAP headers for authentication using
+      the WebServiceExporter and WebServiceProxyFactory, refer to this <ulink
+      url="http://opensource.atlassian.com/confluence/spring/download/attachments/708/Spring.Examples.SoapHeader.rar?version=1">solution</ulink>
+      on our wiki.</para>
+    </sect2>
+  </sect1>
+</chapter>

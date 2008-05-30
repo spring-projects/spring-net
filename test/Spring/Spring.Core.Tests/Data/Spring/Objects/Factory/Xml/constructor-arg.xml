@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<objects xmlns="http://www.springframework.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+	<object id="rod10" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg index="0" type="System.String">
+			<null />
+		</constructor-arg>
+	</object>
+	<object id="objectWithCtorArgRefShortcuts" type="Spring.Objects.TestObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg ref="kerry2" />
+	</object>
+	<object id="objectWithCtorArgValueShortcuts" type="Spring.Objects.TestObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg name="name" type="string" value="Rick" />
+		<constructor-arg name="age" type="int" value="30" />
+	</object>
+	<object id="rod1" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests">
+		<constructor-arg ref="kerry2"/>
+	</object>
+	<object id="rod2" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
+		autowire="constructor">
+		<constructor-arg index="1" ref="kerry1"/>
+		<constructor-arg index="0" ref="kerry2"/>
+		<constructor-arg ref="other"/>
+	</object>
+	<object id="rod3" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
+		autowire="constructor">
+		<constructor-arg index="0" ref="kerry2"/>
+		<constructor-arg index="1" ref="kerry2"/>
+	</object>
+	<object id="rod4" type="Spring.Objects.Factory.Xml.DerivedConstructorDependenciesObject, Spring.Core.Tests"
+		autowire="constructor">
+		<constructor-arg index="0">
+			<description>bird</description>
+			<ref object="kerry2"/>
+		</constructor-arg>
+		<constructor-arg ref="kerry2"/>
+	</object>
+	<object id="rod5" type="Spring.Objects.Factory.Xml.DerivedConstructorDependenciesObject, Spring.Core.Tests">
+		<constructor-arg index="1">
+			<description>wife</description>
+			<ref object="kerry1"/>
+		</constructor-arg>
+		<constructor-arg index="3">
+			<description>mmm</description>
+			<value>99</value>
+		</constructor-arg>
+		<constructor-arg ref="other"/>
+		<constructor-arg index="4" value="myname"/>
+		<constructor-arg index="0" ref="kerry2"/>
+	</object>
+	<object id="rod6" type="Spring.Objects.Factory.Xml.DerivedConstructorDependenciesObject, Spring.Core.Tests">
+		<constructor-arg index="1" ref="kerry1"/>
+		<constructor-arg ref="other"/>
+		<constructor-arg index="0" ref="kerry2"/>
+	</object>
+	<object id="rod7" type="Spring.Objects.Factory.Xml.DerivedConstructorDependenciesObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg index="1" ref="kerry1"/>
+		<constructor-arg ref="other"/>
+		<constructor-arg ref="other"/>
+		<constructor-arg index="0" ref="kerry2"/>
+	</object>
+	<object id="rod8" type="Spring.Objects.Factory.Xml.DerivedConstructorDependenciesObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg index="2" ref="other"/>
+		<constructor-arg index="0" ref="kerry2"/>
+	</object>
+	<object id="rod9" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg type="int" value="99" />
+	</object>
+	<object id="rod11" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg index="0">
+			<ref local="kerry2" />
+		</constructor-arg>
+	</object>
+	<object id="rod12" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg index="0">
+			<ref local="kerry1" />
+		</constructor-arg>
+	</object>
+	<object id="rod13" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
+		singleton="false">
+		<constructor-arg index="0">
+			<ref local="kerry1" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref local="kerry2" />
+		</constructor-arg>
+	</object>
+	<object id="kerry1" type="Spring.Objects.TestObject, Spring.Core.Tests">
+		<property name="name" value="Kerry1"/>
+	</object>
+	<object id="kerry2" type="Spring.Objects.TestObject, Spring.Core.Tests">
+		<property name="name" value="Kerry2"/>
+	</object>
+	<object id="other" type="Spring.Objects.IndexedTestObject, Spring.Core.Tests" />
+	<object id="objectWithBoolean" type="Spring.Objects.Factory.Xml.SingleSimpleTypeConstructorObject"
+		singleton="false">
+		<constructor-arg type="bool" value="true"/>
+	</object>
+	<object id="objectWithBooleanAndString" type="Spring.Objects.Factory.Xml.SingleSimpleTypeConstructorObject"
+		singleton="false">
+		<constructor-arg type="bool" value="true"/>
+		<constructor-arg type="string" value="A String"/>
+	</object>
+	<object id="objectWithDoubleBoolean" type="Spring.Objects.Factory.Xml.DoubleBooleanConstructorObject"
+		autowire="constructor" singleton="false">
+		<constructor-arg type="bool" value="true"/>
+	</object>
+	<object id="ctorArgsAllNamed" type="Spring.Objects.TestObject, Spring.Core.Tests">
+		<constructor-arg name="name" value="Isaac Newton"/>
+		<constructor-arg name="age" value="87"/>
+	</object>
+	<object id="grabCtorArgFromMethodInvokingFactoryObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
+		<constructor-arg name="name">
+			<object type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject, Spring.Core">
+				<property name="TargetObject">
+					<object type="Spring.Objects.TestObject, Spring.Core.Tests">
+						<property name="name" value="Isaac Newton"/>
+					</object>
+				</property>
+				<property name="TargetMethod" value="GetNameWithHonorific"/>
+				<property name="NamedArguments">
+					<dictionary>
+						<entry key="lettersAfterName" value="Phd, PPQ, MC, DJ"/>
+						<entry key="isFemale" value="false"/>
+					</dictionary>
+				</property>
+			</object>
+		</constructor-arg>
+		<constructor-arg name="age" value="198"/>
+	</object>
+	<object id="bool" type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject, Spring.Core">
+		<property name="TargetType" value="System.Boolean"/>
+		<property name="TargetMethod" value="Parse"/>
+		<property name="Arguments">
+			<list>
+				<value>False</value>
+			</list>
+		</property>
+	</object>
+</objects>

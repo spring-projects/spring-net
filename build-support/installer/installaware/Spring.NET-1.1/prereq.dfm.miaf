@@ -1,0 +1,6 @@
+IF (checkWINST.Caption <> TRUE)  THEN  WINST.Visible := True;
+IF (checkJS.Caption <> TRUE)  THEN  JS.Visible := True;
+IF (checkDotNET.Caption <> TRUE)  THEN  dotNET.Visible := True;
+IF (checkWINST.Caption = TRUE)  THEN  WINST.Visible := False;
+IF (checkDotNET.Caption = TRUE)  THEN  dotNET.Visible := False;
+IF (checkJS.Caption = TRUE)  THEN  JS.Visible := False;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects 
+  xmlns="http://www.springframework.net"
+  xmlns:r="http://www.springframework.net/remoting">
+
+  <r:configurer filename="Spring.Services.Tests.dll.config" />
+
+  <!--
+		Old fashion way without remoting config parser...
+  <object type="Spring.Remoting.RemotingConfigurer, Spring.Services">
+    <property name="Filename" value="Spring.Services.Tests.dll.config" />
+  </object>
+  -->
+
+</objects>

@@ -1,0 +1,158 @@
+<%@ CodeTemplate %>
+<%@ Import Namespace="System.IO" %>
+<%@ Assembly Name="AgileDocs.Core" %>
+<%@ Import Namespace="AgileDocs.Core" %>
+
+<script runat="template">
+
+  string PoolExample (string fileName, string xpath)
+  {
+    return "<programlisting format='linespecific' xml:space='preserve'>"
+      + XmlPeek.HtmlEncode (
+          XmlPeek.ExtractAndQueryXPath(			
+            Path.Combine("examples/Spring/Spring.Examples.Pool/Examples/Pool", fileName), 
+            String.Format("examples/example[@name='{0}']", xpath)))
+      + "</programlisting>";
+  }
+
+</script>
+
+  <sect1>
+    <title>Pooling example</title>
+    <para>
+    The idea is to build an executor backed by a pool of 
+    <literal>QueuedExecutor</literal>: this will show how Spring.NET 
+    provides some useful low-level/high-quality reusable threading and 
+    pooling abstractions.
+    This executor will provide parallel executions (in our case 
+    <literal>grep</literal>-like file scans).  <emphasis>Note: This example
+    is not in the 1.0.0 release to its use of classes in the Spring.Threading
+    namespace scheduled for release in Spring 1.1. To access ths example 
+    please get the code from CVS <ulink url="http://opensource.atlassian.com/confluence/spring/display/NET/Project+Structure">(instructions)</ulink> or from the download section of the 
+    Spring.NET website that contains an .zip with the full CVS tree.</emphasis>
+    </para>
+    <para>
+    Some information on <literal>QueuedExecutor</literal> is helpful to 
+    better understand the implementation and to possibly disagree with it.
+    Keep in mind that the point is to show how to develop your own 
+    object-pool.
+    </para>
+    <para>
+    A <literal>QueuedExecutor</literal> is an executor where 
+    <literal>IRunnable</literal> instances are run serialy by a worker 
+    thread. When you <literal>Execute</literal> with a 
+    <literal>QueuedExecutor</literal>, your request is queued; at some 
+    point in the future your request will be taken and executed by the 
+    worker thread: in case of error the thread is terminated. 
+    However
+    this executor recreates its worker thread as needed.
+    </para>
+    <para>Last but not least, this executor can be shut down in 
+    a few different ways (please refer to the Spring.NET SDK documentation).    
+    Given its simplicity, it is very powerful.
+    </para>
+    <para>
+    The example project <literal>Spring.Examples.Pool</literal> provides 
+    an implementation of a pooled executor, backed by n instances of 
+    <literal>Spring.Threading.QueuedExecutor</literal>: please ignore 
+    the fact that <literal>Spring.Threading</literal> includes already a
+    very different implementation of a <literal>PooledExecutor</literal>:
+    here we wanto to use a pool of <literal>QueuedExecutor</literal>s.
+    </para>
+    <para>
+    This executor will be used to implement a parallel 
+    recursive <literal>grep</literal>-like console executable.
+    </para>
+    <sect2>
+    <title>Implementing <literal>Spring.Pool.IPoolableObjectFactory</literal></title>
+    <para>
+    In order to use the <literal>SimplePool</literal> implementation,
+    the first thing to do is to implement the <literal>IPoolableObjectFactory</literal>
+    interface. This interface is intended to be implemented by objects 
+    that can create the type of objects that should be pooled.
+    The <literal>SimplePool</literal>
+    will call the lifecycle methods on <literal>IPoolableObjectFactory</literal> interface
+    (<literal>MakeObject, ActivateObject, ValidateObject, PassivateObject, and DestroyObject</literal>)
+    as appropriate when the pool is created, objects are borrowed and returned to the pool, and when
+    the pool is destroyed.
+    </para>    
+    <para>
+    In our case, as already said, we want to to implement a pool 
+    of <literal>QueuedExecutor</literal>. Ok, here the declaration:   
+    <%= PoolExample("PooledQueuedExecutor.cs", "factory-declaration") %>
+    the first task a factory should do is to create objects:
+    <%= PoolExample("PooledQueuedExecutor.cs", "make") %>
+    and should be also able to destroy them:
+    <%= PoolExample("PooledQueuedExecutor.cs", "destroy") %>
+    </para>
+    <para>
+    When an object is taken from the pool, to satisfy a client request,
+    may be the object should be activated. We can possibly implement the
+    activation like this:
+    <%= PoolExample("PooledQueuedExecutor.cs", "activate") %>
+    even if a <literal>QueuedExecutor</literal> restarts itself as 
+    needed and so a valid implementation could leave this method empty.
+    </para>
+    <para>
+    After activation, and before the pooled object can be succesfully 
+    returned to the client, it is validated (should the object be 
+    invalid, it will be discarded: this can lead to an empty unusable
+    pool
+    <footnote>
+    <para>You may think that we can provide a smarter 
+    implementation and you are probably right. However, it is not so 
+    difficult to create a new pool in case the old one became unusable.
+    It could not be your preferred choice but surely it leverages 
+    simplicity and object immutability
+    </para>
+    </footnote>).
+    Here we check that the worker thread exists:
+    <%= PoolExample("PooledQueuedExecutor.cs", "validate") %>
+    </para>
+    <para>
+    Passivation, symmetrical to activation, is the process a pooled 
+    object is subject to when the object is returned to the pool. In our 
+    case we simply do nothing:
+    <%= PoolExample("PooledQueuedExecutor.cs", "passivate") %>
+    </para>
+    <para>
+    At this point, creating a pool is simply a matter of creating an 
+    <literal>SimplePool</literal> as in:
+    <%= PoolExample("PooledQueuedExecutor.cs", "create-pool") %>
+    </para>
+    </sect2>
+    <sect2>
+    <title>Being smart using pooled objects</title>
+    <para>
+    Taking advantage of the <literal>using</literal> keyword seems
+    to be very important in these <literal>c#</literal> days, so we 
+    implement a very simple helper (<literal>PooledObjectHolder</literal>)
+    that can allow us to do things like:
+    <%= PoolExample("PooledQueuedExecutor.cs", "execute") %>
+    without worrying about obtaining and returning an object from/to the 
+    pool.
+    </para>
+    <para>
+    Here is the implementation:
+    <%= PoolExample("PooledQueuedExecutor.cs", "holder") %>
+    </para>
+    <para>
+    Please don't forget to destroy all the pooled istances once you have 
+    finished! How? Well using something like this in 
+    <literal>PooledQueuedExecutor</literal>:
+    <%= PoolExample("PooledQueuedExecutor.cs", "stop") %>
+    </para>
+    </sect2>
+    <sect2>
+    <title>Using the executor to do a parallel <literal>grep</literal></title>
+    <para>
+    The use of the just built executor is quite straigtforward but a 
+    little tricky if we want to really exploit the pool.
+    <%= PoolExample("Grep.cs", "parallel-grep-class") %>
+    </para>
+    <para>    
+    <%= PoolExample("Grep.cs", "parallel-grep-main") %>
+    </para>
+    </sect2>
+  </sect1>
+

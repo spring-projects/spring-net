@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="background">
+  <title>Background information</title>
+
+  <sect1 id="background-ioc">
+    <title>Inversion of Control</title>
+
+    <para>In early 2004, Martin Fowler asked the readers of his site: when
+    talking about Inversion of Control: <emphasis>"the question, is what
+    aspect of control are they inverting?"</emphasis>. After talking about the
+    term Inversion of Control Martin suggests renaming the pattern, or at
+    least giving it a more self-explanatory name, and starts to use the term
+    <emphasis>Dependency Injection</emphasis>. His <ulink
+    url="http://martinfowler.com/articles/injection.html">article</ulink>
+    continues to explain some of the ideas behind this important software
+    engineering principle.</para>
+
+    <para>Other references you may find useful are</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Wikipedia Article - <ulink
+        url="http://en.wikipedia.org/wiki/Dependency_injection">Dependency
+        Injection</ulink></para>
+      </listitem>
+
+      <listitem>
+        <para>CodeProject article - <ulink
+        url="http://www.codeproject.com/cs/design/DependencyInjection.asp">Dependency
+        Injection for Loose Coupling</ulink></para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+</chapter>

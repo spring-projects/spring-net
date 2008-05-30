@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns='http://www.springframework.net'
+         xmlns:d="http://www.springframework.net/database">
+
+     <!-- Available Catalogs: CreditsAndDebits, Credits, Debits -->
+     <!-- Database Providers -->
+     <d:provider id="DbProvider" 
+                   provider="SqlServer-2.0" 
+                   connectionString="Data Source=NYCSUMPOLLL\SQLEXPRESS;Initial Catalog=Credits;Integrated Security=True;Pooling=False"/>
+
+     <d:provider id="DbProvider" 
+                   provider="SqlServer-2.0" 
+                   connectionString="Data Source=NYCSUMPOLLL\SQLEXPRESS;Initial Catalog=Debits;Integrated Security=True;Pooling=False"/>
+
+
+    <!-- Transaction Manager -->
+    <!--
+    <object id="transactionManager" 
+            type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
+      <property name="DbProvider" ref="DbProvider"/>
+    </object>
+    -->
+    
+    <object id="transactionManager"
+            type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data">
+    </object>
+       
+ 
+  <!-- AdoTemplate for DAO Implementation -->
+  <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
+    <property name="DbProvider" ref="DbProvider"/>
+  </object>
+
+  <object id="adoTemplateForDebitDb" type="Spring.Data.Core.AdoTemplate, Spring.Data">
+    <property name="DbProvider" ref="DebitDbProvider"/>
+  </object>
+
+  <!-- DAO Implementations -->
+  <object id="accountCreditDao" type="Spring.Data.SimpleAccountCreditDao, Spring.Data.Integration.Tests">
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+
+  <object id="accountDebitDao" type="Spring.Data.SimpleAccountDebitDao, Spring.Data.Integration.Tests">
+      <property name="AdoTemplate" ref="adoTemplateForDebitDb"/>
+  </object>
+ 
+  <!-- The object that performs multiple data access operations.  The transactional
+       proxy is created for this class since it has transactional attributes applied
+       to its virtual methods.
+       -->
+  <object id="accountManager" 
+          type="Spring.Data.SimpleAccountManager, Spring.Data.Integration.Tests">
+    <property name="AccountCreditDao" ref="accountCreditDao"/>
+    <property name="AccountDebitDao" ref="accountDebitDao"/>
+  </object>
+
+
+
+
+  <!-- The rest of the config file is common no matter how many objects you add -->
+  <!-- that you would like to have declarative tx management applied to         -->
+  
+  <object id="autoProxyCreator" 
+          type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop">
+  </object>
+
+  <object id="transactionAdvisor"
+          type="Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor, Spring.Data"
+          autowire="constructor">
+  </object>
+
+
+  <!-- Transaction Interceptor -->
+  <object id="transactionInterceptor" 
+          type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data">
+    <property name="TransactionManager" ref="transactionManager"/>
+    <!-- note do not have converter from string to this property type registered -->
+    <property name="TransactionAttributeSource" ref="attributeTransactionAttributeSource"/>
+  </object>
+
+  <object id="attributeTransactionAttributeSource"
+          type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data">
+  </object>
+
+
+</objects>

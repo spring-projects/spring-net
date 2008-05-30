@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<project name="Spring.Services" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+  <!--
+    Required properties:
+      * current.bin.dir           - (path) root level to build to
+      * current.build.debug       - (true|false) debug build?
+      * current.build.defines.csc - framework-specific build defines for C# compiler
+-->
+  <target name="build">
+    
+    <!-- TO REMOVE : for .NET 3.0 build -->
+    <!--<property if="${net-2.0}" name="current.build.defines.csc" value="${current.build.defines.csc},NET_3_0" />-->
+
+    <!-- build Spring.Services -->
+    <csc target="library" define="${current.build.defines.csc}"
+		     warnaserror="true"
+		     debug="${current.build.debug}"
+                     output="${current.bin.dir}/${project::get-name()}.dll"
+                     doc="${current.bin.dir}/${project::get-name()}.xml"
+		     >
+      <arg line="${compiler.args}"/>
+      <nowarn>
+        <warning number="${nowarn.numbers}" />
+      </nowarn>
+      <sources failonempty="true">
+        <include name="**/*.cs" />
+        <include name="../GenCommonAssemblyInfo.cs" />
+        <exclude name="**/WindowsService/**" />
+      </sources>
+      <resources prefix="Spring" dynamicprefix="true" failonempty="true">
+        <include name="**/*.keys" />
+        <include name="**/*.xsd" />
+        <exclude name="**/obj/**" />
+      </resources>
+      <references basedir="${current.bin.dir}">
+        <include name="Common.Logging.dll"/>
+        <include name="Spring.Core.dll" />
+        <include name="Spring.Aop.dll" />
+        <include name="Spring.Web.dll" />
+
+        <!-- TO REMOVE : for .NET 3.0 build -->
+        <!--<include if="${net-2.0}" name="C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.ServiceModel.dll" />-->
+        
+      </references>
+    </csc>
+  </target>
+</project>

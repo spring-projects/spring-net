@@ -1,0 +1,191 @@
+#region License
+
+/*
+ * Copyright © 2002-2007 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
+#region Imports
+
+using System;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Reflection;
+using System.Security.Permissions;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using Spring.Context;
+using Spring.Context.Support;
+using Spring.Util;
+using Spring.Web.Support;
+
+#endregion
+
+namespace Spring.Web.UI.Controls
+{
+    /// <summary>
+    /// This panel provides the same features as <see cref="System.Web.UI.WebControls.Panel"/>, but provides additional means with regards to Spring.
+    /// </summary>
+    /// <remarks>
+    /// In some cases, automatic dependency injection can cause performance problems. In this case,you can use a Panel for finer-grained control
+    /// over which controls are to be injected or not.
+    /// </remarks>
+    /// <author>Erich Eichinger</author>
+    /// <version>$Id: Panel.cs,v 1.3 2008/03/09 15:20:37 oakinger Exp $</version>
+    [PersistChildren(true),
+    ToolboxData("<{0}:Panel runat=\"server\" Width=\"125px\" Height=\"50px\"> </{0}:Panel>"),
+    ParseChildren(false),
+#if NET_1_1
+    Designer("System.Web.UI.Design.WebControls.PanelDesigner, System.Design, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), 
+#else
+    Designer("System.Web.UI.Design.WebControls.PanelContainerDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"),
+#endif
+    AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal),
+    AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
+    public class Panel : System.Web.UI.WebControls.Panel, ISupportsWebDependencyInjection
+    {
+        // this helper class intercepts the first call to the child controls 
+        // collection from within InitRecursive().
+        // InitRecursive() is called right after the control has been added to it's parent's children.
+        private class InitRecursiveInterceptingControlsCollection : ControlCollection
+        {
+            private bool _passedInitRecursiveCheck = false;
+
+            public InitRecursiveInterceptingControlsCollection(Control owner) : base(owner)
+            {
+            }
+
+            public override Control this[int index]
+            {
+                get
+                {
+                    // the following check relies on the fact, that ControlCollection is set readonly 
+                    // right before InitRecursive() is called on each child control
+                    if (!_passedInitRecursiveCheck
+                        && this.IsReadOnly)
+                    {
+                            _passedInitRecursiveCheck = true;
+                            ((Panel)this.Owner).OnPreInitRecursive(EventArgs.Empty);
+                    }
+                    return base[index];
+                }
+            }
+        }
+
+        private bool _suppressDependencyInjection;
+        private bool _renderContainerTag;
+
+        /// <summary>
+        /// This flag controls, whether DI on child controls will be done or not
+        /// </summary>
+        /// <remarks>By default, DI will be done</remarks>
+        public bool SuppressDependencyInjection
+        {
+            get { return _suppressDependencyInjection; }
+            set { _suppressDependencyInjection = value; }
+        }
+
+        /// <summary>
+        /// This flag controls, whether this Panel's tag will be rendered.
+        /// </summary>
+        public bool RenderContainerTag
+        {
+            get { return _renderContainerTag; }
+            set { _renderContainerTag = value; }
+        }
+
+        /// <summary>
+        /// Overridden to suppress rendering this control's tag
+        /// </summary>
+        /// <param name="writer"></param>
+        protected override void Render(HtmlTextWriter writer)
+        {
+            if (_renderContainerTag)
+            {
+                base.Render(writer);
+            }
+            else
+            {
+                base.RenderContents(writer);
+            }
+        }
+
+        /// <summary>
+        /// This method is invoked right before InitRecursive() is called for this Panel and
+        /// ensures, that dependencies get injected on child controls before their Init event is raised.
+        /// </summary>
+        protected virtual void OnPreInitRecursive(EventArgs e)
+        {
+            if (!_suppressDependencyInjection 
+                && _defaultApplicationContext == null)
+            {
+                // obtain appContext of the closed parent template (.ascx/.aspx) control
+                IApplicationContext appCtx = WebApplicationContext.GetContext(this.TemplateSourceDirectory.TrimEnd('/') + "/");
+                // NOTE: _defaultApplicationContext will be set during DI!
+                WebDependencyInjectionUtils.InjectDependenciesRecursive(appCtx, this);
+            }
+        }
+
+        #region Dependency Injection Support
+
+        private IApplicationContext _defaultApplicationContext;
+
+        /// <summary>
+        /// Sets / Gets the ApplicationContext instance used to configure this control
+        /// </summary>
+        IApplicationContext ISupportsWebDependencyInjection.DefaultApplicationContext
+        {
+            get { return _defaultApplicationContext; }
+            set { _defaultApplicationContext = value; }
+        }
+
+        /// <summary>
+        /// Injects dependencies into control before adding it.
+        /// </summary>
+        protected override void AddedControl(Control control, int index)
+        {
+            if (!_suppressDependencyInjection 
+                && _defaultApplicationContext != null)
+            {
+                WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);
+            }
+            base.AddedControl(control, index);
+        }
+
+        /// <summary>
+        /// Overridden to automatically aquire a reference to 
+        /// root application context to use for DI.
+        /// </summary>
+        protected override ControlCollection CreateControlCollection()
+        {
+            // set root application context to signal, that we care 
+            // for our children ourselves
+            if (_suppressDependencyInjection)
+            {
+                _defaultApplicationContext = WebApplicationContext.GetRootContext();
+                return base.CreateControlCollection();
+            }
+            else
+            {
+                return new InitRecursiveInterceptingControlsCollection(this);
+            }
+        }
+
+        #endregion Dependency Injection Support
+    }
+}

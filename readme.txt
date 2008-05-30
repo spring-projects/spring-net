@@ -1,0 +1,176 @@
+THE SPRING.NET FRAMEWORK, Release 1.1.2  (May 6, 2008)
+--------------------------------------------------------------------
+http://www.springframework.net/
+
+
+1. INTRODUCTION
+
+The 1.1 release of Spring.NET contains
+
+     * A full featured Inversion of Control container 
+     * An Aspect Oriented Programming framework
+     * Expression Language for lightweight scripting
+     * UI-agnostic validation framework
+     * ASP.NET Framework 
+       - Dependency Injection for pages and user controls, bi-directional data binding, and more.
+     * Declarative transaction management abstraction
+       - Declarative transaction management via use of common XML configuration and attributes across different transaction APIs
+     * ADO.NET framework
+       - Simplifies use of ADO.NET.  DAO support classes and integration with Spring's declarative transaction management functionality
+     * Portable Service Abstractions  
+       - Export plain .NET objects via .NET Remoting, Web Service or .NET Serviced Component and create client side proxies based on endpoint URL and service interface.
+     * NHibernate Integation
+       - NHibernate 1.0 and 1.2 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
+     * ASP.NET AJAX Integration
+       - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
+     * NUnit integration 
+       - Provides Dependency Injection of test cases and Spring container loading and caching. .  Data access and transaction management features aid with integration testing.
+
+Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002). 
+
+
+2. KNOWN ISSUES
+
+The fallback rules for localized resources seem to have a bug that is fixed by applying Service Pack 1 for .NET 1.1.  This affects the use of IMessageSource.GetMessage methods that specify CultureInfo.
+
+3. RELEASE INFO
+
+Release contents:
+
+* "src" contains the C# source files for the framework
+* "test" contains the C# source files for Spring.NET's test suite
+* "bin" contains various Spring.NET distribution dll files
+* "lib/Net" contains shared third-party libraries needed for building the framework
+* "lib/NHibernate10" contains NHibernate 1.0 dlls
+* "lib/NHibernate12" contains NHibernate 1.2 dlls
+* "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
+* "examples" contains sample applications.
+
+debug build is done using /DEBUG:full and release build using /DEBUG:pdbonly flags.
+
+The VS.NET solution for the framework and examples are provided.  
+
+Latest info is available at the public website: http://www.springframework.net/
+
+Project info at the SourceForge site: http://sourceforge.net/projects/springnet/
+
+The Spring Framework is released under the terms of the Apache Software License (see license.txt).
+
+
+4. DISTRIBUTION DLLs
+
+The "bin" directory contains the following distinct dll files for use in applications. Dependencies are those other than on the .NET BCL.
+
+* "Spring.Core" (~596 KB)
+- Contents: Inversion of control container. Collection classes. 
+- Dependencies: antlr.runtime, Common.Logging
+
+* "Spring.Aop" (~144 KB)
+- Contents: Abstract Oriented Programming Framework.
+- Dependencies: Spring.Core, Common.Logging
+
+* "Spring.Data" (~312 KB)
+- Contents: Transaction and ADO.NET Framework.
+- Dependencies: Spring.Core, Spring.Aop
+
+* "Spring.Data.NHibernate" (~68 KB)
+- Contents: NHibernate 1.0 integration
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
+
+* "Spring.Data.NHibernate12" (~84 KB)
+- Contents: NHibernate 1.2 integration
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
+
+* "Spring.Services" (~72 KB)
+- Contents: Web Services, Remoting, and Enterprise Component based services.
+- Dependencies: Spring.Core, Spring.Aop
+
+* "Spring.Web" (~156 KB)
+- Contents: ASP.NET based Web Application Framework.
+- Dependencies: Spring.Core, Spring.Aop
+
+* "Spring.Web.Extensions" (~8 KB)
+- Contents: ASP.NET AJAX Integartion
+- Dependencies: Spring.Core, Spring.Aop, System.Web.Extensions
+
+* "Spring.Testing.NUnit" (~24 KB)
+- Contents: NUnit Integration
+- Dependencies: Spring.Core, Spring.Data, NUnit
+
+5. WHERE TO START?
+
+Documentation can be found in the "docs" directory:
+* The Spring reference documentation
+
+Documented sample applications can be found in "examples":
+* IoCQuickStart.MovieFinder - A simple example demonstrating basic IoC container behavior.
+* IoCQuickStart.AppContext - Show use of various IApplicationContext features.
+* IoCQuickStart.EventRegistry - Show use of loosely coupled eventing features.
+* AopQuickStart - Show use of AOP features.
+* SpringAir - Show use of Spring.Web features.
+* Calculator - Show use of Spring.Services features.
+* WebQuickStart - Show step by step usage of Spring.Web features.
+* Web.Extensions.Example - Show ASP.NET AJAX integartion.
+* DataQuickStart - Show use of Spring.Data data access features.
+* TxQuickStart - Show use of Spring's transaction features.
+* Data.NHibernate.Northwind - Show use of Spring's NHibernate features.
+
+6. How to build
+
+VS.NET
+------
+There are three solution file for different version of VS.NET
+
+* Spring.Net.1.0.2002.sln for use with VS.NET 2002
+* Spring.Net.1.1.2003.sln for use with VS.NET 2003
+* Spring.Net.1.1.2005.sln for use with VS.NET 2005
+
+NAnt
+----
+
+A NAnt build script can be obtained via CVS or nightly builds.   You will need to 
+get the supporting tools directory from CVS as well.
+
+To build the source and run the unit tests type
+
+nant test -D:project.build.sign=false
+
+NOTE!  You need to comment out the <startup> section of NAnt.exe.config in order to
+property run unit tests under different version of the .NET framework.
+
+Debug builds are strongly named using the Spring.Net.snk key file.  The ANTLR assemblies
+are signed with this key as well until such time as the ANTR distribution provides their
+own strongly signed assemblies.  If you want to run the build to creat strongly signed
+assebmlies you can generate a key file by executing the following commands
+
+sn -k Spring.Net.snk
+nant
+
+The installation of the docbook toolchain is required to generate the reference
+documentation and make a final release build. Refer to the Spring.NET Wiki at
+http://opensource.atlassian.com/confluence/spring/display/NET/Docbook+Reference
+for information on how to install the docbook toolchain.
+
+Innovasys Document X! is used to generate the SDK documentation.
+
+
+7. Support
+
+The user forms at http://forum.springframework.net/ are available for you to submit questions, support requests, and interact with other Spring.NET users.
+
+Bug and issue tracking can be found at http://opensource.atlassian.com/projects/spring/secure/BrowseProject.jspa?id=10020
+
+The Spring.NET wiki is located at http://opensource.atlassian.com/confluence/spring/display/NET/Home
+
+A Fisheye repository browser is located at http://fisheye1.cenqua.com/viewrep/springnet
+
+8. Acknowledgements
+
+InnovaSys Document X!
+---------------------
+InnovSys has kindly provided a license to generate the SDK documentation and supporting utilities for
+integration with Visual Studio. 
+
+
+
+

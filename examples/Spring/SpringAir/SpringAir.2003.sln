@@ -1,0 +1,53 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringAir.Core.2003", "src\SpringAir.Core\SpringAir.Core.2003.csproj", "{5E3427D8-62FC-483F-A86B-B44A79A46BCC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringAir.Core.Tests.2003", "test\SpringAir.Core.Tests\SpringAir.Core.Tests.2003.csproj", "{BB9AFE5E-7785-43AC-86ED-CF0A073F006E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringAir.Data.Ado.2003", "src\SpringAir.Data.Ado\SpringAir.Data.Ado.2003.csproj", "{78B285FE-27F3-44F4-84B1-7A589AB48EF3}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringAir.Web.2003", "http://localhost/SpringAir.2003/SpringAir.Web.2003.csproj", "{B29E702D-DC32-42B4-8A15-AC7C07CFC48D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringAir.Data.Ado.Tests.2003", "test\SpringAir.Data.Ado.Tests\SpringAir.Data.Ado.Tests.2003.csproj", "{B0A6F98E-5363-4575-BB6B-A84E91895468}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{5E3427D8-62FC-483F-A86B-B44A79A46BCC}.Debug.ActiveCfg = Debug|.NET
+		{5E3427D8-62FC-483F-A86B-B44A79A46BCC}.Debug.Build.0 = Debug|.NET
+		{5E3427D8-62FC-483F-A86B-B44A79A46BCC}.Release.ActiveCfg = Release|.NET
+		{5E3427D8-62FC-483F-A86B-B44A79A46BCC}.Release.Build.0 = Release|.NET
+		{BB9AFE5E-7785-43AC-86ED-CF0A073F006E}.Debug.ActiveCfg = Debug|.NET
+		{BB9AFE5E-7785-43AC-86ED-CF0A073F006E}.Debug.Build.0 = Debug|.NET
+		{BB9AFE5E-7785-43AC-86ED-CF0A073F006E}.Release.ActiveCfg = Release|.NET
+		{BB9AFE5E-7785-43AC-86ED-CF0A073F006E}.Release.Build.0 = Release|.NET
+		{78B285FE-27F3-44F4-84B1-7A589AB48EF3}.Debug.ActiveCfg = Debug|.NET
+		{78B285FE-27F3-44F4-84B1-7A589AB48EF3}.Debug.Build.0 = Debug|.NET
+		{78B285FE-27F3-44F4-84B1-7A589AB48EF3}.Release.ActiveCfg = Release|.NET
+		{78B285FE-27F3-44F4-84B1-7A589AB48EF3}.Release.Build.0 = Release|.NET
+		{B29E702D-DC32-42B4-8A15-AC7C07CFC48D}.Debug.ActiveCfg = Debug|.NET
+		{B29E702D-DC32-42B4-8A15-AC7C07CFC48D}.Debug.Build.0 = Debug|.NET
+		{B29E702D-DC32-42B4-8A15-AC7C07CFC48D}.Release.ActiveCfg = Release|.NET
+		{B29E702D-DC32-42B4-8A15-AC7C07CFC48D}.Release.Build.0 = Release|.NET
+		{B0A6F98E-5363-4575-BB6B-A84E91895468}.Debug.ActiveCfg = Debug|.NET
+		{B0A6F98E-5363-4575-BB6B-A84E91895468}.Debug.Build.0 = Debug|.NET
+		{B0A6F98E-5363-4575-BB6B-A84E91895468}.Release.ActiveCfg = Release|.NET
+		{B0A6F98E-5363-4575-BB6B-A84E91895468}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

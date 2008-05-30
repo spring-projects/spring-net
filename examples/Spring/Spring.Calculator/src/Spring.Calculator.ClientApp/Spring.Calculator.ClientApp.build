@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<project name="Spring.Calculator.ClientApp" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+	<!--
+		Required properties:
+		* current.bin.dir           - (path) root level to build to
+		* current.build.debug       - (true|false) debug build?
+		* current.build.defines.csc - framework-specific build defines for C# compiler
+	-->
+	<target name="build">
+		<csc target="exe" define="${current.build.defines.csc}" 
+			warnaserror="true" debug="${current.build.debug}"
+			output="${current.bin.dir}/${project::get-name()}.exe">
+			<sources failonempty="true">
+				<include name="**/*.cs" />
+			</sources>
+			<nowarn>
+				<warning number="${nowarn.numbers}" />
+			</nowarn>
+			<resources prefix="Spring.Calculator.ClientApp" dynamicprefix="true" failonempty="true">
+				<include name="**/*.xml" />
+			</resources>
+			<references basedir="${current.bin.dir}">
+				<include name="log4net.dll" />
+			        <include name="Common.Logging.dll"/>
+				<include name="Spring.Core.dll" />
+				<include name="Spring.Aop.dll" />
+				<include name="Spring.Services.dll" />
+				<include name="Spring.Aspects.dll" />
+				<include name="Spring.Calculator.Contract.dll" />
+				<include name="Spring.Calculator.Services.dll" />
+			</references>
+		</csc>
+		<copy tofile="${current.bin.dir}/${project::get-name()}.exe.config" 
+			file="App.config"
+			overwrite="true">
+		</copy>
+	</target>
+</project>

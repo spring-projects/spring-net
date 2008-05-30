@@ -1,0 +1,46 @@
+using System;
+using System.Web;
+using System.Web.Services;
+using System.Web.Services.Protocols;
+using System.Web.Services.Description;
+using System.Xml.Serialization;
+
+/// <summary>
+/// Test class used to generate the wsdl.
+/// </summary>
+[WebService(Namespace = "http://www.springframwework.net")]
+#if NET_2_0 
+[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+#endif
+//[SoapRpcService(Use=SoapBindingUse.Literal)]
+public class HelloWorldService : System.Web.Services.WebService
+{
+    public HelloWorldService()
+    {
+    }
+
+    [WebMethod]
+    public string SayHelloWorld()
+    {
+        return "Hello World !";
+    }
+
+    [WebMethod]
+    [return: XmlElement("out")]
+    public string SayHello(string name)
+    {
+        return String.Format("Hello {0} !", name);
+    }
+
+    [WebMethod]
+    [SoapDocumentMethod(OneWay = true)]
+    //[SoapRpcMethod(Use = SoapBindingUse.Literal, OneWay = true)]
+    public void LogHelloWorld()
+    {
+    }
+
+    [WebMethod(MessageName = "MyLogHello")]
+    public void LogHello(string name)
+    {
+    }
+}

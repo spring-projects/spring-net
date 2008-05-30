@@ -1,0 +1,113 @@
+#region License
+
+/*
+ * Copyright 2002-2004 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
+using System;
+
+using NUnit.Framework;
+
+namespace Spring.Globalization.Formatters
+{
+	/// <summary>
+	/// Unit tests for PercentFormatter class.
+	/// </summary>
+    /// <author>Aleksandar Seovic</author>
+    /// <version>$Id: PercentFormatterTests.cs,v 1.2 2006/04/09 07:24:49 markpollack Exp $</version>
+    [TestFixture]
+    public class PercentFormatterTests
+	{
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void FormatNullValue()
+        {
+            PercentFormatter fmt = new PercentFormatter();
+            fmt.Format(null);
+        }
+
+        [Test]
+        public void ParseNullOrEmptyValue()
+        {
+            PercentFormatter fmt = new PercentFormatter();
+            Assert.AreEqual(0, fmt.Parse(null));
+            Assert.IsTrue(fmt.Parse("") is double);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void FormatNonNumber()
+        {
+            PercentFormatter fmt = new PercentFormatter();
+            fmt.Format("not a number");
+        }
+
+        [Test]
+        public void FormatUsingDefaults()
+        {
+            PercentFormatter fmt = new PercentFormatter("en-US");
+            Assert.AreEqual("25.00 %", fmt.Format(0.25));
+            Assert.AreEqual("25.34 %", fmt.Format(0.2534));
+
+            fmt = new PercentFormatter("sr-SP-Latn");
+            Assert.AreEqual("25,00%", fmt.Format(0.25));
+            Assert.AreEqual("25,34%", fmt.Format(0.2534));
+        }
+
+        [Test]
+        public void ParseUsingDefaults()
+        {
+            PercentFormatter fmt = new PercentFormatter("en-US");
+            Assert.AreEqual(0.25, fmt.Parse("25.00 %"));
+            Assert.AreEqual(0.2534, fmt.Parse("25.34 %"));
+
+            fmt = new PercentFormatter("sr-SP-Latn");
+            Assert.AreEqual(0.25, fmt.Parse("25,00%"));
+            Assert.AreEqual(0.2534, fmt.Parse("25,34%"));
+        }
+
+        [Test]
+        public void FormatUsingCustomSettings()
+        {
+            PercentFormatter fmt = new PercentFormatter("en-US");
+            fmt.DecimalDigits = 0;
+            fmt.PositivePattern = 1;
+            Assert.AreEqual("25%", fmt.Format(0.25));
+            Assert.AreEqual("25%", fmt.Format(0.2534));
+
+            fmt = new PercentFormatter("sr-SP-Latn");
+            fmt.DecimalDigits = 1;
+            Assert.AreEqual("25,0%", fmt.Format(0.25));
+            Assert.AreEqual("25,3%", fmt.Format(0.2534));
+        }
+
+        [Test]
+        public void ParseUsingCustomSettings()
+        {
+            PercentFormatter fmt = new PercentFormatter("en-US");
+            fmt.DecimalDigits = 0;
+            fmt.PositivePattern = 1;
+            Assert.AreEqual(0.25, fmt.Parse("25%"));
+            Assert.AreEqual(0.2534, fmt.Parse("25.34%"));
+
+            fmt = new PercentFormatter("sr-SP-Latn");
+            fmt.DecimalDigits = 1;
+            Assert.AreEqual(0.25, fmt.Parse("25,0%"));
+            Assert.AreEqual(0.253, fmt.Parse("25,3%"));
+        }
+    }
+}

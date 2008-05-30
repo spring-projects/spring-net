@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\Spring.Net\build\package\Spring.NET\bin\net\1.1\debug\Spring.Core.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Core" RelatedProject="Spring-1.0-net-1.1.dxp" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="True" LoadOnDemand="False" LoadSourceComments="False">
+    <IgnoreWordList>Globalization|instantiating</IgnoreWordList>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <lang_vbUsage>on</lang_vbUsage>
+        <lang_VB>on</lang_VB>
+        <lang_CS>on</lang_CS>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Core" tid="##PROJECT_INTRODUCTION" q="" cd="38801.9069444444"><![CDATA[<P>The Spring.Core namespace provides an implementation of an Inversion of Control container.&nbsp;</P>
+<P>Inversion of Control (IoC) containers provide a&nbsp;simple but powerful means to&nbsp;create and configure properties of objects in your application.&nbsp; These properties maybe simple types, such as strings or integers but much of the power of an IoC container comes from the ability to set properties that are refernces to other objects in your application, i.e. an objects dependencies.&nbsp;</P>
+<P>An introductory article to IoC containers can be found in the September 2005 edition of <A href="http://msdn.microsoft.com/msdnmag/issues/05/09/DesignPatterns/default.aspx">MSDN Magazine</A>.&nbsp; Links to additional introductory material on IoC containers can be found on&nbsp;the <A href="www.springframework.net">Spring.NET</A> or <A href="www.springframework.org">Spring Framework</A> websites.</P>
+<P>The design of Spring.NET's IoC container is such that your application objects configured by the IoC container almost always to not need to depend on any classes or interfaces contained in this namespace.&nbsp;</P>
+<P>However, you may find it useful to reference this namespace as it contains&nbsp;some general framework style classes&nbsp; &nbsp;These range from&nbsp;%Spring.Expressions:Spring.Core~Spring.Expressions_namespace% that provides&nbsp;evaluation of object graph expressions to&nbsp;%Spring.Util:Spring.Core~Spring.Util_namespace% that provides various Reflection, String, and XML utility functions.</P>]]></c>
+<c eid="Spring.Core" tid="##PROJECT_GETTINGSTARTED" q="" cd="38801.9067824074"><![CDATA[<P>Inversion of Control (IoC) containers provide a non-invasive means to configure the dependency of objects in your application.&nbsp; A more detailed&nbsp;introduction to IoC containers can be found is this <A href="http://martinfowler.com/articles/injection.html">article</A> by Martin Fowler which uses a simple movie search application as a means to demonstrate the IoC container.&nbsp; This example&nbsp;implemented using Spring.NET's IoC is available as part of the&nbsp;the Spring.NET distribution and documented as the <A href="http://www.springframework.net/doc/reference/html/quickstarts.html">MovieFinder Quickstart</A>.</P>]]></c>
+<c eid="Spring.Core~Spring.Attributes_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Custom .NET Attributes provided by the Spring.NET Framework.</c>
+<c eid="Spring.Core~Spring.Collections_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[Collection style classes used throughout the Spring.NET framework.&nbsp; Most notably an implementation of a %Set:Spring.Core~Spring.Collections.ISet% collection class.]]></c>
+<c eid="Spring.Core~Spring.Context_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[<P>Builds on the feature set provided by the Spring.Objects namespace to add support for&nbsp;message sources and for the Observer design pattern, and the ability for application objects to obtain resources.</P>
+<P>There is no necessity for Spring.NET applications explicitly to depend on the functionality provided by either of the&nbsp;%IApplicationContext:Spring.Core~Spring.Context.IApplicationContext% or %IObjectFactory:Spring.Core~Spring.Objects.Factory.IObjectFactory% interfaces. One of the strengths of the Spring.NET architecture is that application objects can almost always be configured without any dependency on Spring.NET-specific APIs.</P>]]></c>
+<c eid="Spring.Core~Spring.Context.Events_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[<P>Support classes for application events, such as standard context events.</P>]]></c>
+<c eid="Spring.Core~Spring.Context.Support_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[<P>Support classes for the functionality defined in the Spring.Context namespace.<BR></P>
+<P>Contains abstract base classes for the %IApplicationContext:Spring.Core~Spring.Context.IApplicationContext% and %IMessageSource:Spring.Core~Spring.Context.IMessageSource% interfaces.</P>]]></c>
+<c eid="Spring.Core~Spring.Core_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Provides core interfaces that are not specific to any part of the framework.</c>
+<c eid="Spring.Core~Spring.Core.IO_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Generic abstraction for resources such as files accessed via HTTP or the local file system.</c>
+<c eid="Spring.Core~Spring.DataBinding_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Provides data binding of objects to view components.</c>
+<c eid="Spring.Core~Spring.Expressions_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[Provides&nbsp;evaluation of object graph expressions.]]></c>
+<c eid="Spring.Core~Spring.Globalization_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[Defines the core interfaces and support classes for internationalization&nbsp;support.]]></c>
+<c eid="Spring.Core~Spring.Globalization.Localizers_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Defines implementations of the %ILocalizer:Spring.Core~Spring.Globalization.ILocalizer% interface that apply resources to target objects as well as any supporting classes.</c>
+<c eid="Spring.Core~Spring.Globalization.Resolvers_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[Defines implementations of the %ICultureResolver:Spring.Core~Spring.Globalization.ICultureResolver% strategy interface for resolving CultureInfo instances as well as&nbsp;any supporting classes.]]></c>
+<c eid="Spring.Core~Spring.Objects_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[<P>Contains interfaces and classes for manipulating plain old .NET objects (PONOs).</P>
+<P>The classes and interfaces declared in this namespace are central to Spring.NET's Inversion of Control (IoC) container implementation.</P>]]></c>
+<c eid="Spring.Core~Spring.Objects.Events_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Interfaces that define a loosely coupled event model.</c>
+<c eid="Spring.Core~Spring.Objects.Events.Support_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Support classes for the interfaces defined in the Spring.Objects.Events namespace, such as an implementation of the %IEventRegistry:Spring.Core~Spring.Objects.Events.IEventRegistry% interface.</c>
+<c eid="Spring.Core~Spring.Objects.Factory_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[The core namespace implementing Spring.NET's lightweight Inversion of Control (IoC) container.<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<BR>Provides an alternative to the Singleton and Prototype design patterns, including a consistent approach to configuration management. Builds on top of the classes defined in the %Spring.Objects:Spring.Core~Spring.Objects_namespace% namespace.]]></c>
+<c eid="Spring.Core~Spring.Objects.Factory.Config_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Configuration-related convenience classes for object factories.</c>
+<c eid="Spring.Core~Spring.Objects.Factory.Support_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[Classes supporting the classes defined in the Spring.Objects.Factory namespace.<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;p /&gt;<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Contains a number of abstract base classes for custom IObjectFactory implementations.]]></c>
+<c eid="Spring.Core~Spring.Objects.Factory.Xml_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Contains an abstract XML-based %IObjectFactory:Spring.Core~Spring.Objects.Factory.IObjectFactory% implementation, including an XML Schema for validation.</c>
+<c eid="Spring.Core~Spring.Objects.Support_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[<P>Classes supporting the classes defined in the %Spring.Objects.Factory:Spring.Core~Spring.Objects.Factory_namespace% namespace.<BR></P>
+<P>Contains a number of abstract base classes for custom %IObjectFactory:Spring.Core~Spring.Objects.Factory.IObjectFactory% implementations.</P>]]></c>
+<c eid="Spring.Core~Spring.Objects.TypeConverters_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[<P>TypeConverters are used to convert between string and objects and vice versa.<BR></P>
+<P>Some of the custom type converter implementation classes in this namespace are registered automatically by an appropriate IObjectWrapper implementation class.</P>
+<P><BR>Please consult either the reference documentation or the embedded (API) documentation (for the appropriate IObjectWrapper implementation class) for the specifics of which TypeConverters are pre-registered.</P>]]></c>
+<c eid="Spring.Core~Spring.Pool_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Contains object pool interfaces.</c>
+<c eid="Spring.Core~Spring.Pool.Support_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Contains simple object pool implementation.</c>
+<c eid="Spring.Core~Spring.Proxy_namespace" tid="##SUMMARY" q="" cd="38801.9067824074"><![CDATA[<P>Provides classes that can create proxy types via composition or inheritance, and apply any number of custom attributes to the class definition and / or members of the proxied type.<BR></P>
+<P>This is useful in those cases where attributes may need to be applied to a class definition to take advantage of behavior that relies on the presence of such attributes. Examples of behavior that can be controlled&nbsp;via the use of attributes include COM+ ServicedComponents and web services.</P>]]></c>
+<c eid="Spring.Core~Spring.Util_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Miscellaneous utility classes, such as string manipulation utilities.</c>
+<c eid="Spring.Core~Spring.Validation_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Provides validation functionality, for usage in business and / or UI layers.</c>
+<c eid="Spring.Core~Spring.Validation.Actions_namespace" tid="##SUMMARY" q="" cd="38801.9067824074">Implementations of %IValidationAction:Spring.Core~Spring.Validation.IValidationAction%.</c>
+    </DocumentXComments>
+

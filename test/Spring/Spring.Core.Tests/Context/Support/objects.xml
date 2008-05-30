@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<objects xmlns="http://www.springframework.net">
+  <object id="abstractObjectProcessorPrototype"
+          type="Spring.Context.Support.XmlApplicationContextTests+CountingObjectPostProcessor, Spring.Core.Tests"
+          abstract="true">
+  </object>
+
+  <object id="abstractFactoryProcessorPrototype"
+          type="Spring.Context.Support.XmlApplicationContextTests+CoutingObjectFactoryPostProcessor, Spring.Core.Tests"
+          abstract="true">
+  </object>
+
+  <object id='goran' type='Spring.Objects.TestObject, Spring.Core.Tests'>
+    <property name='Name' value='Goran'/>
+  </object>
+
+  <object id="testObjectContainer_lazy" 
+          type="Spring.Expressions.TestObjectContainer, Spring.Core.Tests"
+          lazy-init="true">
+    <property name="TestObject" expression="@(goran)" />
+  </object>
+
+  <object id='disposeTester' type='Spring.Context.Support.XmlApplicationContextTests+DisposeTester, Spring.Core.Tests' />
+  <object id='destroyTester' type='Spring.Context.Support.XmlApplicationContextTests+DestroyTester, Spring.Core.Tests' destroy-method='DestroyMe'/>
+
+</objects>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database">
+
+  <db:provider id="DbProvider" 
+                 provider="OracleODP-2.0" 
+                 connectionString="Data Source=AGORA; User Id=agora_user; Password=welcome"/>
+
+  <!--
+  <object id="DbProvider" 
+            type="Spring.Data.Support.Oracle.OracleClientProvider, Spring.Data">
+            
+        <property name="ConnectionString" 
+                  value="Data Source=agora; User Id=agora_user; Password=welcome;  Integrated Security=no;"/>
+    </object>
+  -->
+    <object id="adoTemplate" 
+            type="Spring.Data.Core.AdoTemplate, Spring.Data">
+            
+        <property name="DbProvider" ref="DbProvider"/>                
+    </object>
+    
+    
+</objects>

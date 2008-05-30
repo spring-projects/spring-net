@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns="http://www.springframework.net/remoting"
+          xmlns:objects="http://www.springframework.net" 
+          xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+          xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense" 
+          targetNamespace="http://www.springframework.net/remoting" 
+          elementFormDefault="qualified" attributeFormDefault="unqualified" 
+          vs:friendlyname="Spring.NET Remoting Framework Configuration" vs:ishtmlschema="false" vs:iscasesensitive="true" vs:requireattributequotes="true" vs:defaultnamespacequalifier="" vs:defaultnsprefix="">
+
+  <xs:import namespace="http://www.springframework.net"/>
+
+  <xs:annotation>
+    <xs:documentation>
+      Spring.NET Remoting Framework Config Schema Definition
+
+      Author: Bruno Baia
+
+      This file defines a configuration schema for the remoting framework
+      object definitions. Using elements from this schema instead of the
+      standard object definitions can greatly simplify remoting configuration.
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:complexType name="remotingConfigurerType">
+    <xs:annotation>
+      <xs:documentation>Configures the remoting infrastructure.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="filename" type="objects:nonNullString" use="optional">
+      <xs:annotation>
+        <xs:documentation>The name of the remoting configurationn file.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="useConfigFile" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Indicates whether a configuration file is used. Default is true.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="ensureSecurity" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Indicates whether the security is enabled. Default is false.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="saoFactoryObjectType">
+    <xs:annotation>
+      <xs:documentation>Creates a reference to a server activated object (SAO).</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="id" type="xs:ID" use="optional">
+      <xs:annotation>
+        <xs:documentation>The id of the created object.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="serviceInterface" type="objects:nonNullString" use="required">
+      <xs:annotation>
+        <xs:documentation>The remote service interface.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="serviceUrl" type="objects:nonNullString" use="required">
+      <xs:annotation>
+        <xs:documentation>The URI of the well known object.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="caoFactoryObjectType">
+    <xs:annotation>
+      <xs:documentation>Creates a reference to a client activated object (CAO).</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="constructor-args" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The arguments used to call the CAO constructor.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:group ref="objects:objectList" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:ID" use="optional">
+      <xs:annotation>
+        <xs:documentation>The id of the created object.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="remoteTargetName" type="objects:nonNullString" use="required">
+      <xs:annotation>
+        <xs:documentation>The remote target name to activate.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="serviceUrl" type="objects:nonNullString" use="required">
+      <xs:annotation>
+        <xs:documentation>The Uri of the remote type.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="lifeTimeType">
+    <xs:annotation>
+      <xs:documentation>Defines the lifetime policy of the remoteobject.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="initialLeaseTime" type="objects:nonNullString" use="optional">
+      <xs:annotation>
+        <xs:documentation>The initial time for the lease.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="renewOnCallTime" type="objects:nonNullString" use="optional">
+      <xs:annotation>
+        <xs:documentation>The amount of time to add to the current lease time after each call.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sponsorshipTimeout" type="objects:nonNullString" use="optional">
+      <xs:annotation>
+        <xs:documentation>The amount of time to wait for a sponsor to respond with a lease renewal time.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="remoteObjectFactoryType">
+    <xs:annotation>
+      <xs:documentation>Creates a MarshalByRefObject wrapper around target class.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="lifeTime" type="lifeTimeType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="interfaces" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The list of interfaces to wrap.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:group ref="objects:objectList" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:ID" use="optional">
+      <xs:annotation>
+        <xs:documentation>The id of the created remote object to be referenced.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="targetName" type="objects:nonNullString" use="required">
+      <xs:annotation>
+        <xs:documentation>The target object.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="infinite" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Indicates whether the remote object has infinite lifetime.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="saoExporterType">
+    <xs:annotation>
+      <xs:documentation>Registers an object as a Server Activated Object (SAO).</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="lifeTime" type="lifeTimeType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="interfaces" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The list of interfaces whose methods should be exported.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:group ref="objects:objectList" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:ID" use="optional">
+      <xs:annotation>
+        <xs:documentation>The id of the exporter to be referenced.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="targetName" type="objects:nonNullString" use="required">
+      <xs:annotation>
+        <xs:documentation>The target object to export.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="applicationName" type="objects:nonNullString" use="optional">
+      <xs:annotation>
+        <xs:documentation>The name of the remote application.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="serviceName" type="objects:nonNullString" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of the exported remote service.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="infinite" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Indicates whether the remote object has infinite lifetime.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="caoExporterType">
+    <xs:annotation>
+      <xs:documentation>Registers an object as a Client Activated Object (CAO).</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="lifeTime" type="lifeTimeType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="interfaces" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The list of interfaces whose methods should be exported.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:group ref="objects:objectList" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:ID" use="optional">
+      <xs:annotation>
+        <xs:documentation>The id of the exporter to be referenced.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="targetName" type="objects:nonNullString" use="required">
+      <xs:annotation>
+        <xs:documentation>The target object to export.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="infinite" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>Indicates whether the remote object has infinite lifetime.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:element name="configurer" type="remotingConfigurerType"/>
+  <xs:element name="saoFactory" type="saoFactoryObjectType"/>
+  <xs:element name="caoFactory" type="caoFactoryObjectType"/>
+  <xs:element name="remoteObjectFactory" type="remoteObjectFactoryType"/>
+  <xs:element name="saoExporter" type="saoExporterType"/>
+  <xs:element name="caoExporter" type="caoExporterType"/>
+
+</xs:schema>

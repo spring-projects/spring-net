@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appendix id="xsd-config">
+  <title>XML Schema-based configuration</title>
+
+  <section id="xsd-config-introduction">
+    <title>Introduction</title>
+
+    <para>This appendix details the use of XML Schema-based configuration in
+    Spring.</para>
+
+    <para> The <emphasis>'classic' </emphasis>
+    <literal>&lt;object/&gt;</literal>-based schema is good, but its
+    generic-nature comes with a price in terms of configuration overhead.
+    Creating a custom XML Schema-based configuration makes Spring XML
+    configuration files substantially clearer to read. In addition, it allows
+    you to express the intent of an object definition.</para>
+
+    <para>The key thing to remember is that creating custom schema tags work
+    best for infrastructure or integration objects: for example, AOP,
+    collections, transactions, integration with 3rd-party frameworks, etc.,
+    while the existing object tags are best suited to application-specific
+    objects, such as DAOs, service layer objects, etc.</para>
+
+    <para>Please note the fact that the XML configuration mechanism is totally
+    customisable and extensible. This means you can write your own
+    domain-specific configuration tags that would better represent your
+    application's domain; the process involved in doing so is covered in the
+    appendix entitled <xref linkend="extensible-xml" />.</para>
+  </section>
+
+  <section id="xsd-config-body">
+    <title>XML Schema-based configuration</title>
+
+    <section id="xsd-config-body-referencing">
+      <title>Referencing the schemas</title>
+
+      <para>As a reminder, you reference the standard objects schema as shown
+      below</para>
+
+      <programlisting>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
+
+<lineannotation> &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+&lt;/objects&gt;</programlisting>
+
+      <note>
+        <para>The <literal>'xsi:schemaLocation'</literal> fragment is not
+        actually required, but can be included to reference a local copy of a
+        schema (which can be useful during development) and assumes the XML
+        editor will look to that location and load the schema.</para>
+      </note>
+
+      <para>The above Spring XML configuration fragment is boilerplate that
+      you can copy and paste (!) and then plug
+      <literal>&lt;object/&gt;</literal> definitions into like you have always
+      done. However, the entire point of using custom schema tags is to make
+      configuration easier. </para>
+    </section>
+
+    <para>The rest of this chapter gives an overview of custom XML Schema
+    based configuration that are included with the release.</para>
+
+    <section id="xsd-config-body-schemas-tx">
+      <title>The <literal>tx</literal> (transaction) schema</title>
+
+      <para>The <literal>tx</literal> tags deal with configuring objects in
+      Spring's comprehensive support for transactions. These tags are covered
+      in the chapter entitled <xref linkend="transaction" />.</para>
+
+      <tip>
+        <para>You are strongly encouraged to look at the
+        <filename>'spring-tx-1.1.xsd'</filename> file that ships with the
+        Spring distribution. This file is (of course), the XML Schema for
+        Spring's transaction configuration, and covers all of the various tags
+        in the <literal>tx</literal> namespace, including attribute defaults
+        and suchlike. This file is documented inline, and thus the information
+        is not repeated here in the interests of adhering to the DRY (Don't
+        Repeat Yourself) principle.</para>
+      </tip>
+
+      <para>In the interest of completeness, to use the tags in the
+      <literal>tx</literal> schema, you need to have the following preamble at
+      the top of your Spring XML configuration file; the emboldened text in
+      the following snippet references the correct schema so that the tags in
+      the <literal>tx</literal> namespace are available to you.</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;object xmlns="http://www.springframework.net"
+      xmlns:aop="http://www.springframework.org/schema/aop"
+   <emphasis role="bold">   xmlns:tx="http://www.springframework.org/schema/tx"</emphasis>&gt;
+  
+<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+&lt;/object&gt;</programlisting>
+
+      <note>
+        <para>Often when using the tags in the <literal>tx</literal> namespace
+        you will also be using the tags from the <literal>aop</literal>
+        namespace (since the declarative transaction support in Spring is
+        implemented using AOP). The above XML snippet contains the relevant
+        lines needed to reference the <literal>aop</literal> schema so that
+        the tags in the <literal>aop</literal> namespace are available to
+        you.</para>
+      </note>
+    </section>
+
+    <section id="xsd-config-body-schemas-aop">
+      <title>The <literal>aop</literal> schema</title>
+
+      <para>The <literal>aop</literal> tags deal with configuring all things
+      AOP in Spring. These tags are comprehensively covered in the chapter
+      entitled <xref linkend="aop" />.</para>
+
+      <para>In the interest of completeness, to use the tags in the
+      <literal>aop</literal> schema, you need to have the following preamble
+      at the top of your Spring XML configuration file; the emboldened text in
+      the following snippet references the correct schema so that the tags in
+      the <literal>aop</literal> namespace are available to you.</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   <emphasis role="bold">xmlns:aop="http://www.springframework.org/schema/aop"</emphasis>&gt;
+
+<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+&lt;/objects&gt;</programlisting>
+    </section>
+
+    <section id="xsd-config-body-schemas-db">
+      <title>The <literal>db</literal> schema</title>
+
+      <para>The <literal>db</literal> tags deal with creating
+      <classname>IDbProvider</classname> instances for a given database client
+      library. The following snippet references the correct schema so that the
+      tags in the <literal>db</literal> namespace are available to you. The
+      tags are comprehensively covered in the chapter entitled <xref
+      linkend="dbprovider" />.</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   <emphasis role="bold">xmlns:db="http://www.springframework.org/schema/db"</emphasis>&gt;
+
+<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+&lt;/objects&gt;</programlisting>
+    </section>
+
+    <section id="xsd-config-body-schemas-remoting">
+      <title>The <literal>remoting</literal> schema</title>
+
+      <para>The <literal>remoting</literal> tags are for use when you want to
+      export an existing POCO object as a .NET remoted object or to create a
+      client side .NET remoting proxy. The tags are comprehensively covered in
+      the chapter <xref linkend="remoting" /></para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.org/schema/objects"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   <emphasis role="bold">xmlns:r="http://www.springframework.org/schema/remoting"</emphasis>&gt;
+
+<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+&lt;/objects&gt;</programlisting>
+    </section>
+
+    <section id="xsd-config-body-schemas-validation">
+      <title>The <literal>validation</literal> schema</title>
+
+      <para>The <literal>validation</literal> tags are for use when you want
+      definte <literal>IValidator</literal> object instances. The tags are
+      comprehensively covered in the chapter <xref
+      linkend="validation" /></para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   <emphasis role="bold">xmlns:v="http://www.springframework.org/schema/validation"</emphasis>&gt;
+
+<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+&lt;/objects&gt;</programlisting>
+    </section>
+
+    <section id="xsd-config-body-schemas-objects">
+      <title>The <literal>objects</literal> schema</title>
+
+      <para>Last but not least we have the tags in the
+      <literal>objects</literal> schema. Examples of the various tags in the
+      <literal>objects</literal> schema are not shown here because they are
+      quite comprehensively covered in the section entitled <xref
+      linkend="object-factory-properties-detailed" /> (and indeed in that
+      entire <link linkend="objects">chapter</link>).</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
+
+    &lt;object id="foo" class="X.Y.Foo, X"&gt;
+        &lt;property name="name" value="Rick"/&gt;
+    &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+    </section>
+  </section>
+
+  <section id="xsd-config-setup">
+    <title>Setting up your IDE</title>
+
+    <para>To setup VS.NET to provide intellisence while editing XML file for
+    your custom XML schemas you will need to copy your XSD files to an
+    appropriate VS.NET directory. Refer to the following chapter for details,
+    <xref linkend="vsnet" /></para>
+
+    <para>For SharpDevelop, follow the directions on the "<ulink
+    url="http://community.sharpdevelop.net/blogs/mattward/articles/FeatureTourEditingXml.aspx">Editing
+    XML</ulink>" product documentation.</para>
+  </section>
+</appendix>

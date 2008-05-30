@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="vsnet">
+  <title>Visual Studio.NET Integration</title>
+
+  <sect1 id="vsnet-config-section">
+     
+
+    <title>XML Editing and Validation</title>
+
+     
+
+    <para>Most of this section is well travelled territory for those familiar
+    with editing XML files in their favorite XML editor. The XML configuration
+    data that defines the objects that Spring will manage for you are
+    validated against the Spring.NET XML Schema at runtime. The location of
+    the XML configuration data to create an
+    <literal>IApplicationContext</literal> can be any of the resource
+    locations supported by Spring's <classname>IResource</classname>
+    abstraction. (See <xref linkend="objects-iresource" /> for more
+    information.) To create an <classname>IApplicationContext</classname>
+    using a "standalone" XML configuration file the custom configuration
+    section in the standard .NET application configuration would read:</para>
+
+     
+
+    <programlisting>&lt;spring&gt;
+
+  &lt;context&gt;
+    &lt;resource uri="file://objects.xml"/&gt;
+  &lt;/context&gt;
+
+&lt;/spring&gt;</programlisting>
+
+    The VS.NET 2005 XML editor can use the attribute 
+
+    <literal>xsi:schemaLocation</literal>
+
+     as a hint to associate the physical location of a schema file with the XML document being edited. VS.NET 2002/2003 do not recognize the 
+
+    <literal>xsi:schemaLocation</literal>
+
+     element. If you reference the Spring.NET XML schema as shown below, you can get intellisense and validation support while editing a Spring configuration file in VS.NET 2005. In order to get this functionality in VS.NET 2002/2003 you will need to register the schema with VS.NET or include the schema as part of your application project. 
+
+    <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"&gt;
+  &lt;object id="..." type="..."&gt;
+  ...
+  &lt;/object&gt;
+  &lt;object id="..." type="..."&gt;
+  ...
+  &lt;/object&gt;
+  ...
+&lt;/objects&gt;</programlisting>
+
+     
+
+    <para>It is typically more convenient to install the schema in VS.NET,
+    even for VS.NET 2005, as it makes the xml a little less verbose and you
+    don't need to keep copying the XSD file for each project you create. For
+    VS.NET 2003 the schema directory will be either</para>
+
+     
+
+    <para><literal>C:\Program Files\Microsoft Visual Studio .NET
+    2003\Common7\Packages\schemas\xml</literal> for VS 2003</para>
+
+     
+
+    <para>or</para>
+
+     
+
+    <para><literal>C:\Program Files\Microsoft Visual Studio
+    .NET\Common7\Packages\schemas\xml</literal> for VS.NET 2002</para>
+
+     
+
+    <para>The VS.NET 2005 directory for XML schemas is</para>
+
+     
+
+    <para>
+      <literal>C:\Program Files\Microsoft Visual Studio
+      8\Xml\Schemas</literal>
+    </para>
+
+     
+
+    <para>Spring's .xsd schemas are located in the directory doc/schema. In
+    that directory is also a NAnt build file to help copy over the .xsd files
+    to the appropriate VS.NET locations. To execute this script simply type
+    '<literal>nant</literal>' in the doc/schema directory.</para>
+
+     
+
+    <para>Once you have registered the schema with VS.NET you can adding only
+    the namespace declaration to the objects element,</para>
+
+     
+
+    <para>
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net"&gt;
+  &lt;object id="..." type="..."&gt;
+  ...
+  &lt;/object&gt;
+  &lt;object id="..." type="..."&gt;
+  ...
+  &lt;/object&gt;
+  ...
+&lt;/objects&gt;</programlisting>
+    </para>
+
+     
+
+    <para>Once registered, the namespace declaration alone is sufficient to
+    get intellisense and validation of the configuration file from within
+    VS.NET. Alternatively, you can select the .xsd file to use by setting the
+    targetSchema property in the Property Sheet for the configuration
+    file.</para>
+
+     
+
+    <para>As shown in the section <xref linkend="objects-factory-client" />
+    Spring.NET supports using .NET's application configuration file as the
+    location to store the object definitions that will be managed by the
+    object factory.</para>
+
+     
+
+    <programlisting>
+&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;section name="context" type="Spring.Context.Support.ContextHandler, Spring.Core"/&gt;
+      &lt;section name="objects" type="Spring.Context.Support.DefaultSectionHandler, Spring.Core" /&gt;
+    &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+
+    &lt;context&gt;
+      &lt;resource uri="config://spring/objects"/&gt;
+    &lt;/context&gt;
+       
+    &lt;objects xmlns="http://www.springframework.net"&gt;
+        ...
+    &lt;/objects&gt;
+
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;
+    </programlisting>
+
+     
+
+    <para>In this case VS.NET 2002/2003 will still provide you with
+    intellisense help but you will not be able to fully validate the document
+    as the entire schema for App.config is not known. To be able to validate
+    this document one would need to install the <ulink
+    url="http://www.radsoftware.com.au/articles/intellisensewebconfig.aspx">.NET
+    Configuration File schema</ulink> and an additional schema that
+    incorporates the <literal>&lt;spring&gt;</literal> and
+    <literal>&lt;context&gt;</literal> section in addition to the
+    <literal>&lt;objects&gt;</literal> would need to be created.</para>
+
+     
+
+    <para>Validating schema is a new feature in VS 2005 it is validating all
+    the time while you edit, you will see any errors that it finds in the
+    Error List window.</para>
+
+     
+
+    <para>Keep these trade offs in mind as you decide where to place the bulk
+    of your configuration information. Conventional wisdom is do quick
+    prototyping with App.config and use another IResource location, file or
+    embedded assembly resource, for serious development.</para>
+
+     
+  </sect1>
+
+  <sect1 id="vsnet-schema-versions">
+    <title>Versions of XML Schema</title>
+
+    <para>The schema was updated from Spring 1.0.1 to 1.0.2 in order to
+    support generics. The schema for version 1.0.1 is located under
+    <literal>http://www.springframework.net/xsd/1.0.1/</literal> The schema
+    for the latest version will always be located under
+    <literal>http://www.springframework.net/xsd/</literal></para>
+  </sect1>
+
+  <sect1 id="vsnet-api-help">
+    <title>Integrated API help</title>
+
+    <para>Spring provides API documentation that can be integrated within
+    Visual Studio. There are two versions of the documentation, one for VS.NET
+    2002/2003 and the other for VS 2005. They differ only in the format
+    applied, VS 2005 using the sexy new format. Enjoy!</para>
+  </sect1>
+</chapter>

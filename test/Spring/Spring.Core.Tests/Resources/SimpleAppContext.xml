@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net">
+
+  <object id="test" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="name">
+      <value>George</value>
+    </property>
+    <property name="age">
+      <value>25</value>
+    </property>
+  </object>
+  
+</objects>
+

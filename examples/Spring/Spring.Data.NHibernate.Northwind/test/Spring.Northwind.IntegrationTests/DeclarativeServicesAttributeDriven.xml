@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+  <!-- The rest of the config file is common no matter how many objects you add -->
+  <!-- that you would like to have declarative tx management applied to -->
+  <object id="autoProxyCreator" 
+          type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop">
+  </object>
+
+  <object id="transactionAdvisor"
+          type="Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor, Spring.Data">
+    <property name="TransactionInterceptor" ref="transactionInterceptor"/>
+  </object>
+
+  <!-- Transaction Interceptor -->
+  <object id="transactionInterceptor" 
+          type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data">
+    <property name="TransactionManager" ref="HibernateTransactionManager"/>
+    <!-- note do not have converter from string to this property type registered -->
+    <property name="TransactionAttributeSource" ref="attributeTransactionAttributeSource"/>
+  </object>
+
+  <object id="attributeTransactionAttributeSource"
+          type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data">
+  </object>
+</objects>

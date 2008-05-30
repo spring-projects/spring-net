@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Spring.Web.Extensions</name>
+    </assembly>
+    <members>
+        <member name="T:Spring.Web.Script.Services.ScriptHandlerFactory">
+            <summary>
+            An <see cref="T:System.Web.IHttpHandlerFactory"/> implementation that 
+            creates a handler object for either ASP.NET AJAX 1.0 or Spring web services.
+            </summary>
+            <author>Bruno Baia</author>
+            <author>Thomas Broyer</author>
+            <version>$Id: ScriptHandlerFactory.cs,v 1.2 2008/03/27 11:11:22 bbaia Exp $</version>
+        </member>
+        <member name="M:Spring.Web.Script.Services.ScriptHandlerFactory.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:Spring.Web.Script.Services.ScriptHandlerFactory"/> class.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Script.Services.ScriptHandlerFactory.GetHandler(System.Web.HttpContext,System.String,System.String,System.String)">
+            <summary>
+            Retrieves an instance of the <see cref="T:System.Web.IHttpHandler"/> 
+            implementation for handling web service requests 
+            for both Spring and ASP.NET AJAX 1.0 web services.
+            </summary>
+            <param name="context">The current HTTP context.</param>
+            <param name="requestType">The type of HTTP request (GET or POST).</param>
+            <param name="url">The url of the web service.</param>
+            <param name="pathTranslated">The physical application path for the web service.</param>
+            <returns>The web service handler object.</returns>
+        </member>
+        <member name="M:Spring.Web.Script.Services.ScriptHandlerFactory.ReleaseHandler(System.Web.IHttpHandler)">
+            <summary>
+            Enables a factory to reuse an existing handler instance.
+            </summary>
+            <param name="handler">The <see cref="T:System.Web.IHttpHandler"/> object to reuse.</param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"
+    default-autowire="byType"
+>
+    <description>
+        Reproduces a problem with AutoProxyCreators, IFactoryObjects,
+        circular dependencies and a certain order of object definitions
+    </description>
+
+    <!-- start instantiating a factoryobject -->
+    <object id="testObjectFactory" type="Spring.Aop.Framework.AutoProxy.TestObjectFactoryObject, Spring.Aop.Tests">
+        <property name="SomeOtherObject" ref="someOtherObject" />
+    </object>
+
+    <!-- note that testAdvisor is defined *after* 'testObjectFactory'! -->
+    <object id="testAdvisor" type="Spring.Aop.Framework.AutoProxy.TestAdvisor, Spring.Aop.Tests">
+        <property name="testObject" ref="testObjectFactory" />  <!-- ref on testObjectFactory closes the dep circle -->
+    </object>
+
+<!--
+  This object can be instantiated without any additional deps 
+- which causes the AutoProxyCreator to do its job
+-->
+    <object id="someOtherObject" type="Spring.Aop.Framework.AutoProxy.SomeOtherObject, Spring.Aop.Tests" />
+
+<!-- this object is not a direct or indirect dependency of aapc -->
+    <object id="independentObject" type="Spring.Aop.Framework.AutoProxy.IndependentObject, Spring.Aop.Tests" />
+
+  
+    <!-- match everything -->
+    <object id="aapc" type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop"/>
+
+</objects>

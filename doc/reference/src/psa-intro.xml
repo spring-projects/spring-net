@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="psa-intro">
+  <title>Introduction to Spring Services</title>
+
+  <sect1>
+    <title>Introduction</title>
+
+    <para>The goal of Spring's integration with distributed technologies is to
+    adapt plain .NET objects so they can be used with a specific distributed
+    technology. This integration is designed to be as non-intrusive as
+    possible. If you need to expose an object to a remote process then you can
+    define an exporter for that object. Similarly, on the client side you
+    define an corresponding endpoint accessor. Of course, the object's methods
+    still need to be suitable for remoting, i.e. coarse grained, to avoid
+    making unnecessary and expensive remote calls.</para>
+
+    <para>Since these exporters and client side endpoint accessors are defined
+    using meta data for Spring IoC container, you can easily use dependency
+    injection on them to set initial state and to 'wire up' the presentation
+    tier, such as web forms, to the service layer. In addition, you may apply
+    AOP aspects to the exported classes and/or service endpoints to apply
+    behavior such as logging, security, or other custom behavior that may not
+    be provided by the target distributed technology. The Spring specific
+    terminology for this approach to object distribution is known as Portable
+    Service Abstractions (PSA). As a result of this approach, you can decide
+    much later in the development process the technical details of how you
+    will distribute your objects as compared to traditional code centric
+    approaches. Changing of the implementation is done though configuration of
+    the IoC container and not by recompilation. Of course, you may choose to
+    not use the IoC container to manage these objects and use the exporter and
+    service endpoints programatically.</para>
+
+    <para>The diagram shown below is a useful way to demonstrate the key
+    abstractions in the Spring tool chest and their interrelationships. The
+    four key concepts are; plain .NET objects, Dependency Injection, AOP, and
+    Portable Service Abstractions. At the heart sits the plain .NET object
+    that can be instantiated and configured using dependency injection. Then,
+    optionally, the plain object can be adapted to a specific distributed
+    technology. Lastly, additional behavior can be applied to objects. This
+    behavior is typically that which can not be easily address by traditional
+    OO approaches such as inheritance. In the case of service layer, common
+    requirements such as 'the service layer must be transactional' are
+    implemented in a manner that naturally expresses that intention in a
+    single place, as compared to scattered code across the service
+    layer.</para>
+
+    <para><mediaobject>
+        <imageobject>
+          <imagedata fileref="images/spring-triangle.png" format="PNG"
+                     scale="50" />
+        </imageobject>
+      </mediaobject>Spring implements this exporter functionality by creating
+    a proxy at runtime that meets the implementation requirements of a
+    specific distributed technology. In the case of .NET Remoting the proxy
+    will inherit from MarshalByRef, for EnterpriseServices it will inherit
+    from ServicedComponent and for aspx web services, WebMethod attributes
+    will be added to methods. Client side functionality is often implemented
+    by a thin layer over the client access mechanism of the underlying
+    distributed technology, though in some cases such as client side access to
+    web services, you have the option to create a proxy on the fly from the
+    .wsdl definition, much like you would have done using the command line
+    tools.</para>
+
+    <para>The common implementation theme for you as a provider of these
+    service objects is to implement an interface. This is generally considered
+    a best practice in its own right, you will see most pure WCF examples
+    following this practice, and also lends itself to a straightforward
+    approach to unit testing business functionality as stub or mock
+    implementations may be defined for testing purposes.</para>
+
+    <para>The assembly <literal>Spring.Services.dll</literal> contains support
+    for <link linkend="remoting">.NET Remoting</link>, <link
+    linkend="services">Enterprise Services</link> and <link
+    linkend="webservices">ASMX Web Services</link>. Support for WCF services
+    is planned for Spring 1.2 and is currently in the CVS repository if you
+    care to take an early look.</para>
+  </sect1>
+</chapter>

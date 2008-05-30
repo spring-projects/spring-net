@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+  <description>
+    Matches all Advisors in the factory: we don't use a prefix
+  </description>
+
+  <object id="aapc" type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop"/>
+
+
+  <!--
+		Depending on the order value, these object should appear
+		before or after the LTCRegExpAdvisor. Thus we configure
+		them to check for the presence of a thread local variable.
+		The LTCRegExpAdvisor's order value is 10.
+	-->  
+
+  <object id="orderedBeforeLTCSet" type="Spring.Aop.Framework.AutoProxy.OrderedLogicalThreadContextCheckAdvisor, Spring.Aop.Tests">
+    <property name="Order" value="9"/>
+    <property name="RequireLTCHasValue" value="false"/>
+  </object>
+
+  <object id="orderedAfterLTCSet" type="Spring.Aop.Framework.AutoProxy.OrderedLogicalThreadContextCheckAdvisor, Spring.Aop.Tests">
+    <property name="Order" value="11"/>
+    <property name="RequireLTCHasValue" value="true"/>
+  </object>
+
+  <object id="orderedAfterLTCSet2" type="Spring.Aop.Framework.AutoProxy.OrderedLogicalThreadContextCheckAdvisor, Spring.Aop.Tests">
+    <description>Don't set order value: should remain int.MAXVALUE, so it's non-ordered</description>
+    <property name="RequireLTCHasValue" value="true"/>
+  </object>
+
+  <object id="LTCAdvice" type="Spring.Aop.Framework.AutoProxy.LogicalThreadContextAdvice, Spring.Aop.Tests"/>
+  
+  <object id="LTCRegExpAdvisor" type="Spring.Aop.Support.RegularExpressionMethodPointcutAdvisor, Spring.Aop">
+    <property name="advice" ref="LTCAdvice"/>
+    <property name="pattern" value=".*set_A.*"/>
+    <property name="Order" value="10"/>
+  </object>
+  
+  <object id="CountingAdvice" type="Spring.Aop.Framework.CountingAfterReturningAdvice, Spring.Aop.Tests"/>
+
+  <object id="CountingAdvisor" type="Spring.Aop.Support.RegularExpressionMethodPointcutAdvisor, Spring.Aop">
+    <property name="advice" ref="CountingAdvice"/>
+    <property name="pattern" value=".*set_N.*"/>
+  </object>
+
+  <object id="testObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="SimpleTestObject"/>
+    <property name="Age" value="4"/>
+  </object>
+  
+  
+  <object id="otherTestObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Name" value="OtherSimpleTestObject"/>
+    <property name="Age" value="2"/>
+  </object>
+  
+  
+  <object id="testObjectFactory" type="Spring.Objects.Factory.DummyFactory">
+    <property name="otherTestObject" ref="otherTestObject" />
+  </object>
+  
+
+  <object id="noSetterPropertiesObject" type="Spring.Aop.Framework.AutoProxy.NoSetterProperties, Spring.Aop.Tests"/>
+
+  
+</objects>

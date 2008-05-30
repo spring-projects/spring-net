@@ -1,0 +1,636 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Web"
+        ProductVersion = "7.10.6030"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{B29E702D-DC32-42B4-8A15-AC7C07CFC48D}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "SpringAir.Web"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = "SpringAir"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "SpringAir.Core.2003"
+                    Project = "{5E3427D8-62FC-483F-A86B-B44A79A46BCC}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "SpringAir.Data.Ado.2003"
+                    Project = "{78B285FE-27F3-44F4-84B1-7A589AB48EF3}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Common.Logging"
+                    AssemblyName = "Common.Logging"
+                    HintPath = "..\..\..\..\..\lib\Net\1.1\Common.Logging.dll"
+                />
+                <Reference
+                    Name = "Spring.Web"
+                    AssemblyName = "Spring.Web"
+                    HintPath = "..\..\..\..\..\bin\net\1.1\debug\Spring.Web.dll"
+                />
+                <Reference
+                    Name = "Spring.Core"
+                    AssemblyName = "Spring.Core"
+                    HintPath = "..\..\..\..\..\bin\net\1.1\debug\Spring.Core.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Constants.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Global.asax"
+                    SubType = "Component"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Global.asax.cs"
+                    DependentUpon = "Global.asax"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Global.asax.resx"
+                    DependentUpon = "Global.asax.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SpringAir.Web.build"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Web.config"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Config\Aspects.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Config\Log4Net.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Config\Services.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Config\Web.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Config\Production\Dao.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Config\Production\Services.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Config\Test\Dao.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Config\Test\Services.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Strings.en.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Strings.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Strings.sr-SP-Cyrl.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Strings.sr-SP-Latn.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-blue.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-blue2.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-brown.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-green.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-setup.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-system.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-tas.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-win2k-1.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-win2k-2.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-win2k-cold-1.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\calendar-win2k-cold-2.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\img.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-af.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-al.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-bg.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-big5.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-big5-utf8.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-br.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-ca.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-cs-utf8.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-cs-win.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-da.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-de.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-du.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-el.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-en.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-en-US.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-es.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-fi.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-fr.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-he-utf8.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-hr.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-hr-utf8.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-hu.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-it.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-jp.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-ko.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-ko-utf8.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-lt.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-lt-utf8.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-lv.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-nl.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-no.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-pl.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-pl-utf8.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-pt.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-ro.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-ru.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-ru_win_.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-si.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-sk.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-sp.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-sr-SP-Cyrl.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-sr-SP-Latn.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-sv.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-tr.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\calendar-zh.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Scripts\Calendar\lang\cn_utf8.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Home.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Home.aspx.cs"
+                    DependentUpon = "Home.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Home.aspx.resx"
+                    DependentUpon = "Home.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\StandardTemplate.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\StandardTemplate.ascx.cs"
+                    DependentUpon = "StandardTemplate.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\StandardTemplate.ascx.resx"
+                    DependentUpon = "StandardTemplate.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\Web.config"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\BookTrip\ReservationConfirmationPage.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\BookTrip\ReservationConfirmationPage.aspx.cs"
+                    DependentUpon = "ReservationConfirmationPage.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\BookTrip\ReservationConfirmationPage.aspx.resx"
+                    DependentUpon = "ReservationConfirmationPage.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\ReservationConfirmationPage.en.resx"
+                    DependentUpon = "ReservationConfirmationPage.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\ReservationConfirmationPage.sr-SP-Cyrl.resx"
+                    DependentUpon = "ReservationConfirmationPage.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\ReservationConfirmationPage.sr-SP-Latn.resx"
+                    DependentUpon = "ReservationConfirmationPage.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\SuggestedFlights.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\BookTrip\SuggestedFlights.aspx.cs"
+                    DependentUpon = "SuggestedFlights.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\BookTrip\SuggestedFlights.aspx.resx"
+                    DependentUpon = "SuggestedFlights.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\SuggestedFlights.en.resx"
+                    DependentUpon = "SuggestedFlights.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\SuggestedFlights.sr-SP-Cyrl.resx"
+                    DependentUpon = "SuggestedFlights.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\SuggestedFlights.sr-SP-Latn.resx"
+                    DependentUpon = "SuggestedFlights.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\TripForm.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\BookTrip\TripForm.aspx.cs"
+                    DependentUpon = "TripForm.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\BookTrip\TripForm.aspx.resx"
+                    DependentUpon = "TripForm.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\TripForm.en.resx"
+                    DependentUpon = "TripForm.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\TripForm.sr-SP-Cyrl.resx"
+                    DependentUpon = "TripForm.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\TripForm.sr-SP-Latn.resx"
+                    DependentUpon = "TripForm.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\BookTrip\Web.config"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\CSS\default.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\calendar-1.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\calendar-2.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\line.jpg"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\panel-bottom-left.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\panel-bottom-middle.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\panel-bottom-right.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\panel-left-middle.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\panel-right-middle.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\panel-top-left.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\panel-top-middle.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\panel-top-right.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\spring-air-logo.jpg"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\en\spring-air-logo.jpg"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\sr-SP-Cyrl\spring-air-logo.jpg"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Web\Images\sr-SP-Latn\spring-air-logo.jpg"
+                    BuildAction = "Content"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

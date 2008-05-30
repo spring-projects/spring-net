@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<project name="Spring.Calculator.Contract" default="build" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+  <!--
+        Required properties:
+            * current.bin.dir           - (path) root level to build to
+            * build.debug               - (true|false) debug build?
+            * current.build.defines.csc - framework-specific build defines
+    -->
+  <target name="build">
+    <copy file="../../Spring.Calculator.snk" todir="." />
+    <csc target="library" define="${current.build.defines.csc}"
+			warnaserror="false" debug="${current.build.debug}"
+			output="${current.bin.dir}/${project::get-name()}.dll">
+      <sources failonempty="true">
+        <include name="**/*.cs" />
+      </sources>
+      <nowarn>
+        <warning number="${nowarn.numbers}" />
+      </nowarn>
+    </csc>
+  </target>
+</project>

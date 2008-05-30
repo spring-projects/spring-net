@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="springair">
+  <title>SpringAir - Reference Application</title>
+
+  <sect1>
+    <title>Introduction</title>
+
+    <para>The SpringAir sample application demonstrates a selection of
+    Spring.NET's powerful features making a .NET programmer's life easier. It
+    demonstrates the following features of Spring.Web</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Spring.NET IoC container configuration</para>
+      </listitem>
+
+      <listitem>
+        <para>Dependency Injection as applied to ASP.NET pages</para>
+      </listitem>
+
+      <listitem>
+        <para>Master Page support</para>
+      </listitem>
+
+      <listitem>
+        <para>Web Service support</para>
+      </listitem>
+
+      <listitem>
+        <para>Bi-directional data binding</para>
+      </listitem>
+
+      <listitem>
+        <para>Declarative validation of domain objects</para>
+      </listitem>
+
+      <listitem>
+        <para>Internationalization</para>
+      </listitem>
+
+      <listitem>
+        <para>Result mapping to better encapsulate page navigation
+        flows</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The application models a flight reservation system where you can
+    browse flights, book a trip and even attach your own clients by leveraging
+    the web services exposed by the SpringAir application.</para>
+
+    <para>All pages within the application are fully Spring managed.
+    Dependencies get injected as configured within a Spring Application
+    Context. For NET 1.1 it shows how to apply centrally managed layouts to
+    all pages in an application by using master pages - a well-known feature
+    from NET 2.0.</para>
+
+    <para>When selecting your flights, you are already experiencing a fully
+    localized form. Select your preferred language from the bottom of the form
+    and see, how the new language is immediately applied. As soon as you
+    submit your desired flight, the submitted values are automatically unbound
+    from the form onto the application's data model by leveraging Spring.Web's
+    support for Data Binding. With Data Binding you can easily associate
+    properties on your PONO model with elements on your ASP.NET form.</para>
+  </sect1>
+
+  <sect1>
+    <title>Getting Started</title>
+
+    <para>The application is located in the installation directory under
+    'examples/SpringAir. The directory 'SpringAir.Web.2003' contains the .NET
+    1.1 version of the application and the directory 'SpringAir.Web.2005'
+    contains the .NET 2.0 version. For .NET 1.1 you will need to create a
+    virtual directory named 'SpringAir.2003' using IIS Administrator and point
+    it to the following directory
+    examples\Spring\SpringAir\src\SpringAir.Web.2003. The solution file for
+    .NET 1.1 is examples\Spring\SpringAir\SpringAir.2003.sln. For .NET 2.0
+    simply open the solution examples\Spring\SpringAir\SpringAir.2005.sln. Set
+    your startup project to be SpringAir.Web and the startpage to
+    .\Web\Home.aspx</para>
+  </sect1>
+
+  <sect1>
+    <title>Container configuration</title>
+
+    <para>The web project's top level Web.config configures the IoC container
+    that is used within the web application. You do not need to explicitly
+    instantiate the IoC container. The important parts of that configuration
+    are shown below</para>
+
+    <programlisting>&lt;spring&gt;
+    &lt;parsers&gt;
+        &lt;parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" /&gt;
+    &lt;/parsers&gt;
+
+    &lt;context&gt;
+        &lt;resource uri="~/Config/Aspects.xml"/&gt;
+        &lt;resource uri="~/Config/Web.xml"/&gt;
+        &lt;resource uri="~/Config/Services.xml"/&gt;
+      
+        &lt;!-- TEST CONFIGURATION --&gt;
+
+       &lt;resource uri="~/Config/Test/Services.xml"/&gt;
+       &lt;resource uri="~/Config/Test/Dao.xml"/&gt;
+      
+       &lt;!-- PRODUCTION CONFIGURATION --&gt;
+
+       &lt;!--
+       &lt;resource uri="~/Config/Production/Services.xml"/&gt;
+       &lt;resource uri="~/Config/Production/Dao.xml"/&gt;
+       --&gt;
+    &lt;/context&gt;
+&lt;/spring&gt;</programlisting>
+
+    <para>In this example there are separate configuration files for test and
+    production configuration. The Services.xml file is in fact the same
+    between the two, and the example will be refactored in future to remove
+    that duplication. The Dao layer in the test configuration is an in-memory
+    version, faking database access, whereas the production version uses an
+    ADO.NET based solution.</para>
+
+    <para>The pages that comprise the application are located in the directory
+    'Web/BookTrip'. In that directory is another Web.config that is
+    responsible for configuring that directory's .aspx pages. There are three
+    main pages in the flow of the application.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>TripForm - form to enter in airports, times, round-trip or
+        one-way</para>
+      </listitem>
+
+      <listitem>
+        <para>Suggested Flights - form to select flights</para>
+      </listitem>
+
+      <listitem>
+        <para>ReservationConfirmationPage - your confirmation ID from the
+        booking process.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The XML configuration to configure the TripForm form is shown
+    below</para>
+
+    <programlisting>      &lt;object type="TripForm.aspx" parent="standardPage"&gt;
+        &lt;property name="BookingAgent" ref="bookingAgent" /&gt;
+        &lt;property name="AirportDao" ref="airportDao" /&gt;
+        &lt;property name="TripValidator" ref="tripValidator" /&gt;
+        &lt;property name="Results"&gt;
+          &lt;dictionary&gt;
+            &lt;entry key="displaySuggestedFlights" value="redirect:SuggestedFlights.aspx" /&gt;
+          &lt;/dictionary&gt;
+        &lt;/property&gt;
+      &lt;/object&gt;</programlisting>
+
+    <para>As you can see the various services it needs are set using standard
+    DI techniques. The Results property externalizes the page flow,
+    redirecting to the next page in the flow, SuggestedFlights. The 'parent'
+    attribute lets this page inherit properties from a template. The is
+    located in the top level Web.config file, packaged under the Config
+    directory. The standardPage sets up properties of Spring's base page
+    class, from which all the pages in this application inherit from. (Note
+    that to perform only dependency injection on pages you do not need to
+    inherit from Spring's Page class).</para>
+  </sect1>
+
+  <sect1>
+    <title>Bi-directional data binding</title>
+
+    <para>The TripForm page demonstrates the bi-directional data binding
+    features. A Trip object is used to back the information of the form. The
+    family of methods that are overridden to support the bi-directional data
+    binding are listed below.</para>
+
+    <programlisting>    protected override void InitializeModel()
+    {
+        trip = new Trip();
+        trip.Mode = TripMode.RoundTrip;
+        trip.StartingFrom.Date = DateTime.Today;
+        trip.ReturningFrom.Date = DateTime.Today.AddDays(1);
+    }
+
+    protected override void LoadModel(object savedModel)
+    {
+        trip = (Trip)savedModel;
+    }
+
+    protected override object SaveModel()
+    {
+        return trip;
+    }
+
+    protected override void InitializeDataBindings()
+    {
+        BindingManager.AddBinding("tripMode.Value", "Trip.Mode");
+        BindingManager.AddBinding("leavingFromAirportCode.SelectedValue", "Trip.StartingFrom.AirportCode");
+        BindingManager.AddBinding("goingToAirportCode.SelectedValue", "Trip.ReturningFrom.AirportCode");
+        BindingManager.AddBinding("leavingFromDate.SelectedDate", "Trip.StartingFrom.Date");
+        BindingManager.AddBinding("returningOnDate.SelectedDate", "Trip.ReturningFrom.Date");
+    }</programlisting>
+
+    <para>This is all you need to set up in order to have values from the Trip
+    object 'marshaled' to and from the web controls. The
+    InitializeDataBindings method set this up, using the Spring Expression
+    Language to define the UI element property that is associate with the
+    model (Trip) property.</para>
+  </sect1>
+
+  <sect1>
+    <title>Declarative Validation</title>
+
+    <para>The method called when the Search button is clicked will perform
+    validation. If validation succeeds as well as additional business logic
+    checks, the next page in the flow is loaded. This is shown in the code
+    below. Notice how much cleaner and more business focused the code reads
+    than if you were using standard ASP.NET APIs.</para>
+
+    <programlisting>    protected void SearchForFlights(object sender, EventArgs e)
+    {
+        if (Validate(trip, tripValidator))
+        {
+            FlightSuggestions suggestions = this.bookingAgent.SuggestFlights(Trip);
+            if (suggestions.HasOutboundFlights)
+            {
+                Session[Constants.SuggestedFlightsKey] = suggestions;
+                SetResult(DisplaySuggestedFlights);
+            }
+        }
+    }</programlisting>
+
+    <para>The 'Validate' method of the page takes as arguments the object to
+    validate and a IValidator instance. The TripForm property TripValidator is
+    set via dependency injection (as shown above). The validation logic is
+    defined declaratively in the XML configuration file and is shown
+    below.</para>
+
+    <programlisting>   &lt;v:group id="tripValidator"&gt;
+
+    &lt;v:required id="departureAirportValidator" test="StartingFrom.AirportCode"&gt;
+				  &lt;v:message id="error.departureAirport.required" providers="departureAirportErrors, validationSummary"/&gt;
+				&lt;/v:required&gt;
+
+			  &lt;v:group id="destinationAirportValidator"&gt;
+				  &lt;v:required test="ReturningFrom.AirportCode"&gt;
+				    &lt;v:message id="error.destinationAirport.required" providers="destinationAirportErrors, validationSummary"/&gt;
+				  &lt;/v:required&gt;
+				  &lt;v:condition test="ReturningFrom.AirportCode != StartingFrom.AirportCode" when="ReturningFrom.AirportCode != ''"&gt;
+				    &lt;v:message id="error.destinationAirport.sameAsDeparture" providers="destinationAirportErrors, validationSummary"/&gt;
+				  &lt;/v:condition&gt;
+			  &lt;/v:group&gt;
+
+				&lt;v:group id="departureDateValidator"&gt;
+					&lt;v:required test="StartingFrom.Date"&gt;
+				    &lt;v:message id="error.departureDate.required" providers="departureDateErrors, validationSummary"/&gt;
+				  &lt;/v:required&gt;
+					&lt;v:condition test="StartingFrom.Date &gt;= DateTime.Today" when="StartingFrom.Date != DateTime.MinValue"&gt;
+				    &lt;v:message id="error.departureDate.inThePast" providers="departureDateErrors, validationSummary"/&gt;
+					&lt;/v:condition&gt;
+				&lt;/v:group&gt;
+
+				&lt;v:group id="returnDateValidator" when="Mode == 'RoundTrip'"&gt;
+					&lt;v:required test="ReturningFrom.Date"&gt;
+				    &lt;v:message id="error.returnDate.required" providers="returnDateErrors, validationSummary"/&gt;
+				  &lt;/v:required&gt;
+					&lt;v:condition test="ReturningFrom.Date &gt;= StartingFrom.Date" when="ReturningFrom.Date != DateTime.MinValue"&gt;
+				    &lt;v:message id="error.returnDate.beforeDeparture" providers="returnDateErrors, validationSummary"/&gt;
+				  &lt;/v:condition&gt;
+				&lt;/v:group&gt;
+
+			&lt;/v:group&gt;</programlisting>
+
+    <para>The validation logic has 'when' clauses so that return dates can be
+    ignored if the Mode property of the Trip object is set to
+    'RoundTrip'.</para>
+  </sect1>
+
+  <sect1>
+    <title>Internationalization</title>
+
+    <para>Both image and text based internationalization are supported. You
+    can see this in action by clicking on the English, Srpski, or Српски links
+    on the bottom of the page.</para>
+  </sect1>
+
+  <sect1>
+    <title>Web Services</title>
+
+    <para>The class BookingAgent that was used by the TripForm class is a
+    standard .NET class, i.e no WebMethod attributes are on any of its
+    methods. Spring can expose this object as a web service by declaring the
+    following XML defined in the top level Config/Services.xml file</para>
+
+    <programlisting>  &lt;object id="bookingAgentWebService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
+    &lt;property name="TargetName" value="bookingAgent"/&gt;
+    &lt;property name="Name" value="BookingAgent"/&gt;
+    &lt;property name="Namespace" value="http://SpringAir/WebServices"/&gt;
+    &lt;property name="Description" value="SpringAir Booking Agent Web Service"/&gt;
+    &lt;property name="MemberAttributes"&gt;
+      &lt;dictionary&gt;
+        &lt;entry key="SuggestFlights"&gt;
+          &lt;object type="System.Web.Services.WebMethodAttribute, System.Web.Services"&gt;
+            &lt;property name="Description" value="Gets those flight suggestions that are applicable for the supplied trip."/&gt;
+          &lt;/object&gt;
+        &lt;/entry&gt;
+        &lt;entry key="Book"&gt;
+          &lt;object type="System.Web.Services.WebMethodAttribute, System.Web.Services"&gt;
+            &lt;property name="Description" value="Goes ahead and actually books what up until this point has been a transient reservation."/&gt;
+          &lt;/object&gt;
+        &lt;/entry&gt;
+        &lt;entry key="GetAirportList"&gt;
+          &lt;object type="System.Web.Services.WebMethodAttribute, System.Web.Services"&gt;
+            &lt;property name="Description" value="Return a collection of all those airports that can be used for the purposes of booking."/&gt;
+          &lt;/object&gt;
+        &lt;/entry&gt;
+      &lt;/dictionary&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para></para>
+  </sect1>
+</chapter>

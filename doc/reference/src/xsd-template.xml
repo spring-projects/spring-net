@@ -1,0 +1,4 @@
+<appendix id="springobjectsxsd">
+  <title>Spring.NET's <literal>spring-objects.xsd</literal></title>
+  <programlisting><![CDATA[@xsd-include@]]></programlisting>
+</appendix>

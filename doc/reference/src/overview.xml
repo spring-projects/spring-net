@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="introduction">
+  <title>Introduction</title>
+
+  <sect1 id="introduction-overview">
+    <title>Overview</title>
+
+    <para>Spring.NET is an application framework that provides comprehensive
+    infrastructural support for developing enterprise .NET applications. It
+    allows you to remove incidental complexity when using the base class
+    libraries makes best practices, such as test driven development, easy
+    practices. Spring.NET is created, supported and sustained by <ulink
+    url="http://www.springsource.com">SpringSource</ulink>.</para>
+
+    <para>The design of Spring.NET is based on the Java version of the Spring
+    Framework, which has shown real-world benefits and is used in thousands of
+    enterprise applications world wide. Spring .NET is not a quick port from
+    the Java version, but rather a 'spiritual port' based on following proven
+    architectural and design patterns in that are not tied to a particular
+    platform. The breadth of functionality in Spring .NET spans application
+    tiers which allows you to treat it as a ‘one stop shop’ but that is not
+    required. Spring .NET is not an all-or-nothing solution. You can use the
+    functionality in its modules independently. These <link
+    linkend="intro-modules">modules</link> are described below.</para>
+
+    <para>Enterprise applications typically are composed of a number of a
+    variety of physical tiers and within each tier functionality is often
+    split into functional layers. The business service layer for example
+    typically uses a objects in the data access layer to fulfill a use-case.
+    No matter how your application is architected, at the end of the day there
+    are a variety of objects that collaborate with one another to form the
+    application proper. The objects in an application can thus be said to have
+    dependencies between themselves.</para>
+
+    <para>The .NET platform provides a wealth of functionality for
+    architecting and building applications, ranging all the way from the very
+    basic building blocks of primitive types and classes (and the means to
+    define new classes), to rich full-featured application servers and web
+    frameworks. One area that is decidedly conspicuous by its absence is any
+    means of taking the basic building blocks and composing them into a
+    coherent whole; this area has typically been left to the purvey of the
+    architects and developers tasked with building an application (or
+    applications). Now to be fair, there are a number of design patterns
+    devoted to the business of composing the various classes and object
+    instances that makeup an all-singing, all-dancing application. Design
+    patterns such as Factory, Abstract Factory, Builder, Decorator, and
+    Service Locator (to name but a few) have widespread recognition and
+    acceptance within the software development industry (presumably that is
+    why these patterns have been formalized as patterns in the first place).
+    This is all very well, but these patterns are just that: best practices
+    given a name, typically together with a description of what the pattern
+    does, where the pattern is typically best applied, the problems that the
+    application of the pattern addresses, and so forth. Notice that the last
+    paragraph used the phrase “... a description of what the pattern does...”;
+    pattern books and wikis are typically listings of such formalized best
+    practice that you can certainly take away, mull over, and then implement
+    yourself in your application.</para>
+
+    <para>The Spring Framework takes best practices that have been proven over
+    the years in numerous applications and formalized as design patterns, and
+    actually codifies these patterns as first class objects that you as an
+    architect and developer can take away and integrate into your own
+    application(s). This is a Very Good Thing Indeed as attested to by the
+    numerous organizations and institutions that have used the Spring
+    Framework to engineer robust, maintainable applications. For example, the
+    IoC component of the Spring Framework addresses the enterprise concern of
+    taking the classes, objects, and services that are to compose an
+    application, by providing a formalized means of composing these various
+    disparate components into a fully working application ready for use</para>
+  </sect1>
+
+  <sect1>
+    <title>Background</title>
+
+    <para>In early 2004, Martin Fowler asked the readers of his site: when
+    talking about Inversion of Control: “the question is, what aspect of
+    control are [they] inverting?”. Fowler then suggested renaming the
+    principle (or at least giving it a more self-explanatory name), and
+    started to use the term Dependency Injection. His article then continued
+    to explain the ideas underpinning the Inversion of Control (IoC) and
+    Dependency Injection (DI) principle. If you need a decent insight into IoC
+    and DI, please do refer to the article :
+    http://martinfowler.com/articles/injection.html.</para>
+  </sect1>
+
+  <sect1 id="intro-modules">
+    <title>Modules</title>
+
+    <para>The Spring Framework contains a lot of features, which are
+    well-organized into modules shown in the diagram below. The diagram below
+    shows the various core modules of Spring.NET.</para>
+
+    <para><mediaobject>
+        <imageobject>
+          <imagedata fileref="images/overview.gif" format="GIF" />
+        </imageobject>
+      </mediaobject></para>
+
+    <para>Click on the module name for more information.</para>
+
+    <para><link lang="" linkend="objects">Spring.Core</link> is the most
+    fundamental part of the framework allowing you to configure your
+    application using Dependency Injection. Other supporting functionality,
+    listed below, is located in Spring.Core</para>
+
+    <para><link linkend="aop">Spring.Aop</link> - Use this module to perform
+    Aspect-Oriented Programming (AOP). AOP centralizes common functionality
+    that can then be declaratively applied across your application in a
+    targeted manner. Spring's <link linkend="aop-aspect-library">aspect
+    library</link> provides predefined easy to use aspects for transactions,
+    logging, performance monitoring, caching, method retry, and exception
+    handling.</para>
+
+    <para><link linkend="index-middle-tier">Spring.Data</link> - Use this
+    module to achieve greater efficiency and consistency in writing data
+    access functionality in ADO.NET and to perform declarative transaction
+    management.</para>
+
+    <para><link linkend="orm">Spring.Data.NHibernate</link> - Use this module
+    to integrate NHibernate with Spring’s declarative transaction management
+    functionality allowing easy mixing of ADO.NET and NHibernate operations
+    within the same transaction. NHibernate 1.0 users will benefit from ease
+    of use APIs to perform data access operations.</para>
+
+    <para><link linkend="web">Spring.Web</link> - Use this module to raise the
+    level of abstraction when writing ASP.NET web applications allowing you to
+    effectively address common pain-points in ASP.NET such as data binding,
+    validation, and ASP.NET page/control/module/provider configuration.</para>
+
+    <para><link linkend="ajax">Spring.Web.Extensions</link> - Use this module
+    to raise the level of abstraction when writing ASP.NET web applications
+    allowing you to effectively address common pain-points in ASP.NET such as
+    data binding, validation, and ASP.NET page/control/module/provider
+    configuration.</para>
+
+    <para><link linkend="index-services">Spring.Services</link> - Use this
+    module to adapt plain .NET objects so they can be used with a specific
+    distributed communication technology, such as .NET Remoting, Enterprise
+    Services, and ASMX Web Services. These services can be configured via
+    dependency injection and ‘decorated’ by applying AOP.</para>
+
+    <para><link linkend="testing">Spring.Testing.NUnit</link> - Use this
+    module to perform integration testing with NUnit.</para>
+
+    <para>The Spring.Core module also includes the following additional
+    features</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="expressions">Expression Language</link> -
+        provides efficient querying and manipulation of an object graphs at
+        runtime.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="validation">Validation Framework</link> - a
+        robust UI agnostic framework for creating complex validation rules for
+        business objects either programatically or declaratively.</para>
+      </listitem>
+
+      <listitem>
+        <para>Data binding Framework - a UI agnostic framework for performing
+        data binding.</para>
+      </listitem>
+
+      <listitem>
+        <para>Dynamic Reflection - provides a high performance reflection
+        API</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="threading">Threading</link> - provides additional
+        concurrency abstractions such as Latch, Semaphore and Thread Local
+        Storage.</para>
+      </listitem>
+
+      <listitem>
+        <para><link lang="" linkend="resources">Resource abstraction</link> -
+        provides a common interface to treat the InputStream from a file and
+        from a URL in a polymorphic and protocol-independent manner.</para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+
+  <sect1>
+    <title>Usage Scenarios</title>
+
+    <para>With the building blocks described above you can use Spring in all
+    sorts of scenarios, from simple stand alone console applications to
+    fully-fledged enterprise applications using Spring's transaction
+    management functionality and web framework integration. </para>
+
+    <para>It is important to note that the Spring Framework <emphasis>does
+    not</emphasis> force you to use everything within it; it is not an
+    <emphasis>all-or-nothing</emphasis> solution. Existing front-ends built
+    using standard ASP.NET can be integrated perfectly well with a
+    Spring-based middle-tier, allowing you to use the transaction and/or data
+    access features that Spring offers. The only things you need to do is wire
+    up your business logic using Spring's IoC container and integrate it into
+    your web layer using WebApplicationContext to locate middle tier services
+    and/or configure your standard ASP.NET pages with depdenency injection.
+    </para>
+
+    <para>While the Spring framework does not force any particular application
+    architecure it encourages the use of a well layered application
+    architecture with distinct tiers for the presentation, service, data
+    access, and database. </para>
+  </sect1>
+
+  <sect1>
+    <title>Quickstart applications</title>
+
+    <para>There are several sample applications that showcase individual
+    features. If you are already familiar with the concepts of dependency
+    injection, AOP, or have experience using the Java version of the Spring
+    framework you may find jumping into the examples a better way to bootstrap
+    the learning processing process. The following quickstart applications are
+    available and can be found in the examples directory in the distribution.
+    Click on the links for additional information.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="qs-moviefinder">Movie Finder</link> - A simple
+        demonstration of Dependency Injection (DI) techniques using Spring's
+        Inversion of Control (IoC) container.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="qs-appcontext-messagesource">Application
+        Context</link> - Demonstrates IoC container features such as
+        localization, accessing of ResourceSet objects, and applying resources
+        to object properties.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="aop-quickstart">Aspect Oriented
+        Programming</link> - Demonstrates use of the AOP framework to add
+        additional behavior to your existing objects. Examples of programmatic
+        and declarative AOP configuration are shown.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="remoting-quickstart">Distributed Computing</link>
+        - A calculator demonstrating remote service abstractions that let you
+        'export' a plain .NET object (PONO) via .NET Remoting, Web Services,
+        or an EnterpriseService ServiceComponent. Corresponding client side
+        proxies are also demonstrated. .</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="springair">Web Application - SpringAir</link> -A
+        ticket booking application that demonstrates the ASP.NET framework
+        showing features such as DI for ASP.NET pages, data binding,
+        validation, and localization.</para>
+      </listitem>
+
+      <listitem>
+        <para>Web Development - Introductory examples showing use of
+        dependency injection and Spring's bi-directional data binding in
+        ASP.NET.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="data-quickstart">Data Access</link> -
+        Demonstrates the ADO.NET framework showing how to simplify developing
+        ADO.NET based data access layers.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="tx-quickstart">Transaction Management</link> :
+        Demonstrates the use of declarative transaction management for both
+        local and distributed transaction in both .NET 1.1 and 2.0.</para>
+      </listitem>
+
+      <listitem>
+        <para>AJAX : Demonstrates how to access a plain .NET object as a
+        webservice in client side JavaScript</para>
+      </listitem>
+
+      <listitem>
+        <para>NHibernate Northwind: Demonstrates use of Spring's NHibernate
+        integration to simplify the use of NHibernate. Web tier is also
+        included showing how to use the Open-Session In View approach to
+        session management in the web tier.</para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+
+  <sect1>
+    <title>License Information</title>
+
+    <para>Spring.NET is licensed according to the terms of the Apache License,
+    Version 2.0. The full text of this license are available online at <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</ulink>
+    . You can also view the full text of the license in the license.txt file
+    located in the root installation directory.</para>
+  </sect1>
+
+  <sect1>
+    <title>Support</title>
+
+    <para>Training and support are available through <ulink
+    url="http://www.springsource.com">SpringSource</ulink> in addition to the
+    mailing lists and forums you can find on the main <ulink
+    url="http://www.springframework.net">Spring.NET</ulink> website.</para>
+  </sect1>
+</chapter>

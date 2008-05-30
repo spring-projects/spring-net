@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	
+  <object id="init-method1"
+      type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+DoubleInitializer, Spring.Core.Tests"
+      init-method="Init">
+    <property name="num">
+      <value>7</value>
+    </property>
+  </object>
+	
+  <object id="init-method2"
+      type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+BadInitializer, Spring.Core.Tests"
+      init-method="Init2"
+      singleton="false"/>
+	
+  <object id="init-method3"
+      type="Spring.Objects.TestObject, Spring.Core.Tests"
+      init-method="Init"
+      singleton="false"/>
+	
+  <object id="init-and-ib"
+      type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+InitAndIB, Spring.Core.Tests"
+      lazy-init="true"
+      init-method="CustomInit"
+      destroy-method="CustomDestroy"/>
+	
+  <object id="dependingObject"
+      type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+DependingObject, Spring.Core.Tests"
+      depends-on="preparingObject1, preparingObject2"/>
+	
+  <object id="preparingObject1"
+      type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+PreparingObject1, Spring.Core.Tests"/>
+	
+  <object id="preparingObject2"
+      type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+PreparingObject2, Spring.Core.Tests"/>
+
+</objects>

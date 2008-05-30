@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+	<description>enterpriseService</description>
+	
+	<object id="calculatorComponent" type="Spring.EnterpriseServices.ServicedComponentExporter, Spring.Services">
+		<property name="TargetName" value="calculatorService" />
+		<property name="TypeAttributes">
+			<list>
+				<object type="System.EnterpriseServices.TransactionAttribute, System.EnterpriseServices" />
+			</list>
+		</property>
+		<property name="MemberAttributes">
+			<dictionary>
+				<entry key="*">
+					<list>
+						<object type="System.EnterpriseServices.AutoCompleteAttribute, System.EnterpriseServices" />
+					</list>
+				</entry>
+			</dictionary>
+		</property>
+	</object>
+	
+	<object type="Spring.EnterpriseServices.EnterpriseServicesExporter, Spring.Services">
+		<property name="ApplicationName">
+			<value>Spring Calculator Application</value>
+		</property>
+		<property name="Description">
+			<value>Spring Calculator application.</value>
+		</property>
+		<property name="AccessControl">
+			<object type="System.EnterpriseServices.ApplicationAccessControlAttribute, System.EnterpriseServices">
+				<property name="AccessChecksLevel">
+					<value>ApplicationComponent</value>
+				</property>
+			</object>
+		</property>
+		<property name="Roles">
+			<list>
+				<value>Admin : Administrator role</value>
+				<value>User : User role</value>
+				<value>Manager : Administrator role</value>
+			</list>
+		</property>
+		<property name="Components">
+			<list>
+				<ref object="calculatorComponent" />
+			</list>
+		</property>
+		<property name="Assembly">
+			<value>Spring.Calculator.EnterpriseServices</value>
+		</property>
+	</object>
+	
+</objects>

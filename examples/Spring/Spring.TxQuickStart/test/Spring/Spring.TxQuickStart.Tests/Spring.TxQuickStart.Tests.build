@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<project name="Spring.TxQuickStart.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+	<!--
+        Required properties:
+            * current.bin.dir           - (path) root level to build to
+            * build.debug               - (true|false) debug build?
+            * current.build.defines.csc - framework-specific build defines
+    -->
+	<target name="build">
+
+		<csc target="library" define="${current.build.defines.csc}"
+		     warnaserror="true"
+		     debug="${current.build.debug}"
+      		     output="${current.bin.dir}/${project::get-name()}.dll"
+		     doc="${current.bin.dir}/${project::get-name()}.xml">
+			<nowarn>
+				<warning number="${nowarn.numbers.test}" />
+			</nowarn>
+			<sources failonempty="true">
+				<include name="**/*.cs" />
+				<include name="../CommonAssemblyInfo.cs" />
+			</sources>
+			<references basedir="${current.bin.dir}">
+				<include name="*.dll" />
+				<exclude name="${project::get-name()}.dll" />
+			</references>
+		</csc>
+		<copy todir="${current.bin.dir}">
+			<fileset basedir="${project::get-name()}/Data">
+				<include name="**/*.xml" />
+			        <include name="**/*.test" />
+			</fileset>
+		</copy>
+		<copy todir="${current.bin.dir}">
+			<fileset basedir="${project::get-name()}">
+				<include name="**/*.config" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="test" depends="build">
+		<nunit2outproc>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml"
+			           outputdir="${current.bin.dir}/results" />
+			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll"
+			      appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
+		</nunit2outproc>
+	</target>
+
+	<target name="test-mono-1.0" >
+		<nunit2outproc>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml"
+			           outputdir="${current.bin.dir}/results" />
+			<test assemblyname="${bin.dir}/net/1.1/${current.build.config}/${project::get-name()}.dll"
+			      appconfig="${bin.dir}/net/1.1/${current.build.config}/${project::get-name()}.dll.config" />
+		</nunit2outproc>
+	</target>
+
+</project>

@@ -1,0 +1,348 @@
+body
+{
+	padding: 0;
+	margin: 0;
+	width: 720px;
+	text-align: center;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+body, table
+{
+	font-size: 12px;
+}
+
+form
+{
+	margin: 0;
+}
+
+td.formLabel
+{
+	font-weight: bold;
+	text-align: right;
+	vertical-align: baseline;
+	padding: 0 4px 0 16px;
+}
+
+.validationError
+{
+	font-size: 80%;
+	color: #c50;
+}
+
+input, select
+{
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+/* main container box */
+#container
+{
+	width: 800px;
+	position: relative;
+	padding: 0 15px 15px;
+	margin: 5 auto;
+	text-align: left;
+}
+
+div#logo
+{
+	width: 794px;
+	height: 119px;
+}
+
+div#navigation
+{
+	width: 720px;
+	height: 20px;
+	background: #E2F3B8;
+	text-align: right;
+}
+
+#container div#content
+{
+	position: relative;
+	width: 800px;
+	height: 100%;
+	overflow: hidden;
+	background-color: #ecf1f3;
+	padding: 0;
+	margin: 0;
+}
+
+.panel11, .panel12, .panel13, .panel21, .panel23, .panel31, .panel32, .panel33
+{
+	position: absolute;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+}
+
+.panel11
+{
+	top: 0;
+	left: 0;
+	width: 16px;
+	height: 16px;
+	z-index: 2;
+}
+.panel12
+{
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 16px;
+	z-index: 1;
+}
+.panel13
+{
+	top: 0;
+	right: 0;
+	width: 16px;
+	height: 16px;
+	z-index: 2;
+}
+
+.panel21
+{
+	top: 0;
+	left: 0;
+	width: 16px;
+	height: 100%;
+	z-index: 1;
+}
+.panel23
+{
+	top: 0;
+	right: 0;
+	width: 16px;
+	height: 100%;
+	z-index: 1;
+}
+
+.panel31
+{
+	bottom: -1px;
+	left: 0;
+	width: 16px;
+	height: 16px;
+	z-index: 2;
+}
+.panel32
+{
+	bottom: -1px;
+	left: 0;
+	width: 100%;
+	height: 16px;
+	z-index: 1;
+}
+.panel33
+{
+	bottom: -1px;
+	right: 0;
+	width: 16px;
+	height: 16px;
+	z-index: 2;
+}
+
+.panelContent
+{
+	position: relative;
+	overflow: hidden;
+	padding: 18px;
+	margin: 0;
+	z-index: 3;
+}
+
+div#insert
+{
+	width: 120;
+	float: right;
+	text-align: right;
+}
+
+.buttonBar
+{
+	height: 1.5em;
+	text-align: right;
+}
+
+#copyright
+{
+	width: 800px;
+	text-align: center;
+	font: bold 90% Tahoma, sans-serif;
+	color: div#336633;
+}
+
+#copyright img.divider
+{
+	margin: 4px 0;
+}
+
+#copyright a:link, #copyright a:visited, #copyright a:active
+{
+	text-decoration: none;
+	color: #c50;
+}
+
+#copyright a:hover
+{
+	color: #f60;
+	text-decoration: underline;
+}
+
+img.imageButton
+{
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.readOnly
+{
+	color: #c0c0c0;
+}
+
+.error
+{
+	color: red;
+	font-weight: bold;
+	font-family: Arial, sans-serif;
+	font-size: 90%;
+}
+
+/* Table */
+.suggestedTable
+{
+	border: 1px solid #006;
+}
+.suggestedTableCaption th
+{
+	padding: 4px 2px;
+	margin: 4px;
+	line-height: 18px;
+	vertical-align: middle;
+	background-color: #006;
+	color: #fff;
+	font-size: 120%;
+}
+.suggestedTableColnames th
+{
+	text-align: left;
+	line-height: 16px;
+	padding: 4px 2px;
+	background-color: #159;
+	color: #fff;
+}
+.suggestedTableRow td
+{
+	text-align: left;
+	border-bottom: 1px solid #006;
+	padding: 4px 2px;
+}
+
+
+/* Text styles */
+content a
+{
+	text-decoration: none;
+	font-weight: bold;
+	color: #000;
+}
+content a:link
+{
+}
+content a:visited
+{
+}
+content a:active
+{
+}
+content a:hover
+{
+	text-decoration: underline;
+}
+
+content h1
+{
+	font-size: 2.0em;
+	font-weight: normal;
+	margin-top: 0em;
+	margin-bottom: 0em;
+}
+
+content h2
+{
+	font-size: 1.7em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: normal;
+}
+
+content h3
+{
+	font-size: 1.4em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: normal;
+}
+
+content h4
+{
+	font-size: 1.2em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: bold;
+}
+
+content h5
+{
+	font-size: 1.0em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: bold;
+}
+
+content h6
+{
+	font-size: 0.8em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: bold;
+}
+
+content img
+{
+	border: 0;
+}
+
+content ol, content ul, content li
+{
+	font-size: 1.0em;
+	line-height: 1.8em;
+	margin-top: 0.2em;
+	margin-bottom: 0.1em;
+}
+
+content p
+{
+	font-size: 1.0em;
+	line-height: 1.8em;
+	margin: 1.2em 0em 1.2em 0em;
+}
+
+content li > p
+{
+	margin-top: 0.2em;
+}
+
+content pre
+{
+	font-family: monospace;
+	font-size: 1.0em;
+}
+
+content strong, content b
+{
+	font-weight: bold;
+}
+
+
+

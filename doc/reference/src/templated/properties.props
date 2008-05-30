@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<codeSmith>
+	<propertySet>
+	<!--
+		<property name="MyPurchaseOrder">
+			<PurchaseOrder xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.ericjsmith.net">
+				<ShipTo Name="Eric J. Smith">
+					<Line1>123 Test Dr.</Line1>
+					<City>Dallas</City>
+					<State>TX</State>
+					<Zip>75075</Zip>
+				</ShipTo>
+				<OrderDate>05-01-2003</OrderDate>
+				<Items>
+					<OrderedItem>
+						<ItemName>Item #1</ItemName>
+						<Description>Item #1 Description</Description>
+						<UnitPrice>5.45</UnitPrice>
+						<Quantity>3</Quantity>
+						<LineTotal>16.35</LineTotal>
+					</OrderedItem>
+					<OrderedItem>
+						<ItemName>Item #2</ItemName>
+						<Description>Item #2 Description</Description>
+						<UnitPrice>12.75</UnitPrice>
+						<Quantity>8</Quantity>
+						<LineTotal>102.00</LineTotal>
+					</OrderedItem>
+				</Items>
+				<SubTotal>45.23</SubTotal>
+				<ShipCost>5.23</ShipCost>
+				<TotalCost>50.46</TotalCost>
+			</PurchaseOrder>
+		</property>
+	-->
+	</propertySet>
+</codeSmith>

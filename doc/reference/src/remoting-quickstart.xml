@@ -1,0 +1,817 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="remoting-quickstart">
+  <title>Portable Service Abstraction Quick Start</title>
+
+  <sect1 id="qs-remoting-introduction">
+    <title>Introduction</title>
+
+    <para>This quickstart demonstrates the basic usage of Spring.NET's
+    portable service abstraction functionality. Sections 2-5 demonstrate the
+    use of .NET Remoting, Section 6 shows the use of the
+    ServicedComponentExporter for .NET Enterprise Services, and Section 7
+    shows the use of the WebServiceExporter.</para>
+  </sect1>
+
+  <sect1 id="qs-remoting-projectstructure">
+    <title>.NET Remoting Example</title>
+
+    <para>The infrastructure classes are located in the
+    <literal>Spring.Services</literal> assembly under the
+    <literal>Spring.Services.Remoting</literal> namespace. The overall
+    strategy is to export .NET objects on the server side as either CAO or SAO
+    objects using <classname>CaoExporter</classname> or
+    <classname>SaoExporter</classname> and obtain references to these objects
+    on the client side using <classname>CaoFactoryObject</classname> and
+    <classname>SaoFactoryObject</classname>. This quickstart does assume
+    familiarity with .NET Remoting on the part of the reader. If you are new
+    to .NET remoting you may find the links to introductory remoting material
+    presented at the conclusion of this quickstart of some help.</para>
+
+    <para>As usual with quick start examples in Spring.NET, the classes used
+    in the quickstart are intentionally simple. In the specific case of this
+    remoting quickstart we are going to make a simple calculator that can be
+    accessed remotely. The same calculator class will be exported in multiple
+    ways reflecting the variety of .NET remoting options available (CAO,
+    SAO-SingleCall, SAO-Singleton) and also the use of adding AOP advice to
+    SAO hosted objects.</para>
+
+    <para>The example solution is located in the
+    <literal>examples\Spring\Spring.Calculator</literal> directory and
+    contains multiple projects.</para>
+
+    <para><mediaobject>
+        <imageobject>
+          <imagedata fileref="images/remoting-solution.gif" format="GIF" />
+        </imageobject>
+      </mediaobject></para>
+
+    <para>The <literal>Spring.Calculator.Contract</literal> project contains
+    the interface <classname>ICalculator</classname> that defines the basic
+    operations of a calculator and another interface
+    <classname>IAdvancedCalculator</classname> that adds support for memory
+    storage for results. (woo hoo - big feature - HP-12C beware!) These
+    interfaces are shown below. The
+    <literal>Spring.Calculator.Services</literal> project contains an
+    implementation of the these interfaces, namely the classes
+    <classname>Calculator</classname> and
+    <classname>AdvancedCalculator</classname>. The purpose of the
+    <classname>AdvancedCalculator</classname> implementation is to demonstrate
+    the configuration of object state for SAO-singleton objects. Note that the
+    calculator implementations <emphasis>do not</emphasis> inherit from the
+    <classname>MarshalByRefObject</classname> class. The
+    <literal>Spring.Calculator.ClientApp</literal> project contains the client
+    application and the <literal>Spring.Calculator.RemoteApp</literal> project
+    contains a console application that will host a Remoted instance of the
+    <classname>AdvancedCalculator</classname> class. The
+    <literal>Spring.Aspects</literal> project contains some logging advice
+    that will be used to demonstrate the application of aspects to remoted
+    objects. <literal>Spring.Calculator.RegisterComponentServices</literal> is
+    related to enterprise service exporters and is not relevant for this
+    quickstart. <literal>Spring.Calculator.Web</literal> is related to web
+    services exporters and is not relevant for this quickstart.</para>
+
+    <programlisting>public interface ICalculator
+{
+    int Add(int n1, int n2);
+
+    int Subtract(int n1, int n2);
+
+    DivisionResult Divide(int n1, int n2);
+
+    int Multiply(int n1, int n2);
+}
+
+[Serializable]
+public class DivisionResult
+{
+	  private int _quotient = 0;
+	  private int _rest = 0;
+
+	  public int Quotient
+	  {
+		  get { return _quotient; }
+		  set { _quotient = value; }
+	  }
+
+	  public int Rest
+	  {
+		  get { return _rest; }
+		  set { _rest = value; }
+	  }
+}</programlisting>
+
+    <para>An extension of this interface that supports having a slot for
+    calculator memory is shown below</para>
+
+    <programlisting>public interface IAdvancedCalculator : ICalculator
+{
+	int GetMemory();
+
+	void SetMemory(int memoryValue);
+
+	void MemoryClear();
+
+	void MemoryAdd(int num);
+}</programlisting>
+
+    <para>The structure of the VS.NET solution is a consequence of following
+    the best practice of using interfaces to share type information between a
+    .NET remoting client and server. The benefits of this approach are that
+    the client does not need a reference to the assembly that contains the
+    implementation class. Having the client reference the implementation
+    assembly is undesirable for a variety of reasons. One reason being
+    security since an untrusted client could potentially obtain the source
+    code to the implementation since Intermediate Language (IL) code is easily
+    reverse engineered. Another, more compelling, reason is to provide a
+    greater decoupling between the client and server so the server can update
+    its implementation of the interface in a manner that is quite transparent
+    to the client; i.e. the client code need not change. Independent of .NET
+    remoting best practices, using an interface to provide a service contract
+    is just good object-oriented design. This lets the client choose another
+    implementation unrelated to .NET Remoting, for example a local, test-stub
+    or a web services implementation. One of the major benefits of using
+    Spring.NET is that it reduces the cost of doing 'interface based
+    programming' to almost nothing. As such, this best practice approach to
+    .NET remoting fits naturally into the general approach to application
+    development that Spring.NET encourages you to follow. Ok, with that
+    barrage of OO design ranting finished, on to the implementation!</para>
+  </sect1>
+
+  <sect1 id="qs-remoting-implementation">
+    <title>Implementation</title>
+
+    <para>The implementation of the calculators contained in the
+    <literal>Spring.Calculator.Servies</literal> project is quite
+    straightforward. The only interesting methods are those that deal with the
+    memory storage, which is the state that we will be configuring explicitly
+    using constructor injection. A subset of the implementation is shown
+    below.</para>
+
+    <programlisting>public class Calculator : ICalculator
+{
+
+    public int Add(int n1, int n2)
+    {
+        return n1 + n2;
+    }
+
+    public int Substract(int n1, int n2)
+    {
+        return n1 - n2;
+    }
+
+    public DivisionResult Divide(int n1, int n2)
+    {
+        DivisionResult result = new DivisionResult();
+        result.Quotient = n1 / n2;
+        result.Rest = n1 % n2;
+        return result;
+    }
+
+    public int Multiply(int n1, int n2)
+    {
+        return n1 * n2;
+    }
+
+}
+
+public class AdvancedCalculator : Calculator, IAdvancedCalculator
+{
+
+  private int memoryStore = 0;
+
+  public AdvancedCalculator()
+  {}
+
+  public AdvancedCalculator(int initialMemory)
+  {
+    memoryStore = initialMemory;
+  }
+
+  public int GetMemory()
+  {
+    return memoryStore;
+  }
+
+  // other methods omitted in this listing...
+
+}</programlisting>
+
+    <para>The <classname>Spring.Calculator.RemotedApp</classname> project
+    hosts remoted objects inside a console application. The code is also quite
+    simple and shown below</para>
+
+    <programlisting>public static void Main(string[] args)
+{
+    try 
+    { 
+        // initialization of Spring.NET's IoC container
+        IApplicationContext ctx = ContextRegistry.GetContext();
+
+        Console.Out.WriteLine("Server listening...");
+    }   
+    catch (Exception e)
+    {
+	Console.Out.WriteLine(e);
+    }
+    finally
+    {
+	Console.Out.WriteLine("--- Press &lt;return&gt; to quit ---");
+	Console.ReadLine();
+    }
+}</programlisting>
+
+    <para>The configuration of the .NET remoting channels is done using the
+    standard <literal>system.runtime.remoting</literal> configuration section
+    inside the .NET configuration file of the application
+    (<literal>App.config</literal>). In this case we are using the
+    <literal>tcp</literal> channel on port <literal>8005</literal>.</para>
+
+    <programlisting>&lt;system.runtime.remoting&gt;
+  &lt;application&gt;
+    &lt;channels&gt;
+      &lt;channel ref="tcp" port="8005" /&gt;
+    &lt;/channels&gt;
+  &lt;/application&gt;
+&lt;/system.runtime.remoting&gt;</programlisting>
+
+    <para>The objects created in Spring's application context are shown below.
+    Multiple resource files are used to export these objects under various
+    remoting configurations. The AOP advice used in this example is a simple
+    Log4Net based around advice.</para>
+
+    <programlisting>	&lt;configSections&gt;
+		&lt;sectionGroup name="spring"&gt;
+			&lt;section name="context" type="Spring.Context.Support.ContextHandler, Spring.Core" /&gt;
+			&lt;section name="objects" type="Spring.Context.Support.DefaultSectionHandler, Spring.Core" /&gt;
+			&lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core" /&gt;
+		&lt;/sectionGroup&gt;
+		&lt;section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler,log4net" /&gt;
+	&lt;/configSections&gt;
+
+&lt;spring&gt;
+		&lt;parsers&gt;
+			&lt;parser type="Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services" /&gt;
+		&lt;/parsers&gt;
+	&lt;context&gt;
+		&lt;resource uri="config://spring/objects" /&gt;
+		&lt;resource uri="assembly://RemoteServer/RemoteServer.Config/cao.xml" /&gt;
+		&lt;resource uri="assembly://RemoteServer/RemoteServer.Config/saoSingleCall.xml" /&gt;
+		&lt;resource uri="assembly://RemoteServer/RemoteServer.Config/saoSingleCall-aop.xml" /&gt;
+		&lt;resource uri="assembly://RemoteServer/RemoteServer.Config/saoSingleton.xml" /&gt;
+		&lt;resource uri="assembly://RemoteServer/RemoteServer.Config/saoSingleton-aop.xml" /&gt;
+	&lt;/context&gt;
+	&lt;objects xmlns="http://www.springframework.net"&gt;
+		&lt;description&gt;Definitions of objects to be exported.&lt;/description&gt;
+
+    &lt;object type="Spring.Remoting.RemotingConfigurer, Spring.Services"&gt;
+      &lt;property name="Filename" value="Spring.Calculator.RemoteApp.exe.config" /&gt;
+    &lt;/object&gt;
+      
+		&lt;object id="Log4NetLoggingAroundAdvice" type="Spring.Aspects.Logging.Log4NetLoggingAroundAdvice, Spring.Aspects"&gt;
+			&lt;property name="Level" value="Debug" /&gt;
+		&lt;/object&gt;
+
+		&lt;object id="singletonCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services"&gt;
+			&lt;constructor-arg type="int" value="217"/&gt;
+		&lt;/object&gt;
+		
+		&lt;object id="singletonCalculatorWeaved" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
+			&lt;property name="target" ref="singletonCalculator"/&gt;
+			&lt;property name="interceptorNames"&gt;
+				&lt;list&gt;
+					&lt;value&gt;Log4NetLoggingAroundAdvice&lt;/value&gt;
+				&lt;/list&gt;
+			&lt;/property&gt;
+		&lt;/object&gt;
+		
+		&lt;object id="prototypeCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" singleton="false"&gt;
+			&lt;constructor-arg type="int" value="217"/&gt;
+		&lt;/object&gt;
+		
+		&lt;object id="prototypeCalculatorWeaved" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
+			&lt;property name="targetSource"&gt;
+				&lt;object type="Spring.Aop.Target.PrototypeTargetSource, Spring.Aop"&gt;
+					&lt;property name="TargetObjectName" value="prototypeCalculator"/&gt;
+				&lt;/object&gt;
+			&lt;/property&gt;
+			&lt;property name="interceptorNames"&gt;
+				&lt;list&gt;
+					&lt;value&gt;Log4NetLoggingAroundAdvice&lt;/value&gt;
+				&lt;/list&gt;
+			&lt;/property&gt;
+		&lt;/object&gt;
+		
+	&lt;/objects&gt;
+&lt;/spring&gt;</programlisting>
+
+    <para>The declaration of the calculator instance,
+    <literal>singletonCalculator</literal> for example, and the setting of any
+    property values and / or object references is done as you would normally
+    do for any object declared in the Spring.NET configuration file. To expose
+    the calculator objects as .NET remoted objects the exporter
+    <classname>Spring.Remoting.CaoExporter</classname> is used for CAO objects
+    and <classname>Spring.Remoting.SaoExporter</classname> is used for SAO
+    objects. Both exporters require the setting of a
+    <literal>TargetName</literal> property that refers to the name of the
+    object in Spring's IoC container that will be remoted. The semantics of
+    SAO-SingleCall and CAO behavior are achieved by exporting a target object
+    that is declared as a "prototype" (i.e. singleton=false). For SAO objects,
+    the <literal>ServiceName</literal> property defines the name of the
+    service as it will appear in the URL that clients use to locate the remote
+    object. To set the remoting lifetime of the objects to be infinite, the
+    property <literal>Infinite</literal> is set to true.</para>
+
+    <para>The configuration for the exporting a SAO-Singleton is shown
+    below.<programlisting>&lt;objects	
+	xmlns="http://www.springframework.net" 
+	xmlns:r="http://www.springframework.net/remoting"&gt;
+	
+	&lt;description&gt;Registers the calculator service as a SAO in 'Singleton' mode.&lt;/description&gt;
+	
+	&lt;r:saoExporter 
+		targetName="singletonCalculator" 
+		serviceName="RemotedSaoSingletonCalculator" /&gt;
+&lt;/objects&gt;</programlisting>The configuration shown above uses the Spring
+    Remoting schema but you can also choose to use the standard 'generic' XML
+    configuration shown below.<programlisting>&lt;object name="saoSingletonCalculator" type="Spring.Remoting.SaoExporter, Spring.Services"&gt;
+  &lt;property name="TargetName" value="singletonCalculator" /&gt;
+  &lt;property name="ServiceName" value="RemotedSaoSingletonCalculator" /&gt;
+&lt;/object&gt;</programlisting> This will result in the remote object being
+    identified by the URL
+    <literal>tcp://localhost:8005/RemotedSaoSingletonCalculator</literal>. The
+    use of <classname>SaoExporter</classname> and
+    <classname>CaoExporter</classname> for other configuration are similar,
+    look at the configuration files in the
+    <classname>Spring.Calculator.RemotedApp</classname> project files for more
+    information.</para>
+
+    <para>On the client side, the client application will connect a specific
+    type of remote calculator service, object, ask it for it's current memory
+    value, which is pre-configured to <literal>217</literal>, then perform a
+    simple addition. As in the case of the server, the channel configuration
+    is done using the standard .NET Remoting configuration section of the .NET
+    application configuration file (<literal>App.config</literal>), as can
+    been seen below.</para>
+
+    <programlisting>&lt;system.runtime.remoting&gt;
+    &lt;application&gt;
+    	&lt;channels&gt;
+    		&lt;channel ref="tcp"/&gt;
+    	&lt;/channels&gt;
+    &lt;/application&gt;
+&lt;/system.runtime.remoting&gt;</programlisting>
+
+    <para>The client implementation code is shown below.</para>
+
+    <programlisting>public static void Main(string[] args)
+{
+	try
+	{
+	        Pause();
+
+		IApplicationContext ctx = ContextRegistry.GetContext();
+
+		Console.Out.WriteLine("Get Calculator...");
+		IAdvancedCalculator firstCalc = (IAdvancedCalculator) ctx.GetObject("calculatorService");
+    Console.WriteLine("Divide(11, 2) : " + firstCalc.Divide(11, 2));
+		Console.Out.WriteLine("Memory = " + firstCalc.GetMemory());
+		firstCalc.MemoryAdd(2);
+		Console.Out.WriteLine("Memory + 2 = " + firstCalc.GetMemory());
+
+		Console.Out.WriteLine("Get Calculator...");
+		IAdvancedCalculator secondCalc = (IAdvancedCalculator) ctx.GetObject("calculatorService");
+		Console.Out.WriteLine("Memory = " + secondCalc.GetMemory());
+	}
+	catch (Exception e)
+	{
+		Console.Out.WriteLine(e);
+	}
+	finally
+	{
+		Pause();
+	}
+}</programlisting>
+
+    <para>Note that the client application code is not aware that it is using
+    a remote object. The <literal>Pause()</literal> method simply waits until
+    the <literal>Return</literal> key is pressed on the console so that the
+    client doesn't make a request to the server before the server has had a
+    chance to start. The standard configuration and initialization of the .NET
+    remoting infrastructure is done before the creation of the Spring.NET IoC
+    container. The configuration of the client application is constructed in
+    such a way that one can easily switch implementations of the
+    <literal>calculatorService</literal> retrieved from the application
+    context. In more complex applications the calculator service would be a
+    dependency on another object in your application, say in a workflow
+    processing layer. The following listing shows a configuration for use of a
+    local implementation and then several remote implementations. The same
+    Exporter approach can be used to create Web Services and Serviced
+    Components (Enterprise Services) of the calculator object but are not
+    discussed in this QuickStart.</para>
+
+    <programlisting>
+&lt;spring&gt;
+  &lt;context&gt;
+    &lt;resource uri="config://spring/objects" /&gt;
+      
+    &lt;!-- Only one at a time ! --&gt;
+
+    &lt;!-- ================================== --&gt;
+    &lt;!-- In process (local) implementations --&gt;
+    &lt;!-- ================================== --&gt;
+    &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.InProcess/inProcess.xml" /&gt;
+
+    &lt;!-- ======================== --&gt;
+    &lt;!-- Remoting implementations --&gt;
+    &lt;!-- ======================== --&gt;
+    &lt;!-- Make sure 'RemoteApp' console application is running and listening. --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.Remoting/cao.xml" /&gt; --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.Remoting/cao-ctor.xml" /&gt; --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.Remoting/saoSingleton.xml" /&gt; --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.Remoting/saoSingleton-aop.xml" /&gt; --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.Remoting/saoSingleCall.xml" /&gt; --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.Remoting/saoSingleCall-aop.xml" /&gt; --&gt;
+
+    &lt;!-- =========================== --&gt;
+    &lt;!-- Web Service implementations --&gt;
+    &lt;!-- =========================== --&gt;
+    &lt;!-- Make sure 'http://localhost/SpringCalculator/' web application is running --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.WebServices/webServices.xml" /&gt; --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.WebServices/webServices-aop.xml" /&gt; --&gt;
+
+    &lt;!-- ================================= --&gt;
+    &lt;!-- EnterpriseService implementations --&gt;
+    &lt;!-- ================================= --&gt;
+    &lt;!-- Make sure you register components with 'RegisterComponentServices' console application.  --&gt;
+    &lt;!-- &lt;resource uri="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.EnterpriseServices/enterpriseServices.xml" /&gt; --&gt;
+  &lt;/context&gt;
+&lt;/spring&gt;
+</programlisting>
+
+    <para>The inProcess.xml configuration file creates an instance of
+    AdvancedCalculator directly <programlisting>
+&lt;objects xmlns="http://www.springframework.net"&gt;
+	
+  &lt;description&gt;inProcess&lt;/description&gt;
+	
+  &lt;object id="calculatorService" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" /&gt;
+	
+&lt;/objects&gt;
+</programlisting></para>
+
+    <para>Factory classes are used to create a client side reference to the
+    .NET remoting implementations. For SAO objects use the
+    <classname>SaoFactoryObject</classname> class and for CAO objects use the
+    <classname>CaoFactoryObject</classname> class. The configuration for
+    obtaining a reference to the previously exported SAO singleton
+    implementation is shown below <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+	
+	&lt;description&gt;saoSingleton&lt;/description&gt;
+	
+	&lt;object id="calculatorService" type="Spring.Remoting.SaoFactoryObject, Spring.Services"&gt;
+		&lt;property name="ServiceInterface" value="Spring.Calculator.Interfaces.IAdvancedCalculator, Spring.Calculator.Contract" /&gt;
+		&lt;property name="ServiceUrl" value="tcp://localhost:8005/RemotedSaoSingletonCalculator" /&gt;
+	&lt;/object&gt;
+	
+&lt;/objects&gt;
+</programlisting></para>
+
+    <para>You must specify the property <literal>ServiceInterface</literal> as
+    well as the location of the remote object via the
+    <literal>ServiceUrl</literal> property. The property replacement
+    facilities of Spring.NET can be leveraged here to make it easy to
+    configure the URL value based on environment variable settings, a standard
+    .NET configuration section, or an external property file. This is useful
+    to easily switch between test, QA, and production (yea baby!)
+    environments. An example of how this would be expressed is...</para>
+
+    <programlisting>&lt;property name="ServiceUrl" value="${protocol}://${host}:${port}/RemotedSaoSingletonCalculator" /&gt;</programlisting>
+
+    <para>The property values in this example are defined elsewhere; refer to
+    <xref linkend="objects-factory-placeholderconfigurer" /> for additional
+    information. As mentioned previously, more important in terms of
+    configuration flexibility is the fact that now you can swap out different
+    implementations (.NET remoting based or otherwise) of this interface by
+    making a simple change to the configuration file.</para>
+
+    <para>The configuration for obtaining a reference to the previously
+    exported CAO implementation is shown below <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+	
+	&lt;description&gt;cao&lt;/description&gt;
+	
+	&lt;object id="calculatorService" type="Spring.Remoting.CaoFactoryObject, Spring.Services"&gt;
+		&lt;property name="RemoteTargetName" value="prototypeCalculator" /&gt;
+		&lt;property name="ServiceUrl" value="tcp://localhost:8005" /&gt;
+	&lt;/object&gt;
+	
+&lt;/objects&gt;
+</programlisting></para>
+  </sect1>
+
+  <sect1>
+    <title>Running the application</title>
+
+    <para>Now that we have had a walk though of the implementation and
+    configuration it is finally time to run the application (if you haven't
+    yet pulled the trigger). Be sure to set up VS.NET to run multiple
+    applications on startup as shown below.</para>
+
+    <para><mediaobject>
+        <imageobject>
+          <imagedata fileref="images/remoting-startup.gif" format="GIF" />
+        </imageobject>
+      </mediaobject></para>
+
+    <para>Running the solution yields the following output in the server and
+    client window</para>
+
+    <para><programlisting>  SERVER WINDOW
+
+Server listening...
+--- Press &lt;return&gt; to quit ---
+
+
+   CLIENT WINDOW
+
+--- Press &lt;return&gt; to continue ---     (hit return...)
+Get Calculator...
+Divide(11, 2) : Quotient: '5'; Rest: '1'
+Memory = 0
+Memory + 2 = 2
+Get Calculator...
+Memory = 2
+--- Press &lt;return&gt; to continue ---</programlisting></para>
+  </sect1>
+
+  <sect1>
+    <title>Remoting Schema</title>
+
+    <para>The spring-remoting.xsd file in the doc directory provides a short
+    syntax to configure Spring.NET remoting features. To install the schema in
+    the VS.NET environment run the install-schema NAnt script in the doc
+    directory. Refer to the Chapter on VS.NET integration for more
+    details.</para>
+
+    <para>The various configuration files in the RemoteServer and Client
+    projects show the schema in action. Here is a condensed listing of those
+    definitions which should give you a good feel for how to use the
+    schema.</para>
+
+    <programlisting>&lt;!-- Calculator definitions --&gt;
+&lt;object id="singletonCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services"&gt;
+	&lt;constructor-arg type="int" value="217" /&gt;
+&lt;/object&gt;
+
+&lt;object id="prototypeCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" singleton="false"&gt;
+	&lt;constructor-arg type="int" value="217" /&gt;
+&lt;/object&gt;
+
+&lt;!-- CAO object --&gt;
+&lt;r:caoExporter targetName="prototypeCalculator" infinite="false"&gt;
+  &lt;r:lifeTime initialLeaseTime="2m" renewOnCallTime="1m"/&gt;
+&lt;/r:caoExporter&gt;
+
+&lt;!-- SAO Single Call --&gt;
+&lt;r:saoExporter 
+  targetName="prototypeCalculator" 
+  serviceName="RemotedSaoSingleCallCalculator"/&gt;
+
+&lt;!-- SAO Singleton --&gt;
+&lt;r:saoExporter 
+  targetName="singletonCalculator" 
+  serviceName="RemotedSaoSingletonCalculator" /&gt;</programlisting>
+
+    <para>Note that the singleton nature of the remoted object is based on the
+    Spring object definition. The "PrototypeCalculator" has its singleton
+    property set to false to that a new one will be created every time a
+    method on the remoted object is invoked for the SAO case.</para>
+  </sect1>
+
+  <sect1>
+    <title id="entsvc-example">.NET Enterprise Services Example</title>
+
+    <para>The .NET Enterprise Services example is located in the project
+    Spring.Calculator.RegisterComponentServices.2005.csproj or
+    Spring.Calculator.RegisterComponentServices.2003.csproj, depending on the
+    use of .NET 1.1 or 2.0. The example uses the previous AdvancedCalculator
+    implementation and then imports the embedded configuration file
+    'enterpriseServices.xml' from the namespace
+    Spring.Calculator.RegisterComponentServices.Config. The top level
+    configuration is shown below</para>
+
+    <programlisting>	&lt;spring&gt;
+	
+		&lt;context&gt;
+			&lt;resource uri="config://spring/objects" /&gt;
+			&lt;resource uri="assembly://Spring.Calculator.RegisterComponentServices/Spring.Calculator.RegisterComponentServices.Config/enterpriseServices.xml" /&gt;
+		&lt;/context&gt;
+		
+		&lt;objects xmlns="http://www.springframework.net"&gt;
+			&lt;description&gt;Definitions of objects to be registered.&lt;/description&gt;
+			
+			&lt;object id="calculatorService" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" /&gt;
+			
+		&lt;/objects&gt;
+		
+	&lt;/spring&gt;</programlisting>
+
+    <para>The exporter that adapts the AdvancedCalculator for use as an
+    Enterprise Service component is defined first in enterpriseServices.xml.
+    Second is defined an exporter that will host the exported Enterprise
+    Services component application by signing the assembly, registering it
+    with the specified COM+ application name. If application does not exist it
+    will create it and configure it using values specified for Description,
+    AccessControl and Roles properties. The configuration file for
+    enterpriseServices.xml is shown below</para>
+
+    <para><programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+
+	&lt;description&gt;enterpriseService&lt;/description&gt;
+	
+	&lt;object id="calculatorComponent" type="Spring.EnterpriseServices.ServicedComponentExporter, Spring.Services"&gt;
+		&lt;property name="TargetName" value="calculatorService" /&gt;
+		&lt;property name="TypeAttributes"&gt;
+			&lt;list&gt;
+				&lt;object type="System.EnterpriseServices.TransactionAttribute, System.EnterpriseServices" /&gt;
+			&lt;/list&gt;
+		&lt;/property&gt;
+		&lt;property name="MemberAttributes"&gt;
+			&lt;dictionary&gt;
+				&lt;entry key="*"&gt;
+					&lt;list&gt;
+						&lt;object type="System.EnterpriseServices.AutoCompleteAttribute, System.EnterpriseServices" /&gt;
+					&lt;/list&gt;
+				&lt;/entry&gt;
+			&lt;/dictionary&gt;
+		&lt;/property&gt;
+	&lt;/object&gt;
+	
+	&lt;object type="Spring.EnterpriseServices.EnterpriseServicesExporter, Spring.Services"&gt;
+		&lt;property name="ApplicationName"&gt;
+			&lt;value&gt;Spring Calculator Application&lt;/value&gt;
+		&lt;/property&gt;
+		&lt;property name="Description"&gt;
+			&lt;value&gt;Spring Calculator application.&lt;/value&gt;
+		&lt;/property&gt;
+		&lt;property name="AccessControl"&gt;
+			&lt;object type="System.EnterpriseServices.ApplicationAccessControlAttribute, System.EnterpriseServices"&gt;
+				&lt;property name="AccessChecksLevel"&gt;
+					&lt;value&gt;ApplicationComponent&lt;/value&gt;
+				&lt;/property&gt;
+			&lt;/object&gt;
+		&lt;/property&gt;
+		&lt;property name="Roles"&gt;
+			&lt;list&gt;
+				&lt;value&gt;Admin : Administrator role&lt;/value&gt;
+				&lt;value&gt;User : User role&lt;/value&gt;
+				&lt;value&gt;Manager : Administrator role&lt;/value&gt;
+			&lt;/list&gt;
+		&lt;/property&gt;
+		&lt;property name="Components"&gt;
+			&lt;list&gt;
+				&lt;ref object="calculatorComponent" /&gt;
+			&lt;/list&gt;
+		&lt;/property&gt;
+		&lt;property name="Assembly"&gt;
+			&lt;value&gt;Spring.Calculator.EnterpriseServices&lt;/value&gt;
+		&lt;/property&gt;
+	&lt;/object&gt;
+	
+&lt;/objects&gt;</programlisting></para>
+  </sect1>
+
+  <sect1 id="websvc-example">
+    <title>Web Services Example</title>
+
+    <para>The WebServices example shows how to export the AdvancedCalculator
+    as a web service that is an AOP proxy of AdvancedCalculator that has
+    logging advice applied to it. The main configuration file, Web.config,
+    includes information from three locations as shown below</para>
+
+    <programlisting>		&lt;context&gt;
+			&lt;resource uri="config://spring/objects"/&gt;
+			&lt;resource uri="~/Config/webServices.xml"/&gt;
+			&lt;resource uri="~/Config/webServices-aop.xml"/&gt;
+		&lt;/context&gt;</programlisting>
+
+    <para>The config section 'spring/objects' in Web.config contains the
+    definition for the 'plain' Advanced calculator, as well as the definitions
+    to create an AOP proxy of an AdvancedCalculator that adds logging advice.
+    These definitions are shown below<programlisting>		&lt;objects xmlns="http://www.springframework.net"&gt;
+			
+      &lt;!-- Aspect --&gt;
+      
+      &lt;object id="CommonLoggingAroundAdvice" type="Spring.Aspects.Logging.CommonLoggingAroundAdvice, Spring.Aspects"&gt;
+        &lt;property name="Level" value="Debug"/&gt;
+      &lt;/object&gt;
+      
+      &lt;!-- Service --&gt;
+			
+      &lt;!-- 'plain object' for AdvancedCalculator --&gt;
+      &lt;object id="calculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services"/&gt;
+			
+      &lt;!-- AdvancedCalculator object with AOP logging advice applied. --&gt;
+      &lt;object id="calculatorWeaved" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
+				    &lt;property name="target" ref="calculator"/&gt;
+				    &lt;property name="interceptorNames"&gt;
+					     &lt;list&gt;
+						      &lt;value&gt;CommonLoggingAroundAdvice&lt;/value&gt;
+					     &lt;/list&gt;
+				    &lt;/property&gt;
+			    &lt;/object&gt;
+		
+    &lt;/objects&gt;</programlisting>The configuration file webService.xml
+    simply exports the named calculator object</para>
+
+    <programlisting>	&lt;object id="calculatorService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
+		&lt;property name="TargetName" value="calculator" /&gt;
+		&lt;property name="Namespace" value="http://SpringCalculator/WebServices" /&gt;
+		&lt;property name="Description" value="Spring Calculator Web Services" /&gt;
+	&lt;/object&gt;</programlisting>
+
+    <para>Whereas the webService-aop.xml exports the calculator instance that
+    has AOP advice applied to it.</para>
+
+    <programlisting>	&lt;object id="calculatorServiceWeaved" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
+		&lt;property name="TargetName" value="calculatorWeaved" /&gt;
+		&lt;property name="Namespace" value="http://SpringCalculator/WebServices" /&gt;
+		&lt;property name="Description" value="Spring Calculator Web Services" /&gt;
+	&lt;/object&gt;
+	</programlisting>
+
+    <para>Setting the solution to run the web project as the startup, you will
+    be presented with a screen as shown below</para>
+
+    <para><mediaobject>
+        <imageobject>
+          <imagedata fileref="images/web-exporter-calc-svc-main.jpg"
+                     format="JPG" />
+        </imageobject>
+      </mediaobject>Selecting the CalculatorService and
+    CalculatorServiceWeaved links will bring you to the standard user
+    interface generated for browsing a web service, as shown below<mediaobject>
+        <imageobject>
+          <imagedata fileref="images/web-exporter-calc-svc.jpg" />
+        </imageobject>
+      </mediaobject></para>
+
+    <para>And similarly for the calculator service with AOP applied</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/web-exporter-calc-svc-aop.jpg" />
+      </imageobject>
+    </mediaobject>
+
+    <para>Invoking the Add method for calculatorServiceWeaved shows the
+    screen</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/web-exporter-calc-svc-aop-add.jpg" />
+      </imageobject>
+    </mediaobject>
+
+    <para>Invoking add will then show the result '4' in a new browser instance
+    and the log file log.txt will contain the following entires</para>
+
+    <programlisting>2007-10-15 17:59:47,375 [DEBUG] Spring.Aspects.Logging.CommonLoggingAroundAdvice - Intercepted call : about to invoke method 'Add'
+2007-10-15 17:59:47,421 [DEBUG] Spring.Aspects.Logging.CommonLoggingAroundAdvice - Intercepted call : returned '4'</programlisting>
+  </sect1>
+
+  <sect1 id="qs-remoting-additional">
+    <title>Additional Resources</title>
+
+    <para>Some introductory articles on .NET remoting can be found online at
+    MSDN. Ingo Rammer is also a very good authority on .NET remoting, and the
+    .NET Remoting FAQ (link below) which is maintained by Ingo is chock full
+    of useful information.</para>
+
+    <para><itemizedlist>
+        <listitem>
+          <para><ulink
+          url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/introremoting.asp">An
+          Introduction to Microsoft .NET Remoting Framework</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/hawkremoting.asp">Microsoft
+          .NET Remoting: A Technical Overview</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="http://www.apress.com/book/bookDisplay.html?bID=374">Advanced
+          .NET Remoting</ulink> (authored by Ingo Rammer)</para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="http://www.thinktecture.com/resources/remotingfaq/default.html">.NET
+          Remoting FAQ</ulink></para>
+        </listitem>
+      </itemizedlist></para>
+  </sect1>
+</chapter>

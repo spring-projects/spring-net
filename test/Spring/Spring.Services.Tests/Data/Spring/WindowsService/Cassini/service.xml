@@ -1,0 +1,25 @@
+<objects>
+	
+	<import resource="file://~/localizer.xml"/>
+
+    <object name="cassini" type="Cassini.Server, Cassini" init-method="Start" destroy-method="Stop">
+        <!--
+        <constructor-arg>
+            <value>8800</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>/</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>${spring.services.application.fullpath}/wwwroot</value>
+        </constructor-arg>        
+        -->
+        <constructor-arg index="0" value="90"/>
+        <constructor-arg index="1" value="/"/>
+        <constructor-arg index="2" value="${spring.services.application.fullpath}/wwwroot"/>
+        <!--
+        <constructor-arg index="2" value="C:\Documents and Settings\fede\Desktop\Spring.Net\build\VS.Net\Spring.Services.WindowsService.Process\Debug\deploy\cassini\wwwroot"/>
+        -->
+    </object>
+
+</objects>

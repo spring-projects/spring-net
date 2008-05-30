@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="services">
+  <title>.NET Enterprise Services</title>
+
+  <sect1 id="services-introduction">
+    <title>Introduction</title>
+
+    <para>Spring's .NET Enterprise Services support allows you to export a
+    'plain .NET object' as a .NET Remoted object. By "plain .NET object" we
+    mean classes that do not inherit from a specific infrastructure base class
+    such as ServicedComponent..</para>
+
+    <para>You can leverage the IoC container to configure the exporter and
+    service endpoints. You may also opt to not use the IoC container to
+    configure the objects and use Spring's .NET Enterprise Services classes
+    Programatically, as you would with any third party library.</para>
+  </sect1>
+
+  <sect1 id="services-servicedcomponents">
+    <title>Serviced Components</title>
+
+    <para>Services components in .NET are able to use COM+ services such as
+    declarative and distributed transactions, role based security, object
+    pooling messaging. To access these services your class needs to derive
+    from the class
+    <classname>System.EnterpriseServices.ServicedComponent</classname>, adorn
+    your class and assemblies with relevant attributes, and configure your
+    application by registering your serviced components with the COM+ catalog.
+    The overall landscape of accessing and using COM+ services within .NET
+    goes by the name .NET Enterprise Services.</para>
+
+    <para>Many of these services can be provided without the need to derive
+    from a ServicedComponent though the use of Spring's Aspect-Oriented
+    Programming functionality. Nevertheless, you may be interested in
+    exporting your class as a serviced component and having client access that
+    component in a location transparent manner. By using Spring's
+    <literal>ServicedComponentExporter</literal>,
+    <literal>EnterpriseServicesExporter</literal> and
+    <literal>ServicedComponentFactory</literal> you can easily create and
+    consume serviced components without having your class inherit from
+    <literal>ServicedComponent</literal> and automate the manual deployment
+    process that involves strongly signing your assembly and using the
+    <literal>regsvcs</literal> utility.</para>
+
+    <para>Note that the following sections do not delve into the details of
+    programming .NET Enterprise Services. An excellent reference for such
+    information is Christian Nagel's "Enterprise Services with the .NET
+    Framework" Spring.NET includes an example of using these classes, the
+    'calculator' example. More information can be found in the section, .<link
+    linkend="entsvc-example">NET Enterprise Services example.</link></para>
+  </sect1>
+
+  <sect1 id="services-serverside">
+    <title>Server Side</title>
+
+    <para>One of the main challenges for the exporting of a serviced component
+    to the host is the need for them to be contained within a physical
+    assembly on the file system in order to be registered with the COM+
+    Services. To make things more complicated, this assembly has to be
+    strongly named before it can be successfully registered.</para>
+
+    <para>Spring provides two classes that allow all of this to happen.
+    <itemizedlist>
+        <listitem>
+           
+
+          <classname>Spring.Enterprise.ServicedComponentExporter</classname>
+
+           is responsible for exporting a single component and making sure that it derives from ServicedComponent class. It also allows you to specify class-level and method-level attributes for the component in order to define things such as transactional behavior, queuing, etc. 
+        </listitem>
+
+        <listitem>
+           
+
+          <classname>Spring.Enterprise.EnterpriseServicesExporter</classname>
+
+           corresponds to a COM+ application, and it allows you to specify list of components that should be included in the application, as well as the application name and other assembly-level attributes 
+        </listitem>
+      </itemizedlist></para>
+
+    <para>Let's say that we have a simple service interface and implementation
+    class, such as these:</para>
+
+    <programlisting>namespace MyApp.Services
+{
+    public interface IUserManager
+    {
+        User GetUser(int userId);
+        void SaveUser(User user);
+    }
+
+    public class SimpleUserManager : IUserManager
+    {
+        private IUserDao userDao;
+        public IUserDao UserDao
+        {
+            get { return userDao; }
+            set { userDao = value; }
+        }
+
+        public User GetUser(int userId)
+        {
+            return UserDao.FindUser(userId);
+        }
+
+        public void SaveUser(User user)
+        {
+            if (user.IsValid)
+            {
+                UserDao.SaveUser(user);
+            }
+        }
+    }
+} </programlisting>
+
+    <para>And the corresponding object definition for it in the application
+    context config file:</para>
+
+    <programlisting>&lt;object id="userManager" type="MyApp.Services.SimpleUserManager"&gt;
+    &lt;property name="UserDao" ref="userDao"/&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>Let's say that we want to expose user manager as a serviced
+    component so we can leverage its support for transactions. First we need
+    to export our service using the exporter
+    <literal>ServicedComponentExporter</literal> as shown below</para>
+
+    <programlisting>&lt;object id="MyApp.EnterpriseServices.UserManager" type="Spring.Enterprise.ServicedComponentExporter, Spring.Services"&gt;
+    &lt;property name="TargetName" value="userManager"/&gt;
+    &lt;property name="TypeAttributes"&gt;
+        &lt;list&gt;
+            &lt;object type="System.EnterpriseServices.TransactionAttribute, System.EnterpriseServices"/&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="MemberAttributes"&gt;
+        &lt;dictionary&gt;
+            &lt;entry key="*"&gt;
+                &lt;list&gt;
+                    &lt;object type="System.EnterpriseServices.AutoCompleteAttribute, System.EnterpriseServices"/&gt;
+                &lt;/list&gt;
+            &lt;/entry&gt;
+        &lt;/dictionary&gt;
+    &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>The exporter defined above will create a composition proxy for our
+    SimpleUserManager class that extends <literal>ServicedComponent</literal>
+    and delegates method calls to SimpleUserManager instance. It will also
+    adorn the proxy class with a <literal>TransactionAtribute</literal> and
+    all methods with an <literal>AutoCompleteAttribute</literal>.</para>
+
+    <para>The next thing we need to do is configure an exporter for the COM+
+    application that will host our new component:</para>
+
+    <programlisting>&lt;object id="MyComponentExporter" type="Spring.Enterprise.EnterpriseServicesExporter, Spring.Services"&gt;
+    &lt;property name="ApplicationName" value="My COM+ Application"/&gt;
+    &lt;property name="Description" value="My enterprise services application."/&gt;
+    &lt;property name="AccessControl"&gt;
+        &lt;object type="System.EnterpriseServices.ApplicationAccessControlAttribute, System.EnterpriseServices"&gt;
+            &lt;property name="AccessChecksLevel" value="ApplicationComponent"/&gt;
+        &lt;/object&gt;
+    &lt;/property&gt;
+    &lt;property name="Roles"&gt;
+        &lt;list&gt;
+            &lt;value&gt;Admin : Administrator role&lt;/value&gt;
+            &lt;value&gt;User : User role&lt;/value&gt;
+            &lt;value&gt;Manager : Administrator role&lt;/value&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="Components"&gt;
+        &lt;list&gt;
+            &lt;ref object="MyApp.EnterpriseServices.UserManager"/&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="Assembly" value="MyComPlusApp"/&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>This exporter will put all proxy classes for the specified list of
+    components into the specified assembly, sign the assembly, and register it
+    with the specified COM+ application name. If application does not exist it
+    will create it and configure it using values specified for Description,
+    AccessControl and Roles properties.</para>
+  </sect1>
+
+  <sect1 id="services-clientside">
+    <title>Client Side</title>
+
+    <para>Because serviced component classes are dynamically generated and
+    registered, you cannot instantiate them in your code using the new
+    operator. Instead, you need to use
+    <classname>Spring.Enterprise.ServicedComponentFactory</classname>
+    definition, which also allows you to specify the configuration template
+    for the component as well as the name of the remote server the component
+    is running on, if necessary. An example is shown below</para>
+
+    <programlisting>&lt;object id="enterpriseUserManager" type="Spring.Enterprise.ServicedComponentFactory, Spring.Services"&gt;
+    &lt;property name="Name" value="MyApp.EnterpriseServices.UserManager"/&gt;
+    &lt;property name="Template" value="userManager"/&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>You can then inject this instance of the IUserManager into a client
+    class and use it just like you would use original SimpleUserManager
+    implementation. As you can see, by coding your services as plain .Net
+    objects, against well defined service interfaces, you gain easy
+    pluggability for your service implementation though this configuration,
+    while keeping the core business logic in a technology agnostic PONO, i.e.
+    Plain Ordinary .Net Object.</para>
+  </sect1>
+</chapter>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+  <!-- not a fully specified name -->
+  <!-- <object id="connection" type="System.Data.OleDb.OleDbConnection, System.Data, Version=1.0.5000.0, Culture=neutral"> -->
+  <object id="connectionNotFullySpecified" type="System.Data.OleDb.OleDbConnection, System.Data">
+    <property name="connectionstring">
+      <value>Provider=SQLOLEDB</value>
+    </property>
+  </object>
+</objects>

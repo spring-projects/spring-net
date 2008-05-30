@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+  
+	<object id="indexedObject" type="Spring.Objects.IndexedTestObject, Spring.Core.Tests" />
+	<!-- Overridden by next factory -->
+	<object id="test" type="Spring.Objects.TestObject, Spring.Core.Tests">
+		<property name="name">
+			<value>custom</value>
+		</property>
+		<property name="age">
+			<value>25</value>
+		</property>
+	</object>
+	<object id="testFactory1" type="Spring.Objects.Factory.DummyFactory, Spring.Core.Tests" />
+	<object id="testFactory2" type="Spring.Objects.Factory.DummyFactory, Spring.Core.Tests">
+		<property name="IsSingleton">
+			<value>false</value>
+		</property>
+	</object>
+</objects>

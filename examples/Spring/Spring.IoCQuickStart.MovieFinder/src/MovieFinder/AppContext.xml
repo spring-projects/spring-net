@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net" >
+  <description>An example that demonstrates simple IoC features.</description>
+
+  <object id="MyMovieLister" 
+          type="Spring.IocQuickStart.MovieFinder.MovieLister, Spring.IocQuickStart.MovieFinder">
+    <property name="MovieFinder" ref="AnotherMovieFinder"/>
+  </object>
+  
+  
+  <!-- An IMovieFinder implementation that uses harcoded values as it's movie source... -->
+  <!--
+  <object id="MyMovieFinder" 
+          type="Spring.IocQuickStart.MovieFinder.SimpleMovieFinder, Spring.IocQuickStart.MovieFinder"/>    
+  -->
+  
+    
+  <!--An IMovieFinder implementation that uses a text file as it's movie source...  -->
+
+  <object id="AnotherMovieFinder" 
+          type="Spring.IocQuickStart.MovieFinder.ColonDelimitedMovieFinder, Spring.IocQuickStart.MovieFinder">
+    <constructor-arg index="0" value="movies.txt"/>
+  </object>
+
+  <object type="Spring.Objects.Factory.Attributes.RequiredAttributeObjectPostProcessor, Spring.Core"/>
+
+</objects>

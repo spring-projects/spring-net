@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://myns"
+	targetNamespace="http://myns"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:simpleType name="GUID">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="\{?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\}?" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="UserCredentials">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="userId" type="GUID" />
+      <xsd:element minOccurs="1" maxOccurs="1" name="applicationName" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="userCredentials" type="UserCredentials" />
+</xsd:schema>

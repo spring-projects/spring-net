@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright 2002-2007 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter id="ajax">
+  <title>ASP.NET AJAX</title>
+
+  <sect1 id="introduction-ajax">
+    <title>Introduction</title>
+
+    <para>Spring's ASP.NET AJAX integration allows for a plain .NET object
+    (PONO), that is one that doesn't have any attributes or special base
+    classes, to be exported as a web service, configured via dependency
+    injection, 'decorated' by applying AOP, and then exposed to client side
+    JavaScript.</para>
+  </sect1>
+
+  <sect1 id="webServices">
+    <title>Web Services</title>
+
+    <para>Spring.NET, and particularly Spring.Web, improved <ulink
+    url="http://www.springframework.net/doc-latest/reference/html/webservices.html">support
+    for web services</ulink> in .NET with the
+    <classname>WebServiceExporter</classname>. Exporting of an ordinary plain
+    .NET object as a web service is achieved by registering a custom
+    implementation of the <classname>WebServiceHandlerFactory</classname>
+    class as the HTTP handler for <literal>*.asmx</literal> requests.</para>
+
+    <para><ulink
+    url="http://www.springframework.net/doc-latest/reference/html/webservices.html">Microsoft
+    ASP.NET AJAX</ulink> introduced a new HTTP handler
+    <classname>System.Web.Script.Services.ScriptHandlerFactory</classname> to
+    allow a Web Service to be invoked from the browser by using
+    JavaScript.</para>
+
+    <para>Spring's integration allows for both Spring.Web and ASP.NET AJAX
+    functionality to be used together by creating a new HTTP handler.</para>
+
+    <sect2 id="exposingWebServices">
+      <title>Exposing Web Services</title>
+
+      <para>The <classname>WebServiceExporter</classname> combined with the
+      new HTTP handler exposes PONOs as Web Services in your ASP.NET AJAX
+      application.</para>
+
+      <para>In order for a Web service to be accessed from script, the
+      <classname>WebServiceExporter</classname> should decorate the Web
+      Service class with the <classname>ScriptServiceAttribute</classname>.
+      The code below is taken from the sample application
+      Spring.Web.Extensions.Sample, aka the 'AJAX' shortcut in the
+      installation. : <programlisting>
+&lt;object id="ContactWebService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
+  &lt;property name="TargetName" value="ContactService"/&gt;
+  &lt;property name="Namespace" value="http://Spring.Examples.Atlas/ContactService"/&gt;
+  &lt;property name="Description" value="Contact Web Services"/&gt;
+  &lt;property name="TypeAttributes"&gt;
+    &lt;list&gt;
+      &lt;object type="System.Web.Script.Services.ScriptServiceAttribute, System.Web.Extensions"/&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;
+          
+        </programlisting></para>
+
+      <para>All that one needs to do in order to use the
+      <classname>WebServiceExporter</classname> is:</para>
+
+      <para><emphasis> 1. Configure the Web.config file of your ASP.NET AJAX
+      application as a Spring.Web application. </emphasis> <programlisting>
+&lt;sectionGroup name="spring"&gt;
+  &lt;section name="context" type="Spring.Context.Support.WebContextHandler, Spring.Web"/&gt;
+&lt;/sectionGroup&gt;
+        
+        </programlisting> <programlisting>
+&lt;spring&gt;
+  &lt;context&gt;
+    &lt;resource uri="~/Spring.config"/&gt;
+  &lt;/context&gt;
+&lt;/spring&gt;
+        
+        </programlisting></para>
+
+      <para><emphasis> 2. Register the HTTP handler and the Spring HttpModule
+      under the <literal>system.web</literal> section. </emphasis>
+      <programlisting>
+&lt;httpHandlers&gt;
+  &lt;remove verb="*" path="*.asmx"/&gt;
+  &lt;add verb="*" path="*.asmx" validate="false" type="Spring.Web.Script.Services.ScriptHandlerFactory, Spring.Web.Extensions"/&gt;
+  &lt;add verb="*" path="*_AppService.axd" validate="false" type="System.Web.Script.Services.ScriptHandlerFactory, System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/&gt;
+  &lt;add verb="GET,HEAD" path="ScriptResource.axd" type="System.Web.Handlers.ScriptResourceHandler, System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" validate="false"/&gt;
+&lt;/httpHandlers&gt;
+
+&lt;httpModules&gt;
+  &lt;add name="ScriptModule" type="System.Web.Handlers.ScriptModule, System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/&gt;
+  &lt;add name="SpringModule" type="Spring.Context.Support.WebSupportModule, Spring.Web"/&gt;
+&lt;/httpModules&gt;
+        
+        </programlisting></para>
+
+      <para><emphasis> 3. Register the HTTP handler and the Spring HttpModule
+      under <literal>system.webServer</literal> section. </emphasis>
+      <programlisting>
+&lt;modules&gt;
+  &lt;add name="ScriptModule" preCondition="integratedMode" type="System.Web.Handlers.ScriptModule, System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/&gt;
+  &lt;add name="SpringModule" type="Spring.Context.Support.WebSupportModule, Spring.Web"/&gt;
+&lt;/modules&gt;
+&lt;handlers&gt;
+  &lt;remove name="WebServiceHandlerFactory-Integrated" /&gt;
+  &lt;add name="ScriptHandlerFactory" verb="*" path="*.asmx" preCondition="integratedMode" 
+       type="Spring.Web.Script.Services.ScriptHandlerFactory, Spring.Web.Extensions"/&gt;
+  &lt;add name="ScriptHandlerFactoryAppServices" verb="*" path="*_AppService.axd" preCondition="integratedMode"
+       type="System.Web.Script.Services.ScriptHandlerFactory, System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/&gt;
+  &lt;add name="ScriptResource" preCondition="integratedMode" verb="GET,HEAD" path="ScriptResource.axd" type="System.Web.Handlers.ScriptResourceHandler, System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" /&gt;
+&lt;/handlers&gt;
+        
+        </programlisting></para>
+
+      <para>You can find a full Web.config file in the example that comes with
+      this integration.</para>
+    </sect2>
+
+    <sect2 id="callingWebServices">
+      <title>Calling Web Services by using JavaScript</title>
+
+      <para>A proxy class is generated for each Web Service. Calls to Web
+      Services methods are made by using this proxy class. When using the
+      <classname>WebServiceExporter</classname>, the name of the proxy class
+      is equal to the <classname>WebServiceExporter</classname>'s id.
+      <programlisting>
+// This function calls the Contact Web service method 
+// passing simple type parameters and the callback function  
+function GetEmails(prefix, count)
+{
+    ContactWebService.GetEmails(prefix, count, GetEmailsOnSucceeded);
+}
+          
+        </programlisting></para>
+    </sect2>
+  </sect1>
+</chapter>

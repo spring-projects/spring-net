@@ -1,0 +1,503 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Spring.Testing.NUnit</name>
+    </assembly>
+    <members>
+        <member name="T:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests">
+             <summary>
+             Convenient superclass for tests depending on a Spring context.
+             The test instance itself is populated by Dependency Injection.
+             </summary>
+             
+             <remarks>
+             <p>Really for integration testing, not unit testing.
+             You should <i>not</i> normally use the Spring container
+             for unit tests: simply populate your objects in plain NUnit tests!</p>
+            
+             <p>This supports two modes of populating the test:
+             <ul>
+             <li>Via Property Dependency Injection. Simply express dependencies on objects
+             in the test fixture, and they will be satisfied by autowiring by type.</li>
+             <li>Via Field Injection. Declare protected variables of the required type
+             which match named beans in the context. This is autowire by name,
+             rather than type. This approach is based on an approach originated by
+             Ara Abrahmian. Property Dependency Injection is the default: set the
+             "populateProtectedVariables" property to true in the constructor to switch
+             on Field Injection.</li>
+             </ul></p>
+            
+             <p>This class will normally cache contexts based on a <i>context key</i>:
+             normally the config locations String array describing the Spring resource
+             descriptors making up the context. Unless the <code>SetDirty()</code> method
+             is called by a test, the context will not be reloaded, even across different
+             subclasses of this test. This is particularly beneficial if your context is
+             slow to construct, for example if you are using Hibernate and the time taken
+             to load the mappings is an issue.</p>
+            
+             <p>If you don't want this behavior, you can override the <code>ContextKey</code>
+             property, most likely to return the test class. In conjunction with this you would
+             probably override the <code>GetContext</code> method, which by default loads
+             the locations specified by the <code>ConfigLocations</code> property.</p>
+            
+             <p><b>WARNING:</b> When doing integration tests from within VS.NET, only use
+             assembly resource URLs. Else, you may see misleading failures when changing
+             context locations.</p>
+             </remarks>
+             
+             <author>Rod Johnson</author>
+             <author>Rob Harrop</author>
+             <author>Rick Evans</author>
+             <author>Aleksandar Seovic (.NET)</author>
+             <version>$Id: AbstractDependencyInjectionSpringContextTests.cs,v 1.4 2008/03/14 12:02:45 oakinger Exp $</version>
+        </member>
+        <member name="T:Spring.Testing.NUnit.AbstractSpringContextTests">
+            <summary>
+            Superclass for NUnit test cases using a Spring context.
+            </summary>
+            <remarks>
+            <p>Maintains a cache of contexts by key. This has significant performance
+            benefit if initializing the context would take time. While initializing a 
+            Spring context itself is very quick, some objects in a context, such as
+            a LocalSessionFactoryObject for working with NHibernate, may take time to
+            initialize. Hence it often makes sense to do that initializing once.</p>
+            <p>Normally you won't extend this class directly but rather extend one
+            of its subclasses.</p>
+            </remarks>
+            <author>Rod Johnson</author>
+            <author>Aleksandar Seovic (.NET)</author>
+            <version>$Id: AbstractSpringContextTests.cs,v 1.2 2007/08/20 18:38:11 markpollack Exp $</version>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractSpringContextTests.contextKeyToContextMap">
+            <summary>
+            Map of context keys returned by subclasses of this class, to
+            Spring contexts.
+            </summary>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractSpringContextTests.logger">
+            <summary>
+            Logger available to subclasses.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractSpringContextTests.#ctor">
+            <summary>
+            Default constructor for AbstractSpringContextTests.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractSpringContextTests.SetDirty(System.String[])">
+            <summary>
+            Set custom locations dirty. This will cause them to be reloaded
+            from the cache before the next test case is executed.
+            </summary>
+            <remarks>
+            Call this method only if you change the state of a singleton
+            object, potentially affecting future tests.
+            </remarks>
+            <param name="locations">Locations </param>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractSpringContextTests.HasCachedContext(System.Object)">
+            <summary>
+            Returns <c>true</c> if context for the specified 
+            <paramref name="contextKey"/> is cached.
+            </summary>
+            <param name="contextKey">Context key to check.</param>
+            <returns>
+            <c>true</c> if context for the specified 
+            <paramref name="contextKey"/> is cached, 
+            <c>false</c> otherwise.
+            </returns>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractSpringContextTests.ContextKeyString(System.Object)">
+            <summary>
+            Converts context key to string.
+            </summary>
+            <remarks>
+            Subclasses can override this to return a string representation of
+            their contextKey for use in logging.
+            </remarks>
+            <param name="contextKey">Context key to convert.</param>
+            <returns>
+            String representation of the specified <paramref name="contextKey"/>.  Null if 
+            contextKey is null.
+            </returns>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractSpringContextTests.AddContext(System.Object,Spring.Context.IConfigurableApplicationContext)">
+            <summary>
+            Caches application context.
+            </summary>
+            <param name="key">Key to use.</param>
+            <param name="context">Context to cache.</param>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractSpringContextTests.GetContext(System.Object)">
+            <summary>
+            Returns cached context if present, or loads it if not.
+            </summary>
+            <param name="key">Context key.</param>
+            <returns>Spring application context associated with the specified key.</returns>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractSpringContextTests.LoadContextLocations(System.String[])">
+            <summary>
+            Loads application context from the specified resource locations.
+            </summary>
+            <param name="locations">Resources to load object definitions from.</param>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractSpringContextTests.LoadContext(System.Object)">
+            <summary>
+            Loads application context based on user-defined key.
+            </summary>
+            <remarks>
+            Unless overriden by the user, this method will alway throw 
+            a <see cref="T:System.NotSupportedException"/>. 
+            </remarks>
+            <param name="key">User-defined key.</param>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.applicationContext">
+            <summary>
+            Application context this test will run against.
+            </summary>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.managedVariableNames">
+            <summary>
+            Holds names of the fields that should be used for field injection.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.#ctor">
+            <summary>
+            Default constructor for AbstractDependencyInjectionSpringContextTests.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.SetDirty">
+            <summary>
+            Called to say that the "applicationContext" instance variable is dirty and
+            should be reloaded. We need to do this if a test has modified the context
+            (for example, by replacing an object definition).
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.SetUp">
+            <summary>
+            Test setup method.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.InjectDependencies">
+            <summary>
+            Inject dependencies into 'this' instance (that is, this test instance).
+            </summary>
+            <remarks>
+            <p>The default implementation populates protected variables if the
+            <see cref="P:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.PopulateProtectedVariables"/> property is set, else
+            uses autowiring if autowiring is switched on (which it is by default).</p>
+            <p>You can certainly override this method if you want to totally control
+            how dependencies are injected into 'this' instance.</p>
+            </remarks>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.LoadContextLocations(System.String[])">
+            <summary>
+            Loads application context from the specified resource locations.
+            </summary>
+            <param name="locations">Resources to load object definitions from.</param>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.InitManagedVariableNames">
+            <summary>
+            Retrieves the names of the fields that should be used for field injection.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.InjectProtectedVariables">
+            <summary>
+            Injects protected fields using Field Injection.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.BeforeProtectedVariableInjection(System.Reflection.FieldInfo)">
+            <summary>
+            Called right before a field is being injected
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.OnSetUp">
+            <summary>
+            Subclasses can override this method in order to 
+            add custom test setup logic.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.TearDown">
+            <summary>
+            Test teardown method.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.OnTearDown">
+            <summary>
+            Subclasses can override this method in order to 
+            add custom test teardown logic.
+            </summary>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.PopulateProtectedVariables">
+            <summary>
+            Gets or sets a flag specifying whether to populate protected 
+            variables of this test case.
+            </summary>
+            <value>
+            A flag specifying whether to populate protected variables of this test case. 
+            Default is <b>false</b>.
+            </value>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.AutowireMode">
+            <summary>
+            Gets or sets the autowire mode for test properties set by Dependency Injection.
+            </summary>
+            <value>
+            The autowire mode for test properties set by Dependency Injection.
+            The default is <see cref="F:Spring.Objects.Factory.Config.AutoWiringMode.ByType"/>.
+            </value>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.DependencyCheck">
+            <summary>
+            Gets or sets a flag specifying whether or not dependency checking 
+            should be performed for test properties set by Dependency Injection.
+            </summary>
+            <value>
+            <p>A flag specifying whether or not dependency checking 
+            should be performed for test properties set by Dependency Injection.</p>
+            <p>The default is <b>true</b>, meaning that tests cannot be run
+            unless all properties are populated.</p>
+            </value>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.LoadCount">
+            <summary>
+            Gets the current number of context load attempts.
+            </summary>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.ContextKey">
+            <summary>
+            Gets a key for this context. Usually based on config locations, but
+            a subclass overriding buildContext() might want to return its class.
+            </summary>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractDependencyInjectionSpringContextTests.ConfigLocations">
+            <summary>
+            Subclasses must implement this property to return the locations of their
+            config files. A plain path will be treated as a file system location.
+            </summary>
+            <value>An array of config locations</value>
+        </member>
+        <member name="T:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests">
+            <summary>
+            Subclass of AbstractTransactionalSpringContextTests that adds some convenience
+            functionality for ADO.NET access. Expects a IDbProvider object
+            to be defined in the Spring application context.
+            </summary>
+            <remarks>
+            This class exposes a AdoTemplate and provides an easy way to delete from the
+            database in a new transaction.
+            </remarks>
+            <author>Rod Johnson</author>
+            <author>Juergen Hoeller</author>
+            <author>Mark Pollack (.NET)</author>
+            <version>$Id: AbstractTransactionalDbProviderSpringContextTests.cs,v 1.3 2007/08/03 19:51:16 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests">
+             <summary>
+             Convenient superclass for tests that should occur in a transaction, but normally
+             will roll the transaction back on the completion of each test.
+             </summary>
+             <remarks>
+             <p>This is useful in a range of circumstances, allowing the following benefits:</p>
+             <ul>
+             <li>Ability to delete or insert any data in the database, without affecting other tests</li>
+             <li>Providing a transactional context for any code requiring a transaction</li>
+             <li>Ability to write anything to the database without any need to clean up.</li>
+             </ul>
+            
+             <p>This class is typically very fast, compared to traditional setup/teardown scripts.</p>
+            
+             <p>If data should be left in the database, call the <code>SetComplete()</code>
+             method in each test. The "DefaultRollback" property, which defaults to "true",
+             determines whether transactions will complete by default.</p>
+            
+             <p>It is even possible to end the transaction early; for example, to verify lazy
+             loading behavior of an O/R mapping tool. (This is a valuable away to avoid
+             unexpected errors when testing a web UI, for example.)  Simply call the
+             <code>endTransaction()</code> method. Execution will then occur without a
+             transactional context.</p>
+            
+             <p>The <code>StartNewTransaction()</code> method may be called after a call to
+             <code>EndTransaction()</code> if you wish to create a new transaction, quite
+             independent of the old transaction. The new transaction's default fate will be to
+             roll back, unless <code>setComplete()</code> is called again during the scope of the
+             new transaction. Any number of transactions may be created and ended in this way.
+             The final transaction will automatically be rolled back when the test case is
+             torn down.</p>
+            
+             <p>Transactional behavior requires a single object in the context implementing the
+             IPlatformTransactionManager interface. This will be set by the superclass's
+             Dependency Injection mechanism. If using the superclass's Field Injection mechanism,
+             the implementation should be named "transactionManager". This mechanism allows the
+             use of this superclass even when there's more than one transaction manager in the context.</p>
+             
+             <p><i>This superclass can also be used without transaction management, if no
+             IPlatformTransactionManager object is found in the context provided. Be careful about
+             using this mode, as it allows the potential to permanently modify data.
+             This mode is available only if dependency checking is turned off in
+             the AbstractDependencyInjectionSpringContextTests superclass. The non-transactional
+             capability is provided to enable use of the same subclass in different environments.</i></p>
+             
+             </remarks>
+                 
+             <author>Rod Johnson</author>
+             <author>Juergen Hoeller</author>
+             <author>Rick Evans</author>
+             <author>Mark Pollack (.NET)</author>
+             <version>$Id: AbstractTransactionalSpringContextTests.cs,v 1.3 2007/06/01 14:05:57 oakinger Exp $</version>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.transactionManager">
+            <summary>
+            The transaction manager to use
+            </summary>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.defaultRollback">
+            <summary>
+            Should we roll back by default?
+            </summary>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.complete">
+            <summary>
+            Should we commit the current transaction?
+            </summary>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.transactionsStarted">
+            <summary>
+            Number of transactions started
+            </summary>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.transactionDefinition">
+            <summary>
+            Default transaction definition is used.
+            Subclasses can change this to cause different behaviour.
+            </summary>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.transactionStatus">
+            <summary>
+            TransactionStatus for this test. Typical subclasses won't need to use it.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests"/> class.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.PreventTransaction">
+            <summary>
+            Prevents the transaction.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.OnSetUp">
+            <summary>
+            Creates a transaction
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.OnSetUpBeforeTransaction">
+            <summary>
+            Callback method called before transaction is setup.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.OnSetUpInTransaction">
+            <summary>
+            Callback method called after transaction is setup.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.OnTearDown">
+            <summary>
+            rollback the transaction.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.OnTearDownInTransaction">
+            <summary>
+            Callback before rolling back the transaction.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.OnTearDownAfterTransaction">
+            <summary>
+            Callback after rolling back the transaction.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.SetComplete">
+            <summary>
+            Set the complete flag..
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.EndTransaction">
+            <summary>
+            Ends the transaction.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.StartNewTransaction">
+            <summary>
+            Starts the new transaction.
+            </summary>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.TransactionManager">
+            <summary>
+            Sets the transaction manager to use.
+            </summary>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.DefaultRollback">
+            <summary>
+            Sets the default rollback flag.
+            </summary>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.TransactionDefinition">
+            <summary>
+            Set the <see cref="T:Spring.Transaction.ITransactionDefinition"/> to be used
+            </summary>
+            <remarks>
+            Defaults to <see cref="T:Spring.Transaction.Support.DefaultTransactionDefinition"/>
+            </remarks>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.adoTemplate">
+            <summary>
+            Holds the <see cref="P:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.AdoTemplate"/> that this base class manages
+            </summary>
+        </member>
+        <member name="F:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.zappedTables">
+            <summary>
+            Did this test delete any tables? If so, we forbid transaction completion,
+            and only allow rollback.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests"/> class.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.DeleteFromTables(System.String[])">
+            <summary>
+            Convenient method to delete all rows from these tables.
+            Calling this method will make avoidance of rollback by calling
+            SetComplete() impossible.
+            </summary>
+            <param name="names"></param>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.SetComplete">
+            <summary>
+            Overridden to prevent the transaction committing if a number of tables have been
+            cleared, as a defensive measure against accidental <i>permanent</i> wiping of a database.
+            </summary>
+        </member>
+        <member name="M:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.CountRowsInTable(System.String)">
+            <summary>
+            Counts the rows in given table.
+            </summary>
+            <param name="tableName">Name of the table to count rows in.</param>
+            <returns>The number of rows in the table</returns>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.DbProvider">
+            <summary>
+            Sets the DbProvider, via Dependency Injection.
+            </summary>
+            <value>The IDbProvider.</value>
+        </member>
+        <member name="P:Spring.Testing.NUnit.AbstractTransactionalDbProviderSpringContextTests.AdoTemplate">
+            <summary>
+            Gets or sets the AdoTemplate that this base class manages.
+            </summary>
+            <value>The ADO template.</value>
+        </member>
+    </members>
+</doc>

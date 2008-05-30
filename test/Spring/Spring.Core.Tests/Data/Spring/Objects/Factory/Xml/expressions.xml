@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<objects xmlns="http://www.springframework.net">
+  
+  <object id="to1" type="Spring.Objects.ExpressionTestObject, Spring.Core.Tests">
+    <constructor-arg name="someString" expression="date('1974-08-24').ToString('m')"/>
+    <property name="ExpressionOne" value="DateTime.Today"/>
+    <property name="ExpressionTwo" value="String.Empty"/>
+    <property name="SomeDate" expression="date('2004-08-14', 'yyyy-MM-dd')"/>
+    <property name="SomeDictionary">
+      <dictionary>
+        <entry key="method1" expression="@[WebMethod(Description = 'My First Web Method')]"/>
+        <entry key="method2" expression="@[WebMethod(Description = 'My Second Web Method')]"/>
+      </dictionary>
+    </property>
+  </object>
+
+  <object id="to2" type="Spring.Objects.ExpressionTestObject, Spring.Core.Tests">
+    <constructor-arg name="someString">
+      <expression value="ToString('m')">
+        <property name="Context" expression="date('1974-08-24')"/>
+      </expression>
+    </constructor-arg>
+    <property name="ExpressionOne" value="DateTime.Today"/>
+    <property name="ExpressionTwo" value="String.Empty"/>
+    <property name="SomeDate">
+      <expression value="SomeDate">
+        <property name="Context" ref="to1"/>
+      </expression>
+    </property>
+    <property name="SomeDictionary">
+      <dictionary>
+        <entry key="method1">
+          <expression value="@[WebMethod(Description = 'My First Web Method')]" />
+        </entry>
+        <entry key="method2">
+          <expression value="@[WebMethod(Description = #desc)]">
+            <property name="Variables">
+              <dictionary>
+                <entry key="desc" value="My Second Web Method"/>
+              </dictionary>
+            </property>
+          </expression>
+        </entry>
+      </dictionary>
+    </property>
+  </object>
+
+</objects>

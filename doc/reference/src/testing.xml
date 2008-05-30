@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="testing">
+  <title>Testing</title>
+
+  <section id="testing-introduction">
+    <title>Introduction</title>
+
+    <para>The Spring team considers developer testing to be an absolutely
+    integral part of enterprise software development. A thorough treatment of
+    testing in the enterprise is beyond the scope of this chapter; rather, the
+    focus here is on the value add that the adoption of the IoC principle can
+    bring to <link linkend="unit-testing">unit testing</link>; and on the
+    benefits that the Spring Framework provides in <link
+    linkend="integration-testing">integration testing</link>.</para>
+  </section>
+
+  <section id="unit-testing">
+    <title>Unit testing</title>
+
+    <para>One of the main benefits of Dependency Injection is that your code
+    is much less likely to have any hidden dependencies on the runtime
+    environment or other configuration subsystems. This allows for unit tests
+    to be written in a manner such that the object under test can be simply
+    instantiated with the <literal>new</literal> operator and have its
+    dependences set in the unit test code. You can use mock objects (in
+    conjunction with many other valuable testing techniques) to test your code
+    in isolation. If you follow the architecture recommendations around Spring
+    you will find that the resulting clean layering and componentization of
+    your codebase will naturally faciliate <emphasis>easier</emphasis> unit
+    testing. For example, you will be able to test service layer objects by
+    stubbing or mocking DAO interfaces, without any need to access persistent
+    data while running unit tests.</para>
+
+    <para>True unit tests typically will run extremely quickly, as there is no
+    runtime infrastructure to set up, i.e., database, ORM tool, or whatever.
+    Thus emphasizing true unit tests as part of your development methodology
+    will boost your productivity. The upshot of this is that you do not need
+    this section of the testing chapter to help you write effective
+    <emphasis>unit</emphasis> tests for your IoC-based applications.</para>
+  </section>
+
+  <section id="integration-testing">
+    <title>Integration testing</title>
+
+    <para>However, it is also important to be able to perform some integration
+    testing enabling you to test things such as:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The correct wiring of your Spring IoC container contexts.</para>
+      </listitem>
+
+      <listitem>
+        <para>Data access using ADO.NET or an ORM tool. This would include
+        such things such as the correctness of SQL statements / or NHibernate
+        XML mapping files.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Spring Framework provides first class support for integration
+    testing in the form of the classes that are packaged in the <filename
+    class="libraryfile">Spring.Testing.NUnit.dll</filename> library.
+    <emphasis>Please note that these test classes are NUnit-specific. Support
+    for mbUnit and VSTS are under consideration for future
+    versions.</emphasis></para>
+
+    <note>
+      <para>The Spring.Testing.NUnit.dll library is compiled against NUnit
+      2.4.1. At the time of this writing the latest version of NUnit is 2.4.6.
+      Note that add-in have their own versions of NUnit they use. For example,
+      ReSharper 3.0 uses 2.2.8. If you are using the GUI-runner that comes
+      with NUnit then you should add the following to your .config file, (in
+      the form of MyAssembly.dll.config)</para>
+
+      <programlisting>&lt;runtime&gt;
+
+  &lt;assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1"&gt;
+
+    &lt;dependentAssembly&gt;
+      &lt;assemblyIdentity name="nunit.framework" 
+                        publicKeyToken="96d09a1eb7f44a77" 
+                        culture="neutral"/&gt;
+      &lt;bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535
+                       newVersion="2.4.6.0"/&gt;
+
+    &lt;/dependentAssembly&gt;
+
+  &lt;/assemblyBinding&gt;
+
+&lt;/runtime&gt;</programlisting>
+    </note>
+
+    <para>The <literal>Spring.Testing.NUnit</literal> namespace provides
+    valuable NUnit <classname>TestCase</classname> superclasses for
+    integration testing using a Spring container. Note that as of NUnit 2.4
+    these can be rewritten in terms of custom attributes via NUnit's new
+    extensibility mechanism. This will be an additional option in an upcoming
+    release of Spring.NET and is already present in the Java version of the
+    Spring framework.</para>
+
+    <para>These superclasses provide the following functionality:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link linkend="testing-ctx-management">Spring IoC container
+        caching</link> between test case execution.</para>
+      </listitem>
+
+      <listitem>
+        <para>The pretty-much-transparent <link
+        linkend="testing-fixture-di">Dependency Injection of test fixture
+        instances</link> (this is nice).</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="testing-tx">Transaction management</link>
+        appropriate to integration testing (this is even nicer).</para>
+      </listitem>
+
+      <listitem>
+        <para>A number of Spring-specific <link
+        linkend="testing-superclasses">inherited instance variables</link>
+        that are really useful when integration testing.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section id="testing-ctx-management">
+      <title>Context management and caching</title>
+
+      <para>The <literal><literal>Spring.Testing.NUnit</literal></literal>
+      package provides support for consistent loading of Spring contexts, and
+      caching of loaded contexts. Support for the caching of loaded contexts
+      is important, because if you are working on a large project, startup
+      time may become an issue - not because of the overhead of Spring itself,
+      but because the objects instantiated by the Spring container will
+      themselves take time to instantiate. For example, a project with 50-100
+      NHibernate mapping files might take 10-20 seconds to load the mapping
+      files, and incurring that cost before running every single test case in
+      every single test fixture will lead to slower overall test runs that
+      could reduce productivity.</para>
+
+      <para>To address this issue, the
+      <classname>AbstractDependencyInjectionSpringContextTests</classname> has
+      an <literal>protected</literal> property that subclasses must implement
+      to provide the location of context definition files:</para>
+
+      <programlisting>protected abstract string[] ConfigLocations { get; }</programlisting>
+
+      <para>Implementations of this method must provide an array containing
+      the IResource locations of XML configuration metadata used to configure
+      the application. This will be the same, or nearly the same, as the list
+      of configuration locations specified in
+      <literal>App.config/Web.config</literal> or other deployment
+      configuration.</para>
+
+      <para>By default, once loaded, the configuration file set will be reused
+      for each test case. Thus the setup cost will be incurred only once (per
+      test fixture), and subsequent test execution will be much faster. In the
+      unlikely case that a test may 'dirty' the config location, requiring
+      reloading - for example, by changing an object definition or the state
+      of an application object - you can call the
+      <methodname>SetDirty()</methodname> method on
+      <classname>AbstractDependencyInjectionSpringContextTests</classname> to
+      cause the test fixture to reload the configurations and rebuild the
+      application context before executing the next test case.</para>
+    </section>
+
+    <section id="testing-fixture-di">
+      <title>Dependency Injection of test fixtures</title>
+
+      <para>When
+      <classname>AbstractDependencyInjectionSpringContextTests</classname>
+      (and subclasses) load your application context, they can optionally
+      configure instances of your test classes by Setter Injection. All you
+      need to do is to define instance variables and the corresponding
+      setters.
+      <classname>AbstractDependencyInjectionSpringContextTests</classname>
+      will automatically locate the corresponding object in the set of
+      configuration files specified in the
+      <methodname>ConfigLocations</methodname> property.</para>
+
+      <para>Consider the scenario where we have a class,
+      <classname>HibernateTitleDao</classname>, that performs data access
+      logic for say, the <classname>Title</classname> domain object. We want
+      to write integration tests that test all of the following areas:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The Spring configuration; basically, is everything related to
+          the configuration of the <classname>HibernateTitleDao</classname>
+          object correct and present?</para>
+        </listitem>
+
+        <listitem>
+          <para>The Hibernate mapping file configuration; is everything mapped
+          correctly and are the correct lazy-loading settings in place?</para>
+        </listitem>
+
+        <listitem>
+          <para>The logic of the <classname>HibernateTitleDao</classname>;
+          does the configured instance of this class perform as
+          anticipated?</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Let's look at the test class itself (we will look at the
+      configuration immediately afterwards).</para>
+
+      <programlisting>[TestFixture]
+public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyInjectionSpringContextTests</emphasis>  {
+
+    <lineannotation>// this instance will be (automatically) dependency injected</lineannotation>    
+    private HibernateTitleDao titleDao;
+
+    <lineannotation>// a setter method to enable DI of the 'titleDao' instance variable</lineannotation>
+    public HibernateTitleDao HibernateTitleDao {
+        set { titleDao = value; }
+    }
+
+    [Test]
+    public void LoadTitle() {
+        Title title = this.titleDao.LoadTitle(10);
+        Assert.IsNotNull(title);
+    }
+
+    <lineannotation>// specifies the Spring configuration to load for this test fixture</lineannotation>
+    protected override string[] ConfigLocations {
+        return new String[] { "assembly://MyAssembly/MyNamespace/daos.xml" };
+    }
+
+}</programlisting>
+
+      <para>The file referenced by the ConfigLocations method
+      (<literal>'classpath:com/foo/daos.xml'</literal>) looks like
+      this:</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;objects  xmlns="http://www.springframework.net"&gt;
+
+    <lineannotation>&lt;!-- this object will be injected into the <classname>HibernateTitleDaoTests</classname> class --&gt;</lineannotation>
+    &lt;object id="titleDao" type="Spring.Samples.HibernateTitleDao, Spring.Samples"&gt;
+        &lt;property name="sessionFactory" ref="sessionFactory"/&gt;
+    &lt;/object&gt;
+    
+    &lt;object id="sessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate"&gt;
+        <lineannotation>&lt;!-- dependencies elided for clarity --&gt;</lineannotation>
+    &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+
+      <para>The
+      <classname>AbstractDependencyInjectionSpringContextTests</classname>
+      classes uses <link linkend="objects-factory-autowire"><emphasis>autowire
+      by type</emphasis></link>. Thus if you have multiple object definitions
+      of the same type, you cannot rely on this approach for those particular
+      object. In that case, you can use the inherited
+      <literal>applicationContext</literal> instance variable, and explicit
+      lookup using (for example) an explicit call to
+      <methodname>applicationContext.GetObject("titleDao")</methodname>.</para>
+
+      <para>If you don't want dependency injection applied to your test cases,
+      simply don't declare any set properties. Alternatively, you can extend
+      the <classname>AbstractSpringContextTests</classname> - the root of the
+      class hierarchy in the <literal>Spring.Testing.NUnit</literal>
+      namespace. It merely contains convenience methods to load Spring
+      contexts, and performs no Dependency Injection of the test
+      fixture.</para>
+
+      <section id="testing-fixture-di-field">
+        <title>Field level injection</title>
+
+        <para>If, for whatever reason, you don't fancy having setter
+        properties in your test fixtures, Spring can (in this one case) inject
+        dependencies into <literal>protected</literal> fields. Find below a
+        reworking of the previous example to use field level injection (the
+        Spring XML configuration does not need to change, merely the test
+        fixture).</para>
+
+        <programlisting>[TestFixture]
+public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyInjectionSpringContextTests</emphasis>  {
+
+    public HibernateTitleDaoTests() {
+    	<lineannotation>   // switch on field level injection</lineannotation>
+        PopulateProtectedVariables = true;
+    }
+
+    <lineannotation>// this instance will be (automatically) dependency injected</lineannotation>
+    <lineannotation><emphasis>protected</emphasis></lineannotation> HibernateTitleDao <lineannotation><emphasis>titleDao</emphasis></lineannotation>;
+
+    [Test]
+    public void LoadTitle() {
+        Title title = this.titleDao.LoadTitle(10);
+        Assert.IsNotNull(title);
+    }
+
+    <lineannotation>// specifies the Spring configuration to load for this test fixture</lineannotation>
+    protected override string[] ConfigLocations {
+        return new String[] { "assembly://MyAssembly/MyNamespace/daos.xml" };
+    }
+
+}</programlisting>
+
+        <para>In the case of field injection, there is no autowiring going on:
+        the name of your <literal>protected</literal> instances variable(s)
+        are used as the lookup object name in the configured Spring
+        container.</para>
+      </section>
+    </section>
+
+    <section id="testing-tx">
+      <title>Transaction management</title>
+
+      <para>One common issue in tests that access a real database is their
+      effect on the state of the persistence store. Even when you're using a
+      development database, changes to the state may affect future tests.
+      Also, many operations - such as inserting to or modifying persistent
+      data - cannot be done (or verified) outside a transaction.</para>
+
+      <para>The
+      <classname>AbstractTransactionalDbProviderSpringContextTests</classname>
+      superclass (and subclasses) exist to meet this need. By default, they
+      create and roll back a transaction for each test. You simply write code
+      that can assume the existence of a transaction. If you call
+      transactionally proxied objects in your tests, they will behave
+      correctly, according to their transactional semantics.</para>
+
+      <para><classname>AbstractTransactionalSpringContextTests</classname>
+      depends on a <classname>IPlatformTransactionManager</classname> object
+      being defined in the application context. The name doesn't matter, due
+      to the use of autowire by type.</para>
+
+      <para>Typically you will extend the subclass,
+      <classname>AbstractTransactionalDbProviderSpringContextTests</classname>.
+      This also requires that a <classname>DbProvider</classname> object
+      definition - again, with any name - be present in the configurations. It
+      creates an <classname>AdoTemplate</classname> instance variable that is
+      useful for convenient querying, and provides handy methods to delete the
+      contents of selected tables (remember that the transaction will roll
+      back by default, so this is safe to do).</para>
+
+      <para>If you want a transaction to commit - unusual, but occasionally
+      useful when you want a particular test to populate the database - you
+      can call the <methodname>SetComplete()</methodname> method inherited
+      from <classname>AbstractTransactionalSpringContextTests</classname>.
+      This will cause the transaction to commit instead of roll back.</para>
+
+      <para>There is also convenient ability to end a transaction before the
+      test case ends, through calling the
+      <methodname>EndTransaction()</methodname> method. This will roll back
+      the transaction by default, and commit it only if
+      <methodname>SetComplete()</methodname> had previously been called. This
+      functionality is useful if you want to test the behavior of
+      'disconnected' data objects, such as Hibernate-mapped objects that will
+      be used in a web or remoting tier outside a transaction. Often, lazy
+      loading errors are discovered only through UI testing; if you call
+      <methodname>EndTransaction()</methodname> you can ensure correct
+      operation of the UI through your NUnit test suite.</para>
+    </section>
+
+    <section id="testing-superclasses">
+      <title>Convenience variables</title>
+
+      <para>When you extend the
+      <classname>AbstractTransactionalDbProviderSpringContextTests</classname>
+      class you will have access to the following <literal>protected</literal>
+      instance variables:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>applicationContext</literal> (a
+          <interfacename>IConfigurableApplicationContext</interfacename>):
+          inherited from the
+          <classname>AbstractDependencyInjectionSpringContextTests</classname>
+          superclass. Use this to perform explicit object lookup, or test the
+          state of the context as a whole.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>adoTemplate</literal>: inherited from
+          <classname>AbstractTransactionalDbProviderSpringContextTests</classname>.
+          Useful for querying to confirm state. For example, you might query
+          before and after testing application code that creates an object and
+          persists it using an ORM tool, to verify that the data appears in
+          the database. (Spring will ensure that the query runs in the scope
+          of the same transaction.) You will need to tell your ORM tool to
+          'flush' its changes for this to work correctly, for example using
+          the <methodname>Flush()</methodname> method on NHibernate's
+          <classname>ISession</classname> interface.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Often you will provide an application-wide superclass for
+      integration tests that provides further useful instance variables used
+      in many tests</para>
+    </section>
+
+    <section id="testing-examples-petclinic"></section>
+  </section>
+
+  <section id="testing-resources">
+    <title>Further Resources</title>
+
+    <para>This section contains links to further resources about testing in
+    general.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The <ulink url="http://www.nunit.org/index.htm">NUnit
+        homepage</ulink>. The Spring Framework's unit test suite is written
+        using NUnit as the testing framework.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</chapter>

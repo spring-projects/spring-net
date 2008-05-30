@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="aop-aspect-library">
+  <title>Aspect Library</title>
+
+  <sect1 id="aop-library-introduction">
+    <title>Introduction</title>
+
+    <para>Spring provides several aspects in the distribution. The most
+    popular of which is transactional advice, located in the Spring.Data
+    module. However, the aspects that are documented in this section are those
+    contained within the Spring.Aop module itself. The aspects in within
+    Spring.Aop.dll are Caching, Exception Handling, Logging, Retry, and
+    Parameter Validation. Other traditional advice types such as validation,
+    security, and thread management, will be included in a future
+    release.</para>
+  </sect1>
+
+  <sect1 id="caching-aspect">
+    <title>Caching</title>
+
+    <para>Caching the return value of a method or the value of a method
+    parameter is a common approach to increase application performance.
+    Application performance is increased with effective use of caching since
+    layers in the application that are closer to the user can return
+    information within their own layer as compared to making more expensive
+    calls to retrieve that information from a lower, and more slow, layer such
+    as a database or a web service. Caching also can help in terms of
+    application scalability, which is generally the more important
+    concern.</para>
+
+    <para>The caching support in Spring.NET consists of base cache interfaces
+    that can be used to specify a specific storage implementation of the cache
+    and also an aspect that determines where to apply the caching
+    functionality and its configuration.</para>
+
+    <para>The base cache interface that any cache implementation should
+    implement is <classname>Spring.Caching.ICache</classname> located in
+    <classname>Spring.Core.</classname> Two implementations are provided,
+    <classname>Spring.Caching.AspNetCache </classname>located in
+    <classname>Spring.Web</classname> which stores cache entries within an
+    ASP.NET cache and a simple implementation,
+    <classname>Spring.Caching.NonExpiringCache</classname> that stores cache
+    entries in memory and never expires these entries. Custom implementations
+    based on 3rd party implementations, such as Oracle Coherence, or
+    memcached, can be used by implementing the <literal>ICache</literal>
+    interface.</para>
+
+    <para>The cache aspect is
+    <literal>Spring.Aspects.Cache.CacheAspect</literal> located in
+    <literal>Spring.Aop</literal>. It consists of three pieces of
+    functionality, the ability to cache return values, method parameters, and
+    explicit eviction of an item from the cache. The aspect currently relies
+    on using attributes to specify the pointcut as well as the behavior, much
+    like the transactional aspect. Future versions will allow for external
+    configuration of the behavior so you can apply caching to a code base
+    without needing to use attributes in the code.</para>
+
+    <para>The following attributes are available</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>CacheResult - used to cache the return
+        value</literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>CacheResultItems - used when returning a collection as
+        a return value </literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>CacheParameter - used to cache a method
+        parameter</literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>InvalidateCache</literal> - used to indicate one or
+        more cache items should be invalidated.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Each <classname>CacheResult</classname>,
+    <classname>CacheResultItems</classname>, and
+    <classname>CacheParameter</classname> attributes define the following
+    properties.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>CacheName</literal> - the name of the cache
+        implementation to use</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>Key</literal> - a string representing a Spring
+        Expression Language (SpEL) expression used as the key in the
+        cache.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>Condition</literal> - a SpEL expression that should be
+        evaluated in order to determine whether the item should be
+        cached.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>TimeToLive</literal> - The amount of time an object
+        should remain in the cache (in seconds).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The <classname>InvalidateCache</classname> attribute has properties
+    for the CacheName, the Key as well as the Condition, with the same
+    meanings as listed previously.</para>
+
+    <para>Each <classname>ICache</classname> implementation will have
+    properties that are specific to a caching technology. In the case of
+    <classname>AspNetCache</classname>, the two important properties to
+    configure are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>SlidingExperation</literal> - If this property value is
+        set to true, every time the marked object is accessed it's TimeToLive
+        value is reset to its original value</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>Priority</literal> - the cache item priority
+        controlling how likely an object is to be removed from an associated
+        cache when the cache is being purged.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>TimeToLive</literal> - The amount of time an object
+        should remain in the cache (in seconds).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The values of the Priority enumeration are</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>Low</literal> - low likelihood of deletion when cache
+        is purged.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>Normal</literal> - default priority for deletion when
+        cache is purged.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>High</literal> - high likelihood of deletion when cache
+        is purged.</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>NotRemovable</literal> - cache item not deleted when
+        cache is purged.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>An important element of the applying these attributes is the use of
+    the expression language that allows for calling context information to
+    drive the caching actions. Here is an example taken from the Spring Air
+    sample application of the AirportDao implementation that implements an
+    interface with the method GetAirport(long id).</para>
+
+    <programlisting>        [CacheResult("AspNetCache", "'Airport.Id=' + #id", TimeToLive = "0:1:0")]
+        public Airport GetAirport(long id)
+        {
+           // implementation not shown...
+        }
+        </programlisting>
+
+    <para>The first parameter is the cache name. The second string parameter
+    is the cache key and is a string expression that incorporates the argument
+    passed into the method, the id. The method parameter names are exposed as
+    variables to the key expression. If you do not specify a key, then all the
+    parameter values will be used to cache the returned value. The expression
+    may also call out to other objects in the Spring container allowing for a
+    more complex key algorithm to be encapsulated. The end result is that the
+    Airport object is cached by id for 60 seconds in a cache named
+    AspNetCache. The TimetoLive property could also have been specified on the
+    configuration of the AspNetCache object.</para>
+
+    <para>The configuration to enable the caching aspect is shown below</para>
+
+    <programlisting>  &lt;object id="CacheAspect" type="Spring.Aspects.Cache.CacheAspect, Spring.Aop"/&gt;
+  &lt;object id="AspNetCache" type="Spring.Caching.AspNetCache, Spring.Web"&gt;
+    &lt;property name="SlidingExpiration" value="true"/&gt;
+    &lt;property name="Priority" value="CachePriority.Low"/&gt;
+    &lt;property name="TimeToLive" value="00:02:00"/&gt;
+  &lt;/object&gt;
+
+
+  &lt;!-- Apply aspects to DAOs --&gt;
+  &lt;object type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop"&gt;
+    &lt;property name="ObjectNames"&gt;
+      &lt;list&gt;
+        &lt;value&gt;*Dao&lt;/value&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="InterceptorNames"&gt;
+      &lt;list&gt;
+        &lt;value&gt;CacheAspect&lt;/value&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para>in this example an <classname>ObjectNameAutoProxyCreator</classname>
+    was used to apply the cache aspect to objects that have Dao in their name.
+    The AspNetCache setting for TimeToLive will override the TimeToLive value
+    set at the method level via the attribute.</para>
+  </sect1>
+
+  <sect1 id="exception-aspect">
+    <title>Exception Handling</title>
+
+    <para>In some cases existing code can be easily adopted to a simple error
+    handling strategy that can perform one of the following actions</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>translations - either wrap the thrown exception inside a new one
+        or replace it with a new exception type (no inner exception is
+        set).</para>
+      </listitem>
+
+      <listitem>
+        <para>return value - the exception is ignored and a return value for
+        the method is provided instead</para>
+      </listitem>
+
+      <listitem>
+        <para>swallow - the exception is ignored.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The applicability of general exception handling advice depends
+    greatly on how tangled the code is regarding access to local variables
+    that may form part of the exception. Once you get familiar with the
+    feature set of Spring declarative exception handling advice you should
+    evaluate where it may be effectively applied in your code base. It is
+    worth noting that you can still chain together multiple pieces of
+    exception handling advice allowing you to mix the declarative approach
+    shown in this section with the traditional inheritance based approach,
+    i.e. implementing IThrowsAdvice or IMethodInterceptor.</para>
+
+    <para>Declarative exception handling is expressed in the form of a
+    mini-language relevant to the domain at hand, exception handling. This
+    could be referred to as a Domain Specific Language (DSL). Here is a simple
+    example, which should hopefully be self explanatory.</para>
+
+    <para><programlisting>&lt;object name="exceptionHandlingAdvice" type="Spring.Aspects.Exceptions.ExceptionHandlerAdvice, Spring.Aop"&gt;
+  &lt;property name="exceptionHandlers"&gt;
+    &lt;list&gt;
+      &lt;value&gt;<emphasis role="bold">on exception name ArithmeticException wrap System.InvalidOperationException</emphasis>&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>What this is instructing the advice to do is
+    the following bit of code when an ArithmeticException is thrown, throw new
+    System.InvalidOperationException("Wrapped ArithmeticException", e), where
+    e is the original ArithmeticException. The default message, "Wrapped
+    ArithmethicException" is automatically appended. You may however specify
+    the message used in the newly thrown exception as shown below</para>
+
+    <programlisting>on exception name ArithmeticException wrap System.InvalidOperationException 'My Message'</programlisting>
+
+    <para>Similarly, if you would rather replace the exception, that is do not
+    nest one inside the other, you can use the following syntax</para>
+
+    <programlisting>on exception name ArithmeticException replace System.InvalidOperationException
+
+or
+
+on exception name ArithmeticException replace System.InvalidOperationException 'My Message'</programlisting>
+
+    <para>Both wrap and replace are special cases of the more general
+    translate action. An example of a translate expression is shown
+    below</para>
+
+    <para><programlisting>on exception name ArithmeticException translate new System.InvalidOperationException('My Message, Method Name ' + #method.Name, #e)</programlisting>What
+    we see here after the translate keyword is text that will be passed into
+    Spring's expression language (SpEL) for evaluation. Refer to the chapter
+    on the <link linkend="expression">expression language</link> for more
+    details. One important feature of the expression evaluation is the
+    availability of variables relating to the calling context when the
+    exception was thrown. These are</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>method - the MethodInfo object corresponding to the method that
+        threw the exception</para>
+      </listitem>
+
+      <listitem>
+        <para>args - the argument array to the method that threw the
+        exception, signature is object[]</para>
+      </listitem>
+
+      <listitem>
+        <para>target - the AOP target object instance.</para>
+      </listitem>
+
+      <listitem>
+        <para>e - the thrown exception</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>You can invoke methods on these variables, prefixed by a '#' in the
+    expression. This gives you the flexibility to call special purpose
+    constructors that can have any piece of information accessible via the
+    above variables, or even other external data through the use of SpEL's
+    ability to reference objects within the Spring container.</para>
+
+    <para>You may also choose to 'swallow' the exception or to return a
+    specific return value, for example</para>
+
+    <programlisting>on exception name ArithmeticException swallow
+
+
+or
+
+
+on exception name ArithmeticException return 12</programlisting>
+
+    <para>You may also simply log the exception</para>
+
+    <programlisting>on exception name ArithmeticException,ArgumentException log 'My Message, Method Name ' + #method.Name</programlisting>
+
+    <para>Here we see that a comma delimited list of exception names can be
+    specified.</para>
+
+    <para>The logging is performed using the Commons.Logging library that
+    provides an abstraction over the underlying logging implementation.
+    Logging is currently at the debug level with a logger name of
+    "LogExceptionHandler" The ability to specify these values will be a future
+    enhancement and likely via a syntax resembling a constructor for the
+    action, i.e. log(Debug,"LoggerName").</para>
+
+    <para>Multiple exception handling statements can be specified within the
+    &lt;list&gt; shown above. The processing flow is on exception, the name of
+    the exception listed in the statement is compared to the thrown exception
+    to see if there is a match. A comma separated list of exceptions can be
+    used to group together the same action taken for different exception
+    names. If the action to take is logging, then the logging action is
+    performed and the search for other matching exception names continues. For
+    all other actions, namely translate, wrap, replace, swallow, return, once
+    an exception handler is matched, those in the chain are no longer
+    evaluated. Note, do not confuse this handler chain with the general advice
+    AOP advice chain. For translate, wrap, and replace actions a SpEL
+    expression is created and used to instantiate a new exception (in addition
+    to any other processing that may occur when evaluating the expression)
+    which is then thrown.</para>
+
+    <para>The exception handling DSL also supports the ability to provide a
+    SpEL boolean expression to determine if the advice will apply instead of
+    just filtering by the expression name. For example, the following is the
+    equivalent to the first example based on exception names but compares the
+    specific type of the exception thrown</para>
+
+    <programlisting><emphasis role="bold">on exception (#e is T(System.ArithmeticException))</emphasis> wrap System.InvalidOperationException</programlisting>
+
+    <para>The syntax use is 'on exception (SpEL boolean expression)' and
+    inside the expression you have access to the variables of the calling
+    context listed before, i.e. method, args, target, and e. This can be
+    useful to implement a small amount of conditional logic, such as checking
+    for a specific error number in an exception, i.e. <literal>(#e is
+    T(System.Data.SqlException) &amp;&amp; #e.Errors[0].Number in
+    {156,170,207,208})</literal>, to catch and translate bad grammar codes in
+    a SqlException.</para>
+
+    <para>While the examples given above are toy examples, they could just as
+    easily be changed to convert your application specific exceptions. If you
+    find yourself pushing the limits of using SpEL expressions, you will
+    likely be better off creating your own custom aspect class instead of a
+    scripting approach.</para>
+
+    <sect2>
+      <title>Language Reference</title>
+
+      <para>The general syntax of the language is</para>
+
+      <para><literal>on exception name [ExceptionName1,ExceptionName2,...]
+      [action] [SpEL expression]</literal></para>
+
+      <para>or</para>
+
+      <para><literal>on exception (SpEL boolean expression) [action] [SpEL
+      expression]</literal></para>
+
+      <para>The exception names are required as well as the action. The valid
+      actions are</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>log</para>
+        </listitem>
+
+        <listitem>
+          <para>translate</para>
+        </listitem>
+
+        <listitem>
+          <para>wrap</para>
+        </listitem>
+
+        <listitem>
+          <para>replace</para>
+        </listitem>
+
+        <listitem>
+          <para>return</para>
+        </listitem>
+
+        <listitem>
+          <para>swallow</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The form of the expression depends on the action. For logging, the
+      entire string is taken as the SpEL expression to log. Translate expects
+      an exception to be returned from evaluation the SpEL expression. Wrap
+      and replace are shorthand for the translate action. For wrap and replace
+      you specify the exception name and the message to pass into the standard
+      exception constructors (string, exception) and (string). The exception
+      name can be a partial or fully qualified name. Spring will attempt to
+      resolve the typename across all referenced assemblies. You may also
+      register type aliases for use with SpEL in the standard manner with
+      Spring.NET and those will be accessible from within the exception
+      handling expression.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="logging-aspect">
+    <title>Logging</title>
+
+    <para>The logging advice lets you log the information on method entry,
+    exit and thrown exception (if any). The implementation is based on the
+    logging library, <link linkend="???">Common.Logging</link>, that provides
+    portability across different logging libraries. There are a number of
+    configuration options available, listed below</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>LogUniqueIdentifier</para>
+      </listitem>
+
+      <listitem>
+        <para>LogExecutionTime</para>
+      </listitem>
+
+      <listitem>
+        <para>LogMethodArguments</para>
+      </listitem>
+
+      <listitem>
+        <para>LogReturnValue</para>
+      </listitem>
+
+      <listitem>
+        <para>Separator</para>
+      </listitem>
+
+      <listitem>
+        <para>LogLevel</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>You declare the logging advice in IoC container with the following
+    XML fragment. Alternatively, you can use the class
+    <classname>SimpleLoggingAdvice</classname> programatically.</para>
+
+    <programlisting>&lt;object name="loggingAdvice" type="Spring.Aspects.Logging.SimpleLoggingAdvice, Spring.Aop"&gt;
+  &lt;property name="logUniqueIdentifier" value="true"/&gt;               
+  &lt;property name="logExecutionTime"    value="true"/&gt;               
+  &lt;property name="logMethodArguments"  value="true"/&gt;
+  &lt;property name="LogReturnValue"      value="true"/&gt;
+
+  &lt;property name="Separator"           value=";"/&gt;
+  &lt;property name="LogLevel"            value="Info"/&gt;
+
+
+  &lt;property name="HideProxyTypeNames"  value="true"/&gt;
+  &lt;property name="UseDynamicLogger"    value="true"/&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>
+      The default values for LogUniqueIdentifier, LogExecutionTime, LogMethodArguments and 
+      LogReturnValue are false. The default separator value is ", " and the
+      default log level is Common.Logging's LogLevel.Trace.</para>
+
+    <para>You can set the name of the logger with the property
+    <property>LoggerName</property>, for example "DataAccessLayer" for a
+    logging advice that would be applied across the all the classes in the
+    data access layer. That works well when using a 'category' style of
+    logging. If you do not set the <property>LoggerName</property> property,
+    then the type name of the logging advice is used as the logging name.
+    Another approach to logging is to log based on the type of the object
+    being called, the target type. Since often this is a proxy class with a
+    relatively meaningless name, the property
+    <property>HideProxyTypeNames</property> can be set to true to show the
+    true target type and not the proxy type.</para>
+
+    <para>To further extend the functionality of the
+    <classname>SimpleLoggingAdvice</classname> you can subclass
+    <classname>SimpleLoggingAdvice</classname> and override the methods</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>string GetEntryMessage(IMethodInvocation invocation,
+        string idString)</literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>string GetExceptionMessage(IMethodInvocation
+        invocation, Exception e, TimeSpan executionTimeSpan, string
+        idString)</literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>string GetExitMessage(IMethodInvocation invocation,
+        object returnValue, TimeSpan executionTimeSpan, string
+        idString)</literal></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The default implementation to calculate a unique identifier is to
+    use a GUID. You can alter this behavior by overriding the method
+    <literal>string CreateUniqueIdentifier()</literal>. The
+    <classname>SimpleLoggingAdvice</classname> class inherits from
+    <classname>AbstractLoggingAdvice</classname>, which has the abstract
+    method <literal>object InvokeUnderLog(IMethodInvocation invocation, ILog
+    log)</literal> and you can also override the method <literal>ILog
+    GetLoggerForInvocation(IMethodInvocation invocation)</literal> to
+    customize the logger instance used for logging. Refer to the SDK
+    documentation for more details on subclassing
+    <classname>AbstractLoggingAdvice</classname>.</para>
+
+    <para>As an example of the Logging advice's output, adding the advice to
+    the method</para>
+
+    <programlisting>public int Bark(string message, int[] luckyNumbers)
+{
+  return 4;
+}</programlisting>
+
+    <para>And calling Bark("hello", new int[]{1, 2, 3} ), results in the
+    following output</para>
+
+    <programlisting>Entering Bark, 5d2bad47-62cd-435b-8de7-91f12b7f433e, message=hello; luckyNumbers=System.Int32[]
+
+Exiting Bark, 5d2bad47-62cd-435b-8de7-91f12b7f433e, 30453.125 ms, return=4</programlisting>
+
+    <para>The method parameters values are obtained using the ToString()
+    method. If you would like to have an alternate implementation, say to view
+    some values in an array, override the method string
+    GetMethodArgumentAsString(IMethodInvocation invocation).</para>
+
+    <para>The Spring 1.2 release will have an additional logging advice
+    implementation that leverages the Spring Expression Language to further
+    customize the content of the logging messages via simple configuration
+    using similar syntax to the retry and exception handling advice.</para>
+  </sect1>
+
+  <sect1 id="retry-aspect">
+    <title>Retry</title>
+
+    <para>When making a distributed call it is often a common requirement to
+    be able to retry the method invocation if there was an exception.
+    Typically the exception will be due to a communication issue that is
+    intermittent and retrying over a period of time will likely result in a
+    successful invocation. When applying retry advice it is important to know
+    if making two calls to the remote service will cause side effects.
+    Generally speaking, the method being invoked should be <ulink
+    url="http://en.wikipedia.org/wiki/Idempotent#Computer_Science">idempotent</ulink>,
+    that is, it is safe to call multiple times.</para>
+
+    <para>The retry advice is specified using a little language, i.e a DSL. A
+    simple example is shown below</para>
+
+    <programlisting>on exception name ArithmeticException retry 3x delay 1s</programlisting>
+
+    <para>The meaning is: when an exception that has 'ArithmeticException' in
+    its type name is thrown, retry the invocation up to 3 times and delay for
+    1 second between each retry event.</para>
+
+    <para>You can also provide a SpEL (Spring Expression Language) expression
+    that calculates the time interval to sleep between each retry event. The
+    syntax for this is shown below</para>
+
+    <programlisting>on exception name ArithmeticException retry 3x rate (1*#n + 0.5)</programlisting>
+
+    <para>As with the exception handling advice, you may also specify a
+    boolean SpEL that must evaluate to true in order for the advice to apply.
+    For example</para>
+
+    <programlisting>on exception (#e is T(System.ArithmeticException)) retry 3x delay 1s
+
+
+on exception (#e is T(System.ArithmeticException)) retry 3x rate (1*#n + 0.5)</programlisting>
+
+    <para>The time specified after the delay keyword is converted to a
+    TimeSpan object using Spring's TimeSpanConverter. This supports setting
+    the time as an integer + time unit. Time units are (d, h, m, s, ms)
+    representing (days, hours, minutes, seconds, and milliseconds). For
+    example; 1d = 1day, 5h = 5 hours etc. You can not specify a string such as
+    '1d 5h'. The value that is calculated from the expression after the rate
+    keyword is interpreted as a number of seconds. The power of using SpEL for
+    the rate expression is that you can easily specify some exponential retry
+    rate (a bigger delay for each retry attempt) or call out to a custom
+    function developed for this purpose.</para>
+
+    <para>When using a SpEL expression for the filter condition or for the
+    rate expression, the following variable are available</para>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>method - the MethodInfo object corresponding to the method
+          that threw the exception</para>
+        </listitem>
+
+        <listitem>
+          <para>args - the argument array to the method that threw the
+          exception, signature is object[]</para>
+        </listitem>
+
+        <listitem>
+          <para>target - the AOP target object instance.</para>
+        </listitem>
+
+        <listitem>
+          <para>e - the thrown exception</para>
+        </listitem>
+      </itemizedlist>You declare the advice in IoC container with the
+    following XML fragment. Alternatively, you can use the
+    <classname>RetryAdvice</classname> class programatically.</para>
+
+    <programlisting>&lt;object name="exceptionHandlingAdvice" type="Spring.Aspects.RetryAdvice, Spring.Aop"&gt;
+  &lt;property name="retryExpression" value="<emphasis role="bold">on exception name ArithmeticException retry 3x delay 1s</emphasis>"/&gt;
+&lt;/object&gt;</programlisting>
+
+    <sect2>
+      <title>Language Reference</title>
+
+      <para>The general syntax of the language is</para>
+
+      <para><literal>on exception name [ExceptionName1,ExceptionName2,...]
+      retry [number of times]x [delay|rate] [delay time|SpEL rate
+      expression]</literal></para>
+
+      <para>or</para>
+
+      <para><literal>on exception (SpEL boolean expression) retry [number of
+      times]x [delay|rate] [delay time|SpELrate expression]</literal></para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="tx-aspect">
+    <title>Transactions</title>
+
+    <para>The transaction aspect is more fully described in the section on
+    <link linkend="transaction">transaction management</link>.</para>
+  </sect1>
+
+  <sect1 id="parameter-validation">
+    <title>Parameter Validation</title>
+
+    <para>Spring provides a UI-agnostic <link linkend="validation">validation
+    framework</link> in which you can declare validation rules, both
+    progammatically and declaratively, and have those rules evaluated against
+    an arbitrary .NET object. Spring provides additional support for rendering
+    of validation errors within Spring's ASP.NET framework. (See the section
+    on <link linkend="validation-aspnet-usage" os="">ASP.NET usage tips</link>
+    for more information.) However, validation is not confined to the UI tier.
+    It is a common task that occurs across most, if not all, applications
+    layers. Validation that is performed in the UI layer is often repeated in
+    the service layer, in order to be proactive in case non UI-based clients
+    invoke the service layer. Validation rules completely different from those
+    used in the UI layer may be used on the server side.</para>
+
+    <para>To address some of the common needs for validation on the server
+    side, Spring provides parameter validation advice so that applies Spring's
+    validation rules to the method parameters. The class
+    <classname>ParameterValidationAdvice</classname> is used in conjunction
+    with the <classname>Validated</classname> attribute to specify which
+    validation rules are applied to method parameters. For example, to apply
+    parameter validation to the method SuggestFlights in the BookingAgent
+    class used in the <link linkend="springair">SpringAir sample
+    application</link>, you would apply the <classname>Validated</classname>
+    attribute to the method parameters as shown below.</para>
+
+    <programlisting>public FlightSuggestions SuggestFlights( [Validated("tripValidator")] Trip trip)
+{
+   // unmodified implementation goes here
+}</programlisting>
+
+    <para>The <literal>Validated</literal> attribute takes a string name that
+    specifies the name of the validation rule, i.e. the name of the IValidator
+    object in the Spring application context. The
+    <classname>Validated</classname> attribute is located in the namespace
+    <literal>Spring.Validation</literal> of the <literal>Spring.Core</literal>
+    assembly.</para>
+
+    <para>The configuration of the advice is to simply define the an instance
+    of the <literal>ParameterValidationAdvice</literal> class and apply the
+    advice, for example based on object names using an
+    <classname>ObjectNameAutoProxyCreator</classname>, as shown below,</para>
+
+    <programlisting>  &lt;object id="<emphasis role="bold">validationAdvice</emphasis>" type="Spring.Aspects.Validation.ParameterValidationAdvice, Spring.Aop"/&gt;
+
+  &lt;object type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop"&gt;
+    &lt;property name="ObjectNames"&gt;
+      &lt;list&gt;
+        &lt;value&gt;bookingAgent&lt;/value&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="InterceptorNames"&gt;
+      &lt;list&gt;
+        &lt;value&gt;<emphasis role="bold">validationAdvice</emphasis>&lt;/value&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para>When the advised method is invoked first the validation of each
+    method parameter is performed. If all validation succeeds, then the method
+    body is executed. If validation fails an exception of the type
+    <classname>ValidationException</classname> is thrown and you can retrieve
+    errors information from its property <literal>ValidationErrors</literal>.
+    See the SDK documentation for details.</para>
+  </sect1>
+</chapter>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"
+	default-lazy-init="true">
+	
+  <object id="lazy-and-bad"
+      type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+BadInitializer, Spring.Core.Tests"
+      init-method="init2"/>
+
+  <object id="init-and-ib-no-init-in-local-object-def"
+     type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+InitAndIB, Spring.Core.Tests"
+     init-method="customInit"
+     destroy-method="customDestroy"/>
+  
+  <object id="init-and-ib"
+      type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+InitAndIB, Spring.Core.Tests"
+      lazy-init="false"
+      init-method="customInit"
+      destroy-method="customDestroy"/>
+	
+  <object id="prototype" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false"/>
+
+</objects>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="web-quickstart">
+  <title>Web Quickstarts</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Web Quickstart solution provides basic 'Hello World' examples
+    for using Spring.Web features. You can use this solution as a starting
+    point and then move on to the SpringAir application that uses a wider
+    range of Spring.Web features. </para>
+  </section>
+</chapter>

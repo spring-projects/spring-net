@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeSmith.Engine</name>
+    </assembly>
+    <members>
+        <member name="M:CodeSmith.Engine.About.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:CodeSmith.Engine.CodeSmithSerializerAttribute">
+            <summary>
+            Summary description for CodeSmithSerializerAttribute.
+            </summary>
+        </member>
+    </members>
+</doc>

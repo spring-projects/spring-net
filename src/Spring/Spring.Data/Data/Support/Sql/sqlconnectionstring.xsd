@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  
+  <xs:simpleType name="nonNullString">
+    <xs:restriction base="xs:string">    
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  
+  <xs:element name="sqlServerConnection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dictionary" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+      
+      <xs:attribute name="name" use="required" type="nonNullString"/>
+      <xs:attribute name="applicationName" use="optional" type="nonNullString"/>
+      <xs:attribute name="asynchronousProcessing" use="optional" type="xs:boolean"/>
+      <xs:attribute name="attachDBFilename" use="optional" type="nonNullString"/>
+      <xs:attribute name="browsableConnectionString" use="optional" type="xs:boolean"/>
+      <xs:attribute name="connectTimeout" use="optional" type="xs:integer"/>
+      <xs:attribute name="connectionReset" use="optional" type="xs:boolean"/>
+      <xs:attribute name="contextConnection" use="optional" type="xs:boolean"/>
+      <xs:attribute name="currentLanguage" use="optional" type="xs:string"/>
+      <xs:attribute name="dataSource" use="optional" type="nonNullString"/>
+      <xs:attribute name="encrypt" use="optional" type="xs:boolean"/>
+      <xs:attribute name="enlist" use="optional" type="xs:boolean"/>
+      <xs:attribute name="failoverPartner" use="optional" type="nonNullString"/>
+      <xs:attribute name="initialCatalog" use="optional" type="nonNullString"/>
+      <xs:attribute name="integratedSecurity" use="optional" type="xs:boolean"/>
+      <xs:attribute name="loadBalanceTimeout" use="optional" type="xs:integer"/>
+      <xs:attribute name="maxPoolSize" use="optional" type="xs:integer"/>
+      <xs:attribute name="minPoolSize" use="optional" type="xs:integer"/>
+      <xs:attribute name="multipleActiveResultSets" use="optional" type="xs:boolean"/>
+      <xs:attribute name="networkLibrary" use="optional" type="xs:string"/>
+      <xs:attribute name="packetSize" use="optional" type="xs:integer"/>
+      <xs:attribute name="password" use="optional" type="xs:string"/>
+      <xs:attribute name="persistSecurityInfo" use="optional" type="xs:boolean"/>
+      <xs:attribute name="pooling" use="optional" type="xs:boolean"/>
+      <xs:attribute name="replication" use="optional" type="xs:boolean"/>
+      <xs:attribute name="trustServerCertificate" use="optional" type="xs:boolean"/>
+      <xs:attribute name="typeSystemVersion" use="optional" type="nonNullString"/>
+      <xs:attribute name="userID" use="optional" type="xs:string"/>
+      <xs:attribute name="userInstance" use="optional" type="xs:boolean"/>
+      <xs:attribute name="workstationID" use="optional" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dictionary">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element  minOccurs="0" maxOccurs="unbounded" ref="entry"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entry">
+    <xs:complexType>
+      <xs:attribute name="key" use="optional" type="nonNullString"/>
+      <xs:attribute name="key-ref" use="optional"  type="nonNullString"/>
+      <xs:attribute name="value"  use="optional" type="nonNullString"/>
+      <xs:attribute name="value-ref" use="optional" type="nonNullString"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

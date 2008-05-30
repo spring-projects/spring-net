@@ -1,0 +1,317 @@
+#region License
+
+/*
+ * Copyright © 2002-2005 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
+#region Imports
+
+using System;
+using System.Collections;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.Serialization;
+
+using Spring.Util;
+using Spring.Proxy;
+
+#endregion
+
+namespace Spring.Aop.Framework.DynamicProxy
+{
+    /// <summary>
+    /// Builds an AOP proxy type using the decorator pattern.
+    /// </summary>
+    /// <author>Bruno Baia</author>
+    /// <version>$Id: DecoratorAopProxyTypeBuilder.cs,v 1.17 2007/12/07 17:58:56 bbaia Exp $</version>
+    public class DecoratorAopProxyTypeBuilder : AbstractAopProxyTypeBuilder
+    {
+        #region Fields
+
+        private const string PROXY_TYPE_NAME = "DecoratorAopProxy";
+
+        private IAdvised advised;
+
+        /// <summary>
+        /// AdvisedProxy instance calls should be delegated to.
+        /// </summary>
+        protected FieldBuilder advisedProxyField;
+        
+        #endregion
+
+        #region Constructor (s) / Destructor
+
+        /// <summary>
+        /// Creates a new instance of the 
+        /// <see cref="DecoratorAopProxyTypeBuilder"/> class.
+        /// </summary>
+        /// <param name="advised">The proxy configuration.</param>
+        public DecoratorAopProxyTypeBuilder(IAdvised advised)
+        {
+            if (!ReflectionUtils.IsTypeVisible(advised.TargetSource.TargetType, DynamicProxyManager.ASSEMBLY_NAME))
+            {
+                throw new AopConfigException(String.Format(
+                    "Cannot create decorator-based IAopProxy for a non visible class [{0}]",
+                    advised.TargetSource.TargetType.FullName));
+            }
+            if (advised.TargetSource.TargetType.IsSealed)
+            {
+                throw new AopConfigException(String.Format(
+                    "Cannot create decorator-based IAopProxy for a sealed class [{0}]",
+                    advised.TargetSource.TargetType.FullName));
+            }
+            this.advised = advised;
+
+            Name = PROXY_TYPE_NAME;
+            TargetType = advised.TargetSource.TargetType.IsInterface ? typeof(object) : advised.TargetSource.TargetType;
+            BaseType = TargetType;
+            Interfaces = GetProxiableInterfaces(advised.Interfaces);
+            ProxyTargetAttributes = advised.ProxyTargetAttributes;
+        }
+
+        #endregion
+
+        #region IProxyTypeBuilder Members
+
+        /// <summary>
+        /// Creates the proxy type.
+        /// </summary>
+        /// <returns>The generated proxy class.</returns>
+        public override Type BuildProxyType()
+        {
+            IDictionary targetMethods = new Hashtable();
+
+            TypeBuilder typeBuilder = CreateTypeBuilder(Name, BaseType);
+
+            // apply custom attributes to the proxy type.
+            ApplyTypeAttributes(typeBuilder, TargetType);
+
+            // declare fields
+            DeclareAdvisedProxyInstanceField(typeBuilder);
+
+            // implement ISerializable if possible
+            if (advised.IsSerializable)
+            {
+                typeBuilder.SetCustomAttribute(
+                    ReflectionUtils.CreateCustomAttribute(typeof(SerializableAttribute)));
+                ImplementSerializationConstructor(typeBuilder);
+                ImplementGetObjectDataMethod(typeBuilder);
+            }
+
+            // create constructors
+            ImplementConstructors(typeBuilder);
+
+            // implement interfaces
+            IDictionary interfaceMap = advised.InterfaceMap;
+            foreach (Type intf in Interfaces)
+            {
+                object target = interfaceMap[intf];
+                if (target == null)
+                {
+                    // implement interface (proxy only final methods)
+                    ImplementInterface(typeBuilder,
+                        new TargetAopProxyMethodBuilder(typeBuilder, this, true, targetMethods),
+                        intf, TargetType, false);
+                }
+                else if (target is IIntroductionAdvisor)
+                {
+                    // implement introduction
+                    ImplementInterface(typeBuilder,
+                        new IntroductionProxyMethodBuilder(typeBuilder, this, targetMethods, advised.IndexOf((IIntroductionAdvisor)target)),
+                        intf, TargetType);
+                }
+            }
+
+            // inherit from target type
+            InheritType(typeBuilder, 
+                new TargetAopProxyMethodBuilder(typeBuilder, this, false, targetMethods), 
+                TargetType);
+
+            // implement IAdvised interface
+            ImplementInterface(typeBuilder,
+                new IAdvisedProxyMethodBuilder(typeBuilder, this),
+                typeof(IAdvised), TargetType);
+
+            // implement IAopProxy interface
+            ImplementIAopProxy(typeBuilder);
+
+            Type proxyType;
+            proxyType = typeBuilder.CreateType();
+
+            // set target method references
+            foreach (DictionaryEntry entry in targetMethods)
+            {
+                FieldInfo field = proxyType.GetField((string)entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
+                field.SetValue(proxyType, (MethodInfo)entry.Value);
+            }
+
+            return proxyType;
+        }
+
+        #endregion
+
+        #region IAopProxyTypeGenerator Members
+
+        /// <summary>
+        /// Generates the IL instructions that pushes  
+        /// the current <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/> 
+        /// instance on stack.
+        /// </summary>
+        /// <param name="il">The IL generator to use.</param>
+        public override void PushAdvisedProxy(ILGenerator il)
+        {
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldfld, advisedProxyField);
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Declares field that holds the <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/>
+        /// instance used by the proxy.
+        /// </summary>
+        /// <param name="builder">
+        /// The <see cref="System.Type"/> builder to use for code generation.
+        /// </param>
+        protected virtual void DeclareAdvisedProxyInstanceField(TypeBuilder builder)
+        {
+            advisedProxyField = builder.DefineField("__advisedProxy", typeof(AdvisedProxy), FieldAttributes.Private);
+        }
+
+        /// <summary>
+        /// Implements serialization method.
+        /// </summary>
+        /// <param name="typeBuilder"></param>
+        private void ImplementGetObjectDataMethod(TypeBuilder typeBuilder)
+        {
+            typeBuilder.AddInterfaceImplementation(typeof(ISerializable));
+
+            MethodBuilder mb =
+                typeBuilder.DefineMethod("GetObjectData",
+                                         MethodAttributes.Public | MethodAttributes.HideBySig | 
+                                         MethodAttributes.NewSlot | MethodAttributes.Virtual,
+                                         typeof (void),
+                                         new Type[] {typeof (SerializationInfo), typeof (StreamingContext)});
+
+            ILGenerator il = mb.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldstr, "advisedProxy");
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldfld, advisedProxyField);
+            il.EmitCall(OpCodes.Callvirt, References.AddSerializationValue, null);
+            il.Emit(OpCodes.Ret);
+
+            typeBuilder.DefineMethodOverride(mb, typeof(ISerializable).GetMethod("GetObjectData"));
+        }
+
+
+        /// <summary>
+        /// Implements serialization constructor.
+        /// </summary>
+        /// <param name="typeBuilder">Type builder to use.</param>
+        private void ImplementSerializationConstructor(TypeBuilder typeBuilder)
+        {
+            ConstructorBuilder cb =
+                typeBuilder.DefineConstructor(MethodAttributes.Family,
+                                              CallingConventions.Standard,
+                                              new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+
+            ILGenerator il = cb.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldstr, "advisedProxy");
+            il.Emit(OpCodes.Ldtoken, typeof(AdvisedProxy));
+            il.EmitCall(OpCodes.Call, References.GetTypeFromHandle, null);
+            il.EmitCall(OpCodes.Callvirt, References.GetSerializationValue, null);
+            il.Emit(OpCodes.Castclass, typeof(AdvisedProxy));
+            il.Emit(OpCodes.Stfld, advisedProxyField);
+            il.Emit(OpCodes.Ret);
+        }
+
+        /// <summary>
+        /// Implements constructors for the proxy class.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// This implementation creates a new instance 
+        /// of the <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/> class.
+        /// </p>
+        /// </remarks>
+        /// <param name="typeBuilder">
+        /// The <see cref="System.Type"/> builder to use.
+        /// </param>
+        protected override void ImplementConstructors(TypeBuilder typeBuilder)
+        {
+            ConstructorBuilder cb =
+                typeBuilder.DefineConstructor(References.ObjectConstructor.Attributes,
+                                              References.ObjectConstructor.CallingConvention,
+                                              new Type[] { typeof(IAdvised) });
+
+            ILGenerator il = cb.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Newobj, References.AdvisedProxyConstructor);
+            il.Emit(OpCodes.Stfld, advisedProxyField);
+            il.Emit(OpCodes.Ret);
+        }
+
+        /// <summary>
+        /// Implements <see cref="Spring.Aop.Framework.IAopProxy"/> interface.
+        /// </summary>
+        /// <param name="typeBuilder">The type builder to use.</param>
+        protected virtual void ImplementIAopProxy(TypeBuilder typeBuilder)
+        {
+            Type intf = typeof(IAopProxy);
+            MethodInfo getProxyMethod = intf.GetMethod("GetProxy", Type.EmptyTypes);
+
+            typeBuilder.AddInterfaceImplementation(intf);
+
+            MethodBuilder mb = typeBuilder.DefineMethod(typeof(IAdvised).FullName + "." + getProxyMethod.Name,
+                MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Final,
+                getProxyMethod.CallingConvention, getProxyMethod.ReturnType, Type.EmptyTypes);
+
+            ILGenerator il = mb.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Ret);
+
+            typeBuilder.DefineMethodOverride(mb, getProxyMethod);
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Determines if the specified <paramref name="type"/> 
+        /// is one of those generated by this builder.
+        /// </summary>
+        /// <param name="type">The type to check.</param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a decorator-based proxy;
+        /// otherwise <see langword="false"/>.
+        /// </returns>
+        public static bool IsDecoratorProxy(Type type)
+        {
+            return type.FullName.StartsWith(PROXY_TYPE_NAME);
+        }
+
+        #endregion
+    }
+}

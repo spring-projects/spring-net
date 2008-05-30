@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns='http://www.springframework.net'>
+  <object id="MatchAlwaysTransactionAttributeSource"
+          type="Spring.Transaction.Interceptor.MatchAlwaysTransactionAttributeSource, Spring.Data">
+
+    <property name="transactionAttribute" value="PROPAGATION_REQUIRES_NEW" />
+  
+  </object>
+</objects>

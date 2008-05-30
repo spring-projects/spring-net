@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+    <object id="mySqlMembershipProvider" type="Spring.Web.Providers.ConfigurableSqlMembershipProvider">
+        <property name="connectionStringName" value="MyLocalSQLServer" />
+        <property name="parameters">
+            <name-values>
+                <add key="description" value="membershipprovider description" />
+            </name-values>
+        </property>
+    </object>
+
+    <object id="mySqlRoleProvider" type="Spring.Web.Providers.ConfigurableSqlRoleProvider">
+        <property name="connectionStringName" value="MyLocalSQLServer" />
+        <property name="parameters">
+            <name-values>
+                <add key="description" value="roleprovider description" />
+            </name-values>
+        </property>
+    </object>
+
+    <object id="mySqlProfileProvider" type="Spring.Web.Providers.ConfigurableSqlProfileProvider">
+        <property name="connectionStringName" value="MyLocalSQLServer" />
+        <property name="parameters">
+            <name-values>
+                <add key="description" value="profileprovider description" />
+            </name-values>
+        </property>
+    </object>
+
+    <object id="myXmlSiteMapProvider" type="Spring.Web.Providers.ConfigurableXmlSiteMapProvider">
+        <property name="siteMapFile" value="Web.sitemap" />
+        <property name="parameters">
+            <name-values>
+                <add key="description" value="profileprovider description" />
+            </name-values>
+        </property>
+    </object>
+    
+</objects>

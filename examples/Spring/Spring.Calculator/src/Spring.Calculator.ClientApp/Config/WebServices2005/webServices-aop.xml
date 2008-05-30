@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+	
+	<description>webServices-aop</description>
+		
+	<object id="webCalculatorService" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services"> 
+		<property name="ServiceUri" value="http://localhost:1643/Spring.Calculator.Web.2005/calculatorServiceWeaved.asmx"/> 
+		<property name="ServiceInterface" value="Spring.Calculator.Interfaces.IAdvancedCalculator, Spring.Calculator.Contract"/> 
+	</object>
+	
+	<object id="calculatorService" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+		<property name="target" ref="webCalculatorService"/>
+		<property name="interceptorNames">
+			<list>
+				<value>ConsoleLoggingAroundAdvice</value>
+			</list>
+		</property>
+	</object>
+	
+</objects>

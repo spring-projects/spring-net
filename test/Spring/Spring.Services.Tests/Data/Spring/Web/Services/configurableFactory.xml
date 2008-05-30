@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <object id="withProxyType" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services">
+    <property name="ProxyType" value="Spring.Web.Services.WebServiceProxyFactoryTests+FakeProxyClass, Spring.Services.Tests"/>
+    <property name="ServiceInterface" value="Spring.Web.Services.WebServiceProxyFactoryTests+IHelloWorld, Spring.Services.Tests"/>
+    <property name="ProductTemplate">
+      <object>
+        <property name="Url" value="http://www.springframework.org/" />
+        <property name="Timeout" value="10000" />
+      </object>
+    </property>
+  </object>
+
+  <object id="withServiceUri" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services">
+    <property name="ServiceUri" value="assembly://Spring.Services.Tests/Spring.Data.Spring.Web.Services/document-literal.wsdl"/>
+    <property name="ServiceInterface" value="Spring.Web.Services.WebServiceProxyFactoryTests+IHelloWorld, Spring.Services.Tests"/>
+    <property name="ProductTemplate">
+      <object>
+        <property name="Url" value="http://www.springframework.org/" />
+        <property name="Timeout" value="10000" />
+      </object>
+    </property>
+  </object>
+
+</objects>

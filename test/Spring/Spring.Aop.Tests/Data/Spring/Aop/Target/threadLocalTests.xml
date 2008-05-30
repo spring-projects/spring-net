@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<objects xmlns="http://www.springframework.net">
+	<object id="prototypeTest" type="Spring.Objects.Factory.SideEffectObject" singleton="false">
+		<property name="count">
+			<value>10</value>
+		</property>
+	</object>
+	<object id="threadLocalTs" type="Spring.Aop.Target.ThreadLocalTargetSource">
+		<property name="targetobjectName">
+			<value>prototypeTest</value>
+		</property>
+	</object>
+	<object id="debugInterceptor" type="Spring.Aop.Interceptor.NopInterceptor" />
+	<!--
+		We want to invoke the getStatsMixin method on our ThreadLocal invoker
+	-->
+	<object id="statsAdvisor" type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject">
+		<property name="targetObject">
+			<ref local="threadLocalTs" />
+		</property>
+		<property name="targetMethod">
+			<value>GetStatsMixin</value>
+		</property>
+	</object>
+	<!--
+		This will create a object for each thread ("apartment")
+	-->
+	<object id="apartment" type="Spring.Aop.Framework.ProxyFactoryObject">
+		<!-- in java:
+		<property name="interceptorNames"><value>debugInterceptor,statsAdvisor</value></property>
+		-->
+		<property name="introductionNames">
+			<value>statsAdvisor</value>
+		</property>
+		<property name="interceptorNames">
+			<value>debugInterceptor</value>
+		</property>
+		<property name="targetSource">
+			<ref local="threadLocalTs" />
+		</property>
+		<!-- Necessary as have a mixin and want to avoid losing the class,
+			 because there's no target interface
+		 -->
+		<property name="proxyTargetType">
+			<value>true</value>
+		</property>
+	</object>
+	<!-- ================ Definitions for second ThreadLocalTargetSource ====== -->
+	<object id="wife" type="Spring.Objects.TestObject">
+		<property name="name">
+			<value>Kerry</value>
+		</property>
+	</object>
+	<object id="test" singleton="false" type="Spring.Objects.TestObject">
+		<property name="name">
+			<value>Rod</value>
+		</property>
+		<property name="spouse">
+			<ref local="wife" />
+		</property>
+	</object>
+	<object id="threadLocalTs2" type="Spring.Aop.Target.ThreadLocalTargetSource">
+		<property name="targetobjectName">
+			<value>test</value>
+		</property>
+	</object>
+	<object id="threadLocal2" type="Spring.Aop.Framework.ProxyFactoryObject">
+		<property name="targetSource">
+			<ref local="threadLocalTs2" />
+		</property>
+	</object>
+</objects>

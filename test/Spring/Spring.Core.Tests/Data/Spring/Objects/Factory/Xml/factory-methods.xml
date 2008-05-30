@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+    <object id="default" type="Spring.Objects.Factory.Xml.FactoryMethods, Spring.Core.Tests"
+        factory-method="DefaultInstance">
+        <!-- No constructor-arg elements -->
+        <property name="valUe" value="setterString"/> <!-- case is jumbled up on purpose -->
+    </object>
+    <object id="testObjectOnly" type="Spring.Objects.Factory.Xml.FactoryMethods, Spring.Core.Tests"
+        factory-method="NewInstance">
+        <constructor-arg ref="juergen"/>
+    </object>
+    <object id="full" type="Spring.Objects.Factory.Xml.FactoryMethods, Spring.Core.Tests"
+        factory-method="newInsTance"> <!-- case is jumbled up on purpose -->
+        <constructor-arg index="0" ref="juergen"/>
+        <constructor-arg index="1" value="gotcha"/>
+        <constructor-arg index="2" value="27"/>
+    </object>
+    <object id="defaultPrototype" type="Spring.Objects.Factory.Xml.FactoryMethods, Spring.Core.Tests"
+        singleton="false" factory-method="defaultInstance">
+        <!-- No constructor-arg elements -->
+        <property name="value" value="setterString"/>
+    </object>
+    <object id="testObjectOnlyPrototype" type="Spring.Objects.Factory.Xml.FactoryMethods, Spring.Core.Tests"
+        factory-method="newInstance" singleton="false">
+        <constructor-arg ref="juergen"/>
+        <property name="value" value="testObjectOnlyPrototypeDISetterString"/>
+    </object>
+    <object id="fullPrototype" type="Spring.Objects.Factory.Xml.FactoryMethods, Spring.Core.Tests"
+        factory-method="newInstance" singleton="false">
+        <constructor-arg index="0" ref="juergen"/>
+        <constructor-arg index="1" value="gotcha"/>
+        <constructor-arg index="2" value="27"/>
+    </object>
+    <object id="noMatchPrototype" type="Spring.Objects.Factory.Xml.FactoryMethods, Spring.Core.Tests"
+        factory-method="newInstance" singleton="false">
+        <constructor-arg index="0" ref="juergen"/>
+        <constructor-arg index="1" value="27"/>
+        <constructor-arg index="2" value="gotcha"/>
+        <constructor-arg index="3" value="bogus"/>
+    </object>
+    <object id="juergen" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name" value="Juergen"/>
+    </object>
+    <!--
+		The class is the factory class, not the created class 
+	-->
+    <object id="externalFactoryMethodWithoutArgs" type="Spring.Objects.Factory.Xml.TestObjectCreator, Spring.Core.Tests"
+        factory-method="createTestObject"></object>
+    <object id="externalFactoryMethodWithArgs" type="Spring.Objects.Factory.Xml.TestObjectCreator, Spring.Core.Tests"
+        factory-method="creATETestoBject"> <!-- case is jumbled up on purpose -->
+        <constructor-arg index="0" value="Rod"/>
+        <constructor-arg index="1" value="33"/>
+    </object>
+    <object id="instanceFactoryMethodWithoutArgs" factory-object="instanceFactory" factory-method="defaultInstance" />
+    <object id="instanceFactoryMethodOverloads" factory-object="instanceFactory" factory-method="createInstance" singleton="false"/>
+
+    <object id="instanceFactory" type="Spring.Objects.Factory.Xml.InstanceFactory">
+        <property name="factoryObjectProperty" value="instanceFactory"/>
+    </object>
+
+
+   
+
+</objects>

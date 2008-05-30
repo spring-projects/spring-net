@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="pool">
+  <title>Object Pooling</title>
+
+  <sect1 id="pool-introduction">
+    <title>Introduction</title>
+
+    <para>The Spring.Pool namespace contains a generic API for implementing
+    pools of objects. Object pooling is a well known technique to minimize the
+    creation of objects that can take a significant amount of time. Common
+    examples are to create a pool of database connections such that each
+    request to the database can reuse an existing connection instead of
+    creating one per client request. Threads are also another common candidate
+    for pooling in order to increase responsiveness of an application to
+    multiple concurrent client requests.</para>
+
+    <para>.NET contains support for object pooling in these common scenarios.
+    Support for database connection pools is directly supported by ADO.NET
+    data providers as a configuration option. Similarly, thread pooling is
+    supported via the System.ThreadPool class. Support for pooling of other
+    objects can be done using the CLR managed API to COM+ found in the
+    System.EnterpriseServices namespace.</para>
+
+    <para>Despite this built-in support there are scenarios where you would
+    like to use alternative pool implementations. This may be because the
+    default implementations, such as System.ThreadPool, do not meet your
+    requirements. (For a discussion on advanced ThreadPool usage see <ulink
+    url="http://www.codeproject.com/csharp/SmartThreadPool.asp"> Smart Thread
+    Pool</ulink> by Ami Bar.) Alternatively, you may want to pool classes that
+    do not inherit from
+    <literal>System.EnterpriseServices.ServicedComponent</literal>. Instead of
+    making changes to the object model to meet this inheritance requirement,
+    Spring .NET provides similar support for pooling, but for any object, by
+    using AOP proxies and a generic pool API for managing object
+    instances.</para>
+
+    <para>Note, that if you are concerned only with applying pooling to an
+    existing object, the pooling APIs discussed here are not very important.
+    Instead the use and configuration of
+    <classname>Spring.Aop.Target.SimplePoolTargetSource</classname> is more
+    relevant. Pooling of objects can either be done Programatically or through
+    the XML configuration of the Spring .NET container. Attribute support for
+    pooling, similar to the ServicedComponent approach, will be available in a
+    future release of Spring.NET.</para>
+
+    <para><xref linkend="quickstarts" /> contains an example that shows the
+    use of the pooling API independent of AOP functionality.</para>
+  </sect1>
+
+  <sect1 id="pool-api">
+    <title>Interfaces and Implementations</title>
+
+    <para>The <literal>Spring.Pool</literal> namespace provides two simple
+    interfaces to manage pools of objects. The first interface,
+    <classname>IObjectPool</classname> describes how to take and put back an
+    object from the pool. The second interface
+    <classname>IPoolableObjectFactory</classname> is meant to be used in
+    conjunction with implementations of the <classname>IObjectPool</classname>
+    to provide guidance in calling various lifecycle events on the objects
+    managed by the pool. These interfaces are based on the Jakarta Commons
+    Pool API. <classname>Spring.Pool.Support.SimplePool</classname> is a
+    default implementation of <classname>IObjectPool</classname> and
+    <classname>Spring.Aop.Target.SimplePoolTargetSource</classname> is the
+    implementation of <classname>IPoolableObjectFactory</classname> for use
+    with AOP. The current goal of the Spring.Pool namespace is not to provide
+    a one-for-one replacement of the Jakarta Commons Pool API, but rather to
+    support basic object pooling needs for common AOP scenarios. Consequently,
+    other interfaces and base classes available in the Jakarta package are not
+    available.</para>
+  </sect1>
+</chapter>

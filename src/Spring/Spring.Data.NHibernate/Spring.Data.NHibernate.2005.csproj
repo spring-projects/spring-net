@@ -1,0 +1,108 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{130E1609-45A7-4F65-B112-105F2DD3E2CE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spring</RootNamespace>
+    <AssemblyName>Spring.Data.NHibernate</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\build\VS.Net.2005\Spring.Data.NHibernate\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Spring.Data.NHibernate.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\build\VS.Net.2005\Spring.Data.NHibernate\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_2_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\NHibernate10\net\2.0\Castle.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=1.1.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\NHibernate10\net\2.0\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=1.0.4.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\NHibernate10\net\2.0\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Data\NHibernate\HibernateAccessor.cs" />
+    <Compile Include="Data\NHibernate\HibernateAdoException.cs" />
+    <Compile Include="Data\NHibernate\HibernateDelegate.cs" />
+    <Compile Include="Data\NHibernate\HibernateObjectRetrievalFailureException.cs" />
+    <Compile Include="Data\NHibernate\HibernateOptimisticLockingFailureException.cs" />
+    <Compile Include="Data\NHibernate\HibernateQueryException.cs" />
+    <Compile Include="Data\NHibernate\HibernateSystemException.cs" />
+    <Compile Include="Data\NHibernate\HibernateTemplate.cs" />
+    <Compile Include="Data\NHibernate\HibernateTransactionManager.cs" />
+    <Compile Include="Data\NHibernate\ICommonHibernateOperations.cs" />
+    <Compile Include="Data\NHibernate\IHibernateCallback.cs" />
+    <Compile Include="Data\NHibernate\IHibernateOperations.cs" />
+    <Compile Include="Data\NHibernate\LocalSessionFactoryObject.cs" />
+    <Compile Include="Data\NHibernate\SessionFactoryUtils.cs" />
+    <Compile Include="Data\NHibernate\SessionHolder.cs" />
+    <Compile Include="Data\NHibernate\SpringSessionSynchronization.cs" />
+    <Compile Include="Data\NHibernate\Support\ConfigSectionSessionScopeSettings.cs" />
+    <Compile Include="Data\NHibernate\Support\HibernateDaoSupport.cs" />
+    <Compile Include="Data\NHibernate\Support\OpenSessionInViewModule.cs" />
+    <Compile Include="Data\NHibernate\Support\SessionScope.cs" />
+    <Compile Include="Data\NHibernate\Support\SessionScopeSettings.cs" />
+    <Compile Include="Data\NHibernate\TemplateFlushMode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Aop\Spring.Aop.2005.csproj">
+      <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
+      <Name>Spring.Aop.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.2005.csproj">
+      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
+      <Name>Spring.Core.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Data\Spring.Data.2005.csproj">
+      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
+      <Name>Spring.Data.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Web\Spring.Web.2005.csproj">
+      <Project>{BA4789EB-281A-48EA-8763-28B9F0596A18}</Project>
+      <Name>Spring.Web.2005</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

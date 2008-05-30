@@ -1,0 +1,1301 @@
+<?xml version="1.0" ?>
+<project name="Spring.NET" default="test">
+
+  <!-- global project settings -->
+  <property name="project.name" value="Spring.NET"/>
+  <property name="project.name.full" value="Spring.NET Framework"/>
+  <property name="spring.basedir" value="${project::get-base-directory()}"/>
+  <property name="nant.nunit2outproc.nunitpath" value="${project::get-base-directory()}/build-support/tools/nunit/" />
+
+  <!-- debug or release -->
+  <property name="project.build.config" value="debug"/>
+  <property name="project.build.package" value="false"/>
+  <property name="project.build.sign" value="false"/>
+  <!-- Include spring helpers -->
+  <include buildfile="${spring.basedir}/Spring.include"/>
+
+  <property name="package.version" value="1.1.2" unless="${property::exists('project.version')}"/>
+  <property name="using-clover" value="false"/>
+  <!-- change this to sync the sdk doc version generated -->
+  <property name="package.version.docs" value="1.1.0" unless="${property::exists('project.version')}"/>
+  <!-- make system environment variables available as NAnt properties -->
+  <sysinfo/>
+
+  <property name="project.company" value="SpringSource"/>
+  <property name="project.copyright" value="Copyright 2002-2008 Spring.NET Framework Team."/>
+
+  <property name="key.file" value="Spring.Net.snk"/>
+  <property name="project.year" value="2008"/>
+
+  <!-- Targets that are always executed -->
+  <call target="set-build-configuration"/>
+
+  <!-- What packages to build -->
+  <property name="build.allnamespaces" value="false"/>
+
+  <if test="${not build.allnamespaces}">
+    <call target="set-build-namespaces-release"/>
+  </if>
+  <if test="${build.allnamespaces}">
+    <call target="set-build-namespaces-all"/>
+  </if>
+
+  <call target="set-framework-configuration"/>
+  <call target="set-user-overrides"/>
+
+  <!-- Targets that check settings -->
+  <target name="check-package-version">
+    <fail message="A package version has not been specified." if="${not property::exists('package.version')}"/>
+  </target>
+  <target name="check-package-dir">
+    <property name="package.dir" value="build/package" overwrite="false"/>
+    <mkdir dir="${package.dir}"/>
+  </target>
+  <target name="check-current-package-dir">
+    <fail message="The current package directory has not been specified."
+          if="${not property::exists('current.package.dir')}"/>
+    <mkdir dir="${current.package.dir}"/>
+  </target>
+  <target name="check-htmlhelp-compiler">
+    <if test="${not property::exists('htmlhelp.compiler')}">
+      <readregistry property="htmlhelp.workshop.installroot"
+                    key="SOFTWARE\Microsoft\HTML Help Workshop\InstallDir" hive="CurrentUser"
+                    failonerror="false"/>
+      <if test="${property::exists('htmlhelp.workshop.installroot')}">
+        <property name="htmlhelp.compiler" value="${htmlhelp.workshop.installroot}/hhc.exe"/>
+      </if>
+    </if>
+    <if test="${not property::exists('htmlhelp.compiler')}">
+      <sysinfo/>
+      <property name="htmlhelp.compiler" value="${sys.os.folder.programfiles}/HTML Help Worshop/hhc.exe"/>
+    </if>
+  </target>
+  <!-- Target for cleaning up the current package directory -->
+  <target name="clean-current-package-dir" depends="check-current-package-dir"
+          description="Cleans the current package directory">
+    <echo message="Cleaning the ${current.package.dir} package directory."/>
+    <delete dir="${current.package.dir}" if="${directory::exists(current.package.dir)}"/>
+    <mkdir dir="${current.package.dir}"/>
+  </target>
+
+  <!-- Displays configuration info, usefull for working out why Spring.NET doesn't build -->
+  <target name="display-setup" depends="check-htmlhelp-compiler">
+    <!-- .NET Framework 1.0 -->
+    <if test="${framework::exists('net-1.0')}">
+      <property name="nant.settings.currentframework" value="net-1.0"/>
+      <call target="display-target-framework"/>
+    </if>
+    <if test="${not framework::exists('net-1.0')}">
+      <echo message=".NET Framework 1.0 runtime is not available."/>
+    </if>
+    <!-- .NET Framework 1.1 -->
+    <if test="${framework::exists('net-1.1')}">
+      <property name="nant.settings.currentframework" value="net-1.1"/>
+      <call target="display-target-framework"/>
+    </if>
+    <if test="${not framework::exists('net-1.1')}">
+      <echo message=".NET Framework 1.1 runtime is not available."/>
+    </if>
+    <!-- .NET Framework 2.0 -->
+    <if test="${framework::exists('net-2.0')}">
+      <property name="nant.settings.currentframework" value="net-2.0"/>
+      <call target="display-target-framework"/>
+    </if>
+    <if test="${not framework::exists('net-2.0')}">
+      <echo message=".NET Framework 2.0 runtime is not available."/>
+    </if>
+    <!-- .NET Compact Framework 1.0 -->
+    <if test="${framework::exists('netcf-1.0')}">
+      <property name="nant.settings.currentframework" value="netcf-1.0"/>
+      <call target="display-target-framework"/>
+    </if>
+    <if test="${not framework::exists('netcf-1.0')}">
+      <echo message=".NET Compact Framework 1.0 runtime is not available."/>
+    </if>
+    <!-- Mono 1.0 -->
+    <if test="${framework::exists('mono-1.0')}">
+      <property name="nant.settings.currentframework" value="mono-1.0"/>
+      <call target="display-target-framework"/>
+    </if>
+    <if test="${not framework::exists('mono-1.0')}">
+      <echo message="Mono 1.0 runtime is not available."/>
+    </if>
+    <!-- Mono 2.0 -->
+    <if test="${framework::exists('mono-2.0')}">
+      <property name="nant.settings.currentframework" value="mono-2.0"/>
+      <call target="display-target-framework"/>
+    </if>
+    <if test="${not framework::exists('mono-2.0')}">
+      <echo message="Mono 2.0 runtime is not available."/>
+    </if>
+    <!-- SSCLI 1.0 -->
+    <if test="${framework::exists('sscli-1.0')}">
+      <property name="nant.settings.currentframework" value="sscli-1.0"/>
+      <call target="display-target-framework"/>
+    </if>
+    <if test="${not framework::exists('sscli-1.0')}">
+      <echo message="SSCLI 1.0 runtime is not available."/>
+    </if>
+    <!-- HTML Help Compiler -->
+    <echo message="htmlhelp.compiler: ${htmlhelp.compiler}"/>
+  </target>
+
+
+  <target name="display-target-framework">
+    <echo message=""/>
+    <echo message="----------------------------------------------------------"/>
+    <echo message=" ${nant.settings.currentframework.description}"/>
+    <echo message="----------------------------------------------------------"/>
+    <echo message=""/>
+    <echo message="framework : ${framework::get-target-framework()}"/>
+    <echo message="description : ${framework::get-description(framework::get-target-framework())}"/>
+    <if test="${framework::sdk-exists(framework::get-target-framework())}">
+      <echo message="sdk directory : ${framework::get-sdk-directory(framework::get-target-framework())}"/>
+    </if>
+    <if test="${not framework::sdk-exists(framework::get-target-framework())}">
+      <echo message="sdk directory : &lt;not configured/available>"/>
+    </if>
+    <echo message="framework directory : ${framework::get-framework-directory(framework::get-target-framework())}"/>
+    <echo message="assembly directory : ${framework::get-assembly-directory(framework::get-target-framework())}"/>
+    <echo message=""/>
+  </target>
+
+
+  <!-- Target for setting the package configuration -->
+  <target name="set-package-configuration" depends="check-package-dir, check-package-version">
+    <!-- for .exe 
+    <property name="current.package.dir" value="${package.dir}/${project::get-name()}"/>
+    -->
+    <!-- for docs packaging MLP -->
+
+    <property name="current.package.dir" value="l:/release/${project::get-name()}"/>
+
+
+
+    <property name="doc.dir" value="${current.package.dir}/doc"/>
+    <property name="sdkdoc.dir" value="${doc.dir}/sdk"/>
+  </target>
+
+  <!-- Target for compiling all build configurations for all runtime configurations -->
+  <target name="compile-build-all" description="Compile all build configurations for all runtime configurations">
+    <echo message="Compiling all build configurations for all runtime configurations."/>
+
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build"/>
+
+    <!-- make the release build, which requires Spring.Net.snk, only if making an distributable release -->
+    <if test="${property::exists('project.build.package') and project.build.package}">
+      <call target="set-release-build-configuration"/>
+      <call target="compile-build"/>
+    </if>
+
+
+  </target>
+
+  <!-- Target for compiling all runtime configurations in the current build configuration -->
+  <target name="compile-build" description="Compile current build configurations for all runtime configurations">
+    <echo message="Compiling all framework versions for the ${current.build.config} build configuration."/>
+
+    <call target="compile-build-1.0"/>
+    <call target="compile-build-1.1"/>
+    <call target="compile-build-2.0"/>
+
+    <!-- Ignore Compact Framework 1.0 for now -->
+    <!-- call target="compile-build-netcf-1.0"/ -->
+    <!-- Ignore Mono 2.0 for now -->
+    <!-- call target="compile-build-mono-2.0"/-->
+
+  </target>
+
+  <target name="compile-build-1.0" description="Builds for .NET 1.0 if available">
+    <if test="${framework::exists('net-1.0')}">
+      <call target="compile-net-1.0"/>
+    </if>
+
+    <if test="${not framework::exists('net-1.0')}">
+      <if test="${property::exists('project.build.package') and project.build.package}">
+        <fail message="The .NET Framework 1.0 is not available."/>
+      </if>
+      <if test="${not(property::exists('project.build.package') and project.build.package)}">
+        <echo message="The .NET Framework 1.0 is not available. Build skipped."/>
+      </if>
+    </if>
+  </target>
+
+  <target name="compile-build-1.1" description="Builds for .NET 1.1 if available">>
+    <if test="${framework::exists('net-1.1')}">
+      <call target="compile-net-1.1"/>
+    </if>
+
+    <if test="${not framework::exists('net-1.1')}">
+      <if test="${property::exists('project.build.package') and project.build.package}">
+        <fail message="The .NET Framework 1.1 is not available."/>
+      </if>
+      <if test="${not(property::exists('project.build.package') and project.build.package)}">
+        <echo message="The .NET Framework 1.1 is not available. Build skipped."/>
+      </if>
+    </if>
+  </target>
+
+  <target name="compile-build-2.0" description="Builds for .NET 2.0 if available">
+    <if test="${framework::exists('net-2.0')}">
+      <call target="compile-net-2.0"/>
+    </if>
+
+    <if test="${not framework::exists('net-2.0')}">
+      <if test="${property::exists('project.build.package') and project.build.package}">
+        .NET 2.0 Build Skipped for Package
+        <fail message="The .NET Framework 2.0 is not available."/>
+        <echo message="The .NET Framework 2.0 is not available. Build skipped during package."/>
+      </if>
+      <if test="${not(property::exists('project.build.package') and project.build.package)}">
+        <echo message="The .NET Framework 2.0 is not available. Build skipped."/>
+      </if>
+    </if>
+  </target>
+
+
+  <!-- Targets for other .NET frameworks -->
+
+  <target name="compile-build-netcf-1.0" description="Builds for .NET 1.0 Compact Framework if available">
+    <if test="${framework::exists('netcf-1.0')}">
+      <call target="compile-netcf-1.0" />
+    </if>
+
+    <if test="${not framework::exists('netcf-1.0')}">
+      <if test="${property::exists('project.build.package') and project.build.package}">
+        <fail message="The .NET Compact Framework 1.0 is not available." />
+      </if>
+      <if test="${not(property::exists('project.build.package') and project.build.package)}">
+        <echo message="The .NET Compact Framework 1.0 is not available. Build skipped." />
+      </if>
+    </if>
+  </target>
+
+  <target name="compile-build-mono-2.0" description="Builds for mono 2.0 if available">
+     <if test="${framework::exists('mono-2.0')}">
+       <call target="compile-mono-2.0"/>
+     </if>
+     <if test="${not framework::exists('mono-2.0')}">
+         <if test="${property::exists('project.build.package') and project.build.package}">
+             <fail message="Mono 2.0 is not available."/>
+         </if>
+         <if test="${not(property::exists('project.build.package') and project.build.package)}">
+             <echo message="Mono 2.0 is not available. Build skipped."/>
+         </if>
+     </if>
+  </target>
+
+  <target name="compile" description="Builds the current build configuration for the current target framework."
+          depends="check-current-build-config">
+    <call target="compile-${framework::get-target-framework()}"/>
+  </target>
+
+  <target name="compile-test"> <!-- used as configurable template by all compile-{net|mono|netcf}-x.x targets -->
+    <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="nh.lib.dir" value="${spring.basedir}/lib/NHibernate10/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="nh12.lib.dir" value="${spring.basedir}/lib/NHibernate12/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <call target="copylibs"/>
+
+    <!-- build assemblies -->
+    <nant buildfile="src/Spring/Spring.Core/Spring.Core.build" target="build"/>
+    <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop}"/>
+    <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web}"/>
+    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate/Spring.Data.NHibernate.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
+    <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing}"/>
+    <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-web}"/>
+
+
+    <!-- build examples -->
+
+    <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples and not using-clover}"/>
+
+    <!-- test assemblies -->
+    <nant buildfile="test/Spring/Spring.Core.Tests/Spring.Core.Tests.build" target="test"/>
+    <nant buildfile="test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.build" target="test" if="${build-aop}"/>
+    <nant buildfile="test/Spring/Spring.Data.Tests/Spring.Data.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate.Tests/Spring.Data.NHibernate.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
+    <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
+    <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test"/>
+    <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="false"/>
+  </target>
+
+  <target name="compile-net-1.0" description="Builds .NET Framework 1.0 version"
+          depends="set-net-1.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+
+    <call target="copykeys" if="${project.build.sign}"/>
+    <call target="common.generate-assemblyinfo"/>
+    <!-- disable namespaces not supported in net-1.0 -->
+    <property name="build-web" value="false" />
+    <call target="compile-test" />
+  </target>
+
+  <target name="compile-net-1.1" description="Builds .NET Framework 1.1 version"
+          depends="set-net-1.1-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+    <call target="copykeys" if="${project.build.sign}"/>
+    <call target="common.generate-assemblyinfo"/>
+    <call target="compile-test" />
+  </target>
+
+  <target name="compile-net-2.0" description="Builds .NET Framework 2.0 version"
+          depends="set-net-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+    <call target="copykeys" if="${project.build.sign}"/>
+    <call target="common.generate-assemblyinfo"/>
+    <call target="compile-test" />
+  </target>
+
+  <target name="compile-mono-2.0" description="Builds MONO Framework 2.0 version"
+          depends="set-mono-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+    <call target="copykeys" if="${project.build.sign}"/>
+    <call target="common.generate-assemblyinfo"/>
+    <call target="compile-test" />
+  </target>
+
+  <target name="copykeys">
+
+      <if test="${not file::exists(spring.basedir + '/Spring.Net.snk')}">
+          <echo message="Key file not found. You can generate a key file by running 'sn -k Spring.Net.snk'."/>
+          <echo message="The generated key file should be stored in the Spring.Net base directory."/>
+      </if>
+      <if test="${file::exists(spring.basedir + '/Spring.Net.snk')}">
+        <!-- copy the Spring key file to the location where the compiler expects it to be -->
+        <copy file="Spring.Net.snk" todir="${current.bin.dir}"/>
+      </if>
+      <!-- for .NET 2.0 need to provide keyfile argument to compiler -->
+      <if test="${net-2.0}" if="${project.build.sign}">
+        <property name="compiler.args" value="/keyfile:..\..\..\Spring.Net.snk"/>
+      </if>
+
+  </target>
+
+  <target name="copylibs">
+    <echo message="Current bin dir = ${current.bin.dir}"/>
+    <echo message="Current lib dir = ${lib.dir}"/>
+    <!-- copy framework-neutral libraries -->
+    <copy todir="${current.bin.dir}">
+      <fileset basedir="lib">
+        <include name="*.dll"/>
+        <include name="*.xml"/>
+      </fileset>
+    </copy>
+    <!-- copy framework-specific libraries -->
+    <copy todir="${current.bin.dir}">
+      <fileset basedir="${lib.dir}">
+        <include name="*.dll"/>
+        <include name="*.xml"/>
+        <exclude name="nunit.core.*" />
+      </fileset>
+    </copy>
+  </target>
+
+
+  <!-- Top level targets -->
+  <!-- target for developers to do just debug build and test everything in CVS -->
+  <target name="test">
+    <echo message="Compiling debug configuration for all runtime configurations."/>
+    <property name="nant.target.root.name" value="build"/>
+    <call target="build-all-function"/>
+  </target>
+
+  <target name="build-1.0">
+    <call target="set-build-namespaces-release"/>
+    <echo message="------------------------"/>
+    <echo message="Building .NET 1.0 DEBUG "/>
+    <echo message="----------------------- "/>
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-1.0"/>
+
+    <if test="${property::exists('project.build.package') and project.build.package}">
+      <echo message="--------------------------"/>
+      <echo message="Building .NET 1.0 RELEASE "/>
+      <echo message="--------------------------"/>
+      <call target="set-release-build-configuration"/>
+      <call target="compile-build-1.0"/>
+    </if>
+
+  </target>
+
+  <target name="build-1.1">
+    <call target="set-build-namespaces-release"/>
+    <echo message="------------------------"/>
+    <echo message="Building .NET 1.1 DEBUG "/>
+    <echo message="------------------------"/>
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-1.1"/>
+
+    <if test="${property::exists('project.build.package') and project.build.package}">
+      <echo message="------------------------"/>
+      <echo message="Building .NET 1.1 DEBUG "/>
+      <echo message="------------------------"/>
+      <call target="set-release-build-configuration"/>
+      <call target="compile-build-1.1"/>
+    </if>
+  </target>
+
+  <target name="build-2.0">
+    <call target="set-build-namespaces-release"/>
+    <echo message="------------------------"/>
+    <echo message="Building .NET 2.0 DEBUG "/>
+    <echo message="------------------------"/>
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-2.0"/>
+
+
+    <if test="${property::exists('project.build.package') and project.build.package}">
+    <echo message="--------------------------"/>
+    <echo message="Building .NET 2.0 RELEASE "/>
+    <echo message="--------------------------"/>
+      <call target="set-release-build-configuration"/>
+      <call target="compile-build-2.0"/>
+    </if>
+  </target>
+
+  <target name="build-mono-2.0">
+
+    <if test="${property::exists('project.build.package') and project.build.package}">
+      <call target="set-release-build-configuration"/>
+      <echo message="--------------------------"/>
+      <echo message="Building MONO 2.0 RELEASE "/>
+      <echo message="--------------------------"/>
+      <call target="compile-build-mono-2.0"/>
+    </if>
+
+    <echo message="--------------------------"/>
+    <echo message="Building MONO 2.0 DEBUG   "/>
+    <echo message="--------------------------"/>
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-mono-2.0"/>
+
+  </target>
+
+  <target name="clean" description="Deletes current build configuration">
+    <call target="cleanall"/>
+  </target>
+
+  <target name="cleanall" description="Deletes every build configuration">
+    <property name="target.dir" value="${path::combine(project::get-base-directory(),'build')}"/>
+    <echo message="Deleting all builds from all configurations : '${target.dir}'"/>
+    <delete
+            dir="${project::get-base-directory()}/build/net"
+            if="${directory::exists(target.dir)}"
+            failonerror="false"/>
+  </target>
+
+  <target name="clean-obj">
+	<delete dir="src/Spring/Spring.Aop/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Aop/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Core/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Core/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Data/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Data/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Data.NHibernate/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Data.NHibernate/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Data.NHibernate12/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Data.NHibernate12/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Services/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Services/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Messaging.Nms/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Messaging.Nms/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Scheduling.Quartz/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Scheduling.Quartz/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Testing.NUnit/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Testing.NUnit/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Web/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Web/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Web.Extensions/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Web.Extensions/bin" failonerror="false"/>
+
+	<delete dir="test/Spring/Spring.Aop.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Aop.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Core.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Core.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.Integration.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.Integration.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.NHibernate.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.NHibernate.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.NHibernate.Integration.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.NHibernate.Integration.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Services.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Messaging.Nms.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Web.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Web.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Testing.NUnit.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Testing.NUnit.Tests/bin" failonerror="false"/>
+
+
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Aspects/obj" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Aspects/bin" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.ClientApp/obj" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.ClientApp/bin" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Contract/obj" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Contract/bin" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RegisterComponentServices/obj" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RegisterComponentServices/bin" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RemoteApp/obj" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RemoteApp/bin" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Services/obj" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Services/bin" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2003/obj" failonerror="false"/>
+	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2003/bin" failonerror="false"/>
+
+	<delete dir="examples/Spring/SpringAir/src/SpringAir.Core/obj" failonerror="false"/>
+	<delete dir="examples/Spring/SpringAir/src/SpringAir.Core/bin" failonerror="false"/>
+	<delete dir="examples/Spring/SpringAir/src/SpringAir.Data.Ado/obj" failonerror="false"/>
+	<delete dir="examples/Spring/SpringAir/src/SpringAir.Data.Ado/bin" failonerror="false"/>
+	<delete dir="examples/Spring/SpringAir/src/SpringAir.Data.IBatis/obj" failonerror="false"/>
+	<delete dir="examples/Spring/SpringAir/src/SpringAir.Data.IBatis/bin" failonerror="false"/>
+
+	<delete dir="examples/Spring/SpringAir/test/SpringAir.Core.Tests/obj" failonerror="false"/>
+	<delete dir="examples/Spring/SpringAir/test/SpringAir.Core.Tests/bin" failonerror="false"/>
+	<delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/obj" failonerror="false"/>
+ 	<delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/bin" failonerror="false"/>
+  </target>
+
+  <target name="prepare-docs" description="Create documentation from templates">
+    <if test="${file::exists('doc/CodeSmith/CodeSmithConsole.exe')}">
+      <foreach item="File" property="template.in">
+        <in>
+          <items>
+            <include name="doc/reference/src/templated/*.xml"/>
+          </items>
+        </in>
+        <do>
+          <property name="template.out" value="doc/reference/src/${path::get-file-name(template.in)}"/>
+          <echo message="${template.in} -> ${template.out}"/>
+          <exec program="doc/CodeSmith/CodeSmithConsole.exe" workingdir=".">
+            <arg value="/nologo"/>
+            <arg value="/template:${template.in}"/>
+            <arg value="/properties:doc/reference/src/templated/properties.props"/>
+            <arg value="/out:${template.out}"/>
+          </exec>
+        </do>
+      </foreach>
+    </if>
+  </target>
+
+
+  <target name="package" depends="set-package-configuration" description="Build and Package distribution">
+
+    <property name="project.build.package" value="true"/>
+
+    <call target="clean-current-package-dir"/>
+
+    <property name="nant.target.root.name" value="build"/>
+
+    <call target="set-build-namespaces-release"/>
+    <property name="project.build.package" value="true"/>
+
+    <call target="build-all-function"/>
+
+    <call target="prepare-docs"/>
+    <exec workingdir="./doc" program="cmd.exe" commandline="/c ant refdoc"/>
+
+    <call target="package-release-files"/>
+
+  </target>
+
+  <target name="releasepkg">
+    <call target="set-release-build-configuration"/>
+    <call target="package-release-files"/>
+  </target>
+
+  <!--
+        Target to use when packaging as a standalone .zip file. VS.NET docs
+        included but compressed sdk-web directory is. Intended for mono developers
+    -->
+  <target name="package-zip" description="Build and Package distribution as .zip file">
+    <call target="package"/>
+    <property name="project.zip-path" value="${package.dir}/${project.name}-${package.version}.zip"/>
+    <zip zipfile="${project.zip-path}">
+      <fileset basedir="${package.dir}/${project.name}-${package.version}">
+        <include name="**/*"/>
+        <exclude name="**/sdk-web/**"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="dailysnapshot">
+    <property name="nant.target.root.name" value="daily-build"/>
+    <property name="project.build.sign" value="true"/>
+    <call target="copykeys"/>
+    <call target="build-all-function"/>
+    <call target="package-cvs"/>
+    <!-- only copy the supporting tools directory for the daily build. -->
+    <call target="package-tools"/>
+    <call target="upload-cvs-release"/>
+  </target>
+
+  <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
+
+    <call target="${nant.target.root.name}-1.0" />
+
+    <call target="${nant.target.root.name}-1.1" />
+
+    <call target="${nant.target.root.name}-2.0" />
+
+    <!-- ignore Mono 2.0 for now -->
+    <!-- call target="${nant.target.root.name}-mono-2.0" / --> 
+
+  </target>
+
+  <target name="daily-build-1.0">
+    <call target="set-build-namespaces-all"/>
+    <call target="set-package-configuration"/>
+
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-1.0"/>
+    <call target="set-release-build-configuration"/>
+    <call target="compile-build-1.0"/>
+
+  </target>
+
+  <target name="daily-build-1.1">
+    <call target="set-build-namespaces-all"/>
+    <call target="set-package-configuration"/>
+
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-1.1"/>
+    <call target="set-release-build-configuration"/>
+    <call target="compile-build-1.1"/>
+
+  </target>
+
+  <target name="daily-build-2.0">
+    <call target="set-build-namespaces-all"/>
+    <call target="set-package-configuration"/>
+
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-2.0"/>
+    <call target="set-release-build-configuration"/>
+    <call target="compile-build-2.0"/>
+
+  </target>
+
+
+  <!-- Target to use when packaging everything in CVS -->
+  <target name="package-cvs" description="Build and Package distribution">
+    <property name="project.build.package" value="false"/>
+    <tstamp/>
+    <property name="package.version" value="${tstamp.date}-${tstamp.time}"/>
+
+    <!--
+    <call target="set-build-namespaces-all"/>
+    <call target="set-package-configuration"/>
+    <call target="clean-current-package-dir"/>
+
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build"/>
+
+    <call target="set-release-build-configuration"/>
+    <call target="compile-build"/>
+    -->
+
+    <call target="prepare-docs"/>
+    <exec workingdir="./doc" program="cmd.exe" commandline="/c ant refdoc"/>
+
+    <call target="set-debug-build-configuration"/>
+
+
+    <call target="package-release-files"/>
+    <copy todir="${current.package.dir}">
+      <fileset>
+        <include name="Spring.Net.sln"/>
+      </fileset>
+    </copy>
+
+    <property name="project.zip-path" value="${package.dir}/${project.name}-${package.version}.zip"/>
+    <!-- for some reason this isn't being properly excluded in src.to.copy -->
+    <delete>
+      <fileset basedir="${current.package.dir}">
+        <include name="**/${project.name}-SDK-HTML.zip"/>
+      </fileset>
+    </delete>
+
+    <zip zipfile="${project.zip-path}">
+      <fileset basedir="${current.package.dir}">
+        <include name="**/*"/>
+        <exclude name="**/sdk-web/**"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="package-tools">
+    <!-- copy third-party tools -->
+    <mkdir dir="${current.package.dir}/build-support/tools"/>
+    <copy todir="${current.package.dir}/build-support/tools">
+      <fileset basedir="tools">
+        <include name="**/*.exe"/>
+        <include name="**/*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="test-zip">
+    <property name="project.build.package" value="false"/>
+    <tstamp/>
+    <property name="package.version" value="${tstamp.date}-${tstamp.time}"/>
+
+
+    <call target="set-build-namespaces-all"/>
+    <call target="set-package-configuration"/>
+    <call target="set-debug-build-configuration"/>
+
+    <property name="project.zip-path" value="${package.dir}/${project.name}-${package.version}.zip"/>
+
+    <echo message="project.zip-path = ${project.zip-path}"/>
+
+    <delete>
+      <fileset basedir="${current.package.dir}">
+        <include name="**/${project.name}-SDK-HTML.zip"/>
+      </fileset>
+    </delete>
+
+    <zip zipfile="${project.zip-path}">
+      <fileset basedir="${current.package.dir}">
+        <include name="**/*"/>
+        <exclude name="**/sdk-web/**"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="upload-cvs-release">
+    <call target="set-package-configuration"/>
+    <property name="filetoupload" value="${project.name}-${package.version}.zip"/>
+
+    <property name="spring.ssh.server" value="spring02.managed.contegix.com" />
+    <property name="spring.ssh.user" value="markp"/>
+    <property name="spring.ssh.args" value=" -l ${spring.ssh.user} " />
+    <property name="spring.web.path" value="/var/www/domains/springframework.net/www/htdocs" />
+    <!-- setup property that holds partial path to be used by scp -->
+    <property name="serverpart" value="${spring.ssh.user + '@' + spring.ssh.server + ':' + spring.web.path}" />
+    <property name="nightly.builds.path" value="downloads/nightly"/>
+
+    <echo message="uploading ${filetoupload} to spring02.managed.contegix.com"/>
+    <exec workingdir="${package.dir}" program="scp" verbose="true">
+      <arg value="${filetoupload}" />
+      <arg value="${serverpart}/${nightly.builds.path}/${filetoupload}" />
+    </exec>
+
+    <echo message="extracting ${filetoupload} to downloads/latest"/>
+    <property name="extract.command" value="cd website/downloads/nightly/; ./update-latest.sh"/>
+    <exec workingdir="${package.dir}" program="ssh" verbose="true">
+      <arg value="${spring.ssh.user + '@' + spring.ssh.server}" />
+      <arg value="${extract.command}" />
+    </exec>
+
+  </target>
+
+  <target name="package-release-files" depends="set-package-configuration">
+    <echo message="Current package directory = ${current.package.dir}"/>
+    <copy todir="${current.package.dir}">
+      <fileset>
+        <include name="${solution.file.1.1.2002}"/>
+        <include name="${solution.file.1.1.2003}"/>
+        <include name="${solution.file.1.1.2005}"/>
+        <include name="readme.txt"/>
+        <include name="changelog.txt"/>
+        <include name="license.txt"/>
+        <include name="BreakingChanges-1.1.txt"/>
+        <!-- exclude VS.Net stuff -->
+        <exclude name="**/sdk-web/**"/>
+        <exclude name="**/*.suo"/>
+        <exclude name="**/*.user"/>
+        <exclude name="**/bin/**"/>
+        <exclude name="**/obj/**"/>
+        <exclude name="**/*.resharper"/>
+        <exclude name="**/*.resharper.user"/>
+        <exclude name="**/Thumbs.db"/>
+      </fileset>
+    </copy>
+
+    <!-- copy built assemblies -->
+    <mkdir dir="${current.package.dir}/bin/net"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/bin/net">
+        <fileset basedir="./build/net">
+          <include name="**/Spring.Core.dll"/>
+          <include name="**/Spring.Core.xml"/>
+          <include name="**/Spring.Core.pdb"/>
+
+          <include name="**/Spring.Aop.dll"/>
+          <include name="**/Spring.Aop.xml"/>
+          <include name="**/Spring.Aop.pdb"/>
+
+          <include name="**/Spring.Data.dll"/>
+          <include name="**/Spring.Data.xml"/>
+          <include name="**/Spring.Data.pdb"/>
+
+          <include name="**/Spring.Data.NHibernate.dll"/>
+          <include name="**/Spring.Data.NHibernate.xml"/>
+          <include name="**/Spring.Data.NHibernate.pdb"/>
+
+          <include name="**/Spring.Data.NHibernate12.dll"/>
+          <include name="**/Spring.Data.NHibernate12.xml"/>
+          <include name="**/Spring.Data.NHibernate12.pdb"/>
+
+          <include name="**/Spring.Web.dll"/>
+          <include name="**/Spring.Web.xml"/>
+          <include name="**/Spring.Web.pdb"/>
+
+          <include name="**/Spring.Web.Extensions.dll"/>
+          <include name="**/Spring.Web.Extensions.xml"/>
+          <include name="**/Spring.Web.Extensions.pdb"/>
+
+          <include name="**/Spring.Services.dll"/>
+          <include name="**/Spring.Services.xml"/>
+          <include name="**/Spring.Services.pdb"/>
+
+          <include name="**/Spring.Testing.NUnit.dll"/>
+          <include name="**/Spring.Testing.NUnit.xml"/>
+          <include name="**/Spring.Testing.NUnit.pdb"/>
+
+          <include name="**/antlr.runtime.dll"/>
+          <include name="**/Common.Logging.dll"/>
+          <include name="**/Common.Logging.*.dll"/>
+
+	  <exclude name="**/release/Spring/**"/>
+	  <exclude name="**/debug/Spring/**"/>
+          <exclude name="**/examples/**"/>
+          <exclude name="**/results/**"/>
+          <exclude name="mono/**"/>
+        </fileset>
+      </copy>
+    </if>
+
+    <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
+      <copy todir="${current.package.dir}/bin/net">
+        <fileset basedir="./build/net">
+          <include name="**/Spring.Services.*.exe"/>
+          <include name="**/Spring.*.dll"/>
+          <include name="**/Spring.*.xml"/>
+          <include name="**/Spring.*.pdb"/>
+          <include name="**/antlr.runtime.dll"/>
+          <include name="**/log4net.dll"/>
+          <include name="**/log4net.xml"/>
+          <include name="**/log4net.pdb"/>
+          <include name="**/Common.Logging.dll"/>
+          <include name="**/Common.Logging.xml"/>
+          <exclude name="**/examples/**"/>
+          <exclude name="**/results/**"/>
+          <exclude name="**/Spring.*.Tests.dll"/>
+          <exclude name="**/Spring.*.Tests.xml"/>
+          <exclude name="**/Spring.*.Tests.pdb"/>
+          <exclude name="**/Spring.Examples.*"/>
+        </fileset>
+      </copy>
+    </if>
+
+    <delete>
+      <fileset basedir="${current.package.dir}/bin/net">
+        <include name="**/es/**"/>
+        <include name="**/PT-BR/**"/>
+        <include name="**/pt-BR/**"/>
+        <include name="**/sr/**"/>
+        <include name="**/sr-SP-Cyrl/**"/>
+        <include name="**/sr-Cyrl-CS/**"/>
+        <include name="**/results/**"/>
+        <include name="**/release/Spring/**"/>
+        <include name="**/debug/Spring/**"/>
+      </fileset>
+    </delete>
+
+    <!-- copy user reference documentation -->
+    <mkdir dir="${current.package.dir}/doc/reference"/>
+    <copy todir="${current.package.dir}/doc/reference">
+      <fileset basedir="doc/output/reference">
+        <include name="html/**/*"/>
+        <include name="pdf/**/*"/>
+        <include name="htmlhelp/**/*"/>
+        <include name="styles/**/*"/>
+        <include name="images/**/*"/>
+      </fileset>
+    </copy>
+
+    <!-- copy third-party libraries -->
+    <mkdir dir="${current.package.dir}/lib/Net"/>
+
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib/Net">
+        <fileset basedir="lib/Net">
+          <include name="**/DotNetMock*.dll"/>
+          <include name="**/log4net.dll"/>
+          <include name="**/Common.Logging.dll"/>
+          <include name="**/antlr.runtime.dll"/>
+          <include name="**/nunit.*.dll"/>
+          <include name="**/NUnitAsp.dll"/>
+          <include name="**/NUnitAspEx.dll"/>
+          <include name="**/Rhino.Mocks.dll"/>
+          <include name="**/System.Web.Extensions.dll"/>
+          <include name="**/EULA.rtf"/>
+        </fileset>
+      </copy>
+    </if>
+
+    <mkdir dir="${current.package.dir}/lib/NHibernate10"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib/NHibernate10">
+        <fileset basedir="lib/NHibernate10">
+          <include name="**/*.dll"/>
+          <include name="**/*.license.txt"/>
+        </fileset>
+      </copy>
+    </if>
+
+    <mkdir dir="${current.package.dir}/lib/NHibernate12"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib/NHibernate12">
+        <fileset basedir="lib/NHibernate12">
+          <include name="**/*.dll"/>
+          <include name="**/*.license.txt"/>
+        </fileset>
+      </copy>
+    </if>
+
+
+    <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib">
+        <fileset basedir="lib">
+          <include name="**/*.dll"/>
+          <include name="**/*.xml"/>
+        </fileset>
+      </copy>
+    </if>
+
+    <!-- copy third-party icons -->
+    <mkdir dir="${current.package.dir}/icons"/>
+    <copy todir="${current.package.dir}/icons">
+      <fileset basedir="icons">
+        <include name="*.ico"/>
+        <include name="*.pal"/>
+      </fileset>
+    </copy>
+
+    <!-- copy schema and dtd -->
+    <mkdir dir="${current.package.dir}/doc/schema"/>
+    <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Core/Objects/Factory/Xml/spring-objects-1.1.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Core/Objects/Factory/Xml/spring-tool-1.1.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Core/Validation/Config/spring-validation-1.1.xsd"/>
+
+
+    <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Aop/Aop/Config/spring-aop-1.1.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Data/Data/Config/spring-database-1.1.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Data/Transaction/Config/spring-tx-1.1.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Services/Remoting/Config/spring-remoting-1.1.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
+          file="doc/install-schema.build"/>
+
+    <echo message="copying source code for release..."/>
+
+    <!-- copy source code -->
+    <copy todir="${current.package.dir}" verbose="false">
+      <fileset refid="src.to.copy"/>
+    </copy>
+
+
+      <copy todir="${current.package.dir}/examples">
+        <fileset basedir="examples">
+          <include name="**/*.refresh"/>
+          <include name="**/*.refresh"/>
+        </fileset>
+      </copy>
+
+
+
+  </target>
+
+  <target name="package-sdkdocs" depends="set-package-configuration">
+    <if test="${property::exists('docx.generated')}">
+      <echo message="copying SDK docs..."/>
+      <call target="copy-sdkdoc-spring"/>
+    </if>
+  </target>
+
+  <!-- Copy over the SDK documentation generated by Document X -->
+  <target name="copy-sdkdoc-spring" depends="set-package-configuration">
+    <call target="set-release-build-configuration"/>
+    <delete dir="${current.package.dir}/doc/sdk/1.1/htmlhelp"/>
+    <delete dir="${current.package.dir}/doc/sdk/1.1/vsnet2003"/>
+    <delete dir="${current.package.dir}/doc/sdk/2.0/htmlhelp"/>
+    <delete dir="${current.package.dir}/doc/sdk/2.0/vsnet2005"/>
+
+    <mkdir dir="${current.package.dir}/doc/sdk/1.1/htmlhelp"/>
+    <mkdir dir="${current.package.dir}/doc/sdk/1.1/vsnet2003"/>
+    <mkdir dir="${current.package.dir}/doc/sdk/2.0/htmlhelp"/>
+    <mkdir dir="${current.package.dir}/doc/sdk/2.0/vsnet2005"/>
+
+    <property name="sdk.src.dir" value="l:/release/Spring.NET" overwrite="false"/>
+
+    <!-- Copy htmlhelp 1.0 files for .NET 1.1 and 2.0 assemblies -->
+    <copy todir="${current.package.dir}/doc/sdk/1.1/htmlhelp"
+          file="${sdk.src.dir}/doc/sdk/Spring-1.1/net-1.1/htmlhelp1and2/Spring.NET.chm"/>
+
+    <copy todir="${current.package.dir}/doc/sdk/2.0/htmlhelp"
+          file="${sdk.src.dir}/doc/sdk/Spring-1.1/net-2.0/htmlhelp1and2/Spring.NET.chm"/>
+
+    <!-- Copy generated htmlhelp 2.x files, install scripts, -->
+    <!-- and install utility for .NET 1.1 assemblies         -->
+    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003">
+      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.1/net-1.1/web">
+        <include name="COL_*.*"/>
+      </fileset>
+    </copy>
+    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
+          file="${sdk.src.dir}/doc/sdk/Spring-1.1/net-1.1/htmlhelp1and2/Spring.NET.hxs"/>
+    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
+          file="doc/InnovaHxReg.exe"/>
+    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
+          file="doc\docx\Spring-1.1\net-1.1\RegisterHelp2.bat"/>
+    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
+          file="doc\docx\Spring-1.1\net-1.1\UnRegisterHelp2.bat"/>
+
+    <!-- Copy generated htmlhelp 2.x files, install scripts, -->
+    <!-- and install utility for .NET 2.0 assemblies         -->
+    <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005">
+      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.1/net-2.0/web">
+        <include name="COL_*.*"/>
+      </fileset>
+    </copy>
+    <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005"
+          file="${sdk.src.dir}/doc/sdk/Spring-1.1/net-2.0/htmlhelp1and2/Spring.NET.hxs"/>
+    <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005"
+          file="doc/InnovaHxReg.exe"/>
+    <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005"
+          file="doc\docx\Spring-1.1\net-2.0\RegisterHelp2.bat"/>
+    <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005"
+          file="doc\docx\Spring-1.1\net-2.0\UnRegisterHelp2.bat"/>
+
+  </target>
+
+  <target name="set-user-overrides" unless="${target::has-executed('set-user-overrides')}">
+    <!--
+             Per-user custom properties; we load any custom properties and / or
+             property overrides here... for instance, if a developer has installed
+             their Clover.NET executable into 'D:\dev_utils\Cenqua\Clover.NET', he or
+             she would use the following custom properties file...
+
+             <project name="MyCustomSpring.NETProperties">
+                <property name="Clover.home" value="D:\dev_utils\Cenqua\Clover.NET"/>
+             </project>
+
+             These custom properties are loaded from a single file named
+             'Spring.NET.xml' that must be placed in the ${sys.os.folder.applicationdata}
+             directory. NAnt expands this property to the 'home' folder of the
+             currently logged in user (on WinX boxes); for example...
+
+             C:\Documents and Settings\Rick Evans\Application Data
+        -->
+    <!-- has this user specified any custom properties / property overrides? -->
+    <property name="user.overrides.file" value="${sys.os.folder.applicationdata}\${project.name}.xml"/>
+    <if test="${file::exists(user.overrides.file)}">
+      <property name="user.overrides.present" value="true"/>
+    </if>
+    <if test="${not file::exists(user.overrides.file)}">
+      <property name="user.overrides.present" value="false"/>
+    </if>
+    <!-- if so, then include all of those custom properties / property overrides -->
+    <if test="${user.overrides.present}">
+      <echo message="Using overrides properties file '${user.overrides.file}'."/>
+      <include buildfile="${user.overrides.file}"/>
+    </if>
+  </target>
+  <target name="set-build-namespaces-all">
+    <property name="build.allnamespaces" value="true"/>
+    <property name="build-aop" value="true"/>
+    <property name="build-data" value="true"/>
+    <property name="build-services" value="true"/>
+    <property name="build-testing" value="true"/>
+    <property name="build-winservices" value="true"/>
+    <property name="build-web" value="true"/>
+    <property name="solution.file" value="Spring.Net.sln"/>
+    <fileset id="src.to.copy">
+      <include name="src/**"/>
+      <include name="examples/**"/>
+      <include name="test/**"/>
+      <!-- exclude VS.Net stuff -->
+      <exclude name="**/*.suo"/>
+      <exclude name="**/*.user"/>
+      <exclude name="**/bin/**"/>
+      <exclude name="**/obj/**"/>
+      <exclude name="**/_ReSharper*/**"/>
+      <exclude name="**/build/**"/>
+      <exclude name="**/sdk-web/**"/>
+      <exclude name="**/POC/**"/>
+      <exclude name="**/sdk/net/1.1/${project.name}-SDK-HTML.zip"/>
+      <exclude name="examples/Spring/SpringAir/src/SpringAir.Web.2005.References/*.dll"/>
+      <exclude name="examples/Spring/SpringAir/src/SpringAir.Web.2005.References/*.pdb"/>
+      <exclude name="examples/Spring/SpringAir/src/SpringAir.Web.2005.References/*.xml"/>
+      <exclude name="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web.References/*.dll"/>
+      <exclude name="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web.References/*.pdb"/>
+      <exclude name="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web.References/*.xml"/>
+      <include name="installer/**"/>
+
+    </fileset>
+  </target>
+  <target name="set-build-namespaces-release">
+    <property name="build-aop" value="true"/>
+    <property name="build-data" value="true"/>
+    <property name="build-services" value="true"/>
+    <property name="build-testing" value="true"/>
+    <property name="build-winservices" value="true"/>
+    <property name="build-web" value="true"/>
+    <property name="build-examples" value="true"/>
+    <property name="solution.file.1.1.2002" value="Spring.Net.1.1.2002.sln"/>
+    <property name="solution.file.1.1.2003" value="Spring.Net.1.1.2003.sln"/>
+    <property name="solution.file.1.1.2005" value="Spring.Net.1.1.2005.sln"/>
+    <fileset id="src.to.copy">
+      <include name="src/Spring/Spring.Core/**"/>
+      <include name="src/Spring/Spring.Aop/**"/>
+      <include name="src/Spring/Spring.Web/**"/>
+      <include name="src/Spring/Spring.Web.Extensions/**"/>
+      <include name="src/Spring/Spring.Services/EnterpriseServices/**"/>
+      <include name="src/Spring/Spring.Services/Remoting/**"/>
+      <include name="src/Spring/Spring.Services/Web/**"/>
+      <include name="src/Spring/Spring.Services/Spring.Services.2003.csproj"/>
+      <include name="src/Spring/Spring.Services/Spring.Services.2005.csproj"/>
+      <include name="src/Spring/Spring.Services/*.build"/>
+      <include name="src/Spring/Spring.Services/AssemblyInfo.cs"/>
+      <include name="src/Spring/Spring.Data/**"/>
+      <include name="src/Spring/Spring.Data.NHibernate/**"/>
+      <include name="src/Spring/Spring.Data.NHibernate12/**"/>
+      <include name="src/Spring/Spring.Testing.NUnit/**"/>
+      <include name="src/Spring/CommonAssemblyInfo.cs"/>
+
+      <include name="test/Spring/Spring.Core.Tests/**"/>
+      <include name="test/Spring/Spring.Aop.Tests/**"/>
+      <include name="test/Spring/Spring.Web.Tests/**"/>
+      <include name="test/Spring/Spring.Services.Tests/Data/**"/>
+      <include name="test/Spring/Spring.Services.Tests/EnterpriseServices/**"/>
+      <include name="test/Spring/Spring.Services.Tests/Remoting/**"/>
+      <include name="test/Spring/Spring.Services.Tests/Web/**"/>
+      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.2003.csproj"/>
+      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.2005.csproj"/>
+      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build"/>
+      <include name="test/Spring/Spring.Services.Tests/*.config"/>
+      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.dll.config"/>
+      <include name="test/Spring/Spring.Services.Tests/AssemblyInfo.cs"/>
+      <include name="test/Spring/Spring.Data.Tests/**"/>
+      <include name="test/Spring/Spring.Data.Integration.Tests/**"/>
+      <include name="test/Spring/Spring.Data.NHibernate.Tests/**"/>
+      <include name="test/Spring/Spring.Data.NHibernate.Integration.Tests/**"/>
+      <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
+      <include name="test/Spring/CommonAssemblyInfo.cs"/>
+
+      <include name="examples/Spring/Spring.Examples.build"/>
+      <include name="examples/Spring/Spring.AopQuickStart/**"/>
+      <include name="examples/Spring/Spring.DataQuickStart/**"/>
+      <include name="examples/Spring/Spring.Data.NHibernate.Northwind/**"/>
+      <include name="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web/Bin/*.refresh"/>
+      <include name="examples/Spring/Spring.TxQuickStart/**"/>
+      <include name="examples/Spring/Spring.IoCQuickStart.AppContext/**"/>
+      <include name="examples/Spring/Spring.IoCQuickStart.EventRegistry/**"/>
+      <include name="examples/Spring/Spring.IoCQuickStart.MovieFinder/**"/>
+      <include name="examples/Spring/Spring.Calculator/**"/>
+      <include name="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2005/Bin/*.refresh"/>
+      <include name="examples/Spring/Spring.WebQuickStart/**"/>
+      <include name="examples/Spring/Spring.Web.Extensions.Example/**"/>
+      <include name="examples/Spring/Spring.Web.Extensions.Example/src/Spring.Web.Extensions.Example.2005/Bin/*.refresh"/>
+      <include name="examples/Spring/SpringAir/**"/>
+      <include name="examples/SpringAir/src/SpringAir.Web.2005/bin/*.refresh"/>
+
+
+      <exclude name="src/Spring/Spring.Services/*WindowsService*"/>
+      <exclude name="test/Spring/Spring.Services/*WindowsService*"/>
+      <!-- exclude VS.Net stuff -->
+      <exclude name="**/sdk-web/**"/>
+      <exclude name="**/*.suo"/>
+      <exclude name="**/*.user"/>
+      <exclude name="**/bin/**"/>
+      <exclude name="**/obj/**"/>
+      <exclude name="**/_ReSharper*/**"/>
+      <exclude name="**/build/**"/>
+      <exclude name="**/*.resharper"/>
+    </fileset>
+  </target>
+
+  <!-- Set up test environment -->
+  <target name="TestInit">
+      <!-- custom task for testing under different runtimes -->
+    <loadtasks assembly="${spring.basedir}/build-support/tools/NAnt.NUnit2OutProc.Task/NAnt.NUnit2OutProcTasks.dll" />
+  </target>
+
+  <!-- Clover.NET code coverage targets... -->
+  <target name="CloverInit">
+    <!-- initializes the Clover environment -->
+    <echo message="Building with Clover.NET..."/>
+    <if test="${not property::exists('Clover.home')}">
+      <property name="Clover.home" value="K:\Program Files\Cenqua\Clover.NET 2.0 for .NET 2.0\"/>
+    </if>
+    <!-- 1595 - (Clover.NET workaround) 'type' is defined in multiple places; using definition from 'assembly' -->
+    <property name="nowarn.numbers" value="${nowarn.numbers},1595"/>
+    <copy todir="${Clover.home}" failonerror="false" overwrite="true">
+      <fileset basedir=".">
+        <include name="clovernet.license"/>
+      </fileset>
+    </copy>
+    <!-- Note: Using custom build CloverNant tasks -->
+    <loadtasks assembly="${Clover.home}\CloverNAnt-0.85.dll"/>
+    <clover-setup initstring="CloverBuild\clover.cdb" builddir="CloverBuild" enabled="true" flatten="false">
+      <fileset basedir=".">
+        <include name="src/Spring/Spring.Data/**/*"/>
+        <exclude name="examples/**/*"/>
+        <exclude name="test/**/*"/>
+        <exclude name="src/Spring/CommonAssemblyInfo.cs"/>
+      </fileset>
+    </clover-setup>
+  </target>
+  <target name="CloverClean">
+    <delete dir="CloverBuild" failonerror="false"/>
+    <!-- delete any Cloverised output lying around from previous Cloverisings -->
+    <property name="target.dir"
+              value="${project::get-base-directory()}/build/${nant.settings.currentframework}.${nant.platform.name}"/>
+    <delete
+            dir="${project::get-base-directory()}/build/${nant.settings.currentframework}.${nant.platform.name}/bin"
+            if="${directory::exists(target.dir)}"
+            failonerror="false"/>
+  </target>
+  <target name="CloverTest" depends="CloverInit">
+    <!-- let Clover instrument a debug build -->
+    <property name="using-clover" value="true"/>
+    <call target="test"/>
+  </target>
+  <target name="CloverReport" depends="CloverInit">
+    <clover-report>
+      <current title="${project.name} Code Coverage" output="report">
+        <format type="html"/>
+      </current>
+    </clover-report>
+  </target>
+  <target name="CloverAll" depends="CloverClean, CloverReport, CloverClean"
+          description="Convenience target to execute the full Clover build cycle.">
+  </target>
+  <target name="clovercruise" depends="CloverAll"
+          description="Convenience target to execute the full Clover build cycle with reporting for cruise control.">
+  </target>
+
+</project>

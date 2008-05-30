@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="tx-quickstart">
+  <title>Transactions QuickStart</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Transaction Quickstart demonstrates Spring's transaction
+    management features. The database schema are two simple tables, credit and
+    debit, which contain an Identifier and an Amount. The quick start shows
+    the use of declarative transactions using attributes and also the ability
+    to change the transaction manager (local or distributed) via changes to
+    only the configuration files - no code changes are required. It also
+    demonstrates some techniques for unit and integration testing an
+    application as well as separating Spring's configuration files so that one
+    is responsible for describing how the core business classes are configured
+    and others that are responsible for the database environment and
+    application of AOP.</para>
+
+    <para>This quickstart assumes you have installed a way to run NUnit tests
+    within your IDE. Some excellent tools that let you do this are <ulink
+    url="http://www.testdriven.net/">TestDriven.NET</ulink> and <ulink
+    url="http://www.jetbrains.com/resharper/">ReSharper</ulink>.</para>
+  </section>
+
+  <section>
+    <title>Application Overview</title>
+
+    <para>The design of the application is very simple and consists of two
+    logical layers, a business service layer in the namespace
+    <package>Spring.TxQuickStart.Services</package> and a DAO layer in the
+    namespace <package>Spring.TxQuickStart.Dao</package>. As this is just a
+    toy example the business service layer does nothing more than call two DAO
+    objects. The business service is to transfer money in a bank account and
+    is blatantly taken from the book <ulink
+    url="http://www.apress.com/book/bookDisplay.html?bID=10002">Pro
+    ADO.NET</ulink> by Sahil Malik. The transfer service is defined by the
+    interface <interfacename>IAccountManager</interfacename> with the
+    implementation <classname>AccountManager</classname> located in the
+    namespace <classname>Spring.TxQuickStart.Services</classname>. The money
+    is recorded in a credit and debit table in the database. The SQL Server
+    schema for the tables is located in the file CreditsDebitsSchema.sql.
+    Transferring the money requires an ACID operation on these two tables. The
+    credit operation is defined via a
+    <interfacename>IAccountCreditDao</interfacename> interface and the debit
+    operation via an <interfacename>IAccountDebitDao</interfacename>
+    interface. Implementations of these interfaces using
+    <classname>AdoTemplate</classname> are in the namespace
+    <package>Spring.TxQuickStart.Dao.Ado</package>.</para>
+
+    <section>
+      <title>Interfaces</title>
+
+      <para>The Manager and DAO interfaces are shown below</para>
+
+      <programlisting>    public interface IAccountManager
+    {
+        void DoTransfer(float creditAmount, float debitAmount);
+    }
+
+
+    public interface IAccountCreditDao
+    {
+        void CreateCredit(float creditAmount);
+    }
+
+    public interface IAccountDebitDao
+    {
+        void DebitAccount(float debitAmount);
+    }</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Implementation</title>
+
+    <para>The implementation of the Account Credit DAO is shown below</para>
+
+    <programlisting>    public class AccountCreditDao : AdoDaoSupport, IAccountCreditDao
+    {
+        public void CreateCredit(float creditAmount)
+        {
+            AdoTemplate.ExecuteNonQuery(CommandType.Text,
+                                        "insert into Credits (CreditAmount) VALUES (@amount)", "amount", DbType.Decimal, 0,
+                                        creditAmount);
+        }
+    }</programlisting>
+
+    <para>and for the Debit DAO</para>
+
+    <programlisting>    public class AccountDebitDao : AdoDaoSupport, IAccountDebitDao
+    {
+        public void DebitAccount(float debitAmount)
+        {
+            AdoTemplate.ExecuteNonQuery(CommandType.Text,
+                                       "insert into dbo.Debits (DebitAmount) VALUES (@amount)", "amount", DbType.Decimal, 0,
+                                       debitAmount);
+        }
+    }</programlisting>
+
+    <para>Both of these DAO implementations inherit from Spring's
+    <classname>AdoDaoSupport</classname> class that provides convenient access
+    to an <classname>AdoTemplate</classname> for performing data access
+    operations. With no other properties that can be configured in these
+    implementations, the only configuration required is setting of
+    AdoDaoSupport's <classname>DbProvider</classname> property representing
+    the connection to the database.</para>
+
+    <para>The implementation of the service layer interface,
+    <classname>IAccountManager</classname>, is shown below.</para>
+
+    <programlisting>    public class AccountManager : IAccountManager
+    {
+
+        private IAccountCreditDao accountCreditDao;
+        private IAccountDebitDao accountDebitDao;
+
+        private float maxTransferAmount = 1000000;
+
+        public AccountManager(IAccountCreditDao accountCreditDao, IAccountDebitDao accountDebitDao)
+        {
+            this.accountCreditDao = accountCreditDao;
+            this.accountDebitDao = accountDebitDao;
+        }
+
+        public float MaxTransferAmount
+        {
+            get { return maxTransferAmount; }
+            set { maxTransferAmount = value; }
+        }
+
+        
+        [Transaction]
+        public void DoTransfer(float creditAmount, float debitAmount)
+        {
+            accountCreditDao.CreateCredit(creditAmount);
+
+            if (creditAmount &gt; maxTransferAmount || debitAmount &gt; maxTransferAmount)
+            {
+                throw new ArithmeticException("see a teller big spender...");
+            }
+           
+            accountDebitDao.DebitAccount(debitAmount);
+        }
+
+    }</programlisting>
+
+    <para>The if statement is a poor-mans representation of business logic,
+    namely that there is a policy that does not allow the use of this service
+    for amounts larger than $1,000,000. If the credit or debit amount is
+    larger than 1,000,000 then and exception will be thrown. We can write a
+    unit test that will test for this business logic and provide stub
+    implementations of the DAO objects so that our tests are not only
+    independent of the database but will also execute very quickly.<note>
+        <para>Notice the Transaction attribute on the
+        <literal>DoTransfer</literal> method. This attribute can be read by
+        Spring and used to create a transactional proxy to AccountManager in
+        order to perform declarative transaction management.</para>
+      </note></para>
+
+    <para>The NUnit unit test for AccountManager is shown below</para>
+
+    <programlisting>    public class AccountManagerUnitTests
+    {
+        private IAccountManager accountManager;
+
+        [SetUp]
+        public void Setup()
+        {
+            IAccountCreditDao stubCreditDao = new StubAccountCreditDao();
+            IAccountDebitDao stubDebitDao = new StubAccountDebitDao();
+            accountManager = new AccountManager(stubCreditDao, stubDebitDao);            
+        }
+
+        [Test]
+        public void TransferBelowMaxAmount()
+        {
+            accountManager.DoTransfer(217, 217);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArithmeticException))]
+        public void TransferAboveMaxAmount()
+        {
+            accountManager.DoTransfer(2000000, 200000);
+        }       
+    }</programlisting>
+
+    <para>Running these tests we exercise both code pathways through the
+    method <literal>DoTransfer</literal>. Nothing we have done so far is
+    Spring specific (aside from the presence of the [Transaction] attribute.
+    Now that we know the class works in isolation, we can now 'wire' up the
+    application for use in production by specifying how the service and DAO
+    layers are related. This configuration file is shown below and can loosely
+    be referred to as your 'application blueprint'. This configuration file is
+    named application-config.xml and is an embedded resource inside the 'main'
+    project, Spring.TxQuickStart.</para>
+
+    <programlisting>&lt;objects xmlns='http://www.springframework.net'&gt;
+
+  &lt;!-- DAO Implementations --&gt;
+  &lt;object id="accountCreditDao" type="Spring.TxQuickStart.Dao.Ado.AccountCreditDao, Spring.TxQuickStart"&gt;
+    &lt;property name="DbProvider" ref="CreditDbProvider"/&gt;
+  &lt;/object&gt;
+
+  &lt;object id="accountDebitDao" type="Spring.TxQuickStart.Dao.Ado.AccountDebitDao, Spring.TxQuickStart"&gt;
+    &lt;property name="DbProvider" ref="DebitDbProvider"/&gt;
+  &lt;/object&gt;
+
+
+  &lt;!-- The service that performs multiple data access operations --&gt;
+  &lt;object id="accountManager"
+          type="Spring.TxQuickStart.Services.AccountManager, Spring.TxQuickStart"&gt;
+    &lt;constructor-arg name="accountCreditDao" ref="accountCreditDao"/&gt;
+    &lt;constructor-arg name="accountDebitDao" ref="accountDebitDao"/&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+
+    <para>This configuration is selecting the real ADO.NET implementations
+    that will insert records into the database. We can now write a NUnit
+    integration test that will test the service and DAO layers. To do this we
+    add on configuration information specific to our test environment. This
+    extra configuration information will determine what databases we speak to
+    and what transaction manager (local or distribute) to use. The code for
+    this integration style NUnit test is shown below</para>
+
+    <programlisting>    [TestFixture]
+    public class AccountManagerTests 
+    {
+        private AdoTemplate adoTemplateCredit;
+        private AdoTemplate adoTemplateDebit;
+
+        private IAccountManager accountManager;
+
+        [SetUp]
+        public void SetUp()
+        {
+            // Configure Spring programmatically
+            NamespaceParserRegistry.RegisterParser(typeof(DatabaseNamespaceParser));
+            NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
+            NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+            IApplicationContext context = new XmlApplicationContext(
+                "assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/system-test-local-config.xml" 
+                );
+            accountManager = context["accountManager"] as IAccountManager;
+            CleanDb(context);
+        }
+
+        [Test]
+        public void TransferBelowMaxAmount()
+        {
+            accountManager.DoTransfer(217, 217);
+
+            int numCreditRecords = (int)adoTemplateCredit.ExecuteScalar(CommandType.Text, "select count(*) from Credits");
+            int numDebitRecords =  (int)adoTemplateDebit.ExecuteScalar(CommandType.Text, "select count(*) from Debits");
+            Assert.AreEqual(1, numCreditRecords);
+            Assert.AreEqual(1, numDebitRecords);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArithmeticException))]
+        public void TransferAboveMaxAmount()
+        {
+            accountManager.DoTransfer(2000000, 200000);
+        }
+
+
+        private void CleanDb(IApplicationContext context)
+        {
+            IDbProvider dbProvider = (IDbProvider)context["DebitDbProvider"];
+            adoTemplateDebit = new AdoTemplate(dbProvider);
+            adoTemplateDebit.ExecuteNonQuery(CommandType.Text, "truncate table Debits");
+
+            dbProvider = (IDbProvider)context["CreditDbProvider"];
+            adoTemplateCredit = new AdoTemplate(dbProvider);
+            adoTemplateCredit.ExecuteNonQuery(CommandType.Text, "truncate table Credits");
+
+        }
+    }</programlisting>
+
+    <para>The essential element is to create an instance of Spring's
+    application context where the relevant layers of the application are
+    'wired' together. The <classname>IAccountManager</classname>
+    implementation is retrieved from the IoC container and stored as a field
+    of the test class. The basic logic of the test is the same as in the unit
+    test but in addition there is the verification of actions performed in the
+    database. The set up method puts the database tables into a known state
+    before running the tests. Other techniques for performing integration
+    testing that can alleviate the need to do extensive database state
+    management for integration tests is described in the <link
+    linkend="testing">testing</link> section.</para>
+  </section>
+
+  <section>
+    <title>Configuration</title>
+
+    <para>The configuration file system-test-local-config.xml shown in the
+    previous program listing includes application-config.xml and specifies the
+    database to use and the local (not distributed) transaction manager
+    AdoPlatformTransactionManager. This configuration file is shown
+    below</para>
+
+    <programlisting>&lt;objects xmlns="http://www.springframework.net"
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx"&gt;
+
+
+  &lt;!-- Imports application configuration --&gt;
+  &lt;import resource="assembly://Spring.TxQuickStart/Spring.TxQuickStart/application-config.xml"/&gt;
+  
+  &lt;!-- Imports additional aspects --&gt;
+  &lt;!--
+  &lt;import resource="assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/aspects-config.xml"/&gt;
+  --&gt;
+  
+  
+  &lt;!-- Database Providers --&gt;
+  
+  &lt;db:provider id="DebitDbProvider"
+               provider="System.Data.SqlClient"
+               connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa"/&gt;
+
+  &lt;db:provider id="CreditDbProvider"
+               provider="System.Data.SqlClient"
+               connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa"/&gt;
+                  
+  &lt;alias name="DebitDbProvider" alias="CreditDbProvider"/&gt;
+
+  &lt;!-- Transaction Manager if using a single database that contain both credit and debit tables --&gt;
+  &lt;object id="transactionManager" 
+          type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data"&gt;
+    &lt;property name="DbProvider" ref="DebitDbProvider"/&gt;
+  &lt;/object&gt;
+
+  &lt;!-- Transaction aspect --&gt;
+  
+  &lt;tx:attribute-driven/&gt;
+
+&lt;/objects&gt;</programlisting>
+
+    <para>Moving from top to bottom in the configuration file, the
+    'application-blueprint' configuration file is included. Then the database
+    type and connection parameters are specified for the two databases. The
+    names of these providers must match those specific in
+    application-config.xml. Since the two names point to the same database, an
+    alias configuration element is used to have them point to the same
+    dbProvider under different names. The type of transaction manager is then
+    selected, in this case we are showing the use of local transactions with
+    AdoPlatformTransactionManager. Running the tests will result in 217 being
+    entered into the Credits and Debits table of each database. You can fire
+    up SQL Server Management Studio or equivalent to verify this.</para>
+
+    <para>To switch to a distributed transaction you can refer to the
+    configuration file system-test-dtc-config.xml, which is shown below</para>
+
+    <programlisting>objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx"&gt;
+
+
+  &lt;!-- Imports application configuration --&gt;
+  &lt;import resource="assembly://Spring.TxQuickStart/Spring.TxQuickStart/application-config.xml"/&gt;
+  
+  &lt;!-- Imports additional aspects --&gt;
+  &lt;!--
+  &lt;import resource="assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/aspects-config.xml"/&gt;
+  --&gt;
+   
+  &lt;db:provider id="DebitDbProvider"
+                 provider="System.Data.SqlClient"
+                 connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Debits;User ID=springqa; Password=springqa"/&gt;
+
+
+  &lt;db:provider id="CreditDbProvider"
+                 provider="System.Data.SqlClient"
+                 connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Credits;User ID=springqa; Password=springqa"/&gt;
+                  
+ 
+  &lt;!-- Transaction Manager if using two databases, one containing the credit table and the other a debit table --&gt;
+
+  &lt;object id="transactionManager"
+          type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data"&gt;
+  &lt;/object&gt;
+
+  
+  &lt;!-- Transaction aspect --&gt;
+  &lt;tx:attribute-driven/&gt;
+
+&lt;/objects&gt;</programlisting>
+
+    <para>TxScopeTransactionManager uses .NET 2.0 System.Transactions as the
+    implementation, allowing for distributed transactions between the two
+    different databases listed. In a larger application the different layers
+    would typically be broken up into individual configuration files and
+    imported into the main configuration file. This allows your configuration
+    to mirror your architecture.</para>
+
+    <para>You can also use the configuration file
+    system-test-dtc-es-config.xml that will use EnterpriseServices to perform
+    transaction management.</para>
+
+    <section>
+      <title>Rollback Rules</title>
+
+      <para>Using Rollback rules allows you to specify which exceptions will
+      not cause a rollback and instead only stop execution flow, committing
+      the work done up to the exception. An alternative implementation of
+      AccountManager's DoTransfer method (included in the sample code) is
+      shown below.</para>
+
+      <programlisting>        [Transaction(NoRollbackFor = new Type[] { typeof(ArithmeticException) })]
+        public void DoTransfer(float creditAmount, float debitAmount)
+        {
+            accountCreditDao.CreateCredit(creditAmount);
+
+            if (creditAmount &gt; maxTransferAmount || debitAmount &gt; maxTransferAmount)
+            {
+                throw new ArithmeticException("see a teller big spender...");
+            }                     
+         
+            accountDebitDao.DebitAccount(debitAmount);
+        }  </programlisting>
+
+      <para>All that has changed is the use of the NoRollbackFor property on
+      the transaction attribute.</para>
+
+      <para>The expected behavior is that the credit table will be updated
+      even though the exception is thrown. This is due to specifying that
+      exceptions of the type ArithmethicException should not rollback the
+      database transaction. Running the test code below verifies that the
+      exception still propagates out of the method.</para>
+
+      <programlisting>        [Test]   
+        public void DeclarativeWithAttributesNoRollbackFor()
+        {
+            try
+            {
+                accountManager.DoTransfer(2000000, 2000000);
+                Assert.Fail("Should have thrown Arithmetic Exception");
+            } catch (ArithmeticException) {
+                int numCreditRecords = (int)adoTemplateCredit.ExecuteScalar(CommandType.Text, "select count(*) from Credits");
+                int numDebitRecords = (int)adoTemplateDebit.ExecuteScalar(CommandType.Text, "select count(*) from Debits");
+                Assert.AreEqual(1, numCreditRecords);
+                Assert.AreEqual(0, numDebitRecords);
+            }
+        }</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Adding additional Aspects</title>
+
+    <para>Transactional advice is just one type of advice that can be applied
+    to the service layer. You can also configure other pieces of advice to be
+    executed as part of the general advice chain that is associated with
+    methods that have the Transaction attribute applied. In this example we
+    will add logging of thrown exceptions using Spring's
+    ExceptionHandlerAdvice as well as logging of the service layer method
+    invocation. No code is required to be changed in order to have this
+    additional functionality. Instead all you have to do is uncomment the
+    line</para>
+
+    <programlisting>  &lt;import resource="assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/aspects-config.xml"/&gt;</programlisting>
+
+    <para>in either system-test-dtc-config.xml or system-test-local-config.xml
+    The aspect configuration file is shown below</para>
+
+    <programlisting>&lt;objects xmlns='http://www.springframework.net'
+         xmlns:aop="http://www.springframework.net/aop"&gt;
+
+
+
+  &lt;object name="exceptionAdvice" type="Spring.Aspects.Exceptions.ExceptionHandlerAdvice, Spring.Aop"&gt;
+    &lt;property name="exceptionHandlers"&gt;
+      &lt;list&gt;
+        &lt;value&gt;on exception name ArithmeticException log 'Logging an exception thrown from method ' + #method.Name &lt;/value&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+
+  &lt;object name="loggingAdvice" type="Spring.Aspects.Logging.SimpleLoggingAdvice, Spring.Aop"&gt;
+    &lt;property name="logUniqueIdentifier" value="true"/&gt;
+    &lt;property name="logExecutionTime"    value="true"/&gt;
+    &lt;property name="logMethodArguments"  value="true"/&gt;
+    &lt;property name="Separator"           value=";"/&gt;
+
+    &lt;property name="HideProxyTypeNames"  value="true"/&gt;
+    &lt;property name="UseDynamicLogger"    value="true"/&gt;
+
+    &lt;property name="LogLevel"            value="Info"/&gt;
+  &lt;/object&gt;
+
+
+  &lt;object id="txAttributePointcut" type="Spring.Aop.Support.AttributeMatchMethodPointcut, Spring.Aop"&gt;
+    &lt;property name="Attribute" value="Spring.Transaction.Interceptor.TransactionAttribute, Spring.Data"/&gt;
+  &lt;/object&gt;
+
+  &lt;aop:config&gt;
+
+    &lt;aop:advisor id="exceptionProcessAdvisor" order="1"
+               advice-ref="exceptionAdvice"
+               pointcut-ref="txAttributePointcut"/&gt;
+
+    &lt;aop:advisor id="loggingAdvisor" order="2"
+                 advice-ref="loggingAdvice"
+                 pointcut-ref="txAttributePointcut"/&gt;
+
+  &lt;/aop:config&gt;
+  
+&lt;/objects&gt;</programlisting>
+
+    <para>The transaction aspect is now additionally configured with an order
+    value of "10", which will place it after the execution of the exception
+    aspect, which is configured to use an order value of 1. The behavior for
+    logging the exception is specified by creating and configuring an instance
+    of
+    <classname>Spring.Aspects.Exceptions.ExceptionHandlerAdvice</classname>.
+    The location where that behavior is applied, the pointcut, is the
+    Transaction attribute. The logging of method arguments and execution time
+    is specified by configuring an instance of
+    <classname>Spring.Aspects.Logging.SimpleLoggingAdvice</classname>.</para>
+
+    <para>The AOP configuration section on the bottom is what ties together
+    the behavior and where it will take place in the program flow. Under the
+    covers the transaction configuration, &lt;tx:attribute-driven/&gt; creates
+    similar advice and pointcut definitions. Running the test
+    TransferBelowMaxAmount will then log the following messages</para>
+
+    <programlisting>INFO  - Entering DoTransfer;45b6af04-b736-4efa-a489-45462726ddf2;creditAmount=217; debitAmount=217
+INFO  - Exiting DoTransfer;45b6af04-b736-4efa-a489-45462726ddf2;1328.125 ms;return=
+</programlisting>
+
+    <para>When the test case of the test TransferAboveMaxAmount is run the
+    following messages are logged</para>
+
+    <programlisting>INFO  - Entering DoTransfer;d94bc81b-a4ff-4ca1-9aaa-f2834f262307;creditAmount=2000000; debitAmount=200000
+INFO  - Exception thrown in DoTransferDoTransfer;d94bc81b-a4ff-4ca1-9aaa-f2834f262307;1140.625
+System.ArithmeticException: see a teller big spender...
+   at Spring.TxQuickStart.Services.AccountManager.DoTransfer(Single creditAmount, Single debitAmount) in L:\projects\Spring.Net\examples\Spring\Spring.TxQuickStart\src\Spring\Spring.TxQuickStart\TxQuickStart\Services\AccountManager.cs:line 36
+   at Spring.DynamicReflection.Method_DoTransfer_ec48557f22b149958fd2243413136600.Invoke(Object target, Object[] args)
+   at Spring.Reflection.Dynamic.SafeMethod.Invoke(Object target, Object[] arguments) in l:\projects\Spring.Net\src\Spring\Spring.Core\Reflection\Dynamic\DynamicMethod.cs:line 108
+   at Spring.Aop.Framework.DynamicMethodInvocation.InvokeJoinpoint() in l:\projects\Spring.Net\src\Spring\Spring.Aop\Aop\Framework\DynamicMethodInvocation.cs:line 89
+   at Spring.Aop.Framework.AbstractMethodInvocation.Proceed() in l:\projects\Spring.Net\src\Spring\Spring.Aop\Aop\Framework\AbstractMethodInvocation.cs:line 257
+   at Spring.Transaction.Interceptor.TransactionInterceptor.Invoke(IMethodInvocation invocation) in l:\projects\Spring.Net\src\Spring\Spring.Data\Transaction\Interceptor\TransactionInterceptor.cs:line 80
+   at Spring.Aop.Framework.AbstractMethodInvocation.Proceed() in l:\projects\Spring.Net\src\Spring\Spring.Aop\Aop\Framework\AbstractMethodInvocation.cs:line 282
+   at Spring.Aspects.Logging.SimpleLoggingAdvice.InvokeUnderLog(IMethodInvocation invocation, ILog log) in l:\projects\Spring.Net\src\Spring\Spring.Aop\Aspects\Logging\SimpleLoggingAdvice.cs:line 185
+TRACE - Logging an exception thrown from method DoTransfer
+</programlisting>
+
+    <para></para>
+  </section>
+</chapter>

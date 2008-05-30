@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+    <object id="cultureAware" type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests">
+        <property name="culturE">
+            <ref local="cultureFactory" />
+        </property>
+    </object>
+    <object id="cultureFactory" type="Spring.Objects.Factory.Config.PropertyRetrievingFactoryObject, Spring.Core">
+        <property name="staticProperTY">
+            <value>System.Globalization.CultureInfo.CurrentUICulture, Mscorlib</value>
+        </property>
+    </object>
+    
+    <object id="instanceCultureAware" type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests">
+        <property name="culturE">
+            <ref local="instanceCultureFactory" />
+        </property>
+    </object>
+    <object id="instanceCultureFactory" type="Spring.Objects.Factory.Config.FieldRetrievingFactoryObject, Spring.Core">
+        <property name="targetobjecT">
+            <ref local="instanceCultureAwareSource"/>
+        </property>
+        <property name="targetFIELd">
+            <value>DefauLT</value>
+        </property>
+    </object>
+    <object id="instanceCultureAwareSource" type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests"/>
+    
+    <object id="withTypesField" type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests">
+        <property name="TYPES">
+            <ref local="emptyTypesFactory" />
+        </property>
+    </object>
+    <object id="emptyTypesFactory" type="Spring.Objects.Factory.Config.FieldRetrievingFactoryObject, Spring.Core">
+        <property name="targetTYPE">
+            <value>System.Type, Mscorlib</value>
+        </property>
+        <property name="targetFIELd">
+            <value>EmPTytypeS</value>
+        </property>
+    </object>
+    
+    <object id="instancePropertyCultureAware" type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests">
+        <property name="culturE">
+            <ref local="instancePropertyCultureFactory" />
+        </property>
+    </object>
+    <object id="instancePropertyCultureFactory" type="Spring.Objects.Factory.Config.PropertyRetrievingFactoryObject, Spring.Core">
+        <property name="targetobjecT">
+            <ref local="instancePropertyCultureAwareSource"/>
+        </property>
+        <property name="targetproperTY">
+            <value>MyDefaultCulture</value>
+        </property>
+    </object>
+    <object id="instancePropertyCultureAwareSource" type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests"/>
+    
+    <object id="rubbishProperty" type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests">
+        <property name="culturE">
+            <ref local="rubbishPropertyCultureFactory" />
+        </property>
+    </object>
+    <object id="rubbishPropertyCultureFactory" type="Spring.Objects.Factory.Config.PropertyRetrievingFactoryObject, Spring.Core">
+        <property name="staticProperTY">
+            <value>System.Globalization.CultureInfo.LittleBobbyBoJangles, Mscorlib</value>
+        </property>
+    </object>
+    
+    <object id="rubbishField" type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests">
+        <property name="culturE">
+            <ref local="rubbishFieldCultureFactory" />
+        </property>
+    </object>
+    <object id="rubbishFieldCultureFactory" type="Spring.Objects.Factory.Config.FieldRetrievingFactoryObject, Spring.Core">
+        <property name="staticProperTY">
+            <value>System.Type.Foo, Mscorlib</value>
+        </property>
+    </object>
+ 
+</objects>

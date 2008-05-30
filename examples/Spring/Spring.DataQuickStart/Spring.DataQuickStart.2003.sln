@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.DataQuickStart.2003", "src\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2003.csproj", "{4599FD80-29F6-4542-8945-F93F709DFD3F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.DataQuickStart.Tests.2003", "test\Spring\Spring.DataQuickStart.Tests\Spring.DataQuickStart.Tests.2003.csproj", "{9989A239-3406-4E67-B2B5-C8CF78E2311B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{4599FD80-29F6-4542-8945-F93F709DFD3F}.Debug.ActiveCfg = Debug|.NET
+		{4599FD80-29F6-4542-8945-F93F709DFD3F}.Debug.Build.0 = Debug|.NET
+		{4599FD80-29F6-4542-8945-F93F709DFD3F}.Release.ActiveCfg = Release|.NET
+		{4599FD80-29F6-4542-8945-F93F709DFD3F}.Release.Build.0 = Release|.NET
+		{9989A239-3406-4E67-B2B5-C8CF78E2311B}.Debug.ActiveCfg = Debug|.NET
+		{9989A239-3406-4E67-B2B5-C8CF78E2311B}.Debug.Build.0 = Debug|.NET
+		{9989A239-3406-4E67-B2B5-C8CF78E2311B}.Release.ActiveCfg = Release|.NET
+		{9989A239-3406-4E67-B2B5-C8CF78E2311B}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--@ <code> @-->
+<objects>
+
+    <object name='watcher' 
+      type='Spring.Services.WindowsService.Common.Deploy.FileSystem.FileSystemApplicationWatcher'>
+      <!-- 
+      we can get access to the IApplication we are asked to monitor 
+      using a reference like the following
+      -->
+      <constructor-arg ref='.injected.application'/>
+
+      <!-- sometimes the windows OS will decide to not give you the same case you see in explorer:
+           in fact one should consider this OS case-insensitive with regard to file names ...
+           The following property, true by default can however be tuned
+	  <property name="ignoreCase" value="false"/>
+      -->
+
+      <property name="includes">
+        <list>
+          <value>wwwroot/bin/*.*</value> 
+          <value>service.config</value> 
+          <value>service.xml</value> 
+        </list>
+      </property>      
+      
+      <!--
+      <property name="excludes">
+        <list>
+          <value>Db/**/*.*</value> 
+          <value>Jobs</value>
+          <value>Jobs</value>
+          <value>**/*.log</value>
+        </list>
+      </property>
+      -->
+      
+    </object>
+    
+</objects>
+<!--@ </code> @-->

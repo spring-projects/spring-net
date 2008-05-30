@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	Tests for independent prototype behaviour.
+-->
+
+<objects xmlns="http://www.springframework.net">
+
+	
+	<object id="test" type="Spring.Objects.Factory.SideEffectObject">	
+		<property name="count"><value>10</value></property>
+	</object>
+	
+	<object id="prototypeTest" type="Spring.Objects.Factory.SideEffectObject" singleton="false">	
+		<property name="count"><value>10</value></property>
+	</object>
+	
+	<object id="prototypeTargetSource" type="Spring.Aop.Target.PrototypeTargetSource, Spring.Aop">
+	    <property name="TargetObjectName"><value>prototypeTest</value></property>
+	</object>
+	
+	<object id="debugInterceptor" type="Spring.Aop.Interceptor.NopInterceptor, Spring.Aop.Tests"/>
+	
+	<object id="singleton" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+	    <property name="TargetName"><value>test</value></property>
+	    <property name="InterceptorNames"><value>debugInterceptor</value></property>
+	</object>
+	
+    <object id="prototype" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+	    <property name="TargetSource"><ref object="prototypeTargetSource"/></property>
+	    <property name="InterceptorNames"><value>debugInterceptor</value></property>
+	</object>
+	
+	<object id="prototypeByName" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+	    <property name="TargetName"><value>prototypeTest</value></property>
+	    <property name="InterceptorNames"><value>debugInterceptor</value></property>
+	</object>
+	
+</objects>		
+	
+	

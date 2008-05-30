@@ -1,0 +1,162 @@
+<%@ CodeTemplate %>
+<%@ Import Namespace="System.IO" %>
+<%@ Assembly Name="AgileDocs.Core" %>
+<%@ Import Namespace="AgileDocs.Core" %>
+
+<script runat="template">
+
+	string Example(string example, string what) 
+	{
+		return "<programlisting format='linespecific' xml:space='preserve'>"
+      + XmlPeek.HtmlEncode (
+			XmlPeek.ExtractAndQueryXPath(			
+				Path.Combine("test/Spring/Spring.Core.Tests/Data/PathMatcher", "Examples.test"), 
+				String.Format("examples/example[@name='{0}']/{1}", example, what), 
+				new ExtractXml("#", null)))
+      + "</programlisting>";		
+	}
+
+</script>
+
+
+<chapter id="misc">
+  <title>Spring.NET miscellanea</title>
+  <sect1>
+    <title>Introduction</title>
+    <para>
+    This chapter contains miscellanea information on features, goodies, caveats 
+    that does not belong to any paricular area.  
+    </para>
+  </sect1>
+  <sect1>
+	<title>PathMatcher</title>
+	<para>
+	<emphasis>Note, Spring.Util.PathMatcher is 
+  currently only available in CVS, not the RC3 release.  If you want to use these feature
+  please get the code from CVS 
+  <ulink url="http://opensource.atlassian.com/confluence/spring/display/NET/Project+Structure">(instructions)</ulink> 
+  or from the download section of the 
+  Spring.NET website that contains an .zip with the full CVS tree.
+  </emphasis>
+  </para>	
+	<para>
+	<literal>Spring.Util.PathMatcher</literal> provides <literal>Ant/NAnt</literal>-like path name matching 
+	features.
+	</para>
+	<para>To do the match, you use the method:
+	<programlisting format='linespecific' xml:space='preserve'><%= 
+	  XmlPeek.HtmlEncode (
+			XmlPeek.ExtractAndQueryXPath(			
+				"src/Spring/Spring.Core/Util/PathMatcher.cs", 
+				"fragments/fragment[@name='match-method']"))
+   %></programlisting>	
+	</para>
+	<para>If you want to decide if case is important or not use the method:
+	<programlisting format='linespecific' xml:space='preserve'><%= 
+	  XmlPeek.HtmlEncode (
+			XmlPeek.ExtractAndQueryXPath(			
+				"src/Spring/Spring.Core/Util/PathMatcher.cs", 
+				"fragments/fragment[@name='match-method-nocase']"))
+   %></programlisting>	
+	</para>
+	<sect2>
+  <title>General rules</title>
+	<para>
+	To build your pattern, you use the <literal>*</literal>, <literal>?</literal>
+	and <literal>**</literal> building blocks:
+  <itemizedlist spacing="compact">
+  <listitem>
+	  <para><literal>*</literal>: matches any number of non slash 
+	  characters;
+	  </para>
+	</listitem>
+  <listitem>
+	  <para><literal>?</literal>: matches exactly 1 (one) non slash/dot
+	  character;
+	  </para>
+	</listitem>
+	<listitem>
+	  <para><literal>**</literal>: matches any subdirectory, without 
+	  taking care of the depth;
+	  </para>
+	</listitem>
+  </itemizedlist>
+	</para>
+	</sect2>
+	
+  <sect2>
+	<title>Matching filenames</title>
+	<para>
+  A file name can be matched using the following 
+  notation:
+	<%= Example("filename", "pattern") %>
+	matches:
+	<%= Example("filename", "match") %>
+	does not match:
+	<%= Example("filename", "dont.match") %>
+	</para>
+	<para>
+	The classical all files pattern:
+	<%= Example("filename-all", "pattern") %>
+	matches:
+	<%= Example("filename-all", "match") %>
+	does not match:
+	<%= Example("filename-all", "dont.match") %>
+	</para>
+	</sect2>
+
+	<sect2>
+	<title>Matching subdirectories</title>
+	<para>
+  A directory name can be matched at any depth level using the following 
+  notation:
+	<%= Example("subdir", "pattern") %>
+	That pattern matches the following paths:
+	<%= Example("subdir", "match") %>
+	but does not match these:
+	<%= Example("subdir", "dont.match") %>
+	</para>
+	<para>
+	You can compose subdirectories to match like this:
+	<%= Example("double-subdir", "pattern") %>
+	That pattern matches the following paths:
+	<%= Example("double-subdir", "match") %>
+	but does not match these:
+	<%= Example("double-subdir", "dont.match") %>
+	</para>
+	<para>
+	You can use more advanced patterns:
+	<%= Example("subdir-2", "pattern") %>
+	matches:
+	<%= Example("subdir-2", "match") %>
+	does not match:
+	<%= Example("subdir-2", "dont.match") %>
+	</para>
+	</sect2>
+			
+	<sect2>
+	<title>Case does matter, slashes don't</title>
+	<para>
+	.NET is expected to be a cross-platform development ... platform. So,
+	<literal>PathMatcher</literal> will match taking care of the case of the pattern
+	and the case of the path. For example:
+	<%= Example("case-sensitive", "pattern") %>
+	matches:
+	<%= Example("case-sensitive", "match") %>
+	but does not match:
+	<%= Example("case-sensitive", "dont.match") %>
+	</para>
+	<para>If you do not matter about case, you should explicitly tell the 	
+	<literal>Pathmatcher</literal>.</para>
+	<para>
+  Back and forward slashes, in the very same cross-platform spirit, are 
+  not important:
+	<%= Example("slashes", "pattern") %>
+	matches all the following paths:
+	<%= Example("slashes", "match") %>
+	</para>
+	</sect2>
+	
+  </sect1>
+
+</chapter>

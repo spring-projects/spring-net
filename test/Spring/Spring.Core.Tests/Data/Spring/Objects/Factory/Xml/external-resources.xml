@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<objects xmlns="http://www.springframework.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+    <import resource="./Resources/resource-imports.xml" />
+	<object id="jenny" type="Spring.Objects.TestObject, Spring.Core.Tests">
+		<property name="name">
+			<value>Jenny</value>
+		</property>
+	</object>
+</objects>

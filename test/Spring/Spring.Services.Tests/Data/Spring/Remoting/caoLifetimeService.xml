@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects 
+  xmlns="http://www.springframework.net"
+  xmlns:r="http://www.springframework.net/remoting">
+
+  <!-- server -->
+
+  <object id="counter2" type="Spring.Remoting.SimpleCounter, Spring.Services.Tests">
+    <constructor-arg index="0" value="1" />
+  </object>
+
+  <r:caoExporter id="counter2Exporter" targetName="counter2" infinite="false">
+    <r:lifeTime initialLeaseTime="10s" renewOnCallTime="1s" sponsorshipTimeout="100ms"/>
+  </r:caoExporter>
+
+  <!--
+		Old fashion way without remoting config parser...
+  <object type="Spring.Remoting.CaoExporter, Spring.Services">
+    <property name="TargetName" value="counter2" />
+    <property name="Infinite" value="false" />
+    <property name="InitialLeaseTime" value="10s" />
+    <property name="RenewOnCallTime" value="1s" />
+    <property name="SponsorshipTimeout" value="100ms" />
+  </object>
+  -->
+  
+
+  <!-- client -->
+
+  <r:caoFactory id="remoteCaoCounter2" remoteTargetName="counter2" serviceUrl="tcp://localhost:8005/"/>
+  
+  <!--
+		Old fashion way without remoting config parser...
+  <object id="remoteCaoCounter2" type="Spring.Remoting.CaoFactoryObject, Spring.Services">
+    <property name="RemoteTargetName" value="counter2" />
+    <property name="ServiceUrl" value="tcp://localhost:8005/" />
+  </object>
+  -->
+
+</objects>

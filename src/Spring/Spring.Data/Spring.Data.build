@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<project name="Spring.Data" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<!--
+    Required properties:
+      * current.bin.dir           - (path) root level to build to
+      * current.build.debug       - (true|false) debug build?
+      * current.build.defines.csc - framework-specific build defines for C# compiler
+ -->
+	<target name="build">
+		<!-- build Spring.Data -->
+		<csc target="library" define="${current.build.defines.csc}"
+                     warnaserror="true"
+		     debug="${current.build.debug}"
+                     output="${current.bin.dir}/${project::get-name()}.dll"
+                     doc="${current.bin.dir}/${project::get-name()}.xml">
+			<arg line="${compiler.args}"/>
+			<nowarn>
+				<warning number="1591,0169,0168" />
+			</nowarn>
+			<sources failonempty="true">
+				<include name="**/*.cs" />
+				<include name="../GenCommonAssemblyInfo.cs" />
+			</sources>
+			<resources basedir="." prefix="Spring.Data.Common" failonempty="true">
+				<include name="Data\Common\dbproviders.xml" />
+			</resources>
+			<resources basedir="." prefix="Spring.Data.Config" failonempty="true">
+				<include name="Data\Config\spring-database-1.1.xsd" />
+			</resources>
+			<resources basedir="." prefix="Spring.Transaction.Config" failonempty="true">
+				<include name="Transaction\Config\spring-tx-1.1.xsd" />
+			</resources>
+			<resources basedir="Resources">
+				<include name="**/*" />
+			</resources>
+			<references basedir="${current.bin.dir}">
+				<include name="System.Data.dll" />
+				<include name="System.EnterpriseServices.dll" />
+				<include name="Common.Logging.dll"/>
+				<include name="Spring.Core.dll" />
+				<include name="Spring.Aop.dll" />
+			</references>
+		</csc>
+	</target>
+</project>

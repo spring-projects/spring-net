@@ -1,0 +1,30 @@
+--pattern--
+**/DB/**/*.db
+--match--
+c:/spring/service/deploy/app/DB/foo.db
+c:/spring/service/deploy/app/spaced dir/DB/foo.db
+--dont-match--
+c:/spring/service/deploy/app/db/foo.DB
+c:/spring/service/deploy/app/DB/foo.DB
+c:/spring/service/deploy/app/db/backup/foo
+//server/share/service/deploy/app/db/backup/foo
+
+--pattern--
+**/db/**/*.DB
+--match--
+c:/spring/service/deploy/app/db/foo.DB
+--dont-match--
+c:/spring/service/deploy/app/DB/foo.DB
+c:/spring/service/deploy/app/DB/backup/foo
+c:/spring/service/deploy/app/spaced dir/DB/foo.DB
+//server/share/service/deploy/app/DB/backup/foo
+
+--pattern--
+**/DB/**/*.DB
+--match--
+c:/spring/service/deploy/app/DB/foo.DB
+c:/spring/service/deploy/app/spaced dir/DB/foo.DB
+--dont-match--
+c:/spring/service/deploy/app/db/foo.DB
+c:/spring/service/deploy/app/DB/backup/foo
+//server/share/service/deploy/app/DB/backup/foo

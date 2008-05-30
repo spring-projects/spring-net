@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--@ <code> @-->
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	
+    <object name="echo" 
+      type="Spring.Services.WindowsService.Samples.Echo, Spring.Services.WindowsService.Tests" 
+      init-method="Start" destroy-method="Stop">
+      <property name="port"><value>${port}</value></property>
+    </object>
+
+    <object id="configurer" type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
+      <property name="locations">
+         <list>
+            <value>file://~/service.config</value>
+         </list>
+      </property>
+      <property name="configSections">
+         <list>
+            <value>appSettings</value>
+         </list>
+      </property>
+	</object>
+
+</objects>
+<!--@ </code> @-->

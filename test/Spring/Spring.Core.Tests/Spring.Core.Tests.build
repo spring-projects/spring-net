@@ -1,0 +1,104 @@
+<?xml version="1.0" ?>
+<project name="Spring.Core.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+	<!--
+        Required properties:
+            * current.bin.dir           - (path) root level to build to
+            * build.debug               - (true|false) debug build?
+            * current.build.defines.csc - framework-specific build defines
+    -->
+	<target name="build">
+		<!--
+	        <copy file="../../../src/Spring/Spring.Core/Pool/Support/ISync.cs" todir="../../../CloverBuild/Pool/Support" verbose="true"/>
+		-->
+
+
+		<csc target="library" define="${current.build.defines.csc}"
+			warnaserror="true"
+			debug="${current.build.debug}"
+			output="${current.bin.dir}/${project::get-name()}.dll"
+			doc="${current.bin.dir}/${project::get-name()}.xml">
+			<nowarn>
+				<warning number="${nowarn.numbers.test},0219,0169" /> <!-- add 0414 for mono 2.0 -->
+			</nowarn>
+			<sources failonempty="true">
+				<include name="**/*.cs" />
+				<include name="../CommonAssemblyInfo.cs" />
+				<exclude name="Objects\Factory\Config\ConnectionStringsVariableSourceTests.cs"
+                 if="${framework::get-target-framework() != 'net-2.0'}"/>
+      </sources>
+			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
+				<include name="**/*.resx" />
+				<include name="**/*.xsd" />
+				<include name="**/*.txt" />
+				<include name="**/*.properties" />
+				<include name="**/SimpleAppContext.xml" />
+				<include name="**/Factory/Attributes/*.xml" />
+				<include name="**/Context/Support/*.xml" />
+				<include name="**/aliasedObjects.xml" />
+				<include name="**/contextlifecycle.xml" />
+			</resources>
+			<references basedir="${current.bin.dir}">
+				<include name="System.EnterpriseServices.dll" />
+				<include name="System.Drawing.dll" />
+				<include name="System.Data.dll" />
+				<include name="System.Web.Services.dll" />
+				<include name="*.dll" />
+				<exclude name="${project::get-name()}.dll" />
+				<exclude name="CloverRuntime.dll" />
+			</references>
+		</csc>
+
+		<!-- for some reason, on my new machine the csc task doesn't create the resource assembly for the sr-SP-Cyrl culture so do it by hand (MLP)-->
+		<if test="${framework::get-target-framework() != 'net-2.0'}">
+		  <mkdir dir="${current.bin.dir}/sr-SP-Cyrl"/>
+		  <copy file="Resources/Spring.Context.Tests.sr-SP-Cyrl.resx" todir="${current.bin.dir}/sr-SP-Cyrl"/>
+		  <resgen input="${current.bin.dir}/sr-SP-Cyrl/Spring.Context.Tests.sr-SP-Cyrl.resx" output="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Spring.Context.Tests.sr-SP-Cyrl.resources" />
+		  <copy file="Resources/Tesla.sr-SP-Cyrl.resx" todir="${current.bin.dir}/sr-SP-Cyrl"/>
+		  <resgen input="${current.bin.dir}/sr-SP-Cyrl/Tesla.sr-SP-Cyrl.resx" output="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Tesla.sr-SP-Cyrl.resources" />
+		  <al output="${current.bin.dir}/sr-SP-Cyrl/Spring.Core.Tests.resources.dll"
+		      target="lib"
+		      culture="sr-SP-Cyrl">
+		    <sources>
+		      <include name="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Spring.Context.Tests.sr-SP-Cyrl.resources"/>
+		      <include name="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Tesla.sr-SP-Cyrl.resources" />
+		    </sources>
+		  </al>
+		</if>
+
+		<copy todir="${current.bin.dir}">
+			<fileset basedir="${project::get-base-directory()}/Data">
+				<include name="**/*.xml" />
+                          <include name="**/*.test" />
+			</fileset>
+		</copy>
+
+		<copy file="${project::get-base-directory()}/${project::get-name()}.dll-1.1.config"
+                      tofile="${current.bin.dir}/${project::get-name()}.dll.config"
+                      if="${framework::get-target-framework() != 'net-2.0'}"/>
+
+                <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
+                      tofile="${current.bin.dir}/${project::get-name()}.dll.config"
+                      if="${framework::get-target-framework() == 'net-2.0'}"/>
+
+        </target>
+	<target name="test" depends="build">
+		<nunit2outproc>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml"
+			           outputdir="${current.bin.dir}/results" />
+			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll"
+			      appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
+		</nunit2outproc>
+	</target>
+<!--
+	<target name="test-mono-1.0" >
+		<nunit2outproc>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml"
+			           outputdir="${current.bin.dir}/results" />
+			<test assemblyname="${bin.dir}/net/1.1/${current.build.config}/${project::get-name()}.dll"
+			      appconfig="${bin.dir}/net/1.1/${current.build.config}/${project::get-name()}.dll.config" />
+		</nunit2outproc>
+	</target>
+-->
+</project>

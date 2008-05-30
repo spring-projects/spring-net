@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects 
+  xmlns="http://www.springframework.net"
+  xmlns:r="http://www.springframework.net/remoting">
+
+  <!-- server -->
+
+  <object id="counter" type="Spring.Remoting.SimpleCounter, Spring.Services.Tests">
+    <property name="Counter" value="1" />
+  </object>
+
+  <r:saoExporter id="saoCounter" targetName="counter" serviceName="RemotedSaoCounter" infinite="false">
+    <r:lifeTime initialLeaseTime="10s" renewOnCallTime="1s" sponsorshipTimeout="100ms"/>
+  </r:saoExporter>
+
+  <!--
+		Old fashion way without remoting config parser...
+  <object id="saoCounter" type="Spring.Remoting.SaoExporter, Spring.Services">
+    <property name="TargetName" value="counter" />
+    <property name="ServiceName" value="RemotedSaoCounter" />
+    <property name="Infinite" value="false" />
+    <property name="InitialLeaseTime" value="10s" />
+    <property name="RenewOnCallTime" value="1s" />
+    <property name="SponsorshipTimeout" value="100ms" />
+  </object>
+  -->
+
+  
+  <!-- client -->
+
+  <r:saoFactory id="remoteSaoCounter" 
+    serviceInterface="Spring.Remoting.ISimpleCounter, Spring.Services.Tests"
+    serviceUrl="tcp://localhost:8005/RemotedSaoCounter"/>
+  
+  <!--
+		Old fashion way without remoting config parser...
+  <object id="remoteSaoCounter" type="Spring.Remoting.SaoFactoryObject, Spring.Services">
+    <property name="ServiceInterface" value="Spring.Remoting.ISimpleCounter, Spring.Services.Tests" />
+    <property name="ServiceUrl" value="tcp://localhost:8005/RemotedSaoCounter" />
+  </object>
+  -->
+
+</objects>

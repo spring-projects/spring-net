@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<log4net>
+	<appender name="AspNetTraceAppender" type="log4net.Appender.AspNetTraceAppender">
+		<layout type="log4net.Layout.PatternLayout">
+			<conversionPattern value="[%thread] %-5level - %message%newline" />
+		</layout>
+	</appender>
+	<appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
+		<file value="Logs/log.txt" />
+		<appendToFile value="true" />
+		<rollingStyle value="Size" />
+		<maxSizeRollBackups value="10" />
+		<maximumFileSize value="100KB" />
+		<staticLogFileName value="true" />
+		<layout type="log4net.Layout.PatternLayout">
+			<conversionPattern value="%date [%thread] %-5level %logger [%property{NDC}] - %message%newline" />
+		</layout>
+	</appender>
+
+    <appender name="TraceAppender" type="log4net.Appender.TraceAppender">
+        <layout type="log4net.Layout.PatternLayout">
+            <conversionPattern value="%-5p: %m" />
+        </layout>
+    </appender>
+
+	<!-- Set default logging level to DEBUG -->
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="AspNetTraceAppender" />
+		<appender-ref ref="TraceAppender" />
+		<appender-ref ref="RollingFileAppender" />
+	</root>
+	<!--
+		In Spring.NET there is a 1-1 correspondence between the logger name and
+		the namespace of the class doing the logging...
+	-->
+	<logger name="Spring">
+		<level value="DEBUG" />
+	</logger>
+</log4net>

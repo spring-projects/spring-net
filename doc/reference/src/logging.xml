@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="logging">
+  <title>Common Logging</title>
+
+  <section id="logging-abstract">
+    <title>Introduction</title>
+
+    <para>Spring uses a simple logging abstraction in order to provide a layer
+    of indirection between logging calls made by Spring and the specific
+    logging library used in your application (log4net, EntLib logging, NLog).
+    The library is available for .NET 1.0, 1.1, and 2.0 with both debug and
+    strongly signed assemblies. Since this need is not specific to Spring, the
+    logging library was moved out of the Spring project and into a more
+    general open source project called <ulink
+    url="http://netcommon.sourceforge.net/">Common Infrastructure Libraries
+    for .NET</ulink>. The logging abstraction within the project is known as
+    Common.Logging. Note that it is not the intention of this library to be a
+    replacement for the many fine logging libraries that are out there. The
+    API is incredibly minimal and will very likely stay that way. Please note
+    that this library is intended only for use where the paramount requirement
+    is portability and you will generally be better served by using a specific
+    logging implementation so that you can leverage its advanced features and
+    extended APIs to your advantage.</para>
+
+    <para>You can find online documentation on how to configure Common.Logging
+    is available in <ulink
+    url="http://netcommon.sourceforge.net/doc-latest/reference/html/index.html">HTML</ulink>
+    , <ulink
+    url="http://netcommon.sourceforge.net/doc-latest/reference/pdf/commong-logging-reference.pdf">PDF</ulink>,
+    and <ulink
+    url="http://netcommon.sourceforge.net/doc-latest/reference/htmlhelp/htmlhelp.chm">HTML
+    Help</ulink> formats.</para>
+  </section>
+</chapter>

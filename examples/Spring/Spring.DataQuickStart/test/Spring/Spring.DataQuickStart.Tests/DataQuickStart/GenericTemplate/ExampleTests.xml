@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+         xmlns:db="http://www.springframework.net/database">
+
+  <db:provider id="dbProvider" 
+                provider="SqlServer-2.0" 
+                connectionString="Data Source=.\SQL2005;Initial Catalog=Northwind;Persist Security Info=True;User ID=springqa;Password=springqa"/>
+
+  <object id="adoTemplate" type="Spring.Data.Generic.AdoTemplate, Spring.Data">
+    <property name="DbProvider" ref="dbProvider"/>
+    <property name="DataReaderWrapperType" value="Spring.Data.Support.NullMappingDataReader, Spring.Data"/>
+  </object>
+
+  <object id="commandCallbackDao" type="Spring.DataQuickStart.Dao.GenericTemplate.CommandCallbackDao, Spring.DataQuickStart">
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+  
+  <object id="resultSetExtractorDao" type="Spring.DataQuickStart.Dao.GenericTemplate.ResultSetExtractorDao, Spring.DataQuickStart">
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+
+  <object id="rowMapperDao" type="Spring.DataQuickStart.Dao.GenericTemplate.RowMapperDao, Spring.DataQuickStart">
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+
+  <object id="rowCallbackDao" type="Spring.DataQuickStart.Dao.GenericTemplate.RowCallbackDao, Spring.DataQuickStart">
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+
+  <object id="queryForObjectDao" type="Spring.DataQuickStart.Dao.GenericTemplate.QueryforObjectDao, Spring.DataQuickStart">
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+
+
+  <object id="custOrdersDetailStoredProc" type="Spring.DataQuickStart.Dao.GenericTemplate.CustOrdersDetailStoredProc, Spring.DataQuickStart">
+    <constructor-arg index="0" ref="dbProvider"/>
+  </object>
+</objects>

@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="objects-misc">
+  <title>The IObjectWrapper and Type conversion</title>
+
+  <sect1 id="objects-misc-introduction">
+    <title>Introduction</title>
+    <para>The concepts encapsulated by the
+    <classname>IObjectWrapper</classname> interface are fundamental to the
+    workings of the core Spring.NET libraries The typical application
+    developer most probably will not ever have the need to use the
+    <classname>IObjectWrapper</classname> directly... because this is
+    reference documentation however, we felt that some explanation of this
+    core interface might be right. The <classname>IObjectWrapper</classname>
+    is explained in this chapter since if you were going to use it at all, you
+    would probably do that when trying to bind data to objects, which, nicely
+    enough, is precisely the area that the
+    <classname>IObjectWrapper</classname> addresses.</para>
+  </sect1>
+
+  <sect1 id="objects-objects">
+    <title>Manipulating objects using the IObjectWrapper</title>
+
+    <para>One quite important concept of the <literal>Spring.Objects</literal>
+    namespace is encapsulated in the definition
+    <classname>IObjectWrapper</classname> interface and its corresponding
+    implementation, the <classname>ObjectWrapper</classname> class. The
+    functionality offered by the <classname>IObjectWrapper</classname>
+    includes methods to set and get property values (either individually or in
+    bulk), get property descriptors (instances of the
+    <classname>System.Reflection.PropertyInfo</classname> class), and to query
+    the readability and writability of properties. The
+    <classname>IObjectWrapper</classname> also offers support for nested
+    properties, enabling the setting of properties on subproperties to an
+    unlimited depth. The <classname>IObjectWrapper</classname> usually isn't
+    used by application code directly, but by framework classes such as the
+    various <classname>IObjectFactory</classname> implementations.</para>
+
+    <para>The way the <classname>IObjectWrapper</classname> works is partly
+    indicated by its name: <emphasis>it wraps an object</emphasis> to perform
+    actions on a wrapped object instance... such actions would include the
+    setting and getting of properties exposed on the wrapped object.</para>
+
+    <para><emphasis>Note: the concepts explained in this section are not
+    important to you if you're not planning to work with the
+    <classname>IObjectWrapper</classname> directly.</emphasis></para>
+
+    <sect2 id="objects-objects-conventions">
+      <title>Setting and getting basic and nested properties</title>
+
+      <para>Setting and getting properties is done using the
+      <methodname>SetPropertyValue()</methodname> and
+      <methodname>GetPropertyValue()</methodname> methods, for which there are
+      a couple of overloaded variants. The details of the various overloads
+      (including return values and method parameters) are all described in the
+      extensive API documentation supplied as a part of the Spring.NET
+      distribution.</para>
+
+      <para>The aforementioned <methodname>SetPropertyValue()</methodname> and
+      <methodname>GetPropertyValue()</methodname> methods have a number of
+      conventions for indicating the path of a property. A property path is an
+      expression that implementations of the
+      <classname>IObjectWrapper</classname> interface can use to look up the
+      properties of the wrapped object; some examples of property paths
+      include...</para>
+
+      <para><table frame="all">
+          <title>Examples of property paths</title>
+
+          <tgroup cols="2">
+            <colspec colname="c1" colwidth="2*" />
+
+            <colspec colname="c2" colwidth="4*" />
+
+            <thead>
+              <row>
+                <entry>Path</entry>
+
+                <entry>Explanation</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>name</entry>
+
+                <entry>Indicates the <literal>name</literal> property of the
+                wrapped object.</entry>
+              </row>
+
+              <row>
+                <entry>account.name</entry>
+
+                <entry>Indicates the nested property <literal>name</literal>
+                of the <literal>account</literal> property of the wrapped
+                object.</entry>
+              </row>
+
+              <row>
+                <entry>account[2]</entry>
+
+                <entry>Indicates the <emphasis>third</emphasis> element of the
+                <literal>account</literal> property of the wrapped object.
+                Indexed properties are typically collections such as
+                <literal>lists</literal> and <literal>dictionaries</literal>,
+                but can be any class that exposes an indexer.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
+
+      <para>Below you'll find some examples of working with the
+      <classname>IObjectWrapper</classname> to get and set properties.
+      Consider the following two classes: <programlisting>[C#]
+public class Company
+  {
+    private string name;
+    private Employee managingDirector;
+
+    public string Name
+    {
+      get { return this.name; }
+      set { this.name = value; }
+    }
+    
+    public Employee ManagingDirector
+    {
+      get { return this.managingDirector; }
+      set { this.managingDirector = value; }
+    }
+}</programlisting> <programlisting>[C#]
+public class Employee
+{
+    private string name;
+    private float salary;
+    
+    public string Name
+    {
+      get { return this.name; }
+      set { this.name = value; }
+    }
+
+    public float Salary
+    {
+      get { return salary; }
+      set { this.salary = value; }
+    }
+}</programlisting></para>
+
+      <para>The following code snippets show some examples of how to retrieve
+      and manipulate some of the properties of
+      <classname>IObjectWrapper</classname>-wrapped <literal>Company</literal>
+      and <literal>Employee</literal> instances. <programlisting>[C#]
+Company c = new Company();
+IObjectWrapper owComp = new ObjectWrapper(c);
+// setting the company name...
+owComp.SetPropertyValue("name", "Salina Inc.");
+// can also be done like this...
+PropertyValue v = new PropertyValue("name", "Salina Inc.");
+owComp.SetPropertyValue(v);
+
+// ok, let's create the director and bind it to the company...
+Employee don = new Employee();
+IObjectWrapper owDon = new ObjectWrapper(don);
+owDon.SetPropertyValue("name", "Don Fabrizio");
+owComp.SetPropertyValue("managingDirector", don);
+
+// retrieving the salary of the ManagingDirector through the company
+float salary = (float)owComp.GetPropertyValue("managingDirector.salary");</programlisting></para>
+
+      <para>Note that since the various Spring.NET libraries are compliant
+      with the Common Language Specification (CLS), the resolution of
+      arbitrary strings to properties, events, classes and such is performed
+      in a case-insensitive fashion. The previous examples were all written in
+      the C# language, which is a case-sensitive language, and yet the
+      <literal>Name</literal> property of the <literal>Employee</literal>
+      class was set using the all-lowercase <literal>'name'</literal> string
+      identifier. The following example (using the classes defined previously)
+      should serve to illustrate this...</para>
+
+      <programlisting>[C#]
+// ok, let's create the director and bind it to the company...
+Employee don = new Employee();
+IObjectWrapper owDon = new ObjectWrapper(don);
+owDon.SetPropertyValue("naMe", "Don Fabrizio");
+owDon.GetPropertyValue("nAmE"); // gets "Don Fabrizio"
+
+IObjectWrapper owComp = new ObjectWrapper(new Company());
+owComp.SetPropertyValue("ManaGINGdirecToR", don);
+owComp.SetPropertyValue("mANaGiNgdirector.salARY", 80000);
+Console.WriteLine(don.Salary); // puts 80000</programlisting>
+
+      <para>The case-insensitivity of the various Spring.NET libraries
+      (dictated by the CLS) is not usually an issue... if you happen to have a
+      class that has a number of properties, events, or methods that differ
+      only by their case, then you might want to consider refactoring your
+      code, since this is generally regarded as poor programming
+      practice.</para>
+    </sect2>
+
+    <sect2 id="objects-objects-other">
+      <title>Other features worth mentioning</title>
+
+      <para>In addition to the features described in the preceding sections
+      there a number of features that might be interesting to you, though not
+      worth an entire section. <itemizedlist spacing="compact">
+          <listitem>
+            <para><emphasis>determining readability and
+            writability</emphasis>: using the <literal>IsReadable()</literal>
+            and <literal>IsWritable()</literal> methods, you can determine
+            whether or not a property is readable or writable.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>retrieving PropertyInfo instances</emphasis>:
+            using <literal>GetPropertyInfo(string)</literal> and
+            <literal>GetPropertyInfos()</literal> you can retrieve instances
+            of the <classname>System.Reflection.PropertyInfo</classname>
+            class, that might come in handy sometimes when you need access to
+            the property metadata specific to the object being wrapped.</para>
+          </listitem>
+        </itemizedlist></para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="objects-objects-conversion">
+    <title>Type conversion</title>
+
+    <para>If you associate a <classname>TypeConverter</classname> with the
+    definition of a custom <classname>Type</classname> using the standard .NET
+    mechanism (see the example code below), Spring.NET will use the associated
+    <classname>TypeConverter</classname> to do the conversion.<programlisting>[C#]
+[TypeConverter (typeof (FooTypeConverter))]
+public class Foo
+{
+}</programlisting></para>
+
+    <para>The <classname>TypeConverter</classname> class from the
+    <literal>System.ComponentModel</literal> namespace of the .NET BCL is used
+    extensively by the various classes in the <literal>Spring.Core</literal>
+    library, as said class <quote>... provides a unified way of converting
+    types of values to other types, as well as for accessing standard values
+    and subproperties.</quote> <footnote>
+        <para>More information about creating custom
+        <literal>TypeConverter</literal> implementations can be found online
+        at Microsoft's MSDN website, by searching for <emphasis>Implementing a
+        Type Converter</emphasis>.</para>
+      </footnote></para>
+
+    <para>For example, a date can be represented in a human readable format
+    (such as <literal>30th August 1984</literal>), while we're still able to
+    convert the human readable form to the original date format or (even
+    better) to an instance of the <classname>System.DateTime</classname>
+    class. This behavior can be achieved by using the standard .NET idiom of
+    decorating a class with the <classname>TypeConverterAttribute</classname>.
+    Spring.NET also offers another means of associating a
+    <classname>TypeConverters</classname> with a class. You might want to do
+    this to achieve a conversion that is not possible using standard idiom...
+    for example, the <literal>Spring.Core</literal> library contains a custom
+    <classname>TypeConverter</classname> that converts comma-delimited strings
+    to String array instances. Registering custom converters on an
+    <classname>IObjectWrapper</classname> instance gives the wrapper the
+    knowledge of how to convert properties to the desired
+    <classname>Type</classname>.</para>
+
+    <para>An example of where property conversion is used in Spring.NET is the
+    setting of properties on objects, accomplished using the aforementioned
+    <literal>TypeConverters</literal>. When mentioning
+    <classname>System.String</classname> as the value of a property of some
+    object (declared in an XML file for instance), Spring.NET will (if the
+    type of the associated property is <classname>System.Type</classname>) use
+    the <classname>RuntimeTypeConverter</classname> class to try to resolve
+    the property value to a <classname>Type</classname> object. The example
+    below demonstrates this automatic conversion of the
+    <literal>Example.Xml.SAXParser</literal> (a string) into the corresponding
+    <classname>Type</classname> instance for use in this factory-style class.
+    <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+&lt;object id="parserFactory" type="Example.XmlParserFactory, ExamplesLibrary"
+destroy-method="Close"&gt;
+  &lt;property name="ParserClass" value="Example.Xml.SAXParser, ExamplesLibrary"/&gt;
+&lt;/object&gt;
+&lt;/objects&gt;</programlisting> <programlisting>[C#]
+public class XmlParserFactory
+{
+	private Type parserClass;
+	
+	public Type ParserClass
+	{
+	  get { return this.parserClass; }
+	  set { this.parserClass = value; }
+	}
+	
+	public XmlParser GetParser ()
+	{
+	  return Activator.CreateInstance (ParserClass);
+	}
+}</programlisting></para>
+
+    <sect2 id="objects-misc-enums">
+      <title>Type Conversion for Enumerations</title>
+
+      <para>The default type converter for enumerations is the
+      <classname>System.ComponentModel.EnumConverter</classname> class. To
+      specify the value for an enumerated property, simply use the name of the
+      property. For example the <classname>TestObject</classname> class has a
+      property of the enumerated type <classname>FileMode</classname>. One of
+      the values for this enumeration is named <literal>Create</literal>. The
+      following XML fragment shows how to configure this property</para>
+
+      <programlisting>&lt;object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
+  &lt;property name="name" value="Rod"/&gt;
+  &lt;property name="FileMode" value="Create"/&gt;
+&lt;/object&gt;</programlisting>
+    </sect2>
+  </sect1>
+
+  <sect1 id="object-objects-builtin-converters">
+    <title>Built-in TypeConverters</title>
+
+    <para>Spring.NET has a number of built-in
+    <classname>TypeConverters</classname> to make life easy. Each of those is
+    listed below and they are all located in the
+    <literal>Spring.Objects.TypeConverters</literal> namespace of the
+    <literal>Spring.Core</literal> library.</para>
+
+    <para><table frame="all">
+        <title>Built-in <classname>TypeConverters</classname></title>
+
+        <tgroup cols="2">
+          <colspec colname="c1" colwidth="3*" />
+
+          <colspec colname="c2" colwidth="5*" />
+
+          <thead>
+            <row>
+              <entry>Type</entry>
+
+              <entry>Explanation</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>RuntimeTypeConverter</literal></entry>
+
+              <entry>Parses strings representing
+              <classname>System.Types</classname> to actual
+              <classname>System.Types</classname> and the other way
+              around.</entry>
+            </row>
+
+            <row>
+              <entry><literal>FileInfoConverter</literal></entry>
+
+              <entry>Capable of resolving strings to a
+              <classname>System.IO.FileInfo</classname> object.</entry>
+            </row>
+
+            <row>
+              <entry><literal>StringArrayConverter</literal></entry>
+
+              <entry>Capable of resolving a comma-delimited list of strings to
+              a string-array and vice versa.</entry>
+            </row>
+
+            <row>
+              <entry><literal>UriConverter</literal></entry>
+
+              <entry>Capable of resolving a string representation of a URI to
+              an actual <literal>Uri</literal>-object.</entry>
+            </row>
+
+            <row>
+              <entry><literal>FileInfoConverter</literal></entry>
+
+              <entry>Capable of resolving a string representation of a
+              FileInfo to an actual
+              <literal>FileInfo</literal>-object.</entry>
+            </row>
+
+            <row>
+              <entry><literal>StreamConverter</literal></entry>
+
+              <entry>Capable of resolving Spring IResource URI (string) to its
+              corresponding <literal>InputStream</literal>-object.</entry>
+            </row>
+
+            <row>
+              <entry><literal>ResourceConverter</literal></entry>
+
+              <entry>Capable of resolving Spring IResource URI (string) to an
+              <literal>IResource</literal> object.</entry>
+            </row>
+
+            <row>
+              <entry><literal>ResourceManagerConverter</literal></entry>
+
+              <entry>Capable of resolving a two part string (resource name,
+              assembly name) to a
+              <classname>System.Resources.ResourceManager</classname>
+              object.</entry>
+            </row>
+
+            <row>
+              <entry><literal>RgbColorConverter</literal></entry>
+
+              <entry>Capable of resolving a comma separated list of Red,
+              Green, Blue integer values to a
+              <classname>System.Drawing.Color</classname> structure.</entry>
+            </row>
+
+            <row>
+              <entry>RegexConverter</entry>
+
+              <entry>Converts string representation of regular expression into
+              an instance of System.Text.RegularExpressions.Regex</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table></para>
+
+    <para>Spring.NET uses the standard .NET mechanisms for the resolution of
+    <classname>System.Types</classname>, including, but not limited to
+    checking any configuration files associated with your application,
+    checking the Global Assembly Cache (GAC), and assembly probing.</para>
+
+    <sect2>
+      <title>Custom type converters</title>
+
+      <para>You can register a custom type converter either Programatically
+      using the class TypeConverterRegistry or through configuration of
+      Spring's container and described in the section <link
+      linkend="context-type-converters">Registering Type
+      Converters</link>.</para>
+
+      <para></para>
+    </sect2>
+  </sect1>
+</chapter>

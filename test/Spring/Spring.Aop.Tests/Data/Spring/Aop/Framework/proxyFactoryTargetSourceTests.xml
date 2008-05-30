@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	Tests for independent prototype behaviour.
+-->
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+	<!-- Simple target -->
+	<object id="target" type="Spring.Objects.TestObject">	
+		<property name="name" value="Adam"/>
+	</object>
+	
+	<!-- Simple target -->
+	<object id="testPrototypeTarget" type="Spring.Objects.TestObject" singleton="false">	
+		<property name="name" value="Eve"/>
+	</object>
+	
+	<object id="nopInterceptor" type="Spring.Aop.Interceptor.NopInterceptor"/>
+	
+	<object id="countingBeforeAdvice" type="Spring.Aop.Framework.CountingBeforeAdvice"/>
+
+	<object id="targetSource" type="Spring.Aop.Target.SingletonTargetSource">
+		<constructor-arg ref="target"/>
+	</object>
+
+	<object id="directTarget" type="Spring.Aop.Framework.ProxyFactoryObject"> 
+		<property name="targetName" value="target"/>
+		<property name="interceptorNames" value="countingBeforeAdvice,nopInterceptor"/>
+	</object>
+	
+	<object id="viaPrototypeTargetSource" type="Spring.Aop.Framework.ProxyFactoryObject"> 
+		<property name="targetName" value="testPrototypeTarget"/>
+	</object>
+	
+	<object id="viaTargetSource" type="Spring.Aop.Framework.ProxyFactoryObject"> 
+		<property name="targetName" value="targetSource"/>
+		<property name="interceptorNames" value="nopInterceptor"/>
+	</object>
+	
+	<object id="unsupportedInterceptor" type="Spring.Aop.Framework.UnsupportedInterceptor"/>
+
+	<!--
+		specifies no target or target source, just the interceptor names...
+	-->
+	<object id="noTarget" type="Spring.Aop.Framework.ProxyFactoryObject">
+    <property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>
+		<property name="interceptorNames"><value>nopInterceptor,unsupportedInterceptor</value></property>
+	</object>
+
+	<object id="prototypeTarget" type="Spring.Aop.Framework.ProxyFactoryObject"> 
+		<property name="interceptorNames" value="nopInterceptor,target"/>
+	</object>
+</objects>		
+	
+	

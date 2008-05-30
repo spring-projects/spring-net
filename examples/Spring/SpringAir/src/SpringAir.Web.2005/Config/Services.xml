@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <description>
+    The SpringAir object definitions for the middle (service) tier.
+  </description>
+
+  <!-- Web service definitions -->
+  <object id="bookingAgentWebService" name="/BookingAgent.asmx" type="Spring.Web.Services.WebServiceExporter, Spring.Web">
+    <property name="TargetName" value="bookingAgent"/>
+    <property name="Name" value="BookingAgent"/>
+    <property name="Namespace" value="http://SpringAir/WebServices"/>
+    <property name="Description" value="SpringAir Booking Agent Web Service"/>
+    <property name="MemberAttributes">
+      <dictionary>
+        <entry key="SuggestFlights">
+          <object type="System.Web.Services.WebMethodAttribute, System.Web.Services">
+            <property name="Description" value="Gets those flight suggestions that are applicable for the supplied trip."/>
+          </object>
+        </entry>
+        <entry key="Book">
+          <object type="System.Web.Services.WebMethodAttribute, System.Web.Services">
+            <property name="Description" value="Goes ahead and actually books what up until this point has been a transient reservation."/>
+          </object>
+        </entry>
+        <entry key="GetAirportList">
+          <object type="System.Web.Services.WebMethodAttribute, System.Web.Services">
+            <property name="Description" value="Return a collection of all those airports that can be used for the purposes of booking."/>
+          </object>
+        </entry>
+      </dictionary>
+    </property>
+  </object>
+
+</objects>

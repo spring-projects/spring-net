@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx"
+         xmlns:aop="http://www.springframework.net/aop">
+
+
+  <db:provider  id="DbProvider"
+              provider="SqlServer-2.0"
+              connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa"/>
+
+
+  <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
+    <property name="DbProvider" ref="DbProvider"/>
+  </object>
+
+  <object id="testObjectDao" type="Spring.Data.TestObjectDao, Spring.Data.Integration.Tests">
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+
+  <object id="testObjectManager" type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests">
+    <property name="TestObjectDao" ref="testObjectDao"/>
+  </object>
+
+  
+  <object id="TransactionManager" type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data">
+  </object>
+ 
+
+  <!--
+  <object id="TransactionManager" type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
+    <property name="DbProvider" ref="DbProvider"/>
+  </object>
+  -->
+
+
+  <tx:advice id="txAdvice" transaction-manager="TransactionManager">
+    <tx:attributes>
+      <tx:method name="*"/>
+    </tx:attributes>
+  </tx:advice>
+
+  <object id="serviceOperation" type="Spring.Aop.Support.SdkRegularExpressionMethodPointcut, Spring.Aop">
+    <property name="patterns">
+      <list>
+        <value>TestObjectManager</value>
+      </list>
+    </property>
+  </object>
+
+  <aop:config>
+    <aop:advisor pointcut-ref="serviceOperation" advice-ref="txAdvice"/>
+  </aop:config>
+  
+    
+</objects>
+

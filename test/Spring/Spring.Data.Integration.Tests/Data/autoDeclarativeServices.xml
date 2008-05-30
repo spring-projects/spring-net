@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx">
+
+  
+  <!--
+   <d:provider id="DbProvider"
+                 provider="SqlServer-2.0"
+                 connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa"/>
+  -->
+
+  <db:provider id="DbProvider" 
+                  provider="SqlServer-1.1" 
+                  connectionString="Data Source=MARKT60\SQL2005;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+    <object id="adoTransactionManager" 
+            type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
+            
+        <property name="DbProvider" ref="DbProvider"/>
+    </object>
+        
+    <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
+        <property name="DbProvider" ref="DbProvider"/>                
+    </object>
+
+    <object id="testObjectDao" type="Spring.Data.TestObjectDao, Spring.Data.Integration.Tests">
+        <property name="AdoTemplate" ref="adoTemplate"/>
+    </object>
+            
+    
+    <!-- The DAO object that performs multiple data access operations -->
+    <!--
+    <object id="testObjectManager" parent="TxProxyConfigurationTemplate">
+      <property name="Target">
+        <object id="testObjectManagerTarget" type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests">
+          <property name="TestObjectDao" ref="testObjectDao"/>
+        </object>
+      </property>
+    </object>
+    -->
+
+    <object id="testObjectManager" type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests">
+      <property name="TestObjectDao" ref="testObjectDao"/>
+    </object>
+
+    
+    <object id="consoleLoggingAroundAdvice" type="Spring.Data.ConsoleLoggingAroundAdvice"/>
+
+
+    <object id="testCoordinator" type="Spring.Data.TestCoordinator, Spring.Data.Integration.Tests">
+      <property name="TestObjectManager" ref="testObjectManager"/>
+    </object>
+
+    
+    <object id="testCoordinatorAOPProxy" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+      <property name="target" ref="testCoordinator"/>
+      <property name="InterceptorNames">
+        <list>
+          <value>aroundAdvisor</value>
+        </list>
+      </property>
+    </object>
+    
+    
+    <!--
+    <object id="testCoordinator" type="Spring.Aop.Framework.ProxyFactoryObject">
+      <property name="target">
+        <object id="testCoordinatorTarget" type="Spring.Data.TestCoordinator, Spring.Data.Integration.Tests">
+          <property name="TestObjectManager" ref="testObjectManager"/>
+        </object>
+      </property>
+      <property name="interceptorNames">
+        <list>
+          <value>consoleLoggingAroundAdvice</value>
+        </list>
+      </property>
+    </object>
+    -->
+
+    <!--
+    <object id="TxProxyConfigurationTemplate" abstract="true"
+      type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data">
+
+      <property name="PlatformTransactionManager" ref="adoTransactionManager"/>
+
+      <property name="TransactionAttributes">
+        <name-values>
+          <add key="*" value="PROPAGATION_REQUIRED"/>
+        </name-values>
+      </property>
+    </object>
+    -->
+    
+    <!-- The rest of the config file is common no matter how many objects you add -->
+    <!-- that you would like to have declarative tx management applied to -->    
+
+    <object id="autoProxyCreator" 
+            type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop">
+    </object>
+    
+    <object id="transactionAdvisor"
+            type="Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor, Spring.Data"
+            autowire="constructor">
+    </object>
+    
+
+    <object id="transactionInterceptor" 
+            type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data" autowire="byType">
+        <!--
+        <property name="TransactionManager" ref="adoTransactionManager"/>
+        <property name="TransactionAttributeSource" ref="attributeTransactionAttributeSource"/>        
+        -->
+    </object>
+    
+    <object id="attributeTransactionAttributeSource"
+            type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data">    
+    </object>
+
+
+
+    <object id="aroundAdvisor" type="Spring.Aop.Support.NameMatchMethodPointcutAdvisor, Spring.Aop">
+      <property name="Advice" ref="consoleLoggingAroundAdvice"/>
+      <property name="MappedNames">
+        <list>
+          <value>Spring.Data.TestCoordinator.Work*</value>
+        </list>
+      </property>
+    </object>
+
+    
+</objects>
+

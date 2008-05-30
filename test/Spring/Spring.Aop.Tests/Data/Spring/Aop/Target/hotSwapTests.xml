@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<objects xmlns="http://www.springframework.net">
+	<!-- Simple target -->
+	<object id="target1" type="Spring.Objects.Factory.SideEffectObject">
+		<property name="count" value="10"/>
+	</object>
+	<object id="target2" type="Spring.Objects.Factory.SideEffectObject" singleton="true">
+		<property name="count" value="20"/>
+	</object>
+	<!-- 
+		Hot swappable target source...
+	-->
+	<object id="swapper" type="Spring.Aop.Target.HotSwappableTargetSource">
+		<constructor-arg ref="target1"/>
+	</object>
+	<object id="swappable" type="Spring.Aop.Framework.ProxyFactoryObject">
+		<property name="targetSource" ref="swapper"/>
+	</object>
+</objects>

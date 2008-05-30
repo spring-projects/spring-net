@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright 2002-2005 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter id="quickstarts">
+  <title>IoC Quickstarts</title>
+
+  <sect1>
+    <title>Introduction</title>
+
+    <para>This chapter includes a grab bag of quickstart examples for using
+    the Spring.NET framework.</para>
+  </sect1>
+
+  <sect1 id="qs-moviefinder">
+    <title>Movie Finder</title>
+
+    <para>The source material for this simple demonstration of Spring.NET's
+    IoC features is lifted straight from Martin Fowler's article that
+    discussed the ideas underpinning the IoC pattern. See <ulink
+    url="http://martinfowler.com/articles/injection.html">Inversion of Control
+    Containers and the Dependency Injection pattern</ulink> for more
+    information. The motivation for basing this quickstart example on said
+    article is because the article is pretty widely known, and most people who
+    are looking at IoC for the first time typically will have read the article
+    (at the time of writing a <ulink
+    url="http://www.google.co.uk/search?q=ioc">simple Google search for
+    'IoC'</ulink> yields the article in the first five results).</para>
+
+    <para>Fowler's article used the example of a search facility for movies to
+    illustrate IoC and Dependency Injection (DI). The article described how a
+    <literal>MovieLister</literal> object might receive a reference to an
+    implementation of the <literal>IMovieFinder</literal> interface (using
+    DI).</para>
+
+    <para>The <literal>IMovieFinder</literal> returns a list of all movies and
+    the <literal>MovieLister</literal> filters this list to return an array of
+    <literal>Movie</literal>objects that match a specified directors name.
+    This example demonstrates how the Spring.NET IoC container can be used to
+    supply an appropriate <literal>IMovieFinder</literal> implementation to an
+    arbitrary <literal>MovieLister</literal> instance.</para>
+
+    <para>The C# code listings for the MovieFinder application can be found in
+    the <literal>examples/Spring/Spring.Examples.MovieFinder</literal>
+    directory off the top level directory of the Spring.NET
+    distribution.</para>
+
+    <para><mediaobject>
+        <imageobject>
+          <imagedata fileref="images/movie-finder.gif" format="GIF" />
+        </imageobject>
+      </mediaobject></para>
+
+    <sect2 id="qs-mf-gettingstarted">
+      <title>Getting Started - Movie Finder</title>
+
+      <para>The startup class for the MovieFinder example is the
+      <literal>MovieApp</literal> class, which is an ordinary .NET class with
+      a single application entry point... <programlisting>using System;
+namespace Spring.Examples.MovieFinder
+{
+  public class MovieApp
+  {
+    public static void Main ()
+    {
+    }
+  }
+}</programlisting></para>
+
+      <para>What we want to do is get a reference to an instance of the
+      <literal>MovieLister</literal> class... since this is a Spring.NET
+      example we'll get this reference from Spring.NET's IoC container, the
+      <literal>IApplicationContext</literal>. There are a number of ways to
+      get a reference to an <literal>IApplicationContext</literal> instance,
+      but for this example we'll be using an
+      <literal>IApplicationContext</literal> that is instantiated from a
+      custom configuration section in a standard .NET application config
+      file...</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;configuration&gt;
+    &lt;configSections&gt;
+        &lt;sectionGroup name="spring"&gt;
+            &lt;section name="context" type="Spring.Context.Support.ContextHandler, Spring.Core"/&gt;
+            &lt;section name="objects" type="Spring.Context.Support.DefaultSectionHandler, Spring.Core" /&gt;
+        &lt;/sectionGroup&gt;
+    &lt;/configSections&gt;
+    &lt;spring&gt;
+        &lt;context&gt;
+            &lt;resource uri="config://spring/objects"/&gt;
+        &lt;/context&gt;
+        &lt;objects xmlns="http://www.springframework.net"&gt;
+            &lt;description&gt;An  example that demonstrates simple IoC features.&lt;/description&gt;
+        &lt;/objects&gt;
+    &lt;/spring&gt;
+&lt;/configuration&gt;</programlisting>
+
+      <para>The objects that will be used in the example application will be
+      configured as XML <literal>&lt;object/&gt;</literal> elements nested
+      inside the <literal>&lt;objects/&gt;</literal> element.</para>
+
+      <para>The body of the <literal>Main</literal> method in the
+      <literal>MovieApp</literal> class can now be fleshed out a little
+      further... <programlisting>
+using System;
+using Spring.Context;
+...
+    public static void Main ()
+    {
+      IApplicationContext ctx = ContextRegistry.GetContext();
+    }
+...</programlisting>As can be seen in the above C# snippet, a
+      <literal>using</literal> statement has been added to the
+      <literal>MovieApp</literal> source. The
+      <literal>Spring.Context</literal> namespace gives the application access
+      to the <literal>IApplicationContext</literal> class that will serve as
+      the primary means for the application to access the IoC container. The
+      line of code... <programlisting>IApplicationContext ctx = ContextRegistry.GetContext();</programlisting>
+      ... retrieves a fully configured <literal>IApplicationContext</literal>
+      implementation that has been configured using the named
+      <literal>&lt;objects/&gt;</literal> section from the application config
+      file.</para>
+    </sect2>
+
+    <sect2 id="qs-mf-firstobject">
+      <title>First Object Definition</title>
+
+      <para>As yet, no objects have been defined in the application config
+      file, so let's do that now. The very miminal XML definition for the
+      <literal>MovieLister</literal> instance that we are going to use in the
+      application can be seen in the following XML snippet...</para>
+
+      <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;object name="MyMovieLister"
+      type="Spring.Examples.MovieFinder.MovieLister, Spring.Examples.MovieFinder"&gt;
+    &lt;/object&gt;
+  &lt;/objects&gt;</programlisting>
+
+      <para>Notice that the full, assembly-qualified name of the
+      <literal>MovieLister</literal> class has been specified in the
+      <literal>type</literal> attribute of the object definition, and that the
+      definition has been assigned the (unique) id of
+      <literal>MyMovieLister</literal>. Using this id, an instance of the
+      object so defined can be retrieved from the
+      <literal>IApplicationContext</literal> reference like so...</para>
+
+      <programlisting>...
+    public static void Main ()
+    {
+      IApplicationContext ctx = ContextRegistry.GetContext();
+      MovieLister lister = (MovieLister) ctx.GetObject ("MyMovieLister");
+    }
+...</programlisting>
+
+      <para>The <literal>lister</literal> instance has not yet had an
+      appropriate implementation of the <literal>IMovieFinder</literal>
+      interface injected into it. Attempting to use the
+      <literal>MoviesDirectedBy</literal> method will most probably result in
+      a nasty <literal>NullReferenceException</literal> since the
+      <literal>lister</literal> instance does not yet have a reference to an
+      <literal>IMovieFinder</literal>. The XML configuration for the
+      <literal>IMovieFinder</literal> implementation that is going to be
+      injected into the <literal>lister</literal> instance looks like
+      this...</para>
+
+      <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;object name="MyMovieFinder"
+        type="Spring.Examples.MovieFinder.SimpleMovieFinder, Spring.Examples.MovieFinder"/&gt;
+    &lt;/object&gt;
+&lt;/objects&gt;</programlisting>
+    </sect2>
+
+    <sect2 id="qs-mf-setterinjection">
+      <title>Setter Injection</title>
+
+      <para>What we want to do is inject the <literal>IMovieFinder</literal>
+      instance identified by the <literal>MyMovieFinder</literal> id into the
+      <literal>MovieLister</literal> instance identified by the
+      <literal>MyMovieLister</literal> id, which can be accomplished using
+      Setter Injection and the following XML... <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;object name="MyMovieLister"
+      type="Spring.Examples.MovieFinder.MovieLister, Spring.Examples.MovieFinder"&gt;
+        &lt;!-- using setter injection... --&gt;
+        &lt;property name="movieFinder" ref="MyMovieFinder"/&gt;
+    &lt;/object&gt;
+    &lt;object name="MyMovieFinder"
+        type="Spring.Examples.MovieFinder.SimpleMovieFinder, Spring.Examples.MovieFinder"/&gt;
+    &lt;/object&gt;
+&lt;/objects&gt;</programlisting>When the <literal>MyMovieLister</literal>
+      object is retrieved from (i.e. instantiated by) the
+      <literal>IApplicationContext</literal> in the application, the
+      Spring.NET IoC container will inject the reference to the
+      <literal>MyMovieFinder</literal> object into the
+      <literal>MovieFinder</literal> property of the
+      <literal>MyMovieLister</literal> object. The
+      <literal>MovieLister</literal> object that is referenced in the
+      application is then fully configured and ready to be used in the
+      application to do what is does best... list movies by director.
+      <programlisting>...
+    public static void Main ()
+    {
+      IApplicationContext ctx = ContextRegistry.GetContext();
+      MovieLister lister = (MovieLister) ctx.GetObject ("MyMovieLister");
+      Movie[] movies = lister.MoviesDirectedBy("Roberto Benigni");
+      Console.WriteLine ("\nSearching for movie...\n");
+      foreach (Movie movie in movies)
+      {
+          Console.WriteLine (
+              string.Format ("Movie Title = '{0}', Director = '{1}'.",
+              movie.Title, movie.Director));
+      }
+      Console.WriteLine ("\nMovieApp Done.\n\n");
+    }
+...</programlisting>To help ensure that the XML configuration of the
+      MovieLister class must specify a value for the MovieFinder property, you
+      can add the [Required] attribute to the MovieLister's MovieFinder
+      property. The example code shows uses this attribute. For more
+      information on using and configuring the [Required] attribute, refer to
+      this <link
+      linkend="object-factory-extension-opp-examplesrapp">section</link> of
+      the reference documentation.</para>
+    </sect2>
+
+    <sect2 id="qs-mf-constructorinjection">
+      <title>Constructor Injection</title>
+
+      <para>Let's define another implementation of the
+      <literal>IMovieFinder</literal> interface in the application config
+      file...<programlisting>...
+  &lt;object name="AnotherMovieFinder"
+      type="Spring.Examples.MovieFinder.ColonDelimitedMovieFinder, Spring.Examples.MovieFinder"&gt;
+  &lt;/object&gt;
+...</programlisting>This XML snippet describes an
+      <literal>IMovieFinder</literal> implementation that uses a colon
+      delimited text file as it's movie source. The C# source code for this
+      class defines a single constructor that takes a
+      <classname>System.IO.FileInfo</classname> as it's single constructor
+      argument. As this object definition currently stands, attempting to get
+      this object out of the <literal>IApplicationContext</literal> in the
+      application with a line of code like so... <programlisting>IMovieFinder finder = (IMovieFinder) ctx.GetObject ("AnotherMovieFinder");</programlisting>
+      will result in a fatal
+      <classname>Spring.Objects.Factory.ObjectCreationException</classname>,
+      because the
+      <classname>Spring.Examples.MovieFinder.ColonDelimitedMovieFinder</classname>
+      class does not have a default constructor that takes no arguments. If we
+      want to use this implementation of the <literal>IMovieFinder</literal>
+      interface, we will have to supply an appropriate constructor
+      argument...<programlisting>...
+  &lt;object name="AnotherMovieFinder"
+      type="Spring.Examples.MovieFinder.ColonDelimitedMovieFinder, Spring.Examples.MovieFinder"&gt;
+      &lt;constructor-arg index="0" value="movies.txt"/&gt;
+  &lt;/object&gt;
+...</programlisting></para>
+
+      <para>Unsurprisingly, the &lt;constructor-arg/&gt; element is used to
+      supply constructor arguments to the constructors of managed objects. The
+      Spring.NET IoC container uses the functionality offered by
+      <classname>System.ComponentModel.TypeConverter</classname>
+      specializations to convert the <literal>movies.txt</literal> string into
+      an instance of the <classname>System.IO.FileInfo</classname> that is
+      required by the single constructor of the
+      <classname>Spring.Examples.MovieFinder.ColonDelimitedMovieFinder</classname>
+      (see <xref linkend="objects-objects-conversion" /> for a more in depth
+      treatment concerning the automatic type conversion functionality offered
+      by Spring.NET).</para>
+
+      <para>So now we have two implementations of the
+      <literal>IMovieFinder</literal> interface that have been defined as
+      distinct object definitions in the config file of the example
+      application; if we wanted to, we could switch the implementation that
+      the <literal>MyMovieLister</literal> object uses like
+      so...<programlisting>...
+  &lt;object name="MyMovieLister"
+    type="Spring.Examples.MovieFinder.MovieLister, Spring.Examples.MovieFinder"&gt;
+      &lt;!-- lets use the colon delimited implementation instead --&gt;
+      &lt;property name="movieFinder" ref="AnotherMovieFinder"/&gt;
+  &lt;/object&gt;
+  &lt;object name="MyMovieFinder"
+      type="Spring.Examples.MovieFinder.SimpleMovieFinder, Spring.Examples.MovieFinder"/&gt;
+  &lt;/object&gt;
+  &lt;object name="AnotherMovieFinder"
+      type="Spring.Examples.MovieFinder.ColonDelimitedMovieFinder, Spring.Examples.MovieFinder"&gt;
+      &lt;constructor-arg index="0" value="movies.txt"/&gt;
+  &lt;/object&gt;
+...</programlisting></para>
+
+      <para>Note that there is no need to recompile the application to effect
+      this change of implementation... simply changing the application config
+      file and then restarting the application will result in the Spring.NET
+      IoC container injecting the colon delimited implementation of the
+      <literal>IMovieFinder</literal> interface into the
+      <literal>MyMovieLister</literal> object.</para>
+    </sect2>
+
+    <sect2 id="qs-mf-summary">
+      <title>Summary</title>
+
+      <para>This example application is quite simple, and admittedly it
+      doesn't do a whole lot. It does however demonstrate the basics of wiring
+      together an object graph using an intuitive XML format. These simple
+      features will get you through pretty much 80% of your object wiring
+      needs. The remaining 20% of the available configuration options are
+      there to cover corner cases such as factory methods, lazy
+      initialization, and suchlike (all of the configuration options are
+      described in detail in the <xref linkend="objects" />).</para>
+    </sect2>
+
+    <sect2>
+      <title>Logging</title>
+
+      <para>Often enough the first use of Spring.NET is also a first
+      introduction to log4net. To kick start your understanding of log4net
+      this section gives a quick overview. The authoritative place for
+      information on log4net is the <ulink
+      url="http://logging.apache.org/log4net/">log4net website</ulink>. Other
+      good online tutorials are <ulink
+      url="http://www.ondotnet.com/pub/a/dotnet/2003/06/16/log4net.html?page=1">Using
+      log4net (OnDotNet article)</ulink> and <ulink
+      url="http://haacked.com/archive/2005/03/07/2317.aspx">Quick and Dirty
+      Guide to Configuring Log4Net For Web Applications</ulink>. Spring.NET is
+      using version 1.2.9 whereas most of the documentation out there is for
+      version 1.2.0. There have been some changes between the two so always
+      double check at the log4net web site for definitive information. Also
+      note that we are investigating using a "commons" logging library so that
+      Spring.NET will not be explicity tied to log4net but will be able to use
+      other logging packages such as NLog and Microsoft enterprise logging
+      application block.</para>
+
+      <para>The general usage pattern for log4net is to configure your
+      loggers, (either in App/Web.config or a seperate file), initialize
+      log4net in your main application, declare some loggers in code, and then
+      log log log. (Sing along...) We are using App.config to configure the
+      loggers. As such, we declare the log4net configuration section handler
+      as shown below <programlisting>&lt;section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler,log4net" /&gt;</programlisting>
+      The corresponding configuration section looks like this <programlisting>
+&lt;log4net&gt; 
+  &lt;appender name="ConsoleAppender" type="log4net.Appender.ConsoleAppender"&gt; 
+     &lt;layout type="log4net.Layout.PatternLayout"&gt; 
+        &lt;conversionPattern value="%date [%thread] %-5level %logger - %message%newline" /&gt; 
+     &lt;/layout&gt; 
+  &lt;/appender&gt; 
+
+  &lt;!-- Set default logging level to DEBUG --&gt;
+  &lt;root&gt; 
+     &lt;level value="DEBUG" /&gt; 
+     &lt;appender-ref ref="ConsoleAppender" /&gt; 
+  &lt;/root&gt; 
+  
+  &lt;!-- Set logging for Spring to INFO.  Logger names in Spring correspond to the namespace --&gt;
+  &lt;logger name="Spring"&gt; 
+     &lt;level value="INFO" /&gt; 
+  &lt;/logger&gt; 
+&lt;/log4net&gt; 
+      </programlisting> The appender is the output sink - in this case the
+      console. There are a large variety of output sinks such as files,
+      databases, etc. Refer to the log4net <ulink
+      url="http://logging.apache.org/log4net/release/config-examples.html">Config
+      Examples</ulink> for more information. Of interest as well is the
+      PatternLayout which defines exactly the information and format of what
+      gets logged. Usually this is the date, thread, logging level, logger
+      name, and then finally the log message. Refer to <ulink
+      url="http://logging.apache.org/log4net/release/sdk/log4net.Layout.PatternLayout.html">PatternLayout
+      Documentation</ulink> for information on how to customize.</para>
+
+      <para>The logging name is up to you to decide when you declare the
+      logger in code. In the case of this example we used the convention of
+      giving the logging name the name of the fully qualified class name.
+      <programlisting>private static readonly ILog LOG = LogManager.GetLogger(typeof (MovieApp));</programlisting>
+      Other conventions are to give the same logger name across multiple
+      classes that constitute a logical component or subsystem within the
+      application, for example a data access layer. One tip in selecting the
+      pattern layout is to shorten the logging name to only the last 2 parts
+      of the fully qualified name to avoid the message sneaking off to the
+      right too much (where can't see it) because of all the other information
+      logged that precedes it. Shortening the logging name is done using the
+      format %logger{2}.</para>
+
+      <para>To initialize the logging system add the following to the start of
+      your application <programlisting>XmlConfigurator.Configure();</programlisting>
+      Note that if you are using or reading information on version 1.2.0 this
+      used to be called DOMConfigurator.Configure();</para>
+
+      <para>The logger sections associate logger names with logging levels and
+      appenders. You have great flexibility to mix and match names, levels,
+      and appenders. In this case we have defined the root logger (using the
+      special tag root) to be at the debug level and have an console sink. We
+      can then specialize other loggers with different setting. In this case,
+      loggers that start with "Spring" in their name are logged at the info
+      level and also sent to the console. Setting the value of this logger
+      from INFO to DEBUG will show you detailed logging information as the
+      Spring container goes about its job of creating and configuring your
+      objects. Coincidentally, the example code itself uses Spring in the
+      logger name, so this logger also controls the output level you see from
+      running MainApp. Finally, you are ready to use the simple logger api to
+      log, i.e. <programlisting>LOG.Info("Searching for movie...");</programlisting>
+      Logging exceptions is another common task, which can be done using the
+      error level <programlisting>try {
+   //do work
+{
+catch (Exception e)
+{
+  LOG.Error("Movie Finder is broken.", e);
+}</programlisting></para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="qs-appcontext-messagesource">
+    <title>ApplicationContext and IMessageSource</title>
+
+    <sect2>
+      <title>Introduction</title>
+
+      <para>The example program <literal>Spring.Examples.AppContext</literal>
+      shows the use of the application context for text localization,
+      retrieving objects contained in ResourceSets, and applying the values of
+      embedded resource properties to an object. The values that are retrieved
+      are displayed in a window.</para>
+
+      <para>The application context configuration file contains an object
+      definition with the name <literal>messageSource</literal> of the type
+      <literal>Spring.Context.Support.ResourceSetMessageSource</literal> which
+      implements the interface <literal>IMessageSource</literal>. This
+      interface provides various methods for retrieving localized resources
+      such as text and images as described in <xref
+      linkend="context-functionality-messagesource" />. When creating an
+      instance of IApplicationContext, an object with the name 'messageSource'
+      is searched for and used as the implementation for the context's
+      IMessageSource functionality.</para>
+
+      <para>The <literal>ResourceSetMessageSource</literal> takes a list of
+      ResourceManagers to define the collection of culture-specific resources.
+      The ResourceManager can be contructed in two ways. The first way is to
+      specifying a two part string consisting of the base resource name and
+      the containing assembly. In this example there is an embedded resource
+      file, Images.resx in the project. The second way is to use helper
+      factory class <literal>ResourceManagerFactoryObject</literal> that takes
+      a resource base name and assembly name as properties. This second way of
+      specifying a ResourceManager is useful if you would like direct access
+      to the ResourceManager in other parts of your application. In the
+      example program an embedded resource file, MyResource.resx and a Spanish
+      specific resource file, MyResources.es.resx are declared in this manner.
+      The corresponding XML fragment is shown below <programlisting>...
+        &lt;object name="messageSource" type="Spring.Context.Support.ResourceSetMessageSource, Spring.Core"&gt;
+          &lt;property name="resourceManagers"&gt;
+            &lt;list&gt;
+              &lt;value&gt;Spring.Examples.AppContext.Images, Spring.Examples.AppContext&lt;/value&gt;
+              &lt;ref object="myResourceManager"/&gt;
+            &lt;/list&gt;
+          &lt;/property&gt;
+        &lt;/object&gt;
+  
+        &lt;object name="myResourceManager" type="Spring.Objects.Factory.Config.ResourceManagerFactoryObject, Spring.Core"&gt;
+          &lt;property name="baseName"&gt;
+            &lt;value&gt;Spring.Examples.AppContext.MyResource&lt;/value&gt;
+          &lt;/property&gt;
+          &lt;property name="assemblyName"&gt;
+            &lt;value&gt;Spring.Examples.AppContext&lt;/value&gt;
+          &lt;/property&gt;    
+        &lt;/object&gt;
+...</programlisting></para>
+
+      <para>The main application creates the application context and then
+      retrieves various resources via their key names. In the code all the key
+      names are declared as static fields in the class
+      <literal>Keys.</literal> The resource file Images.resx contains image
+      data under the key name <literal>bubblechamber</literal> (aka
+      Keys.BUBBLECHAMBER). The code <literal>Image image =
+      (Image)ctx.GetResourceObject(Keys.BUBBLECHAMBER);</literal> is used to
+      retrieve the image from the context. The resource files MyResource.resx
+      contains a text resource, <literal>Hello {0} {1}</literal> under the key
+      name <literal>HelloMessage</literal> (aka Keys.HELLO_MESSAGE) that can
+      be used for string text formatting purposes. The example code
+      <programlisting>
+string msg = ctx.GetMessage(Keys.HELLO_MESSAGE,
+                            CultureInfo.CurrentCulture,
+                            "Mr.", "Anderson");
+</programlisting> retrieves the text string and replaces the placeholders in
+      the string with the passed argument values resulting in the text, "Hello
+      Mr. Anderson". The current culture is used to select the resource file
+      MyResource.resx. If instead the Spanish culture is specified
+      <programlisting>
+CultureInfo spanishCultureInfo = new CultureInfo("es");
+string esMsg = ctx.GetMessage(Keys.HELLO_MESSAGE,
+                              spanishCultureInfo,
+                              "Mr.", "Anderson");
+</programlisting> Then the resource file MyResource.es.resx is used instead as
+      in standard .NET localization. Spring is simply delegating to .NET
+      ResourceManager to select the appropriate localized resource. The
+      Spanish version of the resource differs from the English one in that the
+      text under the key <literal>HelloMessage</literal> is <literal>Hola {0}
+      {1}</literal> resulting in the text <literal>"Hola Mr.
+      Anderson"</literal>.</para>
+
+      <para>As you can see in this example, the title "Mr." should not be used
+      in the case of the spanish localization. The title can be abstracted out
+      into a key of its own, called <literal>FemaleGreeting</literal> (aka
+      Keys.FEMALE_GREETING). The replacement value for the message argument
+      {0} can then be made localization aware by wrapping the key in a
+      convenience class DefaultMessageResolvable. The code <programlisting>
+string[] codes = {Keys.FEMALE_GREETING};
+DefaultMessageResolvable dmr = new DefaultMessageResolvable(codes, null);
+
+msg = ctx.GetMessage(Keys.HELLO_MESSAGE,
+                     CultureInfo.CurrentCulture,
+                     dmr, "Anderson");
+</programlisting> will assign msg the value, Hello Mrs. Anderson, since the
+      value for the key <literal>FemaleGreeting</literal> in MyResource.resx
+      is 'Mrs.' Similarly, the code <programlisting>
+esMsg = ctx.GetMessage(Keys.HELLO_MESSAGE,
+                       spanishCultureInfo,
+                       dmr, "Anderson");
+</programlisting> will assign esMsg the value, Hola Senora Anderson, since the
+      value for the key <literal>FemaleGreeting</literal> in
+      MyResource.es.resx is 'Senora'.</para>
+
+      <para>Localization can also apply to objects and not just strings. The
+      .NET 1.1 framework provides the utility class ComponentResourceManager
+      that can apply multiple resource values to object properties in a
+      performant manner. (VS.NET 2005 makes heavy use of this class in the
+      code it generates for winform applications.) The example program has a
+      simple class, Person, that has an integer property Age and a string
+      property Name. The resource file, Person.resx contains key names that
+      follow the pattern, person.&lt;PropertyName&gt;. In this case it
+      contains person.Name and person.Age. The code to assign these resource
+      values to an object is shown below <programlisting>
+Person p = new Person();
+ctx.ApplyResources(p, "person", CultureInfo.CurrentUICulture);
+</programlisting> While you could also use the Spring itself to set the
+      properties of these objects, the configuration of simple properties
+      using Spring will not take into account localization. It may be
+      convenient to combine approaches and use Spring to configure the
+      Person's object references while using IApplicationContext inside an
+      AfterPropertiesSet callback (see IInitializingObject) to set the
+      Person's culture aware properties.</para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>ApplicationContext and IEventRegistry</title>
+
+    <sect2>
+      <title>Introduction</title>
+
+      <para>The example program
+      <literal>Spring.Examples.EventRegistry</literal> shows how to use the
+      application context to wire .NET events in a loosely coupled
+      manner.</para>
+
+      <para>Loosely coupled eventing is normally associated with Message
+      Oriented Middleware (MOM) where a daemon process acts as a message
+      broker between other independent processes. Processes communicate
+      indirectly with each other by sending messages though the message
+      broker. The process that initiates the communication is known as a
+      publisher and the process that receives the message is known as the
+      subscriber. By using an API specific to the middleware these processes
+      register themselves as either publishers or subscribers with the message
+      broker. The communication between the publisher and subscriber is
+      considered loosely coupled because neither the publisher nor subscriber
+      has a direct reference to each other, the messages broker acts as an
+      intermediary between the two processes. The
+      <literal>IEventRegistry</literal> is the analogue of the message broker
+      as applied to .NET events. Publishers are classes that invoke a .NET
+      event, subscribers are the classes that register interest in these
+      events, and the messages sent between them are instances of
+      System.EventArgs. The implementation of
+      <literal>IEventRegistry</literal> determines the exact semantics of the
+      notification style and coupling between subscribers and
+      publishers.</para>
+
+      <para>The <literal>IApplicationContext</literal> interface extends the
+      <literal>IEventRegistry</literal> interface and implementations of
+      <literal>IApplicationContext</literal> delegate the event registry
+      functionality to an instance of
+      <literal>Spring.Objects.Events.Support.EventRegistry</literal>.
+      <literal>IEventRegistry</literal> is a simple inteface with one publish
+      method and two subscribe methods. Refer to <xref
+      linkend="context-functionality-pubsub" /> for a reminder of their
+      signatures. The
+      <literal>Spring.Objects.Events.Support.EventRegistry</literal>
+      implementation is essentially a convenience to decouple the event wiring
+      process between publisher and subscribers. In this implementation, after
+      the event wiring is finished, publishers are directly coupled to the
+      subscribers via the standard .NET eventing mechanisms. Alternate
+      implementations could increase the decoupling further by having the
+      event registry subscribe to the events and be responsible for then
+      notifying the subscribers.</para>
+
+      <para>In this example the class <literal>MyClientEventArgs</literal> is
+      a subclass of <literal>System.EventArgs</literal> that defines a string
+      property EventMessage. The class <literal>MyEventPublisher</literal>
+      defines a public event with the delegate signature <literal>void
+      SimpleClientEvent( object sender, MyClientEventArgs args )</literal> The
+      method <literal>void ClientMethodThatTriggersEvent1()</literal> fires
+      this event. On the subscribing side, the class
+      <literal>MyEventSubscriber</literal> contains a method,
+      <literal>HandleClientEvents</literal> that matches the delegate
+      signature and has a boolean property which is set to true if this method
+      is called.</para>
+
+      <para>The publisher and subscriber classes are defined in an application
+      context configuration file but that is not required in order to
+      participate with the event registry. The main program,
+      <literal>EventRegistryApp</literal> creates the application context and
+      asks it for an instance of <literal>MyEventPublisher</literal> The
+      publisher is registered with the event registry via the call,
+      <literal>ctx.PublishEvents( publisher )</literal>. The event registry
+      keeps a reference to this publisher for later use to register any
+      subscribers that match its event signature. Two subscribers are then
+      created and one of them is wired to the publisher by calling the method
+      <literal>ctx.Subscribe( subscriber, typeof(MyEventPublisher) )</literal>
+      Specifying the type indicates that the subscriber should be registered
+      only to events from objects of the type
+      <literal>MyEventPublisher</literal>. This acts as a simple filtering
+      mechanism on the subscriber.</para>
+
+      <para>The publisher then fires the event using normal .NET eventing
+      semantics and the subscriber is called. The subscriber prints a message
+      to the console and sets a state variable to indicate it has been called.
+      The program then simply prints the state variable of the two
+      subscribers, showing that only one of them (the one that registered with
+      the event registry) was called.</para>
+    </sect2>
+  </sect1>
+
+  &pooling-example;
+
+  <sect1>
+    <title>AOP</title>
+
+    <para>Refer to <xref linkend="aop-quickstart" />.</para>
+  </sect1>
+</chapter>

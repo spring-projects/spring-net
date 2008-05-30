@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+  <object id="object1"
+      type="Spring.Objects.Factory.ConcurrentObjectFactoryTests$ConcurrentObject, Spring.Core.Tests"
+      singleton="false">
+    <property name="date">
+      <value>2004/08/08</value>
+    </property>
+  </object>
+  <object id="object2"
+      type="Spring.Objects.Factory.ConcurrentObjectFactoryTests$ConcurrentObject, Spring.Core.Tests"
+      singleton="false">
+    <property name="date">
+      <value>2000/02/02</value>
+    </property>
+  </object>
+</objects>

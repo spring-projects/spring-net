@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="http://www.springframework.net/aop">
+
+	<aop:config>
+
+		<aop:advisor id="getDescriptionAdvisor" pointcut-ref="getDescriptionCalls" advice-ref="getDescriptionCounter"/>
+
+	</aop:config>
+
+  <object id="getDescriptionCalls" type="Spring.Aop.Support.SdkRegularExpressionMethodPointcut, Spring.Aop">
+    <property name="patterns">
+      <list>
+        <value>.*GetDescription.*</value>
+      </list>
+    </property>
+  </object>
+	
+	<object id="getDescriptionCounter" type="Spring.Aop.Framework.CountingBeforeAdvice, Spring.Aop.Tests"/>
+
+	<object name="testObject" type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+  
+
+
+</objects>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<configSections>
+		<section name="DaoConfiguration" type="System.Configuration.NameValueSectionHandler, System" />
+	</configSections>
+	<!-- intended to be merged with App.config that contains same configuration section name -->
+	<!-- but with the maxresults key-value pair -->
+	<DaoConfiguration>
+	        <add key="connection.string" value="Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;"/>
+	</DaoConfiguration>
+</configuration>

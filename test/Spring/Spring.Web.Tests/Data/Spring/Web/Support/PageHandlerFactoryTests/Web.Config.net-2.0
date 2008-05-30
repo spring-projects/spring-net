@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<configuration>
+
+    <configSections>
+        <sectionGroup name="spring">
+            <section name="context" type="Spring.Context.Support.WebContextHandler, Spring.Web"/>
+            <section name="objects" type="Spring.Context.Support.DefaultSectionHandler, Spring.Core"/>
+        </sectionGroup>
+
+        <sectionGroup name="common">
+            <section name="logging" type="Common.Logging.ConfigurationSectionHandler, Common.Logging" />
+        </sectionGroup>
+
+    </configSections>
+
+	<runtime>
+		<assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+			<!--
+			<dependentAssembly>
+				<assemblyIdentity name="Common.Logging" publicKeyToken="65e474d141e25e07" />
+				<bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535" newVersion="1.0.2.0" />
+				<assemblyIdentity name="Common.Logging" publicKeyToken="af08829b84f0328e" />
+				<bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535" newVersion="1.2.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="nunit.core" publicKeyToken="96d09a1eb7f44a77" />
+				<bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535" newVersion="2.4.5.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="nunit.core.interfaces" publicKeyToken="96d09a1eb7f44a77" />
+				<bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535" newVersion="2.4.5.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="nunit.framework" publicKeyToken="96d09a1eb7f44a77" />
+				<bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535" newVersion="2.4.5.0" />
+			</dependentAssembly>
+-->
+		</assemblyBinding>
+	</runtime>
+	
+    <!-- to see logging output in the attached debugger -->
+    <common>
+        <logging>
+            <factoryAdapter type="Common.Logging.Simple.TraceLoggerFactoryAdapter, Common.Logging">
+                <arg key="Level" value="ALL" />
+            </factoryAdapter>
+        </logging>
+    </common>
+
+    <system.web>
+        <compilation debug="true" />
+
+        <!--
+    The following needs to be configured in order to enable Spring.NET Web Framework features
+-->
+        <httpModules>
+            <add name="SpringModule" type="Spring.Context.Support.WebSupportModule, Spring.Web"/>
+            <add name="NUnitAspExModule" type="NUnitAspEx.AspTestExecutionModule, NUnitAspEx" />
+        </httpModules>
+
+        <httpHandlers>
+			<add verb="*" path="*.oaspx" type="System.Web.UI.PageHandlerFactory"/>
+			<add verb="*" path="*.aspx" type="Spring.Web.Support.PageHandlerFactory, Spring.Web"/>
+            <add verb="*" path="*.testmethod" type="NUnitAspEx.AspTestMethodHandler, NUnitAspEx" validate="false" />
+        </httpHandlers>
+
+    </system.web>
+
+    <!-- demonstrates how to configure IHttpModule instances -->
+    <spring>
+        <context>
+            <resource uri="config://spring/objects"/>
+        </context>
+        <objects xmlns="http://www.springframework.net">
+
+            <object type="TransferAfterSetResult.aspx">
+                <property name="Results">
+                    <dictionary>
+                        <entry key="save" value="transfer:TransferAfterSetResultSave.aspx" />
+                    </dictionary>
+                </property>
+            </object>
+
+            <object type="TransferAfterSetResultSave.aspx">
+                <property name="SomeProperty" value="someValue" />
+            </object>
+        </objects>
+    </spring>
+
+</configuration>

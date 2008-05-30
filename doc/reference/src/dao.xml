@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="dao">
+  <title>DAO support</title>
+
+  <section id="dao-introduction">
+    <title>Introduction</title>
+
+    <para>Spring promotes the use of data access interfaces in your
+    application architecture. These interfaces encapsulate the storage and
+    retrieval of data and objects specific to your business domain without
+    reference to a specific persistence API. Within a layered architecture,
+    the service layer is typically responsible for coordinating responses to a
+    particular business request and it delegates any persistence related
+    activities to objects that implement these data access interfaces. These
+    objects are commonly referred to as DAOs (Data Access Objects) and the
+    architectural layer as a DAL (Data Access Layer).</para>
+
+    <para>The benefits of using DAOs in your application are increased
+    portability across persistence technology and ease of testing. Testing is
+    more easily facilitated because a mock or stub implementation of the data
+    access interface can be easily created in a NUnit test so that service
+    layer functionality can be tested without any dependency on the database.
+    This is beneficial because tests that rely on the database are usually
+    hard to set up and tear down and also are impractical for testing
+    exceptional behavior.</para>
+
+    <para>The Data Access Object (DAO) support in Spring is aimed at making it
+    easy to work with data access technologies like ADO.NET and NHibernate in
+    a standardized way. Spring provides two central pieces of functionality to
+    meet this goal. The first is providing a common exception hierarchy across
+    providers and the second is providing base DAOs classes that raise the
+    level of abstraction when performing common ADO.NET operations. This
+    allows one to switch between the aforementioned persistence technologies
+    fairly easily and it also allows one to code without worrying about
+    catching exceptions that are specific to each technology.</para>
+  </section>
+
+  <section id="dao-exceptions">
+    <title>Consistent exception hierarchy</title>
+
+    <para>Database exceptions in the ADO.NET API are not consistent across
+    providers. The .NET 1.1 BCL did not provide a common base class for
+    ADO.NET exceptions. As such you were required to handle exceptions
+    specific to each provider such as
+    <classname>System.Data.SqlClient.SqlException</classname> or
+    <classname>System.Data.OracleClient.OracleException</classname>. The .NET
+    2.0 BCL improved in this regard by introducing a common base class for
+    exceptions, <classname>System.Data.Common.DbException</classname>. However
+    the common DbException is not very portable either as it provides a vendor
+    specific error code as the underlying piece of information as to what went
+    wrong. This error code is different across providers for the same
+    conceptual error, such as a violation of data integrity or providing bad
+    SQL grammar.</para>
+
+    <para>To promote writing portable and descriptive exception handling code
+    Spring provides a convenient translation from technology specific
+    exceptions like <classname>System.Data.SqlClient.SqlException</classname>
+    or <classname>System.Data.OracleClient.OracleException</classname> to its
+    own exception hierarchy with the
+    <classname>Spring.Dao.DataAccessException</classname> as the root
+    exception. These exceptions wrap the original exception so there is never
+    any risk that one might lose any information as to what might have gone
+    wrong.</para>
+
+    <para>In addition to exceptions from ADO.NET providers, Spring can also
+    wrap NHibernate-specific exceptions.. This allows one to handle most
+    persistence exceptions, which are non-recoverable, only in the appropriate
+    layers, without boilerplate using or catch and throw blocks, and exception
+    declarations. As mentioned above, ADO.NET exceptions (including
+    database-specific dialects) are also converted to the same hierarchy,
+    meaning that one can perform some operations with ADO.NET within a
+    consistent programming model. The above holds true for the various
+    template-based versions of the ORM access framework.</para>
+
+    <para>The exception hierarchy that Spring uses is outlined in the
+    following image:</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/DataAccessException.gif" />
+      </imageobject>
+    </mediaobject>
+
+    <para>(Please note that the class hierarchy detailed in the above image
+    shows only a subset of the whole, rich,
+    <classname>DataAccessException</classname> hierarchy.)</para>
+
+    <para>The exception translation functionality is in the namespace
+    Spring.Data.Support and is based on the interface
+    <literal>IAdoExceptionTranslator</literal> shown below.</para>
+
+    <programlisting>public interface IAdoExceptionTranslator
+{
+  DataAccessException Translate( string task, string sql, Exception exception );
+}</programlisting>
+
+    <para>The arguments to the translator are a task string providing a
+    description of the task being attempted, the SQL query or update that
+    caused the problem, and the 'raw' exception thrown by the ADO.NET data
+    provider. The additional task and SQL arguments allow for very readable
+    and clear error messages to be created when an exception occurs.</para>
+
+    <para>A default implementation,
+    <literal>ErrorCodeExceptionTranslator</literal>, is provided that uses the
+    error codes defined for each data provider in the file dbproviders.xml.
+    Refer to this file, an embedded resource in the Spring.Data assembly, for
+    the exact mappings of error codes to Spring DataAccessExceptions.</para>
+
+    <para>A common need is to modify the error codes that are map onto the
+    exception hierarchy. There are several ways to accomplish this
+    task.</para>
+
+    <para>One approach is to override the error codes that are defined in
+    <code>assembly://Spring.Data/Spring.Data.Common/dbproviders.xml</code>. By
+    default, the <link
+    linkend="dbprovider-dbprovider">DbProviderFactory</link> will look for
+    additional metadata for the IoC container it uses internally to define and
+    manage the DbProviders in a file named <literal>dbProviders.xml</literal>
+    located in the root runtime directory. (You can change this location, see
+    the documentation on <link lang=""
+    linkend="dbprovider-dbprovider">DbProvider</link> for more information.)
+    This is a standard Spring application context so all features, such as
+    <link
+    linkend="objects-factory-customizing-factory-postprocessors">ObjectFactoryPostProcessors</link>
+    are available and will be automatically applied. Defining a <link
+    linkend="objects-factory-overrideconfigurer">PropertyOverrideConfigurer</link>
+    in this additional configuration file will allow for you to override
+    specific property values defined in the embedded resource file. As an
+    example, the additional <literal>dbProviders.xml</literal> file shown
+    below will add the error code <literal>2601</literal> to the list of error
+    codes that map to a
+    <literal>DataIntegrityViolationException</literal>.</para>
+
+    <para><programlisting>&lt;objects xmlns='http://www.springframework.net'&gt;
+ 
+  &lt;alias name='SqlServer-2.0' alias='SqlServer2005'/&gt;
+ 
+  &lt;object name="appConfigPropertyOverride" type="Spring.Objects.Factory.Config.PropertyOverrideConfigurer, Spring.Core"&gt;
+    &lt;property name="Properties"&gt;
+      &lt;name-values&gt;
+        &lt;add key="SqlServer2005.DbMetadata.ErrorCodes.DataIntegrityViolationCodes"
+             value="544,2601,2627,8114,8115"/&gt;
+      &lt;/name-values&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>The reason to define the alias is that <link
+    linkend="objects-factory-overrideconfigurer">PropertyOverrideConfigurer</link>
+    assumes a period <literal>(.)</literal> as the separator to pick out the
+    object name but the names of the objects in
+    <literal>dbProviders.xml</literal> have periods in them (i.e.
+    SqlServer-2.0 or System.Data.SqlClient). Creating an alias that has no
+    periods in the name is a workaround.</para>
+
+    <para>Another way to customize the mappings of error codes to exceptions
+    is to subclass <classname>ErrorCodeExceptionTranslator</classname> and
+    override the method, <literal>DataAccessException
+    TranslateException(string task, string sql, string errorCode, Exception
+    exception)</literal>. This will be called before referencing the metadata
+    to perform exception translation. The vendor specific error code provided
+    as a method argument has already been parsed out of the raw ADO.NET
+    exception. If you create your own specific subclass, then you should set
+    the property <literal>ExceptionTranslator</literal> on
+    <literal>AdoTemplate</literal> and
+    <literal>HibernateTemplate/HibernateTransactionManager</literal> to refer
+    to your custom implementation (unless you are using autowiring).</para>
+
+    <para>The third way is to write an implementation of
+    <literal>IAdoExceptionTranslator</literal> and set the property
+    <literal>FallbackTranslator</literal>'on
+    <literal>ErrorCodeExceptionTranslator</literal>. In this case you are
+    responsible for parsing our the vendor specific error code from the raw
+    ADO.NET exception. As with the case of subclassing
+    ErrorCodeExceptionTranslator, you will need to refer to this custom
+    exception translator when using <literal>AdoTemplate</literal> or
+    <literal>HibernateTemplate/HibernateTransactionManager</literal>.</para>
+
+    <para>The ordering of the exception translation processing is as follows.
+    The method TranslateException is called first, then the standard exception
+    translation logic, then the FallbackTranslator.</para>
+
+    <para>Note that you can use this API directly in your own Spring
+    independent data layer. If you are using Spring's ADO.NET abstraction
+    class, <literal>AdoTemplate</literal>, or
+    <literal>HibernateTemplate</literal>, the converted exceptions will be
+    thrown automatically. Somewhere in between these two cases is using
+    Spring's declarative transaction management features in .NET 2.0 with the
+    raw ADO.NET APIs and using <literal>IAdoExceptionTranslator</literal> in
+    your exception handling layer (which might be implemented in AOP using
+    Spring's exception translation aspect).</para>
+
+    <para>Some of the more common data access exceptions are described here.
+    Please refer to the API documentation for more details.</para>
+
+    <table>
+      <title>Common DataAccessExceptions</title>
+
+      <tgroup cols="2">
+        <colspec align="left" />
+
+        <thead>
+          <row>
+            <entry>Exception</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>BadSqlGrammarException</entry>
+
+            <entry>Exception thrown when SQL specified is invalid.</entry>
+          </row>
+
+          <row>
+            <entry>DataIntegrityViolationException</entry>
+
+            <entry>Exception thrown when an attempt to insert or update data
+            results in violation of an integrity constraint. For example,
+            inserting a duplicate key.</entry>
+          </row>
+
+          <row>
+            <entry>PermissionDeniedDataAccessException</entry>
+
+            <entry>Exception thrown when the underling resource denied a
+            permission to access a specific element, such as a specific
+            database table.</entry>
+          </row>
+
+          <row>
+            <entry>DataAccessResourceFailureException</entry>
+
+            <entry>Exception thrown when a resource fails completely, for
+            example, if we can't connect to a database.</entry>
+          </row>
+
+          <row>
+            <entry>ConcurrentyFailureException</entry>
+
+            <entry>Exception thrown when a concurrency error occurs.
+            OptimisticLockingFailureException and
+            PessimisticLockingFailureException are subclasses. This is a
+            useful exception to catch and to retry the transaction again. See
+            Spring's <link linkend="retry-aspect">Retry Aspect</link> for an
+            AOP based solution.</entry>
+          </row>
+
+          <row>
+            <entry>OptimisticLockingFailureException</entry>
+
+            <entry>Exception thrown when there an optimistic locking failure
+            occurs. The subclass ObjectOptimisticLockingFailureException can
+            be used to examine the Type and the IDof the object that failed
+            the optimistic locking.</entry>
+          </row>
+
+          <row>
+            <entry>PessimisticLockingFailure</entry>
+
+            <entry>Exception thrown when a pessimistic locking failure
+            occures. Subclasses of this exception are
+            CannotAcquireLockException, CannotSerializeTransactionException,
+            and DeadlockLoserDataAccessException.</entry>
+          </row>
+
+          <row>
+            <entry>CannotAcquireLockException</entry>
+
+            <entry>Exception thrown when a lock can not be acquired, for
+            example during an update, i..e a select for update</entry>
+          </row>
+
+          <row>
+            <entry>CannotSerializeTransactionException</entry>
+
+            <entry>Exception thrown when a transaction can not be
+            serialized.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section>
+    <title>Consistent abstract classes for DAO support</title>
+
+    <para>To make it easier to work with a variety of data access technologies
+    such as ADO.NET, NHibernate, and iBatis.NET in a consistent way, Spring
+    provides a set of abstract DAO classes that one can extend. These abstract
+    classes have methods for providing the data source and any other
+    configuration settings that are specific to the technology one is
+    currently using.</para>
+
+    <para>DAO support classes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><classname>AdoDaoSupport</classname> - super class for ADO.NET
+        data access objects. Requires a
+        <interfacename>DbProvider</interfacename> to be provided; in turn,
+        this class provides a <classname>AdoTemplate</classname> instance
+        initialized from the supplied
+        <interfacename>DbProvider</interfacename> to subclasses. See the
+        documentation for <literal>AdoTemplate</literal> for more
+        information.</para>
+      </listitem>
+
+      <listitem>
+        <para><classname>HibernateDaoSupport</classname> - super class for
+        NHibernate data access objects. Requires a
+        <interfacename>ISessionFactory</interfacename> to be provided; in
+        turn, this class provides a <classname>HibernateTemplate</classname>
+        instance initialized from the supplied
+        <interfacename>SessionFactory</interfacename> to subclasses. Can
+        alternatively be initialized directly via a
+        <classname>HibernateTemplate</classname>, to reuse the latter's
+        settings like <interfacename>SessionFactory</interfacename>, flush
+        mode, exception translator, etc. This is contained in a download
+        separate from the main Spring.NET distribution.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</chapter>

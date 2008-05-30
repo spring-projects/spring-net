@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<objects xmlns="http://www.springframework.net">
+	<object id="prototypeTest" type="Spring.Objects.Factory.SideEffectObject" singleton="false">
+		<property name="count">
+			<value>10</value>
+		</property>
+	</object>
+	<object id="poolTargetSource" type="Spring.Aop.Target.SimplePoolTargetSource">
+		<property name="targetobjectName">
+			<value>prototypeTest</value>
+		</property>
+		<property name="maxSize">
+			<value>25</value>
+		</property>
+	</object>
+	<object id="poolConfigAdvisor" type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject">
+		<property name="targetObject">
+			<ref local="poolTargetSource" />
+		</property>
+		<property name="targetMethod">
+			<value>GetPoolingConfigMixin</value>
+		</property>
+	</object>
+	<object id="nop" type="Spring.Aop.Interceptor.NopInterceptor" />
+	<!--
+		This will create a object for each thread ("apartment")
+	-->
+	<object id="pooled" type="Spring.Aop.Framework.ProxyFactoryObject">
+		<property name="targetSource">
+			<ref local="poolTargetSource" />
+		</property>
+		<property name="interceptorNames">
+			<value>nop</value>
+		</property>
+	</object>
+	<object id="pooledNoInterceptors" type="Spring.Aop.Framework.ProxyFactoryObject">
+		<property name="targetSource">
+			<ref local="poolTargetSource" />
+		</property>
+	</object>
+	<object id="pooledWithMixin" type="Spring.Aop.Framework.ProxyFactoryObject">
+		<property name="targetSource">
+			<ref local="poolTargetSource" />
+		</property>
+		<property name="introductionNames">
+			<value>poolConfigAdvisor</value>
+		</property>
+		<!-- Necessary as have a mixin and want to avoid losing the class,
+			 because there's no target interface -->
+		<property name="proxyTargetType">
+			<value>true</value>
+		</property>
+	</object>
+</objects>

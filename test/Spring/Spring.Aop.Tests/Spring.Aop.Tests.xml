@@ -1,0 +1,854 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Spring.Aop.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:Spring.Aspects.RetryAdviceTests">
+            <summary>
+            This class contains tests for RetryAdvice
+            </summary>
+            <author>Mark Pollack</author>
+            <version>$Id: RetryAdviceTests.cs,v 1.3 2008/03/17 20:25:41 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aspects.Cache.CacheParameterAdviceTests">
+            <summary>
+            Unit tests for the CacheParameterAdvice class.
+            </summary>
+            <author>Aleksandar Seovic</author>
+            <version>$Id: CacheParameterAdviceTests.cs,v 1.6 2007/04/01 15:05:33 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.TrueMethodMatcherTests">
+            <summary>
+            Unit tests for the TrueMethodMatcher class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: TrueMethodMatcherTests.cs,v 1.3 2006/04/09 07:19:06 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.MethodCounter">
+            <summary>
+            Useful base class for counting advices etc.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Choy Rim (.NET)</author>
+            <version>$Id: MethodCounter.cs,v 1.2 2007/03/16 04:01:47 aseovic Exp $</version>
+        </member>
+        <member name="F:Spring.Aop.Framework.MethodCounter.map">
+            <summary>Method name --> count, does not understand overloading </summary>
+        </member>
+        <member name="T:Spring.Aop.TruePointcutTests">
+            <summary>
+            Unit tests for the TruePointcut class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: TruePointcutTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.ITimeStamped">
+            <summary>
+            This interface can be implemented by cacheable objects
+            or cache entries, to enable the freshness of objects
+            to be checked.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Choy Rim (.NET)</author>
+            <version>$Id: ITimeStamped.cs,v 1.1 2004/08/01 10:20:20 choyrim Exp $</version>
+        </member>
+        <member name="P:Spring.Aop.Framework.ITimeStamped.TimeStamp">
+            <summary>
+            Return the timestamp for this object.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.CachedAopProxyFactoryTests">
+            <summary>
+            Unit tests for the CachedAopProxyFactoryTests class.
+            </summary>
+            <author>Bruno Baia</author>
+            <version>$Id: CachedAopProxyFactoryTests.cs,v 1.1 2007/08/04 01:20:11 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.DefaultAopProxyFactoryTests">
+            <summary>
+            Unit tests for the DefaultAopProxyFactory class.
+            </summary>
+            <author>Bruno Baia</author>
+            <version>$Id: DefaultAopProxyFactoryTests.cs,v 1.1 2007/08/04 01:20:11 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.AbstractMethodInvocationTests">
+            <summary>
+            Unit tests for the AbstractMethodInvocation class.
+            </summary>
+            <author>Rick Evans</author>
+            <author>Bruno Baia</author>
+            <version>$Id: AbstractMethodInvocationTests.cs,v 1.2 2008/02/06 18:29:05 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Support.TypeFiltersTests">
+            <summary>
+            Unit tests for the TypeFilters class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Choy Rim (.NET)</author>
+            <version>$Id: TypeFiltersTests.cs,v 1.2 2005/07/21 16:01:12 springboy Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Support.ControlFlowPointcutTests">
+            <summary>
+            Unit tests for the ControlFlowPointcut class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="M:Spring.Aop.Support.ControlFlowPointcutTests.SelectiveApplication">
+            <summary>
+            Check that we can use a cflow pointcut only in conjunction with
+            a static pointcut: e.g. all setter methods that are invoked under
+            a particular class.
+            </summary>
+            <remarks>
+            This greatly reduces the number of calls to the cflow pointcut,
+            meaning that it's not so prohibitively expensive.
+            </remarks>
+        </member>
+        <member name="T:Spring.Aop.Support.ControlFlowPointcutTests.SetterPointcut">
+            <summary>
+            Pointcut to catch all methods beginning with 'Set'.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Support.AttributeMatchMethodPointcutTests">
+            <summary>
+            Unit tests for the AttributeMatchMethodPointcut class.
+            </summary>
+            <author>Rick Evans</author>
+            <author>Ronald Wildenberg</author>
+            <version>$Id: AttributeMatchMethodPointcutTests.cs,v 1.3 2007/05/21 16:44:08 bbaia Exp $</version>
+        </member>
+        <member name="M:Spring.Aop.Support.AttributeMatchMethodPointcutTests.MatchesWithAnInterfaceMethodThatMatchesTheAttributeTypeAndNoCheckInterfaces">
+            <summary>
+            Confirms that without interfaces checking, a method that is implemented from an interface, will not match.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Support.AttributeMatchMethodPointcutTests.MatchesWithAnInterfaceMethodThatMatchesTheAttributeTypeAndCheckInterfaces">
+            <summary>
+            Confirms that with interface checking, a method that is implementing an interface method 
+            where the attribute is defined will match.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Support.AttributeMatchMethodPointcutTests.MatchesWithAnIndirectInterfaceMethodThatMatchesTheAttributeTypeAndCheckInterfaces">
+            <summary>
+            Confirms that with interfaces checking, a method that is indirectly implementing an interface method
+            where the attribute is defined will match.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Support.AttributeMatchMethodPointcutTests.MatchesWithAnOverloadedInterfaceMethod">
+            <summary>
+            Confirms that overloading methods do not match, whatever the attributes.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Support.AttributeMatchMethodPointcutTests.MatchesWithAnIndirectInterfaceMethodFromSubclassThatMatchesTheAttributeTypeAndCheckInterfaces">
+            <summary>
+            Confirms that methods, defined in a subclass of a class that implements an interface that
+            has methods that have been decorated with an attribute, match.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.ProxyFactoryObjectTests">
+            <summary>
+            Integration test cases for the ProxyFactoryObject, using an XML object factory.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Federico Spinazzi (.NET)</author>
+            <author>Choy Rim (.NET)</author>
+            <author>Aleksandar Seovic (.NET)</author>
+            <version>$Id: ProxyFactoryObjectTests.cs,v 1.35 2007/12/07 17:59:31 bbaia Exp $</version>
+        </member>
+        <member name="M:Spring.Aop.Framework.ProxyFactoryObjectTests.SingletonInstancesAreEqual">
+            <summary>
+            The instances are equal, but do not have object identity.
+            Interceptors and interfaces and the target are the same.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.ProxyFactoryObjectTests.AutoInvoker">
+            <summary> Test invoker is automatically added to manipulate target</summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.ProxyFactoryObjectTests.CanAddAndRemoveIntroductionsOnSingleton">
+            <summary>
+            Must see effect immediately on behaviour.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.ProxyFactoryObjectTests.CanAddAndRemoveAspectInterfacesOnPrototype">
+            <summary> Try adding and removing interfaces and interceptors on prototype.
+            Changes will only affect future references obtained from the factory.
+            Each instance will be independent.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.ProxyFactoryObjectTests.CanAddAndRemoveAspectInterfacesOnSingletonByCasting">
+            <summary>
+            Note that we can't add or remove interfaces without reconfiguring the
+            singleton. 
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.ProxyFactoryObjectTests.GlobalsCanAddAspectInterfaces">
+            <summary> Checks that globals get invoked,
+            and that they can add aspect interfaces unavailable
+            to other objects. These interfaces don't need
+            to be included in proxiedInterface [].
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.ProxyFactoryObjectTests.PointcutForVoid">
+            <summary>
+            Fires only on void methods. Saves list of methods intercepted.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.ProxyFactoryObjectTests.PointcutForVoid.Matches(System.Reflection.MethodInfo,System.Type,System.Object[])">
+            <summary>
+            Must fire only if it returns void.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.ProxyFactoryObjectTests.IAddedGlobalInterface">
+            <summary> Aspect interface</summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.ProxyFactoryObjectTests.GlobalIntroduction">
+            <summary> Use as a global interceptor. Checks that 
+            global interceptors can add aspect interfaces.
+            NB: Add only via global interceptors in XML file.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.AutoProxy.AdvisorAutoProxyCreatorCircularReferencesTests">
+            <summary>
+            Tests for auto proxy creation combined with factory object and circular references.
+            </summary>
+            <author>Erich Eichinger (.NET)</author>
+            <version>$Id: AdvisorAutoProxyCreatorCircularReferencesTests.cs,v 1.4 2007/09/07 01:53:01 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.Adapter.AfterReturningAdviceInterceptorTests">
+            <summary>
+            Unit tests for the AfterReturningAdviceInterceptor class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aspects.Logging.SimpleLoggingAdviceTests">
+            <summary>
+            This class contains tests for SimpleLoggingAdvice
+            </summary>
+            <author>Mark Pollack</author>
+            <version>$Id: SimpleLoggingAdviceTests.cs,v 1.4 2008/04/04 14:59:47 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.ProxyConfigTests">
+            <summary>
+            Unit tests for the ProxyConfig class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: ProxyConfigTests.cs,v 1.2 2006/04/09 07:19:05 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.AutoProxy.OrderedLogicalThreadContextCheckAdvisor">
+            <summary> 
+            Before advisor that allow us to manipulate ordering to check
+            that superclass sorting works correctly.
+            </summary>
+            <remarks>
+            It doesn't actually do anything except count
+            method invocations and check for presence of a value in the 
+            LogicalThreadContext.
+            </remarks>
+            <author>Mark Pollack (.NET)</author>
+            <version>$Id: OrderedLogicalThreadContextCheckAdvisor.cs,v 1.2 2006/09/15 21:25:17 markpollack Exp $</version>
+        </member>
+        <member name="F:Spring.Aop.Framework.AutoProxy.OrderedLogicalThreadContextCheckAdvisor.requireLtcHasValue">
+            <summary> Should we insist on the presence of a transaction attribute or refuse to accept one?</summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.CountingBeforeAdvice">
+            <summary>
+            Simple before advice example that we can use for counting checks.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Choy Rim (.NET)</author>
+            <version>$Id: CountingBeforeAdvice.cs,v 1.6 2007/03/16 04:01:47 aseovic Exp $</version>
+        </member>
+        <member name="T:Spring.Aspects.Logging.TestableSimpleLoggingAdvice">
+            <summary>
+            This is simple wrapper to expose the protected methood InvokeUnderLog in the class
+            SimpleLoggingAdvice for testing purposes.
+            </summary>
+            <author>Mark Pollack</author>
+            <version>$Id: TestableSimpleLoggingAdvice.cs,v 1.2 2007/12/06 17:17:24 markpollack Exp $</version>
+        </member>
+        <member name="M:Spring.Aspects.Logging.TestableSimpleLoggingAdvice.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Spring.Aspects.Logging.TestableSimpleLoggingAdvice"/> class.
+            </summary>
+            <param name="useDynamicLogger">if set to <c>true</c> [use dynamic logger].</param>
+        </member>
+        <member name="M:Spring.Aspects.Logging.TestableSimpleLoggingAdvice.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Spring.Aspects.Logging.TestableSimpleLoggingAdvice"/> class.
+            </summary>
+        </member>
+        <member name="M:Spring.Aspects.Logging.TestableSimpleLoggingAdvice.CallInvokeUnderLog(AopAlliance.Intercept.IMethodInvocation,Common.Logging.ILog)">
+            <summary>
+            Calls the protected InvokeUnderLog method
+            </summary>
+            <param name="invocation">The invocation.</param>
+            <param name="log">The log.</param>
+            <returns>The result of the call to IMethodInvocation.Proceed()</returns>
+        </member>
+        <member name="M:Spring.Aspects.Logging.TestableSimpleLoggingAdvice.CallIsInterceptorEnabled(AopAlliance.Intercept.IMethodInvocation,Common.Logging.ILog)">
+            <summary>
+            Calls the IsInterceptorEnabled method.
+            </summary>
+            <param name="invocation">The invocation.</param>
+            <param name="log">The log.</param>
+            <returns>The result of the protected method IsInterceptorEnabled</returns>
+        </member>
+        <member name="T:Spring.Aop.Framework.CountingThrowsAdvice">
+            <summary>
+            Simple throw advice example that we can use for counting checks.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Bruno Baia (.NET)</author>
+            <version>$Id: CountingThrowsAdvice.cs,v 1.2 2007/03/16 04:01:47 aseovic Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreatorTests">
+            <summary>
+            Tests for ObjectNameAutoProxyCreator functionality
+            </summary>
+            <author>Mark Pollack</author>
+            <version>$Id: ObjectNameAutoProxyCreatorTests.cs,v 1.6 2007/09/07 01:53:01 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.Adapter.AdvisorAdapterRegistrationTests">
+            <summary>
+            TestCase for AdvisorAdapterRegistrationManager mechanism.
+            </summary>
+            <author>Dmitriy Kopylenko</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.SimpleBeforeAdviceInterceptor">
+            <summary>
+            
+            </summary>
+            <author>Dmitriy Kopylenko</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.Interceptor.SerializableNopInterceptor">
+            <summary>
+            Subclass of NopInterceptor that is serializable and
+            can be used to test proxy serialization.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.Interceptor.NopInterceptor">
+            <summary>
+            Trivial interceptor that can be introduced into an interceptor chain to
+            aid in debugging.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Choy Rim (.NET)</author>
+            <version>$Id: NopInterceptor.cs,v 1.6 2008/01/14 20:49:47 oakinger Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.ProxyFactoryTests">
+            <summary>
+            Unit tests for the ProxyFactory class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Choy Rim (.NET)</author>
+            <author>Rick Evans (.NET)</author>
+            <version>$Id: ProxyFactoryTests.cs,v 1.22 2008/03/21 10:49:38 oakinger Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.CountingAfterReturningAdvice">
+            <summary>
+            Simple after returning advice example that we can use for counting checks.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Bruno Baia (.NET)</author>
+            <version>$Id: CountingAfterReturningAdvice.cs,v 1.2 2007/03/16 04:01:47 aseovic Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Advice.DebugAdvice">
+            <summary>
+            Convenience <see cref="T:AopAlliance.Intercept.IMethodInterceptor"/>
+            implementation that displays verbose information about intercepted
+            invocations to the system console.
+            </summary>
+            <remarks>
+            <p>
+            Can be introduced into an interceptor chain to serve as a useful low
+            level debugging aid.
+            </p>
+            </remarks>
+            <author>Rod Johnson</author>
+            <author>Federico Spinazzi (.NET)</author>
+            <author>Aleksandar Seovic (.NET)</author>
+            <version>$Id: DebugAdvice.cs,v 1.1 2007/08/08 07:45:36 markpollack Exp $</version>
+            <seealso cref="T:System.Console"/>
+        </member>
+        <member name="M:Spring.Aop.Advice.DebugAdvice.Invoke(AopAlliance.Intercept.IMethodInvocation)">
+            <summary>
+            Displays verbose information about intercepted invocations to the
+            system console.
+            </summary>
+            <param name="invocation">
+            The method invocation that is being intercepted.
+            </param>
+            <returns>
+            The result of the call to the
+            <see cref="M:AopAlliance.Intercept.IJoinpoint.Proceed"/> method of
+            the supplied <paramref name="invocation"/>; this return value may
+            well have been intercepted by the interceptor.
+            </returns>
+            <exception cref="T:System.Exception">
+            If any of the interceptors in the chain or the target object itself
+            throws an exception.
+            </exception>
+            <seealso cref="T:System.Console"/>
+            <seealso cref="M:AopAlliance.Intercept.IMethodInterceptor.Invoke(AopAlliance.Intercept.IMethodInvocation)"/>
+        </member>
+        <member name="P:Spring.Aop.Advice.DebugAdvice.Count">
+            <summary>
+            Gets the count of the number of times this interceptor has been
+            invoked.
+            </summary>
+            <returns>
+            The count of the number of times this interceptor has been invoked.
+            </returns>
+        </member>
+        <member name="T:Spring.Aspects.Cache.CacheResultAdviceTests">
+            <summary>
+            Unit tests for the CacheResultAdvice class.
+            </summary>
+            <author>Aleksandar Seovic</author>
+            <version>$Id: CacheResultAdviceTests.cs,v 1.4 2007/08/22 20:16:51 oakinger Exp $</version>
+        </member>
+        <member name="M:Spring.Aspects.Cache.CacheResultAdviceTests.CacheResultOfMethodThatReturnsNull">
+            <summary>
+            Change History:
+            2007-08-22 (oakinger): changed behaviour to cache null values as well
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Target.PrototypeTargetSourceTests">
+            <summary>
+            Unit tests for the PrototypeTargetSource class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Federico Spinazzi</author>
+            <version>$Id: PrototypeTargetSourceTests.cs,v 1.8 2007/07/28 07:33:22 markpollack Exp $</version>
+        </member>
+        <member name="M:Spring.Aop.Target.PrototypeTargetSourceTests.FixtureSetUp">
+            <summary>
+            The setup logic executed before the execution of this test fixture.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Target.PrototypeTargetSourceTests.PrototypeAndSingletonBehaveDifferently">
+            <summary>
+             Test that multiple invocations of the prototype object will result
+             in no change to visible state, as a new instance is used.
+             With the singleton, there will be change.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Target.EmptyTargetSourceTests">
+            <summary>
+            Unit tests for the EmptyTargetSource class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: EmptyTargetSourceTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.ISimpleBeforeAdvice">
+            <summary>
+            Simple BeforeAdvice targeted for testing
+            </summary>
+            <author>Dmitriy Kopylenko</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.DecoratorAopProxyTests">
+            <summary>
+            Additional and overridden tests for the decorator-based proxy.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Juergen Hoeller</author>
+            <author>Bruno Baia (.NET)</author>
+            <version>$Id: DecoratorAopProxyTests.cs,v 1.6 2008/05/21 08:04:52 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests">
+            <summary>
+            Useful base class for Aop proxy test cases.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Juergen Hoeller</author>
+            <author>Bruno Baia (.NET)</author>
+            <version>$Id: AbstractAopProxyTests.cs,v 1.21 2008/05/21 08:04:52 bbaia Exp $</version>
+        </member>
+        <member name="M:Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests.OneAdvisedObjectCallsAnother">
+            <summary>
+            Check that the two MethodInvocations necessary are independent 
+            and don't conflict.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests.TargetCanGetProxyEvenIfNoAdviceChain">
+            <summary>
+            Check that although a method is eligible for advice chain optimization and 
+            direct reflective invocation, it doesn't happen if we've asked to see the proxy, 
+            so as to guarantee a consistent programming model.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests.CanCastProxyToIAdvised">
+            <summary>
+            http://forum.springframework.net/showthread.php?t=504
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests.StringSetterNullReplacementAdvisor">
+            <summary>
+            Fires on setter methods that take a string.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests.StringSetterNullReplacementAdvice">
+            <summary>
+            Replaces null arg with "".
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.AopUtilsTests">
+            <summary>
+            Unit tests for the AopUtils class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Choy Rim (.NET)</author>
+            <version>$Id: AopUtilsTests.cs,v 1.2 2008/03/21 10:49:37 oakinger Exp $</version>
+        </member>
+        <member name="T:Spring.Aspects.Exceptions.ExceptionHandlerAspectIntegrationTests">
+            <summary>
+            This class contains tests for ExceptionHandlerAdvice
+            </summary>
+            <author>Mark Pollack</author>
+            <version>$Id: ExceptionHandlerAspectIntegrationTests.cs,v 1.6 2008/02/26 00:03:43 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aspects.Cache.CacheAspectIntegrationTests">
+            <summary>
+            Unit tests for the CacheParameterAdvice class.
+            </summary>
+            <author>Aleksandar Seovic</author>
+            <version>$Id: CacheAspectIntegrationTests.cs,v 1.4 2007/08/03 14:38:39 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Target.SimplePoolTargetSourceTests">
+            <summary> Tests for pooling invoker interceptor
+            TODO need to make these tests stronger: it's hard to
+            make too many assumptions about a pool
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Federico Spinazzi (.Net)</author>
+            <version>  $Id: SimplePoolTargetSourceTests.cs,v 1.3 2006/02/08 08:31:05 aseovic Exp $
+            </version>
+        </member>
+        <member name="F:Spring.Aop.Target.SimplePoolTargetSourceTests.INITIAL_COUNT">
+            <summary>Initial count value set in Object factory XML </summary>
+        </member>
+        <member name="M:Spring.Aop.Target.SimplePoolTargetSourceTests.TearDown">
+            <summary> We must simulate container shutdown, which should clear threads.</summary>
+        </member>
+        <member name="T:Spring.Aop.SimpleBeforeAdviceAdapter">
+            <summary>
+            
+            </summary>
+            <author>Dmitriy Kopylenko</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.CompositionAopProxyTests">
+            <summary>
+            Additional and overridden tests for the composition-based proxy.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Juergen Hoeller</author>
+            <author>Bruno Baia (.NET)</author>
+            <version>$Id: CompositionAopProxyTests.cs,v 1.4 2007/08/02 04:15:37 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Config.AopNamespaceParserTests">
+            <summary>
+            This class contains tests for the custom aop namespace.
+            </summary>
+            <author>Mark Pollack</author>
+            <version>$Id: AopNamespaceParserTests.cs,v 1.7 2007/08/09 03:06:37 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Target.HotSwappableTargetSourceTests">
+            <summary>
+            Unit tests for the HotSwappableTargetSource class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Federico Spinazzi (.NET)</author>
+            <version>$Id: HotSwappableTargetSourceTests.cs,v 1.4 2006/04/09 07:19:06 markpollack Exp $</version>
+        </member>
+        <member name="F:Spring.Aop.Target.HotSwappableTargetSourceTests.INITIAL_COUNT">
+            <summary>Initial count value set in Object factory XML </summary>
+        </member>
+        <member name="M:Spring.Aop.Target.HotSwappableTargetSourceTests.TearDown">
+            <summary>
+            We must simulate container shutdown, which should clear threads.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.SimpleBeforeAdviceImpl">
+            <summary>
+            
+            </summary>
+            <author>Dmitriy Kopylenko</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.Framework.HashtableCachingAdvisorChainFactoryTests">
+            <summary>
+            Unit tests for the HashtableCachingAdvisorChainFactory class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: HashtableCachingAdvisorChainFactoryTests.cs,v 1.2 2006/04/09 07:19:05 markpollack Exp $</version>
+        </member>
+        <member name="M:Spring.Aop.Framework.HashtableCachingAdvisorChainFactoryTests.FixtureSetUp">
+            <summary>
+            The setup logic executed before the execution of this test fixture.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.HashtableCachingAdvisorChainFactoryTests.SetUp">
+            <summary>
+            The setup logic executed before the execution of each individual test.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.HashtableCachingAdvisorChainFactoryTests.TearDown">
+            <summary>
+            The tear down logic executed after the execution of each individual test.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Framework.HashtableCachingAdvisorChainFactoryTests.FixtureTearDown">
+            <summary>
+            The tear down logic executed after the entire test fixture has executed.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.CountingMultiAdvice">
+            <summary>
+            Advice object that implements <i>multiple</i> Advice interfaces.
+            </summary>
+            <author>Juergen Hoeller</author>
+            <author>Bruno Baia (.NET)</author>
+            <version>$Id: CountingMultiAdvice.cs,v 1.1 2006/08/10 18:45:57 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Target.ThreadLocalTargetSourceTests">
+            <author>Rod Johnson</author>
+            <author>Federico Spinazzi</author>
+            <version>  $Id: ThreadLocalTargetSourceTests.cs,v 1.5 2006/11/13 07:04:51 markpollack Exp $
+            </version>
+        </member>
+        <member name="F:Spring.Aop.Target.ThreadLocalTargetSourceTests.INITIAL_COUNT">
+            <summary>Initial count value set in Object factory XML </summary>
+        </member>
+        <member name="M:Spring.Aop.Target.ThreadLocalTargetSourceTests.TearDown">
+            <summary> We must simulate container shutdown, which should clear threads.</summary>
+        </member>
+        <member name="M:Spring.Aop.Target.ThreadLocalTargetSourceTests.UseDifferentManagedInstancesInSameThread">
+            <summary> Check we can use two different ThreadLocalTargetSources
+            managing objects of different types without them interfering
+            with one another.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Target.ThreadLocalTargetSourceTests.CanGetStatsViaMixinIfThereIsAnInterceptorTakingCareOfThem">
+            <summary> Relies on introduction
+            
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Support.DelegatingIntroductionInterceptorTests">
+            <summary>
+            Translation of DelegatingIntroductionInterceptor unit tests to Spring.NET.
+            </summary>
+            <remarks>
+            Spring.NET doesn't have a DelegatingIntroductionInterceptor because it handles
+            introductions without using interception. So all the unit tests show how similar
+            things can be done in Spring.NET.
+            </remarks>
+            <author>Rod Johnson</author>
+            <author>Choy Rim (.NET)</author>
+            <version>$Id: DelegatingIntroductionInterceptorTests.cs,v 1.6 2004/10/10 08:01:49 gcaprio Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Support.DelegatingIntroductionInterceptorTests.Test">
+            <summary>
+            test introduction.
+            <note>It must include the IAdvice marker interface to be a
+            valid introduction.</note>
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.MockTargetSource">
+            <summary>
+            Useful <see cref="T:Spring.Aop.ITargetSource"/> implementation 
+            that checks calls to GetTarget and ReleaseTarget.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Bruno Baia (.NET)</author>
+            <version>$Id: MockTargetSource.cs,v 1.1 2006/08/10 18:45:58 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicProxy.InheritanceAopProxyTests">
+            <summary>
+            Additional and overridden tests for the inheritance-based proxy.
+            </summary>
+            <author>Bruno Baia</author>
+            <version>$Id: InheritanceAopProxyTests.cs,v 1.2 2008/03/03 09:29:17 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.Adapter.UnknownAdviceTypeExceptionTests">
+            <summary>
+            Unit tests for the UnknownAdviceTypeException class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: UnknownAdviceTypeExceptionTests.cs,v 1.2 2006/04/09 07:19:05 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aspects.Validation.ParameterValidationAdviceTests">
+            <summary>
+            Unit tests for the CacheParameterAdvice class.
+            </summary>
+            <author>Aleksandar Seovic</author>
+            <version>$Id: ParameterValidationAdviceTests.cs,v 1.2 2008/04/02 23:00:46 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Support.AbstractRegularExpressionMethodPointcutTests">
+            <summary>
+            Unit tests for the AbstractRegularExpressionMethodPointcut class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Dmitriy Kopylenko</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.Framework.ReflectiveMethodInvocationTests">
+            <summary>
+            Unit tests for the ReflectiveMethodInvocation class.
+            </summary>
+            <author>Rick Evans</author>
+            <author>Bruno Baia</author>
+            <version>$Id: ReflectiveMethodInvocationTests.cs,v 1.8 2008/02/06 18:29:05 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.DynamicMethodInvocationTests">
+            <summary>
+            Unit tests for the DynamicMethodInvocation class.
+            </summary>
+            <author>Bruno Baia</author>
+            <version>$Id: DynamicMethodInvocationTests.cs,v 1.2 2008/02/06 18:29:05 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests">
+            <summary>
+            Unit tests for the ThrowsAdviceInterceptor class.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.Support.SdkRegularExpressionMethodPointcutTests">
+            <summary>
+            Unit tests for the SdkRegularExpressionMethodPointcut class.
+            </summary>
+            <author>Dmitriy Kopylenko</author>
+            <author>Rick Evans (.NET)</author>
+        </member>
+        <member name="M:Spring.Aop.Support.SdkRegularExpressionMethodPointcutTests.FixtureSetUp">
+            <summary>
+            The setup logic executed before the execution of this test fixture.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Support.SdkRegularExpressionMethodPointcutTests.GetRegexpMethodPointcut">
+            <summary>
+            Returns the method pointcut implementation to be tested.
+            </summary>
+            <returns>The implementation.</returns>
+        </member>
+        <member name="M:Spring.Aop.Support.SdkRegularExpressionMethodPointcutTests.TryMatchesAfterSerialization">
+            <summary>
+            This exercises the logger after deserialization.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Framework.TimestampIntroductionInterceptor">
+            <summary>
+            Test introduction ported from Spring.Java.
+            </summary>
+            <remarks>
+            The name is deceptive because it isn't implemented as an interceptor.
+            It's an introduction which is handled differently in Spring.NET.
+            Keeping the name is useful as a placeholder for future porting work.
+            </remarks>
+            <author>Spring.Java Folks</author>
+            <author>Choy Rim (.NET)</author>
+        </member>
+        <member name="T:Spring.Aop.Framework.AutoProxy.CreatesTestObject">
+            <summary>
+            This is simple implementation of IFactoryObject that creates a TestObject.
+            </summary>
+            <author>Mark Pollack</author>
+            <version>$Id: CreatesTestObject.cs,v 1.1 2007/09/07 01:53:02 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.AutoProxy.AdvisorAutoProxyCreatorTests">
+            <summary>
+            Tests for auto proxy creation by advisor recognition.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Mark Pollack (.NET)</author>
+            <version>$Id: AdvisorAutoProxyCreatorTests.cs,v 1.4 2007/08/01 17:56:25 markpollack Exp $</version>
+        </member>
+        <member name="M:Spring.Aop.Framework.AutoProxy.AdvisorAutoProxyCreatorTests.NoProxy">
+            <summary>
+            No pointcuts match the methods on NoSetterProperties therefore 
+            there should be proxying.
+            </summary> 
+        </member>
+        <member name="M:Spring.Aop.Framework.AutoProxy.AdvisorAutoProxyCreatorTests.HasProxy">
+            <summary>
+            A pointcut matches the property (i.e. method set_Age) on TestObject
+            therefore there should be proxying.
+            </summary> 
+        </member>
+        <member name="T:Spring.Aop.Framework.PrototypeTargetTests">
+            <summary>
+            
+            </summary>
+            <author>Juergen Hoeller</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="T:Spring.AopExceptionTests">
+            <summary>
+            Unit tests for all of the exception classes in the Spring.Aop library...
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: AopExceptionTests.cs,v 1.3 2006/04/09 07:19:04 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Target.SingletonTargetSourceTests">
+            <summary>
+            Unit tests for the SingletonTargetSource class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: SingletonTargetSourceTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Framework.AopContextTests">
+            <summary>
+            Unit tests for the AopContext class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: AopContextTests.cs,v 1.6 2007/05/30 21:06:25 oakinger Exp $</version>
+        </member>
+        <member name="T:Spring.Aspects.Cache.InvalidateCacheAdviceTests">
+            <summary>
+            Unit tests for the InvalidateCacheAdvice class.
+            </summary>
+            <author>Aleksandar Seovic</author>
+            <version>$Id: InvalidateCacheAdviceTests.cs,v 1.4 2007/04/01 15:05:34 bbaia Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.TrueTypeFilterTests">
+            <summary>
+            Unit tests for the TrueTypeFilter class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: TrueTypeFilterTests.cs,v 1.3 2006/04/09 07:19:06 markpollack Exp $</version>
+        </member>
+        <member name="T:Spring.Aop.Support.RegularExpressionMethodPointcutAdvisorTests">
+            <summary>
+            Unit tests for RegularExpressionMethodPointcutAdvisorTests.
+            </summary>
+            <author>Rod Johnson</author>
+            <author>Simon White (.NET)</author>
+        </member>
+        <member name="M:Spring.Aop.Support.RegularExpressionMethodPointcutAdvisorTests.SinglePattern">
+            <summary>
+            Basic use case, a single pattern defined.
+            </summary>
+        </member>
+        <member name="M:Spring.Aop.Support.RegularExpressionMethodPointcutAdvisorTests.MultiplePatterns">
+            <summary>
+            Multiple patterns defined within a single advisor.
+            </summary>
+        </member>
+        <member name="T:Spring.Aop.Support.RootTypeFilterTests">
+            <summary>
+            Unit tests for the RootTypeFilter class.
+            </summary>
+            <author>Rick Evans</author>
+            <version>$Id: RootTypeFilterTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
+        </member>
+    </members>
+</doc>

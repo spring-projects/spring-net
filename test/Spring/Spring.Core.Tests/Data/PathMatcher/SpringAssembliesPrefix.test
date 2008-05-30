@@ -1,0 +1,11 @@
+--pattern--
+**/.spring-assemblies*/**
+--match--
+c:/.spring-assembliesabcd73xs
+c:/app/.spring-assembliesabcd73xs
+c:/app/.spring-assembliesabcd73xs/foo.dll
+//server/app/.spring-assembliesabcd73xs
+--dont-match--
+c:/spring/service/deploy/app/db/backup/foo
+c:/spring/service/deploy/app/ab/backup/foo
+//server/share/service/deploy/app/db/backup/foo

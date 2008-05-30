@@ -1,0 +1,516 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.0.9955"
+        SchemaVersion = "1.0"
+        ProjectGuid = "{F856BCAE-421E-469A-B75F-E41E5BA7F160}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "Spring.Aop.Tests"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                RootNamespace = "Spring"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE;NET_1_0"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    Optimize = "false"
+                    OutputPath = "..\..\..\build\VS.Net.2002\Spring.Aop.Tests\Debug-1.0\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "1"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    Optimize = "true"
+                    OutputPath = "..\..\..\build\VS.Net.2002\Spring.Aop.Tests\Release-1.0\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "Spring.Core.Tests.2002"
+                    Project = "{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Spring.Aop.2002"
+                    Project = "{828F16E3-20A4-4EC4-A8F4-CD95B8ED44C9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Spring.Core.2002"
+                    Project = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
+                />
+                <Reference
+                    Name = "Common.Logging"
+                    AssemblyName = "Common.Logging"
+                    HintPath = "..\..\..\lib\Net\1.0\Common.Logging.dll"
+                />
+                <Reference
+                    Name = "antlr.runtime"
+                    AssemblyName = "antlr.runtime"
+                    HintPath = "..\..\..\lib\Net\1.0\antlr.runtime.dll"
+                />
+                <Reference
+                    Name = "DotNetMock"
+                    AssemblyName = "DotNetMock"
+                    HintPath = "..\..\..\lib\Net\1.0\DotNetMock.dll"
+                />
+                <Reference
+                    Name = "DotNetMock.Framework"
+                    AssemblyName = "DotNetMock.Framework"
+                    HintPath = "..\..\..\lib\Net\1.0\DotNetMock.Framework.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\lib\Net\1.0\nunit.framework.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AopExceptionTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\ISimpleBeforeAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\SimpleBeforeAdviceAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\SimpleBeforeAdviceImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\SimpleBeforeAdviceInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\TrueMethodMatcherTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\TruePointcutTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\TrueTypeFilterTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Advice\DebugAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Config\AopNamespaceParserTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Config\AopNamespaceParserTests.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Aop\Framework\AbstractMethodInvocationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AopContextTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\CountingAfterReturningAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\CountingBeforeAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\CountingMultiAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\CountingThrowsAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\DynamicMethodInvocationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\HashtableCachingAdvisorChainFactoryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\ITimeStamped.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\MethodCounter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\PrototypeTargetTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\ProxyConfigTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\ProxyFactoryObjectTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\ProxyFactoryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\ReflectiveMethodInvocationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\TimestampIntroductionInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\UnsupportedInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\Adapter\AdvisorAdapterRegistrationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\Adapter\AfterReturningAdviceInterceptorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\Adapter\ThrowsAdviceInterceptorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\Adapter\UnknownAdviceTypeExceptionTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\AdvisorAutoProxyCreatorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\LogicalThreadContextAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\NoSetterProperties.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\ObjectNameAutoProxyCreatorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\OrderedLogicalThreadContextCheckAdvisor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\DynamicProxy\AbstractAopProxyTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\DynamicProxy\CompositionAopProxyTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\DynamicProxy\DecoratorAopProxyTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\DynamicProxy\MockTargetSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Interceptor\NopInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Interceptor\SerializableNopInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\AbstractRegularExpressionMethodPointcutTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\AttributeMatchMethodPointcutTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\ControlFlowPointcutTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\DelegatingIntroductionInterceptorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\RegularExpressionMethodPointcutAdvisorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\RootTypeFilterTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\SdkRegularExpressionMethodPointcutTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\TypeFiltersTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Target\EmptyTargetSourceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Target\HotSwappableTargetSourceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Target\PrototypeTargetSourceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Target\SimplePoolTargetSourceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Target\SingletonTargetSourceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Target\ThreadLocalTargetSourceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Cache\CacheAspectIntegrationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Cache\CacheParameterAdviceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Cache\CacheResultAdviceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Cache\InvalidateCacheAdviceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Exception\ExceptionHandlerAspectIntegrationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\innerBeanTarget.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\prototypeTarget.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\prototypeTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\proxyFactoryDoubleTargetSourceTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\proxyFactoryTargetSourceTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\proxyFactoryTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\serializationTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\throwsAdvice.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\adapter\withBPPContext.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\adapter\withoutBPPContext.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\AutoProxy\advisorAutoProxyCreator.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Framework\AutoProxy\objectNameAutoProxyCreatorTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Support\RegularExpressionSetterTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Target\commonsPoolTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Target\hotSwapTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Target\prototypeTargetSourceTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Target\simplePoolTests.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Aop\Target\threadLocalTests.xml"
+                    BuildAction = "Content"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

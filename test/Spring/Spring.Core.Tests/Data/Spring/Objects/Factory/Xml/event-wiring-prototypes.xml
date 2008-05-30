@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+In here, we check the behavior of event wiring to prototypes.
+-->
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+	<!-- prototype event source -->
+	<object id="source"
+	 type="Spring.Objects.TestObject, Spring.Core.Tests"
+	 singleton="false"
+	 />
+
+  <object id="instanceSink" type="Spring.Objects.TestEventHandler, Spring.Core.Tests">
+    <!-- wired up to an event exposed on prototype instance -->
+    <listener event="Click" method="HandleEvent">
+        <ref object="source"/>
+    </listener>
+  </object>
+</objects>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	Tests for independent prototype behaviour.
+-->
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+	<object id="nopInterceptor" type="Spring.Aop.Interceptor.NopInterceptor">
+	</object>
+	
+	<object id="serializableNopInterceptor" type="Spring.Aop.Interceptor.SerializableNopInterceptor">
+	</object>
+	
+	<object id="serializableSingleton" 
+			type="Spring.Aop.Framework.ProxyFactoryObject"
+	>	
+		<property name="interceptorNames"><value>serializableNopInterceptor</value></property>	
+		<property name="proxyInterfaces"><value>Spring.Objects.Person</value></property>		
+		<property name="target">
+			<object type="Spring.Objects.SerializablePerson">
+				<property name="name"><value>serializableSingleton</value></property>
+			</object>
+		</property>
+	</object>
+	
+	
+	<object id="prototypeTarget" type="Spring.Objects.SerializablePerson">
+		<property name="name"><value>serializablePrototype</value></property>
+	</object>
+
+	<object id="serializablePrototype" 
+			type="Spring.Aop.Framework.ProxyFactoryObject"
+	>	
+		<property name="interceptorNames"><value>serializableNopInterceptor,prototypeTarget</value></property>		
+		<property name="proxyInterfaces"><value>Spring.Objects.Person</value></property>	
+		
+		<property name="singleton"><value>false</value></property>
+	</object>
+	
+	
+	<object id="interceptorNotSerializableSingleton" 
+			type="Spring.Aop.Framework.ProxyFactoryObject"
+	>	
+		<property name="interceptorNames"><value>nopInterceptor</value></property>		
+		<property name="target">
+			<object type="Spring.Objects.SerializablePerson" />
+		</property>
+	</object>
+	
+</objects>		
+	
+	

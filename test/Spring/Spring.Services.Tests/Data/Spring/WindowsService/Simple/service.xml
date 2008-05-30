@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--@ <code> @-->
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+	<!--@ <localizer> @-->
+	<!-- provides access to the ${spring.services.application.*} properties -->
+	<object 
+		name="localizer"
+		type="Spring.Services.WindowsService.Common.Localizer+ForApplication, Spring.Services.WindowsService.Common">
+		<!-- change this to access the property with another prefix, for example ${foo.application.base.dir}
+		-->
+		<property name="prefix" value="myPrefix"/>
+	</object>
+	<!--@ </localizer> @-->
+
+	<!--@ <simple> @-->
+    <object name="simple" 
+      type="Spring.Services.WindowsService.Samples.Simple, Spring.Services.WindowsService.Tests" 
+      init-method="Start" destroy-method="Stop">
+      <constructor-arg index="0" value="${myPrefix.application.name},${myPrefix.application.fullPath}"/>
+      <property name="AppName">
+        <value>${myPrefix.application.name}</value>
+      </property>
+      <property name="AppFullPath">
+        <value>${myPrefix.application.fullpath}</value>
+      </property>
+    </object>
+	<!--@ </simple> @-->
+   
+</objects>
+<!--@ </code> @-->

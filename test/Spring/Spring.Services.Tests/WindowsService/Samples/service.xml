@@ -1,0 +1,20 @@
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+    <object name="simple" 
+      type="Spring.Services.WindowsService.Samples.Simple, Spring.Services.WindowsService.Samples" 
+      init-method="Start" destroy-method="Stop">
+      <property name="AppName">
+        <value>${spring.services.application.name}</value>
+      </property>
+      <property name="AppFullPath">
+        <value>${spring.services.application.fullpath}</value>
+      </property>
+    </object>
+
+    <object name="echo" 
+      type="Spring.Services.WindowsService.Samples.Echo, Spring.Services.WindowsService.Samples" 
+      init-method="Start" destroy-method="Stop">
+      <property name="port"><value>10</value></property>
+    </object>
+</objects>

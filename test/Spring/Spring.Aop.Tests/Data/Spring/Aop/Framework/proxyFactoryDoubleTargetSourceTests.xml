@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	Tests for misconfiguring the proxy factory object using target name 
+	as well as set by the targetSource property
+-->	
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	
+	<object id="eveTargetSource" type="Spring.Aop.Target.SingletonTargetSource">
+		<constructor-arg>
+			<object type="Spring.Objects.TestObject">
+				<property name="name"><value>Eve</value></property>
+			</object>
+		</constructor-arg>
+	</object>
+	
+	<object id="adam" type="Spring.Objects.TestObject">
+		<property name="name"><value>Adam</value></property>
+	</object>
+	
+	<object id="adamTargetSource" type="Spring.Aop.Target.SingletonTargetSource">
+		<constructor-arg>
+			<ref local="adam"/>
+		</constructor-arg>
+	</object>
+	
+	<object id="countingBeforeAdvice"
+		type="Spring.Aop.Framework.CountingBeforeAdvice"
+	/>
+	
+	<object id="doubleTarget"
+		type="Spring.Aop.Framework.ProxyFactoryObject"> 
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>
+		<!-- this is the one used and NOT the one set by targetSource -->
+	    <property name="targetName"><value>adamTargetSource</value></property>	
+		<property name="interceptorNames"><value>countingBeforeAdvice</value></property>
+		
+		<property name="targetSource"><ref object="eveTargetSource"/></property>
+	</object>
+	
+	<!-- but this is also possible -->
+	<object id="arbitraryTarget"
+		type="Spring.Aop.Framework.ProxyFactoryObject"> 
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>
+		<!-- this is the one used and NOT the one set by targetSource -->
+		<property name="targetName"><value>adam</value></property>
+		<property name="targetSource"><ref local="eveTargetSource"/></property>
+	</object>
+
+		
+</objects>		
+	
+	

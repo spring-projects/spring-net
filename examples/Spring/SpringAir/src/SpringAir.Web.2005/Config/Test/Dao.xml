@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+    <description>
+        The SpringAir object definitions for the Data Access Objects.
+    </description>
+
+    <!-- Test stubs for Data Access Objects -->
+    <object id="aircraftDao" type="SpringAir.Data.Ado.AircraftDaoStub, SpringAir.Data.Ado"/>
+    
+    <object id="airportDao" type="SpringAir.Data.Ado.AirportDaoStub, SpringAir.Data.Ado"/>
+    
+</objects>

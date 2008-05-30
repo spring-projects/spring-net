@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="threading">
+  <title>Threading and Concurrency Support</title>
+
+  <sect1 id="threading-introduction">
+    <title>Introduction</title>
+
+    <para>The purpose of the <classname>Spring.Threading</classname> namespace
+    is to provide a place to keep useful concurrency abstractions that augment
+    those in the BCL. Since Doug Lea has provided a wealth of mature public
+    domain concurrency abstractions in his Java based
+    'EDU.oswego.cs.dl.util.concurrent' libraries we decided to port a few of
+    his abstractions to .NET. So far, we've only ported three classes, the
+    minimum necessary to provide basic object pooling functionality to support
+    an AOP based pooling aspect and to provide a Semaphore class that was
+    mistakenly not included in .NET 1.0/1.1.</para>
+
+    <para>There is also an important abstraction, IThreadStorage, for
+    performing thread local storage.</para>
+  </sect1>
+
+  <sect1>
+    <title>Thread Local Storage</title>
+
+    <para>Depending on your runtime environment there are different strategies
+    to use for storing objects in thread local storage. If you are in web
+    applications a single Request may be executed on different threads. As
+    such, the location to store thread local objects is in
+    <classname>HttpContext.Current</classname>. For other environments
+    <classname>System.Runtime.Remoting.Messaging.CallContext</classname> is
+    used. For more background information on the motivation behind these
+    choices, say as compared to the attribute [ThreadStatic] refer to
+    "Piers7"'s <ulink
+    url="http://piers7.blogspot.com/2005/11/threadstatic-callcontext-and_02.html">blog</ulink>
+    and this <ulink
+    url="http://forum.springframework.net/showthread.php?t=572&amp;highlight=LogicalThreadContext">forum
+    post</ulink>. The interface IThreadStorage serves as the basis for the
+    thread local storage abstraction and various implementations can be
+    selected from depending on your runtime requirements. Configuring the
+    implementation of IThreadStorage makes it easier to have more portability
+    across runtime environments.</para>
+
+    <para>The API is quite simple and shown below<programlisting>public interface IThreadStorage
+{
+  object GetData(string name)
+
+  void SetData(string name, object value)
+
+  void FreeNamedDataSlot(string name)
+
+}
+</programlisting></para>
+
+    <para>The methods <methodname>GetData</methodname> and
+    <methodname>SetData</methodname> are responsible for retrieving and
+    setting the object that is to be bound to thread local storage and
+    associating it with a name. Clearing the thread local storage is done via
+    the method <methodname>FreeNamedDataSlot</methodname>.</para>
+
+    <para>In <literal>Spring.Core</literal> is the implementation,
+    <classname>CallContextStorage</classname>, that directly uses
+    <classname>CallContext</classname> and also the implementation
+    <classname>LogicalThreadContext</classname> which by default uses
+    <classname>CallContextStorage</classname> but can be configured via the
+    static method <methodname>SetStorage(IThreadStorage)</methodname>. The
+    methods on CallContextStorage and LogicalThreadContext are static.</para>
+
+    <para>In <literal>Spring.Web</literal> is the implementation
+    <classname>HttpContextStorage</classname> which uses the
+    <classname>HttpContext</classname> to store thread local data and
+    <classname>HybridContextStorage</classname> that uses
+    <classname>HttpContext</classname> if within a web environment, i.e.
+    <literal>HttpContext.Current != null</literal>, and
+    <classname>CallContext</classname> otherwise.</para>
+
+    <para>Spring internally uses <classname>LogicalThreadContext</classname>
+    as this doesn't require a coupling to the <package>System.Web</package>
+    namespace. In the case of Spring based web applications, Spring's
+    <classname>WebSupportModule</classname> sets the storage strategy of
+    <classname>LogicalThreadContext</classname> to be
+    <classname>HybridContextStorage</classname>.</para>
+  </sect1>
+
+  <sect1>
+    <title>Synchronization Primitives</title>
+
+    <para>When you take a look at these synchronization classes, you'll wonder
+    why it's even necessary when <literal>System.Threading</literal> provides
+    plenty of synchronization options. Although
+    <literal>System.Threading</literal> provides great synchronization
+    classes, it doesn't provide well-factored abstractions and interfaces for
+    us. Without these abstractions, we will tend to code at a low-level. With
+    enough experience, you'll eventually come up with some abstractions that
+    work well. Doug Lea has already done a lot of that research and has a
+    class library that we can take advantage of.</para>
+
+    <sect2>
+      <title>ISync</title>
+
+      <para><literal>ISync</literal> is the central interface for all classes
+      that control access to resources from multiple threads. It's a simple
+      interface which has two basic use cases. The first case is to block
+      indefinitely until a condition is met:</para>
+
+      <programlisting>void ConcurrentRun(ISync lock) {
+  lock.Acquire(); // block until condition met
+  try {
+    // ... access shared resources
+  }
+  finally {
+    lock.Release();
+  }
+}
+</programlisting>
+
+      <para>The other case is to specify a maximum amount of time to block
+      before the condition is met:</para>
+
+      <programlisting>void ImpatientConcurrentRun(ISync lock) {
+  // block for at most 10 milliseconds for condition
+  if ( lock.Attempt(10) ) {
+    try {
+      // ... access shared resources
+    }
+    finally {
+      lock.Release();
+    }
+  } else {
+    // complain of time out
+  }
+}
+</programlisting>
+    </sect2>
+
+    <sect2>
+      <title>SyncHolder</title>
+
+      <para>The <literal>SyncHolder</literal> class implements the
+      <literal>System.IDisposable</literal> interface and so provides a way to
+      use an <literal>ISync</literal> with the <literal>using</literal> C#
+      keyword: the <literal>ISync</literal> will be automatically
+      <literal>Acquire</literal>d and then <literal>Release</literal>d on
+      exiting from the block.</para>
+
+      <para>This should simplify the programming model for code using (!) an
+      <literal>ISync</literal>: <programlisting>
+ISync sync = ...
+...
+using (new SyncHolder(sync))
+  {
+    // ... code to be executed
+    // holding the ISync lock
+  }
+      </programlisting> There is also the timed version, a little more
+      cumbersome as you must deal with timeouts: <programlisting>
+ISync sync = ...
+long msecs = 100;
+...
+// try to acquire the ISync for msecs milliseconds
+try 
+{
+  using (new SyncHolder(sync, msecs))
+  {
+    // ... code to be executed
+    // holding the ISync lock
+  }
+}    
+catch (TimeoutException)
+{
+  // deal with failed lock acquisition
+}
+
+      </programlisting></para>
+    </sect2>
+
+    <sect2>
+      <title>Latch</title>
+
+      <para>The <literal>Latch</literal> class implements the
+      <literal>ISync</literal> interface and provides an implementation of a
+      <emphasis>latch</emphasis>. A latch is a boolean condition that is set
+      at most once, ever. Once a single release is issued, all acquires will
+      pass. It is similar to a <literal>ManualResetEvent</literal> initialized
+      unsignalled (Reset) and can only be <literal>Set()</literal>. A typical
+      use is to act as a start signal for a group of worker threads.</para>
+
+      <programlisting>class Boss {
+  Latch _startPermit;
+
+  void Worker() {
+    // very slow worker initialization ...
+    // ... attach to messaging system
+    // ... connect to database
+    _startPermit.Acquire();
+    // ... use resources initialized in Mush
+    // ... do real work
+  }
+
+  void Mush() {
+    _startPermit = new Latch();
+    for (int i=0; i&lt;10; ++i) {
+      new Thread(new ThreadStart(Worker)).Start();
+    }
+    // very slow main initialization ...
+    // ... parse configuration
+    // ... initialize other resources used by workers
+    _startPermit.Release();
+  }
+
+}</programlisting>
+    </sect2>
+
+    <sect2>
+      <title>Semaphore</title>
+
+      <para>The <literal>Semaphore</literal> class implements the
+      <literal>ISync</literal> interface and provides an implementation of a
+      semaphore. Conceptually, a semaphore maintains a set of permits. Each
+      <literal>Acquire()</literal> blocks if necessary until a permit is
+      available, and then takes it. Each <literal>Release()</literal> adds a
+      permit. However, no actual permit objects are used; the Semaphore just
+      keeps a count of the number available and acts accordingly. A typical
+      use is to control access to a pool of shared objects.</para>
+
+      <programlisting>class LimitedConcurrentUploader {
+  // ensure we don't exceed maxUpload simultaneous uploads
+  Semaphore _available;
+  public LimitedConcurrentUploader(maxUploads) {
+    _available = new Semaphore(maxUploads);
+  }
+  // no matter how many threads call this method no more
+  // than maxUploads concurrent uploads will occur.
+  public Upload(IDataTransfer upload) {
+    _available.Acquire();
+    try {
+      upload.TransferData();
+    }
+    finally {
+      _available.Release();
+    }
+  }
+}
+
+</programlisting>
+    </sect2>
+  </sect1>
+</chapter>

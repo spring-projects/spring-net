@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\Spring.Net\build\package\Spring.NET\bin\net\1.1\debug\Spring.Services.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Services" RelatedProject="Spring-1.1.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="True" LoadOnDemand="False" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Services" tid="##PROJECT_INTRODUCTION" q="" cd="39413.4980902778"><![CDATA[<P>Use this module to adapt plain .NET objects so they can be used with a specific distributed communication technology, such as .NET Remoting, Enterprise Services, and ASMX Web Services.</P>
+<P>The classes in this assembly provide server and client-side support to export plain .NET objects as a ServicedComponent, Remote object, or Web Service.&nbsp; Exporters can be configured via Dependency Injection and aspects can be applied to these exported objects.</P>]]></c>
+<c eid="Spring.Services" tid="##PROJECT_GETTINGSTARTED" q="" cd="39053.8903587963"><![CDATA[The reference documentation and QuickStart applications (Calculator and Spring.WebQuickStart) &nbsp;are the best places to get started using the functionality contained in Spring.Services.]]></c>
+<c eid="Spring.Services~Spring.EnterpriseServices_namespace" tid="##SUMMARY" q="" cd="39053.8894560185"><![CDATA[Provides functionality to&nbsp;export objects as ServicedComponents and to client side support.]]></c>
+<c eid="Spring.Services~Spring.Remoting_namespace" tid="##SUMMARY" q="" cd="39053.8895486111"><![CDATA[Provides functionality for&nbsp;exporting .NET remoting objects.]]></c>
+<c eid="Spring.Services~Spring.Remoting.Config_namespace" tid="##SUMMARY" q="" cd="39423.5211226852">Custom schema for .NET remoting</c>
+<c eid="Spring.Services~Spring.Remoting.Support_namespace" tid="##SUMMARY" q="" cd="39053.8896412037">Support classes for .NET remoting functionality.</c>
+<c eid="Spring.Services~Spring.Web.Services_namespace" tid="##SUMMARY" q="" cd="39053.8897800926">Provides functionality for exporting/consuming Web Services</c>
+    </DocumentXComments>

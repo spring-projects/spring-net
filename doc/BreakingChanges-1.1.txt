@@ -1,0 +1,148 @@
+Expression Language
+------------------
+1. Changed TypeNode syntax from 
+
+type('qualifiedTypeName')
+
+to
+
+T(qualifiedTypeName)
+
+which is a bit shorter and doesn't require (or allows) type name to be quoted.
+
+2. Changed ReferenceNode syntax from
+
+@ctx:obj 
+
+to
+
+@(ctx:obj)
+
+in order to allow '@' character to be used for other purposes as well, such as for AttributeNode definitions (new in 1.1)
+
+3. Changed string literal escape character from \ (backslash) to ' (single quote).
+
+The only character that needs to be escaped in Spring.Expressions is single quote, and using standard .NET escape character, backslash, to do that lead to all kinds of problems 
+with literal strings containing standard .NET escape characters or regular expressions escape characters. Now you only need to double up the single quote if it is needed within 
+the string -- everything else is copied verbatim and resolved by .NET instead.
+
+
+Configuration
+-------------
+
+1. Renamed ResourcesSectionHandler to ResourceHandlersSectionHandler and changed resource handlers configuration section schema from
+
+<resources>
+   <resource protocol="..." type="..."/>
+</resources>
+
+to
+
+<resourceHandlers>
+   <handler protocol="..." type="..."/>
+</resourceHandlers>
+
+The new class and element names better reflect the purpose of this configuration section and help to avoid confusion with the context/resources section.
+
+Changes (RC2 to final)
+-----------------------------------
+
+Spring.Data
+
+1. Added additional method to IDbProvider to format parameter names when creating IDataParameter.  Will affect code only if you created your own IDbProvider implementation.
+
+Changes (RC2)
+-----------------------------------
+
+Spring.Core
+
+1. Changed TimeToLive parameter from int to TimeSpan in ICache
+
+Changes (M2 to RC1)
+-----------------------------------
+
+These changes are driven primarily by the removal of dependency cycles.  Some changes were made to have a consistent naming pattern
+
+Spring.Core
+
+1.  Refactored XmlResourceReader into interface IObjectDefinitionDocumentReader and class DefaultObjectDefinitionDocumentReader
+2.  IObjectFactory - removed convenience method ConfigureObject(object target) that would simply delgate to ConfigureObject(object target, string name) with the full type name of the target.
+3.  Moved GetObjectDefinition methods from IListableObjectFactory to IConfigurableListableObjectFactory to remove dependency cycle.
+4.  Moved IConfigurableObjectDefinition from namespace Factory.Config to Factory.Support to remove dependency cycle (property MethodOverrides)
+5.  Removed DependencyCheck and MethodOverrides property from IObjectDefinition to remove dependency cycle.
+6.  Moved ObjectDefinitionHolder from Factory.Support for Factory.Config to removed dependency cycle (ObjectDefinitionVisitor)
+7.  Moved ObjectFactoryHandler from Spring.Objects.Support to Spring.Objects.Factory.Xml.ObjectFactorySectionHandler
+8.  Moved PropertyChangeEventArgs from Spring.Objects to Spring.Core
+9.  Moved exceptions from Spring.Objects to Spring.Core to remove  dependency cycle between Spring.Objects and Spring.Expressions
+    Added ReflectionException and FatalReflectionException to Spring.Util
+10. Moved ICriteria implementations from Spring.Objects.Support to Spring.Core to remove several dependency cycles (ControlFlowFactory)
+11. Moved ConversionUtils from Spring.Util to Spring.Core to remove dependency cycle.
+12. Moved ObjectUtils from Spring.Objects to Spring.Util
+13. Moved TypeRegistry and related classes from Spring.Context.Support to Spring.Core.TypeResolution
+14. Renamed ConverstionUtils to TypeConversionUtils
+15. Split TypeResolver into non-generic (TypeResolver) and generic version GenericTypeResolver
+16. Moved Expressions.MethodNode.GetMethodByArgumentValues to ReflectionUtils.
+17. Moved ReferenceNode from Spring.Expressions to Spring.Context.Support to remove dependency cycle with Spring.Context.
+18. Moved Spring.Objects.Support.CriteriaMemberFilter to Spring.Core to remove dependency of Spring.Objects.Events on Spring.Objects.Support.
+19. Moved Spring.Objects.TypeConverters to Spring.Core.TypeConvesion
+20. Renamed XmlParserRegistry to NamespaceParserRegistry and IXmlObjectDefinitionParser to INamespaceParser
+21. Renamed DefaultXmlObjectDefinitionParser to ObjectsNamespaceParser
+    Renamed WebObjectDefinitionParser to WebObjectsNamespaceParser
+    Renamed spring-objects.xsd to spring-objects-1.1.xsd
+    Renamed Spring.Validation.ValidationConfigParser to Spring.Validation.Config.ValidationNamespaceParser
+    Renamed spring-validation.xsd to spring-validation-1.1.xsd and moved to Spring.Validation.Config
+22. Renamed ConfigurationParserAttribute to NamespaceParserAttribute
+23. Renamed ConfigParsersSectionHandler to NamespaceParsersSectionHandler
+24. Moved Spring.Util.DynamicReflection to Spring.Reflection.Dynamic
+
+Spring.Aop
+
+1.  Moved DefaultAopProxyFactory and CachedAopProxyFactory to Aop.Framework.DynamicProxy
+2.  Removed Spring.Aop.Advice.DebugAdvice
+3.  Removed Spring.Aop.Advice.CacheAdvice (New Spring.Aspects.Cache.CacheAspect functionality)
+
+
+Spring.Web
+
+1.  Moved HttpContextSwith from Context.Support to Spring.Util.
+2.  Moved SupportsWebDependencyInjectionMethodBuilder and SupportWebDependencyInjectionTypeBuilder from Spring.Proxy to Spring.Web.Support
+3.  Moved methods CreatePageInstance, GetControlType, and GetPageType from Spring.Util.WebUtils to new class Spring.Objects.Factory.Support.WebObjectUtils
+4.  Moved method InjectDependenciesRecursive from Spring.Util.WebUtils to new class Spring.Web.Support.WebDependencyInjectionUtils
+5.  Moved Spring.Util.ControlInterceptor, IInterceptionStrategy, InterceptControlCollectionOwnerStrategy, InterceptControlCollectionStrategy,
+    SupportsWebDependencyInjectionOwnerProxy to Spring.Web.Support
+6.  Moved WebResource from Spring.Web.IO to Spring.Core.IO
+7.  Moved Spring.Web.Validation to Spring.Web.UI.Validation
+8.  Moved Spring.Web.Process.AbstractProcess to Spring.Web.Support.AbstractProcessHandler
+9.  Added SlidingExpiration property to AspNetCache object and removed from BaseCacheAttribute
+
+Spring.Data
+
+1.  Moved TransactionTemplate, TransactionDelegate and ITransactionCallback from Spring.Data to Spring.Data.Support to remove dependency cycle
+2.  Moved AdoTemplate, AdoAccessor, AdoDaoSupport, RowMapperResultSetExtractor from Spring.Data to Spring.Data.Core
+3.  Moved AdoPlatformTransactionManager, ServiceDomainPlatformTransactionManager, and TxScopeTransactionManager from Spring.Data to Spring.Data.Core
+4.  Moved ErrorCodes from Spring.Data.Support to Spring.Data.Common to remove dependency cycle
+5.  Moved IDataReaderWrapper from Spring.Data.Support to Spring.Data
+6.  Changed schema to use 'provider' instead of 'dbProvider' element, usage is now <db:provider ... /> and not <db:dbProvider .../>
+7.  Moved namespace parser from Spring.Data to Spring.Data.Config namespace.  
+8.  Renamed from DatabaseConfigParser to DatabaseNamespaceParser
+9.  Renamed schema spring-database.xsd to spring-database-1.1.xsd
+10. Changed target schema from http://www.springframework.net/schema/tx to http://www.springframework.net/tx
+
+Spring.Services
+
+
+1.  Moved Spring.Remoting.RemotingConfigParser to Spring.Remoting.Config.RemotingNamespaceParser
+
+
+Changes (M2 to RC1)
+-----------------------------------
+
+Spring.Aop
+
+1. Changed DSL for exception handling.  
+   Instead of "on ArithmeticException log 'Logging an exception thrown from method ' + #method.Name"
+   now use    "on exception name ArithmeticException log 'Logging an exception thrown from method ' + #method.Name 
+
+   Basically add the words 'exception name' after the word 'on'
+   
+

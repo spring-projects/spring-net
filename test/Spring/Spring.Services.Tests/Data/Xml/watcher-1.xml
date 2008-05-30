@@ -1,0 +1,23 @@
+<!--@ <code> @-->
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	
+    <object name='watcher' 
+      type='Spring.Services.WindowsService.Common.Deploy.FileSystem.FileSystemApplicationWatcher' 
+      singleton='false'>
+      <constructor-arg><ref object='.injected.application'/></constructor-arg>
+      <constructor-arg><ref object='configurer'/></constructor-arg>
+    </object>
+
+    <object name='configurer' 
+      type='Spring.Services.WindowsService.Common.Deploy.FileSystem.RegularExpressionFilterConfigurer' 
+      singleton='false'>
+        <property name='includes'>
+        <list>
+          <value>**/**</value>
+        </list>
+      </property>
+    </object>
+</objects>
+<!--@ </code> @-->

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"
+	default-dependency-check="objects" default-autowire="byType">
+	
+  <object id="rod1" type="Spring.Objects.Factory.Xml.DependenciesObject, Spring.Core.Tests">
+		<!-- Should pick up spouse automatically -->
+  </object>
+	
+  <object id="rod2" type="Spring.Objects.Factory.Xml.DependenciesObject, Spring.Core.Tests">
+		<!-- Should pick up spouse automatically -->
+  </object>
+	
+  <object id="spouse" type="Spring.Objects.TestObject, Spring.Core.Tests" dependency-check="none" autowire="no">
+    <property name="name">
+      <value>Kerry</value>
+    </property>
+  </object>
+
+</objects>

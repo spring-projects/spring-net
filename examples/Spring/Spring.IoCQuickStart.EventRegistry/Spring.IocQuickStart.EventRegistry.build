@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<project name="Spring.IocQuickStart.EventRegistry" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<!--
+    Required properties:
+      * current.bin.dir           - (path) root level to build to
+      * current.build.debug       - (true|false) debug build?
+      * current.build.defines.csc - framework-specific build defines for C# compiler
+ -->
+
+  <target name="build">
+    <!-- build EventRegistry example -->
+    <csc target="exe" 
+         define="${current.build.defines.csc}" 
+	 warnaserror="true"
+         debug="${current.build.debug}" 
+         output="${current.bin.dir}/${project::get-name()}.exe">
+      <sources failonempty="true">
+        <include name="**/*.cs" />
+      </sources>
+      <nowarn>
+        <warning number="${nowarn.numbers}" />
+      </nowarn>
+      <references basedir="${current.bin.dir}">
+	<include name="Spring.Core.dll" />
+      </references>
+    </csc>
+    <copy tofile="${current.bin.dir}/${project::get-name()}.exe.config" 
+          file="src/App.config" overwrite="true">
+    </copy>	
+  </target>
+</project>

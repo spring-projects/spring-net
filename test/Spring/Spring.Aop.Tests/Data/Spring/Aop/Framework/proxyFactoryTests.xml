@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+	<!-- Simple target -->
+	<object id="test" type="Spring.Objects.TestObject">	
+		<property name="name"><value>custom</value></property>
+		<property name="age"><value>666</value></property>
+	</object>
+	
+	<object id="debugInterceptor" type="Spring.Aop.Interceptor.NopInterceptor"/>
+	
+	<object id="test1" type="Spring.Aop.Framework.ProxyFactoryObject">	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>		
+		<property name="target"><ref local="test"/></property>	
+		<property name="interceptorNames"><value>debugInterceptor</value></property>		
+	</object>
+	
+	<!--
+		Check that invoker is automatically added to wrap target.
+		Non pointcut object name should be wrapped in invoker.
+	-->
+	<object id="autoInvoker" type="Spring.Aop.Framework.ProxyFactoryObject">	
+		<!-- 
+			Aspect interfaces don't need to be included here.
+			They may, for example, be added by global introductions.
+		 -->
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>		
+		<property name="targetName"><value>test</value></property>
+		<property name="interceptorNames"><value>global*</value></property>
+		<property name="introductionNames"><value>global*</value></property>
+	</object>
+	
+	<object id="prototype" type="Spring.Aop.Framework.ProxyFactoryObject">	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>		
+		<property name="isSingleton"><value>false</value></property>
+		<property name="targetName"><value>test</value></property>		
+	</object>
+
+	<object id="concurrentPrototypeTest" type="Spring.Objects.TestObject" singleton="false">
+		<property name="name"><value>custom</value></property>
+		<property name="age"><value>666</value></property>
+	</object>
+	
+	<object id="concurrentPrototypeTarget" type="Spring.Aop.Target.PrototypeTargetSource, Spring.Aop" singleton="false">
+		<property name="TargetObjectName"><idref object="concurrentPrototypeTest"/></property>
+	</object>
+	
+	<object id="concurrentPrototype" type="Spring.Aop.Framework.ProxyFactoryObject">	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>		
+		<property name="isSingleton"><value>false</value></property>
+		<property name="isFrozen"><value>false</value></property>
+		<property name="targetName"><value>concurrentPrototypeTarget</value></property>		
+		<property name="interceptorNames"><value>global*</value></property>
+	</object>
+	
+	<object id="test2" type="Spring.Aop.Framework.ProxyFactoryObject">	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>		
+		<property name="isSingleton"><value>false</value></property>
+		<property name="targetName"><value>test</value></property>		
+	</object>
+	
+	<object id="pointcuts" type="Spring.Aop.Framework.ProxyFactoryObject">	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>		
+		<property name="targetName"><value>test</value></property>		
+		<property name="interceptorNames"><value>pointcutForVoid</value></property>		
+	</object>
+	
+	<object id="pointcutForVoid" type="Spring.Aop.Framework.ProxyFactoryObjectTests+PointcutForVoid"/>
+	
+	<!--
+		Invalid test for global pointcuts.
+		Must have target because there are no interceptors.
+	-->
+	<!--
+	<object id="noInterceptorNamesWithoutTarget" 
+			type="Spring.Aop.Framework.ProxyFactoryObject"
+	>	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>			
+		
+	</object>
+	
+	<object id="noInterceptorNamesWithTarget" 
+			type="Spring.Aop.Framework.ProxyFactoryObject"
+	>	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>	
+		<property name="target"><ref local="test"/></property>					
+		
+	</object>
+	-->
+	
+	<!-- Same effect as noInterceptor names: also invalid -->
+	<!--
+	<object id="emptyInterceptorNames" type="Spring.Aop.Framework.ProxyFactoryObject">	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>			
+		<property name="interceptorNames"><value/></property>
+	</object>
+	-->
+	
+	<!--
+		Invalid test for global pointcuts.
+		Must have target after *.
+	-->
+	<!--
+	<object id="globalsWithoutTarget" 
+			type="Spring.Aop.Framework.ProxyFactoryObject"
+	>	
+		<property name="proxyInterfaces"><value>Spring.Objects.ITestObject</value></property>			
+		<property name="interceptorNames"><value>global*</value></property>
+	</object>
+	-->
+	
+	
+	<object id="validGlobals" singleton="true" type="Spring.Aop.Framework.ProxyFactoryObject">	
+		<property name="proxyInterfaces"><value>Spring.Context.IApplicationEventListener</value></property>			
+		<property name="targetName"><value>target2</value></property>		
+		<property name="interceptorNames"><value>debugInterceptor,global*</value></property>
+		<property name="introductionNames"><value>global*</value></property>
+	</object>
+	
+	<!--
+		Global debug interceptor
+	-->
+	<object id="global_debug" type="Spring.Aop.Advice.DebugAdvice"/>
+	
+	<!--
+		Will add introduction to all Objects exposing globals
+	-->
+	<object id="global_introduction" type="Spring.Aop.Framework.ProxyFactoryObjectTests+GlobalIntroduction" singleton="false" />
+	
+	<object id="target2" type="Spring.Context.Events.ConsoleListener,Spring.Core"/>
+
+</objects>		
+	
+	

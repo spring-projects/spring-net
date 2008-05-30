@@ -1,0 +1,92 @@
+#region License
+
+/*
+ * Copyright 2002-2004 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
+using System;
+
+using NUnit.Framework;
+
+namespace Spring.Globalization.Formatters
+{
+	/// <summary>
+	/// Unit tests for IntegerFormatter class.
+	/// </summary>
+    /// <author>Aleksandar Seovic</author>
+    /// <version>$Id: IntegerFormatterTests.cs,v 1.3 2007/06/01 08:53:06 oakinger Exp $</version>
+    [TestFixture]
+    public class IntegerFormatterTests
+	{
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void FormatNullValue()
+        {
+            IntegerFormatter fmt = new IntegerFormatter();
+            fmt.Format(null);
+        }
+
+        [Test]
+        public void ParseNullOrEmptyValue()
+        {
+            IntegerFormatter fmt = new IntegerFormatter();
+            Assert.AreEqual( 0, fmt.Parse(null));
+            Assert.AreEqual( 0, fmt.Parse(string.Empty) );
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void FormatNonNumber()
+        {
+            IntegerFormatter fmt = new IntegerFormatter();
+            fmt.Format("not a number");
+        }
+
+        [Test]
+        public void FormatUsingDefaults()
+        {
+            IntegerFormatter fmt = new IntegerFormatter();
+            Assert.AreEqual("1234", fmt.Format(1234));
+            Assert.AreEqual("-1234", fmt.Format(-1234));
+        }
+
+        [Test]
+        public void ParseUsingDefaults()
+        {
+            IntegerFormatter fmt = new IntegerFormatter();
+            Assert.AreEqual(1234, fmt.Parse("1234"));
+            Assert.AreEqual(-1234, fmt.Parse("-1234"));
+        }
+
+        [Test]
+        public void FormatUsingCustomSettings()
+        {
+            IntegerFormatter fmt = new IntegerFormatter("{0:00000}");
+            Assert.AreEqual("01234", fmt.Format(1234));
+            Assert.AreEqual("-01234", fmt.Format(-1234));
+
+            fmt = new IntegerFormatter("{0,10}");
+            Assert.AreEqual("      1234", fmt.Format(1234));
+
+            fmt = new IntegerFormatter("{0,-10}");
+            Assert.AreEqual("1234      ", fmt.Format(1234));
+
+            fmt = new IntegerFormatter("{0:(###) ###-####}");
+            Assert.AreEqual("(813) 555-4034", fmt.Format(8135554034));
+        }
+    }
+}

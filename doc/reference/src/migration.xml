@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="migration">
+  <title>Migrating from 1.1 M2</title>
+
+  <sect1 id="M2RC1-introduction">
+    <title>Introduction</title>
+
+    <para>Several API changes were made after 1.1 M2 (before 1.1 RC1)due
+    primarily by the need to refactor the code base to remove circular
+    dependency cycles, which are now all removed. Class and schema name
+    changes were also made to provide a more consistent naming convention
+    across the codebase. As a result of these changes, you can not simply drop
+    in the new .dlls as you may have done in previous release. This document
+    serves as a high level guide to the most likely areas where you will need
+    to make changes to either your configuration or your code.</para>
+
+    <para>The file, BreakingChanges-1.1.txt, in the root directory of the
+    distribution contains the full listing of breaking changes made for RC1
+    and higher</para>
+  </sect1>
+
+  <sect1 id="migration-changes">
+    <title>Important Changes</title>
+
+    <para>This section covers the common areas were you will need to make
+    changes in code/configuration when migration from M2 to RC1or
+    higher.</para>
+
+    <sect2>
+      <title>Namespaces</title>
+
+      <para>Note: If you previously installed Spring .xsd files to your VS.NET
+      installation directory, remove them manually, and copy over the new
+      ones, which have the -1.1.xsd suffix.</para>
+
+      <para>The names of the section handlers to register custom schemas has
+      changed, from ConfigParsersSectionHandler to
+      <classname>NamespaceParsersSectionHandler</classname>.</para>
+
+      <para>The target namespaces have changed, the 'directory' named /schema/
+      has been removed. For example, the target schema changed from
+      http://www.springframework.net/schema/tx to
+      <classname>http://www.springframework.net/tx.</classname></para>
+
+      <para>A typical declaration to use custom schemas within your
+      configuration file looks like this</para>
+
+      <programlisting>&lt;objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx"
+         xmlns:aop="http://www.springframework.net/aop"&gt;</programlisting>
+
+      <para>The class <classname>XmlParserRegistry</classname> was renamed to
+      <classname>NamespaceParserRegistry</classname>.</para>
+
+      <para>Renamed
+      <classname>Spring.Validation.ValidationConfigParser</classname> to
+      <classname>Spring.Validation.Config.ValidationNamespaceParser</classname></para>
+
+      <para>Renamed from <classname>DatabaseConfigParser</classname> to
+      <classname>DatabaseNamespaceParser</classname></para>
+
+      <para>Renamed/Moved <classname>Remoting.RemotingConfigParser</classname>
+      to
+      <classname>Remoting.Config.RemotingNamespaceParser</classname><parameter></parameter></para>
+
+      <para>A typical registration of custom parsers within your configuration
+      file looks like this</para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;         
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Aop.Config.AopNamespaceParser, Spring.Aop" /&gt; 
+      &lt;parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" /&gt; 
+      &lt;parser type="Spring.Transaction.Config.TxNamespaceParser, Spring.Data" /&gt; 
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;</programlisting>
+
+      <para>A manual registration would look like this</para>
+
+      <programlisting>NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+NamespaceParserRegistry.RegisterParser(typeof(DatabaseNamespaceParser));
+NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
+</programlisting>
+    </sect2>
+
+    <sect2>
+      <title>Core</title>
+
+      <para>Moved Spring.Util.DynamicReflection to
+      Spring.Reflection.Dynamic</para>
+
+      <para>Moved TypeRegistry and related classes from Spring.Context.Support
+      to Spring.Core.TypeResolution</para>
+
+      <para>Moved Spring.Objects.TypeConverters to
+      Spring.Core.TypeConvesion</para>
+    </sect2>
+
+    <sect2>
+      <title>Web</title>
+
+      <para>Moved Spring.Web.Validation to Spring.Web.UI.Validation</para>
+    </sect2>
+
+    <sect2>
+      <title>Data</title>
+
+      <para>Changed schema to use 'provider' instead of 'dbProvider' element,
+      usage is now &lt;db:provider ... /&gt; and not &lt;db:dbProvider
+      .../&gt;</para>
+
+      <para>Moved TransactionTemplate, TransactionDelegate and
+      ITransactionCallback from Spring.Data to Spring.Data.Support</para>
+
+      <para>Moved AdoTemplate, AdoAccessor, AdoDaoSupport,
+      RowMapperResultSetExtractor from Spring.Data to Spring.Data.Core</para>
+
+      <para>Moved AdoPlatformTransactionManager,
+      ServiceDomainPlatformTransactionManager, and TxScopeTransactionManager
+      from Spring.Data to Spring.Data.Core</para>
+    </sect2>
+  </sect1>
+</chapter>

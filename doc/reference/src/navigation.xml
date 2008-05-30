@@ -1,0 +1,75 @@
+<chapter id="navigation">
+  <title>Object Navigation</title>
+  <sect1 id="navigation-introduction">
+    <title>Introduction</title>
+    <para><emphasis>(Available in 1.0)</emphasis></para>
+    <para>Spring provides an expression language that allows for the easy setting 
+    or getting of an object's properties and the invoking of its methods.  
+    The simple syntax of this expression language allows one to to easily express the
+    properties or methods to invoke 
+    in order to retrieve or set a value on an object.  For example to
+    get the name property of an object, the required expression to
+    evaluate this is simply "Name". The chaining of properties is also supported... 
+    for example, if a person object contains a date of birth property (DOB) 
+    that returns a <literal>DateTime</literal>, the year may be retrieved with
+    the expression "DOB.Year".  This generic reflection-like functionality 
+    has many uses but is often found as the foundation to support 
+    a data binding language between GUI elements and model 
+    objects.  As such, the data binding support for ASP.NET web pages
+    contained in the <literal>Spring.Web</literal> library uses this expression language.
+    </para>
+  </sect1>
+  <sect1 id="navigation-simpleexprssions">
+    <title>Simple Expressions</title>
+    <para>        
+    Consider the simple class shown below with the 
+    public field <literal>Name</literal><programlisting>
+public class Inventor
+{
+    public string Name;
+    private DateTime dob;
+
+    public DateTime DOB
+    {
+      get { return dob; }
+      set { dob = value; }
+    }
+}
+</programlisting>
+    which may have been instantiated in code somewhere and had its Name
+    and DOB set to particular values<programlisting>Inventor inventor = new Inventor();
+inventor.Name = "Nikola Tesla";
+inventor.DOB = new DateTime(1854, 10, 9);
+</programlisting>
+    The <classname>ObjectNavigator</classname> is the central
+    class used to set or retrieve the value of an object, and contains
+    the following static methods
+<programlisting>
+object GetValue(object root, string expression)
+object GetValue(object root, NavigationExpression expression)
+
+void SetValue(object root, string expression, object newValue)
+void SetValue(object root, NavigationExpression expression, object newValue)
+</programlisting>
+    To retrieve the name and year of birth we can use the following code<programlisting>
+string name = (string) ObjectNavigator.GetValue(inventor, "Name");    
+int year = (int) ObjectNavigator.GetValue(inventor, "DOB.Year");
+    </programlisting>
+    The string "DOB.Year" is used to create a 
+    <literal>NavigationExpression</literal> object that forms the basis 
+    for the parsing of the string.  If you need to
+    evaluate a complex expression frequently, creating a 
+    <literal>NavigationExpression</literal>
+    and reusing it will increase performance.  To set the property values of this
+    object instance to that of another famous inventor we would write<programlisting>
+ObjectNavigator.SetValue(inventor, "Name", "Michael Pupin");
+ObjectNavigator.SetValue(inventor, "DOB", new DateTime(1854, 10, 9));
+    </programlisting>
+    </para>
+  </sect1>
+  <sect1 id="navigation-collections">
+    <title>Navigating Collections</title>
+    <para>TODO.  TestCase shows some example usage.  Please check the Spring.NET <ulink url="http://www.springframework.net/doc/reference/navigation.html">website</ulink> for the latest updates to this document.
+    </para>
+  </sect1>
+</chapter>

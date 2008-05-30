@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXProject Version="5.0" CompileHelpFile="True" RefreshIfExists="False" DocumentSourceCode="False" AlwaysCopySupportFiles="True" PropertyCommentsFrom="0" RelationshipsFrom="2" DefaultRelsOnlyForCollections="True" ProjectGroupName="Spring-1.0.2" HTMLHelpVersion="2" HHNamespace="Spring.NET-2.1.0.2" HHIdentifier="Spring.NET-1.0.2-.NET-2.0" H2PlugIn="True" H2PlugInNamespace="MS.VSIPCC.v80" LocaleID="0" ExcludeFiltersRegExp="False">
+    <OutputLocation OutputFolder="L:\projects\Spring.Net\doc\sdk\Spring-1.0\net-2.0\web\" HelpFileName="L:\projects\Spring.Net\doc\sdk\Spring-1.0\net-2.0\htmlhelp1and2\Spring.NET.hxs" UseFilenameAliases="False" StripMetadata="False" ClearBeforeBuild="False" RemoveOutputFilesAfterCompile="False"/>
+    <HTMLHelpOptions UseALinkMenus="False"/>
+    <OtherOptions CreateContextLinks="True" WriteHelpDescriptions="True" CopySourceCode="False" CreateWinHelpStub="False" Language="English"/>
+    <IncludeFilters IncludePrivate="False" IncludeFriend="False" IncludeProtected="True" IdentifyVisibility="False">
+        <Namespaces>
+            <Property Name="DX.NET:Method">True</Property>
+            <Property Name="DX.NET:Property">True</Property>
+            <Property Name="DX.NET:Field">True</Property>
+            <Property Name="DX.NET:Event">True</Property>
+            <Property Name="DX.NET:Constructor">True</Property>
+            <Property Name="DX.NET:Operator">True</Property>
+        </Namespaces>
+    </IncludeFilters>
+    <CommentExtraction UnTaggedBlocks="False" UnTaggedEnumerations="False" UnTaggedEvents="False" UnTaggedModules="False" UnTaggedUDTs="False" UnTaggedVariables="False" HelpDescriptionImport="3"/>
+    <Diagrams PageNestingLevels="2" OverviewNestingLevels="3" SupressSingleObjectDiagrams="True" DiagramStyleSource="0" ObjFillColor="0" ObjTextColor="0" ObjBorderColor="0" ColFillColor="0" ColTextColor="0" ColBorderColor="0" UseDropShadow="False" CenterCaptions="False" DiagramBold="False" BorderWidth="0" UseDiagramShapes="False"/>
+    <VariableValues>
+        <VariableValue Name="CopyrightNotice" Value="&amp;copy; 2004-2006 Spring.NET Authors. All Rights Reserved."/>
+        <VariableValue Name="FeedbackLink" Value="&lt;a href=&quot;forum.springframework.net&quot;&gt;Send comments&lt;/a&gt; on this topic."/>
+    </VariableValues>
+    <AdditionalFiles/>
+    <ModelComments/>
+    <IgnoreRelationships/>
+    <NamespaceExclusions>
+        <e>Spring.Core~__Delegates</e>
+    </NamespaceExclusions>
+    <DotNetProperties IncludeRelationshipDiagrams="True" IncludeInheritanceHierarchies="True" IncludeBaseMembers="False" StandardInterfaces="System.*,Microsoft.*" OnlyLinkInherited="True" ExternalDocs="True" UseCommentFiles="True" DrillCommentFiles="True" GenerateXMLLinks="False" XMLIsland="" NoInheritedTopics="True" NoInheritedInLists="False" CreateXMLCommentFile="False" ExcludedLanguages="Delphi,JScript,CPP,CPP2005" GenerateAttributes="True" AttributeFilter="" AttributeFilterInclude="False" VBNETDefaultConstructor="False" LinkOverridenMembersToBaseImplementation="False" UseOverloadSummaryForMasterSummary="False" ExcludeEditorBrowsable="True" GenerateBreadCrumbs="True" IncludeAssemblyBreadCrumb="False"/>
+    <DatabaseProperties DocumentViewSource="True" DocumentTriggerSource="True" DocumentProcedureSource="True" RetainTaggedComments="False"/>
+    <XSDProperties UseCustomSettings="False" PageNestingLevels="2" SuppressSingleObjectDiagrams="True" ElementFillColor="15780518" ElementTextColor="0" ElementBorderColor="10789024" ElementBorders="True" ElementRefFillColor="12648447" ElementRefTextColor="0" ElementRefBorderColor="10789024" ElementRefBorders="True" ComplexTypeFillColor="15780518" ComplexTypeTextColor="0" ComplexTypeBorderColor="10789024" ComplexTypeBorders="True" AnyFillColor="13421772" AnyTextColor="0" AnyBorderColor="10789024" AnyBorders="True" NotationTextColor="8421504" RootLinesColor="10789024" DropShadows="False" BoldCaptions="True" GroupParticleSequenceImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\sequence.gif" GroupParticleChoiceImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\choice.gif" GroupParticleAllImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\all.gif"/>
+    <CommentFiles>
+        <CommentFile FileName="..\net-1.1\Spring.Core.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\build\package\Spring.NET\bin\net\2.0\debug\Spring.Core.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Aop.dxc" DocType="dx.net" ItemMoniker="L:\projects\Spring.Net\build\package\Spring.NET\bin\net\2.0\debug\Spring.Aop.dll"/>
+    </CommentFiles>
+    <DocType Name="dx.net" Template="Visual Studio 2005 Style" UseHelpTemplates="False">
+        <TOCSource TOCSource="0" SpecificTOCName=""/>
+        <ModelCommentProfile Version="5.0" Namespace="dx.net" Name="" Description=""/>
+    </DocType>
+    <NetAssemblies RootAssemblyName="">
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\build\package\Spring.NET\bin\net\2.0\debug\Spring.Core.dll" mRootModule="" AssemblyName="Spring.Core" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\Spring.Net\build\package\Spring.NET\bin\net\2.0\debug\Spring.Aop.dll" mRootModule="" AssemblyName="Spring.Aop" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+    </NetAssemblies>
+    <PropertyBag/>
+</DocumentXProject>

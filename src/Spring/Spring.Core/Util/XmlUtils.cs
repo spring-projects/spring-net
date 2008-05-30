@@ -1,0 +1,151 @@
+#region License
+
+/*
+ * Copyright 2002-2004 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
+#region Imports
+
+using System;
+using System.Configuration;
+using System.Xml;
+using System.IO;
+using System.Xml.Schema;
+
+#endregion
+
+namespace Spring.Util
+{
+    /// <summary>
+    /// XML utility methods.
+    /// </summary>
+    /// <author>Aleksandar Seovic</author>
+    /// <version>$Id: XmlUtils.cs,v 1.5 2007/04/22 00:02:38 oakinger Exp $</version>
+    public class XmlUtils
+    {
+#if !NET_2_0
+        /// <summary>
+        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
+        /// for the supplied <see cref="System.IO.Stream"/>.
+        /// </summary>
+        /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
+        /// <param name="schemas">XML schemas that should be used for validation.</param>
+        /// <param name="eventHandler">Validation event handler.</param>
+        /// <returns>
+        /// A validating <see cref="System.Xml.XmlReader"/> implementation.
+        /// </returns>
+        public static XmlReader CreateValidatingReader(Stream stream, XmlSchemaCollection schemas, ValidationEventHandler eventHandler)
+        {
+            return CreateValidatingReader(stream, new XmlUrlResolver(), schemas, eventHandler);
+        }
+
+		/// <summary>
+		/// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
+		/// for the supplied <see cref="System.IO.Stream"/>.
+		/// </summary>
+		/// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
+		/// <param name="xmlResolver"><see cref="XmlResolver"/> to be used for resolving external references</param>
+		/// <param name="schemas">XML schemas that should be used for validation.</param>
+		/// <param name="eventHandler">Validation event handler.</param>
+		/// <returns>
+		/// A validating <see cref="System.Xml.XmlReader"/> implementation.
+		/// </returns>
+		public static XmlReader CreateValidatingReader(Stream stream, XmlResolver xmlResolver, XmlSchemaCollection schemas, ValidationEventHandler eventHandler)
+		{
+			XmlValidatingReader reader = new XmlValidatingReader(new XmlTextReader(stream));
+			reader.XmlResolver = xmlResolver;
+			reader.Schemas.Add(schemas);
+			reader.ValidationType = ValidationType.Schema;
+			if (eventHandler != null)
+			{
+				reader.ValidationEventHandler += eventHandler;
+			}
+			return reader;
+		}
+#else
+        /// <summary>
+        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
+        /// for the supplied <see cref="System.IO.Stream"/>.
+        /// </summary>
+        /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
+        /// <param name="schemas">XML schemas that should be used for validation.</param>
+        /// <param name="eventHandler">Validation event handler.</param>
+        /// <returns>
+        /// A validating <see cref="System.Xml.XmlReader"/> implementation.
+        /// </returns>
+        public static XmlReader CreateValidatingReader(Stream stream, XmlSchemaSet schemas, ValidationEventHandler eventHandler)
+		{
+			return CreateValidatingReader(stream, new XmlUrlResolver(), schemas, eventHandler);
+		}
+
+        /// <summary>
+        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
+        /// for the supplied <see cref="System.IO.Stream"/>.
+        /// </summary>
+        /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
+        /// <param name="xmlResolver"><see cref="XmlResolver"/> to be used for resolving external references</param>
+        /// <param name="schemas">XML schemas that should be used for validation.</param>
+        /// <param name="eventHandler">Validation event handler.</param>
+        /// <returns>
+        /// A validating <see cref="System.Xml.XmlReader"/> implementation.
+        /// </returns>
+        public static XmlReader CreateValidatingReader(Stream stream, XmlResolver xmlResolver, XmlSchemaSet schemas, ValidationEventHandler eventHandler)
+        {
+            XmlReaderSettings settings = new XmlReaderSettings();
+		    settings.XmlResolver = xmlResolver;
+            settings.Schemas.Add(schemas);
+            settings.ValidationType = ValidationType.Schema;
+            if (eventHandler != null)
+            {
+                settings.ValidationEventHandler += eventHandler;
+            }
+
+            return XmlReader.Create(stream, settings);
+        }
+#endif
+
+        
+#if !NET_2_0
+        /// <summary>
+        /// Gets an <see cref="System.Xml.XmlTextReader"/> implementation 
+        /// for the supplied <see cref="System.IO.Stream"/>.
+        /// </summary>
+        /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
+        /// <returns>
+        /// A non-validating <see cref="System.Xml.XmlReader"/> implementation.
+        /// </returns>
+        public static XmlReader CreateReader(Stream stream)
+        {
+            return new XmlTextReader(stream);
+        }
+#else
+
+        /// <summary>
+        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation 
+        /// for the supplied <see cref="System.IO.Stream"/>.
+        /// </summary>
+        /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
+        /// <returns>
+        /// A non-validating <see cref="System.Xml.XmlReader"/> implementation.
+        /// </returns>
+        public static XmlReader CreateReader(Stream stream)
+        {            
+            return XmlReader.Create(stream);
+        }
+#endif
+    }
+}

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<xsd:schema xmlns="http://www.springframework.net/aop"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns:objects="http://www.springframework.net"
+		xmlns:tool="http://www.springframework.net/tool"
+		targetNamespace="http://www.springframework.net/aop"
+		elementFormDefault="qualified"
+		attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.springframework.net"/>
+	<xsd:import namespace="http://www.springframework.net/tool"/>
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+	Defines the configuration elements for the Spring Framework's AOP support.
+		]]></xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="config">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+	A section (compartmentalization) of AOP-specific configuration (including
+	aspects, pointcuts, etc).
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="advisor" type="advisorType" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation source="net:Spring.Aop.IAdvisor"><![CDATA[
+	A named advisor definition.
+						]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+
+			</xsd:sequence>
+			<xsd:attribute name="proxy-target-type" type="xsd:boolean" default="false">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	Are decorator-based (inheritance) proxies to be created? By default, composition-based proxies are created.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="advisorType">
+		<xsd:annotation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="Spring.Aop.IAdvisor"/>
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<!-- Rick : ID type written explicitly as opposed to being imported (c.f. [SPR-2290] -->
+		<xsd:attribute name="id" type="xsd:ID"/>
+		<xsd:attribute name="advice-ref" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	A reference to an advice bean.
+				]]></xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type type="org.springframework.aop.Advisor"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		<xsd:attribute name="pointcut-ref" type="pointcutRefType">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	A reference to a pointcut definition.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="order" type="xsd:int">
+			<xsd:annotation>
+				<xsd:documentation source="java:org.springframework.core.Ordered"><![CDATA[
+	Controls the ordering of the execution of this advice when multiple
+	advice executes at a specific joinpoint.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:simpleType name="pointcutRefType">
+		<xsd:annotation>
+			<xsd:appinfo>
+				<tool:annotation kind="ref">
+					<tool:expected-type type="org.springframework.aop.Pointcut"/>
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<xsd:union memberTypes="xsd:string"/>
+	</xsd:simpleType>
+
+</xsd:schema>

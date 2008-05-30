@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects	
+	xmlns="http://www.springframework.net" 
+	xmlns:r="http://www.springframework.net/remoting">
+	
+	<description>Registers the calculator service as a SAO in 'Singleton' mode.</description>
+	
+	<r:saoExporter 
+		targetName="singletonCalculator" 
+		serviceName="RemotedSaoSingletonCalculator" />
+	
+	<!--
+		Old fashion way without remoting config parser...
+	<object name="saoSingletonCalculator" type="Spring.Remoting.SaoExporter, Spring.Services">
+		<property name="TargetName" value="singletonCalculator" />
+		<property name="ServiceName" value="RemotedSaoSingletonCalculator" />
+	</object>
+	-->
+	
+</objects>

@@ -1,0 +1,128 @@
+# <examples>
+
+## <example name="">
+## <pattern>
+## </pattern>
+## <match>
+## </match>
+## <dont.match>
+## </dont.match>
+## </example>
+
+# <example name="filename">
+# <pattern>
+foo?bar.*
+# </pattern>
+# <match>
+fooAbar.txt
+foo1bar.txt
+foo_bar.txt
+foo-bar.txt
+# </match>
+# <dont.match>
+foo.bar.txt
+foo/bar.txt
+foo\bar.txt
+# </dont.match>
+# </example>
+
+# <example name="filename-all">
+# <pattern>
+*.*
+# </pattern>
+# <match>
+foo.db
+.db
+foo
+foo.bar.db
+foo.db.db
+db.db.db
+# </match>
+# <dont.match>
+c:/
+c:/foo.db
+c:/foo
+c:/.db
+c:/foo.foo.db
+//server/foo
+# </dont.match>
+# </example>
+
+# <example name="slashes">
+# <pattern>
+spring/foo.bar
+# </pattern>
+# <match>
+c:\spring\foo.bar
+c:/spring\foo.bar
+c:/spring/foo.bar
+/spring/foo.bar
+\spring\foo.bar
+# </match>
+# <dont.match>
+# </dont.match>
+# </example>
+
+# <example name="case-sensitive">
+# <pattern>
+**/db/**/*.DB
+# </pattern>
+# <match>
+c:/spring/service/deploy/app/db/foo.DB
+# </match>
+# <dont.match>
+c:/spring/service/deploy/app/DB/foo.DB
+c:spring/service/deploy/app/spaced dir/DB/foo.DB
+//server/share/service/deploy/app/DB/backup/foo.db
+# </dont.match>
+# </example>
+
+# <example name="double-subdir">
+# <pattern>
+**/bin/**/tmp/**
+# </pattern>
+# <match>
+c:/spring/foo/bin/bar/tmp/a
+c:/spring/foo/bin/tmp/a/b.c
+# </match>
+# <dont.match>
+c:/spring/foo/bin/bar/temp/a
+c:/tmp/foo/bin/bar/a/b.c
+# </dont.match>
+# </example>
+
+# <example name="subdir">
+# <pattern>
+**/db/**
+# </pattern>
+# <match>
+/db
+//server/db
+c:/db
+c:/spring/app/db/foo.db
+//Program Files/App/spaced dir/db/foo.db
+/home/spring/spaced dir/db/v1/foo.db
+# </match>
+# <dont.match>
+c:/spring/app/db-v1/foo.db
+/home/spring/spaced dir/db-v1/foo.db
+# </dont.match>
+# </example>
+
+# <example name="subdir-2">
+# <pattern>
+**/.spring-assemblies*/**
+# </pattern>
+# <match>
+c:/.spring-assemblies
+c:/.spring-assembliesabcd73xs
+c:/app/.spring-assembliesabcd73xs
+c:/app/.spring-assembliesabcd73xs/foo.dll
+//server/app/.spring-assembliesabcd73xs
+# </match>
+# <dont.match>
+c:/app/.spring-assemblie
+# </dont.match>
+# </example>
+
+# </examples>

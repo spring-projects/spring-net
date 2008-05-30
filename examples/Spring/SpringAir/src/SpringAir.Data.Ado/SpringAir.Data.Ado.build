@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<project name="SpringAir.Data.Ado" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+    <!--
+        Required properties:
+            * current.bin.dir           - (path) root level to build to
+            * build.debug               - (true|false) debug build?
+            * current.build.defines.csc - framework-specific build defines
+    -->
+    <target name="build">
+        <csc
+            target="library"
+            define="${current.build.defines.csc}" warnaserror="false" debug="${current.build.debug}"
+            output="${current.bin.dir}/${project::get-name()}.dll">
+            <sources failonempty="true">
+                <include name="**/*.cs" />
+            </sources>
+            <nowarn>
+                <warning number="${nowarn.numbers}" />
+            </nowarn>
+            <references basedir="${current.bin.dir}">
+                <include name="SpringAir.Core.dll" />
+            </references>
+        </csc>
+    </target>
+</project>

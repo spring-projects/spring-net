@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns='http://www.springframework.net'
+         xmlns:d="http://www.springframework.net/database">
+
+  
+ 
+    <object id="transactionManager"  type="Spring.Transaction.CallCountingTransactionManager, Spring.Data.Tests">
+
+    </object>
+        
+
+    <!-- declarative [Transaction] attributes applies here -->
+    <object id="testObjectManager" type="Spring.Data.TestObjectMgr, Spring.Data.Tests">
+
+    </object>
+
+    
+    <object id="consoleLoggingAroundAdvice" type="Spring.Data.LoggingAroundAdvice, Spring.Data.Tests"/>
+
+
+    <object id="testCoordinator" type="Spring.Data.TestCoord, Spring.Data.Tests">
+      <property name="TestObjectMgr" ref="testObjectManager"/>
+    </object>
+
+
+
+    <object id="aroundAdvisor" type="Spring.Aop.Support.NameMatchMethodPointcutAdvisor, Spring.Aop">
+      <property name="Advice" ref="consoleLoggingAroundAdvice"/>
+      <property name="MappedNames">
+        <list>
+          <value>WorkOn</value>
+        </list>
+      </property>
+    </object>
+
+  <!--
+  <object id="testObjManagerProxy" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+    <property name="target" ref="testObjectManager"/>
+    <property name="InterceptorNames">
+      <list>
+        <value>aroundAdvisor</value>
+      </list>
+    </property>
+  </object>
+  -->
+
+  <!-- The rest of the config file is common no matter how many objects you add -->
+  <!-- that you would like to have declarative tx management applied to -->
+
+  <object id="autoProxyCreator"
+          type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop">
+  </object>
+
+  <object id="transactionAdvisor"
+          type="Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor, Spring.Data"
+          autowire="constructor">
+  </object>
+
+
+  <object id="transactionInterceptor"
+          type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data" autowire="byType">
+  </object>
+    
+  <object id="attributeTransactionAttributeSource"
+          type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data">    
+  </object>
+
+
+
+
+    
+</objects>
+

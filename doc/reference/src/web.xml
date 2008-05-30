@@ -1,0 +1,2474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="web">
+  <title>Spring.NET Web Framework</title>
+
+  <sect1 id="web-introduction">
+    <title>Introduction</title>
+
+    <para>One of the objections many developers have to the ASP.NET
+    programming model is that it is not a "true MVC" (Model-View-Controller)
+    implementation, because controller-type logic within the page is too
+    tightly coupled to the view. A good example of this are event handlers
+    within the page class, which typically have references to view elements,
+    such as input controls, all over the place. Without getting into academic
+    discussion of what "true MVC" is, and whether it is even appropriate to
+    try to fit form-based technology such as ASP.NET into traditionally
+    request-based MVC pattern when MVP (Model-View-Presenter) or Presentation
+    Model might be more appropriate, we'd like to agree with the critics on
+    the most important point they are making: controller-type logic, such as
+    the code within page event handlers in ASP.NET, should not depend on the
+    view elements.</para>
+
+    <para>Having said that, there <emphasis>are</emphasis> good things about
+    ASP.NET. Server-side forms and controls make developers significantly more
+    productive and allow us to significantly simplify page markup. They also
+    make cross-browser issues easier to deal with, as each control can make
+    sure that it renders correct markup based on the user's browser. The
+    ability to hook custom logic into the lifecycle of the page, as well as to
+    customize HTTP processing pipeline are also very powerful features.
+    Finally, being able to interact with the strongly typed server-side
+    controls instead of manipulating string-based HTTP request collections,
+    such as Form and QueryString, is a much needed layer of abstraction in web
+    development.</para>
+
+    <para>For these reasons, we decided that instead of developing a new,
+    "pure and true MVC" web framework as part of Spring.NET, we should take a
+    more pragmatic approach and extend ASP.NET in such a way that most, if not
+    all of its shortcomings are eliminated. It should be noted that with the
+    introduction of a 'true MVC framework' being added to .NET, with extension
+    points for IoC containers such as Spring, Spring will continue to play a
+    role within a MVC based model once that functionality is available from
+    Microsoft. It is worth noting that Spring Java has a very popular MVC
+    framework and much of that experience and added value can be
+    transliterated to help developers be more productive when using the
+    upcoming ASP.NET MVC support.</para>
+
+    <para></para>
+
+    <para>Spring.Web also adds support for applying the dependency injection
+    principle to one's ASP.NET <classname>Pages</classname> and
+    <classname>Controls</classname> as well as http modules and custom
+    provider modules. This means that application developers can easily inject
+    service dependencies into web controllers by leveraging the power of the
+    Spring.NET IoC container. See <link linkend="web-di">Dependency Injection
+    for ASP.NET Pages</link> for more information.</para>
+
+    <para>As we said earlier, event handlers in code-behind classes really
+    should not have to deal with ASP.NET UI controls directly. Such event
+    handlers should rather work with the presentation model of the page,
+    represented either as a hierarchy of domain objects or an ADO.NET
+    <classname>DataSet</classname>. It is for that reason that the Spring.NET
+    team implemented bidirectional data binding framework to handle the
+    mapping of values to and from the controls on a page to the underlying
+    data model. The data binding framework also transparently takes care of
+    data type conversion and formatting, enabling application developers to
+    work with fully typed data (domain) objects in the event handlers of
+    code-behind files. See <link linkend="web-databinding">Bidirectional Data
+    Binding and Model Management</link> for more information.</para>
+
+    <para>The flow of control through an application is another area of
+    concern that is addressed by Spring.NET Web Framework. Typical ASP.NET
+    applications will use <literal>Response.Redirect</literal> or
+    <literal>Server.Transfer</literal> calls within
+    <classname>Page</classname> logic to navigate to an appropriate page after
+    an action is executed. This typically leads to hard-coded target URLs in
+    the <classname>Page</classname>, which is never a good thing. Result
+    mapping solves this problem by allowing application developers to specify
+    aliases for action results that map to target URLs based on information in
+    an external configuration file that can easily be edited. Under
+    consideration for future releases of Spring.NET is a process management
+    framework, which will take this approach to another level, allowing you to
+    control complex page flows in a very simple way. See <link
+    linkend="web-resultmapping">Result Mapping</link> for more
+    information.</para>
+
+    <para>Standard localization support is also limited in versions of ASP.NET
+    prior to ASP.NET 2.0. Even though Visual Studio 2003 generates a local
+    resource file for each ASP.NET <classname>Page</classname> and user
+    control, those resources are never used by the ASP.NET infrastructure.
+    This means that application developers have to deal directly with resource
+    managers whenever they need access to localized resources, which in the
+    opinion of the Spring.NET team should not be the case. Spring.NET's Web
+    Framework (hereafter referred to as Spring.Web) adds comprehensive support
+    for localization using both local resource files and global resources that
+    are configured within and for a Spring.NET container. See <link
+    linkend="web-localization">Localization and Message Sources</link> for
+    more information.</para>
+
+    <para>In addition to the aforementioned features that can be considered to
+    be the <emphasis>'core'</emphasis> features of the Spring.Web framework,
+    Spring.Web also ships with a number of other lesser features that might be
+    useful to a large number of application developers. Some of these
+    additional features include back-ports of ASP.NET 2.0 features that can be
+    used with ASP.NET 1.1, such as Master Page support. See <link lang=""
+    linkend="web-masterpages">Master Pages in ASP.NET 1.1</link> for more
+    information.</para>
+
+    <para>In order to implement some of the above mentioned features the
+    Spring.NET team had to extend (as in the object-oriented sense) the
+    standard ASP.NET <classname>Page</classname> and
+    <classname>UserControl</classname> classes. This means that in order to
+    take advantage of the <emphasis>full</emphasis> feature stack of
+    Spring.Web (most notably bidirectional data binding, localization and
+    result mapping), your code-behind classes will have to extend Spring.Web
+    specific base classes such as <classname>Spring.Web.UI.Page</classname>;
+    however, some very powerful features such as dependency injection for
+    ASP.NET Pages, Controls, and providers can be leveraged without having to
+    extend Spring.Web-specific base classes. It is worth stating that by
+    taking advantage of <emphasis>some</emphasis> of the more useful features
+    offered by Spring.Web you will be coupling the presentation tier of your
+    application(s) to Spring.Web. The choice of whether or not this is
+    appropriate is, of course, left to you.</para>
+
+    <para>Finally, please be aware that the standard Spring.NET distribution
+    (as of v1.1) ships with a number of Web QuickStarts and a complete
+    reference application, SpringAir. Web QuickStarts are the best way to
+    learn each Spring.Web feature by following simple examples, and the
+    SpringAir reference application has a Spring.Web-enabled frontend which
+    uses many best practices for Spring.NET web applications, so please do
+    refer to it as you are reading this (reference) material (see <xref
+    linkend="springair" />).</para>
+  </sect1>
+
+  <sect1 id="web-contexts">
+    <title>Automatic context loading and hierarchical contexts</title>
+
+    <sect2 id="web-configuration">
+      <title>Configuration</title>
+
+      <para>Unsurprisingly, Spring.Web builds on top of the Spring.NET IoC
+      container, and makes heavy use (internally) of the easy pluggability and
+      standardized configuration afforded by the IoC container. This also
+      means that all of the controllers (ASP.NET <classname>Page</classname>s)
+      that make up a typical Spring.Web enabled application will be configured
+      using the same standard Spring.NET XML configuration syntax. Spring.Web
+      uses a custom <classname>PageHandlerFactory</classname> implementation
+      to load and configure a Spring.NET IoC container, which is in turn used
+      to locate an appropriate <classname>Page</classname> to handle a HTTP
+      request. The <classname>WebSupportModule</classname> configures
+      miscellaneous Spring infrastructure classes for use in a web
+      environment, for example setting the storage strategy of
+      <classname>LogicalThreadContext</classname> to be
+      <classname>HybridContextStorage</classname>.</para>
+
+      <para>The instantiation and configuration of the Spring.NET IoC
+      container by the Spring.Web infrastructure is wholly transparent to
+      application developers, who will typically never have to explicitly
+      instantiate and configure an IoC container manually (by for example
+      using the <literal>new</literal> operator in C#). In order to effect the
+      transparent bootstrapping of the IoC container, the Spring.Web
+      infrastructure requires the insertion of the following configuration
+      snippet into each and every Spring.Web-enabled web application's root
+      <literal>Web.config</literal> file (the <literal>verb</literal> and
+      <literal>path</literal> properties can of course be changed from the
+      values that are shown below):</para>
+
+      <programlisting>&lt;system.web&gt;
+    &lt;httpHandlers&gt;
+        &lt;add verb="*" path="*.aspx" type="Spring.Web.Support.PageHandlerFactory, Spring.Web"/&gt;
+    &lt;/httpHandlers&gt;
+    &lt;httpModules&gt;
+        &lt;add name="Spring" type="Spring.Context.Support.WebSupportModule, Spring.Web"/&gt;
+    &lt;/httpModules&gt;
+    ...
+&lt;/system.web&gt;
+
+</programlisting>
+
+      <para>Please note that this snippet of standard ASP.NET configuration is
+      only required to be present in the <emphasis>root</emphasis> directory
+      of each Spring.Web web application (i.e. in the
+      <literal>web.config</literal> file present in the top level virtual
+      directory of an ASP.NET web application).</para>
+
+      <para>The above XML configuration snippet will direct the ASP.NET
+      infrastructure to use Spring.NET's page factory, which will in turn
+      create instances of the appropriate <literal>.aspx</literal>
+      <classname>Page</classname>, (possibly) inject dependencies into said
+      <classname>Page</classname> (as required), and then forward the handling
+      of the request to said <classname>Page</classname>.</para>
+
+      <para>After the Spring.Web page factory is configured, you will also
+      need to define a root application context by adding a Spring.NET
+      configuration section to that same <literal>web.config</literal> file.
+      The final configuration file should look a little like this (your exact
+      configuration will no doubt vary in particulars)...</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;configuration&gt;
+
+    &lt;configSections&gt;
+        &lt;sectionGroup name="spring"&gt;
+          &lt;section name="context" type="Spring.Context.Support.WebContextHandler, Spring.Web"/&gt;
+        &lt;/sectionGroup&gt;
+    &lt;/configSections&gt;
+
+    &lt;spring&gt;
+        &lt;context&gt;
+            &lt;resource uri="~/Config/CommonObjects.xml"/&gt;
+            &lt;resource uri="~/Config/CommonPages.xml"/&gt;
+
+            &lt;!-- TEST CONFIGURATION --&gt;
+            &lt;!--
+            &lt;resource uri="~/Config/Test/Services.xml"/&gt;
+            &lt;resource uri="~/Config/Test/Dao.xml"/&gt;
+            --&gt;
+
+            &lt;!-- PRODUCTION CONFIGURATION --&gt;
+
+            &lt;resource uri="~/Config/Production/Services.xml"/&gt;
+            &lt;resource uri="~/Config/Production/Dao.xml"/&gt;
+
+        &lt;/context&gt;
+    &lt;/spring&gt;
+
+    &lt;system.web&gt;
+        &lt;httpHandlers&gt;
+            &lt;add verb="*" path="*.aspx" type="Spring.Web.Support.PageHandlerFactory, Spring.Web"/&gt;
+        &lt;/httpHandlers&gt;
+        &lt;httpModules&gt;
+            &lt;add name="Spring" type="Spring.Context.Support.WebSupportModule, Spring.Web"/&gt;
+        &lt;/httpModules&gt;
+    &lt;/system.web&gt;
+
+&lt;/configuration&gt;
+</programlisting>
+
+      <para>There are a few important points that need to be noted with regard
+      to the above configuration:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>You must define a custom configuration section handler for the
+          <literal>spring/context</literal> element. If you use Spring.NET for
+          many applications on the same web server, it might be easier to move
+          the whole definition of the Spring.NET section group to your
+          <literal>machine.config</literal> file.</para>
+        </listitem>
+
+        <listitem>
+          <para>The custom configuration section handler is of the type
+          <classname>Spring.Context.Support.WebContextHandler</classname>
+          which will in turn instantiate an IoC container of the type
+          <classname>Spring.Context.Support.WebApplicationContext</classname>.
+          This will ensure that all of the features provided by Spring.Web are
+          handled properly (such as request and session-scoped object
+          definitions).</para>
+        </listitem>
+
+        <listitem>
+          <para>Within the &lt;spring&gt; element you need to define a root
+          context, and resource locations that contain the object definitions
+          that will be used within the web application (such as service or
+          business tier objects) then need to be specified as child elements
+          within the &lt;context&gt; element. Object definition resources can
+          be fully-qualified paths or URLs, or non-qualified, as in the
+          example above. Non-qualified resources will be loaded using the
+          default resource type for the context, which for the
+          <classname>WebApplicationContext</classname> is the
+          <classname>WebResource</classname> type.</para>
+        </listitem>
+
+        <listitem>
+          <para>Please note that the object definition resources do not all
+          have to be the same resource type (e.g. all
+          <literal>file://</literal>, all <literal>http://</literal>, all
+          <literal>assembly://</literal>, etc). This means that you can load
+          some object definitions from resources embedded directly within
+          application assemblies (<literal>assembly://</literal>), while
+          continuing to load other object definitions from web resources that
+          can be more easily edited.</para>
+        </listitem>
+      </orderedlist>
+
+      <sect3>
+        <title>Configuration for IIS7</title>
+
+        <para>The configuration for IIS7 is shown below</para>
+
+        <programlisting>&lt;system.webServer&gt;
+  &lt;validation validateIntegratedModeConfiguration="false"/&gt;
+  &lt;modules&gt;
+    &lt;add name="Spring" type="Spring.Context.Support.WebSupportModule, Spring.Web"/&gt;
+  &lt;/modules&gt;
+  &lt;handlers&gt;
+    &lt;add name="SpringPageHandler" verb="*" path="*.aspx" type="Spring.Web.Support.PageHandlerFactory, Spring.Web"/&gt;
+    &lt;add name="SpringContextMonitor" verb="*" path="ContextMonitor.ashx" type="Spring.Web.Support.ContextMonitor, Spring.Web"/&gt;
+  &lt;/handlers&gt;
+&lt;/system.webServer&gt;</programlisting>
+      </sect3>
+    </sect2>
+
+    <sect2 id="web-context-hierarchy">
+      <title>Context Hierarchy</title>
+
+      <para>ASP.NET provides a hierarchical configuration mechanism by
+      allowing application developers to override configuration settings
+      specified at a higher level in the web application directory hierarchy
+      with configuration settings specified at the lower level.</para>
+
+      <para>For example, a web application's root
+      <literal>Web.config</literal> file overrides settings from the (lower
+      level) <literal>machine.config</literal> file. In the same fashion,
+      settings specified within the <literal>web.config</literal> file within
+      a subdirectory of a web application will override settings from the root
+      <literal>Web.config</literal> and so on. Lower level
+      <literal>Web.config</literal> files can also add settings of their own
+      that were not previously defined anywhere.</para>
+
+      <para>Spring.Web leverages this ASP.NET feature to provide support for a
+      context hierarchy. Your lower level <literal>Web.config</literal> files
+      can be used to add new object definitions or to override existing ones
+      per virtual directory.</para>
+
+      <para>What this means to application developers is that one can easily
+      componentize an application by creating a virtual directory per
+      component and creating a custom context for each component that contains
+      the necessary configuration info for that particular context. The
+      configuration for a lower level component will generally contain only
+      those definitions for the pages that the component consists of and
+      (possibly) overrides for some of the definitions from the root context
+      (for example, menus).</para>
+
+      <para>Because each such lower level component will usually contain only
+      a few object definitions, application developers are encouraged to embed
+      those object definitions directly into the <literal>Web.config</literal>
+      for the lower level context instead of relying on an external resource
+      containing object definitions. This is easily accomplished by creating a
+      component <literal>Web.config</literal> similar to the following
+      one:</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+       &lt;section name="objects" type="Spring.Context.Support.DefaultSectionHandler, Spring.Core"/&gt;
+    &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;context type="Spring.Context.Support.WebApplicationContext, Spring.Web"&gt;
+        &lt;resource uri="config://spring/objects"/&gt;
+    &lt;/context&gt;
+
+    &lt;objects xmlns="http://www.springframework.net"&gt;
+        &lt;object type="MyPage.aspx" parent="basePage"&gt;
+              &lt;property name="MyRootService" ref="myServiceDefinedInRootContext"/&gt;
+              &lt;property name="MyLocalService" ref="myServiceDefinedLocally"/&gt;
+              &lt;property name="Results"&gt;
+                 &lt;!-- ... --&gt;
+              &lt;/property&gt;
+        &lt;/object&gt;
+        &lt;object id="myServiceDefinedLocally" type="MyCompany.MyProject.Services.MyServiceImpl, MyAssembly"/&gt;
+    &lt;/objects&gt;
+  &lt;/spring&gt;
+&lt;/configuration&gt;</programlisting>
+
+      <para>The <literal>&lt;context/&gt;</literal> element seen above
+      (contained within the <literal>&lt;spring/&gt;</literal> element) simply
+      tells the Spring.NET infrastructure code to load (its) object
+      definitions from the <literal>spring/objects</literal> section of the
+      configuration file.</para>
+
+      <para>You can (and should) avoid the need to specify
+      <literal>&lt;configSections/&gt;</literal> element by moving the
+      configuration handler definition for the
+      <literal>&lt;objects&gt;</literal> element to a higher level (root)
+      <literal>Web.config</literal> file, or even to the level of the
+      <literal>machine.config</literal> file if Spring.NET is to be used for
+      multiple applications on the same server.</para>
+
+      <para>A very important point to be aware of is that this component-level
+      context can reference definitions from its parent context(s). Basically,
+      if a referenced object definition is not found in the current context,
+      Spring.NET will search all the ancestor contexts in the context
+      hierarchy until it finds said object definition (or ultimately fails and
+      throws an exception).</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="web-di">
+    <title>Dependency Injection for ASP.NET Pages</title>
+
+    <para>Spring.Web builds on top of the feature set and capabilities of
+    ASP.NET; one example of this can be seen the way that Spring.Web has used
+    the code-behind class of the <classname>Page</classname> mechanism to
+    satisfy the <literal>Controller</literal> portion of the MVC architectural
+    pattern. In MVC-based (web) applications, the
+    <literal>Controller</literal> is typically a thin wrapper around one or
+    more service objects. In the specific case of Spring.Web, the Spring.NET
+    team realized that it was very important that service object dependencies
+    be easily injected into <classname>Page</classname>
+    <literal>Controller</literal>s. Accordingly, Spring.Web provides first
+    class support for dependency injection in ASP.NET
+    <classname>Page</classname>s. This allows application developers to inject
+    any required service object dependencies (and indeed any other
+    dependencies) into their <classname>Page</classname>s using standard
+    Spring.NET configuration instead of having to rely on custom service
+    locators or manual object lookups in a Spring.NET application
+    context.</para>
+
+    <para>Once an application developer has <link
+    linkend="web-configuration">configured</link> the Spring.NET web
+    application context, said developer can easily create object definitions
+    for the pages that compose that web application:</para>
+
+    <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+
+  &lt;object name="basePage" abstract="true"&gt;
+    &lt;property name="MasterPageFile" value="~/Web/StandardTemplate.master"/&gt;
+  &lt;/object&gt;
+
+  &lt;object type="Login.aspx"&gt;
+      &lt;property name="Authenticator" ref="authenticationService"/&gt;
+  &lt;/object&gt;
+
+  &lt;object type="Default.aspx" parent="basePage"/&gt;
+
+&lt;/objects&gt;</programlisting>
+
+    <para>This example contains three definitions:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>The first definition is an abstract definition for the base page
+        that many other pages in the application will inherit from. In this
+        case, the definition simply specifies which page is to be referenced
+        as the master page, but it will typically also configure
+        localization-related dependencies and root folders for images, scripts
+        and CSS stylesheets.</para>
+      </listitem>
+
+      <listitem>
+        <para>The second definition defines a login page that neither inherits
+        from the base page nor references the master page. What it does show
+        is how to inject a service object dependency into a page instance (the
+        <literal>authenticationService</literal> is defined elsewhere).</para>
+      </listitem>
+
+      <listitem>
+        <para>The final definition defines a default application page. In this
+        case it simply inherits from the base page in order to inherit the
+        master page dependency, but apart from that it doesn't need any
+        additional dependency injection configuration.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>One thing that slightly differentiates the configuration of ASP.NET
+    pages from the configuration of other .NET classes is in the value passed
+    to the <literal>type</literal> attribute. As can be seen in the above
+    configuration snippet the <literal>type</literal> name is actually the
+    path to the <literal>.aspx</literal> file for the
+    <classname>Page</classname>, relative to the directory context it is
+    defined in. In the case of the above example, those definitions are in the
+    root context so <literal>Login.aspx</literal> and
+    <literal>Default.aspx</literal> also must be in the root of the web
+    application's virtual directory. The master page is defined using an
+    absolute path because it could conceivably be referenced from child
+    contexts that are defined within subdirectories of the web
+    application.</para>
+
+    <para>The astute reader may have noticed that the definitions for the
+    <literal>Login</literal> and <literal>Default</literal> pages don't
+    specify either of the <literal>id</literal> and <literal>name</literal>
+    attributes. This is in marked contrast to typical object definitions in
+    Spring.NET, where the <literal>id</literal> or <literal>name</literal>
+    attributes are typically mandatory (although not always, as in the case of
+    inner object definitions). This is actually intentional, because in the
+    case of Spring.Web <classname>Page</classname>
+    <literal>Controller</literal> instances one typically wants to use the
+    name of the <literal>.aspx</literal> file name as the identifier. If an
+    <literal>id</literal> is not specified, the Spring.Web infrastructure will
+    simply use the name of the <literal>.aspx</literal> file as the object
+    identifier (minus any leading path information, and minus the file
+    extension too). </para>
+
+    <para>Nothing prevents an application developer from specifying an
+    <literal>id</literal> or <literal>name</literal> value explicitly; one use
+    case when the explicit naming might be useful is when one wants to expose
+    the same page multiple times using a slightly different configuration (Add
+    / Edit pages for example). If you would like to use abstract object
+    definitions and have your page inherit from them, the use of the name
+    attribute should be used instead of the id attribute on the abstract
+    object definition.</para>
+
+    <sect2 id="web-di-controls">
+      <title>Injecting Dependencies into Controls</title>
+
+      <para>Spring.Web also allows application developers to inject
+      dependencies into controls (both user controls and standard controls)
+      that are contained within a page. This can be accomplished globally for
+      all controls of a particular <literal>Type</literal> by using the
+      location of the <literal>.ascx</literal> as the object type identifier.
+      This is similar to injecting into <literal>.aspx </literal>pages shown
+      above.</para>
+
+      <programlisting>&lt;object type="~/controls/MyControl.ascx" abstract="true"&gt;
+   &lt;!-- inject dependencies here... --&gt;
+&lt;/object&gt;</programlisting>
+
+      <para>In either case, be sure to mark the object definition as
+      <literal>abstract</literal> (by adding
+      <literal>abstract="true"</literal> to the attribute list of the
+      <literal>&lt;object/&gt;</literal> element).</para>
+    </sect2>
+
+    <sect2>
+      <title>Injecting dependencies into custom HTTP modules</title>
+
+      <para>You can perform dependency injection on custom HTTP modules
+      through the use of the class
+      <classname>Spring.Context.Support.HttpApplicationConfigurer</classname>.
+      You register your custom HTTP module as you would normally, for example
+      a module of the type <classname>HtmlCommentAppenderModule</classname>,
+      taken from the Web Quickstart, appends additional comments into the http
+      response. It is registered as shown below</para>
+
+      <programlisting>&lt;httpModules&gt;
+  &lt;add name="HtmlCommentAppender" type="HtmlCommentAppenderModule"/&gt;
+&lt;/httpModules&gt;</programlisting>
+
+      <para>To configure this module, naming conventions are used to identify
+      the module name with configuration instructions in the Spring
+      configuration file. The ModuleTemplates property of
+      HttpApplicationConfigurer is a dictionary that takes as a key the name
+      of the HTTP module, HtmlCommentAppender, and as a value the
+      configuration instructions as you would normally use for configuring an
+      object with Spring. An example is shown below.
+      HttpApplicationConfigurer' ModuleTemplates property.</para>
+
+      <programlisting>&lt;object name="HttpApplicationConfigurer" type="Spring.Context.Support.HttpApplicationConfigurer, Spring.Web"&gt;
+  &lt;property name="ModuleTemplates"&gt;
+     &lt;dictionary&gt;
+       &lt;entry key="HtmlCommentAppender"&gt; &lt;!-- this name must match the module name --&gt;
+         &lt;object&gt;
+           &lt;!-- select "view source" in your browser on any page to see the appended html comment --&gt;
+           &lt;property name="AppendText" value="My configured comment!" /&gt;
+         &lt;/object&gt;
+       &lt;/entry&gt;
+     &lt;/dictionary&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+      <para>You can see this example in action in the Web Quickstart.</para>
+    </sect2>
+
+    <sect2>
+      <title>Injecting dependencies into custom providers</title>
+
+      <para>Custom providers can be configured with Spring. The approach to
+      configuration is a family of adapters that correspond 1-to-1 with the
+      standard ASP.NET providers that are registered using the standard
+      ASP.NET mechanism. The adapters inherit from their correspondingly named
+      provider class in the BCL.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>MembershipProviderAdapter</para>
+        </listitem>
+
+        <listitem>
+          <para>ProfileProviderAdapter</para>
+        </listitem>
+
+        <listitem>
+          <para>RoleProviderAdapter</para>
+        </listitem>
+
+        <listitem>
+          <para>SiteMapProviderAdapter</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Here is an example of how to register the adapter for membership
+      providers.</para>
+
+      <programlisting>        &lt;membership defaultProvider="mySqlMembershipProvider"&gt;
+            &lt;providers&gt;
+                &lt;clear/&gt;
+                &lt;add connectionStringName="" name="mySqlMembershipProvider" type="Spring.Web.Providers.MembershipProviderAdapter, Spring.Web"/&gt;
+            &lt;/providers&gt;
+        &lt;/membership&gt;</programlisting>
+
+      <para>The name of the provider must match the name of the object in the
+      spring configuration that will serve as the actual provider
+      implementation. For convenience there are configurable versions of the
+      providers found in ASP.NET so that you can use the full functionality of
+      spring to configure these standard provider implementations, for example
+      using property place holders, etc. These are</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>ConfigurableActiveDirectoryMembershipProvider</para>
+        </listitem>
+
+        <listitem>
+          <para>ConfigurableSqlMembershipProvider</para>
+        </listitem>
+
+        <listitem>
+          <para>ConfigurableSqlProfileProvider</para>
+        </listitem>
+
+        <listitem>
+          <para>ConfigurableSqlRoleProvider</para>
+        </listitem>
+
+        <listitem>
+          <para>ConfigurableXmlSiteMapProvider</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Here is an example configuration taken from the Web Quickstart
+      that simply sets the description property and connection string.</para>
+
+      <programlisting>    &lt;object id="mySqlMembershipProvider" type="Spring.Web.Providers.ConfigurableSqlMembershipProvider"&gt;
+        &lt;property name="connectionStringName" value="MyLocalSQLServer" /&gt;
+        &lt;property name="parameters"&gt;
+            &lt;name-values&gt;
+                &lt;add key="description" value="membershipprovider description" /&gt;
+            &lt;/name-values&gt;
+        &lt;/property&gt;
+    &lt;/object&gt;</programlisting>
+
+      <para>Your own custom providers of course will contain additional
+      configuration specific to your implementation.</para>
+    </sect2>
+
+    <sect2 id="web-controlling-di">
+      <title>Customizing control dependency injection</title>
+
+      <para>There might be situations where it is necessary to customize
+      Spring.Web's dependency injection processing. In particular when using
+      GridViews, which create a large number of child controls, dependency
+      injection can slow down your page. To overcome this problem, you may
+      tell Spring to handle the dependency injection process yourself by
+      implementing the interface ISupportsWebDependencyInjection as shown
+      below:</para>
+
+      <programlisting>[C#]
+class MyControl : Control, ISupportsWebDependencyInjection
+{
+  private IApplicationContext _defaultApplicationContext;
+
+  public IApplicationContext DefaultApplicationContext
+  {
+    get { return _defaultApplicationContext; }
+    set { _defaultApplicationContext = value; }
+  }
+
+  override protected AddedControl( Control control, int index )
+  {
+    // handle DI for children ourselves -
+    // defaults to a call to InjectDependenciesRecursive
+    WebUtils.InjectDependenciesRecursive( _defaultApplicationContext, control );
+    base.AddedControl( control, index );
+  }
+}</programlisting>
+
+      <para>There is a Spring server control, Panel, that provides an easier
+      way to turn of dependency injection for parts of your page. Example use
+      is shown below</para>
+
+      <programlisting>&lt;spring:Panel runat="server"
+   suppressDependencyInjection="true"  
+   renderContainerTag="false"&gt;
+
+   .. put your heavy controls here - they won't be touched by DI
+
+&lt;/spring:Panel&gt;</programlisting>
+
+      <para>By wrapping the performance sensitive parts of your page within
+      this panel, you can easily turn off DI using the attribute
+      suppressDependencyInjection. By default &lt;spring:Panel/&gt; won't
+      render a container tag (&lt;div&gt;, &lt;span&gt;, etc.). You can modify
+      this behavior by setting the attribute "renderContainerTag"
+      accordingly.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="web-objectscope">
+    <title>Object Scope</title>
+
+    <para>Spring.NET web applications support an additional attribute within
+    object definition elements that allows you to control the scope of an
+    object: <programlisting>&lt;object id="myObject" type="MyType, MyAssembly" scope="application | session | request"/&gt;</programlisting>As
+    you can see, there are three possible values for the scope attribute --
+    application, session or request. Application scope is the default, and
+    will be used for all objects that don't have scope attribute defined. As
+    its name says, it will result in a single instance of an object being
+    created for the duration of the application, so it works exactly like the
+    standard singleton objects in non-web applications. Session scope allows
+    you to define objects in such a way that an instance is created for each
+    HttpSession. This is the ideal scope for objects that you want bound to a
+    single user such as user profile, shopping cart, etc. Request scope will
+    result in a creation of an instance per HTTP request.</para>
+
+    <para>Unlike with prototype objects, calls to
+    <literal>IApplicationContext.GetObject</literal> will return the same
+    instance of the request-scoped object during a single HTTP request. This
+    allows you, for example, to inject the same request-scoped object into
+    multiple pages and then use server-side transfer to move from one page to
+    another. As all the pages are executed within the single HTTP request in
+    this case, they will share the same instance of the injected
+    object.</para>
+
+    <para>One thing to keep in mind is that objects can only reference other
+    objects that are in the same or broader scope. This means that
+    application-scoped objects can only reference other application-scoped,
+    session-scoped objects can reference both session and application-scoped
+    objects, and finally, request-scoped objects can reference other request,
+    session or application-scoped objects. Also, prototype objects (and that
+    includes all ASP.NET web pages defined within Spring.NET context) can
+    reference singleton objects from any scope, as well as other prototype
+    objects.</para>
+  </sect1>
+
+  <sect1 id="web-masterpages">
+    <title>Master Pages in ASP.NET 1.1</title>
+
+    <para>Support for ASP.NET 1.1 master pages in Spring.Web is very similar
+    to the support for master pages in ASP.NET 2.0.</para>
+
+    <para>The idea is that a web developer can define a layout template for
+    the site as a master page and specify content place holders that other
+    pages can then reference and populate. A sample master page
+    (<literal>MasterLayout.ascx</literal>) could look like this:</para>
+
+    <programlisting>&lt;%@ Control language="c#" Codebehind="MasterLayout.ascx.cs" AutoEventWireup="false" Inherits="MyApp.Web.UI.MasterLyout" %&gt;
+&lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" &gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Master Page&lt;/title&gt;
+        &lt;link rel="stylesheet" type="text/css" href="&lt;%= Context.Request.ApplicationPath %&gt;/css/styles.css"&gt;
+        &lt;spring:ContentPlaceHolder id="head" runat="server"/&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;form runat="server"&gt;
+            &lt;table cellPadding="3" width="100%" border="1"&gt;
+                &lt;tr&gt;
+                    &lt;td colspan="2"&gt;
+                        &lt;spring:ContentPlaceHolder id="title" runat="server"&gt;
+                            &lt;!-- default title content --&gt;
+                        &lt;/spring:ContentPlaceHolder&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;
+                        &lt;spring:ContentPlaceHolder id="leftSidebar" runat="server"&gt;
+                            &lt;!-- default left side content --&gt;
+                        &lt;/spring:ContentPlaceHolder&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                        &lt;spring:ContentPlaceHolder id="main" runat="server"&gt;
+                            &lt;!-- default main area content --&gt;
+                        &lt;/spring:ContentPlaceHolder&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/table&gt;
+        &lt;/form&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>As you can see from the above code, the master page defines the
+    overall layout for the page, in addition to four content placeholders that
+    other pages can override. The master page can also include default content
+    within the placeholder that will be displayed if a derived page does not
+    override the placeholder.</para>
+
+    <para>A page (Child.aspx) that uses this master page might look like
+    this:</para>
+
+    <programlisting>&lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
+&lt;%@ Page language="c#" Codebehind="Child.aspx.cs" AutoEventWireup="false" Inherits="ArtFair.Web.UI.Forms.Child" %&gt;
+&lt;html&gt;
+    &lt;body&gt;
+
+        &lt;spring:Content id="leftSidebarContent" contentPlaceholderId="leftSidebar" runat="server"&gt;
+            &lt;!-- left sidebar content --&gt;
+        &lt;/spring:Content&gt;
+
+        &lt;spring:Content id="mainContent" contentPlaceholderId="main" runat="server"&gt;
+            &lt;!-- main area content --&gt;
+        &lt;/spring:Content&gt;
+
+    &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>The <literal>&lt;spring:Content/&gt;</literal> control in the above
+    example uses the <literal>contentPlaceholderId</literal> attribute
+    (property) to specify exactly which placeholder from the master page is to
+    be overridden. Because this particular page does not define content
+    elements for the head and title place holders, they will be displayed
+    using the default content supplied in the master page.</para>
+
+    <para>Both the <classname>ContentPlaceHolder</classname> and
+    <classname>Content</classname> controls can contain any valid ASP.NET
+    markup: HTML, standard ASP.NET controls, user controls, etc.</para>
+
+    <tip>
+      <title>VS.NET 2003 issue</title>
+
+      <para>Technically, the <literal>&lt;html&gt;</literal> and
+      <literal>&lt;body&gt;</literal> tags from the previous example are not
+      strictly necessary because they are already defined in the master page.
+      However, if these tags are omitted, then Visual Studio 2003 will
+      complain about a schema and intellisense won't work, so it's much easier
+      to work in the HTML view if those tags are included. They will be
+      ignored when the page is rendered.</para>
+    </tip>
+
+    <sect2 id="web-childpage-linking">
+      <title>Linking child pages to their master</title>
+
+      <para>The <classname>Spring.Web.UI.Page</classname> class exposes a
+      property called <literal>MasterPageFile</literal>, which can be used to
+      specify the master page.</para>
+
+      <para>The recommended way to do this is by leveraging the Spring.NET IoC
+      container and creating definitions similar to the following:</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;objects xmlns="http://www.springframework.net"&gt;
+
+  &lt;object name="basePage" abstract="true"&gt;
+      &lt;property name="MasterPageFile" value="~/MasterLayout.ascx"/&gt;
+  &lt;/object&gt;
+
+  &lt;object type="Child.aspx" parent="basePage"&gt;
+      &lt;!-- inject other objects that page needs --&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+
+      <para>This approach allows application developers to change the master
+      page being used for a number of pages within a web application. Of
+      course, the master page can still be overridden on a per context or per
+      page basis by creating a new abstract page definition within a child
+      context, or by specifying the <literal>MasterPageFile</literal> property
+      directly.</para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="web-databinding">
+    <title>Bidirectional Data Binding and Model Management</title>
+
+    <para>A problem with the existing data binding support in ASP.NET is that
+    it is one-way only. It allows application developers to bind page controls
+    to the data model and display information from said data model, but it
+    doesn't allow for the extraction of values from the controls when the form
+    is submitted. Spring.Web adds such bidirectional data binding to ASP.NET
+    by allowing developers to specify data binding rules for their page, and
+    by automatically evaluating configured data binding rules at the
+    appropriate time in the page's lifecycle.</para>
+
+    <para>ASP.NET also doesn't provide any support for model management within
+    the postbacks. Sure, it has a ViewState management, but that takes care of
+    the control state only and not of the state of any presentation model
+    objects these controls might be bound to. In order to manage model within
+    ASP.NET, developers will typically use HTTP Session object to store the
+    model between the postbacks. This results in a decent amount of
+    boilerplate code that can and should be eliminated, which is exactly what
+    Spring.Web does by providing a simple set of model management
+    methods.</para>
+
+    <para>Please note that in order to take advantage of the bidirectional
+    data binding and model management support provided by Spring.Web, you
+    <emphasis>will</emphasis> have to couple your presentation layer to
+    Spring.Web; this is because features <emphasis>requires</emphasis> you to
+    extend a <classname>Spring.Web.UI.Page</classname> instead of the usual
+    <classname>System.Web.UI.Page</classname> class.</para>
+
+    <para>Spring.Web data binding is very easy to use. Application developers
+    simply need to override the protected
+    <literal>InitializeDataBindings</literal> method and configure data
+    binding rules for the page. They also need to override three model
+    management methods: <literal>InitializeModel</literal>,
+    <literal>LoadModel</literal> and <literal>SaveModel</literal>. This is
+    perhaps best illustrated by an example from the SpringAir reference
+    application. First, let's take a look at the page markup:<programlisting>&lt;%@ Page Language="c#" Inherits="TripForm" CodeFile="TripForm.aspx.cs" %&gt;
+
+&lt;asp:Content ID="body" ContentPlaceHolderID="body" runat="server"&gt;
+    &lt;div style="text-align: center"&gt;
+        &lt;h4&gt;&lt;asp:Label ID="caption" runat="server"&gt;&lt;/asp:Label&gt;&lt;/h4&gt;
+        &lt;table&gt;
+            &lt;tr class="formLabel"&gt;
+                &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+                &lt;td colspan="3"&gt;
+                    &lt;spring:RadioButtonGroup ID="tripMode" runat="server"&gt;
+                        &lt;asp:RadioButton ID="OneWay" runat="server" /&gt;
+                        &lt;asp:RadioButton ID="RoundTrip" runat="server" /&gt;
+                    &lt;/spring:RadioButtonGroup&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="formLabel" align="right"&gt;
+                    &lt;asp:Label ID="leavingFrom" runat="server" /&gt;&lt;/td&gt;
+                &lt;td nowrap="nowrap"&gt;
+                    &lt;asp:DropDownList ID="leavingFromAirportCode" runat="server" /&gt;
+                &lt;/td&gt;
+                &lt;td class="formLabel" align="right"&gt;
+                    &lt;asp:Label ID="goingTo" runat="server" /&gt;&lt;/td&gt;
+                &lt;td nowrap="nowrap"&gt;
+                    &lt;asp:DropDownList ID="goingToAirportCode" runat="server" /&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="formLabel" align="right"&gt;
+                    &lt;asp:Label ID="leavingOn" runat="server" /&gt;&lt;/td&gt;
+                &lt;td nowrap="nowrap"&gt;
+                    &lt;spring:Calendar ID="departureDate" runat="server" Width="75px" AllowEditing="true" Skin="system" /&gt;
+                &lt;/td&gt;
+                &lt;td class="formLabel" align="right"&gt;
+                    &lt;asp:Label ID="returningOn" runat="server" /&gt;&lt;/td&gt;
+                &lt;td nowrap="nowrap"&gt;
+                    &lt;div id="returningOnCalendar"&gt;
+                        &lt;spring:Calendar ID="returnDate" runat="server" Width="75px" AllowEditing="true" Skin="system" /&gt;
+                    &lt;/div&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="buttonBar" colspan="4"&gt;
+                    &lt;br/&gt;
+                    &lt;asp:Button ID="findFlights" runat="server"/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+
+ &lt;/asp:Content&gt;
+
+</programlisting>Ignore for the moment the fact that none of the label
+    controls have text defined, which will be described later when we discuss
+    localization in Spring.NET. What is important for the purposes of our
+    current discussion, is that we have a number of input controls defined:
+    <literal>tripMode</literal> radio group,
+    <literal>leavingFromAirportCode</literal> and
+    <literal>goingToAirportCode</literal> dropdowns, as well as two Spring.NET
+    Calendar controls, <literal>departureDate</literal> and
+    <literal>returnDate</literal>.</para>
+
+    <para>Next, let's take a look at the model we will be binding this form
+    to:<programlisting>namespace SpringAir.Domain
+{
+    [Serializable]
+    public class Trip
+    {
+        // fields
+        private TripMode mode;
+        private TripPoint startingFrom;
+        private TripPoint returningFrom;
+
+        // constructors
+        public Trip()
+        {
+            this.mode = TripMode.RoundTrip;
+            this.startingFrom = new TripPoint();
+            this.returningFrom = new TripPoint();
+        }
+
+        public Trip(TripMode mode, TripPoint startingFrom, TripPoint returningFrom)
+        {
+            this.mode = mode;
+            this.startingFrom = startingFrom;
+            this.returningFrom = returningFrom;
+        }
+
+        // properties
+        public TripMode Mode
+        {
+            get { return this.mode; }
+            set { this.mode = value; }
+        }
+
+        public TripPoint StartingFrom
+        {
+            get { return this.startingFrom; }
+            set { this.startingFrom = value; }
+        }
+
+        public TripPoint ReturningFrom
+        {
+            get { return this.returningFrom; }
+            set { this.returningFrom = value; }
+        }
+    }
+
+    [Serializable]
+    public class TripPoint
+    {
+        // fields
+        private string airportCode;
+        private DateTime date;
+
+        // constructors
+        public TripPoint()
+        {}
+
+        public TripPoint(string airportCode, DateTime date)
+        {
+            this.airportCode = airportCode;
+            this.date = date;
+        }
+
+        // properties
+        public string AirportCode
+        {
+            get { return this.airportCode; }
+            set { this.airportCode = value; }
+        }
+
+        public DateTime Date
+        {
+            get { return this.date; }
+            set { this.date = value; }
+        }
+    }
+
+    [Serializable]
+    public enum TripMode
+    {
+        OneWay,
+        RoundTrip
+    }
+}</programlisting>As you can see, <classname>Trip</classname> class uses the
+    <classname>TripPoint</classname> class to represent departure and return,
+    which are exposed as <literal>StartingFrom</literal> and
+    <literal>ReturningFrom</literal> properties. It also uses
+    <classname>TripMode</classname> enumeration to specify whether the trip is
+    one way or return trip, which is exposed as <literal>Mode</literal>
+    property.</para>
+
+    <para>Finally, let's see the code-behind class that ties everything
+    together:<programlisting>public class TripForm : Spring.Web.UI.Page
+{
+    // model
+    private Trip trip;
+    public Trip Trip
+    {
+        get { return trip; }
+        set { trip = value; }
+    }
+
+    // service dependency, injected by Spring IoC container
+    private IBookingAgent bookingAgent;
+    public IBookingAgent BookingAgent
+    {
+        set { bookingAgent = value; }
+    }
+
+    // model management methods
+    protected override void InitializeModel()
+    {
+        trip = new Trip();
+        trip.Mode = TripMode.RoundTrip;
+        trip.StartingFrom.Date = DateTime.Today;
+        trip.ReturningFrom.Date = DateTime.Today.AddDays(1);
+    }
+
+    protected override void LoadModel(object savedModel)
+    {
+        trip = (Trip) savedModel;
+    }
+
+    protected override object SaveModel()
+    {
+        return trip;
+    }
+
+    // data binding rules
+    protected override void InitializeDataBindings()
+    {
+        BindingManager.AddBinding("tripMode.Value", "Trip.Mode");
+        BindingManager.AddBinding("leavingFromAirportCode.SelectedValue", "Trip.StartingFrom.AirportCode");
+        BindingManager.AddBinding("goingToAirportCode.SelectedValue", "Trip.ReturningFrom.AirportCode");
+        BindingManager.AddBinding("departureDate.SelectedDate", "Trip.StartingFrom.Date");
+        BindingManager.AddBinding("returnDate.SelectedDate", "Trip.ReturningFrom.Date");
+    }
+
+    // event handler for findFlights button, uses injected 'bookingAgent'
+    // service and model 'trip' object to find flights
+    private void SearchForFlights(object sender, EventArgs e)
+    {
+        FlightSuggestions suggestions = bookingAgent.SuggestFlights(trip);
+        if (suggestions.HasOutboundFlights)
+        {
+            // redirect to SuggestedFlights page
+        }
+    }
+}</programlisting>There are quite a few things that are happening in this
+    relatively simple piece of code, so it's worth that we spend some time on
+    each one:<orderedlist>
+        <listitem>
+          <para>When the page is initially loaded (<literal>IsPostback ==
+          false</literal>), the <literal>InitializeModel</literal> method is
+          called which initializes the trip object by creating a new instance
+          and setting its properties to desired values. Right before the page
+          is rendered, <literal>the SaveModel</literal> method will be invoked
+          and whatever the value it returns will be stored within the HTTP
+          Session. Finally, on each postback, <literal>the LoadModel</literal>
+          method will be called and the value returned by the previous call to
+          <literal>SaveModel</literal> will be passed to it as an
+          argument.</para>
+
+          <para>In this particular case the implementation is very simple
+          because our whole model is just the <literal>trip</literal> object.
+          As such, <literal>SaveModel</literal> simply returns the
+          <literal>trip</literal> object and <literal>LoadModel</literal>
+          casts the <literal>savedModel</literal> argument to
+          <classname>Trip</classname> and assigns it to the
+          <literal>trip</literal> field within the page. In the more complex
+          scenarios, you will typically return a dictionary containing your
+          model objects from the <literal>SaveModel</literal> method, and read
+          the values from that dictionary within the
+          <literal>LoadModel</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>InitializeDataBindings</literal> method defines the
+          binding rules for all five input controls on our form. It does so by
+          invoking <literal>AddBinding</literal> method on the
+          <literal>BindingManager</literal> exposed by the page.
+          <literal>AddBinding</literal> method is heavily overloaded and it
+          allows you to specify a <emphasis>binding direction</emphasis> and a
+          <emphasis>formatter</emphasis> to use in addition to the
+          <emphasis>source and target binding expressions</emphasis> that are
+          used above. We'll discuss these optional parameters shortly, but for
+          now let's focus on the source and target expressions.</para>
+
+          <para>The Data Binding framework uses Spring.NET Expression Language
+          to define binding expressions. In most cases, like in the example
+          above, both source and target expression will evaluate to a property
+          or a field within one of the controls or a data model. This is
+          always the case when you are setting a bi-directional binding, as
+          both binding expressions need to be "settable". What is important to
+          remember about <literal>InitializeDataBindings</literal> method is
+          that it is executed only once <emphasis>per page type</emphasis>.
+          Basically, all of the binding expressions are parsed the first time
+          the page is instantiated, and are the cached and used by all
+          instances of that same page type that are created at a later time.
+          This is done for performance reasons, as data binding expression
+          parsing on every postback is unnecessary and would add a significant
+          overhead to the overall page processing time.</para>
+        </listitem>
+
+        <listitem>
+          <para>If you look at the SearchForFlights event handler, you will
+          notice that it has no dependencies on the view elements. It simply
+          uses the injected bookingAgent service and a trip object that in
+          order to obtain a list of suggested flights. Furthermore, if you
+          make any modifications to the trip object within your event handler,
+          bound controls will be updated accordingly just before the page is
+          rendered.</para>
+
+          <para>This accomplishes one of the major goals we set out to
+          achieve, allowing developers to remove view element references from
+          the page event handlers and decouple controller-type methods from
+          the view.</para>
+        </listitem>
+      </orderedlist></para>
+
+    <para>Now that you have a solid high-level picture of how Spring.NET data
+    binding and model management are typically used in web applications, let's
+    take a look at the details and see how data binding is actually
+    implemented under the hood, what the extension points are, and what are
+    some additional features that make data binding framework usable in
+    real-world applications.</para>
+
+    <sect2 id="web-binding-detail">
+      <title>Data Binding Under the Hood</title>
+
+      <para>Spring.NET Data Binding framework revolves around two main
+      interfaces: <literal>IBinding</literal> and
+      <literal>IBindingContainer</literal>. The <literal>IBinding</literal>
+      interface is definitely the more important one of the two, as it has to
+      be implemented by all binding types. This interface defines several
+      methods, with some of them being overloaded for
+      convenience:<programlisting>public interface IBinding
+{
+    void BindSourceToTarget(object source, object target, ValidationErrors validationErrors);
+
+    void BindSourceToTarget(object source, object target, ValidationErrors validationErrors, 
+                            IDictionary variables);
+
+    void BindTargetToSource(object source, object target, ValidationErrors validationErrors);
+
+    void BindTargetToSource(object source, object target, ValidationErrors validationErrors, 
+                            IDictionary variables);
+
+    void SetErrorMessage(string messageId, params string[] errorProviders);
+}</programlisting>As their names imply, <literal>BindSourceToTarget</literal>
+      method is used to extract and copy bound values from the source object
+      to the target object, while <literal>BindTargetToSource</literal> does
+      the opposite. Both method names and parameter types are very generic for
+      a good reason -- data binding framework can indeed be used to bind any
+      two objects. Using it to bind web forms to model objects is just one of
+      its possible uses, although a very common one and tightly integrated
+      into the Spring.NET Web Framework.</para>
+
+      <para>The <literal>validationErrors</literal> parameter requires further
+      explanation. While the data binding framework is not in any way coupled
+      to the data validation framework, they are in some ways related. For
+      example, while the data validation framework is best suited to validate
+      the populated model according to the business rules, the data binding
+      framework is in a better position to validate data types during the
+      binding process. However, regardless of where specific validation is
+      performed, all error messages should be presented to the user in a
+      consistent manner. In order to accomplish this, Spring.NET Web Framework
+      passes the same ValidationErrors instance to binding methods and to any
+      validators that might be executed within your event handlers. This
+      ensures that all error messages are stored together and are displayed
+      consistently to the end user, using Spring.NET validation error
+      controls.</para>
+
+      <para>The last method in the <literal>IBinding</literal> interface,
+      <literal>SetErrorMessage</literal>, enables this by allowing you to
+      specify the resource id of the error message to be displayed in the case
+      of binding error, as well as the list of error providers that messages
+      should be displayed in. We will see an example of the
+      <literal>SetErrorMessage</literal> usage shortly.</para>
+
+      <para>The <literal>IBindingContainer</literal> interface extends the
+      <literal>IBinding</literal> interface and adds the following
+      members:<programlisting>public interface IBindingContainer : IBinding
+{
+  bool HasBindings { get; }
+
+  IBinding AddBinding(IBinding binding);
+  IBinding AddBinding(string sourceExpression, string targetExpression);
+  IBinding AddBinding(string sourceExpression, string targetExpression, BindingDirection direction);
+  IBinding AddBinding(string sourceExpression, string targetExpression, IFormatter formatter);
+  IBinding AddBinding(string sourceExpression, string targetExpression, BindingDirection direction, 
+                      IFormatter formatter);
+}</programlisting>As you can see, this interface has a number of overloaded
+      <literal>AddBinding</literal> methods. The first one,
+      <literal>AddBinding(IBinding binding)</literal> is the most generic one,
+      as it can be used to add any binding type to the container. The other
+      four are convenience methods that provide a simple way to add the most
+      commonly used binding type, <literal>SimpleExpressionBinding</literal>.
+      The <literal>SimpleExpressionBinding</literal> is what we used in the
+      example at the beginning of this section to bind our web form to a
+      <classname>Trip</classname> instance. It uses Spring.NET Expression
+      Language to extract and to set values within source and target objects.
+      We discussed <literal>sourceExpression</literal> and
+      <literal>targetExpression</literal> arguments earlier, so let's focus on
+      the remaining ones.</para>
+
+      <sect3 id="web-binding-direction">
+        <title>Binding Direction</title>
+
+        <para>The direction argument determines whether the binding is
+        bidirectional or unidirectional. By default, all data bindings are
+        bidirectional unless the direction argument is set to either
+        <literal>BindingDirection.SourceToTarget</literal> or
+        <literal>BindingDirection.TargetToSource</literal>. If one of these
+        two values is specified, binding will be evaluated only when the
+        appropriate <literal>Bind</literal><emphasis>Direction</emphasis>
+        method is invoked, and will be completely ignored in the other
+        direction. This is very useful when you want to bind some information
+        from the model into non-input controls, such as labels.</para>
+
+        <para>However, unidirectional data bindings are also useful when your
+        form doesn't have a simple one-to-one mapping to presentation model.
+        In our earlier trip form example, the presentation model was
+        intentionally designed to allow for simple one-to-one mappings. For
+        the sake of discussion, let's add the <classname>Airport</classname>
+        class and modify our <classname>TripPoint</classname> class like
+        this:<programlisting>namespace SpringAir.Domain
+{
+    [Serializable]
+    public class TripPoint
+    {
+        // fields
+        private Airport airport;
+        private DateTime date;
+
+        // constructors
+        public TripPoint()
+        {}
+
+        public TripPoint(Airport airport, DateTime date)
+        {
+            this.airport = airport;
+            this.date = date;
+        }
+
+        // properties
+        public Airport Airport
+        {
+            get { return this.airport; }
+            set { this.airport = value; }
+        }
+
+        public DateTime Date
+        {
+            get { return this.date; }
+            set { this.date = value; }
+        }
+    }
+
+    [Serializable]
+    public class Airport
+    {
+        // fields
+        private string code;
+        private string name;
+
+       // properties
+        public string Code
+        {
+            get { return this.code; }
+            set { this.code = value; }
+        }
+
+        public string Name
+        {
+            get { return this.name; }
+            set { this.name = value; }
+        }
+    }
+}</programlisting>Instead of the string property
+        <literal>AirportCode</literal>, our <classname>TripPoint</classname>
+        class now exposes an <literal>Airport</literal> property of type
+        <classname>Airport</classname>, which is defined above. Now we have a
+        problem: what used to be a simple string to string binding, with the
+        airport code selected in a dropdown being copied directly into the
+        TripPoint.AirportCode property and vice versa, now becomes a not so
+        simple string to <classname>Airport</classname> binding, so let's see
+        how we can solve this mismatch problem.</para>
+
+        <para>First of all, binding from the model to the control is still
+        very straight forward. We just need to set up one-way bindings from
+        the model to controls:<programlisting>protected override void InitializeDataBindings()
+    {
+        BindingManager.AddBinding("leavingFromAirportCode.SelectedValue", "Trip.StartingFrom.Airport.Code", BindingDirection.TargetToSource);
+        BindingManager.AddBinding("goingToAirportCode.SelectedValue", "Trip.ReturningFrom.Airport.Code", BindingDirection.TargetToSource);
+        ...
+    }</programlisting>All we need to do is extract airport code value from the
+        <literal>Trip.StartingFrom.Airport.Code</literal> instead of
+        <literal>Trip.StartingFrom.AirportCode</literal>. Unfortunately,
+        binding from the control to the model the same way won't work: we
+        might be able to set <literal>Code</literal> property of the
+        <classname>Airport</classname> object, but that will likely make the
+        <literal>Airport.Name</literal> property invalid. What we really want
+        do is find an instance of the <classname>Airport</classname> class
+        based on the airport code and set the
+        <literal>TripPoint.Airport</literal> property to it. Fortunately, this
+        is very simple to do with Spring.NET data binding, especially because
+        we already have <literal>airportDao</literal> object defined in the
+        Spring context, which has <literal>GetAirport(string
+        airportCode)</literal> finder method. All we need to do is set up data
+        bindings from source to target that will invoke this finder method
+        when evaluating the source expression. Our complete set of bindings
+        for these two drop down lists will then look like
+        this:<programlisting>protected override void InitializeDataBindings()
+    {
+        BindingManager.AddBinding("@(airportDao).GetAirport(leavingFromAirportCode.SelectedValue)", "Trip.StartingFrom.Airport", BindingDirection.SourceToTarget);
+        BindingManager.AddBinding("leavingFromAirportCode.SelectedValue", "Trip.StartingFrom.Airport.Code", BindingDirection.TargetToSource);
+
+        BindingManager.AddBinding("@(airportDao).GetAirport(goingToAirportCode.SelectedValue)", "Trip.ReturningFrom.Airport", BindingDirection.SourceToTarget);
+        BindingManager.AddBinding("goingToAirportCode.SelectedValue", "Trip.ReturningFrom.Airport.Code", BindingDirection.TargetToSource);
+        ...
+    }</programlisting>That's it -- by using two unidirectional bindings with
+        different expressions and by leveraging the fact that expressions can
+        reference objects defined in the Spring context, we were able to solve
+        this non-trivial data binding problem.</para>
+      </sect3>
+
+      <sect3 id="web-binding-formatters">
+        <title>Formatters</title>
+
+        <para>The last argument to <literal>AddBinding</literal> method that
+        we need to discuss is a <literal>formatter</literal> argument. This
+        argument allows you to specify a formatter that should be used to
+        parse string value from the typical input control before it is bound
+        to the model, and to format strongly typed model value before it is
+        bound to the control.</para>
+
+        <para>You will typically use one of the formatters provided in the
+        Spring.Globalization.Formatters namespace, but if you have
+        requirements that cannot be satisfied by one of the standard
+        formatters it is easy enough to write your own -- all you need to do
+        is implement a very simple IFormatter interface:<programlisting>public interface IFormatter
+{
+    string Format(object value);
+    object Parse(string value);
+}</programlisting></para>
+
+        <para>Standard formatters provided with Spring.NET are:
+        <literal>CurrencyFormatter</literal>,
+        <literal>DateTimeFormatter</literal>,
+        <literal>FloatFormatter</literal>,
+        <literal>IntegerFormatter</literal>,
+        <literal>NumberFormatter</literal> and
+        <literal>PercentFormatter</literal>, which should be sufficient for
+        most usage scenarios.</para>
+      </sect3>
+
+      <sect3 id="web-id-typeconversion">
+        <title>Type Conversion</title>
+
+        <para>Because the data binding framework uses the same expression
+        evaluation engine as the Spring.NET IoC container, it will use any
+        registered type converters to perform data binding. Many type
+        converters are included with Spring.NET (take a look at the classes in
+        Spring.Objects.TypeConverters namespace) and automatically registered
+        for you, but you can implement your own custom converters and register
+        them using standard Spring.NET type converter registration
+        mechanisms.</para>
+      </sect3>
+
+      <sect3 id="web-binding-events">
+        <title>Data Binding Events</title>
+
+        <para>Spring.Web's base <classname>Page</classname> class adds two
+        events to the standard .NET page lifecycle -
+        <literal>DataBound</literal> and
+        <literal>DataUnbound</literal>.</para>
+
+        <para>The <literal>DataUnbound</literal> event is fired after the data
+        model has been updated using values from the controls. It is fired
+        right after the <literal>Load</literal> event and only on postbacks,
+        because it doesn't make sense to update the data model using the
+        controls' initial values.</para>
+
+        <para>The <literal>DataBound</literal> is fired after controls have
+        been updated using values from the data model. This happens right
+        before the <literal>PreRender</literal> event.</para>
+
+        <para>The fact that data model is updated immediately after the
+        <literal>Load</literal> event and that controls are updated right
+        before the <literal>PreRender</literal> event means that your event
+        handlers will be able to work with a correctly updated data model, as
+        they execute after the <literal>Load</literal> event, and that any
+        changes you make to the data model within event handlers will be
+        reflected in the controls immediately afterwards, as they (the
+        controls) are updated prior to the actual rendering.</para>
+      </sect3>
+
+      <sect3 id="web-binding-errors">
+        <title>Rendering Binding Errors</title>
+
+        <para>If there are errors in the databinding, for example, trying to
+        bind a string 'hello' to an integer property on the model, you can
+        specify how those fundamental binding errors should be rendered. An
+        example of this shown below taken from the WebQuickStart
+        'RobustEmployeeInfo' example.</para>
+
+        <programlisting>[Default.aspx.cs]
+
+protected override void InitializeDataBindings()
+{
+  // collect txtId.Text binding errors in "id.errors" collection
+  BindingManager.AddBinding("txtId.Text", "Employee.Id").SetErrorMessage("ID has to be an integer", "id.errors");
+  ...
+
+[Default.aspx]
+...
+&lt;asp:TextBox ID="txtId" runat="server" /&gt;
+&lt;!-- output validation errors from "id.errors" collection --&gt;
+&lt;spring:ValidationError Provider="id.errors" runat="server" /&gt;
+...</programlisting>
+
+        <para>The SetErrorMessage specifies the message text or resource id of
+        the error message to be displayed followed by a variable length list
+        of strings that specify the collection of error providers message
+        where the message should be displayed. In the above case the error
+        provider will be rendered in Spring's ValidationError User Control.
+        See</para>
+      </sect3>
+
+      <sect3 id="web-binding-list">
+        <title>HttpRequestListBindingContainer</title>
+
+        <para>HttpRequestListBindingContainer extracts posted raw values from
+        the request and populates the specified IList by creating objects of
+        the type specified and populating each of these objects according to
+        the requestBindings collection.</para>
+
+        <para>Please checkout the WebQuickStart sample's demo of
+        HttpRequestListBindingContainer. Below</para>
+
+        <para><programlisting>protected override void InitializeDataBindings()
+{
+  // HttpRequestListBindingContainer unbinds specified values from Request -&gt; Productlist
+  HttpRequestListBindingContainer requestBindings =
+      new HttpRequestListBindingContainer("sku,name,quantity,price", "Products", typeof(ProductInfo));
+  requestBindings.AddBinding("sku", "Sku");
+  requestBindings.AddBinding("name", "Name");
+  requestBindings.AddBinding("quantity", "Quantity", quantityFormatter);
+  requestBindings.AddBinding("price", "Price", priceFormatter);
+
+  BindingManager.AddBinding(requestBindings);
+}</programlisting></para>
+
+        <note>
+           Due to the fact, that browsers don't send the values of unchecked checkboxes, you can't use HttpRequestListBindingContainer with &lt;input type="checkbox" &gt; html controls. 
+        </note>
+      </sect3>
+    </sect2>
+
+    <sect2 id="web-databindingpanel">
+      <title>Using DataBindingPanel</title>
+
+      <para>To simplify use of Spring's Data Binding feature on web pages and
+      controls, Spring.Web provides a special DataBindingPanel container
+      control. A DataBindingPanel does not render any html code itself, but
+      allows for specifying additional, data binding related attributes to its
+      child controls:</para>
+
+      <para><programlisting>&lt;%@ Page Language="C#" CodeFile="Default.aspx.cs" Inherits="DataBinding_EasyEmployeeInfo_Default" %&gt;
+&lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
+&lt;html&gt;
+&lt;body&gt;
+&lt;spring:DataBindingPanel ID="ctlDataBindingPanel" runat="server"&gt;
+    &lt;table cellpadding="3" cellspacing="3" border="0"&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Employee ID:&lt;/td&gt;
+            &lt;td&gt;
+                &lt;asp:TextBox ID="txtId" runat="server" BindingTarget="Employee.Id" /&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;First Name:&lt;/td&gt;
+            &lt;td&gt;&lt;asp:TextBox ID="txtFirstName" runat="server" BindingTarget="Employee.FirstName" /&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/spring.DataBindingPanel&gt;
+&lt;/body&gt;
+&lt;/html&gt;</programlisting></para>
+
+      <para>Using DataBindingPanel the binding information can be specified
+      directly on the control declaration. The following attributes are
+      recognized by a DataBindingPanel:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>BindingTarget</para>
+
+          <para>corresponds to the target expression used in
+          IBindingContainer.AddBinding()</para>
+        </listitem>
+
+        <listitem>
+          <para>BindingSource</para>
+
+          <para>corresponds to the source expression used in
+          IBindingContainer.AddBinding(). For standard controls you don't need
+          to specify the source expression. If you are binding to some custom
+          control, of course you must specific this attribute.</para>
+        </listitem>
+
+        <listitem>
+          <para>BindingDirection</para>
+
+          <para>one of the values of the BindingDirection enumeration</para>
+        </listitem>
+
+        <listitem>
+          <para>BindingFormatter</para>
+
+          <para>if you need a custom formatter, you can specific the object
+          name of a formatter here. The formatter instance will be obtained by
+          a call to IApplicationContext.GetObject() each time it is
+          needed.</para>
+        </listitem>
+
+        <listitem>
+          <para>BindingType</para>
+
+          <para>In case you need a completely customized binding, specify its
+          type here. Note that a custom binding type must implement the
+          following constructor signature:</para>
+
+          <para><literal>ctor(string source,string target, BindingDirection,
+          IFormatter)</literal></para>
+        </listitem>
+      </itemizedlist>
+
+      <note>
+         The Visual Studio Web Form Editor will of course complain about binding attributes because it doesn't know them. You can safely ignore those warnings. 
+      </note>
+    </sect2>
+  </sect1>
+
+  <sect1 id="web-localization">
+    <title>Localization and Message Sources</title>
+
+    <para>While recognizing that the .NET framework has excellent support for
+    localization, the support within ASP.NET 1.x is somewhat
+    incomplete.</para>
+
+    <para>Every <literal>.aspx</literal> page in an ASP.NET project has a
+    resource file associated with it, but those resources are never used (by
+    the current ASP.NET infrastructure). ASP.NET 2.0 will change that and
+    allow application developers to use local resources for pages. In the
+    meantime, the Spring.NET team built support for using local pages
+    resources into Spring.Web thus allowing application developers to start
+    using ASP.NET 2.0-like page resources immediately.</para>
+
+    <para>Spring.Web supports several different approaches to localization
+    within a web application, which can be mixed and matched as appropriate.
+    Both push and pull mechanisms are supported, as well as the fallback to
+    globally defined resources when a local resource cannot be found.
+    Spring.Web also provides support for user culture management and image
+    localization, which are described in the later sections.</para>
+
+    <tip>
+      <para>Introductory material covering ASP.NET Globalization and
+      Localization can be found at the following URLs; <ulink
+      url="http://msdn.microsoft.com/asp.net/community/authors/mlb/default.aspx?pull=/library/en-us/dnaspp/html/aspnet-globalarchi.asp">Globalization
+      Architecture for ASP.NET</ulink> and <ulink
+      url="http://www.theserverside.net/articles/showarticle.tss?id=LocalizationPractices">Localization
+      Practices for ASP.NET 2.0</ulink> by Michele Leroux Bustamante.</para>
+    </tip>
+
+    <sect2 id="web-localization-push">
+      <title>Automatic Localization Using Localizers ("Push"
+      Localization)</title>
+
+      <para>The central idea behind 'push' localization is that an application
+      developer should be able to specify localization resources in the
+      resource file for the page and have those resources automatically
+      applied to the user controls on the page by the framework. For example,
+      an application developer could define a page such as
+      <literal>UserRegistration.aspx</literal>...</para>
+
+      <programlisting>&lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
+&lt;%@ Page language="c#" Codebehind="UserRegistration.aspx.cs"
+    AutoEventWireup="false" Inherits="ArtFair.Web.UI.Forms.UserRegistration" %&gt;
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;spring:Content id="mainContent" contentPlaceholderId="main" runat="server"&gt;
+            &lt;div align="right"&gt;
+                &lt;asp:LinkButton ID="english" Runat="server" CommandArgument="en-US"&gt;English&lt;/asp:LinkButton&gt;&amp;nbsp;
+                &lt;asp:LinkButton ID="serbian" Runat="server" CommandArgument="sr-SP-Latn"&gt;Srpski&lt;/asp:LinkButton&gt;
+            &lt;/div&gt;
+            &lt;table&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;&lt;asp:Label id="emailLabel" Runat="server"/&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;asp:TextBox id="email" Runat="server" Width="150px"/&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;&lt;asp:Label id="passwordLabel" Runat="server"/&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;asp:TextBox id="password" Runat="server" Width="150px"/&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;&lt;asp:Label id="passwordConfirmationLabel" Runat="server"/&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;asp:TextBox id="passwordConfirmation" Runat="server" Width="150px"/&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;&lt;asp:Label id="nameLabel" Runat="server"/&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;asp:TextBox id="name" Runat="server" Width="150px"/&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+...
+
+                &lt;tr&gt;
+                    &lt;td colspan="2"&gt;
+                        &lt;asp:Button id="saveButton" Runat="server"/&gt;&amp;nbsp;
+                        &lt;asp:Button id="cancelButton" Runat="server"/&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/table&gt;
+        &lt;/spring:Content&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+      <para>A close inspection of the above <literal>.aspx</literal> code
+      reveals that none of the <classname>Label</classname> or
+      <classname>Button</classname> controls have had a value assigned to the
+      <literal>Text</literal> property. The values of the
+      <literal>Text</literal> property for these controls are stored in the
+      local resource file (of the page) using the following convention to
+      identify the resource (string).</para>
+
+      <programlisting>$this.controlId.propertyName</programlisting>
+
+      <para>The corresponding local resource file,
+      <literal>UserRegistration.aspx.resx</literal>, is shown below.</para>
+
+      <programlisting>&lt;root&gt;
+  &lt;data name="$this.emailLabel.Text"&gt;
+    &lt;value&gt;Email:&lt;/value&gt;
+  &lt;/data&gt;
+  &lt;data name="$this.passwordLabel.Text"&gt;
+    &lt;value&gt;Password:&lt;/value&gt;
+  &lt;/data&gt;
+  &lt;data name="$this.passwordConfirmationLabel.Text"&gt;
+    &lt;value&gt;Confirm password:&lt;/value&gt;
+  &lt;/data&gt;
+  &lt;data name="$this.nameLabel.Text"&gt;
+    &lt;value&gt;Full name:&lt;/value&gt;
+  &lt;/data&gt;
+
+...
+
+  &lt;data name="$this.countryLabel.Text"&gt;
+    &lt;value&gt;Country:&lt;/value&gt;
+  &lt;/data&gt;
+  &lt;data name="$this.saveButton.Text"&gt;
+    &lt;value&gt;$messageSource.save&lt;/value&gt;
+  &lt;/data&gt;
+  &lt;data name="$this.cancelButton.Text"&gt;
+    &lt;value&gt;$messageSource.cancel&lt;/value&gt;
+  &lt;/data&gt;
+&lt;/root&gt;</programlisting>
+
+      <tip>
+        <title>VS2003</title>
+
+        <para>To view the .resx file for a page, you may need to enable
+        "Project/Show All Files" in Visual Studio. When "Show All Files" is
+        enabled, the .resx file appears like a "child" of the code-behind
+        page.</para>
+
+        <para>When Visual Studio creates the .resx file, it will include a
+        <literal>xds:schema</literal> element and several
+        <literal>reshead</literal> elements. Your data elements will follow
+        the <literal>reshead</literal> elements. When working with the .resx
+        files, you may want to choose "Open With" from the context menu and
+        select the "Source Code" text editor.</para>
+      </tip>
+
+      <tip>
+        <title>VS2005</title>
+
+        <para>To create a resource file in VS2005, open your control or page
+        in design mode and select "Tools/Generate local resource" from the
+        menu</para>
+      </tip>
+
+      <para>Finally a localizer must be configured for the page to enable
+      automatic localization:</para>
+
+      <programlisting>&lt;object id="localizer" type="Spring.Globalization.Localizers.ResourceSetLocalizer, Spring.Core"/&gt;
+
+&lt;object type="UserRegistration.aspx"&gt;
+    &lt;property name="Localizer" ref="localizer"/&gt;
+&lt;/object&gt;</programlisting>
+
+      <para>For more information on configuring localizers see <xref
+      linkend="web-localizers" /></para>
+    </sect2>
+
+    <sect2 id="web-globalresources">
+      <title>Global Message Sources</title>
+
+      <para>The last two resource definitions from the previous section
+      require some additional explanation:</para>
+
+      <programlisting>&lt;data name="$this.saveButton.Text"&gt;
+    &lt;value&gt;$messageSource.save&lt;/value&gt;
+  &lt;/data&gt;
+  &lt;data name="$this.cancelButton.Text"&gt;
+    &lt;value&gt;$messageSource.cancel&lt;/value&gt;
+  &lt;/data&gt;</programlisting>
+
+      <para>In some cases it makes sense to apply a resource that is defined
+      <emphasis>globally</emphasis> as opposed to locally. In this example, it
+      makes better sense to define values for the <literal>Save</literal> and
+      <literal>Cancel</literal> buttons globally as they will probably be used
+      throughout the application.</para>
+
+      <para>The above example demonstrates how one can achieve that by
+      defining a <emphasis>resource redirection</emphasis> expression as the
+      value of a local resource by prefixing a global resource name with the
+      following string.</para>
+
+      <programlisting>$messageSource.</programlisting>
+
+      <para>Taking the case of the above example, this will tell the localizer
+      to use the <literal>save</literal> and <literal>cancel</literal>
+      portions of the resource key as lookup keys to retrieve the actual
+      values from a global message source. The important thing to remember is
+      that one need only define a resource redirect once, typically in the
+      invariant resource file – any lookup for a resource redirect will simply
+      fall back to the invariant culture, and result in a global message
+      source lookup using the correct culture.</para>
+
+      <para>Global resources are (on a per-context basis) defined as a plain
+      vanilla object definition using the reserved name of
+      <literal>'messageSource'</literal>, which one can add to one's
+      Spring.NET configuration file as shown below.</para>
+
+      <programlisting>&lt;object id="messageSource" type="Spring.Context.Support.ResourceSetMessageSource, Spring.Core"&gt;
+    &lt;property name="ResourceManagers"&gt;
+        &lt;list&gt;
+            &lt;value&gt;MyApp.Web.Resources.Strings, MyApp.Web&lt;/value&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+      <important>
+        <title>NET 2.0</title>
+
+        <para>To use resources from your App_GlobalResources folder, specify
+        <literal>App_GlobalResources</literal> as assembly name (see the
+        SpringAir example application for more):</para>
+
+        <literal>&lt;value&gt;Resources.Strings,
+        App_GlobalResources&lt;/value&gt;</literal>
+      </important>
+
+      <para>The global resources are cached within the Spring.NET
+      <classname>IApplicationContext</classname> and are accessible through
+      the Spring.NET <literal>IMessageSource</literal> interface.</para>
+
+      <para>The Spring.Web <literal>Page</literal> and
+      <literal>UserControl</literal> classes have a reference to their owning
+      <classname>IApplicationContext</classname> and it's associated
+      <literal>IMessageSource</literal>. As such, they will automatically
+      redirect resource lookups to a global message source if a local resource
+      cannot be found.</para>
+
+      <para>Currently, the <literal>ResourceSetMessageSource</literal> is the
+      only message source implementation that ships with Spring.NET.</para>
+    </sect2>
+
+    <sect2 id="web-localizers">
+      <title>Working with Localizers</title>
+
+      <para>In order to apply resources automatically, a localizer needs to be
+      injected into all pages requiring this feature (typically accomplished
+      using a base page definition that other pages will inherit from). The
+      injected localizer will inspect the resource file when the page is first
+      requested, cache the resources that start with the
+      <literal>'$this'</literal> marker string value, and apply the values to
+      the controls that populate the page prior to the page being
+      rendered.</para>
+
+      <para>A localizer is simply an object that implements the
+      <classname>Spring.Globalization.ILocalizer</classname> interface.
+      <classname>Spring.Globalization.AbstractLocalizer</classname> is
+      provided as a convenient base class for localization: this class has one
+      abstract method, <literal>LoadResources</literal>. This method must load
+      and return a list of all the resources that must be automatically
+      applied from the resource store.</para>
+
+      <para>Spring.NET ships with one concrete implementation of a localizer,
+      <classname>Spring.Globalization.Localizers.ResourceSetLocalizer</classname>,
+      that retrieves a list of resources to apply from the local resource
+      file. Future releases of Spring.NET may provide other localizers that
+      read resources from an XML file or even a flat text file that contains
+      resource name-value pairs which will allow application developers to
+      store resources within the files in a web application instead of as
+      embedded resources in an assembly. Of course, if an application
+      developer would rather store such resources in a database, he or she can
+      write their own <classname>ILocalizer</classname> implementation that
+      will load a list of resources to apply from a database.</para>
+
+      <para>As mentioned previously, one would typically configure the
+      localizer to be used within an abstract base definition for those pages
+      that require localization as shown below.</para>
+
+      <programlisting>&lt;object id="localizer" type="Spring.Globalization.Localizers.ResourceSetLocalizer, Spring.Core"/&gt;
+
+&lt;object name="basePage" abstract="true"&gt;
+    &lt;description&gt;
+        Pages that reference this definition as their parent
+        (see examples below) will automatically inherit following properties.
+    &lt;/description&gt;
+    &lt;property name="Localizer" ref="localizer"/&gt;
+&lt;/object&gt;</programlisting>
+
+      <para>Of course, nothing prevents an application developer from defining
+      a different localizer for each page in the application; in any case, one
+      can always override the localizer defined in a base (page) definition.
+      Alternatively, if one does want any resources to be applied
+      automatically one can completely omit the localizer definition.</para>
+
+      <para>One last thing to note is that Spring.NET
+      <classname>UserControl</classname> instances will (by default) inherit
+      the localizer and other localization settings from the page that they
+      are contained within, but one can similarly also override that behavior
+      using explicit dependency injection.</para>
+    </sect2>
+
+    <sect2 id="web-pull-localization">
+      <title>Applying Resources Manually ("Pull" Localization)</title>
+
+      <para>While automatic localization as described above works great for
+      many form-like pages, it doesn't work nearly as well for the controls
+      defined within any iterative controls because the IDs for such iterative
+      controls are not fixed. It also doesn't work well in those cases where
+      one needs to display the same resource multiple times within the same
+      page. For example, think of the header columns for outgoing and return
+      flights tables within the SpringAir application (see <xref
+      linkend="springair" />).</para>
+
+      <para>In these situations, one should use a pull-style mechanism for
+      localization, which boils down to a simple <literal>GetMessage</literal>
+      call as shown below.</para>
+
+      <programlisting>&lt;asp:Repeater id="outboundFlightList" Runat="server"&gt;
+  &lt;HeaderTemplate&gt;
+    &lt;table border="0" width="90%" cellpadding="0" cellspacing="0" align="center" class="suggestedTable"&gt;
+      &lt;thead&gt;
+        &lt;tr class="suggestedTableCaption"&gt;
+          &lt;th colspan="6"&gt;
+            &lt;%= GetMessage("outboundFlights") %&gt;
+          &lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr class="suggestedTableColnames"&gt;
+          &lt;th&gt;&lt;%= GetMessage("flightNumber") %&gt;&lt;/th&gt;
+          &lt;th&gt;&lt;%= GetMessage("departureDate") %&gt;&lt;/th&gt;
+          &lt;th&gt;&lt;%= GetMessage("departureAirport") %&gt;&lt;/th&gt;
+          &lt;th&gt;&lt;%= GetMessage("destinationAirport") %&gt;&lt;/th&gt;
+          &lt;th&gt;&lt;%= GetMessage("aircraft") %&gt;&lt;/th&gt;
+          &lt;th&gt;&lt;%= GetMessage("seatPlan") %&gt;&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+  &lt;/HeaderTemplate&gt;</programlisting>
+
+      <para>The <literal>GetMessage</literal> method is available within both
+      the <classname>Spring.Web.UI.Page </classname> and
+      <classname>Spring.Web.UI.UserControl</classname> classes, and it will
+      automatically fall back to a global message source lookup if a local
+      resource is not found.</para>
+    </sect2>
+
+    <sect2 id="web-localizing-images">
+      <title>Localizing Images within a Web Application</title>
+
+      <para>Spring.Web provides an easy (and consistent) way to localize
+      images within a web application. Unlike text resources, which can be
+      stored within embedded resource files, XML files, or even a database,
+      images in a typical web application are usually stored as files on the
+      file system. Using a combination of directory naming conventions and a
+      custom ASP.NET control, Spring.Web allows application developers to
+      localize images within the page as easily as text resources.</para>
+
+      <para>The Spring.Web <literal>Page</literal> class exposes the
+      <literal>ImagesRoot</literal> property, which is used to define the root
+      directory where images are stored. The default value is 'Images', which
+      means that the localizer expects to find an 'Images' directory within
+      the application root, but one can set it to any value in the definition
+      of the page.</para>
+
+      <para>In order to localize images, one needs to create a directory for
+      each localized culture under the <literal>ImagesRoot</literal> directory
+      as shown below.</para>
+
+      <programlisting>/MyApp
+   /Images
+      /en
+      /en-US
+      /fr
+      /fr-CA
+      /sr-SP-Cyrl
+      /sr-SP-Latn
+      ...</programlisting>
+
+      <para>Once an appropriate folder hierarchy is in place all one need do
+      is put the localized images in the appropriate directories and make sure
+      that different translations of the same image are named the same. In
+      order to place a localized image on a page, one needs to use the
+      <literal>&lt;spring:LocalizedImage&gt;</literal> as shown below.</para>
+
+      <programlisting>&lt;%@ Page language="c#" Codebehind="StandardTemplate.aspx.cs"
+                AutoEventWireup="false" Inherits="SpringAir.Web.StandardTemplate" %&gt;
+&lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" &gt;
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;spring:LocalizedImage id="logoImage" imageName="spring-air-logo.jpg" borderWidth="0" runat="server" /&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+      <para>This control will find the most specific directory that contains
+      an image with the specified name using standard localization fallback
+      rules and the user's culture. For example, if the user's culture is
+      <literal>'en-US'</literal>, the localizer will look for the
+      <literal>spring-air-logo.jpg</literal> file in
+      <literal>Images/en-US</literal>, then in <literal>Images/en</literal>
+      and finally, if the image file has still not been found, in the root
+      <literal>Images</literal> directory (which for all practical purposes
+      serves as an invariant culture folder).</para>
+    </sect2>
+
+    <sect2 id="web-culture">
+      <title>User Culture Management</title>
+
+      <para>In addition to global and local resource management, Spring.Web
+      also adds support for user culture management by exposing the current
+      <classname>CultureInfo</classname> through the
+      <literal>UserCulture</literal> property on the
+      <classname>Page</classname> and <classname>UserControl</classname>
+      classes.</para>
+
+      <para>The <literal>UserCulture</literal> property will simply delegate
+      culture resolution to an implementation of
+      <classname>Spring.Globalization.ICultureResolver</classname> interface.
+      One can specify exactly which culture resolver to use by configuring the
+      <literal>CultureResolver</literal> property of the
+      <classname>Page</classname> class in the relevant object definition as
+      shown below.</para>
+
+      <programlisting>&lt;object name="BasePage" abstract="true"&gt;
+    &lt;property name="CultureResolver"&gt;
+        &lt;object type="Spring.Globalization.Resolvers.CookieCultureResolver, Spring.Web"/&gt;
+    &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+      <para>Several useful implementations of
+      <classname>ICultureResolver</classname> ship as part of Spring.Web, so
+      it is unlikely that application developers will have to implement their
+      own culture resolver. However, if one does have such a requirement, the
+      resulting implementation should be fairly straightforward as there are
+      only two methods that one need implement. The following sections discuss
+      each available implementation of the
+      <classname>ICultureResolver</classname> interface.</para>
+
+      <sect3>
+        <title>DefaultWebCultureResolver</title>
+
+        <para>This is default culture resolver implementation. It will be used
+        if one does not specify a culture resolver for a page, or if one
+        explicitly injects a <classname>DefaultWebCultureResolver</classname>
+        into a page definition explicitly. The latter case (explicit
+        injection) is sometimes useful because it allows one to specify a
+        culture that should always be used by providing a value to the
+        <literal>DefaultCulture</literal> property on the resolver.</para>
+
+        <para>The <classname>DefaultWebCultureResolver</classname> will first
+        look at the <literal>DefaultCulture</literal> property and return its
+        value if said property value is not null. If it is null, the
+        <classname>DefaultWebCultureResolver</classname> will fall back to
+        request header inspection, and finally, if no
+        <literal>'Accept-Lang'</literal> request headers are present it will
+        return the UI culture of the currently executing thread.</para>
+      </sect3>
+
+      <sect3>
+        <title>RequestCultureResolver</title>
+
+        <para>This resolver works in a similar way to the
+        <classname>DefaultWebCultureResolver</classname> with the exception
+        that it always checks request headers <emphasis>first</emphasis>, and
+        only then falls back to the value of the
+        <literal>DefaultCulture</literal> property or the culture code of the
+        current thread.</para>
+      </sect3>
+
+      <sect3>
+        <title>SessionCultureResolver</title>
+
+        <para>This resolver will look for culture information in the user's
+        session and return it if it finds one. If not, it will fall back to
+        the behavior of the
+        <classname>DefaultWebCultureResolver</classname>.</para>
+      </sect3>
+
+      <sect3>
+        <title>CookieCultureResolver</title>
+
+        <para>This resolver will look for culture information in a cookie, and
+        return it if it finds one. If not, it will fall back to the behavior
+        of the <classname>DefaultWebCultureResolver</classname>.</para>
+
+        <warning>
+          <para><classname>CookieCultureResolver</classname> will not work if
+          your application uses <literal>localhost</literal> as the server
+          URL, which is a typical setting in a development environment.</para>
+
+          <para>In order to work around this limitation you should use
+          <classname>SessionCultureResolver</classname> during development and
+          switch to <classname>CookieCultureResolver</classname> before you
+          deploy the application in a production. This is easily accomplished
+          in Spring.Web (simply change the config file) but is something that
+          you should be aware of.</para>
+        </warning>
+      </sect3>
+    </sect2>
+
+    <sect2 id="web-culture-changing">
+      <title>Changing Cultures</title>
+
+      <para>In order to be able to change the culture application developers
+      will need to use one of the culture resolvers that support culture
+      changes, such as <classname>SessionCultureResolver</classname> or
+      <classname>CookieCultureResolver</classname>. One could also write a
+      custom <classname>ICultureResolver</classname> that will persist culture
+      information in a database, as part of a user's profile.</para>
+
+      <para>Once that requirement is satisfied, all that one need do is to set
+      the <literal>UserCulture</literal> property to a new
+      <classname>CultureInfo</classname> object before the page is rendered.
+      In the following <literal>.aspx</literal> example, there are two link
+      buttons that can be used to change the user's culture. In the
+      code-behind, this is all one need do to set the new culture. A code
+      snippet for the code-behind file
+      (<literal>UserRegistration.aspx.cs</literal>) is shown below.</para>
+
+      <programlisting>protected override void OnInit(EventArgs e)
+{
+    InitializeComponent();
+
+    this.english.Command += new CommandEventHandler(this.SetLanguage);
+    this.serbian.Command += new CommandEventHandler(this.SetLanguage);
+
+    base.OnInit(e);
+}
+
+private void SetLanguage(object sender, CommandEventArgs e)
+{
+    this.UserCulture = new CultureInfo((string) e.CommandArgument);
+}</programlisting>
+    </sect2>
+  </sect1>
+
+  <sect1 id="web-resultmapping">
+    <title>Result Mapping</title>
+
+    <para>One of the problems evident in many ASP.NET applications is that
+    there is no built-in way to externalize the flow of an application. The
+    most common way of defining application flow is by hardcoding calls to the
+    <literal>Response.Redirect</literal> and
+    <literal>Server.Transfer</literal> methods within event handlers.</para>
+
+    <para>This approach is problematic because any changes to the flow of an
+    application necessitates code changes (with the attendant recompilation,
+    testing, redeployment, etc). A much better way, and one that has been
+    proven to work successfully in many MVC ( <ulink
+    url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/DesMVC.asp">Model-View-Controller</ulink>)
+    web frameworks is to provide the means to externalize the mapping of
+    action results to target pages.</para>
+
+    <para>Spring.Web adds this functionality to ASP.NET by allowing one to
+    define result mappings within the definition of a page, and to then simply
+    use logical result names within event handlers to control application
+    flow.</para>
+
+    <para>In Spring.Web, a logical result is encapsulated and defined by the
+    <classname>Result</classname> class; because of this one can configure
+    results just like any other object:</para>
+
+    <programlisting>
+&lt;objects xmlns="http://www.springframework.net"&gt;
+
+    &lt;object id="homePageResult" type="Spring.Web.Support.Result, Spring.Web"&gt;
+        &lt;property name="TargetPage" value="~/Default.aspx"/&gt;
+        &lt;property name="Mode" value="Transfer"/&gt;
+        &lt;property name="Parameters"&gt;
+            &lt;dictionary&gt;
+                &lt;entry key="literal" value="My Text"/&gt;
+                &lt;entry key="name" value="%{UserInfo.FullName}"/&gt;
+                &lt;entry key="host" value="%{Request.UserHostName}"/&gt;
+            &lt;/dictionary&gt;
+        &lt;/property&gt;
+    &lt;/object&gt;
+
+    &lt;object id="loginPageResult" type="Spring.Web.Support.Result, Spring.Web"&gt;
+        &lt;property name="TargetPage" value="Login.aspx"/&gt;
+        &lt;property name="Mode" value="Redirect"/&gt;
+    &lt;/object&gt;
+
+    &lt;object type="UserRegistration.aspx" parent="basePage"&gt;
+        &lt;property name="UserManager" ref="userManager"/&gt;
+        &lt;property name="Results"&gt;
+            &lt;dictionary&gt;
+                &lt;entry key="userSaved" value-ref="homePageResult"/&gt;
+                &lt;entry key="cancel" value-ref="loginPageResult"/&gt;
+            &lt;/dictionary&gt;
+        &lt;/property&gt;
+    &lt;/object&gt;
+
+&lt;/objects&gt;
+</programlisting>
+
+    <para>The only property that you <emphasis>must</emphasis> supply a value
+    for each and every result is the <literal>TargetPage</literal> property.
+    The value of the <literal>Mode</literal> property can be either
+    <literal>Transfer</literal>, <literal>TransferNoPreserve</literal>,
+    <literal>Redirect</literal>, and defaults to <literal>Transfer</literal>
+    if none is specified. TransferNoPreserve issues a server-side transfer
+    with 'preserveForm=false', so that QueryString and Form data are not
+    preserved.</para>
+
+    <para>If one's target page requires parameters, one can define them using
+    the <literal>Parameters</literal> dictionary property. One simply
+    specifies either literal values or <link linkend="navigation">object
+    navigation expressions</link> for such parameter values; if one specifies
+    an expression, this expression will be evaluated in the context of the
+    page in which the result is being referenced... in the specific case of
+    the above example, this means that any page that uses the
+    <literal>homePageResult</literal> needs to expose a
+    <classname>UserInfo</classname> property on the page class itself.<note>
+        <para>In Spring 1.1.0 and before the prefix used to indicate an object
+        navigation expression in the <literal>Parameters</literal> dictionary
+        property was the dollar sign, i.e.
+        <literal>${UserInfo.FullName}.</literal>This conflicted with the
+        prefix used to perform property replacement, the dollar sign, as
+        described in the section <link
+        linkend="objects-factory-placeholderconfigurer">PropertyPlaceholderConfigurer</link>.
+        As a workaround you can change the prefix and suffix used in
+        PropertyPlaceholderConfigurer to be different, for example prefix =
+        $${ and suffix = }. In Spring 1.1.1 a new prefix character, the
+        percent sign (i.e.<literal>%{UserInfo.FullName}</literal>.) can be
+        used in the <literal>Parameters</literal> dictionary to avoid this
+        conflict so you can keep the familiar NAnt style
+        PropertyPlaceholderConfigurer defaults.</para>
+      </note></para>
+
+    <para>Parameters will be handled differently depending on the result mode.
+    For redirect results, every parameter will be converted to a string, then
+    URL encoded, and finally appended to a redirect query string. On the other
+    hand, parameters for transfer results will be added to the
+    <literal>HttpContext.Items</literal> collection before the request is
+    transferred to the target page. This means that transfers are more
+    flexible because any object can be passed as a parameter between pages.
+    They are also more efficient because they don't require a round-trip to
+    the client and back to the server, so transfer mode is recommended as the
+    preferred result mode (it is also the current default).</para>
+
+    <para>The above example shows independent result object definitions, which
+    are useful for global results such as a home- and login- page.
+    <classname>Result</classname> definitions that are only going to be used
+    by one page should be simply embedded within the definition of a page,
+    either as inner object definitions or using a special shortcut notation
+    for defining a result definition:</para>
+
+    <programlisting>
+&lt;object type="~/UI/Forms/UserRegistration.aspx" parent="basePage"&gt;
+  &lt;property name="UserManager"&gt;
+    &lt;ref object="userManager"/&gt;
+  &lt;/property&gt;
+  
+  &lt;property name="Results"&gt;
+    &lt;dictionary&gt;
+      &lt;entry key="userSaved" value="redirect:UserRegistered.aspx?status=Registration Successful,user=${UserInfo}"/&gt;
+      &lt;entry key="cancel" value-ref="homePageResult"/&gt;
+    &lt;/dictionary&gt;
+  &lt;/property&gt;
+&lt;/object&gt;
+</programlisting>
+
+    <para>The short notation for the result must adhere to the following
+    format...</para>
+
+    <programlisting>[&lt;mode&gt;:]&lt;targetPage&gt;[?param1,param2,...,paramN]</programlisting>
+
+    <para>There are three possible values for the <literal>mode</literal>
+    value referred to in the above notation snippet; they are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>redirect</para>
+      </listitem>
+
+      <listitem>
+        <para>transfer</para>
+      </listitem>
+
+      <listitem>
+        <para>TransferNoPreserve</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>They correspond to the values of the ResultMode enumeration. One
+    thing to notice is that a comma is used instead of an ampersand to
+    separate parameters; this is done so as to avoid the need for laborious
+    ampersand escaping within an XML object definition. The use of the
+    ampersand character is still supported if required, but one will then have
+    to specify it using the well known &amp; entity reference.</para>
+
+    <para>Once one has defined one's results, it is very simple to use them
+    within the event handlers of one's pages
+    (<literal>UserRegistration.apsx.cs</literal>)...</para>
+
+    <programlisting>private void SaveUser(object sender, EventArgs e)
+{
+    UserManager.SaveUser(UserInfo);
+    SetResult("userSaved");
+}
+
+public void Cancel(object sender, EventArgs e)
+{
+    SetResult("cancel");
+}
+
+protected override void OnInit(EventArgs e)
+{
+    InitializeComponent();
+
+    this.saveButton.Click += new EventHandler(this.SaveUser);
+    this.cancelButton.Click += new EventHandler(this.Cancel);
+
+    base.OnInit(e);
+}</programlisting>
+
+    <para>One could of course further refactor the above example and use
+    defined constants. This would be a good thing to do in the case of a
+    logical result name such as "home" that is likely to be referenced by many
+    pages.</para>
+  </sect1>
+
+  <sect1 id="web-clientscripting">
+    <title>Client-Side Scripting</title>
+
+    <para>ASP.NET has decent support for client-side scripting through the use
+    of the <literal>Page.RegisterClientScriptBlock</literal> and
+    <literal>Page.RegisterStartupScript</literal> methods.</para>
+
+    <para>However, neither of these two methods allows you to output a
+    registered script markup within a <literal>&lt;head&gt;</literal> section
+    of a page, which is (in many cases) exactly what you would like to
+    do.</para>
+
+    <sect2 id="web-scripthead">
+      <title>Registering Scripts within the head HTML section</title>
+
+      <para>Spring.Web adds several methods to enhance client-side scripting
+      to the base <classname>Spring.Web.UI.Page</classname> class:
+      <literal>RegisterHeadScriptBlock</literal> and
+      <literal>RegisterHeadScriptFile</literal>, each with a few overrides.
+      You can call these methods from your custom pages and controls in order
+      to register script blocks and script files that must be included in the
+      <literal>&lt;head&gt;</literal> section of the final HTML page.</para>
+
+      <para>The only additional thing that is required to make this work is
+      that you use the <literal>&lt;spring:Head&gt;</literal> server-side
+      control to define your <literal>&lt;head&gt;</literal> section instead
+      of using the standard HTML <literal>&lt;head&gt;</literal> element. This
+      is shown below.</para>
+
+      <programlisting>&lt;%@ Page language="c#" Codebehind="StandardTemplate.aspx.cs"
+                AutoEventWireup="false" Inherits="SpringAir.Web.StandardTemplate" %&gt;
+&lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" &gt;
+&lt;html&gt;
+  &lt;spring:Head runat="server" id="Head1"&gt;
+    &lt;title&gt;
+      &lt;spring:ContentPlaceHolder id="title" runat="server"&gt;
+        &lt;%= GetMessage("default.title") %&gt;
+      &lt;/spring:ContentPlaceHolder&gt;
+    &lt;/title&gt;
+    &lt;LINK href="&lt;%= CssRoot %&gt;/default.css" type="text/css" rel="stylesheet"&gt;
+    &lt;spring:ContentPlaceHolder id="head" runat="server"&gt;&lt;/spring:ContentPlaceHolder&gt;
+  &lt;/spring:Head&gt;
+  &lt;body&gt;
+  ...
+  &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+      <para>The example above shows you how you would typically set-up a
+      <literal>&lt;head&gt;</literal> section within a master page template in
+      order to be able to change the title value and to add additional
+      elements to the <literal>&lt;head&gt;</literal> section from the child
+      pages using <literal>&lt;spring:ContentPlaceholder&gt;</literal>
+      controls. However, only the <literal>&lt;spring:Head&gt;</literal>
+      declaration is required in order for Spring.NET
+      <literal>Register*</literal> scripts to work properly.</para>
+    </sect2>
+
+    <sect2 id="web-scriptcss">
+      <title>Adding CSS Definitions to the head Section</title>
+
+      <para>In a similar fashion, you can add references to CSS files, or even
+      specific styles, directly to the <literal>&lt;head&gt;</literal> HTML
+      section using <literal>Page.RegisterStyle</literal> and
+      <literal>Page.RegisterStyleFile</literal> methods. The latter one simply
+      allows you to include a reference to an external CSS file, while the
+      former one allows you to define embedded style definitions by specifying
+      the style name and definition as the parameters. The final list of style
+      definitions registered this way will be rendered within the single
+      embedded <literal>style</literal> section of the final HTML
+      document.</para>
+    </sect2>
+
+    <sect2 id="web-wellknowdirectory">
+      <title>Well-Known Directories</title>
+
+      <para>In order to make the manual inclusion of client-side scripts, CSS
+      files and images easier, the Spring.Web <literal>Page</literal> class
+      exposes several properties that help you reference such artifacts using
+      absolute paths. This affords web application developers a great deal of
+      convenience functionality straight out of the box if they stick to
+      common conventions such as a web application (directory)
+      structure..</para>
+
+      <para>These properties are <literal>ScriptsRoot</literal>,
+      <literal>CssRoot</literal> and <literal>ImagesRoot</literal>. They have
+      default values of <literal>Scripts</literal>, <literal>CSS</literal> and
+      <literal>Images</literal>, which will work just fine if you create and
+      use these directories in your web application root. However, if you
+      prefer to place them somewhere else, you can always override default
+      values by injecting new values into your page definitions (you will
+      typically inject these values only in the base page definition, as they
+      are normally shared by all the pages in the application). An example of
+      such configuration is shown below:</para>
+
+      <programlisting>&lt;object name="basePage" abstract="true"&gt;
+    &lt;description&gt;
+        Convenience base page definition for all the pages.
+
+        Pages that reference this definition as their parent (see the examples below)
+        will automatically inherit the following properties....
+
+    &lt;/description&gt;
+    &lt;property name="CssRoot" value="Web/CSS"/&gt;
+    &lt;property name="ImagesRoot" value="Web/Images"/&gt;
+&lt;/object&gt;
+</programlisting>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Spring User Controls</title>
+
+    <para>Spring provides several custom user controls that are located in the
+    <literal>Spring.Web.UI.Controls</literal> namespace. This section
+    primarily lists the controls and points to other documentation to provide
+    additional information. There are a few other controls not documented
+    here, please check the SDK docs for their descriptions.</para>
+
+    <sect2>
+      <title>Validation Controls</title>
+
+      <para>The location in the web page where validation errors are to be
+      rendered can be specifies by using the
+      <classname>ValidationSummary</classname> and
+      <classname>ValidationError</classname> controls. There are two controls
+      since they have different defaults for how errors are rendered.
+      <classname>ValidationSummary</classname> is used to display potentially
+      multiple errors identified by the validation framework.
+      <classname>ValidationError</classname> is used to display field-level
+      validation errors. Please refer to the section <link
+      linkend="validation-aspnet-usage">ASP.NET usage tips</link> in the
+      chapter on the <link linkend="validation">Validation Framework</link>
+      more information.</para>
+    </sect2>
+
+    <sect2>
+      <title>Databinding Controls</title>
+
+      <para>Some standard controls are not easy to use with Spring's
+      databinding support. Examples are check boxes and ratio button groups.
+      In this case you should use the <classname>CheckBoxList</classname> and
+      <classname>RadioButtonGroup</classname> controls. Databinding itself can
+      be done using the <link
+      linkend="web-databindingpanel">DataBindingPanel</link> instead of the
+      using the BindingManager API within the code behind page.</para>
+    </sect2>
+
+    <sect2>
+      <title>Calendar Control</title>
+
+      <para>A pop-up DHTML calendar control is provided. It is a slightly
+      modified version of the <ulink
+      url="http://www.dynarch.com/projects/calendar">Dynarch.com DHTML
+      Calendar</ulink> control written by Mihai Bazon.</para>
+    </sect2>
+
+    <sect2>
+      <title>Panel Control</title>
+
+      <para>You can suppress dependency injection for controls inside your
+      ASP.NET by using the Panel control. See the section <link
+      linkend="web-panel-control-di">Customizing control dependency
+      injection</link> for more information.</para>
+    </sect2>
+  </sect1>
+</chapter>

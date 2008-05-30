@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns='http://www.springframework.net'>
+
+    <!-- Available Catalogs: CreditsAndDebits, Credits, Debits -->
+    <!-- Database Providers -->
+    
+    <!-- for demos this serves double duty for CreditsAndDebits -->
+    <!-- for demos remember to change dbprovider for adoTemplateForDebitDb -->
+    
+    <object id="DbProvider" type="Spring.Data.Support.SqlProvider, Spring.Data">
+      <property name="ConnectionString" 
+                value="Data Source=NYCSUMPOLLL;Initial Catalog=Credits;Integrated Security=True"/>          
+    </object>
+
+    
+    <object id="DebitDbProvider" type="Spring.Data.Support.SqlProvider, Spring.Data">
+      <property name="ConnectionString" 
+                value="Data Source=NYCSUMPOLLL;Initial Catalog=Debits;Integrated Security=True"/>
+    </object>
+    
+    
+    <!-- Transaction Manager -->
+    <object id="transactionManager" 
+            type="Spring.Data.ServiceDomainPlatformTransactionManager, Spring.Data">
+    </object>
+    <!--
+    <object id="transactionManager" 
+            type="Spring.Data.AdoPlatformTransactionManager, Spring.Data">
+      <property name="DbProvider" ref="DbProvider"/>
+    </object>
+    -->
+    
+    <!--
+    <object id="transactionManager"
+            type="Spring.Data.TxScopeTransactionManager, Spring.Data">
+    </object>
+    -->   
+ 
+  <!-- AdoTemplate for DAO Implementation -->
+  <object id="adoTemplate" type="Spring.Data.AdoTemplate, Spring.Data">
+    <property name="DbProvider" ref="DbProvider"/>
+  </object>
+
+  <object id="adoTemplateForDebitDb" type="Spring.Data.AdoTemplate, Spring.Data">
+    <property name="DbProvider" ref="DebitDbProvider"/>
+  </object>
+
+  <!-- DAO Implementations -->
+  <object id="accountCreditDao" type="Spring.Data.AccountCreditDao, Spring.Data.Integration.Tests">
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+
+  <object id="accountDebitDao" type="Spring.Data.AccountDebitDao, Spring.Data.Integration.Tests">
+      <property name="AdoTemplate" ref="adoTemplateForDebitDb"/>
+  </object>
+
+  <!-- AOP Transactional Proxy Configuration for 'ServiceLayer' -->
+  
+    <!-- The DAO object that performs multiple data access operations -->
+    <object id="accountManagerTarget" 
+            type="Spring.Data.AccountManager, Spring.Data.Integration.Tests">
+      <property name="AccountCreditDao" ref="accountCreditDao"/>
+      <property name="AccountDebitDao" ref="accountDebitDao"/>
+    </object>
+
+
+    
+    <!-- Transactional Proxy for TestObjectManager using the ProxyFactoryObject -->
+    <object id="accountManager" 
+            type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+        
+        <property name="Target" ref="accountManagerTarget"/>
+        <property name="ProxyInterfaces">
+            <value>Spring.Data.IAccountManager</value>
+        </property>
+        <property name="InterceptorNames">
+            <value>transactionInterceptor</value>
+        </property>  
+            
+    </object>
+
+
+  <!-- Transaction Interceptor -->
+  <object id="transactionInterceptor" 
+          type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data">
+    <property name="TransactionManager" ref="transactionManager"/>
+    <!-- note do not have converter from string to this property type registered -->
+    <property name="TransactionAttributeSource" ref="attributeTransactionAttributeSource"/>
+  </object>
+
+  <object id="attributeTransactionAttributeSource"
+          type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data">
+  </object>
+
+
+</objects>

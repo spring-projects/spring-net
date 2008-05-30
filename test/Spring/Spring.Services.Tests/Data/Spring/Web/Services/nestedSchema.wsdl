@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://mywsdlns" xmlns:ns1="http://myns" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://mywsdlns" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <wsdl:types>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://myns" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://myns">
+      <xsd:include schemaLocation="nestedSchema.xsd"/>
+    </xsd:schema>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://mywsdlns">
+      <xsd:import namespace="http://myns"/>
+      <xsd:element name="testMethod">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="userCredentials" nillable="true" type="ns1:UserCredentials"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="testMethodResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="WebServiceException" type="xsd:string"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="testMethodRequest">
+    <wsdl:part name="parameters" element="tns:testMethod"/>
+  </wsdl:message>
+  <wsdl:message name="WebServiceException">
+    <wsdl:part name="WebServiceException" element="tns:WebServiceException"/>
+  </wsdl:message>
+  <wsdl:message name="testMethodResponse">
+    <wsdl:part name="parameters" element="tns:testMethodResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="SPPServiceSoap">
+    <wsdl:operation name="testMethod">
+      <wsdl:input name="testMethodRequest" message="tns:testMethodRequest"/>
+      <wsdl:output name="testMethodResponse" message="tns:testMethodResponse"/>
+      <wsdl:fault name="WebServiceException" message="tns:WebServiceException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SPPServiceHttpBinding" type="tns:SPPServiceSoap">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="testMethod">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="testMethodRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="testMethodResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="WebServiceException">
+        <wsdlsoap:fault name="WebServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SPPService">
+    <wsdl:port name="SPPServiceHttpPort" binding="tns:SPPServiceHttpBinding">
+      <wsdlsoap:address location="http://localhost/Test/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

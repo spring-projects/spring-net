@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="javadevelopers">
+  <title>Spring.NET for Java Developers</title>
+
+  <sect1 id="jd-introduction">
+    <title>Introduction</title>
+
+    <para>This chapter is to help Java developers get their sea legs using
+    Spring.NET. It is not intended to be a comprehensive comparison between
+    .NET and Java. Rather, it highlights the day-to-day differences you will
+    experience when you start to use Spring.NET.</para>
+  </sect1>
+
+  <sect1 id="jd-beans-objects">
+    <title>Beans to Objects</title>
+
+    <para>There are some simple name changes, basically everywhere you saw the
+    word 'bean' you will now see the word 'object'. A comparison of a simple
+    Spring configuration file highlights these small name changes. Here is the
+    application.xml file for the sample MovieFinder application in Spring.Java
+    <programlisting>&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"&gt;
+&lt;beans&gt;
+   &lt;bean id="MyMovieLister" class="MovieFinder.MovieLister"&gt;
+       &lt;property name="finder" ref="MyMovieFinder"/&gt;
+   &lt;/bean&gt;
+   &lt;bean id="MyMovieFinder" class="MovieFinder.SimpleMovieFinder"/&gt;
+&lt;/beans&gt;</programlisting> Here is the corresponding file in Spring.NET
+    <programlisting>&lt;objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects-1.1.xsd"&gt;
+  &lt;object name="MyMovieLister" 
+          type="Spring.Examples.MovieFinder.MovieLister, Spring.Examples.MovieFinder"&gt;
+        &lt;property name="movieFinder" ref="MyMovieFinder"/&gt;
+  &lt;/object&gt;
+  &lt;object name="MyMovieFinder" 
+          type="Spring.Examples.MovieFinder.SimpleMovieFinder, Spring.Examples.MovieFinder"/&gt;
+&lt;/objects&gt;</programlisting> As you can easily see the &lt;beans&gt; and
+    &lt;bean&gt; elements are replaced by &lt;objects&gt; and &lt;object&gt;
+    elements. The class definition in Spring.Java contains the fully qualified
+    class name. The Spring.NET version also contains the fully qualified
+    classname but in addition specifies the name of the assembly where that
+    type is located. This is necessary since .NET does not have a 'classpath'
+    concept. Assembly names in .NET can have up to four parts to describe the
+    exact version.</para>
+
+    <para>The other XML Schema elements in Spring.NET are the same as in
+    Spring.Java's DTD except for specifying string based key value pairs. In
+    Java this is represented by the java.util.Properties class and the xml
+    element is name &lt;props&gt; as shown below <programlisting
+    format="linespecific" xml:space="preserve">
+&lt;property name="people"&gt;
+  &lt;props&gt;
+    &lt;prop key="PennAndTeller"&gt;The magic property&lt;/prop&gt;
+    &lt;prop key="GeorgeCarlin"&gt;The funny property&lt;/prop&gt;
+  &lt;/props&gt;
+&lt;/property&gt;</programlisting> In .NET the analogous class is
+    System.Collections.Specialized.NameValueCollection and is represented by
+    the xml element &lt;name-values&gt;. The listing of the elements also
+    follows the .NET convention of application configuration files using the
+    &lt;add&gt; element with 'key' and 'value' attributes. This is show below
+    <programlisting format="linespecific" xml:space="preserve">
+&lt;property name="people"&gt;
+  &lt;name-values&gt;
+    &lt;add key="PennAndTeller" value="The magic property"/&gt;
+    &lt;add key="GeorgeCarlin" value="The funny property"/&gt;
+  &lt;/name-values&gt;
+&lt;/property&gt;</programlisting></para>
+  </sect1>
+
+  <sect1 id="jd-propertyeditor-typeconverter">
+    <title>PropertyEditors to TypeConverters</title>
+
+    <para>PropertyEditors from the java.beans package provide the ability to
+    convert from a string to an instance of a Java class and vice-versa. For
+    example, to set a string array property, a comma delimited string can be
+    used. The Java class that provides this functionality is the appropriately
+    named StringArrayPropertyEditor. In .NET, TypeConverters from the
+    System.ComponentModel namespace provide the same functionality. The type
+    conversion functionality in .NET also allows for TypeConverters to be
+    explicitly registered with a data type. This allows for transparent
+    setting of complex object properties. However, some classes in the .NET
+    framework do not support the style of conversion we are used to from
+    Spring.Java, such as setting of a string[] with a comma delimited string.
+    The type converter, StringArrayConverter in the
+    Spring.Objects.TypeConverters namespace is therefore explicitly registered
+    with Spring.NET in order to provide this functionality. As in the case of
+    Spring.Java, Spring.NET allows user defined type converters to be
+    registered. However, if you are creating a custom type in .NET, using the
+    standard .NET mechanisms for type conversion is the preferred
+    approach.</para>
+  </sect1>
+
+  <sect1 id="jd-ResourceBundle-ResourceManager">
+    <title>ResourceBundle-ResourceManager</title>
+  </sect1>
+
+  <sect1 id="jd-exceptions">
+    <title>Exceptions</title>
+
+    <para>Exceptions in Java can either be checked or unchecked. .NET supports
+    only unchecked exceptions. Spring.Java prefers the use of unchecked
+    exceptions, frequently making conversions from checked to unchecked
+    exceptions. In this respect Spring.Java is similar to the default behavior
+    of .NET</para>
+  </sect1>
+
+  <sect1 id="jd-app-config">
+    <title>Application Configuration</title>
+
+    <para>In Spring.Java it is very common to create an ObjectFactory or
+    ApplicationContext from an external XML configuration file This
+    functionality is also provided in Spring.NET. However, in .NET the
+    System.Configuration namespace provides support for managing application
+    configuration information. The functionality in this namespace depends on
+    the availability of specially named files: Web.config for ASP.NET
+    applications and &lt;MyExe&gt;.exe.config for WinForms and console
+    applications. &lt;MyExe&gt; is the name of your executable. As part of the
+    compilation process, if you have a file name App.config in the root of
+    your project, the compiler will rename the file to
+    &lt;MyExe&gt;.exe.config and place it into the runtime executable
+    folder.</para>
+
+    <para>These application configuration files are XML based and contain
+    configuration sections that can be referenced by name to retrieve custom
+    configuration objects. In order to inform the .NET configuration system
+    how to create a custom configuration object from one of these sections, an
+    implementation of the interface, IConfigurationSectionHandler, needs to be
+    registered. Spring.NET provides two implementations, one to create an
+    IApplicationContext from a <literal>&lt;context&gt;</literal> section and
+    another to configure the context with object definitions contained in an
+    <literal>&lt;objects&gt;</literal> section. The
+    <literal>&lt;context&gt;</literal> section is very powerful and
+    expressive. It provides full support for locating all
+    <literal>IResource</literal> via Uri syntax and hierarchical contexts
+    without coding or using more verbose XML as would be required in the
+    current version of Spring.Java</para>
+
+    <programlisting>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;configuration&gt;
+
+    &lt;configSections&gt;
+        &lt;sectionGroup name="spring"&gt;
+            &lt;section name="context" type="Spring.Context.Support.ContextHandler, Spring.Core"/&gt;
+            &lt;section name="objects" type="Spring.Context.Support.DefaultSectionHandler, Spring.Core" /&gt;
+        &lt;/sectionGroup&gt;
+    &lt;/configSections&gt;
+ 
+    &lt;spring&gt;
+    
+        &lt;context&gt;
+            &lt;resource uri="config://spring/objects"/&gt;
+        &lt;/context&gt;
+        
+        &lt;objects&gt;
+            &lt;description&gt;An  example that demonstrates simple IoC features.&lt;/description&gt;
+            &lt;object name="MyMovieLister" type="Spring.Examples.MovieFinder.MovieLister, MovieFinder"&gt;
+                &lt;property name="movieFinder" ref="AnotherMovieFinder"/&gt;
+            &lt;/object&gt;
+            &lt;object name="MyMovieFinder" type="Spring.Examples.MovieFinder.SimpleMovieFinder, MovieFinder"/&gt;
+            &lt;!--
+            An IMovieFinder implementation that uses a text file as it's movie source...
+            --&gt;
+            &lt;object name="AnotherMovieFinder" type="Spring.Examples.MovieFinder.ColonDelimitedMovieFinder, MovieFinder"&gt;
+                &lt;constructor-arg index="0" value="movies.txt"/&gt;
+            &lt;/object&gt;
+        &lt;/objects&gt;
+
+    &lt;/spring&gt;
+    
+&lt;/configuration&gt;</programlisting>
+
+    <para>The &lt;configSections&gt; and &lt;section&gt; elements are a
+    standard part of the .NET application configuration file. These elements
+    are used to register an instance of IConfigurationSectionHandler and
+    associate it with another xml element in the file, in this case the
+    &lt;context&gt; and &lt;objects&gt; elements.</para>
+
+    <para>The following code segment is used to retrieve the
+    IApplicationContext from the .NET application configuration file.
+    <programlisting>IApplicationContext ctx
+          = ConfigurationUtils.GetSection("spring/context") as IApplicationContext;</programlisting></para>
+
+    <para>In order to enforce the usage of the named configuration section
+    <literal>spring/context</literal> the preferred instantiation mechanism is
+    via the use of the registry class ContextRegistry as shown below
+    <programlisting>IApplicationContext ctx = ContextRegistry.GetContext();</programlisting></para>
+  </sect1>
+
+  <sect1 id="jd-aop-framework">
+    <title>AOP Framework</title>
+
+    <sect2 id="NoTargetInInterceptorNames">
+      <title>Cannot specify target name at the end of interceptorNames for
+      ProxyFactoryObject</title>
+
+      <para>When configuring the list of interceptor names on a
+      <classname>ProxyFactoryObject</classname> instance (or object
+      definition), one <emphasis>cannot</emphasis> specify the name of the
+      target (i.e. the object being proxied) at the end of the list of
+      interceptor names. This shortcut <emphasis>is</emphasis> valid in Spring
+      Java, where the <classname>ProxyFactoryBean</classname> will
+      automatically detect this, and use the last name in the interceptor
+      names list as the target of the <classname>ProxyFactoryBean</classname>.
+      The following configuration, which would be valid in Spring Java
+      (barring the obvious element name changes), is <emphasis
+      role="bold">not</emphasis> valid in Spring.NET (so don't do it).</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+    &lt;objects xmlns="http://www.springframework.net"&gt;
+        &lt;object id="target" type="Spring.Objects.TestObject"&gt;
+            &lt;property name="name" value="Bingo"/&gt;
+        &lt;/object&gt;
+
+        &lt;object id="nopInterceptor" type="Spring.Aop.Interceptor.NopInterceptor"/&gt;
+
+        &lt;object id="prototypeTarget" type="Spring.Aop.Framework.ProxyFactoryObject"&gt;
+            &lt;property name="interceptorNames" value="nopInterceptor,target"/&gt; &lt;!-- not valid! --&gt;
+        &lt;/object&gt;
+    &lt;/objects&gt;</programlisting>
+
+      <para>In Spring.NET, the <literal>InterceptorNames</literal> property of
+      the <classname>ProxyFactoryObject</classname> can
+      <emphasis>only</emphasis> be used to specify the names of interceptors.
+      Use the <literal>TargetName</literal> property to specify the name of
+      the target object that is to be proxied.</para>
+
+      <para>The main reason for not supporting exactly the same style of
+      configuration as Spring Java is because this 'feature' is regarded as a
+      legacy holdover from Rod Johnson's initial Spring AOP implementation,
+      and is currently only kept as-is (in Spring Java) for reasons of
+      backward compatibility.</para>
+    </sect2>
+  </sect1>
+</chapter>

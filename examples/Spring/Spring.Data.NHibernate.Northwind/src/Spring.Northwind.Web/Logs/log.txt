@@ -1,0 +1,186 @@
+2008-04-04 17:21:13,343 [8] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Not closing pre-bound Hibernate Session after HibernateTemplate
+2008-04-04 17:21:13,390 [8] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - disposing 'request'-scoped item cache
+2008-04-04 17:21:13,390 [8] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Trying to close SessionScope
+2008-04-04 17:21:13,390 [8] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Closing single Hibernate Session in SessionScope
+2008-04-04 17:21:13,390 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Removed value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@F15783] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] from thread [8]
+2008-04-04 17:21:13,390 [8] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Closing Hibernate Session
+2008-04-04 17:21:13,390 [8] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Closed LazySessionHolder
+2008-04-04 17:21:13,390 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Opening single Hibernate Session in SessionScope
+2008-04-04 17:21:13,390 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Created LazySessionHolder
+2008-04-04 17:21:13,390 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Bound value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@1EA711C] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] to thread [4]
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolving url '/Spring.Northwind.Web/CustomerOrders.aspx'
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolved url '/Spring.Northwind.Web/CustomerOrders.aspx' from reusable handler cache
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Creating instance of Object '/CustomerOrders.aspx' with merged definition [Root web object with class [/Spring.Northwind.Web/CustomerOrders.aspx] defined in file [L:\projects\Spring.Net\examples\Spring\Spring.Data.NHibernate.Northwind\src\Spring.Northwind.Web\Web.xml]].
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IInstantiationAwareObjectPostProcessors before the instantiation of '/CustomerOrders.aspx'.
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - creating page instance '/Spring.Northwind.Web/CustomerOrders.aspx'
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - page vpath is /Spring.Northwind.Web/CustomerOrders.aspx
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - configuring object 'ASP.customerorders_aspx' using definition '/CustomerOrders.aspx'
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerEditController' in object '/CustomerOrders.aspx' to object 'CustomerEditController'.
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerEditController'.
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors before initialization of object '/CustomerOrders.aspx'
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors after initialization of object '/CustomerOrders.aspx'
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@1EA711C] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - session instance requested - opening new session
+2008-04-04 17:21:13,406 [4] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Opening Hibernate Session
+2008-04-04 17:21:13,406 [4] INFO  NHibernate.Loader.Loader [(null)] - SELECT orders0_.CustomerID as CustomerID__1_, orders0_.OrderID as OrderID1_, orders0_.OrderID as OrderID0_0_, orders0_.OrderDate as OrderDate0_0_, orders0_.RequiredDate as Required3_0_0_, orders0_.ShippedDate as ShippedD4_0_0_, orders0_.ShipName as ShipName0_0_, orders0_.ShipAddress as ShipAddr6_0_0_, orders0_.ShipCity as ShipCity0_0_, orders0_.ShipRegion as ShipRegion0_0_, orders0_.ShipPostalCode as ShipPost9_0_0_, orders0_.ShipCountry as ShipCou10_0_0_ FROM Orders orders0_ WHERE orders0_.CustomerID=@p0
+2008-04-04 17:21:13,453 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - disposing 'request'-scoped item cache
+2008-04-04 17:21:13,453 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Trying to close SessionScope
+2008-04-04 17:21:13,453 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Closing single Hibernate Session in SessionScope
+2008-04-04 17:21:13,453 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Removed value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@1EA711C] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] from thread [4]
+2008-04-04 17:21:13,453 [4] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Closing Hibernate Session
+2008-04-04 17:21:13,453 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Closed LazySessionHolder
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Opening single Hibernate Session in SessionScope
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Created LazySessionHolder
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Bound value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@30FCBCE] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] to thread [4]
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolving url '/Spring.Northwind.Web/CustomerList.aspx'
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolved url '/Spring.Northwind.Web/CustomerList.aspx' from reusable handler cache
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Creating instance of Object '/CustomerList.aspx' with merged definition [Root web object with class [/Spring.Northwind.Web/CustomerList.aspx] defined in file [L:\projects\Spring.Net\examples\Spring\Spring.Data.NHibernate.Northwind\src\Spring.Northwind.Web\Web.xml]].
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IInstantiationAwareObjectPostProcessors before the instantiation of '/CustomerList.aspx'.
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - creating page instance '/Spring.Northwind.Web/CustomerList.aspx'
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - page vpath is /Spring.Northwind.Web/CustomerList.aspx
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - configuring object 'ASP.customerlist_aspx' using definition '/CustomerList.aspx'
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerEditController' in object '/CustomerList.aspx' to object 'CustomerEditController'.
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerEditController'.
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerDao' in object '/CustomerList.aspx' to object 'CustomerDao'.
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerDao'.
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors before initialization of object '/CustomerList.aspx'
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors after initialization of object '/CustomerList.aspx'
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@30FCBCE] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - session instance requested - opening new session
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Opening Hibernate Session
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@30FCBCE] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Found thread-bound Session for HibernateTemplate
+2008-04-04 17:21:14,703 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@30FCBCE] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:14,703 [4] INFO  NHibernate.Loader.Loader [(null)] - SELECT this_.CustomerID as CustomerID1_0_, this_.CompanyName as CompanyN2_1_0_, this_.ContactName as ContactN3_1_0_, this_.ContactTitle as ContactT4_1_0_, this_.Address as Address1_0_, this_.City as City1_0_, this_.Region as Region1_0_, this_.PostalCode as PostalCode1_0_, this_.Country as Country1_0_, this_.Phone as Phone1_0_, this_.Fax as Fax1_0_ FROM Customers this_
+2008-04-04 17:21:14,718 [4] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Not closing pre-bound Hibernate Session after HibernateTemplate
+2008-04-04 17:21:14,734 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - disposing 'request'-scoped item cache
+2008-04-04 17:21:14,734 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Trying to close SessionScope
+2008-04-04 17:21:14,734 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Closing single Hibernate Session in SessionScope
+2008-04-04 17:21:14,734 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Removed value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@30FCBCE] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] from thread [4]
+2008-04-04 17:21:14,734 [4] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Closing Hibernate Session
+2008-04-04 17:21:14,734 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Closed LazySessionHolder
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Opening single Hibernate Session in SessionScope
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Created LazySessionHolder
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Bound value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@16799F8] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] to thread [8]
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolving url '/Spring.Northwind.Web/CustomerList.aspx'
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolved url '/Spring.Northwind.Web/CustomerList.aspx' from reusable handler cache
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Creating instance of Object '/CustomerList.aspx' with merged definition [Root web object with class [/Spring.Northwind.Web/CustomerList.aspx] defined in file [L:\projects\Spring.Net\examples\Spring\Spring.Data.NHibernate.Northwind\src\Spring.Northwind.Web\Web.xml]].
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IInstantiationAwareObjectPostProcessors before the instantiation of '/CustomerList.aspx'.
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - creating page instance '/Spring.Northwind.Web/CustomerList.aspx'
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - page vpath is /Spring.Northwind.Web/CustomerList.aspx
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - configuring object 'ASP.customerlist_aspx' using definition '/CustomerList.aspx'
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerEditController' in object '/CustomerList.aspx' to object 'CustomerEditController'.
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerEditController'.
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerDao' in object '/CustomerList.aspx' to object 'CustomerDao'.
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerDao'.
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors before initialization of object '/CustomerList.aspx'
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors after initialization of object '/CustomerList.aspx'
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@16799F8] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [8]
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - session instance requested - opening new session
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Opening Hibernate Session
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@16799F8] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [8]
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Found thread-bound Session for HibernateTemplate
+2008-04-04 17:21:16,062 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@16799F8] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [8]
+2008-04-04 17:21:16,062 [8] INFO  NHibernate.Loader.Loader [(null)] - SELECT this_.CustomerID as CustomerID1_0_, this_.CompanyName as CompanyN2_1_0_, this_.ContactName as ContactN3_1_0_, this_.ContactTitle as ContactT4_1_0_, this_.Address as Address1_0_, this_.City as City1_0_, this_.Region as Region1_0_, this_.PostalCode as PostalCode1_0_, this_.Country as Country1_0_, this_.Phone as Phone1_0_, this_.Fax as Fax1_0_ FROM Customers this_
+2008-04-04 17:21:16,078 [8] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Not closing pre-bound Hibernate Session after HibernateTemplate
+2008-04-04 17:21:16,125 [8] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - disposing 'request'-scoped item cache
+2008-04-04 17:21:16,125 [8] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Trying to close SessionScope
+2008-04-04 17:21:16,125 [8] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Closing single Hibernate Session in SessionScope
+2008-04-04 17:21:16,125 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Removed value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@16799F8] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] from thread [8]
+2008-04-04 17:21:16,125 [8] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Closing Hibernate Session
+2008-04-04 17:21:16,125 [8] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Closed LazySessionHolder
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Opening single Hibernate Session in SessionScope
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Created LazySessionHolder
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Bound value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@3154901] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] to thread [4]
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolving url '/Spring.Northwind.Web/CustomerEditor.aspx'
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Context.Support.WebApplicationContext [(null)] - looking up web context 'spring.root' in WebContextCache
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Context.Support.WebApplicationContext [(null)] - returning WebContextCache hit '[/spring.northwind.web]:WebApplicationContext(35298535)' for vpath 'spring.root' 
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Web.Support.AbstractHandlerFactory [(null)] - GetHandler():looking up definition for app-relative url '/CustomerEditor.aspx'
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Web.Support.AbstractHandlerFactory [(null)] - GetHandler():found definition for page-url '/CustomerEditor.aspx'
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Creating instance of Object '/CustomerEditor.aspx' with merged definition [Root web object with class [/Spring.Northwind.Web/CustomerEditor.aspx] defined in file [L:\projects\Spring.Net\examples\Spring\Spring.Data.NHibernate.Northwind\src\Spring.Northwind.Web\Web.xml]].
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IInstantiationAwareObjectPostProcessors before the instantiation of '/CustomerEditor.aspx'.
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - creating page instance '/Spring.Northwind.Web/CustomerEditor.aspx'
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - page vpath is /Spring.Northwind.Web/CustomerEditor.aspx
+2008-04-04 17:21:16,125 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - configuring object 'ASP.customereditor_aspx' using definition '/CustomerEditor.aspx'
+2008-04-04 17:21:16,140 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerEditController' in object '/CustomerEditor.aspx' to object 'CustomerEditController'.
+2008-04-04 17:21:16,140 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerEditController'.
+2008-04-04 17:21:16,140 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerDao' in object '/CustomerEditor.aspx' to object 'CustomerDao'.
+2008-04-04 17:21:16,140 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerDao'.
+2008-04-04 17:21:16,156 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors before initialization of object '/CustomerEditor.aspx'
+2008-04-04 17:21:16,156 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors after initialization of object '/CustomerEditor.aspx'
+2008-04-04 17:21:16,156 [4] DEBUG Spring.Aop.Framework.AutoProxy.AbstractAutoProxyCreator [(null)] - returning available advisors
+2008-04-04 17:21:16,468 [4] INFO  Spring.Aop.Framework.AutoProxy.AbstractAutoProxyCreator [(null)] - Candidate advisor [Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor] rejected for type [ASP.customereditor_aspx]
+2008-04-04 17:21:16,546 [4] DEBUG Spring.Web.UI.Controls.DataBindingPanel [(null)] - binding control 'ctl03' relative to '__Page' using expression 'FindControl('ctl03').Text'
+2008-04-04 17:21:16,640 [4] DEBUG Spring.Web.UI.Controls.DataBindingPanel [(null)] - binding control 'ctl04' relative to '__Page' using expression 'FindControl('ctl04').Text'
+2008-04-04 17:21:16,656 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@3154901] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:16,656 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - session instance requested - opening new session
+2008-04-04 17:21:16,656 [4] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Opening Hibernate Session
+2008-04-04 17:21:16,703 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@3154901] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:16,734 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - disposing 'request'-scoped item cache
+2008-04-04 17:21:16,734 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Trying to close SessionScope
+2008-04-04 17:21:16,734 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Closing single Hibernate Session in SessionScope
+2008-04-04 17:21:16,734 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Removed value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@3154901] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] from thread [4]
+2008-04-04 17:21:16,734 [4] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Closing Hibernate Session
+2008-04-04 17:21:16,734 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Closed LazySessionHolder
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Opening single Hibernate Session in SessionScope
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Created LazySessionHolder
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Bound value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@62A49D] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] to thread [4]
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolving url '/Spring.Northwind.Web/CustomerList.aspx'
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolved url '/Spring.Northwind.Web/CustomerList.aspx' from reusable handler cache
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Creating instance of Object '/CustomerList.aspx' with merged definition [Root web object with class [/Spring.Northwind.Web/CustomerList.aspx] defined in file [L:\projects\Spring.Net\examples\Spring\Spring.Data.NHibernate.Northwind\src\Spring.Northwind.Web\Web.xml]].
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IInstantiationAwareObjectPostProcessors before the instantiation of '/CustomerList.aspx'.
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - creating page instance '/Spring.Northwind.Web/CustomerList.aspx'
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - page vpath is /Spring.Northwind.Web/CustomerList.aspx
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - configuring object 'ASP.customerlist_aspx' using definition '/CustomerList.aspx'
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerEditController' in object '/CustomerList.aspx' to object 'CustomerEditController'.
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerEditController'.
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerDao' in object '/CustomerList.aspx' to object 'CustomerDao'.
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerDao'.
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors before initialization of object '/CustomerList.aspx'
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors after initialization of object '/CustomerList.aspx'
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@62A49D] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - session instance requested - opening new session
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Opening Hibernate Session
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@62A49D] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Found thread-bound Session for HibernateTemplate
+2008-04-04 17:21:18,734 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@62A49D] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [4]
+2008-04-04 17:21:18,734 [4] INFO  NHibernate.Loader.Loader [(null)] - SELECT this_.CustomerID as CustomerID1_0_, this_.CompanyName as CompanyN2_1_0_, this_.ContactName as ContactN3_1_0_, this_.ContactTitle as ContactT4_1_0_, this_.Address as Address1_0_, this_.City as City1_0_, this_.Region as Region1_0_, this_.PostalCode as PostalCode1_0_, this_.Country as Country1_0_, this_.Phone as Phone1_0_, this_.Fax as Fax1_0_ FROM Customers this_
+2008-04-04 17:21:18,750 [4] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Not closing pre-bound Hibernate Session after HibernateTemplate
+2008-04-04 17:21:18,765 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - disposing 'request'-scoped item cache
+2008-04-04 17:21:18,765 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Trying to close SessionScope
+2008-04-04 17:21:18,765 [4] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Closing single Hibernate Session in SessionScope
+2008-04-04 17:21:18,765 [4] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Removed value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@62A49D] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] from thread [4]
+2008-04-04 17:21:18,765 [4] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Closing Hibernate Session
+2008-04-04 17:21:18,765 [4] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Closed LazySessionHolder
+2008-04-04 17:21:21,609 [8] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Opening single Hibernate Session in SessionScope
+2008-04-04 17:21:21,609 [8] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Created LazySessionHolder
+2008-04-04 17:21:21,609 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Bound value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@1648030] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] to thread [8]
+2008-04-04 17:21:21,609 [8] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolving url '/Spring.Northwind.Web/CustomerList.aspx'
+2008-04-04 17:21:21,609 [8] DEBUG Spring.Web.Support.PageHandlerFactory [(null)] - GetHandler():resolved url '/Spring.Northwind.Web/CustomerList.aspx' from reusable handler cache
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Creating instance of Object '/CustomerList.aspx' with merged definition [Root web object with class [/Spring.Northwind.Web/CustomerList.aspx] defined in file [L:\projects\Spring.Net\examples\Spring\Spring.Data.NHibernate.Northwind\src\Spring.Northwind.Web\Web.xml]].
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IInstantiationAwareObjectPostProcessors before the instantiation of '/CustomerList.aspx'.
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - creating page instance '/Spring.Northwind.Web/CustomerList.aspx'
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.WebObjectUtils [(null)] - page vpath is /Spring.Northwind.Web/CustomerList.aspx
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - configuring object 'ASP.customerlist_aspx' using definition '/CustomerList.aspx'
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerEditController' in object '/CustomerList.aspx' to object 'CustomerEditController'.
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerEditController'.
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Resolving reference from property 'CustomerDao' in object '/CustomerList.aspx' to object 'CustomerDao'.
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - Returning cached instance of singleton object 'CustomerDao'.
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors before initialization of object '/CustomerList.aspx'
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory [(null)] - Invoking IObjectPostProcessors after initialization of object '/CustomerList.aspx'
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@1648030] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [8]
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - session instance requested - opening new session
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Opening Hibernate Session
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@1648030] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [8]
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Found thread-bound Session for HibernateTemplate
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Retrieved value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@1648030] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] bound to thread [8]
+2008-04-04 17:21:21,625 [8] INFO  NHibernate.Loader.Loader [(null)] - SELECT this_.CustomerID as CustomerID1_0_, this_.CompanyName as CompanyN2_1_0_, this_.ContactName as ContactN3_1_0_, this_.ContactTitle as ContactT4_1_0_, this_.Address as Address1_0_, this_.City as City1_0_, this_.Region as Region1_0_, this_.PostalCode as PostalCode1_0_, this_.Country as Country1_0_, this_.Phone as Phone1_0_, this_.Fax as Fax1_0_ FROM Customers this_
+2008-04-04 17:21:21,625 [8] DEBUG Spring.Data.NHibernate.HibernateTemplate [(null)] - Not closing pre-bound Hibernate Session after HibernateTemplate
+2008-04-04 17:21:21,687 [8] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - disposing 'request'-scoped item cache
+2008-04-04 17:21:21,687 [8] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Trying to close SessionScope
+2008-04-04 17:21:21,687 [8] DEBUG Spring.Data.NHibernate.Support.OpenSessionInViewModule [(null)] - Closing single Hibernate Session in SessionScope
+2008-04-04 17:21:21,687 [8] DEBUG Spring.Transaction.Support.TransactionSynchronizationManager [(null)] - Removed value [Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder@1648030] for key [NHibernate.Impl.SessionFactoryImpl@294C2AB] from thread [8]
+2008-04-04 17:21:21,687 [8] DEBUG Spring.Data.NHibernate.SessionFactoryUtils [(null)] - Closing Hibernate Session
+2008-04-04 17:21:21,687 [8] DEBUG Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder [(null)] - Closed LazySessionHolder
+2008-04-04 17:24:18,796 [4] DEBUG Spring.Context.Support.WebSupportModule [(null)] - end session jffsz0255kqrjrgqyardrgs55 because of Removed
+2008-04-04 17:24:18,812 [4] DEBUG Spring.Objects.Factory.Support.WebObjectFactory [(null)] - disposing 'session'-scoped item cache

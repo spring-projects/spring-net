@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+
+<!--
+    Build file for the Spring.NET Docbook Documentation
+
+    $Id: build.xml,v 1.12 2007/12/06 15:53:07 oakinger Exp $
+
+    Build file based on build.xml from original Spring Framework, which
+		originated from the Hibernate documentation.  Building the documentation
+    requires you to download reference/lib from the sourceforge download area.
+-->
+
+<project name="Spring.NET Docbook" default="refdoc" basedir=".">
+
+  <property file="build.properties" />
+  <property file="project.properties" />
+
+  <target name="clean" description="Delete output and temporary directories.">
+    <delete dir="${basedir}/${doc.output.dir}" />
+  </target>
+
+
+  <target name="preparedocs"
+      description="Extra preparation for the documentation (common to all formats)">
+    <delete file="${basedir}/${doc.ref.dir}/src/dtd.xml"/>
+    <loadfile
+        property="doc.beansxsd"
+        srcFile="${src.dir}/Spring/Spring.Core/Objects/Factory/Xml/spring-objects-1.1.xsd"/>
+    <copy
+        file="${basedir}/${doc.ref.dir}/src/xsd-template.xml"
+        tofile="${basedir}/${doc.ref.dir}/src/xsd.xml"/>
+    <replace
+        file="${basedir}/${doc.ref.dir}/src/xsd.xml"
+        token="@xsd-include@"
+        value="${doc.beansxsd}"/>
+  </target>
+
+  <!-- Extra preparation for HTML documentation -->
+  <target name="preparedocshtml">
+    <mkdir dir="${basedir}/${doc.ref.output.dir}/styles"/>
+    <copy file="${doc.ref.dir}/styles/html.css"
+      todir="${basedir}/${doc.ref.output.dir}/styles"/>
+
+    <!-- TODO fix this -->
+    <mkdir dir="${basedir}/${doc.ref.output.dir}/images/admons"/>
+    <mkdir dir="${basedir}/${doc.ref.output.dir}/images/callouts"/>
+
+    <copy todir="${basedir}/${doc.ref.output.dir}/images/admons">
+      <fileset dir="${doc.ref.dir}/images/admons"/>
+    </copy>
+    <copy todir="${basedir}/${doc.ref.output.dir}/images/callouts">
+      <fileset dir="${doc.ref.dir}/images/callouts"/>
+    </copy>
+
+  </target>
+
+  <target name="docpdf" depends="preparedocs"
+      description="Compile reference documentation to pdf">
+
+    <antcall target="copycommoncontent">
+      <param name="doc.type.output.dir"
+          value="${basedir}/${doc.ref.output.dir}/pdf/images"/>
+    </antcall>
+
+    <java classname="com.icl.saxon.StyleSheet" fork="true"
+        dir="${doc.ref.dir}">
+      <classpath>
+        <fileset dir="${basedir}/${docbook.lib.dir}">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+      <arg value="-o" />
+      <arg value="${basedir}/${doc.ref.output.dir}/pdf/docbook_fop.tmp" />
+      <arg value="${basedir}/${doc.ref.dir}/src/index.xml" />
+      <arg value="${basedir}/${doc.ref.dir}/styles/fopdf.xsl" />
+    </java>
+
+    <java classname="org.apache.fop.apps.Fop" fork="true" maxmemory="1024m"
+        dir="${doc.ref.dir}">
+      <classpath>
+        <fileset dir="${basedir}/${docbook.lib.dir}">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+      <arg value="-d" />
+      <arg value="${basedir}/${doc.ref.output.dir}/pdf/docbook_fop.tmp" />
+      <arg value="${basedir}/${doc.ref.output.dir}/pdf/spring-net-reference.pdf" />
+    </java>
+
+
+    <delete file="${doc.ref.output.dir}/pdf/docbook_fop.tmp" />
+
+
+  </target>
+
+  <target name="dochtml" depends="preparedocs,preparedocshtml"
+      description="Compile reference documentation to chunked html">
+
+    <antcall target="copycommoncontent">
+      <param name="doc.type.output.dir"
+          value="${basedir}/${doc.ref.output.dir}/html/images"/>
+    </antcall>
+
+    <java classname="com.icl.saxon.StyleSheet" fork="true"
+        dir="${doc.ref.output.dir}/html">
+      <classpath>
+        <fileset dir="${basedir}/${docbook.lib.dir}">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+      <arg value="${basedir}/${doc.ref.dir}/src/index.xml" />
+      <arg value="${basedir}/${doc.ref.dir}/styles/html_chunk.xsl" />
+    </java>
+
+  </target>
+
+  <target name="dochtmlsingle" depends="preparedocs,preparedocshtml"
+      description="Compile reference documentation to single html">
+
+    <antcall target="copycommoncontent">
+      <param name="doc.type.output.dir"
+          value="${basedir}/${doc.ref.output.dir}/html_single/images"/>
+    </antcall>
+
+    <java classname="com.icl.saxon.StyleSheet" fork="true"
+        dir="${doc.ref.dir}">
+      <classpath>
+        <fileset dir="${basedir}/${docbook.lib.dir}">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+      <arg value="-o" />
+      <arg value="${basedir}/${doc.ref.output.dir}/html_single/index.html" />
+      <arg value="${basedir}/${doc.ref.dir}/src/index.xml" />
+      <arg value="${basedir}/${doc.ref.dir}/styles/html.xsl" />
+    </java>
+
+  </target>
+
+  <target name="htmlhelp" depends="preparedocs,preparedocshtml"
+      description="Compile reference documentation to MS HTML-HELP">
+
+    <antcall target="copycommoncontent">
+      <param name="doc.type.output.dir"
+          value="${basedir}/${doc.ref.output.dir}/htmlhelp/images"/>
+    </antcall>
+
+    <java classname="com.icl.saxon.StyleSheet" fork="true"
+        dir="${doc.ref.output.dir}/htmlhelp">
+      <classpath>
+        <fileset dir="${basedir}/${docbook.lib.dir}">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+      <arg value="${basedir}/${doc.ref.dir}/src/index.xml" />
+      <arg value="${basedir}/${doc.ref.dir}/styles/htmlhelp.xsl" />
+    </java>
+    <exec dir="${doc.ref.output.dir}/htmlhelp" executable="cmd.exe">
+      <arg line="/c 'C:\Program Files\HTML Help Workshop\hhc.exe' htmlhelp.hhp"/>
+    </exec>
+    <delete includeEmptyDirs="true">
+      <fileset dir="${doc.ref.output.dir}/htmlhelp">
+        <include name="**/*"/>
+        <exclude name="htmlhelp.chm"/>
+      </fileset>
+    </delete>
+
+
+
+  </target>
+
+  <!--
+  copies content common to all docs to the dir in the ${doc.type.output.dir} property
+  -->
+  <target name="copycommoncontent">
+    <mkdir dir="${doc.type.output.dir}"/>
+    <copy todir="${doc.type.output.dir}">
+      <fileset dir="${basedir}/${doc.ref.dir}/src/images">
+        <include name="*.gif"/>
+        <include name="*.svg"/>
+        <include name="*.jpg"/>
+        <include name="*.png"/>
+      </fileset>
+    </copy>
+    <copy todir="${doc.type.output.dir}">
+      <fileset dir="${basedir}/${doc.ref.dir}/images">
+        <include name="**/*.gif"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.jpg"/>
+        <include name="**/*.png"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- this is the target to call for generating docs for the release -->
+  <target name="refdoc" depends="clean,dochtml,htmlhelp,docpdf"
+      description="Generate reference documentation"/>
+
+
+</project>
+

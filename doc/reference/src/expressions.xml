@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="expressions">
+  <title>Expression Evaluation</title>
+  <sect1 id="expressions-introduction">
+    <title>Introduction</title>
+
+    <para>The Spring.Expressions namespace provides a powerful expression
+    language for querying and manipulating an object graph at runtime. The
+    language supports setting and getting of property values, property
+    assignment, method invocation, accessing the context of arrays,
+    collections and indexers, logical and arithmetic operators, named
+    variables, and retrieval of objects by name from Spring's IoC container.
+    It also supports list projection and selection, as well as common list
+    aggregators.</para>
+
+    <para>The functionality provided in this namespace serves as the
+    foundation for a variety of other features in Spring.NET such as enhanced
+    property evaluation in the XML based configuration of the IoC container, a
+    Data Validation framework, and a Data Binding framework for ASP.NET. You
+    will likely find other cool uses for this library in your own work where
+    run-time evaluation of criteria based on an object's state is required.
+    For those with a Java background, the Spring.Expressions namespace
+    provides functionality similar to the Java based Object Graph Navigation
+    Language, <ulink url="http://www.ognl.org/">OGNL</ulink>.</para>
+
+    <para>This chapter covers the features of the expression language using an
+    Inventor and Inventor's Society class as the target objects for expression
+    evaluation. The class declarations and the data used to populate them are
+    listed at the end of the chapter in section <xref
+    linkend="expressions-classes" />. These classes are blatantly taken from
+    the NUnit tests for the Expressions namespace which you can refer to for
+    additional example usage.</para>
+  </sect1>
+
+  <sect1 id="expressions-evaluating">
+    <title>Evaluating Expressions</title>
+
+    <para>The simplest, but not the most efficient way to perform expression
+    evaluation is by using one of the static convenience methods of the
+    <classname>ExpressionEvaluator</classname> class:<programlisting>public static object GetValue(object root, string expression);
+
+public static object GetValue(object root, string expression, IDictionary variables)
+
+public static void SetValue(object root, string expression, object newValue)
+
+public static void SetValue(object root, string expression, IDictionary variables, object newValue)</programlisting>
+    The first argument is the 'root' object that the expression string (2nd argument) will be 
+    evaluated against.  The third argument is used to support variables in the expression 
+    and will be discussed later.
+    
+    Simple usage to get the value of an object property is shown below using the 
+    <classname>Inventor</classname> class.
+    You can find the class listing in section <xref linkend="expressions-classes"/>.
+    <programlisting>Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+
+tesla.PlaceOfBirth.City = "Smiljan";
+
+string evaluatedName = (string) ExpressionEvaluator.GetValue(tesla, "Name"); 
+
+string evaluatedCity = (string) ExpressionEvaluator.GetValue(tesla, "PlaceOfBirth.City"));</programlisting>
+    The value of 'evaluatedName' is 'Nikola Tesla' and that of 'evaluatedCity'
+    is 'Smiljan'. A period is used to navigate the nested properties of the
+    object. Similarly to set the property of an object, say we want to rewrite
+    history and change Tesla's city of birth, we would simply add the
+    following line <programlisting>ExpressionEvaluator.SetValue(tesla, "PlaceOfBirth.City", "Novi Sad");</programlisting></para>
+
+    <para>A much better way to evaluate expressions is to parse them once and
+    then evaluate as many times as you want
+    using<classname>Expression</classname>class. Unlike
+    <classname>ExpressionEvaluator</classname>, which parses expression every
+    time you invoke one of its methods, <classname>Expression</classname>
+    class will cache the parsed expression for increased performance. The
+    methods of this class are listed below: <programlisting>public static IExpression Parse(string expression)
+
+public override object Get(object context, IDictionary variables)
+
+public override void Set(object context, IDictionary variables, object newValue)</programlisting>
+    The retrieval of the Name property in the previous example using the
+    Expression class is shown below <programlisting>IExpression exp = Expression.Parse("Name");
+
+string evaluatedName = (string) exp.GetValue(tesla, null);</programlisting></para>
+
+    <para>The difference in performance between the two approaches, when
+    evaluating the same expression many times, is several orders of magnitude,
+    so you should only use convenience methods of the
+    <classname>ExpressionEvaluator</classname> class when you are doing
+    one-off expression evaluations. In all other cases you should parse the
+    expression first and then evaluate it as many times as you need.</para>
+
+    <para>There are a few exception classes to be aware of when using the
+    <classname>ExpressionEvaluator</classname>. These are
+    <classname>InvalidPropertyException</classname>, when you refer to a
+    property that doesn't exist,
+    <classname>NullValueInNestedPathException</classname>, when a null value
+    is encountered when traversing through the nested property list, and
+    <classname>ArgumentException</classname> and
+    <classname>NotSupportedException</classname> when you pass in values that
+    are in error in some other manner.</para>
+
+    <para>The expression language is based on a grammar and uses <ulink
+    url="http://www.antlr.org/">ANTLR</ulink> to construct the lexer and
+    parser. Errors relating to bad syntax of the language will be caught at
+    this level of the language implementation. For those interested in the
+    digging deeper into the implementation, the grammar file is named
+    Expression.g and is located in the src directory of the namespace. As a
+    side note, the release version of the ANTLR DLL included with Spring.NET
+    was signed with the Spring.NET key, which means that you should always use
+    the included version of <literal>antlr.runtime.dll</literal> within your
+    application. Upcoming releases of ANTLR will provide strongly signed
+    assemblies, which will remove this requirement.</para>
+  </sect1>
+
+  <sect1 id="expressions-language-ref">
+    <title>Language Reference</title>
+
+    <sect2 id="expressions-literals">
+      <title>Literal expressions</title>
+
+      <para>The types of literal expressions supported are strings, dates,
+      numeric values (int, real, and hex), boolean and null. String are
+      delimited by single quotes. To put a single quote itself in a string use
+      the backslash character. The following listing shows simple usage of
+      literals. Typically they would not be used in isolation like this, but
+      as part of a more complex expression, for example using a literal on one
+      side of a logical comparison operator. <programlisting>string helloWorld = (string) ExpressionEvaluator.GetValue(null, "'Hello World'"); // evals to "Hello World"
+
+string tonyPizza  = (string) ExpressionEvaluator.GetValue(null, "'Tony\\'s Pizza'"); // evals to "Tony's Pizza"
+
+double avogadrosNumber = (double) ExpressionEvaluator.GetValue(null, "6.0221415E+23");
+
+int maxValue = (int)  ExpressionEvaluator.GetValue(null, "0x7FFFFFFF");  // evals to 2147483647
+
+DateTime birthday = (DateTime) ExpressionEvaluator.GetValue(null, "date('1974/08/24')");
+
+DateTime exactBirthday = 
+  (DateTime) ExpressionEvaluator.GetValue(null, " date('19740824T131030', 'yyyyMMddTHHmmss')");
+
+bool trueValue = (bool) ExpressionEvaluator.GetValue(null, "true");
+
+object nullValue = ExpressionEvaluator.GetValue(null, "null");</programlisting>
+      Note that the extra backslash character in Tony's Pizza is to satisfy C#
+      escape syntax. Numbers support the use of the negative sign, exponential
+      notation, and decimal points. By default real numbers are parsed using
+      <classname>Double.Parse</classname> unless the format character "M" or
+      "F" is supplied, in which case <classname>Decimal.Parse</classname> and
+      <classname>Single.Parse</classname> would be used respectfully. As shown
+      above, if two arguments are given to the date literal then
+      <classname>DateTime.ParseExact</classname> will be used. Note that all
+      parse methods of classes that are used internally reference the
+      <classname>CultureInfo.InvariantCulture</classname>.</para>
+    </sect2>
+
+    <!-- PROPERTIES -->
+
+    <sect2 id="expressions-properties">
+      <title>Properties, Arrays, Lists, Dictionaries, Indexers</title>
+
+      <para>As shown in the previous example in <xref
+      linkend="expressions-evaluating" />, navigating through properties is
+      easy, just use a period to indicate a nested property value. The
+      instances of <classname>Inventor</classname> class,
+      <emphasis>pupin</emphasis> and <emphasis>tesla</emphasis>, were
+      populated with data listed in section <xref
+      linkend="expressions-classes" />. To navigate "down" and get Tesla's
+      year of birth and Pupin's city of birth the following expressions are
+      used <programlisting>int year = (int) ExpressionEvaluator.GetValue(tesla, "DOB.Year"));  // 1856
+
+string city = (string) ExpressionEvaluator.GetValue(pupin, "PlaCeOfBirTh.CiTy");  // "Idvor"</programlisting>
+      For the sharp-eyed, that isn't a typo in the property name for place of
+      birth. The expression uses mixed cases to demonstrate that the
+      evaluation is case insensitive.</para>
+
+      <para>The contents of arrays and lists are obtained using square bracket
+      notation. <programlisting>// Inventions Array
+string invention = (string) ExpressionEvaluator.GetValue(tesla, "Inventions[3]"); // "Induction motor"
+
+// Members List
+string name = (string) ExpressionEvaluator.GetValue(ieee, "Members[0].Name"); // "Nikola Tesla"
+
+// List and Array navigation
+string invention = (string) ExpressionEvaluator.GetValue(ieee, "Members[0].Inventions[6]") // "Wireless communication"</programlisting></para>
+
+      <para>The contents of dictionaries are obtained by specifying the
+      literal key value within the brackets. In this case, because keys for
+      the <emphasis>Officers</emphasis> dictionary are strings, we can specify
+      string literal.<programlisting>// Officer's Dictionary
+Inventor pupin = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers['president']";
+
+string city = (string) ExpressionEvaluator.GetValue(ieee, "Officers['president'].PlaceOfBirth.City"); // "Idvor"
+
+ExpressionEvaluator.SetValue(ieee, "Officers['advisors'][0].PlaceOfBirth.Country", "Croatia");</programlisting></para>
+
+      <para>You may also specify non literal values in place of the quoted
+      literal values by using another expression inside the square brackets
+      such as variable names or static properties/methods on other types.
+      These features are discussed in other sections.</para>
+
+      <para>Indexers are similarly referenced using square brackets. The
+      following is a small example that shows the use of indexers.
+      Multidimensional indexers are also supported. <programlisting>public class Bar
+{
+    private int[] numbers = new int[] {1, 2, 3};
+
+    public int this[int index]
+    {
+        get { return numbers[index];}
+        set { numbers[index] = value; }
+    }
+}
+
+Bar b = new Bar();
+
+int val = (int) ExpressionEvaluator.GetValue(bar, "[1]") // evaluated to 2
+
+ExpressionEvaluator.SetValue(bar, "[1]", 3);  // set value to 3</programlisting></para>
+
+      <sect3>
+        <title>Defining Arrays, Lists and Dictionaries Inline</title>
+
+        <para>In addition to accessing arrays, lists and dictionaries by
+        navigating the graph for the context object, Spring.NET Expression
+        Language allows you to define them inline, within the expression.
+        Inline lists are defined by simply enclosing a comma separated list of
+        items with curly brackets:<programlisting>{1, 2, 3, 4, 5}
+{'abc', 'xyz'}</programlisting> If you want to ensure that a strongly typed
+        array is initialized instead of a weakly typed list, you can use array
+        initializer instead: <programlisting>new int[] {1, 2, 3, 4, 5}
+new string[] {'abc', 'xyz'}</programlisting></para>
+
+        <para>Dictionary definition syntax is a bit different: you need to use
+        a # prefix to tell expression parser to expect key/value pairs within
+        the brackets and to specify a comma separated list of key/value pairs
+        within the brackets:<programlisting>#{'key1' : 'Value 1', 'today' : DateTime.Today}
+#{1 : 'January', 2 : 'February', 3 : 'March', ...}</programlisting></para>
+
+        <para>Arrays, lists and dictionaries created this way can be used
+        anywhere where arrays, lists and dictionaries obtained from the object
+        graph can be used, which we will see later in the examples.</para>
+
+        <para>Keep in mind that even though examples above use literals as
+        array/list elements and dictionary keys and values, that's only to
+        simplify the examples -- you can use any valid expression wherever
+        literals are used.</para>
+      </sect3>
+    </sect2>
+
+    <sect2 id="expressions-methods">
+      <title>Methods</title>
+
+      <para>Methods are invoked using typical C# programming syntax. You may
+      also invoke methods on literals.</para>
+
+      <programlisting>//string literal 
+char[] chars = (char[]) ExpressionEvaluator.GetValue(null, "'test'.ToCharArray(1, 2)"))  // 't','e'
+
+//date literal 
+int year = (int) ExpressionEvaluator.GetValue(null, "date('1974/08/24').AddYears(31).Year") // 2005
+
+// object usage, calculate age of tesla navigating from the IEEE society.
+
+ExpressionEvaluator.GetValue(ieee, "Members[0].GetAge(date('2005-01-01')") // 149 (eww..a big anniversary is coming up ;)</programlisting>
+    </sect2>
+
+    <sect2 id="expressions-operators">
+      <title>Operators</title>
+
+      <sect3 id="expressions-relational">
+        <title>Relational operators</title>
+
+        <para>The relational operators; equal, not equal, less than, less than
+        or equal, greater than, and greater than or equal are supported using
+        standard operator notation. These operators take into account if the
+        object implements the <classname>IComparable</classname> interface.
+        Enumerations are also supported but you will need to register the
+        enumeration type, as described in Section <xref
+        linkend="expressions-typeregistration" />, in order to use an
+        enumeration value in an expression if it is not contained in the
+        mscorlib.</para>
+
+        <programlisting>ExpressionEvaluator.GetValue(null, "2 == 2")  // true
+
+ExpressionEvaluator.GetValue(null, "date('1974-08-24') != DateTime.Today")  // true
+
+ExpressionEvaluator.GetValue(null, "2 &lt; -5.0") // false
+
+ExpressionEvaluator.GetValue(null, "DateTime.Today &lt;= date('1974-08-24')") // false
+
+ExpressionEvaluator.GetValue(null, "'Test' &gt;= 'test'") // true</programlisting>
+
+        <para>Enumerations can be evaluated as shown below <programlisting>FooColor fColor = new FooColor();
+
+ExpressionEvaluator.SetValue(fColor, "Color", KnownColor.Blue);
+
+bool trueValue = (bool) ExpressionEvaluator.GetValue(fColor, "Color == KnownColor.Blue"); //true</programlisting>
+        Where FooColor is the following class. <programlisting>public class FooColor
+{
+    private KnownColor knownColor;
+
+    public KnownColor Color
+    {
+        get { return knownColor;}
+        set { knownColor = value; }
+    }
+}</programlisting></para>
+
+        <para>In addition to standard relational operators, Spring.NET
+        Expression Language supports some additional, very useful operators
+        that were "borrowed" from SQL, such as <emphasis>in</emphasis>,
+        <emphasis>like</emphasis> and <emphasis>between</emphasis>, as well as
+        <emphasis>is</emphasis> and <emphasis>matches</emphasis> operators,
+        which allow you to test if object is of a specific type or if the
+        value matches a regular expression.<programlisting>ExpressionEvaluator.GetValue(null, "3 in {1, 2, 3, 4, 5}")  // true
+
+ExpressionEvaluator.GetValue(null, "'Abc' like '[A-Z]b*'")  // true
+
+ExpressionEvaluator.GetValue(null, "'Abc' like '?'")  // false
+
+ExpressionEvaluator.GetValue(null, "1 between {1, 5}")  // true
+
+ExpressionEvaluator.GetValue(null, "'efg' between {'abc', 'xyz'}")  // true
+
+ExpressionEvaluator.GetValue(null, "'xyz' is int")  // false
+
+ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4, 5} is IList")  // true
+
+ExpressionEvaluator.GetValue(null, "'5.0067' matches '^-?\\d+(\\.\\d{2})?$'"))  // false
+
+ExpressionEvaluator.GetValue(null, @"'5.00' matches '^-?\d+(\.\d{2})?$'")  // true</programlisting>Note
+        that the Visual Basic and not SQL syntax is used for the
+        <emphasis>like</emphasis> operator pattern string.
+        </para>
+      </sect3>
+
+      <sect3 id="expressions-logical">
+        <title>Logical operators</title>
+
+        <para>The logical operators that are supported are
+        <emphasis>and</emphasis>, <emphasis>or</emphasis>, and
+        <emphasis>not</emphasis>. Their use is demonstrated
+        below<programlisting>// AND
+bool falseValue = (bool) ExpressionEvaluator.GetValue(null, "true and false"); //false
+
+string expression = @"IsMember('Nikola Tesla') and IsMember('Mihajlo Pupin')";
+bool trueValue = (bool) ExpressionEvaluator.GetValue(ieee, expression);  //true
+
+// OR
+bool trueValue = (bool) ExpressionEvaluator.GetValue(null, "true or false");  //true
+
+string expression = @"IsMember('Nikola Tesla') or IsMember('Albert Einstien')";
+bool trueValue = (bool) ExpressionEvaluator.GetValue(ieee, expression); // true
+
+// NOT
+bool falseValue = (bool) ExpressionEvaluator.GetValue(null, "!true");
+
+// AND and NOT
+string expression = @"IsMember('Nikola Tesla') and !IsMember('Mihajlo Pupin')";
+bool falseValue = (bool) ExpressionEvaluator.GetValue(ieee, expression);</programlisting></para>
+      </sect3>
+
+      <sect3 id="expressions-math">
+        <title>Mathematical operators</title>
+
+        <para>The addition operator can be used on numbers, strings and dates.
+        Subtraction can be used on numbers and dates. Multiplication and
+        division can be used only on numbers. Other mathematical operators
+        supported are modulus (%) and exponential power (^). Standard operator
+        precedence is enforced. These operators are demonstrated below
+        <programlisting>// Addition
+int two = (int)ExpressionEvaluator.GetValue(null, "1 + 1"); // 2
+
+String testString = (String)ExpressionEvaluator.GetValue(null, "'test' + ' ' + 'string'"); //'test string'
+
+DateTime dt = (DateTime)ExpressionEvaluator.GetValue(null, "date('1974-08-24') + 5"); // 8/29/1974
+            
+// Subtraction
+
+int four = (int) ExpressionEvaluator.GetValue(null, "1 - -3"); //4
+
+Decimal dec = (Decimal) ExpressionEvaluator.GetValue(null, "1000.00m - 1e4"); // 9000.00
+
+TimeSpan ts = (TimeSpan) ExpressionEvaluator.GetValue(null, "date('2004-08-14') - date('1974-08-24')"); //10948.00:00:00
+
+// Multiplication
+
+int six = (int) ExpressionEvaluator.GetValue(null, "-2 * -3"); // 6
+
+int twentyFour = (int) ExpressionEvaluator.GetValue(null, "2.0 * 3e0 * 4"); // 24
+
+// Division
+
+int minusTwo = (int) ExpressionEvaluator.GetValue(null, "6 / -3"); // -2
+
+int one = (int) ExpressionEvaluator.GetValue(null, "8.0 / 4e0 / 2"); // 1
+
+// Modulus
+
+int three = (int) ExpressionEvaluator.GetValue(null, "7 % 4"); // 3
+
+int one = (int) ExpressionEvaluator.GetValue(null, "8.0 % 5e0 % 2"); // 1
+
+// Exponent
+
+int sixteen = (int) ExpressionEvaluator.GetValue(null, "-2 ^ 4"); // 16
+
+// Operator precedence
+
+int minusFortyFive = (int) ExpressionEvaluator.GetValue(null, "1+2-3*8^2/2/2"); // -45
+</programlisting></para>
+      </sect3>
+    </sect2>
+
+    <sect2 id="expressions-assignment">
+      <title>Assignment</title>
+
+      <para>Setting of a property is done by using the assignment operator.
+      This would typically be done within a call to
+      <literal>GetValue</literal> since in the simple case
+      <literal>SetValue</literal> offers the same functionality. Assignment in
+      this manner is useful when combining multiple operators in an expression
+      list, discussed in the next section. Some examples of assignment are
+      shown below <programlisting>Inventor inventor = new Inventor();
+String aleks = (String) ExpressionEvaluator.GetValue(inventor, "Name = 'Aleksandar Seovic'");
+DateTime dt = (DateTime) ExpressionEvaluator.GetValue(inventor, "DOB = date('1974-08-24')");
+
+//Set the vice president of the society
+Inventor tesla = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers['vp'] = Members[0]");</programlisting></para>
+    </sect2>
+
+    <sect2 id="expressions-explist">
+      <title>Expression lists</title>
+
+      <para>Multiple expressions can be evaluated against the same context
+      object by separating them with a semicolon and enclosing the entire
+      expression within parentheses. The value returned is the value of the
+      last expression in the list. Examples of this are shown below
+      <programlisting>//Perform property assignments and then return Name property.
+
+String pupin = (String) ExpressionEvaluator.GetValue(ieee.Members, 
+  "( [1].PlaceOfBirth.City = 'Beograd'; [1].PlaceOfBirth.Country = 'Serbia'; [1].Name )"));
+
+// pupin = "Mihajlo Pupin"</programlisting></para>
+    </sect2>
+
+    <sect2 id="expressions-types">
+      <title>Types</title>
+
+      <para>In many cases, you can reference types by simply specifying type
+      name:<programlisting>ExpressionEvaluator.GetValue(null, "1 is int")
+
+ExpressionEvaluator.GetValue(null, "DateTime.Today")
+
+ExpressionEvaluator.GetValue(null, "new string[] {'abc', 'efg'}")</programlisting></para>
+
+      <para>This is possible for all standard types from
+      <literal>mscorlib</literal>, as well as for any other type that is
+      registered with the <literal>TypeRegistry</literal> as described in the
+      next section.</para>
+
+      <para>For all other types, you need to use special
+      <literal>T(typeName)</literal> expression:<programlisting>Type dateType = (Type) ExpressionEvaluator.GetValue(null, "T(System.DateTime)")
+
+Type evalType = (Type) ExpressionEvaluator.GetValue(null, "T(Spring.Expressions.ExpressionEvaluator, Spring.Core)")
+
+bool trueValue = (bool) ExpressionEvaluator.GetValue(tesla, "T(System.DateTime) == DOB.GetType()")</programlisting></para>
+
+      <note>
+        <para>The implementation delegates to Spring's
+        <classname>ObjectUtils.ResolveType</classname> method for the actual
+        type resolution, which means that the types used within expressions
+        are resolved in the exactly the same way as the types specified in
+        Spring configuration files.</para>
+      </note>
+    </sect2>
+
+    <sect2 id="expressions-typeregistration">
+      <title>Type Registration</title>
+
+      <para>To refer to a type within an expression that is not in the
+      mscorlib you need to register it with the
+      <literal>TypeRegistry</literal>. This will allow you to refer to a
+      shorthand name of the type within your expressions. This is commonly
+      used in expression that use the new operator or refer to a static
+      properties of an object. Example usage is shown below.</para>
+
+      <programlisting>TypeRegistry.RegisterType("Society", typeof(Society));
+
+Inventor pupin = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers[Society.President]");</programlisting>
+
+      <para>Alternatively, you can register types using
+      <literal>typeAliases</literal> configuration section.</para>
+    </sect2>
+
+    <sect2 id="expressions-ctor">
+      <title>Constructors</title>
+
+      <para>Constructors can be invoked using the new operator. For classes
+      outside mscorlib you will need to register your types so they can be
+      resolved. Examples of using constructors are shown below:
+      <programlisting>// simple ctor
+DateTime dt = (DateTime) ExpressionEvaluator.GetValue(null, "new DateTime(1974, 8, 24)");
+
+// Register Inventor type then create new inventor instance within Add method inside an expression list.  
+// Then return the new count of the Members collection.
+
+TypeRegistry.RegisterType(typeof(Inventor));
+int three = (int) ExpressionEvaluator.GetValue(ieee.Members, "{ Add(new Inventor('Aleksandar Seovic', date('1974-08-24'), 'Serbian')); Count}"));
+            
+</programlisting></para>
+
+      <para>As a convenience, Spring.NET also allows you to define named
+      constructor arguments, which are used to set object's properties after
+      instantiation, similar to the way standard .NET attributes work. For
+      example, you could create an instance of the <literal>Inventor</literal>
+      class and set its <literal>Inventions</literal> property in a single
+      statement:<programlisting>
+Inventor aleks = (Inventor) ExpressionEvaluator.GetValue(null, "new Inventor('Aleksandar Seovic', date('1974-08-24'), 'Serbian', Inventions = {'SPELL'})");
+</programlisting>The only rule you have to follow is that named arguments
+      should be specified <emphasis>after</emphasis> standard constructor
+      arguments, just like in the .NET attributes.</para>
+
+      <para>While we are on the subject, Spring.NET Expression Language also
+      provides a convenient syntax for .NET attribute instance creation.
+      Instead of using standard constructor syntax, you can use a somewhat
+      shorter and more familiar syntax to create an instance of a .NET
+      attribute class:<programlisting>
+WebMethodAttribute webMethod = (WebMethodAttribute) ExpressionEvaluator.GetValue(null, "@[WebMethod(true, CacheDuration = 60, Description = 'My Web Method')]");
+</programlisting>As you can see, with the exception of the
+      <literal>@</literal> prefix, syntax is exactly the same as in C#.</para>
+
+      <para>Slightly different syntax is not the only thing that
+      differentiates an attribute expression from a standard constructor
+      invocation expression. In addition to that, attribute expression uses
+      slightly different type resolution mechanism and will attempt to load
+      both the specified type name and the specified type name with an
+      <literal>Attribute</literal> suffix, just like the C# compiler.</para>
+    </sect2>
+
+    <sect2 id="expressions-variables">
+      <title>Variables</title>
+
+      <para>Variables can referenced in the expression using the syntax
+      <literal>#</literal><emphasis>variableName</emphasis>. The variables are
+      passed in and out of the expression using the dictionary parameter in
+      <classname>ExpressionEvaluator</classname>'s <literal>GetValue</literal>
+      or <literal>SetValue</literal> methods. <programlisting>public static object GetValue(object root, string expression, IDictionary variables)
+
+public static void SetValue(object root, string expression, IDictionary variables, object newValue)</programlisting>
+      The variable name is the key value of the dictionary. Example usage is
+      shown below; <programlisting>IDictionary vars = new Hashtable();
+vars["newName"] = "Mike Tesla";
+ExpressionEvaluator.GetValue(tesla, "Name = #newName", vars));</programlisting>
+      You can also use the dictionary as a place to store values of the object
+      as they are evaluated inside the expression. For example to change
+      Tesla's first name back again and keep the old value; <programlisting>ExpressionEvaluator.GetValue(tesla, "{ #oldName = Name; Name = 'Nikola Tesla' }", vars);
+String oldName = (String)vars["oldName"]; // Mike Tesla</programlisting>
+      Variable names can also be used inside indexers or maps instead of
+      literal values. For example; <programlisting>vars["prez"] = "president";
+Inventor pupin = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers[#prez]", vars);</programlisting></para>
+
+      <sect3 id="expressions-this">
+        <title>The '#this' and '#root' variables</title>
+
+        <para>There are two special variables that are always defined and can
+        be references within the expression: <literal>#this</literal> and
+        <literal>#root</literal>.</para>
+
+        <para>The <literal>#this</literal> variable can be used to explicitly
+        refer to the context for the node that is currently being
+        evaluated:<programlisting>// sets the name of the president and returns its instance
+ExpressionEvaluator.GetValue(ieee, "Officers['president'].( #this.Name = 'Nikola Tesla'; #this )")</programlisting></para>
+
+        <para>Similarly, the <literal>#root</literal> variable allows you to
+        refer to the root context for the expression:<programlisting>// removes president from the Officers dictionary and returns removed instance
+ExpressionEvaluator.GetValue(ieee, "Officers['president'].( #root.Officers.Remove('president'); #this )")</programlisting></para>
+      </sect3>
+    </sect2>
+
+    <sect2 id="expressions-ternary">
+      <title>Ternary Operator (If-Then-Else)</title>
+
+      <para>You can use the ternary operator for performing if-then-else
+      conditional logic inside the expression. A minimal example is;
+      <programlisting>String aTrueString  = (String) ExpressionEvaluator.GetValue(null, "false ? 'trueExp' : 'falseExp'") // trueExp
+</programlisting> In this case, the boolean false results in returning the
+      string value 'trueExp'. A less artificial example is shown below
+      <programlisting>ExpressionEvaluator.SetValue(ieee, "Name", "IEEE");
+IDictionary vars = new Hashtable();
+vars["queryName"] = "Nikola Tesla";
+
+string expression = @"IsMember(#queryName) 
+                      ? #queryName + ' is a member of the ' + Name + ' Society' 
+                      : #queryName + ' is not a member of the ' + Name + ' Society'";
+
+String queryResultString = (String) ExpressionEvaluator.GetValue(ieee, expression, vars));
+
+// queryResultString = "Nikola Tesla is a member of the IEEE Society"</programlisting></para>
+    </sect2>
+
+    <sect2>
+      <title>List Projection and Selection</title>
+
+      <para>List projection and selection are very powerful expression
+      language features that allow you to transform the source list into
+      another list by either <emphasis>projecting</emphasis> across its
+      "columns", or <emphasis>selecting</emphasis> from its "rows". In other
+      words, projection can be thought of as a column selector in a SQL SELECT
+      statement, while selection would be comparable to the WHERE
+      clause.</para>
+
+      <para>For example, let's say that we need a list of the cities where our
+      inventors were born. This could be easily obtained by projecting on the
+      <literal>PlaceOfBirth.City</literal> property: <programlisting>IList placesOfBirth = (IList) ExpressionEvaluator.GetValue(ieee, "Members.!{PlaceOfBirth.City}")  // { 'Smiljan', 'Idvor' }
+</programlisting>Or we can get the list of officers' names:<programlisting>IList officersNames = (IList) ExpressionEvaluator.GetValue(ieee, "Officers.Values.!{Name}")  // { 'Nikola Tesla', 'Mihajlo Pupin' }
+</programlisting></para>
+
+      <para>As you can see from the examples, projection uses
+      <literal>!{</literal><emphasis>projectionExpression</emphasis><literal>}</literal>
+      syntax and will return a new list of the same length as the original
+      list but typically with the elements of a different type.</para>
+
+      <para>On the other hand, selection, which uses
+      <literal>?{</literal><emphasis>projectionExpression</emphasis><literal>}</literal>
+      syntax, will filter the list and return a new list containing a subset
+      of the original element list. For example, selection would allow us to
+      easily get a list of Serbian inventors:<programlisting>IList serbianInventors = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{Nationality == 'Serbian'}")  // { tesla, pupin }
+</programlisting>Or to get a list of inventors that invented
+      sonar:<programlisting>IList sonarInventors = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{'Sonar' in Inventions}")  // { pupin }
+</programlisting>Or we can combine selection and projection to get a list of
+      sonar inventors' names:<programlisting>IList sonarInventorsNames = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{'Sonar' in Inventions}.!{Name}")  // { 'Mihajlo Pupin' }
+</programlisting></para>
+
+      <para>As a convenience, Spring.NET Expression Language also supports a
+      special syntax for selecting the first or last match. Unlike regular
+      selection, which will return an empty list if no matches are found,
+      first or last match selection expression will either return an instance
+      of the matched element, or <literal>null</literal> if no matching
+      elements were found. In order to return a first match you should prefix
+      your selection expression with <literal>^{</literal> instead of
+      <literal>?{</literal>, and to return last match you should use
+      <literal>${</literal> prefix:<programlisting>ExpressionEvaluator.GetValue(ieee, "Members.^{Nationality == 'Serbian'}.Name")  // 'Nikola Tesla'
+ExpressionEvaluator.GetValue(ieee, "Members.${Nationality == 'Serbian'}.Name")  // 'Mihajlo Pupin'
+</programlisting>Notice that we access the <literal>Name</literal> property
+      directly on the selection result, because an actual matched instance is
+      returned by the first and last match expression instead of a filtered
+      list.</para>
+    </sect2>
+
+    <sect2>
+      <title>Collection Processors and Aggregators</title>
+
+      <para>In addition to list projection and selection, Spring.NET
+      Expression Language also supports several collection processors, such as
+      <literal>distinct</literal>, <literal>nonNull</literal> and
+      <literal>sort</literal>, as well as a number of commonly used
+      aggregators, such as <literal>max</literal>, <literal>min</literal>,
+      <literal>count</literal>, <literal>sum</literal> and
+      <literal>average</literal>.</para>
+
+      <para>The difference between processors and aggregators is that
+      processors return a new or transformed collection, while aggregators
+      return a single value. Other than that, they are very similar -- both
+      processors and aggregators are invoked on a collection node using
+      standard method invocation expression syntax, which makes them very
+      simple to use and allows easy chaining of multiple processors.</para>
+
+      <sect3>
+        <title>Count Aggregator</title>
+
+        <para>The count aggregator is a safe way to obtain a number of items
+        in a collection. It can be applied to a collection of any type,
+        including arrays, which helps eliminate the decision on whether to use
+        <literal>Count</literal> or <literal>Length</literal> property
+        depending on the context. Unlike its standard .NET counterparts, count
+        aggregator can also be invoked on the <literal>null</literal> context
+        without throwing a <classname>NullReferenceException</classname>. It
+        will simply return zero in this case, which makes it much safer than
+        standard .NET properties within larger expression.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -3}.count()")  // 3
+ExpressionEvaluator.GetValue(null, "count()")  // 0
+</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Sum Aggregator</title>
+
+        <para>The sum aggregator can be used to calculate a total for the list
+        of numeric values. If numbers within the list are not of the same type
+        or precision, it will automatically perform necessary conversion and
+        the result will be the highest precision type. If any of the
+        collection elements is not a number, this aggregator will throw an
+        <classname>InvalidArgumentException</classname>.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.sum()")  // 13 (int)
+ExpressionEvaluator.GetValue(null, "{5, 5.8, 12.2, 1}.sum()")  // 24.0 (double)
+</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Average Aggregator</title>
+
+        <para>The average aggregator will return the average for the
+        collection of numbers. It will use the same type coercion rules, as
+        the sum aggregator in order to be as precise as possible. Just like
+        the sum aggregator, if any of the collection elements is not a number,
+        it will throw an
+        <classname>InvalidArgumentException</classname>.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -4, 10}.average()")  // 3
+ExpressionEvaluator.GetValue(null, "{1, 5, -2, 10}.average()")  // 3.5
+</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Minimum Aggregator</title>
+
+        <para>The minimum aggregator will return the smallest item in the
+        list. In order to determine what "the smallest" actually means, this
+        aggregator relies on the assumption that the collection items are of
+        the uniform type and that they implement the
+        <classname>IComparable</classname> interface. If that is not the case,
+        this aggregator will throw an
+        <classname>InvalidArgumentException</classname>.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.min()")  // -3
+ExpressionEvaluator.GetValue(null, "{'abc', 'efg', 'xyz'}.min()")  // 'abc'
+</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Maximum Aggregator</title>
+
+        <para>The maximum aggregator will return the largest item in the list.
+        In order to determine what "the largest" actually means, this
+        aggregator relies on the assumption that the collection items are of
+        the uniform type and that they implement
+        <classname>IComparable</classname> interface. If that is not the case,
+        this aggregator will throw an
+        <classname>InvalidArgumentException</classname>.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.max()")  // 10
+ExpressionEvaluator.GetValue(null, "{'abc', 'efg', 'xyz'}.max()")  // 'xyz'
+</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Non-null Processor</title>
+
+        <para>A non-null processor is a very simple collection processor that
+        eliminates all <literal>null</literal> values from the
+        collection.<programlisting>ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', null, 'abc', 'def', null}.nonNull()")  // { 'abc', 'xyz', 'abc', 'def' }
+ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', null, 'abc', 'def', null}.nonNull().distinct().sort()")  // { 'abc', 'def', 'xyz' }
+</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Distinct Processor</title>
+
+        <para>A distinct processor is very useful when you want to ensure that
+        you don't have duplicate items in the collection. It can also accept
+        an optional <literal>Boolean</literal> argument that will determine
+        whether <literal>null</literal> values should be included in the
+        results. The default is <literal>false</literal>, which means that
+        they will not be included. <programlisting>ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.distinct(true).sort()")  // { null, 'abc', 'def', 'xyz' }
+ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.distinct(false).sort()")  // { 'abc', 'def', 'xyz' }
+</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Sort Processor</title>
+
+        <para>The sort processor can be used to sort uniform collections of
+        elements that implement <classname>IComparable</classname>.</para>
+
+        <programlisting>ExpressionEvaluator.GetValue(null, "{1.2, 5.5, -3.3}.sort()")  // { -3.3, 1.2, 5.5 }
+ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.sort()")  // { null, 'abc', 'abc', 'def', 'def', 'xyz' }
+</programlisting>
+      </sect3>
+    </sect2>
+
+    <sect2>
+      <title>Spring Object References</title>
+
+      <para>Expressions can refer to objects that are declared in Spring's
+      application context using the syntax
+      <literal>@(</literal><emphasis>contextName</emphasis><literal>:</literal><emphasis>objectName</emphasis><literal>)</literal>.
+      If no contextName is specified the default root context name
+      (<literal>Spring.RootContext</literal>) is used. Using the application
+      context defined in the MovieFinder example from <xref
+      linkend="quickstarts" />, the following expression returns the number of
+      movies directed by Roberto Benigni. <programlisting>public static void Main()
+{
+  . . .
+
+// Retrieve context defined in the spring/context section of 
+// the standard .NET configuration file.
+IApplicationContext ctx = ContextRegistry.GetContext();
+
+int numMovies = (int) ExpressionEvaluator.GetValue(null, 
+                      "@(MyMovieLister).MoviesDirectedBy('Roberto Benigni').Length");
+
+  . . .
+}</programlisting> The variable numMovies is evaluated to 2 in this
+      example.</para>
+    </sect2>
+
+    <sect2>
+      <title>Lambda Expressions</title>
+
+      <para>A somewhat advanced, but a very powerful feature of Spring.NET
+      Expression Language are lambda expressions. Lambda expressions allow you
+      to define inline functions, which can then be used within your
+      expressions just like any other function or method.</para>
+
+      <para>The syntax for defining lambda expressions is:</para>
+
+      <para><literal>#</literal><emphasis>functionName</emphasis><literal> =
+      {|</literal><emphasis>argList</emphasis><literal>|
+      </literal><emphasis>functionBody</emphasis><literal> }</literal></para>
+
+      <para>For example, you could define a <literal>max</literal> function
+      and call it like this:<programlisting>ExpressionEvaluator.GetValue(null, "(#max = {|x,y| $x &gt; $y ? $x : $y }; #max(5,25))", new Hashtable())  // 25</programlisting></para>
+
+      <para>As you can see, any arguments defined for the expression can be
+      referenced within the function body using a <emphasis>local
+      variable</emphasis> syntax,
+      <literal>$</literal><emphasis>varName</emphasis>. Invocation of the
+      function defined using lambda expression is as simple as specifying the
+      comma-separated list of function arguments in parentheses, after the
+      function name.</para>
+
+      <para>Lambda expressions can be recursive, which means that you can
+      invoke the function within its own body:<programlisting>ExpressionEvaluator.GetValue(null, "(#fact = {|n| $n &lt;= 1 ? 1 : $n * #fact($n-1) }; #fact(5))", new Hashtable())  // 120</programlisting></para>
+
+      <para>Notice that in both examples above we had to specify a
+      <literal>variables</literal> parameter for the
+      <literal>GetValue</literal> method. This is because lambda expressions
+      are actually nothing more than parameterized variables and we need
+      variables dictionary in order to store them. If you don't specify a
+      valid <literal>IDictionary</literal> instance for the
+      <literal>variables</literal> parameter, you will get a runtime
+      exception.</para>
+
+      <para>Also, in both examples above we used an expression list in order
+      to define and invoke a function in a single expression. However, more
+      likely than not, you will want to define your functions once and then
+      use them within as many expressions as you need. Spring.NET provides an
+      easy way to pre-register your lambda expressions by exposing a static
+      <literal>Expression.RegisterFunction</literal> method, which takes
+      function name, lambda expression and variables dictionary to register
+      function in as parameters:<programlisting>IDictionary vars = new Hashtable();
+Expression.RegisterFunction("sqrt", "{|n| Math.Sqrt($n)}", vars);
+Expression.RegisterFunction("fact", "{|n| $n &lt;= 1 ? 1 : $n * #fact($n-1)}", vars);</programlisting>Once
+      the function registration is done, you can simply evaluate an expression
+      that uses these functions, making sure that the <literal>vars</literal>
+      dictionary is passed as a parameter to expression evaluation
+      engine:<programlisting>ExpressionEvaluator.GetValue(null, "#fact(5)", vars)  // 120
+ExpressionEvaluator.GetValue(null, "#sqrt(9)", vars)  // 3</programlisting></para>
+
+      <para>Finally, because lambda expressions are treated as variables, they
+      can be assigned to other variables or passed as parameters to other
+      lambda expressions. In the following example we are defining a delegate
+      function that accepts function <literal>f</literal> as the first
+      argument and parameter <literal>n</literal> that will be passed to
+      function <literal>f</literal> as the second. Then we invoke the
+      functions registered in the previous example, as well as the lambda
+      expression defined inline, through our delegate:<programlisting>Expression.RegisterFunction("delegate", "{|f, n| $f($n) }", vars);
+ExpressionEvaluator.GetValue(null, "#delegate(#sqrt, 4)", vars)  // 2
+ExpressionEvaluator.GetValue(null, "#delegate(#fact, 5)", vars)  // 120
+ExpressionEvaluator.GetValue(null, "#delegate({|n| $n ^ 2 }, 5)", vars)  // 25</programlisting>While
+      this particular example is not particularly useful, it does demonstrate
+      that lambda expressions are indeed treated as nothing more than
+      parameterized variables, which is important to remember.</para>
+    </sect2>
+
+    <sect2>
+      <title>Null Context</title>
+
+      <para>If you do not specify a root object, i.e. pass in null, then the
+      expressions evaluated either have to be literal values, i.e.
+      ExpressionEvaluator.GetValue(null, "2 + 3.14"), refer to classes that
+      have static methods or properties, i.e.
+      ExpressionEvaluator.GetValue(null, "DateTime.Today"), create new
+      instances of objects, i.e. ExpressionEvaluator.GetValue(null, "new
+      DateTime(2004, 8, 14)") or refer to other objects such as those in the
+      variable dictionary or in the IoC container. The latter two usages will
+      be discussed later.</para>
+    </sect2>
+  </sect1>
+
+  <!-- SAMPLE CLASSES AND DATA -->
+
+  <sect1 id="expressions-classes">
+    <title>Classes used in the examples</title>
+
+    <para>The following simple classes are used to demonstrate the
+    functionality of the expression language.</para>
+
+    <programlisting>public class Inventor
+{
+    public string Name;
+    public string Nationality;
+    public string[] Inventions;
+    private DateTime dob;
+    private Place pob;
+
+    public Inventor() : this(null, DateTime.MinValue, null)
+    {}
+
+    public Inventor(string name, DateTime dateOfBirth, string nationality)
+    {
+        this.Name = name;
+        this.dob = dateOfBirth;
+        this.Nationality = nationality;
+        this.pob = new Place();
+    }
+
+    public DateTime DOB
+    {
+        get { return dob; }
+        set { dob = value; }
+    }
+
+    public Place PlaceOfBirth
+    {
+        get { return pob; }
+    }
+
+    public int GetAge(DateTime on)
+    {
+        // not very accurate, but it will do the job ;-)
+        return on.Year - dob.Year;
+    }
+}
+
+public class Place
+{
+    public string City;
+    public string Country;
+}
+
+public class Society
+{
+    public string Name;
+    public static string Advisors = "advisors";
+    public static string President = "president";
+
+    private IList members = new ArrayList();
+    private IDictionary officers = new Hashtable();
+
+    public IList Members
+    {
+        get { return members; }
+    }
+
+    public IDictionary Officers
+    {
+        get { return officers; }
+    }
+
+    public bool IsMember(string name)
+    {
+        bool found = false;
+        foreach (Inventor inventor in members)
+        {
+            if (inventor.Name == name)
+            {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+}</programlisting>
+
+    <para>The code listings in this chapter use instances of the data
+    populated with the following information.</para>
+
+    <programlisting>Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+tesla.Inventions = new string[]
+    {
+        "Telephone repeater", "Rotating magnetic field principle",
+        "Polyphase alternating-current system", "Induction motor",
+        "Alternating-current power transmission", "Tesla coil transformer",
+        "Wireless communication", "Radio", "Fluorescent lights"
+    };
+tesla.PlaceOfBirth.City = "Smiljan";
+
+Inventor pupin = new Inventor("Mihajlo Pupin", new DateTime(1854, 10, 9), "Serbian");
+pupin.Inventions = new string[] {"Long distance telephony &amp; telegraphy", "Secondary X-Ray radiation", "Sonar"};
+pupin.PlaceOfBirth.City = "Idvor";
+pupin.PlaceOfBirth.Country = "Serbia";
+
+Society ieee = new Society();
+ieee.Members.Add(tesla);
+ieee.Members.Add(pupin);
+ieee.Officers["president"] = pupin;
+ieee.Officers["advisors"] = new Inventor[] {tesla, pupin};</programlisting>
+  </sect1>
+</chapter>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net" >
+  <description>An example that demonstrates contributing on implementation of MovieFinder progammatically.</description>
+
+
+  <object id="MyMovieLister"
+        type="Spring.IocQuickStart.MovieFinder.MovieLister, Spring.IocQuickStart.MovieFinder">
+    <property name="movieFinder" ref="AnotherMovieFinder"/>
+  </object>
+
+
+</objects>

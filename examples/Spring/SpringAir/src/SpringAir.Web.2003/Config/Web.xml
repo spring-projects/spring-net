@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <!-- Localization-related config objects -->
+  <object id="cultureResolver" type="Spring.Globalization.Resolvers.SessionCultureResolver, Spring.Web" />
+  <object id="localizer" type="Spring.Globalization.Localizers.ResourceSetLocalizer, Spring.Core" />
+  <object id="messageSource" type="Spring.Context.Support.ResourceSetMessageSource, Spring.Core">
+    <property name="ResourceManagers">
+      <list>
+        <value>SpringAir.Resources.Strings, SpringAir.Web</value>
+      </list>
+    </property>
+    <property name="UseCodeAsDefaultMessage" value="true" />
+  </object>
+ 
+  <!-- Validation errors renderers -->
+  <object id="iconRenderer" type="Spring.Web.UI.Validation.IconValidationErrorsRenderer, Spring.Web">
+    <property name="IconSrc" value="validation-error.gif" />
+  </object>
+  <object id="divRenderer" type="Spring.Web.UI.Validation.DivValidationErrorsRenderer, Spring.Web">
+    <property name="CssClass" value="validationError" />
+  </object>
+
+  <!-- Validation error controls injection templates -->
+  <object id="Spring.Web.UI.Controls.ValidationError" abstract="true">
+    <property name="Renderer" ref="iconRenderer"/>
+  </object>
+  <object id="Spring.Web.UI.Controls.ValidationSummary" abstract="true">
+    <property name="Renderer" ref="divRenderer"/>
+  </object>
+ 
+  <!-- Base page definition. All other pages inherit these settings -->
+  <object id="standardPage" abstract="true">
+    <property name="MasterPageFile" value="~/Web/StandardTemplate.ascx" />
+    <property name="CultureResolver" ref="cultureResolver" />
+    <property name="Localizer" ref="localizer" />
+    <property name="CssRoot" value="Web/CSS" />
+    <property name="ImagesRoot" value="Web/Images" />
+  </object>
+ 
+</objects>

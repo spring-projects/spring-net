@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <object type="Spring.Objects.Factory.Config.TypeAliasConfigurer">
+    <property name="TypeAliases">
+      <dictionary>
+        <entry key="TestObject" value="Spring.Objects.TestObject, Spring.Core.Tests" />
+      </dictionary>
+    </property>
+  </object>
+
+  <object id="testObject1" type="TestObject"/>
+
+  <object id="baseTestObject" type="TestObject" abstract="true"/>
+  <object id="testObject2" parent="baseTestObject"/>
+
+  <object id="testObject3" type="TestObject">
+    <constructor-arg name="name" value="Bruno"/>
+    <constructor-arg name="age" value="26"/>
+  </object>
+
+</objects>

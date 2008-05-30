@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+	
+	<description>webServices</description>
+			
+	<object id="calculatorService" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services">
+    <!--<property name="ServiceUri" value="http://localhost/Spring.Calculator.2003/calculatorService.asmx"/>-->
+    <property name="ServiceUri" value="assembly://Spring.Calculator.ClientApp/Spring.Calculator.ClientApp.Config.WebServices2003/calculatorService.wsdl"/>
+    <property name="ServiceInterface" value="Spring.Calculator.Interfaces.IAdvancedCalculator, Spring.Calculator.Contract"/>
+    <!-- Dependency injection on Factory's product : the proxy instance of type SoapHttpClientProtocol -->
+    <property name="ProductTemplate">
+      <object>
+        <property name="Timeout" value="10000" /> <!-- 10s -->
+      </object>
+    </property>
+	</object>
+	
+</objects>

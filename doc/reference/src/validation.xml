@@ -1,0 +1,866 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="validation">
+  <title id="val-title">Validation Framework</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Data validation is a very important part of any enterprise
+    application. ASP.NET has a validation framework but it is very limited in
+    scope and starts falling apart as soon as you need to perform more complex
+    validations. Problems with the out of the box ASP.NET validation framework
+    are well <ulink
+    url="http://www.peterblum.com/VAM/ValMain.aspx">documented</ulink> by
+    Peter Blum on his web site, so we are not going to repeat them here. Peter
+    has also built a nice replacement for the standard ASP.NET validation
+    framework, which is worth looking into if you prefer the standard ASP.NET
+    validation mechanism to the one offered by Spring.NET for some reason.
+    Both frameworks will allow you to perform very complex validations but we
+    designed the Spring.NET validation framework differently for the reasons
+    described below.</para>
+
+    <para>On the Windows Forms side the situation is even worse. Out of the
+    box data validation features are completely inadequate as pointed out by
+    Ian Griffiths in this <ulink
+    url="http://pluralsight.com/wiki/default.aspx/Craig/WinFormsValidationBroken.html">article</ulink>.
+    One of the major problems we saw in most validation frameworks available
+    today, both open source and commercial, is that they are tied to a
+    specific presentation technology. The ASP.NET validation framework uses
+    ASP.NET controls to define validation rules, so these rules end up in the
+    HTML markup of your pages. Peter Blum's framework uses the same approach.
+    In our opinion, validation is not applicable only to the presentation
+    layer so there is no reason to tie it to any particular technology. As
+    such, the Spring.NET Validation Framework is designed in a way that
+    enables data validation in different application layers using the same
+    validation rules.</para>
+
+    <para>The goals of the validation framework are the following:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Allow for the validation of any object, whether it is a UI
+        control or a domain object.</para>
+      </listitem>
+
+      <listitem>
+        <para>Allow the same validation framework to be used in both Windows
+        Forms and ASP.NET applications, as well as in the service layer (to
+        validate parameters passed to the service, for example).</para>
+      </listitem>
+
+      <listitem>
+        <para>Allow composition of the validation rules so arbitrarily complex
+        validation rule sets can be constructed.</para>
+      </listitem>
+
+      <listitem>
+        <para>Allow validators to be conditional so they only execute if a
+        specific condition is met.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>The following sections will describe in more detail how these goals
+    were achieved and show you how to use the Spring.NET Validation Framework
+    in your applications.</para>
+  </section>
+
+  <section>
+    <title>Example Usage</title>
+
+    <para>Decoupling validation from presentation was the major goal that
+    significantly influenced design of the validation framework. We wanted to
+    be able to define a set of validation rules that are completely
+    independent from the presentation so we can reuse them (or at least have
+    the ability to reuse them) in different application layers. This meant
+    that the approach taken by Microsoft ASP.NET team would not work and
+    custom validation controls were not an option. The approach taken was to
+    configure validation rules just like any other object managed by Spring -
+    within the application context. However, due to possible complexity of the
+    validation rules we decided not to use the standard Spring.NET
+    configuration schema for validator definitions but to instead provide a
+    more specific and easier to use custom configuration schema for
+    validation. Note that the validation framework is not tied to the use of
+    XML, you can use its API Programatically. The following example shows
+    validation rules defined for the Trip object in the SpringAir sample
+    application:</para>
+
+    <para><programlisting>&lt;objects xmlns="http://www.springframework.net" xmlns:v="http://www.springframework.net/validation"&gt;
+
+  &lt;object type="TripForm.aspx" parent="standardPage"&gt;
+     &lt;property name="TripValidator" ref="tripValidator" /&gt;
+  &lt;/object&gt;
+
+  &lt;v:group id="tripValidator"&gt;
+
+     &lt;v:required id="departureAirportValidator" test="StartingFrom.AirportCode"&gt;
+        &lt;v:message id="error.departureAirport.required" providers="departureAirportErrors, validationSummary"/&gt;
+     &lt;/v:required&gt;
+
+     &lt;v:group id="destinationAirportValidator"&gt;
+        &lt;v:required test="ReturningFrom.AirportCode"&gt;
+           &lt;v:message id="error.destinationAirport.required" providers="destinationAirportErrors, validationSummary"/&gt;
+        &lt;/v:required&gt;
+        &lt;v:condition test="ReturningFrom.AirportCode != StartingFrom.AirportCode" when="ReturningFrom.AirportCode != ''"&gt;
+           &lt;v:message id="error.destinationAirport.sameAsDeparture" providers="destinationAirportErrors, validationSummary"/&gt;
+        &lt;/v:condition&gt;
+     &lt;/v:group&gt;
+
+     &lt;v:group id="departureDateValidator"&gt;
+        &lt;v:required test="StartingFrom.Date"&gt;
+           &lt;v:message id="error.departureDate.required" providers="departureDateErrors, validationSummary"/&gt;
+        &lt;/v:required&gt;
+        &lt;v:condition test="StartingFrom.Date &gt;= DateTime.Today" when="StartingFrom.Date != DateTime.MinValue"&gt;
+           &lt;v:message id="error.departureDate.inThePast" providers="departureDateErrors, validationSummary"/&gt;
+        &lt;/v:condition&gt;
+     &lt;/v:group&gt;
+
+     &lt;v:group id="returnDateValidator" when="Mode == 'RoundTrip'"&gt;
+        &lt;v:required test="ReturningFrom.Date"&gt;
+           &lt;v:message id="error.returnDate.required" providers="returnDateErrors, validationSummary"/&gt;
+        &lt;/v:required&gt;
+        &lt;v:condition test="ReturningFrom.Date &gt;= StartingFrom.Date" when="ReturningFrom.Date != DateTime.MinValue"&gt;
+           &lt;v:message id="error.returnDate.beforeDeparture" providers="returnDateErrors, validationSummary"/&gt;
+        &lt;/v:condition&gt;
+     &lt;/v:group&gt;
+
+  &lt;/v:group&gt;
+
+&lt;/objects&gt;</programlisting>There are a few things to note in the example
+    above:<itemizedlist>
+        <listitem>
+          <para>You need to reference the validation schema by adding a
+          <literal>xmlns:v="http://www.springframework.net/validation"</literal>
+          namespace declaration to the root element.</para>
+        </listitem>
+
+        <listitem>
+          <para>You can mix standard object definitions and validator
+          definitions in the same configuration file as long as both schemas
+          are referenced.</para>
+        </listitem>
+
+        <listitem>
+          <para>The Validator defined in the configuration file is identified
+          by and id attribute and can be referenced in the standard Spring
+          way, i.e. the injection of tripValidator into TripForm.aspx page
+          definition in the first &lt;object&gt; tag above.</para>
+        </listitem>
+
+        <listitem>
+          <para>The validation framework uses Spring's powerful expression
+          evaluation engine to evaluate both validation rules and
+          applicability conditions for the validator. As such, any valid
+          Spring expression can be specified within the test and when
+          attributes of any validator.</para>
+        </listitem>
+      </itemizedlist></para>
+
+    <para>The example above shows many of the features of the framework, so
+    let's discuss them one by one in the following sections.</para>
+  </section>
+
+  <section>
+    <title>Validator Groups</title>
+
+    <para>Validators can be grouped together. This is important for many
+    reasons but the most typical usage scenario is to group multiple
+    validation rules that apply to the same value. In the example above there
+    is a validator group for almost every property of the Trip instance. There
+    is also a top-level group for the Trip object itself that groups all other
+    validators.</para>
+
+    <para>There are three types of validator groups each with a different
+    behavior:</para>
+
+    <para>While the first type (AND) is definitely the most useful, the other
+    two allow you to implement some specific validation scenarios in a very
+    simple way, so you should keep them in mind when designing your validation
+    rules.</para>
+
+    <table>
+      <title>Validator Groups</title>
+
+      <tgroup cols="3">
+        <colspec align="left" colname="c1" colwidth="1*" />
+
+        <colspec colname="c2" colwidth="5*" />
+
+        <colspec colname="c3" colwidth="18*" />
+
+        <thead>
+          <row>
+            <entry>Type</entry>
+
+            <entry>XML Tag</entry>
+
+            <entry>Behavior</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>AND</entry>
+
+            <entry><literal>group</literal></entry>
+
+            <entry>Returns <emphasis role="bold"><emphasis
+            role="bold"><emphasis>true</emphasis></emphasis></emphasis> only
+            if all contained validators return <emphasis
+            role="bold"><emphasis>true</emphasis></emphasis>. This is the most
+            commonly used validator group.</entry>
+          </row>
+
+          <row>
+            <entry>OR</entry>
+
+            <entry><literal>any</literal></entry>
+
+            <entry>Returns <emphasis
+            role="bold"><emphasis>true</emphasis></emphasis> if one or more of
+            the contained validators return <emphasis
+            role="bold"><emphasis>true</emphasis></emphasis>.</entry>
+          </row>
+
+          <row>
+            <entry>XOR</entry>
+
+            <entry><literal>exclusive</literal></entry>
+
+            <entry>Returns true if only one of the contained validators return
+            true.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>One thing to remember is that a validator group is a validator like
+    any other and can be used anywhere validator is expected. You can nest
+    groups within other groups and reference them using validator reference
+    syntax (described later), so they really allow you to structure your
+    validation rules in the most reusable way.</para>
+  </section>
+
+  <section>
+    <title>Validators</title>
+
+    <para>Ultimately, you will have one or more validator definitions for each
+    piece of data that you want to validate. Spring.NET has several built-in
+    validators that are sufficient for most validations, even fairly complex
+    ones. The framework is extensible so you can write your own custom
+    validators and use them in the same way as the built-in ones.</para>
+
+    <section>
+      <title>Condition Validator</title>
+
+      <para>The condition validator evaluates any logical expression that is
+      supported by Spring's evaluation engine. The syntax is</para>
+
+      <programlisting>&lt;v:<emphasis role="bold">condition</emphasis> id="id" test="testCondition" when="applicabilityCondition" parent="parentValidator"&gt;
+  actions
+&lt;/v:<emphasis role="bold">condition</emphasis>&gt;</programlisting>
+
+      <para>An example is shown below</para>
+
+      <programlisting>&lt;v:condition test="StartingFrom.Date &gt;= DateTime.Today" when="StartingFrom.Date != DateTime.MinValue"&gt;
+   &lt;v:message id="error.departureDate.inThePast" providers="departureDateErrors, validationSummary"/&gt;
+&lt;/v:condition&gt;</programlisting>
+
+      <para>In this example the StartingFrom property of the Trip object is
+      compared to see if it is later than the current date, i.e. DateTime but
+      only when the date has been set (the initial value of StartingFrom.Date
+      was set to DateTime.MinValue).</para>
+
+      <para>The condition validator could be considered "the mother of all
+      validators". You can use it to achieve almost anything that can be
+      achieved by using other validator types, but in some cases the test
+      expression might be very complex, which is why you should use more
+      specific validator type if possible. However, condition validator is
+      still your best bet if you need to check whether particular value
+      belongs to a particular range, or perform a similar test, as those
+      conditions are fairly easy to write.</para>
+
+      <para><note>
+          <para>Keep in mind that Spring.NET Validation Framework typically
+          works with domain objects. This is after data binding from the
+          controls has been performed so that the object being validated is
+          strongly typed. This means that you can easily compare numbers and
+          dates without having to worry if the string representation is
+          comparable.</para>
+        </note></para>
+    </section>
+
+    <section>
+      <title>Required Validator</title>
+
+      <para>This validator ensures that the specified test value is not empty.
+      The syntax is</para>
+
+      <programlisting>&lt;v:<emphasis role="bold">required</emphasis> id="id" test="requiredValue" when="applicabilityCondition" parent="parentValidator"&gt;
+  actions
+&lt;/v:<emphasis role="bold">required</emphasis>&gt;</programlisting>
+
+      <para>An example is shown below</para>
+
+      <programlisting>&lt;v:required test="ReturningFrom.AirportCode"&gt;
+   &lt;v:message id="error.destinationAirport.required" providers="destinationAirportErrors, validationSummary"/&gt;
+&lt;/v:required&gt;</programlisting>
+
+      <para>The specific tests done to determine if the required value is set
+      is listed below</para>
+
+      <table>
+        <title>Rules to determine if required value is valid</title>
+
+        <tgroup cols="2">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry>System.Type</entry>
+
+              <entry>Test</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>System.Type</entry>
+
+              <entry>Type exists</entry>
+            </row>
+
+            <row>
+              <entry>System.String</entry>
+
+              <entry>not null or an empty string</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para></para>
+
+      <para>Required validator is also one of the most commonly used ones, and
+      it is much more powerful than the ASP.NET Required validator, because it
+      works with many other data types other than strings. For example, it
+      will allow you to validate <literal>DateTime</literal> instances (both
+      <literal>MinValue</literal> and <literal>MaxValue</literal> return
+      <literal>false</literal>), integer and decimal numbers, as well as any
+      reference type, in which case it returns <literal>true</literal> for a
+      non-null value and <literal>false</literal> for
+      <literal>{{null}}</literal>s.</para>
+
+      <para>The test attribute for the required validator will typically
+      specify an expression that resolves to a property of a domain object,
+      but it could be any valid expression that returns a value, including a
+      method call.</para>
+    </section>
+
+    <section>
+      <title>Regular Expression Validator</title>
+
+      <para>The syntax is</para>
+
+      <programlisting>&lt;v:<emphasis role="bold">regex</emphasis> id="id" test="valueToEvaluate" when="applicabilityCondition" parent="parentValidator"&gt;
+  &lt;<emphasis role="bold">v:property name="Expression" value="regularExpressionToMatch"</emphasis>/&gt;
+  &lt;v:property name="Options" value="regexOptions"/&gt;
+  actions
+&lt;/v:<emphasis role="bold">regex</emphasis>&gt;</programlisting>
+
+      <para>An example is shown below</para>
+
+      <programlisting>&lt;v:regex test="ReturningFrom.AirportCode"&gt;
+   &lt;v:property name="Expression" value="[A-Z][A-Z][A-Z]"/&gt;
+   &lt;v:message id="error.destinationAirport.threeCharacters" providers="destinationAirportErrors, validationSummary"/&gt;
+&lt;/v:regex&gt;</programlisting>
+
+      <para>Regular expression validator is very useful when validating values
+      that need to conform to some predefined format, such as telephone
+      numbers, email addresses, URLs, etc.</para>
+
+      <para>One major difference of the regular expression validator compared
+      to other built-in validator types is that you need to set a required
+      <literal>Expression</literal> property to a regular expression to match
+      against.</para>
+    </section>
+
+    <section>
+      <title>Generic Validator</title>
+
+      <para>The syntax is</para>
+
+      <programlisting>&lt;v:<emphasis role="bold">validator</emphasis> id="id" test="requiredValue" when="applicabilityCondition" type="validatorType" parent="parentValidator"&gt;
+  actions
+&lt;/v:<emphasis role="bold">validator</emphasis>&gt;</programlisting>
+
+      <para>An example is shown below</para>
+
+      <programlisting>&lt;v:validator test="ReturningFrom.AirportCode" type="MyNamespace.MyAirportCodeValidator, MyAssembly"&gt;
+   &lt;v:message id="error.destinationAirport.invalid" providers="destinationAirportErrors, validationSummary"/&gt;
+&lt;/v:required&gt;</programlisting>
+
+      <para>Generic validator allows you to plug in your custom validator by
+      specifying its type name. Custom validators are very simple to
+      implement, because all you need to do is extend
+      <literal>BaseValidator</literal> class and implement abstract
+      <literal>bool Validate(object objectToValidate)</literal> method. Your
+      implementation simply needs to return <literal>true</literal> if it
+      determines that object is valid, or <literal>false</literal>
+      otherwise</para>
+    </section>
+
+    <section>
+      <title>Conditional Validator Execution</title>
+
+      <para>As you can see from the examples above, each validator (and
+      validator group) allows you to define its applicability condition by
+      specifying a logical expression as the value of the when attribute. This
+      feature is very useful and is one of the major deficiencies in the
+      standard ASP.NET validation framework, because in many cases specific
+      validators need to be turned on or off based on the values of the object
+      being validated.</para>
+
+      <para>For example, when validating a Trip object we need to validate
+      return date only if the Trip.Mode property is set to the
+      TripMode.RoundTrip enum value. In order to achieve that we created
+      following validator definition:</para>
+
+      <programlisting>&lt;v:group id="returnDateValidator" when="Mode == 'RoundTrip'"&gt;
+      // nested validators
+&lt;/v:group&gt;</programlisting>
+
+      <para>Validators within this group will only be evaluated for round
+      trips.</para>
+
+      <note>
+        <para>You should also note that you can compare enums using the string
+        value of the enumeration. You can also use fully qualified enum name,
+        such as:</para>
+
+        <para><literal>Mode == TripMode.RoundTrip</literal></para>
+
+        <para>However, in this case you need to make sure that alias for the
+        TripMode enum type is registered using Spring's standard type aliasing
+        mechanism.</para>
+      </note>
+    </section>
+  </section>
+
+  <section>
+    <title>Validator Actions</title>
+
+    <para>Validation actions are executed every time the containing validator
+    is executed. They allow you to do anything you want based on the result of
+    the validation. By far the most common use of the validation action is to
+    add validation error message to the errors collection, but theoretically
+    you could do anything you want. Because adding validation error messages
+    to the errors collection is such a common scenario, Spring.NET validation
+    schema defines a separate XML tag for this type of validation
+    action.</para>
+
+    <section>
+      <title>Error Message Action</title>
+
+      <para>The syntax is</para>
+
+      <programlisting>&lt;v:message id="messageId" providers="errorProviderList" when="messageApplicabilityCondition"&gt;
+  &lt;v:param value="paramExpression"/&gt;
+&lt;/v:message&gt;</programlisting>
+
+      <para>An example is shown below</para>
+
+      <programlisting>&lt;v:message id="error.departureDate.inThePast" providers="departureDateErrors, validationSummary"&gt;
+   &lt;v:param value="StartingFrom.Date.ToString('D')"/&gt;
+   &lt;v:param value="DateTime.Today.ToString('D')"/&gt;
+&lt;/v:message&gt;</programlisting>
+
+      <para>There are several things that you have to be aware of when dealing
+      with error messages:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>id</literal> is used to look up the error message in
+          the appropriate Spring.NET message source.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>providers</literal> specifies a comma separated list
+          of "error buckets" particular error message should be added to.
+          These "buckets" will later be used by the particular presentation
+          technology in order to display error messages as necessary.</para>
+        </listitem>
+
+        <listitem>
+          <para>a message can have zero or more parameters. Each parameter is
+          an expression that will be resolved using current validation context
+          and the resolved values will be passed as parameters to
+          <literal>IMessageSource.GetMessage</literal> method, which will
+          return the fully resolved message.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Generic Actions</title>
+
+      <para>The syntax is</para>
+
+      <programlisting>&lt;v:action type="actionType" when="actionApplicabilityCondition"&gt;
+  properties
+&lt;/v:action&gt;</programlisting>
+
+      <para>An example is shown below</para>
+
+      <programlisting>&lt;v:action type="Spring.Validation.Actions.ExpressionAction, Spring.Core" when="#page != null"&gt;
+   &lt;v:property name="Valid" value="#page.myPanel.Visible = true"/&gt;
+   &lt;v:property name="Invalid" value="#page.myPanel.Visible = false"/&gt;
+&lt;/v:action&gt;</programlisting>
+
+      <para>Generic actions can be used to perform all kinds of validation
+      actions. In simple cases, such as in the example above where we turn
+      control's visibility on or off depending on the validation result, you
+      can use the built-in <literal>ExpressionAction</literal> class and
+      simply specify expressions to be evaluated based on the validator
+      result.</para>
+
+      <para>In other situations you may want to create your own action
+      implementation, which is fairly simple thing to do – all you need to do
+      is implement <literal>IValidationAction</literal> interface:</para>
+
+      <programlisting>public interface IValidationAction
+{
+    /// &lt;summary&gt;
+    /// Executes the action.
+    /// &lt;/summary&gt;
+    /// &lt;param name="isValid"&gt;Whether associated validator is valid or not.&lt;/param&gt;
+    /// &lt;param name="validationContext"&gt;Validation context.&lt;/param&gt;
+    /// &lt;param name="contextParams"&gt;Additional context parameters.&lt;/param&gt;
+    /// &lt;param name="errors"&gt;Validation errors container.&lt;/param&gt;
+    void Execute(bool isValid, object validationContext, IDictionary contextParams, ValidationErrors errors);
+}</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Validator References</title>
+
+    <para>Sometimes it is not possible (or desirable) to nest all the
+    validation rules within a single top-level validator group. For example,
+    if you have an object graph where both ObjectA and ObjectB have a
+    reference to ObjectC, you might want to set up validation rules for
+    ObjectC only once and reference them from the validation rules for both
+    ObjectA and ObjectB, instead of duplicating them within both
+    definitions.</para>
+
+    <para>The syntax is shown below</para>
+
+    <programlisting>&lt;v:ref name="referencedValidatorId" context="validationContextForTheReferencedValidator"/&gt;</programlisting>
+
+    <para>An example is shown below</para>
+
+    <programlisting>&lt;v:group id="objectA.validator"&gt;
+   &lt;v:ref name="objectC.validator" context="MyObjectC"/&gt;
+   // other validators for ObjectA
+&lt;/v:group&gt;
+
+&lt;v:group id="objectB.validator"&gt;
+   &lt;v:ref name="objectC.validator" context="ObjectCProperty"/&gt;
+   // other validators for ObjectB
+&lt;/v:group&gt;
+
+&lt;v:group id="objectC.Validator"&gt;
+   // validators for ObjectC
+&lt;/v:group&gt;</programlisting>
+
+    <para>It is as simple as that — you define validation rules for ObjectC
+    separately and reference them from within other validation groups.
+    Important thing to realize that in most cases you will also want to
+    "narrow" the context for the referenced validator, typically by specifying
+    the name of the property that holds referenced object. In the example
+    above, ObjectA.MyObjectC and ObjectB.ObjectCProperty are both of type
+    ObjectC, which objectC.validator expects to receive as the validation
+    context.</para>
+  </section>
+
+  <section>
+    <title>Progammatic usage</title>
+
+    <para>You can also create Validators programmatically using the API. An
+    example is shown below</para>
+
+    <programlisting>UserInfo userInfo = new UserInfo();  // has Name and Password props
+
+ValidatorGroup userInfoValidator = new ValidatorGroup();
+
+userInfoValidator.Validators
+                 .Add(new RequiredValidator("Name", null));
+
+userInfoValidator.Validators
+                 .Add(new RequiredValidator("Password", null));
+
+ValidationErrors errors = new ValidationErrors();
+bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
+</programlisting>
+
+    <para>No matter if you create your validators programmatically or
+    declaratively, you can invoke them in service side code via the 'Validate'
+    method shown above and then handle error conditions. Spring provides AOP
+    parameter validation advice as part of ithe <link
+    linkend="aop-aspect-library">aspect library</link> which may also be
+    useful for performing server-side validation.</para>
+  </section>
+
+  <section id="validation-aspnet-usage">
+    <title>Usage tips within ASP.NET</title>
+
+    <para>Now that you know how to configure validation rules, let's see what
+    it takes to evaluate those rules within your typical ASP.NET application
+    and to display error messages.</para>
+
+    <para>The first thing you need to do is inject validators you want to use
+    into your ASP.NET page, as shown in the example below:</para>
+
+    <programlisting>&lt;objects xmlns="http://www.springframework.net" xmlns:v="http://www.springframework.net/validation"&gt;
+
+  &lt;object type="TripForm.aspx" parent="standardPage"&gt;
+     &lt;property name="TripValidator" ref="tripValidator" /&gt;
+  &lt;/object&gt;
+
+  &lt;v:group id="tripValidator"&gt;
+     // our validation rules
+  &lt;/v:group&gt;
+
+&lt;/objects&gt;</programlisting>
+
+    <para>Once that's done, you need to perform validation in one or more of
+    the page event handlers, which typically looks similar to this:</para>
+
+    <programlisting>public void SearchForFlights(object sender, EventArgs e)
+{
+    if (Validate(Controller.Trip, tripValidator))
+    {
+        Process.SetView(Controller.SearchForFlights());
+    }
+}</programlisting>
+
+    <note>
+      <para>Keep in mind that your ASP.NET page needs to extend
+      Spring.Web.UI.Page in order for the code above to work.</para>
+    </note>
+
+    <para>Finally, you need to define where validation errors should be
+    displayed by adding one or more
+    <literal>&lt;spring:validationError/&gt;</literal> and
+    <literal>&lt;spring:validationSummary/&gt;</literal> controls to the
+    ASP.NET form:</para>
+
+    <programlisting>&lt;%@ Page Language="c#" MasterPageFile="~/Web/StandardTemplate.master" Inherits="TripForm" CodeFile="TripForm.aspx.cs" %&gt;
+&lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
+
+&lt;asp:Content ID="head" ContentPlaceHolderID="head" runat="server"&gt;
+
+    &lt;script language="javascript" type="text/javascript"&gt;
+      &lt;!--
+      function showReturnCalendar(isVisible)
+      {
+          document.getElementById('&lt;%= returningOnDate.ClientID %&gt;').style.visibility = isVisible? '': 'hidden';
+          document.getElementById('returningOnCalendar').style.visibility = isVisible? '': 'hidden';
+      }
+      --&gt;
+    &lt;/script&gt;
+
+&lt;/asp:Content&gt;
+
+&lt;asp:Content ID="body" ContentPlaceHolderID="body" runat="server"&gt;
+    &lt;div style="text-align: center"&gt;
+        &lt;h4&gt;&lt;asp:Label ID="caption" runat="server"&gt;&lt;/asp:Label&gt;&lt;/h4&gt;
+        <emphasis role="bold">&lt;spring:ValidationSummary ID="validationSummary" runat="server" /&gt;</emphasis>
+        &lt;table&gt;
+            &lt;tr class="formLabel"&gt;
+                &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+                &lt;td colspan="3"&gt;
+                    &lt;spring:RadioButtonGroup ID="tripMode" runat="server"&gt;
+                        &lt;asp:RadioButton ID="OneWay" onclick="showReturnCalendar(false);" runat="server" /&gt;
+                        &lt;asp:RadioButton ID="RoundTrip" onclick="showReturnCalendar(true);" runat="server" /&gt;
+                    &lt;/spring:RadioButtonGroup&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="formLabel" align="right"&gt;
+                    &lt;asp:Label ID="leavingFrom" runat="server" /&gt;&lt;/td&gt;
+                &lt;td nowrap="nowrap"&gt;
+                    &lt;asp:DropDownList ID="leavingFromAirportCode" AutoCallBack="true" runat="server" /&gt;
+                    <emphasis role="bold">&lt;spring:ValidationError id="departureAirportErrors" runat="server" /&gt;</emphasis>
+                &lt;/td&gt;
+                &lt;td class="formLabel" align="right"&gt;
+                    &lt;asp:Label ID="goingTo" runat="server" /&gt;&lt;/td&gt;
+                &lt;td nowrap="nowrap"&gt;
+                    &lt;asp:DropDownList ID="goingToAirportCode" AutoCallBack="true" runat="server" /&gt;
+                    <emphasis role="bold">&lt;spring:ValidationError id="destinationAirportErrors" runat="server" /&gt;</emphasis>
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="formLabel" align="right"&gt;
+                    &lt;asp:Label ID="leavingOn" runat="server" /&gt;&lt;/td&gt;
+                &lt;td nowrap="nowrap"&gt;
+                    &lt;spring:Calendar ID="leavingFromDate" runat="server" Width="75px" AllowEditing="true" Skin="system" /&gt;
+                    <emphasis role="bold">&lt;spring:ValidationError id="departureDateErrors" runat="server" /&gt;</emphasis>
+                &lt;/td&gt;
+                &lt;td class="formLabel" align="right"&gt;
+                    &lt;asp:Label ID="returningOn" runat="server" /&gt;&lt;/td&gt;
+                &lt;td nowrap="nowrap"&gt;
+                    &lt;div id="returningOnCalendar"&gt;
+                        &lt;spring:Calendar ID="returningOnDate" runat="server" Width="75px" AllowEditing="true" Skin="system" /&gt;
+                        <emphasis role="bold">&lt;spring:ValidationError id="returnDateErrors" runat="server" /&gt;</emphasis>
+                    &lt;/div&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="buttonBar" colspan="4"&gt;
+                    &lt;br/&gt;
+                    &lt;asp:Button ID="findFlights" runat="server"/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+
+    &lt;script language="javascript" type="text/javascript"&gt;
+          if (document.getElementById('&lt;%= tripMode.ClientID %&gt;').value == 'OneWay')
+              showReturnCalendar(false);
+          else
+              showReturnCalendar(true);
+    &lt;/script&gt;
+
+&lt;/asp:Content&gt;</programlisting>
+
+    <section>
+      <title>Rendering Validation Errors</title>
+
+      <para>Spring.NET allows you to render validation errors within the page
+      in several different ways, and if none of them suits your needs you can
+      implement your own validation errors renderer. Implementations of the
+      <literal>Spring.Web.Validation.IValidationErrorsRenderer</literal> that
+      ship with the framework are:</para>
+
+      <table>
+        <title>Validation Renderers</title>
+
+        <tgroup cols="3">
+          <colspec colname="c1" colwidth="1*" />
+
+          <colspec colname="c2" colwidth="5*" />
+
+          <colspec colname="c3" colwidth="10*" />
+
+          <thead>
+            <row>
+              <entry align="left">Name</entry>
+
+              <entry align="center">Class</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>Block</entry>
+
+              <entry><literal>Spring.Web.Validation.DivValidationErrorsRenderer
+              </literal></entry>
+
+              <entry>Renders validation errors as list items within a
+              <literal>&lt;div&gt;</literal> tag. Default renderer for
+              <literal>&lt;spring:validationSummary&gt;</literal>
+              control.</entry>
+            </row>
+
+            <row>
+              <entry>Inline</entry>
+
+              <entry><literal>Spring.Web.Validation.SpanValidationErrorsRenderer
+              </literal></entry>
+
+              <entry>Renders validation errors within a
+              <literal>&lt;span&gt;</literal> tag. Default renderer for
+              <literal>&lt;spring:validationError&gt;</literal>
+              control.</entry>
+            </row>
+
+            <row>
+              <entry>Icon</entry>
+
+              <entry><literal>Spring.Web.Validation.IconValidationErrorsRenderer</literal></entry>
+
+              <entry>Renders validation errors as error icon, with error
+              messages displayed in a tooltip. Best option when saving screen
+              real estate is important.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>These three error renderers should be sufficient for most
+      applications, but in case you want to display errors in some other way
+      you can write your own renderer by implementing
+      <literal>Spring.Web.Validation.IValidationErrorsRenderer</literal>
+      interface:</para>
+
+      <programlisting>namespace Spring.Web.Validation
+{
+    /// &lt;summary&gt;
+    /// This interface should be implemented by all validation errors renderers.
+    /// &lt;/summary&gt;
+    /// &lt;remarks&gt;
+    /// &lt;para&gt;
+    /// Validation errors renderers are used to decouple rendering behavior from the
+    /// validation errors controls such as &lt;see cref="ValidationError"/&gt; and
+    /// &lt;see cref="ValidationSummary"/&gt;.
+    /// &lt;/para&gt;
+    /// &lt;para&gt;
+    /// This allows users to change how validation errors are rendered by simply plugging in
+    /// appropriate renderer implementation into the validation errors controls using
+    /// Spring.NET dependency injection.
+    /// &lt;/para&gt;
+    /// &lt;/remarks&gt;
+    public interface IValidationErrorsRenderer
+    {
+        /// &lt;summary&gt;
+        /// Renders validation errors using specified &lt;see cref="HtmlTextWriter"/&gt;.
+        /// &lt;/summary&gt;
+        /// &lt;param name="page"&gt;Web form instance.&lt;/param&gt;
+        /// &lt;param name="writer"&gt;An HTML writer to use.&lt;/param&gt;
+        /// &lt;param name="errors"&gt;The list of validation errors.&lt;/param&gt;
+        void RenderErrors(Page page, HtmlTextWriter writer, IList errors);
+    }
+}</programlisting>
+
+      <section>
+        <title>Configuring which Error Renderer to use.</title>
+
+        <para>The best part of the errors renderer mechanism is that you can
+        easily change it across the application by modifying configuration
+        templates for <literal>&lt;spring:validationSummary&gt;</literal> and
+        <literal>&lt;spring:validationError&gt;</literal> controls:</para>
+
+        <programlisting>&lt;!-- Validation errors renderer configuration --&gt;
+&lt;object id="Spring.Web.UI.Controls.ValidationError" abstract="true"&gt;
+  &lt;property name="Renderer"&gt;
+    &lt;object type="Spring.Web.Validation.IconValidationErrorsRenderer, Spring.Web"&gt;
+      &lt;property name="IconSrc" value="validation-error.gif"/&gt;
+    &lt;/object&gt;
+  &lt;/property&gt;
+&lt;/object&gt;
+
+&lt;object id="Spring.Web.UI.Controls.ValidationSummary" abstract="true"&gt;
+  &lt;property name="Renderer"&gt;
+    &lt;object type="Spring.Web.Validation.DivValidationErrorsRenderer, Spring.Web"&gt;
+      &lt;property name="CssClass" value="validationError"/&gt;
+    &lt;/object&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+        <para>It's as simple as that!</para>
+      </section>
+    </section>
+  </section>
+</chapter>
