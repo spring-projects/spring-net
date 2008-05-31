@@ -12,12 +12,12 @@ using System.Reflection;
 //------------------------------------------------------------------------------
 
 [assembly: CLSCompliantAttribute(false)]
-[assembly: AssemblyConfigurationAttribute("net-2.0.win32; debug")]
-[assembly: AssemblyProductAttribute("Spring.NET Framework 1.1.2 for .NET 2.0")]
+[assembly: AssemblyConfigurationAttribute("net-1.0.win32; debug")]
+[assembly: AssemblyProductAttribute("Spring.NET Framework 1.1.2 for .NET 1.0")]
 [assembly: AssemblyCompanyAttribute("SpringSource")]
 [assembly: AssemblyCopyrightAttribute("Copyright 2002-2008 Spring.NET Framework Team.")]
 [assembly: AssemblyTrademarkAttribute("Apache License, Version 2.0")]
 [assembly: AssemblyCultureAttribute("")]
-[assembly: AssemblyVersionAttribute("1.1.2.20148")]
+[assembly: AssemblyVersionAttribute("1.1.2.151")]
 [assembly: AssemblyDelaySignAttribute(false)]
 
