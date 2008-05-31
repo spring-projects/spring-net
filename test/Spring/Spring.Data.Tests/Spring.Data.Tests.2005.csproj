@@ -175,6 +175,9 @@
     <Compile Include="Data\Core\ServiceDomainTransactionManagerTests.cs" />
     <Compile Include="Data\Core\TxScopeTransactionManagerIntegrationTests.cs" />
     <Compile Include="Data\Core\TxScopeTransactionManagerTests.cs" />
+    <Compile Include="Data\Objects\AbstractAdoQueryTests.cs" />
+    <Compile Include="Data\Objects\AdoOperationTests.cs" />
+    <Compile Include="Data\Objects\StoredProcedureTests.cs" />
     <Compile Include="Transaction\Interceptor\AbstractTransactionAspectTests.cs" />
     <Compile Include="Transaction\Interceptor\TransactionAttributeSourceTests.cs" />
     <Compile Include="Transaction\Interceptor\TransactionInterceptorTests.cs" />
