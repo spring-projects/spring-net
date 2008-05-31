@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using Spring.Transaction.Support;
 using Spring.Util;
 using NMS;
@@ -134,7 +135,7 @@ namespace Spring.Messaging.Nms.IConnections
             }
             if (conHolderToUse != resourceHolder)
             {
-                TransactionSynchronizationManager.RegisterSynchronization(new NmsResourceSynchronization(resourceKey, conHolderToUse, resourceFactory.AcknowledgementMode));
+                TransactionSynchronizationManager.RegisterSynchronization(new NmsResourceSynchronization(resourceKey, conHolderToUse, resourceFactory.SynchedLocalTransactionAllowed));
                 conHolderToUse.SynchronizedWithTransaction = true;
                 TransactionSynchronizationManager.BindResource(resourceKey, conHolderToUse);
             }
@@ -181,7 +182,20 @@ namespace Spring.Messaging.Nms.IConnections
             
             public virtual ISession CreateSession(NMS.IConnection con)
             {
-                return con.CreateSession(synchedLocalTransactionAllowed);
+                if (synchedLocalTransactionAllowed)
+                {
+                    return con.CreateSession(AcknowledgementMode.Transactional);
+                }
+                else
+                {
+                    return con.CreateSession(AcknowledgementMode.AutoAcknowledge);
+                }
+                 
+            }
+
+            public bool SynchedLocalTransactionAllowed
+            {
+                get { return synchedLocalTransactionAllowed; }
             }
         }
         #endregion
@@ -248,15 +262,15 @@ namespace Spring.Messaging.Nms.IConnections
 
             private NmsResourceHolder resourceHolder;
 
-            private AcknowledgementMode acknowledgementMode;
+            private bool transacted;
 
             private bool holderActive = true;
 
-            public NmsResourceSynchronization(object resourceKey, NmsResourceHolder resourceHolder, AcknowledgementMode acknowledgementMode)
+            public NmsResourceSynchronization(object resourceKey, NmsResourceHolder resourceHolder, bool transacted)
             {
                 this.resourceKey = resourceKey;
                 this.resourceHolder = resourceHolder;
-                this.acknowledgementMode = acknowledgementMode;
+                this.transacted = transacted;
             }
 
             public override void Suspend()
@@ -279,7 +293,7 @@ namespace Spring.Messaging.Nms.IConnections
             {
                 TransactionSynchronizationManager.UnbindResource(this.resourceKey);
                 this.holderActive = false;
-                if (this.acknowledgementMode != AcknowledgementMode.Transactional)
+                if (!transacted)
                 {
                     this.resourceHolder.CloseAll();
                 }
@@ -288,7 +302,7 @@ namespace Spring.Messaging.Nms.IConnections
             //TODO bring in new Spring.Data library to Integration project which has this method in interface.
             public override void AfterCommit()
             {
-                if (this.acknowledgementMode == AcknowledgementMode.Transactional)
+                if (this.transacted)
                 {
                     try
                     {
@@ -301,10 +315,9 @@ namespace Spring.Messaging.Nms.IConnections
                 }
             }
 
-            //TODO bring in new Spring.Data library to Integration project which has this method in interface
             public override void AfterCompletion(TransactionSynchronizationStatus status)
             {
-                if (this.acknowledgementMode == AcknowledgementMode.Transactional)
+                if (this.transacted)
                 {
                     this.resourceHolder.CloseAll();
                 }

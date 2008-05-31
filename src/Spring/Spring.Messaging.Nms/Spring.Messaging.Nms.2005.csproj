@@ -74,9 +74,6 @@
     <Compile Include="Messaging\Nms\Support\NmsUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Messaging\.DS_Store" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.2005.csproj">
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
       <Name>Spring.Core.2005</Name>
