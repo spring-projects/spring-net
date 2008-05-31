@@ -17,14 +17,34 @@
  */
 
 #endregion
+#region License
+
+/*
+ * Copyright © 2002-2008 the original author or authors.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
 
 #region Imports
 
 using System.Collections;
 using System.Data;
-using DotNetMock.Dynamic;
+using System.Data.SqlClient;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Spring.Dao;
 using Spring.Data.Common;
 
 #endregion
@@ -32,43 +52,39 @@ using Spring.Data.Common;
 namespace Spring.Data.Objects
 {
     /// <summary>
-    /// This class contains tests for AdoQuery subclasses
+    /// Tests for AdoQuery
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AdoQueryTests.cs,v 1.3 2007/07/25 08:25:34 markpollack Exp $</version>
+    /// <version>$Id: AdoQueryTests.cs,v 1.4 2008/05/30 21:10:00 markpollack Exp $</version>
     [TestFixture]
-    public class AdoQueryTests
+    public class AdoQueryTests : AbstractAdoQueryTests
     {
-        private MockRepository mocks;
+
+        private static string SELECT_ID_WHERE = "select id from custmr";
+        private static string[] COLUMN_NAMES = new string[] {"id", "forename"};
+	    private static DbType[] COLUMN_TYPES = new DbType[] {DbType.Int32, DbType.String};
 
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            SetUpMocks();
+
+            
         }
 
-/*
+
         [Test]
-        public void QueryWithoutContextRhino()
+        public void MappingAdoQueryWithContextWithoutParams()
         {
-            IDbProvider provider = (IDbProvider) mocks.DynamicMock(typeof (IDbProvider));
-
-            IDbConnection connection = (IDbConnection) mocks.DynamicMock(typeof (IDbConnection));
-
-            Expect.Call(provider.CreateConnection()).Return(connection);
-
-            IDbCommand command = (IDbCommand) mocks.DynamicMock(typeof (IDbCommand));
-
-            IDataReader reader = (IDataReader) mocks.DynamicMock(typeof (IDataReader));
+            IDataReader reader = (IDataReader)mocks.DynamicMock(typeof(IDataReader));
             Expect.Call(reader.Read()).Return(true);
             Expect.Call(reader.GetInt32(0)).Return(1);
             Expect.Call(reader.Read()).Return(false);
 
             Expect.Call(command.ExecuteReader()).Return(reader);
-            Expect.Call(provider.CreateCommand()).Return(command);
-            mocks.ReplayAll();
 
-            IntMappingQueryWithNoContext queryWithNoContext = new IntMappingQueryWithNoContext(provider);
+            mocks.ReplayAll();
+            IntMappingQueryWithContext queryWithNoContext = new IntMappingQueryWithContext(provider);
             queryWithNoContext.Compile();
             IList list = queryWithNoContext.QueryByNamedParam(null, null);
             Assert.IsTrue(list.Count != 0);
@@ -78,66 +94,39 @@ namespace Spring.Data.Objects
             }
 
             mocks.VerifyAll();
-
-
-
         }
- */
+ 
         [Test]
-        public void QueryWithoutContext()
+        [ExpectedException(typeof(InvalidDataAccessApiUsageException))]
+        public void QueryWithoutEnoughParams()
         {
+            SqlParameter sqlParameter1 = new SqlParameter();         
+            Expect.Call(command.CreateParameter()).Return(sqlParameter1);
+            Expect.Call(provider.CreateParameterNameForCollection(COLUMN_NAMES[0])).Return("@" + COLUMN_NAMES[0]);
 
-            //Prepare provider
-            IDynamicMock mockProvider = new DynamicMock(typeof(IDbProvider));
-
-            //Prepare connection to return from provider
-            IDynamicMock mockConnection = new DynamicMock(typeof(IDbConnection));
-            IDbConnection connection = (IDbConnection) mockConnection.Object;
-            mockProvider.ExpectAndReturn("CreateConnection", connection);
-
-            //Prepare command
-            IDynamicMock mockCommand = new DynamicMock(typeof(IDbCommand));
-
-            //Prepare reader to return from command
-            IDynamicMock mockReader = new DynamicMock(typeof (IDataReader));
-            mockReader.ExpectAndReturn("Read", true);
-            mockReader.ExpectAndReturn("GetInt32", 1, 0);
-            mockReader.ExpectAndReturn("Read", false);
-            IDataReader reader = (IDataReader) mockReader.Object;
-            mockCommand.ExpectAndReturn("ExecuteReader", reader);
-
-            //Preppare command to return from provider
-            IDbCommand command = (IDbCommand)mockCommand.Object;
-            mockProvider.ExpectAndReturn("CreateCommand", command);
-
+            SqlParameter sqlParameter2 = new SqlParameter();
+            Expect.Call(command.CreateParameter()).Return(sqlParameter2);
+            Expect.Call(provider.CreateParameterNameForCollection(COLUMN_NAMES[1])).Return("@" + COLUMN_NAMES[1]);
             
-            IDbProvider dbProvider = (IDbProvider)mockProvider.Object;
+            mocks.ReplayAll();
 
+            IntMappingAdoQuery query = new IntMappingAdoQuery();
+            query.DbProvider = provider;
+            query.Sql = SELECT_ID_WHERE;
+            query.DeclaredParameters.Add(COLUMN_NAMES[0], COLUMN_TYPES[0]);
+            query.DeclaredParameters.Add(COLUMN_NAMES[1], COLUMN_TYPES[1]);
+            query.Compile();
+            IList list = query.Query();
 
-            //Test MappingAdoQueryWithContext
-            IntMappingQueryWithNoContext queryWithNoContext = new IntMappingQueryWithNoContext(dbProvider);
-            queryWithNoContext.Compile();
-            //IList list = queryWithNoContext.QueryByNamedParam(null, null);
-            IList list = queryWithNoContext.Query();
-            Assert.IsTrue(list.Count != 0);
-            foreach (int count in list)
-            {
-                Assert.AreEqual(1, count);
-            }
-
-
-
-
-
-
-
+            mocks.VerifyAll();
         }
 
-        public class IntMappingQueryWithNoContext : MappingAdoQueryWithContext
+
+        public class IntMappingQueryWithContext : MappingAdoQueryWithContext
         {
             private static string sql = "select id from custmr";
 
-            public IntMappingQueryWithNoContext(IDbProvider dbProvider)
+            public IntMappingQueryWithContext(IDbProvider dbProvider)
                 : base(dbProvider, sql)
             {
                 CommandType = CommandType.Text;
@@ -149,6 +138,14 @@ namespace Spring.Data.Objects
             {
                 Assert.IsNull(inParams);
                 Assert.IsNull(callingContext);
+                return reader.GetInt32(0);
+            }
+        }
+
+        public class IntMappingAdoQuery : MappingAdoQuery
+        {
+            protected override object MapRow(IDataReader reader, int rowNum)
+            {
                 return reader.GetInt32(0);
             }
         }
