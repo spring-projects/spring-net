@@ -29,7 +29,6 @@ namespace Spring.Data.Support
     /// necessary state and operations to TxScopeTransactionManager.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: DefaultTransactionScopeAdapter.cs,v 1.1 2007/11/30 18:38:47 markpollack Exp $</version> 
     public class DefaultTransactionScopeAdapter : ITransactionScopeAdapter
     {
         private TransactionScope txScope;

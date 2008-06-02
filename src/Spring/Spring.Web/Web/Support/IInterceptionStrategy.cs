@@ -29,7 +29,6 @@ namespace Spring.Web.Support
     /// Any concrete interception strategy must implement this interface
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: IInterceptionStrategy.cs,v 1.1 2007/08/01 23:11:00 markpollack Exp $</version>
     internal interface IInterceptionStrategy
     {
         /// <summary>

@@ -29,7 +29,6 @@ namespace Spring.Aspects
     /// An abstract base class providing all necessary functionality for typical IExceptionHandler implementations.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AbstractExceptionHandler.cs,v 1.2 2007/10/10 18:07:46 markpollack Exp $</version>
     public abstract class AbstractExceptionHandler  : IExceptionHandler
     {
         #region Fields

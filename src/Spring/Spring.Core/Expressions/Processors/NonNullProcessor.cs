@@ -26,7 +26,6 @@ namespace Spring.Expressions.Processors
     /// Implementation of the non-null processor.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: NonNullProcessor.cs,v 1.2 2007/07/31 21:43:52 markpollack Exp $</version>
     public class NonNullProcessor : ICollectionProcessor
     {
         /// <summary>

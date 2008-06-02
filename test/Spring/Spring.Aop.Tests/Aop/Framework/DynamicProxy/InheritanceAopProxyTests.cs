@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// Additional and overridden tests for the inheritance-based proxy.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: InheritanceAopProxyTests.cs,v 1.2 2008/03/03 09:29:17 bbaia Exp $</version>
     [TestFixture]
     public class InheritanceAopProxyTests
     {

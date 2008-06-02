@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework
 	/// <author>Aleksandar Seovic (.NET)</author>
 	/// <author>Rick Evans (.NET)</author>
     /// <author>Bruno Baia (.NET)</author>
-	/// <version>$Id: ReflectiveMethodInvocation.cs,v 1.18 2008/02/06 18:28:52 bbaia Exp $</version>
 	[Serializable]
 	public class ReflectiveMethodInvocation : AbstractMethodInvocation
 	{

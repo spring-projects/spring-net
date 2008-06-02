@@ -42,7 +42,6 @@ namespace Spring.Transaction
 	/// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ITransactionStatus.cs,v 1.11 2007/08/01 18:53:05 markpollack Exp $</version>
 	public interface ITransactionStatus : ISavepointManager
 	{
 		/// <summary>

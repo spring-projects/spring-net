@@ -46,7 +46,6 @@ namespace Spring.Aop.Framework.Adapter
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: AfterReturningAdviceInterceptor.cs,v 1.8 2007/03/16 04:01:21 aseovic Exp $</version>
     [Serializable]
     public sealed class AfterReturningAdviceInterceptor : IMethodInterceptor
 	{

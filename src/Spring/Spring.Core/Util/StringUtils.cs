@@ -43,7 +43,6 @@ namespace Spring.Util
 	/// <author>Aleksandar Seovic (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: StringUtils.cs,v 1.29 2006/04/09 07:19:00 markpollack Exp $</version>
 	public sealed class StringUtils
 	{
 		/// <summary>

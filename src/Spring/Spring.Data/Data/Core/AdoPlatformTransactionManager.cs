@@ -37,7 +37,6 @@ namespace Spring.Data.Core
     /// interface.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AdoPlatformTransactionManager.cs,v 1.7 2007/11/30 18:42:11 markpollack Exp $</version>
     public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager, IInitializingObject
     {
 

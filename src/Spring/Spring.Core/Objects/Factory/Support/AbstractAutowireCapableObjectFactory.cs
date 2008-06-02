@@ -63,7 +63,6 @@ namespace Spring.Objects.Factory.Support
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: AbstractAutowireCapableObjectFactory.cs,v 1.90 2008/05/29 12:13:27 oakinger Exp $</version>
     [Serializable]
     public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFactory, IAutowireCapableObjectFactory
     {

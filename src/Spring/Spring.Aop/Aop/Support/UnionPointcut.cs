@@ -40,7 +40,6 @@ namespace Spring.Aop.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: UnionPointcut.cs,v 1.8 2007/03/16 04:01:25 aseovic Exp $</version>
     [Serializable]
     internal class UnionPointcut : IPointcut
 	{

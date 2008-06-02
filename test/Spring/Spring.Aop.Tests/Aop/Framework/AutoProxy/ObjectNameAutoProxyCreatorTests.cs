@@ -35,7 +35,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// Tests for ObjectNameAutoProxyCreator functionality
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ObjectNameAutoProxyCreatorTests.cs,v 1.6 2007/09/07 01:53:01 markpollack Exp $</version>
     [TestFixture]
     public class ObjectNameAutoProxyCreatorTests
     {

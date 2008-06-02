@@ -32,7 +32,6 @@ namespace Spring.Expressions.Processors
     /// Implementation of the sort processor.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SortProcessor.cs,v 1.4 2008/03/20 23:58:16 oakinger Exp $</version>
     public class SortProcessor : ICollectionProcessor
     {
         /// <summary>

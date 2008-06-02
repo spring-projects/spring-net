@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Base type for all expression nodes.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseNode.cs,v 1.24 2007/09/07 03:01:21 markpollack Exp $</version>
     //[Serializable]
     public abstract class BaseNode : SpringAST, IExpression
     {

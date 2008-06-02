@@ -65,7 +65,6 @@ namespace Spring.Aspects.Exceptions
 	/// 
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ExceptionHandlerAdvice.cs,v 1.9 2007/10/11 01:29:42 markpollack Exp $</version>
     public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
     {
         #region Fields

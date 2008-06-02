@@ -37,7 +37,6 @@ namespace Spring.Context.Support
     ///
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HttpApplicationConfigurerTests.cs,v 1.1 2007/07/27 13:29:21 oakinger Exp $</version>
     [TestFixture]
     public class HttpApplicationConfigurerTests
     {

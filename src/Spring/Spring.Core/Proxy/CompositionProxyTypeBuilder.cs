@@ -41,7 +41,6 @@ namespace Spring.Proxy
 	/// </remarks>
     /// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: CompositionProxyTypeBuilder.cs,v 1.12 2007/03/27 02:27:43 bbaia Exp $</version>
     public class CompositionProxyTypeBuilder : AbstractProxyTypeBuilder
     {
         #region Fields

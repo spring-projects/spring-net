@@ -34,7 +34,6 @@ namespace Spring.Data
 	/// TODO: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TestObjectQuery.cs,v 1.2 2006/06/12 08:43:41 markpollack Exp $</version>
     public class TestObjectQuery : MappingAdoQuery
     {
         private static string sql = "select TestObjectNo, Age, Name from TestObjects where Name = @UName";

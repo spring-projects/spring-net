@@ -7,7 +7,6 @@ namespace Spring.Threading
     /// Implements <see cref="IThreadStorage"/> by using a <see cref="ThreadStaticAttribute"/> hashtable.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ThreadStaticStorage.cs,v 1.1 2007/02/02 21:30:34 oakinger Exp $</version>  
     public class ThreadStaticStorage : IThreadStorage
     {
         [ThreadStatic]

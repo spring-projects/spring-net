@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 	Tests for throws advice.
-	$Id: throwsAdvice.xml,v 1.6 2007/03/09 17:44:40 aseovic Exp $
 -->
 <objects xmlns="http://www.springframework.net">
     <!-- Simple target -->

@@ -30,7 +30,6 @@ namespace Spring.Globalization.Formatters
     /// Provides base functionality for filtering values before they actually get parsed/formatted.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: FilteringFormatter.cs,v 1.1 2008/03/20 13:19:47 oakinger Exp $</version>
     public abstract class FilteringFormatter : IFormatter
     {
         private readonly IFormatter _underlyingFormatter;

@@ -26,11 +26,7 @@ using System;
 
 namespace Spring.Data.Northwind
 {
-	/// <summary>
-	/// TODO: 
-	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: Shipper.cs,v 1.1 2006/06/21 14:07:30 markpollack Exp $</version>
 	public class Shipper 
 	{
 		#region Fields

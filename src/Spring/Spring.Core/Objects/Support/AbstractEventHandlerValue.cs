@@ -31,7 +31,6 @@ namespace Spring.Objects.Support
 	/// Base class implementation for classes that describe an event handler.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: AbstractEventHandlerValue.cs,v 1.7 2006/04/09 07:19:00 markpollack Exp $</version>
     public abstract class AbstractEventHandlerValue : IEventHandlerValue
     {
         #region Constructor (s) / Destructor

@@ -31,7 +31,6 @@ namespace Spring.Objects.Factory.Config
     /// Holder for event handler values for an object.
     /// </summary>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: EventValues.cs,v 1.8 2007/03/16 04:01:38 aseovic Exp $</version>
     [Serializable]
     public class EventValues 
     {

@@ -33,7 +33,6 @@ namespace Spring.Aop.Support
 	/// making them an Advisor.
 	/// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: AttributeMatchMethodPointcutAdvisor.cs,v 1.3 2007/03/16 04:01:23 aseovic Exp $</version>
     [Serializable]
     public class AttributeMatchMethodPointcutAdvisor
 		: AttributeMatchMethodPointcut, IPointcutAdvisor, IOrdered

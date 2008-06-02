@@ -29,7 +29,6 @@ namespace Spring
     /// Helper class for template style Stream usage.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: StreamHelperDecorator.cs,v 1.2 2006/04/09 07:24:48 markpollack Exp $</version>
     public class StreamHelperDecorator
     {
         private StreamHelperCallback callback;

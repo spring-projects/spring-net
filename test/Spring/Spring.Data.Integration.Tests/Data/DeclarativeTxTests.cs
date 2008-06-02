@@ -34,7 +34,6 @@ namespace Spring.Data
 	/// TODO: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: DeclarativeTxTests.cs,v 1.4 2006/11/15 20:31:08 aseovic Exp $</version>
 	[TestFixture]
 	public class DeclarativeTxTests 
 	{

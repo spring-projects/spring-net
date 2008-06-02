@@ -41,7 +41,6 @@ namespace Spring.Aop.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: ControlFlowPointcut.cs,v 1.6 2006/04/09 07:18:37 markpollack Exp $</version>
 	[Serializable]
 	public class ControlFlowPointcut : IPointcut, ITypeFilter, IMethodMatcher
 	{

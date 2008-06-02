@@ -76,7 +76,6 @@ namespace Spring.Context.Support
     /// </code>
     /// </example>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ResourceHandlersSectionHandler.cs,v 1.3 2007/08/08 17:46:37 bbaia Exp $</version>
     /// <seealso cref="IResource"/>
     public class ResourceHandlersSectionHandler : IConfigurationSectionHandler
     {

@@ -285,7 +285,6 @@ namespace Spring.Reflection.Dynamic
     /// Factory class for dynamic properties.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicProperty.cs,v 1.3 2008/05/17 11:05:26 oakinger Exp $</version>
     public class DynamicProperty : BaseDynamicMember
     {
         /// <summary>
@@ -322,7 +321,6 @@ namespace Spring.Reflection.Dynamic
     /// Factory class for dynamic properties.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicProperty.cs,v 1.3 2008/05/17 11:05:26 oakinger Exp $</version>
     public class DynamicProperty : BaseDynamicMember
     {
         private readonly static CreatePropertyCallback s_createPropertyCallback = new CreatePropertyCallback(CreateInternal);

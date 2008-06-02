@@ -32,7 +32,6 @@ namespace Spring.Core
     /// Thrown in response to a failed attempt to write a property.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: NotWritablePropertyException.cs,v 1.1 2007/07/31 00:08:42 markpollack Exp $</version>
     [Serializable]
     public class NotWritablePropertyException : InvalidPropertyException
     {

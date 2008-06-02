@@ -29,7 +29,6 @@ namespace Spring.Web.UI.Controls
     /// in order to render dynamicaly registered head scripts and stylesheets.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: LocalizedImage.cs,v 1.4 2006/05/18 21:37:52 markpollack Exp $</version>
     public class LocalizedImage : System.Web.UI.WebControls.Image
     {
         private string imageName;

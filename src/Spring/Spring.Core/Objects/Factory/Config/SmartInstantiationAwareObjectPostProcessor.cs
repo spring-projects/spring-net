@@ -36,7 +36,6 @@ namespace Spring.Objects.Factory.Config
     /// <seealso cref="InstantiationAwareObjectPostProcessorAdapter"/>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: SmartInstantiationAwareObjectPostProcessor.cs,v 1.1 2008/04/02 18:02:24 markpollack Exp $</version>
     public interface SmartInstantiationAwareObjectPostProcessor : IInstantiationAwareObjectPostProcessor
     {
         /// <summary>

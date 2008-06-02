@@ -33,7 +33,6 @@ namespace Spring
     /// Unit tests for all of the exception classes in the Spring.Data library...
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: DataExceptionTests.cs,v 1.6 2006/05/18 21:37:53 markpollack Exp $</version>
     [TestFixture]
     public sealed class DataExceptionTests : ExceptionsTest
     {

@@ -40,7 +40,6 @@ namespace Spring.Aop
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: TrueTypeFilter.cs,v 1.4 2006/04/09 07:18:36 markpollack Exp $</version>
 	[Serializable]
 	public sealed class TrueTypeFilter : ITypeFilter, ISerializable
 	{

@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework
 	/// Unit tests for the AopContext class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: AopContextTests.cs,v 1.6 2007/05/30 21:06:25 oakinger Exp $</version>
 	[TestFixture]
 	public sealed class AopContextTests
 	{

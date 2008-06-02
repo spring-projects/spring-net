@@ -32,7 +32,6 @@ namespace Spring.Threading
     /// Any <see cref="IThreadStorage"/> implementation must pass these tests.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: CommonThreadStorageTests.cs,v 1.2 2007/05/14 21:31:32 oakinger Exp $</version>
     public abstract class CommonThreadStorageTests
     {
         protected abstract IThreadStorage CreateStorage();

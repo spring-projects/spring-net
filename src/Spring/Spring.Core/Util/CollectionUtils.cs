@@ -35,7 +35,6 @@ namespace Spring.Util
 	/// Mainly for internal use within the framework.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: CollectionUtils.cs,v 1.9 2006/04/09 07:19:00 markpollack Exp $</version>
 	public sealed class CollectionUtils
 	{
 		#region Methods

@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: ConstructorArgumentValues.cs,v 1.16 2008/03/03 09:29:07 bbaia Exp $</version>
 	/// <see cref="Spring.Objects.Factory.Config.IObjectDefinition.ConstructorArgumentValues"/>
 	[Serializable]
 	public class ConstructorArgumentValues

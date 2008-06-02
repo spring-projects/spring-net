@@ -31,7 +31,6 @@ namespace Spring.Validation
     /// Helper classes for validation tests.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: HelperClasses.cs,v 1.2 2006/04/09 07:24:52 markpollack Exp $</version>
     public class TrueValidator : BaseValidator
     {
         public TrueValidator()

@@ -33,7 +33,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: IAdvisorChainFactory.cs,v 1.8 2006/09/14 21:05:23 bbaia Exp $</version>
 	public interface IAdvisorChainFactory : IAdvisedSupportListener
 	{
 		/// <summary>

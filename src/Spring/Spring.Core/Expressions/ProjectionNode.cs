@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents parsed projection node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ProjectionNode.cs,v 1.8 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class ProjectionNode : BaseNode
     {

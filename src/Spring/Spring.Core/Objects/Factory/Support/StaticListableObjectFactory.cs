@@ -50,7 +50,6 @@ namespace Spring.Objects.Factory.Support
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: StaticListableObjectFactory.cs,v 1.24 2007/12/05 00:28:05 bbaia Exp $</version>
     [Serializable]
     public class StaticListableObjectFactory : IListableObjectFactory
 	{

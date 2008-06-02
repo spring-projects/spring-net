@@ -6,7 +6,6 @@ namespace Spring.DataBinding
     /// An interface that has to be implemented by all data binding containers.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IBindingContainer.cs,v 1.1 2006/11/21 05:46:57 aseovic Exp $</version>
     public interface IBindingContainer : IBinding
     {
         /// <summary>

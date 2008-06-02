@@ -31,7 +31,6 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: AttributesTransactionAttributeSource.cs,v 1.6 2007/08/08 20:59:50 markpollack Exp $</version>
 	public class AttributesTransactionAttributeSource : AbstractFallbackTransactionAttributeSource
 	{
 

@@ -39,7 +39,6 @@ namespace Spring.Objects.Factory.Support
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: AutowireUtils.cs,v 1.7 2008/04/02 18:02:24 markpollack Exp $</version>
 	public sealed class AutowireUtils
 	{
 		#region Constructor (s) / Destructor

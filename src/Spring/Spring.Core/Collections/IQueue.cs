@@ -114,7 +114,6 @@ namespace Spring.Collections
 	/// </remarks>
 	/// <author>Doug Lea</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: IQueue.cs,v 1.7 2006/09/30 18:39:24 gcaprio Exp $</version>
 	public interface IQueue : ICollection
 	{
 		/// <summary> 

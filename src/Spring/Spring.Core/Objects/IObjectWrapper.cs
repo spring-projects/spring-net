@@ -58,8 +58,6 @@ namespace Spring.Objects
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IObjectWrapper.cs,v 1.15 2007/07/31 21:43:52 markpollack Exp $
-    /// </version>
     public interface IObjectWrapper
     {
         /// <summary>

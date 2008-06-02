@@ -40,7 +40,6 @@ namespace Spring.Aop.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: MethodMatchers.cs,v 1.7 2007/03/16 04:01:24 aseovic Exp $</version>
     public sealed class MethodMatchers
 	{
 		/// <summary>

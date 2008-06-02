@@ -29,7 +29,6 @@ namespace Spring.Expressions
     /// Represents logical "less than or equal" operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpLessOrEqual.cs,v 1.10 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpLessOrEqual : BinaryOperator
     {

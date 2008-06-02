@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: ObjectReferenceFactoryObject.cs,v 1.3 2007/03/16 04:01:38 aseovic Exp $</version>
 	/// <seealso cref="Spring.Objects.Factory.IFactoryObject"/>
     [Serializable]
     public sealed class ObjectReferenceFactoryObject

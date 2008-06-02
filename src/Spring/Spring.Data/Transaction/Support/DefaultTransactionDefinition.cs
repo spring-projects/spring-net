@@ -37,7 +37,6 @@ namespace Spring.Transaction.Support
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: DefaultTransactionDefinition.cs,v 1.15 2007/12/07 08:10:03 markpollack Exp $</version>
 	[Serializable]
 	public class DefaultTransactionDefinition : ITransactionDefinition
 	{

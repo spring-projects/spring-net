@@ -31,7 +31,6 @@ namespace Spring.Core.IO
     /// Unit tests for the WebResource class.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: WebResourceTests.cs,v 1.6 2008/03/14 12:02:45 oakinger Exp $</version>
     [TestFixture]
     public class WebResourceTests : FileSystemResourceCommonTests
     {

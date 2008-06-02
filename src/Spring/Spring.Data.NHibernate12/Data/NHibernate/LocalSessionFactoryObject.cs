@@ -50,7 +50,6 @@ namespace Spring.Data.NHibernate
 	/// </para>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: LocalSessionFactoryObject.cs,v 1.11 2008/03/21 14:12:08 markpollack Exp $</version>
 	public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, System.IDisposable
 	{
 		#region Fields

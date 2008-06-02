@@ -33,7 +33,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: StaticMethodMatcher.cs,v 1.6 2006/04/09 07:18:37 markpollack Exp $</version>
 	[Serializable]
 	public abstract class StaticMethodMatcher : IMethodMatcher
 	{

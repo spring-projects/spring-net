@@ -34,7 +34,6 @@ namespace Spring.Proxy
     /// Implementation of IProxyMethodBuilder that delegates method calls to target object.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: TargetProxyMethodBuilder.cs,v 1.1 2006/08/10 18:45:55 bbaia Exp $</version>
     public class TargetProxyMethodBuilder : AbstractProxyMethodBuilder
     {
         #region Constructor(s) / Destructor

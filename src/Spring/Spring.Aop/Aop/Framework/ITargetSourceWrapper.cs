@@ -27,7 +27,6 @@ namespace Spring.Aop.Framework
 	/// interface.
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: ITargetSourceWrapper.cs,v 1.1 2006/08/10 18:45:52 bbaia Exp $</version>
 	public interface ITargetSourceWrapper : IDisposable
 	{
 		/// <summary>

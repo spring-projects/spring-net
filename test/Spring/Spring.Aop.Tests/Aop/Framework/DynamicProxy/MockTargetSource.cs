@@ -34,7 +34,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Bruno Baia (.NET)</author>
-    /// <version>$Id: MockTargetSource.cs,v 1.1 2006/08/10 18:45:58 bbaia Exp $</version>
     public class MockTargetSource : ITargetSource
     {
         private object _target;

@@ -32,6 +32,5 @@ namespace Spring.Web.UI.Controls
 	/// <param name="sender">The source of the event.</param>
 	/// <param name="e">A <see cref="TabCommandEventArgs"/> that contains the event data.</param>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: TabCommandEventHandler.cs,v 1.1 2007/07/24 13:33:28 oakinger Exp $</version>
 	public delegate void TabCommandEventHandler(object sender, TabCommandEventArgs e);
 }

@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
 	/// Unit tests for DateTimeFormatter class.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DateTimeFormatterTests.cs,v 1.3 2007/05/04 18:13:22 markpollack Exp $</version>
     [TestFixture]
     public class DateTimeFormatterTests
 	{

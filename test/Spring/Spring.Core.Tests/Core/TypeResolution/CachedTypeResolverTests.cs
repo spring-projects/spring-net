@@ -32,7 +32,6 @@ namespace Spring.Core.TypeResolution
 	/// Unit tests for the CachedTypeResolver class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: CachedTypeResolverTests.cs,v 1.1 2007/07/31 18:21:02 bbaia Exp $</version>
 	[TestFixture]
     public sealed class CachedTypeResolverTests
     {

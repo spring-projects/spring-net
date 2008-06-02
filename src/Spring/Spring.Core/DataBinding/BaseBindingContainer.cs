@@ -8,7 +8,6 @@ namespace Spring.DataBinding
     /// Base implementation of the <see cref="IBindingContainer"/>.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseBindingContainer.cs,v 1.2 2008/02/05 20:40:25 aseovic Exp $</version>
     public class BaseBindingContainer : IBindingContainer
     {
         #region Fields

@@ -41,7 +41,6 @@ namespace Spring.Aop.Advice
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi (.NET)</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: DebugAdvice.cs,v 1.1 2007/08/08 07:45:36 markpollack Exp $</version>
 	/// <seealso cref="System.Console"/>
 	public sealed class DebugAdvice : IMethodInterceptor
 	{

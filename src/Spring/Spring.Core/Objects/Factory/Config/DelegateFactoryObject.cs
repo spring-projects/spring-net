@@ -38,7 +38,6 @@ namespace Spring.Objects.Factory.Config
 	/// </p>
 	/// </remarks>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: DelegateFactoryObject.cs,v 1.6 2007/03/16 04:01:35 aseovic Exp $</version>
     [Serializable]
     public class DelegateFactoryObject : AbstractFactoryObject
 	{

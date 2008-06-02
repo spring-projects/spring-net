@@ -32,7 +32,6 @@ namespace Spring.Core.IO
 	/// Unit tests for the ConfigurableResourceLoader class.
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: ResourceHandlerRegistryTests.cs,v 1.4 2007/08/08 17:49:59 bbaia Exp $</version>
 	[TestFixture]
 	public sealed class ResourceHandlerRegistryTests
 	{

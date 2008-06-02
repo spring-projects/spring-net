@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
 	/// Unit tests for CurrencyFormatter class.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CurrencyFormatterTests.cs,v 1.3 2007/05/04 18:13:22 markpollack Exp $</version>
     [TestFixture]
     public class CurrencyFormatterTests
 	{

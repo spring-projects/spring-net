@@ -35,7 +35,6 @@ namespace Spring.Data.Common
     /// <remarks>This builder is stateful, you must create a new one for each collection
     /// of parameters you would like to create.</remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: DbParametersBuilder.cs,v 1.2 2007/05/01 00:37:10 markpollack Exp $</version>
     public class DbParametersBuilder : IDbParametersBuilder
     {
         #region Fields

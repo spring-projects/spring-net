@@ -44,7 +44,6 @@ namespace Spring.Data
 	/// </p>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IRowMapper.cs,v 1.6 2007/06/28 18:48:19 markpollack Exp $</version>
 	public interface IRowMapper 
 	{
 	    /// <summary>

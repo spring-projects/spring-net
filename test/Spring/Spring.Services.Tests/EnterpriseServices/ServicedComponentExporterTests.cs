@@ -41,7 +41,6 @@ namespace Spring.EnterpriseServices
     /// Unit tests for the ServicedComponentExporter class.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: ServicedComponentExporterTests.cs,v 1.2 2007/05/16 10:03:25 oakinger Exp $</version>
 	[TestFixture]
     public class ServicedComponentExporterTests
 	{

@@ -33,7 +33,6 @@ namespace Spring.Validation
 	/// Evaluates validator test using condition evaluator.
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: ConditionValidator.cs,v 1.5 2006/04/09 07:19:04 markpollack Exp $</version>
 	public class ConditionValidator : BaseValidator
 	{
         #region Constructors

@@ -51,7 +51,6 @@ namespace Spring.Remoting
 	/// <author>Aleksandar Seovic</author>
 	/// <author>Mark Pollack</author>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: SaoExporter.cs,v 1.18 2007/07/31 18:18:19 bbaia Exp $</version>
 	public class SaoExporter : ConfigurableLifetime, IApplicationContextAware, IObjectFactoryAware, IInitializingObject, IDisposable
 	{
 		#region Logging

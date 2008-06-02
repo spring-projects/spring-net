@@ -40,7 +40,6 @@ namespace Spring.Aop
 	/// <author>Aleksandar Seovic (.NET)</author>
 	/// <seealso cref="Spring.Aop.IPointcut"/>
 	/// <seealso cref="TrueTypeFilter.True"/>
-	/// <version>$Id: ITypeFilter.cs,v 1.2 2006/04/09 07:18:36 markpollack Exp $</version>
 	public interface ITypeFilter
 	{
 		/// <summary>

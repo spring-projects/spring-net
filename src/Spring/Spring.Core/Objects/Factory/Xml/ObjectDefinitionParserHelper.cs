@@ -36,7 +36,6 @@ namespace Spring.Objects.Factory.Xml
     /// <author>Juergen Hoeller</author>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ObjectDefinitionParserHelper.cs,v 1.7 2007/08/07 22:05:20 markpollack Exp $</version>
     public class ObjectDefinitionParserHelper
     {
 

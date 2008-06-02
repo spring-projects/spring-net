@@ -32,7 +32,6 @@ namespace Spring.Data.Common
     /// Provides database metdata information.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: DbMetadata.cs,v 1.13 2007/11/21 18:01:45 markpollack Exp $</version>
     public class DbMetadata : IDbMetadata
     {
         #region Fields

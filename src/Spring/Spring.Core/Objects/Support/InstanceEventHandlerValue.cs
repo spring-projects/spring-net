@@ -32,7 +32,6 @@ namespace Spring.Objects.Support
 	/// Describes an event handler for an object instance.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: InstanceEventHandlerValue.cs,v 1.7 2006/04/09 07:19:00 markpollack Exp $</version>
 	public class InstanceEventHandlerValue : AbstractWiringEventHandlerValue
 	{
 		#region Constants

@@ -32,7 +32,6 @@ namespace Spring.Validation.Validators
     /// Unit tests for the RequiredValidator class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: RequiredValidatorTests.cs,v 1.7 2008/02/05 20:40:27 aseovic Exp $</version>
     [TestFixture]
     public sealed class RequiredValidatorTests
     {

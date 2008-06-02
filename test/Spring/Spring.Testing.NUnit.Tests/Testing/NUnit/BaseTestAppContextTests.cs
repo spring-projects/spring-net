@@ -29,7 +29,6 @@ namespace Spring.Testing.NUnit
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: BaseTestAppContextTests.cs,v 1.1 2007/08/20 18:38:11 markpollack Exp $</version>
     public class BaseTestAppContextTests : AbstractTransactionalDbProviderSpringContextTests
     {
 

@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
     /// </summary>
     /// <seealso cref="Properties"/>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: PropertyFileVariableSource.cs,v 1.5 2007/08/08 17:47:13 bbaia Exp $</version>
     [Serializable]
     public class PropertyFileVariableSource : IVariableSource
     {

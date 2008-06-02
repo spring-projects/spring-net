@@ -48,7 +48,6 @@ namespace Spring.Aop.Framework
 	/// <author>Aleksandar Seovic (.NET)</author>
 	/// <author>Rick Evans (.NET)</author>
     /// <author>Bruno Baia (.NET)</author>
-	/// <version>$Id: AbstractMethodInvocation.cs,v 1.8 2007/07/05 20:29:21 bbaia Exp $</version>
 	[Serializable]
     public abstract class AbstractMethodInvocation : IMethodInvocation
 	{

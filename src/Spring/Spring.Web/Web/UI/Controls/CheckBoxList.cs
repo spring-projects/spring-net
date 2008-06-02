@@ -35,7 +35,6 @@ namespace Spring.Web.UI.Controls
 	/// When using Spring.Web's DataBinding, you should use this control for easier binding declaration.
 	/// </remarks>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: CheckBoxList.cs,v 1.2 2007/12/14 16:38:44 oakinger Exp $</version>
 	public class CheckBoxList : System.Web.UI.WebControls.CheckBoxList
 	{
 		/// <summary>

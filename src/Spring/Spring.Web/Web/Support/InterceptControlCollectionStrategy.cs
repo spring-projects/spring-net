@@ -43,7 +43,6 @@ namespace Spring.Web.Support
     /// dynamically implementing ISupportsWebDependencyInjection on this type
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: InterceptControlCollectionStrategy.cs,v 1.2 2008/05/13 14:22:47 oakinger Exp $</version>
     internal class InterceptControlCollectionStrategy : IInterceptionStrategy
     {
         /// <summary>

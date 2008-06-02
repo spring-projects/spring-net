@@ -36,7 +36,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Adhari C Mahendra (.NET)</author>
-    /// <version>$Id: DefaultAdvisorAutoProxyCreator.cs,v 1.9 2007/10/08 22:04:51 markpollack Exp $</version>
     public class DefaultAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator, IObjectNameAware, IInitializingObject
     {
 

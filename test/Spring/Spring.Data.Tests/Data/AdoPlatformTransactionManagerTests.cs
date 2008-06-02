@@ -41,7 +41,6 @@ namespace Spring.Data
     /// This class contains tests for AdoPlatformTransactionManager
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AdoPlatformTransactionManagerTests.cs,v 1.8 2007/12/07 07:31:05 markpollack Exp $</version>
     [TestFixture]
     public class AdoPlatformTransactionManagerTests
     {

@@ -33,7 +33,6 @@ namespace Spring.Data.Objects
 	/// for one result set within the same class.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: AdoQuery.cs,v 1.8 2008/05/30 21:09:22 markpollack Exp $</version>
 	public abstract class AdoQuery : AdoOperation
 	{
 		#region Fields

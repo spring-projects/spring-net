@@ -41,7 +41,6 @@ namespace Spring.Aop.Target
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: SingletonTargetSource.cs,v 1.8 2008/03/21 14:11:57 markpollack Exp $</version>
     [Serializable]
     public sealed class SingletonTargetSource : ITargetSource
 	{

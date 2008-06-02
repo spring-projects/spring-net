@@ -39,7 +39,6 @@ namespace Spring.Aop
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
 	/// <seealso cref="Spring.Aop.IIntroductionAdvisor"/>
-	/// <version>$Id: IPointcutAdvisor.cs,v 1.3 2006/04/09 07:18:36 markpollack Exp $</version>
 	public interface IPointcutAdvisor : IAdvisor
 	{
 		/// <summary>

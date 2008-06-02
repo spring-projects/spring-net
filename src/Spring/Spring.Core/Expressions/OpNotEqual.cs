@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents logical inequality operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpNotEqual.cs,v 1.11 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpNotEqual : BinaryOperator
     {

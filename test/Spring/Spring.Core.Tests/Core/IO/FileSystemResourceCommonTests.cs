@@ -33,7 +33,6 @@ namespace Spring.Core.IO
     /// Common Unit tests for all FileSystemResource derived classes.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: FileSystemResourceCommonTests.cs,v 1.4 2007/08/08 17:49:59 bbaia Exp $</version>
     public abstract class FileSystemResourceCommonTests
     {
         protected const string TemporaryFileName = "temp.file";

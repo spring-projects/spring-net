@@ -33,7 +33,6 @@ namespace Spring
     /// Unit tests for all of the exception classes in the Spring.Aop library...
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: AopExceptionTests.cs,v 1.3 2006/04/09 07:19:04 markpollack Exp $</version>
     [TestFixture]
     public sealed class AopExceptionTests : ExceptionsTest
     {

@@ -38,7 +38,6 @@ namespace Spring.Data.Common
     /// TODO: Add error codes to provider.
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: DbProviderFactory.cs,v 1.12 2007/08/16 20:38:43 markpollack Exp $</version>
     public class DbProviderFactory
     {
     	#region Constants

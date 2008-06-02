@@ -94,7 +94,6 @@ namespace Spring.Objects.Factory.Config
     /// </example>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: FieldRetrievingFactoryObject.cs,v 1.8 2007/07/31 18:16:49 bbaia Exp $</version>
     [Serializable]
     public class FieldRetrievingFactoryObject : IFactoryObject, IInitializingObject, IObjectNameAware
     {

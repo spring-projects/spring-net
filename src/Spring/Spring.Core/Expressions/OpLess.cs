@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents logical "less than" operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpLess.cs,v 1.10 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpLess : BinaryOperator
     {

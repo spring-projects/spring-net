@@ -34,7 +34,6 @@ namespace Spring.Data
 	/// Simple insert non query object with 'in' args to create a testobject.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: CreateTestObjectNonQuery.cs,v 1.2 2008/01/29 18:22:33 markpollack Exp $</version>
 	public class CreateTestObjectNonQuery : AdoNonQuery
 	{
         private static string sql = "insert into TestObjects(Age,Name) values (@Age,@Name)";

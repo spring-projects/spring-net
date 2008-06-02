@@ -33,7 +33,6 @@ namespace Spring.Data.Common
     /// This class contains tests for DbParameters
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: DbParametersTests.cs,v 1.3 2007/12/06 06:58:54 markpollack Exp $</version>
     [TestFixture]
     public class DbParametersTests
     {

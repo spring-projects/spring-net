@@ -33,7 +33,6 @@ namespace Spring.Data
 	/// TODO: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TestObjectStoredProcedure.cs,v 1.3 2008/01/29 18:22:33 markpollack Exp $</version>
 	public class TestObjectStoredProcedure : StoredProcedure
 	{
         private static string procedureName = "SelectByNameWithReturnAndOutValue";

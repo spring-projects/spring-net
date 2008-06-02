@@ -31,7 +31,6 @@ namespace Spring.Validation.Actions
     /// Unit tests for the ExpressionAction class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ExpressionActionTests.cs,v 1.3 2006/04/09 07:24:52 markpollack Exp $</version>
     [TestFixture]
     public class ExpressionActionTests
     {

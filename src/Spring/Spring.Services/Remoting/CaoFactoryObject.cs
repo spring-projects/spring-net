@@ -36,7 +36,6 @@ namespace Spring.Remoting
 	/// <author>Aleksandar Seovic</author>
 	/// <author>Mark Pollack</author>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: CaoFactoryObject.cs,v 1.4 2006/09/13 20:20:14 bbaia Exp $</version>
     public class CaoFactoryObject : IFactoryObject, IInitializingObject
     {
 		#region Fields

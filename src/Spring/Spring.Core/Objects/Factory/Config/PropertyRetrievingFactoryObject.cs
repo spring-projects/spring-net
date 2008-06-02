@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Config
 	/// </p>
 	/// </remarks>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: PropertyRetrievingFactoryObject.cs,v 1.12 2007/07/31 18:16:49 bbaia Exp $</version>
     [Serializable]
     public class PropertyRetrievingFactoryObject : AbstractFactoryObject, IInitializingObject
 	{

@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// Tests for auto proxy creation combined with factory object and circular references.
     /// </summary>
     /// <author>Erich Eichinger (.NET)</author>
-    /// <version>$Id: AdvisorAutoProxyCreatorCircularReferencesTests.cs,v 1.4 2007/09/07 01:53:01 markpollack Exp $</version>
     [TestFixture]
     public class AdvisorAutoProxyCreatorCircularReferencesTests
     {

@@ -66,7 +66,6 @@ namespace Spring.Core.IO
     /// <author>Juergen Hoeller</author>
     /// <author>Leonardo Susatyo (.NET)</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: FileSystemResource.cs,v 1.23 2007/08/08 17:46:55 bbaia Exp $</version>
     public class FileSystemResource : AbstractResource
     {
         private FileInfo fileHandle;

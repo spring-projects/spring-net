@@ -8,7 +8,6 @@ namespace Spring.Validation
     /// </summary>
     /// <author>Damjan Tomic</author>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ValidatedAttribute.cs,v 1.1 2008/04/02 23:02:36 markpollack Exp $</version>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
     [Serializable]
     public class ValidatedAttribute : Attribute

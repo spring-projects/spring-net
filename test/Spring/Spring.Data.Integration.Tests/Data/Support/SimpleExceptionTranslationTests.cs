@@ -33,11 +33,6 @@ using Spring.Data.Core;
 
 namespace Spring.Data.Support
 {
-	/// <summary>
-	/// TODO: 
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: SimpleExceptionTranslationTests.cs,v 1.4 2007/08/03 19:51:23 markpollack Exp $</version>
 	[TestFixture]
 	public class SimpleExceptionTranslationTests 
 	{

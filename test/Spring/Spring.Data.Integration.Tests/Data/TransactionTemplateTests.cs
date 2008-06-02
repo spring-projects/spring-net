@@ -39,7 +39,6 @@ namespace Spring.Data
 	/// Integration tests for transaction template functionality 
 	/// </summary>
 	/// <author>Mark Pollack</author>
-	/// <version>$Id: TransactionTemplateTests.cs,v 1.7 2007/08/03 19:51:22 markpollack Exp $</version>
 	[TestFixture]
 	public class TransactionTemplateTests 
 	{

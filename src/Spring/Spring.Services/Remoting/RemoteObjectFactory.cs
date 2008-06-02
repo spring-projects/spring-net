@@ -38,7 +38,6 @@ namespace Spring.Remoting
 	/// Factory for creating MarshalByRefObject wrapper around target class.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: RemoteObjectFactory.cs,v 1.8 2007/07/31 18:18:19 bbaia Exp $</version>
 	public class RemoteObjectFactory : ConfigurableLifetime, IInitializingObject, IFactoryObject
 	{
 		#region Fields

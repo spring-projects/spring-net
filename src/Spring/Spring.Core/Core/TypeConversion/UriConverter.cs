@@ -33,7 +33,6 @@ namespace Spring.Core.TypeConversion
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: UriConverter.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
 	public class UriConverter : TypeConverter
 	{
         #region Constructor (s) / Destructor

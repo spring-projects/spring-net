@@ -49,7 +49,6 @@
              <author>Rob Harrop</author>
              <author>Rick Evans</author>
              <author>Aleksandar Seovic (.NET)</author>
-             <version>$Id: AbstractDependencyInjectionSpringContextTests.cs,v 1.4 2008/03/14 12:02:45 oakinger Exp $</version>
         </member>
         <member name="T:Spring.Testing.NUnit.AbstractSpringContextTests">
             <summary>
@@ -66,7 +65,6 @@
             </remarks>
             <author>Rod Johnson</author>
             <author>Aleksandar Seovic (.NET)</author>
-            <version>$Id: AbstractSpringContextTests.cs,v 1.2 2007/08/20 18:38:11 markpollack Exp $</version>
         </member>
         <member name="F:Spring.Testing.NUnit.AbstractSpringContextTests.contextKeyToContextMap">
             <summary>
@@ -290,7 +288,6 @@
             <author>Rod Johnson</author>
             <author>Juergen Hoeller</author>
             <author>Mark Pollack (.NET)</author>
-            <version>$Id: AbstractTransactionalDbProviderSpringContextTests.cs,v 1.3 2007/08/03 19:51:16 markpollack Exp $</version>
         </member>
         <member name="T:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests">
              <summary>
@@ -344,7 +341,6 @@
              <author>Juergen Hoeller</author>
              <author>Rick Evans</author>
              <author>Mark Pollack (.NET)</author>
-             <version>$Id: AbstractTransactionalSpringContextTests.cs,v 1.3 2007/06/01 14:05:57 oakinger Exp $</version>
         </member>
         <member name="F:Spring.Testing.NUnit.AbstractTransactionalSpringContextTests.transactionManager">
             <summary>

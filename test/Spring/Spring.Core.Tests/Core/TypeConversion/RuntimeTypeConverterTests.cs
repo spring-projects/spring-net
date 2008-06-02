@@ -31,7 +31,6 @@ namespace Spring.Core.TypeConversion
 	/// <summary>
 	/// Unit tests for the RuntimeTypeConverter class.
 	/// </summary>
-	/// <version>$Id: RuntimeTypeConverterTests.cs,v 1.1 2007/07/31 18:21:01 bbaia Exp $</version>
 	[TestFixture]
     public class RuntimeTypeConverterTests
     {

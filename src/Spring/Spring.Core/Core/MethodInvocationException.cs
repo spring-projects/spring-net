@@ -34,8 +34,6 @@ namespace Spring.Core
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: MethodInvocationException.cs,v 1.1 2007/07/31 00:08:42 markpollack Exp $
-    /// </version>
     [Serializable]
     public class MethodInvocationException : PropertyAccessException
     {

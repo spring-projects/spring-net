@@ -39,7 +39,6 @@ namespace Spring.Core.IO
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: IInputStreamSource.cs,v 1.10 2007/08/08 17:46:55 bbaia Exp $</version>
     /// <seealso cref="Spring.Core.IO.IResource"/>
 	public interface IInputStreamSource 
     {

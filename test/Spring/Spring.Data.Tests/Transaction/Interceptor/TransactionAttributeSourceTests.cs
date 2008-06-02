@@ -33,7 +33,6 @@ namespace Spring.Transaction.Interceptor
     /// <see cref="ITransactionAttributeSource"/> implementations.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TransactionAttributeSourceTests.cs,v 1.1 2008/05/27 19:07:03 markpollack Exp $</version>
     [TestFixture]
     public class TransactionAttributeSourceTests
     {

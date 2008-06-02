@@ -33,7 +33,6 @@ namespace Spring
     /// Replace the original context handler with this hookable version for testing ContextRegistry
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HookableContextHandler.cs,v 1.1 2008/03/21 10:49:38 oakinger Exp $</version>
     public class HookableContextHandler : ContextHandler, IConfigurationSectionHandler
     {
         public delegate object CreateContextFromSectionHandler(object parent, object configContext, XmlNode section);

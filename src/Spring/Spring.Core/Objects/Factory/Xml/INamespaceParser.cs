@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Xml
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
 	/// <author>Sandu Turcan (.NET)</author>
-	/// <version>$Id: INamespaceParser.cs,v 1.1 2007/08/07 21:23:37 markpollack Exp $</version>
 	public interface INamespaceParser
 	{
 

@@ -54,7 +54,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Bruno Baia (.NET)</author>
-    /// <version>$Id: AbstractAopProxyTests.cs,v 1.21 2008/05/21 08:04:52 bbaia Exp $</version>
     public abstract class AbstractAopProxyTests
     {
         protected MockTargetSource mockTargetSource = new MockTargetSource();

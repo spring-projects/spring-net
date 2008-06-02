@@ -68,7 +68,6 @@ namespace Spring.Data.NHibernate.Generic
     /// </remarks>
     /// <author>Sree Nivask (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: HibernateTemplate.cs,v 1.3 2008/01/24 17:29:09 markpollack Exp $</version>
     public class HibernateTemplate : HibernateAccessor, IHibernateOperations
     {
         #region Fields

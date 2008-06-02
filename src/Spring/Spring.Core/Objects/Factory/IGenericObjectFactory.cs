@@ -37,7 +37,6 @@ namespace Spring.Objects.Factory
 	/// </remarks>
 	/// <author>Colin Sampaleanu</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: IGenericObjectFactory.cs,v 1.6 2006/04/09 07:18:48 markpollack Exp $</version>
 	public interface IGenericObjectFactory
 	{
 		/// <summary>

@@ -33,7 +33,6 @@ namespace Spring.Web.UI.Controls
     /// Provides common functionality to all validation renderer controls.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AbstractValidationControl.cs,v 1.1 2008/03/19 12:07:14 oakinger Exp $</version>
     public abstract class AbstractValidationControl : Control
     {
         private string provider;

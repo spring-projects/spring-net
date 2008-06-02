@@ -35,7 +35,6 @@ namespace Spring.Validation
     /// Unit tests for the ValidatorGroup class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ValidatorGroupTests.cs,v 1.4 2008/02/05 20:40:26 aseovic Exp $</version>
     [TestFixture]
     public sealed class ValidatorGroupTests : ValidatorGroup
     {

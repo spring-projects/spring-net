@@ -43,7 +43,6 @@ namespace Spring.Web.UI
     /// </summary>
     /// <author>Goran Milosavljevic</author>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: PageTests.cs,v 1.7 2008/03/15 11:19:39 oakinger Exp $</version>
     [TestFixture]
     public class PageTests : TestWebContextTests
     {

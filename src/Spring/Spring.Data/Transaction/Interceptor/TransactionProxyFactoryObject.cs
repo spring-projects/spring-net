@@ -67,7 +67,6 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Dmitriy Kopylenko</author>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: TransactionProxyFactoryObject.cs,v 1.7 2007/08/01 17:56:16 markpollack Exp $</version>
 	public class TransactionProxyFactoryObject : ProxyConfig, IFactoryObject, IInitializingObject
 	{
 		private TransactionInterceptor _transactionInterceptor;

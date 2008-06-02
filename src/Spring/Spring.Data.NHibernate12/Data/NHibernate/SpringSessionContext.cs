@@ -38,7 +38,6 @@ namespace Spring.Data.NHibernate
     /// qualified name of this class as value.</p></remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: SpringSessionContext.cs,v 1.2 2007/09/19 22:58:11 markpollack Exp $</version>
     /// <see cref="SessionFactoryUtils.DoGetSession(ISessionFactory, bool)"/>
     public class SpringSessionContext : ICurrentSessionContext
     {

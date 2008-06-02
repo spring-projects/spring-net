@@ -36,7 +36,6 @@ namespace Spring.Web.UI.Controls
     /// Tests behaviour of the &lt;Head&gt; server control
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HeadTests.cs,v 1.1 2007/11/28 23:26:28 oakinger Exp $</version>
     [TestFixture]
     public class HeadTests
     {

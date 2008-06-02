@@ -40,6 +40,5 @@ namespace Spring.Data.NHibernate.Generic
     /// </remarks>
     /// <typeparam name="T">The type of result object</typeparam>
     /// <author>Sree Nivask (.NET)</author>
-    /// <version>$Id: HibernateDelegate.cs,v 1.2 2007/09/19 22:58:10 markpollack Exp $</version>
     public delegate T HibernateDelegate<T>(ISession session);
 }

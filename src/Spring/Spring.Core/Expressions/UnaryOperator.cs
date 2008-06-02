@@ -26,7 +26,6 @@ namespace Spring.Expressions
     /// Base class for unary operators.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: UnaryOperator.cs,v 1.8 2007/09/07 03:01:26 markpollack Exp $</version>
     //[Serializable]
     public abstract class UnaryOperator : BaseNode
     {

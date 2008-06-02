@@ -40,7 +40,6 @@ namespace Spring.Core
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
     /// <author>Aleksandar Seovic (.Net)</author>
-    /// <version>$Id: OrderComparator.cs,v 1.5 2006/04/09 07:18:38 markpollack Exp $</version>
     public class OrderComparator : IComparer
 	{
         /// <summary>

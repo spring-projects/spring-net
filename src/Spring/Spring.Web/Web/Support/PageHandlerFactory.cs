@@ -66,7 +66,6 @@ namespace Spring.Web.Support
     /// </para>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: PageHandlerFactory.cs,v 1.41 2008/05/15 12:35:27 oakinger Exp $</version>
     public class PageHandlerFactory : AbstractHandlerFactory
     {
         private readonly ILog Log = LogManager.GetLogger(typeof(PageHandlerFactory));

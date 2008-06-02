@@ -31,7 +31,6 @@ namespace Spring.Validation
     /// Thrown by the validation advice if the method parameters validation fails.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ValidationException.cs,v 1.1 2008/02/05 20:40:26 aseovic Exp $</version>
     [Serializable]
     public class ValidationException : Exception
     {

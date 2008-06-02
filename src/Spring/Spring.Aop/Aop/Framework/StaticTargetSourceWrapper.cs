@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: StaticTargetSourceWrapper.cs,v 1.3 2007/03/16 04:01:20 aseovic Exp $</version>
 	[Serializable]
     public sealed class StaticTargetSourceWrapper : ITargetSourceWrapper
 	{

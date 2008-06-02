@@ -38,7 +38,6 @@ namespace Spring.Objects.Support
     /// <author>Juergen Hoeller</author>
     /// <author>Jean-Pierre Pawlak</author>
     /// <author>Simon White (.NET)</author>
-    /// <version>$Id: PropertyComparator.cs,v 1.12 2007/07/31 00:09:03 markpollack Exp $</version>
     public class PropertyComparator : IComparer
     {
         private static readonly ILog logger

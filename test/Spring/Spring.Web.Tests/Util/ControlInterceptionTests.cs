@@ -36,7 +36,6 @@ namespace Spring.Util
     /// Unit tests for the ControlInterceptor class.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ControlInterceptionTests.cs,v 1.9 2008/03/14 12:02:46 oakinger Exp $</version>
     [TestFixture]
     public class ControlInterceptionTests
     {

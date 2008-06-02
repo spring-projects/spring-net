@@ -37,7 +37,6 @@ namespace Spring.Util
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: AssertUtils.cs,v 1.13 2008/03/14 10:45:08 bbaia Exp $</version>
 	public sealed class AssertUtils
 	{
 		/// <summary>

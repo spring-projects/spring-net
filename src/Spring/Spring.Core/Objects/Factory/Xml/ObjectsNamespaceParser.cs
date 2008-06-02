@@ -58,7 +58,6 @@ namespace Spring.Objects.Factory.Xml
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: ObjectsNamespaceParser.cs,v 1.7 2007/11/26 14:15:54 bbaia Exp $</version>
     [
         NamespaceParser(
             Namespace = "http://www.springframework.net",

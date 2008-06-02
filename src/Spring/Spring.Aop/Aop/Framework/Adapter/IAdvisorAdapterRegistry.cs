@@ -43,7 +43,6 @@ namespace Spring.Aop.Framework.Adapter
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: IAdvisorAdapterRegistry.cs,v 1.3 2006/04/09 07:18:35 markpollack Exp $</version>
     public interface IAdvisorAdapterRegistry
     {
         /// <summary>

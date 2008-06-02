@@ -34,7 +34,6 @@ namespace Spring.Web.UI.Controls
 	/// but are unfortunately not accessible from <see cref="BaseValidator"/>
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: AbstractBaseValidator.cs,v 1.1 2007/07/31 10:40:58 oakinger Exp $</version>
 	public abstract class AbstractBaseValidator : System.Web.UI.WebControls.BaseValidator
     {
 		/// <summary>

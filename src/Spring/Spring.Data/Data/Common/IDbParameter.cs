@@ -31,7 +31,6 @@ namespace Spring.Data.Common
 	/// A parameter interface used by <see cref="IDbParametersBuilder"/>
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IDbParameter.cs,v 1.6 2006/12/02 07:35:23 markpollack Exp $</version>
 	public interface IDbParameter 
 	{
 	    

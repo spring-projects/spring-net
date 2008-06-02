@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Support
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: DefaultObjectNameGenerator.cs,v 1.1 2007/05/23 20:16:13 markpollack Exp $</version>
     public class DefaultObjectNameGenerator : IObjectNameGenerator
     {
         #region IObjectNameGenerator Members

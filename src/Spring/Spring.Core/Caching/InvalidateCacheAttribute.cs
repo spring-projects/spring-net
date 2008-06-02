@@ -40,7 +40,6 @@ namespace Spring.Caching
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: InvalidateCacheAttribute.cs,v 1.2 2007/04/01 15:04:39 bbaia Exp $</version>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
     [Serializable]
     public sealed class InvalidateCacheAttribute : Attribute

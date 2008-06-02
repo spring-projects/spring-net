@@ -43,7 +43,6 @@ namespace Spring.Data.Objects.Generic
     /// 
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AdoOperation.cs,v 1.3 2008/05/30 21:09:32 markpollack Exp $</version>
     public abstract class AdoOperation : AbstractAdoOperation
     {
         

@@ -42,7 +42,6 @@ namespace Spring.Data.Objects.Generic
 	/// the subclass MappingAdoQuery.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: MappingAdoQueryWithContext.cs,v 1.2 2007/07/25 13:32:39 oakinger Exp $</version>
 	public abstract class MappingAdoQueryWithContext : AdoQuery
 	{
 		#region Constructor (s)

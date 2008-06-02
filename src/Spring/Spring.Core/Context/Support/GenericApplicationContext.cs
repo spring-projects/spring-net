@@ -52,7 +52,6 @@ namespace Spring.Context.Support
     /// </example>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: GenericApplicationContext.cs,v 1.5 2008/02/17 13:34:44 markpollack Exp $</version>
     public class GenericApplicationContext : AbstractApplicationContext, IObjectDefinitionRegistry
     {
         private DefaultListableObjectFactory objectFactory;

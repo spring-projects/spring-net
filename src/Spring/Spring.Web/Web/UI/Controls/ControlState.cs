@@ -31,7 +31,6 @@ namespace Spring.Web.UI.Controls
 	/// Enumeration representing a control's current initialization state.
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: ControlState.cs,v 1.1 2007/07/24 13:33:27 oakinger Exp $</version>
 	internal enum ControlState
 	{
 		Constructed,

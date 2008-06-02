@@ -40,7 +40,6 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: MethodMapTransactionAttributeSource.cs,v 1.15 2008/05/29 17:26:41 markpollack Exp $</version>
 	public class MethodMapTransactionAttributeSource : ITransactionAttributeSource
 	{
 		private IDictionary _methodMap;

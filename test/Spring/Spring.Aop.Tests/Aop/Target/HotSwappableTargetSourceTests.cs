@@ -34,7 +34,6 @@ namespace Spring.Aop.Target
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi (.NET)</author>
-	/// <version>$Id: HotSwappableTargetSourceTests.cs,v 1.4 2006/04/09 07:19:06 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class HotSwappableTargetSourceTests
 	{

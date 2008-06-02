@@ -43,7 +43,6 @@ namespace Spring.Core.TypeConversion
     /// </p>
     /// </remarks>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: RuntimeTypeConverter.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
     public class RuntimeTypeConverter : TypeConverter
     {
         #region Constructor (s) / Destructor

@@ -35,7 +35,6 @@ namespace Spring.Transaction.Interceptor
 	/// </p>
 	/// </remarks>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: RollbackRuleAttribute.cs,v 1.7 2008/03/31 20:09:59 markpollack Exp $</version>
 	[Serializable]
 	public class RollbackRuleAttribute : Attribute
 	{

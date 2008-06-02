@@ -51,7 +51,6 @@ namespace Spring.Aop
 	/// <seealso cref="Spring.Aop.IAfterReturningAdvice"/>
 	/// <seealso cref="Spring.Aop.IThrowsAdvice"/>
 	/// <seealso cref="AopAlliance.Intercept.IMethodInterceptor"/>
-	/// <version>$Id: IAdvisor.cs,v 1.7 2006/04/09 07:18:36 markpollack Exp $</version>
 	public interface IAdvisor
 	{
 		/// <summary>

@@ -40,7 +40,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IObjectDefinition.cs,v 1.14 2007/07/30 17:52:22 markpollack Exp $</version>
 	public interface IObjectDefinition
 	{
 		/// <summary>

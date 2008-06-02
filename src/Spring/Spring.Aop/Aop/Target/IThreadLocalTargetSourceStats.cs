@@ -32,7 +32,6 @@ namespace Spring.Aop.Target
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi (.NET)</author>
-	/// <version>$Id: IThreadLocalTargetSourceStats.cs,v 1.3 2006/04/09 07:18:37 markpollack Exp $</version>
 	public interface IThreadLocalTargetSourceStats
 	{
 		/// <summary>

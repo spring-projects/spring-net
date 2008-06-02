@@ -60,7 +60,6 @@ namespace Spring.Util
     /// </code>
     /// </example>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: DynamicCodeManager.cs,v 1.6 2007/08/08 04:00:16 bbaia Exp $</version>
     /// <seealso cref="Spring.Reflection.Dynamic.DynamicReflectionManager"/>
     /// <seealso cref="Spring.Proxy.DynamicProxyManager"/>
     /// <seealso cref="Spring.Objects.Factory.Support.MethodInjectingInstantiationStrategy"/>

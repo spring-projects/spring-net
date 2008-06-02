@@ -50,7 +50,6 @@ namespace Spring.Context.Support
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: ApplicationObjectSupport.cs,v 1.8 2007/07/17 14:51:14 oakinger Exp $</version>
 	public abstract class ApplicationObjectSupport : IApplicationContextAware
 	{
 		private IApplicationContext _applicationContext;

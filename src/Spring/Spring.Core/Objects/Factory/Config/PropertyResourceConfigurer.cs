@@ -69,7 +69,6 @@ namespace Spring.Objects.Factory.Config
     /// <author>Simon White (.NET)</author>
     /// <seealso cref="Spring.Objects.Factory.Config.PropertyOverrideConfigurer"/>
     /// <seealso cref="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer"/>
-    /// <version>$Id: PropertyResourceConfigurer.cs,v 1.19 2007/08/27 14:49:42 oakinger Exp $</version>
     [Serializable]
     public abstract class PropertyResourceConfigurer
         : IObjectFactoryPostProcessor, IOrdered

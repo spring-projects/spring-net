@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Support
     /// Unit tests for the WebObjectDefinitionFactory class.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: WebObjectDefinitionFactoryTests.cs,v 1.4 2008/03/14 12:02:45 oakinger Exp $</version>
     [AspTestFixture("/Test", "/Spring/Objects/Factory/Support")]
     public class WebObjectDefinitionFactoryTests
     {

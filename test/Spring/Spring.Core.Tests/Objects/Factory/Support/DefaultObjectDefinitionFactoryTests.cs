@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Support
 	/// Unit tests for the DefaultObjectDefinitionFactory class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: DefaultObjectDefinitionFactoryTests.cs,v 1.3 2007/05/28 19:14:18 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class DefaultObjectDefinitionFactoryTests
 	{

@@ -32,7 +32,6 @@ namespace Spring.Util
     /// Various utility methods relating to the manipulation of arrays.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ArrayUtils.cs,v 1.15 2007/02/17 08:28:12 bbaia Exp $</version>
     public sealed class ArrayUtils
     {
         /// <summary>

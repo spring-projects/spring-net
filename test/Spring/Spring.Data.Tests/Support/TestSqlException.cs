@@ -31,7 +31,6 @@ namespace Spring.Support
 	/// A simple exception class to test exception translation functionality 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TestSqlException.cs,v 1.2 2006/06/26 18:57:31 markpollack Exp $</version>
     [Serializable] 
     public class TestSqlException : Exception
     {

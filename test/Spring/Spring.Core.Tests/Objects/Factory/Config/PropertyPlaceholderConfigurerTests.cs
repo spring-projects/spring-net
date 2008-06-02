@@ -41,7 +41,6 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the PropertyPlaceholderConfigurer class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: PropertyPlaceholderConfigurerTests.cs,v 1.11 2007/11/26 14:16:29 bbaia Exp $</version>
 	[TestFixture]
     public sealed class PropertyPlaceholderConfigurerTests
 	{

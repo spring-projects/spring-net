@@ -48,7 +48,6 @@ namespace Spring.Data.NHibernate
 	/// </p>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: HibernateAccessor.cs,v 1.6 2008/01/25 15:04:39 markpollack Exp $</version>
 	public abstract class HibernateAccessor : IInitializingObject, IObjectFactoryAware
 	{
 

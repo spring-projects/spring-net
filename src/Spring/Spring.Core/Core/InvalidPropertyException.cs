@@ -34,7 +34,6 @@ namespace Spring.Core
     /// Thrown in response to referring to an invalid property (most often via reflection).
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: InvalidPropertyException.cs,v 1.2 2007/07/31 03:47:22 markpollack Exp $</version>
     [Serializable]
     public class InvalidPropertyException : FatalReflectionException
     {

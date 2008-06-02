@@ -71,7 +71,6 @@ namespace Spring.Context.Support
     /// <author>Rod Johnson</author>
     /// <author>Juergan Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
-    /// <version>$Id: AbstractApplicationContext.cs,v 1.74 2007/08/27 09:38:28 oakinger Exp $</version>
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
     public abstract class AbstractApplicationContext

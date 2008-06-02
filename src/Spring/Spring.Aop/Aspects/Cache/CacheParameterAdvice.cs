@@ -50,7 +50,6 @@ namespace Spring.Aspects.Cache
     /// </remarks>
     /// <seealso cref="CacheParameterAttribute"/>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CacheParameterAdvice.cs,v 1.7 2008/05/05 15:00:55 markpollack Exp $</version>
     public class CacheParameterAdvice : BaseCacheAdvice, IAfterReturningAdvice
     {
         // shared logger instance

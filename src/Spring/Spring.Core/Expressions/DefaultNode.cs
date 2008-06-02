@@ -27,7 +27,6 @@ namespace Spring.Expressions
     /// Represents parsed default node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DefaultNode.cs,v 1.3 2007/09/07 03:01:24 markpollack Exp $</version>
     [Serializable]
     public class DefaultNode : BinaryOperator
     {        

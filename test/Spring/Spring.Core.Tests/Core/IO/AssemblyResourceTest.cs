@@ -34,7 +34,6 @@ namespace Spring.Core.IO
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Federico Spinazzi</author>
-    /// <version>$Id: AssemblyResourceTest.cs,v 1.10 2007/08/08 17:49:59 bbaia Exp $</version>
     [TestFixture]
     public class AssemblyResourceTest
     {

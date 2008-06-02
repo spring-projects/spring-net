@@ -15,7 +15,6 @@ namespace Spring.Data.Common
 	/// itself keeps track of the collection.</remarks>
 	/// 
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IDbParametersBuilder.cs,v 1.1 2006/12/02 07:38:15 markpollack Exp $</version>
 	public interface IDbParametersBuilder 
 	{
         /// <summary>

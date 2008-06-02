@@ -33,7 +33,6 @@ namespace Spring.Globalization.Resolvers
     /// Unit tests for the DefaultCultureResolver class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: DefaultCultureResolverTests.cs,v 1.2 2006/04/09 07:24:50 markpollack Exp $</version>
     [TestFixture]
     public sealed class DefaultCultureResolverTests
     {

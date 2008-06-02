@@ -38,7 +38,6 @@ namespace Spring.Core.TypeResolution
 	/// <author>Rick Evans</author>
 	/// <author>Bruno Baia</author>
     /// <author>Erich Eichinger</author>
-	/// <version>$Id: CachedTypeResolver.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
 	public class CachedTypeResolver : ITypeResolver
 	{
 		/// <summary>

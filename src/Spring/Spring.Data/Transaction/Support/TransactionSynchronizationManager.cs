@@ -65,7 +65,6 @@ namespace Spring.Transaction.Support
 	/// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: TransactionSynchronizationManager.cs,v 1.19 2008/02/17 13:17:13 markpollack Exp $</version>
 	public sealed class TransactionSynchronizationManager
 	{
 	    #region Logging

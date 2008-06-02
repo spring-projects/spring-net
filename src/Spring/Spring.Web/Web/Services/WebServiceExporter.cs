@@ -57,7 +57,6 @@ namespace Spring.Web.Services
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebServiceExporter.cs,v 1.33 2008/04/07 11:00:24 bbaia Exp $</version>
     public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IFactoryObject, IObjectNameAware
     {
         #region Fields

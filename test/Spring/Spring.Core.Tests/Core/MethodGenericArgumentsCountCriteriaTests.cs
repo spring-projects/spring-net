@@ -35,7 +35,6 @@ namespace Spring.Core
     /// Unit tests for the MethodGenericArgumentsCountCriteria class.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: MethodGenericArgumentsCountCriteriaTests.cs,v 1.1 2007/08/04 01:05:52 bbaia Exp $</version>
 	[TestFixture]
     public sealed class MethodGenericArgumentsCountCriteriaTests
     {

@@ -34,7 +34,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
     /// <author>Ronald Wildenberg</author>
-	/// <version>$Id: AttributeMatchMethodPointcut.cs,v 1.8 2007/05/21 16:43:45 bbaia Exp $</version>
 	[Serializable]
     public class AttributeMatchMethodPointcut : StaticMethodMatcherPointcut
 	{

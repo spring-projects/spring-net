@@ -37,7 +37,6 @@ namespace Spring.Data.Support
     /// Can contain a ConnectionHolder object.
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AdoTransactionObjectSupport.cs,v 1.7 2007/11/28 05:54:47 markpollack Exp $</version>
     public abstract class AdoTransactionObjectSupport : ISavepointManager, ISmartTransactionObject
     {
         #region Fields

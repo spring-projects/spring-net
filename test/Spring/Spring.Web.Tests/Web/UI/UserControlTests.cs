@@ -36,7 +36,6 @@ namespace Spring.Web.UI
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: UserControlTests.cs,v 1.2 2008/03/15 11:19:39 oakinger Exp $</version>
     [TestFixture]
     public class UserControlTests : TestWebContextTests
     {

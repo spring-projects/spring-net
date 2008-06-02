@@ -30,7 +30,6 @@ namespace Spring.Globalization.Formatters
     /// format and parse boolean values.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: BooleanFormatter.cs,v 1.1 2007/06/01 08:59:31 oakinger Exp $</version>
     public class BooleanFormatter:IFormatter
     {
         private string trueString;

@@ -42,7 +42,6 @@ namespace Spring.Data.NHibernate
 	/// Note: This is an SPI class, not intended to be used by applications.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: SessionHolder.cs,v 1.1 2007/05/31 20:25:13 markpollack Exp $</version>
 	public class SessionHolder : ResourceHolderSupport
 	{
 		#region Fields

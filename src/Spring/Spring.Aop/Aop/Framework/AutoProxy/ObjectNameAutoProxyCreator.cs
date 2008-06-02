@@ -46,7 +46,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <seealso cref="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator.IsMatch"/>
     /// <author>Juergen Hoeller</author>
     /// <author>Adhari C Mahendra (.NET)</author>
-    /// <version>$Id: ObjectNameAutoProxyCreator.cs,v 1.8 2008/03/03 09:28:49 bbaia Exp $</version>
     public class ObjectNameAutoProxyCreator : AbstractAutoProxyCreator
     {
         private IList objectNames;

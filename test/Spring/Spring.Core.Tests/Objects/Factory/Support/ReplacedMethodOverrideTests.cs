@@ -31,7 +31,6 @@ namespace Spring.Objects.Factory.Support
 	/// Unit tests for the ReplacedMethodOverride class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ReplacedMethodOverrideTests.cs,v 1.2 2006/04/09 07:24:50 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class ReplacedMethodOverrideTests
 	{

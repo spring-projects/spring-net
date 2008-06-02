@@ -72,7 +72,6 @@ namespace Spring.Web.Support
     /// </example>
     /// <author>Aleksandar Seovic</author>
     /// <author>Matan Shapira</author>
-    /// <version>$Id: Result.cs,v 1.13 2008/02/02 09:12:44 oakinger Exp $</version>
     [Serializable]
     public class Result
     {

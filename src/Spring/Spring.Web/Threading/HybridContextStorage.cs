@@ -12,7 +12,6 @@ namespace Spring.Threading
     /// and <see cref="System.Web.HttpContext">System.Web.HttpContext</see> to store data.
     /// </remarks>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HybridContextStorage.cs,v 1.1 2007/02/02 21:31:25 oakinger Exp $</version>  
     public class HybridContextStorage : IThreadStorage
     {
         /// <summary>

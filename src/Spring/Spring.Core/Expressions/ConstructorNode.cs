@@ -33,7 +33,6 @@ namespace Spring.Expressions
     /// Represents parsed method node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ConstructorNode.cs,v 1.16 2007/09/07 03:01:21 markpollack Exp $</version>
     [Serializable]
     public class ConstructorNode : NodeWithArguments
     {

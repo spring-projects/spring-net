@@ -38,7 +38,6 @@ namespace Spring.Aop.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: DefaultPointcutAdvisor.cs,v 1.8 2007/05/30 22:35:43 markpollack Exp $</version>
 	[Serializable]
     public class DefaultPointcutAdvisor : AbstractGenericPointcutAdvisor
 	{

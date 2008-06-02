@@ -30,7 +30,6 @@ namespace Spring.Context
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: IApplicationEventListener.cs,v 1.2 2006/04/09 07:18:38 markpollack Exp $</version>
 	[EventListener]
 	public interface IApplicationEventListener
 	{

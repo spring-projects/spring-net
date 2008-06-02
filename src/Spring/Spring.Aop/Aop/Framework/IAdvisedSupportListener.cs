@@ -36,7 +36,6 @@ namespace Spring.Aop.Framework
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: IAdvisedSupportListener.cs,v 1.5 2006/04/09 07:18:35 markpollack Exp $</version>
 	public interface IAdvisedSupportListener
 	{
 	    /// <summary>

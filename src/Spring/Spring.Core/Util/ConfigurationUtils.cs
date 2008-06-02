@@ -32,7 +32,6 @@ namespace Spring.Util
     /// Utility class for .NET configuration files management.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ConfigurationUtils.cs,v 1.5 2008/01/10 16:37:43 bbaia Exp $</version>
     public class ConfigurationUtils
     {
         /// <summary>

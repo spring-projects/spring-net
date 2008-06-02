@@ -41,7 +41,6 @@ namespace Spring.Pool.Support
 	/// <author>Doug Lea</author>
 	/// <author>Federico Spinazzi</author>
 	/// <author>Mark Pollack</author>
-	/// <version>$Id: SimplePool.cs,v 1.4 2006/09/15 19:06:07 markpollack Exp $</version>
 	public class SimplePool : IObjectPool
 	{
 		private readonly IPoolableObjectFactory factory;

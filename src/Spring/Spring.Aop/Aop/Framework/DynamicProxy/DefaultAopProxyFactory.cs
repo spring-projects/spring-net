@@ -50,7 +50,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Aleksandar Seovic (.NET)</author>
     /// <author>Bruno Baia (.NET)</author>
     /// <seealso cref="Spring.Aop.Framework.IAopProxyFactory"/>
-    /// <version>$Id: DefaultAopProxyFactory.cs,v 1.2 2007/08/02 16:28:29 bbaia Exp $</version>
     [Serializable]
     public class DefaultAopProxyFactory : IAopProxyFactory
     {

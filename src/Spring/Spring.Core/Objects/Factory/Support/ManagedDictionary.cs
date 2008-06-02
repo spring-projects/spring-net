@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Support
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: ManagedDictionary.cs,v 1.14 2007/11/26 14:15:54 bbaia Exp $</version>
     [Serializable]
     public class ManagedDictionary : Hashtable, IManagedCollection
 	{

@@ -28,7 +28,6 @@ namespace Spring.Objects.Factory.Config
 	/// class must apply environment variables when replacing values.
 	/// </summary>
 	/// <author>Mark Pollack</author>
-	/// <version>$Id: EnvironmentVariableMode.cs,v 1.6 2007/03/16 04:01:35 aseovic Exp $</version>
     [Serializable]
     public enum EnvironmentVariableMode
 	{

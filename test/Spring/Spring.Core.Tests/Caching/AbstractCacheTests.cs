@@ -34,7 +34,6 @@ namespace Spring.Caching
     /// that derived classes maybe rely on this default behaviour
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AbstractCacheTests.cs,v 1.1 2007/08/25 14:26:36 oakinger Exp $</version>
     [TestFixture]
     public class AbstractCacheTests
     {

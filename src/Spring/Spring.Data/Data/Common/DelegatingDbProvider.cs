@@ -30,7 +30,6 @@ namespace Spring.Data.Common
     /// IDbProvider
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: DelegatingDbProvider.cs,v 1.1 2008/01/29 22:19:20 markpollack Exp $</version>    
     public class DelegatingDbProvider : IDbProvider, IInitializingObject
     {
         private IDbProvider targetDbProvider;

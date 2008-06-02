@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Xml
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: TestObjectCreator.cs,v 1.3 2006/04/09 07:24:51 markpollack Exp $</version>
     public class TestObjectCreator
     {
         public static TestObject CreateTestObject(string name, int age)

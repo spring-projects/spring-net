@@ -46,7 +46,6 @@ namespace Spring.EnterpriseServices
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: EnterpriseServicesExporter.cs,v 1.6 2007/05/16 10:03:24 oakinger Exp $</version>
     public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAware
     {
         #region Fields

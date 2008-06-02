@@ -51,7 +51,6 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: TransactionAttributeSourceEditor.cs,v 1.5 2006/05/18 21:37:51 markpollack Exp $</version>
 	public class TransactionAttributeSourceEditor
 	{
 		#region PropertiesEditor Class

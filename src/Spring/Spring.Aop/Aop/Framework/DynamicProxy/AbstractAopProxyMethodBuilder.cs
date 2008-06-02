@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: AbstractAopProxyMethodBuilder.cs,v 1.10 2008/05/21 08:04:34 bbaia Exp $</version>
     public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
     {
         #region Fields

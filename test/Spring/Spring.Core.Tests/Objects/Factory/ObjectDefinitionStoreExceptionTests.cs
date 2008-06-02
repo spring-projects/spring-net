@@ -34,7 +34,6 @@ namespace Spring.Objects.Factory
 	/// Unit tests for the ObjectDefinitionStoreException class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ObjectDefinitionStoreExceptionTests.cs,v 1.5 2007/08/08 17:49:04 bbaia Exp $</version>
 	[TestFixture]
 	public sealed class ObjectDefinitionStoreExceptionTests
 	{

@@ -18,7 +18,6 @@ namespace Spring.Aspects.Validation
     /// </remarks>
     /// <author>Damjan Tomic</author>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ParameterValidationAdvice.cs,v 1.2 2008/04/02 23:00:28 markpollack Exp $</version>
     public class ParameterValidationAdvice : IMethodBeforeAdvice, IApplicationContextAware
     {
         private IApplicationContext applicationContext; 

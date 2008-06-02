@@ -46,7 +46,6 @@ namespace Spring.Collections
 	/// <see cref="Spring.Collections.ISet"/>.
 	/// </p>
 	/// </remarks>
-	/// <version>$Id: ImmutableSet.cs,v 1.6 2007/03/16 04:01:28 aseovic Exp $</version>
     [Serializable]
     public sealed class ImmutableSet : Set
 	{

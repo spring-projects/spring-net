@@ -33,7 +33,6 @@ namespace Spring.Util
 	/// Unit tests for the ArrayUtils class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ArrayUtilsTests.cs,v 1.5 2007/02/02 12:33:30 oakinger Exp $</version>
 	[TestFixture]
     public sealed class ArrayUtilsTests
     {

@@ -39,7 +39,6 @@ namespace Spring.Remoting.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseRemoteObject.cs,v 1.1 2006/09/13 20:20:16 bbaia Exp $</version>
     public abstract class BaseRemoteObject : MarshalByRefObject
     {
 		#region Fields

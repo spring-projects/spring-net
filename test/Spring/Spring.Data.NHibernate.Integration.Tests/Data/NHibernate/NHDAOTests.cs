@@ -33,11 +33,6 @@ using Spring.Data.NHibernate.Support;
 
 namespace Spring.Data.NHibernate
 {
-	/// <summary>
-	/// TODO: 
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: NHDAOTests.cs,v 1.1 2007/05/31 20:25:14 markpollack Exp $</version>
 	[TestFixture]
 	public class NHDAOTests 
 	{

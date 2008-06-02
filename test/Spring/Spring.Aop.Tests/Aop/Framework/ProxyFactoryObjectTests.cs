@@ -59,7 +59,6 @@ namespace Spring.Aop.Framework
     /// <author>Federico Spinazzi (.NET)</author>
     /// <author>Choy Rim (.NET)</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: ProxyFactoryObjectTests.cs,v 1.35 2007/12/07 17:59:31 bbaia Exp $</version>
     [TestFixture]
     public sealed class ProxyFactoryObjectTests
     {

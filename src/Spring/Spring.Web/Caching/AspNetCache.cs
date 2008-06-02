@@ -42,7 +42,6 @@ namespace Spring.Caching
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AspNetCache.cs,v 1.6 2007/09/14 18:26:26 oakinger Exp $</version>
     public class AspNetCache : AbstractCache
     {
         #region Internal Abstractions

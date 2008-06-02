@@ -33,7 +33,6 @@ namespace Spring.Core
     /// <see cref="System.Reflection.MethodInfo"/> matches a given <see cref="System.Type"/>.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: MethodReturnTypeCriteria.cs,v 1.1 2007/07/31 02:03:36 markpollack Exp $</version>
     public class MethodReturnTypeCriteria : ICriteria
     {
         #region Constants

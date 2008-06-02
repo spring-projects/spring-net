@@ -30,7 +30,6 @@ namespace Spring.Util
     /// Utility class containing helper methods for object comparison.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CompareUtils.cs,v 1.2 2007/02/17 08:28:12 bbaia Exp $</version>
     public class CompareUtils
     {
         /// <summary>Compares two objects.</summary>

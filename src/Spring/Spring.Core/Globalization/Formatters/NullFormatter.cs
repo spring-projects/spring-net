@@ -29,7 +29,6 @@ namespace Spring.Globalization.Formatters
     /// This formatter is a no-operation implementation.
     /// </remarks>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: NullFormatter.cs,v 1.1 2007/05/19 00:23:18 oakinger Exp $</version>
     public class NullFormatter : IFormatter
     {
         #region Constructors

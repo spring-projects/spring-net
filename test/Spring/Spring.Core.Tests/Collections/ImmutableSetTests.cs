@@ -32,7 +32,6 @@ namespace Spring.Collections
 	/// Unit tests for the ImmutableSet wrapper class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ImmutableSetTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
 	[TestFixture]
     public class ImmutableSetTests
     {

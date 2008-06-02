@@ -46,7 +46,6 @@ namespace Spring.Objects.Factory.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebObjectFactory.cs,v 1.10 2008/05/29 12:13:27 oakinger Exp $</version>
     public class WebObjectFactory : DefaultListableObjectFactory
     {
         private readonly static ILog log = LogManager.GetLogger(typeof(WebObjectFactory));

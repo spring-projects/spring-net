@@ -31,7 +31,6 @@ namespace Spring.Context {
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: IApplicationEventPublisher.cs,v 1.2 2006/04/09 07:18:38 markpollack Exp $</version>
 	public interface IApplicationEventPublisher 
     {
 		/// <summary>

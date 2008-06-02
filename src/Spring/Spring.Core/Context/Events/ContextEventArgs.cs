@@ -28,7 +28,6 @@ namespace Spring.Context.Events
 	/// context lifecycle events.
 	/// </summary>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: ContextEventArgs.cs,v 1.8 2007/07/31 08:18:11 markpollack Exp $</version>
 	/// <seealso cref="Spring.Context.IApplicationContext"/>
 	/// <seealso cref="Spring.Context.IApplicationEventListener"/>
 	/// <seealso cref="Spring.Context.EventListenerAttribute"/>

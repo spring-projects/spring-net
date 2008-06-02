@@ -43,7 +43,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Rick Evans</author>
 	/// <seealso cref="Common.Logging.LogManager.GetLogger(string)"/>
-	/// <version>$Id: LogFactoryObject.cs,v 1.3 2007/10/21 18:17:41 markpollack Exp $</version>
     [Serializable]
     public class LogFactoryObject : IFactoryObject, IInitializingObject
 	{

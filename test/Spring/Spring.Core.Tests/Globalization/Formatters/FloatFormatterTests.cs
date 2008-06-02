@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
 	/// Unit tests for FloatFormatter class.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: FloatFormatterTests.cs,v 1.3 2006/04/09 07:24:49 markpollack Exp $</version>
     [TestFixture]
     public class FloatFormatterTests
 	{

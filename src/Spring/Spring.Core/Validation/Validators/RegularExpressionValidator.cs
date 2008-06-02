@@ -40,7 +40,6 @@ namespace Spring.Validation
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: RegularExpressionValidator.cs,v 1.2 2006/04/09 07:19:04 markpollack Exp $</version>
 	public class RegularExpressionValidator : BaseValidator
 	{
 	    #region Fields

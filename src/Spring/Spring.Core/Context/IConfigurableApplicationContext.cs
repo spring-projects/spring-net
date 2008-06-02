@@ -55,7 +55,6 @@ namespace Spring.Context
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IConfigurableApplicationContext.cs,v 1.10 2006/04/09 07:18:38 markpollack Exp $</version>
     /// <seealso cref="System.IDisposable"/>
     /// <seealso cref="Spring.Context.IApplicationContext"/>
     public interface IConfigurableApplicationContext : IApplicationContext

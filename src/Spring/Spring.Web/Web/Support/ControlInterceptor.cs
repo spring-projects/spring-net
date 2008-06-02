@@ -31,7 +31,6 @@ namespace Spring.Web.Support
     /// Support Class providing a method to ensure a control has been intercepted
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ControlInterceptor.cs,v 1.2 2008/05/13 14:22:47 oakinger Exp $</version>
     internal sealed class ControlInterceptor
     {				
         /// <summary>

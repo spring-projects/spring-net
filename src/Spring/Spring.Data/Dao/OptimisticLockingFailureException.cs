@@ -38,7 +38,6 @@ namespace Spring.Dao
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: OptimisticLockingFailureException.cs,v 1.5 2006/05/18 21:37:50 markpollack Exp $</version>
 	[Serializable]
 	public class OptimisticLockingFailureException : ConcurrencyFailureException
 	{

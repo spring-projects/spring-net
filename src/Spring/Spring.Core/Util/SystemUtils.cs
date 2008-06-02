@@ -34,7 +34,6 @@ namespace Spring.Util
     /// Utility class containing miscellaneous system-level functionality.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SystemUtils.cs,v 1.5 2007/09/07 02:46:49 markpollack Exp $</version>
     public sealed class SystemUtils
     {
         private static bool assemblyResolverRegistered = false;

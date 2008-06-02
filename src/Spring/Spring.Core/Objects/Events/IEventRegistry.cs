@@ -27,7 +27,6 @@ namespace Spring.Objects.Events
 	/// publishing of events.
 	/// </summary>
 	/// <author>Griffin Caprio</author>
-	/// <version>$Id: IEventRegistry.cs,v 1.5 2006/04/09 07:18:47 markpollack Exp $</version>
 	public interface IEventRegistry
 	{
 		/// <summary>

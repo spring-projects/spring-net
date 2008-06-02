@@ -27,7 +27,6 @@ namespace Spring.Objects.Factory.Config
     /// resolves variable name against environment variables.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: EnvironmentVariableSource.cs,v 1.3 2007/08/02 22:18:32 markpollack Exp $</version>
     [Serializable]
     public class EnvironmentVariableSource : IVariableSource
     {

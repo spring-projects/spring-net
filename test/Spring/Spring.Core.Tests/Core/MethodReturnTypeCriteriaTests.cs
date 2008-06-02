@@ -33,7 +33,6 @@ namespace Spring.Core
 	/// <summary>
 	/// Unit tests for the MethodReturnTypeCriteria class.
     /// </summary>
-    /// <version>$Id: MethodReturnTypeCriteriaTests.cs,v 1.1 2007/08/04 01:05:52 bbaia Exp $</version>
 	[TestFixture]
     public sealed class MethodReturnTypeCriteriaTests
     {

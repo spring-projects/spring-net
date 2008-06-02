@@ -30,7 +30,6 @@ namespace Spring.Context
 	/// Marks an interface as being an application event listener.
 	/// </summary>
 	/// <author>Griffin Caprio</author>
-	/// <version>$Id: EventListenerAttribute.cs,v 1.5 2006/04/09 07:18:38 markpollack Exp $</version>
 	/// <see cref="Spring.Context.IApplicationEventListener"/>
 	[AttributeUsage(AttributeTargets.Interface)]
 	public sealed class EventListenerAttribute : Attribute

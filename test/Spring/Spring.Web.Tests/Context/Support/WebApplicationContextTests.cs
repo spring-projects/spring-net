@@ -38,7 +38,6 @@ namespace Spring.Context.Support
     ///
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: WebApplicationContextTests.cs,v 1.1 2008/02/02 10:24:39 oakinger Exp $</version>
     [AspTestFixture("/Test", "/Spring/Context/Support/WebApplicationContextTests")]
     public class WebApplicationContextTests : WebFormTestCase
     {

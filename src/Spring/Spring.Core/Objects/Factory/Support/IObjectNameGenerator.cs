@@ -28,7 +28,6 @@ namespace Spring.Objects.Factory.Support
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IObjectNameGenerator.cs,v 1.1 2007/05/23 20:16:13 markpollack Exp $</version>
     public interface IObjectNameGenerator
     {
         /// <summary>

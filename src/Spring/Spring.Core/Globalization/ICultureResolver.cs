@@ -31,7 +31,6 @@ namespace Spring.Globalization
     /// resolution.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ICultureResolver.cs,v 1.2 2006/04/09 07:18:47 markpollack Exp $</version>
     public interface ICultureResolver
     {
         /// <summary>

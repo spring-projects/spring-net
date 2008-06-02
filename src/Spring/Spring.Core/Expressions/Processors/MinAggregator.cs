@@ -27,7 +27,6 @@ namespace Spring.Expressions.Processors
     /// Implementation of the minimum aggregator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: MinAggregator.cs,v 1.2 2006/12/04 08:58:33 aseovic Exp $</version>
     public class MinAggregator : ICollectionProcessor
     {
         /// <summary>

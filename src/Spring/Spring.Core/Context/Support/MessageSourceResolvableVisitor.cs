@@ -43,7 +43,6 @@ namespace Spring.Context.Support
 	/// </p>
 	/// </remarks>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: MessageSourceResolvableVisitor.cs,v 1.6 2006/04/09 07:18:38 markpollack Exp $</version>
 	public class MessageSourceResolvableVisitor
 	{
 		/// <summary>

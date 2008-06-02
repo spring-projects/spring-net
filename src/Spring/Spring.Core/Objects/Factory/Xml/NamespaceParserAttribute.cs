@@ -35,7 +35,6 @@ namespace Spring.Objects.Factory.Xml
     /// If 
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: NamespaceParserAttribute.cs,v 1.1 2007/08/08 00:34:06 bbaia Exp $</version>
     [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public class NamespaceParserAttribute : Attribute
     {

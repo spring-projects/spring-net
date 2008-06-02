@@ -33,7 +33,6 @@ namespace Spring.Proxy
 	/// Unit tests for the CompositionProxyTypeBuilder class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ExplicitCompositionProxyTypeBuilderTests.cs,v 1.3 2006/08/10 18:45:58 bbaia Exp $</version>
 	[TestFixture]
 	public sealed class ExplicitCompositionProxyTypeBuilderTests : CompositionProxyTypeBuilderTests
 	{

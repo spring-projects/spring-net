@@ -32,7 +32,6 @@ namespace Spring.Collections
 	/// Unit tests for the AbstractQueue class.
 	/// </summary>
 	/// <author>Griffin Caprio</author>
-	/// <version>$Id: AbstractQueueTests.cs,v 1.7 2006/09/30 18:39:24 gcaprio Exp $</version>
 	[TestFixture]
 	public sealed class AbstractQueueTests
 	{

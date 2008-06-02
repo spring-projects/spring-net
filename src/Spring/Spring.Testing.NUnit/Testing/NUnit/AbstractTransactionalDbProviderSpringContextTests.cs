@@ -18,7 +18,6 @@ namespace Spring.Testing.NUnit
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AbstractTransactionalDbProviderSpringContextTests.cs,v 1.3 2007/08/03 19:51:16 markpollack Exp $</version>
     public abstract class AbstractTransactionalDbProviderSpringContextTests : AbstractTransactionalSpringContextTests
     {
         /// <summary>

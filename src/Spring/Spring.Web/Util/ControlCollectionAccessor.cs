@@ -31,7 +31,6 @@ namespace Spring.Util
 	/// Helper class for easier access to reflected ControlCollection members.
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: ControlCollectionAccessor.cs,v 1.3 2008/05/13 23:23:03 oakinger Exp $</version>
 	internal class ControlCollectionAccessor
 	{
 	    private static readonly IDynamicField _owner = new SafeField(typeof (ControlCollection).GetField("_owner", BindingFlags.Instance | BindingFlags.NonPublic));

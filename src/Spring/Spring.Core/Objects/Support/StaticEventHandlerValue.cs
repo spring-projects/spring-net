@@ -32,7 +32,6 @@ namespace Spring.Objects.Support
 	/// Describes an event handler for a static class method.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: StaticEventHandlerValue.cs,v 1.5 2006/04/09 07:19:00 markpollack Exp $</version>
     public class StaticEventHandlerValue : AbstractWiringEventHandlerValue
     {
         #region Constants

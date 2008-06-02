@@ -39,7 +39,6 @@ namespace Spring.Aop.Framework
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: ProxyFactory.cs,v 1.8 2007/03/16 04:01:19 aseovic Exp $</version>
 	[Serializable]
     public class ProxyFactory : AdvisedSupport
 	{

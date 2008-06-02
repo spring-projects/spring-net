@@ -36,7 +36,6 @@ namespace Spring.Aspects.Cache
     /// more of their parameters.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CacheParameterAdvisor.cs,v 1.1 2007/02/16 03:12:56 aseovic Exp $</version>
     public class CacheParameterAdvisor : AttributeMatchMethodPointcutAdvisor, IApplicationContextAware
     {
         /// <summary>

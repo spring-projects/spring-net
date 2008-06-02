@@ -36,7 +36,6 @@ namespace Spring.Data
 	/// Group together multiple ITestObjectDao operations.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TestObjectMgr.cs,v 1.3 2007/10/21 18:32:41 markpollack Exp $</version>
 	public class TestObjectMgr : ITestObjectMgr
 	{
 		#region Fields

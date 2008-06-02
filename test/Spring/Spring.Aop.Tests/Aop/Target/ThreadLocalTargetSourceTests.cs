@@ -27,8 +27,6 @@ namespace Spring.Aop.Target
 {
     /// <author>Rod Johnson</author>
     /// <author>Federico Spinazzi</author>
-    /// <version>  $Id: ThreadLocalTargetSourceTests.cs,v 1.5 2006/11/13 07:04:51 markpollack Exp $
-    /// </version>
     [TestFixture]
     public class ThreadLocalTargetSourceTests
     {

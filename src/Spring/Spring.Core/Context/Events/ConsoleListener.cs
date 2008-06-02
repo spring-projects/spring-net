@@ -36,7 +36,6 @@ namespace Spring.Context.Events
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: ConsoleListener.cs,v 1.6 2006/04/09 07:18:38 markpollack Exp $</version>
 	/// <seealso cref="Spring.Context.IApplicationEventListener"/>
 	public sealed class ConsoleListener : IApplicationEventListener
 	{

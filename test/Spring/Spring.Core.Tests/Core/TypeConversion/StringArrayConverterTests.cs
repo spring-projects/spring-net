@@ -34,7 +34,6 @@ namespace Spring.Core.TypeConversion
 	/// Unit tests for the StringArrayConverter class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: StringArrayConverterTests.cs,v 1.1 2007/07/31 18:21:02 bbaia Exp $</version>
     [TestFixture]
     public sealed class StringArrayConverterTests
     {

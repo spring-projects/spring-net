@@ -41,7 +41,6 @@ namespace Spring.Data.Generic
     /// It simplifies the use of ADO.NET and helps to avoid commons errors.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AdoTemplate.cs,v 1.19 2007/12/07 22:56:22 markpollack Exp $</version>
     public class AdoTemplate : AdoAccessor, IAdoOperations
     {
 

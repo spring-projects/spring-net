@@ -32,7 +32,6 @@ namespace Spring.Web.Support
     /// Represents a MIME media type as defined by http://www.iana.org/assignments/media-types/
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: MimeMediaType.cs,v 1.1 2007/11/28 23:26:10 oakinger Exp $</version>
     public class MimeMediaType
     {
         private static readonly ArrayList ContentTypes = new ArrayList( new string[] {

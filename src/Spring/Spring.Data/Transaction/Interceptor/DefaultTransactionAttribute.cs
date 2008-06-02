@@ -29,7 +29,6 @@ namespace Spring.Transaction.Interceptor
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: DefaultTransactionAttribute.cs,v 1.9 2007/12/29 00:28:53 markpollack Exp $</version>
 	public class DefaultTransactionAttribute : DefaultTransactionDefinition, ITransactionAttribute	
 	{
 		/// <summary>

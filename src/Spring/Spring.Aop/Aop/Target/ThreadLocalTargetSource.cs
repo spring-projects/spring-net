@@ -55,7 +55,6 @@ namespace Spring.Aop.Target
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi (.NET)</author>
-	/// <version>$Id: ThreadLocalTargetSource.cs,v 1.8 2006/04/09 07:18:37 markpollack Exp $</version>
 	public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
 		IThreadLocalTargetSourceStats, IDisposable, IMethodInterceptor
 	{

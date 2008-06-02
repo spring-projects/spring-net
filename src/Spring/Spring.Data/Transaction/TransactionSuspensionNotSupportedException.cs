@@ -29,7 +29,6 @@ namespace Spring.Transaction
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: TransactionSuspensionNotSupportedException.cs,v 1.5 2006/05/18 21:37:51 markpollack Exp $</version>
 	[Serializable]
 	public class TransactionSuspensionNotSupportedException : CannotCreateTransactionException
 	{

@@ -35,7 +35,6 @@ namespace Spring.Objects.Factory
     /// This class contains tests related to performance of the object factory implementation.  Ignored by default.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: DefaultListableObjectFactoryPerfTests.cs,v 1.1 2008/01/29 20:11:19 markpollack Exp $</version>
     [TestFixture]
     public class DefaultListableObjectFactoryPerfTests
     {

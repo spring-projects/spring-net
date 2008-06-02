@@ -32,7 +32,6 @@ namespace Spring.Aop.Support
 	/// Unit tests for the RootTypeFilter class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: RootTypeFilterTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
 	[TestFixture]
     public sealed class RootTypeFilterTests
     {

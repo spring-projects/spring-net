@@ -27,7 +27,6 @@ namespace Spring.Expressions
     /// Represents logical AND operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpAND.cs,v 1.8 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpAND : BinaryOperator
     {

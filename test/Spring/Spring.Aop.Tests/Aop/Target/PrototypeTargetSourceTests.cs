@@ -37,7 +37,6 @@ namespace Spring.Aop.Target
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi</author>
-	/// <version>$Id: PrototypeTargetSourceTests.cs,v 1.8 2007/07/28 07:33:22 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class PrototypeTargetSourceTests
 	{

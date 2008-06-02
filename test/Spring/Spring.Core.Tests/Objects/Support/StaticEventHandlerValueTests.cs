@@ -32,7 +32,6 @@ namespace Spring.Objects.Support
 	/// Unit tests for the StaticEventHandlerValue class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: StaticEventHandlerValueTests.cs,v 1.4 2006/04/09 07:24:51 markpollack Exp $</version>
 	[TestFixture]
     public sealed class StaticEventHandlerValueTests
     {

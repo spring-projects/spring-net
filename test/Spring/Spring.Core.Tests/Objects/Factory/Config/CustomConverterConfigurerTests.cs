@@ -35,7 +35,6 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the CustomConverterConfigurer class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: CustomConverterConfigurerTests.cs,v 1.6 2007/05/11 02:32:31 markpollack Exp $</version>
 	[TestFixture]
     public sealed class CustomConverterConfigurerTests
     {

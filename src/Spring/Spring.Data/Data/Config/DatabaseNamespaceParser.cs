@@ -39,7 +39,6 @@ namespace Spring.Data.Config
     /// Implementation of the custom configuration parser for database definitions.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: DatabaseNamespaceParser.cs,v 1.3 2007/08/08 00:34:33 bbaia Exp $</version>
     [
         NamespaceParser(
             Namespace = "http://www.springframework.net/database",

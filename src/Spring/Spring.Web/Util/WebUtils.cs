@@ -32,7 +32,6 @@ namespace Spring.Util
     /// Miscellaneous web utility methods.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebUtils.cs,v 1.32 2008/03/19 18:05:07 oakinger Exp $</version>
     public sealed class WebUtils
     {
         #region Constructor (s) / Destructor

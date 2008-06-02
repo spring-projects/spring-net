@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents logical equality operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpEqual.cs,v 1.12 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpEqual : BinaryOperator
     {

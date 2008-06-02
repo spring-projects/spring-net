@@ -37,7 +37,6 @@ namespace Spring.Aspects.Validation
     /// more of their parameters.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ParameterValidationAdvisor.cs,v 1.1 2008/05/26 09:17:50 bbaia Exp $</version>
     public class ParameterValidationAdvisor : AttributeMatchMethodPointcutAdvisor, IApplicationContextAware
     {
         /// <summary>

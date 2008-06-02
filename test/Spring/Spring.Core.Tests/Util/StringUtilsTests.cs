@@ -34,7 +34,6 @@ namespace Spring.Util
 	/// <author>Aleksandar Seovic</author>
 	/// <author>Rick Evans</author>
 	/// <author>Griffin Caprio</author>
-	/// <version>$Id: StringUtilsTests.cs,v 1.3 2006/04/09 07:24:51 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class StringUtilsTests
 	{

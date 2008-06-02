@@ -51,7 +51,6 @@ namespace Spring.Objects.Factory.Config
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Simon White (.NET)</author>
-    /// <version>$Id: ObjectDefinitionHolder.cs,v 1.2 2007/08/07 22:05:20 markpollack Exp $</version>
     [Serializable]
     public class ObjectDefinitionHolder
     {

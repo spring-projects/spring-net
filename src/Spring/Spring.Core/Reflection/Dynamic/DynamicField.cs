@@ -284,7 +284,6 @@ namespace Spring.Reflection.Dynamic
     /// Factory class for dynamic fields.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicField.cs,v 1.4 2008/05/16 10:02:39 oakinger Exp $</version>
     public class DynamicField : BaseDynamicMember
     {
         /// <summary>
@@ -305,7 +304,6 @@ namespace Spring.Reflection.Dynamic
     /// Factory class for dynamic fields.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicField.cs,v 1.4 2008/05/16 10:02:39 oakinger Exp $</version>
     public class DynamicField : BaseDynamicMember
     {
         private static readonly CreateFieldCallback s_createCallback = new CreateFieldCallback(CreateInternal);

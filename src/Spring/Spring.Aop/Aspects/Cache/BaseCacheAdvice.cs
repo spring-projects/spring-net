@@ -37,7 +37,6 @@ namespace Spring.Aspects.Cache
     /// access to common functionality, such as obtaining a cache instance.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseCacheAdvice.cs,v 1.3 2007/04/01 15:04:04 bbaia Exp $</version>
     public class BaseCacheAdvice : IApplicationContextAware
     {
         private IApplicationContext applicationContext;

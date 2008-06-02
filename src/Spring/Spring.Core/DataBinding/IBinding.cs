@@ -7,7 +7,6 @@ namespace Spring.DataBinding
     /// An interface that defines the methods that have to be implemented by all data bindings.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IBinding.cs,v 1.3 2008/02/05 20:40:25 aseovic Exp $</version>
     public interface IBinding
     {
         /// <summary>

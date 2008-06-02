@@ -32,7 +32,6 @@ namespace Spring.Transaction.Support
 	/// i.e. without the need for a return statement.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TransactionCallbackWithoutResult.cs,v 1.3 2006/06/21 14:07:30 markpollack Exp $</version>
 	public abstract class TransactionCallbackWithoutResult : ITransactionCallback
 	{
 		#region Methods

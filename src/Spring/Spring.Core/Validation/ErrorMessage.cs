@@ -35,7 +35,6 @@ namespace Spring.Validation
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Goran Milosavljevic</author>
-    /// <version>$Id: ErrorMessage.cs,v 1.5 2007/02/19 17:56:42 aseovic Exp $</version>
     [Serializable]
     public class ErrorMessage : IXmlSerializable
     {

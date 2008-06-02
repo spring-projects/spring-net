@@ -107,7 +107,6 @@ namespace Spring.Context
 	/// <seealso cref="Spring.Context.Support.XmlApplicationContext"/>
 	/// <seealso cref="Spring.Context.Support.DelegatingMessageSource"/>
 	/// <seealso cref="Spring.Objects.Factory.Support.DefaultListableObjectFactory"/>
-	/// <version>$Id: IApplicationContext.cs,v 1.15 2007/08/08 17:46:37 bbaia Exp $</version>
 	public interface IApplicationContext
 		: IListableObjectFactory, IHierarchicalObjectFactory, IMessageSource,
 			IApplicationEventPublisher, IResourceLoader, IEventRegistry, IDisposable

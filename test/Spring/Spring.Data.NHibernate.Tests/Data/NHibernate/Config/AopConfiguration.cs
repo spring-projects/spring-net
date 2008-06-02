@@ -36,7 +36,6 @@ namespace Spring.Data.NHibernate.Config
     /// This class contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AopConfiguration.cs,v 1.2 2007/08/01 17:51:58 markpollack Exp $</version>
     [TestFixture]
     public class AopConfiguration
     {

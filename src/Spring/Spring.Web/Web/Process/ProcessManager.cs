@@ -26,7 +26,6 @@ namespace Spring.Web.Process
     /// Singleton that keeps track of all active process instances.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ProcessManager.cs,v 1.2 2006/05/18 21:37:52 markpollack Exp $</version>
     public class ProcessManager
     {
         private static readonly ProcessManager instance = new ProcessManager();

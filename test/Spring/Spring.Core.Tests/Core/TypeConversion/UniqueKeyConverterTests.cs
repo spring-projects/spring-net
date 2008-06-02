@@ -33,7 +33,6 @@ namespace Spring.Core.TypeConversion
     /// Tests <see cref="UniqueKeyConverter"/> functionality.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: UniqueKeyConverterTests.cs,v 1.1 2007/08/22 20:17:05 oakinger Exp $</version>
     [TestFixture]
     public class UniqueKeyConverterTests
     {

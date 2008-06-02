@@ -36,7 +36,6 @@ namespace Spring.Data.Support
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <author>Mark Pollack</author> 
-	/// <version>$Id: IAdoExceptionTranslator.cs,v 1.2 2006/11/29 07:18:46 markpollack Exp $</version>
 	public interface IAdoExceptionTranslator
 	{
 		/// <summary>

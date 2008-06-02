@@ -10,7 +10,6 @@ namespace Spring.DataBinding
     /// Abstract base class for <see cref="IBinding"/> implementations.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractBinding.cs,v 1.2 2008/02/05 20:40:25 aseovic Exp $</version>
     public abstract class AbstractBinding : IBinding
     {
         #region Fields

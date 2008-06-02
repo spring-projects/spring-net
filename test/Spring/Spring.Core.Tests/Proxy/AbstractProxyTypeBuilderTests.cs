@@ -44,7 +44,6 @@ namespace Spring.Proxy
     /// </summary>
     /// <author>Rick Evans</author>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: AbstractProxyTypeBuilderTests.cs,v 1.21 2007/12/05 00:28:39 bbaia Exp $</version>
     public abstract class AbstractProxyTypeBuilderTests
     {
         [Test]

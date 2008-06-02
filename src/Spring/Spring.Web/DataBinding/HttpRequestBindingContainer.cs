@@ -19,7 +19,6 @@ namespace Spring.DataBinding
     /// can't use <see cref="HttpRequestListBindingContainer"/> for binding to checkboxes.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: HttpRequestBindingContainer.cs,v 1.6 2008/02/05 20:40:26 aseovic Exp $</version>
     public class HttpRequestListBindingContainer : BaseBindingContainer
     {
         private string[] requestParams;

@@ -33,7 +33,6 @@ namespace Spring.Web.UI.Controls
     /// by defining matching <see cref="Spring.Web.UI.Controls.Content"/> control.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ContentPlaceholder.cs,v 1.6 2006/09/08 06:21:31 oakinger Exp $</version>
 #if NET_2_0
 	public class ContentPlaceHolder : System.Web.UI.WebControls.ContentPlaceHolder
 	{}

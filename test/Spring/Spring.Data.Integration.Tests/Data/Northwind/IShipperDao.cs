@@ -30,7 +30,6 @@ namespace Spring.Data.Northwind
 	/// TODO: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IShipperDao.cs,v 1.1 2006/06/21 14:07:30 markpollack Exp $</version>
 	public interface IShipperDao 
 	{
         Shipper Create(string name, string phone);

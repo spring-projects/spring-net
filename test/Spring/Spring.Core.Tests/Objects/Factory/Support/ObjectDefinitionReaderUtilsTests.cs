@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Support
     /// Unit tests for the ObjectDefinitionReaderUtils class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ObjectDefinitionReaderUtilsTests.cs,v 1.3 2006/04/09 07:24:50 markpollack Exp $</version>
     [TestFixture]
     public sealed class ObjectDefinitionReaderUtilsTests
     {

@@ -39,7 +39,6 @@ namespace Spring.Transaction.Interceptor
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: TransactionAttributeSourceAdvisor.cs,v 1.11 2007/12/07 08:10:03 markpollack Exp $</version>
 	[Serializable]
 	public class TransactionAttributeSourceAdvisor : StaticMethodMatcherPointcutAdvisor
 	{

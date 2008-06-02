@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Config
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: TypedStringValueTests.cs,v 1.4 2007/05/29 20:00:47 markpollack Exp $</version> 
 	[TestFixture]
 	public sealed class TypedStringValueTests
 	{

@@ -39,7 +39,6 @@ namespace Spring.Transaction
     /// </remarks>
     /// <author>Griffin Caprio (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ITransactionDefinition.cs,v 1.9 2007/12/07 08:10:03 markpollack Exp $</version>
 	public interface ITransactionDefinition
 	{
 		/// <summary>

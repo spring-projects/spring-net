@@ -35,7 +35,6 @@ namespace Spring.Objects.Factory.Xml
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: ObjectDefinitionConstants.cs,v 1.8 2006/11/17 20:41:39 aseovic Exp $</version>
 	public sealed class ObjectDefinitionConstants
 	{
 		/// <summary>

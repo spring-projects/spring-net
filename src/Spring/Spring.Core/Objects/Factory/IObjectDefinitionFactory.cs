@@ -38,7 +38,6 @@ namespace Spring.Objects.Factory.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IObjectDefinitionFactory.cs,v 1.10 2007/07/30 18:00:01 markpollack Exp $</version>
     public interface IObjectDefinitionFactory
     {
 

@@ -57,7 +57,6 @@ namespace Spring.Objects
     /// <author>Jean-Pierre Pawlak</author>
     /// <author>Mark Pollack (.NET)</author>
     /// <author>Aleksandar Seovic(.NET)</author>
-    /// <version>$Id: ObjectWrapper.cs,v 1.72 2007/07/31 08:18:20 markpollack Exp $</version>
     [Serializable]
     public class ObjectWrapper : IObjectWrapper
     {

@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans</author>
-    /// <version>$Id: FieldRetrievingFactoryObjectTests.cs,v 1.5 2006/04/09 07:24:50 markpollack Exp $</version>
     [TestFixture]
     public sealed class FieldRetrievingFactoryObjectTests
     {

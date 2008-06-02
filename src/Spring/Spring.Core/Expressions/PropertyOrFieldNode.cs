@@ -41,7 +41,6 @@ namespace Spring.Expressions
     /// Represents node that navigates to object's property or public field.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: PropertyOrFieldNode.cs,v 1.28 2007/09/14 13:48:53 oakinger Exp $</version>
     [Serializable]
     public class PropertyOrFieldNode : BaseNode
     {

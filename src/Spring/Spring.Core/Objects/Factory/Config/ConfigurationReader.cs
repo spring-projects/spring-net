@@ -47,7 +47,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Simon White</author>
 	/// <author>Mark Pollack</author>
-	/// <version>$Id: ConfigurationReader.cs,v 1.18 2007/08/08 17:47:13 bbaia Exp $</version>
 	public sealed class ConfigurationReader
 	{
 		private const string ConfigSectionTypeAttribute = "type";

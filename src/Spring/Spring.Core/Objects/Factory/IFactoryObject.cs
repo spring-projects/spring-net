@@ -48,7 +48,6 @@ namespace Spring.Objects.Factory
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IFactoryObject.cs,v 1.6 2006/04/09 07:18:48 markpollack Exp $</version>
 	public interface IFactoryObject
 	{
 	    /// <summary>

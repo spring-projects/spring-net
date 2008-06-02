@@ -45,7 +45,6 @@ namespace Spring.Globalization.Formatters
 	/// </para>
 	/// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DateTimeFormatter.cs,v 1.2 2006/04/09 07:18:47 markpollack Exp $</version>
     public class DateTimeFormatter : IFormatter
 	{
         private DateTimeFormatInfo formatInfo;

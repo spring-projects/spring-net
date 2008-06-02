@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents ternary expression node.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: TernaryNode.cs,v 1.9 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class TernaryNode : BaseNode
     {

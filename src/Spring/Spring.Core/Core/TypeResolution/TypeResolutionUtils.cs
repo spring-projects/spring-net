@@ -41,7 +41,6 @@ namespace Spring.Core.TypeResolution
     /// </p>
     /// </remarks>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: TypeResolutionUtils.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
     public sealed class TypeResolutionUtils
     {
         #region Fields

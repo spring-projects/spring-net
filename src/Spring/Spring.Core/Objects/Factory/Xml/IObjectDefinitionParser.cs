@@ -30,7 +30,6 @@ namespace Spring.Objects.Factory.Xml
     /// </remarks>
     /// <author>Rob Harrop</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IObjectDefinitionParser.cs,v 1.3 2007/05/25 03:23:21 markpollack Exp $</version>
     public interface IObjectDefinitionParser
     {
         /// <summary>

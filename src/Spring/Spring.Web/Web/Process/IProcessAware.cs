@@ -27,7 +27,6 @@ namespace Spring.Web.Process
     /// that want to be aware of the <see cref="IProcess"/> they belong to. 
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IProcessAware.cs,v 1.2 2006/05/18 21:37:52 markpollack Exp $</version>
     public interface IProcessAware
     {
         /// <summary>

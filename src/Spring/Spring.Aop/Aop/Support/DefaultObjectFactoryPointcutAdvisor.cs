@@ -33,7 +33,6 @@ namespace Spring.Aop.Support
     /// </remarks>
     /// <author>Juerge Hoeller</author>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: DefaultObjectFactoryPointcutAdvisor.cs,v 1.1 2007/05/30 22:35:43 markpollack Exp $</version>
     public class DefaultObjectFactoryPointcutAdvisor : AbstractObjectFactoryPointcutAdvisor
     {
         private IPointcut pointcut = TruePointcut.True;

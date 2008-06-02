@@ -10,7 +10,6 @@ namespace Spring.DataBinding
     /// interface.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ListBinding.cs,v 1.2 2008/02/05 20:40:25 aseovic Exp $</version>
     public class ListBinding : AbstractBinding
     {
         private IExpression sourceExpression = Expression.Parse("#source = #target");

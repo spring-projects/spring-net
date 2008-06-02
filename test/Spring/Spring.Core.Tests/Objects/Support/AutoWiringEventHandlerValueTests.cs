@@ -32,7 +32,6 @@ namespace Spring.Objects.Support
     /// Unit tests for the AutoWiringEventHandlerValue class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: AutoWiringEventHandlerValueTests.cs,v 1.3 2006/04/09 07:24:51 markpollack Exp $</version>
     [TestFixture]
     public class AutoWiringEventHandlerValueTests
     {

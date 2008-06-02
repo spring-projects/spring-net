@@ -50,7 +50,6 @@ namespace Spring.Objects.Factory.Config
     /// You can reference these variables within your object definitions, just like any other variable.</p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ConnectionStringsVariableSource.cs,v 1.4 2007/08/02 22:18:32 markpollack Exp $</version>
     [Serializable]
     public class ConnectionStringsVariableSource : IVariableSource
     {

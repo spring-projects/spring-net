@@ -43,7 +43,6 @@ namespace Spring.EnterpriseServices
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ServicedComponentFactory.cs,v 1.7 2007/05/16 10:03:25 oakinger Exp $</version>
     public class ServicedComponentFactory : IConfigurableFactoryObject, IInitializingObject
     {
         #region Fields

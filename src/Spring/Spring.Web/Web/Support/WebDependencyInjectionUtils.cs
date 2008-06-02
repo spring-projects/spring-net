@@ -26,13 +26,8 @@ using Spring.Util;
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// This is 
+    /// Utilities for dependency injection in the web tier.
     /// </summary>
-    /// <remarks>
-    ///
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    /// <version>$Id: WebDependencyInjectionUtils.cs,v 1.3 2008/05/13 14:22:47 oakinger Exp $</version>
     public class WebDependencyInjectionUtils
     {
         /// <summary>

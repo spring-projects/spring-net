@@ -55,7 +55,6 @@ namespace Spring.Testing.NUnit
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AbstractTransactionalSpringContextTests.cs,v 1.3 2007/06/01 14:05:57 oakinger Exp $</version>
     public abstract class AbstractTransactionalSpringContextTests : AbstractDependencyInjectionSpringContextTests
     {
         /// <summary>

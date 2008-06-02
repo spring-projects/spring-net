@@ -38,7 +38,6 @@ namespace Spring.Context
     /// </remarks>
     /// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IMessageSourceResolvable.cs,v 1.6 2006/04/09 07:18:38 markpollack Exp $</version>
     /// <seealso cref="Spring.Context.IMessageSource.GetMessage(IMessageSourceResolvable, CultureInfo)"/>
     /// <seealso cref="Spring.Context.Support.DefaultMessageSourceResolvable"/>
     public interface IMessageSourceResolvable

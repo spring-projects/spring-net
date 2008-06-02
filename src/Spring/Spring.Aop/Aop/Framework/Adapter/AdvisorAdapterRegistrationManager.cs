@@ -44,7 +44,6 @@ namespace Spring.Aop.Framework.Adapter
     /// </remarks>
     /// <author>Dmitriy Kopylenko</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: AdvisorAdapterRegistrationManager.cs,v 1.5 2007/08/22 08:49:08 markpollack Exp $</version>
     public class AdvisorAdapterRegistrationManager : IObjectPostProcessor
     {
         /// <summary>

@@ -31,7 +31,6 @@ namespace Spring.Caching
     ///
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: BaseCacheAttributeTests.cs,v 1.1 2007/08/29 17:30:00 oakinger Exp $</version>
     [TestFixture]
     public class BaseCacheAttributeTests
     {

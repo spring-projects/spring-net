@@ -48,7 +48,6 @@ namespace Spring.Data.NHibernate.Generic.Support
     /// </remarks>
     /// <author>Sree Nivask (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: HibernateDaoSupport.cs,v 1.3 2007/09/19 22:58:10 markpollack Exp $</version>
 	public abstract class HibernateDaoSupport : DaoSupport
 	{
 		#region Fields

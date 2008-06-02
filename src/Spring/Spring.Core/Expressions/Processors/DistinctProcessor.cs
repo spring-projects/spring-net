@@ -28,7 +28,6 @@ namespace Spring.Expressions.Processors
     /// Implementation of the distinct processor.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DistinctProcessor.cs,v 1.1 2006/12/04 08:58:33 aseovic Exp $</version>
     public class DistinctProcessor : ICollectionProcessor
     {
         /// <summary>

@@ -44,7 +44,6 @@ namespace Spring.Data.Generic
     /// method.
     /// </remarks>    
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IDataAdapterCallback.cs,v 1.1 2007/12/04 06:48:21 markpollack Exp $</version>
     public interface IDataAdapterCallback<T>
     {
         /// <summary>

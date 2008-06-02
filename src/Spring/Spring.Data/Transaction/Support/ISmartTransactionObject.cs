@@ -36,7 +36,6 @@ namespace Spring.Transaction.Support
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
-    /// <version>$Id: ISmartTransactionObject.cs,v 1.6 2007/08/29 03:42:20 markpollack Exp $</version>
 	public interface ISmartTransactionObject
 	{
 	    /// <summary>

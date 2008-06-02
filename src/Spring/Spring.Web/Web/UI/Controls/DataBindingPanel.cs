@@ -47,7 +47,6 @@ namespace Spring.Web.UI.Controls
     /// to a model by adding an attribute "BindingTarget"
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: DataBindingPanel.cs,v 1.13 2008/03/06 20:23:44 oakinger Exp $</version>
     [PersistChildren(true),
     ToolboxData("<{0}:DataBindingPanel runat=\"server\" Width=\"125px\" Height=\"50px\"> </{0}:DataBindingPanel>"), 
     ParseChildren(false),

@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents logical IN operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpIn.cs,v 1.5 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpIn : BinaryOperator
     {

@@ -42,7 +42,6 @@ namespace Spring.Web.UI
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractWizard.cs,v 1.7 2006/05/18 21:37:52 markpollack Exp $</version>
     public abstract class AbstractWizard : Page
     {
         private IList steps;

@@ -34,7 +34,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: DefaultIntroductionAdvisor.cs,v 1.11 2007/03/16 04:01:23 aseovic Exp $</version>
 	[Serializable]
     public class DefaultIntroductionAdvisor : IIntroductionAdvisor, ITypeFilter
 	{

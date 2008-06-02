@@ -47,7 +47,6 @@ namespace Spring.Collections
     /// </p>
     /// </remarks>
     /// <author>Rick Evans</author>
-    /// <version>$Id: SetTests.cs,v 1.3 2006/04/09 07:19:06 markpollack Exp $</version>
     public abstract class SetTests
     {
         protected static readonly object StuffOne = "This Is";

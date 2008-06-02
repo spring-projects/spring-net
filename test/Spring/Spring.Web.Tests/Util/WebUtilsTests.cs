@@ -34,7 +34,6 @@ namespace Spring.Util
     /// Unit tests for the WebUtilsTests class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: WebUtilsTests.cs,v 1.9 2008/03/19 18:05:08 oakinger Exp $</version>
     [TestFixture]
     public sealed class WebUtilsTests
     {

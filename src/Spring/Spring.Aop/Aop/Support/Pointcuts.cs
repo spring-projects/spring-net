@@ -38,7 +38,6 @@ namespace Spring.Aop.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: Pointcuts.cs,v 1.6 2007/03/16 04:01:25 aseovic Exp $</version>
     public sealed class Pointcuts
 	{
 		/// <summary>

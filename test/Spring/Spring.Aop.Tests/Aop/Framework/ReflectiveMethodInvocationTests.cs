@@ -35,7 +35,6 @@ namespace Spring.Aop.Framework
     /// </summary>
     /// <author>Rick Evans</author>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ReflectiveMethodInvocationTests.cs,v 1.8 2008/02/06 18:29:05 bbaia Exp $</version>
     [TestFixture]
     public class ReflectiveMethodInvocationTests : AbstractMethodInvocationTests
     {

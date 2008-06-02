@@ -36,7 +36,6 @@ namespace Spring.Aop.Config
     /// This class contains tests for the custom aop namespace.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AopNamespaceParserTests.cs,v 1.7 2007/08/09 03:06:37 markpollack Exp $</version>
     [TestFixture]
     public class AopNamespaceParserTests
     {

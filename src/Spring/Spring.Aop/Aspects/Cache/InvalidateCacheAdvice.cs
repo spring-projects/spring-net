@@ -53,7 +53,6 @@ namespace Spring.Aspects.Cache
     /// </remarks>
     /// <seealso cref="InvalidateCacheAttribute"/>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: InvalidateCacheAdvice.cs,v 1.4 2007/04/01 15:04:05 bbaia Exp $</version>
     public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
     {
         // shared logger instance

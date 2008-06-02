@@ -33,7 +33,6 @@ namespace Spring.Core
     /// implementations that are regular expression based.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: RegularExpressionCriteria.cs,v 1.1 2007/07/31 01:35:07 markpollack Exp $</version>
     public abstract class RegularExpressionCriteria : ICriteria
     {
         #region Constants

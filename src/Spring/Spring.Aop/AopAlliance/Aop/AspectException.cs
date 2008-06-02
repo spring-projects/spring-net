@@ -22,7 +22,6 @@ namespace AopAlliance.Aop
 	/// Superclass for all AOP infrastructure exceptions.
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: AspectException.cs,v 1.3 2006/04/09 07:18:33 markpollack Exp $</version>
 	[Serializable]
 	public class AspectException : Exception
 	{

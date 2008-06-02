@@ -34,7 +34,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.Net)</author>
-	/// <version>$Id: StaticMethodMatcherPointcutAdvisor.cs,v 1.6 2006/04/09 07:18:37 markpollack Exp $</version>
 	[Serializable]
 	public abstract class StaticMethodMatcherPointcutAdvisor
 		: StaticMethodMatcherPointcut, IPointcutAdvisor, IOrdered

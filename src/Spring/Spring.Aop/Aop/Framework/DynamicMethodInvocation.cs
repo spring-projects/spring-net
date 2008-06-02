@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework
     /// <seealso cref="Spring.Reflection.Dynamic.DynamicMethod"/>
 	/// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: DynamicMethodInvocation.cs,v 1.3 2008/02/06 18:28:52 bbaia Exp $</version>
 	[Serializable]
 	public class DynamicMethodInvocation : AbstractMethodInvocation
 	{

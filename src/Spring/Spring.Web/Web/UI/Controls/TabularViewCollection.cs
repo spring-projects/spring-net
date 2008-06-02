@@ -34,7 +34,6 @@ namespace Spring.Web.UI.Controls
 	/// Holds the collection of <see cref="TabularView"/> controls in a <see cref="TabularMultiView"/>.
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: TabularViewCollection.cs,v 1.1 2007/07/24 13:33:28 oakinger Exp $</version>
 	[
 		AspNetHostingPermission(SecurityAction.LinkDemand, Level=AspNetHostingPermissionLevel.Minimal)
 			, AspNetHostingPermission(SecurityAction.InheritanceDemand, Level=AspNetHostingPermissionLevel.Minimal)]

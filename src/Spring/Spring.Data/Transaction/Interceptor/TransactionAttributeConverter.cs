@@ -46,7 +46,6 @@ namespace Spring.Transaction.Interceptor
     /// </p>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TransactionAttributeConverter.cs,v 1.1 2007/12/29 00:28:53 markpollack Exp $</version>
     public class TransactionAttributeConverter : TypeConverter
     {
         /// <summary>

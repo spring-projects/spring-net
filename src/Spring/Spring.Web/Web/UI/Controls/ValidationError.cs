@@ -31,7 +31,6 @@ namespace Spring.Web.UI.Controls
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Jonathan Allenby</author>
-    /// <version>$Id: ValidationError.cs,v 1.11 2008/03/19 12:07:14 oakinger Exp $</version>
     public class ValidationError : AbstractValidationControl
     {
         /// <summary>

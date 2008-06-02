@@ -34,7 +34,6 @@ namespace Spring.Util
 	/// Helper class for easier access to reflected Control members.
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: ControlAccessor.cs,v 1.2 2008/05/13 14:22:47 oakinger Exp $</version>
 	internal class ControlAccessor
 	{
 		private static readonly MethodInfo s_miClear = GetMethod("Clear");

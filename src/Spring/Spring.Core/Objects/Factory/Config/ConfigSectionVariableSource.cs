@@ -31,7 +31,6 @@ namespace Spring.Objects.Factory.Config
     /// the standard .NET configuration file.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ConfigSectionVariableSource.cs,v 1.4 2007/08/22 20:16:27 oakinger Exp $</version>
     [Serializable]
     public class ConfigSectionVariableSource : IVariableSource
     {

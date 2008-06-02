@@ -36,7 +36,6 @@ namespace Spring.Testing.NUnit.Another
     /// assembly.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: LoadAppContextTests.cs,v 1.3 2007/08/25 14:26:35 oakinger Exp $</version>
     [TestFixture]
     public class LoadAppContextTests : BaseTestAppContextTests
     {

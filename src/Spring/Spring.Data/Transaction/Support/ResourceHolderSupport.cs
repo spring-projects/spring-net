@@ -33,7 +33,6 @@ namespace Spring.Transaction.Support
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: ResourceHolderSupport.cs,v 1.9 2007/01/30 20:12:29 markpollack Exp $</version>
 	public abstract class ResourceHolderSupport
 	{
 		private bool synchronizedWithTransaction = false;

@@ -32,7 +32,6 @@ namespace Spring.Threading
     /// Apply common thread-storage tests for <see cref="HybridContextStorage"/>
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HybridContextStorageTests.cs,v 1.1 2007/02/02 21:31:18 oakinger Exp $</version>  
     [TestFixture]
     public class HybridContextStorageTests : CommonThreadStorageTests
     {

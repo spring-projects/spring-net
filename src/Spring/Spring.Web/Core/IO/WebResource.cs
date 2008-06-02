@@ -39,7 +39,6 @@ namespace Spring.Core.IO
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebResource.cs,v 1.14 2008/03/14 12:02:45 oakinger Exp $</version>
     public class WebResource : FileSystemResource
     {
         private string absolutePath;

@@ -75,7 +75,6 @@ namespace Spring.Context.Support
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: XmlApplicationContext.cs,v 1.18 2007/08/08 17:46:37 bbaia Exp $</version>
 	/// <seealso cref="Spring.Core.IO.IResource"/>
 	/// <seealso cref="Spring.Core.IO.IResourceLoader"/>
 	/// <seealso cref="Spring.Core.IO.ConfigurableResourceLoader"/>

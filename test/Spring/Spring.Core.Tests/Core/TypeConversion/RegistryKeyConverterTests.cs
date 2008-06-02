@@ -32,7 +32,6 @@ namespace Spring.Core.TypeConversion
     /// Unit tests for the RegistryKeyConverter class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: RegistryKeyConverterTests.cs,v 1.1 2007/07/31 18:21:01 bbaia Exp $</version>
     [TestFixture]
     public sealed class RegistryKeyConverterTests
     {

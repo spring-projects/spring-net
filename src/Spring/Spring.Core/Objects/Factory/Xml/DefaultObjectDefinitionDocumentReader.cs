@@ -45,7 +45,6 @@ namespace Spring.Objects.Factory.Xml
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: DefaultObjectDefinitionDocumentReader.cs,v 1.9 2007/08/27 14:49:43 oakinger Exp $</version>
     public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentReader
     {
         #region Constants

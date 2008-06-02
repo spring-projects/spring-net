@@ -28,7 +28,6 @@ namespace Spring.Objects.Factory.Config
     /// <see cref="Environment.SpecialFolder"/> enumeration).
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SpecialFolderVariableSource.cs,v 1.3 2007/08/02 22:18:32 markpollack Exp $</version>
     [Serializable]
     public class SpecialFolderVariableSource : IVariableSource
     {

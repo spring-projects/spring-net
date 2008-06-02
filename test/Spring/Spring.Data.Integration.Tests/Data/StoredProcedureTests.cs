@@ -37,7 +37,6 @@ namespace Spring.Data
 	/// Integration tests for StoredProcedure support.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: StoredProcedureTests.cs,v 1.5 2008/01/29 18:22:33 markpollack Exp $</version>
 	[TestFixture]
 	public class StoredProcedureTests 
 	{

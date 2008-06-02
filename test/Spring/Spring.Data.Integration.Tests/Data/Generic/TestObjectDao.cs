@@ -34,7 +34,6 @@ namespace Spring.Data.Generic
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TestObjectDao.cs,v 1.3 2008/01/29 18:22:33 markpollack Exp $</version>
     public class TestObjectDao : AdoDaoSupport, ITestObjectDao
     {
         public IList<TestObject> FindAll()

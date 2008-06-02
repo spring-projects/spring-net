@@ -33,7 +33,6 @@ namespace Spring.Dao
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
 	/// <author>Juergen Hoeller</author>
-	/// <version>$Id: EmptyResultDataAccessException.cs,v 1.2 2006/05/18 21:37:50 markpollack Exp $</version>
     [Serializable]
     public class EmptyResultDataAccessException : IncorrectResultSizeDataAccessException
     {

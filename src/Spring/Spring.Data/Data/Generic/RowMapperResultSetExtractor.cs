@@ -51,7 +51,6 @@ namespace Spring.Data.Generic
 	/// </p>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: RowMapperResultSetExtractor.cs,v 1.4 2007/08/03 19:51:10 markpollack Exp $</version>
 	public class RowMapperResultSetExtractor<T> : IResultSetExtractor<IList<T>> 
 	{
 		#region Fields

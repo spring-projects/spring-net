@@ -27,7 +27,6 @@ namespace Spring.Context
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IHierarchicalMessageSource.cs,v 1.6 2006/04/09 07:18:38 markpollack Exp $</version>
 	/// <seealso cref="Spring.Context.IMessageSource"/>
 	public interface IHierarchicalMessageSource : IMessageSource
 	{

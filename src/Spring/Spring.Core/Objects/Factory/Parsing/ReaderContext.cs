@@ -29,7 +29,6 @@ namespace Spring.Objects.Factory.Parsing
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ReaderContext.cs,v 1.3 2007/08/08 17:47:13 bbaia Exp $</version>
     public class ReaderContext
     {
         private IResource resource;

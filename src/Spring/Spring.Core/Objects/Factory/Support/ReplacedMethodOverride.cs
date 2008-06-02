@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: ReplacedMethodOverride.cs,v 1.3 2007/03/16 04:01:42 aseovic Exp $</version>
     [Serializable]
     public sealed class ReplacedMethodOverride : MethodOverride
 	{

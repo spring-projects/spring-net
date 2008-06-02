@@ -46,7 +46,6 @@ namespace Spring.Core.IO
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IResourceLoader.cs,v 1.12 2007/08/08 17:46:55 bbaia Exp $</version>
     /// <seealso cref="Spring.Core.IO.IResource"/>
     /// <seealso cref="Spring.Core.IO.ResourceConverter"/>
     /// <seealso cref="Spring.Core.IO.ConfigurableResourceLoader"/>

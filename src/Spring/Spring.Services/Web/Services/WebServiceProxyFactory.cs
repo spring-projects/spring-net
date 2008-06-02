@@ -62,7 +62,6 @@ namespace Spring.Web.Services
     /// </remarks>
     /// <author>Bruno Baia</author>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebServiceProxyFactory.cs,v 1.33 2008/02/24 19:10:12 bbaia Exp $</version>
     public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingObject
     {
         #region Logging

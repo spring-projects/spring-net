@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents unary minus operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpUnaryMinus.cs,v 1.8 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpUnaryMinus : UnaryOperator
     {

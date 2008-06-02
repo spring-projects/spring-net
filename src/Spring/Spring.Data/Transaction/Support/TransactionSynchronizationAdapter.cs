@@ -33,7 +33,6 @@ namespace Spring.Transaction.Support
 	/// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: TransactionSynchronizationAdapter.cs,v 1.7 2006/12/06 00:02:25 markpollack Exp $</version>
 	public abstract class TransactionSynchronizationAdapter : ITransactionSynchronization, IComparable
 	{
 

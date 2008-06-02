@@ -41,7 +41,6 @@ namespace Spring.Objects.Events
 	/// </remarks>
 	/// <author>Mark Pollack</author>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: IEventRegistryAware.cs,v 1.2 2006/04/09 07:18:47 markpollack Exp $</version>
 	public interface IEventRegistryAware
 	{
 		/// <summary>

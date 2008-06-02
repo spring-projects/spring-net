@@ -29,7 +29,6 @@ namespace Spring.Caching
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AbstractCache.cs,v 1.7 2007/10/11 01:29:49 markpollack Exp $</version>
     public abstract class AbstractCache : ICache
     {
         #region Fields

@@ -31,7 +31,6 @@ namespace Spring.Collections
 	/// Simple linked list implementation.
 	/// </summary>
 	/// <author>Simon White</author>
-	/// <version>$Id: LinkedList.cs,v 1.9 2007/03/16 04:01:28 aseovic Exp $</version>
     [Serializable]
     public class LinkedList : IList
 	{

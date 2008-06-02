@@ -29,7 +29,6 @@ namespace Spring.Data.Common
     /// <summary>
     /// Implemenation of of DbProvider that uses metadata to create provider specific ADO.NET objects.
     /// </summary>
-    /// <version>$Id:</version>
     public class DbProvider : IDbProvider
     {
         private string connectionString;

@@ -32,7 +32,6 @@ namespace Spring.Threading
     /// Test behaviour of LogicalThreadContext
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: LogicalThreadContextTest.cs,v 1.1 2007/02/02 21:31:08 oakinger Exp $</version>  
     [TestFixture]
     public class LogicalThreadContextTest
     {

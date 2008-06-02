@@ -38,7 +38,6 @@ namespace Spring.Data.Support
 	/// which defines error code mappings for various providers.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: ErrorCodeExceptionTranslator.cs,v 1.11 2007/12/06 20:14:30 markpollack Exp $</version>
 	public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
 	{
 		#region Fields

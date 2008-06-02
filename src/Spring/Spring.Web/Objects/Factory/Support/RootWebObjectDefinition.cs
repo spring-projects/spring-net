@@ -40,7 +40,6 @@ namespace Spring.Objects.Factory.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: RootWebObjectDefinition.cs,v 1.4 2007/08/01 23:10:46 markpollack Exp $</version>
     public class RootWebObjectDefinition : RootObjectDefinition, IWebObjectDefinition
     {
         private ObjectScope _scope = ObjectScope.Default;

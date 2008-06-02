@@ -38,7 +38,6 @@ namespace Spring.Objects.Support
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ArgumentConvertingMethodInvoker.cs,v 1.10 2007/07/31 18:17:08 bbaia Exp $</version>
 	/// <seealso cref="MethodInvoker"/>
 	public class ArgumentConvertingMethodInvoker : MethodInvoker
 	{

@@ -38,7 +38,6 @@ namespace Spring.Core
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
     /// <author>Aleksandar Seovic (.Net)</author>
-    /// <version>$Id: IOrdered.cs,v 1.6 2007/05/26 00:42:36 markpollack Exp $</version>
     public interface IOrdered
 	{
 

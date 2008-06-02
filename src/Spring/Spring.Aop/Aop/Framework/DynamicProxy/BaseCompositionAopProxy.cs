@@ -33,7 +33,6 @@ namespace Spring.Aop.Framework.DynamicProxy
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: BaseCompositionAopProxy.cs,v 1.2 2007/03/16 04:01:22 aseovic Exp $</version>
     [Serializable]
     public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerializable
     {

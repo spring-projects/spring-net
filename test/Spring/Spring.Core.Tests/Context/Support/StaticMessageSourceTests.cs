@@ -29,8 +29,6 @@ namespace Spring.Context.Support
     /// <summary>
     /// Unit tests for the StaticMessageSource class.
     /// </summary>
-    /// <author></author>
-    /// <version>$Id: StaticMessageSourceTests.cs,v 1.9 2007/07/24 17:26:40 oakinger Exp $</version>
     [TestFixture]
     public sealed class StaticMessageSourceTests
     {

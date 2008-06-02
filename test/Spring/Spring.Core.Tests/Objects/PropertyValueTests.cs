@@ -31,7 +31,6 @@ namespace Spring.Objects
     /// Unit tests for the PropertyValue class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: PropertyValueTests.cs,v 1.6 2006/04/09 07:24:50 markpollack Exp $</version>
     [TestFixture]
     public sealed class PropertyValueTests
     {

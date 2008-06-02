@@ -36,7 +36,6 @@ namespace Spring.Aop.Support
 	/// <author>Juergen Hoeller</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: NameMatchMethodPointcutAdvisor.cs,v 1.5 2007/05/30 22:35:43 markpollack Exp $</version>
     [Serializable]
     public class NameMatchMethodPointcutAdvisor : AbstractGenericPointcutAdvisor
 	{

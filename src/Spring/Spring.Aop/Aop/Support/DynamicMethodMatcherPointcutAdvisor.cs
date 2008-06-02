@@ -34,7 +34,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: DynamicMethodMatcherPointcutAdvisor.cs,v 1.6 2007/03/16 04:01:24 aseovic Exp $</version>
 	[Serializable]
     public abstract class DynamicMethodMatcherPointcutAdvisor
 		: DynamicMethodMatcher, IPointcutAdvisor, IPointcut, IOrdered

@@ -33,7 +33,6 @@ namespace Spring.Core.IO
 	/// Unit tests for the ResourceConverter class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ResourceConverterTests.cs,v 1.7 2007/08/08 17:49:59 bbaia Exp $</version>
 	[TestFixture]
 	public sealed class ResourceConverterTests
 	{

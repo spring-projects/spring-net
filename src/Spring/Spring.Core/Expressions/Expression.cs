@@ -42,7 +42,6 @@ namespace Spring.Expressions
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Expression.cs,v 1.19 2008/03/20 10:35:54 oakinger Exp $</version>
     [Serializable]
     public class Expression : BaseNode
     {

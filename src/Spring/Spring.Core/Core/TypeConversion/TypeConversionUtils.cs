@@ -34,7 +34,6 @@ namespace Spring.Core.TypeConversion
     /// Utility methods that are used to convert objects from one type into another.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: TypeConversionUtils.cs,v 1.4 2008/03/20 23:58:16 oakinger Exp $</version>
     public class TypeConversionUtils
     {
         /// <summary>

@@ -27,7 +27,6 @@ namespace Spring.Expressions
     /// Represents logical OR operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpOR.cs,v 1.8 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpOR : BinaryOperator
     {

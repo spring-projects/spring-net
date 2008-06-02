@@ -30,7 +30,6 @@ namespace Spring.Expressions
     /// Represents arithmetic multiplication operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpMULTIPLY.cs,v 1.10 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpMULTIPLY : BinaryOperator
     {

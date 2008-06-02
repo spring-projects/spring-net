@@ -32,7 +32,6 @@ namespace Spring.Core.TypeConversion
 	/// Unit tests for the UriConverter class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: UriConverterTests.cs,v 1.1 2007/07/31 18:21:02 bbaia Exp $</version>
 	[TestFixture]
     public sealed class UriConverterTests
     {

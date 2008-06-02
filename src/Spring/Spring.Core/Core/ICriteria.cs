@@ -30,7 +30,6 @@ namespace Spring.Core
     /// The criteria for an arbitrary filter.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ICriteria.cs,v 1.6 2006/04/09 07:18:38 markpollack Exp $</version>
     public interface ICriteria 
     {
         /// <summary>

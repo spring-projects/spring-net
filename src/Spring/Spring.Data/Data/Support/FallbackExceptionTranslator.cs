@@ -35,7 +35,6 @@ namespace Spring.Data.Support
 	/// "primary" implementation of IAdoExceptionTranslator, i.e. AdoExceptionTranslator.
     /// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: FallbackExceptionTranslator.cs,v 1.6 2007/01/01 22:22:50 markpollack Exp $</version>
 	public class FallbackExceptionTranslator : IAdoExceptionTranslator
 	{
 

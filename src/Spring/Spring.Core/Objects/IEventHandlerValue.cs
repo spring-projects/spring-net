@@ -25,7 +25,6 @@ namespace Spring.Objects
 	/// Describes an event handler.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: IEventHandlerValue.cs,v 1.6 2006/04/09 07:18:49 markpollack Exp $</version>
 	public interface IEventHandlerValue 
     {
         /// <summary>

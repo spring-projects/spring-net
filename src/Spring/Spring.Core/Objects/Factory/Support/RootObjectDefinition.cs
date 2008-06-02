@@ -57,7 +57,6 @@ namespace Spring.Objects.Factory.Support
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: RootObjectDefinition.cs,v 1.20 2007/03/16 04:01:43 aseovic Exp $</version>
     /// <seealso cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>
     [Serializable]
     public class RootObjectDefinition : AbstractObjectDefinition

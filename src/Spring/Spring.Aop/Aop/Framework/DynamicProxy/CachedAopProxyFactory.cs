@@ -47,7 +47,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Erich Eichinger</author>
     /// <seealso cref="Spring.Aop.Framework.DynamicProxy.DefaultAopProxyFactory"/>
     /// <seealso cref="Spring.Aop.Framework.IAopProxyFactory"/>
-    /// <version>$Id: CachedAopProxyFactory.cs,v 1.1 2007/08/02 04:15:21 markpollack Exp $</version>
     [Serializable]
     public class CachedAopProxyFactory : DefaultAopProxyFactory
     {

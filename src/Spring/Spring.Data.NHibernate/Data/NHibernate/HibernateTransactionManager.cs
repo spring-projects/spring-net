@@ -63,7 +63,6 @@ namespace Spring.Data.NHibernate
     /// operations within a single transaction.</para>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: HibernateTransactionManager.cs,v 1.7 2007/11/20 14:39:48 markpollack Exp $</version>
 	public class HibernateTransactionManager : AbstractPlatformTransactionManager, IObjectFactoryAware, IInitializingObject
 	{   
 		#region Fields

@@ -35,7 +35,6 @@ namespace Spring.Aop.Framework.Adapter
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: AfterReturningAdviceAdapter.cs,v 1.5 2007/03/16 04:01:20 aseovic Exp $</version>
     [Serializable]
     internal class AfterReturningAdviceAdapter : IAdvisorAdapter
     {

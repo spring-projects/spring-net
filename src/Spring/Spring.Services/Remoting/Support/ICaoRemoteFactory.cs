@@ -37,7 +37,6 @@ namespace Spring.Remoting.Support
 	/// <author>Aleksandar Seovic</author>
 	/// <author>Mark Pollack</author>
 	/// <author>Bruno Baia</author>
-    /// <version>$Id: ICaoRemoteFactory.cs,v 1.1 2006/09/13 20:20:16 bbaia Exp $</version>
     public interface ICaoRemoteFactory
 	{
         /// <summary>

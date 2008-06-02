@@ -33,7 +33,6 @@ namespace Spring.Remoting
 	/// Unit tests for the CaoFactoryObject class.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: CaoFactoryObjectTests.cs,v 1.12 2007/02/20 19:39:52 aseovic Exp $</version>
 	[TestFixture]
 	public class CaoFactoryObjectTests : BaseRemotingTestFixture
 	{

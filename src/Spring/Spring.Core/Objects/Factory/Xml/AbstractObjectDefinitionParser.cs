@@ -48,7 +48,6 @@ namespace Spring.Objects.Factory.Xml
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AbstractObjectDefinitionParser.cs,v 1.4 2007/05/26 19:25:54 markpollack Exp $</version>
     public abstract class AbstractObjectDefinitionParser : IObjectDefinitionParser
     {
         /// <summary>

@@ -28,7 +28,6 @@ namespace Spring.Aop.Framework.Adapter
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: GlobalAdvisorAdapterRegistry.cs,v 1.5 2006/04/09 07:18:35 markpollack Exp $</version>
     public sealed class GlobalAdvisorAdapterRegistry : DefaultAdvisorAdapterRegistry
     {
         private static readonly GlobalAdvisorAdapterRegistry instance

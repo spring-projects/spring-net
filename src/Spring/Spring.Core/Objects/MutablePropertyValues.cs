@@ -45,7 +45,6 @@ namespace Spring.Objects
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: MutablePropertyValues.cs,v 1.15 2007/03/16 04:01:29 aseovic Exp $</version>
     [Serializable]
     public class MutablePropertyValues : IPropertyValues
     {

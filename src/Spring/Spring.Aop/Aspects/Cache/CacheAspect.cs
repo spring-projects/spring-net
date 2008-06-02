@@ -40,7 +40,6 @@ namespace Spring.Aspects.Cache
 	/// <see cref="CacheParameterAdvisor"/>
 	/// <see cref="InvalidateCacheAdvisor"/>
     /// <author>Aleksandar Seovic</author>
-	/// <version>$Id: CacheAspect.cs,v 1.2 2007/08/03 14:38:35 markpollack Exp $</version>
 	public class CacheAspect : IAdvisors, IApplicationContextAware
 	{
 	    private IAdvisor[] advisors;

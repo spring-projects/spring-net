@@ -84,7 +84,6 @@ namespace Spring.Core.TypeConversion
 	/// </code>
 	/// </example>
 	/// <author></author>
-	/// <version>$Id: StringArrayConverter.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
 	public class StringArrayConverter : TypeConverter
 	{
 		private const string DefaultListSeparator = ",";

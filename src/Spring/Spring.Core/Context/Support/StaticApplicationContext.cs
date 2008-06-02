@@ -40,7 +40,6 @@ namespace Spring.Context.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: StaticApplicationContext.cs,v 1.9 2007/07/10 05:48:03 markpollack Exp $</version>
 	public class StaticApplicationContext : GenericApplicationContext
 	{
 		/// <summary>

@@ -42,7 +42,6 @@ namespace Spring.Data.Core
     /// It simplifies the use of ADO.NET and helps to avoid commons errors.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AdoTemplate.cs,v 1.9 2007/12/28 19:37:13 markpollack Exp $</version>   
     public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         #region Logging Definition

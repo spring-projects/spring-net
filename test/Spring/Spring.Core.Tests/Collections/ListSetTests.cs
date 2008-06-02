@@ -32,7 +32,6 @@ namespace Spring.Collections
 	/// Unit tests for the ListSet class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ListSetTests.cs,v 1.3 2006/04/09 07:19:06 markpollack Exp $</version>
 	[TestFixture]
     public class ListSetTests : SetTests
     {

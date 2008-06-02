@@ -37,7 +37,6 @@ namespace Spring.Objects.Factory.Support
     /// Miscellaneous utility methods to support web functionality within Spring.Objects
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebObjectUtils.cs,v 1.3 2008/01/27 23:29:55 oakinger Exp $</version>
     public sealed class WebObjectUtils
     {
         private static ILog s_log = LogManager.GetLogger(typeof(WebObjectUtils));

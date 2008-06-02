@@ -46,7 +46,6 @@ namespace Spring.Aop
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: ITargetSource.cs,v 1.9 2007/10/10 18:07:38 markpollack Exp $</version>
 	public interface ITargetSource
 	{
         /// <summary>

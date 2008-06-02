@@ -30,7 +30,6 @@ namespace Spring.Web.Support
     /// The various result modes.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ResultMode.cs,v 1.3 2007/04/19 07:49:01 oakinger Exp $</version>
     /// <seealso cref="Spring.Web.Support.Result"/>
     [Serializable]
     public enum ResultMode

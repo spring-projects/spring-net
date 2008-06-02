@@ -35,7 +35,6 @@ namespace Spring.Data.NHibernate.Generic
 	/// </remarks>
     /// <author>Sree Nivask (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IFindHibernateCallback.cs,v 1.2 2007/09/19 22:58:10 markpollack Exp $</version>
 	public interface IFindHibernateCallback<T>
 	{
         /// <summary>

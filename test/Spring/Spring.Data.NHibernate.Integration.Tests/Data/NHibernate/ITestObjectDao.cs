@@ -26,7 +26,6 @@ namespace Spring.Data.NHibernate
 	/// TODO: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: ITestObjectDao.cs,v 1.1 2007/05/31 20:25:14 markpollack Exp $</version>
 	public interface ITestObjectDao 
 	{
         void Create(TestObject to);

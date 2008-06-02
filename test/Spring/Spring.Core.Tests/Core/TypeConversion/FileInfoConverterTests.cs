@@ -32,7 +32,6 @@ namespace Spring.Core.TypeConversion
     /// Unit tests for the FileInfoConverter class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: FileInfoConverterTests.cs,v 1.1 2007/07/31 18:21:01 bbaia Exp $</version>
     [TestFixture]
     public sealed class FileInfoConverterTests
     {

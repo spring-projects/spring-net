@@ -57,7 +57,6 @@ namespace Spring.Objects.Factory.Xml
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: XmlObjectFactory.cs,v 1.13 2007/08/08 17:47:13 bbaia Exp $</version>
 	/// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/>
     [Serializable]
     public class XmlObjectFactory : DefaultListableObjectFactory

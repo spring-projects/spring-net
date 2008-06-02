@@ -36,7 +36,6 @@ namespace Spring.Support
 	/// Test the database exception translation.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: ErrorCodeExceptionTranslatorTests.cs,v 1.8 2007/12/06 20:14:39 markpollack Exp $</version>
 	[TestFixture]
 	public class ErrorCodeExceptionTranslatorTests 
 	{

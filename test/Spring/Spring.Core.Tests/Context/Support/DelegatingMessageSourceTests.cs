@@ -33,7 +33,6 @@ namespace Spring.Context.Support
 	/// Unit tests for the DelegatingMessageSource class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: DelegatingMessageSourceTests.cs,v 1.3 2006/04/09 07:19:07 markpollack Exp $</version>
 	[TestFixture]
     public sealed class DelegatingMessageSourceTests
     {

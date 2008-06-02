@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents parsed function node.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: FunctionNode.cs,v 1.7 2008/03/20 23:58:16 oakinger Exp $</version>
     [Serializable]
     public class FunctionNode : NodeWithArguments
     {

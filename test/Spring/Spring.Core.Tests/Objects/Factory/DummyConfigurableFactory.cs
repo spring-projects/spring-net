@@ -31,7 +31,6 @@ namespace Spring.Objects.Factory
     /// of IConfigurableFactoryObject support in AbstractObjectFactory.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-    /// <version>$Id: DummyConfigurableFactory.cs,v 1.2 2007/03/04 20:42:06 bbaia Exp $</version>
 	public class DummyConfigurableFactory : DummyFactory, IConfigurableFactoryObject
     {
         #region Fields

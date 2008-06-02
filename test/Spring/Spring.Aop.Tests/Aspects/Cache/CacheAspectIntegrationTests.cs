@@ -37,7 +37,6 @@ namespace Spring.Aspects.Cache
     /// Unit tests for the CacheParameterAdvice class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CacheAspectIntegrationTests.cs,v 1.4 2007/08/03 14:38:39 markpollack Exp $</version>
     [TestFixture]
     public sealed class CacheAspectIntegrationTests
     {

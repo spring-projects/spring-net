@@ -35,7 +35,6 @@ namespace Spring.Aop
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: TrueMethodMatcher.cs,v 1.5 2006/04/09 07:18:36 markpollack Exp $</version>
 	[Serializable]
 	public sealed class TrueMethodMatcher : IMethodMatcher, ISerializable
 	{

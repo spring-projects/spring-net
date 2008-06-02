@@ -34,7 +34,6 @@ namespace Spring.Reflection.Dynamic
     /// Unit tests for the DynamicConstructor class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicConstructorTests.cs,v 1.1 2007/08/08 04:06:01 bbaia Exp $</version>
 	[TestFixture]
     public sealed class DynamicConstructorTests
     {

@@ -33,7 +33,6 @@ namespace Spring.Data
 	/// Simple stored procedure with only 'in' args to create a testobject record 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: CallCreateTestObject.cs,v 1.2 2006/06/21 14:07:30 markpollack Exp $</version>
 	public class CallCreateTestObject : StoredProcedure
 	{
         private static string procedureName = "CreateTestObject";

@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Attributes
     /// This class contains tests for RequiredAttributeObjectPostProcessor.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: RequiredAttributeObjectPostProcessorTests.cs,v 1.1 2008/04/02 18:02:31 markpollack Exp $</version>
     [TestFixture]
     public class RequiredAttributeObjectPostProcessorTests
     {

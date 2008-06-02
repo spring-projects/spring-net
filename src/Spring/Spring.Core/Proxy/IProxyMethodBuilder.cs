@@ -33,7 +33,6 @@ namespace Spring.Proxy
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: IProxyMethodBuilder.cs,v 1.1 2006/08/10 18:45:55 bbaia Exp $</version>
     public interface IProxyMethodBuilder
     {
         /// <summary>

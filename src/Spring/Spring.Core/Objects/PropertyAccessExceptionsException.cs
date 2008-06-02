@@ -48,7 +48,6 @@ namespace Spring.Objects
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: PropertyAccessExceptionsException.cs,v 1.15 2007/07/31 00:26:30 markpollack Exp $</version>
 	[Serializable]
 	public class PropertyAccessExceptionsException : ObjectsException
 	{

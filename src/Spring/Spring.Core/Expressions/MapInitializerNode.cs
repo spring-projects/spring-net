@@ -29,7 +29,6 @@ namespace Spring.Expressions
     /// Represents parsed map initializer node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: MapInitializerNode.cs,v 1.4 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class MapInitializerNode : BaseNode
     {

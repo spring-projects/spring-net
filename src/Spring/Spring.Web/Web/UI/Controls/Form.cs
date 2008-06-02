@@ -39,7 +39,6 @@ namespace Spring.Web.UI.Controls
     /// and also <a href="http://opensource.atlassian.com/projects/spring/browse/SPRNET-560">JIRA SPRNET-560</a> for more info.
     /// </remarks>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: Form.cs,v 1.1 2007/07/24 14:32:58 oakinger Exp $</version>
     public class Form : HtmlForm
     {
         private bool suppressAction = false;

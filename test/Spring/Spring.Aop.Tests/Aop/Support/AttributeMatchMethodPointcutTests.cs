@@ -33,7 +33,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rick Evans</author>
     /// <author>Ronald Wildenberg</author>
-	/// <version>$Id: AttributeMatchMethodPointcutTests.cs,v 1.3 2007/05/21 16:44:08 bbaia Exp $</version>
 	[TestFixture]
 	public sealed class AttributeMatchMethodPointcutTests
 	{

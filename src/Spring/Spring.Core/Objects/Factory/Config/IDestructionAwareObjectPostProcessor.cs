@@ -37,7 +37,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: IDestructionAwareObjectPostProcessor.cs,v 1.4 2006/04/09 07:18:47 markpollack Exp $</version>
 	public interface IDestructionAwareObjectPostProcessor : IObjectPostProcessor
 	{
 		/// <summary>

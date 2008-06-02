@@ -44,7 +44,6 @@ namespace Spring.Context.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: NullMessageSource.cs,v 1.5 2007/08/27 09:38:29 oakinger Exp $</version>
     public sealed class NullMessageSource : AbstractMessageSource
     {
         /// <summary>

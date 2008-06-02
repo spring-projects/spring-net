@@ -34,7 +34,6 @@ namespace Spring.Data
 	/// Group together multiple ITestObjectDao operations.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TestObjectManager.cs,v 1.4 2008/03/21 14:10:23 markpollack Exp $</version>
 	public class TestObjectManager : ITestObjectManager
 	{
 		#region Fields

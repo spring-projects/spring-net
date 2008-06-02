@@ -32,7 +32,6 @@ namespace Spring.Proxy
 	/// used to create a proxy type for any class.
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: IProxyTypeBuilder.cs,v 1.8 2007/06/20 15:59:54 bbaia Exp $</version>
 	public interface IProxyTypeBuilder
 	{
 		/// <summary>

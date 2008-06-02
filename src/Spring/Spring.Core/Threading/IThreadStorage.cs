@@ -8,7 +8,6 @@ namespace Spring.Threading
     /// All implementations of this interface must treat keys case-sensitive.
     /// </remarks>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: IThreadStorage.cs,v 1.1 2007/02/02 21:30:34 oakinger Exp $</version>  
     public interface IThreadStorage
     {
         /// <summary>

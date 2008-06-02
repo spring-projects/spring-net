@@ -41,7 +41,6 @@ namespace Spring.Objects.Factory.Support
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: ManagedList.cs,v 1.15 2007/11/26 14:15:54 bbaia Exp $</version>
     [Serializable]
     public class ManagedList : ArrayList, IManagedCollection
     {

@@ -33,7 +33,6 @@ namespace Spring.Core.TypeConversion
     /// Unit tests for the CredentialConverter class.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: CredentialConverterTests.cs,v 1.1 2007/07/31 18:21:01 bbaia Exp $</version>
     [TestFixture]
     public sealed class CredentialConverterTests
     {

@@ -110,7 +110,6 @@ namespace Spring.Objects.Factory.Support
 	/// </code>
 	/// </example>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: IManagedCollection.cs,v 1.5 2007/03/16 03:05:37 bbaia Exp $</version>
 	public interface IManagedCollection : ICollection
 	{
 		/// <summary>

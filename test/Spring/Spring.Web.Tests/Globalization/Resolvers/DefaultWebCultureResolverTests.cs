@@ -33,7 +33,6 @@ namespace Spring.Globalization.Resolvers
     /// Tests DefaultWebCultureResolver behaviour.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: DefaultWebCultureResolverTests.cs,v 1.1 2007/08/25 14:26:36 oakinger Exp $</version>
     [TestFixture]
     public class DefaultWebCultureResolverTests
     {

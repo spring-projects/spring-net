@@ -40,7 +40,6 @@ namespace Spring.Aop.Framework
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: AopUtils.cs,v 1.4 2007/10/10 18:07:38 markpollack Exp $</version>
     public sealed class AopUtils
     {
 

@@ -30,7 +30,6 @@ namespace Spring.Objects {
 	/// Exposes a static method that has a signature compatible with the
 	/// EventHandler delegate.
     /// </summary>
-    /// <version>$Id: StaticTestEventHandler.cs,v 1.3 2006/04/09 07:24:50 markpollack Exp $</version>
     public class StaticTestEventHandler
     {
         public static void HandleArbitraryEvent (object sender, EventArgs e) 

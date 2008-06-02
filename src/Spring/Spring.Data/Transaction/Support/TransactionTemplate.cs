@@ -55,7 +55,6 @@ namespace Spring.Transaction.Support
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author> 
     /// <author>Griffin Caprio (.NET)</author>
-    /// <version>$Id: TransactionTemplate.cs,v 1.13 2007/08/01 18:53:14 markpollack Exp $</version>
     public class TransactionTemplate : DefaultTransactionDefinition, ITransactionOperations, IInitializingObject
     {
         private IPlatformTransactionManager _platformTransactionManager;

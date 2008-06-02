@@ -32,7 +32,6 @@ namespace Spring.Expressions
     /// Represents parsed method node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: MethodNode.cs,v 1.21 2008/03/20 23:58:16 oakinger Exp $</version>
     [Serializable]
     public class MethodNode : NodeWithArguments
     {

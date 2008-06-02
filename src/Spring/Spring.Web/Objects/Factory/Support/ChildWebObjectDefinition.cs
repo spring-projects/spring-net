@@ -36,7 +36,6 @@ namespace Spring.Objects.Factory.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ChildWebObjectDefinition.cs,v 1.3 2007/08/01 23:10:46 markpollack Exp $</version>
     public class ChildWebObjectDefinition : ChildObjectDefinition, IWebObjectDefinition
     {
         private ObjectScope _scope = ObjectScope.Default;

@@ -43,7 +43,6 @@ namespace Spring.Objects.Factory
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: ObjectFactoryUtils.cs,v 1.17 2007/07/31 03:47:39 markpollack Exp $</version>
 	public sealed class ObjectFactoryUtils
 	{
 		#region Constructor (s) / Destructor

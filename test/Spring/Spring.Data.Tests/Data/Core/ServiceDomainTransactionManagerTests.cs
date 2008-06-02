@@ -39,7 +39,6 @@ namespace Spring.Data.Core
     /// This class contains tests for ServiceDomainTransactionManager
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ServiceDomainTransactionManagerTests.cs,v 1.5 2007/12/07 07:31:05 markpollack Exp $</version>
     [TestFixture]
     public class ServiceDomainTransactionManagerTests
     {

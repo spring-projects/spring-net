@@ -36,7 +36,6 @@ namespace Spring.Data
 	/// TODO: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: MappingAdoQueryTests.cs,v 1.3 2006/11/13 07:05:00 markpollack Exp $</version>
 	[TestFixture]
 	public class MappingAdoQueryTests 
 	{

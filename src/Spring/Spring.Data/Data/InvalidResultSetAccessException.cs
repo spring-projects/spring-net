@@ -32,7 +32,6 @@ namespace Spring.Data
     /// Exception thrown when a result set has been accessed in an invalid fashion.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: InvalidResultSetAccessException.cs,v 1.2 2007/12/07 08:09:52 markpollack Exp $</version>
 	[Serializable]
 	public class InvalidResultSetAccessException : InvalidDataAccessResourceUsageException, ISerializable
 	{

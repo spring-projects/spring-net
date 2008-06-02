@@ -42,7 +42,6 @@ namespace Spring.ServiceModel
 	/// Registers an object type on the server as a WCF service.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: ServiceExporter.cs,v 1.2 2007/09/21 14:26:26 bbaia Exp $</version>
 	public class ServiceExporter : IApplicationContextAware, IObjectFactoryAware, IInitializingObject, IDisposable
 	{
 		#region Logging

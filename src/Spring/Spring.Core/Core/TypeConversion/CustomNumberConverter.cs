@@ -50,7 +50,6 @@ namespace Spring.Core.TypeConversion
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: CustomNumberConverter.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
 	public class CustomNumberConverter : TypeConverter
 	{
 		private Type _type;

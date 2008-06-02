@@ -33,7 +33,7 @@ namespace Spring.Collections
 	/// <p>
 	/// In addition to synchronizing reads, this implementation also fixes
 	/// IEnumerator/ICollection issue described at 
-	/// http://msdn.microsoft.com/netframework/programming/breakingchanges/runtime/clr.aspx
+    /// http://msdn.microsoft.com/en-us/netframework/aa570326.aspx
 	/// (search for SynchronizedHashtable for issue description), by implementing 
 	/// <see cref="IEnumerator"/> interface explicitly, and returns thread safe enumerator
 	/// implementations as well.
@@ -44,7 +44,6 @@ namespace Spring.Collections
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: SynchronizedHashtable.cs,v 1.2 2007/08/27 13:57:17 oakinger Exp $</version>
 	[Serializable]
 	public class SynchronizedHashtable : IDictionary, ICollection, IEnumerable, ICloneable
 	{

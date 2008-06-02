@@ -119,7 +119,6 @@ namespace Spring.Reflection.Dynamic
     /// Factory class for dynamic constructors.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicConstructor.cs,v 1.1 2007/08/08 04:05:37 bbaia Exp $</version>
     public class DynamicConstructor : BaseDynamicMember
     {
         private static readonly CreateConstructorCallback s_createCallback = new CreateConstructorCallback(CreateInternal);

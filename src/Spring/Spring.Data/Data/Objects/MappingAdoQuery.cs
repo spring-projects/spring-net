@@ -39,7 +39,6 @@ namespace Spring.Data.Objects
     /// contextual information, subclass this instead of MappingSqlQueryWithContext.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: MappingAdoQuery.cs,v 1.5 2008/05/29 17:26:35 markpollack Exp $</version>
 	public abstract class MappingAdoQuery : MappingAdoQueryWithContext
 	{
 		#region Constructor (s)

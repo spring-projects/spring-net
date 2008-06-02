@@ -46,7 +46,6 @@ namespace Spring.Collections
 	/// </note>
 	/// </remarks>
 	/// <seealso cref="Spring.Collections.ISet"/>
-	/// <version>$Id: HybridSet.cs,v 1.6 2007/03/16 04:01:28 aseovic Exp $</version>
 	[Serializable]
     public class HybridSet : DictionarySet
 	{

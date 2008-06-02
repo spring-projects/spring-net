@@ -36,7 +36,6 @@ namespace Spring.Data
     /// set of parameter declarations.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IDbCommandCreatorFactory.cs,v 1.11 2007/08/06 20:13:39 markpollack Exp $</version>
 	public class IDbCommandCreatorFactory 
 	{
 		#region Fields

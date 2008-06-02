@@ -34,7 +34,6 @@ namespace Spring.Data.Northwind
 	/// TODO: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: AdoTemplateShipperDao.cs,v 1.3 2007/08/03 19:51:22 markpollack Exp $</version>
 	public class AdoTemplateShipperDao : AdoDaoSupport, IShipperDao
     {
         #region IShipperDao Members

@@ -34,7 +34,6 @@ namespace Spring.Reflection.Dynamic
     /// Unit tests for the DynamicProperty class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicPropertyTests.cs,v 1.3 2008/05/17 11:05:27 oakinger Exp $</version>
 	[TestFixture]
     public class DynamicPropertyTests : BasePropertyTests
     {

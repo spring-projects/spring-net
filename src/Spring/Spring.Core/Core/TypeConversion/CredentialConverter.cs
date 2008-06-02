@@ -47,7 +47,6 @@ namespace Spring.Core.TypeConversion
     /// </code>
     /// </example>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: CredentialConverter.cs,v 1.2 2007/12/07 15:14:40 bbaia Exp $</version>
     public class CredentialConverter : TypeConverter
     {
         private readonly static Regex credentialRegex = new Regex(

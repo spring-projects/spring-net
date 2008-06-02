@@ -42,7 +42,6 @@ namespace Spring.Validation.Config
     /// Implementation of the custom configuration parser for validator definitions.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ValidationNamespaceParser.cs,v 1.2 2007/08/08 00:34:17 bbaia Exp $</version>
     [
         NamespaceParser(
             Namespace = "http://www.springframework.net/validation", 

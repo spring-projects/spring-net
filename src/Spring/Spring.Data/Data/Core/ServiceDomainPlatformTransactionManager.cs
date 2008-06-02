@@ -40,7 +40,6 @@ namespace Spring.Data.Core
     /// functionality which is available on Win 2003 and Win XP SP2.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ServiceDomainPlatformTransactionManager.cs,v 1.6 2007/12/04 19:43:16 markpollack Exp $</version>
     public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransactionManager, IInitializingObject
     {
         private IServiceDomainAdapter txAdapter;

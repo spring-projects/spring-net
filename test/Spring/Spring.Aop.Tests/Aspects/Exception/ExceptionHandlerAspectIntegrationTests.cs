@@ -39,7 +39,6 @@ namespace Spring.Aspects.Exceptions
     /// This class contains tests for ExceptionHandlerAdvice
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ExceptionHandlerAspectIntegrationTests.cs,v 1.6 2008/02/26 00:03:43 markpollack Exp $</version>
     [TestFixture]
     public class ExceptionHandlerAspectIntegrationTests
     {

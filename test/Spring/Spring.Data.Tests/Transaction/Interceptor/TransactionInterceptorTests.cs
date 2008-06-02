@@ -31,7 +31,6 @@ namespace Spring.Transaction.Interceptor
     /// This class contains mock objects tests the TransactionInterceptor 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TransactionInterceptorTests.cs,v 1.3 2007/10/21 18:16:58 markpollack Exp $</version>
     [TestFixture]
     public class TransactionInterceptorTests : AbstractTransactionAspectTests
     {

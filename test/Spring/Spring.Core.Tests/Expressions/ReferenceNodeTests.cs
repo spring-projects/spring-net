@@ -35,7 +35,6 @@ namespace Spring.Expressions
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ReferenceNodeTests.cs,v 1.1 2008/03/20 10:35:55 oakinger Exp $</version>
     [TestFixture]
     public class ReferenceNodeTests
     {

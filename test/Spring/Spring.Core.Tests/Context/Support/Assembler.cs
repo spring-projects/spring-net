@@ -26,7 +26,6 @@ namespace Spring.Context.Support
 
 
     /// <author>Mark Pollack</author>
-    /// <version>$Id: Assembler.cs,v 1.2 2007/07/17 14:55:47 oakinger Exp $</version>
     public class Assembler
     {
         private Service service;

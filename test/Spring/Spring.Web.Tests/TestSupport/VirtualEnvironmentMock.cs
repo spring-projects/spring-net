@@ -8,7 +8,6 @@ namespace Spring.TestSupport
     /// Test environment implementation.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: VirtualEnvironmentMock.cs,v 1.5 2008/03/14 12:02:46 oakinger Exp $</version>
     internal class VirtualEnvironmentMock : IVirtualEnvironment, IDisposable
     {
         private readonly IVirtualEnvironment _prevEnvironment;

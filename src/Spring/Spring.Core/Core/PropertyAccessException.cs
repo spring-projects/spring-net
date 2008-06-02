@@ -36,7 +36,6 @@ namespace Spring.Core
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: PropertyAccessException.cs,v 1.2 2007/07/31 03:47:22 markpollack Exp $</version>
     [Serializable]
     public abstract class PropertyAccessException : ReflectionException, IErrorCoded
     {

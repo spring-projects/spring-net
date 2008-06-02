@@ -52,7 +52,6 @@ namespace Spring.Context.Support
     /// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
     /// <author>Harald Radi (.NET)</author>
-    /// <version>$Id: AbstractMessageSource.cs,v 1.23 2007/08/28 14:16:15 oakinger Exp $</version>
     /// <seealso cref="Spring.Context.IMessageSourceResolvable"/>
     /// <seealso cref="Spring.Context.IMessageSource"/>
     /// <seealso cref="Spring.Context.IHierarchicalMessageSource"/>

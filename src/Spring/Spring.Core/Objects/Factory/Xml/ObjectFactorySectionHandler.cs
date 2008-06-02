@@ -51,7 +51,6 @@ namespace Spring.Objects.Factory.Xml
     /// </p>
     /// </example>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ObjectFactorySectionHandler.cs,v 1.3 2007/08/08 17:47:13 bbaia Exp $</version>
     public class ObjectFactorySectionHandler : IConfigurationSectionHandler
     {
         /// <summary>

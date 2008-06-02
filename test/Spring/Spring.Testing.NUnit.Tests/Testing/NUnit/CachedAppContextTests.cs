@@ -33,7 +33,6 @@ namespace Spring.Testing.NUnit
     /// NUnit.  The first one should be LoadAppContextTests.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: CachedAppContextTests.cs,v 1.2 2007/08/21 19:26:14 markpollack Exp $</version>
     [TestFixture]
     public class CachedAppContextTests : BaseTestAppContextTests
     {

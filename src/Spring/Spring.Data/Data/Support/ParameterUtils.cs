@@ -34,7 +34,6 @@ namespace Spring.Data.Support
 	/// Miscellaneous utility methods for manipulating parameter objects. 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: ParameterUtils.cs,v 1.12 2007/10/11 04:41:00 markpollack Exp $</version>
 	public class ParameterUtils 
 	{
 		#region Fields

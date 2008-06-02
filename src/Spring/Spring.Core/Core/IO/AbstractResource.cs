@@ -50,7 +50,6 @@ namespace Spring.Core.IO
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: AbstractResource.cs,v 1.25 2007/12/06 22:08:47 markpollack Exp $</version>
     /// <seealso cref="Spring.Core.IO.IResource"/>
     public abstract class AbstractResource : IResource
     {

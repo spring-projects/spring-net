@@ -41,7 +41,6 @@ namespace Spring.Dao
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: PessimisticLockingFailureException.cs,v 1.1 2008/04/08 20:26:43 markpollack Exp $</version>
 	[Serializable]
 	public class PessimisticLockingFailureException : ConcurrencyFailureException
 	{

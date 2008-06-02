@@ -31,7 +31,6 @@ namespace Spring.Objects.Factory.Config
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: DictionaryFactoryObject.cs,v 1.7 2007/07/31 03:47:39 markpollack Exp $</version>
     [Serializable]
     public class DictionaryFactoryObject : AbstractFactoryObject
 	{

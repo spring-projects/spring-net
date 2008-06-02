@@ -33,7 +33,6 @@ namespace Spring.Core.IO
 	/// Unit tests for the InputStreamResource class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: InputStreamResourceTests.cs,v 1.5 2007/08/08 17:49:59 bbaia Exp $</version>
 	[TestFixture]
     public sealed class InputStreamResourceTests
     {

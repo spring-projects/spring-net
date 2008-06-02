@@ -33,7 +33,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: IAopProxy.cs,v 1.4 2006/11/16 02:30:49 bbaia Exp $</version>
 	[ProxyIgnore]
     public interface IAopProxy
 	{

@@ -44,7 +44,6 @@ namespace Spring.Aop
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: IIntroductionInterceptor.cs,v 1.3 2006/04/09 07:18:36 markpollack Exp $</version>
 	public interface IIntroductionInterceptor : IMethodInterceptor
 	{
 		/// <summary>

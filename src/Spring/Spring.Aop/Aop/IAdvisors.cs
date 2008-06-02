@@ -33,7 +33,6 @@ namespace Spring.Aop
 	/// </summary>
     /// <seealso cref="IAdvisor"/>
     /// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: IAdvisors.cs,v 1.1 2007/08/03 14:38:30 markpollack Exp $</version>
 	public interface IAdvisors
 	{
         /// <summary>

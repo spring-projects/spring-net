@@ -170,7 +170,6 @@ namespace Spring.Objects.Factory.Config
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: MethodInvokingFactoryObject.cs,v 1.15 2007/03/16 04:01:38 aseovic Exp $</version>
 	/// <seealso cref="Spring.Objects.Support.MethodInvoker"/>
 	/// <seealso cref="Spring.Objects.Support.ArgumentConvertingMethodInvoker"/>
     [Serializable]

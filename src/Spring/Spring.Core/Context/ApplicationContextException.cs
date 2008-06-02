@@ -31,7 +31,6 @@ namespace Spring.Context
     /// <summary>Exception thrown during application context initialization.</summary>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ApplicationContextException.cs,v 1.5 2006/04/09 07:18:38 markpollack Exp $</version>
     [Serializable]
     public class ApplicationContextException : FatalObjectException
     {

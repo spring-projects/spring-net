@@ -38,7 +38,6 @@ namespace Spring.Aop.Support
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: StaticMethodMatcherPointcut.cs,v 1.8 2007/05/30 22:35:43 markpollack Exp $</version>
 	[Serializable]
 	public abstract class StaticMethodMatcherPointcut : StaticMethodMatcher, IPointcut
 	{

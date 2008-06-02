@@ -34,7 +34,6 @@ namespace Spring.Core.TypeResolution
 	/// <summary>
     /// Unit tests for the TypeResolutionUtils class.
 	/// </summary>
-	/// <version>$Id: TypeResolutionUtilsTests.cs,v 1.2 2007/08/02 14:19:03 markpollack Exp $</version>
     [TestFixture]
     public sealed class TypeResolutionUtilsTests
     {

@@ -7,7 +7,6 @@ namespace Spring.Validation
     /// An interface that validation errors containers have to implement.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IValidationErrors.cs,v 1.1 2008/02/05 20:40:26 aseovic Exp $</version>
     public interface IValidationErrors
     {
         /// <summary>

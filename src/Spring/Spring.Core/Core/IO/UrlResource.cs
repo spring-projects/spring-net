@@ -58,7 +58,6 @@ namespace Spring.Core.IO
 	/// <author>Juergen Hoeller</author>
 	/// <author>Leonardo Susatyo (.NET)</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: UrlResource.cs,v 1.15 2007/08/08 17:46:55 bbaia Exp $</version>
 	/// <seealso cref="Spring.Core.IO.IResource"/>
 	/// <seealso cref="Spring.Core.IO.IResourceLoader"/>
 	/// <seealso cref="Spring.Core.IO.ConfigurableResourceLoader"/>

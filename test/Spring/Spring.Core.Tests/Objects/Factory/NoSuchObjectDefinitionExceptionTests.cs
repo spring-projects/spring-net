@@ -29,7 +29,6 @@ namespace Spring.Objects.Factory
 	/// Unit tests for the NoSuchObjectDefinitionException class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: NoSuchObjectDefinitionExceptionTests.cs,v 1.3 2006/04/09 07:24:50 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class NoSuchObjectDefinitionExceptionTests
 	{

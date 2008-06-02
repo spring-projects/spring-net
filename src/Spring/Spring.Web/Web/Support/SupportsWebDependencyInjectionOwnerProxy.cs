@@ -32,7 +32,6 @@ namespace Spring.Web.Support
     /// Wraps a Control to make it DI aware
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: SupportsWebDependencyInjectionOwnerProxy.cs,v 1.2 2008/05/13 14:22:47 oakinger Exp $</version>
     internal class SupportsWebDependencyInjectionOwnerProxy : Control, ISupportsWebDependencyInjection
     {
         // Control Fields and Methods	    

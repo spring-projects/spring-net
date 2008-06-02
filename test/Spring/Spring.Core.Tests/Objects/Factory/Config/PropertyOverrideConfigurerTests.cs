@@ -37,7 +37,6 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the PropertyOverrideConfigurer class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: PropertyOverrideConfigurerTests.cs,v 1.9 2007/10/10 16:31:50 bbaia Exp $</version>
 	[TestFixture]
 	public sealed class PropertyOverrideConfigurerTests
 	{

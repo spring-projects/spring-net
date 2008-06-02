@@ -70,7 +70,6 @@ namespace Spring.Web.UI
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Page.cs,v 1.89 2008/04/03 04:32:29 markpollack Exp $</version>
     [AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
     [AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
     public class Page : System.Web.UI.Page, IHttpHandler, IApplicationContextAware, ISharedStateAware, IProcessAware,

@@ -30,7 +30,6 @@ namespace Spring.Web.Support
     /// This MethodBuilder emits a Callback-call before calling the base method
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: SupportsWebDependencyInjectionMethodBuilder.cs,v 1.1 2007/08/01 23:11:01 markpollack Exp $</version>
     internal class SupportsWebDependencyInjectionMethodBuilder : BaseProxyMethodBuilder
     {
         private FieldInfo _appContextField;

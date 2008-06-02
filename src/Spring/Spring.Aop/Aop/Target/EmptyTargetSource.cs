@@ -40,7 +40,6 @@ namespace Spring.Aop.Target
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: EmptyTargetSource.cs,v 1.4 2007/10/08 22:04:51 markpollack Exp $</version>
 	[Serializable]
 	public sealed class EmptyTargetSource : ITargetSource, ISerializable
 	{

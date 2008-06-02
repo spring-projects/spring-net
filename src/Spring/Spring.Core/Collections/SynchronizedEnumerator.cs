@@ -27,7 +27,6 @@ namespace Spring.Collections
     /// collections in order to ensure that the enumeration is thread safe.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SynchronizedEnumerator.cs,v 1.1 2006/05/03 01:13:41 aseovic Exp $</version>
     internal class SynchronizedEnumerator : IEnumerator
     {
         protected object syncRoot;

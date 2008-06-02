@@ -43,7 +43,6 @@ namespace Spring.Core.TypeConversion
     /// </p>
     /// </remarks>
     /// <author>Federico Spinazzi</author>
-    /// <version>$Id: RGBColorConverter.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
     public sealed class RGBColorConverter : TypeConverter
     {
         private const char ArgbSeparator = ',';

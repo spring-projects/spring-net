@@ -32,7 +32,6 @@ namespace Spring.Remoting
 	/// </summary>
 	/// <author>Bruno Baia</author>
 	/// <author>Mark Pollack</author>
-	/// <version>$Id: SaoExporterTests.cs,v 1.4 2007/02/20 19:40:12 aseovic Exp $</version>
 	[TestFixture]
 	public class SaoExporterTests : BaseRemotingTestFixture
 	{

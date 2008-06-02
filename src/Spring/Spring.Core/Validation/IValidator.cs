@@ -47,7 +47,6 @@ namespace Spring.Validation
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IValidator.cs,v 1.8 2008/02/05 20:40:26 aseovic Exp $</version>
     /// <seealso cref="BaseValidator"/>
     public interface IValidator
     {

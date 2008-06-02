@@ -32,7 +32,6 @@ namespace Spring.Proxy
     /// <summary>
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: DynamicProxyManagerTests.cs,v 1.2 2007/05/02 11:35:43 bbaia Exp $</version>
     [TestFixture]
     public class DynamicProxyManagerTests
     {

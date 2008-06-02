@@ -40,7 +40,6 @@ namespace Spring.Aop.Target
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.Net)</author>
-	/// <version>$Id: HotSwappableTargetSource.cs,v 1.6 2007/03/16 04:01:26 aseovic Exp $</version>
     [Serializable]
     public class HotSwappableTargetSource : ITargetSource
 	{

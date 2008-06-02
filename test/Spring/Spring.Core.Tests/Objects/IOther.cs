@@ -26,7 +26,6 @@ namespace Spring.Objects
 	/// </summary>
 	/// <author>Spring.Java Folks</author>
 	/// <author>Choy Rim (.NET)</author>
-	/// <version>$Id: IOther.cs,v 1.2 2006/04/09 07:24:50 markpollack Exp $</version>
 	public interface IOther
 	{
 

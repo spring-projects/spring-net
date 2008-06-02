@@ -37,8 +37,6 @@ namespace Spring.Aop.Target
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Spinazzi Federico (.NET)</author>
-	/// <version>$Id: PrototypeTargetSource.cs,v 1.3 2006/04/09 07:18:37 markpollack Exp $
-	/// </version>
 	public sealed class PrototypeTargetSource : AbstractPrototypeTargetSource
 	{
 		/// <summary>

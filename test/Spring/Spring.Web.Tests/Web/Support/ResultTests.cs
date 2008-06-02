@@ -31,7 +31,6 @@ namespace Spring.Web.Support
     /// Unit tests for the Result class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ResultTests.cs,v 1.4 2007/04/19 07:49:36 oakinger Exp $</version>
     [TestFixture]
     public sealed class ResultTests
     {

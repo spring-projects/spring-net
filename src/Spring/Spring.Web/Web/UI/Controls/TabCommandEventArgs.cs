@@ -32,7 +32,6 @@ namespace Spring.Web.UI.Controls
 	/// Provides information about a command raised from a <see cref="TabContainer"/>
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: TabCommandEventArgs.cs,v 1.1 2007/07/24 13:33:27 oakinger Exp $</version>
 	public class TabCommandEventArgs : CommandEventArgs
 	{
 		/// <summary>

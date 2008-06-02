@@ -34,7 +34,6 @@ namespace Spring.Reflection.Dynamic
     /// Unit tests for the DynamicField class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicFieldTests.cs,v 1.2 2008/05/16 10:02:41 oakinger Exp $</version>
 	[TestFixture]
     public class DynamicFieldTests
     {

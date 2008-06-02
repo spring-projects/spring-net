@@ -33,7 +33,6 @@ namespace Spring.Objects.Events.Support
 	/// interface.
 	/// </summary>
 	/// <author>Griffin Caprio</author>
-	/// <version>$Id: EventRegistry.cs,v 1.7 2006/04/09 07:18:47 markpollack Exp $</version>
 	public class EventRegistry : IEventRegistry
 	{
 		private IList _publishers;

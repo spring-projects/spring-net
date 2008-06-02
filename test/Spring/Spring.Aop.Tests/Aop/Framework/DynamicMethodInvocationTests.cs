@@ -34,7 +34,6 @@ namespace Spring.Aop.Framework
 	/// Unit tests for the DynamicMethodInvocation class.
 	/// </summary>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: DynamicMethodInvocationTests.cs,v 1.2 2008/02/06 18:29:05 bbaia Exp $</version>
 	[TestFixture]
     public class DynamicMethodInvocationTests : AbstractMethodInvocationTests
 	{

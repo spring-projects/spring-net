@@ -56,7 +56,6 @@ namespace Spring.Objects.Factory.Attributes
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: RequiredAttributeObjectPostProcessor.cs,v 1.2 2008/04/08 19:29:07 markpollack Exp $</version>
     public class RequiredAttributeObjectPostProcessor : InstantiationAwareObjectPostProcessorAdapter
     {
         private Type requiredAttributeType = typeof (RequiredAttribute);

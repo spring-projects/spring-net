@@ -33,7 +33,6 @@ namespace Spring.Objects
 	/// XmlObjectFactoryTests.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: LazyTestObject.cs,v 1.1 2006/04/23 19:34:38 markpollack Exp $</version>
 	public class LazyTestObject 
 	{
 		#region Fields

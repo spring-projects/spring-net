@@ -32,7 +32,6 @@ namespace Spring.Objects.Support
 	/// Unit tests for the ArgumentConvertingMethodInvoker class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ArgumentConvertingMethodInvokerTests.cs,v 1.4 2006/04/09 07:24:51 markpollack Exp $</version>
 	[TestFixture]
     public sealed class ArgumentConvertingMethodInvokerTests
     {

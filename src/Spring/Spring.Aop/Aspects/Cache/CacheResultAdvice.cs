@@ -48,7 +48,6 @@ namespace Spring.Aspects.Cache
     /// <seealso cref="CacheResultAttribute"/>
     /// <seealso cref="CacheResultItemsAttribute"/>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CacheResultAdvice.cs,v 1.6 2008/05/05 15:00:55 markpollack Exp $</version>
     public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
     {
         // shared logger instance

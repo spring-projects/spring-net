@@ -32,7 +32,6 @@ namespace Spring.Aop.Framework.Adapter
 	/// Unit tests for the UnknownAdviceTypeException class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: UnknownAdviceTypeExceptionTests.cs,v 1.2 2006/04/09 07:19:05 markpollack Exp $</version>
 	[TestFixture]
     public sealed class UnknownAdviceTypeExceptionTests
     {

@@ -68,7 +68,6 @@ namespace Spring.Validation
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: RequiredValidator.cs,v 1.8 2008/03/21 14:12:02 markpollack Exp $</version>
     public class RequiredValidator : BaseValidator
     {
         #region Constructors

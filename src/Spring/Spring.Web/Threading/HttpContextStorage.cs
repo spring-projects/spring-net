@@ -6,7 +6,6 @@ namespace Spring.Threading
     /// Implements <see cref="IThreadStorage"/> by using <see cref="HttpContext"/>.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HttpContextStorage.cs,v 1.1 2007/02/02 21:31:25 oakinger Exp $</version>  
     public class HttpContextStorage : IThreadStorage
     {
         /// <summary>

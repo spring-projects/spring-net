@@ -51,7 +51,6 @@ namespace Spring.Objects
 	/// <author>Rod Johnson</author>
 	/// <author>Mark Pollack (.NET)</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: ObjectWrapperTests.cs,v 1.14 2007/07/31 18:19:58 bbaia Exp $</version>
 	[TestFixture]
 	public sealed class ObjectWrapperTests
 	{

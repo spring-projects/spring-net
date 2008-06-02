@@ -37,7 +37,6 @@ namespace Spring.Objects.Factory.Config
     /// Unit tests for the ConfigurationReader class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ConfigurationReaderTests.cs,v 1.7 2007/08/08 17:49:04 bbaia Exp $</version>
     [TestFixture]
     public sealed class ConfigurationReaderTests
     {

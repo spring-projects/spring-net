@@ -36,7 +36,6 @@ namespace Spring.Proxy
     /// </summary>
     /// <author>Rick Evans</author>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: InheritanceProxyTypeBuilderTests.cs,v 1.9 2007/06/27 15:34:47 bbaia Exp $</version>
     [TestFixture]
     public sealed class InheritanceProxyTypeBuilderTests : AbstractProxyTypeBuilderTests
     {

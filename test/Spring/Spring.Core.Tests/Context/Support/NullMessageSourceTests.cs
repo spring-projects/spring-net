@@ -27,7 +27,6 @@ namespace Spring.Context.Support
 	/// Unit tests for the NullMessageSource class.
 	/// </summary>
 	/// <author></author>
-	/// <version>$Id: NullMessageSourceTests.cs,v 1.3 2007/07/02 21:24:48 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class NullMessageSourceTests
 	{

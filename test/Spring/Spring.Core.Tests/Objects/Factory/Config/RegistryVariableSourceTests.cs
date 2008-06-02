@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the RegistryVariableSource class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: RegistryVariableSourceTests.cs,v 1.3 2007/08/03 08:31:25 oakinger Exp $</version>
     [TestFixture]
     public sealed class RegistryVariableSourceTests
     {

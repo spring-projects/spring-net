@@ -34,7 +34,6 @@ namespace Spring.Aspects.Cache
     /// to all the methods that have <see cref="CacheResultAttribute"/> defined.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CacheResultAdvisor.cs,v 1.1 2007/02/16 03:13:01 aseovic Exp $</version>
     public class CacheResultAdvisor : AttributeMatchMethodPointcutAdvisor, IApplicationContextAware
     {
         /// <summary>

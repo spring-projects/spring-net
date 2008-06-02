@@ -33,7 +33,6 @@ namespace Spring.Data.Objects
     /// </summary>
     /// <remarks>The default CommandType is CommandType.Text</remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AdoScalar.cs,v 1.3 2007/07/25 08:25:20 markpollack Exp $</version>
     public class AdoScalar : AdoOperation
     {
         #region Constructor (s)

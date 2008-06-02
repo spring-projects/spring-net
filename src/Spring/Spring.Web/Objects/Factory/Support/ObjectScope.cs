@@ -24,7 +24,6 @@ namespace Spring.Objects.Factory.Support
     /// The possible object scope values.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ObjectScope.cs,v 1.1 2007/02/17 06:57:44 bbaia Exp $</version>
     public enum ObjectScope
     {
         /// <summary>

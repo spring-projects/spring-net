@@ -34,7 +34,6 @@ namespace Spring.Dao
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: UncategorizedDataAccessException.cs,v 1.5 2006/05/18 21:37:50 markpollack Exp $</version>
 	[Serializable]
 	public abstract class UncategorizedDataAccessException : DataAccessException
 	{

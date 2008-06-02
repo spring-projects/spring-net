@@ -29,7 +29,6 @@ namespace Spring.Transaction
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: HeuristicCompletionException.cs,v 1.6 2006/05/18 21:37:51 markpollack Exp $</version>
 	[Serializable]
 	public class HeuristicCompletionException : TransactionException, ISerializable
 	{

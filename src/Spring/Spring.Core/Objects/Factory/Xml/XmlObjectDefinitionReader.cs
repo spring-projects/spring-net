@@ -51,7 +51,6 @@ namespace Spring.Objects.Factory.Xml
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: XmlObjectDefinitionReader.cs,v 1.33 2008/02/04 22:44:03 markpollack Exp $</version>
     public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
     {
         #region Fields

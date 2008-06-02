@@ -37,7 +37,6 @@ namespace Spring.Data
 	/// the Spring.Data.Objects namespace.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IDbDataAdapterCreator.cs,v 1.3 2007/12/07 08:09:52 markpollack Exp $</version>
 	public interface IDbDataAdapterCreator 
 	{
         /// <summary>

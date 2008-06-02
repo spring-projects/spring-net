@@ -43,7 +43,6 @@ namespace Spring.Objects.Factory.Config
     /// <seealso cref="RegistryVariableSource"/>
     /// <seealso cref="SpecialFolderVariableSource"/>
 	/// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IVariableSource.cs,v 1.3 2007/08/02 22:18:32 markpollack Exp $</version>
     public interface IVariableSource
     {
         /// <summary>

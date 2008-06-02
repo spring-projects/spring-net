@@ -33,7 +33,6 @@ namespace Spring.Remoting
     /// Unit tests for the RemoteObjectFactory class.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: RemoteObjectFactoryTests.cs,v 1.5 2007/08/22 20:17:19 oakinger Exp $</version>
     [TestFixture]
     public class RemoteObjectFactoryTests
     {

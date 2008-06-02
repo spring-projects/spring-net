@@ -54,7 +54,6 @@ namespace Spring.Aop.Framework
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: AopContext.cs,v 1.7 2006/09/15 21:25:16 markpollack Exp $</version>
 	public sealed class AopContext
 	{
         private const string CURRENTPROXY_SLOTNAME = "AopContext.CurrentProxySlotName";

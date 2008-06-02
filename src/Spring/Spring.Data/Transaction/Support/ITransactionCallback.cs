@@ -36,7 +36,6 @@ namespace Spring.Transaction.Support
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ITransactionCallback.cs,v 1.4 2007/08/01 23:32:39 markpollack Exp $</version>
     public interface ITransactionCallback 
     {
         /// <summary>

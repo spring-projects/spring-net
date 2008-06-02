@@ -31,7 +31,6 @@ namespace Spring.Web.Support
     /// Tests the MediaType class according to http://www.iana.org/assignments/media-types/
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: MimeMediaTypeTests.cs,v 1.1 2007/11/28 23:26:28 oakinger Exp $</version>
     [TestFixture]
     public class MimeMediaTypeTests
     {

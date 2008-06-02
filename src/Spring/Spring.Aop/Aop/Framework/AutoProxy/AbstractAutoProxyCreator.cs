@@ -71,7 +71,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <author>Adhari C Mahendra (.NET)</author>
     /// <seealso cref="Spring.Aop.Framework.AutoProxy.AbstractAutoProxyCreator.InterceptorNames"/>
     /// <seealso cref="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator"/>
-    /// <version>$Id: AbstractAutoProxyCreator.cs,v 1.15 2008/03/03 09:28:49 bbaia Exp $</version>
     public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwareObjectPostProcessor, IObjectFactoryAware, IOrdered
     {
         #region Protected Fields

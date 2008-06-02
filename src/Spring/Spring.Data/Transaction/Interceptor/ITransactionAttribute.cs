@@ -29,7 +29,6 @@ namespace Spring.Transaction.Interceptor
 	/// specification to <see cref="Spring.Transaction.ITransactionDefinition"/>.
 	/// </summary>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: ITransactionAttribute.cs,v 1.6 2007/12/29 00:28:53 markpollack Exp $</version>
 	[TypeConverter(typeof(TransactionAttributeConverter))]
 	public interface ITransactionAttribute : ITransactionDefinition
 	{

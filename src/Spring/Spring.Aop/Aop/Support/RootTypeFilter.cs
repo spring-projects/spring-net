@@ -34,7 +34,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: RootTypeFilter.cs,v 1.3 2007/03/16 04:01:25 aseovic Exp $</version>
     [Serializable]
     public class RootTypeFilter : ITypeFilter
 	{

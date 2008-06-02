@@ -33,7 +33,6 @@ namespace Spring.DataBinding
     /// Test cases for the BaseBindingManager.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseBindingManagerTests.cs,v 1.6 2008/03/20 14:02:47 oakinger Exp $</version>
     [TestFixture]
     public class BaseBindingManagerTests
     {

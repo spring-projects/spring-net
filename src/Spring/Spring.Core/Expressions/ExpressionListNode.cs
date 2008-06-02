@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents parsed expression list node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ExpressionListNode.cs,v 1.6 2007/09/07 03:01:24 markpollack Exp $</version>
     [Serializable]
     public class ExpressionListNode : BaseNode
     {

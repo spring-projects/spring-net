@@ -34,7 +34,6 @@ namespace Spring.Data
 	/// any necessary parameters. 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IDbCommandCreator.cs,v 1.6 2007/08/06 20:13:39 markpollack Exp $</version>
 	public interface IDbCommandCreator 
 	{
         /// <summary>

@@ -37,7 +37,6 @@ namespace Spring.Core
     /// </p>
     /// </remarks>
     /// <author>Rick Evans</author>
-    /// <version>$Id: CriteriaMemberFilter.cs,v 1.1 2007/07/31 21:43:52 markpollack Exp $</version>
     public class CriteriaMemberFilter 
     {
         #region Constructor (s) / Destructor

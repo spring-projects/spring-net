@@ -45,7 +45,6 @@ namespace Spring.Objects.Factory.Xml
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebObjectsNamespaceParser.cs,v 1.1 2007/08/07 23:22:30 markpollack Exp $</version>
     /// <see cref="ObjectsNamespaceParser"/>
     public class WebObjectsNamespaceParser : ObjectsNamespaceParser
     {

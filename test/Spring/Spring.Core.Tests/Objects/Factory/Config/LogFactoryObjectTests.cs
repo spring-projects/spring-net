@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the LogFactoryObject class.
 	/// </summary>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: LogFactoryObjectTests.cs,v 1.1 2006/11/15 20:31:08 aseovic Exp $</version>
 	[TestFixture]
 	public sealed class LogFactoryObjectTests
 	{

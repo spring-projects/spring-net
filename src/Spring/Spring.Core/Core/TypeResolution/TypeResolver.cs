@@ -37,7 +37,6 @@ namespace Spring.Core.TypeResolution
     /// <author>Rick Evans</author>
     /// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: TypeResolver.cs,v 1.3 2007/08/27 15:18:24 oakinger Exp $</version>
     public class TypeResolver : ITypeResolver
     {
         /// <summary>

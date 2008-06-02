@@ -70,7 +70,6 @@ namespace Spring.Data.NHibernate
     /// </p>
     /// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: HibernateTemplate.cs,v 1.3 2008/01/24 17:29:16 markpollack Exp $</version>
 	public class HibernateTemplate : HibernateAccessor, IHibernateOperations
 	{
 		#region Fields

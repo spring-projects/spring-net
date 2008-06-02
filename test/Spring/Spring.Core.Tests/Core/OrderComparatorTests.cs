@@ -33,7 +33,6 @@ namespace Spring.Core
 	/// Unit tests for the OrderComparator class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: OrderComparatorTests.cs,v 1.2 2006/04/09 07:24:48 markpollack Exp $</version>
 	[TestFixture]
     public sealed class OrderComparatorTests
     {

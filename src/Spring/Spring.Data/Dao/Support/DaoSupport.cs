@@ -36,7 +36,6 @@ namespace Spring.Dao.Support
     ///  AdoDaoSupport, HibernateDaoSupport, etc.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: DaoSupport.cs,v 1.3 2006/11/13 07:04:45 markpollack Exp $</version>
 	public abstract class DaoSupport : IInitializingObject
 	{
 		#region Fields

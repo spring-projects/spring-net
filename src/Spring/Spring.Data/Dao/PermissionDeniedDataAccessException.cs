@@ -33,7 +33,6 @@ namespace Spring.Dao
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: PermissionDeniedDataAccessException.cs,v 1.1 2006/06/12 10:39:19 markpollack Exp $</version>
 	[Serializable]
 	public class PermissionDeniedDataAccessException : InvalidDataAccessResourceUsageException
 	{

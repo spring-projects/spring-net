@@ -28,7 +28,6 @@ namespace Spring.Objects
 	/// Unit tests for the NotWritablePropertyException class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: NotWritablePropertyExceptionTests.cs,v 1.4 2007/07/31 00:09:24 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class NotWritablePropertyExceptionTests
 	{

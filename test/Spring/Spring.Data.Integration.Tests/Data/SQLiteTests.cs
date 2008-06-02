@@ -43,7 +43,6 @@ namespace Spring.Data
     /// This class contains misc tests for specific providers
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: SQLiteTests.cs,v 1.1 2008/02/04 22:49:42 markpollack Exp $</version>
     [TestFixture]
     public class SQLiteTests
     {

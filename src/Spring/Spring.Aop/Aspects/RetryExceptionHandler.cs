@@ -30,7 +30,6 @@ namespace Spring.Aspects
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: RetryExceptionHandler.cs,v 1.1 2007/10/10 07:38:17 markpollack Exp $</version>
     public class RetryExceptionHandler : AbstractExceptionHandler
     {
         #region Fields

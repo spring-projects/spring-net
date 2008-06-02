@@ -36,7 +36,6 @@ namespace Spring.Web.UI.Controls
 	/// the user with content arranged in tabular form.
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: TabularMultiView.cs,v 1.1 2007/07/24 13:33:28 oakinger Exp $</version>
 	[ToolboxData("<{0}:TabularMultiView runat=\"server\"></{0}:TabularMultiView>")]
 	[ParseChildren(false)]
 	public class TabularMultiView : WebControl

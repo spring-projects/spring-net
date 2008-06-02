@@ -36,7 +36,6 @@ namespace Spring.Core.TypeResolution
     /// Unit tests for the GenericTypeResolver class.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: GenericTypeResolverTests.cs,v 1.2 2007/08/16 05:42:33 markpollack Exp $</version>
     [TestFixture]
     public class GenericTypeResolverTests : TypeResolverTests
     {

@@ -32,7 +32,6 @@ namespace Spring.Data.Support
 	/// </summary>
 	/// <remarks>IDataRecord methods are virtual.</remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: NullMappingDataReader.cs,v 1.2 2006/10/08 04:56:06 markpollack Exp $</version>
 	public class NullMappingDataReader : IDataReaderWrapper
 	{
 		#region Fields

@@ -34,7 +34,6 @@ namespace Spring.Objects.Factory.Xml
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: NamespaceParserSupport.cs,v 1.9 2008/02/20 14:29:22 bbaia Exp $</version>
     public abstract class NamespaceParserSupport : INamespaceParser
     {
 

@@ -33,7 +33,6 @@ namespace Spring.Data.NHibernate.Support
     /// Tests <see cref="SessionScopeSettings"/> functionality.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: SessionScopeSettingsTests.cs,v 1.2 2008/04/25 13:25:09 markpollack Exp $</version>
     [TestFixture]
     public class SessionScopeSettingsTests
     {

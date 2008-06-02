@@ -31,7 +31,6 @@ namespace Spring.Threading
     /// Base class for async test operations
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AsyncTestTask.cs,v 1.2 2008/02/02 10:24:38 oakinger Exp $</version>
     public abstract class AsyncTestTask
     {
         private Exception exception;

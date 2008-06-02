@@ -61,7 +61,6 @@ namespace Spring.Objects.Factory.Config
     /// will be thrown. </para>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: VariablePlaceholderConfigurer.cs,v 1.2 2007/08/02 22:18:32 markpollack Exp $</version>
     public class VariablePlaceholderConfigurer : IObjectFactoryPostProcessor, IOrdered
     {
         #region Fields

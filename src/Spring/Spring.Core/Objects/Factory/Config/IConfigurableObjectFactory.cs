@@ -49,7 +49,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IConfigurableObjectFactory.cs,v 1.14 2007/07/16 21:06:21 markpollack Exp $</version>
 	public interface IConfigurableObjectFactory : IHierarchicalObjectFactory
 	{
 		/// <summary>

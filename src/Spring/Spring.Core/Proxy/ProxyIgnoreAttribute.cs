@@ -30,7 +30,6 @@ namespace Spring.Proxy
     /// This attribute can be used to mark interfaces that should not be proxied
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ProxyIgnoreAttribute.cs,v 1.1 2006/11/16 02:30:50 bbaia Exp $</version>
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = false)]
     [Serializable]
     public sealed class ProxyIgnoreAttribute : Attribute

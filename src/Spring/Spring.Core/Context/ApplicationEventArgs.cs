@@ -30,7 +30,6 @@ namespace Spring.Context
 	/// <author>Mark Pollack (.NET)</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <seealso cref="Spring.Context.IApplicationEventListener"/>
-	/// <version>$Id: ApplicationEventArgs.cs,v 1.5 2006/04/09 07:18:38 markpollack Exp $</version>
 	[Serializable]
 	public class ApplicationEventArgs : EventArgs
 	{

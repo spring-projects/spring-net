@@ -33,7 +33,6 @@ namespace Spring.Remoting
     /// Unit tests for the RemotingConfigurerTests class.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: RemotingConfigurerTests.cs,v 1.3 2007/02/20 19:40:02 aseovic Exp $</version>
 	[TestFixture]
     public class RemotingConfigurerTests : BaseRemotingTestFixture
 	{

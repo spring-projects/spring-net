@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents parsed named argument node in the expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: QualifiedIdentifier.cs,v 1.7 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class QualifiedIdentifier : BaseNode
     {

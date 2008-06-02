@@ -27,7 +27,6 @@ namespace Spring.Expressions
     /// Represents logical IS operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpIs.cs,v 1.4 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpIs : BinaryOperator
     {

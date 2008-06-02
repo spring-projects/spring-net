@@ -28,7 +28,6 @@ namespace Spring.Caching
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ICache.cs,v 1.5 2007/08/27 09:38:11 oakinger Exp $</version>
 	public interface ICache
 	{
         /// <summary>

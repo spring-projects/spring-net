@@ -30,7 +30,6 @@ namespace Spring.Remoting
     /// Unit tests for the RemotingConfigParserTests class.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: RemotingConfigParserTests.cs,v 1.1 2006/05/20 22:16:59 bbaia Exp $</version>
 	[TestFixture]
     public class RemotingConfigParserTests
 	{

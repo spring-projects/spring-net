@@ -35,7 +35,6 @@ namespace Spring.Objects.Factory.Support
     /// This class contains tests for ObjectDefinitionBuilder
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ObjectDefinitionBuilderTests.cs,v 1.4 2008/01/28 23:03:05 markpollack Exp $</version>
     [TestFixture]
     public class ObjectDefinitionBuilderTests
     {

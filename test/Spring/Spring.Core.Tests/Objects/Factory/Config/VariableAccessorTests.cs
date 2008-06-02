@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
     /// Tests <see cref="VariableAccessor"/> functionality.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: VariableAccessorTests.cs,v 1.1 2007/08/22 20:17:05 oakinger Exp $</version>
     [TestFixture]
     public class VariableAccessorTests
     {

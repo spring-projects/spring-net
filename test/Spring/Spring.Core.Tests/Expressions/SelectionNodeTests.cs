@@ -32,7 +32,6 @@ namespace Spring.Expressions
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: SelectionNodeTests.cs,v 1.1 2008/03/25 22:33:04 oakinger Exp $</version>
     [TestFixture]
     public class SelectionNodeTests
     {

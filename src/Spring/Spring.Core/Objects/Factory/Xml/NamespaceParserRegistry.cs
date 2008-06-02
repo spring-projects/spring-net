@@ -45,7 +45,6 @@ namespace Spring.Objects.Factory.Xml
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: NamespaceParserRegistry.cs,v 1.7 2007/09/17 01:12:48 bbaia Exp $</version>
     public class NamespaceParserRegistry
     {
         /// <summary>

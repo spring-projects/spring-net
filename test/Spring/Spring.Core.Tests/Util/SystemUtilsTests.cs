@@ -32,7 +32,6 @@ namespace Spring.Util
     /// This class contains tests for SystemUtils
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: SystemUtilsTests.cs,v 1.1 2007/09/07 02:47:08 markpollack Exp $</version>
     [TestFixture]
     public class SystemUtilsTests
     {

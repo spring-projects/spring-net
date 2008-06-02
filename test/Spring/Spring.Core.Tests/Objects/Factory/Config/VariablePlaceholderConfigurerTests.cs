@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
     /// This calss contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: VariablePlaceholderConfigurerTests.cs,v 1.1 2007/07/10 05:48:43 markpollack Exp $</version>
     [TestFixture]
     public class VariablePlaceholderConfigurerTests
     {

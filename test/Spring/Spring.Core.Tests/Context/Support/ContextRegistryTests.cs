@@ -32,7 +32,6 @@ namespace Spring.Context.Support
 	/// Unit tests for the ContextRegistry class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ContextRegistryTests.cs,v 1.9 2008/03/21 10:49:38 oakinger Exp $</version>
 	[TestFixture]
 	public sealed class ContextRegistryTests
 	{

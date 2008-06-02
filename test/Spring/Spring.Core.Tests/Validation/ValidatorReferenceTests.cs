@@ -31,7 +31,6 @@ namespace Spring.Validation
     /// Unit tests for ValidatorReference class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ValidatorReferenceTests.cs,v 1.3 2008/02/05 20:40:27 aseovic Exp $</version>
     [TestFixture]
     public class ValidatorReferenceTests
     {

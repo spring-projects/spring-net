@@ -38,7 +38,6 @@ namespace Spring.Transaction.Interceptor
 	/// </remarks>
 	/// <author>Colin Sampaleanu</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: MatchAlwaysTransactionAttributeSource.cs,v 1.7 2007/12/29 00:28:53 markpollack Exp $</version>
 	[Serializable]
 	public class MatchAlwaysTransactionAttributeSource : ITransactionAttributeSource
 	{

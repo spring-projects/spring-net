@@ -25,7 +25,6 @@ namespace Spring.Transaction
     /// transaction propagation settings.
     /// </summary>
     /// <author>Griffin Caprio (.NET)</author>
-    /// <version>$Id: TransactionPropagation.cs,v 1.7 2007/05/29 20:00:33 markpollack Exp $</version>
     public enum TransactionPropagation
     {
         /// <summary>

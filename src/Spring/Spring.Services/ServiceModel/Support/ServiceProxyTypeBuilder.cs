@@ -38,7 +38,6 @@ namespace Spring.ServiceModel.Support
     /// Builds a WCF service type.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ServiceProxyTypeBuilder.cs,v 1.1 2007/05/18 21:04:37 bbaia Exp $</version>
     public class ServiceProxyTypeBuilder : CompositionProxyTypeBuilder
     {
         #region Fields

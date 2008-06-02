@@ -39,7 +39,6 @@ namespace Spring.Data.Core
     /// but does not access any database
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TxScopeTransactionManagerIntegrationTests.cs,v 1.1 2007/11/30 18:38:59 markpollack Exp $</version>
     [TestFixture]
     public class TxScopeTransactionManagerIntegrationTests
     {

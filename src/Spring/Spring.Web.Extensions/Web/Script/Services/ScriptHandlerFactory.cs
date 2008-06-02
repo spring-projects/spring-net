@@ -41,7 +41,6 @@ namespace Spring.Web.Script.Services
     /// </summary>
     /// <author>Bruno Baia</author>
     /// <author>Thomas Broyer</author>
-    /// <version>$Id: ScriptHandlerFactory.cs,v 1.2 2008/03/27 11:11:22 bbaia Exp $</version>
     public class ScriptHandlerFactory : AbstractHandlerFactory, IHttpHandlerFactory
     {
         private static readonly Type scriptHandlerFactoryType =

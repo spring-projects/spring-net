@@ -37,7 +37,6 @@ namespace Spring.Core
 	/// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.Net)</author>
-    /// <version>$Id: IControlFlow.cs,v 1.4 2006/04/09 07:18:38 markpollack Exp $</version>
     public interface IControlFlow
 	{
         /// <summary>

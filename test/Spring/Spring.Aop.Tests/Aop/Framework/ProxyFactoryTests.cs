@@ -42,7 +42,6 @@ namespace Spring.Aop.Framework
     /// <author>Rod Johnson</author>
     /// <author>Choy Rim (.NET)</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: ProxyFactoryTests.cs,v 1.22 2008/03/21 10:49:38 oakinger Exp $</version>
     [TestFixture]
     public sealed class ProxyFactoryTests
     {

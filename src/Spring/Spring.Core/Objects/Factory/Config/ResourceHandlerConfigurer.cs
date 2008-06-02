@@ -46,7 +46,6 @@ namespace Spring.Objects.Factory.Config
     /// </p>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ResourceHandlerConfigurer.cs,v 1.3 2007/08/08 17:47:13 bbaia Exp $</version>
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
     /// <seealso cref="Spring.Context.IApplicationContext"/>	
     [Serializable]

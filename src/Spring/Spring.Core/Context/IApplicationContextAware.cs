@@ -61,11 +61,9 @@ namespace Spring.Context
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IApplicationContextAware.cs,v 1.8 2007/08/08 17:46:37 bbaia Exp $</version>
     /// <see cref="Spring.Objects.Factory.IObjectFactoryAware"/>
     /// <see cref="Spring.Objects.Factory.IInitializingObject"/>
     /// <see cref="Spring.Objects.Factory.IObjectFactory"/>
-    /// <version>$Id: IApplicationContextAware.cs,v 1.8 2007/08/08 17:46:37 bbaia Exp $</version>
     public interface IApplicationContextAware
     {
     	/// <summary>

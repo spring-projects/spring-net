@@ -31,7 +31,6 @@ namespace Spring.Util
     /// A utility  class for raising events in a generic and consistent fashion.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: EventUtils.cs,v 1.5 2006/04/09 07:19:00 markpollack Exp $</version>
     public class EventRaiser
     {
         /// <summary>
@@ -85,7 +84,6 @@ namespace Spring.Util
     /// </p>
     /// </remarks>
     /// <author>Rick Evans</author>
-    /// <version>$Id: EventUtils.cs,v 1.5 2006/04/09 07:19:00 markpollack Exp $</version>
     public class DefensiveEventRaiser : EventRaiser
     {
         /// <summary>

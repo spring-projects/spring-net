@@ -28,7 +28,6 @@ namespace Spring.Aspects.Logging
     /// SimpleLoggingAdvice for testing purposes.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TestableSimpleLoggingAdvice.cs,v 1.2 2007/12/06 17:17:24 markpollack Exp $</version>
     public class TestableSimpleLoggingAdvice : SimpleLoggingAdvice
     {
         /// <summary>

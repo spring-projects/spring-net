@@ -42,7 +42,6 @@ namespace Spring.Data.NHibernate
     /// This class contains tests for the HibernateTransactionManager
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: HibernateTransactionManagerTests.cs,v 1.5 2008/01/29 20:07:38 markpollack Exp $</version>
     [TestFixture]
     public class HibernateTransactionManagerTests
     {

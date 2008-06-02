@@ -29,7 +29,6 @@ namespace Spring.Expressions
     /// Represents lambda expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: LambdaExpressionNode.cs,v 1.8 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class LambdaExpressionNode : BaseNode
     {

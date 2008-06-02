@@ -29,7 +29,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: IAopProxyFactory.cs,v 1.3 2006/04/09 07:18:35 markpollack Exp $</version>
 	public interface IAopProxyFactory
 	{
 		/// <summary>

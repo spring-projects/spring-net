@@ -26,7 +26,6 @@ namespace Spring.Transaction.Support
 	/// Enumeration of status values when synchronizing transactions.
 	/// </summary>
 	/// <author>Griffin Caprio</author>
-	/// <version>$Id: TransactionSynchronizationStatus.cs,v 1.5 2006/05/18 21:37:51 markpollack Exp $</version>
 	public enum TransactionSynchronizationStatus
 	{
 		/// <summary>

@@ -26,8 +26,6 @@ namespace Spring.Aop.Target
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi (.Net)</author>
-	/// <version>  $Id: SimplePoolTargetSourceTests.cs,v 1.3 2006/02/08 08:31:05 aseovic Exp $
-	/// </version>
     [TestFixture]
     public class SimplePoolTargetSourceTests
 	{

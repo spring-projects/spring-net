@@ -38,7 +38,6 @@ namespace Spring.Data.Objects.Generic
 	/// A superclass for object based abstractions of RDBMS stored procedures. 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: StoredProcedure.cs,v 1.3 2007/07/25 13:32:39 oakinger Exp $</version>
 	public abstract class StoredProcedure : AdoOperation
 	{
 		#region Fields

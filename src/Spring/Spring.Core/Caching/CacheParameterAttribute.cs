@@ -42,7 +42,6 @@ namespace Spring.Caching
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CacheParameterAttribute.cs,v 1.2 2007/03/31 01:07:26 bbaia Exp $</version>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true, Inherited = false)]
     [Serializable]
     public sealed class CacheParameterAttribute : BaseCacheAttribute

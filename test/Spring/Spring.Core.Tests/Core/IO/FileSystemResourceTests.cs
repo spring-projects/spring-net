@@ -32,7 +32,6 @@ namespace Spring.Core.IO
     /// Unit tests for the FileSystemResourceTest class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: FileSystemResourceTests.cs,v 1.9 2007/08/08 17:49:59 bbaia Exp $</version>
     [TestFixture]
     public class FileSystemResourceTests : FileSystemResourceCommonTests
     {

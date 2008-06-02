@@ -37,7 +37,6 @@ namespace Spring.Util
     /// For e.g. testing purposes, the default environment implementation may be replaced using <see cref="SetInstance(IVirtualEnvironment)" />.
     /// </remarks>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: VirtualEnvironment.cs,v 1.5 2008/03/14 12:02:45 oakinger Exp $</version>
     public sealed class VirtualEnvironment
     {
         // default to standard HttpRuntime

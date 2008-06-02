@@ -40,7 +40,6 @@ namespace Spring.Remoting
 	/// <author>Aleksandar Seovic</author>
 	/// <author>Mark Pollack</author>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: SaoFactoryObject.cs,v 1.7 2006/05/17 17:45:39 bbaia Exp $</version>
     public class SaoFactoryObject : IFactoryObject, IInitializingObject
     {
 		#region Fields

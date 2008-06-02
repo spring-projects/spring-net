@@ -46,7 +46,6 @@ namespace Spring.Web.Services
     /// Unit tests for the WebServiceProxyFactory class.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: WebServiceProxyFactoryTests.cs,v 1.8 2007/12/07 20:26:26 bbaia Exp $</version>
     [TestFixture]
     public class WebServiceProxyFactoryTests
     {

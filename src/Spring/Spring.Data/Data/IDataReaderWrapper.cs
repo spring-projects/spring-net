@@ -36,7 +36,6 @@ namespace Spring.Data
     /// See <see cref="Spring.Data.Support.NullMappingDataReader"/> as an example.
     ///  </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IDataReaderWrapper.cs,v 1.2 2007/10/30 15:24:44 markpollack Exp $</version>
     public interface IDataReaderWrapper : IDataReader
     {
         /// <summary>

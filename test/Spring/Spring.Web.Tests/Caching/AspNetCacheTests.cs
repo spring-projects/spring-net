@@ -36,7 +36,6 @@ namespace Spring.Caching
     /// Test AspNetCache behaviour.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AspNetCacheTests.cs,v 1.2 2007/08/25 10:22:13 oakinger Exp $</version>
     [TestFixture]
     public class AspNetCacheTests
     {

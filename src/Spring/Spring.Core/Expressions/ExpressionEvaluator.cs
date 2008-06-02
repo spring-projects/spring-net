@@ -44,7 +44,6 @@ namespace Spring.Expressions
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ExpressionEvaluator.cs,v 1.2 2006/04/09 07:18:39 markpollack Exp $</version>
     public class ExpressionEvaluator
     {
         /// <summary>

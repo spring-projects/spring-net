@@ -40,7 +40,6 @@ namespace Spring.Aop.Config
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AopNamespaceUtils.cs,v 1.4 2007/05/26 19:25:48 markpollack Exp $</version>
     public class AopNamespaceUtils
     {
 

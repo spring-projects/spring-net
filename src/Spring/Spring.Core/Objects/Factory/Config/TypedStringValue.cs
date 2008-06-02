@@ -45,7 +45,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: TypedStringValue.cs,v 1.5 2007/05/29 20:00:20 markpollack Exp $</version>
 	[Serializable]
 	public class TypedStringValue
 	{

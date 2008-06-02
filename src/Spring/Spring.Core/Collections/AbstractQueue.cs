@@ -57,7 +57,6 @@ namespace Spring.Collections
 	/// </remarks>
 	/// <author>Doug Lea</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: AbstractQueue.cs,v 1.8 2007/08/27 09:38:11 oakinger Exp $</version>
 	[Serializable]
 	public abstract class AbstractQueue : IQueue
 	{

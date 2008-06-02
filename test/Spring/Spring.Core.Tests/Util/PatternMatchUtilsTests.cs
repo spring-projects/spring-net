@@ -29,7 +29,6 @@ namespace Spring.Util
 	/// <summary>
     /// Unit tests for the PatternMatchUtils class.
 	/// </summary>
-	/// <version>$Id: PatternMatchUtilsTests.cs,v 1.2 2007/07/31 18:19:59 bbaia Exp $</version>
     [TestFixture]
     public sealed class PatternMatchUtilsTests
     {

@@ -29,7 +29,6 @@ namespace Spring.Objects.Factory.Config
     /// resolves variable name against command line arguments.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CommandLineArgsVariableSource.cs,v 1.3 2007/08/02 22:18:32 markpollack Exp $</version>
     [Serializable]
     public class CommandLineArgsVariableSource : IVariableSource
     {

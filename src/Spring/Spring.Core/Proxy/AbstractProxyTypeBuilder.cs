@@ -48,7 +48,6 @@ namespace Spring.Proxy
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: AbstractProxyTypeBuilder.cs,v 1.33 2007/12/07 17:59:20 bbaia Exp $</version>
 	public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGenerator
 	{
         #region Fields

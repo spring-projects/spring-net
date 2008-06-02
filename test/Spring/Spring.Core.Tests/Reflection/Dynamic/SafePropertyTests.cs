@@ -33,7 +33,6 @@ namespace Spring.Reflection.Dynamic
     /// as DynamicField plus tests for accessing private members.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: SafePropertyTests.cs,v 1.1 2008/05/17 11:05:27 oakinger Exp $</version>
     [TestFixture]
     public class SafePropertyTests : BasePropertyTests
     {

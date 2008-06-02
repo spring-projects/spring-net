@@ -32,7 +32,6 @@ namespace Spring.Globalization
     /// Helps setting/resetting current thread cultures.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: CultureTestScope.cs,v 1.1 2007/07/24 17:26:47 oakinger Exp $</version>
     public class CultureTestScope : IDisposable
     {
         [ThreadStatic]

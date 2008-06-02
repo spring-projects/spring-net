@@ -35,7 +35,6 @@ namespace Spring.Objects.Factory.Xml
 	/// </summary>
 	/// <author>Rick Evans</author>
 	/// <author>Aleksandar Seovic  2006.11.21</author>
-	/// <version>$Id: XmlParserResolverTests.cs,v 1.10 2007/08/07 21:23:59 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class XmlParserResolverTests
 	{

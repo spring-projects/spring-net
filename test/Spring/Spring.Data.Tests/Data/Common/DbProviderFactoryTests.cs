@@ -34,7 +34,6 @@ namespace Spring.Data.Common
     /// Test for loading of DbProviders
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: DbProviderFactoryTests.cs,v 1.13 2008/04/02 19:37:20 markpollack Exp $</version>       
     [TestFixture]
     public class DbProviderFactoryTests
     {

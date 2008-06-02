@@ -32,7 +32,6 @@ namespace Spring.Pool
 	/// </p>
 	/// </remarks>
 	/// <author>Federico Spinazzi</author>
-	/// <version>$Id: IObjectPool.cs,v 1.5 2005/08/13 18:04:54 springboy Exp $</version>
 	/// <seealso cref="Spring.Pool.IPoolableObjectFactory"/>
 	public interface IObjectPool
 	{

@@ -27,7 +27,6 @@ namespace Spring.Transaction
     /// have been called.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: CallCountingTransactionManager.cs,v 1.1 2007/05/26 00:43:07 markpollack Exp $</version>
     public class CallCountingTransactionManager : AbstractPlatformTransactionManager
     {
 

@@ -29,7 +29,6 @@ namespace Spring.DataBinding
     /// binds source to target one-to-one.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SimpleExpressionBinding.cs,v 1.3 2007/03/19 16:05:52 oakinger Exp $</version>
     public class SimpleExpressionBinding : AbstractSimpleBinding
     {
         #region Fields

@@ -44,7 +44,6 @@ namespace Spring.Validation
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
     /// <author>Goran Milosavljevic</author>
-    /// <version>$Id: ValidationErrors.cs,v 1.9 2008/02/05 20:40:26 aseovic Exp $</version>
     [Serializable]
     public class ValidationErrors : IValidationErrors, IXmlSerializable
     {

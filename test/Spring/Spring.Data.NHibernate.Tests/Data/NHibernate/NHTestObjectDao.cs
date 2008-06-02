@@ -34,7 +34,6 @@ namespace Spring.Data.NHibernate
 	/// NHibernate based DAO implementation of ITestObjectDAao: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: NHTestObjectDao.cs,v 1.1 2007/07/18 18:44:57 oakinger Exp $</version>
 	public class TestObjectDao : HibernateDaoSupport, ITestObjectDao
 	{
 

@@ -75,7 +75,6 @@ namespace Spring.Objects.Factory.Config
 	/// </example>
 	/// <author>Colin Sampaleanu</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: ObjectFactoryCreatingFactoryObject.cs,v 1.9 2007/03/16 04:01:38 aseovic Exp $</version>
     [Serializable]
     public class ObjectFactoryCreatingFactoryObject
 		: AbstractFactoryObject, IObjectFactoryAware

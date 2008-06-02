@@ -31,7 +31,6 @@ namespace Spring
     /// Required for auto-registering NUnitAspEx extension with NUnit for this assembly
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: MyNUnitAddinHelper.cs,v 1.1 2007/12/03 16:11:31 oakinger Exp $</version>
     [NUnitAddin]
     public class MyNUnitAddinHelper : NUnitAspEx.NUnitAddinHelper
     {

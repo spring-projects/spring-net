@@ -34,7 +34,6 @@ namespace Spring.Util
     /// XML utility methods.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: XmlUtils.cs,v 1.5 2007/04/22 00:02:38 oakinger Exp $</version>
     public class XmlUtils
     {
 #if !NET_2_0

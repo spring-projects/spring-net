@@ -31,7 +31,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Choy Rim (.NET)</author>
-	/// <version>$Id: CountingBeforeAdvice.cs,v 1.6 2007/03/16 04:01:47 aseovic Exp $</version>
     [Serializable]
     public class CountingBeforeAdvice : MethodCounter, IMethodBeforeAdvice
 	{

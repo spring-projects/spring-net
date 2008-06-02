@@ -25,7 +25,6 @@ namespace Spring.Pool
     /// Base class for all pooling exceptions.
     /// </summary>
     /// <author>Federico Spinazzi</author>
-    /// <version>$Id: PoolException.cs,v 1.4 2005/08/07 04:59:47 markpollack Exp $</version>
     [Serializable]
     public class PoolException : Exception
     {

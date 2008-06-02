@@ -31,7 +31,6 @@ namespace Spring.Aop.Target
 	/// Unit tests for the SingletonTargetSource class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: SingletonTargetSourceTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class SingletonTargetSourceTests
 	{

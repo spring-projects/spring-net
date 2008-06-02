@@ -39,7 +39,6 @@ namespace Spring.Aop.Framework.DynamicProxy
 	/// Represents the AOP configuration data built-in with the proxy.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: AdvisedProxy.cs,v 1.10 2008/02/06 18:28:52 bbaia Exp $</version>
     [Serializable]
 	public class AdvisedProxy : IAdvised //, ISerializable
 	{

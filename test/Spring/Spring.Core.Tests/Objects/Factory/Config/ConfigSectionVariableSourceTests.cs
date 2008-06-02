@@ -31,7 +31,6 @@ namespace Spring.Objects.Factory.Config
     /// Unit tests for the ConfigSectionVariableSource class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ConfigSectionVariableSourceTests.cs,v 1.3 2007/08/08 17:49:04 bbaia Exp $</version>
     [TestFixture]
     public sealed class ConfigSectionVariableSourceTests
     {

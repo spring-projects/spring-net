@@ -63,7 +63,6 @@ namespace Spring.Context.Support
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: ApplicationContextAwareProcessor.cs,v 1.8 2007/08/22 08:49:26 markpollack Exp $</version>
 	public class ApplicationContextAwareProcessor : IObjectPostProcessor
 	{
 		private IApplicationContext _applicationContext;

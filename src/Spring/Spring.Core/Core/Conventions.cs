@@ -30,7 +30,6 @@ namespace Spring.Core
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: Conventions.cs,v 1.1 2007/05/26 00:42:36 markpollack Exp $</version>
     public sealed class Conventions
     {
         /// <summary> Convert <code>String</code>s in attribute name format (lowercase, hyphens separating words)

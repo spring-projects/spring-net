@@ -32,7 +32,6 @@ namespace Spring.Util
 	/// An implementation of the Java Properties class.
 	/// </summary>
 	/// <author>Simon White</author>
-    /// <version>$Id: Properties.cs,v 1.16 2007/07/31 18:16:26 bbaia Exp $</version>
     [Serializable]
     public class Properties : Hashtable
 	{

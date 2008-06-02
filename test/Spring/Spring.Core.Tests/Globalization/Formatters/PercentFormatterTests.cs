@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
 	/// Unit tests for PercentFormatter class.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: PercentFormatterTests.cs,v 1.2 2006/04/09 07:24:49 markpollack Exp $</version>
     [TestFixture]
     public class PercentFormatterTests
 	{

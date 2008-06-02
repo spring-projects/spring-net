@@ -46,7 +46,6 @@ namespace Spring.Objects.Factory
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IInitializingObject.cs,v 1.8 2006/04/09 07:18:48 markpollack Exp $</version>
 	/// <seealso cref="Spring.Objects.Factory.IObjectFactory"/>
 	public interface IInitializingObject
 	{

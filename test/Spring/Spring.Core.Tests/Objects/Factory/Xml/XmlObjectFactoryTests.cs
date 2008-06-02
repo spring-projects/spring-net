@@ -54,7 +54,6 @@ namespace Spring.Objects.Factory.Xml
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: XmlObjectFactoryTests.cs,v 1.80 2008/05/02 20:08:23 markpollack Exp $</version>
     [TestFixture]
     public sealed class XmlObjectFactoryTests
     {

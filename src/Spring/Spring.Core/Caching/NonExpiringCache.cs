@@ -28,7 +28,6 @@ namespace Spring.Caching
     /// never expires cache items.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: NonExpiringCache.cs,v 1.4 2007/08/24 22:43:55 oakinger Exp $</version>
     public class NonExpiringCache : AbstractCache
     {
         private readonly IDictionary itemStore = new Hashtable();

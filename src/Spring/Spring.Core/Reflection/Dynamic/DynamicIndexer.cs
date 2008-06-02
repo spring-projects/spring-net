@@ -350,7 +350,6 @@ namespace Spring.Reflection.Dynamic
     /// Factory class for dynamic indexers.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicIndexer.cs,v 1.1 2007/08/08 04:05:37 bbaia Exp $</version>
     public class DynamicIndexer : BaseDynamicMember
     {
         private static readonly CreateIndexerCallback s_createCallback = new CreateIndexerCallback(CreateInternal);

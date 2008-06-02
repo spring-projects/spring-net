@@ -36,7 +36,6 @@ namespace Spring.Remoting
 	/// Unit tests for the CaoExporter class.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: CaoExporterTests.cs,v 1.11 2007/02/20 19:39:47 aseovic Exp $</version>
 	[TestFixture]
 	public class CaoExporterTests : BaseRemotingTestFixture
 	{

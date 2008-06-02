@@ -36,7 +36,6 @@ namespace Spring.Objects.Support
 	/// that autowires events to handler methods.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: AutoWiringEventHandlerValue.cs,v 1.11 2006/11/13 07:04:41 markpollack Exp $</version>
 	public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
 	{
 		#region Constants

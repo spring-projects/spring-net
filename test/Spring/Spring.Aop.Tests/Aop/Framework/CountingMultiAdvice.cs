@@ -33,7 +33,6 @@ namespace Spring.Aop.Framework
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Bruno Baia (.NET)</author>
-    /// <version>$Id: CountingMultiAdvice.cs,v 1.1 2006/08/10 18:45:57 bbaia Exp $</version>
     public class CountingMultiAdvice : MethodCounter,
         IMethodBeforeAdvice, IAfterReturningAdvice, IThrowsAdvice
     {

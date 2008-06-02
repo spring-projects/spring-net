@@ -44,7 +44,6 @@ namespace Spring.Context.Support
     /// Provides various support for proper handling requests.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: WebSupportModule.cs,v 1.15 2007/08/08 17:48:19 bbaia Exp $</version>
     public class WebSupportModule : IHttpModule
     {
         private static readonly ILog s_log;

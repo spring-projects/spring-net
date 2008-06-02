@@ -32,7 +32,6 @@ namespace Spring.Data
     /// Exception thrown when SQL specified is invalid.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: BadSqlGrammarException.cs,v 1.3 2006/11/29 07:18:45 markpollack Exp $</version>
 	[Serializable]
 	public class BadSqlGrammarException : InvalidDataAccessResourceUsageException, ISerializable
 	{

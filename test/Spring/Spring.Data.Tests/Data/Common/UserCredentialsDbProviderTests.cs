@@ -32,7 +32,6 @@ namespace Spring.Data.Common
     /// This class contains tests for UserCredentialsDbProvider
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: UserCredentialsDbProviderTests.cs,v 1.1 2008/01/29 18:17:48 markpollack Exp $</version>
     [TestFixture]
     public class UserCredentialsDbProviderTests
     {

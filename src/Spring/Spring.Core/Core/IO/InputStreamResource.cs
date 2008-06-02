@@ -48,7 +48,6 @@ namespace Spring.Core.IO
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: InputStreamResource.cs,v 1.10 2007/12/06 22:08:47 markpollack Exp $</version>
 	public class InputStreamResource : AbstractResource
 	{
 		#region Constructor (s) / Destructor

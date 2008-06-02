@@ -41,7 +41,6 @@ namespace Spring.Data
     /// "database1ProviderName" must match a key in the provided TargetDbProviders dictionary.
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: MultiDelegatingDbProvider.cs,v 1.5 2008/05/29 17:26:35 markpollack Exp $</version>
     public class MultiDelegatingDbProvider : IDbProvider, IInitializingObject
     {
         private IDictionary targetDbProviders = new SynchronizedHashtable();

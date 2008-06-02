@@ -36,7 +36,6 @@ namespace Spring.Web.UI
 	/// </p>
 	/// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DialogAttribute.cs,v 1.3 2006/05/18 21:37:52 markpollack Exp $</version>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     public class DialogAttribute : Attribute
 	{

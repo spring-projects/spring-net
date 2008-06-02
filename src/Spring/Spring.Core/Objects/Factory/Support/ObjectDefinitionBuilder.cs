@@ -36,7 +36,6 @@ namespace Spring.Objects.Factory.Support
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ObjectDefinitionBuilder.cs,v 1.4 2007/05/29 20:00:20 markpollack Exp $</version>
     public class ObjectDefinitionBuilder
     {
         #region Fields

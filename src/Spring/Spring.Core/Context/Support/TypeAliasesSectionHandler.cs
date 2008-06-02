@@ -70,7 +70,6 @@ namespace Spring.Context.Support
     /// </code>
     /// </example>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: TypeAliasesSectionHandler.cs,v 1.8 2007/07/31 18:15:50 bbaia Exp $</version>
     /// <seealso cref="Spring.Core.TypeResolution.TypeRegistry"/>
     public class TypeAliasesSectionHandler : IConfigurationSectionHandler
     {

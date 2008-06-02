@@ -23,14 +23,6 @@ using Spring.Transaction.Interceptor;
 
 namespace Spring.Data.NHibernate
 {
-    /// <summary>
-    /// This is 
-    /// </summary>
-    /// <remarks>
-    ///
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    /// <version>$Id: SimpleService.cs,v 1.1 2007/07/18 18:44:57 oakinger Exp $</version>
     public class SimpleService : ISimpleService
     {
         private ITestObjectDao testObjectDao;

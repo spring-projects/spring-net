@@ -32,7 +32,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: AopConfigException.cs,v 1.4 2006/04/09 07:18:35 markpollack Exp $</version>
     [Serializable]
 	public class AopConfigException : ApplicationException
 	{

@@ -48,7 +48,6 @@ namespace Spring.Objects.Factory.Config
     /// </p>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ResourceManagerFactoryObject.cs,v 1.11 2007/03/16 04:01:39 aseovic Exp $</version>
     /// <seealso cref="Spring.Objects.Factory.Config.AbstractFactoryObject.GetObject"/>
     /// <seealso cref="Spring.Objects.Factory.Config.AbstractFactoryObject.CreateInstance"/>
     /// <seealso cref="System.Resources.ResourceManager"/>

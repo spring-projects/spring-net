@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Support
 	/// Unit tests for the SimpleInstantiationStrategy class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: SimpleInstantiationStrategyTests.cs,v 1.5 2006/04/09 07:24:50 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class SimpleInstantiationStrategyTests
 	{

@@ -26,7 +26,6 @@ namespace Spring.Aspects.Exceptions
     /// Returns a token to indicate that this exception should be swallowed.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: SwallowExceptionHandler.cs,v 1.2 2007/10/02 21:56:53 markpollack Exp $</version>
     public class SwallowExceptionHandler : AbstractExceptionHandler
     {
         /// <summary>

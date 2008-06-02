@@ -9,7 +9,6 @@ namespace Spring.DataBinding
     /// Abstract base class for simple, one-to-one <see cref="IBinding"/> implementations.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractSimpleBinding.cs,v 1.4 2008/02/05 20:40:25 aseovic Exp $</version>
     public abstract class AbstractSimpleBinding : AbstractBinding
     {
         #region Fields

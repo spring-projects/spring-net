@@ -38,7 +38,6 @@ namespace Spring.Web.UI.Controls
 	/// This controls provides MultiView introduced with ASP.NET 2.0 for NET 1.1 Platform
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: MultiView.cs,v 1.1 2007/07/24 13:33:27 oakinger Exp $</version>
 	[
 		DefaultEvent("ActiveViewChanged")
 			, ToolboxData("<{0}:MultiView runat=\"server\"></{0}:MultiView>")

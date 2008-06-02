@@ -103,7 +103,6 @@ namespace Spring.Aop.Framework.Adapter
     /// </example>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: ThrowsAdviceInterceptor.cs,v 1.8 2007/05/04 13:16:44 bbaia Exp $</version>
     /// <seealso cref="Spring.Aop.IThrowsAdvice"/>
     [Serializable]
     public sealed class ThrowsAdviceInterceptor : IMethodInterceptor

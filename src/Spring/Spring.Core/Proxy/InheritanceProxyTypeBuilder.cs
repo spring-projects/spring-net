@@ -40,7 +40,6 @@ namespace Spring.Proxy
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: InheritanceProxyTypeBuilder.cs,v 1.14 2007/12/04 18:38:02 bbaia Exp $</version>
 	public class InheritanceProxyTypeBuilder : AbstractProxyTypeBuilder
 	{
         #region Fields

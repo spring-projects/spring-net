@@ -63,7 +63,6 @@ namespace Spring.Data.Support
     /// more complete discussion.
     /// 
     /// </remarks>
-    /// <version>$Id:</version>
     public abstract class TypedDataSetUtils
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (TypedDataSetUtils));

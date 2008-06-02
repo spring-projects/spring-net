@@ -43,7 +43,6 @@ namespace Spring.Aop
 	/// <seealso cref="Spring.Aop.IIntroductionInterceptor"/>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: IIntroductionAdvisor.cs,v 1.8 2006/04/09 07:18:36 markpollack Exp $</version>
 	public interface IIntroductionAdvisor : IAdvisor
 	{
 		/// <summary>

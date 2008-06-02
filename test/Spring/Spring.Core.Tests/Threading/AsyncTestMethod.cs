@@ -32,7 +32,6 @@ namespace Spring.Threading
     ///
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AsyncTestMethod.cs,v 1.2 2008/02/02 10:24:38 oakinger Exp $</version>
     public class AsyncTestMethod : AsyncTestTask
     {
         public delegate object TestMethod(object[] args);

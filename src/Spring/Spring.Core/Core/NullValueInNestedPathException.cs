@@ -34,7 +34,6 @@ namespace Spring.Core
     /// Thrown in response to encountering a <see langword="null"/> value
     /// when traversing a nested path expression.
     /// </summary>
-    /// <version>$Id: NullValueInNestedPathException.cs,v 1.2 2007/07/31 03:47:22 markpollack Exp $</version>
     [Serializable]
     public class NullValueInNestedPathException : FatalReflectionException
     {

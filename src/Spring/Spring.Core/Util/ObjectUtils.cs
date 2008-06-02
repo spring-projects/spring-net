@@ -42,7 +42,6 @@ namespace Spring.Util
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: ObjectUtils.cs,v 1.9 2007/12/29 00:31:00 markpollack Exp $</version>
     public sealed class ObjectUtils
     {
         #region Constants

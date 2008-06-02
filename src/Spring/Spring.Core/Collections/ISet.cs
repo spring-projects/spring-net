@@ -107,7 +107,6 @@ namespace Spring.Collections
 	///		</item>
 	/// </list>
 	/// </remarks>
-	/// <version>$Id: ISet.cs,v 1.5 2006/04/09 07:18:37 markpollack Exp $</version>
 	public interface ISet : ICollection, ICloneable
 	{
 		/// <summary>

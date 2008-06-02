@@ -134,7 +134,6 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: PropertyPlaceholderConfigurer.cs,v 1.23 2007/08/02 22:18:32 markpollack Exp $</version>
 	/// <seealso cref="Spring.Objects.Factory.Config.PropertyResourceConfigurer"/>
 	/// <seealso cref="Spring.Objects.Factory.Config.PropertyOverrideConfigurer"/>
 	/// <seealso cref="Spring.Objects.Factory.Config.IObjectDefinition"/>

@@ -25,7 +25,6 @@ namespace Spring.DataBinding
     /// web pages, user controls, windows forms, etc.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IDataBound.cs,v 1.3 2006/11/21 05:46:57 aseovic Exp $</version>
     public interface IDataBound
     {
         /// <summary>

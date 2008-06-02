@@ -34,7 +34,6 @@ namespace Spring.Transaction
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: ISavepointManager.cs,v 1.5 2006/05/17 17:48:25 bbaia Exp $</version>
 	public interface ISavepointManager
 	{
 		/// <summary>

@@ -89,7 +89,6 @@ namespace Spring.Web.Support
 	/// </code>
 	/// </example>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: ISupportsWebDependencyInjection.cs,v 1.2 2007/08/01 23:11:00 markpollack Exp $</version>
 	public interface ISupportsWebDependencyInjection
 	{
 		/// <summary>

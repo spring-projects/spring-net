@@ -31,7 +31,6 @@ namespace Spring.Globalization.Formatters
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HasTextFilteringFormatterTests.cs,v 1.1 2008/03/20 13:19:47 oakinger Exp $</version>
     [TestFixture]
     public class HasTextFilteringFormatterTests
     {

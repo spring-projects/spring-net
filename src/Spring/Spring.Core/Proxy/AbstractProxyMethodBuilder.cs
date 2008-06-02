@@ -34,7 +34,6 @@ namespace Spring.Proxy
     /// Base class for method builders that contains common functionalities.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: AbstractProxyMethodBuilder.cs,v 1.7 2008/02/06 18:26:42 bbaia Exp $</version>
     public abstract class AbstractProxyMethodBuilder : IProxyMethodBuilder
     {
         #region Fields

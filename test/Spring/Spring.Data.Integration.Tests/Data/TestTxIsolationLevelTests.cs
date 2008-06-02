@@ -41,7 +41,6 @@ namespace Spring.Data
     /// Simple exercising of the AdoTemplate 
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: TestTxIsolationLevelTests.cs,v 1.1 2008/04/03 05:41:46 markpollack Exp $</version>
     [TestFixture]
     public class TestTxIsolationLevelTests
     {

@@ -33,7 +33,6 @@ namespace Spring.Aop.Interceptor
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Choy Rim (.NET)</author>
-	/// <version>$Id: NopInterceptor.cs,v 1.6 2008/01/14 20:49:47 oakinger Exp $</version>
 	public class NopInterceptor : IMethodBeforeAdvice
 	{
 	    protected int instanceId;

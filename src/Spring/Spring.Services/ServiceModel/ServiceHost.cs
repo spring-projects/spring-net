@@ -36,7 +36,6 @@ namespace Spring.ServiceModel
     /// Provides a host for Spring-managed services.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ServiceHost.cs,v 1.1 2007/05/18 21:04:37 bbaia Exp $</version>
     public class ServiceHost : System.ServiceModel.ServiceHost
     {
         #region Constructor(s) / Destructor

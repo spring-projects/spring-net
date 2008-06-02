@@ -34,7 +34,6 @@ namespace Spring.Web.UI.Controls
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AbstractValidationControlTests.cs,v 1.1 2008/03/19 12:07:15 oakinger Exp $</version>
     [TestFixture]
     public class AbstractValidationControlTests
     {

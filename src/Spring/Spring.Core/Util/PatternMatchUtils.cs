@@ -33,7 +33,6 @@ namespace Spring.Util
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: PatternMatchUtils.cs,v 1.4 2007/07/31 18:16:25 bbaia Exp $</version>
     public abstract class PatternMatchUtils
     {
         /// <summary> Match a String against the given pattern, supporting the following simple

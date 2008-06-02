@@ -82,7 +82,6 @@ namespace Spring.Reflection.Dynamic
     /// Allows easy access to existing and creation of new dynamic relection members.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicReflectionManager.cs,v 1.5 2008/05/17 11:05:26 oakinger Exp $</version>
     public sealed class DynamicReflectionManager
     {
         #region Fields

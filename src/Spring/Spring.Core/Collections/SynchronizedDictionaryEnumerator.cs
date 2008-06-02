@@ -27,7 +27,6 @@ namespace Spring.Collections
     /// dictionary implementations in order to ensure that the enumeration is thread safe.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SynchronizedDictionaryEnumerator.cs,v 1.1 2006/05/03 01:13:41 aseovic Exp $</version>
     internal class SynchronizedDictionaryEnumerator : SynchronizedEnumerator, IDictionaryEnumerator
     {
         public SynchronizedDictionaryEnumerator(object syncRoot, IDictionaryEnumerator enumerator)

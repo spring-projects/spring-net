@@ -39,7 +39,6 @@ namespace Spring.Validation
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ValidatorReference.cs,v 1.5 2008/02/05 20:40:26 aseovic Exp $</version>
     public class ValidatorReference : IValidator, IObjectFactoryAware
     {
         #region Fields

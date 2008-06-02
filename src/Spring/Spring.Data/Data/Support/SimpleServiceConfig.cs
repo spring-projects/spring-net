@@ -29,7 +29,6 @@ namespace Spring.Data.Support
     /// </summary>
     /// <remarks>This is done to enhance testability of the transaction manager since ServiceConfig does not override Equals or Hashcode</remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id $</version> 
     public class SimpleServiceConfig
     {
         private string transactionDescription;

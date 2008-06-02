@@ -36,7 +36,6 @@ namespace Spring.Web.Support
     ///
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: PageHandlerFactoryTests.cs,v 1.4 2008/01/27 23:29:55 oakinger Exp $</version>
     [AspTestFixture("/Test", "/Spring/Web/Support/PageHandlerFactoryTests")]
     public class PageHandlerFactoryTests : WebFormTestCase
     {

@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the PropertyRetrievingFactoryObject class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: PropertyRetrievingFactoryObjectTests.cs,v 1.6 2007/07/31 00:09:30 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class PropertyRetrievingFactoryObjectTests
 	{

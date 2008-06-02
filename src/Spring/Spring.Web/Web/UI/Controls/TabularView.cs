@@ -33,7 +33,6 @@ namespace Spring.Web.UI.Controls
 	/// Represents a control that acts as a container for a group of controls within a <see cref="TabularMultiView"/> control. 
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: TabularView.cs,v 1.2 2007/07/24 14:32:58 oakinger Exp $</version>
 	[ToolboxData("<{0}:TabularView runat=\"server\"></{0}:TabularView>")]
 	public class TabularView : View
 	{

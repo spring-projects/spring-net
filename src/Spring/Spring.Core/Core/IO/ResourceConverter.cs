@@ -62,7 +62,6 @@ namespace Spring.Core.IO
 	/// </code>
 	/// </example>
 	/// <author>Mark Pollack</author>
-	/// <version>$Id: ResourceConverter.cs,v 1.14 2007/08/08 17:46:55 bbaia Exp $</version>
 	/// <seealso cref="Spring.Core.IO.IResourceLoader"/>
 	/// <seealso cref="System.ComponentModel.TypeConverter"/>
 	public class ResourceConverter : TypeConverter

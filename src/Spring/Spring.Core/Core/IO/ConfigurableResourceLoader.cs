@@ -72,7 +72,6 @@ namespace Spring.Core.IO
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ConfigurableResourceLoader.cs,v 1.25 2007/08/08 17:46:55 bbaia Exp $</version>
     /// <seealso cref="Spring.Core.IO.IResource"/>
     /// <seealso cref="Spring.Core.IO.ResourceConverter"/>
     /// <seealso cref="Spring.Context.IApplicationContext"/>

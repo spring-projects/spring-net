@@ -40,7 +40,6 @@ namespace Spring.Data.NHibernate
 	/// Use of Hibernate Template against database.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: MultipleDbTests.cs,v 1.1 2007/05/31 20:25:14 markpollack Exp $</version>
 	[TestFixture]
 	public class MultipleDbTests 
 	{

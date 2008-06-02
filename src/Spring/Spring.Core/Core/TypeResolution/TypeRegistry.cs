@@ -47,7 +47,6 @@ namespace Spring.Core.TypeResolution
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
     /// <seealso cref="Spring.Context.Support.TypeAliasesSectionHandler"/>
-    /// <version>$Id: TypeRegistry.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
     public sealed class TypeRegistry
     {
         #region Constants

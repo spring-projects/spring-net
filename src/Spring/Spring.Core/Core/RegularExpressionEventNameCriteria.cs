@@ -35,7 +35,6 @@ namespace Spring.Core
     /// supplied regular expression pattern.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: RegularExpressionEventNameCriteria.cs,v 1.1 2007/07/31 01:35:07 markpollack Exp $</version>
     public class RegularExpressionEventNameCriteria : RegularExpressionCriteria
     {
         #region Constants

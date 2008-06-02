@@ -36,7 +36,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// method calls to an <see cref="Spring.Aop.Framework.IAdvised"/> instance.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: IAdvisedProxyMethodBuilder.cs,v 1.3 2006/11/12 01:37:47 bbaia Exp $</version>
     public class IAdvisedProxyMethodBuilder : TargetProxyMethodBuilder
     {
         #region Fields

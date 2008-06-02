@@ -51,7 +51,6 @@ namespace Spring.Objects
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: PropertyValue.cs,v 1.15 2007/07/31 00:08:42 markpollack Exp $</version>
     [Serializable]
     public class PropertyValue
     {

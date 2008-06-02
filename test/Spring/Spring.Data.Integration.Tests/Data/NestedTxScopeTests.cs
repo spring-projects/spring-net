@@ -40,7 +40,6 @@ namespace Spring.Data
     /// This class contains tests for nesting transaction scopes.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: NestedTxScopeTests.cs,v 1.3 2008/05/02 20:08:29 markpollack Exp $</version>
     [TestFixture]
     public class NestedTxScopeTests
     {

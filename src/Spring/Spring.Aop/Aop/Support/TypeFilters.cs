@@ -31,7 +31,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.Net)</author>
-	/// <version>$Id: TypeFilters.cs,v 1.4 2007/03/16 04:01:25 aseovic Exp $</version>
 	public sealed class TypeFilters
 	{
 		/// <summary>

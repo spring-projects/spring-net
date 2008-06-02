@@ -44,7 +44,6 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TransactionInterceptor.cs,v 1.12 2007/09/07 04:46:53 markpollack Exp $</version>
 	[Serializable]
 	public class TransactionInterceptor : TransactionAspectSupport, IMethodInterceptor
 	{

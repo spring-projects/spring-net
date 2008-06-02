@@ -30,7 +30,6 @@ namespace Spring.Data.Support
     /// </summary>
     /// <remarks>Introduced for purposes of unit testing.</remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ITransactionScopeAdapter.cs,v 1.1 2007/11/30 18:38:47 markpollack Exp $</version> 
     public interface ITransactionScopeAdapter
     {
         /// <summary>

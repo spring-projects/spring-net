@@ -33,7 +33,6 @@ namespace Spring.Data
     /// one of our generic data access exceptions. 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: UncategorizedAdoException.cs,v 1.4 2006/11/29 07:18:46 markpollack Exp $</version>
 	[Serializable]
 	public class UncategorizedAdoException : UncategorizedDataAccessException, ISerializable
 	{

@@ -32,7 +32,6 @@ namespace Spring.Util
 	/// Unit tests for the EventRaiser class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: EventRaiserTests.cs,v 1.3 2006/04/09 07:24:51 markpollack Exp $</version>
 	[TestFixture]
     public sealed class EventRaiserTests
     {

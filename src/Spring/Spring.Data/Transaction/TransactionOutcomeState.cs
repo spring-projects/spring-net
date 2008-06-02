@@ -14,7 +14,6 @@ namespace Spring.Transaction
 	/// Represents a transaction's current state.
 	/// </summary>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: TransactionOutcomeState.cs,v 1.4 2006/05/18 21:37:51 markpollack Exp $</version>
 	public enum TransactionOutcomeState
 	{
 		/// <summary>

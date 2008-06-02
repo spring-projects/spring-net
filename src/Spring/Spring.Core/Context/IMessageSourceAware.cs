@@ -42,7 +42,6 @@ namespace Spring.Context {
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: IMessageSourceAware.cs,v 1.4 2006/04/09 07:18:38 markpollack Exp $</version>
     /// <seealso cref="Spring.Objects.Factory.IInitializingObject"/>
 	public interface IMessageSourceAware 
     {

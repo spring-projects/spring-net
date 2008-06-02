@@ -51,7 +51,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <seealso cref="Spring.Aop.Framework.AutoProxy.AbstractAdvisorAutoProxyCreator.FindCandidateAdvisors"/>
     /// <author>Rod Johnson</author>
     /// <author>Adhari C Mahendra (.NET)</author>
-    /// <version>$Id: AbstractAdvisorAutoProxyCreator.cs,v 1.5 2007/08/22 08:49:08 markpollack Exp $</version>
     public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
     {
         /// <summary>

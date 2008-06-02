@@ -49,7 +49,6 @@ namespace Spring.Util
 	/// </code>
 	/// </example>
 	/// <author>Federico Spinazzi</author>
-	/// <version>$Id: PathMatcher.cs,v 1.7 2007/02/23 18:46:41 markpollack Exp $</version>
 	public sealed class PathMatcher
 	{
 		private const string AllFilesInThisDirectory = "*.*";

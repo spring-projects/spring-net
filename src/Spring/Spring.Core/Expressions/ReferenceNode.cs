@@ -29,7 +29,6 @@ namespace Spring.Context.Support
     /// Represents a reference to a Spring-managed object.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ReferenceNode.cs,v 1.13 2008/03/20 10:35:54 oakinger Exp $</version>
     [Serializable]
     public class ReferenceNode : BaseNode
     {

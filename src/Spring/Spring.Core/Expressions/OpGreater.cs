@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents logical "greater than" operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpGreater.cs,v 1.10 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpGreater : BinaryOperator
     {

@@ -47,7 +47,6 @@ namespace Spring.Aop.Support
 	/// </remarks> 
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: ComposablePointcut.cs,v 1.7 2007/03/16 04:01:23 aseovic Exp $</version>
 	[Serializable]
     public class ComposablePointcut : IPointcut
 	{

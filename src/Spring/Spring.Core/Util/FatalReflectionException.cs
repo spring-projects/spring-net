@@ -34,8 +34,6 @@ namespace Spring.Util
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: FatalReflectionException.cs,v 1.1 2007/07/31 03:47:23 markpollack Exp $
-    /// </version>
     [Serializable]
     public class FatalReflectionException : ReflectionException
     {

@@ -33,8 +33,6 @@ namespace Spring.Objects
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: FatalObjectException.cs,v 1.7 2006/04/09 07:18:49 markpollack Exp $
-    /// </version>
     [Serializable]
     public class FatalObjectException : ObjectsException
     {

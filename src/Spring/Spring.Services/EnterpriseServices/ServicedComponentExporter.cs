@@ -48,7 +48,6 @@ namespace Spring.EnterpriseServices
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ServicedComponentExporter.cs,v 1.9 2007/07/31 18:18:19 bbaia Exp $</version>
     public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
     {
         #region Fields

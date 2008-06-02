@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Xml
     /// XmlObjectDefinitionReader.
     /// </summary>
     /// <remarks>In future will contain access to IXmlParserRegistry</remarks>
-    /// <version>$Id: XmlReaderContext.cs,v 1.6 2007/08/27 13:57:43 oakinger Exp $</version>
     public class XmlReaderContext : ReaderContext
     {
 

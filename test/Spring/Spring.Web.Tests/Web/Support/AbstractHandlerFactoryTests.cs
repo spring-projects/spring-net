@@ -34,7 +34,6 @@ namespace Spring.Web.Support
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: AbstractHandlerFactoryTests.cs,v 1.1 2008/03/19 18:05:08 oakinger Exp $</version>
     [TestFixture]
     public class AbstractHandlerFactoryTests : AbstractHandlerFactory
     {

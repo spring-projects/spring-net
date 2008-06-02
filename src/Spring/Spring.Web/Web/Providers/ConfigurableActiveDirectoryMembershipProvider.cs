@@ -38,7 +38,6 @@ namespace Spring.Web.Providers
     /// A spring configurable version of <see cref="ActiveDirectoryMembershipProvider"/>
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ConfigurableActiveDirectoryMembershipProvider.cs,v 1.1 2007/07/26 14:43:56 oakinger Exp $</version>
     [DirectoryServicesPermission(SecurityAction.InheritanceDemand, Unrestricted = true)]
     [DirectoryServicesPermission(SecurityAction.LinkDemand, Unrestricted = true)]
     [AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]

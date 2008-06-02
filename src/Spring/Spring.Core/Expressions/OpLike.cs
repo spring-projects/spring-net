@@ -31,7 +31,6 @@ namespace Spring.Expressions
     /// Represents VB-style logical LIKE operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpLike.cs,v 1.5 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpLike : BinaryOperator
     {

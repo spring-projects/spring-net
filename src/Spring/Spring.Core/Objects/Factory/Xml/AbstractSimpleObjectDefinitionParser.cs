@@ -29,7 +29,6 @@ namespace Spring.Objects.Factory.Xml
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AbstractSimpleObjectDefinitionParser.cs,v 1.1 2007/05/26 19:25:54 markpollack Exp $</version>
     public class AbstractSimpleObjectDefinitionParser : AbstractSingleObjectDefinitionParser
     {
         

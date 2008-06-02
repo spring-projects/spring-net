@@ -38,7 +38,6 @@ namespace Spring.Web.UI.Controls
     /// within the master page
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Content.cs,v 1.6 2007/07/24 13:33:27 oakinger Exp $</version>
 #if NET_2_0
 	public class Content : System.Web.UI.WebControls.Content
 	{}

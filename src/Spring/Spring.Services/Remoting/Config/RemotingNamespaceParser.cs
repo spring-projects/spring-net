@@ -38,7 +38,6 @@ namespace Spring.Remoting.Config
     /// Implementation of the custom configuration parser for remoting definitions.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: RemotingNamespaceParser.cs,v 1.3 2007/10/08 14:57:34 bbaia Exp $</version>
     [
         NamespaceParser(
             Namespace = "http://www.springframework.net/remoting",

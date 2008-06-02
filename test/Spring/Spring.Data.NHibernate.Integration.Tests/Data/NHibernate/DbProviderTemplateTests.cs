@@ -34,7 +34,6 @@ namespace Spring.Data.NHibernate
     /// This class contains tests for execution of misc Hibernate usage, including userCredentialsDbProvider
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: DbProviderTemplateTests.cs,v 1.2 2008/03/21 14:10:37 markpollack Exp $</version>
     [TestFixture]
     public class DbProviderTemplateTests
     {

@@ -31,7 +31,6 @@ namespace Spring.Validation.Actions
     /// to the validation errors container.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ErrorMessageAction.cs,v 1.5 2008/02/05 20:40:25 aseovic Exp $</version>
     public class ErrorMessageAction : BaseValidationAction
     {
         private string messageId;

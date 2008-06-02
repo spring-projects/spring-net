@@ -41,7 +41,6 @@ namespace Spring.Context.Support
     /// Unit tests for the ResourceSetMessageSource class.
     /// </summary>
     /// <author></author>
-    /// <version>$Id: ResourceSetMessageSourceTests.cs,v 1.13 2007/07/18 21:26:07 oakinger Exp $</version>
     [TestFixture]
     public sealed class ResourceSetMessageSourceTests
     {

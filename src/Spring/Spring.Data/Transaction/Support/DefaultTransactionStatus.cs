@@ -40,7 +40,6 @@ namespace Spring.Transaction.Support
 	/// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: DefaultTransactionStatus.cs,v 1.14 2007/12/06 06:23:33 markpollack Exp $</version>
 	public class DefaultTransactionStatus : ITransactionStatus
 	{
 		private object _transaction;

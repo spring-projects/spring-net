@@ -35,7 +35,6 @@ namespace Spring.Data.NHibernate
 	/// NHibnerations actions taken during the transaction lifecycle.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: SpringSessionSynchronization.cs,v 1.2 2007/08/29 03:42:06 markpollack Exp $</version>
 	public class SpringSessionSynchronization : TransactionSynchronizationAdapter, IOrdered
 	{
 		#region Fields

@@ -26,7 +26,6 @@ namespace Spring.DataBinding
 	/// Enumeration that defines possible values for data binding direction.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BindingDirection.cs,v 1.2 2006/04/09 07:18:39 markpollack Exp $</version>
     [Flags]
     public enum BindingDirection
 	{

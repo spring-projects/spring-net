@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
     /// Unit tests for the ConnectionStringsVariableSource class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ConnectionStringsVariableSourceTests.cs,v 1.2 2007/05/30 17:32:37 oakinger Exp $</version>
     [TestFixture]
     public sealed class ConnectionStringsVariableSourceTests
     {

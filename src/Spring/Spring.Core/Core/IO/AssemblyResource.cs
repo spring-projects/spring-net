@@ -45,7 +45,6 @@ namespace Spring.Core.IO
     /// </remarks>
     /// <author>Aleksandar Seovic (.NET)</author>
     /// <author>Federico Spinazzi (.NET)</author>
-    /// <version>$Id: AssemblyResource.cs,v 1.16 2007/08/08 17:46:55 bbaia Exp $</version>
     public class AssemblyResource : AbstractResource
     {
         #region Fields

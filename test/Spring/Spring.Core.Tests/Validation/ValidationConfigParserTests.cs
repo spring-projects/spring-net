@@ -40,7 +40,6 @@ namespace Spring.Validation
     /// Unit tests for the ValidationNamespaceParser class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ValidationConfigParserTests.cs,v 1.14 2007/08/08 17:48:45 bbaia Exp $</version>
     [TestFixture]
     public sealed class ValidationConfigParserTests
     {

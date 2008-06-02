@@ -32,7 +32,6 @@ namespace Spring.Objects.Support
     /// Unit tests for the MutableSortDefinition class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: MutableSortDefinitionTests.cs,v 1.3 2006/04/09 07:24:51 markpollack Exp $</version>
     [TestFixture]
     public sealed class MutableSortDefinitionTests
     {

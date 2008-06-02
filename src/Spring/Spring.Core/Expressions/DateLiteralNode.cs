@@ -29,7 +29,6 @@ namespace Spring.Expressions
     /// Represents parsed node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DateLiteralNode.cs,v 1.7 2007/09/07 03:01:21 markpollack Exp $</version>
     [Serializable]
     public class DateLiteralNode : BaseNode
     {

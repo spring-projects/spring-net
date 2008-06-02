@@ -32,7 +32,6 @@ namespace Spring.Util
 	/// Unit tests for the AssertUtils class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: AssertUtilsTests.cs,v 1.8 2007/05/30 22:39:28 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class AssertUtilsTests
 	{

@@ -35,7 +35,6 @@ namespace Spring.Web.UI.Controls
     /// This control alows radio buttons to be data-bound to a data model of the page.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: RadioButtonGroup.cs,v 1.5 2007/03/16 22:38:55 oakinger Exp $</version>
     [ParseChildren(false)]
     public class RadioButtonGroup : WebControl, IPostBackDataHandler
     {

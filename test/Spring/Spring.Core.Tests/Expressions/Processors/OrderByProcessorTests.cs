@@ -32,7 +32,6 @@ namespace Spring.Expressions.Processors
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: OrderByProcessorTests.cs,v 1.1 2008/03/20 23:58:17 oakinger Exp $</version>
     [TestFixture]
     public class OrderByProcessorTests
     {

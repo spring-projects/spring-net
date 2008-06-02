@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Support {
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans</author>
-    /// <version>$Id: IObjectDefinitionReader.cs,v 1.8 2007/08/08 17:47:13 bbaia Exp $</version>
 	public interface IObjectDefinitionReader 
     {
         /// <summary>

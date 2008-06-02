@@ -33,7 +33,6 @@ namespace Spring.Dao
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: DeadlockLoserDataAccessException.cs,v 1.6 2008/04/08 20:26:43 markpollack Exp $</version>
 	[Serializable]
 	public class DeadlockLoserDataAccessException : PessimisticLockingFailureException
 	{

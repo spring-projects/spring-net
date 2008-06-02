@@ -32,7 +32,6 @@ namespace Spring.Web.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Script.cs,v 1.4 2007/11/28 23:26:10 oakinger Exp $</version>
     internal abstract class Script
     {
         internal static readonly MimeMediaType DefaultType = MimeMediaType.Text.Javascript;
@@ -87,7 +86,6 @@ namespace Spring.Web.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Script.cs,v 1.4 2007/11/28 23:26:10 oakinger Exp $</version>
     internal class ScriptBlock : Script
     {
         private string script;
@@ -132,7 +130,6 @@ namespace Spring.Web.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Script.cs,v 1.4 2007/11/28 23:26:10 oakinger Exp $</version>
     internal class ScriptFile : Script
     {
         private string fileName;
@@ -178,7 +175,6 @@ namespace Spring.Web.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Script.cs,v 1.4 2007/11/28 23:26:10 oakinger Exp $</version>
     internal class ScriptEvent : ScriptBlock
     {
         private string element;

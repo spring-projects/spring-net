@@ -38,7 +38,6 @@ namespace Spring.Transaction.Config
     /// <author>Juergen Hoeller</author>
     /// <author>Adrian Colyer</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: TxAdviceObjectDefinitionParser.cs,v 1.2 2007/06/18 10:31:19 bbaia Exp $</version>
     public class TxAdviceObjectDefinitionParser : AbstractSingleObjectDefinitionParser
     {
         private static string TIMEOUT = "timeout";

@@ -37,7 +37,6 @@ namespace Spring.Data.NHibernate.Generic
 	/// </remarks>
 	/// 
     /// <author>Sree Nivask (.NET)</author>
-	/// <version>$Id: IHibernateCallback.cs,v 1.2 2007/09/19 22:58:10 markpollack Exp $</version>
 	public interface IHibernateCallback<T>
 	{
         /// <summary>

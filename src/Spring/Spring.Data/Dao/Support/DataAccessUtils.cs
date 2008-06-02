@@ -33,7 +33,6 @@ namespace Spring.Dao.Support
 	/// Useful with any data access technology.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: DataAccessUtils.cs,v 1.3 2006/12/02 07:35:23 markpollack Exp $</version>
 	public class DataAccessUtils 
 	{
 

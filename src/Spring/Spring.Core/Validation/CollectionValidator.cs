@@ -25,7 +25,6 @@ namespace Spring.Validation
     /// </remarks>
     /// <author>Damjan Tomic</author>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CollectionValidator.cs,v 1.5 2008/02/05 20:40:26 aseovic Exp $</version>
     public class CollectionValidator : ValidatorGroup
     {
         #region Fields

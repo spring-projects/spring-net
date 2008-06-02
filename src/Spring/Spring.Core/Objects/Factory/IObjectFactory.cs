@@ -148,7 +148,6 @@ namespace Spring.Objects.Factory
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IObjectFactory.cs,v 1.17 2007/07/30 15:41:32 markpollack Exp $</version>
 	public interface IObjectFactory : IDisposable
 	{
 		/// <summary>

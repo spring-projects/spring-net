@@ -37,7 +37,6 @@ namespace Spring.Data.NHibernate
 	/// ObjectDeletedException, and WrongClassException.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: HibernateObjectRetrievalFailureException.cs,v 1.1 2007/05/31 20:25:13 markpollack Exp $</version>
 	[Serializable]
 	public class HibernateObjectRetrievalFailureException : ObjectRetrievalFailureException
 	{

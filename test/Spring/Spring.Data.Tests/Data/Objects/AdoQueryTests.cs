@@ -55,7 +55,6 @@ namespace Spring.Data.Objects
     /// Tests for AdoQuery
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AdoQueryTests.cs,v 1.4 2008/05/30 21:10:00 markpollack Exp $</version>
     [TestFixture]
     public class AdoQueryTests : AbstractAdoQueryTests
     {

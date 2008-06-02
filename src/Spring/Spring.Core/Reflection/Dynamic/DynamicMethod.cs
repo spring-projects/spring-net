@@ -144,7 +144,6 @@ namespace Spring.Reflection.Dynamic
     /// Factory class for dynamic methods.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DynamicMethod.cs,v 1.2 2008/03/06 20:20:37 oakinger Exp $</version>
     public class DynamicMethod : BaseDynamicMember
     {
         private static readonly CreateMethodCallback s_createMethodCallback = new CreateMethodCallback(CreateInternal);

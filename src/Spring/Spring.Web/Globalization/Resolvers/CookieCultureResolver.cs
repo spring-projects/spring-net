@@ -28,7 +28,6 @@ namespace Spring.Globalization.Resolvers
     /// Culture resolver that uses cookie to store culture information.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CookieCultureResolver.cs,v 1.4 2007/08/25 14:26:35 oakinger Exp $</version>
     public class CookieCultureResolver : DefaultWebCultureResolver
     {
         private const string CultureKey = "Spring.UserLocale";

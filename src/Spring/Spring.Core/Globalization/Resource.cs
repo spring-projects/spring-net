@@ -29,7 +29,6 @@ namespace Spring.Globalization
 	/// as read from the resource file.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Resource.cs,v 1.3 2006/04/09 07:18:47 markpollack Exp $</version>
     [Serializable]
     public class Resource
     {

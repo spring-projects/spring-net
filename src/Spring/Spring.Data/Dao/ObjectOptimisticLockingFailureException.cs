@@ -32,7 +32,6 @@ namespace Spring.Dao
     ///  Provides information about the persistent class and the identifier. 
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ObjectOptimisticLockingFailureException.cs,v 1.1 2006/12/13 18:40:11 markpollack Exp $</version>
     [Serializable]
     public class ObjectOptimisticLockingFailureException : OptimisticLockingFailureException, ISerializable
     {

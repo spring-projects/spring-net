@@ -34,7 +34,6 @@ namespace Spring.Objects.Factory.Support
 	/// Unit tests for the LookupMethodReplacer class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: LookupMethodReplacerTests.cs,v 1.3 2007/07/30 17:52:33 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class LookupMethodReplacerTests
 	{

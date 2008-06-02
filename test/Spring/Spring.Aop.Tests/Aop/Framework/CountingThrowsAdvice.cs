@@ -33,7 +33,6 @@ namespace Spring.Aop.Framework
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Bruno Baia (.NET)</author>
-    /// <version>$Id: CountingThrowsAdvice.cs,v 1.2 2007/03/16 04:01:47 aseovic Exp $</version>
     [Serializable]
     public class CountingThrowsAdvice : MethodCounter, IThrowsAdvice
     {

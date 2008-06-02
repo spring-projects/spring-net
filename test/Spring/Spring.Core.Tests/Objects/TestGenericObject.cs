@@ -32,7 +32,6 @@ namespace Spring.Objects
 	/// Simple test object used for testing generic objects.
 	/// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: TestGenericObject.cs,v 1.2 2006/04/09 07:24:50 markpollack Exp $</version>
 	public class TestGenericObject<T,U>
 	{
         #region Fields

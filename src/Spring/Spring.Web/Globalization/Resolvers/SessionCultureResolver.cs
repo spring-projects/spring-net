@@ -28,7 +28,6 @@ namespace Spring.Globalization.Resolvers
     /// Culture resolver that uses HTTP session to store culture information.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SessionCultureResolver.cs,v 1.3 2007/08/25 14:26:35 oakinger Exp $</version>
     public class SessionCultureResolver : DefaultWebCultureResolver
     {
         private const string CultureKey = "Spring.UserLocale";

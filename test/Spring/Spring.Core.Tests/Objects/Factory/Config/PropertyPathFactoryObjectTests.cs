@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the PropertyPathFactoryObject class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: PropertyPathFactoryObjectTests.cs,v 1.3 2007/07/31 00:09:30 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class PropertyPathFactoryObjectTests
 	{

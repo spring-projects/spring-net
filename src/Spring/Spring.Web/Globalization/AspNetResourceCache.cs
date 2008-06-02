@@ -28,7 +28,6 @@ namespace Spring.Globalization
     /// Resource cache implementation that uses ASP.NET <see cref="Cache"/> to cache resources.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AspNetResourceCache.cs,v 1.6 2007/08/03 06:08:59 oakinger Exp $</version>
     internal class AspNetResourceCache : AbstractResourceCache
     {
         /// <summary>

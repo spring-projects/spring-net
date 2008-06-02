@@ -33,7 +33,6 @@ namespace Spring.Objects.Support
 	/// Unit tests for the MethodInvoker class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: MethodInvokerTests.cs,v 1.4 2007/08/04 01:05:41 bbaia Exp $</version>
 	[TestFixture]
 	public sealed class MethodInvokerTests
 	{

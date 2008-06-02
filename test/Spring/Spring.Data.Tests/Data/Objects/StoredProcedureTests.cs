@@ -54,7 +54,6 @@ namespace Spring.Data.Objects
     /// Tests for StoredProcedure
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: StoredProcedureTests.cs,v 1.1 2008/05/30 21:10:00 markpollack Exp $</version>
     [TestFixture]
     public class StoredProcedureTests : AbstractAdoQueryTests
     {

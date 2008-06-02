@@ -35,7 +35,6 @@ namespace Spring.Data.NHibernate
     /// This class contains tests for LocalSessionFactoryObject
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: LocalSessionFactoryObjectTests.cs,v 1.1 2008/01/29 20:07:18 markpollack Exp $</version>
     [TestFixture]
     public class LocalSessionFactoryObjectTests
     {

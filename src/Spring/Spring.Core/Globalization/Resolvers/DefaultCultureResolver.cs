@@ -37,7 +37,6 @@ namespace Spring.Globalization.Resolvers
     /// <cref lang="null"/>.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DefaultCultureResolver.cs,v 1.2 2006/04/09 07:18:47 markpollack Exp $</version>
     public class DefaultCultureResolver : ICultureResolver
     {
         private CultureInfo defaultCulture;

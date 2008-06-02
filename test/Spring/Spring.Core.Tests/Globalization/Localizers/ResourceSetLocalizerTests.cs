@@ -37,8 +37,6 @@ namespace Spring.Globalization.Localizers
     /// Unit tests for the ResourceSetLocalizer class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ResourceSetLocalizerTests.cs,v 1.4 2007/07/24 17:26:47 oakinger Exp $</version>
-
 #if ! NET_1_0
     [TestFixture]
 #endif

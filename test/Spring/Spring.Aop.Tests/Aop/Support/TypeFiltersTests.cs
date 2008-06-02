@@ -33,7 +33,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Choy Rim (.NET)</author>
-	/// <version>$Id: TypeFiltersTests.cs,v 1.2 2005/07/21 16:01:12 springboy Exp $</version>
 	[TestFixture]
 	public sealed class TypeFiltersTests
 	{

@@ -30,7 +30,6 @@ namespace Spring.Remoting.Support
     /// Defines lifetime's properties of remote objects that is used by Spring.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ILifetime.cs,v 1.1 2006/09/13 20:20:16 bbaia Exp $</version>
     public interface ILifetime
     {
         /// <summary>

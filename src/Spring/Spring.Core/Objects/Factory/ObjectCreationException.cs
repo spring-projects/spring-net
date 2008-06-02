@@ -39,7 +39,6 @@ namespace Spring.Objects.Factory
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: ObjectCreationException.cs,v 1.15 2007/12/05 00:28:04 bbaia Exp $</version>
 	[Serializable]
 	public class ObjectCreationException : FatalObjectException
 	{

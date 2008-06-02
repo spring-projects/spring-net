@@ -33,7 +33,6 @@ namespace Spring.Core.TypeConversion
     /// Converts between instances of <see cref="UniqueKey"/> and their string representations.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: UniqueKeyConverter.cs,v 1.1 2007/08/22 20:17:35 oakinger Exp $</version>
     public class UniqueKeyConverter : TypeConverter
     {
         /// <summary>

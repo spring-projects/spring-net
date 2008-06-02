@@ -33,7 +33,6 @@ namespace Spring.Core
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: ControlFlowFactory.cs,v 1.9 2007/07/31 01:35:07 markpollack Exp $</version>
 	public abstract class ControlFlowFactory
 	{
 		/// <summary>

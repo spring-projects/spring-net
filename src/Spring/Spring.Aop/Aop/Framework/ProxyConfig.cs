@@ -47,7 +47,6 @@ namespace Spring.Aop.Framework
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: ProxyConfig.cs,v 1.13 2007/09/07 01:51:49 markpollack Exp $</version>
 	[Serializable]
     public class ProxyConfig
     {

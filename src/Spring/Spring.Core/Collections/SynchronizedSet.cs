@@ -42,7 +42,6 @@ namespace Spring.Collections
 	/// </p>
 	/// </remarks>
 	/// <seealso cref="Spring.Collections.ISet"/>
-	/// <version>$Id: SynchronizedSet.cs,v 1.6 2007/03/16 04:01:29 aseovic Exp $</version>
     [Serializable]
     public sealed class SynchronizedSet : Set
 	{

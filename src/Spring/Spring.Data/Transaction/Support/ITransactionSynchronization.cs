@@ -31,7 +31,6 @@ namespace Spring.Transaction.Support
 	/// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ITransactionSynchronization.cs,v 1.7 2006/11/24 05:57:46 markpollack Exp $</version>
 	public interface ITransactionSynchronization
 	{
         /// <summary>

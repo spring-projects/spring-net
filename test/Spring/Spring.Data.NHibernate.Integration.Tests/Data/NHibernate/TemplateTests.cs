@@ -42,7 +42,6 @@ namespace Spring.Data.NHibernate
 	/// Use of Hibernate Template against database.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TemplateTests.cs,v 1.2 2008/02/04 22:42:50 markpollack Exp $</version>
 	[TestFixture]
 	public class TemplateTests 
 	{

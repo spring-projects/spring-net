@@ -33,7 +33,6 @@ namespace Spring.Data
 	/// Interface that defines ADO.NET related database operations.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IAdoOperations.cs,v 1.24 2007/12/04 06:52:19 markpollack Exp $</version>
 	public interface IAdoOperations : ICommonAdoOperations
 	{        
 

@@ -25,7 +25,6 @@ namespace Spring.Data.NHibernate
 	/// TODO: 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TestObject.cs,v 1.1 2007/07/18 18:44:57 oakinger Exp $</version>
 	public class TestObject 
 	{
 		#region Fields

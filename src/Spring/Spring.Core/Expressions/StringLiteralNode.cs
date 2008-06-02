@@ -27,7 +27,6 @@ namespace Spring.Expressions
     /// Represents parsed string literal node.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: StringLiteralNode.cs,v 1.8 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class StringLiteralNode : BaseNode
     {

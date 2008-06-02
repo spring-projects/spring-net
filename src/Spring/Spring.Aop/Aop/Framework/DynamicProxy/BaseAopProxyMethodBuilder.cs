@@ -36,7 +36,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// that delegates method calls to the base method.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: BaseAopProxyMethodBuilder.cs,v 1.1 2008/02/06 18:28:52 bbaia Exp $</version>
     public class BaseAopProxyMethodBuilder : AbstractAopProxyMethodBuilder
     {
         #region Constructor(s) / Destructor

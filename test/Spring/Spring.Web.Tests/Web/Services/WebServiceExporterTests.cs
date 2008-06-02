@@ -42,7 +42,6 @@ namespace Spring.Web.Services
     /// Unit tests for the WebServiceExporter class.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: WebServiceExporterTests.cs,v 1.7 2007/12/07 20:26:38 bbaia Exp $</version>
     [TestFixture]
     public sealed class WebServiceExporterTests
     {

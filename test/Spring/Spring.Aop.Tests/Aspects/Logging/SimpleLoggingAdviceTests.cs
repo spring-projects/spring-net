@@ -36,7 +36,6 @@ namespace Spring.Aspects.Logging
     /// This class contains tests for SimpleLoggingAdvice
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: SimpleLoggingAdviceTests.cs,v 1.4 2008/04/04 14:59:47 bbaia Exp $</version>
     [TestFixture]
     public class SimpleLoggingAdviceTests
     {

@@ -31,7 +31,6 @@ namespace Spring.TestSupport
     /// The base class for tests to run within a TestWebContext
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: TestWebContextTests.cs,v 1.1 2008/03/15 11:19:39 oakinger Exp $</version>
     public abstract class TestWebContextTests
     {
         [SetUp]

@@ -33,7 +33,6 @@ namespace Spring.Util
 	/// <see cref="System.Delegate"/> <see cref="System.Type"/>s metadata.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: DelegateInfo.cs,v 1.9 2006/04/09 07:19:00 markpollack Exp $</version>
 	public sealed class DelegateInfo
 	{
 		#region Constants

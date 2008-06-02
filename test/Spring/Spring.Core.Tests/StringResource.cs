@@ -34,7 +34,6 @@ namespace Spring
     /// A <see cref="IResource"/> adapter implementation encapsulating a simply string.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: StringResource.cs,v 1.1 2008/03/20 10:35:54 oakinger Exp $</version>
     public class StringResource : AbstractResource
     {
         #region Fields

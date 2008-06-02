@@ -39,7 +39,6 @@ namespace Spring.Remoting
 	/// </summary>
 	/// <author>Mark Pollack</author>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: SaoFactoryObjectTests.cs,v 1.12 2007/10/09 22:25:31 markpollack Exp $</version>
 	[TestFixture]
 	public class SaoFactoryObjectTests : BaseRemotingTestFixture
 	{

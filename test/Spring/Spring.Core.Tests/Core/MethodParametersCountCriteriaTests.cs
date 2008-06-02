@@ -33,7 +33,6 @@ namespace Spring.Core
 	/// Unit tests for the MethodParametersCountCriteria class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: MethodParametersCountCriteriaTests.cs,v 1.3 2007/09/20 14:35:29 bbaia Exp $</version>
 	[TestFixture]
     public sealed class MethodParametersCountCriteriaTests
     {

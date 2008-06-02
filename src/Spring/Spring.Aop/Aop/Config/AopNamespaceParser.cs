@@ -35,7 +35,6 @@ namespace Spring.Aop.Config
     /// <author>Adrian Colyer</author>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AopNamespaceParser.cs,v 1.3 2007/08/09 02:42:35 markpollack Exp $</version>
     [
         NamespaceParser(
             Namespace = "http://www.springframework.net/aop",

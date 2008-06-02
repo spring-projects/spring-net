@@ -54,7 +54,6 @@ namespace Spring.Web.UI
     /// Spring.NET Master Page implementation for ASP.NET 1.1
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: MasterPage.cs,v 1.15 2008/04/22 15:08:59 markpollack Exp $</version>
     public class MasterPage : UserControl
     {
         /// <summary>
@@ -107,7 +106,6 @@ namespace Spring.Web.UI
     /// Spring.NET Master Page implementation for ASP.NET 2.0
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: MasterPage.cs,v 1.15 2008/04/22 15:08:59 markpollack Exp $</version>
     public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, ISupportsWebDependencyInjection
     {
         #region Instance Fields

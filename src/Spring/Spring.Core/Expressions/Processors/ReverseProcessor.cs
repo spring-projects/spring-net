@@ -31,7 +31,6 @@ namespace Spring.Expressions.Processors
     /// Reverts order of elements in the list
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ReverseProcessor.cs,v 1.1 2008/03/20 23:58:16 oakinger Exp $</version>
     public class ReverseProcessor : ICollectionProcessor
     {
         /// <summary>

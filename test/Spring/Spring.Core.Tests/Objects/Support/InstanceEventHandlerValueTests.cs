@@ -32,7 +32,6 @@ namespace Spring.Objects.Support
 	/// Unit tests for the InstanceEventHandlerValue class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: InstanceEventHandlerValueTests.cs,v 1.5 2006/04/09 07:24:51 markpollack Exp $</version>
 	[TestFixture]
     public sealed class InstanceEventHandlerValueTests
     {

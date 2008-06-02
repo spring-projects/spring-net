@@ -26,7 +26,6 @@ namespace Spring.Objects.Factory.Attributes
     /// Custom attribute to indicate required setter property
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: MyRequiredAttribute.cs,v 1.1 2008/04/02 18:02:31 markpollack Exp $</version>
     [AttributeUsage(AttributeTargets.Property)]
     public class MyRequiredAttribute : Attribute
     {

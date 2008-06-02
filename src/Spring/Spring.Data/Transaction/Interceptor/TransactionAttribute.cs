@@ -48,7 +48,6 @@ namespace Spring.Transaction.Interceptor
     /// </para>
     /// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TransactionAttribute.cs,v 1.8 2007/12/07 07:30:48 markpollack Exp $</version>
 	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, 
          Inherited = true)]
     [Serializable]

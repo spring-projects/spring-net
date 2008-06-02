@@ -33,7 +33,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: DynamicMethodMatcher.cs,v 1.5 2006/04/09 07:18:37 markpollack Exp $</version>
 	public abstract class DynamicMethodMatcher : IMethodMatcher
 	{
 		#region Constructor (s) / Destructor

@@ -32,7 +32,6 @@ namespace Spring.Reflection.Dynamic
     /// Base class for dynamic members.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseDynamicMember.cs,v 1.1 2007/08/08 04:05:37 bbaia Exp $</version>
     public class BaseDynamicMember
     {
         /// <summary>

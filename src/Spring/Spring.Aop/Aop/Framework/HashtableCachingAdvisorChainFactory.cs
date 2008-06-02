@@ -34,7 +34,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: HashtableCachingAdvisorChainFactory.cs,v 1.9 2007/03/16 04:01:18 aseovic Exp $</version>
 	[Serializable]
 	public sealed class HashtableCachingAdvisorChainFactory : IAdvisorChainFactory
 	{

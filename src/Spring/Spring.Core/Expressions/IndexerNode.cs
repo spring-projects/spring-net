@@ -32,7 +32,6 @@ namespace Spring.Expressions
     /// Represents parsed indexer node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IndexerNode.cs,v 1.16 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class IndexerNode : NodeWithArguments
     {

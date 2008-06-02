@@ -43,7 +43,6 @@ namespace Spring.Context.Support
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
-    /// <version>$Id: AbstractXmlApplicationContext.cs,v 1.20 2007/07/20 11:37:55 oakinger Exp $</version>
     public abstract class AbstractXmlApplicationContext : AbstractApplicationContext
     {
 		/// <summary>

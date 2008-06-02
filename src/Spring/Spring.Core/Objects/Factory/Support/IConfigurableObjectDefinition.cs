@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Support
     /// implementations.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: IConfigurableObjectDefinition.cs,v 1.1 2007/07/30 17:52:22 markpollack Exp $</version>
     public interface IConfigurableObjectDefinition : IObjectDefinition
     {
         /// <summary>

@@ -88,7 +88,6 @@ namespace Spring.Context.Support
     /// </code>
     /// </example>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: TypeConvertersSectionHandler.cs,v 1.6 2007/07/31 18:15:50 bbaia Exp $</version>
     /// <seealso cref="Spring.Core.TypeResolution.TypeRegistry"/>
     public class TypeConvertersSectionHandler : IConfigurationSectionHandler
     {

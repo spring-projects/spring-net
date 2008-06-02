@@ -45,7 +45,6 @@ namespace Spring.Context.Support
     /// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <seealso cref="Spring.Context.Support.DelegatingMessageSource"/>
-    /// <version>$Id: StaticMessageSource.cs,v 1.16 2007/08/27 13:57:27 oakinger Exp $</version>
     public class StaticMessageSource : AbstractMessageSource
     {
         private Hashtable _messages;

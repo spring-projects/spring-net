@@ -12,7 +12,6 @@ namespace Spring.Transaction.Interceptor
     /// Test MatchAlwaysTransactionAttributeSourceTests
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: MatchAlwaysTransactionAttributeSourceTests.cs,v 1.7 2008/05/27 19:07:03 markpollack Exp $</version>
     [TestFixture]
     public class MatchAlwaysTransactionAttributeSourceTests
     {

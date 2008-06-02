@@ -36,7 +36,6 @@ namespace Spring.Remoting
     /// Convenience class to configure remoting infrastructure from the IoC container.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: RemotingConfigurer.cs,v 1.7 2007/10/08 14:57:34 bbaia Exp $</version>
     public class RemotingConfigurer : IObjectFactoryPostProcessor, IOrdered
     {
 		#region Fields

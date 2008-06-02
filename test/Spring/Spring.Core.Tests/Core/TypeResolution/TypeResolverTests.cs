@@ -34,7 +34,6 @@ namespace Spring.Core.TypeResolution
     /// </summary>
     /// <author>Rick Evans</author>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: TypeResolverTests.cs,v 1.1 2007/07/31 18:21:02 bbaia Exp $</version>
     [TestFixture]
     public class TypeResolverTests
     {

@@ -44,7 +44,6 @@ namespace Spring.Util
     /// <author>Aleksandar Seovic (.NET)</author>
     /// <author>Stan Dvoychenko (.NET)</author>
     /// <author>Bruno Baia (.NET)</author>
-    /// <version>$Id: ReflectionUtils.cs,v 1.59 2008/05/13 14:22:46 oakinger Exp $</version>
     public sealed class ReflectionUtils
     {
         /// <summary>
@@ -1361,7 +1360,6 @@ namespace Spring.Util
         /// Creates a <see cref=" CustomAttributeBuilder"/>.
         /// </summary>
         /// <author>Bruno Baia</author>
-        /// <version>$Id: ReflectionUtils.cs,v 1.59 2008/05/13 14:22:46 oakinger Exp $</version>
         public class CustomAttributeBuilderBuilder
         {
             #region Fields

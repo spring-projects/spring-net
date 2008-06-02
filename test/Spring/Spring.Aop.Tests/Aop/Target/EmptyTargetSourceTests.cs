@@ -33,7 +33,6 @@ namespace Spring.Aop.Target
 	/// Unit tests for the EmptyTargetSource class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: EmptyTargetSourceTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
 	[TestFixture]
     public sealed class EmptyTargetSourceTests
     {

@@ -31,7 +31,6 @@ namespace Spring.Objects.Factory.Config
     /// that injects dependencies into the object managed by the factory.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: IConfigurableFactoryObject.cs,v 1.1 2007/07/29 19:39:27 markpollack Exp $</version>
     public interface IConfigurableFactoryObject : IFactoryObject
     {
         /// <summary>

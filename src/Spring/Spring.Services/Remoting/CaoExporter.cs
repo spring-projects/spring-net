@@ -42,7 +42,6 @@ namespace Spring.Remoting
 	/// <author>Aleksandar Seovic</author>
 	/// <author>Mark Pollack</author>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: CaoExporter.cs,v 1.12 2007/11/07 19:03:09 bbaia Exp $</version>
 	public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObjectFactoryAware, IInitializingObject, IDisposable
 	{
 		#region Logging

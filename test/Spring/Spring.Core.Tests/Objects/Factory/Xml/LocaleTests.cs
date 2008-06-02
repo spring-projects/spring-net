@@ -35,7 +35,6 @@ namespace Spring.Objects.Factory.Xml
     /// as comma delimited strings.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: LocaleTests.cs,v 1.1 2007/08/25 16:08:36 markpollack Exp $</version>
     [TestFixture]
     public class LocaleTests
     {

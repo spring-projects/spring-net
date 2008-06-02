@@ -29,7 +29,6 @@ namespace Spring.Validation
 	/// Unit tests for the ValidationException class.
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: ValidationExceptionTests.cs,v 1.1 2008/02/05 20:40:27 aseovic Exp $</version>
 	[TestFixture]
 	public sealed class ValidationExceptionTests
 	{

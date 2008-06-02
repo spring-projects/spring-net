@@ -28,7 +28,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// This is simple implementation of IFactoryObject that creates a TestObject.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: CreatesTestObject.cs,v 1.1 2007/09/07 01:53:02 markpollack Exp $</version>
     public class CreatesTestObject : IFactoryObject, IInitializingObject
     {
         private bool initialized = false;

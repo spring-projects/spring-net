@@ -32,7 +32,6 @@ namespace Spring.Objects
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET) </author>
-    /// <version>$Id: IPropertyValues.cs,v 1.7 2006/04/09 07:18:49 markpollack Exp $</version>
     public interface IPropertyValues : IEnumerable
     {
         /// <summary>

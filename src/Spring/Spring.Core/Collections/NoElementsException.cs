@@ -31,7 +31,6 @@ namespace Spring.Collections
 	/// Thrown when an element is requested from an empty <see cref="IQueue"/>.
 	/// </summary>
 	/// <author>Griffin Caprio</author>
-	/// <version>$Id: NoElementsException.cs,v 1.4 2006/04/09 07:18:37 markpollack Exp $</version>
 	[Serializable]
 	public class NoElementsException : ApplicationException
 	{

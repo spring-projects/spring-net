@@ -36,7 +36,6 @@ namespace Spring.Data
 	/// of transaction attributes.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: AutoDeclarativeTxTests.cs,v 1.4 2007/05/26 00:43:01 markpollack Exp $</version>
 	[TestFixture]
 	public class AutoDeclarativeTxTests 
 	{

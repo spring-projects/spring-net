@@ -76,7 +76,6 @@ namespace Spring.Core.TypeConversion
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: NameValueConverter.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
 	public class NameValueConverter : TypeConverter
 	{
 		#region Constructor (s) / Destructor

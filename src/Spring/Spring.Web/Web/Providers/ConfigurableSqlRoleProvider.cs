@@ -36,7 +36,6 @@ namespace Spring.Web.Providers
     /// A spring-configurable version of <see cref="SqlRoleProvider"/>
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ConfigurableSqlRoleProvider.cs,v 1.1 2007/07/26 14:43:56 oakinger Exp $</version>
     [AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
     [AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
     public class ConfigurableSqlRoleProvider : SqlRoleProvider, IRoleProvider

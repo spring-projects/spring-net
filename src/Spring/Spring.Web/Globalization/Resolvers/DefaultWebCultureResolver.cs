@@ -30,7 +30,6 @@ namespace Spring.Globalization.Resolvers
     /// Default culture resolver for web applications. Contains some common utility methods for web culture resolvers.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: DefaultWebCultureResolver.cs,v 1.5 2007/08/25 14:26:35 oakinger Exp $</version>
     public class DefaultWebCultureResolver : DefaultCultureResolver
     {
         /// <summary>

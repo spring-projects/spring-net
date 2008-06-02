@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
     /// Unit tests for the EnvironmentVariableSource class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: EnvironmentVariableSourceTests.cs,v 1.1 2007/03/10 01:44:40 aseovic Exp $</version>
     [TestFixture]
     public sealed class EnvironmentVariableSourceTests
     {

@@ -25,7 +25,6 @@ namespace Spring.Data.NHibernate
 	/// Enumeration for the various Hibernate flush modes. 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TemplateFlushMode.cs,v 1.1 2007/05/31 20:25:13 markpollack Exp $</version>
 	public enum TemplateFlushMode 
 	{
         /// <summary>Never flush is a good strategy for read-only units of work.

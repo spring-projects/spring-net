@@ -39,7 +39,6 @@ namespace Spring.Aop.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Choy Rim (.NET)</author>
-	/// <version>$Id: DelegatingIntroductionInterceptorTests.cs,v 1.6 2004/10/10 08:01:49 gcaprio Exp $</version>
 	[TestFixture]
 	public class DelegatingIntroductionInterceptorTests
 	{

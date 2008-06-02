@@ -38,7 +38,6 @@ namespace Spring.Web.Support
     /// An abstract base class that defines common behavior for different process implementations.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractProcessHandler.cs,v 1.1 2007/08/03 08:31:25 oakinger Exp $</version>
     public abstract class AbstractProcessHandler : IProcess, ISharedStateAware, IApplicationContextAware, IHttpHandler, IRequiresSessionState
     {
         /// <summary>

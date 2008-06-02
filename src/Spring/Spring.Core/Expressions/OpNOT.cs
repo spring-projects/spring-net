@@ -27,7 +27,6 @@ namespace Spring.Expressions
     /// Represents logical NOT operator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: OpNOT.cs,v 1.8 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class OpNOT : UnaryOperator
     {

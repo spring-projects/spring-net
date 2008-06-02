@@ -32,7 +32,6 @@ namespace Spring.Aspects
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AbstractExceptionHandlerAdvice.cs,v 1.1 2007/10/08 22:05:16 markpollack Exp $</version>
     public abstract class AbstractExceptionHandlerAdvice : IMethodInterceptor, IInitializingObject
     {
         /// <summary>

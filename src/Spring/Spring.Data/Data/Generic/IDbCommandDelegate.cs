@@ -44,7 +44,6 @@ namespace Spring.Data.Generic
     /// <returns>The object returned from processing with the
     /// provided DbCommand </returns>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: IDbCommandDelegate.cs,v 1.1 2007/06/27 21:41:57 markpollack Exp $</version>
     public delegate T IDbCommandDelegate<T>(IDbCommand command);
 }
 #endif

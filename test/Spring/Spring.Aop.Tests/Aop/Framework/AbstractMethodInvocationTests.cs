@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
 	/// <author>Rick Evans</author>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: AbstractMethodInvocationTests.cs,v 1.2 2008/02/06 18:29:05 bbaia Exp $</version>
 	[TestFixture]
 	public abstract class AbstractMethodInvocationTests
 	{

@@ -39,7 +39,6 @@ namespace Spring.Caching
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CacheResultAttribute.cs,v 1.1 2007/02/09 07:12:23 aseovic Exp $</version>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     [Serializable]
     public sealed class CacheResultAttribute : BaseCacheAttribute

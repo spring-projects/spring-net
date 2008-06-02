@@ -29,7 +29,6 @@ namespace Spring.Expressions.Processors
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: OrderByProcessor.cs,v 1.2 2008/03/20 23:58:16 oakinger Exp $</version>
     public class OrderByProcessor : ICollectionProcessor
     {
         #region Comparer Helper Implementations

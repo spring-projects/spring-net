@@ -30,7 +30,6 @@ namespace Spring.Objects.Factory.Config
     /// implementations
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AbstractConfigurer.cs,v 1.3 2007/07/31 18:16:49 bbaia Exp $</version>
     [Serializable]
     public abstract class AbstractConfigurer : IOrdered, IObjectFactoryPostProcessor
     {

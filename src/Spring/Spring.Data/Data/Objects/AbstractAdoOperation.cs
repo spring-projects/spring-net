@@ -32,7 +32,6 @@ namespace Spring.Data.Objects
     /// generic implementations of "AdoOperation" subclasses.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AbstractAdoOperation.cs,v 1.2 2008/05/30 21:09:22 markpollack Exp $</version>
     public abstract class AbstractAdoOperation : IInitializingObject
     {
         #region Logging Definition

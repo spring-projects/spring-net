@@ -38,7 +38,6 @@ namespace Spring.Web.UI.Validation
     /// <see cref="ValidationError"/> control.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SpanValidationErrorsRenderer.cs,v 1.1 2007/08/02 19:50:28 markpollack Exp $</version>
     public class SpanValidationErrorsRenderer : AbstractValidationErrorsRenderer
     {
         /// <summary>

@@ -32,7 +32,6 @@ namespace Spring.Web.Support
     /// Resource cache implementation that uses Spring.NET page/handler state to cache resources.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SharedStateResourceCache.cs,v 1.1 2007/08/03 08:31:25 oakinger Exp $</version>
     internal class SharedStateResourceCache : AbstractResourceCache
     {
         private readonly ISharedStateAware sharedStateHolder;

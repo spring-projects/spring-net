@@ -40,7 +40,6 @@ namespace Spring.Objects.Factory
 	/// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: ObjectIsNotAFactoryException.cs,v 1.5 2006/04/09 07:18:49 markpollack Exp $</version>
     [Serializable]
     public class ObjectIsNotAFactoryException : ObjectNotOfRequiredTypeException
     {

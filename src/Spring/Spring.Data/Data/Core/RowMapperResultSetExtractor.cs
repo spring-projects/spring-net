@@ -49,7 +49,6 @@ namespace Spring.Data.Core
     /// </p>
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: RowMapperResultSetExtractor.cs,v 1.1 2007/08/03 19:51:11 markpollack Exp $</version>
     public class RowMapperResultSetExtractor : IResultSetExtractor
     {
         #region Fields

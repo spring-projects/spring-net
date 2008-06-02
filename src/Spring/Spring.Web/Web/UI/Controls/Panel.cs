@@ -46,7 +46,6 @@ namespace Spring.Web.UI.Controls
     /// over which controls are to be injected or not.
     /// </remarks>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: Panel.cs,v 1.3 2008/03/09 15:20:37 oakinger Exp $</version>
     [PersistChildren(true),
     ToolboxData("<{0}:Panel runat=\"server\" Width=\"125px\" Height=\"50px\"> </{0}:Panel>"),
     ParseChildren(false),

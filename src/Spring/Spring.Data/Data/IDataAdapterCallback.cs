@@ -46,7 +46,6 @@ namespace Spring.Data
     /// method.
     /// </remarks>    
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IDataAdapterCallback.cs,v 1.3 2007/12/04 06:49:17 markpollack Exp $</version>
 	public interface IDataAdapterCallback 
 	{
         /// <summary>

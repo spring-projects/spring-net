@@ -31,7 +31,6 @@ namespace Spring.Data.Common
     /// A parameter class used by <see cref="DbParametersBuilder"/>
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: DbParameter.cs,v 1.6 2008/05/30 21:09:22 markpollack Exp $</version>
 	public class DbParameter : Spring.Data.Common.IDbParameter
 	{
 		#region Fields

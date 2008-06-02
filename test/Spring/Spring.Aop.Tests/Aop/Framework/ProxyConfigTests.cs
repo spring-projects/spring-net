@@ -31,7 +31,6 @@ namespace Spring.Aop.Framework
 	/// Unit tests for the ProxyConfig class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ProxyConfigTests.cs,v 1.2 2006/04/09 07:19:05 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class ProxyConfigTests
 	{

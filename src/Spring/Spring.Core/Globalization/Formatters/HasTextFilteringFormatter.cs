@@ -31,7 +31,6 @@ namespace Spring.Globalization.Formatters
     /// if they are null or contain whitespaces only,
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HasTextFilteringFormatter.cs,v 1.1 2008/03/20 13:19:47 oakinger Exp $</version>
     public class HasTextFilteringFormatter : FilteringFormatter
     {
         private readonly string _defaultValue;

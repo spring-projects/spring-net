@@ -28,7 +28,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Choy Rim (.NET)</author>
-	/// <version>$Id: ITimeStamped.cs,v 1.1 2004/08/01 10:20:20 choyrim Exp $</version>
 	public interface ITimeStamped
 	{
 		/// <summary>

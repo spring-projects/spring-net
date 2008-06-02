@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// Builds an AOP proxy type using inheritance.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: InheritanceAopProxyTypeBuilder.cs,v 1.2 2008/03/03 09:28:50 bbaia Exp $</version>
     public class InheritanceAopProxyTypeBuilder : AbstractAopProxyTypeBuilder
     {
         #region Fields

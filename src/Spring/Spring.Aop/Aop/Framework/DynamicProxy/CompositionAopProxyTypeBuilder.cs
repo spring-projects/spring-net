@@ -37,7 +37,6 @@ namespace Spring.Aop.Framework.DynamicProxy
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: CompositionAopProxyTypeBuilder.cs,v 1.15 2007/12/07 17:58:56 bbaia Exp $</version>
 	public class CompositionAopProxyTypeBuilder : AbstractAopProxyTypeBuilder
     {
         #region Fields

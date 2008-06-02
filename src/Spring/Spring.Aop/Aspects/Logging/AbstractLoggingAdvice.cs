@@ -33,7 +33,6 @@ namespace Spring.Aspects.Logging
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AbstractLoggingAdvice.cs,v 1.2 2007/12/06 17:17:19 markpollack Exp $</version>
     public abstract class AbstractLoggingAdvice : IMethodInterceptor
     {
         #region Fields

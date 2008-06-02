@@ -33,7 +33,6 @@ namespace Spring.Expressions
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: MethodNodeTests.cs,v 1.2 2008/03/20 23:58:16 oakinger Exp $</version>
     [TestFixture]
     public class MethodNodeTests
     {

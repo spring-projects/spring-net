@@ -35,7 +35,6 @@ namespace Spring.Remoting.Support
     /// that is intended to be remotable.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: RemoteObjectProxyTypeBuilder.cs,v 1.3 2006/11/12 01:37:47 bbaia Exp $</version>
     internal class RemoteObjectProxyTypeBuilder : CompositionProxyTypeBuilder
     {
         #region Fields

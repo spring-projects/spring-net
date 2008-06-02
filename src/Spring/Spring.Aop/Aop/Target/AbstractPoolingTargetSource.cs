@@ -66,7 +66,6 @@ namespace Spring.Aop.Target
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi (.NET)</author>
-	/// <version>$Id: AbstractPoolingTargetSource.cs,v 1.7 2007/03/16 04:01:26 aseovic Exp $</version>
     [Serializable]
     public abstract class AbstractPoolingTargetSource
 		: AbstractPrototypeTargetSource, PoolingConfig, IDisposable, IAdvice

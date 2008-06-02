@@ -31,7 +31,6 @@ namespace Spring.Aop.Target
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: PoolingConfig.cs,v 1.4 2006/04/09 07:18:37 markpollack Exp $</version>
 	public interface PoolingConfig
 	{
 		/// <summary>

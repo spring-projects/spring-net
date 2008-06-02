@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IInstantiationStrategy.cs,v 1.6 2006/04/09 07:18:49 markpollack Exp $</version>
 	public interface IInstantiationStrategy
 	{
 		/// <summary>

@@ -75,7 +75,6 @@ namespace Spring.Context.Support
 	/// </code>
 	/// </example>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: NamespaceParsersSectionHandler.cs,v 1.1 2007/08/08 01:53:43 bbaia Exp $</version>
 	/// <seealso cref="NamespaceParserRegistry"/>
     public class NamespaceParsersSectionHandler : IConfigurationSectionHandler
 	{

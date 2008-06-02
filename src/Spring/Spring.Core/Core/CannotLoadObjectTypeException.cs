@@ -33,7 +33,6 @@ namespace Spring.Core
     /// Exception thrown when the ObjectFactory cannot load the specified type of a given object.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: CannotLoadObjectTypeException.cs,v 1.4 2007/08/01 23:24:11 bbaia Exp $</version>
     [Serializable]
     public class CannotLoadObjectTypeException : FatalReflectionException
     {

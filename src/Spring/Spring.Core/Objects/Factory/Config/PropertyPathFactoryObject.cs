@@ -86,7 +86,6 @@ namespace Spring.Objects.Factory.Config
 	/// </example>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: PropertyPathFactoryObject.cs,v 1.3 2007/03/16 04:01:39 aseovic Exp $</version>
     [Serializable]
     public class PropertyPathFactoryObject : IFactoryObject, IObjectNameAware, IObjectFactoryAware
 	{

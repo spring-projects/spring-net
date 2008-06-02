@@ -34,7 +34,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// used to build the Aop proxy type.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: IAopProxyTypeGenerator.cs,v 1.2 2006/11/05 20:36:59 bbaia Exp $</version>
     public interface IAopProxyTypeGenerator : IProxyTypeGenerator
 	{
         /// <summary>

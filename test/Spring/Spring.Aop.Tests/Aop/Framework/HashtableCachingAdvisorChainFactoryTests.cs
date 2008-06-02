@@ -32,7 +32,6 @@ namespace Spring.Aop.Framework
 	/// Unit tests for the HashtableCachingAdvisorChainFactory class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: HashtableCachingAdvisorChainFactoryTests.cs,v 1.2 2006/04/09 07:19:05 markpollack Exp $</version>
 	[TestFixture]
     public sealed class HashtableCachingAdvisorChainFactoryTests
     {

@@ -41,7 +41,6 @@ namespace Spring.Web.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractHandlerFactory.cs,v 1.5 2008/03/19 18:05:08 oakinger Exp $</version>
     public abstract class AbstractHandlerFactory : IHttpHandlerFactory
     {
         /// <summary>

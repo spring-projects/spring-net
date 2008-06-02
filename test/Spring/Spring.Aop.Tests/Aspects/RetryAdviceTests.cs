@@ -32,7 +32,6 @@ namespace Spring.Aspects
     /// This class contains tests for RetryAdvice
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: RetryAdviceTests.cs,v 1.3 2008/03/17 20:25:41 markpollack Exp $</version>
     [TestFixture]
     public class RetryAdviceTests
     {

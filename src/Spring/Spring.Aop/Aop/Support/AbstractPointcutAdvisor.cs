@@ -33,7 +33,6 @@ namespace Spring.Aop.Support
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AbstractPointcutAdvisor.cs,v 1.2 2008/01/14 20:49:47 oakinger Exp $</version>
     [Serializable]
     public abstract class AbstractPointcutAdvisor : IPointcutAdvisor, IOrdered
     {

@@ -38,7 +38,6 @@ namespace Spring.Validation
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseValidationAction.cs,v 1.6 2008/02/05 20:40:26 aseovic Exp $</version>
     public abstract class BaseValidationAction : IValidationAction
     {
         #region Fields

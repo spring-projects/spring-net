@@ -28,7 +28,6 @@ namespace Spring.Transaction.Config
     /// This is a utility class to help in parsing the transaction namespace
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TxNamespaceUtils.cs,v 1.2 2007/12/07 08:10:03 markpollack Exp $</version>
     public sealed class TxNamespaceUtils
     {
         /// <summary>

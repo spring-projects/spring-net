@@ -36,7 +36,6 @@ namespace Spring.Context.Support
     ///
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HttpApplicationConfigurer.cs,v 1.2 2007/07/29 19:39:42 markpollack Exp $</version>
     public class HttpApplicationConfigurer
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(HttpApplicationConfigurer));

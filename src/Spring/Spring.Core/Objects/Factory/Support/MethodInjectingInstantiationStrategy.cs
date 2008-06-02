@@ -49,7 +49,6 @@ namespace Spring.Objects.Factory.Support
 	/// </p>
 	/// </remarks>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: MethodInjectingInstantiationStrategy.cs,v 1.13 2008/05/02 16:44:44 markpollack Exp $</version>
     [Serializable]
     public class MethodInjectingInstantiationStrategy : SimpleInstantiationStrategy
 	{

@@ -50,7 +50,6 @@ namespace Spring.Web.UI
     /// Extends standard .Net user control by adding data binding and localization functionality.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: UserControl.cs,v 1.54 2008/04/03 05:31:25 markpollack Exp $</version>
     public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, IWebDataBound, ISupportsWebDependencyInjection,
                                IPostBackDataHandler,IValidationContainer
     {

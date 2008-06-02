@@ -42,7 +42,6 @@ namespace Spring.Data.Generic
     /// </p>
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IRowMapper.cs,v 1.4 2007/06/28 18:48:18 markpollack Exp $</version>
     public interface IRowMapper<T>
     {
         /// <summary>

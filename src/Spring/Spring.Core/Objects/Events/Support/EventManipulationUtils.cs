@@ -34,7 +34,6 @@ namespace Spring.Objects.Events.Support
 	/// Utility class to aid in the manipulation of events and delegates.
 	/// </summary>
 	/// <author>Griffin Caprio</author>
-	/// <version>$Id: EventManipulationUtils.cs,v 1.3 2007/07/31 01:35:12 markpollack Exp $</version>
 	public sealed class EventManipulationUtils
 	{
 		/// <summary>

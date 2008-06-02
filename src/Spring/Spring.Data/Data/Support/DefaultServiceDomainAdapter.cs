@@ -29,7 +29,6 @@ namespace Spring.Data.Support
     /// </summary>
     /// <remarks>Introduced for purposes of unit testing.</remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id $</version> 
     public class DefaultServiceDomainAdapter : IServiceDomainAdapter
     {
 

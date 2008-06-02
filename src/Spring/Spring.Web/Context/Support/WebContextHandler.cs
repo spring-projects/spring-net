@@ -45,7 +45,6 @@ namespace Spring.Context.Support
     /// as default Context-Type.
     /// </remarks>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: WebContextHandler.cs,v 1.8 2008/03/13 20:07:43 bbaia Exp $</version>
     public class WebContextHandler : ContextHandler
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(WebContextHandler));

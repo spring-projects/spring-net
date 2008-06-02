@@ -85,7 +85,6 @@ namespace Spring.Objects.Support
 	/// <author>Colin Sampaleanu</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: MethodInvoker.cs,v 1.7 2007/08/04 01:05:15 bbaia Exp $</version>
 	public class MethodInvoker
 	{
 		#region Fields

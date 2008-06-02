@@ -26,7 +26,6 @@ namespace Spring.Globalization
     /// Resource cache implementation that doesn't cache resources.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: NullResourceCache.cs,v 1.2 2006/04/09 07:18:47 markpollack Exp $</version>
     public class NullResourceCache : AbstractResourceCache
     {
         /// <summary>

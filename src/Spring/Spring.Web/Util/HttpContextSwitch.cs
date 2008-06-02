@@ -47,7 +47,6 @@ namespace Spring.Util
     /// </code>
     /// </example>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: HttpContextSwitch.cs,v 1.1 2007/08/01 23:10:51 markpollack Exp $</version>
     public class HttpContextSwitch : IDisposable
     {
         private HttpContext savedContext;

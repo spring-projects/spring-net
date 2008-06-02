@@ -29,8 +29,6 @@ namespace Spring.Objects
 	/// <summary>
 	/// Unit tests for the PropertyAccessExceptionsException class.
     /// </summary>
-    /// <author></author>
-    /// <version>$Id: PropertyAccessExceptionsExceptionTests.cs,v 1.4 2007/07/31 00:09:24 markpollack Exp $</version>
 	[TestFixture]
     public sealed class PropertyAccessExceptionsExceptionTests
     {

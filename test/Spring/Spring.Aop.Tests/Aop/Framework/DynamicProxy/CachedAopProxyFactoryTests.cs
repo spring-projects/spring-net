@@ -36,7 +36,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// Unit tests for the CachedAopProxyFactoryTests class.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: CachedAopProxyFactoryTests.cs,v 1.1 2007/08/04 01:20:11 bbaia Exp $</version>
 	[TestFixture]
     public sealed class CachedAopProxyFactoryTests : DefaultAopProxyFactoryTests
 	{

@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Config
     /// Provides methods for type-safe accessing <see cref="IVariableSource"/>s.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: VariableAccessor.cs,v 1.2 2007/08/27 14:49:42 oakinger Exp $</version>
     public class VariableAccessor
     {
         private readonly IVariableSource variableSource;

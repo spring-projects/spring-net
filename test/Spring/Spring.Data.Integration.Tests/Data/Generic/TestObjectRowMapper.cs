@@ -34,7 +34,6 @@ namespace Spring.Data.Generic
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TestObjectRowMapper.cs,v 1.3 2007/08/07 19:50:44 markpollack Exp $</version>
     public class TestObjectRowMapper<T> : IRowMapper<T> where T : TestObject, new()
     {
         public T MapRow(IDataReader reader, int rowNum) 

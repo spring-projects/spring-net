@@ -36,7 +36,6 @@ namespace Spring.Context.Support
     /// </p>
     /// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: DefaultSectionHandler.cs,v 1.4 2006/04/09 07:18:38 markpollack Exp $</version>
     public class DefaultSectionHandler : IConfigurationSectionHandler
     {
         #region Methods

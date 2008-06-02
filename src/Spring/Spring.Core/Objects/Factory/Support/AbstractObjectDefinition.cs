@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Support
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: AbstractObjectDefinition.cs,v 1.31 2007/08/27 13:57:43 oakinger Exp $</version>
     [Serializable]
     public abstract class AbstractObjectDefinition : IConfigurableObjectDefinition
     {

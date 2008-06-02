@@ -45,7 +45,6 @@ namespace Spring.Context.Support
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: ResourceSetMessageSource.cs,v 1.23 2007/07/31 18:15:50 bbaia Exp $</version>
 	public class ResourceSetMessageSource : AbstractMessageSource, IInitializingObject
 	{
 		#region Fields

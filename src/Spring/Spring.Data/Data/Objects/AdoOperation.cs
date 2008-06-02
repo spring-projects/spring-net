@@ -42,7 +42,6 @@ namespace Spring.Data.Objects
     /// 
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AdoOperation.cs,v 1.15 2008/05/30 21:09:22 markpollack Exp $</version>
     public abstract class AdoOperation : AbstractAdoOperation
     {
         

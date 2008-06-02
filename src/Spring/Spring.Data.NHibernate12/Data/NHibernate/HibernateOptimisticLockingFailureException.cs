@@ -37,7 +37,6 @@ namespace Spring.Data.NHibernate
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: HibernateOptimisticLockingFailureException.cs,v 1.1 2008/04/08 20:26:30 markpollack Exp $</version>
     [Serializable]
     public class HibernateOptimisticLockingFailureException : ObjectOptimisticLockingFailureException
     {

@@ -43,7 +43,6 @@ namespace Spring.Web.UI.Validation
     /// </para>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IValidationErrorsRenderer.cs,v 1.1 2007/08/02 19:50:28 markpollack Exp $</version>
     public interface IValidationErrorsRenderer
     {
         /// <summary>

@@ -32,7 +32,6 @@ namespace Spring.Web.UI.Controls
 	/// This validator allows for validating a CheckBox's "Checked" state.
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: CheckBoxValidator.cs,v 1.1 2007/07/31 10:40:59 oakinger Exp $</version>
 	[ToolboxData("<{0}:RequiredCheckBoxValidator runat=\"server\" ErrorMessage=\"RequiredCheckBoxValidator\"></{0}:RequiredCheckBoxValidator>")]
     public class RequiredCheckBoxValidator : AbstractBaseValidator
     {

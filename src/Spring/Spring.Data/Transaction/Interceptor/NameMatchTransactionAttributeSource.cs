@@ -33,7 +33,6 @@ namespace Spring.Transaction.Interceptor
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: NameMatchTransactionAttributeSource.cs,v 1.9 2008/05/29 17:26:41 markpollack Exp $</version>
 	[Serializable]
 	public class NameMatchTransactionAttributeSource : ITransactionAttributeSource
 	{

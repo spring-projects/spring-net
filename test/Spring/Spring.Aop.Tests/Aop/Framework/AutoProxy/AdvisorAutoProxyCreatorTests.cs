@@ -37,7 +37,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AdvisorAutoProxyCreatorTests.cs,v 1.4 2007/08/01 17:56:25 markpollack Exp $</version>
     [TestFixture]
     public class AdvisorAutoProxyCreatorTests
     {

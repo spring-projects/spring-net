@@ -47,7 +47,6 @@ namespace Spring.Data.NHibernate.Support
     /// </para>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: HibernateDaoSupport.cs,v 1.2 2007/08/28 15:26:37 markpollack Exp $</version>
 	public abstract class HibernateDaoSupport : DaoSupport
 	{
 	    #region Fields

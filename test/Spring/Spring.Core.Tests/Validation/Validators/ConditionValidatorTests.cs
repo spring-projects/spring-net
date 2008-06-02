@@ -36,7 +36,6 @@ namespace Spring.Validation.Validators
     /// Unit tests for the ConditionValidator class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ConditionValidatorTests.cs,v 1.9 2008/02/05 20:40:27 aseovic Exp $</version>
     [TestFixture]
     public sealed class ConditionValidatorTests
     {

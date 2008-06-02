@@ -35,7 +35,6 @@ namespace Spring.Proxy
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: DynamicProxyManager.cs,v 1.6 2007/05/30 17:32:05 oakinger Exp $</version>
     public sealed class DynamicProxyManager
     {
         #region Fields

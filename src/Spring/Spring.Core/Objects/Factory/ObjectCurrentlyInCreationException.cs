@@ -39,7 +39,6 @@ namespace Spring.Objects.Factory
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ObjectCurrentlyInCreationException.cs,v 1.7 2008/05/29 12:13:27 oakinger Exp $</version>
 	[Serializable]
 	public class ObjectCurrentlyInCreationException : ObjectCreationException
 	{

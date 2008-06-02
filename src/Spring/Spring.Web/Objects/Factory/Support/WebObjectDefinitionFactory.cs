@@ -40,7 +40,6 @@ namespace Spring.Objects.Factory.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebObjectDefinitionFactory.cs,v 1.9 2008/04/07 00:19:55 bbaia Exp $</version>
     public class WebObjectDefinitionFactory : DefaultObjectDefinitionFactory
     {
 

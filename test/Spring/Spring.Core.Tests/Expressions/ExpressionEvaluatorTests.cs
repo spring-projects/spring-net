@@ -55,7 +55,6 @@ namespace Spring.Expressions
     /// This class contains tests for ExpressionEvaluator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ExpressionEvaluatorTests.cs,v 1.72 2008/03/20 23:58:16 oakinger Exp $</version>
     [TestFixture]
     public sealed class ExpressionEvaluatorTests
     {

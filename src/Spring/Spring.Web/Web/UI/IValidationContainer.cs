@@ -32,7 +32,6 @@ namespace Spring.Web.UI
     /// handling validation and error rendering
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: IValidationContainer.cs,v 1.1 2008/03/19 12:07:15 oakinger Exp $</version>
     public interface IValidationContainer
     {
         /// <summary>

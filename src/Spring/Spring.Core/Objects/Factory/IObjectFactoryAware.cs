@@ -45,7 +45,6 @@ namespace Spring.Objects.Factory
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IObjectFactoryAware.cs,v 1.6 2006/04/09 07:18:48 markpollack Exp $</version>
 	public interface IObjectFactoryAware
 	{
 		/// <summary>

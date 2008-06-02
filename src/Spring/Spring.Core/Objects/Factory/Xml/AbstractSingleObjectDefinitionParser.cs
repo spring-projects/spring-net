@@ -41,7 +41,6 @@ namespace Spring.Objects.Factory.Xml
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: AbstractSingleObjectDefinitionParser.cs,v 1.3 2007/05/29 14:42:20 markpollack Exp $</version>
     public class AbstractSingleObjectDefinitionParser : AbstractObjectDefinitionParser
     {
         #region Methods

@@ -33,7 +33,6 @@ namespace Spring.Data.Core
     /// TransactionManager that uses TransactionScope provided by System.Transactions.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: TxScopeTransactionManager.cs,v 1.5 2007/12/04 19:43:16 markpollack Exp $</version>    
     public class TxScopeTransactionManager : AbstractPlatformTransactionManager, IInitializingObject
     {
         private ITransactionScopeAdapter txAdapter;

@@ -43,7 +43,6 @@ namespace Spring.Globalization.Localizers
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ResourceSetLocalizer.cs,v 1.11 2007/07/24 17:26:25 oakinger Exp $</version>
     public class ResourceSetLocalizer : AbstractLocalizer
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ResourceSetLocalizer));

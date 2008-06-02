@@ -29,7 +29,6 @@ namespace Spring.Aspects.Exceptions
     /// Evaluates the expression for the return value of the method.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ReturnValueExceptionHandler.cs,v 1.3 2007/10/10 18:07:46 markpollack Exp $</version>
     public class ReturnValueExceptionHandler : AbstractExceptionHandler
     {
 

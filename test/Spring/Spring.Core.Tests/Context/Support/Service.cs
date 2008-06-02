@@ -23,7 +23,6 @@ using System;
 namespace Spring.Context.Support
 {  
     /// <author>Mark Pollack</author>
-    /// <version>$Id: Service.cs,v 1.1 2007/07/10 05:48:37 markpollack Exp $</version>
     public class Service : IApplicationContextAware, IMessageSourceAware, IDisposable
     {
         private IApplicationContext applicationContext;

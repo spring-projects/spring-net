@@ -38,7 +38,6 @@ namespace Spring.Data.Core
     /// This calss contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TxScopeTransactionManagerTests.cs,v 1.3 2007/12/07 07:31:05 markpollack Exp $</version>
     [TestFixture]
     public class TxScopeTransactionManagerTests
     {

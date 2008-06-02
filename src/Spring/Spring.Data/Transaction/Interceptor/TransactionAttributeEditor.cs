@@ -47,7 +47,6 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: TransactionAttributeEditor.cs,v 1.7 2007/12/07 07:30:48 markpollack Exp $</version>
 	public class TransactionAttributeEditor
 	{
 		private RuleBasedTransactionAttribute _attribute;

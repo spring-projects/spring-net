@@ -63,7 +63,6 @@ namespace Spring.Objects.Factory.Support
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
     /// <seealso cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/>
-    /// <version>$Id: DefaultListableObjectFactory.cs,v 1.42 2007/10/10 19:17:07 bbaia Exp $</version>
     [Serializable]
     public class DefaultListableObjectFactory :
         AbstractAutowireCapableObjectFactory,

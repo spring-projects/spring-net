@@ -49,7 +49,6 @@ namespace Spring.Context.Support
     /// </remarks>
     /// <author>Juergan Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: DelegatingMessageSource.cs,v 1.5 2007/07/02 21:24:39 markpollack Exp $</version>
     /// <seealso cref="Spring.Context.Support.AbstractApplicationContext"/>
     public class DelegatingMessageSource : IHierarchicalMessageSource
     {

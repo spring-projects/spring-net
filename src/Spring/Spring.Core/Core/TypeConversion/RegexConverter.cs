@@ -33,7 +33,6 @@ namespace Spring.Core.TypeConversion
     /// Converts string representation of a regular expression into an instance of <see cref="Regex"/>.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: RegexConverter.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
     public class RegexConverter : TypeConverter
     {
         /// <summary>

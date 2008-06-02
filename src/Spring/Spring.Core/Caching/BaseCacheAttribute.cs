@@ -8,7 +8,6 @@ namespace Spring.Caching
     /// Abstract base class containing shared properties for all cache attributes.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseCacheAttribute.cs,v 1.5 2007/08/29 17:29:10 oakinger Exp $</version>
     [Serializable]
     public abstract class BaseCacheAttribute : Attribute
     {

@@ -34,7 +34,6 @@ namespace Spring.Data.NHibernate.Support
     /// Tests for SessionScope
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: SessionScopeTests.cs,v 1.5 2008/05/13 14:22:47 oakinger Exp $</version>
     [TestFixture]
     public class SessionScopeTests
     {

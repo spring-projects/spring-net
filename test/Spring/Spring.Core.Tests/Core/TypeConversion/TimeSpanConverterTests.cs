@@ -32,7 +32,6 @@ namespace Spring.Core.TypeConversion
     /// Unit tests for the TimeSpanConverter class.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: TimeSpanConverterTests.cs,v 1.2 2007/08/29 17:29:41 oakinger Exp $</version>
     [TestFixture]
     public sealed class TimeSpanConverterTests
     {

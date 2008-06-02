@@ -36,7 +36,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// to create an AOP proxy for any object.
 	/// </summary>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: AbstractAopProxyTypeBuilder.cs,v 1.5 2007/12/03 09:06:58 bbaia Exp $</version>
     public abstract class AbstractAopProxyTypeBuilder : 
         AbstractProxyTypeBuilder, IAopProxyTypeGenerator
     {

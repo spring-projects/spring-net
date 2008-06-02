@@ -36,7 +36,6 @@ namespace Spring.Objects.Factory
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: NoSuchObjectDefinitionException.cs,v 1.8 2006/04/09 07:18:48 markpollack Exp $</version>
 	[Serializable]
 	public class NoSuchObjectDefinitionException : ObjectsException
 	{

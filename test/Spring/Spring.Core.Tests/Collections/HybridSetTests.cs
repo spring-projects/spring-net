@@ -32,7 +32,6 @@ namespace Spring.Collections
 	/// Unit tests for the HybridSet class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: HybridSetTests.cs,v 1.3 2006/04/09 07:19:06 markpollack Exp $</version>
 	[TestFixture]
     public class HybridSetTests : SetTests
     {

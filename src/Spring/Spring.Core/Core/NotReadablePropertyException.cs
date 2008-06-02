@@ -39,7 +39,6 @@ namespace Spring.Core
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: NotReadablePropertyException.cs,v 1.2 2007/07/31 00:26:30 markpollack Exp $</version>
     [Serializable]
     public class NotReadablePropertyException : InvalidPropertyException
     {

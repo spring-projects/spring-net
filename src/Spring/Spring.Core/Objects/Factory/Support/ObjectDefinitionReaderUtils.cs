@@ -40,7 +40,6 @@ namespace Spring.Objects.Factory.Support
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
     /// <seealso cref="ObjectsNamespaceParser"/>
-    /// <version>$Id: ObjectDefinitionReaderUtils.cs,v 1.13 2007/08/07 22:05:20 markpollack Exp $</version>
     public sealed class ObjectDefinitionReaderUtils
     {
         /// <summary>

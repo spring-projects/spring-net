@@ -36,7 +36,6 @@ namespace Spring.Data.Common
     /// ErrorCodes instances for various providers.
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ErrorCodes.cs,v 1.1 2007/08/01 18:53:06 markpollack Exp $</version>
     public class ErrorCodes 
     {
         #region Fields

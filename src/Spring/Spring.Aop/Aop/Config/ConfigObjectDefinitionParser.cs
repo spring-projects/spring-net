@@ -32,7 +32,6 @@ namespace Spring.Aop.Config
     /// The <see cref="IObjectDefinitionParser"/> for the <code>&lt;aop:config&gt;</code> tag.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: ConfigObjectDefinitionParser.cs,v 1.3 2008/02/20 14:29:13 bbaia Exp $</version>
     public class ConfigObjectDefinitionParser : IObjectDefinitionParser
     {
         /// <summary>

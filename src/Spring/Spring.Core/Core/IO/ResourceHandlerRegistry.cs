@@ -93,7 +93,6 @@ namespace Spring.Core.IO
     /// </para>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ResourceHandlerRegistry.cs,v 1.7 2007/08/08 17:46:55 bbaia Exp $</version>
     public class ResourceHandlerRegistry
     {
         /// <summary>

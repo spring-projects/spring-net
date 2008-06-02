@@ -33,7 +33,6 @@ namespace Spring.Context
     /// Unit tests for all of the exception classes in the Spring.Context library...
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ContextExceptionTests.cs,v 1.2 2006/04/09 07:19:06 markpollack Exp $</version>
     [TestFixture]
     public sealed class ContextExceptionTests : ExceptionsTest
     {

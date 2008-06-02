@@ -28,7 +28,6 @@ namespace Spring.Web.UI.Validation
     /// This class provides common members for all validation errors renderers.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractValidationErrorsRenderer.cs,v 1.1 2007/08/02 19:50:28 markpollack Exp $</version>
     public abstract class AbstractValidationErrorsRenderer : IValidationErrorsRenderer
     {
         private string cssClass;

@@ -50,7 +50,6 @@ namespace Spring.Context.Support
     /// <author>Mark Pollack</author>
     /// <author>Aleksandar Seovic</author>
     /// <seealso cref="Spring.Context.IApplicationContext"/>
-    /// <version>$Id: ContextRegistry.cs,v 1.28 2008/03/21 10:49:37 oakinger Exp $</version>
     public sealed class ContextRegistry
     {
         /// <summary>

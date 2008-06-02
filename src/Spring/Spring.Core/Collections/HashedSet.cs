@@ -40,7 +40,6 @@ namespace Spring.Collections
 	/// </p>
 	/// </remarks>
 	/// <seealso cref="Spring.Collections.ISet"/>
-	/// <version>$Id: HashedSet.cs,v 1.6 2007/03/16 04:01:27 aseovic Exp $</version>
 	[Serializable]
     public class HashedSet : DictionarySet
 	{

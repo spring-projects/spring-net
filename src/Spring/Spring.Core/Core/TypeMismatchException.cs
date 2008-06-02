@@ -36,7 +36,6 @@ namespace Spring.Core
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: TypeMismatchException.cs,v 1.1 2007/07/31 00:08:42 markpollack Exp $</version>
     [Serializable]
     public class TypeMismatchException : PropertyAccessException
     {

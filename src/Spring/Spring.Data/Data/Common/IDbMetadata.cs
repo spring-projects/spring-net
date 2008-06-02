@@ -33,7 +33,6 @@ namespace Spring.Data.Common
     /// </summary>
     /// 
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IDbMetadata.cs,v 1.8 2007/11/21 18:01:45 markpollack Exp $</version>
     public interface IDbMetadata
     {
         /// <summary>

@@ -33,7 +33,6 @@ namespace Spring.Data
     /// </summary>
     /// <author>Rod Johnson</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: CannotGetAdoConnectionException.cs,v 1.1 2006/11/24 05:57:46 markpollack Exp $</version>
 	[Serializable]
 	public class CannotGetAdoConnectionException : InvalidDataAccessResourceUsageException, ISerializable
 	{

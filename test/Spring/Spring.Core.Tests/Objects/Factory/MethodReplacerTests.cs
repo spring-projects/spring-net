@@ -39,7 +39,6 @@ namespace Spring.Objects.Factory
 	/// </p>
 	/// </remarks>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: MethodReplacerTests.cs,v 1.4 2008/05/02 20:08:23 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class MethodReplacerTests
 	{

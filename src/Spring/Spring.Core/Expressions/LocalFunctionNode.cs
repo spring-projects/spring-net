@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents local function node.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: LocalFunctionNode.cs,v 1.7 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class LocalFunctionNode : NodeWithArguments
     {

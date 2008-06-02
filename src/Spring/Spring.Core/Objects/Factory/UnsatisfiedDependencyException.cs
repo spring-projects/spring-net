@@ -36,7 +36,6 @@ namespace Spring.Objects.Factory
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: UnsatisfiedDependencyException.cs,v 1.8 2006/04/09 07:18:49 markpollack Exp $</version>
 	[Serializable]
 	public class UnsatisfiedDependencyException : ObjectCreationException
 	{

@@ -39,7 +39,6 @@ namespace Spring.Web.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ContextMonitor.cs,v 1.3 2007/07/29 19:39:48 markpollack Exp $</version>
     public class ContextMonitor : IHttpHandler
     {
         /// <summary>

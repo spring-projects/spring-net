@@ -39,7 +39,6 @@ namespace Spring.Objects.Factory.Support
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: AbstractObjectDefinitionReader.cs,v 1.14 2008/01/10 14:32:24 bbaia Exp $</version>
 	public abstract class AbstractObjectDefinitionReader : IObjectDefinitionReader
 	{
 		#region Constants

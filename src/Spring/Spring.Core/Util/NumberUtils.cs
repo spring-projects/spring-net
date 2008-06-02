@@ -37,7 +37,6 @@ namespace Spring.Util
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: NumberUtils.cs,v 1.6 2008/03/20 23:58:16 oakinger Exp $</version>
 	public sealed class NumberUtils
 	{
 		/// <summary>

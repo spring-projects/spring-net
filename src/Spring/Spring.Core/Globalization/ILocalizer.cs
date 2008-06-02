@@ -34,7 +34,6 @@ namespace Spring.Globalization
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ILocalizer.cs,v 1.2 2006/04/09 07:18:47 markpollack Exp $</version>
     public interface ILocalizer
     {
         /// <summary>

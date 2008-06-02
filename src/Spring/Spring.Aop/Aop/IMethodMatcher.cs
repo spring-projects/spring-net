@@ -69,7 +69,6 @@ namespace Spring.Aop
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: IMethodMatcher.cs,v 1.9 2006/04/09 07:18:36 markpollack Exp $</version>
 	/// <seealso cref="TrueMethodMatcher"/>
 	public interface IMethodMatcher
 	{

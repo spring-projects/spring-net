@@ -34,7 +34,6 @@ namespace Spring.Data.Objects.Generic
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: VacationRowMapper.cs,v 1.2 2007/07/25 18:43:28 markpollack Exp $</version>
     public class VacationRowMapper<T> : IRowMapper<T> where T : Vacation, new()
     {
         public T MapRow(IDataReader reader, int rowNum) 

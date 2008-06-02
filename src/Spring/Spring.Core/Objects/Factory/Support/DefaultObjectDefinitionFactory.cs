@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Support
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: DefaultObjectDefinitionFactory.cs,v 1.13 2007/08/01 12:29:43 bbaia Exp $</version>
     [Serializable]
     public class DefaultObjectDefinitionFactory : IObjectDefinitionFactory
 	{

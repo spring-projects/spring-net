@@ -52,7 +52,6 @@ namespace Spring.Context
     /// </remarks>
     /// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IResourceLoaderAware.cs,v 1.8 2007/08/08 17:46:37 bbaia Exp $</version>
     /// <see cref="Spring.Context.IApplicationContextAware"/>
     /// <see cref="Spring.Objects.Factory.IInitializingObject"/>
     /// <see cref="Spring.Core.IO.IResourceLoader"/>

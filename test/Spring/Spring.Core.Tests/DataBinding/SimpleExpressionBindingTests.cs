@@ -28,7 +28,6 @@ namespace Spring.DataBinding
     /// Test cases for the SimpleExpressionBinding class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SimpleExpressionBindingTests.cs,v 1.1 2006/11/21 05:47:00 aseovic Exp $</version>
     [TestFixture]
     public class SimpleExpressionBindingTests
     {

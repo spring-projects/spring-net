@@ -27,7 +27,6 @@ namespace Spring.Globalization
     /// Abstract base class that all resource cache implementations should extend.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractResourceCache.cs,v 1.3 2006/04/09 07:18:47 markpollack Exp $</version>
     public abstract class AbstractResourceCache : IResourceCache
     {
         /// <summary>

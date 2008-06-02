@@ -37,7 +37,6 @@ namespace Spring.Validation
 	/// </summary>
 	/// <author>Rick Evans</author>
     /// <author>Goran Milosavljevic</author>
-    /// <version>$Id: ValidationErrorsTests.cs,v 1.7 2008/02/05 20:40:26 aseovic Exp $</version>
 	[TestFixture]
 	public sealed class ValidationErrorsTests
 	{

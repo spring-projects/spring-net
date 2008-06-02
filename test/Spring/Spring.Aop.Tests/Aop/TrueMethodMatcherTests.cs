@@ -33,7 +33,6 @@ namespace Spring.Aop
 	/// Unit tests for the TrueMethodMatcher class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: TrueMethodMatcherTests.cs,v 1.3 2006/04/09 07:19:06 markpollack Exp $</version>
 	[TestFixture]
     public sealed class TrueMethodMatcherTests
     {

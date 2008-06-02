@@ -29,7 +29,6 @@ namespace Spring.Aspects.Exceptions
     /// Translates from one exception to another based.  My wrap or replace exception depending on the expression.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TranslationExceptionHandler.cs,v 1.3 2007/10/10 18:07:46 markpollack Exp $</version>
     public class TranslationExceptionHandler : AbstractExceptionHandler
     {
         /// <summary>

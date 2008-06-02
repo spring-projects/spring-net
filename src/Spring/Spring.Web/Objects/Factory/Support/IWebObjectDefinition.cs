@@ -24,7 +24,6 @@ namespace Spring.Objects.Factory.Support
     /// Defines additional members web object definitions need to implement.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IWebObjectDefinition.cs,v 1.2 2007/03/26 14:58:38 oakinger Exp $</version>
     public interface IWebObjectDefinition
     {
         /// <summary>

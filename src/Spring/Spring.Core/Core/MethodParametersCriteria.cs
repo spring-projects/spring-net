@@ -44,7 +44,6 @@ namespace Spring.Core
     /// </p>
     /// </remarks>
     /// <author>Rick Evans</author>
-    /// <version>$Id: MethodParametersCriteria.cs,v 1.2 2007/09/20 14:20:46 bbaia Exp $</version>
     public class MethodParametersCriteria : ICriteria
     {
         #region Constructor (s) / Destructor

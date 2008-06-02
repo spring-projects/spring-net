@@ -23,7 +23,6 @@ using Spring.Objects.Factory;
 namespace Spring.Context.Support
 {
     /// <author>Mark Pollack</author>
-    /// <version>$Id: Logic.cs,v 1.1 2007/07/10 05:48:37 markpollack Exp $</version>
     public class Logic : IObjectNameAware
     {
         

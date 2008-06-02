@@ -41,7 +41,6 @@ namespace Spring.Aop.Framework
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: AdvisorChainFactoryUtils.cs,v 1.7 2006/04/09 07:18:35 markpollack Exp $</version>
 	public sealed class AdvisorChainFactoryUtils
 	{
 		/// <summary>

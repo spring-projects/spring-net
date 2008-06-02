@@ -27,7 +27,6 @@ namespace Spring.Expressions
     /// Interface that all navigation expression nodes have to implement.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IExpression.cs,v 1.5 2007/07/31 08:18:20 markpollack Exp $</version>
     [TypeConverter(typeof(ExpressionConverter))]
     public interface IExpression
     {

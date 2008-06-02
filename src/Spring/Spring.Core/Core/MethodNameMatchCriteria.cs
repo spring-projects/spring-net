@@ -42,7 +42,6 @@ namespace Spring.Core
     /// </para>
     /// </remarks>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: MethodNameMatchCriteria.cs,v 1.1 2007/08/04 01:04:34 bbaia Exp $</version>
     public class MethodNameMatchCriteria : ICriteria
     {
         #region Constructor (s) / Destructor

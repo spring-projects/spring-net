@@ -34,7 +34,6 @@ namespace Spring.Web.UI.Controls
 	/// Represents a collection container that enables a <see cref="MultiView"/> control to maintain a list of its child controls.
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: ViewCollection.cs,v 1.1 2007/07/24 13:33:28 oakinger Exp $</version>
 	[
 		AspNetHostingPermission(SecurityAction.LinkDemand, Level=AspNetHostingPermissionLevel.Minimal)
 			, AspNetHostingPermission(SecurityAction.InheritanceDemand, Level=AspNetHostingPermissionLevel.Minimal)]

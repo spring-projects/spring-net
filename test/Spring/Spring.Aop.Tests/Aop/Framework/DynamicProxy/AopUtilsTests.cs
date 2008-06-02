@@ -40,7 +40,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Choy Rim (.NET)</author>
-    /// <version>$Id: AopUtilsTests.cs,v 1.2 2008/03/21 10:49:37 oakinger Exp $</version>
     [TestFixture]
     public sealed class AopUtilsTests
     {

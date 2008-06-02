@@ -43,7 +43,6 @@ namespace Spring.Web.UI.Controls
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Calendar.cs,v 1.13 2007/12/07 21:06:35 oakinger Exp $</version>
     [ValidationProperty("SelectedDate")]
     public class Calendar : WebControl, IPostBackDataHandler
     {

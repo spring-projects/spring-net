@@ -47,7 +47,6 @@ namespace Spring.Data.NHibernate
     ///  Also provides support for exception translation.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: SessionFactoryUtils.cs,v 1.1 2008/04/08 20:26:30 markpollack Exp $</version>
 	public abstract class SessionFactoryUtils 
 	{
 		#region Fields

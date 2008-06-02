@@ -38,7 +38,6 @@ namespace Spring.Threading
     /// You should call <see cref="SetStorage(IThreadStorage)"/> only once at application startup!
     /// </remarks>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: LogicalThreadContext.cs,v 1.3 2007/07/03 22:32:04 markpollack Exp $</version>  
     public sealed class LogicalThreadContext
     {
         /// <summary>

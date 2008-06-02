@@ -39,7 +39,6 @@ namespace Spring.Dao
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: CannotAcquireLockException.cs,v 1.6 2008/04/08 20:26:43 markpollack Exp $</version>
 	[Serializable]
 	public class CannotAcquireLockException : PessimisticLockingFailureException
 	{

@@ -44,7 +44,6 @@ namespace Spring.Data.NHibernate
     /// </remarks> 
     /// <author>Mark Pollack (.NET)</author>  
     /// <threadsafety statis="true" instance="true"/> 
-    /// <version>$Id: ICommonHibernateOperations.cs,v 1.2 2007/09/19 22:58:22 markpollack Exp $</version>
     public interface ICommonHibernateOperations
     {
         /// <summary>

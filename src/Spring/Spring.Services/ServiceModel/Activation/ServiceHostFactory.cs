@@ -36,7 +36,6 @@ namespace Spring.ServiceModel.Activation
     /// to host objects created by Spring's IoC container.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ServiceHostFactory.cs,v 1.2 2007/05/18 21:04:37 bbaia Exp $</version>
     public class ServiceHostFactory : ServiceHostFactoryBase
     {
         /// <summary>

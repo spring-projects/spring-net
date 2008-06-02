@@ -35,8 +35,6 @@ namespace Spring.Aop.Target
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi</author>
-	/// <version>$Id: SimplePoolTargetSource.cs,v 1.9 2007/03/16 04:01:26 aseovic Exp $
-	/// </version>
     [Serializable]
     public class SimplePoolTargetSource : AbstractPoolingTargetSource, IPoolableObjectFactory
 	{

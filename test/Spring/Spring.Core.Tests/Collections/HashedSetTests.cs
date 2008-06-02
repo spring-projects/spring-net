@@ -32,7 +32,6 @@ namespace Spring.Collections
 	/// Unit tests for the HashedSet class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: HashedSetTests.cs,v 1.3 2006/04/09 07:19:06 markpollack Exp $</version>
     [TestFixture]
     public class HashedSetTests : SetTests
     {

@@ -35,7 +35,6 @@ namespace Spring.Data.Generic
 	/// such as StoredProcedure.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: NamedResultSetProcessor.cs,v 1.2 2007/07/25 13:32:31 oakinger Exp $</version>
 	public class NamedResultSetProcessor<T>
 	{
 		#region Fields

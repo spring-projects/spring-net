@@ -40,7 +40,6 @@ namespace Spring.Data.NHibernate.Generic
     /// <threadsafety statis="true" instance="true"/>
     /// <author>Sree Nivask (.NET)</author>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IHibernateOperations.cs,v 1.2 2007/09/19 22:58:10 markpollack Exp $</version>
     public interface IHibernateOperations : ICommonHibernateOperations
     {
         

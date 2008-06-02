@@ -45,7 +45,6 @@ namespace Spring.Util
 	/// <summary>
 	/// Unit tests for the ReflectionUtils class.
 	/// </summary>
-	/// <version>$Id: ReflectionUtilsTests.cs,v 1.22 2008/04/02 16:21:49 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class ReflectionUtilsTests
 	{

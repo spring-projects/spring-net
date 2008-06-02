@@ -27,7 +27,6 @@ namespace Spring.Expressions
     /// Represents parsed boolean literal node.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BooleanLiteralNode.cs,v 1.9 2007/09/07 03:01:21 markpollack Exp $</version>
     [Serializable]
     public class BooleanLiteralNode : BaseNode
     {

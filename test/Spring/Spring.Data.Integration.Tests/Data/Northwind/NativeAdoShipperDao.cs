@@ -28,11 +28,7 @@ using System.Data.SqlClient;
 
 namespace Spring.Data.Northwind
 {
-    /// <summary>
-    /// TODO: 
-    /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: NativeAdoShipperDao.cs,v 1.1 2006/06/21 14:07:30 markpollack Exp $</version>
     public class NativeAdoShipperDao : IShipperDao
     {
         #region IShipperDao Members

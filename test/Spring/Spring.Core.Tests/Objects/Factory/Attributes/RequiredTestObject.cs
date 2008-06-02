@@ -25,7 +25,6 @@ namespace Spring.Objects.Factory.Attributes
     /// Test object for testing 'required' attribute functionality.
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: RequiredTestObject.cs,v 1.1 2008/04/02 18:02:31 markpollack Exp $</version>
     public class RequiredTestObject : IObjectNameAware, IObjectFactoryAware
     {
         private string name;

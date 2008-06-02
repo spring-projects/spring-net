@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Xml
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Rick Evans</author>
-    /// <version>$Id: InstanceFactory.cs,v 1.3 2007/06/14 19:52:07 markpollack Exp $</version>
     public class InstanceFactory 
     {
         private string _factoryObjectProperty;

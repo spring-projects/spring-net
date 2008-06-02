@@ -35,7 +35,6 @@ namespace Spring.Objects.Factory.Support
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: MethodOverrides.cs,v 1.8 2007/03/16 04:01:42 aseovic Exp $</version>
     [Serializable]
     public class MethodOverrides : IEnumerable
 	{

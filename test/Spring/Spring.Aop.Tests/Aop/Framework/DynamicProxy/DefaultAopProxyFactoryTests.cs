@@ -33,7 +33,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// Unit tests for the DefaultAopProxyFactory class.
 	/// </summary>
 	/// <author>Bruno Baia</author>
-	/// <version>$Id: DefaultAopProxyFactoryTests.cs,v 1.1 2007/08/04 01:20:11 bbaia Exp $</version>
 	[TestFixture]
     public class DefaultAopProxyFactoryTests
 	{

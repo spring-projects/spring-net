@@ -170,7 +170,6 @@ namespace Spring.Context.Support
 	/// <author>Mark Pollack</author>
 	/// <author>Aleksandar Seovic</author>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: ContextHandler.cs,v 1.36 2008/03/13 20:07:33 bbaia Exp $</version>
 	/// <seealso cref="ContextRegistry"/>
 	public class ContextHandler : IConfigurationSectionHandler
 	{

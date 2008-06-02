@@ -29,7 +29,6 @@ namespace Spring.Transaction
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: TransactionUsageException.cs,v 1.6 2006/05/18 21:37:51 markpollack Exp $</version>
 	[Serializable]
 	public class TransactionUsageException : TransactionException
 	{

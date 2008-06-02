@@ -44,7 +44,6 @@ namespace Spring.Objects.Factory.Support
 	/// </p>
 	/// </remarks>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: LookupMethodReplacer.cs,v 1.3 2007/07/30 17:52:22 markpollack Exp $</version>
 	public sealed class LookupMethodReplacer : AbstractMethodReplacer
 	{
 		/// <summary>

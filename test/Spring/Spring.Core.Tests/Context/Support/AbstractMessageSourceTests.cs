@@ -28,8 +28,6 @@ using NUnit.Framework;
 
 namespace Spring.Context.Support
 {
-    /// <author></author>
-    /// <version>$Id: AbstractMessageSourceTests.cs,v 1.6 2007/08/23 14:31:18 oakinger Exp $</version>
     [TestFixture]
 	public sealed class AbstractMessageSourceTests : AbstractMessageSource
 	{

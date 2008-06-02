@@ -41,7 +41,6 @@ namespace Spring.Context.Support
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: MessageSourceAccessor.cs,v 1.8 2007/08/23 14:30:50 oakinger Exp $</version>
 	/// <seealso cref="Spring.Context.IMessageSource"/>
 	/// <seealso cref="Spring.Context.Support.ApplicationObjectSupport"/>
 	public class MessageSourceAccessor

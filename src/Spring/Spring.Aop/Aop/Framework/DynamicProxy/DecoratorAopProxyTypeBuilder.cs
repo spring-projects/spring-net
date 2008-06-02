@@ -37,7 +37,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// Builds an AOP proxy type using the decorator pattern.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: DecoratorAopProxyTypeBuilder.cs,v 1.17 2007/12/07 17:58:56 bbaia Exp $</version>
     public class DecoratorAopProxyTypeBuilder : AbstractAopProxyTypeBuilder
     {
         #region Fields

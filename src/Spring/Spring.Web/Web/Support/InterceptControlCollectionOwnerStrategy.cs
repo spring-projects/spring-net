@@ -29,7 +29,6 @@ namespace Spring.Web.Support
     /// This strategy replaces the original collection's owner with an intercepting proxy
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: InterceptControlCollectionOwnerStrategy.cs,v 1.1 2007/08/01 23:11:01 markpollack Exp $</version>
     internal class InterceptControlCollectionOwnerStrategy : IInterceptionStrategy
     {
         public bool Intercept(IApplicationContext defaultApplicationContext, ControlAccessor ctlAccessor,

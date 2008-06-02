@@ -56,7 +56,6 @@ namespace Spring.Objects.Factory
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IListableObjectFactory.cs,v 1.12 2007/07/29 19:39:27 markpollack Exp $</version>
 	public interface IListableObjectFactory : IObjectFactory
 	{
 		/// <summary>

@@ -34,7 +34,6 @@ namespace Spring.Expressions
     /// Converts string representation of expression into an instance of <see cref="IExpression"/>.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ExpressionConverter.cs,v 1.1 2007/07/31 02:13:52 markpollack Exp $</version>
     public class ExpressionConverter : TypeConverter
     {
         /// <summary>

@@ -41,7 +41,6 @@ namespace Spring.Threading
     /// </remarks>
     /// <author>Doug Lea</author>
     /// <author>Federico Spinazzi (.Net)</author>
-    /// <version>$Id: Semaphore.cs,v 1.10 2006/09/15 21:30:09 markpollack Exp $</version>
     public class Semaphore : ISync
 	{
         /// <summary>

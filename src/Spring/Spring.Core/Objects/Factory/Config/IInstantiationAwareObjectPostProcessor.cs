@@ -39,7 +39,6 @@ namespace Spring.Objects.Factory.Config {
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: IInstantiationAwareObjectPostProcessor.cs,v 1.4 2007/08/22 08:49:39 markpollack Exp $</version>
 	public interface IInstantiationAwareObjectPostProcessor : IObjectPostProcessor
 	{
 		/// <summary>

@@ -30,7 +30,6 @@ namespace Spring.DataBinding
     /// represents an entry point for the binding and unbinding process.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: BaseBindingManager.cs,v 1.1 2006/11/21 05:46:57 aseovic Exp $</version>
     public class BaseBindingManager : BaseBindingContainer
     {
         #region Constructor(s)

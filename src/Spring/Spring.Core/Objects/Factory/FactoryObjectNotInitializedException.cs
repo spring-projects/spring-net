@@ -51,7 +51,6 @@ namespace Spring.Objects.Factory
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: FactoryObjectNotInitializedException.cs,v 1.4 2007/12/05 00:28:04 bbaia Exp $</version>
 	[Serializable]
 	public class FactoryObjectNotInitializedException : ObjectCreationException
 	{

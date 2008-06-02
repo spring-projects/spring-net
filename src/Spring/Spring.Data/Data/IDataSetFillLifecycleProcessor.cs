@@ -43,7 +43,6 @@ namespace Spring.Data
 	/// </p>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: IDataSetFillLifecycleProcessor.cs,v 1.3 2006/11/29 07:18:45 markpollack Exp $</version>
 	public interface IDataSetFillLifecycleProcessor 
 	{
 	    /// <summary>

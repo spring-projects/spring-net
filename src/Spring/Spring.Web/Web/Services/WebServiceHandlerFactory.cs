@@ -46,7 +46,6 @@ namespace Spring.Web.Services
     /// to find web service object in the Spring context.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebServiceHandlerFactory.cs,v 1.12 2008/03/19 18:05:08 oakinger Exp $</version>
     [PermissionSet(SecurityAction.InheritanceDemand, Unrestricted=true)]
     public class WebServiceHandlerFactory : System.Web.Services.Protocols.WebServiceHandlerFactory, IHttpHandlerFactory
     {

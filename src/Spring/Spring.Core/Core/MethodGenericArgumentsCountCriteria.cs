@@ -42,7 +42,6 @@ namespace Spring.Core
     /// </p>
     /// </remarks>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: MethodGenericArgumentsCountCriteria.cs,v 1.1 2007/08/04 01:04:33 bbaia Exp $</version>
     public class MethodGenericArgumentsCountCriteria : ICriteria
     {
         #region Constructor (s) / Destructor

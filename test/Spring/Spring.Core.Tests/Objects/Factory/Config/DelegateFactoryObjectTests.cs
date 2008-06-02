@@ -32,7 +32,6 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the DelegateFactoryObject class.
 	/// </summary>
 	/// <author>Rick Evans</author>
-	/// <version>$Id: DelegateFactoryObjectTests.cs,v 1.5 2006/04/09 07:24:50 markpollack Exp $</version>
 	[TestFixture]
 	public sealed class DelegateFactoryObjectTests
 	{

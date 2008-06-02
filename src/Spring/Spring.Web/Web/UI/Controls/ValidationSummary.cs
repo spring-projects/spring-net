@@ -32,7 +32,6 @@ namespace Spring.Web.UI.Controls
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Jonathan Allenby</author>
-    /// <version>$Id: ValidationSummary.cs,v 1.11 2008/03/19 12:07:14 oakinger Exp $</version>
     public class ValidationSummary : AbstractValidationControl
     {
         /// <summary>

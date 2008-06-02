@@ -33,7 +33,6 @@ namespace Spring.Collections
 	/// A collection that contains no duplicate elements.
 	/// </summary>
 	/// <seealso cref="Spring.Collections.ISet"/>
-	/// <version>$Id: Set.cs,v 1.7 2007/03/16 04:01:28 aseovic Exp $</version>
     [Serializable]
     public abstract class Set : ISet
 	{

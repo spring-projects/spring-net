@@ -28,7 +28,6 @@ namespace Spring.Data.Support
     /// </summary>
     /// <remarks>We don't use it for navigating since this could lead to unpredictable consequences.</remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: RowCallbackResultSetExtractor.cs,v 1.1 2007/07/25 08:27:08 markpollack Exp $</version>
     public class RowCallbackResultSetExtractor : IResultSetExtractor
     {
         private IRowCallback rowCallback;

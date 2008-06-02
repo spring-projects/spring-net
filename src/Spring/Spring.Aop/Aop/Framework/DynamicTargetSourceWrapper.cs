@@ -38,7 +38,6 @@ namespace Spring.Aop.Framework
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	/// <version>$Id: DynamicTargetSourceWrapper.cs,v 1.4 2007/03/16 04:01:17 aseovic Exp $</version>
 	[Serializable]
     public sealed class DynamicTargetSourceWrapper : ITargetSourceWrapper
 	{

@@ -32,7 +32,6 @@ namespace Spring.Aop.Framework
 	/// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.Net)</author>
-    /// <version>$Id: InterceptorAndDynamicMethodMatcher.cs,v 1.3 2007/03/16 04:01:18 aseovic Exp $</version>
     [Serializable]
     internal class InterceptorAndDynamicMethodMatcher
 	{

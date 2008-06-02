@@ -37,7 +37,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Adhari C Mahendra (.NET)</author>
-    /// <version>$Id: ITargetSourceCreator.cs,v 1.3 2007/08/22 08:49:08 markpollack Exp $</version>
     public interface ITargetSourceCreator
     {
         /// <summary>

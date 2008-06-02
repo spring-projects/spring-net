@@ -34,7 +34,6 @@ namespace Spring.Aop.Support
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: NameMatchMethodPointcut.cs,v 1.9 2007/03/16 04:01:24 aseovic Exp $</version>
     [Serializable]
     public class NameMatchMethodPointcut : StaticMethodMatcherPointcut
 	{

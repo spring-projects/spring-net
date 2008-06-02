@@ -42,7 +42,6 @@ namespace Spring
     /// The example above will print <c>Duration: 0.123s</c>.
     /// </example>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: StopWatch.cs,v 1.1 2008/05/16 10:02:42 oakinger Exp $</version>
     public class StopWatch
     {
         private DateTime _startTime;

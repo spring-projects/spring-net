@@ -31,8 +31,6 @@ namespace Spring.Objects.Factory.Xml
 	/// A log4Net appender that does nothing (by intention).
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: NullAppender.cs,v 1.4 2006/11/13 07:04:59 markpollack Exp $</version>
-    
     public sealed class NullAppender //: AppenderSkeleton
     {
 	    /*

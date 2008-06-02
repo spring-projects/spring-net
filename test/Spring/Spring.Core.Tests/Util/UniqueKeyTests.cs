@@ -31,7 +31,6 @@ namespace Spring.Util
     /// Tests <see cref="UniqueKey"/> functionality.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: UniqueKeyTests.cs,v 1.1 2007/08/22 20:17:05 oakinger Exp $</version>
     [TestFixture]
     public class UniqueKeyTests
     {

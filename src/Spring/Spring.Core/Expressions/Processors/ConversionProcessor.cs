@@ -32,7 +32,6 @@ namespace Spring.Expressions.Processors
     /// Converts all elements in the input list to a given target type.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: ConversionProcessor.cs,v 1.1 2008/03/20 23:58:16 oakinger Exp $</version>
     public class ConversionProcessor : ICollectionProcessor
     {
         /// <summary>

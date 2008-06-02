@@ -32,7 +32,6 @@ namespace Spring
     /// Unit tests for all of the exception classes in the Spring.Core library...
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: CoreExceptionTests.cs,v 1.3 2007/01/03 06:27:43 aseovic Exp $</version>
     [TestFixture]
     public sealed class CoreExceptionTests : ExceptionsTest
     {

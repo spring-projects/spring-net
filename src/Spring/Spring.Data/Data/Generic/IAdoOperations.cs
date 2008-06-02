@@ -32,7 +32,6 @@ namespace Spring.Data.Generic
     /// Interface that defines ADO.NET related database operations using generics
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: IAdoOperations.cs,v 1.9 2007/12/04 06:48:21 markpollack Exp $</version>
     public interface IAdoOperations : ICommonAdoOperations
     {
 

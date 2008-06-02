@@ -32,7 +32,6 @@ namespace Spring.Support
 	/// A fake provider class used to test exception translation functionality
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TestDbProvider.cs,v 1.11 2007/12/06 05:48:32 markpollack Exp $</version>
 	public class TestDbProvider : IDbProvider
 	{
         private string connectionString;

@@ -39,7 +39,6 @@ namespace Spring.Objects.Factory.Support
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: WebInstantiationStrategy.cs,v 1.4 2008/05/02 16:44:50 markpollack Exp $</version>
     [Serializable]
     public class WebInstantiationStrategy : MethodInjectingInstantiationStrategy
     {

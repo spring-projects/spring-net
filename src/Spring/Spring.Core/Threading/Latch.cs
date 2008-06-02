@@ -57,7 +57,6 @@ namespace Spring.Threading
     /// </summary>
     /// <author>Doug Lea</author>
     /// <author>Federico Spinazzi (.Net)</author>
-    /// <version>$Id: Latch.cs,v 1.11 2006/09/15 19:06:08 markpollack Exp $</version>
     public class Latch : ISync
     {
         /// <summary>

@@ -36,7 +36,6 @@ namespace Spring.Web.UI.Controls
 	/// render tabs. Override <see cref="CreateTab"/> to change this behaviour.
 	/// </remarks>
 	/// <author>Erich Eichinger</author>
-	/// <version>$Id: TabContainer.cs,v 1.1 2007/07/24 13:33:28 oakinger Exp $</version>
 	public class TabContainer : Control
 	{
 		/// <summary>

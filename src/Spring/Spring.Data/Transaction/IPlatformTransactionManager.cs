@@ -40,7 +40,6 @@ namespace Spring.Transaction
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: IPlatformTransactionManager.cs,v 1.10 2007/08/01 18:53:05 markpollack Exp $</version>
 	public interface IPlatformTransactionManager
 	{
 		/// <summary>

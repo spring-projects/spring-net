@@ -35,7 +35,6 @@ namespace Spring.Context
 	/// <author>Mark Pollack (.NET)</author>
 	/// <seealso cref="Spring.Context.IMessageSource"/>
 	/// <seealso cref="Spring.Context.IMessageSourceResolvable"/>
-	/// <version>$Id: NoSuchMessageException.cs,v 1.8 2007/07/17 14:51:13 oakinger Exp $</version>
 	[Serializable]
 	public class NoSuchMessageException : ApplicationException
 	{

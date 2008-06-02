@@ -34,7 +34,6 @@ namespace Spring.Objects.Factory.Config
 	/// to a Spring <see cref="IExpression"/> that should be evaluated at runtime.
 	/// </summary>
 	/// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ExpressionHolder.cs,v 1.5 2007/08/21 19:28:33 markpollack Exp $</version>
     [Serializable]
     public class ExpressionHolder
 	{

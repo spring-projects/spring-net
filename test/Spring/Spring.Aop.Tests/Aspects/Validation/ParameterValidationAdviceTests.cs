@@ -36,7 +36,6 @@ namespace Spring.Aspects.Validation
     /// Unit tests for the CacheParameterAdvice class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ParameterValidationAdviceTests.cs,v 1.2 2008/04/02 23:00:46 markpollack Exp $</version>
     [TestFixture]
     public sealed class ParameterValidationAdviceTests
     {

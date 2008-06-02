@@ -34,7 +34,6 @@ namespace Spring.Data.Common
     /// parameters.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: DbParameters.cs,v 1.14 2007/12/06 22:34:56 markpollack Exp $</version>
     public class DbParameters : IDbParameters
     {
 

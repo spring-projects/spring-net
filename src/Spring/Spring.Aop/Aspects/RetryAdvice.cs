@@ -38,7 +38,6 @@ namespace Spring.Aspects
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: RetryAdvice.cs,v 1.5 2008/03/17 20:25:34 markpollack Exp $</version>
     public class RetryAdvice : AbstractExceptionHandlerAdvice
     {
         #region Fields

@@ -30,7 +30,6 @@ namespace Spring.Expressions
     /// Represents parsed attribute node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AttributeNode.cs,v 1.9 2007/09/07 03:01:21 markpollack Exp $</version>
     [Serializable]
     public class AttributeNode : ConstructorNode
     {

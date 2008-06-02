@@ -32,7 +32,6 @@ namespace Spring.Core.TypeConversion
     /// Converter for <see cref="System.TimeSpan"/> instances.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: TimeSpanConverter.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
     public class TimeSpanConverter : System.ComponentModel.TimeSpanConverter
     {
         #region Constants

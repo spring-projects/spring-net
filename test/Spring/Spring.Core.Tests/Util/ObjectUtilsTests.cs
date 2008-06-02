@@ -39,7 +39,6 @@ namespace Spring.Util
     /// Unit tests for the ObjectUtils class.
     /// </summary>
     /// <author>Rick Evans (.NET)</author>
-    /// <version>$Id: ObjectUtilsTests.cs,v 1.4 2007/08/17 02:43:30 markpollack Exp $</version>
     [TestFixture]
     public class ObjectUtilsTests
     {

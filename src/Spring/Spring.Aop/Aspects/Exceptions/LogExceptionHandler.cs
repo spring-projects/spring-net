@@ -29,7 +29,6 @@ namespace Spring.Aspects.Exceptions
     /// Log the exceptions.  Default log nameis "LogExceptionHandler" and log level is Debug 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: LogExceptionHandler.cs,v 1.6 2008/02/26 00:03:24 markpollack Exp $</version>
     public class LogExceptionHandler : AbstractExceptionHandler
     {
         private string logName = "LogExceptionHandler";

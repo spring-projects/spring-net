@@ -40,7 +40,6 @@ namespace Spring.Objects.Factory.Xml
     /// Tests for collections in XML object definitions.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: XmlObjectCollectionTests.cs,v 1.9 2007/08/08 17:49:04 bbaia Exp $</version>
     [TestFixture]
     public sealed class XmlObjectCollectionTests
     {

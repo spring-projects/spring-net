@@ -26,7 +26,6 @@ namespace Spring.Expressions.Processors
     /// Implementation of the count aggregator.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: CountAggregator.cs,v 1.2 2006/12/04 08:58:33 aseovic Exp $</version>
     public class CountAggregator : ICollectionProcessor
     {
         /// <summary>

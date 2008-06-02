@@ -39,7 +39,6 @@ namespace Spring.Objects.Factory.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans (.NET)</author>
-	/// <version>$Id: MethodOverride.cs,v 1.9 2007/08/22 08:52:03 markpollack Exp $</version>
     [Serializable]
     public abstract class MethodOverride
 	{

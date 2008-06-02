@@ -45,7 +45,6 @@ namespace Spring.Objects.Factory.Config
 	/// <author>Juergen Hoeller</author>
 	/// <author>Keith Donald</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: AbstractFactoryObject.cs,v 1.13 2007/03/16 04:01:34 aseovic Exp $</version>
     [Serializable]
     public abstract class AbstractFactoryObject : IFactoryObject, IInitializingObject, IDisposable
 	{

@@ -55,7 +55,6 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: TransactionAspectSupport.cs,v 1.15 2008/05/27 19:06:57 markpollack Exp $</version>
 	[Serializable]
 	public class TransactionAspectSupport : IInitializingObject
 	{

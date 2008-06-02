@@ -27,7 +27,6 @@ namespace Spring.Objects.Factory.Config
 	/// The various autowiring modes.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: AutoWiringMode.cs,v 1.8 2007/03/16 04:01:34 aseovic Exp $</version>
     [Serializable]
     public enum AutoWiringMode 
     {

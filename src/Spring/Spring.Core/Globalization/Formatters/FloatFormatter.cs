@@ -37,7 +37,6 @@ namespace Spring.Globalization.Formatters
 	/// </para>
 	/// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: FloatFormatter.cs,v 1.4 2006/04/09 07:18:47 markpollack Exp $</version>
     public class FloatFormatter : IFormatter
 	{
         /// <summary>

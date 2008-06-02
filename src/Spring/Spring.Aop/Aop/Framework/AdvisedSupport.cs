@@ -57,7 +57,6 @@ namespace Spring.Aop.Framework
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: AdvisedSupport.cs,v 1.36 2008/01/14 20:49:47 oakinger Exp $</version>
     /// <seealso cref="Spring.Aop.Framework.IAopProxy"/>
     [Serializable]
     public class AdvisedSupport : ProxyConfig, IAdvised

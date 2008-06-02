@@ -37,7 +37,6 @@ namespace Spring.Threading
     /// 
     /// <author>Doug Lea</author>
     /// <author>Federico Spinazzi (.Net)</author>
-    /// <version>$Id: ISync.cs,v 1.6 2006/09/15 19:06:08 markpollack Exp $</version>
     public interface ISync
 	{
         /// <summary>  Wait (possibly forever) until successful passage.

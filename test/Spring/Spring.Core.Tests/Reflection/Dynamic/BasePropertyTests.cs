@@ -11,7 +11,6 @@ namespace Spring.Reflection.Dynamic
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: BasePropertyTests.cs,v 1.1 2008/05/17 11:05:27 oakinger Exp $</version>
     public abstract class BasePropertyTests
     {
         protected Inventor tesla;

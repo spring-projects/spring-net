@@ -47,7 +47,6 @@ namespace Spring.Globalization
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractLocalizer.cs,v 1.5 2007/07/24 17:26:25 oakinger Exp $</version>
     public abstract class AbstractLocalizer : ILocalizer
     {
         private IResourceCache resourceCache = new NullResourceCache();

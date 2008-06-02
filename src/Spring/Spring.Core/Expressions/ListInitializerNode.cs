@@ -28,7 +28,6 @@ namespace Spring.Expressions
 	/// Represents parsed list initializer node in the navigation expression.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ListInitializerNode.cs,v 1.4 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public class ListInitializerNode : NodeWithArguments
 	{

@@ -48,7 +48,6 @@ namespace Spring.Objects.Factory.Config
     /// </p>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: TypeAliasConfigurer.cs,v 1.6 2007/07/31 18:16:49 bbaia Exp $</version>
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
     /// <seealso cref="Spring.Context.IApplicationContext"/>	
     [Serializable]

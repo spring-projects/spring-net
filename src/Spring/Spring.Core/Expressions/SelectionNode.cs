@@ -28,7 +28,6 @@ namespace Spring.Expressions
     /// Represents parsed selection node in the navigation expression.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: SelectionNode.cs,v 1.6 2008/03/25 22:33:04 oakinger Exp $</version>
     [Serializable]
     public class SelectionNode : BaseNode
     {

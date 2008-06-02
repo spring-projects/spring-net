@@ -28,7 +28,6 @@ namespace Spring.Objects.Factory.Config
     /// resolves variable name against registry key.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: RegistryVariableSource.cs,v 1.3 2007/08/03 08:31:24 oakinger Exp $</version>
     public class RegistryVariableSource : IVariableSource
     {
         private RegistryKey key;

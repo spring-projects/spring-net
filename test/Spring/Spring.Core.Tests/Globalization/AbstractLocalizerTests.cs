@@ -35,7 +35,6 @@ namespace Spring.Globalization
     /// Unit tests for the localizers.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: AbstractLocalizerTests.cs,v 1.5 2007/07/24 17:26:47 oakinger Exp $</version>
     public abstract class AbstractLocalizerTests
     {
         private ILocalizer localizer;

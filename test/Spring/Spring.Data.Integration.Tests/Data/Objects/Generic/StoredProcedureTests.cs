@@ -41,7 +41,6 @@ namespace Spring.Data.Objects.Generic
     /// This calss contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: StoredProcedureTests.cs,v 1.3 2007/08/07 19:50:44 markpollack Exp $</version>
     [TestFixture]
     public class StoredProcedureTests
     {

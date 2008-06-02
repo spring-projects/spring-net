@@ -36,7 +36,6 @@ namespace Spring.Aop.Support
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: AbstractObjectFactoryPointcutAdvisor.cs,v 1.2 2007/08/10 17:39:44 bbaia Exp $</version>
     public abstract class AbstractObjectFactoryPointcutAdvisor : AbstractPointcutAdvisor, IObjectFactoryAware
     {
         private string adviceObjectName;

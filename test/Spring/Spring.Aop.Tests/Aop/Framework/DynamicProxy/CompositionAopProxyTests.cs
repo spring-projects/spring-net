@@ -34,7 +34,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Bruno Baia (.NET)</author>
-    /// <version>$Id: CompositionAopProxyTests.cs,v 1.4 2007/08/02 04:15:37 markpollack Exp $</version>
     [TestFixture]
     public class CompositionAopProxyTests : AbstractAopProxyTests
     {

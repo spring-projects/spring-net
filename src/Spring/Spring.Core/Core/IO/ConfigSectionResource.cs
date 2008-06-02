@@ -47,7 +47,6 @@ namespace Spring.Core.IO
     /// </remarks>
     /// <author>Mark Pollack</author>
     /// <author>Rick Evans</author>
-    /// <version>$Id: ConfigSectionResource.cs,v 1.27 2007/12/05 00:57:31 bbaia Exp $</version>
     public class ConfigSectionResource : AbstractResource
     {
         private XmlElement configElement;

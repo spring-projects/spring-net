@@ -3,7 +3,6 @@
 <!--
 	Test that inner object for target means that we can use
 	autowire without ambiguity from target and proxy.
-	$Id: innerBeanTarget.xml,v 1.4 2005/03/05 23:54:02 gcaprio Exp $
 -->
 
 <objects xmlns="http://www.springframework.net" 

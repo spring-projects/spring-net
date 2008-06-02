@@ -46,7 +46,6 @@ namespace Spring.Aop.Framework.Adapter
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: MethodBeforeAdviceInterceptor.cs,v 1.5 2007/03/16 04:01:21 aseovic Exp $</version>
     [Serializable]
     internal sealed class MethodBeforeAdviceInterceptor : IMethodInterceptor
     {

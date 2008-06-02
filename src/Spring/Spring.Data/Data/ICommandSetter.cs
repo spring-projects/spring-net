@@ -33,7 +33,6 @@ namespace Spring.Data
 	/// The CommandType and CommandText will have already been supplied.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: ICommandSetter.cs,v 1.5 2006/12/02 07:35:23 markpollack Exp $</version>
 	public interface ICommandSetter 
 	{
 	    

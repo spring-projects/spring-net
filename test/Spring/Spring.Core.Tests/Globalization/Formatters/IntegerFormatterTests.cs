@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
 	/// Unit tests for IntegerFormatter class.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: IntegerFormatterTests.cs,v 1.3 2007/06/01 08:53:06 oakinger Exp $</version>
     [TestFixture]
     public class IntegerFormatterTests
 	{

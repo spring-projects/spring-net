@@ -29,7 +29,6 @@ namespace Spring.Transaction.Support
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollac (.NET)</author>
-    /// <version>$Id: ITransactionOperations.cs,v 1.1 2007/08/01 18:53:14 markpollack Exp $</version>
     public interface ITransactionOperations
     {
         /// <summary>

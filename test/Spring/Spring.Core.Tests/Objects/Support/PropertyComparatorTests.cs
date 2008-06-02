@@ -41,7 +41,6 @@ namespace Spring.Objects.Support
     /// </remarks>
     /// <author>Rick Evans</author>
     /// <author>Michael Loll</author>
-    /// <version>$Id: PropertyComparatorTests.cs,v 1.10 2007/07/31 00:09:35 markpollack Exp $</version>
     [TestFixture]
     public sealed class PropertyComparatorTests
     {

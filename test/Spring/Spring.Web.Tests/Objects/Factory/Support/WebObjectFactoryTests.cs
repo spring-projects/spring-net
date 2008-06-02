@@ -33,7 +33,6 @@ namespace Spring.Objects.Factory.Support
     /// Unit tests for the WebObjectFactory class.
     /// </summary>
     /// <author>Rick Evans</author>
-    /// <version>$Id: WebObjectFactoryTests.cs,v 1.5 2008/03/14 12:02:45 oakinger Exp $</version>
     [TestFixture]
     public sealed class WebObjectFactoryTests
     {

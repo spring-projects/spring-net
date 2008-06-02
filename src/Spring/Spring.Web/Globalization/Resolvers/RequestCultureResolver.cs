@@ -39,7 +39,6 @@ namespace Spring.Globalization.Resolvers
     /// the web browser.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: RequestCultureResolver.cs,v 1.4 2007/08/25 14:26:35 oakinger Exp $</version>
     public class RequestCultureResolver : DefaultWebCultureResolver
     {
         /// <summary>

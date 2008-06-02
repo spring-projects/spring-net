@@ -35,7 +35,6 @@ namespace Spring.Web.Support
     /// This TypeBuilder dynamically implements the <see cref="ISupportsWebDependencyInjection"/> contract on a given type.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: SupportsWebDependencyInjectionTypeBuilder.cs,v 1.1 2007/08/01 23:11:01 markpollack Exp $</version>
     internal class SupportsWebDependencyInjectionTypeBuilder : InheritanceProxyTypeBuilder
     {
         private const string PROXY_TYPE_NAME = "SupportsWebDependencyInjectionControlProxy";

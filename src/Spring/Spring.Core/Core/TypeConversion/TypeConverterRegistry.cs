@@ -43,7 +43,6 @@ namespace Spring.Core.TypeConversion
     /// Registry class that allows users to register and retrieve type converters.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: TypeConverterRegistry.cs,v 1.1 2007/07/31 18:16:08 bbaia Exp $</version>
     public class TypeConverterRegistry
     {
         /// <summary>

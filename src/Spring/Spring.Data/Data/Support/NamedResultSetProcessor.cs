@@ -31,7 +31,6 @@ namespace Spring.Data.Support
 	/// such as StoredProcedure.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: NamedResultSetProcessor.cs,v 1.3 2006/11/29 07:18:46 markpollack Exp $</version>
 	public class NamedResultSetProcessor 
 	{
 		#region Fields

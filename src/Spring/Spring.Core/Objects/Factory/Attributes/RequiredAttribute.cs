@@ -31,7 +31,6 @@ namespace Spring.Objects.Factory.Attributes
     /// </remarks>
     /// <author>Rob Harrop</author>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: RequiredAttribute.cs,v 1.1 2008/04/02 18:02:24 markpollack Exp $</version>
     [AttributeUsage(AttributeTargets.Property, Inherited = true)]    
     public class RequiredAttribute : Attribute
     {

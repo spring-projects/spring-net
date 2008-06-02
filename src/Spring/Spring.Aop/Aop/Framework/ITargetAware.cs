@@ -32,7 +32,6 @@ namespace Spring.Aop.Framework
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: ITargetAware.cs,v 1.3 2006/04/09 07:18:35 markpollack Exp $</version>
     public interface ITargetAware
     {
         /// <summary>

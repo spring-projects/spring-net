@@ -29,7 +29,6 @@ namespace Spring.Expressions
     /// Base type for nodes that accept arguments.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: NodeWithArguments.cs,v 1.15 2007/09/07 03:01:26 markpollack Exp $</version>
     [Serializable]
     public abstract class NodeWithArguments : BaseNode
     {

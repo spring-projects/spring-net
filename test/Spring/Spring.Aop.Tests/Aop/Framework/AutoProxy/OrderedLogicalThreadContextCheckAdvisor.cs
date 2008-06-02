@@ -40,7 +40,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// LogicalThreadContext.
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
-    /// <version>$Id: OrderedLogicalThreadContextCheckAdvisor.cs,v 1.2 2006/09/15 21:25:17 markpollack Exp $</version>
     public class OrderedLogicalThreadContextCheckAdvisor : StaticMethodMatcherPointcutAdvisor, IInitializingObject
     {
         

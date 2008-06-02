@@ -35,7 +35,6 @@ namespace Spring.Data.NHibernate.Support
     /// <author>Mark Pollack (.NET)</author>
     /// <author>Erich Eichinger</author>
     /// <author>Harald Radi</author>
-    /// <version>$Id: OpenSessionInViewModule.cs,v 1.7 2008/01/21 06:39:12 oakinger Exp $</version>
     public class OpenSessionInViewModule : SessionScope, IHttpModule
     {
         /// <summary>

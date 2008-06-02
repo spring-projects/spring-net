@@ -44,7 +44,6 @@ namespace Spring.Web.UI.Controls
     /// </example>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: Head.cs,v 1.8 2007/11/28 23:26:19 oakinger Exp $</version>
     public class Head : Control
     {
         private string _defaultStyleType = "text/css";

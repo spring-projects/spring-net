@@ -42,7 +42,6 @@ namespace Spring.Objects.Factory.Config
     /// to parse all string values contained in a ObjectDefinition, resolving any placeholders found.
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <version>$Id: ObjectDefinitionVisitor.cs,v 1.9 2008/02/18 00:02:27 bbaia Exp $</version>
     public class ObjectDefinitionVisitor
     {
         private IVariableSource variableSource;

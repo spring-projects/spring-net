@@ -75,7 +75,6 @@ namespace Spring.Testing.NUnit
     /// <author>Rob Harrop</author>
     /// <author>Rick Evans</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: AbstractDependencyInjectionSpringContextTests.cs,v 1.4 2008/03/14 12:02:45 oakinger Exp $</version>
     public abstract class AbstractDependencyInjectionSpringContextTests : AbstractSpringContextTests
     {
         private bool populateProtectedVariables = false;

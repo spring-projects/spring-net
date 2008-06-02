@@ -37,7 +37,6 @@ namespace Spring.Testing.NUnit
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: AbstractSpringContextTests.cs,v 1.2 2007/08/20 18:38:11 markpollack Exp $</version>
     public abstract class AbstractSpringContextTests 
     {
         /// <summary>

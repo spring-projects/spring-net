@@ -40,7 +40,6 @@ namespace Spring.Context {
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    /// <version>$Id: IMessageSource.cs,v 1.13 2007/07/02 21:24:39 markpollack Exp $</version>
     /// <seealso cref="Spring.Context.Support.ResourceSetMessageSource"/>
     public interface IMessageSource {
         /// <summary>

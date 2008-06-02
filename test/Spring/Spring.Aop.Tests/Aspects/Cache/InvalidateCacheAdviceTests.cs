@@ -35,7 +35,6 @@ namespace Spring.Aspects.Cache
     /// Unit tests for the InvalidateCacheAdvice class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    /// <version>$Id: InvalidateCacheAdviceTests.cs,v 1.4 2007/04/01 15:05:34 bbaia Exp $</version>
     [TestFixture]
     public sealed class InvalidateCacheAdviceTests
     {

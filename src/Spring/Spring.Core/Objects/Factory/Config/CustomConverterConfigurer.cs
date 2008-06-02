@@ -211,7 +211,6 @@ namespace Spring.Objects.Factory.Config
 	/// </example>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Simon White (.NET)</author>
-	/// <version>$Id: CustomConverterConfigurer.cs,v 1.14 2007/05/11 02:32:14 markpollack Exp $</version>
 	/// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
 	/// <seealso cref="Spring.Context.IApplicationContext"/>
 	/// <seealso cref="Spring.Objects.Factory.Config.IConfigurableObjectFactory.RegisterCustomConverter(Type, TypeConverter)"/>

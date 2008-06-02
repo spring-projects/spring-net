@@ -46,7 +46,6 @@ namespace Spring.Aop.Target
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Federico Spinazzi (.NET)</author>
-	/// <version>$Id: AbstractPrototypeTargetSource.cs,v 1.11 2007/07/28 07:32:52 markpollack Exp $</version>
     public abstract class AbstractPrototypeTargetSource
 		: ITargetSource, IObjectFactoryAware, IInitializingObject
 	{

@@ -86,7 +86,6 @@ namespace Spring.Aop.Framework
 	/// <author>Choy Rim (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <version>$Id: ProxyFactoryObject.cs,v 1.26 2007/08/03 14:38:30 markpollack Exp $</version>
 	/// <seealso cref="Spring.Aop.Framework.ProxyFactoryObject.InterceptorNames"/>
 	/// <seealso cref="Spring.Aop.Framework.ProxyFactoryObject.ProxyInterfaces"/>
 	/// <seealso cref="AopAlliance.Intercept.IMethodInterceptor"/>

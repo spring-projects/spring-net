@@ -33,7 +33,6 @@ namespace Spring.Dao
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <version>$Id: DataAccessResourceFailureException.cs,v 1.5 2006/05/18 21:37:50 markpollack Exp $</version>
 	[Serializable]
 	public class DataAccessResourceFailureException : DataAccessException
 	{
