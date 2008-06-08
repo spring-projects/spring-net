@@ -143,6 +143,7 @@
     <Compile Include="Collections\StaticSetTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\SynchronizedHashtableTests.cs" />
     <Compile Include="CommonTypes.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -276,6 +277,7 @@
     <Compile Include="Expressions\MethodNodeTests.cs" />
     <Compile Include="Expressions\Processors\ConversionProcessorTests.cs" />
     <Compile Include="Expressions\Processors\OrderByProcessorTests.cs" />
+    <Compile Include="Expressions\PropertyOrFieldNodeTests.cs" />
     <Compile Include="Expressions\ReferenceNodeTests.cs" />
     <Compile Include="Expressions\SelectionNodeTests.cs" />
     <Compile Include="Globalization\AbstractLocalizerTests.cs">

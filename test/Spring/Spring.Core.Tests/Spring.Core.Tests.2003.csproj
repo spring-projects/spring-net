@@ -896,6 +896,41 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Expressions\FunctionNodeTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\MethodNodeTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\PropertyOrFieldNodeTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\ReferenceNodeTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\SelectionNodeTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\Processors\ConversionProcessorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\Processors\OrderByProcessorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Globalization\AbstractLocalizerTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
