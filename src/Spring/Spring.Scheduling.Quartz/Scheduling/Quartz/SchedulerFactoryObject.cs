@@ -679,12 +679,12 @@ namespace Spring.Scheduling.Quartz
                 // its default configuration when explicitly given properties.
                 if (taskExecutor != null)
                 {
-                    mergedProps[StdSchedulerFactory.PROP_THREAD_POOL_CLASS] =
+                    mergedProps[StdSchedulerFactory.PropertyThreadPoolType] =
                         typeof (LocalTaskExecutorThreadPool).FullName;
                 }
                 else
                 {
-                    mergedProps.Set(StdSchedulerFactory.PROP_THREAD_POOL_CLASS, typeof (SimpleThreadPool).Name);
+                    mergedProps.Set(StdSchedulerFactory.PropertyThreadPoolType, typeof(SimpleThreadPool).Name);
                     mergedProps[PROP_THREAD_COUNT] = Convert.ToString(DEFAULT_THREAD_COUNT);
                 }
 
@@ -697,25 +697,29 @@ namespace Spring.Scheduling.Quartz
                     using (StreamReader sr = new StreamReader(configLocation.InputStream))
                     {
                         string line;
-                        while ((line =sr.ReadLine()) != null)
+                        while ((line = sr.ReadLine()) != null)
                         {
-                            string[] lineItems = line.Split('=');
+                            string[] lineItems = line.Split(new char[] { '=' }, 2);
                             if (lineItems.Length == 2)
                             {
-                                mergedProps[lineItems[0]] = lineItems[1];
+                                mergedProps[lineItems[0].Trim()] = lineItems[1].Trim();
                             }
                         } 
                     }
                     
                 }
 
-                MergePropertiesIntoMap(quartzProperties, mergedProps);
+                if (quartzProperties != null)
+                {
+                    // if given quartz properties, merge to them to configuration
+                	MergePropertiesIntoMap(quartzProperties, mergedProps);
+                }
 
 
                 // Make sure to set the scheduler name as configured in the Spring configuration.
                 if (schedulerName != null)
                 {
-                    mergedProps.Add(StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, schedulerName);
+                    mergedProps.Add(StdSchedulerFactory.PropertySchedulerInstanceName, schedulerName);
                 }
 
                 ((StdSchedulerFactory) schedulerFactory).Initialize(mergedProps);

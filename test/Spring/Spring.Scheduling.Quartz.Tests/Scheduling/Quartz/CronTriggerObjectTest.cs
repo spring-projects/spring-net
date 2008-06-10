@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections;
 
 using NUnit.Framework;
 
@@ -86,6 +87,15 @@ namespace Spring.Scheduling.Quartz
             Assert.AreSame(jd, cronTrigger.JobDetail, "job details weren't same");
         }
 
+        [Test]
+        public void TestJobDataAsMap()
+        {
+            Hashtable data = new Hashtable();
+            data["foo"] = "bar";
+            data["number"] = 123;
+            cronTrigger.JobDataAsMap = data;
+            CollectionAssert.AreEqual(data, cronTrigger.JobDataMap, "Data differed");
+        }
 
     }
 

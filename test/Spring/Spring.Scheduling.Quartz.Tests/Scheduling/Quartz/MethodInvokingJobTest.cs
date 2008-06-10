@@ -92,6 +92,17 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(1, job.CounterValue, "Job was not invoked once");
         }
 
+        [Test]
+        public void TestMethodInvoker_PrivateMethod()
+        {
+            InvocationCountingJob job = new InvocationCountingJob();
+            MethodInvoker mi = new MethodInvoker();
+            mi.TargetObject = job;
+            mi.TargetMethod = "PrivateMethod";
+            mi.Prepare();
+            methodInvokingJob.MethodInvoker = mi;
+            methodInvokingJob.Execute(CreateMinimalJobExecutionContext());
+        }
         
         private static JobExecutionContext CreateMinimalJobExecutionContext()
         {
@@ -130,6 +141,9 @@ namespace Spring.Scheduling.Quartz
             throw new Exception();
         }
 
+        private void PrivateMethod()
+        {
+        }
 
         public int CounterValue
         {

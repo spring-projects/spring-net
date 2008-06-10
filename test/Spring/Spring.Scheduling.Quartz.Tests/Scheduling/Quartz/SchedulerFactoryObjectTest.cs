@@ -16,6 +16,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Threading;
 
 using NUnit.Framework;
@@ -24,6 +28,8 @@ using Quartz;
 using Quartz.Impl;
 
 using Rhino.Mocks;
+
+using Spring.Core.IO;
 
 namespace Spring.Scheduling.Quartz
 {
@@ -34,7 +40,9 @@ namespace Spring.Scheduling.Quartz
     [TestFixture]
     public class SchedulerFactoryObjectTest
     {
-        private MockRepository mockery = null;
+        private static readonly MethodInfo m_InitSchedulerFactory = typeof(SchedulerFactoryObject).GetMethod("InitSchedulerFactory",
+                                                        BindingFlags.Instance | BindingFlags.NonPublic);
+        private MockRepository mockery;
         private SchedulerFactoryObject factory;
 
         [SetUp]
@@ -256,6 +264,48 @@ namespace Spring.Scheduling.Quartz
             factory.SchedulerFactoryType = typeof(StdSchedulerFactory);
         }
 
+        [Test]
+        public void TestInitSchedulerFactory_MinimalDefaults()
+        {
+            TestSchedulerFactory.Mockery.ReplayAll();
+
+            factory.SchedulerName = "testFactoryObject";
+            StdSchedulerFactory factoryToPass = new StdSchedulerFactory();
+            m_InitSchedulerFactory.Invoke(factory, new object[] { factoryToPass });
+        }
+
+        [Test]
+        public void TestInitSchedulerFactory_ConfigLocationReadingShouldPreserverExtraEqualsMarksAndTrimKeysAndValues()
+        {
+            const string ConnectionStringValue = "Server=(local);Database=quartz;Trusted_Connection=True;";
+            const string ConnectionStringKey = "quartz.dataSource.default.connectionString";
+            string configuration =
+                @"quartz.jobStore.type = Quartz.Impl.AdoJobStore.JobStoreTX, Quartz
+quartz.jobStore.useProperties = false
+quartz.jobStore.dataSource = default" + Environment.NewLine +
+ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
+"quartz.dataSource.default.provider = SqlServer-20";
+
+            // initialize data
+            MemoryStream ms = new MemoryStream();
+            byte[] data = Encoding.UTF8.GetBytes(configuration);
+            ms.Write(data, 0, data.Length);
+            ms.Seek(0, SeekOrigin.Begin);
+            ms.Position = 0;
+
+            // intercept call
+            InterceptingStdSChedulerFactory factoryToPass = new InterceptingStdSChedulerFactory();
+
+            TestSchedulerFactory.Mockery.ReplayAll();
+
+            factory.ConfigLocation = new TestConfigLocation(ms, "description");
+            
+            m_InitSchedulerFactory.Invoke(factory, new object[] { factoryToPass });
+
+            Assert.AreEqual(ConnectionStringValue, factoryToPass.Properties[ConnectionStringKey]);
+
+        }
+
         [TearDown]
         public void TearDown()
         {
@@ -267,6 +317,13 @@ namespace Spring.Scheduling.Quartz
         }
 
 
+    }
+
+    internal class TestConfigLocation : InputStreamResource
+    {
+        public TestConfigLocation(Stream inputStream, string description) : base(inputStream, description)
+        {
+        }
     }
 
     public class TestSchedulerFactory : ISchedulerFactory
@@ -305,5 +362,18 @@ namespace Spring.Scheduling.Quartz
         }
     }
 
+    public class InterceptingStdSChedulerFactory : StdSchedulerFactory
+    {
+        private NameValueCollection properties;
 
+        public override void Initialize(NameValueCollection props)
+        {
+            this.properties = props;
+        }
+
+        public NameValueCollection Properties
+        {
+            get { return properties; }
+        }
+    }
 }

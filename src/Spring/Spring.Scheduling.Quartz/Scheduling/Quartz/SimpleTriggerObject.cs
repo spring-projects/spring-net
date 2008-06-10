@@ -54,14 +54,14 @@ namespace Spring.Scheduling.Quartz
 		private long startDelay = 0;
 		private JobDetail jobDetail;
 		private string objectName;
-        private readonly Constants constants = new Constants(typeof(MisfirePolicy.SimpleTrigger), typeof(MisfirePolicy));
+        private readonly Constants constants = new Constants(typeof(MisfireInstruction.SimpleTrigger), typeof(MisfireInstruction));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleTriggerObject"/> class.
         /// </summary>
         public SimpleTriggerObject()
         {
-            RepeatCount = REPEAT_INDEFINITELY;
+            RepeatCount = RepeatIndefinitely;
         }
 
 		/// <summary> 
@@ -80,14 +80,14 @@ namespace Spring.Scheduling.Quartz
 		/// <summary> 
 		/// Set the misfire instruction via the name of the corresponding
 		/// constant in the SimpleTrigger class.
-        /// Default is <see cref="MisfirePolicy.SmartPolicy" />.
+        /// Default is <see cref="MisfireInstruction.SmartPolicy" />.
 		/// </summary>
-		/// <seealso cref="MisfirePolicy.SimpleTrigger.FireNow" />
-        /// <seealso cref="MisfirePolicy.SimpleTrigger.RescheduleNextWithExistingCount" />
-        /// <seealso cref="MisfirePolicy.SimpleTrigger.RescheduleNextWithRemainingCount" />
-        /// <seealso cref="MisfirePolicy.SimpleTrigger.RescheduleNowWithExistingRepeatCount" />
-        /// <seealso cref="MisfirePolicy.SimpleTrigger.RescheduleNowWithRemainingRepeatCount" />
-        /// <seealso cref="MisfirePolicy.SmartPolicy" />
+        /// <seealso cref="MisfireInstruction.SimpleTrigger.FireNow" />
+        /// <seealso cref="MisfireInstruction.SimpleTrigger.RescheduleNextWithExistingCount" />
+        /// <seealso cref="MisfireInstruction.SimpleTrigger.RescheduleNextWithRemainingCount" />
+        /// <seealso cref="MisfireInstruction.SimpleTrigger.RescheduleNowWithExistingRepeatCount" />
+        /// <seealso cref="MisfireInstruction.SimpleTrigger.RescheduleNowWithRemainingRepeatCount" />
+        /// <seealso cref="MisfireInstruction.SmartPolicy" />
 		public virtual string MisfireInstructionName
 		{
 			set 
@@ -179,7 +179,7 @@ namespace Spring.Scheduling.Quartz
 			}
 			if (Group == null)
 			{
-                Group = SchedulerConstants.DEFAULT_GROUP;
+                Group = SchedulerConstants.DefaultGroup;
 			}
 			if (StartTimeUtc == DateTime.MinValue)
 			{

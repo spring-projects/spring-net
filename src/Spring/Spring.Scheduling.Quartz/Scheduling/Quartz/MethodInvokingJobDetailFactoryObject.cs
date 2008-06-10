@@ -65,7 +65,7 @@ namespace Spring.Scheduling.Quartz
         /// </summary>
 		public MethodInvokingJobDetailFactoryObject()
 		{
-            group = SchedulerConstants.DEFAULT_GROUP;
+            group = SchedulerConstants.DefaultGroup;
 		}
 
 
@@ -84,7 +84,7 @@ namespace Spring.Scheduling.Quartz
 		/// Default is the default group of the Scheduler.
 		/// </summary>
 		/// <seealso cref="JobDetail.Group" />
-        /// <seealso cref="SchedulerConstants.DEFAULT_GROUP" />
+        /// <seealso cref="SchedulerConstants.DefaultGroup" />
 		public virtual string Group
 		{
 			set { group = value; }

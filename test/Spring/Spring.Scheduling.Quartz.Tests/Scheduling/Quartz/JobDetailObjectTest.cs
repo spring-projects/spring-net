@@ -90,7 +90,7 @@ namespace Spring.Scheduling.Quartz
             jobDetail.ObjectName = objectName;
             jobDetail.Group = null;
             jobDetail.AfterPropertiesSet();
-            Assert.AreEqual(SchedulerConstants.DEFAULT_GROUP, jobDetail.Group, "Groups differ");
+            Assert.AreEqual(SchedulerConstants.DefaultGroup, jobDetail.Group, "Groups differ");
             Assert.AreEqual(objectName, jobDetail.Name, "Names differ");
         }
 
@@ -113,9 +113,13 @@ namespace Spring.Scheduling.Quartz
         {
             const string objectName = "springJobDetailObject";
             jobDetail.ObjectName = objectName;
-            jobDetail.ApplicationContext = new XmlApplicationContext();
-            jobDetail.ApplicationContextJobDataKey = "applicationContextJobDataKey";
+            XmlApplicationContext ctx = new XmlApplicationContext();
+            jobDetail.ApplicationContext = ctx;
+            string key = "applicationContextJobDataKey";
+            jobDetail.ApplicationContextJobDataKey = key;
             jobDetail.AfterPropertiesSet();
+            Assert.AreSame(ctx, jobDetail.ApplicationContext, "ApplicationContext was not set correctly");
+            Assert.AreSame(ctx, jobDetail.JobDataMap[key], "ApplicationContext was not set to job data map");
         }
 
         [Test]

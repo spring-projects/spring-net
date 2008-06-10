@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Collections;
 
 using NUnit.Framework;
 
@@ -90,6 +91,16 @@ namespace Spring.Scheduling.Quartz
             simpleTrigger.AfterPropertiesSet();
             base.TestAfterPropertiesSet_JobDetailGiven();
             Assert.AreSame(jd, simpleTrigger.JobDetail, "job details weren't same");
+        }
+
+        [Test]
+        public void TestJobDataAsMap()
+        {
+            Hashtable data = new Hashtable();
+            data["foo"] = "bar";
+            data["number"] = 123;
+            simpleTrigger.JobDataAsMap = data;
+            CollectionAssert.AreEqual(data, simpleTrigger.JobDataMap, "Data differed");
         }
 
     }

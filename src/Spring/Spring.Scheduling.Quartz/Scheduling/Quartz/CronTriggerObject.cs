@@ -54,7 +54,7 @@ namespace Spring.Scheduling.Quartz
 	{
 		private JobDetail jobDetail;
 		private string objectName;
-        private readonly Constants constants = new Constants(typeof(MisfirePolicy.CronTrigger), typeof(MisfirePolicy));
+        private readonly Constants constants = new Constants(typeof(MisfireInstruction.CronTrigger), typeof(MisfireInstruction));
 
 
 		/// <summary> 
@@ -73,11 +73,11 @@ namespace Spring.Scheduling.Quartz
 		/// <summary> 
 		/// Set the misfire instruction via the name of the corresponding
 		/// constant in the CronTrigger class.
-		/// Default is <code>MISFIRE_INSTRUCTION_SMART_POLICY</code>.
+        /// Default is <see cref="MisfireInstruction.SmartPolicy" />.
 		/// </summary>
-        /// <seealso cref="MisfirePolicy.CronTrigger.FireOnceNow" />
-        /// <seealso cref="MisfirePolicy.CronTrigger.DoNothing" />
-        /// <seealso cref="MisfirePolicy.SmartPolicy" />
+        /// <seealso cref="MisfireInstruction.CronTrigger.FireOnceNow" />
+        /// <seealso cref="MisfireInstruction.CronTrigger.DoNothing" />
+        /// <seealso cref="MisfireInstruction.SmartPolicy" />
 		public virtual string MisfireInstructionName
 		{
 			set 
@@ -154,7 +154,7 @@ namespace Spring.Scheduling.Quartz
 			}
 			if (Group == null)
 			{
-                Group = SchedulerConstants.DEFAULT_GROUP;
+                Group = SchedulerConstants.DefaultGroup;
 			}
 			if (StartTimeUtc == DateTime.MinValue)
 			{

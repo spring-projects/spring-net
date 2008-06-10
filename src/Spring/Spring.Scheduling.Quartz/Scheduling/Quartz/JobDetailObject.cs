@@ -33,7 +33,7 @@ namespace Spring.Scheduling.Quartz
 	/// <author>Juergen Hoeller</author>
 	/// <seealso cref="JobDetail.Name" />
 	/// <seealso cref="JobDetail.Group" />
-	/// <seealso cref="SchedulerConstants.DEFAULT_GROUP" /> 
+	/// <seealso cref="SchedulerConstants.DefaultGroup" /> 
 	public class JobDetailObject : JobDetail, IObjectNameAware, IApplicationContextAware, IInitializingObject
 	{
         private Type actualJobType;
@@ -200,7 +200,7 @@ namespace Spring.Scheduling.Quartz
 			}
 			if (Group == null)
 			{
-				Group = SchedulerConstants.DEFAULT_GROUP;
+				Group = SchedulerConstants.DefaultGroup;
 			}
 			if (applicationContextJobDataKey != null)
 			{

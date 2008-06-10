@@ -41,10 +41,10 @@ namespace Spring.Scheduling.Quartz
         public virtual void TestAfterPropertiesSet_Defaults()
         {
             Assert.AreEqual(TRIGGER_NAME, trigger.Name, "trigger name mismatch");
-            Assert.AreEqual(SchedulerConstants.DEFAULT_GROUP, trigger.Group, "trigger group name mismatch");
+            Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.Group, "trigger group name mismatch");
             AssertDateTimesEqualityWithAllowedDelta(DateTime.UtcNow, trigger.StartTimeUtc, 1000);
             Assert.IsNull(trigger.JobName, "trigger job name not null");
-            Assert.AreEqual(SchedulerConstants.DEFAULT_GROUP, trigger.JobGroup, "trigger job group was not default");
+            Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.JobGroup, "trigger job group was not default");
         }
 
         [Test]
