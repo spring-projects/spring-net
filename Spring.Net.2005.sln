@@ -1,53 +1,151 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.2005", "src\Spring\Spring.Core\Spring.Core.2005.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.Tests.2005", "test\Spring\Spring.Core.Tests\Spring.Core.Tests.2005.csproj", "{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aop.2005", "src\Spring\Spring.Aop\Spring.Aop.2005.csproj", "{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aop.Tests.2005", "test\Spring\Spring.Aop.Tests\Spring.Aop.Tests.2005.csproj", "{2111596A-0327-4C9D-8919-294FBD988A23}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F04753EF-7A1B-4837-AB63-8C0821E8155D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		Spring.build = Spring.build
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Services.2005", "src\Spring\Spring.Services\Spring.Services.2005.csproj", "{B58E34CF-6E70-481D-AC87-1BC2D13C21FB}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Services.Tests.2005", "test\Spring\Spring.Services.Tests\Spring.Services.Tests.2005.csproj", "{EB2687B7-8B26-4FBC-852A-4128D5CACAFC}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.2005", "src\Spring\Spring.Web\Spring.Web.2005.csproj", "{BA4789EB-281A-48EA-8763-28B9F0596A18}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Tests.2005", "test\Spring\Spring.Web.Tests\Spring.Web.Tests.2005.csproj", "{C67E47AA-1ACD-41B4-A465-4D336A2319CA}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.2005", "src\Spring\Spring.Data\Spring.Data.2005.csproj", "{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.Tests.2005", "test\Spring\Spring.Data.Tests\Spring.Data.Tests.2005.csproj", "{ACD39D47-1811-40FA-9E7E-5DEA5B9CE6C0}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.Integration.Tests.2005", "test\Spring\Spring.Data.Integration.Tests\Spring.Data.Integration.Tests.2005.csproj", "{91766D21-C568-459F-9BEA-759B011F23CF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Extensions.2005", "src\Spring\Spring.Web.Extensions\Spring.Web.Extensions.2005.csproj", "{E5E287D2-EE2C-4C99-87CA-EB27B35ABF7B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.NUnit.2005", "src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.2005.csproj", "{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.2005", "src\Spring\Spring.Data.NHibernate\Spring.Data.NHibernate.2005.csproj", "{130E1609-45A7-4F65-B112-105F2DD3E2CE}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Integration.Tests.2005", "test\Spring\Spring.Data.NHibernate.Integration.Tests\Spring.Data.NHibernate.Integration.Tests.2005.csproj", "{4A07E150-ED90-407C-8CAD-4760444DDFD9}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate12.2005", "src\Spring\Spring.Data.NHibernate12\Spring.Data.NHibernate12.2005.csproj", "{90F2D070-6F98-4926-A626-BD7A6071D6D9}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Tests.2005", "test\Spring\Spring.Data.NHibernate.Tests\Spring.Data.NHibernate.Tests.2005.csproj", "{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.NUnit.Tests.2005", "test\Spring\Spring.Testing.NUnit.Tests\Spring.Testing.NUnit.Tests.2005.csproj", "{4D6D616B-7643-4D6B-8E5E-14ECFDB9AF82}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.2005", "src\Spring\Spring.Scheduling.Quartz\Spring.Scheduling.Quartz.2005.csproj", "{E823D54C-CE82-4868-929F-5F95A999F61E}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.Tests.2005", "test\Spring\Spring.Scheduling.Quartz.Tests\Spring.Scheduling.Quartz.Tests.2005.csproj", "{9FE720ED-2BD9-4FB9-89C8-FFFA4A491CB5}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Nms.2005", "src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2005.csproj", "{AEB1578C-9018-4D49-B440-789F38DD2F29}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Nms.Tests.2005", "test\Spring\Spring.Messaging.Nms.Tests\Spring.Messaging.Nms.Tests.2005.csproj", "{FA7A6931-7DBE-4A32-A312-51FAD2E80332}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate20.2005", "src\Spring\Spring.Data.NHibernate20\Spring.Data.NHibernate20.2005.csproj", "{71368632-B8B7-4A6A-8C65-8DA848120C82}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -315,6 +413,16 @@ Global
 		{FA7A6931-7DBE-4A32-A312-51FAD2E80332}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA7A6931-7DBE-4A32-A312-51FAD2E80332}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FA7A6931-7DBE-4A32-A312-51FAD2E80332}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Release|.NET.ActiveCfg = Release|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{71368632-B8B7-4A6A-8C65-8DA848120C82}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
