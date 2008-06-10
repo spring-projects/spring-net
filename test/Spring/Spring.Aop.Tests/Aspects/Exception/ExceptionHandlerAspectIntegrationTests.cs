@@ -273,6 +273,21 @@ namespace Spring.Aspects.Exceptions
             }
         }
 
+        [Test]
+        public void SwallowReturnTypeIsValueType()
+        {
+            string returnHandlerText = "on exception name ArithmeticException swallow";
+            ITestObject to = CreateTestObjectProxy(returnHandlerText);
+            try
+            {
+                to.ExceptionalWithReturnValue(new ArithmeticException("Bad Math"));
+            }
+            catch (Exception e)
+            {
+                Assert.Fail("Should not have thrown exception. Exception type = " + e.GetType());
+            }
+        }
+
 
         [Test]
         public void ReturnWithString()

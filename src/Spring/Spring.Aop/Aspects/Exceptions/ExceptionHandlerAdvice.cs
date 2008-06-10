@@ -69,7 +69,10 @@ namespace Spring.Aspects.Exceptions
     {
         #region Fields
 
-        private static readonly ILog log = LogManager.GetLogger(typeof(ExceptionHandlerAdvice));
+        /// <summary>
+        /// Log instance available to subclasses
+        /// </summary>
+        protected static readonly ILog log = LogManager.GetLogger(typeof(ExceptionHandlerAdvice));
 
         private IList exceptionHandlers = new ArrayList();
 
@@ -180,8 +183,9 @@ namespace Spring.Aspects.Exceptions
                         return returnVal;
                     }
                     else
-                    {
-                        return null;
+                    {                        
+                        Type returnType = invocation.Method.ReturnType;
+                        return returnType.IsValueType ? Activator.CreateInstance(returnType) : null;
                     }
                 }
             }
@@ -297,7 +301,12 @@ namespace Spring.Aspects.Exceptions
             return CreateExceptionHandler(parsedAdviceExpression);
         }
 
-        private static IExceptionHandler CreateExceptionHandler(ParsedAdviceExpression parsedAdviceExpression)           
+        /// <summary>
+        /// Creates the exception handler.
+        /// </summary>
+        /// <param name="parsedAdviceExpression">The parsed advice expression.</param>
+        /// <returns>The exception handler instance</returns>
+        protected virtual IExceptionHandler CreateExceptionHandler(ParsedAdviceExpression parsedAdviceExpression)           
         {
             if (parsedAdviceExpression.ActionText.IndexOf("log") >= 0)
             {
@@ -348,7 +357,13 @@ namespace Spring.Aspects.Exceptions
             return null;
         }
 
-        private static string ParseWrappedExceptionExpression(string action, string handlerString)
+        /// <summary>
+        /// Parses the wrapped exception expression.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="handlerString">The handler string.</param>
+        /// <returns></returns>
+        protected string ParseWrappedExceptionExpression(string action, string handlerString)
         {
             int endOfActionIndex = handlerString.IndexOf(action) + action.Length;
             string exceptionAndMessage = handlerString.Substring(endOfActionIndex).Trim();
