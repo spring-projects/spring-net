@@ -3728,13 +3728,13 @@ public class AnotherExampleObject : IDisposable
 &lt;/object&gt;</programlisting></para>
 
     <para>... the parent object cannot be instantiated on its own since it
-    incomplete, and it is also explicitly marked as abstract.
-    When a definition is defined to be abstract like this, it is usable only
-    as a pure template object definition that will serve as a parent
-    definition for child definitions.  Trying to use such an abstract parent
-    object on its own (by referring to it as a ref property of another object, or
-    doing an explicit <methodname>GetObject()</methodname> with the parent
-    object id), will result in an error. The container's internal
+    incomplete, and it is also explicitly marked as abstract. When a
+    definition is defined to be abstract like this, it is usable only as a
+    pure template object definition that will serve as a parent definition for
+    child definitions. Trying to use such an abstract parent object on its own
+    (by referring to it as a ref property of another object, or doing an
+    explicit <methodname>GetObject()</methodname> with the parent object id),
+    will result in an error. The container's internal
     <methodname>PreInstantiateSingletons</methodname> method will completely
     ignore object definitions that are considered abstract.</para>
 
@@ -3747,9 +3747,8 @@ public class AnotherExampleObject : IDisposable
 
       <emphasis>true</emphasis>
 
-       , otherwise the application context will actually (attempt to) pre-instantiate the abstract object.
+       , otherwise the application context will actually (attempt to) pre-instantiate the abstract object. 
     </note>
-
   </sect1>
 
   <sect1 id="objects-factory-extension">
@@ -5035,6 +5034,34 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       reader)</literal> and <literal>int ParseElement(XmlElement element,
       XmlResourceReader reader)</literal>. Registering custom parsers outside
       of App.config will be addressed in a future release.</para>
+
+      <para>To register a custom parser register a section handler of the type
+      <literal>Spring.Context.Support.NamespaceParsersSectionHandler</literal>
+      in the configSecitons section of App.config. The parser configuration
+      section contains one or more &lt;parser&gt; elements each with a type
+      attribute. Below is an example that registers all the namespaces
+      provided in Spring.</para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other configuration section handler defined here --&gt;
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt; 
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Aop.Config.AopNamespaceParser, Spring.Aop" /&gt; 
+      &lt;parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" /&gt; 
+      &lt;parser type="Spring.Transaction.Config.TxNamespaceParser, Spring.Data" /&gt;
+      &lt;parser type="Spring.Validation.Config.ValidationNamespaceParser, Spring.Core" /&gt;
+      &lt;parser type="Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services" /&gt;
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
     </sect2>
 
     <sect2 id="context-custom-resourcehandler">
@@ -5047,10 +5074,12 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       <classname>FileSystemResource</classname> or
       <classname>AssemblyResource</classname> for implementation tips. You can
       register your custom resource handler either within App.config, as shown
-      above using a .<classname>ResourceHandlersSectionHandler</classname> or
-      define an object of the type
-      <classname>Spring.Objects.Factory.Config.ResourceHandlerConfigurer</classname>.
-      An example of the latter is shown below:</para>
+      in the program listing at the start of this section using a
+      .<classname>ResourceHandlersSectionHandler</classname> or define an
+      object of the type
+      <classname>Spring.Objects.Factory.Config.ResourceHandlerConfigurer</classname>
+      as you would any other Spring managed object. An example of the latter
+      is shown below:</para>
 
       <programlisting>&lt;object id="myResourceHandlers" type="Spring.Objects.Factory.Config.<classname>ResourceHandlersSectionHandler</classname>, Spring.Core"&gt;
       &lt;property name="ResourceHandlers"&gt;
@@ -5089,8 +5118,33 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         &lt;/object&gt;
     &lt;/property&gt;
     &lt;property name="Advice" ref="aspNetCacheAdvice"/&gt;
-&lt;/object&gt;</programlisting> For an example showing type aliases for
-      generic types see <xref
+&lt;/object&gt;</programlisting></para>
+
+      <para>To register a type alias register a section handler of the type
+      <literal>Spring.Context.Support.TypeAliasesSectionHandler</literal> in
+      the configSecitons section of App.config. The type alias configuration
+      section contains one or more &lt;alias&gt; elements each with a name and
+      a type attribute. Below is an example that registers the alias for
+      WebServiceExporter </para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other configuration section handler defined here --&gt;
+      &lt;section name="parsers" type="Spring.Context.Support.TypeAliasesSectionHandler, Spring.Core"/&gt; 
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;typeAliases&gt;
+       &lt;alias name="WebServiceExporter" type="Spring.Web.Services.WebServiceExporter, Spring.Web"/&gt;
+    &lt;/typeAliases&gt;
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
+
+      <para> For an example showing type aliases for generic types see <xref
       linkend="objects-creation-generic-types" />.</para>
 
       <para>Another way is to define an object of the type

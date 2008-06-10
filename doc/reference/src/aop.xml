@@ -2167,9 +2167,7 @@ Saving speaker...
 
     <programlisting>&lt;objects xmlns="http://www.springframework.net"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:aop="http://www.springframework.net/schema/aop"
-		xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.1.xsd
-				http://www.springframework.net/schema/aop http://www.springframework.net/schema/aop/spring-aop-1.1.xsd"&gt;
+		xmlns:aop="http://www.springframework.net/aop"&gt;
 
 	&lt;aop:config&gt;
 

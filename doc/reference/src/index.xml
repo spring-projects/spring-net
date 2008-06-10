@@ -16,6 +16,7 @@
 <!ENTITY overview     SYSTEM "overview.xml">
 <!ENTITY psa-intro    SYSTEM "psa-intro.xml">
 <!ENTITY remoting     SYSTEM "remoting.xml">
+<!ENTITY nms	      SYSTEM "nms.xml">
 <!ENTITY web          SYSTEM "web.xml">
 <!ENTITY ajax         SYSTEM "ajax.xml">
 <!ENTITY services     SYSTEM "services.xml">
@@ -110,9 +111,9 @@
       &overview;
       &background;
       &migration;
-	<part id="index-core">
+	<part id="spring-core">
 		<title>Core Technologies</title>
-		<partintro>
+		<partintro id="spring-core-intro">
 			<para>
 				This initial part of the reference documentation covers
 				all of those technologies that are absolutely integral
@@ -199,12 +200,12 @@
       &logging;
       &testing;
       </part>
-      <part id="index-middle-tier">
+      <part id="spring-middle-tier">
 		<title>Middle Tier Data Access</title>
-		<partintro id="index-middle-tier-intro">
+		<partintro id="spring-middle-tier-intro">
 			<para>
 				This part of the reference documentation is concerned
-				with the middle tier, and specifically the data access
+				with othe middle tier, and specifically the data access
 				responsibilities of said tier.
 			</para>
 			<para>
@@ -237,9 +238,9 @@
 		&ado;
 		&orm;
 	</part>
-	<part>
+	<part id="spring-web">
 		<title>The Web</title>
-		<partintro>
+		<partintro id="spring-web-intro">
 			<para>
 				This part of the reference documentation covers the
 				Spring Framework's support for the presentation tier,
@@ -286,7 +287,27 @@
 		&remoting;
 		&services;
 		&webservices;
-	</part>      
+	</part> 
+	<part id="spring-integration">
+		<title>Integration</title>
+		<partintro id="spring-integration-intro">
+			<para>
+				This part of the reference documentation covers
+				the Spring Framework's integration with a number of 
+				related enterprise .NET technologies.
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para><xref linkend="nms"/></para>
+				</listitem>
+				<listitem>
+					<para><xref linkend="scheduling"/></para>
+				</listitem>
+			</itemizedlist>
+		</partintro>
+		&jms;
+		&scheduling;
+	</part>
 	<part id="index-vsnet">
 		<title>VS.NET Integration</title>
 		<partintro>
