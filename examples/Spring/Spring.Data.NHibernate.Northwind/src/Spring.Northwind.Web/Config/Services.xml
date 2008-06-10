@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net">
+<objects xmlns="http://www.springframework.net"
+         xmlns:tx="http://www.springframework.org/schema/tx">
 
   <!-- Referenced by main application context configuration file -->
   
@@ -18,13 +19,6 @@
     
   </object>
 
-  <import resource="DeclarativeServicesAttributeDriven.xml"/>
   
-  <!-- didn't configure correctly yet - don't use
-  <import resource="DeclarativeServicesObjectNameDriven.xml"/>  
-  -->
-
-  <!--
-  <import resource="DeclarativeServicesTxProxyFactoryDriven.xml"/>
-  -->
+  
 </objects>
