@@ -295,6 +295,7 @@
     <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh.lib.dir" value="${spring.basedir}/lib/NHibernate10/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh12.lib.dir" value="${spring.basedir}/lib/NHibernate12/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="nh20.lib.dir" value="${spring.basedir}/lib/NHibernate20/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copylibs"/>
 
     <!-- build assemblies -->
@@ -305,6 +306,7 @@
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate/Spring.Data.NHibernate.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-web}"/>
@@ -499,6 +501,8 @@
 	<delete dir="src/Spring/Spring.Data.NHibernate/bin" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Data.NHibernate12/obj" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Data.NHibernate12/bin" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Data.NHibernate20/obj" failonerror="false"/>
+	<delete dir="src/Spring/Spring.Data.NHibernate20/bin" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Services/obj" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Services/bin" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Messaging.Nms/obj" failonerror="false"/>
@@ -845,6 +849,10 @@
           <include name="**/Spring.Data.NHibernate12.dll"/>
           <include name="**/Spring.Data.NHibernate12.xml"/>
           <include name="**/Spring.Data.NHibernate12.pdb"/>
+
+          <include name="**/Spring.Data.NHibernate20.dll"/>
+          <include name="**/Spring.Data.NHibernate20.xml"/>
+          <include name="**/Spring.Data.NHibernate20.pdb"/>
 
           <include name="**/Spring.Web.dll"/>
           <include name="**/Spring.Web.xml"/>
