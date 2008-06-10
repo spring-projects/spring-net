@@ -79,7 +79,7 @@ namespace Spring.Aspects.Exceptions
         private string onExceptionNameRegex = @"^(on\s+exception\s+name)\s+(.*?)\s+(log|translate|wrap|replace|return|swallow)\s*(.*?)$";
 
         private string onExceptionRegex = @"^(on\s+exception\s+)(\(.*?\))\s+(log|translate|wrap|replace|return|swallow)\s*(.*?)$";
-            
+           
         #endregion
 
         #region Properties
@@ -240,6 +240,11 @@ namespace Spring.Aspects.Exceptions
                                                     "]");
                     }
                     newExceptionHandlers.Add(handler);
+                }
+                IExceptionHandler handlerObject = o as IExceptionHandler;
+                if (handlerObject != null)
+                {
+                    newExceptionHandlers.Add(handlerObject);
                 }
 
             }

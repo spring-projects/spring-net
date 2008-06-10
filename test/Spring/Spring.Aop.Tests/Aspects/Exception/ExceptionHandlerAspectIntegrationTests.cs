@@ -54,8 +54,6 @@ namespace Spring.Aspects.Exceptions
         [Test]
         public void LoggingTest()
         {
-
-
             LogExceptionHandler logHandler = new LogExceptionHandler();
             string testText = @"#log.Debug('Hello World, exception message = ' + #e.Message + ', target method = ' + #method.Name)";
             logHandler.SourceExceptionNames.Add("ArithmeticException");
@@ -86,13 +84,23 @@ namespace Spring.Aspects.Exceptions
             ExecuteLoggingHandler(logHandlerText);
         }
 
-
         [Test]
         public void LoggingTestWithConstraintExpression()
         {
             string logHandlerText = "on exception (#e is T(System.ArithmeticException)) log 'My Message, Method Name ' + #method.Name";
 
             ExecuteLoggingHandler(logHandlerText);
+        }
+
+        [Test]
+        public void LoggingTestWithConstraintExpressionWithExceptionHandler()
+        {
+            LogExceptionHandler exHandler = new LogExceptionHandler();
+            exHandler.ConstraintExpressionText = "#e is T(System.ArithmeticException)";
+            exHandler.LogName = "Cms.Session.ExceptionHandler";
+            exHandler.ActionExpressionText = "#log.Fatal('Request Timeout occured', #e)";
+
+            ExecuteLoggingHandler(exHandler);
         }
 
         [Test]
@@ -142,6 +150,20 @@ namespace Spring.Aspects.Exceptions
             }
         }
 
+        private void ExecuteLoggingHandler(IExceptionHandler handler)
+        {
+            ITestObject to = CreateTestObjectProxy(handler);
+
+            try
+            {
+                to.Exceptional(new ArithmeticException());
+            }
+            catch (ArithmeticException)
+            {
+                //TODO assert logging occured.
+            }
+        }
+
 
 
         [Test]
@@ -151,6 +173,25 @@ namespace Spring.Aspects.Exceptions
                 "on exception name ArithmeticException translate new System.InvalidOperationException('My Message, Method Name ' + #method.Name, #e)";
 
             ITestObject to = CreateTestObjectProxy(translationHandlerText);
+            AssertTranslation(to);
+        }
+
+
+        [Test]
+        public void TranslateWithExceptionHandlerInstance()
+        {
+            TranslationExceptionHandler exHandler = new TranslationExceptionHandler();
+            IList exceptionNames = new ArrayList();
+            exceptionNames.Add("ArithmeticException");
+            exHandler.SourceExceptionNames = exceptionNames;
+            exHandler.ActionExpressionText =
+                "new System.InvalidOperationException('My Message, Method Name ' + #method.Name, #e)";
+            ITestObject to = CreateTestObjectProxy(exHandler);
+            AssertTranslation(to);
+        }
+
+        private static void AssertTranslation(ITestObject to)
+        {
             try
             {
                 to.Exceptional(new ArithmeticException("Bad Math"));
@@ -160,7 +201,8 @@ namespace Spring.Aspects.Exceptions
             {
                 Assert.IsInstanceOfType(typeof(ArithmeticException), e.InnerException, "Inner exception.");
                 Assert.AreEqual("My Message, Method Name Exceptional", e.Message);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Assert.IsInstanceOfType(typeof(InvalidOperationException), e, "wrong exception type thrown.");
             }
@@ -339,8 +381,18 @@ namespace Spring.Aspects.Exceptions
         private ITestObject CreateTestObjectProxy(string logHandlerText)
         {
             exceptionHandlerAdvice.ExceptionHandlers.Add(logHandlerText);
-            exceptionHandlerAdvice.AfterPropertiesSet();
+            return CreateProxy();
+        }
 
+        private ITestObject CreateTestObjectProxy(IExceptionHandler exceptionHander)
+        {
+            exceptionHandlerAdvice.ExceptionHandlers.Add(exceptionHander);
+            return CreateProxy();
+        }
+
+        private ITestObject CreateProxy()
+        {
+            exceptionHandlerAdvice.AfterPropertiesSet();
             ProxyFactory pf = new ProxyFactory(new TestObject());
             pf.AddAdvice(exceptionHandlerAdvice);
             return (ITestObject)pf.GetProxy();

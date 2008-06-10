@@ -377,6 +377,28 @@ on exception name ArithmeticException return 12</programlisting>
     likely be better off creating your own custom aspect class instead of a
     scripting approach.</para>
 
+    <para>You can also configure ExceptionHandlerAdvice to use an instance of
+    IExceptionHandler, for example to access more sophisticated logging
+    functionality than is available with the current log action in the DSL,
+    for example setting the logging level and pass the exception into the
+    logging subsystem</para>
+
+    <programlisting>&lt;object name="exceptionHandlingAdvice" type="Spring.Aspects.Exceptions.ExceptionHandlerAdvice, Spring.Aop"&gt;
+  &lt;property name="exceptionHandlers"&gt;
+    &lt;list&gt;
+      &lt;object type="Spring.Aspects.Exceptions.LogExceptionHandler"&gt;
+        &lt;property name="LogName" value="Cms.Session.ExceptionHandler" /&gt;
+        &lt;property name="ConstraintExpressionText" value="#e is T(System.Threading.ThreadAbortException)" /&gt;
+        &lt;property name="ActionExpressionText" value="#log.Fatal('Request Timeout occured', #e)" /&gt;
+      &lt;/object&gt; 
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>The configuration of the logger name, level, and weather or not to
+    pass the thrown exception as the second argument to the log method will be
+    supported in the DSL style in a future release.</para>
+
     <sect2>
       <title>Language Reference</title>
 
@@ -486,10 +508,10 @@ on exception name ArithmeticException return 12</programlisting>
   &lt;property name="UseDynamicLogger"    value="true"/&gt;
 &lt;/object&gt;</programlisting>
 
-    <para>
-      The default values for LogUniqueIdentifier, LogExecutionTime, LogMethodArguments and 
-      LogReturnValue are false. The default separator value is ", " and the
-      default log level is Common.Logging's LogLevel.Trace.</para>
+    <para>The default values for LogUniqueIdentifier, LogExecutionTime,
+    LogMethodArguments and LogReturnValue are false. The default separator
+    value is ", " and the default log level is Common.Logging's
+    LogLevel.Trace.</para>
 
     <para>You can set the name of the logger with the property
     <property>LoggerName</property>, for example "DataAccessLayer" for a
