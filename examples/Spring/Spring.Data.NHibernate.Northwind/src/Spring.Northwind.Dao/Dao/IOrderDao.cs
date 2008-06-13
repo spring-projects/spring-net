@@ -30,7 +30,7 @@ namespace Spring.Northwind.Dao
 {
     public interface IOrderDao
     {
-        Order FindById(long orderId);
+        Order FindById(int orderId);
         IList FindAll();
         Order Save(Order order);
         Order SaveOrUpdate(Order order);

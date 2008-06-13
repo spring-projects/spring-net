@@ -28,9 +28,9 @@ namespace Spring.Northwind.Domain
         #region Fields
 
         protected int id;
-        protected DateTime orderDate;
-        protected DateTime requiredDate;
-        protected DateTime shippedDate;
+        protected DateTime? orderDate;
+        protected DateTime? requiredDate;
+        protected DateTime? shippedDate;
         protected decimal freight;
         protected string shipName;
         protected string shipAddress;
@@ -80,19 +80,19 @@ namespace Spring.Northwind.Domain
             set { id = value; }
         }
 
-        public DateTime OrderDate
+        public DateTime? OrderDate
         {
             get { return orderDate; }
             set { orderDate = value; }
         }
 
-        public DateTime RequiredDate
+        public DateTime? RequiredDate
         {
             get { return requiredDate; }
             set { requiredDate = value; }
         }
 
-        public DateTime ShippedDate
+        public DateTime? ShippedDate
         {
             get { return shippedDate; }
             set { shippedDate = value; }

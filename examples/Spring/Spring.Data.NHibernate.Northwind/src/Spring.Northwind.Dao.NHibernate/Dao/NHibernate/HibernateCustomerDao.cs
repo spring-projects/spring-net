@@ -44,6 +44,18 @@ namespace Spring.Northwind.Dao.NHibernate
             return HibernateTemplate.LoadAll(typeof (Customer));
         }
 
+        // Note that the transaction demaraction is here only for the case when
+        // the DAO object is being used directly, i.e. not as part of a service layer
+        // call.  This would be commonly only when creating an application that contains
+        // no business logic and is essentially a table maintenance application.  
+        // These applications are affectionaly known as 'CRUD' applications, the acronym
+        // refering to Create, Retrieve, Update, And Delete and the only operations
+        // performed by the application.
+
+        // If called from a transactional service layer, typically with the transaction
+        // propagation setting set to REQUIRED, then any DAO operations will use the 
+        // same settings as started from the transactional layer.
+
         [Transaction(ReadOnly = false)]
         public Customer Save(Customer customer)
         {

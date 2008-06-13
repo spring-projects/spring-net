@@ -3,7 +3,7 @@
   <class name="Spring.Northwind.Domain.Customer, Spring.Northwind.Dao" table="Customers" lazy="false">
     <id name="Id" type="String" unsaved-value="null">
       <column name="CustomerID" length="5" sql-type="nchar" not-null="true" unique="true" index="PK_Customers"/>
-      <generator class="native" />
+      <generator class="assigned" />
     </id>
     <property name="CompanyName" type="String">
       <column name="CompanyName" length="40" sql-type="nvarchar" not-null="true" index="CompanyName"/>

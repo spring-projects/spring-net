@@ -32,7 +32,7 @@ namespace Spring.Northwind.Dao.NHibernate
 {
     public class HibernateOrderDao : HibernateDaoSupport, IOrderDao
     {
-        public Order FindById(long orderId)
+        public Order FindById(int orderId)
         {
             return HibernateTemplate.Load(typeof(Order), orderId) as Order;
    
