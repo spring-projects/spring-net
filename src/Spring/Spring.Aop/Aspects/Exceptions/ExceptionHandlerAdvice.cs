@@ -185,7 +185,7 @@ namespace Spring.Aspects.Exceptions
                     else
                     {                        
                         Type returnType = invocation.Method.ReturnType;
-                        return returnType.IsValueType ? Activator.CreateInstance(returnType) : null;
+                        return returnType.IsValueType && !returnType.Equals(typeof(void))? Activator.CreateInstance(returnType) : null;
                     }
                 }
             }

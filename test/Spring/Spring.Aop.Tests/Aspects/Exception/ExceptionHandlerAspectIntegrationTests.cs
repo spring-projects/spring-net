@@ -309,9 +309,9 @@ namespace Spring.Aspects.Exceptions
             try
             {
                 to.Exceptional(new ArithmeticException("Bad Math"));                
-            } catch (Exception)
+            } catch (Exception e)
             {
-                Assert.Fail("Should not have thrown exception");   
+                Assert.Fail("Should not have thrown exception" + e);   
             }
         }
 
