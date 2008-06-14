@@ -21,7 +21,7 @@
 using System;
 using Common.Logging;
 using Spring.Objects.Factory;
-using NMS;
+using Apache.NMS;
 
 namespace Spring.Messaging.Nms
 {

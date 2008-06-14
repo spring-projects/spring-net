@@ -31,7 +31,13 @@ namespace Spring.Aspects.Exceptions
     /// <author>Mark Pollack</author>
     public class LogExceptionHandler : AbstractExceptionHandler
     {
+        #region Fields
         private string logName = "LogExceptionHandler";
+
+        private LogLevel logLevel = LogLevel.Trace;
+
+        private bool logMessageOnly = false;
+        #endregion
 
 
         /// <summary>
@@ -63,7 +69,28 @@ namespace Spring.Aspects.Exceptions
             set { logName = value; }
         }
 
-        
+
+        /// <summary>
+        /// Gets or sets the log level.
+        /// </summary>
+        /// <value>The log level.</value>
+        public LogLevel LogLevel
+        {
+            get { return logLevel; }
+            set { logLevel = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to log message only, and not pass in the 
+        /// exception to the logging API
+        /// </summary>
+        /// <value><c>true</c> if log message only; otherwise, <c>false</c>.</value>
+        public bool LogMessageOnly
+        {
+            get { return logMessageOnly; }
+            set { logMessageOnly = value; }
+        }
+
         /// <summary>
         /// Handles the exception.
         /// </summary>

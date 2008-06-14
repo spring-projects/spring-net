@@ -348,7 +348,7 @@ namespace Spring.Data.NHibernate
 	    protected override void DoBegin(object transaction, ITransactionDefinition definition)
 	    {
             HibernateTransactionObject txObject = (HibernateTransactionObject) transaction;
-
+            
 	        if (DbProvider != null && TransactionSynchronizationManager.HasResource(DbProvider) 
                 && !txObject.ConnectionHolder.SynchronizedWithTransaction)
 	        {

@@ -1,4 +1,4 @@
-using NMS;
+using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Listener
 {

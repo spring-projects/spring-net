@@ -21,7 +21,7 @@
 using System;
 using Spring.Transaction.Support;
 using Spring.Util;
-using NMS;
+using Apache.NMS;
 
 namespace Spring.Messaging.Nms.IConnections
 {
@@ -90,7 +90,7 @@ namespace Spring.Messaging.Nms.IConnections
             {
                 conHolderToUse = new NmsResourceHolder();
             }
-            NMS.IConnection con = resourceFactory.GetConnection(conHolderToUse);
+            Apache.NMS.IConnection con = resourceFactory.GetConnection(conHolderToUse);
             ISession session = null;
             try
             {
@@ -153,12 +153,12 @@ namespace Spring.Messaging.Nms.IConnections
             private IConnectionFactory cf;
             private bool synchedLocalTransactionAllowed;
 
-            public AnonymousClassResourceFactory(NMS.IConnection existingCon, IConnectionFactory cf, bool synchedLocalTransactionAllowed)
+            public AnonymousClassResourceFactory(Apache.NMS.IConnection existingCon, IConnectionFactory cf, bool synchedLocalTransactionAllowed)
             {
                 InitBlock(existingCon, cf, synchedLocalTransactionAllowed);
             }
 
-            private void InitBlock(NMS.IConnection existingCon, IConnectionFactory cf, bool synchedLocalTransactionAllowed)
+            private void InitBlock(Apache.NMS.IConnection existingCon, IConnectionFactory cf, bool synchedLocalTransactionAllowed)
             {
                 this.existingCon = existingCon;
                 this.cf = cf;
@@ -169,18 +169,18 @@ namespace Spring.Messaging.Nms.IConnections
             {
                return holder.GetSession(typeof(ISession), existingCon);
             }
-            
-            public virtual NMS.IConnection GetConnection(NmsResourceHolder holder)
+
+            public virtual Apache.NMS.IConnection GetConnection(NmsResourceHolder holder)
             {
                return (existingCon != null ? existingCon : holder.GetConnection());
             }
-			
-            public virtual NMS.IConnection CreateConnection()
+
+            public virtual Apache.NMS.IConnection CreateConnection()
             {
                 return cf.CreateConnection();
             }
-            
-            public virtual ISession CreateSession(NMS.IConnection con)
+
+            public virtual ISession CreateSession(Apache.NMS.IConnection con)
             {
                 if (synchedLocalTransactionAllowed)
                 {
@@ -236,7 +236,7 @@ namespace Spring.Messaging.Nms.IConnections
             /// <returns> the new NMS ISession
             /// </returns>
             /// <throws>NMSException if thrown by NMS API methods </throws>
-            ISession CreateSession(NMS.IConnection con);
+            ISession CreateSession(Apache.NMS.IConnection con);
 
 
             /// <summary>

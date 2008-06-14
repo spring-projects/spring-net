@@ -18,7 +18,7 @@
 
 #endregion
 
-using NMS;
+using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Support.Converter
 {

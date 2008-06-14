@@ -6,7 +6,7 @@ using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.Converter;
 using Spring.Messaging.Nms.Support.IDestinations;
 using Spring.Util;
-using NMS;
+using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Listener.Adapter
 {

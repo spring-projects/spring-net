@@ -198,11 +198,11 @@ namespace Spring.Data.NHibernate
 
 	    #endregion
 
-		#region Methods
+	    #region Methods
 
-		#endregion
+	    #endregion
 
-        /// <summary>
+	    /// <summary>
         /// Return the singleon session factory.
         /// </summary>
         /// <returns>The singleon session factory.</returns>
@@ -286,6 +286,7 @@ namespace Spring.Data.NHibernate
                 }
             }
 
+            
             IResourceLoader resourceLoader = new ConfigurableResourceLoader();
 
             if (this.mappingResources != null)

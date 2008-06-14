@@ -33,13 +33,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\net\2.0\antlr.runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Apache.NMS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Apache.NMS.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging, Version=1.1.0.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\net\2.0\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="NMS, Version=4.0.0.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\net\2.0\NMS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

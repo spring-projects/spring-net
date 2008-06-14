@@ -1,6 +1,6 @@
 using Spring.Collections;
 using Spring.Messaging.Nms.Support;
-using NMS;
+using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Listener
 {
@@ -58,7 +58,7 @@ namespace Spring.Messaging.Nms.Listener
             //TODO TaskExectuor abstraction would go here...
 			
 	        SimpleMessageListener listener = new SimpleMessageListener(this, session);
-            consumer.Listener += new NMS.MessageListener(listener.OnMessage); 
+            consumer.Listener += new Apache.NMS.MessageListener(listener.OnMessage); 
             return consumer;
         }
 

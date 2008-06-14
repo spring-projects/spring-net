@@ -24,7 +24,7 @@ using Common.Logging;
 using Spring.Collections;
 using Spring.Transaction.Support;
 using Spring.Util;
-using NMS;
+using Apache.NMS;
 
 namespace Spring.Messaging.Nms.IConnections
 {
@@ -71,7 +71,7 @@ namespace Spring.Messaging.Nms.IConnections
         /// </param>
         /// <param name="session">the NMS ISession
         /// </param>
-       public NmsResourceHolder(NMS.IConnection connection, ISession session)
+       public NmsResourceHolder(Apache.NMS.IConnection connection, ISession session)
         {
             AddConnection(connection);
             AddSession(session, connection);
@@ -93,7 +93,7 @@ namespace Spring.Messaging.Nms.IConnections
 
         #region Methods
         
-        public void AddConnection(NMS.IConnection connection)
+        public void AddConnection(Apache.NMS.IConnection connection)
         {
             //TODO - update Assert utility class...
             //Assert.isTrue(!this.frozen, "Cannot add IConnection because NmsResourceHolder is frozen");
@@ -109,7 +109,7 @@ namespace Spring.Messaging.Nms.IConnections
             AddSession(session, null);
         }
 
-        public void AddSession(ISession session, NMS.IConnection connection)
+        public void AddSession(ISession session, Apache.NMS.IConnection connection)
         {
             //TOOD update AssertUtils class
             //Assert.isTrue(!this.frozen, "Cannot add ISession because NmsResourceHolder is frozen");
@@ -130,12 +130,12 @@ namespace Spring.Messaging.Nms.IConnections
             }
         }
 
-        public virtual NMS.IConnection GetConnection()
+        public virtual Apache.NMS.IConnection GetConnection()
         {
-            return (!(this.connections.Count == 0) ? (NMS.IConnection)this.connections[0] : null);
+            return (!(this.connections.Count == 0) ? (Apache.NMS.IConnection)this.connections[0] : null);
         }
 
-        public virtual NMS.IConnection GetConnection(System.Type connectionType)
+        public virtual Apache.NMS.IConnection GetConnection(System.Type connectionType)
         {
             throw new NotImplementedException();
             //TODO Updae CollectionUtils...
@@ -152,7 +152,7 @@ namespace Spring.Messaging.Nms.IConnections
             return GetSession(sessionType, null);
         }
 
-        public virtual ISession GetSession(System.Type sessionType, NMS.IConnection connection)
+        public virtual ISession GetSession(System.Type sessionType, Apache.NMS.IConnection connection)
         {
             IList sessions = this.sessions;
             if (connection != null)
@@ -199,7 +199,7 @@ namespace Spring.Messaging.Nms.IConnections
                     logger.Debug("Could not close NMS ISession after transaction", ex);
                 }
             }
-            foreach (NMS.IConnection connection in connections)
+            foreach (Apache.NMS.IConnection connection in connections)
             {
                 try
                 {

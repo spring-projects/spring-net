@@ -25,7 +25,7 @@ using Spring.Messaging.Nms.Support.Converter;
 using Spring.Messaging.Nms.Support.IDestinations;
 using Spring.Transaction.Support;
 using Spring.Util;
-using NMS;
+using Apache.NMS;
 
 namespace Spring.Messaging.Nms
 {
