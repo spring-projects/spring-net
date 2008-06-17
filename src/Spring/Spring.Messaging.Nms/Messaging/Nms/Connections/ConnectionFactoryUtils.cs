@@ -41,9 +41,9 @@ namespace Spring.Messaging.Nms.IConnections
         /// <param name="existingCon">the existing NMS IConnection to obtain a ISession for
         /// (may be <code>null</code>)
         /// </param>
-        /// <param name="acknowledgementMode">whether to allow for a local NMS transaction
+        /// <param name="synchedLocalTransactionAllowed">whether to allow for a local NMS transaction
         /// that is synchronized with a Spring-managed transaction (where the main transaction
-        /// might be a JDBC-based one for a specific DataSource, for example), with the NMS
+        /// might be a ADO.NET-based one for a specific DataSource, for example), with the NMS
         /// transaction committing right after the main transaction. If not allowed, the given
         /// IConnectionFactory needs to handle transaction enlistment underneath the covers.
         /// </param>

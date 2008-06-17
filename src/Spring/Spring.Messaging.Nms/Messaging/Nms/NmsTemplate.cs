@@ -1201,6 +1201,7 @@ namespace Spring.Messaging.Nms
             public ProducerCreatorCallback(NmsTemplate jmsTemplate, IProducerCallback producerCallback)
             {
                 this.jmsTemplate = jmsTemplate;
+				this.producerCallback = producerCallback;
             }
 
             public object DoInNms(ISession session)
