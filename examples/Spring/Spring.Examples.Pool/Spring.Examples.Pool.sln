@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core", "..\..\..\src\Spring\Spring.Core\Spring.Core.2003.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Examples.Pool", "Spring.Examples.Pool.csproj", "{C261D9ED-85C3-4B35-BE48-7156F5B17430}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{710961A3-0DF4-49E4-A26E-F5B9C044AC84}.Debug.ActiveCfg = Debug|.NET
+		{710961A3-0DF4-49E4-A26E-F5B9C044AC84}.Debug.Build.0 = Debug|.NET
+		{710961A3-0DF4-49E4-A26E-F5B9C044AC84}.Release.ActiveCfg = Release|.NET
+		{710961A3-0DF4-49E4-A26E-F5B9C044AC84}.Release.Build.0 = Release|.NET
+		{C261D9ED-85C3-4B35-BE48-7156F5B17430}.Debug.ActiveCfg = Debug|.NET
+		{C261D9ED-85C3-4B35-BE48-7156F5B17430}.Debug.Build.0 = Debug|.NET
+		{C261D9ED-85C3-4B35-BE48-7156F5B17430}.Release.ActiveCfg = Release|.NET
+		{C261D9ED-85C3-4B35-BE48-7156F5B17430}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

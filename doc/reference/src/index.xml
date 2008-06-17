@@ -54,7 +54,7 @@
     <title>The Spring.NET Framework</title>
     <subtitle>Reference Documentation</subtitle>
     <releaseinfo>Version 1.1.2</releaseinfo>
-    <pubdate>Last Updated May 6, 2008</pubdate>
+    <pubdate>Last Updated June 12, 2008</pubdate>
     <authorgroup>
       <author>
         <firstname>Mark</firstname>
@@ -288,6 +288,7 @@
 		&services;
 		&webservices;
 	</part> 
+	<!--
 	<part id="spring-integration">
 		<title>Integration</title>
 		<partintro id="spring-integration-intro">
@@ -305,9 +306,10 @@
 				</listitem>
 			</itemizedlist>
 		</partintro>
-		&jms;
+		&nms;
 		&scheduling;
 	</part>
+	-->
 	<part id="index-vsnet">
 		<title>VS.NET Integration</title>
 		<partintro>

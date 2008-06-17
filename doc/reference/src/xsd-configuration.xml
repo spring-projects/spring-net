@@ -8,7 +8,7 @@
     <para>This appendix details the use of XML Schema-based configuration in
     Spring.</para>
 
-    <para> The <emphasis>'classic' </emphasis>
+    <para>The <emphasis>'classic' </emphasis>
     <literal>&lt;object/&gt;</literal>-based schema is good, but its
     generic-nature comes with a price in terms of configuration overhead.
     Creating a custom XML Schema-based configuration makes Spring XML
@@ -58,7 +58,7 @@
       you can copy and paste (!) and then plug
       <literal>&lt;object/&gt;</literal> definitions into like you have always
       done. However, the entire point of using custom schema tags is to make
-      configuration easier. </para>
+      configuration easier.</para>
     </section>
 
     <para>The rest of this chapter gives an overview of custom XML Schema
@@ -90,10 +90,14 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;object xmlns="http://www.springframework.net"
-      xmlns:aop="http://www.springframework.org/schema/aop"
-   <emphasis role="bold">   xmlns:tx="http://www.springframework.org/schema/tx"</emphasis>&gt;
+      xmlns:aop="http://www.springframework.net/aop"
+   <emphasis role="bold">   xmlns:tx="http://www.springframework.net/tx"</emphasis>&gt;
   
-<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+<lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+  &lt;!-- &lt;tx/&gt; transaction definitions here --&gt;
+
+  &lt;!-- &lt;aop/&gt; AOP definitions here --&gt;
 
 &lt;/object&gt;</programlisting>
 
@@ -106,6 +110,28 @@
         the tags in the <literal>aop</literal> namespace are available to
         you.</para>
       </note>
+
+      <para>You will also need to configure the AOP and Transaction namespace
+      parsers in the main .NET application configuration file as shown
+      below</para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;   
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Aop.Config.AopNamespaceParser, Spring.Aop" /&gt;
+      &lt;parser type="Spring.Transaction.Config.TxNamespaceParser, Spring.Data" /&gt;
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
     </section>
 
     <section id="xsd-config-body-schemas-aop">
@@ -123,12 +149,33 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   <emphasis role="bold">xmlns:aop="http://www.springframework.org/schema/aop"</emphasis>&gt;
+         <emphasis role="bold">xmlns:aop="http://www.springframework.net/aop"</emphasis>&gt;
 
-<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+<lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+  &lt;!-- &lt;aop/&gt; AOP definitions here --&gt;
 
 &lt;/objects&gt;</programlisting>
+
+      <para>You will also need to configure the AOP namespace parser in the
+      main .NET application configuration file as shown below</para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;   
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Aop.Config.AopNamespaceParser, Spring.Aop" /&gt;
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
     </section>
 
     <section id="xsd-config-body-schemas-db">
@@ -143,12 +190,33 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   <emphasis role="bold">xmlns:db="http://www.springframework.org/schema/db"</emphasis>&gt;
+         <emphasis role="bold">xmlns:db="http://www.springframework.net/db"</emphasis>&gt;
 
-<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+<lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+  &lt;!-- &lt;db/&gt; database definitions here --&gt;
 
 &lt;/objects&gt;</programlisting>
+
+      <para>You will also need to configure the Database namespace parser in
+      the main .NET application configuration file as shown below</para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;      
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" /&gt; 
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
     </section>
 
     <section id="xsd-config-body-schemas-remoting">
@@ -160,13 +228,34 @@
       the chapter <xref linkend="remoting" /></para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.org/schema/objects"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   <emphasis role="bold">xmlns:r="http://www.springframework.org/schema/remoting"</emphasis>&gt;
+&lt;objects xmlns="http://www.springframework.net"
+         <emphasis role="bold">xmlns:r="http://www.springframework.net/remoting"</emphasis>&gt;
 
-<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+<lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+  &lt;!-- &lt;r/&gt; remoting definitions here --&gt;
 
 &lt;/objects&gt;</programlisting>
+
+      <para>You will also need to configure the remoting namespace parser in
+      the main .NET application configuration file as shown below</para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;     
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services" /&gt;
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
     </section>
 
     <section id="xsd-config-body-schemas-validation">
@@ -178,13 +267,34 @@
       linkend="validation" /></para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   <emphasis role="bold">xmlns:v="http://www.springframework.org/schema/validation"</emphasis>&gt;
+&lt;objects xmlns="http://www.springframework.net" 
+        <emphasis role="bold">xmlns:v="http://www.springframework.net/validation"</emphasis>&gt;
 
-<lineannotation>&lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+<lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+  &lt;!-- &lt;v/&gt; valdiation definitions here --&gt;
 
 &lt;/objects&gt;</programlisting>
+
+      <para>You will also need to configure the validation namespace parser in
+      the main .NET application configuration file as shown below</para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;     
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Validation.Config.ValidationNamespaceParser, Spring.Core" /&gt;
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
     </section>
 
     <section id="xsd-config-body-schemas-objects">

@@ -80,16 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Spring.Core.2003"
-                    Project = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Spring.Data.2003"
-                    Project = "{E10A3BED-795F-41CB-A4A8-8C4B342ACDDF}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\..\lib\Net\1.1\nunit.framework.dll"
@@ -123,6 +113,16 @@
                     Name = "Common.Logging"
                     AssemblyName = "Common.Logging"
                     HintPath = "..\..\..\lib\Net\1.1\Common.Logging.dll"
+                />
+                <Reference
+                    Name = "Spring.Core.2003"
+                    Project = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Spring.Data.2003"
+                    Project = "{E10A3BED-795F-41CB-A4A8-8C4B342ACDDF}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "Spring.Data.NHibernate12.2003"

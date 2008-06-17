@@ -225,7 +225,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Data\Objects\AbstractAdoQueryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\Objects\AdoOperationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\Objects\AdoQueryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\Objects\StoredProcedureTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
