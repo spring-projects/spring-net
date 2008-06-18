@@ -33,6 +33,7 @@
 				<exclude name="${project::get-name()}.dll" />
 				<exclude name="Spring.Data.NHibernate.Tests.dll" />
 				<exclude name="Spring.Data.NHibernate12.dll" />
+				<exclude name="Spring.Data.NHibernate20.dll" />
 				<exclude name="CloverRuntime.dll" />
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
