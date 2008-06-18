@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.2005", "..\..\..\src\Spring\Spring.Scheduling.Quartz\Spring.Scheduling.Quartz.2005.csproj", "{E823D54C-CE82-4868-929F-5F95A999F61E}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.Example.2005", "src\Spring.Scheduling.Quartz.Example.2005.csproj", "{0C0D8C65-90DE-4914-9940-4C684C54971B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E823D54C-CE82-4868-929F-5F95A999F61E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E823D54C-CE82-4868-929F-5F95A999F61E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E823D54C-CE82-4868-929F-5F95A999F61E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E823D54C-CE82-4868-929F-5F95A999F61E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
