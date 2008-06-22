@@ -62,5 +62,45 @@ namespace Spring.Objects.Factory.Xml
                     new DefaultListableObjectFactory());
             reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("/dev/null"));
         }
+
+        [Test]
+        public void WhitespaceValuesArePreservedForValueAttribute()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+                @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net'>  
+	<object id='test' type='Spring.Objects.TestObject, Spring.Core.Tests'>
+		<property name='name' value=' &#x000a;&#x000d;&#x0009;' />
+	</object>
+</objects>
+"));
+            Assert.AreEqual(" \n\r\t", ((TestObject) of.GetObject("test")).Name);
+        }
+
+        [Test]
+        public void WhitespaceValuesResultInEmptyStringForValueElement()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+                @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net'>  
+	<object id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests'>
+		<property name='name'><value /></property>
+	</object>
+	<object id='test3' type='Spring.Objects.TestObject, Spring.Core.Tests'>
+		<property name='name'><value></value></property>
+	</object>
+	<object id='test4' type='Spring.Objects.TestObject, Spring.Core.Tests'>
+		<property name='name'><value> &#x000a;&#x000d;&#x0009;</value></property>
+	</object>
+</objects>
+"));
+            Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test2")).Name);
+            Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test3")).Name);
+            Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test4")).Name);
+        }
     }
 }
