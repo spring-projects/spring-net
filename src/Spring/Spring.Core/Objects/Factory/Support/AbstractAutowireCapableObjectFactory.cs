@@ -2104,7 +2104,7 @@ namespace Spring.Objects.Factory.Support
                 return ConfigureObject(name, definition, new ObjectWrapper(target));
             }
 
-            return null;
+            return target;
         }
 
         /// <summary>

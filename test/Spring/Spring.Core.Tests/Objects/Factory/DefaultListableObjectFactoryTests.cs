@@ -1337,6 +1337,15 @@ namespace Spring.Objects.Factory
 			Assert.AreEqual(1, lof.ObjectPostProcessorCount, errMsg);
 		}
 
+        [Test]
+        public void ConfigureObjectReturnsOriginalInstanceIfNoDefinitionFound()
+        {
+            IConfigurableObjectFactory of = new DefaultListableObjectFactory();
+            object testObject = new object();
+            object resultObject = of.ConfigureObject(testObject, "non-existing object definition name");
+            Assert.AreSame(testObject, resultObject);
+        }
+
 		#region Helper Classes
 
 		public class GoodDisposable : IDisposable
