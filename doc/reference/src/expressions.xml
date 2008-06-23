@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="expressions">
   <title>Expression Evaluation</title>
+
   <sect1 id="expressions-introduction">
     <title>Introduction</title>
 
@@ -44,14 +45,12 @@ public static object GetValue(object root, string expression, IDictionary variab
 public static void SetValue(object root, string expression, object newValue)
 
 public static void SetValue(object root, string expression, IDictionary variables, object newValue)</programlisting>
-    The first argument is the 'root' object that the expression string (2nd argument) will be 
-    evaluated against.  The third argument is used to support variables in the expression 
-    and will be discussed later.
-    
-    Simple usage to get the value of an object property is shown below using the 
-    <classname>Inventor</classname> class.
-    You can find the class listing in section <xref linkend="expressions-classes"/>.
-    <programlisting>Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+    The first argument is the 'root' object that the expression string (2nd
+    argument) will be evaluated against. The third argument is used to support
+    variables in the expression and will be discussed later. Simple usage to
+    get the value of an object property is shown below using the
+    <classname>Inventor</classname> class. You can find the class listing in
+    section <xref linkend="expressions-classes" />. <programlisting>Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
 
 tesla.PlaceOfBirth.City = "Smiljan";
 
@@ -327,8 +326,7 @@ ExpressionEvaluator.GetValue(null, "'5.0067' matches '^-?\\d+(\\.\\d{2})?$'"))  
 
 ExpressionEvaluator.GetValue(null, @"'5.00' matches '^-?\d+(\.\d{2})?$'")  // true</programlisting>Note
         that the Visual Basic and not SQL syntax is used for the
-        <emphasis>like</emphasis> operator pattern string.
-        </para>
+        <emphasis>like</emphasis> operator pattern string.</para>
       </sect3>
 
       <sect3 id="expressions-logical">
@@ -645,7 +643,7 @@ ExpressionEvaluator.GetValue(ieee, "Members.${Nationality == 'Serbian'}.Name")  
       list.</para>
     </sect2>
 
-    <sect2>
+    <sect2 id="expressions-processors">
       <title>Collection Processors and Aggregators</title>
 
       <para>In addition to list projection and selection, Spring.NET
@@ -765,10 +763,118 @@ ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.
         <programlisting>ExpressionEvaluator.GetValue(null, "{1.2, 5.5, -3.3}.sort()")  // { -3.3, 1.2, 5.5 }
 ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.sort()")  // { null, 'abc', 'abc', 'def', 'def', 'xyz' }
 </programlisting>
+
+        <para>The sort processor also accepts a boolean value as an argument
+        to determine sort order, sort(false) will sort the collection in
+        decending order.</para>
+      </sect3>
+
+      <sect3>
+        <title>Type Conversion Processor</title>
+
+        <para>The convert processor can be used to convert a collection of
+        elements to a given Type.</para>
+
+        <programlisting>object[] arr = new object[] { "0", 1, 1.1m, "1.1", 1.1f };
+decimal[] result = (decimal[]) ExpressionEvaluator.GetValue(arr, "convert(decimal)");
+</programlisting>
+      </sect3>
+
+      <sect3>
+        <title>Reverse Processor</title>
+
+        <para>The reverse processor returns the reverse order of elements in
+        the list</para>
+
+        <programlisting>object[] arr = new object[] { "0", 1, 2.1m, "3", 4.1f };
+object[] result = new ArrayList( (ICollection) ExpressionEvaluator.GetValue(arr, "reverse()") ).ToArray(); // { 4.1f, "3", 2.1m, 1, "0" }            </programlisting>
+      </sect3>
+
+      <sect3>
+        <title>OrderBy Processor</title>
+
+        <para>Collections can be ordered in three ways, an expression, a SpEL
+        lamda expreression, or a delegate.</para>
+
+        <programlisting><emphasis role="bold">// orderBy expression</emphasis>
+IExpression exp = Expression.Parse("orderBy('ToString()')");
+object[] input = new object[] { 'b', 1, 2.0, "a" };
+object[] ordered = exp.GetValue(input);  // { 1, 2.0, "a", 'b' }
+
+
+<emphasis role="bold">// SpEL lambda expressions</emphasis>
+IExpression exp = Expression.Parse("orderBy({|a,b| $a.ToString().CompareTo($b.ToString())})");
+object[] input = new object[] { 'b', 1, 2.0, "a" };
+object[] ordered = exp.GetValue(input);  // { 1, 2.0, "a", 'b' }
+
+Hashtable vars = new Hashtable();
+Expression.RegisterFunction( "compare", "{|a,b| $a.ToString().CompareTo($b.ToString())}", vars);
+exp = Expression.Parse("orderBy(#compare)");
+ordered = exp.GetValue(input, vars);  // { 1, 2.0, "a", 'b' }
+
+<emphasis role="bold">// .NET delegate</emphasis>
+private delegate int CompareCallback(object x, object y);
+private int CompareObjects(object x, object y)
+{
+  if (x == y) return 0;
+  return x.ToString().CompareTo(""+y);
+}
+
+Hashtable vars = new Hashtable();
+vars["compare"] = new CompareCallback(CompareObjects);
+
+IExpression exp = Expression.Parse("orderBy(#compare)");
+object[] input = new object[] { 'b', 1, 2.0, "a" };
+object[] ordered = exp.GetValue(input);  // { 1, 2.0, "a", 'b' }
+</programlisting>
+      </sect3>
+
+      <sect3>
+        <title>User Defined Collection Processor</title>
+
+        <para>You can register your own collection processor for use in
+        evaluation a collection. Here is an example of a ICollectionProcessor
+        implementation that sums only the even numbers of an integer
+        list</para>
+
+        <programlisting>        public class IntEvenSumCollectionProcessor : ICollectionProcessor
+        {
+            public object Process(ICollection source, object[] args)
+            {
+                object total = 0d;
+                foreach (object item in source)
+                {
+                    if (item != null)
+                    {
+                        if (NumberUtils.IsInteger(item))
+                        {
+                            if ((int)item % 2 == 0)
+                            {
+                                total = NumberUtils.Add(total, item);
+                            }                            
+                        }
+                        else
+                        {
+                            throw new ArgumentException("Sum can only be calculated for a collection of numeric values.");
+                        }
+                    }
+                }
+
+                return total;
+            }
+        }
+
+
+        public void DoWork()
+        {
+            Hashtable vars = new Hashtable();
+            vars["EvenSum"] = new IntEvenSumCollectionProcessor();
+            int result = (int)ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4}.EvenSum()", vars));  // 6
+        }</programlisting>
       </sect3>
     </sect2>
 
-    <sect2>
+    <sect2 id="expressions-object-references">
       <title>Spring Object References</title>
 
       <para>Expressions can refer to objects that are declared in Spring's
@@ -794,13 +900,14 @@ int numMovies = (int) ExpressionEvaluator.GetValue(null,
       example.</para>
     </sect2>
 
-    <sect2>
+    <sect2 id="expressions-lamda">
       <title>Lambda Expressions</title>
 
       <para>A somewhat advanced, but a very powerful feature of Spring.NET
       Expression Language are lambda expressions. Lambda expressions allow you
       to define inline functions, which can then be used within your
-      expressions just like any other function or method.</para>
+      expressions just like any other function or method. You may also use
+      .NET delegates as described in the next section.</para>
 
       <para>The syntax for defining lambda expressions is:</para>
 
@@ -861,6 +968,32 @@ ExpressionEvaluator.GetValue(null, "#delegate({|n| $n ^ 2 }, 5)", vars)  // 25</
       this particular example is not particularly useful, it does demonstrate
       that lambda expressions are indeed treated as nothing more than
       parameterized variables, which is important to remember.</para>
+    </sect2>
+
+    <sect2>
+      <title>Delegate Expressions</title>
+
+      <para>Delegate expressions allow you to refer to .NET delegates which
+      can then be used within your expressions just like any other function or
+      method.</para>
+
+      <para>For example, you can define a max delegate and call it like
+      this</para>
+
+      <programlisting>private delegate double DoubleFunctionTwoArgs(double arg1, double arg2);
+
+private double Max(double arg1, double arg2)
+{
+  return Math.Max(arg1, arg2);
+}
+
+
+public void DoWork()
+{
+  Hashtable vars = new Hashtable();
+  vars["max"] = new DoubleFunctionTwoArgs(Max);
+  double result = (double) ExpressionEvaluator.GetValue(null, "#max(5,25)", vars);  // 25
+}</programlisting>
     </sect2>
 
     <sect2>
