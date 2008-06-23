@@ -158,10 +158,10 @@ namespace Spring.Objects.Support
                 {
                     propertyValue = ow.GetPropertyValue(this.sortDefinition.Property);
                 }
-                catch (InvalidPropertyException ex)
+                catch (InvalidPropertyException)
                 {
                     // the property doesn't exist in the first place, so let exception through...
-                    throw ex;
+                    throw;
                 }
                 catch (ObjectsException ex)
                 {

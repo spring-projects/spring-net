@@ -68,7 +68,7 @@ namespace Spring.Util
             catch (TargetInvocationException ex) 
             {
                 // unwrap the exception that actually caused the TargetInvocationException and throw that...
-                throw ex.GetBaseException();
+                throw ReflectionUtils.UnwrapTargetInvocationException(ex);
             }
         }
     }

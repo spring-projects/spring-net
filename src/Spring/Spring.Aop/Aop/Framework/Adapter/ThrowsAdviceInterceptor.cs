@@ -232,7 +232,7 @@ namespace Spring.Aop.Framework.Adapter
             catch (Exception ex)
             {
                 LookupAndInvokeAnyHandler(ex, invocation);
-                throw ex;
+                throw;
             }
         }
 
@@ -311,7 +311,7 @@ namespace Spring.Aop.Framework.Adapter
             }
             catch (TargetInvocationException ex)
             {
-                throw ex.InnerException;
+                throw ReflectionUtils.UnwrapTargetInvocationException(ex);
             }
         }
     }

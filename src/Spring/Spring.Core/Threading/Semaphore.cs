@@ -87,10 +87,10 @@ namespace Spring.Threading
 						Monitor.Wait(this);
 					--nPermits;
 				}
-				catch (ThreadInterruptedException ex)
+				catch (ThreadInterruptedException)
 				{
 					Monitor.Pulse(this);
-					throw ex;
+					throw;
 				}
 			}
 		}
@@ -134,10 +134,10 @@ namespace Spring.Threading
                             }
                         }
                     }
-                    catch (ThreadInterruptedException ex)
+                    catch (ThreadInterruptedException)
                     {
                         Monitor.Pulse(this);
-                        throw ex;
+                        throw;
                     }
                 }
             }
