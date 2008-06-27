@@ -36,9 +36,7 @@
         <div id="copyright">
           <img class="divider" src="<%= Page.ImagesRoot %>/line.jpg" alt="" width="500" height="1"/>
           <br/>
-          © Copyright 2005-2006, <a href="http://www.springframework.net/" title="Spring.NET Framework">
-            Spring.NET</a>, under the terms of the Apache 2.0 software license
-          license.
+          <%= CopyrightText %>
           <br/>
           
           <asp:LinkButton ID="english" Runat="server" CommandArgument="en-US" CausesValidation="False">English</asp:LinkButton>&nbsp;
