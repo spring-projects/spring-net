@@ -547,7 +547,11 @@ namespace Spring.Data.NHibernate
                 }
                 else
                 {
+#if NH_2_0
+                    rootCause = new PropertyValueException("mymsg", typeof(string).Name, "Name");
+#else
                     rootCause = new PropertyValueException("mymsg", typeof(string), "Name");
+#endif
                     LastCall.On(transaction).Throw(rootCause);
                 }
 

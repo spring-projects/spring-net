@@ -324,6 +324,8 @@
     <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate.Tests/Spring.Data.NHibernate.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate20.Tests.build" target="test" if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate20.Integration.Tests.build" target="test" if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-nms}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test"/>
@@ -532,6 +534,10 @@
 	<delete dir="test/Spring/Spring.Data.NHibernate.Tests/bin" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Data.NHibernate.Integration.Tests/obj" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Data.NHibernate.Integration.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.NHibernate20.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.NHibernate20.Tests/bin" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.NHibernate20.Integration.Tests/obj" failonerror="false"/>
+	<delete dir="test/Spring/Spring.Data.NHibernate20.Integration.Tests/bin" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Services.Tests/obj" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
@@ -1204,6 +1210,8 @@
       <include name="test/Spring/Spring.Data.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate.Integration.Tests/**"/>
+      <include name="test/Spring/Spring.Data.NHibernate20.Tests/**"/>
+      <include name="test/Spring/Spring.Data.NHibernate20.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/CommonAssemblyInfo.cs"/>
 
