@@ -54,8 +54,12 @@ namespace Spring.Data.NHibernate
 	    [Test]
 	    public void CreateNative()
 	    {
-            IApplicationContext ctx =
-                new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
+            IApplicationContext ctx;
+#if NH_2_0
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
+#else
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
+#endif
             ITestObjectDao dao = (ITestObjectDao)ctx.GetObject("nativeNHTestObjectDao");
 	        
             TestObject toGeorge = new TestObject();

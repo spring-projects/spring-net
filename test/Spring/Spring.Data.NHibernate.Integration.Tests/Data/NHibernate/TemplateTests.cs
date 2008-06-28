@@ -28,9 +28,7 @@ using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.Common;
-using Spring.Data.Config;
 using Spring.Data.Support;
-using Spring.Objects.Factory.Xml;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
@@ -79,8 +77,11 @@ namespace Spring.Data.NHibernate
         {
             //NamespaceParserRegistry.RegisterParser(typeof(DatabaseNamespaceParser));
             BasicConfigurator.Configure();
-            ctx =
-                new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
+#if NH_2_0
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
+#else
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
+#endif
             dbProvider = ctx["DbProvider"] as IDbProvider;
             transactionManager = ctx["hibernateTransactionManager"] as IPlatformTransactionManager;
             

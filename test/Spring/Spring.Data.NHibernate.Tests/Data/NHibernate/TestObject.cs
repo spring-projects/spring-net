@@ -47,19 +47,19 @@ namespace Spring.Data.NHibernate
 
 		#region Properties
 
-	    public int Age
+	    public virtual int Age
 	    {
 	        get { return age; }
 	        set { age = value; }
 	    }
 
-	    public string Name
+        public virtual string Name
 	    {
 	        get { return name; }
 	        set { name = value; }
 	    }
 
-	    public int ObjectNumber
+        public virtual int ObjectNumber
 	    {
 	        get { return objectNumber; }
 	        set { objectNumber = value; }

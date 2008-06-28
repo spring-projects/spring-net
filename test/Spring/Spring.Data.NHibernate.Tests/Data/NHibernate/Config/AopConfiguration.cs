@@ -22,8 +22,6 @@
 
 using NUnit.Framework;
 using Spring.Aop.Framework;
-using Spring.Aop.Framework.DynamicProxy;
-using Spring.Aop.Support;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Transaction;
@@ -44,8 +42,11 @@ namespace Spring.Data.NHibernate.Config
         [SetUp]
         public void Setup()
         {
-            ctx =
-                new XmlApplicationContext("assembly://Spring.Data.NHibernate.Tests/Spring.Data.NHibernate.Config/AopConfiguration.xml");
+#if NH_2_0
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate.Config/AopConfiguration.xml");
+#else
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Tests/Spring.Data.NHibernate.Config/AopConfiguration.xml");
+#endif
            
         }
 

@@ -123,17 +123,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\TestObject.hbm.xml">
-      <Link>Data\NHibernate\TestObject.hbm.xml</Link>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Data\NHibernate\Config\AopConfiguration.xml" />
+    <EmbeddedResource Include="Data\NHibernate\Config\AopConfigurationTxPointcut.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\Config\AopConfiguration.xml">
-      <Link>Data\NHibernate\Config\AopConfiguration.xml</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\Config\AopConfigurationTxPointcut.xml">
-      <Link>Data\NHibernate\Config\AopConfigurationTxPointcut.xml</Link>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Data\NHibernate\TestObject.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

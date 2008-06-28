@@ -65,8 +65,11 @@ namespace Spring.Data.NHibernate
         {
             BasicConfigurator.Configure();
             
-            ctx =
-                new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/NHDAOTests.xml");
+#if NH_2_0
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate/NHDAOTests.xml");
+#else
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/NHDAOTests.xml");
+#endif
             ctx.Name = AbstractApplicationContext.DefaultRootContextName;
             if (!ContextRegistry.IsContextRegistered(AbstractApplicationContext.DefaultRootContextName))
             {

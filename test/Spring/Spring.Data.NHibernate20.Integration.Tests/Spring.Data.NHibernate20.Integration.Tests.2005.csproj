@@ -141,27 +141,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Credit.hbm.xml">
-      <Link>Data\NHibernate\Credit.hbm.xml</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\dbProviderTemplateTests.xml">
-      <Link>Data\NHibernate\dbProviderTemplateTests.xml</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Debit.hbm.xml">
-      <Link>Data\NHibernate\Debit.hbm.xml</Link>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\MultipleDbTests.xml">
       <Link>Data\NHibernate\MultipleDbTests.xml</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\NHDAOTests.xml">
-      <Link>Data\NHibernate\NHDAOTests.xml</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\templateTests.xml">
-      <Link>Data\NHibernate\templateTests.xml</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\TestObject.hbm.xml">
-      <Link>Data\NHibernate\TestObject.hbm.xml</Link>
-    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\NHibernate\dbProviderTemplateTests.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\NHibernate\templateTests.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\NHibernate\Credit.hbm.xml" />
+    <Content Include="Data\NHibernate\NHDAOTests.xml" />
+    <EmbeddedResource Include="Data\NHibernate\TestObject.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

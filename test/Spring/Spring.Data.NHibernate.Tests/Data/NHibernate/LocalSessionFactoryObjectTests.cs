@@ -47,14 +47,17 @@ namespace Spring.Data.NHibernate
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
             sfo.DbProvider = dbProvider;
             IDictionary properties = new Hashtable();
-            properties.Add("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver");
-            properties.Add("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider");
+            properties.Add(Environment.Dialect, "NHibernate.Dialect.MsSql2000Dialect");
+            properties.Add(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver");
+            properties.Add(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider");
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();
 
             Assert.IsNotNull(sfo.Configuration);
-            Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionProvider].ToString(),
+            Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionProvider],
                             "NHibernate.Connection.DriverConnectionProvider");
+            Assert.AreEqual(sfo.Configuration.Properties[Environment.Dialect],
+                            "NHibernate.Dialect.MsSql2000Dialect");
         }
 
         [Test]
@@ -73,6 +76,7 @@ namespace Spring.Data.NHibernate
         {
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
             IDictionary properties = new Hashtable();
+            properties.Add(Environment.Dialect, "NHibernate.Dialect.MsSql2000Dialect");
             properties.Add(Environment.ConnectionProvider, "myClass");
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();
