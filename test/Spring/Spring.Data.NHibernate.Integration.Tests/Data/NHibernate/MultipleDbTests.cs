@@ -76,8 +76,11 @@ namespace Spring.Data.NHibernate
         public void SetUp()
         {
             BasicConfigurator.Configure();
-            ctx =
-                new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/MultipleDbTests.xml");
+#if NH_2_0
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate/MultipleDbTests.xml");
+#else
+            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/MultipleDbTests.xml");
+#endif
            
         }
 

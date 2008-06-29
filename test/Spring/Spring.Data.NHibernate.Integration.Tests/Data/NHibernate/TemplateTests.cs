@@ -231,10 +231,10 @@ namespace Spring.Data.NHibernate
             {
                  to = dao.FindByName("Gabriel");
             } 
-            catch (Exception e)
+            catch (Exception)
             {
                 transactionManager.Rollback(status);
-                throw e;
+                throw;
             }
             transactionManager.Commit(status);
             Assert.IsNotNull(to,"FindByName for Gabriel should not return null");
