@@ -189,7 +189,7 @@
     <programlisting>  &lt;object id="CacheAspect" type="Spring.Aspects.Cache.CacheAspect, Spring.Aop"/&gt;
   &lt;object id="AspNetCache" type="Spring.Caching.AspNetCache, Spring.Web"&gt;
     &lt;property name="SlidingExpiration" value="true"/&gt;
-    &lt;property name="Priority" value="CachePriority.Low"/&gt;
+    &lt;property name="Priority" value="Low"/&gt;
     &lt;property name="TimeToLive" value="00:02:00"/&gt;
   &lt;/object&gt;
 
