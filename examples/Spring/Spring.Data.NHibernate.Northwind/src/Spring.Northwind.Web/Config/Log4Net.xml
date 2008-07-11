@@ -29,7 +29,7 @@
   <root>
     <level value="DEBUG" />
     <!--<appender-ref ref="AspNetTraceAppender" />-->
-    <!--<appender-ref ref="TraceAppender" />-->
+    <appender-ref ref="TraceAppender" />
     <appender-ref ref="RollingFileAppender" />
   </root>
   <!--

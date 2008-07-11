@@ -1,0 +1,89 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FD89FEBE-4914-45F3-9123-B2CB954810DD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spring.Northwind.Web.References</RootNamespace>
+    <AssemblyName>Spring.Northwind.Web.References</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>.</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\bin\net\2.0\debug\antlr.runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\lib\NHibernate12\net\2.0\Castle.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net, Version=1.2.0.2, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\lib\NHibernate12\net\2.0\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\lib\NHibernate12\net\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=1.2.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\lib\NHibernate12\net\2.0\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.2005.csproj">
+      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
+      <Name>Spring.Core.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Data.NHibernate12\Spring.Data.NHibernate12.2005.csproj">
+      <Project>{90F2D070-6F98-4926-A626-BD7A6071D6D9}</Project>
+      <Name>Spring.Data.NHibernate12.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Data\Spring.Data.2005.csproj">
+      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
+      <Name>Spring.Data.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Web\Spring.Web.2005.csproj">
+      <Project>{BA4789EB-281A-48EA-8763-28B9F0596A18}</Project>
+      <Name>Spring.Web.2005</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
