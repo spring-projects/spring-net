@@ -36,22 +36,23 @@ namespace Spring.Web.Support
         /// </summary>
         /// <param name="applicationContext">ApplicationContext to be used</param>
         /// <param name="control">Control to inject dependencies into.</param>
-        public static void InjectDependenciesRecursive(IApplicationContext applicationContext, Control control)
+        public static Control InjectDependenciesRecursive(IApplicationContext applicationContext, Control control)
         {
             if (applicationContext != null)
             {
-                InjectDependenciesRecursiveInternal(applicationContext, control);
+                control = InjectDependenciesRecursiveInternal(applicationContext, control);
             }
+            return control;
         }
 
-        private static void InjectDependenciesRecursiveInternal(IApplicationContext appContext, Control control)
+        private static Control InjectDependenciesRecursiveInternal(IApplicationContext appContext, Control control)
         {
-            if (control is LiteralControl) return; // nothing to do
+            if (control is LiteralControl) return control; // nothing to do
 
             ISupportsWebDependencyInjection diControl = control as ISupportsWebDependencyInjection;
             if (diControl != null && diControl.DefaultApplicationContext != null)
             {
-                return; // nothing to do anymore - control cares for its children
+                return control; // nothing to do anymore - control cares for itself and its children
             }
 
             // "intercept" Control to make it DI-aware
@@ -72,7 +73,7 @@ namespace Spring.Web.Support
             }
 
             // inject dependencies using control's context
-            appContextToUse.ConfigureObject(control, control.GetType().FullName);
+            control = (Control)appContextToUse.ConfigureObject(control, control.GetType().FullName);
 
             // and now go for control's children
             if (control.HasControls())
@@ -82,12 +83,18 @@ namespace Spring.Web.Support
                 for (int i = 0; i < childCount; i++)
                 {
                     Control c = childControls[i];
-                    if (!(c is LiteralControl))
+                    if (c is LiteralControl) continue;
+
+                    Control configuredControl = InjectDependenciesRecursiveInternal(appContext, c);
+                    if (configuredControl != c)
                     {
-                        InjectDependenciesRecursiveInternal(appContext, c);
+                        ControlAccessor ac = new ControlAccessor(c.Parent);
+                        ac.SetControlAt(configuredControl, i);
                     }
                 }
             }
+
+            return control;
         }
 
         /// <summary>

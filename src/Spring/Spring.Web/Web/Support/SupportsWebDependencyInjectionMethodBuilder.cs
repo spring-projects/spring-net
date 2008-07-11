@@ -18,6 +18,7 @@
 
 #region Imports
 
+using System;
 using System.Reflection;
 using System.Reflection.Emit;
 using Spring.Proxy;
@@ -73,10 +74,19 @@ namespace Spring.Web.Support
             ParameterInfo[] callbackParams = _callbackMethod.GetParameters();
             ParameterInfo[] paramArray = method.GetParameters();
 
+            Type returnType = _callbackMethod.ReturnType;
+            int replaceArgumentIndex = -1;
+
             for (int j = 1; j < callbackParams.Length; j++)
             {
                 for (int i = 0; i < paramArray.Length; i++)
                 {
+                    // remember the parameter to assign the value returned from the callback to
+                    if (paramArray[i].ParameterType == returnType)
+                    {
+                        replaceArgumentIndex = i;
+                    }
+
                     if (paramArray[i].ParameterType == callbackParams[j].ParameterType)
                     {
                         il.Emit(OpCodes.Ldarg_S, i + 1);
@@ -87,6 +97,11 @@ namespace Spring.Web.Support
 
             // invoke static(!) callback
             il.EmitCall(OpCodes.Call, _callbackMethod, null);
+            // if callback has a result, store the result back into the first matching argument
+            if (replaceArgumentIndex > -1)
+            {
+                il.Emit(OpCodes.Starg_S, (byte)replaceArgumentIndex+1);
+            }
             return;
         }
     }

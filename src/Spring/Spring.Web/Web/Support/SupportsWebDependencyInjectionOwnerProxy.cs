@@ -63,8 +63,11 @@ namespace Spring.Web.Support
         protected override void AddedControl(Control control, int index)
         {
             // do DI
-            WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);
-
+            Control configuredControl = WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);
+            if (configuredControl != control)
+            {
+               _targetControl.SetControlAt( configuredControl, index );                
+            }
             _targetControl.AddedControl(control, index);
         }
 

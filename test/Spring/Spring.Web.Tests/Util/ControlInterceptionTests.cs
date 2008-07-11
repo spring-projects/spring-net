@@ -292,4 +292,35 @@ namespace Spring.Util
     }
 
     #endregion Test Support Classes
+
+    #region DI Templates // look at them using reflector
+
+    internal class DIControlCollection : ControlCollection, ISupportsWebDependencyInjection
+    {
+        private IApplicationContext _defaultApplicationContext;
+
+        public DIControlCollection(Control owner) : base(owner)
+        {
+        }
+
+        IApplicationContext ISupportsWebDependencyInjection.DefaultApplicationContext
+        {
+            get { return _defaultApplicationContext; }
+            set { _defaultApplicationContext = value; }
+        }
+
+        public override void Add(Control child)
+        {
+            child = WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, child);
+            base.Add(child);
+        }
+
+        public override void AddAt(int index, Control child)
+        {
+            child = WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, child);
+            base.AddAt(index, child);
+        }
+    }
+
+    #endregion
 }

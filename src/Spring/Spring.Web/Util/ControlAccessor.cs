@@ -187,6 +187,13 @@ namespace Spring.Util
 			}
 		}
 
+        private static readonly SafeField ControlsArrayField = new SafeField(typeof(ControlCollection).GetField("_controls", BindingFlags.Instance|BindingFlags.NonPublic));
+        public void SetControlAt(Control control, int index)
+        {
+             Control[] controls = (Control[]) ControlsArrayField.GetValue(this.Controls);
+            controls[index] = control;
+        }
+
 #if NET_2_0
         private delegate ControlCollection GetControlsDelegate(Control target);
         private delegate void SetControlsDelegate(Control target, ControlCollection controls);

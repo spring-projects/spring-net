@@ -161,7 +161,7 @@ namespace Spring.Web.UI.Controls
             if (!_suppressDependencyInjection 
                 && _defaultApplicationContext != null)
             {
-                WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);
+                control = WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);                
             }
             base.AddedControl(control, index);
         }

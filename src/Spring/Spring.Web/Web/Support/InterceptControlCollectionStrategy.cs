@@ -48,7 +48,7 @@ namespace Spring.Web.Support
         /// <summary>
         /// Holds a reference to the static(!) callback-method to be used during generation of intercepted ControlCollection-Types
         /// </summary>
-        private delegate void InjectDependenciesCallbackHandler(IApplicationContext defaultApplicationContext, Control control);
+        private delegate Control InjectDependenciesCallbackHandler(IApplicationContext defaultApplicationContext, Control control);
 
         /// <summary>
         /// The list of methods to be intercepted for a ControlCollection

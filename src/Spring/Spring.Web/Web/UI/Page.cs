@@ -540,10 +540,10 @@ namespace Spring.Web.UI
         /// <returns>
         /// Returns the specified <see langword="UserControl"/> object, with dependencies injected.
         /// </returns>
-        protected new Control LoadControl(string virtualPath)
+        protected virtual new Control LoadControl(string virtualPath)
         {
             Control control = base.LoadControl(virtualPath);
-            WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
+            control = WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
             return control;
         }
 
@@ -557,10 +557,10 @@ namespace Spring.Web.UI
     /// <returns>
     /// Returns the specified <see langword="UserControl"/> object, with dependencies injected.
     /// </returns>
-        protected new Control LoadControl(Type t, params object[] parameters)
+        protected virtual new Control LoadControl(Type t, params object[] parameters)
         {
             Control control = base.LoadControl(t, parameters);
-            WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
+            control = WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
             return control;
         }
 #endif
@@ -1656,7 +1656,7 @@ namespace Spring.Web.UI
         /// </summary>
         protected override void AddedControl(Control control, int index)
         {
-            WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
+            control = WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
             base.AddedControl(control, index);
         }
 

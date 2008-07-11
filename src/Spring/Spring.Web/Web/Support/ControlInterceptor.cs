@@ -18,8 +18,10 @@
 
 #region Imports
 
+using System;
 using System.Collections;
 using System.Web.UI;
+using Common.Logging;
 using Spring.Context;
 using Spring.Util;
 
@@ -33,6 +35,17 @@ namespace Spring.Web.Support
     /// <author>Erich Eichinger</author>
     internal sealed class ControlInterceptor
     {				
+        private class NoOpInterceptionStrategy : IInterceptionStrategy
+        {
+            private ILog Log = LogManager.GetLogger(typeof(NoOpInterceptionStrategy));
+
+            public bool Intercept(IApplicationContext defaultApplicationContext, ControlAccessor ctlAccessor,
+                                  ControlCollectionAccessor ctlColAccessor)
+            {
+                return true;
+            }
+        }
+
         /// <summary>
         /// Holds all available interception strategies
         /// </summary>
@@ -41,7 +54,12 @@ namespace Spring.Web.Support
                 new InterceptControlCollectionStrategy()
                 , new InterceptControlCollectionOwnerStrategy()
             };
-		
+
+		/// <summary>
+		/// The last resort interception strategy...
+		/// </summary>
+        private static readonly IInterceptionStrategy s_noopInterceptionStrategy = new NoOpInterceptionStrategy();
+
         /// <summary>
         /// Holds a control.GetType()->IInterceptionStrategy table.
         /// </summary>
@@ -102,10 +120,18 @@ namespace Spring.Web.Support
             else
             {
                 // probe for a strategy
+                bool bOk = false;
                 for(int i=0;i<s_availableInterceptionStrategies.Length;i++)
                 {
-                    bool bOk = s_availableInterceptionStrategies[i].Intercept(defaultApplicationContext, ctlAccessor, ctlColAccessor);
+                    strategy = s_availableInterceptionStrategies[i];
+                    bOk = strategy.Intercept(defaultApplicationContext, ctlAccessor, ctlColAccessor);
                     if (bOk) break;
+                }
+
+                if (!bOk)
+                {
+                    LogManager.GetLogger(typeof(ControlInterceptor)).Warn(string.Format("dependency injection not supported for control type {0}", ctlAccessor.GetTarget().GetType()));
+                    strategy = s_noopInterceptionStrategy;
                 }
 
                 lock(s_cachedInterceptionStrategies)
