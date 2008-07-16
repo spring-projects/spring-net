@@ -71,7 +71,7 @@
     poison-message handling policies. The message listener container leverages
     Spring's support for managing transactions. Both DTC, local messaging
     transactions, and local database transactions are supported. In
-    particular, you can easily coordinating the commit and rollback of a local
+    particular, you can easily coordinate the commit and rollback of a local
     MessageQueueTransaction and a local database transaction when they are
     used together.</para>
 
@@ -170,7 +170,10 @@
     <classname>MessageQueueTransactionManager</classname> an implementation of
     Spring's <classname>IPlatformTransactionManager</classname> abstraction
     that provides a uniform API on top of various transaction manager
-    (ADO.NET,NHibernate, MSMQ, etc). </para>
+    (ADO.NET,NHibernate, MSMQ, etc). Spring's
+    <classname>MessageQueueTransactionManager</classname> is responsible for
+    createing, committing, and rolling back a MSMQ
+    <classname>MessageQueueTransaction</classname>.</para>
 
     <para>While you can create the message listener container
     programmatically, we will show the declarative configuration approach
@@ -283,11 +286,13 @@
     queue questionTxQueue for redelivery). If the same message causes an
     exception in processing 5 times ,then it will be sent transactionally to
     the retryQuestionTxQueue and the message transaction will commit (removing
-    it from the queue questionTxQueue). The SendToQueueExceptionHandler
-    implements the interface
-    <classname>IMessageTransactionExceptionHandler</classname> (discussed
-    below) so you can write your own implementations should the provided ones
-    not meet your needs.</para>
+    it from the queue questionTxQueue). You can also specify that certain
+    exceptions should commit the transaction (remove from the queue) but this
+    is not shown here ,see below for more informatio non this functionality
+    The <classname>SendToQueueExceptionHandler</classname> implements the
+    interface <classname>IMessageTransactionExceptionHandler</classname>
+    (discussed below) so you can write your own implementations should the
+    provided ones not meet your needs.</para>
 
     <para>That's the quick tour folks. Hopefully you got a general feel for
     how things work, what requires configuration, and what is the code you

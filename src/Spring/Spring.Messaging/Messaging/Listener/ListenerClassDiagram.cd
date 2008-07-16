@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="10" />
+  <Class Name="Spring.Messaging.Listener.AbstractListenerContainer" Collapsed="true">
+    <Position X="3.75" Y="1" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>Messaging\Listener\AbstractListenerContainer.cs</FileName>
+      <HashCode>AAAAAAAgACgAAQAAEAEAIxAAAAgAAAYpIABAIAgAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Spring.Messaging.Listener.AbstractMessageListenerContainer" Collapsed="true">
+    <Position X="3.75" Y="2.25" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>Messaging\Listener\AbstractMessageListenerContainer.cs</FileName>
+      <HashCode>AABAMYAgABgAABIAAAAIAACAAAAAAAAAAAEAAAhAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Spring.Messaging.Listener.AbstractPeekingMessageListenerContainer" Collapsed="true">
+    <Position X="3.5" Y="3.5" Width="3" />
+    <TypeIdentifier>
+      <FileName>Messaging\Listener\AbstractPeekingMessageListenerContainer.cs</FileName>
+      <HashCode>AAAAAAAiwAghGCBAABEAAhSEAABAQAQIAAAAAIAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Spring.Messaging.Listener.DistributedTxMessageListenerContainer" Collapsed="true">
+    <Position X="6" Y="6" Width="3.75" />
+    <TypeIdentifier>
+      <FileName>Messaging\Listener\DistributedTxMessageListenerContainer.cs</FileName>
+      <HashCode>AAABAAAAAAgAAQAAAAAIAAAAAAQAAAAAAAAAAAAAAQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Spring.Messaging.Listener.AbstractTransactionalMessageListenerContainer" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="2.75" />
+    <TypeIdentifier>
+      <FileName>Messaging\Listener\AbstractTransactionalMessageListenerContainer.cs</FileName>
+      <HashCode>AAAAAIAAAAggEACAAAAIAAAAEAAAAAAAAAAAAAAAAAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Spring.Messaging.Listener.TransactionalMessageListenerContainer" Collapsed="true">
+    <Position X="2" Y="6" Width="3.75" />
+    <TypeIdentifier>
+      <FileName>Messaging\Listener\TransactionalMessageListenerContainer.cs</FileName>
+      <HashCode>AAhAAAAQAAgAASAIAAAKAAAAAAEAAgAAAAQAAACAAAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Spring.Messaging.Listener.NonTransactionalMessageListenerContainer" Collapsed="true">
+    <Position X="1.25" Y="4.75" Width="3.75" />
+    <TypeIdentifier>
+      <FileName>Messaging\Listener\NonTransactionalMessageListenerContainer.cs</FileName>
+      <HashCode>AAAAIAAAAAggAABAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>

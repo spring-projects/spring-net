@@ -17,6 +17,7 @@
 <!ENTITY psa-intro    SYSTEM "psa-intro.xml">
 <!ENTITY remoting     SYSTEM "remoting.xml">
 <!ENTITY nms	      SYSTEM "nms.xml">
+<!ENTITY msmq	      SYSTEM "msmq.xml">
 <!ENTITY web          SYSTEM "web.xml">
 <!ENTITY ajax         SYSTEM "ajax.xml">
 <!ENTITY services     SYSTEM "services.xml">
@@ -53,8 +54,8 @@
   <bookinfo>
     <title>The Spring.NET Framework</title>
     <subtitle>Reference Documentation</subtitle>
-    <releaseinfo>Version 1.1.2</releaseinfo>
-    <pubdate>Last Updated June 12, 2008</pubdate>
+    <releaseinfo>Version 1.2.0 M1</releaseinfo>
+    <pubdate>Last Updated July 16, 2008</pubdate>
     <authorgroup>
       <author>
         <firstname>Mark</firstname>
@@ -288,7 +289,7 @@
 		&services;
 		&webservices;
 	</part> 
-	<!--
+
 	<part id="spring-integration">
 		<title>Integration</title>
 		<partintro id="spring-integration-intro">
@@ -302,14 +303,22 @@
 					<para><xref linkend="nms"/></para>
 				</listitem>
 				<listitem>
+					<para><xref linkend="msmq"/></para>
+				</listitem>
+				<!--
+				<listitem>
 					<para><xref linkend="scheduling"/></para>
 				</listitem>
+				-->
 			</itemizedlist>
 		</partintro>
 		&nms;
+		&msmq;
+		<!--
 		&scheduling;
+		-->
 	</part>
-	-->
+
 	<part id="index-vsnet">
 		<title>VS.NET Integration</title>
 		<partintro>

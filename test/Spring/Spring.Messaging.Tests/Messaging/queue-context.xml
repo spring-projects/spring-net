@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+
+  <object id='testqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+    <property name='Path' value='.\Private$\testqueue'/>
+    <property name='DenySharedReceive' value='true'/>
+    <property name='AccessMode' value='Receive'/>
+    <property name='EnableCache' value='true'/>
+    <property name='ProductTemplate'>
+      <object>
+        <property name='Label' value='MyLabel'/>
+      </object>
+    </property>
+  </object>
+  
+</objects>

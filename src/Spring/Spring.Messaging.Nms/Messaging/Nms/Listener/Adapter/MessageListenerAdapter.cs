@@ -179,7 +179,6 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             }
             else
             {
-                //TODO ' use as '
                 IMessage msg = result as IMessage;
                 if (msg == null)
                 {

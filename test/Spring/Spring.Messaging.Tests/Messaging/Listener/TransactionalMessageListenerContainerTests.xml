@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+         xmlns:db="http://www.springframework.net/database">
+
+  
+  <db:provider id="DbProvider"                
+               provider="System.Data.SqlClient"
+               connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa"/>
+  
+  <object id="adoTransactionManager"
+          type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
+
+    <property name="DbProvider" ref="DbProvider"/>
+  </object>
+
+  <object id='msmqtxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+    <property name='Path' value='.\Private$\testtxqueue'/>
+    <property name='MessageReadPropertyFilterSetAll' value='true'/>
+    <property name='ProductTemplate'>
+      <object>
+        <property name='Label' value='MyTxLabel'/>
+      </object>
+    </property>
+  </object>
+
+  <object id='msmqtxresponsequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+    <property name='Path' value='.\Private$\testtxresponsequeue'/>
+    <property name='MessageReadPropertyFilterSetAll' value='true'/>
+    <property name='ProductTemplate'>
+      <object>
+        <property name='Label' value='MyTxResponseLabel'/>
+      </object>
+    </property>
+  </object>
+
+  <object id='msmqtxretryqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+    <property name='Path' value='.\Private$\testtxretryqueue'/>
+    <property name='MessageReadPropertyFilterSetAll' value='true'/>
+    <property name='ProductTemplate'>
+      <object>
+        <property name='Label' value='MyTxRetryLabel'/>
+      </object>
+    </property>
+  </object>
+
+  <object id="queueTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+    <property name="MessageQueueObjectName" value="msmqtxqueue"/>
+    <property name="MessageConverterObjectName" value="messageConverter"/>
+  </object>
+
+  <object id="retryQueueTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+    <property name="MessageQueueObjectName" value="msmqtxretryqueue"/>
+    <property name="MessageConverterObjectName" value="messageConverter"/>
+  </object>
+  
+  <object id="messageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"
+          singleton="false">
+    <property name="TargetTypes" value="System.String"/>
+  </object>
+
+  <object id="transactionalMessageListenerContainer" type="Spring.Messaging.Listener.TransactionalMessageListenerContainer, Spring.Messaging">
+    <property name="MessageQueueObjectName" value="msmqtxqueue"/>
+    <property name="PlatformTransactionManager" ref="adoTransactionManager"/>
+    <property name="MaxConcurrentListeners" value="1"/>
+    <property name="ListenerTimeLimit" value="20s"/>
+    <property name="MessageListener" ref="messageListenerAdapter"/>
+    <property name="MessageTransactionExceptionHandler" ref="messageTransactionExceptionHandler"/>
+    <property name="AutoStartup" value="false"/>
+  </object>
+
+  <object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging">
+    <property name="DefaultResponseQueueName" value="msmqtxresponsequeue"/>
+    <property name="MessageConverterObjectNAme" value="messageConverter"/>
+    <property name="HandlerObject" ref="simpleHandler"/>
+  </object>
+
+  <object id="simpleHandler" type="Spring.Messaging.Listener.SimpleHandler, Spring.Messaging.Tests">
+    
+  </object>
+
+  <object id="messageTransactionExceptionHandler" type="Spring.Messaging.Listener.SendToQueueExceptionHandler, Spring.Messaging">
+    <property name="MaxRetry" value="2"/>
+    <property name="MessageQueueObjectName" value="msmqtxretryqueue"/>
+  </object>
+  
+  <object id="simpleMessageListener" type="Spring.Messaging.Listener.SimpleMessageListener, Spring.Messaging.Tests"/>
+  
+</objects>
