@@ -257,6 +257,7 @@
     <Compile Include="Transaction\Support\AbstractPlatformTransactionManager.cs" />
     <Compile Include="Transaction\Support\DefaultTransactionDefinition.cs" />
     <Compile Include="Transaction\Support\DefaultTransactionStatus.cs" />
+    <Compile Include="Transaction\Support\IResourceTransactionManager.cs" />
     <Compile Include="Transaction\Support\ISmartTransactionObject.cs" />
     <Compile Include="Transaction\Support\ITransactionCallback.cs" />
     <Compile Include="Transaction\Support\ITransactionOperations.cs" />

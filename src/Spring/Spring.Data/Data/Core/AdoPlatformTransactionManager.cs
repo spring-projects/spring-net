@@ -37,7 +37,7 @@ namespace Spring.Data.Core
     /// interface.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
-    public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager, IInitializingObject
+    public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager, IResourceTransactionManager, IInitializingObject
     {
 
         private IDbProvider dbProvider;
@@ -424,6 +424,19 @@ namespace Spring.Data.Core
             if (dbProvider == null)
             {
                 throw new ArgumentException("DbProvider is required");
+            }
+        }
+
+        /// <summary>
+        /// Gets the resource factory that this transaction manager operates on,
+        /// For the AdoPlatformTransactionManager this is the DbProvider
+        /// </summary>
+        /// <value>The DbProvider.</value>
+        public object ResourceFactory
+        {
+            get
+            {
+                return dbProvider;
             }
         }
     }

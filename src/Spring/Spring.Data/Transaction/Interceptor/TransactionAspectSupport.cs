@@ -338,6 +338,7 @@ namespace Spring.Transaction.Interceptor
 	    {
 	        ITransactionAttribute txAttr = sourceAttr;
 
+            // If no name specified, apply method identification as transaction name.
 	        if (txAttr != null && txAttr.Name == null)
 	        {
 	            txAttr = new DelegatingTransactionAttributeWithName(txAttr, joinpointIdentification);

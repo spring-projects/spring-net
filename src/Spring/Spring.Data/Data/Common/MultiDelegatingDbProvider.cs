@@ -37,12 +37,14 @@ namespace Spring.Data
     /// <remarks>
     /// The name of which DbProvider to use, as provided to the IDictionary property TargetDbProviders
     /// is "dbProviderName".  Once the target dbprovider name is known, set the name via a call to
-    /// <code>LogicalThreadContext.SetData("dbProviderName", "database1ProviderName")</code>. The value
+    /// <code>LogicalThreadContext.SetData(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME, "database1ProviderName")</code>. The value
     /// "database1ProviderName" must match a key in the provided TargetDbProviders dictionary.
     /// </remarks>
     /// <author>Mark Pollack</author>
     public class MultiDelegatingDbProvider : IDbProvider, IInitializingObject
     {
+        private static readonly string CURRENT_DBPROVIDER_SLOTNAME = Spring.Util.UniqueKey.GetTypeScopedString(typeof(MultiDelegatingDbProvider), "Current");
+
         private IDictionary targetDbProviders = new SynchronizedHashtable();
 
         #region Constructors
@@ -254,13 +256,26 @@ namespace Spring.Data
         /// <returns>The corresonding IDbProvider.</returns>
         protected virtual IDbProvider GetTargetProvider()
         {
-            string dbProviderName = (string)LogicalThreadContext.GetData("dbProviderName");
+            string dbProviderName = (string)LogicalThreadContext.GetData(CURRENT_DBPROVIDER_SLOTNAME);
             if (targetDbProviders.Contains(dbProviderName))
             {
                 return (IDbProvider)targetDbProviders[dbProviderName];
             }
             throw new InvalidDataAccessApiUsageException("'" + dbProviderName + "'"
                                         + "was not under the thread local key 'dbProviderName'");
+        }
+
+        /// <summary>
+        /// Convenience method to sets the name of the DbProvider that will be used for the
+        /// the current thread's procesing.
+        /// </summary>
+        /// <value>The name of the DbProvider to use for the current threads processing.</value>
+        public static string CurrentDbProviderName
+        {
+            set
+            {
+                LogicalThreadContext.SetData(CURRENT_DBPROVIDER_SLOTNAME, value);
+            }            
         }
     }
 }

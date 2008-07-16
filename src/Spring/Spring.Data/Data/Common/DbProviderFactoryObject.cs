@@ -34,9 +34,15 @@ namespace Spring.Data.Common
     /// </remarks>
     public class DbProviderFactoryObject : IFactoryObject, IInitializingObject
     {
+        #region Fields
+
         private string provider;
         private string connectionString;
         private IDbProvider dbProvider;
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Creates a new instance of the <see cref="DbProviderFactoryObject"/> class.
@@ -44,6 +50,42 @@ namespace Spring.Data.Common
         public DbProviderFactoryObject()
         {
         }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the name of the database provider.
+        /// </summary>
+        /// <value>The name of the database provider.</value>
+        public string Provider
+        {
+            get { return provider; }
+            set
+            {
+                AssertUtils.ArgumentHasText(value, "The 'ProviderName' property must have a value.");
+                provider = value.Trim();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the connection string.
+        /// </summary>
+        /// <value>The connection string.</value>
+        public string ConnectionString
+        {
+            get { return connectionString; }
+            set
+            {
+                AssertUtils.ArgumentHasText(value, "The 'ConnectionString' property must have a value.");
+                connectionString = value.Trim();
+            }
+        }
+
+        #endregion
+
+        #region IFactoryObject Members
 
         /// <summary>
         /// Return an instance of and IDbProvider as configured by this factory
@@ -96,6 +138,10 @@ namespace Spring.Data.Common
             get { return true; }
         }
 
+        #endregion
+
+        #region IInitializingObject Memebers
+
         /// <summary>
         /// Validates that the provider name is specified.
         /// </summary>
@@ -111,33 +157,9 @@ namespace Spring.Data.Common
             ValidateProperties();
         }
 
-        /// <summary>
-        /// Gets or sets the name of the database provider.
-        /// </summary>
-        /// <value>The name of the database provider.</value>
-        public string Provider
-        {
-            get { return provider; }
-            set
-            {
-                AssertUtils.ArgumentHasText(value, "The 'ProviderName' property must have a value.");
-                provider = value.Trim();
-            }
-        }
+        #endregion
 
-        /// <summary>
-        /// Gets or sets the connection string.
-        /// </summary>
-        /// <value>The connection string.</value>
-        public string ConnectionString
-        {
-            get { return connectionString; }
-            set
-            {
-                AssertUtils.ArgumentHasText(value, "The 'ConnectionString' property must have a value.");
-                connectionString = value.Trim();
-            }
-        }
+        #region Private Memebers
 
         /// <summary>
         /// Validates the properties.
@@ -149,5 +171,7 @@ namespace Spring.Data.Common
                 throw new ArgumentException("The 'DbProviderName' property has not been set.");
             }
         }
+
+        #endregion
     }
 }

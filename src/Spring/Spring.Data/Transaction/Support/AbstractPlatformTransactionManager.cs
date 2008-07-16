@@ -232,7 +232,7 @@ namespace Spring.Transaction.Support
 
         #endregion
 
-        #region Abstract Methods
+        #region Protected Methods
 
         /// <summary>
         /// Return the current transaction object.
@@ -413,6 +413,35 @@ namespace Spring.Transaction.Support
         {
             return true;
         }
+
+        /// <summary>
+        /// Register the given list of transaction synchronizations with the existing transaction.
+        /// </summary>
+        /// <remarks>
+        /// Invoked when the control of the Spring transaction manager and thus all Spring
+        /// transaction synchronizations end, without the transaction being completed yet. This
+        /// is for example the case when participating in an existing System.Transactions or
+        /// EnterpriseServices transaction invoked via their APIs.
+        /// <para>
+        /// The default implementation simply invokes the <code>AfterCompletion</code> methods
+        /// immediately, passing in TransactionSynchronizationStatus.Unknown. 
+        /// This is the best we can do if there's no chance to determine the actual 
+        /// outcome of the outer transaction.
+        /// </para>
+        /// </remarks>
+        /// <param name="transaction">The transaction transaction object returned by <code>DoGetTransaction</code>.</param>
+        /// <param name="synchronizations">The lList of TransactionSynchronization objects.</param>
+        /// <exception cref="TransactionException">In case of errors</exception>
+        /// <seealso cref="InvokeAfterCompletion"/>
+        /// <seealso cref="ITransactionSynchronization.AfterCompletion"/>
+        /// <seealso cref="TransactionSynchronizationStatus.Unknown"/>
+        protected virtual void RegisterAfterCompletionWithExistingTransaction(Object transaction, IList synchronizations)
+		{
+
+		    log.Debug("Cannot register Spring after-completion synchronization with existing transaction - " +
+				"processing Spring after-completion callbacks immediately, with outcome status 'unknown'");
+		    InvokeAfterCompletion(synchronizations, TransactionSynchronizationStatus.Unknown);
+	    }
 
         /// <summary>
         /// Cleanup resources after transaction completion.
@@ -1130,6 +1159,7 @@ namespace Spring.Transaction.Support
                 {
                     //TODO investigate parallel of JTA/System.Txs
                     log.Info("Transaction controlled outside of spring tx manager.");
+                    RegisterAfterCompletionWithExistingTransaction(status.Transaction, synchronizations);
                 }
             }
         }
