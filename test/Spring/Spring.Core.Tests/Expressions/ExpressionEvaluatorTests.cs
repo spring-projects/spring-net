@@ -41,6 +41,7 @@ using Spring.Context.Support;
 using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Expressions;
+using Spring.Expressions.Processors;
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Threading;
@@ -1565,6 +1566,37 @@ namespace Spring.Expressions
             Assert.AreEqual(TransactionOption.Required, webMethod.TransactionOption);
         }
 
+        [Test]
+        public void TestDelegateFunctionExpressions()
+        {
+            //for purposes of an example in documentation
+            Hashtable vars = new Hashtable();
+            vars["sqrt"] = new DoubleFunction(Sqrt);
+            double result = (double)ExpressionEvaluator.GetValue(null, "#sqrt(64)", vars);
+            Assert.AreEqual(8, result);
+
+            vars = new Hashtable();
+            vars["max"] = new DoubleFunctionTwoArgs(Max);
+            result = (double) ExpressionEvaluator.GetValue(null, "#max(5,25)", vars);
+            Assert.AreEqual(25, result);
+
+            
+        }
+
+        private delegate double DoubleFunction(double arg);
+        
+        private double Sqrt(double arg)
+        {
+            return Math.Sqrt(arg);
+        }
+
+        private delegate double DoubleFunctionTwoArgs(double arg1, double arg2);
+
+        private double Max(double arg1, double arg2)
+        {
+            return Math.Max(arg1, arg2);
+        }
+
         /// <summary>
         /// Type lambda expressions.
         /// </summary>
@@ -1624,6 +1656,43 @@ namespace Spring.Expressions
             Assert.AreEqual(4, ExpressionEvaluator.GetValue(arr, "count()"));
             Assert.AreEqual(3, ExpressionEvaluator.GetValue(null, "{1, 5, -3}.count()"));
             Assert.AreEqual(0, ExpressionEvaluator.GetValue(null, "count()"));
+        }
+
+        [Test]
+        public void TestCustomCollectionProcessor()
+        {
+            // Test for the purposes of creating documentation example.  
+            Hashtable vars = new Hashtable();
+            vars["EvenSum"] = new IntEvenSumCollectionProcessor();
+            Assert.AreEqual(6, ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4}.EvenSum()", vars));
+
+        }
+
+        private class IntEvenSumCollectionProcessor : ICollectionProcessor
+        {
+            public object Process(ICollection source, object[] args)
+            {
+                object total = 0d;
+                foreach (object item in source)
+                {
+                    if (item != null)
+                    {
+                        if (NumberUtils.IsInteger(item))
+                        {
+                            if ((int)item % 2 == 0)
+                            {
+                                total = NumberUtils.Add(total, item);
+                            }                            
+                        }
+                        else
+                        {
+                            throw new ArgumentException("Sum can only be calculated for a collection of numeric values.");
+                        }
+                    }
+                }
+
+                return total;
+            }
         }
 
         [Test]

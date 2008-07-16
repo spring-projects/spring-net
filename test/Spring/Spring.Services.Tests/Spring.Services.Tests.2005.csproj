@@ -183,6 +183,6 @@
     </PreBuildEvent>
     <PostBuildEvent>echo "Copying .xml files for Spring.Services tests"
 xcopy "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2005\Spring.Services.Tests\$(ConfigurationName)\ /y /s /q /d
-xcopy  "$(ProjectDir)$(TargetFileName).config" ..\..\..\..\build\VS.Net.2005\Spring.Services.Tests\$(ConfigurationName)\ /y /s /q</PostBuildEvent>
+xcopy "$(ProjectDir)$(TargetFileName).config" ..\..\..\..\build\VS.Net.2005\Spring.Services.Tests\$(ConfigurationName)\ /y /s /q</PostBuildEvent>
   </PropertyGroup>
 </Project>
