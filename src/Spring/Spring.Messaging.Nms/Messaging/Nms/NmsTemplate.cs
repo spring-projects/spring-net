@@ -87,9 +87,9 @@ namespace Spring.Messaging.Nms
 
         /// <summary> Create a new NmsTemplate.</summary>
         /// <remarks>
-        /// <p>Note: The IConnectionFactory has to be set before using the instance.
+        /// <para>Note: The IConnectionFactory has to be set before using the instance.
         /// This constructor can be used to prepare a NmsTemplate via an ObjectFactory,
-        /// typically setting the IConnectionFactory.</p>
+        /// typically setting the IConnectionFactory.</para>
         /// </remarks>
         public NmsTemplate()
         {

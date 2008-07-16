@@ -95,6 +95,13 @@ namespace Spring.Messaging.Nms.Support.IDestinations
 		
         #endregion
 
+        /// <summary>
+        /// Resolves the given destination name to a NMS destination.
+        /// </summary>
+        /// <param name="session">The current session.</param>
+        /// <param name="destinationName">Name of the destination.</param>
+        /// <returns>The located IDestination</returns>
+        /// <exception cref="NMSException">If resolution failed.</exception>
         public virtual IDestination ResolveDestinationName(ISession session, System.String destinationName)
         {
             return DestinationResolver.ResolveDestinationName(session, destinationName, PubSubDomain);

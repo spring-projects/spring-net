@@ -62,6 +62,10 @@ namespace Spring.Messaging.Nms.Listener
             return consumer;
         }
 
+        /// <summary>
+        /// Close the message consumers and sessions.
+        /// </summary>
+        /// <throws>NMSException if destruction failed </throws>
         protected override void DestroyListener()
         {
             logger.Debug("Closing NMS IMessageConsumers");
@@ -76,6 +80,9 @@ namespace Spring.Messaging.Nms.Listener
             }
         }
 
+        /// <summary>
+        /// Afters the properties set.
+        /// </summary>
         public override void AfterPropertiesSet()
         {
             if (this.concurrentConsumers <= 0)

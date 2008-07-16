@@ -164,28 +164,20 @@ namespace Spring.Messaging.Nms.IConnections
             //return (ISession)CollectionUtils.FindValueOfType(sessions, sessionType);
         }
 
+        /// <summary>
+        /// Commits all sessions.
+        /// </summary>
         public virtual void CommitAll()
         {
             foreach (ISession session in sessions)
             {
 				session.Commit();
-				
-				// TODO are these exceptions valid?
-//                try
-//                {
-//                    session.Commit();
-//                }
-//                catch (TransactionInProgressException ex)
-//                {
-//                    // Ignore -> can only happen in case of a distributed transaction.
-//                }
-//                catch (IllegalStateException ex)
-//                {
-//                    // Ignore -> can only happen in case of a distributed transaction.
-//                }
             }
         }
-        
+
+        /// <summary>
+        /// Closes all sessions then stops and closes all connections, in that order.
+        /// </summary>
         public virtual void CloseAll()
         {
             foreach (ISession session in sessions)

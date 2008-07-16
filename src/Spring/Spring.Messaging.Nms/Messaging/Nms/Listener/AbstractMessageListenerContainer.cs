@@ -372,11 +372,27 @@ namespace Spring.Messaging.Nms.Listener
             }
         }
 
+        /// <summary>
+        /// Invoke the specified listener as standard JMS MessageListener.
+        /// </summary>
+        /// <remarks>Default implementation performs a plain invocation of the
+        /// <code>OnMessage</code> methods</remarks>
+        /// <param name="listener">The listener to invoke.</param>
+        /// <param name="message">The received message.</param>
+        /// <exception cref="NMSException">if thronw by the underlying NMS APIs</exception>
         protected virtual void DoInvokeListener(IMessageListener listener, IMessage message)
         {
             listener.OnMessage(message);
         }
 
+        /// <summary>
+        /// Invoke the specified listener as Spring SessionAwareMessageListener,
+        /// exposing a new NMS Session (potentially with its own transaction)
+        /// to the listener if demanded.
+        /// </summary>
+        /// <param name="listener">The Spring ISessionAwareMessageListener to invoke.</param>
+        /// <param name="session">The session to operate on.</param>
+        /// <param name="message">The received message.</param>
         protected virtual void DoInvokeListener(ISessionAwareMessageListener listener, ISession session, IMessage message)
         {
             IConnection conToClose = null;
