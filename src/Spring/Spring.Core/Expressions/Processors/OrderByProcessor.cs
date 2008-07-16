@@ -106,7 +106,7 @@ namespace Spring.Expressions.Processors
         /// Sorts the source collection using custom sort criteria.
         /// </summary>
         /// <remarks>
-        /// Please not that your compare function needs to take care about
+        /// Please note that your compare function needs to take care about
         /// proper conversion of types to be comparable!
         /// </remarks>
         /// <param name="source">
