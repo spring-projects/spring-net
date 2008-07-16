@@ -63,7 +63,7 @@ namespace Spring.Data.NHibernate
     /// operations within a single transaction.</para>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	public class HibernateTransactionManager : AbstractPlatformTransactionManager, IObjectFactoryAware, IInitializingObject
+	public class HibernateTransactionManager : AbstractPlatformTransactionManager, IResourceTransactionManager, IObjectFactoryAware, IInitializingObject
 	{   
 		#region Fields
         
@@ -235,7 +235,18 @@ namespace Spring.Data.NHibernate
 	        set { sessionFactory = value; }
 	    }
 
-        /// <summary>
+
+	    /// <summary>
+	    /// Gets the resource factory that this transaction manager operates on,
+        /// For the HibenratePlatformTransactionManager this the SessionFactory
+	    /// </summary>
+	    /// <value>The SessionFactory.</value>
+	    public object ResourceFactory
+	    {
+	        get { return sessionFactory; }
+	    }
+
+	    /// <summary>
         /// Set whether to autodetect a ADO.NET connection used by the Hibernate SessionFactory,
         /// if set via LocalSessionFactoryObject's <code>DbProvider</code>. Default is "true".
         /// </summary>
