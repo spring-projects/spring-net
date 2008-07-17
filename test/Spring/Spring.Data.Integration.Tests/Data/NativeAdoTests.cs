@@ -53,6 +53,7 @@ namespace Spring.Data
 
 			SqlConnection conn = new SqlConnection(connString);
 			conn.Open();
+            conn.Open();
 			//conn.BeginTransaction(IsolationLevel.Unspecified);
 			SqlTransaction trans = conn.BeginTransaction();
 			Console.WriteLine(trans.IsolationLevel);

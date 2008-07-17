@@ -77,8 +77,6 @@ namespace Spring.Messaging.Nms
 		
 		private TimeSpan timeToLive;
 		
-        private bool cacheNmsResources = true;
-
         private NmsResources jmsResources = new NmsResources();
         
         #endregion
@@ -180,17 +178,10 @@ namespace Spring.Messaging.Nms
                 return action.DoInNms(sessionToUse);
             }
             //TODO make sure don't want to do exception translation.
-            //TODO investigate options to not close session/connection via caching since
-            //these objects are thread safe in tibco ems.
             finally
             {
-                if (!CacheNmsResources)
-                {
-                    NmsUtils.CloseSession(sessionToClose);
-                    NmsUtils.CloseConnection(conToClose, startConnection);
-                }
-                //TODO No IConnectionFactory interface so can't create
-                //     non closing impl of IConnection  Need NMS.
+                NmsUtils.CloseSession(sessionToClose);
+                ConnectionFactoryUtils.ReleaseConnection(conToClose, ConnectionFactory, startConnection);                
             }
         }
 
@@ -358,12 +349,6 @@ namespace Spring.Messaging.Nms
         }
 
 
-        virtual public bool CacheNmsResources
-        {
-            get { return cacheNmsResources; }
-            set { cacheNmsResources = value; }
-        }
-
         #endregion
 
         protected virtual object DoConvertFromMessage(IMessage message)
@@ -400,58 +385,6 @@ namespace Spring.Messaging.Nms
         {
             return holder.GetSession();
         }
-
-        /// <summary>Create a NMS IConnection via this template's IConnectionFactory.
-        /// </summary>
-        /// <remarks>If CacheNmsResource is true, then the connection
-        /// will be created upon the first invocation and will retrun the same
-        /// connection on all subsequent calls.
-        /// </remarks>
-        /// <returns>A NMS IConnection
-        /// </returns>
-        /// <throws>NMSException if thrown by NMS API methods </throws>
-        protected virtual IConnection CreateConnection()
-        {
-            if (this.CacheNmsResources)
-            {
-                if (jmsResources.Connection ==  null)
-                {
-                    jmsResources.Connection = ConnectionFactory.CreateConnection();
-                }
-                return jmsResources.Connection;
-
-            }
-            else
-            {
-                return ConnectionFactory.CreateConnection();
-            }
-            
-        }
-
-        /// <summary> Create a NMS ISession for the given IConnection.
-        /// <p>This implementation uses NMS 1.1 API.</p>
-        /// </summary>
-        /// <param name="con">the NMS IConnection to create a ISession for
-        /// </param>
-        /// <returns> the new NMS ISession
-        /// </returns>
-        /// <throws>NMSException if thrown by NMS API methods </throws>
-        protected virtual ISession CreateSession(IConnection con)
-        {
-            if (CacheNmsResources)
-            {
-                if (jmsResources.Session == null)
-                {
-                    jmsResources.Session = jmsResources.Connection.CreateSession(SessionAcknowledgeMode);
-                }
-                return jmsResources.Session;
-            }
-            else
-            {
-                return con.CreateSession(SessionAcknowledgeMode);
-            }
-        }
-
 
         /// <summary> Create a NMS IMessageProducer for the given ISession and IDestination,
         /// configuring it to disable message ids and/or timestamps (if necessary).
@@ -498,18 +431,7 @@ namespace Spring.Messaging.Nms
         /// <throws>NMSException if thrown by NMS API methods </throws>
         protected virtual IMessageProducer DoCreateProducer(ISession session, IDestination destination)
         {
-            if (CacheNmsResources)
-            {
-                if (jmsResources.MessageProducer == null)
-                {
-                    jmsResources.MessageProducer = session.CreateProducer(destination);
-                }
-                return jmsResources.MessageProducer;
-            }
-            else
-            {
-                return session.CreateProducer(destination);
-            }
+            return session.CreateProducer(destination);            
         }
 
         /// <summary> Create a NMS IMessageConsumer for the given ISession and IDestination.
@@ -596,17 +518,10 @@ namespace Spring.Messaging.Nms
             }
             finally
             {
-                CloseProducer(producer);
-            }
-        }
-
-        private void CloseProducer(IMessageProducer producer)
-        {
-            if (!CacheNmsResources)
-            {
                 NmsUtils.CloseMessageProducer(producer);
             }
         }
+
 
         /// <summary> Actually send the given NMS message.</summary>
         /// <param name="producer">the NMS IMessageProducer to send with

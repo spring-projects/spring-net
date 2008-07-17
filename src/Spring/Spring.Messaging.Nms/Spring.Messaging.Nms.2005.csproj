@@ -48,7 +48,10 @@
   <ItemGroup>
     <Compile Include="Context\ILifecycle.cs" />
     <Compile Include="Messaging\Nms\Connections\ConnectionFactoryUtils.cs" />
+    <Compile Include="Messaging\Nms\Connections\ISmartConnectionFactory.cs" />
     <Compile Include="Messaging\Nms\Connections\NmsResourceHolder.cs" />
+    <Compile Include="Messaging\Nms\Connections\NmsTransactionManager.cs" />
+    <Compile Include="Messaging\Nms\Connections\SingleConnectionFactory.cs" />
     <Compile Include="Messaging\Nms\Connections\SynchedLocalTransactionFailedException.cs" />
     <Compile Include="Messaging\Nms\IMessageCreator.cs" />
     <Compile Include="Messaging\Nms\IMessageListener.cs" />
@@ -74,6 +77,10 @@
     <Compile Include="Messaging\Nms\Support\NmsUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Spring.Aop\Spring.Aop.2005.csproj">
+      <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
+      <Name>Spring.Aop.2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spring.Core\Spring.Core.2005.csproj">
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
       <Name>Spring.Core.2005</Name>

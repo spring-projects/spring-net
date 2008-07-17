@@ -20,7 +20,7 @@
 				<include name="**/*.cs" />
 				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
-		        <resources prefix="Spring" dynamicprefix="true" failonempty="true">
+		        <resources prefix="Spring" dynamicprefix="true" failonempty="false">
 			        <include name="**/*.xml" />
 			</resources>
 			<references basedir="${current.bin.dir}">

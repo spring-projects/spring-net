@@ -19,9 +19,10 @@
 #endregion
 
 using System;
+using Apache.NMS;
+using Common.Logging;
 using Spring.Transaction.Support;
 using Spring.Util;
-using Apache.NMS;
 
 namespace Spring.Messaging.Nms.IConnections
 {
@@ -33,7 +34,11 @@ namespace Spring.Messaging.Nms.IConnections
     /// <author>Mark Pollack (.NET)</author>
     public abstract class ConnectionFactoryUtils
     {
-        
+        #region Logging
+
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(ConnectionFactoryUtils));
+
+        #endregion
 
         /// <summary> Obtain a NMS ISession that is synchronized with the current transaction, if any.</summary>
         /// <param name="cf">the IConnectionFactory to obtain a ISession for
@@ -50,10 +55,13 @@ namespace Spring.Messaging.Nms.IConnections
         /// <returns> the transactional ISession, or <code>null</code> if none found
         /// </returns>
         /// <throws>  NMSException in case of NMS failure </throws>
-        public static ISession GetTransactionalSession(IConnectionFactory cf, IConnection existingCon,  bool synchedLocalTransactionAllowed)
+        public static ISession GetTransactionalSession(IConnectionFactory cf, IConnection existingCon,
+                                                       bool synchedLocalTransactionAllowed)
         {
-
-            return DoGetTransactionalSession(cf, new AnonymousClassResourceFactory(existingCon, cf, synchedLocalTransactionAllowed));
+            return
+                DoGetTransactionalSession(cf,
+                                          new AnonymousClassResourceFactory(existingCon, cf,
+                                                                            synchedLocalTransactionAllowed));
         }
 
         /// <summary> Obtain a NMS ISession that is synchronized with the current transaction, if any.</summary>
@@ -66,13 +74,13 @@ namespace Spring.Messaging.Nms.IConnections
         /// <returns> the transactional ISession, or <code>null</code> if none found
         /// </returns>
         /// <throws>NMSException in case of NMS failure </throws>
-        public static ISession DoGetTransactionalSession(System.Object resourceKey, ConnectionFactoryUtils.ResourceFactory resourceFactory)
+        public static ISession DoGetTransactionalSession(Object resourceKey, ResourceFactory resourceFactory)
         {
-
             AssertUtils.ArgumentNotNull(resourceKey, "Resource key must not be null");
             AssertUtils.ArgumentNotNull(resourceKey, "ResourceFactory must not be null");
 
-            NmsResourceHolder resourceHolder = (NmsResourceHolder)TransactionSynchronizationManager.GetResource(resourceKey);
+            NmsResourceHolder resourceHolder =
+                (NmsResourceHolder)TransactionSynchronizationManager.GetResource(resourceKey);
             if (resourceHolder != null)
             {
                 ISession rssession = resourceFactory.GetSession(resourceHolder);
@@ -90,7 +98,7 @@ namespace Spring.Messaging.Nms.IConnections
             {
                 conHolderToUse = new NmsResourceHolder();
             }
-            Apache.NMS.IConnection con = resourceFactory.GetConnection(conHolderToUse);
+            IConnection con = resourceFactory.GetConnection(conHolderToUse);
             ISession session = null;
             try
             {
@@ -115,7 +123,7 @@ namespace Spring.Messaging.Nms.IConnections
                     {
                         session.Close();
                     }
-                    catch (System.Exception)
+                    catch (Exception)
                     {
                         // ignore
                     }
@@ -126,7 +134,7 @@ namespace Spring.Messaging.Nms.IConnections
                     {
                         con.Close();
                     }
-                    catch (System.Exception)
+                    catch (Exception)
                     {
                         // ignore
                     }
@@ -135,52 +143,90 @@ namespace Spring.Messaging.Nms.IConnections
             }
             if (conHolderToUse != resourceHolder)
             {
-                TransactionSynchronizationManager.RegisterSynchronization(new NmsResourceSynchronization(resourceKey, conHolderToUse, resourceFactory.SynchedLocalTransactionAllowed));
+                TransactionSynchronizationManager.RegisterSynchronization(
+                    new NmsResourceSynchronization(resourceKey, conHolderToUse,
+                                                   resourceFactory.SynchedLocalTransactionAllowed));
                 conHolderToUse.SynchronizedWithTransaction = true;
                 TransactionSynchronizationManager.BindResource(resourceKey, conHolderToUse);
             }
             return session;
         }
-		
-		
 
+        public static void ReleaseConnection(IConnection connection, IConnectionFactory cf, bool started)
+        {
+            if (connection == null)
+            {
+                return;
+            }
+
+            if (started && cf is ISmartConnectionFactory && ((ISmartConnectionFactory)cf).ShouldStop(connection))
+            {
+                try
+                {
+                    connection.Stop();
+                }
+                catch (Exception ex)
+                {
+                    LOG.Debug("Could not stop NMS IConnection before closing it", ex);
+
+                }
+            }
+            try
+            {
+                connection.Close();
+            } catch (Exception ex)
+            {
+                LOG.Debug("Could not close NMS Connection", ex);
+            }           
+        }
+
+        public static bool IsSessionTransactional(ISession session, IConnectionFactory cf)
+        {
+            if (session == null || cf == null)
+            {
+                return false;
+            }
+            NmsResourceHolder resourceHolder = (NmsResourceHolder) TransactionSynchronizationManager.GetResource(cf);
+            return (resourceHolder != null && resourceHolder.ContainsSession(session));
+        }
 
         #region ResourceFactory helper classes
 
-        private class AnonymousClassResourceFactory : ConnectionFactoryUtils.ResourceFactory
+        private class AnonymousClassResourceFactory : ResourceFactory
         {
             private IConnection existingCon;
             private IConnectionFactory cf;
             private bool synchedLocalTransactionAllowed;
 
-            public AnonymousClassResourceFactory(Apache.NMS.IConnection existingCon, IConnectionFactory cf, bool synchedLocalTransactionAllowed)
+            public AnonymousClassResourceFactory(IConnection existingCon, IConnectionFactory cf,
+                                                 bool synchedLocalTransactionAllowed)
             {
                 InitBlock(existingCon, cf, synchedLocalTransactionAllowed);
             }
 
-            private void InitBlock(Apache.NMS.IConnection existingCon, IConnectionFactory cf, bool synchedLocalTransactionAllowed)
+            private void InitBlock(IConnection existingCon, IConnectionFactory cf, bool synchedLocalTransactionAllowed)
             {
                 this.existingCon = existingCon;
                 this.cf = cf;
                 this.synchedLocalTransactionAllowed = synchedLocalTransactionAllowed;
             }
-			
+
             public virtual ISession GetSession(NmsResourceHolder holder)
             {
-               return holder.GetSession(typeof(ISession), existingCon);
+                return holder.GetSession(typeof(ISession), existingCon);
             }
 
-            public virtual Apache.NMS.IConnection GetConnection(NmsResourceHolder holder)
+            public virtual IConnection GetConnection(NmsResourceHolder holder)
             {
-               return (existingCon != null ? existingCon : holder.GetConnection());
+                return (existingCon != null ? existingCon : holder.GetConnection());
             }
 
-            public virtual Apache.NMS.IConnection CreateConnection()
+            public virtual IConnection CreateConnection()
             {
                 return cf.CreateConnection();
             }
 
-            public virtual ISession CreateSession(Apache.NMS.IConnection con)
+            public virtual ISession CreateSession(IConnection con)
             {
                 if (synchedLocalTransactionAllowed)
                 {
@@ -190,7 +236,6 @@ namespace Spring.Messaging.Nms.IConnections
                 {
                     return con.CreateSession(AcknowledgementMode.AutoAcknowledge);
                 }
-                 
             }
 
             public bool SynchedLocalTransactionAllowed
@@ -198,6 +243,7 @@ namespace Spring.Messaging.Nms.IConnections
                 get { return synchedLocalTransactionAllowed; }
             }
         }
+
         #endregion
 
         #region Helper classes/interfaces
@@ -207,7 +253,6 @@ namespace Spring.Messaging.Nms.IConnections
         /// </summary>
         public interface ResourceFactory
         {
-
             /// <summary> Fetch an appropriate ISession from the given NmsResourceHolder.</summary>
             /// <param name="holder">the NmsResourceHolder
             /// </param>
@@ -236,7 +281,7 @@ namespace Spring.Messaging.Nms.IConnections
             /// <returns> the new NMS ISession
             /// </returns>
             /// <throws>NMSException if thrown by NMS API methods </throws>
-            ISession CreateSession(Apache.NMS.IConnection con);
+            ISession CreateSession(IConnection con);
 
 
             /// <summary>
@@ -247,17 +292,13 @@ namespace Spring.Messaging.Nms.IConnections
             /// Returns whether to allow for synchronizing a local NMS transaction
             /// </summary>
             /// 
-            bool SynchedLocalTransactionAllowed
-            { 
-                get;
-            }
+            bool SynchedLocalTransactionAllowed { get; }
         }
 
         /// <summary> Callback for resource cleanup at the end of a non-native NMS transaction
         /// </summary>
         private class NmsResourceSynchronization : TransactionSynchronizationAdapter
         {
-
             private object resourceKey;
 
             private NmsResourceHolder resourceHolder;
@@ -275,7 +316,7 @@ namespace Spring.Messaging.Nms.IConnections
 
             public override void Suspend()
             {
-                if (this.holderActive)
+                if (holderActive)
                 {
                     TransactionSynchronizationManager.UnbindResource(resourceKey);
                 }
@@ -283,7 +324,7 @@ namespace Spring.Messaging.Nms.IConnections
 
             public override void Resume()
             {
-                if (this.holderActive)
+                if (holderActive)
                 {
                     TransactionSynchronizationManager.BindResource(resourceKey, resourceHolder);
                 }
@@ -291,22 +332,22 @@ namespace Spring.Messaging.Nms.IConnections
 
             public override void BeforeCompletion()
             {
-                TransactionSynchronizationManager.UnbindResource(this.resourceKey);
-                this.holderActive = false;
+                TransactionSynchronizationManager.UnbindResource(resourceKey);
+                holderActive = false;
                 if (!transacted)
                 {
-                    this.resourceHolder.CloseAll();
+                    resourceHolder.CloseAll();
                 }
             }
 
             //TODO bring in new Spring.Data library to Integration project which has this method in interface.
             public override void AfterCommit()
             {
-                if (this.transacted)
+                if (transacted)
                 {
                     try
                     {
-                        this.resourceHolder.CommitAll();
+                        resourceHolder.CommitAll();
                     }
                     catch (NMSException ex)
                     {
@@ -317,12 +358,13 @@ namespace Spring.Messaging.Nms.IConnections
 
             public override void AfterCompletion(TransactionSynchronizationStatus status)
             {
-                if (this.transacted)
+                if (transacted)
                 {
-                    this.resourceHolder.CloseAll();
+                    resourceHolder.CloseAll();
                 }
             }
         }
+
         #endregion
     }
 }

@@ -54,6 +54,7 @@ namespace Spring.Messaging.Nms.IConnections
         private IList sessions = new LinkedList();
 
         private IDictionary sessionsPerIConnection = new Hashtable();
+        private IConnectionFactory connectionFactory;
 
         #endregion
 
@@ -71,8 +72,16 @@ namespace Spring.Messaging.Nms.IConnections
         /// </param>
         /// <param name="session">the NMS ISession
         /// </param>
-       public NmsResourceHolder(Apache.NMS.IConnection connection, ISession session)
+        public NmsResourceHolder(Apache.NMS.IConnection connection, ISession session)
         {
+            AddConnection(connection);
+            AddSession(session, connection);
+            this.frozen = true;
+        }
+
+        public NmsResourceHolder(IConnectionFactory connectionFactory, IConnection connection, ISession session)
+        {
+            this.connectionFactory = connectionFactory;
             AddConnection(connection);
             AddSession(session, connection);
             this.frozen = true;
@@ -191,25 +200,17 @@ namespace Spring.Messaging.Nms.IConnections
                     logger.Debug("Could not close NMS ISession after transaction", ex);
                 }
             }
-            foreach (Apache.NMS.IConnection connection in connections)
+            foreach (IConnection connection in connections)
             {
-                try
-                {
-                    try
-                    {
-                        connection.Stop();
-                    }
-                    finally
-                    {
-                        connection.Close();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.Debug("Could not close NMS IConnection after transaction", ex);
-                }
+                ConnectionFactoryUtils.ReleaseConnection(connection, connectionFactory, true);
             }
         }
+
+        public bool ContainsSession(ISession session)
+        {
+            return this.sessions.Contains(session);
+        }
+
         #endregion
     }
 }

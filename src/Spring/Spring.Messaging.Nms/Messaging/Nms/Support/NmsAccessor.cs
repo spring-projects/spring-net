@@ -112,8 +112,14 @@ namespace Spring.Messaging.Nms.Support
         /// </remarks>
         public bool SessionTransacted
         {
-            get { return sessionTransacted; }
-            set { sessionTransacted = value; }
+            get { return SessionAcknowledgeMode == AcknowledgementMode.Transactional; }
+            set
+            {
+                if (value)
+                {
+                    sessionAcknowledgeMode = AcknowledgementMode.Transactional;
+                }
+            }
         }
 
         #endregion
@@ -125,6 +131,20 @@ namespace Spring.Messaging.Nms.Support
             {
                 throw new ArgumentException("ConnectionFactory is required");
             }
+        }
+
+        /// <summary>
+        /// Creates the connection via the ConnectionFactory.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual IConnection CreateConnection()
+        {
+            return ConnectionFactory.CreateConnection();
+        }
+
+        protected virtual ISession CreateSession(IConnection con)
+        {
+            return con.CreateSession(SessionAcknowledgeMode);
         }
     }
 }

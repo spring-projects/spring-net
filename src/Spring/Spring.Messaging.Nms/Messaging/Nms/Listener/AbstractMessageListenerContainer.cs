@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Spring.Context;
+using Spring.Messaging.Nms.IConnections;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.IDestinations;
 using Spring.Util;
@@ -505,7 +506,7 @@ namespace Spring.Messaging.Nms.Listener
             {
                 lock (this.sharedConnectionMonitor)
                 {
-                    NmsUtils.CloseConnection(this.sharedConnection);
+                    ConnectionFactoryUtils.ReleaseConnection(sharedConnection, ConnectionFactory, autoStartup);
                 }
                 throw;
             }
