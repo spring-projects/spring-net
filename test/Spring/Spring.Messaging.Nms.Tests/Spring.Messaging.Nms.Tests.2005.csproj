@@ -74,9 +74,19 @@
       <Project>{AEB1578C-9018-4D49-B440-789F38DD2F29}</Project>
       <Name>Spring.Messaging.Nms.2005</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2005.csproj">
+      <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
+      <Name>Spring.Core.Tests.2005</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\Nms\Connections\CachingConnectionFactoryTests.cs" />
     <Compile Include="Messaging\Nms\Connections\NmsTransactionManagerTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\SingleConnectionFactoryTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestConnection.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestExceptionListener.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestMessageProducer.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Spring.Messaging.Nms.Tests.dll.config">

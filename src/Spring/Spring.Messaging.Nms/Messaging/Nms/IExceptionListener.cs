@@ -1,5 +1,3 @@
- 
-
 #region License
 
 /*
@@ -20,23 +18,16 @@
 
 #endregion
 
-using Apache.NMS;
+using System;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms
 {
     /// <summary>
-    /// Extension of the <code>IConnectionFactory</code> interface, 
-    /// indicating how to release Connections obtained from it.
+    /// Exception handler for exceptions from the messaging infrastrcture.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public interface ISmartConnectionFactory
+    /// <author>Mark Pollack</author>
+    public interface IExceptionListener
     {
-        /// <summary>
-        /// Shoulds we stop the connection, obtained from this ConnectionFactory?
-        /// </summary>
-        /// <param name="con">The connection to check.</param>
-        /// <returns>wheter a stop call is necessary</returns>
-        bool ShouldStop(IConnection con);
+        void OnException(Exception exception);
     }
 }

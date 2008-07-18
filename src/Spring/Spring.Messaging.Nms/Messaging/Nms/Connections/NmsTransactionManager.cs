@@ -8,7 +8,7 @@ using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
-namespace Spring.Messaging.Nms.IConnections
+namespace Spring.Messaging.Nms.Connection
 {
     /// <summary>
     /// A <see cref="AbstractPlatformTransactionManager"/> implementation

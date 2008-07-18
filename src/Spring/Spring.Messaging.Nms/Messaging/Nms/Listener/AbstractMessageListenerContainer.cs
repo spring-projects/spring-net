@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using Spring.Context;
-using Spring.Messaging.Nms.IConnections;
+using Spring.Messaging.Nms.Connection;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.IDestinations;
 using Spring.Util;

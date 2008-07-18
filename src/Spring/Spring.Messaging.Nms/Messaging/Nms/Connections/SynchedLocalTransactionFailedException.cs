@@ -19,25 +19,19 @@
 #endregion
 
 using System;
-using System.Runtime.Serialization;
+using Apache.NMS;
 
-namespace Spring.Messaging.Nms.IConnections
-{
-    //TODO should we have a generic spring exception for NMS?
-    
+namespace Spring.Messaging.Nms.Connection
+{ 
     /// <summary> Exception thrown when a synchronized local transaction failed to complete
     /// (after the main transaction has already completed).
     /// </summary>
     /// <author>Jergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
     [Serializable]
-    public class SynchedLocalTransactionFailedException : ApplicationException
+    public class SynchedLocalTransactionFailedException : NMSException
     {
         #region Constructor (s) / Destructor
-        /// <summary>Creates a new instance of the SynchedLocalTransactionFailedException class.</summary>
-        public SynchedLocalTransactionFailedException()
-        {
-        }
 
         /// <summary>
         /// Creates a new instance of the SynchedLocalTransactionFailedException class. with the specified message.
@@ -64,22 +58,6 @@ namespace Spring.Messaging.Nms.IConnections
         {
         }
 
-        /// <summary>
-        /// Creates a new instance of the SynchedLocalTransactionFailedException class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
-        protected SynchedLocalTransactionFailedException(
-            SerializationInfo info, StreamingContext context)
-            : base (info, context)
-        {
-        }
         #endregion
     }
 }

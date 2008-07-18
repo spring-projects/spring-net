@@ -24,9 +24,9 @@ using Common.Logging;
 using Spring.Objects.Factory;
 using Spring.Util;
 
-namespace Spring.Messaging.Nms.IConnections
+namespace Spring.Messaging.Nms.Connection
 {
-    public class SingleConnectionFactory : IConnectionFactory, IInitializingObject, IDisposable
+    public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, IInitializingObject, IDisposable
     {
         #region Logging Definition
 
@@ -34,11 +34,13 @@ namespace Spring.Messaging.Nms.IConnections
 
         #endregion
 
+        #region Fields
+
         private IConnectionFactory targetConnectionFactory;
 
         private string clientId;
 
-        private ExceptionListener exceptionListenerDelegate;
+        private IExceptionListener exceptionListener;
 
         private bool reconnectOnException = false;
 
@@ -57,6 +59,9 @@ namespace Spring.Messaging.Nms.IConnections
         /// </summary>
         private object connectionMonitor = new object();
 
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleConnectionFactory"/> class.
@@ -73,9 +78,9 @@ namespace Spring.Messaging.Nms.IConnections
         /// <param name="target">The single Connection.</param>
         public SingleConnectionFactory(IConnection target)
         {
-            AssertUtils.ArgumentNotNull(target, "connection", "Target Connection must not be null");
+            AssertUtils.ArgumentNotNull(target, "connection", "TargetSession Connection must not be null");
             this.target = target;
-            connection = GetSharedConnection(target);
+            connection = GetSharedConnection(this, target);
         }
 
 
@@ -87,9 +92,13 @@ namespace Spring.Messaging.Nms.IConnections
         public SingleConnectionFactory(IConnectionFactory targetConnectionFactory)
         {
             AssertUtils.ArgumentNotNull(targetConnectionFactory, "targetConnectionFactory",
-                                        "Target ConnectionFactory must not be null");
+                                        "TargetSession ConnectionFactory must not be null");
             this.targetConnectionFactory = targetConnectionFactory;
         }
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets or sets the target connection factory which will be used to create a single
@@ -118,17 +127,11 @@ namespace Spring.Messaging.Nms.IConnections
         }
 
 
-        /// <summary>
-        /// Gets or sets the exception listener delegate that should be registered with
-        /// the single connection created by this factory.
-        /// </summary>
-        /// <value>The exception listener delegate.</value>
-        public ExceptionListener ExceptionListenerDelegate
+        public IExceptionListener ExceptionListener
         {
-            get { return exceptionListenerDelegate; }
-            set { exceptionListenerDelegate = value; }
+            get { return exceptionListener; }
+            set { exceptionListener = value; }
         }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether the single Connection
@@ -155,6 +158,8 @@ namespace Spring.Messaging.Nms.IConnections
             set { reconnectOnException = value; }
         }
 
+        #endregion
+
         #region IConnectionFactory Members
 
         public IConnection CreateConnection()
@@ -168,6 +173,13 @@ namespace Spring.Messaging.Nms.IConnections
                 return connection;
             }
         }
+
+        public IConnection CreateConnection(string userName, string password)
+        {
+            throw new InvalidOperationException("SingleConnectionFactory does not support custom username and password.");
+        }
+
+        #endregion
 
         public void InitConnection()
         {
@@ -188,8 +200,17 @@ namespace Spring.Messaging.Nms.IConnections
                 {
                     LOG.Info("Established shared NMS Connection: " + this.target);
                 }
-                this.connection = GetSharedConnection(this.target);
+                this.connection = GetSharedConnection(this, target);
             }
+        }
+
+        /// <summary>
+        /// Exception listener callback that renews the underlying single Connection.
+        /// </summary>
+        /// <param name="exception">The exception from the messaging infrastructure.</param>
+        public void OnException(Exception exception)
+        {
+            ResetConnection();
         }
 
         protected virtual void PrepareConnection(IConnection con)
@@ -198,16 +219,34 @@ namespace Spring.Messaging.Nms.IConnections
             {
                 con.ClientId = ClientId;
             }
-            if (ExceptionListenerDelegate != null || ReconnectOnException)
+            if (ExceptionListener != null || ReconnectOnException)
             {
-                ExceptionListener listenerToUse = ExceptionListenerDelegate;
+                IExceptionListener listenerToUse = ExceptionListener;
                 if (ReconnectOnException)
                 {
-                    InternalChainedExceptionListenerSupport chained = new InternalChainedExceptionListenerSupport(this, listenerToUse);
+                    InternalChainedExceptionListener chained = new InternalChainedExceptionListener(this, listenerToUse);
                     con.ExceptionListener += chained.OnException;
                 }
-
+                else
+                {
+                    if (ExceptionListener != null)
+                    {
+                        con.ExceptionListener += ExceptionListener.OnException;                                     
+                    }
+                }
             }
+        }
+
+        /// <summary>
+        /// Template method for obtaining a (potentially cached) Session.
+        /// </summary>
+        /// <param name="con">The connection to operate on.</param>
+        /// <param name="mode">The session ack mode.</param>
+        /// <returns>the Session to use, or <code>null</code> to indicate
+	    /// creation of a default Session</returns>  
+        public virtual ISession GetSession(IConnection con, AcknowledgementMode mode)
+        {
+            return null;
         }
 
         protected virtual IConnection DoCreateConnection()
@@ -215,7 +254,7 @@ namespace Spring.Messaging.Nms.IConnections
             return TargetConnectionFactory.CreateConnection();
         }
 
-        private void CloseConnection(IConnection con)
+        protected virtual void CloseConnection(IConnection con)
         {
             try
             {
@@ -232,13 +271,6 @@ namespace Spring.Messaging.Nms.IConnections
             }
         }
 
-        public IConnection CreateConnection(string userName, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
         #region IInitializingObject Members
 
         public void AfterPropertiesSet()
@@ -251,14 +283,12 @@ namespace Spring.Messaging.Nms.IConnections
 
         #endregion
 
-        #region IDisposable Members
-
         public void Dispose()
         {
             ResetConnection();
         }
 
-        public void ResetConnection()
+        public virtual void ResetConnection()
         {
             lock (connectionMonitor)
             {
@@ -271,41 +301,72 @@ namespace Spring.Messaging.Nms.IConnections
             }
         }
 
-        #endregion
-
-        protected virtual IConnection GetSharedConnection(IConnection target)
+        protected virtual IConnection GetSharedConnection(SingleConnectionFactory singleConnectionFactory, IConnection target)
         {
             lock (connectionMonitor)
             {
-                return new CloseSupressingConnection(target);
+                return new CloseSupressingConnection(singleConnectionFactory, target);
             }
         }
     }
 
-    internal class InternalChainedExceptionListenerSupport
+    internal class InternalChainedExceptionListener : ChainedExceptionListener, IExceptionListener
     {
-        private SingleConnectionFactory factory;
-        private ExceptionListener listenerToUse;
-        public InternalChainedExceptionListenerSupport(SingleConnectionFactory factory, ExceptionListener listenerToUse)
+        private IExceptionListener userListener;
+        public InternalChainedExceptionListener(IExceptionListener internalListener, IExceptionListener userListener)
         {
-            this.factory = factory;
-            this.listenerToUse = listenerToUse;
+            AddListener(internalListener);
+            if (userListener != null)
+            {
+                AddListener(userListener);
+                this.userListener = userListener;
+            }                    
         }
 
-        public void OnException(Exception exception)
+        public IExceptionListener UserListener
         {
-            //TODO exception mgmt.
+            get { return userListener; }
         }
     }
 
     internal class CloseSupressingConnection : IConnection
     {
         private IConnection target;
+        private SingleConnectionFactory singleConnectionFactory;
 
-        public CloseSupressingConnection(IConnection target)
+        public CloseSupressingConnection(SingleConnectionFactory singleConnectionFactory, IConnection target)
         {
             this.target = target;
+            this.singleConnectionFactory = singleConnectionFactory;
         }
+
+        public void Close()
+        {
+            // don't pass the call to the target.
+        }
+
+        public void Stop()
+        {
+            //don't pass the call to the target.
+        }
+
+        public ISession CreateSession()
+        {
+            return CreateSession(AcknowledgementMode.AutoAcknowledge);
+        }
+
+        public ISession CreateSession(AcknowledgementMode acknowledgementMode)
+        {
+            ISession session = singleConnectionFactory.GetSession(target, acknowledgementMode);
+            if (session != null)
+            {
+                return session;
+            }
+            return target.CreateSession();
+        }
+
+        #region Pass through implementations to the target connection
+
 
         public event ExceptionListener ExceptionListener
         {
@@ -313,20 +374,6 @@ namespace Spring.Messaging.Nms.IConnections
             remove { target.ExceptionListener -= value; }
         }
 
-        public ISession CreateSession()
-        {
-            return target.CreateSession();
-        }
-
-        public ISession CreateSession(AcknowledgementMode acknowledgementMode)
-        {
-            return target.CreateSession(acknowledgementMode);
-        }
-
-        public void Close()
-        {
-            // don't pass the call to the target.
-        }
 
         public AcknowledgementMode AcknowledgementMode
         {
@@ -354,10 +401,7 @@ namespace Spring.Messaging.Nms.IConnections
         {
             get { return target.IsStarted; }
         }
+        #endregion
 
-        public void Stop()
-        {
-            //don't pass the call to the target.
-        }
     }
 }

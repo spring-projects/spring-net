@@ -36,6 +36,32 @@ namespace Spring.Util
 	public sealed class AssertUtilsTests
 	{
         [Test]
+        [ExpectedException(typeof(ArgumentException),ExpectedMessage = "foo")]
+        public void IsTrueWithMesssage()
+        {
+            AssertUtils.IsTrue(false,"foo");
+        }
+
+        [Test]
+        public void IsTrueWithMessageValidExpression()
+        {
+            AssertUtils.IsTrue(true, "foo");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "[Assertion failed] - this expression must be true")]
+        public void IsTrue()
+        {
+            AssertUtils.IsTrue(false);
+        }
+
+        [Test]
+        public void IsTrueValidExpression()
+        {
+            AssertUtils.IsTrue(true);
+        }
+
+        [Test]
         [ExpectedException(typeof(InvalidOperationException))]
         public void StateTrue()
         {

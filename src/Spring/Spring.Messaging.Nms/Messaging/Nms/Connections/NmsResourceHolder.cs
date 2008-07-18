@@ -26,7 +26,7 @@ using Spring.Transaction.Support;
 using Spring.Util;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.IConnections
+namespace Spring.Messaging.Nms.Connection
 {
     /// <summary> IConnection holder, wrapping a NMS IConnection and a NMS ISession.
     /// NmsTransactionManager binds instances of this class to the thread,

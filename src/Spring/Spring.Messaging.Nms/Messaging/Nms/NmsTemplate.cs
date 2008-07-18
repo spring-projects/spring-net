@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-using Spring.Messaging.Nms.IConnections;
+using Spring.Messaging.Nms.Connection;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.Converter;
 using Spring.Messaging.Nms.Support.IDestinations;

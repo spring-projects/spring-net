@@ -1,5 +1,3 @@
- 
-
 #region License
 
 /*
@@ -25,18 +23,18 @@ using Apache.NMS;
 namespace Spring.Messaging.Nms.Connection
 {
     /// <summary>
-    /// Extension of the <code>IConnectionFactory</code> interface, 
-    /// indicating how to release Connections obtained from it.
+    /// Subinterface of ISession to be implemented by
+    /// implementations that wrap an ISession to provide added 
+    /// functionality. Allows access to the the underlying target Session.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public interface ISmartConnectionFactory
+    /// <author>Mark Pollack</author>
+    public interface IDecoratorSession : ISession
     {
         /// <summary>
-        /// Shoulds we stop the connection, obtained from this ConnectionFactory?
+        /// Gets the target session of the decorator.
+        /// This will typically be the native provider Session or a wrapper from a session pool.
         /// </summary>
-        /// <param name="con">The connection to check.</param>
-        /// <returns>wheter a stop call is necessary</returns>
-        bool ShouldStop(IConnection con);
+        /// <value>The underlying session, never null</value>
+        ISession TargetSession { get; }
     }
 }

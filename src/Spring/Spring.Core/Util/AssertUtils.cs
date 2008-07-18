@@ -193,6 +193,37 @@ namespace Spring.Util
             }
         }
 
+
+        /// <summary>
+        ///  Assert a boolean expression, throwing <code>ArgumentException</code>
+	    ///  if the test result is <code>false</code>.
+        /// </summary>
+        /// <param name="expression">a boolean expression.</param>
+        /// <param name="message">The exception message to use if the assertion fails.</param>
+        /// <exception cref="ArgumentException">
+        /// if expression is <code>false</code>
+        /// </exception>
+        public static void IsTrue(bool expression, string message)
+        {
+            if (!expression)
+            {
+                throw new ArgumentException(message);
+            }
+        }
+
+        /// <summary>
+        ///  Assert a boolean expression, throwing <code>ArgumentException</code>
+        ///  if the test result is <code>false</code>.
+        /// </summary>
+        /// <param name="expression">a boolean expression.</param>
+        /// <exception cref="ArgumentException">
+        /// if expression is <code>false</code>
+        /// </exception>
+        public static void IsTrue(bool expression)
+        {
+            IsTrue(expression, "[Assertion failed] - this expression must be true");
+        }
+
         /// <summary>
         /// Assert a bool expression, throwing <code>InvalidOperationException</code>
         /// if the expression is <code>false</code>.

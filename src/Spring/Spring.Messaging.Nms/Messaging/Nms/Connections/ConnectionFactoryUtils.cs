@@ -24,7 +24,7 @@ using Common.Logging;
 using Spring.Transaction.Support;
 using Spring.Util;
 
-namespace Spring.Messaging.Nms.IConnections
+namespace Spring.Messaging.Nms.Connection
 {
     /// <summary> Helper class for obtaining transactional NMS resources
     /// for a given IConnectionFactory.
@@ -340,7 +340,6 @@ namespace Spring.Messaging.Nms.IConnections
                 }
             }
 
-            //TODO bring in new Spring.Data library to Integration project which has this method in interface.
             public override void AfterCommit()
             {
                 if (transacted)

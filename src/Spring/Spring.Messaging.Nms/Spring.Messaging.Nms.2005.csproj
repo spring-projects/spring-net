@@ -47,12 +47,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\ILifecycle.cs" />
+    <Compile Include="Messaging\Nms\Connections\CachedMessageProducer.cs" />
+    <Compile Include="Messaging\Nms\Connections\CachedSession.cs" />
+    <Compile Include="Messaging\Nms\Connections\CachingConnectionFactory.cs" />
+    <Compile Include="Messaging\Nms\Connections\ChainedExceptionListener.cs" />
     <Compile Include="Messaging\Nms\Connections\ConnectionFactoryUtils.cs" />
+    <Compile Include="Messaging\Nms\Connections\IDecoratorSession.cs" />
     <Compile Include="Messaging\Nms\Connections\ISmartConnectionFactory.cs" />
     <Compile Include="Messaging\Nms\Connections\NmsResourceHolder.cs" />
     <Compile Include="Messaging\Nms\Connections\NmsTransactionManager.cs" />
     <Compile Include="Messaging\Nms\Connections\SingleConnectionFactory.cs" />
     <Compile Include="Messaging\Nms\Connections\SynchedLocalTransactionFailedException.cs" />
+    <Compile Include="Messaging\Nms\IExceptionListener.cs" />
     <Compile Include="Messaging\Nms\IMessageCreator.cs" />
     <Compile Include="Messaging\Nms\IMessageListener.cs" />
     <Compile Include="Messaging\Nms\IMessagePostProcessor.cs" />
