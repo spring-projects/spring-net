@@ -578,16 +578,6 @@ namespace Spring.Messaging.Nms.Listener
 
         #endregion
 
-        protected virtual IConnection CreateConnection()
-        {
-            return ConnectionFactory.CreateConnection();
-        }
-
-        protected virtual ISession CreateSession(IConnection con)
-        {
-            return con.CreateSession(SessionAcknowledgeMode);
-        }
-
         protected virtual bool IsClientAcknowledge(ISession session)
         {
             return (session.AcknowledgementMode == AcknowledgementMode.ClientAcknowledge);

@@ -8,8 +8,6 @@ namespace Spring.Messaging.Nms.Connection
         private int startCount;
         private int closeCount;
         private int createSessionCount;
-        private int closeSessionCount;
-
 
         public int StartCount
         {

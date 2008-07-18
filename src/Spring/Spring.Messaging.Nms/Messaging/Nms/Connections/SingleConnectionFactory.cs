@@ -267,7 +267,7 @@ namespace Spring.Messaging.Nms.Connection
                 }
             } catch (Exception ex)
             {
-                LOG.Warn("Could not close shared NMS connection.");
+                LOG.Warn("Could not close shared NMS connection.", ex);
             }
         }
 

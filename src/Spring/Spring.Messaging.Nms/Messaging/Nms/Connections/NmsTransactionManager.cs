@@ -210,10 +210,11 @@ namespace Spring.Messaging.Nms.Connection
                     LOG.Debug("Committing NMS transaction on Session [" + session + "]");
                 }
                 session.Commit();
-                ///https://issues.apache.org/activemq/browse/AMQNET-93
-                ///TODO - need to mirror JMS exception classes in NMS API.
-                //} catch (TransactionRolledBackException ex)
-                //{
+                /** https://issues.apache.org/activemq/browse/AMQNET-93
+                   TODO - need to mirror JMS exception classes in NMS API.
+                   } catch (TransactionRolledBackException ex)
+                   {
+                 */
 
             }
             catch (NMSException ex)
