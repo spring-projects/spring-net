@@ -412,11 +412,6 @@ namespace Spring.Objects.Factory
 		[ExpectedException(typeof (ObjectDefinitionStoreException))]
 		public virtual void Aliasing()
 		{
-			if (!(ObjectFactory is AbstractObjectFactory))
-			{
-				return;
-			}
-
 			string alias = "rods alias";
 			try
 			{
