@@ -27,6 +27,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.SessionState;
 using Common.Logging;
+using Spring.Collections;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
@@ -50,6 +51,7 @@ namespace Spring.Objects.Factory.Support
     {
         private readonly static ILog log = LogManager.GetLogger(typeof(WebObjectFactory));
 
+        private static bool s_eventHandlersRegistered = false;
         private readonly static string OBJECTTABLEKEY = "spring.objects";
 
         private delegate IDictionary ObjectDictionaryCreationHandler();
@@ -68,7 +70,7 @@ namespace Spring.Objects.Factory.Support
 
         static WebObjectFactory()
         {
-            EnsureEventHandlersRegistered();
+            //EnsureEventHandlersRegistered();
         }
 
         /// <summary>
@@ -77,9 +79,19 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         private static void EnsureEventHandlersRegistered()
         {
-            if (log.IsDebugEnabled) log.Debug("hooking up event handlers");
-            VirtualEnvironment.EndRequest += new VirtualEnvironment.RequestEventHandler(OnEndRequest);
-            VirtualEnvironment.EndSession += new VirtualEnvironment.SessionEventHandler(OnEndSession);
+            if (!s_eventHandlersRegistered)
+            {
+                lock(typeof(WebObjectFactory))
+                {
+                    if (s_eventHandlersRegistered) return;
+
+                    if (log.IsDebugEnabled) log.Debug("hooking up event handlers");
+                    VirtualEnvironment.EndRequest += new VirtualEnvironment.RequestEventHandler(OnEndRequest);
+                    VirtualEnvironment.EndSession += new VirtualEnvironment.SessionEventHandler(OnEndSession);
+
+                    s_eventHandlersRegistered = true;
+                }
+            }
         }
 
         /// <summary>
@@ -303,6 +315,8 @@ namespace Spring.Objects.Factory.Support
             object instance;
             lock (scopedSingletonCache.SyncRoot)
             {
+                EnsureEventHandlersRegistered();
+
                 instance = scopedSingletonCache[objectName];
                 if (instance == TemporarySingletonPlaceHolder)
                 {
@@ -397,23 +411,26 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Injects dependencies into the supplied <paramref name="target"/> instance
-        /// using the named object definition.
+        /// Configures object instance by injecting dependencies, satisfying Spring lifecycle
+        /// interfaces and applying object post-processors.
         /// </summary>
-        /// <param name="target">
-        /// The object instance that is to be so configured.
-        /// </param>
         /// <param name="name">
         /// The name of the object definition expressing the dependencies that are to
         /// be injected into the supplied <parameref name="target"/> instance.
         /// </param>
+        /// <param name="definition">
+        /// An object definition that should be used to configure object.
+        /// </param>
+        /// <param name="wrapper">
+        /// A wrapped object instance that is to be so configured.
+        /// </param>
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.ConfigureObject(object, string)"/>
-        public override object ConfigureObject(object target, string name)
+        protected override object ConfigureObject(string name, RootObjectDefinition definition, IObjectWrapper wrapper)
         {
             // always configure object relative to contextPath
             using (new HttpContextSwitch(contextPath))
             {
-                return base.ConfigureObject(target, name);
+                return base.ConfigureObject(name, definition, wrapper);
             }
         }
 
@@ -482,7 +499,7 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         private static IDictionary CreateCaseInsensitiveDictionary()
         {
-            return CollectionsUtil.CreateCaseInsensitiveHashtable();
+            return new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
         }
 
         /// <summary>

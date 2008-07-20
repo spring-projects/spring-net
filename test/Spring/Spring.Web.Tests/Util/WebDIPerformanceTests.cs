@@ -21,11 +21,15 @@
 #region Imports
 
 using System;
+using System.Collections.Specialized;
 using System.Data;
 using System.Web.UI.WebControls;
+using Common.Logging;
+using Common.Logging.Simple;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.Objects.Factory.Support;
 using Spring.TestSupport;
 
 #if NET_2_0
@@ -86,20 +90,36 @@ namespace Spring.Util
         [Test, Explicit]
         public void RunTestWithDI()
         {
+//            LogManager.Adapter = new Common.Logging.Simple.TraceLoggerFactoryAdapter();
+
             DataView dv = CreateDataSource();
-            IApplicationContext ctx = new StaticApplicationContext();
-
-            int runs = 1000;
-
-            StopWatch watch = new StopWatch();
-            using (watch.Start("Duration: {0}"))
+            using (TestWebContext wctx = new TestWebContext("/testpath", "testpage.aspx"))
             {
-                for (int i = 0; i < runs; i++)
+                IApplicationContext ctx = new WebApplicationContext();
+
+                int runs = 1000;
+
+                StopWatch watch = new StopWatch();
+                using (watch.Start("Duration: {0}"))
                 {
-                    DataGrid grid = new DataGrid();
-                    Spring.Web.Support.WebDependencyInjectionUtils.InjectDependenciesRecursive(ctx, grid);
-                    grid.DataSource = dv;
-                    grid.DataBind();
+                    for (int i = 0; i < runs; i++)
+                    {
+                        DataGrid grid = new DataGrid();
+                        Spring.Web.Support.WebDependencyInjectionUtils.InjectDependenciesRecursive(ctx, grid);
+                        grid.DataSource = dv;
+                        grid.DataBind();
+                    }
+                }
+
+                using (watch.Start("Duration: {0}"))
+                {
+                    for (int i = 0; i < runs; i++)
+                    {
+                        DataGrid grid = new DataGrid();
+                        grid.DataSource = dv;
+                        grid.DataBind();
+                        Spring.Web.Support.WebDependencyInjectionUtils.InjectDependenciesRecursive(ctx, grid);
+                    }
                 }
             }
         }
@@ -112,7 +132,7 @@ namespace Spring.Util
             Hashtable ht = new Hashtable();
             Dictionary<object, object> dict = new Dictionary<object, object>();
 
-            for(int i = 0; i < 100000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 ht.Add(i, new object());
                 dict.Add(new object(), new object());

@@ -276,6 +276,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Util\ISessionState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\IVirtualEnvironment.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

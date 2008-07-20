@@ -26,6 +26,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
+using Spring.Collections;
 
 #endregion
 
@@ -65,7 +66,7 @@ namespace Spring.Util
     /// <seealso cref="Spring.Objects.Factory.Support.MethodInjectingInstantiationStrategy"/>
     public sealed class DynamicCodeManager
     {
-        private static readonly Hashtable s_moduleCache = CollectionsUtil.CreateCaseInsensitiveHashtable();
+        private static readonly Hashtable s_moduleCache = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
         
         /// <summary>
         /// prevent instantiation

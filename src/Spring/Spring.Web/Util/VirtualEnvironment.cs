@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.IO;
 using System.Web;
 using System.Web.Caching;
@@ -71,16 +72,167 @@ namespace Spring.Util
             return prevEnvironment;
         }
 
-        #region default IVirtualEnvironment Adapter for HttpRuntime         
+        #region default IVirtualEnvironment Adapter for HttpRuntime
 
         /// <summary>
         /// Implementation for running within HttpRuntime
         /// </summary>
         private class HttpRuntimeEnvironment : IVirtualEnvironment
         {
+            #region HttpSessionState Adapter
+
+            private class SessionDictionaryAdapter : ISessionState
+            {
+                private readonly HttpSessionState _sessionState;
+
+                public SessionDictionaryAdapter(HttpSessionState sessionState)
+                {
+                    _sessionState = sessionState;
+                }
+
+
+                public bool Contains(object key)
+                {
+                    ICollection keys = _sessionState.Keys;
+                    foreach (string sessionKey in keys)
+                    {
+                        if (object.Equals(sessionKey, (string)key)) return true;
+                    }
+                    return false;
+                }
+
+                public void Add(object key, object value)
+                {
+                    _sessionState.Add((string)key, value);
+                }
+
+                public void Clear()
+                {
+                    _sessionState.Clear();
+                }
+
+                public IDictionaryEnumerator GetEnumerator()
+                {
+                    Hashtable tableCopy = new Hashtable();
+                    ICollection keys = _sessionState.Keys;
+                    foreach (string sessionKey in keys)
+                    {
+                        tableCopy.Add(sessionKey, _sessionState[sessionKey]);
+                    }
+                    return tableCopy.GetEnumerator();
+                }
+
+                public void Remove(object key)
+                {
+                    _sessionState.Remove((string) key);
+                }
+
+                public object this[object key]
+                {
+                    get { return _sessionState[(string)key]; }
+                    set { _sessionState[(string)key] = value; }
+                }
+
+                public ICollection Keys
+                {
+                    get { return _sessionState.Keys; }
+                }
+
+                public ICollection Values
+                {
+                    get
+                    {
+                        object[] values = new object[_sessionState.Count];
+                        _sessionState.CopyTo(values, 0);
+                        return values;
+                    }
+                }
+
+                public bool IsReadOnly
+                {
+                    get { return _sessionState.IsReadOnly; }
+                }
+
+                public bool IsFixedSize
+                {
+                    get { return false; }
+                }
+
+                IEnumerator IEnumerable.GetEnumerator()
+                {
+                    return GetEnumerator();
+                }
+
+                public void CopyTo(Array array, int index)
+                {
+                    _sessionState.CopyTo(array, index);
+                }
+
+                public int Count
+                {
+                    get { return _sessionState.Count; }
+                }
+
+                public object SyncRoot
+                {
+                    get { return _sessionState.SyncRoot; }
+                }
+
+                public bool IsSynchronized
+                {
+                    get { return _sessionState.IsSynchronized; }
+                }
+
+                public void Abandon()
+                {
+                    _sessionState.Abandon();
+                }
+
+                public bool IsCookieless
+                {
+                    get { return _sessionState.IsCookieless; }
+                }
+
+                public bool IsNewSession
+                {
+                    get { return _sessionState.IsNewSession; }
+                }
+
+                public int LCID
+                {
+                    get { return _sessionState.LCID; }
+                    set { _sessionState.LCID = value; }
+                }
+
+                public SessionStateMode Mode
+                {
+                    get { return _sessionState.Mode; }
+                }
+
+                public string SessionID
+                {
+                    get { return _sessionState.SessionID; }
+                }
+
+                public int CodePage
+                {
+                    get { return _sessionState.CodePage; }
+                    set { _sessionState.CodePage = value; }
+                }
+#if NET_2_0
+                public HttpCookieMode CookieMode
+                {
+                    get { return _sessionState.CookieMode; }
+                }
+#endif
+            }
+
+            #endregion //HttpSessionState Adapter
+
             public string ApplicationVirtualPath
             {
-                get { 
+                get
+                {
                     string appPath = HttpRuntime.AppDomainAppVirtualPath;
                     if (!appPath.EndsWith("/")) appPath = appPath + "/";
                     return appPath;
@@ -123,6 +275,16 @@ namespace Spring.Util
                 }
 #endif
                 throw new ArgumentException("can't map context relative path outside a context");
+            }
+
+            public ISessionState Session
+            {
+                get { return new SessionDictionaryAdapter(HttpContext.Current.Session); }
+            }
+
+            public IDictionary RequestVariables
+            {
+                get { return HttpContext.Current.Items; }
             }
         }
 

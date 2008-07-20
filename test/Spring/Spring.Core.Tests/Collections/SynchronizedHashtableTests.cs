@@ -37,10 +37,100 @@ namespace Spring.Collections
     [TestFixture]
     public class SynchronizedHashtableTests
     {
+        [Test]
+        public void BehavesLikeHashtable()
+        {
+            SynchronizedHashtable st = new SynchronizedHashtable();
+            st.Add("key", "value");
+            Assert.AreEqual("value", st["key"]);
+            st["key"] = "value2";
+            Assert.AreEqual("value2", st["key"]);
+            st["key2"] = "value3";
+            Assert.AreEqual("value3", st["key2"]);
+
+            try
+            {
+                st.Add("key", "value4");
+                Assert.Fail();
+            }
+            catch(ArgumentException)
+            {}
+
+            Assert.AreEqual(2, st.Count);
+        }
+
+        [Test]
+        public void InitializeFromOtherCopiesValues()
+        {
+            Hashtable ht = new Hashtable();
+            ht["key"] = "value";
+            ht["key2"] = "value2";
+
+            SynchronizedHashtable st = new SynchronizedHashtable(ht, false);
+            Assert.AreEqual(2, st.Count);
+            ht.Remove("key");
+            Assert.AreEqual(1, ht.Count);
+            Assert.AreEqual(2, st.Count);
+        }
+
+        [Test]
+        public void DefaultsToCaseSensitive()
+        {
+            SynchronizedHashtable st = new SynchronizedHashtable();
+            st.Add("key","value");            
+            st.Add("KEY","value");            
+            Assert.AreEqual(2, st.Count);
+        }
+
+        [Test]
+        public void IgnoreCaseIgnoresCase()
+        {
+            SynchronizedHashtable st = new SynchronizedHashtable(true);
+            st.Add("key", "value");
+            Assert.AreEqual("value", st["KEY"]);
+            st["KeY"] = "value2";
+            Assert.AreEqual(1, st.Count);
+            Assert.AreEqual("value2", st["key"]);
+
+            try
+            {
+                st.Add("KEY", "value2");
+                Assert.Fail();
+            }
+            catch (ArgumentException)
+            {}
+
+            Hashtable ht = new Hashtable();
+            ht.Add("key","value");            
+            ht.Add("KEY","value");
+            try
+            {
+                st = new SynchronizedHashtable(ht, true);
+                Assert.Fail();
+            }
+            catch (ArgumentException)
+            {}
+        }
+
+        [Test]
+        public void WrapKeepsOriginalHashtableReference()
+        {
+            Hashtable ht = new Hashtable();
+            ht["key"] = "value";
+            ht["key2"] = "value2";
+
+            SynchronizedHashtable st = SynchronizedHashtable.Wrap(ht);
+            Assert.AreEqual(2, st.Count);
+            ht.Remove("key");
+            Assert.AreEqual(1, ht.Count);
+            Assert.AreEqual(1, st.Count);            
+        }
+
         /// <summary>
         /// On my Notebook gives 
-        /// Normal Hashtable: 00:00:01.5937500
-        /// Synced Hashtable: 00:00:02.8593750
+        /// Normal Hashtable: 00:00:00.0937500
+        /// Synced Hashtable: 00:00:00.9375000
+        /// =locking *has* a peformance impact.
         /// </summary>
         [Test, Explicit]
         public void TestLockingPerformanceImpact()

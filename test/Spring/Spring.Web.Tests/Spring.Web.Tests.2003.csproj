@@ -140,6 +140,11 @@
                     HintPath = "..\..\..\lib\Net\1.1\nunit.core.interfaces.dll"
                     Private = "False"
                 />
+                <Reference
+                    Name = "antlr.runtime"
+                    AssemblyName = "antlr.runtime"
+                    HintPath = "..\..\..\lib\Net\1.1\antlr.runtime.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -173,9 +178,22 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Context\Support\WebApplicationContextTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\IO\WebResourceTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\Spring\Context\Support\WebApplicationContextTests\Dummy.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Data\Spring\Context\Support\WebApplicationContextTests\Web.Config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Data\Spring\Objects\Factory\Support\TestForm.aspx"
@@ -208,7 +226,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Data\Spring\Web\Support\PageHandlerFactoryTests\Web.Config"
+                    RelPath = "Data\Spring\Web\Support\PageHandlerFactoryTests\Web.Config.net-1.1"
                     BuildAction = "None"
                 />
                 <File
@@ -228,6 +246,11 @@
                 />
                 <File
                     RelPath = "TestSupport\NUnitAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TestSupport\SessionMock.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -268,7 +291,7 @@
                 />
                 <File
                     RelPath = "Util\ControlInterceptionTests.cs"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File

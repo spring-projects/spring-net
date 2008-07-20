@@ -69,9 +69,11 @@ namespace Spring.Objects.Factory.Xml
 
 		#endregion
 
-		protected internal override IObjectFactory ObjectFactory
+		protected internal override AbstractObjectFactory CreateObjectFactory(bool caseSensitive)
 		{
-			get { return factory; }
+			return (caseSensitive) 
+                ? factory 
+                : new DefaultListableObjectFactory(caseSensitive);
 		}
 
 		private DefaultListableObjectFactory parent;

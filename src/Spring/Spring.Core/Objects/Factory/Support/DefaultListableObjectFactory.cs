@@ -25,6 +25,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
 using Common.Logging;
+using Spring.Collections;
 using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
@@ -113,7 +114,7 @@ namespace Spring.Objects.Factory.Support
             }
             else
             {
-                objectDefinitionMap = CollectionsUtil.CreateCaseInsensitiveHashtable();
+                objectDefinitionMap = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
             }
         }
 

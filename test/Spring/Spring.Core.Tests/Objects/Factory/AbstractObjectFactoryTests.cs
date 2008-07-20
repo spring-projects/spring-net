@@ -22,12 +22,51 @@
 
 using System;
 using NUnit.Framework;
+using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
 #endregion
 
 namespace Spring.Objects.Factory
 {
+    public class TestAbstractObjectFactory : AbstractObjectFactory
+    {
+        protected override object CreateObject(string name, RootObjectDefinition definition, object[] arguments)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void DestroyObject(string name, object target)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool ContainsObjectDefinition(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override IObjectDefinition GetObjectDefinition(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override IObjectDefinition GetObjectDefinition(string name, bool includeAncestors)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override object ConfigureObject(object target, string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override object ConfigureObject(object target, string name, IObjectDefinition definition)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
 	/// <summary>
 	/// Subclasses must override SetUp () to initialize the object factory
 	/// and any other variables they need.
@@ -38,13 +77,43 @@ namespace Spring.Objects.Factory
 	{
 		#region Properties
 
-		protected internal abstract IObjectFactory ObjectFactory { get; }
+		protected internal abstract AbstractObjectFactory CreateObjectFactory(bool caseSensitive);
 
-		#endregion
+        protected AbstractObjectFactory ObjectFactory { get { return CreateObjectFactory(true); } }
+        
+        #endregion
 
-		#region Tests
+        #region Case Insensitive Tests
 
-		/// <summary>
+        [Test]
+        public void RespectsCaseInsensitiveNamesAndAliases()
+        {
+            AbstractObjectFactory of = CreateObjectFactory(false);
+
+            object testObject = new object();
+            of.RegisterSingleton("name", testObject);
+            of.RegisterAlias("NAME", "alias");
+
+            try
+            {
+                of.RegisterAlias("NaMe", "AlIaS");
+                Assert.Fail();
+            }
+            catch (ObjectDefinitionStoreException ex)
+            {
+                Assert.IsTrue( -1<ex.Message.IndexOf("already registered") );
+            }
+
+            Assert.AreEqual(1, of.GetAliases("nAmE").Length);
+            Assert.AreEqual(testObject, of.GetObject("nAmE"));
+            Assert.AreEqual(testObject, of.GetObject("ALIAS"));
+        }
+
+        #endregion
+
+        #region Tests
+
+        /// <summary>
 		/// Roderick objects inherits from rod, overriding name only.
 		/// </summary>
 		[Test]

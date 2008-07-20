@@ -122,6 +122,7 @@
     <Compile Include="Globalization\AspNetResourceCache.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\ISessionState.cs" />
     <Compile Include="Web\UI\IValidationContainer.cs" />
     <Compile Include="Web\Support\MimeMediaType.cs" />
     <Compile Include="Web\Support\SharedStateResourceCache.cs">

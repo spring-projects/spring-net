@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.UI;
+using Spring.Collections;
 using Page=Spring.Web.UI.Page;
 
 namespace Spring.TestSupport
@@ -13,7 +14,7 @@ namespace Spring.TestSupport
     {
         public TestPage()
         {
-            this.SharedState = CollectionsUtil.CreateCaseInsensitiveHashtable();
+            this.SharedState = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
         }
 
         public TestPage( HttpContext context ) 

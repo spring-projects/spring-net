@@ -253,6 +253,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Collections\SynchronizedHashtableTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Context\ApplicationEventArgsTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

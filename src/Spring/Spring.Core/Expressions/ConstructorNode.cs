@@ -180,7 +180,7 @@ namespace Spring.Expressions
 
         private static ConstructorInfo[] GetCandidateConstructors(Type type, int argCount)
         {
-            ConstructorInfo[] ctors = type.GetConstructors();
+            ConstructorInfo[] ctors = type.GetConstructors(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
             ArrayList matches = new ArrayList();
 
             foreach (ConstructorInfo ctor in ctors)

@@ -70,7 +70,7 @@ namespace Spring.Web.Support
     {
         private readonly ILog Log = LogManager.GetLogger(typeof(PageHandlerFactory));
 
-        private readonly IDictionary pageHandlerWrappers = CollectionsUtil.CreateCaseInsensitiveHashtable();
+        private readonly IDictionary pageHandlerWrappers = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
 
         /// <summary>
         /// Retrieves instance of the configured page from Spring web application context, 

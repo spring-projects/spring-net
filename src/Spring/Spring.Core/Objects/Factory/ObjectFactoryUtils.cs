@@ -410,11 +410,12 @@ namespace Spring.Objects.Factory
 		public static string TransformedObjectName(string name)
 		{
 			AssertUtils.ArgumentNotNull(name, "name", "Object name must not be null.");
-			string objectName = name;
-			if (ObjectFactoryUtils.IsFactoryDereference(objectName))
+			if (!ObjectFactoryUtils.IsFactoryDereference(name))
 			{
-				objectName = objectName.Substring(ObjectFactoryUtils.FactoryObjectPrefix.Length);
+                return name;
 			}
+
+    		string objectName = name.Substring(ObjectFactoryUtils.FactoryObjectPrefix.Length);
 			return objectName;
 		}
 
@@ -459,8 +460,10 @@ namespace Spring.Objects.Factory
 		public static bool IsFactoryDereference(string name)
 		{
 			return name != null
+				&& name.Length > ObjectFactoryUtils.FactoryObjectPrefix.Length
+                && name[0] == ObjectFactoryUtils.FactoryObjectPrefix[0]
 				&& name.StartsWith(ObjectFactoryUtils.FactoryObjectPrefix)
-				&& name.Length > ObjectFactoryUtils.FactoryObjectPrefix.Length;
+            ;
 		}
 	}
 }

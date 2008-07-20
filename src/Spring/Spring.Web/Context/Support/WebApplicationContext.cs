@@ -28,6 +28,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Hosting;
 using Common.Logging;
+using Spring.Collections;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
@@ -126,7 +127,7 @@ namespace Spring.Context.Support
         /// Since the HttpRuntime discards it's configurationsection cache, we maintain our own context cache.
         /// Despite it really speeds up context-lookup, since we don't have to go through the whole HttpConfigurationSystem
         /// </summary>
-        private static readonly Hashtable s_webContextCache = CollectionsUtil.CreateCaseInsensitiveHashtable();
+        private static readonly Hashtable s_webContextCache = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
 
         static WebApplicationContext()
         {

@@ -21,11 +21,16 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Hosting;
+using Spring.Collections;
+using Spring.Expressions;
+using Spring.Reflection.Dynamic;
 
 #endregion
 
@@ -35,7 +40,8 @@ namespace Spring.TestSupport
     {
         private readonly TextWriter _out;
         private readonly HttpWorkerRequest _wr;
-        [ThreadStatic] private static TestWebContext _wc;
+        [ThreadStatic]
+        private static TestWebContext _wc;
 
         public static void Create(string virtualPath, string page)
         {
@@ -54,24 +60,34 @@ namespace Spring.TestSupport
         {
             _out = new StringWriter();
             HttpWorkerRequest wr;
-            object appPath = Thread.GetDomain().GetData(".appPath");
+            AppDomain domain = Thread.GetDomain();
+
+            // are we running within a valid AspNet AppDomain?
+            string appPath = (string) domain.GetData(".appPath");
             if (appPath != null)
             {
                 wr = new SimpleWorkerRequest(page, string.Empty, _out);
             }
             else
             {
-                string physDir = AppDomain.CurrentDomain.BaseDirectory + "\\";
-                wr = new SimpleWorkerRequest(virtualPath, physDir, page, string.Empty, _out);
+                appPath = domain.BaseDirectory + "\\";
+                wr = new SimpleWorkerRequest(virtualPath, appPath, page, string.Empty, _out);
             }
             HttpContext ctx = new HttpContext(wr);
             HttpContext.Current = ctx;
             HttpBrowserCapabilities browser = new HttpBrowserCapabilities();
 #if NET_2_0
-            browser.Capabilities = CollectionsUtil.CreateCaseInsensitiveHashtable();
+            browser.Capabilities = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
             browser.Capabilities[string.Empty] = "Test User Agent"; // string.Empty is the key for "user agent"
+
+            // avoids NullReferenceException when accessing HttpRequest.FilePath
+            object virtualPathObject = ExpressionEvaluator.GetValue(null, "T(System.Web.VirtualPath).Create('/')");
+            object cachedPathData = ExpressionEvaluator.GetValue(null, "T(System.Web.CachedPathData).GetRootWebPathData()");
+            ExpressionEvaluator.SetValue(cachedPathData, "_virtualPath", virtualPathObject);
+            ExpressionEvaluator.SetValue(cachedPathData, "_physicalPath", appPath);
 #endif
             ctx.Request.Browser = browser;
+            string filePath = ctx.Request.FilePath;
             _wr = wr;
         }
 

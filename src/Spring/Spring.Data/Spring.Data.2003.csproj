@@ -507,12 +507,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Data\Generic\DataAdapterDelegate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\Generic\IAdoOperations.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Data\Generic\ICommandCallback.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\Generic\IDataAdapterCallback.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -657,6 +667,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Data\Support\DefaultTransactionScopeAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\Support\ErrorCodeExceptionTranslator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -673,6 +688,11 @@
                 />
                 <File
                     RelPath = "Data\Support\IServiceDomainAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\Support\ITransactionScopeAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -946,6 +966,11 @@
                 />
                 <File
                     RelPath = "Transaction\Support\DefaultTransactionStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Transaction\Support\IResourceTransactionManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

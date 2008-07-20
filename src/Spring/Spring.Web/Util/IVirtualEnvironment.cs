@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Web;
@@ -66,5 +67,14 @@ namespace Spring.Util
         /// Maps a virtual path to it's physical location
         /// </summary>
         string MapPath( string virtualPath );
+        /// <summary>
+        /// Returns the current Session's variable dictionary
+        /// </summary>
+        ISessionState Session { get; }
+        /// <summary>
+        /// Returns the current Request's variable dictionary
+        /// </summary>
+        IDictionary RequestVariables { get; }
+
     }
 }

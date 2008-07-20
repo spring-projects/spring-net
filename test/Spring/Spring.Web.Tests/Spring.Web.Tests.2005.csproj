@@ -88,6 +88,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestSupport\NUnitAdapter.cs" />
+    <Compile Include="TestSupport\SessionMock.cs" />
     <Compile Include="TestSupport\TestPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

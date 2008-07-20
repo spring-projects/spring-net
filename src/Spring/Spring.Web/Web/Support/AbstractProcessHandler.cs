@@ -25,6 +25,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.SessionState;
+using Spring.Collections;
 using Spring.Context;
 using Spring.Util;
 using Spring.Web.Process;
@@ -52,7 +53,7 @@ namespace Spring.Web.Support
         private object controller;
         private string defaultView;
         private string currentView;
-        private IDictionary views = CollectionsUtil.CreateCaseInsensitiveHashtable();
+        private IDictionary views = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
         private IDictionary sharedState;
         private IApplicationContext applicationContext;
         private string processUrl;

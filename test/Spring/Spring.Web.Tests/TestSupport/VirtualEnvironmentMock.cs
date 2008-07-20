@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Specialized;
 using System.IO;
+using Spring.Collections;
 using Spring.Util;
 
 namespace Spring.TestSupport
@@ -8,7 +11,7 @@ namespace Spring.TestSupport
     /// Test environment implementation.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    internal class VirtualEnvironmentMock : IVirtualEnvironment, IDisposable
+    public class VirtualEnvironmentMock : IVirtualEnvironment, IDisposable
     {
         private readonly IVirtualEnvironment _prevEnvironment;
 
@@ -16,6 +19,8 @@ namespace Spring.TestSupport
         private readonly string _pathInfo;
         private string _currentExecutionFilePath;
         private readonly string _applicationVirtualPath;
+        private ISessionState _session = new SessionMock();
+        private IDictionary _requestVariables = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
 
         public VirtualEnvironmentMock(string currentVirtualFilePath, string pathInfo, string applicationVirtualPath, bool autoInitialize)
         {
@@ -61,6 +66,18 @@ namespace Spring.TestSupport
             string resultPath = WebUtils.CreateAbsolutePath(this.ApplicationVirtualPath, virtualPath);
             resultPath = basePath.TrimEnd('\\') + "\\" + resultPath.Replace('/', '\\').TrimStart('\\');
             return resultPath;
+        }
+
+        public ISessionState Session
+        {
+            get { return _session; }
+            set { _session = value; }
+        }
+
+        public IDictionary RequestVariables
+        {
+            get { return _requestVariables; }
+            set { _requestVariables = value; }
         }
 
         public void Dispose()

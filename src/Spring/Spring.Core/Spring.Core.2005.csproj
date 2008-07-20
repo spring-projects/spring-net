@@ -103,6 +103,7 @@
     <Compile Include="Collections\AbstractQueue.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\CaseInsensitiveHashtable.cs" />
     <Compile Include="Collections\DictionarySet.cs">
       <SubType>Code</SubType>
     </Compile>
