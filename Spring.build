@@ -163,13 +163,11 @@
 
   <!-- Target for setting the package configuration -->
   <target name="set-package-configuration" depends="check-package-dir, check-package-version">
-    <!-- for .exe 
     <property name="current.package.dir" value="${package.dir}/${project::get-name()}"/>
-    -->
     <!-- for docs packaging MLP -->
-
+    <!--
     <property name="current.package.dir" value="l:/release/${project::get-name()}"/>
-
+    -->
 
 
     <property name="doc.dir" value="${current.package.dir}/doc"/>
