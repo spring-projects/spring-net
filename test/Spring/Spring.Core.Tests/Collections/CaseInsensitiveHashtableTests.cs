@@ -24,6 +24,8 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
 
 #endregion
@@ -37,6 +39,36 @@ namespace Spring.Collections
     [TestFixture]
     public class CaseInsensitiveHashtableTests
     {
+        private static object SerializeDeserializeObject(object exp)
+        {
+            byte[] data;
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                formatter.Serialize(ms, exp);
+                ms.Flush();
+                data = ms.ToArray();
+            }
+
+            using (MemoryStream ms = new MemoryStream(data))
+            {
+                exp = formatter.Deserialize(ms);
+            }
+
+            return exp;
+        }
+
+        [Test]
+        public void IsSerializable()
+        {
+            CaseInsensitiveHashtable storiginal = new CaseInsensitiveHashtable();
+            storiginal.Add("key", "value");
+            CaseInsensitiveHashtable st = (CaseInsensitiveHashtable)SerializeDeserializeObject(storiginal);
+            Assert.AreNotSame(storiginal, st);
+            Assert.AreEqual("value", st["KEY"]);
+            Assert.AreEqual(1, st.Count);
+        }
+
         [Test]
         public void IgnoresCase()
         {
@@ -53,18 +85,18 @@ namespace Spring.Collections
                 Assert.Fail();
             }
             catch (ArgumentException)
-            {}
+            { }
 
             Hashtable ht = new Hashtable();
-            ht.Add("key","value");            
-            ht.Add("KEY","value");
+            ht.Add("key", "value");
+            ht.Add("KEY", "value");
             try
             {
                 st = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
                 Assert.Fail();
             }
             catch (ArgumentException)
-            {}
+            { }
         }
 
         [Test]
@@ -93,7 +125,7 @@ namespace Spring.Collections
             StopWatch watch = new StopWatch();
 
             Hashtable ht = CollectionsUtil.CreateCaseInsensitiveHashtable();
-            for(int i=0;i<1000000;i++) ht.Add(Guid.NewGuid().ToString(), "val"); // gen. higher number of elements results in OOM exception????
+            for (int i = 0; i < 1000000; i++) ht.Add(Guid.NewGuid().ToString(), "val"); // gen. higher number of elements results in OOM exception????
             CaseInsensitiveHashtable ciht = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
 
             using (watch.Start("Duration: {0}"))
@@ -102,7 +134,7 @@ namespace Spring.Collections
                 {
                     object v = ht["somekey"];
                 }
-            }            
+            }
 
             using (watch.Start("Duration: {0}"))
             {
@@ -110,7 +142,7 @@ namespace Spring.Collections
                 {
                     object v = ciht["somekey"];
                 }
-            }            
+            }
         }
     }
 }

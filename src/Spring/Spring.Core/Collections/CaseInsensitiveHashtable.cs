@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Globalization;
+using System.Runtime.Serialization;
 using Spring.Util;
 
 namespace Spring.Collections
@@ -8,6 +10,7 @@ namespace Spring.Collections
     /// Provides a performance improved hashtable with case-insensitive (string-only! based) key handling.
     /// </summary>
     /// <author>Erich Eichinger</author>
+    [Serializable]
     public class CaseInsensitiveHashtable : Hashtable
     {
         private readonly TextInfo _textInfo;
@@ -56,6 +59,35 @@ namespace Spring.Collections
                     this.Add(enumerator.Key, enumerator.Value);
                 }
             }
+        }
+
+        /// <summary>
+        /// Initializes a new, empty instance of the <see cref="T:System.Collections.Hashtable"></see> class that is serializable using the specified <see cref="T:System.Runtime.Serialization.SerializationInfo"></see> and <see cref="T:System.Runtime.Serialization.StreamingContext"></see> objects.
+        /// </summary>
+        /// <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext"></see> object containing the source and destination of the serialized stream associated with the <see cref="T:System.Collections.Hashtable"></see>. </param>
+        /// <param name="info">A <see cref="T:System.Runtime.Serialization.SerializationInfo"></see> object containing the information required to serialize the <see cref="T:System.Collections.Hashtable"></see> object.</param>
+        /// <exception cref="T:System.ArgumentNullException">info is null. </exception>
+        protected CaseInsensitiveHashtable(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            _textInfo = (TextInfo) info.GetValue("_textInfo", typeof(TextInfo));
+            _compareInfo = (CompareInfo) info.GetValue("_compareInfo", typeof(CompareInfo));
+
+            AssertUtils.ArgumentNotNull(_textInfo, "TextInfo");
+            AssertUtils.ArgumentNotNull(_compareInfo, "CompareInfo");
+        }
+
+        ///<summary>
+        ///Implements the <see cref="ISerializable"></see> interface and returns the data needed to serialize the <see cref="CaseInsensitiveHashtable"></see>.
+        ///</summary>
+        ///
+        ///<param name="context">A <see cref="StreamingContext"></see> object containing the source and destination of the serialized stream associated with the <see cref="CaseInsensitiveHashtable"></see>. </param>
+        ///<param name="info">A <see cref="SerializationInfo"></see> object containing the information required to serialize the <see cref="CaseInsensitiveHashtable"></see>. </param>
+        ///<exception cref="System.ArgumentNullException">info is null. </exception>
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("_textInfo", _textInfo);
+            info.AddValue("_compareInfo", _compareInfo);
         }
 
         /// <summary>
