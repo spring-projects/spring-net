@@ -38,7 +38,7 @@ namespace Spring.Util
         /// </summary>
         int CodePage { get; set; }
 
-#if NET_2_0
+#if NET_2_0 && !MONO    
         /// <summary>
         /// <see cref="System.Web.SessionState.HttpSessionState.CookieMode"/>
         /// </summary>

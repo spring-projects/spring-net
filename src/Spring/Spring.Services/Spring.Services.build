@@ -37,6 +37,7 @@
         <include name="Spring.Core.dll" />
         <include name="Spring.Aop.dll" />
         <include name="Spring.Web.dll" />
+        <include name="System.Web.Services.dll" />
 
         <!-- TO REMOVE : for .NET 3.0 build -->
         <!--<include if="${net-2.0}" name="C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.ServiceModel.dll" />-->

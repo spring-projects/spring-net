@@ -113,7 +113,11 @@ namespace Spring.Core.TypeResolution
         private static Type LoadTypeDirectlyFromAssembly(TypeAssemblyHolder typeInfo)
         {
             Type type = null;
-            Assembly assembly = Assembly.LoadWithPartialName(typeInfo.AssemblyName);
+#if MONO_2_0
+            Assembly assembly = Assembly.Load(typeInfo.AssemblyName);
+#else
+			Assembly assembly = Assembly.LoadWithPartialName(typeInfo.AssemblyName);
+#endif
             if (assembly != null)
             {
                 type = assembly.GetType(typeInfo.TypeName, true, true);

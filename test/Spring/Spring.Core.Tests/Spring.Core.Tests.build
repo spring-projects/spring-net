@@ -18,7 +18,7 @@
 			output="${current.bin.dir}/${project::get-name()}.dll"
 			doc="${current.bin.dir}/${project::get-name()}.xml">
 			<nowarn>
-				<warning number="${nowarn.numbers.test},0219,0169" /> <!-- add 0414 for mono 2.0 -->
+				<warning number="${nowarn.numbers.test},0219,0169,0612" /> <!-- add 0414 for mono 2.0 -->
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />
@@ -42,27 +42,33 @@
 				<include name="System.Drawing.dll" />
 				<include name="System.Data.dll" />
 				<include name="System.Web.Services.dll" />
+				<include name="System.Runtime.Serialization.Formatters.Soap.dll" />
+				<include name="System.Windows.Forms.dll" />
+				<include name="Rhino.Mocks.dll" />
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
 				<exclude name="CloverRuntime.dll" />
 			</references>
 		</csc>
 
-		<!-- for some reason, on my new machine the csc task doesn't create the resource assembly for the sr-SP-Cyrl culture so do it by hand (MLP)-->
-		<if test="${framework::get-target-framework() != 'net-2.0'}">
-		  <mkdir dir="${current.bin.dir}/sr-SP-Cyrl"/>
-		  <copy file="Resources/Spring.Context.Tests.sr-SP-Cyrl.resx" todir="${current.bin.dir}/sr-SP-Cyrl"/>
-		  <resgen input="${current.bin.dir}/sr-SP-Cyrl/Spring.Context.Tests.sr-SP-Cyrl.resx" output="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Spring.Context.Tests.sr-SP-Cyrl.resources" />
-		  <copy file="Resources/Tesla.sr-SP-Cyrl.resx" todir="${current.bin.dir}/sr-SP-Cyrl"/>
-		  <resgen input="${current.bin.dir}/sr-SP-Cyrl/Tesla.sr-SP-Cyrl.resx" output="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Tesla.sr-SP-Cyrl.resources" />
-		  <al output="${current.bin.dir}/sr-SP-Cyrl/Spring.Core.Tests.resources.dll"
-		      target="lib"
-		      culture="sr-SP-Cyrl">
-		    <sources>
-		      <include name="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Spring.Context.Tests.sr-SP-Cyrl.resources"/>
-		      <include name="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Tesla.sr-SP-Cyrl.resources" />
-		    </sources>
-		  </al>
+		<!-- Mono's al tells me Culture name sr-SP-Cyrl is not supported. Not sure if that's a limitation of my installation (James Fitzsimons) -->
+ 		<if test="${nant.settings.currentframework!='mono-2.0'}">
+			<!-- for some reason, on my new machine the csc task doesn't create the resource assembly for the sr-SP-Cyrl culture so do it by hand (MLP)-->
+			<if test="${framework::get-target-framework() != 'net-2.0'}">
+			  <mkdir dir="${current.bin.dir}/sr-SP-Cyrl"/>
+			  <copy file="Resources/Spring.Context.Tests.sr-SP-Cyrl.resx" todir="${current.bin.dir}/sr-SP-Cyrl"/>
+			  <resgen input="${current.bin.dir}/sr-SP-Cyrl/Spring.Context.Tests.sr-SP-Cyrl.resx" output="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Spring.Context.Tests.sr-SP-Cyrl.resources" />
+			  <copy file="Resources/Tesla.sr-SP-Cyrl.resx" todir="${current.bin.dir}/sr-SP-Cyrl"/>
+			  <resgen input="${current.bin.dir}/sr-SP-Cyrl/Tesla.sr-SP-Cyrl.resx" output="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Tesla.sr-SP-Cyrl.resources" />
+			  <al output="${current.bin.dir}/sr-SP-Cyrl/Spring.Core.Tests.resources.dll"
+			      target="lib"
+			      culture="sr-SP-Cyrl">
+			    <sources>
+			      <include name="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Spring.Context.Tests.sr-SP-Cyrl.resources"/>
+			      <include name="${current.bin.dir}/sr-SP-Cyrl/Spring.Resources.Tesla.sr-SP-Cyrl.resources" />
+			    </sources>
+			  </al>
+			</if>
 		</if>
 
 		<copy todir="${current.bin.dir}">
@@ -79,9 +85,14 @@
                 <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
                       tofile="${current.bin.dir}/${project::get-name()}.dll.config"
                       if="${framework::get-target-framework() == 'net-2.0'}"/>
+                      
+                <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
+                      tofile="${current.bin.dir}/${project::get-name()}.dll.config"
+                      if="${framework::get-target-framework() == 'mono-2.0'}"/>
 
         </target>
 	<target name="test" depends="build">
+	  <if test="${nant.settings.currentframework!='mono-2.0'}">
 		<nunit2outproc>
 			<formatter type="Plain" />
 			<formatter type="Xml" usefile="true" extension=".xml"
@@ -89,6 +100,16 @@
 			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll"
 			      appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
 		</nunit2outproc>
+	  </if>
+	  <if test="${nant.settings.currentframework=='mono-2.0'}">
+	    <nunit2>
+	      <formatter type="Plain" />
+	      <formatter type="Xml" usefile="true" extension=".xml"
+			 outputdir="${current.bin.dir}/results" />
+	      <test assemblyname="${current.bin.dir}/${project::get-name()}.dll"
+		    appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
+	    </nunit2>
+	  </if>
 	</target>
 <!--
 	<target name="test-mono-1.0" >

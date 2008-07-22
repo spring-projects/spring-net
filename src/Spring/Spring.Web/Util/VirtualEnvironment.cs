@@ -219,7 +219,7 @@ namespace Spring.Util
                     get { return _sessionState.CodePage; }
                     set { _sessionState.CodePage = value; }
                 }
-#if NET_2_0
+#if NET_2_0 && !MONO
                 public HttpCookieMode CookieMode
                 {
                     get { return _sessionState.CookieMode; }

@@ -33,9 +33,14 @@ namespace Spring.Util
 	/// <author>Erich Eichinger</author>
 	internal class ControlCollectionAccessor
 	{
-	    private static readonly IDynamicField _owner = new SafeField(typeof (ControlCollection).GetField("_owner", BindingFlags.Instance | BindingFlags.NonPublic));
+#if MONO_2_0
+ 		private static readonly IDynamicField _owner = new SafeField(typeof (ControlCollection).GetField("owner", BindingFlags.Instance | BindingFlags.NonPublic));
+#else
+		private static readonly IDynamicField _owner = new SafeField(typeof (ControlCollection).GetField("_owner", BindingFlags.Instance | BindingFlags.NonPublic));
+#endif
+		
 		private readonly ControlCollection _controls;
-	    private readonly Type _controlsType;
+	    	private readonly Type _controlsType;
 
 		/// <summary>
 		/// Returns the underlying ControlCollection instance.

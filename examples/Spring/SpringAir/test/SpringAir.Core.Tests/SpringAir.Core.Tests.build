@@ -22,12 +22,24 @@
 		</csc>
 	</target>
 	<target name="test" depends="build">
-		<nunit2outproc>
+		<if test="${nant.settings.currentframework!='mono-2.0'}">
+			<nunit2outproc>
+				<formatter type="Plain" />
+				<formatter type="Xml" usefile="true" extension=".xml"
+					   outputdir="${current.bin.dir}/results" />
+				<test assemblyname="${current.bin.dir}/${project::get-name()}.dll"
+				      appconfig="${project::get-name()}.dll.config" />
+			</nunit2outproc>
+	  	</if>
+		<if test="${nant.settings.currentframework=='mono-2.0'}">
+			<nunit2>
 			<formatter type="Plain" />
 			<formatter type="Xml" usefile="true" extension=".xml"
-			           outputdir="${current.bin.dir}/results" />
+				 outputdir="${current.bin.dir}/results" />
 			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll"
-			      appconfig="${project::get-name()}.dll.config" />
-		</nunit2outproc>
+			    appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
+			</nunit2>
+		</if>
+		
 	</target>
 </project>

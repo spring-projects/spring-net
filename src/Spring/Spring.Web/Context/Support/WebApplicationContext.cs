@@ -127,14 +127,14 @@ namespace Spring.Context.Support
         /// Since the HttpRuntime discards it's configurationsection cache, we maintain our own context cache.
         /// Despite it really speeds up context-lookup, since we don't have to go through the whole HttpConfigurationSystem
         /// </summary>
-        private static readonly Hashtable s_webContextCache = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
+        private static readonly Hashtable s_webContextCache = new CaseInsensitiveHashtable();
 
         static WebApplicationContext()
         {
             // register for ContextRegistry.Cleared event - we need to discard our cache in this case
             ContextRegistry.Cleared += new EventHandler(OnContextRegistryCleared);
 
-#if NET_2_0 && !MONO
+#if NET_2_0 && !MONO_2_0
             if (HttpRuntime.AppDomainAppVirtualPath != null) // check if we're within an ASP.NET AppDomain!
             {
                 // ensure HttpRuntime has been fully initialized!

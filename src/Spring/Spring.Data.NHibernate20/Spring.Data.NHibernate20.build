@@ -19,6 +19,7 @@
 			<arg line="${compiler.args}"/>
 			<nowarn>
 				<warning number="${nowarn.numbers.test},0169" />
+				<warning number="0219" if="${nant.settings.currentframework=='mono-2.0'}"/>
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />
@@ -40,6 +41,7 @@
 			<references basedir="${current.bin.dir}">
 				<include name="${nh20.lib.dir}/NHibernate.dll"/>
 				<include name="System.Data.dll" />
+				<include name="System.Web.dll" />
 				<include name="System.EnterpriseServices.dll" />
 				<include name="*NHibernate.dll" />
 				<include name="*.dll" />

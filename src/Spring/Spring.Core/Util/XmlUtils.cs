@@ -105,7 +105,7 @@ namespace Spring.Util
         public static XmlReader CreateValidatingReader(Stream stream, XmlResolver xmlResolver, XmlSchemaSet schemas, ValidationEventHandler eventHandler)
         {
             XmlReaderSettings settings = new XmlReaderSettings();
-		    settings.XmlResolver = xmlResolver;
+		    settings.Schemas.XmlResolver = xmlResolver;
             settings.Schemas.Add(schemas);
             settings.ValidationType = ValidationType.Schema;
             if (eventHandler != null)

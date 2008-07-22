@@ -1,4 +1,4 @@
-// $ANTLR 2.7.6 (2005-12-22): "Expression.g" -> "ExpressionLexer.cs"$
+// $ANTLR 2.7.6 (2005-12-22): "Expressions/Expression.g" -> "ExpressionLexer.cs"$
 
 namespace Spring.Expressions
 {
@@ -123,18 +123,18 @@ namespace Spring.Expressions
 			caseSensitiveLiterals = true;
 			setCaseSensitive(true);
 			literals = new Hashtable(100, (float) 0.4, null, Comparer.Default);
+			literals.Add("false", 6);
 			literals.Add("true", 7);
 			literals.Add("and", 8);
-			literals.Add("matches", 14);
 			literals.Add("in", 10);
 			literals.Add("null", 15);
-			literals.Add("between", 12);
+			literals.Add("matches", 14);
 			literals.Add("or", 9);
+			literals.Add("between", 12);
 			literals.Add("is", 11);
 			literals.Add("like", 13);
 			literals.Add("new", 46);
 			literals.Add("date", 52);
-			literals.Add("false", 6);
 		}
 		
 		override public IToken nextToken()			//throws TokenStreamException

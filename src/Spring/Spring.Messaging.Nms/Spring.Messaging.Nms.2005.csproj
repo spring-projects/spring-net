@@ -66,6 +66,7 @@
     <Compile Include="Messaging\Nms\IProducerCallback.cs" />
     <Compile Include="Messaging\Nms\ISessionCallback.cs" />
     <Compile Include="Messaging\Nms\Listener\AbstractMessageListenerContainer.cs" />
+    <Compile Include="Messaging\Nms\Listener\AbstractNmsListeningContainer.cs" />
     <Compile Include="Messaging\Nms\Listener\Adapter\MessageListenerAdapter.cs" />
     <Compile Include="Messaging\Nms\Listener\DefaultMessageListenerContainer.cs" />
     <Compile Include="Messaging\Nms\Listener\ISessionAwareMessageListener.cs" />

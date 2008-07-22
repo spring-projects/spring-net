@@ -208,18 +208,9 @@ namespace Spring.Objects.Factory.Xml
         {
             try
             {
-                XmlReader reader = null;
-
-                if (SystemUtils.MonoRuntime)
-                {
-                    reader = XmlUtils.CreateReader(stream);
-                }
-                else
-                {
-                    reader =
+                XmlReader reader = 
                         XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(),
-                                                        new ValidationEventHandler(HandleValidation));
-                }
+                                                        new ValidationEventHandler(HandleValidation));       
 
                 #region Instrumentation
 

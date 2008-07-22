@@ -16,7 +16,7 @@
 		     >
 			<arg line="${compiler.args}"/>	
 			<nowarn>
-				<warning number="${nowarn.numbers}" />
+				<warning number="${nowarn.numbers},0108,0114,0612" />
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />
@@ -30,7 +30,9 @@
 				<include name="antlr.runtime.dll" />
 				<include name="Spring.Core.dll" />
 				<include name="Spring.Aop.dll" />
-				<include name="Microsoft.Web.Services2.dll" />
+				<include name="System.Configuration.dll" />
+ 				<include name="System.Web.dll" />
+ 				<include name="System.Web.Services.dll" />
 			</references>
 		</csc>
 	</target>

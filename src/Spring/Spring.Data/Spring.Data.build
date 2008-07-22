@@ -16,19 +16,20 @@
 			<arg line="${compiler.args}"/>
 			<nowarn>
 				<warning number="1591,0169,0168" />
+				<warning number="0414,1584" if="${nant.settings.currentframework=='mono-2.0'}"/>
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />
 				<include name="../GenCommonAssemblyInfo.cs" />
 			</sources>
 			<resources basedir="." prefix="Spring.Data.Common" failonempty="true">
-				<include name="Data\Common\dbproviders.xml" />
+				<include name="Data/Common/dbproviders.xml" />
 			</resources>
 			<resources basedir="." prefix="Spring.Data.Config" failonempty="true">
-				<include name="Data\Config\spring-database-1.1.xsd" />
+				<include name="Data/Config/spring-database-1.1.xsd" />
 			</resources>
 			<resources basedir="." prefix="Spring.Transaction.Config" failonempty="true">
-				<include name="Transaction\Config\spring-tx-1.1.xsd" />
+				<include name="Transaction/Config/spring-tx-1.1.xsd" />
 			</resources>
 			<resources basedir="Resources">
 				<include name="**/*" />
@@ -36,6 +37,7 @@
 			<references basedir="${current.bin.dir}">
 				<include name="System.Data.dll" />
 				<include name="System.EnterpriseServices.dll" />
+				<include name="System.Transactions.dll" />
 				<include name="Common.Logging.dll"/>
 				<include name="Spring.Core.dll" />
 				<include name="Spring.Aop.dll" />

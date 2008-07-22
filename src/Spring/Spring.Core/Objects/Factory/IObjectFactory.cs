@@ -30,13 +30,13 @@ namespace Spring.Objects.Factory
 	/// The root interface for accessing a Spring.NET IoC container.
 	/// </summary>
 	/// <remarks>
-	/// <p>
+	/// <para>
 	/// This is the basic client view of a Spring.NET IoC container; further interfaces
 	/// such as <see cref="Spring.Objects.Factory.IListableObjectFactory"/> and
 	/// <see cref="Spring.Objects.Factory.Config.IConfigurableObjectFactory"/>
 	/// are available for specific purposes such as enumeration and configuration.
-	/// </p>
-	/// <p>
+	/// </para>
+	/// <para>
 	/// This is the root interface to be implemented by objects that can hold a number
 	/// of object definitions, each uniquely identified by a <see cref="System.String"/>
 	/// name. An independent instance of any of these objects can be obtained
@@ -45,15 +45,15 @@ namespace Spring.Objects.Factory
 	/// singleton in the scope of the factory). Which type of instance
 	/// will be returned depends on the object factory configuration - the API is the same.
 	/// The Singleton approach is more useful and hence more common in practice.
-	/// </p>
-	/// <p>
+	/// </para>
+	/// <para>
 	/// The point of this approach is that the IObjectFactory is a central registry of
 	/// application components, and centralizes the configuring of application components
 	/// (no more do individual objects need to read properties files, for example).
 	/// See chapters 4 and 11 of "Expert One-on-One J2EE Design and Development" for a
 	/// discussion of the benefits of this approach.
-	/// </p>
-	/// <p>
+	/// </para>
+	/// <para>
 	/// Normally an IObjectFactory will load object definitions stored in a configuration
 	/// source (such as an XML document), and use the <see cref="Spring.Objects"/>
 	/// namespace to configure the objects. However, an implementation could simply return
@@ -61,8 +61,8 @@ namespace Spring.Objects.Factory
 	/// constraints on how the definitions could be stored: LDAP, RDBMS, XML, properties
 	/// file etc. Implementations are encouraged to support references amongst objects,
 	/// to either Singletons or Prototypes.
-	/// </p>
-	/// <p>
+	/// </para>
+	/// <para>
 	/// In contrast to the methods in
 	/// <see cref="Spring.Objects.Factory.IListableObjectFactory"/>, all of the methods
 	/// in this interface will also check parent factories if this is an
@@ -70,13 +70,13 @@ namespace Spring.Objects.Factory
 	/// not found in this factory instance, the immediate parent is asked. Objects in
 	/// this factory instance are supposed to override objects of the same name in any
 	/// parent factory.
-	/// </p>
-	/// <p>
+	/// </para>
+	/// <para>
 	/// Object factories are supposed to support the standard object lifecycle interfaces
 	/// as far as possible. The maximum set of initialization methods and their standard
 	/// order is:
-	/// </p>
-	/// <p>
+	/// </para>
+	/// <para>
 	/// <list type="bullet">
 	/// <item>
 	/// <description>
@@ -124,12 +124,12 @@ namespace Spring.Objects.Factory
 	/// </description>
 	/// </item>
 	/// </list>
-	/// </p>
+	/// </para>
 	/// <p/>
-	/// <p>
+	/// <para>
 	/// On shutdown of an object factory, the following lifecycle methods apply:
-	/// </p>
-	/// <p>
+	/// </para>
+	/// <para>
 	/// <list type="bullet">
 	/// <item>
 	/// <description>
@@ -143,7 +143,7 @@ namespace Spring.Objects.Factory
 	/// </description>
 	/// </item>
 	/// </list>
-	/// </p>
+	/// </para>
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Juergen Hoeller</author>
@@ -154,14 +154,14 @@ namespace Spring.Objects.Factory
 		/// Is this object a singleton?
 		/// </summary>
 		/// <remarks>
-		/// <p>
+		/// <para>
 		/// That is, will <see cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>
 		/// always return the same object?
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// Will ask the parent factory if the object cannot be found in this factory
 		/// instance.
-		/// </p>
+		/// </para>
 		/// </remarks>
 		/// <param name="name">The name of the object to query.</param>
 		/// <returns>True if the named object is a singleton.</returns>
@@ -195,10 +195,10 @@ namespace Spring.Objects.Factory
 		/// Does this object factory contain an object with the given name?
 		/// </summary>
 		/// <remarks>
-		/// <p>
+		/// <para>
 		/// Will ask the parent factory if the object cannot be found in this factory
 		/// instance.
-		/// </p>
+		/// </para>
 		/// </remarks>
 		/// <param name="name">The name of the object to query.</param>
 		/// <returns>True if an object with the given name is defined.</returns>
@@ -208,10 +208,10 @@ namespace Spring.Objects.Factory
 		/// Return the aliases for the given object name, if defined.
 		/// </summary>
 		/// <remarks>
-		/// <p>
+		/// <para>
 		/// Will ask the parent factory if the object cannot be found in this factory
 		/// instance.
-		/// </p>
+		/// </para>
 		/// </remarks>
 		/// <param name="name">The object name to check for aliases.</param>
 		/// <returns>The aliases, or an empty array if none.</returns>
@@ -220,27 +220,28 @@ namespace Spring.Objects.Factory
 		/// </exception>
 		string[] GetAliases(string name);
 
+#if !MONO
 		/// <summary>
 		/// Return an instance (possibly shared or independent) of the given object name.
 		/// </summary>
 		/// <remarks>
-		/// <p>
+		/// <para>
 		/// This method allows an object factory to be used as a replacement for the
 		/// Singleton or Prototype design pattern.
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// Note that callers should retain references to returned objects. There is no
 		/// guarantee that this method will be implemented to be efficient. For example,
 		/// it may be synchronized, or may need to run an RDBMS query.
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// Will ask the parent factory if the object cannot be found in this factory
 		/// instance.
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// This is the indexer for the <see cref="Spring.Objects.Factory.IObjectFactory"/>
 		/// interface.
-		/// </p>
+		/// </para>
 		/// </remarks>
 		/// <param name="name">The name of the object to return.</param>
 		/// <returns>The instance of the object.</returns>
@@ -250,25 +251,26 @@ namespace Spring.Objects.Factory
 		/// <exception cref="Spring.Objects.ObjectsException">
 		/// If the object could not be created.
 		/// </exception>
-		object this[string name] { get; }
+#endif
+        object this[string name] { get; }
 
 		/// <summary>
 		/// Return an instance (possibly shared or independent) of the given object name.
 		/// </summary>
 		/// <remarks>
-		/// <p>
+		/// <para>
 		/// This method allows an object factory to be used as a replacement for the
 		/// Singleton or Prototype design pattern.
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// Note that callers should retain references to returned objects. There is no
 		/// guarantee that this method will be implemented to be efficient. For example,
 		/// it may be synchronized, or may need to run an RDBMS query.
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// Will ask the parent factory if the object cannot be found in this factory
 		/// instance.
-		/// </p>
+		/// </para>
 		/// </remarks>
 		/// <param name="name">The name of the object to return.</param>
 		/// <returns>The instance of the object.</returns>
@@ -284,19 +286,19 @@ namespace Spring.Objects.Factory
         /// Return an instance (possibly shared or independent) of the given object name.
         /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// This method allows an object factory to be used as a replacement for the
         /// Singleton or Prototype design pattern.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// Note that callers should retain references to returned objects. There is no
         /// guarantee that this method will be implemented to be efficient. For example,
         /// it may be synchronized, or may need to run an RDBMS query.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// Will ask the parent factory if the object cannot be found in this factory
         /// instance.
-        /// </p>
+        /// </para>
         /// </remarks>
         /// <param name="name">The name of the object to return.</param>
         /// <param name="arguments">
@@ -353,23 +355,23 @@ namespace Spring.Objects.Factory
 		/// Return an instance (possibly shared or independent) of the given object name.
 		/// </summary>
 		/// <remarks>
-		/// <p>
+		/// <para>
 		/// Provides a measure of type safety by throwing an exception if the object is
 		/// not of the required <see cref="System.Type"/>.
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// This method allows an object factory to be used as a replacement for the
 		/// Singleton or Prototype design pattern.
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// Note that callers should retain references to returned objects. There is no
 		/// guarantee that this method will be implemented to be efficient. For example,
 		/// it may be synchronized, or may need to run an RDBMS query.
-		/// </p>
-		/// <p>
+		/// </para>
+		/// <para>
 		/// Will ask the parent factory if the object cannot be found in this factory
 		/// instance.
-		/// </p>
+		/// </para>
 		/// </remarks>
 		/// <param name="name">The name of the object to return.</param>
 		/// <param name="requiredType">
@@ -394,12 +396,12 @@ namespace Spring.Objects.Factory
 		/// Determine the type of the object with the given name.
 		/// </summary>
 		/// <remarks>
-		/// <p>
+		/// <para>
 		/// More specifically, checks the type of object that
 		/// <see cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/> would return.
 		/// For an <see cref="Spring.Objects.Factory.IFactoryObject"/>, returns the type
 		/// of object that the <see cref="Spring.Objects.Factory.IFactoryObject"/> creates.
-		/// </p>
+		/// </para>
 		/// </remarks>
 		/// <param name="name">The name of the object to query.</param>
 		/// <returns>
@@ -432,14 +434,14 @@ namespace Spring.Objects.Factory
 		/// using the named object definition.
 		/// </summary>
 		/// <remarks>
-		/// <p>
+		/// <para>
 		/// In addition to being generally useful, typically this method is used to provide
 		/// dependency injection functionality for objects that are instantiated outwith the
 		/// control of a developer. A case in point is the way that the current (1.1)
 		/// ASP.NET classes instantiate web controls... the instantiation takes place within
 		/// a private method of a compiled page, and thus cannot be hooked into the
 		/// typical Spring.NET IOC container lifecycle for dependency injection.
-		/// </p>
+		/// </para>
 		/// </remarks>
 		/// <example>
 		/// The following code snippet assumes that the instantiated factory instance

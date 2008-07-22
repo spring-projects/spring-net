@@ -167,10 +167,16 @@ namespace Spring.Web.Support
     /// </remarks>
     internal class PageHandlerWrapper : Page, IHttpHandler
     {
-#if NET_2_0
+#if NET_2_0 && !MONO_2_0
         private static readonly FieldInfo fiHttpContext_CurrentHandler =
             typeof(HttpContext).GetField("_currentHandler", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly MethodInfo miPage_SetPreviousPage =
+#endif
+#if MONO_2_0
+	private static readonly FieldInfo fiHttpContext_CurrentHandler =
+             typeof(HttpContext).GetField("handler", BindingFlags.NonPublic | BindingFlags.Instance);
+#endif
+#if NET_2_0 || !MONO_2_0
+	private static readonly MethodInfo miPage_SetPreviousPage =
             typeof(System.Web.UI.Page).GetMethod("SetPreviousPage", BindingFlags.NonPublic | BindingFlags.Instance);
 #endif
 
@@ -277,11 +283,15 @@ namespace Spring.Web.Support
             {
                 System.Web.UI.Page page = (Page) handler;
 
+// TODO: to fix this would require a change to the Mono source as there is no mechanisim (public or private) for explicitly setting the 
+// PreviousPage at the moment
+#if !MONO_2_0
                 // During Server.Transfer/Execute() the PreviousPage property gets set
                 if (this.PreviousPage != null)
                 {
                     miPage_SetPreviousPage.Invoke(page, new object[] { this.PreviousPage });
                 }
+#endif
             }
 #endif
 

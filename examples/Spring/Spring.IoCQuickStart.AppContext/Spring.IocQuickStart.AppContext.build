@@ -25,6 +25,7 @@
       <references basedir="${current.bin.dir}">
          <include name="System.Drawing.dll" />
          <include name="Spring.Core.dll" />
+	 <include name="System.Windows.Forms.dll" />
       </references>
     </csc>
     <copy tofile="${current.bin.dir}/${project::get-name()}.exe.config"

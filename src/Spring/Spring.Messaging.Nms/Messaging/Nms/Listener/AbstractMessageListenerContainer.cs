@@ -9,10 +9,8 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Listener
 {
-    public abstract class AbstractMessageListenerContainer : NmsDestinationAccessor, ILifecycle, IDisposable
+    public abstract class AbstractMessageListenerContainer : AbstractNmsListeningContainer
     {
-        private String clientId;
-
         private object destination;
 
         private String messageSelector;
@@ -27,39 +25,12 @@ namespace Spring.Messaging.Nms.Listener
 
         private bool exposeListenerISession = true;
 
-        private bool autoStartup = true;
-
-        private IConnection sharedConnection;
 
 
-        private volatile bool active = false;
-
-        private bool running = false;
 
         private IList pausedTasks = new Spring.Collections.LinkedList();
 
-        private object lifecycleMonitor = new object();
-
-
-        private object sharedConnectionMonitor = new object();
-
         #region Properties
-
-        /// <summary> Set whether to automatically start the listener after initialization.
-        /// <p>Default is "true"; set this to "false" to allow for manual startup.</p>
-        /// </summary>
-        virtual public bool AutoStartup
-        {
-            set { this.autoStartup = value; }
-        }
-
-
-        public string ClientId
-        {
-            set { clientId = value; }
-            get { return clientId;  }
-        }
-
 
         public IDestination Destination
         {
@@ -79,18 +50,7 @@ namespace Spring.Messaging.Nms.Listener
             }
         }
 
-        virtual public bool Active
-        {
-            get
-            {
-                lock (this.lifecycleMonitor)
-                {
-                    return this.active;
-                }
-            }
 
-        }
-        
         public string DestinationName
         {
             get
@@ -173,143 +133,10 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
-        public IConnection SharedConnection
-        {
-            get
-            {
-                if (!SharedConnectionEnabled)
-                {
-                    throw new System.SystemException("This message listener container does not maintain a shared IConnection");
-                }
-                lock (this.sharedConnectionMonitor)
-                {
-                    if (this.sharedConnection == null)
-                    {
-                        //TODO SharedConnectionNotInitializedException
-                        throw new ApplicationException("This message listener container's shared IConnection has not been initialized yet");
-                    }
-                    return this.sharedConnection;
-                }
-            }
-        }
+
 
         #endregion
 
-        public void Start()
-        {
-            DoStart();
-        }
-
-        private void DoStart()
-        {
-            lock (this.lifecycleMonitor)
-            {
-                running = true;
-                System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
-
-                //TODO - PausedTasks
-            }
-
-            if (SharedConnectionEnabled)
-            {
-                StartSharedConnection();
-            }
-        }
-
-        protected virtual void StartSharedConnection()
-        {
-            lock (sharedConnectionMonitor)
-            {
-                if (sharedConnection != null)
-                {
-                    try
-                    {
-                        sharedConnection.Start();
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Debug("Ignoring IConnection start exception - assuming already started", ex);
-                    }
-                }
-            }
-        }
-
-        public void Stop()
-        {
-            DoStop();
-        }
-
-        public bool IsRunning
-        {
-            get
-            {
-                lock (lifecycleMonitor)
-                {
-                    return running;
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            Shutdown();
-        }
-
-        public virtual void Shutdown()
-        {
-            logger.Debug("Shutting down message listener container");
-            bool wasRunning = false;
-            lock (this.lifecycleMonitor)
-            {
-                wasRunning = this.running;
-                this.running = false;
-                this.active = false;
-                System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
-            }
-            try
-            {
-                DestroyListener();
-            }
-            finally
-            {
-                lock (this.sharedConnectionMonitor)
-                {
-                    NmsUtils.CloseConnection(this.sharedConnection, wasRunning);
-                }
-            }
-        }
-
-        protected virtual void DoStop()
-        {
-            lock (this.lifecycleMonitor)
-            {
-                this.running = false;
-                System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
-            }
-
-            if (SharedConnectionEnabled)
-            {
-                StopSharedConnection();
-            }
-        }
-
-        protected virtual void StopSharedConnection()
-        {
-            lock (this.sharedConnectionMonitor)
-            {
-                if (this.sharedConnection != null)
-                {
-                    try
-                    {
-                        this.sharedConnection.Stop();
-                    }
-                    catch (System.InvalidOperationException ex)
-                    {
-                        logger.Debug("Ignoring IConnection stop exception - assuming already stopped", ex);
-                    }
-                }
-            }
-        }
 
 
         #region Template methods for listeners
@@ -480,101 +307,16 @@ namespace Spring.Messaging.Nms.Listener
             Initialize();
         }
 
-        public virtual void Initialize()
-        {
-            try
-            {
-                lock (this.lifecycleMonitor)
-                {
-                    this.active = true;
-                    System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
-                }
 
-                if (SharedConnectionEnabled)
-                {
-                    EstablishSharedConnection();
-                }
 
-                if (this.autoStartup)
-                {
-                    DoStart();
-                }
 
-                RegisterListener();
-            }
-            catch (Exception)
-            {
-                lock (this.sharedConnectionMonitor)
-                {
-                    ConnectionFactoryUtils.ReleaseConnection(sharedConnection, ConnectionFactory, autoStartup);
-                }
-                throw;
-            }
-        }
 
-        protected virtual void EstablishSharedConnection()
-        {
-            RefreshSharedConnection();
-        }
 
-        protected void RefreshSharedConnection()
-        {
-            bool running = IsRunning;
-            lock (this.sharedConnectionMonitor)
-            {
-                NmsUtils.CloseConnection(this.sharedConnection, running);
-                
-                IConnection con = CreateConnection();
-                try
-                {
-                    PrepareSharedConnection(con);
-                }
-                catch (Exception)
-                {
-                    NmsUtils.CloseConnection(con);
-                    throw;
-                }
-                this.sharedConnection = con;
-            }
-        }
 
-        protected virtual void PrepareSharedConnection(IConnection connection)
-        {
-            if (ClientId != null)
-            {
-               connection.ClientId = ClientId;
-            }
-        }
         #region Template methods to be implemented by subclasses
 
-        /// <summary> Return whether a shared NMS IConnection should be maintained
-        /// by this listener container base class.
-        /// </summary>
-        /// <seealso cref="SharedConnection">
-        /// </seealso>
-        protected abstract bool SharedConnectionEnabled
-        {
-            get;
-        }
 
-        /// <summary> Register the specified listener on the underlying NMS IConnection.
-        /// <p>Subclasses need to implement this method for their specific
-        /// listener management process.</p>
-        /// </summary>
-        /// <throws>  NMSException if registration failed </throws>
-        /// <seealso cref="IMessageListener">
-        /// </seealso>
-        /// <seealso cref="SharedConnection">
-        /// </seealso>
-        protected abstract void RegisterListener();
 
-        /// <summary> Destroy the registered listener.
-        /// The NMS IConnection will automatically be closed <i>afterwards</i>
-        /// <p>Subclasses need to implement this method for their specific
-        /// listener management process.</p>
-        /// </summary>
-        /// <throws>  NMSException if destruction failed </throws>
-        protected abstract void DestroyListener();
 
         #endregion
 

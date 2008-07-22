@@ -203,7 +203,12 @@
     <target name="common.set-assembly-attribute-values" depends="generate-build-number">
         <property name="assembly.is-cls-compliant" value="false" />
 	<property name="assembly.configuration" value="${nant.settings.currentframework}.win32; ${current.build.config}"/>
-	<property name="assembly.product" value="${project.name.full} ${package.version} for .NET ${nant.settings.currentframework.number}" />
+	<if test="${nant.settings.currentframework!='mono-2.0'}">
+	  <property name="assembly.product" value="${project.name.full} ${package.version} for .NET ${nant.settings.currentframework.number}" />-->
+	</if>
+        <if test="${nant.settings.currentframework=='mono-2.0'}">
+ 	  <property name="assembly.product" value="${project.name.full} ${package.version} for .NET ${nant.settings.currentframework.number} (MONO)" />
+	</if>
 	<property name="assembly.company" value="${project.company}" />
 	<property name="assembly.copyright" value="${project.copyright}" />
 	<property name="assembly.trademark" value="Apache License, Version 2.0" />
@@ -386,18 +391,20 @@
     <target name="set-mono-2.0-runtime-configuration"
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="nant.settings.currentframework" value="mono-2.0"/>
+        <property name="nant.settings.currentframework.number" value="2.0"/>
         <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
-        <property name="current.build.defines.csc" value="${build.defines.csc},MONO,MONO_2_0" dynamic="true"/>
-        <property name="current.build.defines.jsc" value="${build.defines.jsc},MONO,MONO_2_0" dynamic="true"/>
-        <property name="current.build.defines.vbc" value="${build.defines.vbc},MONO=True,MONO_2_0=True" dynamic="true"/>
-        <property name="current.build.defines.vjc" value="${build.defines.vjc},MONO,MONO_2_0" dynamic="true"/>
-        <property name="current.build.defines.cl" value="${build.defines.cl} /D MONO /D MONO_2_0" dynamic="true"/>
+        <property name="current.build.defines.csc" value="${build.defines.csc},MONO,NET_2_0,MONO_2_0" dynamic="true"/>
+        <property name="current.build.defines.jsc" value="${build.defines.jsc},MONO,NET_2_0,MONO_2_0" dynamic="true"/>
+        <property name="current.build.defines.vbc" value="${build.defines.vbc},MONO=True,NET_2_0,MONO_2_0=True" dynamic="true"/>
+        <property name="current.build.defines.vjc" value="${build.defines.vjc},MONO,NET_2_0,MONO_2_0" dynamic="true"/>
+        <property name="current.build.defines.cl" value="${build.defines.cl} /D MONO /D MONO_2_0 /D NET_2_0" dynamic="true"/>
         <property name="current.bin.dir"
                   value="${bin.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}/${current.build.config}"/>
         <property name="current.sdkdoc.dir"
                   value="${sdkdoc.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
         <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
         <property name="link.sdkdoc.version" value="MsdnOnline"/>
+        <property name="nowarn.numbers" value="${nowarn.numbers},0169,0414,0219"/>
         <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default},0414"/>
     </target>
     <target name="set-sscli-1.0-runtime-configuration"
