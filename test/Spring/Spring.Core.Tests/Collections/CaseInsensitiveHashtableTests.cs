@@ -27,6 +27,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 #endregion
 
@@ -67,6 +68,18 @@ namespace Spring.Collections
             Assert.AreNotSame(storiginal, st);
             Assert.AreEqual("value", st["KEY"]);
             Assert.AreEqual(1, st.Count);
+        }
+
+        [Test]
+        public void AcceptsNonStringKeys()
+        {
+            CaseInsensitiveHashtable st = new CaseInsensitiveHashtable();
+
+            object key = new object();
+            st.Add(key, "value");
+            Assert.AreEqual(1, st.Count);            
+            Assert.AreEqual("value", st[key]);
+            Assert.IsNull(st[new object()]);
         }
 
         [Test]
