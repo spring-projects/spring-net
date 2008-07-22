@@ -13,8 +13,7 @@ namespace Spring.Collections
     [Serializable]
     public class CaseInsensitiveHashtable : Hashtable
     {
-        private readonly TextInfo _textInfo;
-        private readonly CompareInfo _compareInfo;
+        private readonly CultureInfo _culture;
 
         /// <summary>
         /// Creates a case-insensitive hashtable using <see cref="CultureInfo.CurrentCulture"/>.
@@ -38,18 +37,9 @@ namespace Spring.Collections
         /// <param name="d">the dictionary to copy entries from</param>
         /// <param name="culture">the <see cref="CultureInfo"/> to calculate the hashcode</param>
         public CaseInsensitiveHashtable(IDictionary d, CultureInfo culture)
-            :this(d, culture.TextInfo, culture.CompareInfo)
-        {}
-
-        /// <summary>
-        /// Creates a case-insensitive hashtable using the given <see cref="CultureInfo"/>, initially
-        /// populated with entries from another dictionary.
-        /// </summary>
-        protected CaseInsensitiveHashtable(IDictionary d, TextInfo textInfo, CompareInfo compareInfo)
         {
-            AssertUtils.ArgumentNotNull(textInfo, "textInfo");
-            _textInfo = textInfo;
-            _compareInfo = compareInfo;
+            AssertUtils.ArgumentNotNull(culture, "culture");
+            _culture = culture;
 
             if (d != null)
             {
@@ -58,7 +48,7 @@ namespace Spring.Collections
                 {
                     this.Add(enumerator.Key, enumerator.Value);
                 }
-            }
+            }            
         }
 
         /// <summary>
@@ -69,11 +59,9 @@ namespace Spring.Collections
         /// <exception cref="T:System.ArgumentNullException">info is null. </exception>
         protected CaseInsensitiveHashtable(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            _textInfo = (TextInfo) info.GetValue("_textInfo", typeof(TextInfo));
-            _compareInfo = (CompareInfo) info.GetValue("_compareInfo", typeof(CompareInfo));
-
-            AssertUtils.ArgumentNotNull(_textInfo, "TextInfo");
-            AssertUtils.ArgumentNotNull(_compareInfo, "CompareInfo");
+            string cultureName = info.GetString("_cultureName");
+            _culture = new CultureInfo(cultureName);
+            AssertUtils.ArgumentNotNull(_culture, "Culture");
         }
 
         ///<summary>
@@ -86,8 +74,7 @@ namespace Spring.Collections
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue("_textInfo", _textInfo);
-            info.AddValue("_compareInfo", _compareInfo);
+            info.AddValue("_cultureName", _culture.Name);
         }
 
         /// <summary>
@@ -97,7 +84,7 @@ namespace Spring.Collections
         /// <returns></returns>
         protected override int GetHash(object key)
         {
-            return _textInfo.ToLower((string) key).GetHashCode();
+            return _culture.TextInfo.ToLower((string) key).GetHashCode();
         }
 
         /// <summary>
@@ -105,7 +92,7 @@ namespace Spring.Collections
         /// </summary>
         protected override bool KeyEquals(object item, object key)
         {
-            return 0==_compareInfo.Compare((string) item, (string) key, CompareOptions.IgnoreCase);
+            return 0==_culture.CompareInfo.Compare((string) item, (string) key, CompareOptions.IgnoreCase);
         }
 
         /// <summary>
@@ -113,7 +100,7 @@ namespace Spring.Collections
         /// </summary>
         public override object Clone()
         {
-            return new CaseInsensitiveHashtable(this, _textInfo, _compareInfo );
+            return new CaseInsensitiveHashtable(this, _culture );
         }
     }
 }
