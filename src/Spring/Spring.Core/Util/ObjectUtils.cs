@@ -25,6 +25,7 @@ using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Remoting;
+using Common.Logging;
 using Spring.Objects;
 
 #endregion
@@ -44,12 +45,17 @@ namespace Spring.Util
     /// <author>Rick Evans (.NET)</author>
     public sealed class ObjectUtils
     {
+        /// <summary>
+        /// The <see cref="Common.Logging.ILog"/> instance for this class.
+        /// </summary>
+        private static readonly ILog log = LogManager.GetLogger(typeof(ObjectUtils));
+
         #region Constants
 
         /// <summary>
         /// An empty object array.
         /// </summary>
-        public static readonly object[] EmptyObjects = new object[] {};
+        public static readonly object[] EmptyObjects = new object[] { };
 
         #endregion
 
@@ -209,6 +215,8 @@ namespace Spring.Util
         {
             AssertUtils.ArgumentNotNull(constructor, "constructor");
 
+            if (log.IsTraceEnabled) log.Trace(string.Format("instantiating type [{0}] using constructor [{1}]", constructor.DeclaringType, constructor));
+
             if (constructor.DeclaringType.IsInterface)
             {
                 throw new FatalReflectionException(
@@ -296,15 +304,15 @@ namespace Spring.Util
         {
             return (type.IsInstanceOfType(obj) ||
                     (!type.IsPrimitive && obj == null) ||
-                    (type.Equals(typeof (bool)) && obj is Boolean) ||
-                    (type.Equals(typeof (byte)) && obj is Byte) ||
-                    (type.Equals(typeof (char)) && obj is Char) ||
-                    (type.Equals(typeof (sbyte)) && obj is SByte) ||
-                    (type.Equals(typeof (int)) && obj is Int32) ||
-                    (type.Equals(typeof (short)) && obj is Int16) ||
-                    (type.Equals(typeof (long)) && obj is Int64) ||
-                    (type.Equals(typeof (float)) && obj is Single) ||
-                    (type.Equals(typeof (double)) && obj is Double));
+                    (type.Equals(typeof(bool)) && obj is Boolean) ||
+                    (type.Equals(typeof(byte)) && obj is Byte) ||
+                    (type.Equals(typeof(char)) && obj is Char) ||
+                    (type.Equals(typeof(sbyte)) && obj is SByte) ||
+                    (type.Equals(typeof(int)) && obj is Int32) ||
+                    (type.Equals(typeof(short)) && obj is Int16) ||
+                    (type.Equals(typeof(long)) && obj is Int64) ||
+                    (type.Equals(typeof(float)) && obj is Single) ||
+                    (type.Equals(typeof(double)) && obj is Double));
         }
 
         /// <summary>
@@ -324,11 +332,11 @@ namespace Spring.Util
         public static bool IsSimpleProperty(Type type)
         {
             return type.IsPrimitive
-                   || type.Equals(typeof (string))
-                   || type.Equals(typeof (string[]))
+                   || type.Equals(typeof(string))
+                   || type.Equals(typeof(string[]))
                    || IsPrimitiveArray(type)
-                   || type.Equals(typeof (Type))
-                   || type.Equals(typeof (Type[]));
+                   || type.Equals(typeof(Type))
+                   || type.Equals(typeof(Type[]));
         }
 
         /// <summary>
@@ -337,14 +345,14 @@ namespace Spring.Util
         /// </summary>
         public static bool IsPrimitiveArray(Type type)
         {
-            return typeof (bool[]).Equals(type)
-                   || typeof (sbyte[]).Equals(type)
-                   || typeof (char[]).Equals(type)
-                   || typeof (short[]).Equals(type)
-                   || typeof (int[]).Equals(type)
-                   || typeof (long[]).Equals(type)
-                   || typeof (float[]).Equals(type)
-                   || typeof (double[]).Equals(type);
+            return typeof(bool[]).Equals(type)
+                   || typeof(sbyte[]).Equals(type)
+                   || typeof(char[]).Equals(type)
+                   || typeof(short[]).Equals(type)
+                   || typeof(int[]).Equals(type)
+                   || typeof(long[]).Equals(type)
+                   || typeof(float[]).Equals(type)
+                   || typeof(double[]).Equals(type);
         }
 
         /// <summary>
@@ -484,7 +492,7 @@ namespace Spring.Util
         /// <returns>qualified name of the method.</returns>
         public static string GetQualifiedMethodName(MethodInfo method)
         {
-            AssertUtils.ArgumentNotNull(method,"method", "MethodInfo must not be null");
+            AssertUtils.ArgumentNotNull(method, "method", "MethodInfo must not be null");
             return method.DeclaringType.FullName + "." + method.Name;
         }
     }
