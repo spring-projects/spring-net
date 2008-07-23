@@ -445,6 +445,7 @@ namespace Spring.Objects.Factory.Support
             lock (singletonCache)
             {
                 singletonCache[name] = singleton;
+                registeredSingletons.Add(name);
             }
         }
 
@@ -1303,6 +1304,7 @@ namespace Spring.Objects.Factory.Support
             {
                 object tempObject = singletonCache[name];
                 singletonCache.Remove(name);
+                registeredSingletons.Remove(name);
 
                 object singletonInstance = tempObject;
                 if (singletonInstance != null)
@@ -1416,6 +1418,12 @@ namespace Spring.Objects.Factory.Support
         private bool caseSensitive;
         private IDictionary aliasMap;
         private IDictionary singletonCache;
+
+        /// <summary>
+        /// Set of registered singletons, containing the bean names in registration order 
+        /// </summary>
+        private ISet registeredSingletons = new HashedSet();
+
         private IDictionary singletonsInCreation;
 
         #endregion
@@ -1693,18 +1701,7 @@ namespace Spring.Objects.Factory.Support
             return GetObjectForInstance(name, instance);
         }
 
-        /// <summary>
-        /// Tries to find a cached object for the specified name. 
-        /// </summary>
-        /// <param name="objectName">Teh object name to look for.</param>
-        /// <returns>The cached object if found, <see langword="null"/> otherwise.</returns>
-        protected virtual object GetSingleton(string objectName)
-        {
-            lock (singletonCache)
-            {
-                return singletonCache[objectName];
-            }
-        }
+
 
         /// <summary>
         /// Creates a singleton instance for the specified object name and definition.
@@ -1795,8 +1792,6 @@ namespace Spring.Objects.Factory.Support
         public abstract object ConfigureObject(object target, string name, IObjectDefinition definition);
 
         #endregion
-
-        #region IConfigurableObjectFactory Members
 
         /// <summary>
         /// Destroy all cached singletons in this factory.
@@ -1943,7 +1938,7 @@ namespace Spring.Objects.Factory.Support
         /// Register the given existing object as singleton in the object factory,
         /// under the given object name.
         /// </summary>
-        /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableObjectFactory.RegisterSingleton"/>.
+        /// <seealso cref="Spring.Objects.Factory.Config.ISingletonObjectRegistry.RegisterSingleton"/>.
         public void RegisterSingleton(string name, object singletonObject)
         {
             AssertUtils.ArgumentHasText(name, "name", "The singleton object cannot be registered under an empty name.");
@@ -1976,7 +1971,7 @@ namespace Spring.Objects.Factory.Support
         /// Does this object factory contains a singleton instance with the
         /// supplied <paramref name="name"/>?
         /// </summary>
-        /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableObjectFactory.ContainsSingleton(string)"/>
+        /// <seealso cref="Spring.Objects.Factory.Config.ISingletonObjectRegistry.ContainsSingleton(string)"/>
         public bool ContainsSingleton(string name)
         {
             AssertUtils.ArgumentHasText(name, "name");
@@ -1986,6 +1981,84 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
+        #region ISingletonObjectRegistry Members
+
+
+        /// <summary>
+        /// Gets the names of singleton objects registered in this registry.
+        /// </summary>
+        /// <value>The list of names as String array (never <code>null</code>).</value>
+        /// <remarks>
+        /// 	<para>
+        /// Only checks already instantiated singletons; does not return names
+        /// for singleton bean definitions which have not been instantiated yet.
+        /// </para>
+        /// 	<para>
+        /// The main purpose of this method is to check manually registered singletons
+        /// <see cref="RegisterSingleton"/>. Can also be used to check which
+        /// singletons defined by an object definition have already been created.
+        /// </para>
+        /// </remarks>
+        /// <see cref="RegisterSingleton"/>
+        /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.GetObjectDefinitionNames"/>
+        /// <see cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames"/>
+        public string[] SingletonNames
+        {
+            get
+            {
+                lock (singletonCache)
+                {
+                    return
+                        StringUtils.DelimitedListToStringArray(
+                            StringUtils.CollectionToDelimitedString(registeredSingletons, ","), ",");
+                    
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of singleton beans registered in this registry.
+        /// </summary>
+        /// <value>The number of singleton objects.</value>
+        /// <remarks>
+        /// 	<para>
+        /// Only checks already instantiated singletons; does not count
+        /// singleton object definitions which have not been instantiated yet.
+        /// </para>
+        /// 	<para>
+        /// The main purpose of this method is to check manually registered singletons
+        /// <see cref="RegisterSingleton"/>.  Can also be used to count the number of
+        /// singletons defined by an object definition that have already been created.
+        /// </para>
+        /// </remarks>
+        /// <see cref="RegisterSingleton"/>
+        /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.ObjectDefinitionCount"/>
+        /// <see cref="Spring.Objects.Factory.IListableObjectFactory.ObjectDefinitionCount"/>
+        public int SingletonCount
+        {
+            get 
+            { 
+                lock (singletonCache)
+                {
+                    return registeredSingletons.Count;
+                } 
+            }
+        }
+        /// <summary>
+        /// Tries to find a cached object for the specified name. 
+        /// </summary>
+        /// <param name="objectName">Teh object name to look for.</param>
+        /// <returns>The cached object if found, <see langword="null"/> otherwise.</returns>
+        public virtual object GetSingleton(string objectName)
+        {
+            lock (singletonCache)
+            {
+                return singletonCache[objectName];
+            }
+        }
+
         #endregion
+
+
     }
 }

@@ -42,7 +42,12 @@ namespace Spring
 		{
 		}
 
-		public void Dispose()
+	    public object GetSingleton(string objectName)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public void Dispose()
 		{
 			_destroyCalls.Inc();
 		}
@@ -79,7 +84,21 @@ namespace Spring
 			throw new NotImplementedException();
 		}
 
-		public IObjectDefinition GetObjectDefinition(string objectName)
+	    public string[] SingletonNames
+	    {
+	        get { throw new NotImplementedException(); }
+	    }
+
+	    #region ISingletonObjectRegistry Members
+
+	    public int SingletonCount
+	    {
+	        get { throw new NotImplementedException(); }
+	    }
+
+	    #endregion
+
+	    public IObjectDefinition GetObjectDefinition(string objectName)
 		{
 			return null;
 		}

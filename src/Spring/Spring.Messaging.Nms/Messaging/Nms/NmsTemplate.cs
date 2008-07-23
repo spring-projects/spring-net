@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using Common.Logging;
 using Spring.Messaging.Nms.Connection;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.Converter;
@@ -48,6 +49,12 @@ namespace Spring.Messaging.Nms
     /// <author>Mark Pollack (.NET)</author>
     public class NmsTemplate : NmsDestinationAccessor, INmsOperations
     {
+        #region Logging
+
+        private readonly ILog logger = LogManager.GetLogger(typeof(NmsTemplate));
+
+
+        #endregion
         #region Fields
 
         public static readonly long DEFAULT_RECEIVE_TIMEOUT = -1;
@@ -934,16 +941,6 @@ namespace Spring.Messaging.Nms
             {
                 NmsUtils.CloseMessageConsumer(consumer);
             }
-        }
-
-        /// <summary>
-        /// Returns whether the ISession is in client acknowledgement mode.
-        /// </summary>
-        /// <param name="session">The session.</param>
-        /// <returns>true ifin client ack mode, false otherwise</returns>
-        protected virtual bool ClientAcknowledge(ISession session)
-        {
-            return (session.AcknowledgementMode == AcknowledgementMode.ClientAcknowledge);
         }
 
 

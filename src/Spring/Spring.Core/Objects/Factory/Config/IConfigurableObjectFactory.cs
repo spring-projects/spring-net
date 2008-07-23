@@ -49,7 +49,7 @@ namespace Spring.Objects.Factory.Config
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
-	public interface IConfigurableObjectFactory : IHierarchicalObjectFactory
+	public interface IConfigurableObjectFactory : IHierarchicalObjectFactory, ISingletonObjectRegistry
 	{
 		/// <summary>
 		/// Set the parent of this object factory.
@@ -147,27 +147,6 @@ namespace Spring.Objects.Factory.Config
 		void RegisterAlias(string name, string theAlias);
 
 		/// <summary>
-		/// Register the given existing object as singleton in the object factory,
-		/// under the given object name.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Typically invoked during factory configuration, but can also be
-		/// used for runtime registration of singletons. Therefore, a factory
-		/// implementation should synchronize singleton access; it will have
-		/// to do this anyway if it supports lazy initialization of singletons.
-		/// </p>
-		/// </remarks>
-		/// <param name="name">
-		/// The name of the object.
-		/// </param>
-		/// <param name="singleton">The existing object.</param>
-		/// <exception cref="Spring.Objects.ObjectsException">
-		/// If the singleton could not be registered.
-		/// </exception>
-		void RegisterSingleton(string name, object singleton);
-
-		/// <summary>
 		/// Register the given custom <see cref="System.ComponentModel.TypeConverter"/>
 		/// for all properties of the given <see cref="System.Type"/>.
 		/// </summary>
@@ -184,51 +163,5 @@ namespace Spring.Objects.Factory.Config
 		/// </param>
 		void RegisterCustomConverter(Type requiredType, TypeConverter converter);
 
-		/// <summary>
-		/// Does this object factory contains a singleton instance with the
-		/// supplied <paramref name="name"/>?
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Only checks already instantiated singletons; does not return
-		/// <see langword="true"/> for singleton object definitions that have
-		/// not been instantiated yet.
-		/// </p>
-		/// <p>
-		/// The main purpose of this method is to check manually registered
-		/// singletons (<see cref="RegisterSingleton(string, object)"/>). This
-		/// method can also be used to check whether a singleton defined by an
-		/// object definition has already been created.
-		/// </p>
-		/// <p>
-		/// To check whether an object factory contains an object definition
-		/// with a given name, use the
-		/// <see cref="Spring.Objects.Factory.IListableObjectFactory.ContainsObjectDefinition(string)"/>
-		/// method. Calling both
-		/// <see cref="Spring.Objects.Factory.IListableObjectFactory.ContainsObjectDefinition(string)"/>
-		/// and <see cref="ContainsSingleton(string)"/> definitively answers
-		/// the question of whether a specific object factory contains a
-		/// singleton object with the given name.
-		/// </p>
-		/// <p>
-		/// Use the
-		/// <see cref="Spring.Objects.Factory.IObjectFactory.ContainsObject(string)"/>
-		/// method for general checks as to whether a factory knows about an
-		/// object with a given name (regrdless of whether the object in
-		/// question is a manually registed singleton instance or created by
-		/// an object definition)... this also has the happy bonus of also
-		/// checking any ancestor factories.
-		/// </p>
-		/// </remarks>
-		/// <param name="name">
-		/// The name of the (singleton) object to look for.
-		/// </param>
-		/// <returns>
-		/// <see langword="true"/> if this object factory contains a singleton
-		/// instance with the given <paramref name="name"/>.
-		/// </returns>
-		/// <seealso cref="Spring.Objects.Factory.IObjectFactory.ContainsObject(string)"/>
-		/// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.ContainsObjectDefinition(string)"/>
-		bool ContainsSingleton(string name);
 	}
 }

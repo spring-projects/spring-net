@@ -20,6 +20,7 @@
 
 using System;
 using Apache.NMS;
+using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Nms.Connection;
 using Spring.Messaging.Nms.Support;
@@ -46,6 +47,12 @@ namespace Spring.Messaging.Nms.Listener
     /// <author>Mark Pollack</author>
     public abstract class AbstractNmsListeningContainer : NmsDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
     {
+        #region Logging
+
+        private readonly ILog logger = LogManager.GetLogger(typeof(AbstractNmsListeningContainer));
+
+        #endregion
+
         #region Fields
 
         private String clientId;
@@ -55,6 +62,8 @@ namespace Spring.Messaging.Nms.Listener
         private string objectName;
         
         private IConnection sharedConnection;
+
+        private bool sharedConnectionStarted = false;
         
         protected object sharedConnectionMonitor = new object();
         
@@ -80,30 +89,52 @@ namespace Spring.Messaging.Nms.Listener
             set { this.autoStartup = value; }
         }
 
+        public string ObjectName
+        {
+            set { objectName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this container is currently running,
+        /// that is, whether it has been started and not stopped yet.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this container is running; otherwise, <c>false</c>.
+        /// </value>
         public bool IsRunning
         {
             get
             {
                 lock (lifecycleMonitor)
                 {
-                    return running;
+                    return (running && RunningAllowed);
                 }
             }
         }
 
-        /// <summary> Return whether a shared NMS IConnection should be maintained
-        /// by this listener container base class.
+        /// <summary>
+        /// Gets a value indicating whether this container's listeners are generally allowed to run.
         /// </summary>
-        /// <seealso cref="AbstractMessageListenerContainer.SharedConnection">
-        /// </seealso>
-        protected abstract bool SharedConnectionEnabled { get; }
-
-        public void Dispose()
+        /// <remarks>
+        /// <para>
+        /// >This implementation always returns <code>true</code>; the default 'running'
+        /// state is purely determined by <see cref="Start"/>/<see cref="Stop"/>.
+        /// </para>
+        /// <para>
+        /// Subclasses may override this method to check against temporary
+        /// conditions that prevent listeners from actually running. In other words,
+        /// they may apply further restrictions to the 'running' state, returning
+        /// <code>false</code> if such a restriction prevents listeners from running.
+        /// </para>
+        /// </remarks>
+        /// <value><c>true</c> if running allowed; otherwise, <c>false</c>.</value>
+        protected virtual bool RunningAllowed
         {
-            Shutdown();
+            get {
+                return true; }
         }
 
-        virtual public bool Active
+        public virtual bool Active
         {
             get
             {
@@ -115,15 +146,95 @@ namespace Spring.Messaging.Nms.Listener
 
         }
 
-        public string ObjectName
+        /// <summary> Return whether a shared NMS IConnection should be maintained
+        /// by this listener container base class.
+        /// </summary>
+        /// <seealso cref="AbstractMessageListenerContainer.SharedConnection">
+        /// </seealso>
+        protected abstract bool SharedConnectionEnabled { get; }
+
+        /// <summary>
+        /// Gets the shared connection maintained by this container.
+        /// Available after initialization.
+        /// </summary>
+        /// <value>The shared connection (never null)</value>
+        /// <exception cref="InvalidOperationException">if this container does not maintain a
+        /// shared Connection, or if the Connection hasn't been initialized yet.
+        /// </exception>
+        /// <see cref="SharedConnectionEnabled"/>
+        protected IConnection SharedConnection
         {
-            set { objectName = value; }
+            get
+            {
+                if (!SharedConnectionEnabled)
+                {
+                    throw new InvalidOperationException("This listener container does not maintain a shared IConnection");
+                }
+                lock (this.sharedConnectionMonitor)
+                {
+                    if (this.sharedConnection == null)
+                    {
+                        throw new SharedConnectionNotInitializedException("This listener container's shared Connection has not been initialized yet");
+                    }
+                    return this.sharedConnection;
+                }
+            }
+        }
+
+        public override void AfterPropertiesSet()
+        {
+            base.AfterPropertiesSet();
+            ValidateConfiguration();
+            Initialize();
+        }
+
+        /// <summary>
+        /// Validates the configuration of this container.  The default implementation
+        /// is empty.  To be overriden in subclasses.
+        /// </summary>
+        protected virtual void ValidateConfiguration()
+        {
+            
+        }
+
+        public void Dispose()
+        {
+            Shutdown();
         }
 
 
-        public void Start()
+        /// <summary>
+        /// Initializes this container.  Creates a Connection, starts the Connection
+        /// (if the property <see cref="AutoStartup"/> hasn't been turned off), and calls
+        /// <see cref="DoInitialize"/>.
+        /// </summary>
+        /// <exception cref="NMSException">If startup failed</exception>
+        public virtual void Initialize()
         {
-            DoStart();
+            try
+            {
+                lock (this.lifecycleMonitor)
+                {
+                    this.active = true;
+                    System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
+                }
+
+                if (this.autoStartup)
+                {
+                    DoStart();
+                }
+
+                DoInitialize();             
+
+            }
+            catch (Exception)
+            {
+                lock (this.sharedConnectionMonitor)
+                {
+                    ConnectionFactoryUtils.ReleaseConnection(sharedConnection, ConnectionFactory, autoStartup);
+                }
+                throw;
+            }
         }
 
         public virtual void Shutdown()
@@ -152,111 +263,136 @@ namespace Spring.Messaging.Nms.Listener
             // Shut down the invokers
             try
             {
-                DestroyListener();
+                DoShutdown();
             }
             finally
             {
                 lock (this.sharedConnectionMonitor)
                 {
-                    NmsUtils.CloseConnection(this.sharedConnection, wasRunning);
+                    ConnectionFactoryUtils.ReleaseConnection(this.sharedConnection, ConnectionFactory, false);
                 }
             }
         }
 
-        protected void DoStart()
+        /// <summary>
+        /// Starts this container.
+        /// </summary>
+        /// <exception cref="NMSException">if starting failed.</exception>
+        public void Start()
         {
+            DoStart();
+        }
+
+        protected virtual void DoStart()
+        {
+            // Lazily establish a shared Connection, if necessary.
+            if (SharedConnectionEnabled)
+            {
+                EstablishSharedConnection();
+            }
+
             lock (this.lifecycleMonitor)
             {
                 running = true;
                 System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
-
-                //TODO - PausedTasks
             }
 
+            // Start the shared Connection, if any.
             if (SharedConnectionEnabled)
             {
                 StartSharedConnection();
             }
         }
 
-        protected virtual void StartSharedConnection()
+        /// <summary>
+        /// Stops this container.
+        /// </summary>
+        /// <exception cref="NMSException">if stopping failed.</exception>
+        public void Stop()
+        {
+            DoStop();
+        }
+
+        /// <summary>
+        /// Notify all invoker tasks and stop the shared Connection, if any.
+        /// </summary>
+        /// <exception cref="NMSException">if thrown by NMS API methods.</exception>
+        /// <see cref="StopSharedConnection"/>
+        protected virtual void DoStop()
+        {
+            lock (this.lifecycleMonitor)
+            {
+                this.running = false;
+                System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
+            }
+
+            if (SharedConnectionEnabled)
+            {
+                StopSharedConnection();
+            }
+        }
+
+        /// <summary>
+        /// Register any invokers within this container.
+        /// Subclasses need to implement this method for their specific
+        /// invoker management process.  A shared Connection, if any, will already have been
+        /// started at this point.
+        /// </summary>
+        protected abstract void DoInitialize();
+
+
+        /// <summary>
+        /// Close the registered invokers.  Subclasses need to implement this method
+        /// for their specific invoker management process. A shared Connection, if any,
+        /// will automatically be closed afterwards.
+        /// </summary>
+        protected abstract void DoShutdown();
+
+
+        /// <summary>
+        /// Establishes a shared Connection for this container.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The default implementation delegates to <see cref="CreateSharedConnection"/>
+        /// which does one immediate attempt and throws an exception if it fails.
+        /// Can be overridden to have a recovery process in place, retrying
+        /// until a Connection can be successfully established.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="NMSException">If thrown by NMS API methods</exception>
+        protected virtual void EstablishSharedConnection()
         {
             lock (sharedConnectionMonitor)
             {
-                if (sharedConnection != null)
+                if (sharedConnection == null)
                 {
-                    try
-                    {
-                        sharedConnection.Start();
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Debug("Ignoring IConnection start exception - assuming already started", ex);
-                    }
+                    sharedConnection = CreateSharedConnection();
+                    logger.Debug("Established shared NMS Connection");
                 }
             }
         }
 
-        public IConnection SharedConnection
-        {
-            get
-            {
-                if (!SharedConnectionEnabled)
-                {
-                    throw new System.SystemException("This message listener container does not maintain a shared IConnection");
-                }
-                lock (this.sharedConnectionMonitor)
-                {
-                    if (this.sharedConnection == null)
-                    {
-                        //TODO SharedConnectionNotInitializedException
-                        throw new ApplicationException("This message listener container's shared IConnection has not been initialized yet");
-                    }
-                    return this.sharedConnection;
-                }
-            }
-        }
-
-        public virtual void Initialize()
-        {
-            try
-            {
-                lock (this.lifecycleMonitor)
-                {
-                    this.active = true;
-                    System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
-                }
-
-                if (SharedConnectionEnabled)
-                {
-                    EstablishSharedConnection();
-                }
-
-                if (this.autoStartup)
-                {
-                    DoStart();
-                }
-
-                RegisterListener();
-            }
-            catch (Exception)
-            {
-                lock (this.sharedConnectionMonitor)
-                {
-                    ConnectionFactoryUtils.ReleaseConnection(sharedConnection, ConnectionFactory, autoStartup);
-                }
-                throw;
-            }
-        }
-
-        protected virtual void EstablishSharedConnection()
-        {
-            RefreshSharedConnection();
-        }
-
-
+        /// <summary>
+        /// Refreshes the shared connection that this container holds.
+        /// </summary>
+        /// <remarks>
+        /// Called on startup and also after an infrastructure exception
+        /// that occurred during invoker setup and/or execution.
+        /// </remarks>
+        /// <exception cref="NMSException">If thrown by NMS API methods</exception>
         protected void RefreshSharedConnection()
         {
+            lock (sharedConnectionMonitor)
+            {
+                ConnectionFactoryUtils.ReleaseConnection(sharedConnection, ConnectionFactory, sharedConnectionStarted);
+                sharedConnection = CreateSharedConnection();
+                if (sharedConnectionStarted)
+                {
+                    sharedConnection.Start();
+                }
+            }
+            /*
             bool running = IsRunning;
             lock (this.sharedConnectionMonitor)
             {
@@ -273,9 +409,42 @@ namespace Spring.Messaging.Nms.Listener
                     throw;
                 }
                 this.sharedConnection = con;
+            }*/
+        }
+
+        /// <summary>
+        /// Creates the shared connection for this container.
+        /// </summary>
+        /// <remarks>
+        /// The default implementation creates a standard Connection
+        /// and prepares it through <see cref="PrepareSharedConnection"/>
+        /// </remarks>
+        /// <returns>the prepared Connection</returns>
+        /// <exception cref="NMSException">if the creation failed.</exception>
+        protected virtual IConnection CreateSharedConnection()
+        {
+            IConnection con = CreateConnection();
+            try
+            {
+                PrepareSharedConnection(con);
+                return con;
+            } catch (NMSException ex)
+            {
+                NmsUtils.CloseConnection(con);
+                throw;
             }
         }
 
+        /// <summary>
+        /// Prepares the given connection, which is about to be registered
+        /// as shared Connection for this container.
+        /// </summary>
+        /// <remarks>
+        /// The default implementation sets the specified client id, if any.
+        /// Subclasses can override this to apply further settings.
+        /// </remarks>
+        /// <param name="connection">The connection to prepare.</param>
+        /// <exception cref="NMSException">If the preparation efforts failed.</exception>
         protected virtual void PrepareSharedConnection(IConnection connection)
         {
             if (ClientId != null)
@@ -284,33 +453,28 @@ namespace Spring.Messaging.Nms.Listener
             }
         }
 
-        /// <summary> Register the specified listener on the underlying NMS IConnection.
-        /// <p>Subclasses need to implement this method for their specific
-        /// listener management process.</p>
+
+        /// <summary>
+        /// Starts the shared connection.
         /// </summary>
-        /// <throws>  NMSException if registration failed </throws>
-        /// <seealso cref="IMessageListener">
-        /// </seealso>
-        /// <seealso cref="SharedConnection">
-        /// </seealso>
-        protected abstract void RegisterListener();
-
-        public void Stop()
+        /// <exception cref="NMSException">If thrown by NMS API methods</exception>
+        /// <see cref="Start"/>
+        protected virtual void StartSharedConnection()
         {
-            DoStop();
-        }
-
-        protected virtual void DoStop()
-        {
-            lock (this.lifecycleMonitor)
+            lock (sharedConnectionMonitor)
             {
-                this.running = false;
-                System.Threading.Monitor.PulseAll(this.lifecycleMonitor);
-            }
-
-            if (SharedConnectionEnabled)
-            {
-                StopSharedConnection();
+                if (sharedConnection != null)
+                {
+                    try
+                    {
+                        sharedConnectionStarted = true;
+                        sharedConnection.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Warn("Ignoring Connection start exception - assuming already started", ex);
+                    }
+                }
             }
         }
 
@@ -322,24 +486,32 @@ namespace Spring.Messaging.Nms.Listener
                 {
                     try
                     {
+                        this.sharedConnectionStarted = false;
                         this.sharedConnection.Stop();
                     }
                     catch (System.InvalidOperationException ex)
                     {
-                        logger.Debug("Ignoring IConnection stop exception - assuming already stopped", ex);
+                        logger.Warn("Ignoring Connection stop exception - assuming already stopped", ex);
                     }
                 }
             }
         }
 
+    }
 
-
-        /// <summary> Destroy the registered listener.
-        /// The NMS IConnection will automatically be closed <i>afterwards</i>
-        /// <p>Subclasses need to implement this method for their specific
-        /// listener management process.</p>
+    /// <summary>
+    /// Exception that indicates that the initial setup of this container's
+    /// shared Connection failed. This is indicating to invokers that they need
+    /// to establish the shared Connection themselves on first access.
+    /// </summary>
+    public class SharedConnectionNotInitializedException : ApplicationException
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SharedConnectionNotInitializedException"/> class.
         /// </summary>
-        /// <throws>  NMSException if destruction failed </throws>
-        protected abstract void DestroyListener();
+        /// <param name="message">The message.</param>
+        public SharedConnectionNotInitializedException(string message) : base(message)
+        {
+        }
     }
 }

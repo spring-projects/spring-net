@@ -846,6 +846,113 @@ namespace Spring.Context.Support
 
         #endregion
 
+        #region ILifecycle Members
+
+        /// <summary>
+        /// Starts this component.
+        /// </summary>
+        /// <remarks>Should not throw an exception if the component is already running.
+        /// In the case of a container, this will propagate the start signal
+        /// to all components that apply.
+        /// </remarks>
+        public void Start()
+        {
+            IDictionary lifecycleObjects = LifeCycleObjects;
+            foreach (DictionaryEntry dictionaryEntry in lifecycleObjects)
+            {
+                //TODO start dependencies of the lifecycle objects
+                ILifecycle obj = dictionaryEntry.Value as ILifecycle;
+                if (obj != null)
+                {
+                    if (!obj.IsRunning)
+                    {
+                        obj.Start();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Stops this component.
+        /// </summary>
+        /// <remarks>
+        /// Should not throw an exception if the component isn't started yet.
+        /// In the case of a container, this will propagate the stop signal
+        /// to all components that apply.
+        /// </remarks>
+        public void Stop()
+        {
+            IDictionary lifecycleObjects = LifeCycleObjects;
+            foreach (DictionaryEntry dictionaryEntry in lifecycleObjects)
+            {
+                //TODO stop dependencies of the lifecycle objects
+                ILifecycle obj = dictionaryEntry.Value as ILifecycle;
+                if (obj != null)
+                {
+                    if (obj.IsRunning)
+                    {
+                        obj.Stop();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this component is currently running.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this component is running; otherwise, <c>false</c>.
+        /// </value>
+        /// <remarks>
+        /// In the case of a container, this will return <code>true</code>
+        /// only if <i>all</i> components that apply are currently running.
+        /// </remarks>
+        public bool IsRunning
+        {
+            get
+            {
+                IDictionary lifecycleObjects = LifeCycleObjects;
+                foreach (DictionaryEntry dictionaryEntry in lifecycleObjects)
+                {
+                    ILifecycle obj = dictionaryEntry.Value as ILifecycle;
+                    if (obj != null)
+                    {
+                        if (!obj.IsRunning)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets a dictionary of all singleton beans that implement the
+        /// ILifecycle interface in this context.
+        /// </summary>
+        /// <value>A dictionary of ILifecycle objects with object name as key.</value>
+        private IDictionary LifeCycleObjects
+        {
+            get
+            {
+                IConfigurableListableObjectFactory objectFactory = ObjectFactory;
+                string[] objectNames = objectFactory.SingletonNames;
+                IDictionary lifeCycleObjects = new Hashtable();
+                foreach (string objectName in objectNames)
+                {
+                    object obj = objectFactory.GetSingleton(objectName);
+                    if (obj is ILifecycle)
+                    {
+                        lifeCycleObjects[objectName] = obj;
+                    }
+                }
+                return lifeCycleObjects;
+            }
+        }
+
+        #endregion
+
         #region IApplicationContext Members
 
         /// <summary>

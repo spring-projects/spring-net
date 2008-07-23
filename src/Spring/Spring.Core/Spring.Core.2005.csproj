@@ -177,6 +177,7 @@
     <Compile Include="Context\IHierarchicalMessageSource.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\ILifecycle.cs" />
     <Compile Include="Context\IMessageSource.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -546,6 +547,7 @@
     <Compile Include="Objects\Factory\Config\ConnectionStringsVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\IConfigurableFactoryObject.cs" />
     <Compile Include="Objects\Factory\Config\InstantiationAwareObjectPostProcessorAdapter.cs" />
+    <Compile Include="Objects\Factory\Config\ISingletonObjectRegistry.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionHolder.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionVisitor.cs" />
     <Compile Include="Objects\Factory\Config\ResourceHandlerConfigurer.cs" />

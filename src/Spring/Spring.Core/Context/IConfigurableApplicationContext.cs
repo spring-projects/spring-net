@@ -57,7 +57,7 @@ namespace Spring.Context
     /// <author>Mark Pollack (.NET)</author>
     /// <seealso cref="System.IDisposable"/>
     /// <seealso cref="Spring.Context.IApplicationContext"/>
-    public interface IConfigurableApplicationContext : IApplicationContext
+    public interface IConfigurableApplicationContext : IApplicationContext, ILifecycle
     {
         /// <summary>
         /// Return the internal object factory of this application context.

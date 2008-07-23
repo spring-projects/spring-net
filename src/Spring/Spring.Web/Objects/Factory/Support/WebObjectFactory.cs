@@ -206,7 +206,7 @@ namespace Spring.Objects.Factory.Support
         /// </remarks>
         /// <param name="objectName">Object name to look for.</param>
         /// <returns>Cached object if found, null otherwise.</returns>
-        protected override object GetSingleton(string objectName)
+        public override object GetSingleton(string objectName)
         {
             object instance = null;
 

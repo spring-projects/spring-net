@@ -384,7 +384,21 @@ namespace Spring.Messaging.Nms.Connection
         public string ClientId
         {
             get { return target.ClientId; }
-            set { target.ClientId = value; }
+            set
+            {
+                string currentClientId = target.ClientId;
+                if (currentClientId != null && currentClientId.Equals(value))
+                {
+                    //ok
+                }
+                else
+                {
+                    throw new ArgumentException(
+                        "Setting of 'ClientID' property not supported on wrapper for shared Connection." +
+                        "Set the 'ClientId' property on the SingleConnectionFactory instead.");    
+                }
+                
+            }
         }
 
         public void Dispose()

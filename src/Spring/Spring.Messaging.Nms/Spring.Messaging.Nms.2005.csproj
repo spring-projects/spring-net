@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\ILifecycle.cs" />
     <Compile Include="Messaging\Nms\Connections\CachedMessageProducer.cs" />
     <Compile Include="Messaging\Nms\Connections\CachedSession.cs" />
     <Compile Include="Messaging\Nms\Connections\CachingConnectionFactory.cs" />
@@ -70,6 +69,7 @@
     <Compile Include="Messaging\Nms\Listener\Adapter\MessageListenerAdapter.cs" />
     <Compile Include="Messaging\Nms\Listener\DefaultMessageListenerContainer.cs" />
     <Compile Include="Messaging\Nms\Listener\ISessionAwareMessageListener.cs" />
+    <Compile Include="Messaging\Nms\Listener\LocallyExposedNmsResourceHolder.cs" />
     <Compile Include="Messaging\Nms\Listener\SimpleMessageListenerContainer.cs" />
     <Compile Include="Messaging\Nms\MessageCreatorDelegate.cs" />
     <Compile Include="Messaging\Nms\NmsGatewaySupport.cs" />

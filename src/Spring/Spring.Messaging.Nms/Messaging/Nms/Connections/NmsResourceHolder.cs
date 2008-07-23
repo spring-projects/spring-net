@@ -47,14 +47,15 @@ namespace Spring.Messaging.Nms.Connection
 
         #region Fields
 
-        private bool frozen;
+        private IConnectionFactory connectionFactory;
+
+        private bool frozen = false;
 
         private IList connections = new LinkedList();
 
         private IList sessions = new LinkedList();
 
         private IDictionary sessionsPerIConnection = new Hashtable();
-        private IConnectionFactory connectionFactory;
 
         #endregion
 
@@ -64,7 +65,30 @@ namespace Spring.Messaging.Nms.Connection
         /// <summary> Create a new NmsResourceHolder that is open for resources to be added.</summary>
         public NmsResourceHolder()
         {
-            this.frozen = false;
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmsResourceHolder"/> class
+        /// at is open for resources to be added.
+        /// </summary>
+        /// <param name="connectionFactory">The connection factory that this
+        /// resource holder is associated with (may be <code>null</code>)
+        /// </param>
+        public NmsResourceHolder(IConnectionFactory connectionFactory)
+        {
+            this.connectionFactory = connectionFactory;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmsResourceHolder"/> class for the
+        /// given Session.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        public NmsResourceHolder(ISession session)
+        {
+            AddSession(session);
+            frozen = true;
         }
 
         /// <summary> Create a new NmsResourceHolder for the given NMS resources.</summary>

@@ -40,7 +40,7 @@ namespace Spring.Messaging.Nms.Support
     {
         #region Logging
 
-        protected readonly ILog logger = LogManager.GetLogger(typeof(NmsAccessor));
+        private readonly ILog logger = LogManager.GetLogger(typeof(NmsAccessor));
 
         #endregion
         
@@ -145,6 +145,16 @@ namespace Spring.Messaging.Nms.Support
         protected virtual ISession CreateSession(IConnection con)
         {
             return con.CreateSession(SessionAcknowledgeMode);
+        }
+
+        /// <summary>
+        /// Returns whether the ISession is in client acknowledgement mode.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns>true ifin client ack mode, false otherwise</returns>
+        protected virtual bool ClientAcknowledge(ISession session)
+        {
+            return (session.AcknowledgementMode == AcknowledgementMode.ClientAcknowledge);
         }
     }
 }

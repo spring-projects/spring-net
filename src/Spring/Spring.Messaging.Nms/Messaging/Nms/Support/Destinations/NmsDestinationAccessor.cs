@@ -18,6 +18,8 @@
 
 #endregion
 
+using System;
+using Spring.Objects.Factory;
 using Spring.Util;
 using Apache.NMS;
 

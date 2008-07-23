@@ -1,16 +1,46 @@
+#region License
+
+/*
+ * Copyright © 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
 using System;
-using System.Collections;
-using Spring.Context;
-using Spring.Messaging.Nms.Connection;
+using Common.Logging;
 using Spring.Messaging.Nms.Support;
-using Spring.Messaging.Nms.Support.IDestinations;
 using Spring.Util;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Listener
 {
+    /// <summary>
+    /// Abstract base class for message listener containers. Can either host
+    /// a standard NMS <see cref="IMessageListener"/> or a Spring-specific
+    /// <see cref="ISessionAwareMessageListener"/>
+    /// </summary>
     public abstract class AbstractMessageListenerContainer : AbstractNmsListeningContainer
     {
+        #region Logging
+
+        private readonly ILog logger = LogManager.GetLogger(typeof(AbstractMessageListenerContainer));
+
+        #endregion
+
+        #region Fields
+
         private object destination;
 
         private String messageSelector;
@@ -21,14 +51,13 @@ namespace Spring.Messaging.Nms.Listener
 
         private string durableSubscriptionName;
 
-        private ExceptionListener exceptionListener;
+        private IExceptionListener exceptionListener;
 
         private bool exposeListenerISession = true;
 
+        private bool acceptMessagesWhileStopping = false;
 
-
-
-        private IList pausedTasks = new Spring.Collections.LinkedList();
+        #endregion
 
         #region Properties
 
@@ -73,6 +102,17 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Gets or sets the message listener to register.
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// <para>
+        /// This can be either a standard NMS <see cref="IMessageListener"/> object or a 
+        /// Spring <see cref="ISessionAwareMessageListener"/> object.
+        /// </para>
+        /// </remarks>
+        /// <value>The message listener.</value>
         public object MessageListener
         {
             set
@@ -113,7 +153,7 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
-        public ExceptionListener ExceptionListener
+        public IExceptionListener ExceptionListener
         {
             get { return exceptionListener; }
             set { exceptionListener = value; }
@@ -127,6 +167,35 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to accept messages while
+        /// the listener container is in the process of stopping.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Return whether to accept received messages while the listener container
+        /// receive attempt. Switch this flag on to fully process such messages
+        /// even in the stopping phase, with the drawback that even newly sent
+        /// messages might still get processed (if coming in before all receive
+        /// timeouts have expired).
+        /// </para>
+        /// <para>
+        /// Aborting receive attempts for such incoming messages
+        /// might lead to the provider's retry count decreasing for the affected
+        /// messages. If you have a high number of concurrent consumers, make sure
+        /// that the number of retries is higher than the number of consumers,
+        /// to be on the safe side for all potential stopping scenarios.
+        /// </para>
+        /// </remarks>
+        /// <value>
+        /// 	<c>true</c> if accept messages while in the process of stopping; otherwise, <c>false</c>.
+        /// </value>
+        public bool AcceptMessagesWhileStopping
+        {
+            get { return acceptMessagesWhileStopping; }
+            set { acceptMessagesWhileStopping = value; }
+        }
+
         public object LifecycleMonitor
         {
             get { return lifecycleMonitor; }
@@ -139,23 +208,69 @@ namespace Spring.Messaging.Nms.Listener
 
 
 
+        protected override void ValidateConfiguration()
+        {
+            if (this.destination == null)
+            {
+                throw new ArgumentException("Property 'destination' or 'DestinationName' is required");
+            }
+            if (SubscriptionDurable && !PubSubDomain)
+            {
+                throw new ArgumentException("A durable subscription requires a topic (pub-sub domain)");
+            }
+        }
+
         #region Template methods for listeners
+
+
+
+        /// <summary>
+        /// Executes the specified listener, 
+        /// committing or rolling back the transaction afterwards (if necessary).
+        /// </summary>
+        /// <param name="session">The session to operate on.</param>
+        /// <param name="message">The received message.</param>
+        /// <see cref="InvokeListener"/>
+        /// <see cref="CommitIfNecessary"/>
+        /// <see cref="RollbackOnExceptionIfNecessary"/>
+        /// <see cref="HandleListenerException"/>
         public virtual void ExecuteListener(ISession session, IMessage message)
         {
             try
             {
                 DoExecuteListener(session, message);
             }
-            //UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1100'"
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 HandleListenerException(ex);
             }
         }
-        
 
+        /// <summary>
+        /// Executes the specified listener, 
+        /// committing or rolling back the transaction afterwards (if necessary).
+        /// </summary>
+        /// <param name="session">The session to operate on.</param>
+        /// <param name="message">The received message.</param>
+        /// <exception cref="NMSException">If thrown by NMS API methods.</exception>
+        /// <see cref="InvokeListener"/>
+        /// <see cref="CommitIfNecessary"/>
+        /// <see cref="RollbackOnExceptionIfNecessary"/>
         protected virtual void DoExecuteListener(ISession session, IMessage message)
         {
+            if (!AcceptMessagesWhileStopping && !IsRunning)
+            {
+                #region Logging
+                if (logger.IsWarnEnabled)
+                {
+                    logger.Warn("Rejecting received message because of the listener container " +
+                        "having been stopped in the meantime: " + message);
+                }
+                #endregion
+                RollbackIfNecessary(session);
+                throw new MessageRejectedWhileStoppingException();
+            }
+
             try
             {
                 InvokeListener(session, message);
@@ -168,49 +283,33 @@ namespace Spring.Messaging.Nms.Listener
             CommitIfNecessary(session, message);
         }
 
-        private void CommitIfNecessary(ISession session, IMessage message)
+        /// <summary>
+        /// Invokes the specified listener: either as standard NMS IMessageListener
+        /// or (preferably) as Spring SessionAwareMessageListener.
+        /// </summary>
+        /// <param name="session">The session to operate on.</param>
+        /// <param name="message">The received message.</param>
+        /// <exception cref="NMSException">If thrown by NMS API methods.</exception>
+        /// <see cref="MessageListener"/>
+        protected virtual void InvokeListener(ISession session, IMessage message)
         {
-            //TODO
-            //logger.Info("CommitIfNecessary not implemented");
-        }
-
-        private void RollbackOnExceptionIfNecessary(ISession session, Exception ex)
-        {
-            //TODO
-            //logger.Info("RollbackOnExceptionIfNecessary not implemented");
-        }
-
-
-        protected internal virtual void InvokeListener(ISession session, IMessage message)
-        {
-            if (MessageListener is ISessionAwareMessageListener)
+            object listener = MessageListener;
+            if (listener is ISessionAwareMessageListener)
             {
-                DoInvokeListener((ISessionAwareMessageListener) MessageListener, session, message);
+                DoInvokeListener((ISessionAwareMessageListener) listener, session, message);
+            }
+            else if (listener is IMessageListener)
+            {
+               DoInvokeListener((IMessageListener) listener, message);
+            }
+            else if (listener != null)
+            {
+                throw new ArgumentException("Only IMessageListener and ISessionAwareMessageListener supported");
             }
             else
             {
-                if (MessageListener is IMessageListener)
-                {
-                   DoInvokeListener((IMessageListener) MessageListener, message);
-                }
-                else
-                {
-                    throw new System.ArgumentException("Only IMessageListener and ISessionAwareMessageListener supported");
-                }
+                throw new InvalidOperationException("No message listener specified - see property MessageListener");
             }
-        }
-
-        /// <summary>
-        /// Invoke the specified listener as standard JMS MessageListener.
-        /// </summary>
-        /// <remarks>Default implementation performs a plain invocation of the
-        /// <code>OnMessage</code> methods</remarks>
-        /// <param name="listener">The listener to invoke.</param>
-        /// <param name="message">The received message.</param>
-        /// <exception cref="NMSException">if thronw by the underlying NMS APIs</exception>
-        protected virtual void DoInvokeListener(IMessageListener listener, IMessage message)
-        {
-            listener.OnMessage(message);
         }
 
         /// <summary>
@@ -221,6 +320,9 @@ namespace Spring.Messaging.Nms.Listener
         /// <param name="listener">The Spring ISessionAwareMessageListener to invoke.</param>
         /// <param name="session">The session to operate on.</param>
         /// <param name="message">The received message.</param>
+        /// <exception cref="NMSException">If thrown by NMS API methods.</exception>
+        /// <see cref="ISessionAwareMessageListener"/>
+        /// <see cref="ExposeListenerSession"/>
         protected virtual void DoInvokeListener(ISessionAwareMessageListener listener, ISession session, IMessage message)
         {
             IConnection conToClose = null;
@@ -239,13 +341,15 @@ namespace Spring.Messaging.Nms.Listener
                 if (logger.IsDebugEnabled)
                 {
                     logger.Debug("Invoking listener with message of type [" + message.GetType() + 
-                        "] and session [" + sessionToUse + "]");
+                                 "] and session [" + sessionToUse + "]");
                 }
                 listener.OnMessage(message, sessionToUse);
+                // Clean up specially exposed Session, if any
                 if (sessionToUse != session)
                 {
-                    if (sessionToUse.Transacted)
+                    if (sessionToUse.Transacted && SessionTransacted)
                     {
+                        // Transacted session created by this container -> commit.
                         NmsUtils.CommitIfNecessary(sessionToUse);
                     }                        
                 }
@@ -255,9 +359,100 @@ namespace Spring.Messaging.Nms.Listener
                 NmsUtils.CloseConnection(conToClose);
             }
         }
-        
-        protected  virtual void HandleListenerException(System.Exception ex)
+
+        /// <summary>
+        /// Invoke the specified listener as standard JMS MessageListener.
+        /// </summary>
+        /// <remarks>Default implementation performs a plain invocation of the
+        /// <code>OnMessage</code> methods</remarks>
+        /// <param name="listener">The listener to invoke.</param>
+        /// <param name="message">The received message.</param>
+        /// <exception cref="NMSException">if thrown by the NMS API methods</exception>
+        protected virtual void DoInvokeListener(IMessageListener listener, IMessage message)
         {
+            listener.OnMessage(message);
+        }
+
+        /// <summary>
+        /// Perform a commit or message acknowledgement, as appropriate
+        /// </summary>
+        /// <param name="session">The session to commit.</param>
+        /// <param name="message">The message to acknowledge.</param>
+        /// <exception cref="NMSException">In case of commit failure</exception>
+        protected virtual void CommitIfNecessary(ISession session, IMessage message)
+        {
+            // Commit session or acknowledge message
+            if (session.Transacted)
+            {
+                if (SessionTransacted)
+                {
+                    NmsUtils.CommitIfNecessary(session);
+                }
+            }
+            else if (ClientAcknowledge(session))
+            {
+                message.Acknowledge();
+            }
+        }
+
+
+        /// <summary>
+        /// Perform a rollback, if appropriate.
+        /// </summary>
+        /// <param name="session">The session to rollback.</param>
+        /// <exception cref="NMSException">In case of a rollback error</exception>
+        protected virtual void RollbackIfNecessary(ISession session)
+        {
+            if (session.Transacted && SessionTransacted)
+            {
+                // Transacted session created by this container -> rollback
+                NmsUtils.RollbackIfNecessary(session);
+            }
+        }
+        /// <summary>
+        /// Perform a rollback, handling rollback excepitons properly.
+        /// </summary>
+        /// <param name="session">The session to rollback.</param>
+        /// <param name="ex">The thrown application exception.</param>
+        /// <exception cref="NMSException">in case of a rollback error.</exception>
+        protected virtual void RollbackOnExceptionIfNecessary(ISession session, Exception ex)
+        {
+            try
+            {
+                if (session.Transacted && SessionTransacted)
+                {
+                    // Transacted session created by this container -> rollback
+                    if (logger.IsDebugEnabled)
+                    {
+                        logger.Debug("Initiating transaction rollback on application exception");
+                    }
+                    NmsUtils.RollbackIfNecessary(session);
+                }
+            } catch (NMSException ex2)
+            {
+                logger.Error("Application exception overriden by rollback exception", ex);
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Handle the given exception that arose during listener execution.
+        /// </summary>
+        /// <remarks>
+        /// The default implementation logs the exception at error level,
+        /// not propagating it to the JMS provider - assuming that all handling of
+        /// acknowledgement and/or transactions is done by this listener container.
+        /// This can be overridden in subclasses.
+        /// </remarks>
+        /// <param name="ex">The exceptin to handle</param>
+        protected virtual void HandleListenerException(Exception ex)
+        {
+            if (ex is MessageRejectedWhileStoppingException)
+            {
+                // Internal exception - has been handled before.
+                return;
+            }
             if (ex is NMSException)
             {
                 InvokeExceptionListener((NMSException)ex);
@@ -276,54 +471,21 @@ namespace Spring.Messaging.Nms.Listener
             }
         }
 
-        protected virtual void InvokeExceptionListener(NMSException ex)
+        /// <summary>
+        /// Invokes the registered exception listener, if any.
+        /// </summary>
+        /// <param name="ex">The exception that arose during NMS processing.</param>
+        /// <see cref="ExceptionListener"/>
+        protected virtual void InvokeExceptionListener(Exception ex)
         {
-            ExceptionListener exceptionListener = ExceptionListener;
-            if (exceptionListener != null)
+            IExceptionListener exListener = ExceptionListener;
+            if (exListener != null)
             {
-               exceptionListener(ex);
+                exListener.OnException(ex);
             }
         }
         
         #endregion
-
-        public override void AfterPropertiesSet()
-        {
-            base.AfterPropertiesSet();
-
-            if (this.destination == null)
-            {
-                throw new System.ArgumentException("destination or destinationName is required");
-            }
-            if (this.messageListener == null)
-            {
-                throw new System.ArgumentException("messageListener is required");
-            }
-            if (SubscriptionDurable && !PubSubDomain)
-            {
-                throw new System.ArgumentException("A durable subscription requires a topic (pub-sub domain)");
-            }
-
-            Initialize();
-        }
-
-
-
-
-
-
-
-        #region Template methods to be implemented by subclasses
-
-
-
-
-        #endregion
-
-        protected virtual bool IsClientAcknowledge(ISession session)
-        {
-            return (session.AcknowledgementMode == AcknowledgementMode.ClientAcknowledge);
-        }
 
         protected virtual void CheckMessageListener(System.Object messageListener)
         {
@@ -333,5 +495,13 @@ namespace Spring.Messaging.Nms.Listener
                 throw new System.ArgumentException("messageListener needs to be of type [" + typeof(IMessageListener).FullName + "] or [" + typeof(ISessionAwareMessageListener).FullName + "]");
             }
         }
+    }
+
+    /// <summary>
+    /// Internal exception class that indicates a rejected message on shutdown.
+    /// Used to trigger a rollback for an external transaction manager in that case.
+    /// </summary>
+    internal class MessageRejectedWhileStoppingException : ApplicationException
+    {
     }
 }
