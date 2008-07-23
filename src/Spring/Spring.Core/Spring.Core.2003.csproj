@@ -623,6 +623,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\IO\StringResource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\IO\UrlResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

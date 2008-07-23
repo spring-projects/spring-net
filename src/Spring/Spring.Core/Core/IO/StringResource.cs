@@ -28,10 +28,10 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring
+namespace Spring.Core.IO
 {
     /// <summary>
-    /// A <see cref="IResource"/> adapter implementation encapsulating a simply string.
+    /// A <see cref="IResource"/> adapter implementation encapsulating a simple string.
     /// </summary>
     /// <author>Erich Eichinger</author>
     public class StringResource : AbstractResource
@@ -110,6 +110,22 @@ namespace Spring
         public override bool Exists
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// Gets the encoding used to create a byte stream of the <see cref="Content"/> string.
+        /// </summary>
+        public Encoding Encoding
+        {
+            get { return _encoding; }
+        }
+
+        /// <summary>
+        /// Gets the content encapsulated by this <see cref="StringResource"/>.
+        /// </summary>
+        public string Content
+        {
+            get { return _content; }
         }
     }
 }

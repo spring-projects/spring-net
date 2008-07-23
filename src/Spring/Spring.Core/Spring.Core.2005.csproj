@@ -269,6 +269,7 @@
     <Compile Include="Core\IO\IResourceLoader.cs" />
     <Compile Include="Core\IO\ResourceConverter.cs" />
     <Compile Include="Core\IO\ResourceHandlerRegistry.cs" />
+    <Compile Include="Core\IO\StringResource.cs" />
     <Compile Include="Core\IO\UrlResource.cs" />
     <Compile Include="Core\MethodNameMatchCriteria.cs" />
     <Compile Include="Core\MethodGenericArgumentsCountCriteria.cs" />

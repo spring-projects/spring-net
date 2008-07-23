@@ -189,11 +189,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "StringResource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "TestResource.txt"
                     BuildAction = "EmbeddedResource"
                 />
@@ -509,6 +504,11 @@
                 />
                 <File
                     RelPath = "Core\IO\ResourceHandlerRegistryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\IO\StringResourceTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
