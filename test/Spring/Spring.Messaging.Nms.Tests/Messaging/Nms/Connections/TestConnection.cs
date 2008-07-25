@@ -1,7 +1,7 @@
 using System;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     public class TestConnection : IConnection
     {

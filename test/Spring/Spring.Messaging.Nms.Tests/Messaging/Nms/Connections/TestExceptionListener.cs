@@ -20,7 +20,7 @@
 
 using System;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     public class TestExceptionListener : IExceptionListener
     {

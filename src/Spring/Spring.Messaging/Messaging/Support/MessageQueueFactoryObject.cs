@@ -133,6 +133,10 @@ namespace Spring.Messaging.Support
 
         #region IFactoryObject Members
 
+        /// <summary>
+        /// Retrun a configured MessageQueue object.
+        /// </summary>
+        /// <returns>A newly configured MessageQueue object</returns>
         public object GetObject()
         {
             MessageQueue.EnableConnectionCache = enableConnectionCache;

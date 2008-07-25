@@ -451,18 +451,18 @@ namespace Spring.Transaction.Support
         /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoGetTransaction"/>.
         /// </param>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// Called after <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoCommit"/>
         /// and
         /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoRollback"/>
         /// execution on any outcome.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// Should not throw any exceptions but just issue warnings on errors.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// Default implementation does nothing.
-        /// </p>
+        /// </para>
         /// </remarks>
         protected virtual void DoCleanupAfterCompletion(object transaction)
         {

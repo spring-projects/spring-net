@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
+using Spring.Objects;
 
 namespace Spring.Util
 {
@@ -301,5 +302,58 @@ namespace Spring.Util
 			CollectionUtils.RemoveAll(target, source);
 			Assert.IsTrue(0 == target.Count);
 		}
+
+        [Test]
+        public void IsCollectionEmptyOrNull()
+        {
+            ArrayList list = new ArrayList();
+            Assert.IsTrue(CollectionUtils.IsEmpty(list));
+            list.Add("foo");
+            Assert.IsFalse(CollectionUtils.IsEmpty(list));
+            list = null;
+            Assert.IsTrue(CollectionUtils.IsEmpty(list));
+        }
+
+        [Test]
+        public void IsDictionaryEmptyOrNull()
+        {
+            Hashtable t = new Hashtable();
+            Assert.IsTrue(CollectionUtils.IsEmpty(t));
+            t["foo"] = "bar";
+            Assert.IsFalse(CollectionUtils.IsEmpty(t));
+            t = null;
+            Assert.IsTrue(CollectionUtils.IsEmpty(t));
+        }
+
+        [Test]
+        public void FindValueOfType()
+        {
+            ArrayList list = new ArrayList();
+            Assert.IsNull(CollectionUtils.FindValueOfType(list, typeof(String)));
+            list.Add("foo");
+            object obj = CollectionUtils.FindValueOfType(list, typeof (String));
+            Assert.IsNotNull(obj);  
+            Assert.IsNotNull(obj as string);
+            string val = obj as string;
+            Assert.AreEqual("foo", val);
+
+            list.Add(new TestObject("Joe", 34));
+            obj = CollectionUtils.FindValueOfType(list, typeof (TestObject));
+            Assert.IsNotNull(obj);
+            TestObject to = obj as TestObject;
+            Assert.IsNotNull(to);
+            Assert.AreEqual("Joe", to.Name);
+
+            list.Add(new TestObject("Mary", 33));
+            try
+            {
+                obj = CollectionUtils.FindValueOfType(list, typeof(TestObject));
+                Assert.Fail("Should have thrown exception");
+            } catch (ArgumentException)
+            {
+                //ok
+            }
+
+        }
 	}
 }

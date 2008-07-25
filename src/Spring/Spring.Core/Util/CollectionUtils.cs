@@ -201,6 +201,85 @@ namespace Spring.Util
 			return new ArrayList(inputCollection);
 		}
 
+        /// <summary>
+        /// Finds a value of the given type in the given collection.
+        /// </summary>
+        /// <param name="collection">The collection to search.</param>
+        /// <param name="type">The type to look for.</param>
+        /// <returns>a value of the given type found, or null if none.</returns>
+        /// <exception cref="ArgumentException">If more than one value of the given type is found</exception>
+        public static object FindValueOfType(ICollection collection, Type type)
+        {
+            if (IsEmpty(collection))
+            {
+                return null;
+            }
+            Type typeToUse = (type != null ? type : typeof (object));
+            object val = null;
+            foreach (object obj in collection)
+            {
+                if (typeToUse.IsAssignableFrom(obj.GetType()))
+                {
+                    if (val != null)
+                    {
+                        throw new ArgumentException("More than one value of type[" + typeToUse.Name + "] found.");
+                    }
+                    val = obj;
+                }
+            }
+            return val;
+        }
+
+        /// <summary>
+        /// Find a value of one of the given types in the given Collection, 
+        /// searching the Collection for a value of the first type, then
+        /// searching for a value of the second type, etc.
+        /// </summary>
+        /// <param name="collection">The collection to search.</param>
+        /// <param name="types">The types to look for, in prioritized order.</param>
+        /// <returns>a value of the given types found, or <code>null</code> if none</returns>
+        /// <exception cref="ArgumentException">If more than one value of the given type is found</exception>        
+        public static object FindValueOfType(ICollection collection, Type[] types)
+        {
+            if (IsEmpty(collection) || ObjectUtils.IsEmpty(types))
+            {
+                return null;
+            }
+            foreach (Type type in types)
+            {
+                object val = FindValueOfType(collection, type);
+                if (val != null)
+                {
+                    return val;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Determines whether the specified collection is null or empty.
+        /// </summary>
+        /// <param name="collection">The collection to check.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified collection is empty or null; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsEmpty(ICollection collection)
+        {
+            return (collection == null || collection.Count == 0);
+        }
+
+        /// <summary>
+        /// Determines whether the specified dictionary is null empty.
+        /// </summary>
+        /// <param name="dictionary">The dictionary to check.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified dictionary is empty or null; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsEmpty(IDictionary dictionary)
+        {
+            return (dictionary == null || dictionary.Count == 0);
+        }
+
 		#endregion
 	}
 }

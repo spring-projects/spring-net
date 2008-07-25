@@ -24,11 +24,11 @@ using System;
 using Apache.NMS;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Messaging.Nms.Connection;
+using Spring.Messaging.Nms.Connections;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     /// This class contains tests for the SingleConnectionFactory

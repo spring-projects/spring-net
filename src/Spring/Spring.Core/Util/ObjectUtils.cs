@@ -355,6 +355,18 @@ namespace Spring.Util
                    || typeof(double[]).Equals(type);
         }
 
+
+        /// <summary>
+        /// Determines whether the specified array is null or empty.
+        /// </summary>
+        /// <param name="array">The array to check.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified array is null empty; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsEmpty(object[] array)
+        {
+            return (array == null || array.Length == 0);
+        }
         /// <summary>
         /// Determine if the given objects are equal, returning <see langword="true"/>
         /// if both are <see langword="null"/> respectively <see langword="false"/>

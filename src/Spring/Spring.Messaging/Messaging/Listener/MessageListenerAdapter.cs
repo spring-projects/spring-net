@@ -251,7 +251,7 @@ namespace Spring.Messaging.Listener
         }
 
 
-        protected virtual string GetListenerMethodName(Message originalMessage, object extractedMessage)
+        protected virtual string GetHandlerMethodName(Message originalMessage, object extractedMessage)
         {
             return DefaultHandlerMethod;
         }
