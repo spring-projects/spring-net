@@ -20,7 +20,7 @@
 
 using System;
 using Common.Logging;
-using Spring.Messaging.Nms.Connection;
+using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.Converter;
 using Spring.Messaging.Nms.Support.IDestinations;
@@ -37,7 +37,7 @@ namespace Spring.Messaging.Nms
     /// For other operations, this is not necessary.
     /// Point-to-Point (Queues) is the default domain.</para>
     ///
-    /// <para>Default settings for NMS ISessions are "not transacted" and "auto-acknowledge".</para>
+    /// <para>Default settings for NMS Sessions is "auto-acknowledge".</para>
     ///
     /// <para>This template uses a DynamicDestinationResolver and a SimpleMessageConverter
     /// as default strategies for resolving a destination name or converting a message,
@@ -57,11 +57,13 @@ namespace Spring.Messaging.Nms
         #endregion
         #region Fields
 
+        /// <summary>
+        /// Timeout value indicating that a receive operation should
+	    /// check if a message is immediately available without blocking.	 
+        /// </summary>
         public static readonly long DEFAULT_RECEIVE_TIMEOUT = -1;
 
-
         private NmsTemplateResourceFactory transactionalResourceFactory;
-
 
         private object defaultDestination;
 
@@ -92,9 +94,9 @@ namespace Spring.Messaging.Nms
 
         /// <summary> Create a new NmsTemplate.</summary>
         /// <remarks>
-        /// <para>Note: The IConnectionFactory has to be set before using the instance.
+        /// <para>Note: The ConnectionFactory has to be set before using the instance.
         /// This constructor can be used to prepare a NmsTemplate via an ObjectFactory,
-        /// typically setting the IConnectionFactory.</para>
+        /// typically setting the ConnectionFactory.</para>
         /// </remarks>
         public NmsTemplate()
         {
@@ -103,8 +105,8 @@ namespace Spring.Messaging.Nms
         }
 
 
-        /// <summary> Create a new NmsTemplate, given a IConnectionFactory.</summary>
-        /// <param name="connectionFactory">the IConnectionFactory to obtain IConnections from
+        /// <summary> Create a new NmsTemplate, given a ConnectionFactory.</summary>
+        /// <param name="connectionFactory">the ConnectionFactory to obtain IConnections from
         /// </param>
         public NmsTemplate(IConnectionFactory connectionFactory)
             : this()
@@ -134,6 +136,7 @@ namespace Spring.Messaging.Nms
             }
         }
 
+
         private void CheckMessageConverter()
         {
             if (MessageConverter == null)
@@ -143,12 +146,12 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary> Execute the action specified by the given action object within a
-        /// NMS ISession.
+        /// NMS Session.
         /// </summary>
         /// <remarks> Generalized version of <code>execute(ISessionCallback)</code>,
-        /// allowing the NMS IConnection to be started on the fly.
+        /// allowing the NMS Connection to be started on the fly.
         /// <p>Use <code>execute(ISessionCallback)</code> for the general case.
-        /// Starting the NMS IConnection is just necessary for receiving messages,
+        /// Starting the NMS Connection is just necessary for receiving messages,
         /// which is preferably achieved through the <code>receive</code> methods.</p>
         /// </remarks>
         /// <param name="action">callback object that exposes the session
@@ -167,7 +170,8 @@ namespace Spring.Messaging.Nms
             try
             {
                 ISession sessionToUse =
-                    ConnectionFactoryUtils.DoGetTransactionalSession(ConnectionFactory, transactionalResourceFactory);
+                    ConnectionFactoryUtils.DoGetTransactionalSession(ConnectionFactory, transactionalResourceFactory,
+                                                                     startConnection);
                 if (sessionToUse == null)
                 {
                     conToClose = CreateConnection();
@@ -184,11 +188,10 @@ namespace Spring.Messaging.Nms
                 }
                 return action.DoInNms(sessionToUse);
             }
-            //TODO make sure don't want to do exception translation.
             finally
             {
                 NmsUtils.CloseSession(sessionToClose);
-                ConnectionFactoryUtils.ReleaseConnection(conToClose, ConnectionFactory, startConnection);                
+                ConnectionFactoryUtils.ReleaseConnection(conToClose, ConnectionFactory, startConnection);
             }
         }
 
@@ -245,12 +248,10 @@ namespace Spring.Messaging.Nms
             set { messageConverter = value; }
         }
 
-
-        //TODO check tibco support for message id...prob yes..
         /// <summary>
-        /// Gets or sets a value indicating whether IMessageIds are.
+        /// Gets or sets a value indicating whether Message Ids are enabled.
         /// </summary>
-        /// <value><c>true</c> if [message id enabled]; otherwise, <c>false</c>.</value>
+        /// <value><c>true</c> if message id enabled; otherwise, <c>false</c>.</value>
         virtual public bool MessageIdEnabled
         {
             get { return messageIdEnabled; }
@@ -258,7 +259,6 @@ namespace Spring.Messaging.Nms
             set { messageIdEnabled = value; }
         }
 
-        //TODO check tibco support for message id...prob yes.., so don't really need it then.
         /// <summary>
         /// Gets or sets a value indicating whether message timestamps are enabled.
         /// </summary>
@@ -326,9 +326,6 @@ namespace Spring.Messaging.Nms
             set { persistent = value; }
         }
 
-
-        //TODO verify admin...
-
         /// <summary>
         /// Gets or sets the priority when sending.
         /// </summary>
@@ -358,6 +355,11 @@ namespace Spring.Messaging.Nms
 
         #endregion
 
+        /// <summary>
+        /// Extract the content from the given JMS message.
+        /// </summary>
+        /// <param name="message">The Message to convert (can be <code>null</code>).</param>
+        /// <returns>The content of the message, or <code>null</code> if none</returns>
         protected virtual object DoConvertFromMessage(IMessage message)
         {
             if (message != null)
@@ -369,7 +371,7 @@ namespace Spring.Messaging.Nms
 
         #region NMS Factory Methods
 
-        /// <summary> Fetch an appropriate IConnection from the given NmsResourceHolder.
+        /// <summary> Fetch an appropriate Connection from the given NmsResourceHolder.
         /// </summary>
         /// <param name="holder">the NmsResourceHolder
         /// </param>
@@ -381,7 +383,7 @@ namespace Spring.Messaging.Nms
             return holder.GetConnection();
         }
 
-        /// <summary> Fetch an appropriate ISession from the given NmsResourceHolder.
+        /// <summary> Fetch an appropriate Session from the given NmsResourceHolder.
         /// </summary>
         /// <param name="holder">the NmsResourceHolder
         /// </param>
@@ -393,16 +395,16 @@ namespace Spring.Messaging.Nms
             return holder.GetSession();
         }
 
-        /// <summary> Create a NMS IMessageProducer for the given ISession and IDestination,
+        /// <summary> Create a NMS MessageProducer for the given Session and Destination,
         /// configuring it to disable message ids and/or timestamps (if necessary).
         /// <p>Delegates to <code>doCreateProducer</code> for creation of the raw
-        /// NMS IMessageProducer, which needs to be specific to NMS 1.1 or 1.0.2.</p>
+        /// NMS MessageProducer</p>
         /// </summary>
-        /// <param name="session">the NMS ISession to create a IMessageProducer for
+        /// <param name="session">the NMS Session to create a MessageProducer for
         /// </param>
-        /// <param name="destination">the NMS IDestination to create a IMessageProducer for
+        /// <param name="destination">the NMS Destination to create a MessageProducer for
         /// </param>
-        /// <returns> the new NMS IMessageProducer
+        /// <returns> the new NMS MessageProducer
         /// </returns>
         /// <throws>  NMSException if thrown by NMS API methods </throws>
         /// <seealso cref="DoCreateProducer">
@@ -426,14 +428,33 @@ namespace Spring.Messaging.Nms
         }
 
 
-        /// <summary> Create a raw NMS IMessageProducer for the given ISession and IDestination.
-        /// <p>This implementation uses NMS 1.1 API.</p>
+        /// <summary>
+        /// Determines whether the given Session is locally transacted, that is, whether
+        /// its transaction is managed by this template class's Session handling
+        /// and not by an external transaction coordinator. 
         /// </summary>
-        /// <param name="session">the NMS ISession to create a IMessageProducer for
+        /// <remarks>
+        /// The Session's own transacted flag will already have been checked
+        /// before. This method is about finding out whether the Session's transaction
+        /// is local or externally coordinated.
+        /// </remarks>
+        /// <param name="session">The session to check.</param>
+        /// <returns>
+        /// 	<c>true</c> if the session is locally transacted; otherwise, <c>false</c>.
+        /// </returns>
+        protected virtual bool IsSessionLocallyTransacted(ISession session)
+        {
+            return SessionTransacted &&
+                !ConnectionFactoryUtils.IsSessionTransactional(session, ConnectionFactory);
+        }
+
+        /// <summary> Create a raw NMS MessageProducer for the given Session and Destination.
+        /// </summary>
+        /// <param name="session">the NMS Session to create a MessageProducer for
         /// </param>
-        /// <param name="destination">the NMS IDestination to create a IMessageProducer for
+        /// <param name="destination">the NMS IDestination to create a MessageProducer for
         /// </param>
-        /// <returns> the new NMS IMessageProducer
+        /// <returns> the new NMS MessageProducer
         /// </returns>
         /// <throws>NMSException if thrown by NMS API methods </throws>
         protected virtual IMessageProducer DoCreateProducer(ISession session, IDestination destination)
@@ -441,12 +462,11 @@ namespace Spring.Messaging.Nms
             return session.CreateProducer(destination);            
         }
 
-        /// <summary> Create a NMS IMessageConsumer for the given ISession and IDestination.
-        /// <p>This implementation uses NMS 1.1 API.</p>
+        /// <summary> Create a NMS MessageConsumer for the given Session and Destination.
         /// </summary>
-        /// <param name="session">the NMS ISession to create a IMessageConsumer for
+        /// <param name="session">the NMS Session to create a MessageConsumer for
         /// </param>
-        /// <param name="destination">the NMS IDestination to create a IMessageConsumer for
+        /// <param name="destination">the NMS Destination to create a MessageConsumer for
         /// </param>
         /// <param name="messageSelector">the message selector for this consumer (can be <code>null</code>)
         /// </param>
@@ -469,14 +489,24 @@ namespace Spring.Messaging.Nms
             }
         }
 
-        //TODO refactor to not pass null as a 'switch' for behavior.
-        
+        /// <summary>
+        /// Send the given message.
+        /// </summary>
+        /// <param name="session">The session to operate on.</param>
+        /// <param name="destination">The destination to send to.</param>
+        /// <param name="messageCreatorDelegate">The message creator delegate callback to create a Message.</param>
         protected internal virtual void DoSend(ISession session, IDestination destination, IMessageCreatorDelegate messageCreatorDelegate)
         {
             AssertUtils.ArgumentNotNull(messageCreatorDelegate, "IMessageCreatorDelegate must not be null");
             DoSend(session, destination, null, messageCreatorDelegate);
         }
 
+        /// <summary>
+        /// Send the given message.
+        /// </summary>
+        /// <param name="session">The session to operate on.</param>
+        /// <param name="destination">The destination to send to.</param>
+        /// <param name="messageCreator">The message creator callback to create a Message.</param>
         protected internal virtual void DoSend(ISession session, IDestination destination, IMessageCreator messageCreator)
         {
             AssertUtils.ArgumentNotNull(messageCreator, "IMessageCreator must not be null");
@@ -484,13 +514,13 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary> Send the given NMS message.</summary>
-        /// <param name="session">the NMS ISession to operate on
+        /// <param name="session">the NMS Session to operate on
         /// </param>
-        /// <param name="destination">the NMS IDestination to send to
+        /// <param name="destination">the NMS Destination to send to
         /// </param>
-        /// <param name="messageCreator">callback to create a NMS IMessage
+        /// <param name="messageCreator">callback to create a NMS Message
         /// </param>
-        /// <param name="messageCreatorDelegate">delegate callback to create a NMS IMessage
+        /// <param name="messageCreatorDelegate">delegate callback to create a NMS Message
         /// </param>
         /// <throws>NMSException if thrown by NMS API methods </throws>
         protected internal virtual void DoSend(ISession session, IDestination destination, IMessageCreator messageCreator,
@@ -516,8 +546,8 @@ namespace Spring.Messaging.Nms
                 }
                 DoSend(producer, message);
 
-                // Check commit - avoid commit call within a JTA transaction.
-                if (session.Transacted && !TransactionSynchronizationManager.HasResource(ConnectionFactory))
+                // Check commit, avoid commit call is Session transaction is externally coordinated.
+                if (session.Transacted && IsSessionLocallyTransacted(session))
                 {
                     // Transacted session created by this template -> commit.
                     NmsUtils.CommitIfNecessary(session);
@@ -531,9 +561,9 @@ namespace Spring.Messaging.Nms
 
 
         /// <summary> Actually send the given NMS message.</summary>
-        /// <param name="producer">the NMS IMessageProducer to send with
+        /// <param name="producer">the NMS MessageProducer to send with
         /// </param>
-        /// <param name="message">the NMS IMessage to send
+        /// <param name="message">the NMS Message to send
         /// </param>
         /// <throws>  NMSException if thrown by NMS API methods </throws>
         protected virtual void DoSend(IMessageProducer producer, IMessage message)
@@ -554,10 +584,10 @@ namespace Spring.Messaging.Nms
         #region INmsOperations Implementation
 
         /// <summary> Execute the action specified by the given action object within
-        /// a NMS ISession.
-        /// <p>Note: The value of isPubSubDomain affects the behavior of this method.
-        /// If isPubSubDomain equals true, then a ISession is passed to the callback.
-        /// If false, then a ISession is passed to the callback.</p>
+        /// a NMS Session.
+        /// <p>Note: The value of PubSubDomain affects the behavior of this method.
+        /// If PubSubDomain equals true, then a Session is passed to the callback.
+        /// If false, then a Session is passed to the callback.</p>
         /// </summary>
         /// <param name="action">callback object that exposes the session
         /// </param>
@@ -570,7 +600,7 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary> Send a message to a NMS destination. The callback gives access to
-        /// the NMS session and IMessageProducer in order to do more complex
+        /// the NMS session and MessageProducer in order to do more complex
         /// send operations.
         /// </summary>
         /// <param name="action">callback object that exposes the session/producer pair
@@ -603,7 +633,7 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary> Send a message to the specified destination.
-        /// The IMessageCreator callback creates the message given a ISession.
+        /// The MessageCreator callback creates the message given a Session.
         /// </summary>
         /// <param name="destination">the destination to send this message to
         /// </param>
@@ -616,7 +646,7 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary> Send a message to the specified destination.
-        /// The IMessageCreator callback creates the message given a ISession.
+        /// The MessageCreator callback creates the message given a Session.
         /// </summary>
         /// <param name="destinationName">the name of the destination to send this message to
         /// (to be resolved to an actual destination by a DestinationResolver)
@@ -649,7 +679,7 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary> Send a message to the specified destination.
-        /// The IMessageCreator callback creates the message given a ISession.
+        /// The MessageCreator callback creates the message given a Session.
         /// </summary>
         /// <param name="destination">the destination to send this message to
         /// </param>
@@ -663,7 +693,7 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary> Send a message to the specified destination.
-        /// The IMessageCreator callback creates the message given a ISession.
+        /// The MessageCreator callback creates the message given a Session.
         /// </summary>
         /// <param name="destinationName">the destination to send this message to
         /// </param>
@@ -898,12 +928,25 @@ namespace Spring.Messaging.Nms
             return Execute(new ReceiveSelectedCallback(this, destinationName, messageSelector), true) as IMessage;
         
         }
-        
+
+        /// <summary>
+        /// Receive a message.
+        /// </summary>
+        /// <param name="session">The session to operate on.</param>
+        /// <param name="destination">The destination to receive from.</param>
+        /// <param name="messageSelector">The message selector for this consumer (can be <code>null</code></param>
+        /// <returns>The Message received, or <code>null</code> if none.</returns>
         protected virtual IMessage DoReceive(ISession session, IDestination destination, string messageSelector)
         {
             return DoReceive(session, CreateConsumer(session, destination, messageSelector));
         }
-        
+
+        /// <summary>
+        /// Receive a message.
+        /// </summary>
+        /// <param name="session">The session to operate on.</param>
+        /// <param name="consumer">The consumer to receive with.</param>
+        /// <returns>The Message received, or <code>null</code> if none</returns>
         protected virtual IMessage DoReceive(ISession session, IMessageConsumer consumer)
         {
             try
@@ -920,14 +963,14 @@ namespace Spring.Messaging.Nms
                                       : consumer.Receive();
                 if (session.Transacted)
                 {
-                    // Commit necessary - but avoid commit call within a JTA transaction.
-                    if (resourceHolder == null)
+                    // Commit necessary - but avoid commit call is Session transaction is externally coordinated.
+                    if (IsSessionLocallyTransacted(session))
                     {
                         // Transacted session created by this template -> commit.
                         NmsUtils.CommitIfNecessary(session);
                     }
                 }
-                else if (ClientAcknowledge(session))
+                else if (IsClientAcknowledge(session))
                 {
                     // Manually acknowledge message, if any.
                     if (message != null)
@@ -1060,6 +1103,9 @@ namespace Spring.Messaging.Nms
 
         #region Supporting Internal Classes
 
+        /// <summary>
+        /// ResourceFactory implementation that delegates to this template's callback methods.
+        /// </summary>
         private class NmsTemplateResourceFactory : ConnectionFactoryUtils.ResourceFactory
         {
             private NmsTemplate enclosingTemplateInstance;
@@ -1074,34 +1120,34 @@ namespace Spring.Messaging.Nms
                 enclosingTemplateInstance = enclosingInstance;
             }
 
-            public NmsTemplate Enclosing_Instance
+            public NmsTemplate EnclosingInstance
             {
                 get { return enclosingTemplateInstance; }
             }
 
             public virtual IConnection GetConnection(NmsResourceHolder holder)
             {
-                return Enclosing_Instance.GetConnection(holder);
+                return EnclosingInstance.GetConnection(holder);
             }
 
             public virtual ISession GetSession(NmsResourceHolder holder)
             {
-                return Enclosing_Instance.GetSession(holder);
+                return EnclosingInstance.GetSession(holder);
             }
 
             public virtual IConnection CreateConnection()
             {
-                return Enclosing_Instance.CreateConnection();
+                return EnclosingInstance.CreateConnection();
             }
 
             public virtual ISession CreateSession(IConnection con)
             {
-                return Enclosing_Instance.CreateSession(con);
+                return EnclosingInstance.CreateSession(con);
             }
 
             public bool SynchedLocalTransactionAllowed
             {
-                get { return Enclosing_Instance.SessionTransacted; }
+                get { return EnclosingInstance.SessionTransacted; }
             }
         }
 

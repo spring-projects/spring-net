@@ -39,11 +39,13 @@ namespace Spring.Messaging.Nms
     public interface INmsOperations
     {
         /// <summary> Execute the action specified by the given action object within
-		/// a NMS ISession.
-		/// <p>Note: The value of isPubSubDomain affects the behavior of this method.
-		/// If isPubSubDomain equals true, then a ISession is passed to the callback.
-		/// If false, then a ISession is passed to the callback.</p>
+		/// a NMS Session.
 		/// </summary>
+		/// <remarks>
+        /// <para>Note that the value of PubSubDomain affects the behavior of this method.
+        /// If PubSubDomain equals true, then a Session is passed to the callback.
+        /// If false, then a ISession is passed to the callback.</para>b
+		/// </remarks>
 		/// <param name="action">callback object that exposes the session
 		/// </param>
 		/// <returns> the result object from working with the session
@@ -52,7 +54,7 @@ namespace Spring.Messaging.Nms
 		object Execute(ISessionCallback action);
 		
 		/// <summary> Send a message to a NMS destination. The callback gives access to
-		/// the NMS session and IMessageProducer in order to do more complex
+		/// the NMS session and MessageProducer in order to do more complex
 		/// send operations.
 		/// </summary>
 		/// <param name="action">callback object that exposes the session/producer pair
@@ -76,7 +78,7 @@ namespace Spring.Messaging.Nms
 		void Send(IMessageCreator messageCreator);
 		
 		/// <summary> Send a message to the specified destination.
-		/// The IMessageCreator callback creates the message given a ISession.
+		/// The IMessageCreator callback creates the message given a Session.
 		/// </summary>
 		/// <param name="destination">the destination to send this message to
 		/// </param>
@@ -86,7 +88,7 @@ namespace Spring.Messaging.Nms
 		void Send(IDestination destination, IMessageCreator messageCreator);
 		
 		/// <summary> Send a message to the specified destination.
-		/// The IMessageCreator callback creates the message given a ISession.
+		/// The IMessageCreator callback creates the message given a Session.
 		/// </summary>
 		/// <param name="destinationName">the name of the destination to send this message to
 		/// (to be resolved to an actual destination by a DestinationResolver)
@@ -109,7 +111,7 @@ namespace Spring.Messaging.Nms
         void SendWithDelegate(IMessageCreatorDelegate messageCreatorDelegate);
 
         /// <summary> Send a message to the specified destination.
-        /// The IMessageCreator callback creates the message given a ISession.
+        /// The IMessageCreator callback creates the message given a Session.
         /// </summary>
         /// <param name="destination">the destination to send this message to
         /// </param>
@@ -119,7 +121,7 @@ namespace Spring.Messaging.Nms
         void SendWithDelegate(IDestination destination, IMessageCreatorDelegate messageCreatorDelegate);
 
         /// <summary> Send a message to the specified destination.
-        /// The IMessageCreator callback creates the message given a ISession.
+        /// The IMessageCreator callback creates the message given a Session.
         /// </summary>
         /// <param name="destinationName">the name of the destination to send this message to
         /// (to be resolved to an actual destination by a DestinationResolver)

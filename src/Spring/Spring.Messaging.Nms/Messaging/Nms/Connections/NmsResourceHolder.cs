@@ -26,11 +26,11 @@ using Spring.Transaction.Support;
 using Spring.Util;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
-    /// <summary> IConnection holder, wrapping a NMS IConnection and a NMS ISession.
+    /// <summary>Connection holder, wrapping a NMS Connection and a NMS Session.
     /// NmsTransactionManager binds instances of this class to the thread,
-    /// for a given NMS IConnectionFactory.
+    /// for a given NMS ConnectionFactory.
     ///
     /// <p>Note: This is an SPI class, not intended to be used by applications.</p>
     ///
@@ -92,17 +92,23 @@ namespace Spring.Messaging.Nms.Connection
         }
 
         /// <summary> Create a new NmsResourceHolder for the given NMS resources.</summary>
-        /// <param name="connection">the NMS IConnection
+        /// <param name="connection">the NMS Connection
         /// </param>
-        /// <param name="session">the NMS ISession
+        /// <param name="session">the NMS Session
         /// </param>
-        public NmsResourceHolder(Apache.NMS.IConnection connection, ISession session)
+        public NmsResourceHolder(IConnection connection, ISession session)
         {
             AddConnection(connection);
             AddSession(session, connection);
             this.frozen = true;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmsResourceHolder"/> class.
+        /// </summary>
+        /// <param name="connectionFactory">The connection factory.</param>
+        /// <param name="connection">The connection.</param>
+        /// <param name="session">The session.</param>
         public NmsResourceHolder(IConnectionFactory connectionFactory, IConnection connection, ISession session)
         {
             this.connectionFactory = connectionFactory;
@@ -114,6 +120,12 @@ namespace Spring.Messaging.Nms.Connection
         
         #region Properties
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="NmsResourceHolder"/> is frozen, namely that 
+        /// additional resources can be registered with the holder.  If using any of the constructors with
+        /// a Session, the holder will be set to the frozen state.
+        /// </summary>
+        /// <value><c>true</c> if frozen; otherwise, <c>false</c>.</value>
         virtual public bool Frozen
         {
             get
@@ -125,11 +137,14 @@ namespace Spring.Messaging.Nms.Connection
         #endregion
 
         #region Methods
-        
-        public void AddConnection(Apache.NMS.IConnection connection)
+
+        /// <summary>
+        /// Adds the connection to the list of resources managed by this holder.
+        /// </summary>
+        /// <param name="connection">The connection.</param>
+        public void AddConnection(IConnection connection)
         {
-            //TODO - update Assert utility class...
-            //Assert.isTrue(!this.frozen, "Cannot add IConnection because NmsResourceHolder is frozen");
+            AssertUtils.IsTrue(!frozen, "Cannot add IConnection because NmsResourceHolder is frozen");
             AssertUtils.ArgumentNotNull(connection, "IConnection must not be null");
             if (!connections.Contains(connection))
             {
@@ -137,15 +152,23 @@ namespace Spring.Messaging.Nms.Connection
             }
         }
 
+        /// <summary>
+        /// Adds the session to the list of resources managed by this holder.
+        /// </summary>
+        /// <param name="session">The session.</param>
         public void AddSession(ISession session)
         {
             AddSession(session, null);
         }
 
-        public void AddSession(ISession session, Apache.NMS.IConnection connection)
+        /// <summary>
+        /// Adds the session and connection to the list of resources managed by this holder.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="connection">The connection.</param>
+        public void AddSession(ISession session, IConnection connection)
         {
-            //TOOD update AssertUtils class
-            //Assert.isTrue(!this.frozen, "Cannot add ISession because NmsResourceHolder is frozen");
+            AssertUtils.IsTrue(!frozen, "Cannot add ISession because NmsResourceHolder is frozen");
             AssertUtils.ArgumentNotNull(session, "ISession must not be null");
             if (!sessions.Contains(session))
             {
@@ -163,38 +186,60 @@ namespace Spring.Messaging.Nms.Connection
             }
         }
 
-        public virtual Apache.NMS.IConnection GetConnection()
+        /// <summary>
+        /// Gets the connection managed by this resource holder
+        /// </summary>
+        /// <returns>A Connection, or null if no managed connection.</returns>
+        public virtual IConnection GetConnection()
         {
-            return (!(this.connections.Count == 0) ? (Apache.NMS.IConnection)this.connections[0] : null);
+            return (!(this.connections.Count == 0) ? (IConnection)this.connections[0] : null);
         }
 
-        public virtual Apache.NMS.IConnection GetConnection(System.Type connectionType)
+        /// <summary>
+        /// Gets the connection of a given type managed by this resource holder.  This is used
+        /// when storing Queue or Topic Connections (from the older 1.0.2 API) as compared to the
+        /// 'unified domain' API , just Connection, in the newer 1.2 API.
+        /// </summary>
+        /// <param name="connectionType">Type of the connection.</param>
+        /// <returns>The connection, or null if not found.</returns>
+        public virtual IConnection GetConnection(Type connectionType)
         {
-            throw new NotImplementedException();
-            //TODO Updae CollectionUtils...
-            //return (NMS.IConnection)CollectionUtils.FindValueOfType(this.connections, connectionType);
+            return (IConnection)CollectionUtils.FindValueOfType(this.connections, connectionType);
         }
 
+        /// <summary>
+        /// Gets the first session manged by this holder or null if not available.
+        /// </summary>
+        /// <returns>The session or null if not available.</returns>
        public virtual ISession GetSession()
         {
            return (!(this.sessions.Count == 0) ? (ISession)this.sessions[0] : null);
         }
 
+        /// <summary>
+        /// Gets the session managed by this holder by type.
+        /// </summary>
+        /// <param name="sessionType">Type of the session.</param>
+        /// <returns>The session or null if not available.</returns>
         public virtual ISession GetSession(Type sessionType)
         {
             return GetSession(sessionType, null);
         }
 
-        public virtual ISession GetSession(System.Type sessionType, Apache.NMS.IConnection connection)
+        /// <summary>
+        /// Gets the session of a given type associated with the given connection
+        /// </summary>
+        /// <param name="sessionType">Type of the session.</param>
+        /// <param name="connection">The connection.</param>
+        /// <returns>The sessin or null if not available.</returns>
+        public virtual ISession GetSession(Type sessionType, IConnection connection)
         {
             IList sessions = this.sessions;
             if (connection != null)
             {
                 sessions = (IList)sessionsPerIConnection[connection];
             }
-            throw new NotImplementedException();
-            //TODO update collection utils
-            //return (ISession)CollectionUtils.FindValueOfType(sessions, sessionType);
+            return (ISession)CollectionUtils.FindValueOfType(sessions, sessionType);
         }
 
         /// <summary>
@@ -230,6 +275,13 @@ namespace Spring.Messaging.Nms.Connection
             }
         }
 
+        /// <summary>
+        /// Determines whether the holder contains the specified session.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns>
+        /// 	<c>true</c> if the holder contains the specified session; otherwise, <c>false</c>.
+        /// </returns>
         public bool ContainsSession(ISession session)
         {
             return this.sessions.Contains(session);

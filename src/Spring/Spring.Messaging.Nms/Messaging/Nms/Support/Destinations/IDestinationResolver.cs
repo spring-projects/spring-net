@@ -43,7 +43,7 @@ namespace Spring.Messaging.Nms.Support.IDestinations
         /// <summary> Resolve the given destination name, either as located resource
         /// or as dynamic destination.
         /// </summary>
-        /// <param name="session">the current NMS ISession
+        /// <param name="session">the current NMS Session
         /// </param>
         /// <param name="destinationName">the name of the destination
         /// </param>

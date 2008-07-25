@@ -28,19 +28,19 @@ namespace Spring.Messaging.Nms
     /// method, often implemented as an anonymous inner class.</p>
     /// 
     /// <p>The typical implementation will perform multiple operations on the
-    /// supplied NMS ISession and IMessageProducer. </p>
+    /// supplied NMS Session and MessageProducer. </p>
     /// </remarks>
     /// <author>Mark Pollack</author>
     public interface IProducerCallback
     {
-        /// <summary> Perform operations on the given ISession and IMessageProducer.
+        /// <summary> Perform operations on the given Session and MessageProducer.
         /// The message producer is not associated with any destination.
         /// </summary>
-        /// <param name="session">the NMS <code>ISession</code> object to use
+        /// <param name="session">the NMS <code>Session</code> object to use
         /// </param>
-        /// <param name="producer">the NMS <code>IMessageProducer</code> object to use
+        /// <param name="producer">the NMS <code>MessageProducer</code> object to use
         /// </param>
-        /// <returns> a result object from working with the <code>ISession</code>, if any (can be <code>null</code>) 
+        /// <returns> a result object from working with the <code>Session</code>, if any (can be <code>null</code>) 
         /// </returns>
         object DoInNms(ISession session, IMessageProducer producer);
 	

@@ -33,7 +33,7 @@ namespace Spring.Messaging.Nms.Support.IDestinations
         /// <summary> Resolve the given destination name, either as located resource
         /// or as dynamic destination.
         /// </summary>
-        /// <param name="session">the current NMS ISession
+        /// <param name="session">the current NMS Session
         /// </param>
         /// <param name="destinationName">the name of the destination
         /// </param>
@@ -58,7 +58,7 @@ namespace Spring.Messaging.Nms.Support.IDestinations
 
 
         /// <summary> Resolve the given destination name to a Topic.</summary>
-        /// <param name="session">the current NMS ISession
+        /// <param name="session">the current NMS Session
         /// </param>
         /// <param name="topicName">the name of the desired Topic.
         /// </param>
@@ -70,6 +70,14 @@ namespace Spring.Messaging.Nms.Support.IDestinations
             return session.GetTopic(topicName);
         }
 
+        /// <summary> Resolve the given destination name to a Queue.</summary>
+        /// <param name="session">the current NMS Session
+        /// </param>
+        /// <param name="queueName">the name of the desired Queue.
+        /// </param>
+        /// <returns> the NMS Queue name
+        /// </returns>
+        /// <throws>NMSException if resolution failed </throws>
         protected internal virtual IDestination ResolveQueue(ISession session, string queueName)
         {
             return session.GetQueue(queueName);

@@ -21,7 +21,7 @@
 using System;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     /// MessageProducer decorator that adapts specific settings
@@ -31,7 +31,7 @@ namespace Spring.Messaging.Nms.Connection
     /// <author>Mark Pollack (.NET)</author>
     public class CachedMessageProducer : IMessageProducer
     {
-        private IMessageProducer target;
+        private readonly IMessageProducer target;
 
         private bool disableMessageID;
 
@@ -51,92 +51,171 @@ namespace Spring.Messaging.Nms.Connection
         private TimeSpan timeToLive;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedMessageProducer"/> class.
+        /// </summary>
+        /// <param name="target">The target.</param>
         public CachedMessageProducer(IMessageProducer target)
         {
             this.target = target;
         }
 
 
+        /// <summary>
+        /// Gets the target MessageProducer, the procder we are 'wrapping'
+        /// </summary>
+        /// <value>The target MessageProducer.</value>
         public IMessageProducer Target
         {
             get { return target; }
         }
 
+        /// <summary>
+        /// Sends the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public void Send(IMessage message)
         {
             target.Send(message);
         }
 
+        /// <summary>
+        /// Sends a message to the specified message.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="persistent">if set to <c>true</c> use persistent QOS.</param>
+        /// <param name="priority">The message priority.</param>
+        /// <param name="timeToLive">The time to live.</param>
         public void Send(IMessage message, bool persistent, byte priority, TimeSpan timeToLive)
         {
            target.Send(message, persistent, priority, timeToLive);
         }
 
+        /// <summary>
+        /// Sends a message to the specified destination.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="message">The message.</param>
         public void Send(IDestination destination, IMessage message)
         {
             target.Send(destination, message);
         }
 
+        /// <summary>
+        /// Sends a message the specified destination.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="message">The message to send.</param>
+        /// <param name="persistent">if set to <c>true</c> use persistent QOS.</param>
+        /// <param name="priority">The priority.</param>
+        /// <param name="timeToLive">The time to live.</param>
         public void Send(IDestination destination, IMessage message, bool persistent, byte priority, TimeSpan timeToLive)
         {
             target.Send(destination, message, persistent, priority, timeToLive);
         }
 
         #region Odd Message Creationg Methods on IMessageProducer - not in-line with JMS APIs.
+        /// <summary>
+        /// Creates the message.
+        /// </summary>
+        /// <returns>A new message</returns>
         public IMessage CreateMessage()
         {
             return target.CreateMessage();
         }
 
+        /// <summary>
+        /// Creates the text message.
+        /// </summary>
+        /// <returns>A new text message.</returns>
         public ITextMessage CreateTextMessage()
         {
             return target.CreateTextMessage();
         }
 
+        /// <summary>
+        /// Creates the text message.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>A texst message with the given text.</returns>
         public ITextMessage CreateTextMessage(string text)
         {
             return target.CreateTextMessage(text);
         }
 
+        /// <summary>
+        /// Creates the map message.
+        /// </summary>
+        /// <returns>a new map message.</returns>
         public IMapMessage CreateMapMessage()
         {
             return target.CreateMapMessage();
         }
 
+        /// <summary>
+        /// Creates the object message.
+        /// </summary>
+        /// <param name="body">The body.</param>
+        /// <returns>A new object message with the given body.</returns>
         public IObjectMessage CreateObjectMessage(object body)
         {
             return target.CreateObjectMessage(body);
         }
 
+        /// <summary>
+        /// Creates the bytes message.
+        /// </summary>
+        /// <returns>A new bytes message.</returns>
         public IBytesMessage CreateBytesMessage()
         {
             return target.CreateBytesMessage();
         }
 
+        /// <summary>
+        /// Creates the bytes message.
+        /// </summary>
+        /// <param name="body">The body.</param>
+        /// <returns>A new bytes message with the given body.</returns>
         public IBytesMessage CreateBytesMessage(byte[] body)
         {
             return target.CreateBytesMessage(body);
         }
         #endregion
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="CachedMessageProducer"/> uses a persistent QOS
+        /// </summary>
+        /// <value><c>true</c> if persistent; otherwise, <c>false</c>.</value>
         public bool Persistent
         {
             get { return persistent; }
             set { persistent = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the time to live value for messages sent with this producer.
+        /// </summary>
+        /// <value>The time to live.</value>
         public TimeSpan TimeToLive
         {
             get { return timeToLive; }
             set { timeToLive = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the priority of messages sent with this producer.
+        /// </summary>
+        /// <value>The priority.</value>
         public byte Priority
         {
             get { return priority; }
             set { priority = value;}
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether disable setting of the message ID property.
+        /// </summary>
+        /// <value><c>true</c> if disable message ID setting; otherwise, <c>false</c>.</value>
         public bool DisableMessageID
         {
             get
@@ -153,6 +232,12 @@ namespace Spring.Messaging.Nms.Connection
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether disable setting the message timestamp property.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if disable message timestamp; otherwise, <c>false</c>.
+        /// </value>
         public bool DisableMessageTimestamp
         {
             get
@@ -169,6 +254,9 @@ namespace Spring.Messaging.Nms.Connection
             }
         }
 
+        /// <summary>
+        /// Reset properties.
+        /// </summary>
         public void Dispose()
         {
             // It's a cached MessageProducer... reset properties only.

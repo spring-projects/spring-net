@@ -25,11 +25,11 @@ using Spring.Collections;
 using Spring.Util;
 using IQueue=Apache.NMS.IQueue;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     /// <see cref="SingleConnectionFactory"/> subclass that adds
-    /// ISession and IMessageProducer caching.  This ConnectionFactory
+    /// Session and MessageProducer caching.  This ConnectionFactory
     /// also switches the ReconnectOnException property to true
     /// by default, allowing for automatic recovery of the underlying
     /// Connection.
@@ -169,6 +169,14 @@ namespace Spring.Messaging.Nms.Connection
             return session;
         }
 
+        /// <summary>
+        /// Wraps the given Session so that it delegates every method call to the target session but
+        /// adapts close calls. This is useful for allowing application code to
+	    /// handle a special framework Session just like an ordinary Session.
+        /// </summary>
+        /// <param name="targetSession">The original Session to wrap.</param>
+        /// <param name="sessionList">The List of cached Sessions that the given Session belongs to.</param>
+        /// <returns>The wrapped Session</returns>
         protected virtual ISession GetCachedSessionWrapper(ISession targetSession, LinkedList sessionList)
         {
             return new CachedSession(targetSession, sessionList, SessionCacheSize, CacheProducers);

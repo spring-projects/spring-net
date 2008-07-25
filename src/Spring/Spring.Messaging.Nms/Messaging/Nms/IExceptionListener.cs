@@ -28,6 +28,10 @@ namespace Spring.Messaging.Nms
     /// <author>Mark Pollack</author>
     public interface IExceptionListener
     {
+        /// <summary>
+        /// Called when there is an exception in message processing.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
         void OnException(Exception exception);
     }
 }

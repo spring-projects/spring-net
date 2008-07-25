@@ -19,7 +19,7 @@
 #endregion
 
 using Apache.NMS;
-using Spring.Messaging.Nms.Connection;
+using Spring.Messaging.Nms.Connections;
 
 namespace Spring.Messaging.Nms.Listener
 {

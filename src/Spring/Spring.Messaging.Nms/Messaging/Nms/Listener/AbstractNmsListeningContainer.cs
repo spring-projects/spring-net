@@ -22,7 +22,7 @@ using System;
 using Apache.NMS;
 using Common.Logging;
 using Spring.Context;
-using Spring.Messaging.Nms.Connection;
+using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.IDestinations;
 using Spring.Objects.Factory;
@@ -57,24 +57,39 @@ namespace Spring.Messaging.Nms.Listener
 
         private String clientId;
 
-        protected bool autoStartup = true;
+        private bool autoStartup = true;
         
         private string objectName;
         
         private IConnection sharedConnection;
 
         private bool sharedConnectionStarted = false;
-        
+
+        /// <summary>
+        /// The monitor object to lock on when performing operations on the connection.
+        /// </summary>
         protected object sharedConnectionMonitor = new object();
         
         private volatile bool active = false;
         
         private bool running = false;
-        
+
+        /// <summary>
+        /// The monitor object to lock on when performing operations that update the lifecycle of the container.
+        /// </summary>
         protected object lifecycleMonitor = new object();
 
         #endregion
 
+        /// <summary>
+        /// Gets or sets the client id for a shared Connection created and used by this container.
+        /// </summary>
+        /// <remarks>
+        /// Note that client ids need to be unique among all active Connections
+        /// of the underlying JMS provider. Furthermore, a client id can only be
+        /// assigned if the original ConnectionFactory hasn't already assigned one.
+        /// </remarks>
+        /// <value>The client id.</value>
         public string ClientId
         {
             set { clientId = value; }
@@ -89,6 +104,18 @@ namespace Spring.Messaging.Nms.Listener
             set { this.autoStartup = value; }
         }
 
+        /// <summary>
+        /// Set the name of the object in the object factory that created this object.
+        /// </summary>
+        /// <value>The name of the object in the factory.</value>
+        /// <remarks>
+        /// 	<p>
+        /// Invoked after population of normal object properties but before an init
+        /// callback like <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
+        /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+        /// method or a custom init-method.
+        /// </p>
+        /// </remarks>
         public string ObjectName
         {
             set { objectName = value; }
@@ -134,6 +161,11 @@ namespace Spring.Messaging.Nms.Listener
                 return true; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether	this container is currently active,
+	    /// that is, whether it has been set up but not shut down yet.
+        /// </summary>
+        /// <value><c>true</c> if active; otherwise, <c>false</c>.</value>
         public virtual bool Active
         {
             get
@@ -146,11 +178,10 @@ namespace Spring.Messaging.Nms.Listener
 
         }
 
-        /// <summary> Return whether a shared NMS IConnection should be maintained
+        /// <summary> Return whether a shared NMS Connection should be maintained
         /// by this listener container base class.
-        /// </summary>
-        /// <seealso cref="AbstractMessageListenerContainer.SharedConnection">
-        /// </seealso>
+        /// </summary>     
+        /// <seealso cref="SharedConnection"/>
         protected abstract bool SharedConnectionEnabled { get; }
 
         /// <summary>
@@ -180,7 +211,10 @@ namespace Spring.Messaging.Nms.Listener
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Call base class method, then <see cref="ValidateConfiguration"/> and then <see cref="Initialize"/>
+        /// </summary>
         public override void AfterPropertiesSet()
         {
             base.AfterPropertiesSet();
@@ -197,6 +231,9 @@ namespace Spring.Messaging.Nms.Listener
             
         }
 
+        /// <summary>
+        /// Calls <see cref="Shutdown"/> when the application context destroys the container instance.
+        /// </summary>
         public void Dispose()
         {
             Shutdown();
@@ -237,6 +274,9 @@ namespace Spring.Messaging.Nms.Listener
             }
         }
 
+        /// <summary>
+        /// Stop the shared connection, call <see cref="DoShutdown"/>, and close this container.
+        /// </summary>
         public virtual void Shutdown()
         {
             logger.Debug("Shutting down message listener container");
@@ -283,6 +323,9 @@ namespace Spring.Messaging.Nms.Listener
             DoStart();
         }
 
+        /// <summary>
+        /// Start the shared Connection, if any, and notify all invoker tasks.
+        /// </summary>
         protected virtual void DoStart()
         {
             // Lazily establish a shared Connection, if necessary.
@@ -428,7 +471,7 @@ namespace Spring.Messaging.Nms.Listener
             {
                 PrepareSharedConnection(con);
                 return con;
-            } catch (NMSException ex)
+            } catch (NMSException)
             {
                 NmsUtils.CloseConnection(con);
                 throw;
@@ -478,6 +521,10 @@ namespace Spring.Messaging.Nms.Listener
             }
         }
 
+        /// <summary>
+        /// Stops the shared connection.
+        /// </summary>
+        /// <exception cref="NMSException">if thrown by NMS API methods.</exception>
         protected virtual void StopSharedConnection()
         {
             lock (this.sharedConnectionMonitor)
@@ -504,7 +551,7 @@ namespace Spring.Messaging.Nms.Listener
     /// shared Connection failed. This is indicating to invokers that they need
     /// to establish the shared Connection themselves on first access.
     /// </summary>
-    public class SharedConnectionNotInitializedException : ApplicationException
+    public class SharedConnectionNotInitializedException : NMSException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SharedConnectionNotInitializedException"/> class.

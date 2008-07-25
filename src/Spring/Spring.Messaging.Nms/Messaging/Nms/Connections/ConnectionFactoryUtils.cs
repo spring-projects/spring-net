@@ -21,14 +21,14 @@
 using System;
 using Apache.NMS;
 using Common.Logging;
+using Spring.Messaging.Nms.Support;
 using Spring.Transaction.Support;
 using Spring.Util;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary> Helper class for obtaining transactional NMS resources
-    /// for a given IConnectionFactory.
-    ///
+    /// for a given ConnectionFactory.
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
@@ -40,19 +40,76 @@ namespace Spring.Messaging.Nms.Connection
 
         #endregion
 
-        /// <summary> Obtain a NMS ISession that is synchronized with the current transaction, if any.</summary>
-        /// <param name="cf">the IConnectionFactory to obtain a ISession for
+        /// <summary>
+        /// Releases the given connection, stopping it (if necessary) and eventually closing it.
+        /// </summary>
+        /// <remarks>Checks <see cref="ISmartConnectionFactory.ShouldStop"/>, if available.
+        /// This is essentially a more sophisticated version of 
+        /// <see cref="NmsUtils.CloseConnection(IConnection, bool)"/>
+        /// </remarks>
+        /// <param name="connection">The connection to release. (if this is <code>null</code>, the call will be ignored)</param>
+        /// <param name="cf">The ConnectionFactory that the Connection was obtained from. (may be <code>null</code>)</param>
+        /// <param name="started">whether the Connection might have been started by the application.</param>
+        public static void ReleaseConnection(IConnection connection, IConnectionFactory cf, bool started)
+        {
+            if (connection == null)
+            {
+                return;
+            }
+
+            if (started && cf is ISmartConnectionFactory && ((ISmartConnectionFactory)cf).ShouldStop(connection))
+            {
+                try
+                {
+                    connection.Stop();
+                }
+                catch (Exception ex)
+                {
+                    LOG.Debug("Could not stop NMS Connection before closing it", ex);
+
+                }
+            }
+            try
+            {
+                connection.Close();
+            } catch (Exception ex)
+            {
+                LOG.Debug("Could not close NMS Connection", ex);
+            }           
+        }
+
+        /// <summary>
+        /// Determines whether the given JMS Session is transactional, that is,
+        /// bound to the current thread by Spring's transaction facilities.
+        /// </summary>
+        /// <param name="session">The session to check.</param>
+        /// <param name="cf">The ConnectionFactory that the Session originated from</param>
+        /// <returns>
+        /// 	<c>true</c> if is session transactional, bound to current thread; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsSessionTransactional(ISession session, IConnectionFactory cf)
+        {
+            if (session == null || cf == null)
+            {
+                return false;
+            }
+            NmsResourceHolder resourceHolder = (NmsResourceHolder) TransactionSynchronizationManager.GetResource(cf);
+            return (resourceHolder != null && resourceHolder.ContainsSession(session));
+        }
+
+        /// <summary> Obtain a NMS Session that is synchronized with the current transaction, if any.</summary>
+        /// <param name="cf">the ConnectionFactory to obtain a Session for
         /// </param>
-        /// <param name="existingCon">the existing NMS IConnection to obtain a ISession for
+        /// <param name="existingCon">the existing NMS Connection to obtain a Session for
         /// (may be <code>null</code>)
         /// </param>
         /// <param name="synchedLocalTransactionAllowed">whether to allow for a local NMS transaction
         /// that is synchronized with a Spring-managed transaction (where the main transaction
         /// might be a ADO.NET-based one for a specific DataSource, for example), with the NMS
         /// transaction committing right after the main transaction. If not allowed, the given
-        /// IConnectionFactory needs to handle transaction enlistment underneath the covers.
+        /// ConnectionFactory needs to handle transaction enlistment underneath the covers.
         /// </param>
-        /// <returns> the transactional ISession, or <code>null</code> if none found
+        /// <returns> the transactional Session, or <code>null</code> if none found
         /// </returns>
         /// <throws>  NMSException in case of NMS failure </throws>
         public static ISession GetTransactionalSession(IConnectionFactory cf, IConnection existingCon,
@@ -61,20 +118,24 @@ namespace Spring.Messaging.Nms.Connection
             return
                 DoGetTransactionalSession(cf,
                                           new AnonymousClassResourceFactory(existingCon, cf,
-                                                                            synchedLocalTransactionAllowed));
+                                                                            synchedLocalTransactionAllowed), true);
         }
 
-        /// <summary> Obtain a NMS ISession that is synchronized with the current transaction, if any.</summary>
+        /// <summary>
+        /// Obtain a NMS Session that is synchronized with the current transaction, if any.
+        /// </summary>
         /// <param name="resourceKey">the TransactionSynchronizationManager key to bind to
-        /// (usually the IConnectionFactory)
-        /// </param>
+        /// (usually the ConnectionFactory)</param>
         /// <param name="resourceFactory">the ResourceFactory to use for extracting or creating
-        /// NMS resources
-        /// </param>
-        /// <returns> the transactional ISession, or <code>null</code> if none found
+        /// NMS resources</param>
+        /// <param name="startConnection">whether the underlying Connection approach should be
+	    /// started in order to allow for receiving messages. Note that a reused Connection
+	    /// may already have been started before, even if this flag is <code>false</code>.</param>
+        /// <returns>
+        /// the transactional Session, or <code>null</code> if none found
         /// </returns>
         /// <throws>NMSException in case of NMS failure </throws>
-        public static ISession DoGetTransactionalSession(Object resourceKey, ResourceFactory resourceFactory)
+        public static ISession DoGetTransactionalSession(Object resourceKey, ResourceFactory resourceFactory, bool startConnection)
         {
             AssertUtils.ArgumentNotNull(resourceKey, "Resource key must not be null");
             AssertUtils.ArgumentNotNull(resourceKey, "ResourceFactory must not be null");
@@ -83,22 +144,31 @@ namespace Spring.Messaging.Nms.Connection
                 (NmsResourceHolder)TransactionSynchronizationManager.GetResource(resourceKey);
             if (resourceHolder != null)
             {
-                ISession rssession = resourceFactory.GetSession(resourceHolder);
-                if (rssession != null || resourceHolder.Frozen)
+                ISession rhSession = resourceFactory.GetSession(resourceHolder);
+                if (rhSession != null)
                 {
-                    return rssession;
+                    if (startConnection)
+                    {
+                        IConnection conn = resourceFactory.GetConnection(resourceHolder);
+                        if (conn != null)
+                        {
+                            conn.Start();
+                        }
+                    }
+                    return rhSession;
                 }
             }
             if (!TransactionSynchronizationManager.SynchronizationActive)
             {
                 return null;
             }
-            NmsResourceHolder conHolderToUse = resourceHolder;
-            if (conHolderToUse == null)
+            NmsResourceHolder resourceHolderToUse = resourceHolder;
+            if (resourceHolderToUse == null)
             {
-                conHolderToUse = new NmsResourceHolder();
+                resourceHolderToUse = new NmsResourceHolder();
             }
-            IConnection con = resourceFactory.GetConnection(conHolderToUse);
+
+            IConnection con = resourceFactory.GetConnection(resourceHolderToUse);
             ISession session = null;
             try
             {
@@ -106,11 +176,11 @@ namespace Spring.Messaging.Nms.Connection
                 if (!isExistingCon)
                 {
                     con = resourceFactory.CreateConnection();
-                    conHolderToUse.AddConnection(con);
+                    resourceHolderToUse.AddConnection(con);
                 }
                 session = resourceFactory.CreateSession(con);
-                conHolderToUse.AddSession(session, con);
-                if (!isExistingCon)
+                resourceHolderToUse.AddSession(session, con);
+                if (startConnection)
                 {
                     con.Start();
                 }
@@ -141,53 +211,15 @@ namespace Spring.Messaging.Nms.Connection
                 }
                 throw;
             }
-            if (conHolderToUse != resourceHolder)
+            if (resourceHolderToUse != resourceHolder)
             {
                 TransactionSynchronizationManager.RegisterSynchronization(
-                    new NmsResourceSynchronization(resourceKey, conHolderToUse,
+                    new NmsResourceSynchronization(resourceKey, resourceHolderToUse,
                                                    resourceFactory.SynchedLocalTransactionAllowed));
-                conHolderToUse.SynchronizedWithTransaction = true;
-                TransactionSynchronizationManager.BindResource(resourceKey, conHolderToUse);
+                resourceHolderToUse.SynchronizedWithTransaction = true;
+                TransactionSynchronizationManager.BindResource(resourceKey, resourceHolderToUse);
             }
             return session;
-        }
-
-        public static void ReleaseConnection(IConnection connection, IConnectionFactory cf, bool started)
-        {
-            if (connection == null)
-            {
-                return;
-            }
-
-            if (started && cf is ISmartConnectionFactory && ((ISmartConnectionFactory)cf).ShouldStop(connection))
-            {
-                try
-                {
-                    connection.Stop();
-                }
-                catch (Exception ex)
-                {
-                    LOG.Debug("Could not stop NMS IConnection before closing it", ex);
-
-                }
-            }
-            try
-            {
-                connection.Close();
-            } catch (Exception ex)
-            {
-                LOG.Debug("Could not close NMS Connection", ex);
-            }           
-        }
-
-        public static bool IsSessionTransactional(ISession session, IConnectionFactory cf)
-        {
-            if (session == null || cf == null)
-            {
-                return false;
-            }
-            NmsResourceHolder resourceHolder = (NmsResourceHolder) TransactionSynchronizationManager.GetResource(cf);
-            return (resourceHolder != null && resourceHolder.ContainsSession(session));
         }
 
         #region ResourceFactory helper classes
@@ -253,32 +285,32 @@ namespace Spring.Messaging.Nms.Connection
         /// </summary>
         public interface ResourceFactory
         {
-            /// <summary> Fetch an appropriate ISession from the given NmsResourceHolder.</summary>
+            /// <summary> Fetch an appropriate Session from the given NmsResourceHolder.</summary>
             /// <param name="holder">the NmsResourceHolder
             /// </param>
-            /// <returns> an appropriate ISession fetched from the holder,
+            /// <returns> an appropriate Session fetched from the holder,
             /// or <code>null</code> if none found
             /// </returns>
             ISession GetSession(NmsResourceHolder holder);
 
-            /// <summary> Fetch an appropriate IConnection from the given NmsResourceHolder.</summary>
+            /// <summary> Fetch an appropriate Connection from the given NmsResourceHolder.</summary>
             /// <param name="holder">the NmsResourceHolder
             /// </param>
-            /// <returns> an appropriate IConnection fetched from the holder,
+            /// <returns> an appropriate Connection fetched from the holder,
             /// or <code>null</code> if none found
             /// </returns>
             IConnection GetConnection(NmsResourceHolder holder);
 
-            /// <summary> Create a new NMS IConnection for registration with a NmsResourceHolder.</summary>
-            /// <returns> the new NMS IConnection
+            /// <summary> Create a new NMS Connection for registration with a NmsResourceHolder.</summary>
+            /// <returns> the new NMS Connection
             /// </returns>
             /// <throws>NMSException if thrown by NMS API methods </throws>
             IConnection CreateConnection();
 
             /// <summary> Create a new NMS ISession for registration with a NmsResourceHolder.</summary>
-            /// <param name="con">the NMS IConnection to create a ISession for
+            /// <param name="con">the NMS Connection to create a ISession for
             /// </param>
-            /// <returns> the new NMS ISession
+            /// <returns> the new NMS Session
             /// </returns>
             /// <throws>NMSException if thrown by NMS API methods </throws>
             ISession CreateSession(IConnection con);

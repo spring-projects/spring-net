@@ -22,19 +22,19 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms
 {
-    /// <summary> Creates a NMS message given a ISession</summary>
+    /// <summary> Creates a NMS message given a Session</summary>
     /// <remarks>
-    /// <p>The <code>ISession</code> typically is provided by an instance
+    /// <p>The Session typically is provided by an instance
     /// of the NmsTemplate class.</p>
     /// </remarks>
     /// <author>Mark Pollack</author>
     public interface IMessageCreator
     {
-        /// <summary> Create a IMessage to be sent.</summary>
-        /// <param name="session">the NMS ISession to be used to create the
+        /// <summary> Create a Message to be sent.</summary>
+        /// <param name="session">the NMS Session to be used to create the
         /// <code>IMessage</code> (never <code>null</code>)
         /// </param>
-        /// <returns> the <code>IMessage</code> to be sent
+        /// <returns> the <code>Message</code> to be sent
         /// </returns>
         /// <throws>NMSException if thrown by NMS API methods </throws>
         IMessage CreateMessage(ISession session);

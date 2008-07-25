@@ -21,6 +21,7 @@
 using System;
 using Common.Logging;
 using Spring.Collections;
+using Spring.Messaging.Nms;
 using Spring.Messaging.Nms.Support;
 using Apache.NMS;
 using Spring.Transaction.Support;
@@ -30,7 +31,7 @@ namespace Spring.Messaging.Nms.Listener
 {
     /// <summary>
     /// Message listener container that uses the plain NMS client API's
-    /// <see cref="IMessageConsumer.Listener"/> method to create concurrent
+    /// MessageConsumer.Listener method to create concurrent
     /// MessageConsumers for the specified listeners.
     /// </summary>
     public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, IExceptionListener
@@ -57,12 +58,31 @@ namespace Spring.Messaging.Nms.Listener
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to inhibit the delivery of messages published by its own connection.
+        /// Default is "false".
+        /// </summary>
+        /// <value><c>true</c> if should inhibit the delivery of messages published by its own connection; otherwise, <c>false</c>.</value>
         public bool PubSubNoLocal
         {
             get { return pubSubNoLocal; }
             set { pubSubNoLocal = value; }
         }
 
+        /// <summary>
+	    /// Specify the number of concurrent consumers to create. Default is 1.
+        /// </summary>
+        /// <remarks>
+	    /// Raising the number of concurrent consumers is recommendable in order
+	    /// to scale the consumption of messages coming in from a queue. However,
+	    /// note that any ordering guarantees are lost once multiple consumers are
+	    /// registered. In general, stick with 1 consumer for low-volume queues.
+	    /// <para>Do not raise the number of concurrent consumers for a topic.
+	    /// This would lead to concurrent consumption of the same message,
+	    /// which is hardly ever desirable.
+        /// </para>
+        /// </remarks>
+        /// <value>The concurrent consumers.</value>
         public int ConcurrentConsumers
         {
             set
@@ -82,6 +102,10 @@ namespace Spring.Messaging.Nms.Listener
 
         #endregion
 
+        /// <summary>
+        /// Call base class for valdation and then check that if the subscription is durable that the number of 
+        /// concurrent consumers is equal to one.
+        /// </summary>
         protected override void ValidateConfiguration()
         {
             base.ValidateConfiguration();
@@ -120,10 +144,18 @@ namespace Spring.Messaging.Nms.Listener
         {
             base.PrepareSharedConnection(connection);
             connection.ExceptionListener += OnException;
-        }
+        }
 
+
+        /// <summary>
+        /// <see cref="IExceptionListener"/> implementation, invoked by the NMS provider in
+	    /// case of connection failures. Re-initializes this listener container's
+	    /// shared connection and its sessions and consumers.
+        /// </summary>
+        /// <param name="exception">The reported connection exception.</param>
         public void OnException(Exception exception)
         {
+            // First invoke the user-specific ExceptionListener, if any.
             InvokeExceptionListener(exception);
             // now try to recover the shared Connection and all consumers...
             if (logger.IsInfoEnabled)
@@ -178,7 +210,7 @@ namespace Spring.Messaging.Nms.Listener
         /// registering a MessageListener for the specified listener
         /// </summary>
         /// <param name="session">The session to work on.</param>
-        /// <returns>the IMessageConsumer"/></returns>
+        /// <returns>the MessageConsumer"/></returns>
         /// <exception cref="NMSException">if thrown by NMS methods</exception>
         private IMessageConsumer CreateListenerConsumer(ISession session)
         {
@@ -216,6 +248,12 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Creates a MessageConsumer for the given Session and Destination.
+        /// </summary>
+        /// <param name="session">The session to create a MessageConsumer for.</param>
+        /// <param name="destination">The destination to create a MessageConsumer for.</param>
+        /// <returns>The new MessageConsumer</returns>
         protected IMessageConsumer CreateConsumer(ISession session, IDestination destination)
         {
             // Only pass in the NoLocal flag in case of a Topic:

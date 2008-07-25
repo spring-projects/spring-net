@@ -37,7 +37,7 @@ namespace Spring.Messaging.Nms
         /// </summary>
         /// <param name="message">the NMS message from the IMessageConverter
         /// </param>
-        /// <returns> the modified version of the IMessage
+        /// <returns> the modified version of the Message
         /// </returns>
         /// <throws>NMSException if thrown by NMS API methods </throws>
         IMessage PostProcessMessage(IMessage message);

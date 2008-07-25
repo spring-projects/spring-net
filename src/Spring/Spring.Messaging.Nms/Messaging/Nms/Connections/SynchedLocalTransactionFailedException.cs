@@ -21,7 +21,7 @@
 using System;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 { 
     /// <summary> Exception thrown when a synchronized local transaction failed to complete
     /// (after the main transaction has already completed).

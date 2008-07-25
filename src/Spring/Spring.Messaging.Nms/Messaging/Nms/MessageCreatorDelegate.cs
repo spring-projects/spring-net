@@ -25,10 +25,10 @@ namespace Spring.Messaging.Nms
     /// <summary>
     /// Delegate that creates a NMS message given a ISession
     /// </summary>
-    /// <param name="session">the NMS ISession to be used to create the
-    /// <code>IMessage</code> (never <code>null</code>) 
+    /// <param name="session">the NMS Session to be used to create the
+    /// <code>Message</code> (never <code>null</code>) 
     /// </param>
-    /// <returns> the <code>IMessage</code> to be sent
+    /// <returns> the <code>Message</code> to be sent
     /// </returns>
     /// <throws>NMSException if thrown by NMS API methods </throws>
     public delegate IMessage IMessageCreatorDelegate(ISession session);

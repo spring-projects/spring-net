@@ -22,8 +22,15 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms
 {
+    /// <summary>
+    /// Interfaced based approach to listen to messaging events.
+    /// </summary>
 	public interface IMessageListener
 	{
+        /// <summary>
+        /// Called when a message is delivered.
+        /// </summary>
+        /// <param name="message">The message.</param>
 		void OnMessage(IMessage message);
 	}
 }

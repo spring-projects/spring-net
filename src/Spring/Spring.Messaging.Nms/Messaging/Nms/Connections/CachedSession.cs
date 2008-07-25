@@ -24,10 +24,10 @@ using Common.Logging;
 using Spring.Collections;
 using IQueue=Apache.NMS.IQueue;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
-    /// Wrapper for ISession that caches producers and registers itself as available
+    /// Wrapper for Session that caches producers and registers itself as available
     /// to the session cache when being closed.  Generally used for testing purposes or
     /// if need to get at the wrapped Session object via the TargetSession property (for
     /// vendor specific methods).
@@ -192,101 +192,194 @@ namespace Spring.Messaging.Nms.Connection
         }
 
         #region Pass through implementations
+        /// <summary>
+        /// Creates the consumer.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <returns></returns>
         public IMessageConsumer CreateConsumer(IDestination destination)
         {
             return target.CreateConsumer(destination);
         }
 
+        /// <summary>
+        /// Creates the consumer.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="selector">The selector.</param>
+        /// <returns></returns>
         public IMessageConsumer CreateConsumer(IDestination destination, string selector)
         {
             return target.CreateConsumer(destination, selector);
         }
 
+        /// <summary>
+        /// Creates the consumer.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="selector">The selector.</param>
+        /// <param name="noLocal">if set to <c>true</c> [no local].</param>
+        /// <returns></returns>
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal)
         {
             return target.CreateConsumer(destination, selector, noLocal);
         }
 
+
+        /// <summary>
+        /// Creates the durable consumer.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="selector">The selector.</param>
+        /// <param name="noLocal">if set to <c>true</c> [no local].</param>
+        /// <returns></returns>
         public IMessageConsumer CreateDurableConsumer(ITopic destination, string name, string selector, bool noLocal)
         {
             return target.CreateDurableConsumer(destination, name, selector, noLocal);
         }
 
+        /// <summary>
+        /// Gets the queue.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public IQueue GetQueue(string name)
         {
             return target.GetQueue(name);
         }
 
+        /// <summary>
+        /// Gets the topic.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public ITopic GetTopic(string name)
         {
             return target.GetTopic(name);
         }
 
+        /// <summary>
+        /// Creates the temporary queue.
+        /// </summary>
+        /// <returns></returns>
         public ITemporaryQueue CreateTemporaryQueue()
         {
             return target.CreateTemporaryQueue();
         }
 
+        /// <summary>
+        /// Creates the temporary topic.
+        /// </summary>
+        /// <returns></returns>
         public ITemporaryTopic CreateTemporaryTopic()
         {
             return target.CreateTemporaryTopic();
         }
 
+        /// <summary>
+        /// Creates the message.
+        /// </summary>
+        /// <returns></returns>
         public IMessage CreateMessage()
         {
             return target.CreateMessage();
         }
 
+        /// <summary>
+        /// Creates the text message.
+        /// </summary>
+        /// <returns></returns>
         public ITextMessage CreateTextMessage()
         {
             return target.CreateTextMessage();
         }
 
+        /// <summary>
+        /// Creates the text message.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns></returns>
         public ITextMessage CreateTextMessage(string text)
         {
             return target.CreateTextMessage(text);
         }
 
+        /// <summary>
+        /// Creates the map message.
+        /// </summary>
+        /// <returns></returns>
         public IMapMessage CreateMapMessage()
         {
             return target.CreateMapMessage();
         }
 
+        /// <summary>
+        /// Creates the object message.
+        /// </summary>
+        /// <param name="body">The body.</param>
+        /// <returns></returns>
         public IObjectMessage CreateObjectMessage(object body)
         {
             return target.CreateObjectMessage(body);
         }
 
+        /// <summary>
+        /// Creates the bytes message.
+        /// </summary>
+        /// <returns></returns>
         public IBytesMessage CreateBytesMessage()
         {
             return target.CreateBytesMessage();
         }
 
+        /// <summary>
+        /// Creates the bytes message.
+        /// </summary>
+        /// <param name="body">The body.</param>
+        /// <returns></returns>
         public IBytesMessage CreateBytesMessage(byte[] body)
         {
             return target.CreateBytesMessage(body);
         }
 
+        /// <summary>
+        /// Commits this instance.
+        /// </summary>
         public void Commit()
         {
             target.Commit();
         }
 
+        /// <summary>
+        /// Rollbacks this instance.
+        /// </summary>
         public void Rollback()
         {
             target.Rollback();
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="CachedSession"/> is transacted.
+        /// </summary>
+        /// <value><c>true</c> if transacted; otherwise, <c>false</c>.</value>
         public bool Transacted
         {
             get { return target.Transacted; }
         }
 
+        /// <summary>
+        /// Gets the acknowledgement mode.
+        /// </summary>
+        /// <value>The acknowledgement mode.</value>
         public AcknowledgementMode AcknowledgementMode
         {
             get { return target.AcknowledgementMode; }
         }
 
+        /// <summary>
+        /// Call dispose on the target.
+        /// </summary>
         public void Dispose()
         {
             target.Dispose();

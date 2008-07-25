@@ -21,11 +21,36 @@
 using System;
 using Apache.NMS;
 using Common.Logging;
+using Spring.Messaging.Nms;
 using Spring.Objects.Factory;
 using Spring.Util;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
+    /// <summary>
+    /// A ConnectionFactory adapter that returns the same Connection
+    /// from all CreateConnection() calls, and ignores calls to
+    /// Connection.Close().  According to the JMS Connection
+    /// model, this is perfectly thread-safe, check your vendor implmenetation for
+    /// details.
+    /// </summary>
+    /// <remarks>
+    /// You can either pass in a specific Connection directly or let this
+    /// factory lazily create a Connection via a given target ConnectionFactory.
+    /// <para>Useful in order to keep using the same Connection for multiple
+    /// <see cref="NmsTemplate"/> calls, without having a pooling ConnectionFactory 
+    /// underneath. This may span any number of transactions, even concurrently executing transactions.
+    /// </para>
+    /// <para>
+    /// Note that Spring's message listener containers support the use of
+    /// a shared Connection within each listener container instance. Using
+    /// SingleConnectionFactory with a MessageListenerContainer only really makes sense for
+    /// sharing a single Connection across multiple listener containers.
+    /// </para>
+    /// </remarks>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Mark Pollack</author>
+    /// <author>Mark Pollack (.NET)</author>
     public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, IInitializingObject, IDisposable
     {
         #region Logging Definition
@@ -80,7 +105,7 @@ namespace Spring.Messaging.Nms.Connection
         {
             AssertUtils.ArgumentNotNull(target, "connection", "TargetSession Connection must not be null");
             this.target = target;
-            connection = GetSharedConnection(this, target);
+            connection = GetSharedConnection(target);
         }
 
 
@@ -127,6 +152,11 @@ namespace Spring.Messaging.Nms.Connection
         }
 
 
+        /// <summary>
+        /// Gets or sets the exception listener implementation that should be registered
+	    /// with with the single Connection created by this factory, if any.
+        /// </summary>
+        /// <value>The exception listener.</value>
         public IExceptionListener ExceptionListener
         {
             get { return exceptionListener; }
@@ -162,6 +192,10 @@ namespace Spring.Messaging.Nms.Connection
 
         #region IConnectionFactory Members
 
+        /// <summary>
+        /// Creates the connection.
+        /// </summary>
+        /// <returns>A single shared connection</returns>
         public IConnection CreateConnection()
         {
             lock (connectionMonitor)
@@ -174,6 +208,12 @@ namespace Spring.Messaging.Nms.Connection
             }
         }
 
+        /// <summary>
+        /// Creates the connection.
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <returns></returns>
         public IConnection CreateConnection(string userName, string password)
         {
             throw new InvalidOperationException("SingleConnectionFactory does not support custom username and password.");
@@ -181,6 +221,10 @@ namespace Spring.Messaging.Nms.Connection
 
         #endregion
 
+        /// <summary>
+        /// Initialize the underlying shared Connection. Closes and reinitializes the Connection if an underlying
+	    /// Connection is present already.
+        /// </summary>
         public void InitConnection()
         {
             if (TargetConnectionFactory == null)
@@ -200,7 +244,7 @@ namespace Spring.Messaging.Nms.Connection
                 {
                     LOG.Info("Established shared NMS Connection: " + this.target);
                 }
-                this.connection = GetSharedConnection(this, target);
+                this.connection = GetSharedConnection(target);
             }
         }
 
@@ -213,6 +257,13 @@ namespace Spring.Messaging.Nms.Connection
             ResetConnection();
         }
 
+        /// <summary>
+        /// Prepares the connection before it is exposed.
+	    /// The default implementation applies ExceptionListener and client id.
+	    /// Can be overridden in subclasses.
+        /// </summary>
+        /// <param name="con">The Connection to prepare.</param>
+        /// <exception cref="NMSException">if thrown by any NMS API methods.</exception>
         protected virtual void PrepareConnection(IConnection con)
         {
             if (ClientId != null)
@@ -249,11 +300,19 @@ namespace Spring.Messaging.Nms.Connection
             return null;
         }
 
+        /// <summary>
+        /// reate a JMS Connection via this template's ConnectionFactory.
+        /// </summary>
+        /// <returns></returns>
         protected virtual IConnection DoCreateConnection()
         {
             return TargetConnectionFactory.CreateConnection();
         }
 
+        /// <summary>
+        /// Closes the given connection.
+        /// </summary>
+        /// <param name="con">The connection.</param>
         protected virtual void CloseConnection(IConnection con)
         {
             try
@@ -273,6 +332,9 @@ namespace Spring.Messaging.Nms.Connection
 
         #region IInitializingObject Members
 
+        /// <summary>
+        /// Ensure that the connection or TargetConnectionFactory are specified.
+        /// </summary>
         public void AfterPropertiesSet()
         {
             if (connection == null && TargetConnectionFactory == null)
@@ -283,11 +345,20 @@ namespace Spring.Messaging.Nms.Connection
 
         #endregion
 
+
+        /// <summary>
+        /// Close the underlying shared connection. The provider of this ConnectionFactory needs to care for proper shutdown.
+        /// As this object implements <see cref="IDisposable"/> an application context will automatically 
+        /// invoke this on distruction o
+        /// </summary>
         public void Dispose()
         {
             ResetConnection();
         }
 
+        /// <summary>
+        /// Resets the underlying shared Connection, to be reinitialized on next access.
+        /// </summary>
         public virtual void ResetConnection()
         {
             lock (connectionMonitor)
@@ -301,11 +372,19 @@ namespace Spring.Messaging.Nms.Connection
             }
         }
 
-        protected virtual IConnection GetSharedConnection(SingleConnectionFactory singleConnectionFactory, IConnection target)
+        /// <summary>
+        /// Wrap the given Connection with a proxy that delegates every method call to it
+	    /// but suppresses close calls. This is useful for allowing application code to
+	    /// handle a special framework Connection just like an ordinary Connection from a
+	    /// ConnectionFactory.
+        /// </summary>
+        /// <param name="target">The original connection to wrap.</param>
+        /// <returns>the wrapped connection</returns>
+        protected virtual IConnection GetSharedConnection(IConnection target)
         {
             lock (connectionMonitor)
             {
-                return new CloseSupressingConnection(singleConnectionFactory, target);
+                return new CloseSupressingConnection(this, target);
             }
         }
     }
@@ -340,6 +419,26 @@ namespace Spring.Messaging.Nms.Connection
             this.singleConnectionFactory = singleConnectionFactory;
         }
 
+        public string ClientId
+        {
+            get { return target.ClientId; }
+            set
+            {
+                string currentClientId = target.ClientId;
+                if (currentClientId != null && currentClientId.Equals(value))
+                {
+                    //ok, the values are consistent.
+                }
+                else
+                {
+                    throw new ArgumentException(
+                        "Setting of 'ClientID' property not supported on wrapper for shared Connection." +
+                        "Set the 'ClientId' property on the SingleConnectionFactory instead.");    
+                }
+                
+            }
+        }
+
         public void Close()
         {
             // don't pass the call to the target.
@@ -370,7 +469,10 @@ namespace Spring.Messaging.Nms.Connection
 
         public event ExceptionListener ExceptionListener
         {
-            add { target.ExceptionListener += value; }
+            add
+            {
+                target.ExceptionListener += value;
+            }
             remove { target.ExceptionListener -= value; }
         }
 
@@ -379,26 +481,6 @@ namespace Spring.Messaging.Nms.Connection
         {
             get { return target.AcknowledgementMode; }
             set { target.AcknowledgementMode = value; }
-        }
-
-        public string ClientId
-        {
-            get { return target.ClientId; }
-            set
-            {
-                string currentClientId = target.ClientId;
-                if (currentClientId != null && currentClientId.Equals(value))
-                {
-                    //ok
-                }
-                else
-                {
-                    throw new ArgumentException(
-                        "Setting of 'ClientID' property not supported on wrapper for shared Connection." +
-                        "Set the 'ClientId' property on the SingleConnectionFactory instead.");    
-                }
-                
-            }
         }
 
         public void Dispose()

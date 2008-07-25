@@ -20,11 +20,11 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
-    /// Subinterface of ISession to be implemented by
-    /// implementations that wrap an ISession to provide added 
+    /// Subinterface of Session to be implemented by
+    /// implementations that wrap an Session to provide added 
     /// functionality. Allows access to the the underlying target Session.
     /// </summary>
     /// <author>Mark Pollack</author>

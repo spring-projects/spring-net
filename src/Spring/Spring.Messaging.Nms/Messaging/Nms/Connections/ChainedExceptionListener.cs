@@ -23,7 +23,7 @@ using System;
 using System.Collections;
 using Spring.Util;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     /// Implementation of Spring IExceptionListener interface that supports

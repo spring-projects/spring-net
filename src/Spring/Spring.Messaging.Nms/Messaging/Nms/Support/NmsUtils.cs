@@ -25,6 +25,10 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Support
 {
+    /// <summary>
+    /// Generic utility methods for working with NMS. Mainly for internal use
+    /// within the framework, but also useful for custom NMS access code.
+    /// </summary>
     public abstract class NmsUtils
     {
         #region Logging
@@ -33,20 +37,20 @@ namespace Spring.Messaging.Nms.Support
 
         #endregion
 
-        /// <summary> Close the given NMS IConnection and ignore any thrown exception.
+        /// <summary> Close the given NMS Connection and ignore any thrown exception.
         /// This is useful for typical <code>finally</code> blocks in manual NMS code.
         /// </summary>
-        /// <param name="con">the NMS IConnection to close (may be <code>null</code>)
+        /// <param name="con">the NMS Connection to close (may be <code>null</code>)
         /// </param>
         public static void CloseConnection(IConnection con)
         {
             CloseConnection(con, false);
         }
 
-        /// <summary> Close the given NMS IConnection and ignore any thrown exception.
+        /// <summary> Close the given NMS Connection and ignore any thrown exception.
         /// This is useful for typical <code>finally</code> blocks in manual NMS code.
         /// </summary>
-        /// <param name="con">the NMS IConnection to close (may be <code>null</code>)
+        /// <param name="con">the NMS Connection to close (may be <code>null</code>)
         /// </param>
         /// <param name="stop">whether to call <code>stop()</code> before closing
         /// </param>
@@ -74,20 +78,20 @@ namespace Spring.Messaging.Nms.Support
                 }
                 catch (NMSException ex)
                 {
-                    logger.Debug("Could not close NMS IConnection", ex);
+                    logger.Debug("Could not close NMS Connection", ex);
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the NMS provider: It might throw another exception.
-                    logger.Debug("Unexpected exception on closing NMS IConnection", ex);
+                    logger.Debug("Unexpected exception on closing NMS Connection", ex);
                 }
             }
         }
         
-        /// <summary> Close the given NMS ISession and ignore any thrown exception.
+        /// <summary> Close the given NMS Session and ignore any thrown exception.
 		/// This is useful for typical <code>finally</code> blocks in manual NMS code.
 		/// </summary>
-		/// <param name="session">the NMS ISession to close (may be <code>null</code>)
+		/// <param name="session">the NMS Session to close (may be <code>null</code>)
 		/// </param>
 		public static void CloseSession(ISession session)
         {
@@ -109,10 +113,10 @@ namespace Spring.Messaging.Nms.Support
             }
         }
         
-        /// <summary> Close the given NMS IMessageProducer and ignore any thrown exception.
+        /// <summary> Close the given NMS MessageProducer and ignore any thrown exception.
 		/// This is useful for typical <code>finally</code> blocks in manual NMS code.
 		/// </summary>
-		/// <param name="producer">the NMS IMessageProducer to close (may be <code>null</code>)
+		/// <param name="producer">the NMS MessageProducer to close (may be <code>null</code>)
 		/// </param>
         public static void CloseMessageProducer(IMessageProducer producer)
         {
@@ -124,20 +128,20 @@ namespace Spring.Messaging.Nms.Support
                 }
                 catch (NMSException ex)
                 {
-                    logger.Debug("Could not close NMS IMessageProducer", ex);
+                    logger.Debug("Could not close NMS MessageProducer", ex);
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the NMS provider: It might throw RuntimeException or Error.
-                    logger.Debug("Unexpected exception on closing NMS IMessageProducer", ex);
+                    logger.Debug("Unexpected exception on closing NMS MessageProducer", ex);
                 }
             }
         }
 
-        /// <summary> Close the given NMS IMessageConsumer and ignore any thrown exception.
+        /// <summary> Close the given NMS MessageConsumer and ignore any thrown exception.
         /// This is useful for typical <code>finally</code> blocks in manual NMS code.
         /// </summary>
-        /// <param name="consumer">the NMS IMessageConsumer to close (may be <code>null</code>)
+        /// <param name="consumer">the NMS MessageConsumer to close (may be <code>null</code>)
         /// </param>
         public static void CloseMessageConsumer(IMessageConsumer consumer)
         {
@@ -149,12 +153,12 @@ namespace Spring.Messaging.Nms.Support
                 }
                 catch (NMSException ex)
                 {
-                    logger.Debug("Could not close NMS IMessageConsumer", ex);
+                    logger.Debug("Could not close NMS MessageConsumer", ex);
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the NMS provider: It might throw RuntimeException or Error.
-                    logger.Debug("Unexpected exception on closing NMS IMessageConsumer", ex);
+                    logger.Debug("Unexpected exception on closing NMS MessageConsumer", ex);
                 }
             }
         }
@@ -186,11 +190,11 @@ namespace Spring.Messaging.Nms.Support
 //        }
 
 
-        /// <summary> Commit the ISession if not within a distributed transaction.</summary>
-        /// <remarks>Needs investigation - no distributed tx in EMS</remarks>
-        /// <param name="session">the NMS ISession to commit
+        /// <summary> Commit the Session if not within a distributed transaction.</summary>
+        /// <remarks>Needs investigation - no distributed tx in .NET messaging providers</remarks>
+        /// <param name="session">the NMS Session to commit
         /// </param>
-        /// <throws>  NMSException if committing failed </throws>
+        /// <throws>NMSException if committing failed </throws>
         public static void CommitIfNecessary(ISession session)
         {
 		    AssertUtils.ArgumentNotNull(session, "ISession must not be null");
@@ -212,9 +216,9 @@ namespace Spring.Messaging.Nms.Support
 //		    }
 	    }
 
-        /// <summary> Rollback the ISession if not within a distributed transaction.</summary>
+        /// <summary> Rollback the Session if not within a distributed transaction.</summary>
         /// <remarks>Needs investigation - no distributed tx in EMS</remarks>
-        /// <param name="session">the NMS ISession to rollback
+        /// <param name="session">the NMS Session to rollback
         /// </param>
         /// <throws>  NMSException if committing failed </throws>
 	    public static void RollbackIfNecessary(ISession session)

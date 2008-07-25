@@ -39,17 +39,17 @@ namespace Spring.Messaging.Nms.Support.Converter
     /// <author>Mark Pollack (.NET)</author>
     public class SimpleMessageConverter : IMessageConverter
     {
-        /// <summary> Convert a .NET object to a NMS IMessage using the supplied session
+        /// <summary> Convert a .NET object to a NMS Message using the supplied session
         /// to create the message object.
         /// </summary>
         /// <param name="objectToConvert">the object to convert
         /// </param>
-        /// <param name="session">the ISession to use for creating a NMS IMessage
+        /// <param name="session">the Session to use for creating a NMS Message
         /// </param>
-        /// <returns> the NMS IMessage
+        /// <returns> the NMS Message
         /// </returns>
         /// <throws>NMSException if thrown by NMS API methods </throws>
-        /// <throws>IMessageConversionException in case of conversion failure </throws>
+        /// <throws>MessageConversionException in case of conversion failure </throws>
         public IMessage ToMessage(object objectToConvert, ISession session)
         {
             if (objectToConvert is IMessage)
@@ -75,16 +75,16 @@ namespace Spring.Messaging.Nms.Support.Converter
             }
             else
             {
-                throw new IMessageConversionException("Cannot convert object [" + objectToConvert + "] to NMS message");
+                throw new MessageConversionException("Cannot convert object [" + objectToConvert + "] to NMS message");
             }
         }
 
-        /// <summary> Convert from a NMS IMessage to a .NET object.</summary>
+        /// <summary> Convert from a NMS Message to a .NET object.</summary>
         /// <param name="message">the message to convert
         /// </param>
         /// <returns> the converted .NET object
         /// </returns>
-        /// <throws>IMessageConversionException in case of conversion failure </throws>
+        /// <throws>MessageConversionException in case of conversion failure </throws>
         public object FromMessage(IMessage message)
         {
             if (message is ITextMessage)
@@ -155,7 +155,7 @@ namespace Spring.Messaging.Nms.Support.Converter
                 if (!(entry.Key is string))
                 {
                     //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Class.getName' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                    throw new IMessageConversionException("Cannot convert non-String key of type [" +
+                    throw new MessageConversionException("Cannot convert non-String key of type [" +
                                                          (entry.Key != null ? entry.Key.GetType().FullName : null) +
                                                          "] to IMapMessage entry");
                 }
@@ -209,7 +209,7 @@ namespace Spring.Messaging.Nms.Support.Converter
         /// </param>
         /// <returns> the resulting Map
         /// </returns>
-        /// <throws>  NMSException if thrown by NMS methods </throws>
+        /// <throws>NMSException if thrown by NMS methods </throws>
         protected virtual IDictionary ExtractMapFromMessage(IMapMessage message)
         {
             IDictionary dictionary = new Hashtable();
@@ -222,6 +222,11 @@ namespace Spring.Messaging.Nms.Support.Converter
             return dictionary;
         }
 
+        /// <summary>
+        /// Extracts the serializable object from the given object message.
+        /// </summary>
+        /// <param name="message">The message to convert.</param>
+        /// <returns>The resulting serializable object.</returns>
         protected virtual object ExtractSerializableFromMessage(
             IObjectMessage message)
         {

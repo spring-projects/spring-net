@@ -22,10 +22,10 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
-    /// Extension of the <code>IConnectionFactory</code> interface, 
+    /// Extension of the <code>ConnectionFactory</code> interface, 
     /// indicating how to release Connections obtained from it.
     /// </summary>
     /// <author>Juergen Hoeller</author>

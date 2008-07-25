@@ -1,3 +1,22 @@
+#region License
+
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
 
 
 using System;
@@ -8,11 +27,11 @@ using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
-namespace Spring.Messaging.Nms.Connection
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     /// A <see cref="AbstractPlatformTransactionManager"/> implementation
-    /// for a single NMS <code>Apache.NMS.IConnectionFactory</code>. Binds a 
+    /// for a single NMS <code>ConnectionFactory</code>. Binds a 
     /// Connection/Session pair from the specified ConnecctionFactory to the thread,
     /// potentially allowing for one thread-bound Session per ConnectionFactory.
     /// </summary>
@@ -91,7 +110,6 @@ namespace Spring.Messaging.Nms.Connection
             get { return connectionFactory; }
             set
             {
-                //TODO if create TransactionAwareConnectionFactoryProxy need to check for it here.
                 connectionFactory = value;
             }
         }
@@ -126,6 +144,10 @@ namespace Spring.Messaging.Nms.Connection
         #endregion
 
 
+        /// <summary>
+        /// Get the NmsTransactionObject.
+        /// </summary>
+        /// <returns>he NmsTransactionObject.</returns>
         protected override object DoGetTransaction()
         {
             NmsTransactionObject txObject = new NmsTransactionObject();
@@ -135,6 +157,21 @@ namespace Spring.Messaging.Nms.Connection
             return txObject;
         }
 
+
+        /// <summary>
+        /// Begin a new transaction with the given transaction definition.
+        /// </summary>
+        /// <param name="transaction">Transaction object returned by
+        /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoGetTransaction"/>.</param>
+        /// <param name="definition"><see cref="Spring.Transaction.ITransactionDefinition"/> instance, describing
+        /// propagation behavior, isolation level, timeout etc.</param>
+        /// <remarks>
+        /// Does not have to care about applying the propagation behavior,
+        /// as this has already been handled by this abstract manager.
+        /// </remarks>
+        /// <exception cref="Spring.Transaction.TransactionException">
+        /// In the case of creation or system errors.
+        /// </exception>
         protected override void DoBegin(object transaction, ITransactionDefinition definition)
         {
             //This is the default value defined in DefaultTransactionDefinition
@@ -186,6 +223,21 @@ namespace Spring.Messaging.Nms.Connection
                
         }
 
+        /// <summary>
+        /// Suspend the resources of the current transaction.
+        /// </summary>
+        /// <param name="transaction">Transaction object returned by
+        /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoGetTransaction"/>.</param>
+        /// <returns>
+        /// An object that holds suspended resources (will be kept unexamined for passing it into
+        /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoResume"/>.)
+        /// </returns>
+        /// <remarks>
+        /// Transaction synchronization will already have been suspended.
+        /// </remarks>
+        /// <exception cref="Spring.Transaction.TransactionException">
+        /// in case of system errors.
+        /// </exception>
         protected override object DoSuspend(object transaction)
         {
             NmsTransactionObject txObject = (NmsTransactionObject) transaction;
@@ -193,12 +245,31 @@ namespace Spring.Messaging.Nms.Connection
             return TransactionSynchronizationManager.UnbindResource(ConnectionFactory);
         }
 
+        /// <summary>
+        /// Resume the resources of the current transaction.
+        /// </summary>
+        /// <param name="transaction">Transaction object returned by
+        /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoGetTransaction"/>.</param>
+        /// <param name="suspendedResources">The object that holds suspended resources as returned by
+        /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoSuspend"/>.</param>
+        /// <remarks>Transaction synchronization will be resumed afterwards.
+        /// </remarks>
+        /// <exception cref="Spring.Transaction.TransactionException">
+        /// In the case of system errors.
+        /// </exception>
         protected override void DoResume(object transaction, object suspendedResources)
         {
             NmsResourceHolder conHolder = (NmsResourceHolder) suspendedResources;
             TransactionSynchronizationManager.BindResource(ConnectionFactory, conHolder);
         }
 
+        /// <summary>
+        /// Perform an actual commit on the given transaction.
+        /// </summary>
+        /// <param name="status">The status representation of the transaction.</param>
+        /// <exception cref="Spring.Transaction.TransactionException">
+        /// In the case of system errors.
+        /// </exception>
         protected override void DoCommit(DefaultTransactionStatus status)
         {
             NmsTransactionObject txObject = (NmsTransactionObject)status.Transaction;
@@ -210,19 +281,22 @@ namespace Spring.Messaging.Nms.Connection
                     LOG.Debug("Committing NMS transaction on Session [" + session + "]");
                 }
                 session.Commit();
-                /** https://issues.apache.org/activemq/browse/AMQNET-93
-                   TODO - need to mirror JMS exception classes in NMS API.
-                   } catch (TransactionRolledBackException ex)
-                   {
-                 */
-
+                //Note that NMS does not have, TransactionRolledBackException
+                //See https://issues.apache.org/activemq/browse/AMQNET-93
             }
             catch (NMSException ex)
-            {
+            {                
                 throw new TransactionSystemException("Could not commit NMS transaction.", ex);
             }
         }
 
+        /// <summary>
+        /// Perform an actual rollback on the given transaction.
+        /// </summary>
+        /// <param name="status">The status representation of the transaction.</param>
+        /// <exception cref="Spring.Transaction.TransactionException">
+        /// In the case of system errors.
+        /// </exception>
         protected override void DoRollback(DefaultTransactionStatus status)
         {
             NmsTransactionObject txObject = (NmsTransactionObject)status.Transaction;
@@ -242,12 +316,33 @@ namespace Spring.Messaging.Nms.Connection
         }
 
 
+        /// <summary>
+        /// Set the given transaction rollback-only. Only called on rollback
+        /// if the current transaction takes part in an existing one.
+        /// </summary>
+        /// <param name="status">The status representation of the transaction.</param>
+        /// <exception cref="Spring.Transaction.TransactionException">
+        /// In the case of system errors.
+        /// </exception>
         protected override void DoSetRollbackOnly(DefaultTransactionStatus status)
         {
             NmsTransactionObject txObject = (NmsTransactionObject)status.Transaction;
             txObject.ResourceHolder.RollbackOnly = true;
         }
 
+        /// <summary>
+        /// Cleanup resources after transaction completion.
+        /// </summary>
+        /// <param name="transaction">Transaction object returned by
+        /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoGetTransaction"/>.</param>
+        /// <remarks>
+        /// <para>
+        /// Called after <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoCommit"/>
+        /// and
+        /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoRollback"/>
+        /// execution on any outcome.
+        /// </para>
+        /// </remarks>
         protected override void DoCleanupAfterCompletion(object transaction)
         {
             NmsTransactionObject txObject = (NmsTransactionObject)transaction;
@@ -256,6 +351,18 @@ namespace Spring.Messaging.Nms.Connection
             txObject.ResourceHolder.Clear();
         }
 
+        /// <summary>
+        /// Check if the given transaction object indicates an existing transaction
+        /// (that is, a transaction which has already started).
+        /// </summary>
+        /// <param name="transaction">Transaction object returned by
+        /// <see cref="Spring.Transaction.Support.AbstractPlatformTransactionManager.DoGetTransaction"/>.</param>
+        /// <returns>
+        /// True if there is an existing transaction.
+        /// </returns>
+        /// <exception cref="Spring.Transaction.TransactionException">
+        /// In the case of system errors.
+        /// </exception>
         protected override bool IsExistingTransaction(object transaction)
         {
             NmsTransactionObject txObject = transaction as NmsTransactionObject;

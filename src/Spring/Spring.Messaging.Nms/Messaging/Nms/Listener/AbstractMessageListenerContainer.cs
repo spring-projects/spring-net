@@ -20,6 +20,7 @@
 
 using System;
 using Common.Logging;
+using Spring.Messaging.Nms;
 using Spring.Messaging.Nms.Support;
 using Spring.Util;
 using Apache.NMS;
@@ -28,7 +29,7 @@ namespace Spring.Messaging.Nms.Listener
 {
     /// <summary>
     /// Abstract base class for message listener containers. Can either host
-    /// a standard NMS <see cref="IMessageListener"/> or a Spring-specific
+    /// a standard NMS MessageListener or a Spring-specific
     /// <see cref="ISessionAwareMessageListener"/>
     /// </summary>
     public abstract class AbstractMessageListenerContainer : AbstractNmsListeningContainer
@@ -61,6 +62,12 @@ namespace Spring.Messaging.Nms.Listener
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the destination to receive messages from. Will be <code>null</code>
+        /// if the configured destination is not an actual Destination type;
+        /// c.f. <see cref="DestinationName"/> when the destination is a String.
+        /// </summary>
+        /// <value>The destination.</value>
         public IDestination Destination
         {
             get
@@ -80,6 +87,12 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Gets or sets the name of the destination to receive messages from.
+	    /// Will be <code>null</code> if the configured destination is not a
+	    /// string  type; c.f. <see cref="Destination"/> when it is an actual Destination object.
+        /// </summary>
+        /// <value>The name of the destination.</value>
         public string DestinationName
         {
             get
@@ -95,6 +108,10 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Gets or sets the message selector.
+        /// </summary>
+        /// <value>The message selector expression (or <code>null</code> if none)..</value>
         public string MessageSelector
         {
             get { return messageSelector; }
@@ -108,7 +125,7 @@ namespace Spring.Messaging.Nms.Listener
         /// 
         /// <remarks>
         /// <para>
-        /// This can be either a standard NMS <see cref="IMessageListener"/> object or a 
+        /// This can be either a standard NMS MessageListener object or a 
         /// Spring <see cref="ISessionAwareMessageListener"/> object.
         /// </para>
         /// </remarks>
@@ -132,6 +149,19 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the subscription is durable.
+        /// </summary>
+        /// <remarks>
+        /// Set whether to make the subscription durable. The durable subscription name
+	    /// to be used can be specified through the "DurableSubscriptionName" property.
+	    /// <para>Default is "false". Set this to "true" to register a durable subscription,
+	    /// typically in combination with a "DurableSubscriptionName" value (unless
+	    /// your message listener class name is good enough as subscription name).
+	    /// </para>
+	    /// <para>Only makes sense when listening to a topic (pub-sub domain).</para>
+        /// </remarks>
+        /// <value><c>true</c> if the subscription is durable; otherwise, <c>false</c>.</value>
         public bool SubscriptionDurable
         {
             get { return subscriptionDurable; }
@@ -139,6 +169,18 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Gets or sets the name of the durable subscription to create.
+        /// </summary>
+        /// <remarks>
+        /// To be applied in case of a topic (pub-sub domain) with subscription durability activated.
+	    /// The durable subscription name needs to be unique within this client's
+	    /// client id. Default is the class name of the specified message listener.
+	    /// <para>Note: Only 1 concurrent consumer (which is the default of this
+	    /// message listener container) is allowed for each durable subscription.
+	    /// </para> 	   
+        /// </remarks>
+        /// <value>The name of the durable subscription.</value>
         public string DurableSubscriptionName
         {
             get
@@ -153,6 +195,11 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Gets or sets the exception listener to notify in case of a NMSException thrown
+	    /// by the registered message listener or the invocation infrastructure.
+        /// </summary>
+        /// <value>The exception listener.</value>
         public IExceptionListener ExceptionListener
         {
             get { return exceptionListener; }
@@ -160,6 +207,24 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to expose listener session to a registered
+        /// <see cref="ISessionAwareMessageListener"/> as well as to <see cref="NmsTemplate"/> calls.
+        /// </summary>
+        /// <remarks>
+	    /// Default is "true", reusing the listener's Session.
+	    /// Turn this off to expose a fresh Session fetched from the same
+	    /// underlying Connection instead, which might be necessary
+	    /// on some messaging providers.
+	    /// <para>Note that Sessions managed by an external transaction manager will
+	    /// always get exposed to <see cref="NmsTemplate"/>
+	    /// calls. So in terms of NmsTemplate exposure, this setting only affects
+	    /// locally transacted Sessions.
+	    /// </para>
+        /// </remarks>
+        /// <value>
+        /// 	<c>true</c> if expose listener session; otherwise, <c>false</c>.
+        /// </value>
         public bool ExposeListenerSession
         {
             get { return exposeListenerISession; }
@@ -196,18 +261,15 @@ namespace Spring.Messaging.Nms.Listener
             set { acceptMessagesWhileStopping = value; }
         }
 
-        public object LifecycleMonitor
-        {
-            get { return lifecycleMonitor; }
-        }
-
-
-
 
         #endregion
 
 
 
+        /// <summary>
+        /// Validate that the destination is not null and that if the subscription is durable, then we are not
+        /// using the Pub/Sub domain.
+        /// </summary>
         protected override void ValidateConfiguration()
         {
             if (this.destination == null)
@@ -284,7 +346,7 @@ namespace Spring.Messaging.Nms.Listener
         }
 
         /// <summary>
-        /// Invokes the specified listener: either as standard NMS IMessageListener
+        /// Invokes the specified listener: either as standard NMS MessageListener
         /// or (preferably) as Spring SessionAwareMessageListener.
         /// </summary>
         /// <param name="session">The session to operate on.</param>
@@ -384,15 +446,36 @@ namespace Spring.Messaging.Nms.Listener
             // Commit session or acknowledge message
             if (session.Transacted)
             {
-                if (SessionTransacted)
+                // Commit necessary - but avoid commit call is Session transaction is externally coordinated.
+                if (IsSessionLocallyTransacted(session))
                 {
                     NmsUtils.CommitIfNecessary(session);
                 }
             }
-            else if (ClientAcknowledge(session))
+            else if (IsClientAcknowledge(session))
             {
                 message.Acknowledge();
             }
+        }
+
+        /// <summary>
+        /// Determines whether the given Session is locally transacted, that is, whether
+        /// its transaction is managed by this listener container's Session handling
+        /// and not by an external transaction coordinator.
+        /// </summary>
+        /// <remarks>
+        /// The Session's own transacted flag will already have been checked
+        /// before. This method is about finding out whether the Session's transaction
+        /// is local or externally coordinated.
+        /// </remarks>
+        /// <param name="session">The session to check.</param>
+        /// <returns>
+        /// 	<c>true</c> if the is session locally transacted; otherwise, <c>false</c>.
+        /// </returns>
+        /// <see cref="NmsAccessor.SessionTransacted"/>
+        protected virtual bool IsSessionLocallyTransacted(ISession session)
+        {
+            return SessionTransacted;     
         }
 
 
@@ -403,7 +486,7 @@ namespace Spring.Messaging.Nms.Listener
         /// <exception cref="NMSException">In case of a rollback error</exception>
         protected virtual void RollbackIfNecessary(ISession session)
         {
-            if (session.Transacted && SessionTransacted)
+            if (session.Transacted && IsSessionLocallyTransacted(session))
             {
                 // Transacted session created by this container -> rollback
                 NmsUtils.RollbackIfNecessary(session);
@@ -419,7 +502,7 @@ namespace Spring.Messaging.Nms.Listener
         {
             try
             {
-                if (session.Transacted && SessionTransacted)
+                if (session.Transacted && IsSessionLocallyTransacted(session))
                 {
                     // Transacted session created by this container -> rollback
                     if (logger.IsDebugEnabled)
@@ -428,7 +511,7 @@ namespace Spring.Messaging.Nms.Listener
                     }
                     NmsUtils.RollbackIfNecessary(session);
                 }
-            } catch (NMSException ex2)
+            } catch (NMSException)
             {
                 logger.Error("Application exception overriden by rollback exception", ex);
                 throw;
@@ -487,12 +570,19 @@ namespace Spring.Messaging.Nms.Listener
         
         #endregion
 
-        protected virtual void CheckMessageListener(System.Object messageListener)
+        /// <summary>
+        /// Checks the message listener, throwing an exception
+	    /// if it does not correspond to a supported listener type.
+	    /// By default, only a standard JMS MessageListener object or a
+	    /// Spring <see cref="ISessionAwareMessageListener"/> object will be accepted.
+        /// </summary>
+        /// <param name="messageListener">The message listener.</param>
+        protected virtual void CheckMessageListener(object messageListener)
         {
             AssertUtils.ArgumentNotNull(messageListener, "IMessage Listener can not be null");
             if (!(messageListener is IMessageListener || messageListener is ISessionAwareMessageListener))
             {
-                throw new System.ArgumentException("messageListener needs to be of type [" + typeof(IMessageListener).FullName + "] or [" + typeof(ISessionAwareMessageListener).FullName + "]");
+                throw new ArgumentException("messageListener needs to be of type [" + typeof(IMessageListener).FullName + "] or [" + typeof(ISessionAwareMessageListener).FullName + "]");
             }
         }
     }

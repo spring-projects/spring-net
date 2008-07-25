@@ -31,25 +31,25 @@ namespace Spring.Messaging.Nms.Support.Converter
     /// <author>Mark Pollack (.NET)</author>
     public interface IMessageConverter
     {
-        /// <summary> Convert a .NET object to a NMS IMessage using the supplied session
+        /// <summary> Convert a .NET object to a NMS Message using the supplied session
         /// to create the message object.
         /// </summary>
         /// <param name="objectToConvert">the object to convert
         /// </param>
-        /// <param name="session">the ISession to use for creating a NMS IMessage
+        /// <param name="session">the Session to use for creating a NMS Message
         /// </param>
-        /// <returns> the NMS IMessage
+        /// <returns> the NMS Message
         /// </returns>
         /// <throws>NMSException if thrown by NMS API methods </throws>
-        /// <throws>IMessageConversionException in case of conversion failure </throws>
+        /// <throws>MessageConversionException in case of conversion failure </throws>
         IMessage ToMessage(object objectToConvert, ISession session);
 
-        /// <summary> Convert from a NMS IMessage to a .NET object.</summary>
+        /// <summary> Convert from a NMS Message to a .NET object.</summary>
         /// <param name="message">the message to convert
         /// </param>
         /// <returns> the converted .NET object
         /// </returns>
-        /// <throws>IMessageConversionException in case of conversion failure </throws>
+        /// <throws>MessageConversionException in case of conversion failure </throws>
         object FromMessage(IMessage message);
     }
 }

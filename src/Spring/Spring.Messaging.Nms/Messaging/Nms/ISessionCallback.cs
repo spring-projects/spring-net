@@ -23,7 +23,7 @@ using Apache.NMS;
 namespace Spring.Messaging.Nms
 {
     /// <summary> Callback for executing any number of operations on a provided
-    /// ISession
+    /// Session
     /// </summary>
     /// <remarks>
     /// <p>To be used with the NmsTemplate.Execute(ISessionCallback)}
@@ -35,11 +35,11 @@ namespace Spring.Messaging.Nms
     public interface ISessionCallback
     {
         /// <summary> Execute any number of operations against the supplied NMS
-        /// ISession, possibly returning a result.
+        /// Session, possibly returning a result.
         /// </summary>
-        /// <param name="session">the NMS <code>ISession</code>
+        /// <param name="session">the NMS <code>Session</code>
         /// </param>
-        /// <returns> a result object from working with the <code>ISession</code>, if any (so can be <code>null</code>) 
+        /// <returns> a result object from working with the <code>Session</code>, if any (so can be <code>null</code>) 
         /// </returns>
         /// <throws>NMSException if there is any problem </throws>
         object DoInNms(ISession session);

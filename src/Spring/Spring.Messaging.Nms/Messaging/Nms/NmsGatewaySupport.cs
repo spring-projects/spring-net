@@ -29,9 +29,9 @@ namespace Spring.Messaging.Nms
     /// Convenient super class for application classes that need NMS access.
     /// </summary>
     /// <remarks>
-    ///  Requires a IConnectionFactory or a NmsTemplate instance to be set.
-    ///  It will create its own NmsTemplate if a IConnectionFactory is passed in.
-    ///  A custom NmsTemplate instance can be created for a given IConnectionFactory
+    ///  Requires a ConnectionFactory or a NmsTemplate instance to be set.
+    ///  It will create its own NmsTemplate if a ConnectionFactory is passed in.
+    ///  A custom NmsTemplate instance can be created for a given ConnectionFactory
     ///  through overriding the <code>createNmsTemplate</code> method.
     ///
     /// </remarks>
@@ -40,7 +40,7 @@ namespace Spring.Messaging.Nms
 
         #region Logging
 
-        protected readonly ILog logger = LogManager.GetLogger(typeof(NmsGatewaySupport));
+        private readonly ILog logger = LogManager.GetLogger(typeof(NmsGatewaySupport));
 
         #endregion
         
@@ -59,7 +59,7 @@ namespace Spring.Messaging.Nms
 
         /// <summary>
         /// Gets or sets he NMS connection factory to be used by the gateway.
-	    /// Will automatically create a NmsTemplate for the given IConnectionFactory.
+	    /// Will automatically create a NmsTemplate for the given ConnectionFactory.
         /// </summary>
         /// <value>The connection factory.</value>
         public IConnectionFactory ConnectionFactory
@@ -75,9 +75,9 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary>
-        /// Creates a NmsTemplate for the given IConnectionFactory.
+        /// Creates a NmsTemplate for the given ConnectionFactory.
         /// </summary>
-	    /// <remarks>Only invoked if populating the gateway with a IConnectionFactory reference.
+	    /// <remarks>Only invoked if populating the gateway with a ConnectionFactory reference.
 	    /// Can be overridden in subclasses to provide a different NmsTemplate instance
 	    /// </remarks>
 	    ///
@@ -88,6 +88,9 @@ namespace Spring.Messaging.Nms
             return new NmsTemplate(connectionFactory);
         }
 
+        /// <summary>
+        /// Ensures that the JmsTemplate is specified and calls <see cref="InitGateway"/>.
+        /// </summary>
         public void AfterPropertiesSet()
         {
             if (jmsTemplate == null)

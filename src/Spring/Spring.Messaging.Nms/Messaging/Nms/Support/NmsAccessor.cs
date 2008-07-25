@@ -25,14 +25,12 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Support
 {
-    /// <summary> Base class for NmsTemplate and other
-    /// NMS-accessing gateway helpers</summary>
-    /// <remarks>It defines common properties like the
-    /// IConnectionFactory}. The subclass
-    /// NmsIDestinationAccessor adds
-    /// further, destination-related properties.
-    ///
+    /// <summary> Base class for NmsTemplate and other NMS-accessing gateway helpers</summary>
+    /// <remarks>It defines common properties like the ConnectionFactory}. The subclass
+    /// NmsIDestinationAccessor adds further, destination-related properties.
+    /// <para>
     /// Not intended to be used directly. See NmsTemplate.
+    /// </para>
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
@@ -47,7 +45,7 @@ namespace Spring.Messaging.Nms.Support
         #region Fields
         
         private IConnectionFactory connectionFactory;
-        private bool sessionTransacted = false;
+
         private AcknowledgementMode sessionAcknowledgeMode = AcknowledgementMode.AutoAcknowledge;
 
         #endregion
@@ -56,7 +54,7 @@ namespace Spring.Messaging.Nms.Support
 
 
         /// <summary>
-        /// Gets or sets the connection factory to use for obtaining NMS IConnections.
+        /// Gets or sets the connection factory to use for obtaining NMS Connections.
         /// </summary>
         /// <value>The connection factory.</value>
         virtual public IConnectionFactory ConnectionFactory
@@ -78,8 +76,7 @@ namespace Spring.Messaging.Nms.Support
         /// </summary>
         /// <remarks>
         /// Set the NMS acknowledgement mode that is used when creating a NMS
-        /// ISession to send a message. The default is ISession.AUTO_ACKNOWLEDGE.
-        /// <p>Vendor-specific extensions to the acknowledgment mode can be set here as well.</p>
+        /// Session to send a message. The default is AUTO_ACKNOWLEDGE.
         /// </remarks>
         /// <value>The session acknowledge mode.</value>
         virtual public AcknowledgementMode SessionAcknowledgeMode
@@ -112,7 +109,10 @@ namespace Spring.Messaging.Nms.Support
         /// </remarks>
         public bool SessionTransacted
         {
-            get { return SessionAcknowledgeMode == AcknowledgementMode.Transactional; }
+            get
+            {
+                return SessionAcknowledgeMode == AcknowledgementMode.Transactional;
+            }
             set
             {
                 if (value)
@@ -125,6 +125,9 @@ namespace Spring.Messaging.Nms.Support
         #endregion
         
         
+        /// <summary>
+        /// Verify that ConnectionFactory property has been set.
+        /// </summary>
         public virtual void AfterPropertiesSet()
         {
             if (ConnectionFactory == null)
@@ -142,6 +145,11 @@ namespace Spring.Messaging.Nms.Support
             return ConnectionFactory.CreateConnection();
         }
 
+        /// <summary>
+        /// Creates the session for the given Connection
+        /// </summary>
+        /// <param name="con">The connection to create a session for.</param>
+        /// <returns>The new session</returns>
         protected virtual ISession CreateSession(IConnection con)
         {
             return con.CreateSession(SessionAcknowledgeMode);
@@ -150,9 +158,9 @@ namespace Spring.Messaging.Nms.Support
         /// <summary>
         /// Returns whether the ISession is in client acknowledgement mode.
         /// </summary>
-        /// <param name="session">The session.</param>
-        /// <returns>true ifin client ack mode, false otherwise</returns>
-        protected virtual bool ClientAcknowledge(ISession session)
+        /// <param name="session">The session to check.</param>
+        /// <returns>true if in client ack mode, false otherwise</returns>
+        protected virtual bool IsClientAcknowledge(ISession session)
         {
             return (session.AcknowledgementMode == AcknowledgementMode.ClientAcknowledge);
         }
