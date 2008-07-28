@@ -45,7 +45,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         /// <remarks>Checks <see cref="ISmartConnectionFactory.ShouldStop"/>, if available.
         /// This is essentially a more sophisticated version of 
-        /// <see cref="NmsUtils.CloseConnection(IConnection, bool)"/>
+        /// <see cref="MessagingUtils.CloseConnection(IConnection, bool)"/>
         /// </remarks>
         /// <param name="connection">The connection to release. (if this is <code>null</code>, the call will be ignored)</param>
         /// <param name="cf">The ConnectionFactory that the Connection was obtained from. (may be <code>null</code>)</param>
@@ -93,7 +93,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 return false;
             }
-            NmsResourceHolder resourceHolder = (NmsResourceHolder) TransactionSynchronizationManager.GetResource(cf);
+            MessageResourceHolder resourceHolder = (MessageResourceHolder) TransactionSynchronizationManager.GetResource(cf);
             return (resourceHolder != null && resourceHolder.ContainsSession(session));
         }
 
@@ -140,8 +140,8 @@ namespace Spring.Messaging.Nms.Connections
             AssertUtils.ArgumentNotNull(resourceKey, "Resource key must not be null");
             AssertUtils.ArgumentNotNull(resourceKey, "ResourceFactory must not be null");
 
-            NmsResourceHolder resourceHolder =
-                (NmsResourceHolder)TransactionSynchronizationManager.GetResource(resourceKey);
+            MessageResourceHolder resourceHolder =
+                (MessageResourceHolder)TransactionSynchronizationManager.GetResource(resourceKey);
             if (resourceHolder != null)
             {
                 ISession rhSession = resourceFactory.GetSession(resourceHolder);
@@ -162,10 +162,10 @@ namespace Spring.Messaging.Nms.Connections
             {
                 return null;
             }
-            NmsResourceHolder resourceHolderToUse = resourceHolder;
+            MessageResourceHolder resourceHolderToUse = resourceHolder;
             if (resourceHolderToUse == null)
             {
-                resourceHolderToUse = new NmsResourceHolder();
+                resourceHolderToUse = new MessageResourceHolder();
             }
 
             IConnection con = resourceFactory.GetConnection(resourceHolderToUse);
@@ -214,7 +214,7 @@ namespace Spring.Messaging.Nms.Connections
             if (resourceHolderToUse != resourceHolder)
             {
                 TransactionSynchronizationManager.RegisterSynchronization(
-                    new NmsResourceSynchronization(resourceKey, resourceHolderToUse,
+                    new MessageResourceSynchronization(resourceKey, resourceHolderToUse,
                                                    resourceFactory.SynchedLocalTransactionAllowed));
                 resourceHolderToUse.SynchronizedWithTransaction = true;
                 TransactionSynchronizationManager.BindResource(resourceKey, resourceHolderToUse);
@@ -243,12 +243,12 @@ namespace Spring.Messaging.Nms.Connections
                 this.synchedLocalTransactionAllowed = synchedLocalTransactionAllowed;
             }
 
-            public virtual ISession GetSession(NmsResourceHolder holder)
+            public virtual ISession GetSession(MessageResourceHolder holder)
             {
                 return holder.GetSession(typeof(ISession), existingCon);
             }
 
-            public virtual IConnection GetConnection(NmsResourceHolder holder)
+            public virtual IConnection GetConnection(MessageResourceHolder holder)
             {
                 return (existingCon != null ? existingCon : holder.GetConnection());
             }
@@ -285,29 +285,29 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public interface ResourceFactory
         {
-            /// <summary> Fetch an appropriate Session from the given NmsResourceHolder.</summary>
-            /// <param name="holder">the NmsResourceHolder
+            /// <summary> Fetch an appropriate Session from the given MessageResourceHolder.</summary>
+            /// <param name="holder">the MessageResourceHolder
             /// </param>
             /// <returns> an appropriate Session fetched from the holder,
             /// or <code>null</code> if none found
             /// </returns>
-            ISession GetSession(NmsResourceHolder holder);
+            ISession GetSession(MessageResourceHolder holder);
 
-            /// <summary> Fetch an appropriate Connection from the given NmsResourceHolder.</summary>
-            /// <param name="holder">the NmsResourceHolder
+            /// <summary> Fetch an appropriate Connection from the given MessageResourceHolder.</summary>
+            /// <param name="holder">the MessageResourceHolder
             /// </param>
             /// <returns> an appropriate Connection fetched from the holder,
             /// or <code>null</code> if none found
             /// </returns>
-            IConnection GetConnection(NmsResourceHolder holder);
+            IConnection GetConnection(MessageResourceHolder holder);
 
-            /// <summary> Create a new NMS Connection for registration with a NmsResourceHolder.</summary>
+            /// <summary> Create a new NMS Connection for registration with a MessageResourceHolder.</summary>
             /// <returns> the new NMS Connection
             /// </returns>
             /// <throws>NMSException if thrown by NMS API methods </throws>
             IConnection CreateConnection();
 
-            /// <summary> Create a new NMS ISession for registration with a NmsResourceHolder.</summary>
+            /// <summary> Create a new NMS ISession for registration with a MessageResourceHolder.</summary>
             /// <param name="con">the NMS Connection to create a ISession for
             /// </param>
             /// <returns> the new NMS Session
@@ -329,17 +329,17 @@ namespace Spring.Messaging.Nms.Connections
 
         /// <summary> Callback for resource cleanup at the end of a non-native NMS transaction
         /// </summary>
-        private class NmsResourceSynchronization : TransactionSynchronizationAdapter
+        private class MessageResourceSynchronization : TransactionSynchronizationAdapter
         {
             private object resourceKey;
 
-            private NmsResourceHolder resourceHolder;
+            private MessageResourceHolder resourceHolder;
 
             private bool transacted;
 
             private bool holderActive = true;
 
-            public NmsResourceSynchronization(object resourceKey, NmsResourceHolder resourceHolder, bool transacted)
+            public MessageResourceSynchronization(object resourceKey, MessageResourceHolder resourceHolder, bool transacted)
             {
                 this.resourceKey = resourceKey;
                 this.resourceHolder = resourceHolder;

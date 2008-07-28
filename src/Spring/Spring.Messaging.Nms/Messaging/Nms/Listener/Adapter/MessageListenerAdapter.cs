@@ -457,7 +457,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             }
             finally
             {
-                NmsUtils.CloseMessageProducer(producer);
+                MessagingUtils.CloseMessageProducer(producer);
             }
         }
 

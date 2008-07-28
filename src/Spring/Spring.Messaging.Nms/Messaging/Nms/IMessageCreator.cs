@@ -25,7 +25,7 @@ namespace Spring.Messaging.Nms
     /// <summary> Creates a NMS message given a Session</summary>
     /// <remarks>
     /// <p>The Session typically is provided by an instance
-    /// of the NmsTemplate class.</p>
+    /// of the MessageTemplate class.</p>
     /// </remarks>
     /// <author>Mark Pollack</author>
     public interface IMessageCreator

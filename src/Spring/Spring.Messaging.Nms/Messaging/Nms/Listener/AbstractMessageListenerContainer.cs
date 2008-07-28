@@ -32,7 +32,7 @@ namespace Spring.Messaging.Nms.Listener
     /// a standard NMS MessageListener or a Spring-specific
     /// <see cref="ISessionAwareMessageListener"/>
     /// </summary>
-    public abstract class AbstractMessageListenerContainer : AbstractNmsListeningContainer
+    public abstract class AbstractMessageListenerContainer : AbstractListenerContainer
     {
         #region Logging
 
@@ -209,7 +209,7 @@ namespace Spring.Messaging.Nms.Listener
 
         /// <summary>
         /// Gets or sets a value indicating whether to expose listener session to a registered
-        /// <see cref="ISessionAwareMessageListener"/> as well as to <see cref="NmsTemplate"/> calls.
+        /// <see cref="ISessionAwareMessageListener"/> as well as to <see cref="MessageTemplate"/> calls.
         /// </summary>
         /// <remarks>
 	    /// Default is "true", reusing the listener's Session.
@@ -217,8 +217,8 @@ namespace Spring.Messaging.Nms.Listener
 	    /// underlying Connection instead, which might be necessary
 	    /// on some messaging providers.
 	    /// <para>Note that Sessions managed by an external transaction manager will
-	    /// always get exposed to <see cref="NmsTemplate"/>
-	    /// calls. So in terms of NmsTemplate exposure, this setting only affects
+	    /// always get exposed to <see cref="MessageTemplate"/>
+	    /// calls. So in terms of MessageTemplate exposure, this setting only affects
 	    /// locally transacted Sessions.
 	    /// </para>
         /// </remarks>
@@ -412,13 +412,13 @@ namespace Spring.Messaging.Nms.Listener
                     if (sessionToUse.Transacted && SessionTransacted)
                     {
                         // Transacted session created by this container -> commit.
-                        NmsUtils.CommitIfNecessary(sessionToUse);
+                        MessagingUtils.CommitIfNecessary(sessionToUse);
                     }                        
                 }
             } finally
             {
-                NmsUtils.CloseSession(sessionToClose);
-                NmsUtils.CloseConnection(conToClose);
+                MessagingUtils.CloseSession(sessionToClose);
+                MessagingUtils.CloseConnection(conToClose);
             }
         }
 
@@ -449,7 +449,7 @@ namespace Spring.Messaging.Nms.Listener
                 // Commit necessary - but avoid commit call is Session transaction is externally coordinated.
                 if (IsSessionLocallyTransacted(session))
                 {
-                    NmsUtils.CommitIfNecessary(session);
+                    MessagingUtils.CommitIfNecessary(session);
                 }
             }
             else if (IsClientAcknowledge(session))
@@ -472,7 +472,7 @@ namespace Spring.Messaging.Nms.Listener
         /// <returns>
         /// 	<c>true</c> if the is session locally transacted; otherwise, <c>false</c>.
         /// </returns>
-        /// <see cref="NmsAccessor.SessionTransacted"/>
+        /// <see cref="MessagingAccessor.SessionTransacted"/>
         protected virtual bool IsSessionLocallyTransacted(ISession session)
         {
             return SessionTransacted;     
@@ -489,7 +489,7 @@ namespace Spring.Messaging.Nms.Listener
             if (session.Transacted && IsSessionLocallyTransacted(session))
             {
                 // Transacted session created by this container -> rollback
-                NmsUtils.RollbackIfNecessary(session);
+                MessagingUtils.RollbackIfNecessary(session);
             }
         }
         /// <summary>
@@ -509,7 +509,7 @@ namespace Spring.Messaging.Nms.Listener
                     {
                         logger.Debug("Initiating transaction rollback on application exception");
                     }
-                    NmsUtils.RollbackIfNecessary(session);
+                    MessagingUtils.RollbackIfNecessary(session);
                 }
             } catch (NMSException)
             {

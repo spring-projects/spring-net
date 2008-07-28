@@ -236,12 +236,12 @@ namespace Spring.Messaging.Nms.Listener
             logger.Debug("Closing NMS MessageConsumers");
             foreach (IMessageConsumer messageConsumer in consumers)
             {
-                NmsUtils.CloseMessageConsumer(messageConsumer);
+                MessagingUtils.CloseMessageConsumer(messageConsumer);
             }
             logger.Debug("Closing NMS Sessions");
             foreach (ISession session in sessions)
             {
-                NmsUtils.CloseSession(session);
+                MessagingUtils.CloseSession(session);
             }
             consumers = null;
             sessions = null;
@@ -295,7 +295,7 @@ namespace Spring.Messaging.Nms.Listener
             if (exposeResource)
             {
                 TransactionSynchronizationManager.BindResource(
-                    container.ConnectionFactory, new LocallyExposedNmsResourceHolder(session));
+                    container.ConnectionFactory, new LocallyExposedMessageResourceHolder(session));
             }
             try
             {

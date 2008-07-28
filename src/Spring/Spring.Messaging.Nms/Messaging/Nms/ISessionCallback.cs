@@ -26,11 +26,11 @@ namespace Spring.Messaging.Nms
     /// Session
     /// </summary>
     /// <remarks>
-    /// <p>To be used with the NmsTemplate.Execute(ISessionCallback)}
+    /// <p>To be used with the MessageTemplate.Execute(ISessionCallback)}
     /// method, often implemented as an anonymous inner class.</p>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <seealso cref="NmsTemplate.Execute(ISessionCallback,bool)">
+    /// <seealso cref="MessageTemplate.Execute(ISessionCallback,bool)">
     /// </seealso>
     public interface ISessionCallback
     {

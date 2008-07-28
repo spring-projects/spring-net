@@ -38,7 +38,7 @@ namespace Spring.Messaging.Nms.Connections
     /// You can either pass in a specific Connection directly or let this
     /// factory lazily create a Connection via a given target ConnectionFactory.
     /// <para>Useful in order to keep using the same Connection for multiple
-    /// <see cref="NmsTemplate"/> calls, without having a pooling ConnectionFactory 
+    /// <see cref="MessageTemplate"/> calls, without having a pooling ConnectionFactory 
     /// underneath. This may span any number of transactions, even concurrently executing transactions.
     /// </para>
     /// <para>

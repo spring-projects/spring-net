@@ -26,7 +26,7 @@ using Apache.NMS;
 namespace Spring.Messaging.Nms.Support.Converter
 {
     /// <summary> A simple message converter that can handle ITextMessages, IBytesMessages,
-    /// IMapMessages, and IObjectMessages. Used as default by NmsTemplate, for
+    /// IMapMessages, and IObjectMessages. Used as default by MessageTemplate, for
     /// <code>ConvertAndSend</code> and <code>ReceiveAndConvert</code> operations.
     ///
     /// <p>Converts a String to a NMS ITextMessage, a byte array to a NMS IBytesMessage,

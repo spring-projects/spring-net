@@ -24,18 +24,18 @@ using Spring.Messaging.Nms.Connections;
 namespace Spring.Messaging.Nms.Listener
 {
     /// <summary>
-    /// NmsResourceHolder marker subclass that indicates local exposure,
+    /// MessageResourceHolder marker subclass that indicates local exposure,
     /// i.e. that does not indicate an externally managed transaction.
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class LocallyExposedNmsResourceHolder : NmsResourceHolder
+    public class LocallyExposedMessageResourceHolder : MessageResourceHolder
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocallyExposedNmsResourceHolder"/> class.
+        /// Initializes a new instance of the <see cref="LocallyExposedMessageResourceHolder"/> class.
         /// </summary>
         /// <param name="session">The session.</param>
-        public LocallyExposedNmsResourceHolder(ISession session) : base(session)
+        public LocallyExposedMessageResourceHolder(ISession session) : base(session)
         {
             
         }

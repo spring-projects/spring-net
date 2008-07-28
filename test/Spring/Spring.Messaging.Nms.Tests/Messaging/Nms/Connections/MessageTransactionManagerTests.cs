@@ -62,9 +62,9 @@ namespace Spring.Messaging.Nms.Connections
 
             mocks.ReplayAll();
 
-            NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
+            MessageTransactionManager tm = new MessageTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
-            NmsTemplate nt = new NmsTemplate(connectionFactory);
+            MessageTemplate nt = new MessageTemplate(connectionFactory);
             nt.Execute(new AssertSessionCallback(session));
             tm.Commit(ts);
 
@@ -83,9 +83,9 @@ namespace Spring.Messaging.Nms.Connections
 
             mocks.ReplayAll();
 
-            NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
+            MessageTransactionManager tm = new MessageTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
-            NmsTemplate nt = new NmsTemplate(connectionFactory);
+            MessageTemplate nt = new MessageTemplate(connectionFactory);
             nt.Execute(new AssertSessionCallback(session));
             tm.Rollback(ts);
 
@@ -111,9 +111,9 @@ namespace Spring.Messaging.Nms.Connections
             mocks.ReplayAll();
 
 
-            NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
+            MessageTransactionManager tm = new MessageTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
-            NmsTemplate nt = new NmsTemplate(connectionFactory);
+            MessageTemplate nt = new MessageTemplate(connectionFactory);
             nt.Execute(new AssertSessionCallback(session));
 
             TransactionTemplate tt = new TransactionTemplate(tm);
@@ -143,9 +143,9 @@ namespace Spring.Messaging.Nms.Connections
 
             mocks.ReplayAll();
 
-            NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
+            MessageTransactionManager tm = new MessageTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
-            NmsTemplate nt = new NmsTemplate(connectionFactory);
+            MessageTemplate nt = new MessageTemplate(connectionFactory);
             nt.Execute(new AssertSessionCallback(session));
 
             TransactionTemplate tt = new TransactionTemplate(tm);
@@ -192,9 +192,9 @@ namespace Spring.Messaging.Nms.Connections
 
             mocks.ReplayAll();
 
-            NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
+            MessageTransactionManager tm = new MessageTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
-            NmsTemplate nt = new NmsTemplate(connectionFactory);
+            MessageTemplate nt = new MessageTemplate(connectionFactory);
             nt.Execute(new AssertSessionCallback(session));
 
             TransactionTemplate tt = new TransactionTemplate(tm);
@@ -241,9 +241,9 @@ namespace Spring.Messaging.Nms.Connections
 
             mocks.ReplayAll();
 
-            NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
+            MessageTransactionManager tm = new MessageTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
-            NmsTemplate nt = new NmsTemplate(connectionFactory);
+            MessageTemplate nt = new MessageTemplate(connectionFactory);
 
 
             TransactionTemplate tt = new TransactionTemplate(tm);

@@ -29,29 +29,29 @@ namespace Spring.Messaging.Nms
     /// Convenient super class for application classes that need NMS access.
     /// </summary>
     /// <remarks>
-    ///  Requires a ConnectionFactory or a NmsTemplate instance to be set.
-    ///  It will create its own NmsTemplate if a ConnectionFactory is passed in.
-    ///  A custom NmsTemplate instance can be created for a given ConnectionFactory
+    ///  Requires a ConnectionFactory or a MessageTemplate instance to be set.
+    ///  It will create its own MessageTemplate if a ConnectionFactory is passed in.
+    ///  A custom MessageTemplate instance can be created for a given ConnectionFactory
     ///  through overriding the <code>createNmsTemplate</code> method.
     ///
     /// </remarks>
-    public class NmsGatewaySupport : IInitializingObject
+    public class MessageGatewaySupport : IInitializingObject
     {
 
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(NmsGatewaySupport));
+        private readonly ILog logger = LogManager.GetLogger(typeof(MessageGatewaySupport));
 
         #endregion
         
-        private NmsTemplate jmsTemplate;
+        private MessageTemplate jmsTemplate;
 
 
         /// <summary>
         /// Gets or sets the NMS template for the gateway.
         /// </summary>
         /// <value>The NMS template.</value>
-        public NmsTemplate NmsTemplate
+        public MessageTemplate MessageTemplate
         {
             get { return jmsTemplate; }
             set { jmsTemplate = value; }
@@ -59,7 +59,7 @@ namespace Spring.Messaging.Nms
 
         /// <summary>
         /// Gets or sets he NMS connection factory to be used by the gateway.
-	    /// Will automatically create a NmsTemplate for the given ConnectionFactory.
+	    /// Will automatically create a MessageTemplate for the given ConnectionFactory.
         /// </summary>
         /// <value>The connection factory.</value>
         public IConnectionFactory ConnectionFactory
@@ -75,17 +75,17 @@ namespace Spring.Messaging.Nms
         }
 
         /// <summary>
-        /// Creates a NmsTemplate for the given ConnectionFactory.
+        /// Creates a MessageTemplate for the given ConnectionFactory.
         /// </summary>
 	    /// <remarks>Only invoked if populating the gateway with a ConnectionFactory reference.
-	    /// Can be overridden in subclasses to provide a different NmsTemplate instance
+	    /// Can be overridden in subclasses to provide a different MessageTemplate instance
 	    /// </remarks>
 	    ///
 	    /// <param name="connectionFactory">The connection factory.</param>
         /// <returns></returns>
-        protected virtual NmsTemplate CreateNmsTemplate(IConnectionFactory connectionFactory)
+        protected virtual MessageTemplate CreateNmsTemplate(IConnectionFactory connectionFactory)
         {
-            return new NmsTemplate(connectionFactory);
+            return new MessageTemplate(connectionFactory);
         }
 
         /// <summary>

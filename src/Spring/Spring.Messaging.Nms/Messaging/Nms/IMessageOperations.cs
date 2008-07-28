@@ -25,10 +25,10 @@ namespace Spring.Messaging.Nms
     /// <summary>Specifies a basic set of NMS operations.
 	/// </summary>
 	/// <remarks>
-	/// <p>Implemented by NmsTemplate. Not often used but a useful option
+	/// <p>Implemented by MessageTemplate. Not often used but a useful option
 	/// to enhance testability, as it can easily be mocked or stubbed.</p>
 	/// 
-	/// <p>Provides <code>NmsTemplate's</code> <code>send(..)</code> and
+	/// <p>Provides <code>MessageTemplate's</code> <code>send(..)</code> and
 	/// <code>receive(..)</code> methods that mirror various NMS API methods.
 	/// See the NMS specification and NMS API docs for details on those methods.
 	/// </p>
@@ -36,7 +36,7 @@ namespace Spring.Messaging.Nms
 	/// <author>Mark Pollack</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
-    public interface INmsOperations
+    public interface IMessageOperations
     {
         /// <summary> Execute the action specified by the given action object within
 		/// a NMS Session.

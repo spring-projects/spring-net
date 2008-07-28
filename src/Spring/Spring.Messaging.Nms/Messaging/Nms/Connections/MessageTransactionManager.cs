@@ -23,6 +23,7 @@ using System;
 using System.Data;
 using Apache.NMS;
 using Common.Logging;
+using Spring.Messaging.Nms;
 using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
@@ -39,7 +40,7 @@ namespace Spring.Messaging.Nms.Connections
     /// <para>
     /// Application code is required to retrieve the transactional Session via
     /// <see cref="ConnectionFactoryUtils.GetTransactionalSession"/>.  Spring's
-    /// <see cref="NmsTemplate"/> will autodetect a thread-bound Session and 
+    /// <see cref="MessageTemplate"/> will autodetect a thread-bound Session and 
     /// automatically participate in it.
     /// </para>
     /// <para>
@@ -57,24 +58,24 @@ namespace Spring.Messaging.Nms.Connections
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class NmsTransactionManager : AbstractPlatformTransactionManager, 
+    public class MessageTransactionManager : AbstractPlatformTransactionManager, 
         IResourceTransactionManager, IInitializingObject
     {
 
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(NmsTransactionManager));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(MessageTransactionManager));
 
         #endregion 
 
         private IConnectionFactory connectionFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NmsTransactionManager"/> class.
+        /// Initializes a new instance of the <see cref="MessageTransactionManager"/> class.
         /// </summary>
         /// <remarks>
         /// The ConnectionFactory has to be set before using the instance. 
-        /// This constructor can be used to prepare a NmsTemplate via a ApplicationContext,
+        /// This constructor can be used to prepare a MessageTemplate via a ApplicationContext,
         /// typically setting the ConnectionFactory via ConnectionFactory property.
         /// <para>
         /// Turns off transaction synchronization by default, as this manager might
@@ -83,17 +84,17 @@ namespace Spring.Messaging.Nms.Connections
 	    /// Only one manager is allowed to drive synchronization at any point of time.
         /// </para>
         /// </remarks>
-        public NmsTransactionManager()
+        public MessageTransactionManager()
         {
             TransactionSynchronization = TransactionSynchronizationState.Never;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NmsTransactionManager"/> class
+        /// Initializes a new instance of the <see cref="MessageTransactionManager"/> class
         /// given a ConnectionFactory.
         /// </summary>
         /// <param name="connectionFactory">The connection factory to obtain connections from.</param>
-        public NmsTransactionManager(IConnectionFactory connectionFactory) : this()
+        public MessageTransactionManager(IConnectionFactory connectionFactory) : this()
         {
             ConnectionFactory = connectionFactory;
             AfterPropertiesSet();
@@ -145,15 +146,15 @@ namespace Spring.Messaging.Nms.Connections
 
 
         /// <summary>
-        /// Get the NmsTransactionObject.
+        /// Get the MessageTransactionObject.
         /// </summary>
-        /// <returns>he NmsTransactionObject.</returns>
+        /// <returns>he MessageTransactionObject.</returns>
         protected override object DoGetTransaction()
         {
-            NmsTransactionObject txObject = new NmsTransactionObject();
+            MessageTransactionObject txObject = new MessageTransactionObject();
 
             txObject.ResourceHolder =
-                (NmsResourceHolder) TransactionSynchronizationManager.GetResource(ConnectionFactory);
+                (MessageResourceHolder) TransactionSynchronizationManager.GetResource(ConnectionFactory);
             return txObject;
         }
 
@@ -179,7 +180,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 throw new InvalidIsolationLevelException("NMS does not support an isoliation level concept");
             }
-            NmsTransactionObject txObject = (NmsTransactionObject) transaction;
+            MessageTransactionObject txObject = (MessageTransactionObject) transaction;
             IConnection con = null;
             ISession session = null;
             try
@@ -190,7 +191,7 @@ namespace Spring.Messaging.Nms.Connections
                 {
                     log.Debug("Created NMS transaction on Session [" + session + "] from Connection [" + con + "]");
                 }
-                txObject.ResourceHolder = new NmsResourceHolder(ConnectionFactory, con, session);
+                txObject.ResourceHolder = new MessageResourceHolder(ConnectionFactory, con, session);
                 txObject.ResourceHolder.SynchronizedWithTransaction = true;
                 int timeout = DetermineTimeout(definition);
                 if (timeout != DefaultTransactionDefinition.TIMEOUT_DEFAULT)
@@ -240,7 +241,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </exception>
         protected override object DoSuspend(object transaction)
         {
-            NmsTransactionObject txObject = (NmsTransactionObject) transaction;
+            MessageTransactionObject txObject = (MessageTransactionObject) transaction;
             txObject.ResourceHolder = null;
             return TransactionSynchronizationManager.UnbindResource(ConnectionFactory);
         }
@@ -259,7 +260,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </exception>
         protected override void DoResume(object transaction, object suspendedResources)
         {
-            NmsResourceHolder conHolder = (NmsResourceHolder) suspendedResources;
+            MessageResourceHolder conHolder = (MessageResourceHolder) suspendedResources;
             TransactionSynchronizationManager.BindResource(ConnectionFactory, conHolder);
         }
 
@@ -272,7 +273,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </exception>
         protected override void DoCommit(DefaultTransactionStatus status)
         {
-            NmsTransactionObject txObject = (NmsTransactionObject)status.Transaction;
+            MessageTransactionObject txObject = (MessageTransactionObject)status.Transaction;
             ISession session = txObject.ResourceHolder.GetSession();
             try
             {
@@ -299,7 +300,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </exception>
         protected override void DoRollback(DefaultTransactionStatus status)
         {
-            NmsTransactionObject txObject = (NmsTransactionObject)status.Transaction;
+            MessageTransactionObject txObject = (MessageTransactionObject)status.Transaction;
             ISession session = txObject.ResourceHolder.GetSession();
             try
             {
@@ -326,7 +327,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </exception>
         protected override void DoSetRollbackOnly(DefaultTransactionStatus status)
         {
-            NmsTransactionObject txObject = (NmsTransactionObject)status.Transaction;
+            MessageTransactionObject txObject = (MessageTransactionObject)status.Transaction;
             txObject.ResourceHolder.RollbackOnly = true;
         }
 
@@ -345,7 +346,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </remarks>
         protected override void DoCleanupAfterCompletion(object transaction)
         {
-            NmsTransactionObject txObject = (NmsTransactionObject)transaction;
+            MessageTransactionObject txObject = (MessageTransactionObject)transaction;
             TransactionSynchronizationManager.UnbindResource(ConnectionFactory);
             txObject.ResourceHolder.CloseAll();
             txObject.ResourceHolder.Clear();
@@ -365,7 +366,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </exception>
         protected override bool IsExistingTransaction(object transaction)
         {
-            NmsTransactionObject txObject = transaction as NmsTransactionObject;
+            MessageTransactionObject txObject = transaction as MessageTransactionObject;
             if (txObject != null)
             {
                 return txObject.ResourceHolder != null;
@@ -396,15 +397,15 @@ namespace Spring.Messaging.Nms.Connections
 
 
         /// <summary>
-        /// NMS Transaction object, representing a NmsResourceHolder.
-        /// Used as transaction object by NmsTransactionManager
+        /// NMS Transaction object, representing a MessageResourceHolder.
+        /// Used as transaction object by MessageTransactionManager
         /// </summary>
-        internal class NmsTransactionObject : ISmartTransactionObject
+        internal class MessageTransactionObject : ISmartTransactionObject
         {
-            private NmsResourceHolder resourceHolder;
+            private MessageResourceHolder resourceHolder;
 
 
-            public NmsResourceHolder ResourceHolder
+            public MessageResourceHolder ResourceHolder
             {
                 get { return resourceHolder; }
                 set { resourceHolder = value; }

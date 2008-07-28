@@ -33,7 +33,7 @@ namespace Spring.Messaging.Nms.Listener
     /// Common base class for all containers which need to implement listening
     /// based on a Connection (either shared or freshly obtained for each attempt).
     /// Inherits basic Connection and Session configuration handling from the
-    /// <see cref="NmsAccessor"/> base class.
+    /// <see cref="MessagingAccessor"/> base class.
     /// </summary>
     /// <para>
     /// This class provides basic lifecycle management, in particular management
@@ -45,11 +45,11 @@ namespace Spring.Messaging.Nms.Listener
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public abstract class AbstractNmsListeningContainer : NmsDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
+    public abstract class AbstractListenerContainer : MessageDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(AbstractNmsListeningContainer));
+        private readonly ILog logger = LogManager.GetLogger(typeof(AbstractListenerContainer));
 
         #endregion
 
@@ -439,7 +439,7 @@ namespace Spring.Messaging.Nms.Listener
             bool running = IsRunning;
             lock (this.sharedConnectionMonitor)
             {
-                NmsUtils.CloseConnection(this.sharedConnection, running);
+                MessagingUtils.CloseConnection(this.sharedConnection, running);
 
                 IConnection con = CreateConnection();
                 try
@@ -448,7 +448,7 @@ namespace Spring.Messaging.Nms.Listener
                 }
                 catch (Exception)
                 {
-                    NmsUtils.CloseConnection(con);
+                    MessagingUtils.CloseConnection(con);
                     throw;
                 }
                 this.sharedConnection = con;
@@ -473,7 +473,7 @@ namespace Spring.Messaging.Nms.Listener
                 return con;
             } catch (NMSException)
             {
-                NmsUtils.CloseConnection(con);
+                MessagingUtils.CloseConnection(con);
                 throw;
             }
         }

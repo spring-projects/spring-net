@@ -22,7 +22,7 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms
 {
-    /// <summary> To be used with NmsTemplate's send method that
+    /// <summary> To be used with MessageTemplate's send method that
     /// convert an object to a message.
     /// </summary>
     /// <remarks>

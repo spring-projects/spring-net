@@ -47,11 +47,11 @@ namespace Spring.Messaging.Nms
     /// <author>Mark Pollack</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class NmsTemplate : NmsDestinationAccessor, INmsOperations
+    public class MessageTemplate : MessageDestinationAccessor, IMessageOperations
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(NmsTemplate));
+        private readonly ILog logger = LogManager.GetLogger(typeof(MessageTemplate));
 
 
         #endregion
@@ -63,7 +63,7 @@ namespace Spring.Messaging.Nms
         /// </summary>
         public static readonly long DEFAULT_RECEIVE_TIMEOUT = -1;
 
-        private NmsTemplateResourceFactory transactionalResourceFactory;
+        private MessageTemplateResourceFactory transactionalResourceFactory;
 
         private object defaultDestination;
 
@@ -85,30 +85,28 @@ namespace Spring.Messaging.Nms
 		private bool persistent = NMSConstants.defaultPersistence;
 		
 		private TimeSpan timeToLive;
-		
-        private NmsResources jmsResources = new NmsResources();
-        
+		        
         #endregion
 
         #region Constructor (s)
 
-        /// <summary> Create a new NmsTemplate.</summary>
+        /// <summary> Create a new MessageTemplate.</summary>
         /// <remarks>
         /// <para>Note: The ConnectionFactory has to be set before using the instance.
-        /// This constructor can be used to prepare a NmsTemplate via an ObjectFactory,
+        /// This constructor can be used to prepare a MessageTemplate via an ObjectFactory,
         /// typically setting the ConnectionFactory.</para>
         /// </remarks>
-        public NmsTemplate()
+        public MessageTemplate()
         {
-            transactionalResourceFactory = new NmsTemplateResourceFactory(this);
+            transactionalResourceFactory = new MessageTemplateResourceFactory(this);
             InitDefaultStrategies();
         }
 
 
-        /// <summary> Create a new NmsTemplate, given a ConnectionFactory.</summary>
+        /// <summary> Create a new MessageTemplate, given a ConnectionFactory.</summary>
         /// <param name="connectionFactory">the ConnectionFactory to obtain IConnections from
         /// </param>
-        public NmsTemplate(IConnectionFactory connectionFactory)
+        public MessageTemplate(IConnectionFactory connectionFactory)
             : this()
         {
             ConnectionFactory = connectionFactory;
@@ -132,7 +130,7 @@ namespace Spring.Messaging.Nms
             if (defaultDestination == null)
             {
                 throw new SystemException(
-                    "No defaultDestination or defaultDestinationName specified. Check configuration of NmsTemplate.");
+                    "No defaultDestination or defaultDestinationName specified. Check configuration of MessageTemplate.");
             }
         }
 
@@ -141,7 +139,7 @@ namespace Spring.Messaging.Nms
         {
             if (MessageConverter == null)
             {
-                throw new SystemException("No messageConverter registered. Check configuration of NmsTemplate.");
+                throw new SystemException("No messageConverter registered. Check configuration of MessageTemplate.");
             }
         }
 
@@ -190,7 +188,7 @@ namespace Spring.Messaging.Nms
             }
             finally
             {
-                NmsUtils.CloseSession(sessionToClose);
+                MessagingUtils.CloseSession(sessionToClose);
                 ConnectionFactoryUtils.ReleaseConnection(conToClose, ConnectionFactory, startConnection);
             }
         }
@@ -371,26 +369,26 @@ namespace Spring.Messaging.Nms
 
         #region NMS Factory Methods
 
-        /// <summary> Fetch an appropriate Connection from the given NmsResourceHolder.
+        /// <summary> Fetch an appropriate Connection from the given MessageResourceHolder.
         /// </summary>
-        /// <param name="holder">the NmsResourceHolder
+        /// <param name="holder">the MessageResourceHolder
         /// </param>
         /// <returns> an appropriate IConnection fetched from the holder,
         /// or <code>null</code> if none found
         /// </returns>
-        protected virtual IConnection GetConnection(NmsResourceHolder holder)
+        protected virtual IConnection GetConnection(MessageResourceHolder holder)
         {
             return holder.GetConnection();
         }
 
-        /// <summary> Fetch an appropriate Session from the given NmsResourceHolder.
+        /// <summary> Fetch an appropriate Session from the given MessageResourceHolder.
         /// </summary>
-        /// <param name="holder">the NmsResourceHolder
+        /// <param name="holder">the MessageResourceHolder
         /// </param>
         /// <returns> an appropriate ISession fetched from the holder,
         /// or <code>null</code> if none found
         /// </returns>
-        protected virtual ISession GetSession(NmsResourceHolder holder)
+        protected virtual ISession GetSession(MessageResourceHolder holder)
         {
             return holder.GetSession();
         }
@@ -550,12 +548,12 @@ namespace Spring.Messaging.Nms
                 if (session.Transacted && IsSessionLocallyTransacted(session))
                 {
                     // Transacted session created by this template -> commit.
-                    NmsUtils.CommitIfNecessary(session);
+                    MessagingUtils.CommitIfNecessary(session);
                 }
             }
             finally
             {
-                NmsUtils.CloseMessageProducer(producer);
+                MessagingUtils.CloseMessageProducer(producer);
             }
         }
 
@@ -581,7 +579,7 @@ namespace Spring.Messaging.Nms
 
         #endregion
 
-        #region INmsOperations Implementation
+        #region IMessageOperations Implementation
 
         /// <summary> Execute the action specified by the given action object within
         /// a NMS Session.
@@ -952,8 +950,8 @@ namespace Spring.Messaging.Nms
             try
             {
                 long timeout = ReceiveTimeout;
-                NmsResourceHolder resourceHolder =
-                (NmsResourceHolder)TransactionSynchronizationManager.GetResource(ConnectionFactory);
+                MessageResourceHolder resourceHolder =
+                (MessageResourceHolder)TransactionSynchronizationManager.GetResource(ConnectionFactory);
                 if (resourceHolder != null && resourceHolder.HasTimeout)
                 {
                     timeout = Convert.ToInt64(resourceHolder.TimeToLiveInMilliseconds);
@@ -967,7 +965,7 @@ namespace Spring.Messaging.Nms
                     if (IsSessionLocallyTransacted(session))
                     {
                         // Transacted session created by this template -> commit.
-                        NmsUtils.CommitIfNecessary(session);
+                        MessagingUtils.CommitIfNecessary(session);
                     }
                 }
                 else if (IsClientAcknowledge(session))
@@ -982,7 +980,7 @@ namespace Spring.Messaging.Nms
             }
             finally
             {
-                NmsUtils.CloseMessageConsumer(consumer);
+                MessagingUtils.CloseMessageConsumer(consumer);
             }
         }
 
@@ -1106,31 +1104,31 @@ namespace Spring.Messaging.Nms
         /// <summary>
         /// ResourceFactory implementation that delegates to this template's callback methods.
         /// </summary>
-        private class NmsTemplateResourceFactory : ConnectionFactoryUtils.ResourceFactory
+        private class MessageTemplateResourceFactory : ConnectionFactoryUtils.ResourceFactory
         {
-            private NmsTemplate enclosingTemplateInstance;
+            private MessageTemplate enclosingTemplateInstance;
 			
-            public NmsTemplateResourceFactory(NmsTemplate enclosingInstance)
+            public MessageTemplateResourceFactory(MessageTemplate enclosingInstance)
             {
                 InitBlock(enclosingInstance);
             }
 
-            private void InitBlock(NmsTemplate enclosingInstance)
+            private void InitBlock(MessageTemplate enclosingInstance)
             {
                 enclosingTemplateInstance = enclosingInstance;
             }
 
-            public NmsTemplate EnclosingInstance
+            public MessageTemplate EnclosingInstance
             {
                 get { return enclosingTemplateInstance; }
             }
 
-            public virtual IConnection GetConnection(NmsResourceHolder holder)
+            public virtual IConnection GetConnection(MessageResourceHolder holder)
             {
                 return EnclosingInstance.GetConnection(holder);
             }
 
-            public virtual ISession GetSession(NmsResourceHolder holder)
+            public virtual ISession GetSession(MessageResourceHolder holder)
             {
                 return EnclosingInstance.GetSession(holder);
             }
@@ -1153,10 +1151,10 @@ namespace Spring.Messaging.Nms
 
         private class ProducerCreatorCallback : ISessionCallback
         {
-            private NmsTemplate jmsTemplate;
+            private MessageTemplate jmsTemplate;
             private IProducerCallback producerCallback;
 
-            public ProducerCreatorCallback(NmsTemplate jmsTemplate, IProducerCallback producerCallback)
+            public ProducerCreatorCallback(MessageTemplate jmsTemplate, IProducerCallback producerCallback)
             {
                 this.jmsTemplate = jmsTemplate;
 				this.producerCallback = producerCallback;
@@ -1171,7 +1169,7 @@ namespace Spring.Messaging.Nms
                 }
                 finally
                 {
-                    NmsUtils.CloseMessageProducer(producer);
+                    MessagingUtils.CloseMessageProducer(producer);
                 }
 
             }
@@ -1179,18 +1177,18 @@ namespace Spring.Messaging.Nms
 
         private class ReceiveCallback : ISessionCallback
         {
-            private NmsTemplate jmsTemplate;
+            private MessageTemplate jmsTemplate;
             private IDestination destination;
             private string destinationName;
 
 
-            public ReceiveCallback(NmsTemplate jmsTemplate, string destinationName)
+            public ReceiveCallback(MessageTemplate jmsTemplate, string destinationName)
             {
                 this.jmsTemplate = jmsTemplate;
                 this.destinationName = destinationName;
             }
 
-            public ReceiveCallback(NmsTemplate jmsTemplate, IDestination destination)
+            public ReceiveCallback(MessageTemplate jmsTemplate, IDestination destination)
             {
                 this.jmsTemplate = jmsTemplate;
                 this.destination = destination;
@@ -1214,11 +1212,11 @@ namespace Spring.Messaging.Nms
 
         private class ConvertAndSendMessageCreator : IMessageCreator
         {
-            private NmsTemplate jmsTemplate;
+            private MessageTemplate jmsTemplate;
             private object objectToConvert;
             private IMessagePostProcessor messagePostProcessor;
 
-            public ConvertAndSendMessageCreator(NmsTemplate jmsTemplate, object message, IMessagePostProcessor messagePostProcessor)
+            public ConvertAndSendMessageCreator(MessageTemplate jmsTemplate, object message, IMessagePostProcessor messagePostProcessor)
             {
                 this.jmsTemplate = jmsTemplate;
                 objectToConvert = message;
@@ -1234,12 +1232,12 @@ namespace Spring.Messaging.Nms
 
         private class ReceiveSelectedCallback : ISessionCallback
         {
-            private NmsTemplate jmsTemplate;
+            private MessageTemplate jmsTemplate;
             private string messageSelector;
             private string destinationName;
             private IDestination destination;
 
-            public ReceiveSelectedCallback(NmsTemplate jmsTemplate,
+            public ReceiveSelectedCallback(MessageTemplate jmsTemplate,
                                IDestination destination,
                                string messageSelector)
             {
@@ -1247,7 +1245,7 @@ namespace Spring.Messaging.Nms
                 this.destination = destination;
                 this.messageSelector = messageSelector;
             }
-            public ReceiveSelectedCallback(NmsTemplate jmsTemplate,
+            public ReceiveSelectedCallback(MessageTemplate jmsTemplate,
                                            string destinationName,
                                            string messageSelector)
             {
@@ -1276,42 +1274,12 @@ namespace Spring.Messaging.Nms
         #endregion
     }
 
-    /// <summary>
-    /// This is a TIBCO specific class so that we can reuse connections, session, and
-    /// message producers instead of creating/destroying them on each operation.
-    /// </summary>
-    internal class NmsResources
-    {
-        private IConnection connection;
-        private ISession session;
-        private IMessageProducer messageProducer;
-
-        public IConnection Connection
-        {
-            get { return connection; }
-            set { connection = value; }
-        }
-
-        public ISession Session
-        {
-            get { return session; }
-            set { session = value; }
-        }
-
-        public IMessageProducer MessageProducer
-        {
-            get { return messageProducer; }
-            set { messageProducer = value; }
-        }
-    }
-
-
     internal class SimpleMessageCreator : IMessageCreator
     {
-        private NmsTemplate jmsTemplate;
+        private MessageTemplate jmsTemplate;
         private object objectToConvert;
         
-        public SimpleMessageCreator(NmsTemplate jmsTemplate, object objectToConvert)
+        public SimpleMessageCreator(MessageTemplate jmsTemplate, object objectToConvert)
         {
             this.jmsTemplate = jmsTemplate;
             this.objectToConvert = objectToConvert;
@@ -1331,32 +1299,32 @@ namespace Spring.Messaging.Nms
     {
         private string destinationName;
         private IDestination destination;
-        private NmsTemplate jmsTemplate;
+        private MessageTemplate jmsTemplate;
         private IMessageCreator messageCreator;
         private IMessageCreatorDelegate messageCreatorDelegate;
 
-        public SendDestinationCallback(NmsTemplate jmsTemplate, string destinationName, IMessageCreator messageCreator)
+        public SendDestinationCallback(MessageTemplate jmsTemplate, string destinationName, IMessageCreator messageCreator)
         {
             this.jmsTemplate = jmsTemplate;
             this.destinationName = destinationName;
             this.messageCreator = messageCreator;
         }
 
-        public SendDestinationCallback(NmsTemplate jmsTemplate, IDestination destination, IMessageCreator messageCreator)
+        public SendDestinationCallback(MessageTemplate jmsTemplate, IDestination destination, IMessageCreator messageCreator)
         {
             this.jmsTemplate = jmsTemplate;
             this.destination = destination;
             this.messageCreator = messageCreator;
         }
 
-        public SendDestinationCallback(NmsTemplate jmsTemplate, string destinationName, IMessageCreatorDelegate messageCreatorDelegate)
+        public SendDestinationCallback(MessageTemplate jmsTemplate, string destinationName, IMessageCreatorDelegate messageCreatorDelegate)
         {
             this.jmsTemplate = jmsTemplate;
             this.destinationName = destinationName;
             this.messageCreatorDelegate = messageCreatorDelegate;
         }
 
-        public SendDestinationCallback(NmsTemplate jmsTemplate, IDestination destination, IMessageCreatorDelegate messageCreatorDelegate)
+        public SendDestinationCallback(MessageTemplate jmsTemplate, IDestination destination, IMessageCreatorDelegate messageCreatorDelegate)
         {
             this.jmsTemplate = jmsTemplate;
             this.destination = destination;

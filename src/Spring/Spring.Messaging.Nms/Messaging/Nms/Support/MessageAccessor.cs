@@ -25,20 +25,20 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Support
 {
-    /// <summary> Base class for NmsTemplate and other NMS-accessing gateway helpers</summary>
+    /// <summary> Base class for MessageTemplate and other NMS-accessing gateway helpers</summary>
     /// <remarks>It defines common properties like the ConnectionFactory}. The subclass
     /// NmsIDestinationAccessor adds further, destination-related properties.
     /// <para>
-    /// Not intended to be used directly. See NmsTemplate.
+    /// Not intended to be used directly. See MessageTemplate.
     /// </para>
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class NmsAccessor : IInitializingObject
+    public class MessagingAccessor : IInitializingObject
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(NmsAccessor));
+        private readonly ILog logger = LogManager.GetLogger(typeof(MessagingAccessor));
 
         #endregion
         

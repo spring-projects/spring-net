@@ -29,7 +29,7 @@ using Apache.NMS;
 namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>Connection holder, wrapping a NMS Connection and a NMS Session.
-    /// NmsTransactionManager binds instances of this class to the thread,
+    /// MessageTransactionManager binds instances of this class to the thread,
     /// for a given NMS ConnectionFactory.
     ///
     /// <p>Note: This is an SPI class, not intended to be used by applications.</p>
@@ -37,11 +37,11 @@ namespace Spring.Messaging.Nms.Connections
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class NmsResourceHolder : ResourceHolderSupport
+    public class MessageResourceHolder : ResourceHolderSupport
     {
         #region Logging
 
-        private static readonly ILog logger = LogManager.GetLogger(typeof(NmsResourceHolder));
+        private static readonly ILog logger = LogManager.GetLogger(typeof(MessageResourceHolder));
 
         #endregion
 
@@ -62,41 +62,41 @@ namespace Spring.Messaging.Nms.Connections
 
         #region Constructor (s)
 
-        /// <summary> Create a new NmsResourceHolder that is open for resources to be added.</summary>
-        public NmsResourceHolder()
+        /// <summary> Create a new MessageResourceHolder that is open for resources to be added.</summary>
+        public MessageResourceHolder()
         {
         }
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NmsResourceHolder"/> class
+        /// Initializes a new instance of the <see cref="MessageResourceHolder"/> class
         /// at is open for resources to be added.
         /// </summary>
         /// <param name="connectionFactory">The connection factory that this
         /// resource holder is associated with (may be <code>null</code>)
         /// </param>
-        public NmsResourceHolder(IConnectionFactory connectionFactory)
+        public MessageResourceHolder(IConnectionFactory connectionFactory)
         {
             this.connectionFactory = connectionFactory;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NmsResourceHolder"/> class for the
+        /// Initializes a new instance of the <see cref="MessageResourceHolder"/> class for the
         /// given Session.
         /// </summary>
         /// <param name="session">The session.</param>
-        public NmsResourceHolder(ISession session)
+        public MessageResourceHolder(ISession session)
         {
             AddSession(session);
             frozen = true;
         }
 
-        /// <summary> Create a new NmsResourceHolder for the given NMS resources.</summary>
+        /// <summary> Create a new MessageResourceHolder for the given NMS resources.</summary>
         /// <param name="connection">the NMS Connection
         /// </param>
         /// <param name="session">the NMS Session
         /// </param>
-        public NmsResourceHolder(IConnection connection, ISession session)
+        public MessageResourceHolder(IConnection connection, ISession session)
         {
             AddConnection(connection);
             AddSession(session, connection);
@@ -104,12 +104,12 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NmsResourceHolder"/> class.
+        /// Initializes a new instance of the <see cref="MessageResourceHolder"/> class.
         /// </summary>
         /// <param name="connectionFactory">The connection factory.</param>
         /// <param name="connection">The connection.</param>
         /// <param name="session">The session.</param>
-        public NmsResourceHolder(IConnectionFactory connectionFactory, IConnection connection, ISession session)
+        public MessageResourceHolder(IConnectionFactory connectionFactory, IConnection connection, ISession session)
         {
             this.connectionFactory = connectionFactory;
             AddConnection(connection);
@@ -121,7 +121,7 @@ namespace Spring.Messaging.Nms.Connections
         #region Properties
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="NmsResourceHolder"/> is frozen, namely that 
+        /// Gets a value indicating whether this <see cref="MessageResourceHolder"/> is frozen, namely that 
         /// additional resources can be registered with the holder.  If using any of the constructors with
         /// a Session, the holder will be set to the frozen state.
         /// </summary>
@@ -144,7 +144,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="connection">The connection.</param>
         public void AddConnection(IConnection connection)
         {
-            AssertUtils.IsTrue(!frozen, "Cannot add IConnection because NmsResourceHolder is frozen");
+            AssertUtils.IsTrue(!frozen, "Cannot add IConnection because MessageResourceHolder is frozen");
             AssertUtils.ArgumentNotNull(connection, "IConnection must not be null");
             if (!connections.Contains(connection))
             {
@@ -168,7 +168,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="connection">The connection.</param>
         public void AddSession(ISession session, IConnection connection)
         {
-            AssertUtils.IsTrue(!frozen, "Cannot add ISession because NmsResourceHolder is frozen");
+            AssertUtils.IsTrue(!frozen, "Cannot add ISession because MessageResourceHolder is frozen");
             AssertUtils.ArgumentNotNull(session, "ISession must not be null");
             if (!sessions.Contains(session))
             {

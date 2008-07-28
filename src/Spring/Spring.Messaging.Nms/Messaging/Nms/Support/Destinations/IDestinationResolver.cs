@@ -25,13 +25,13 @@ namespace Spring.Messaging.Nms.Support.IDestinations
     /// <summary> Strategy interface for resolving NMS destinations.
     /// </summary>
     /// <remarks>
-    /// <para>Used by NmsTemplate for resolving
+    /// <para>Used by MessageTemplate for resolving
     /// destination names from simple Strings to actual
     /// IDestination implementation instances.
     /// </para>
     /// 
     /// <para>The default DestinationResolver implementation used by
-    /// NmsTemplate instances is the
+    /// MessageTemplate instances is the
     /// DynamicDestinationResolver class. Consider using the
     /// JndiDestinationResolver for more advanced scenarios.
     /// </para>

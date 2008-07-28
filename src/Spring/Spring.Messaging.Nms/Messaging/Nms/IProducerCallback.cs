@@ -24,7 +24,7 @@ namespace Spring.Messaging.Nms
 {
     /// <summary> Callback for sending a message to a NMS destination.</summary>
     /// <remarks>
-    /// <p>To be used with the NmsTemplate.Execute(IProducerCallback)
+    /// <p>To be used with the MessageTemplate.Execute(IProducerCallback)
     /// method, often implemented as an anonymous inner class.</p>
     /// 
     /// <p>The typical implementation will perform multiple operations on the
