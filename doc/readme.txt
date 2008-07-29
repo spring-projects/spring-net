@@ -7,10 +7,11 @@ documentation can be generated using Java Ant. The targets are:
 * clean         - clean any output directories for docs
 
 To generate documentation, you need to include a lot of libraries, which
-haven't been added to CVS because they're simply too big. The libraries can
-be downloaded from sourceforge or from
-http://www.jteam.nl/spring/reference-libraries.zip.  Download them, and
-unzip the zip into reference/lib.  Then, the targets should work.
+haven't been added to CVS because they're simply too big. 
+
+Refer to the Spring.NET Wiki at
+http://opensource.atlassian.com/confluence/spring/display/NET/Docbook+Reference
+for information on how to install the docbook toolchain.
 
 Thanks to Spring.Java and Hibernate, for providing the skeleton for DocBook
 documentation!
