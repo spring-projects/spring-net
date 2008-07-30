@@ -997,9 +997,7 @@ namespace Spring.Scheduling.Quartz
                         string.Format("Will start Quartz Scheduler [{0}] in {1} seconds", sched.SchedulerName,
                                       startDelay));
                 }
-                QuartzThread schedulerThread = new AnonymousClassThread(this);
-                schedulerThread.Name = "Quartz Scheduler [" + sched.SchedulerName + "]";
-                schedulerThread.Start();
+                sched.StartDelayed(startDelay);
             }
         }
 
@@ -1043,46 +1041,5 @@ namespace Spring.Scheduling.Quartz
                 }
             }
         }
-
-        #region Nested type: AnonymousClassThread
-
-        private class AnonymousClassThread : QuartzThread
-        {
-            private readonly SchedulerFactoryObject schedulerFactoryObject;
-
-            public AnonymousClassThread(SchedulerFactoryObject enclosingInstance)
-            {
-                schedulerFactoryObject = enclosingInstance;
-            }
-
-            
-            public override void Run()
-            {
-                try
-                {
-                    Thread.Sleep(schedulerFactoryObject.startupDelay*1000);
-                }
-                catch (ThreadInterruptedException)
-                {
-                    // simply proceed
-                }
-                if (schedulerFactoryObject.logger.IsInfoEnabled)
-                {
-                    schedulerFactoryObject.logger.Info("Starting Quartz Scheduler now, after delay of " +
-                                                   schedulerFactoryObject.startupDelay +
-                                                   " seconds");
-                }
-                try
-                {
-                    schedulerFactoryObject.scheduler.Start();
-                }
-                catch (SchedulerException ex)
-                {
-                    throw new SchedulingException("Could not start Quartz Scheduler after delay", ex);
-                }
-            }
-        }
-
-        #endregion
     }
 }
