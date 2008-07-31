@@ -18,6 +18,8 @@ using System.Threading;
 
 using Quartz;
 
+using Spring.Util;
+
 namespace Spring.Scheduling.Quartz
 {
 	/// <summary> 
@@ -35,7 +37,7 @@ namespace Spring.Scheduling.Quartz
 	/// <seealso cref="IJob.Execute(JobExecutionContext)" />
 	public class DelegatingJob : IJob
 	{
-        private ThreadStart delegateInstance;
+        private readonly ThreadStart delegateInstance;
 
         /// <summary>
         /// Return the wrapped Runnable implementation.
@@ -54,29 +56,17 @@ namespace Spring.Scheduling.Quartz
 		/// </param>
         public DelegatingJob(ThreadStart delegateInstance)
 		{
-			if (delegateInstance == null)
-			{
-				throw new ArgumentException("Delegate must not be null", "delegateInstance");
-			}
+            AssertUtils.ArgumentNotNull(delegateInstance, "delegateInstance", "Delegate must not be null");
 			this.delegateInstance = delegateInstance;
 		}
 
 
 		/// <summary> 
-        /// Delegates execution to the underlying ThreadStart,
-		/// converting any Exception thrown to a Quartz JobExecutionException
-		/// (as required by the Job contract).
+        /// Delegates execution to the underlying ThreadStart.
 		/// </summary>
 		public virtual void Execute(JobExecutionContext context)
 		{
-            try
-            {
-                delegateInstance.Invoke();
-            }
-            catch (Exception ex)
-            {
-                throw new JobExecutionException(ex);
-            }
+            delegateInstance.Invoke();
 		}
 	}
 }

@@ -18,7 +18,6 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
-using System.Threading;
 
 using Common.Logging;
 
@@ -104,20 +103,21 @@ namespace Spring.Scheduling.Quartz
         private ITriggerListener[] globalTriggerListeners;
         private ArrayList jobDetails;
         private IJobFactory jobFactory;
+        private bool jobFactorySet;
         private IJobListener[] jobListeners;
         private string[] jobSchedulingDataLocations;
-        private bool overwriteExistingJobs = false;
+        private bool overwriteExistingJobs;
         private NameValueCollection quartzProperties;
         private IScheduler  scheduler;
         private IDictionary schedulerContextMap;
         private Type schedulerFactoryType;
         private ISchedulerListener[] schedulerListeners;
         private string schedulerName;
-        private int startupDelay = 0;
+        private int startupDelay;
         private ITaskExecutor taskExecutor;
         private ITriggerListener[] triggerListeners;
         private ArrayList triggers;
-        private bool waitForJobsToCompleteOnShutdown = false;
+        private bool waitForJobsToCompleteOnShutdown;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SchedulerFactoryObject"/> class.
@@ -126,7 +126,6 @@ namespace Spring.Scheduling.Quartz
         {
             logger = LogManager.GetLogger(GetType());
             schedulerFactoryType = typeof (StdSchedulerFactory);
-            jobFactory = new AdaptableJobFactory();
         }
 
 
@@ -265,20 +264,25 @@ namespace Spring.Scheduling.Quartz
         /// <remarks>
         /// <p>
         /// Default is Spring's <see cref="AdaptableJobFactory" />, which supports
-        /// standard Quartz <see cref="IJob" /> instances.
+        /// standard Quartz <see cref="IJob" /> instances. Note that this default only applies
+ 	 	/// to a <i>local</i> Scheduler, not to a RemoteScheduler (where setting
+ 	 	/// a custom JobFactory is not supported by Quartz).
         /// </p>
         /// <p>
         /// Specify an instance of Spring's <see cref="SpringObjectJobFactory" /> here
-        /// (typically as an inner object definition) to automatically populate a
-        /// job's object properties from the specified job data map and scheduler
-        /// context.
+        /// (typically as an inner object definition) to automatically populate a job's 
+        /// object properties from the specified job data map and scheduler context.
         /// </p>
         /// </remarks>
         /// <seealso cref="AdaptableJobFactory" />
         /// <seealso cref="SpringObjectJobFactory" />
         public virtual IJobFactory JobFactory
         {
-            set { jobFactory = value; }
+            set 
+            { 
+                jobFactory = value;
+                jobFactorySet = true;
+            }
         }
 
         /// <summary> 
@@ -636,6 +640,15 @@ namespace Spring.Scheduling.Quartz
 
             // Get Scheduler instance from SchedulerFactory.
             scheduler = CreateScheduler(schedulerFactory, schedulerName);
+            PopulateSchedulerContext();
+
+            if (!jobFactorySet && !(scheduler is RemoteScheduler)) 
+            {
+ 	 	        // Use AdaptableJobFactory as default for a local Scheduler, unless when
+ 	 	        // explicitly given a null value through the "jobFactory" bean property.
+ 	 	        jobFactory = new AdaptableJobFactory();
+ 	 	    }
+
             if (jobFactory != null)
             {
                 if (jobFactory is ISchedulerContextAware)
@@ -645,8 +658,6 @@ namespace Spring.Scheduling.Quartz
                 scheduler.JobFactory = jobFactory;
             }
 
-
-            PopulateSchedulerContext();
             RegisterListeners();
             RegisterJobsAndTriggers();
 
@@ -911,10 +922,7 @@ namespace Spring.Scheduling.Quartz
                 scheduler.AddJob(jobDetail, true);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -969,10 +977,7 @@ namespace Spring.Scheduling.Quartz
                 }
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
 

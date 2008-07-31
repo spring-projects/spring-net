@@ -70,18 +70,19 @@ namespace Spring.Scheduling.Quartz
             }
             catch (TargetInvocationException ex)
             {
-                logger.Warn(errorMessage, ex.GetBaseException());
+                logger.Error(errorMessage, ex.GetBaseException());
                 if (ex.GetBaseException() is JobExecutionException)
                 {
+                    // -> JobExecutionException, to be logged at info level by Quartz
                     throw ex.GetBaseException();
                 }
-                throw new JobExecutionException(errorMessage, ex.GetBaseException());
-
+                // -> "unhandled exception", to be logged at error level by Quartz
+                throw new JobMethodInvocationFailedException(methodInvoker, ex.GetBaseException());
             }
             catch (Exception ex)
             {
-                logger.Warn(errorMessage, ex);
-                throw new JobExecutionException(errorMessage, ex);
+                // -> "unhandled exception", to be logged at error level by Quartz
+                throw new JobMethodInvocationFailedException(methodInvoker, ex.GetBaseException());   
             }
         }
     }

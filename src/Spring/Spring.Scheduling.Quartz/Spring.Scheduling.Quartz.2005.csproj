@@ -45,6 +45,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JobMethodInvocationFailedException.cs" />
     <Compile Include="Scheduling\Quartz\AdaptableJobFactory.cs" />
     <Compile Include="Scheduling\Quartz\CronTriggerObject.cs" />
     <Compile Include="Scheduling\Quartz\DelegatingJob.cs" />

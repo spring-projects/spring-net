@@ -56,7 +56,6 @@ namespace Spring.Scheduling.Quartz
 		private string objectName;
         private readonly Constants constants = new Constants(typeof(MisfireInstruction.CronTrigger), typeof(MisfireInstruction));
 
-
 		/// <summary> 
 		/// Register objects in the JobDataMap via a given Map.
 		/// </summary>
@@ -80,10 +79,7 @@ namespace Spring.Scheduling.Quartz
         /// <seealso cref="MisfireInstruction.SmartPolicy" />
 		public virtual string MisfireInstructionName
 		{
-			set 
-			{
-				MisfireInstruction = constants.AsNumber(value); 
-			}
+			set { MisfireInstruction = constants.AsNumber(value); }
 		}
 
         /// <summary>
