@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright 2002-2007 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
+using System;
 using System.Data;
+using System.Reflection;
 
 using Quartz.Impl.AdoJobStore;
 using Quartz.Impl.AdoJobStore.Common;
+
+using IDbMetadata=Spring.Data.Common.IDbMetadata;
 
 namespace Spring.Scheduling.Quartz
 {
@@ -28,6 +32,7 @@ namespace Spring.Scheduling.Quartz
     public class SpringDbProviderAdapter : IDbProvider
     {
         private readonly Data.Common.IDbProvider dbProvider;
+        private DbMetadata metadata;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringDbProviderAdapter"/> class.
@@ -36,7 +41,9 @@ namespace Spring.Scheduling.Quartz
         public SpringDbProviderAdapter(Data.Common.IDbProvider dbProvider)
         {
             this.dbProvider = dbProvider;
+            metadata = new SpringMetadataAdapter(dbProvider.DbMetadata);
         }
+
 
         public IDbCommand CreateCommand()
         {
@@ -71,7 +78,101 @@ namespace Spring.Scheduling.Quartz
 
         public DbMetadata Metadata
         {
-            get { throw new System.NotImplementedException(); }
+            get { return metadata; }
         }
     }
+
+    public class SpringMetadataAdapter : DbMetadata
+    {
+        private IDbMetadata metadata;
+
+        public SpringMetadataAdapter(IDbMetadata metadata)
+        {
+            this.metadata = metadata;
+        }
+
+        public override string ProductName
+        {
+            get { return metadata.ProductName; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override Type ConnectionType
+        {
+            get { return metadata.ConnectionType; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override Type CommandType
+        {
+            get { return metadata.CommandType; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override Type ParameterType
+        {
+            get { return metadata.ParameterType; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override Type CommandBuilderType
+        {
+            get { return metadata.CommandBuilderType; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override MethodInfo CommandBuilderDeriveParametersMethod
+        {
+            get { return metadata.CommandBuilderDeriveParametersMethod; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override string ParameterNamePrefix
+        {
+            get { return metadata.ParameterNamePrefix; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override Type ExceptionType
+        {
+            get { return metadata.ExceptionType; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override bool BindByName
+        {
+            get { return metadata.BindByName; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override Type ParameterDbType
+        {
+            get { return metadata.ParameterDbType; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override PropertyInfo ParameterDbTypeProperty
+        {
+            get { return metadata.ParameterDbTypeProperty; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override PropertyInfo ParameterIsNullableProperty
+        {
+            get { return metadata.ParameterIsNullableProperty; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public override Enum DbBinaryType
+        {
+            get { return DbType.Binary; }
+        }
+
+        public override bool UseParameterNamePrefixInParameterCollection
+        {
+            get { return metadata.UseParameterNamePrefixInParameterCollection; }
+            set { throw new NotImplementedException(); }
+        }
+    }
+
 }

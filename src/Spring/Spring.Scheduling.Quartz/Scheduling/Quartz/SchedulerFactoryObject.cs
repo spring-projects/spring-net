@@ -145,7 +145,7 @@ namespace Spring.Scheduling.Quartz
         private IJobListener[] jobListeners;
         private string[] jobSchedulingDataLocations;
         private bool overwriteExistingJobs;
-        private NameValueCollection quartzProperties;
+        private IDictionary quartzProperties;
         private IScheduler  scheduler;
         private IDictionary schedulerContextMap;
         private Type schedulerFactoryType;
@@ -227,7 +227,7 @@ namespace Spring.Scheduling.Quartz
         /// or to specify all necessary properties locally.
         /// </remarks>
         /// <seealso cref="ConfigLocation" />
-        public virtual NameValueCollection QuartzProperties
+        public virtual IDictionary QuartzProperties
         {
             set { quartzProperties = value; }
         }
@@ -779,7 +779,7 @@ namespace Spring.Scheduling.Quartz
                 if (taskExecutor != null)
                 {
                     mergedProps[StdSchedulerFactory.PropertyThreadPoolType] =
-                        typeof (LocalTaskExecutorThreadPool).FullName;
+                        typeof (LocalTaskExecutorThreadPool).AssemblyQualifiedName;
                 }
                 else
                 {
@@ -816,7 +816,7 @@ namespace Spring.Scheduling.Quartz
 
         		if (dbProvider != null) 
                 {
-		        	mergedProps.Add(StdSchedulerFactory.PropertyJobStoreType, typeof(LocalDataSourceJobStore).FullName);
+                    mergedProps.Add(StdSchedulerFactory.PropertyJobStoreType, typeof(LocalDataSourceJobStore).AssemblyQualifiedName);
 		        }
 
 
@@ -836,11 +836,11 @@ namespace Spring.Scheduling.Quartz
         /// </summary>
         /// <param name="properties">The properties to merge into given map.</param>
         /// <param name="map">The map to merge to.</param>
-        protected virtual void MergePropertiesIntoMap(NameValueCollection properties, NameValueCollection map)
+        protected virtual void MergePropertiesIntoMap(IDictionary properties, NameValueCollection map)
         {
             foreach (string key in properties.Keys)
             {
-                map[key] = properties[key];
+                map[key] = (string) properties[key];
             }
         }
 

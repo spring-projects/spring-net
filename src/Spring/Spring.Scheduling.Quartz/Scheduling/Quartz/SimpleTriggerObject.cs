@@ -51,7 +51,7 @@ namespace Spring.Scheduling.Quartz
 	/// <seealso cref="CronTriggerObject" />
 	public class SimpleTriggerObject : SimpleTrigger, IJobDetailAwareTrigger, IObjectNameAware, IInitializingObject
 	{
-		private long startDelay = 0;
+		private long startDelay;
 		private JobDetail jobDetail;
 		private string objectName;
         private readonly Constants constants = new Constants(typeof(MisfireInstruction.SimpleTrigger), typeof(MisfireInstruction));
@@ -90,10 +90,7 @@ namespace Spring.Scheduling.Quartz
         /// <seealso cref="MisfireInstruction.SmartPolicy" />
 		public virtual string MisfireInstructionName
 		{
-			set 
-			{ 
-				MisfireInstruction = constants.AsNumber(value); 
-			}
+			set { MisfireInstruction = constants.AsNumber(value); }
 		}
 
 		/// <summary> 
