@@ -30,7 +30,10 @@ using Quartz.Xml;
 
 using Spring.Context;
 using Spring.Core.IO;
+using Spring.Data.Common;
 using Spring.Objects.Factory;
+using Spring.Transaction;
+using Spring.Transaction.Support;
 
 namespace Spring.Scheduling.Quartz
 {
@@ -77,8 +80,6 @@ namespace Spring.Scheduling.Quartz
     /// <seealso cref="StdSchedulerFactory" />
     public class SchedulerFactoryObject : IFactoryObject, IApplicationContextAware, IInitializingObject, IDisposable
     {
-        private const string CONTEXT_KEY_CONFIG_TIME_TASK_EXECUTOR = "sched_factory_conf_t_t_exec";
-        
         /// <summary>
         /// Default thread count to be set to thread pool.
         /// </summary>
@@ -88,6 +89,43 @@ namespace Spring.Scheduling.Quartz
         /// Property name for thread count in thread pool.
         /// </summary>
         public const string PROP_THREAD_COUNT = "quartz.threadPool.threadCount";
+
+        [ThreadStatic]
+        private static IDbProvider configTimeDbProvider;
+
+        [ThreadStatic]
+        private static ITaskExecutor configTimeTaskExecutor;
+
+        /// <summary>
+        /// Return the IDbProvider for the currently configured Quartz Scheduler,
+        /// to be used by LocalDataSourceJobStore.
+        /// </summary>
+        /// <remarks>
+        /// This instance will be set before initialization of the corresponding
+        /// Scheduler, and reset immediately afterwards. It is thus only available
+        /// during configuration.
+        /// </remarks>
+        /// <seealso cref="DbProvider" />
+        /// <seealso cref="LocalDataSourceJobStore" />
+        public static IDbProvider ConfigTimeDbProvider
+        {
+            get { return configTimeDbProvider; }
+        }
+
+        /// <summary>
+        /// Return the TaskExecutor for the currently configured Quartz Scheduler,
+        /// to be used by LocalTaskExecutorThreadPool.
+        /// </summary>
+        /// <remarks>
+        /// This instance will be set before initialization of the corresponding
+        /// Scheduler, and reset immediately afterwards. It is thus only available
+        /// during configuration.
+        /// </remarks>
+        public static ITaskExecutor ConfigTimeTaskExecutor
+        {
+            get { return configTimeTaskExecutor; }
+        }
+
 
         /// <summary>
         /// Logger for this instance and its sub-class instances.
@@ -118,6 +156,8 @@ namespace Spring.Scheduling.Quartz
         private ITriggerListener[] triggerListeners;
         private ArrayList triggers;
         private bool waitForJobsToCompleteOnShutdown;
+        private IDbProvider dbProvider;
+        private IPlatformTransactionManager transactionManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SchedulerFactoryObject"/> class.
@@ -467,6 +507,42 @@ namespace Spring.Scheduling.Quartz
         }
 
         /// <summary>
+        /// Set the default DbProvider to be used by the Scheduler. If set,
+        /// this will override corresponding settings in Quartz properties.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Note: If this is set, the Quartz settings should not define
+        ///  a job store "dataSource" to avoid meaningless double configuration.
+        /// </p>
+        /// <p>
+        /// A Spring-specific subclass of Quartz' JobStoreSupport will be used.
+        /// It is therefore strongly recommended to perform all operations on
+        /// the Scheduler within Spring-managed transactions.
+        /// Else, database locking will not properly work and might even break
+        /// (e.g. if trying to obtain a lock on Oracle without a transaction).
+        /// </p>
+        /// </remarks>
+        /// <seealso cref="QuartzProperties" />
+        /// <seealso cref="TransactionManager" />
+        /// <seealso cref="LocalDataSourceJobStore" />
+        public IDbProvider DbProvider
+        {
+            set { dbProvider = value; }
+        }
+
+        /// <summary>
+        /// Set the transaction manager to be used for registering jobs and triggers
+	    /// that are defined by this SchedulerFactoryObject. Default is none; setting
+    	///  this only makes sense when specifying a DataSource for the Scheduler.
+        /// </summary>
+        /// <seealso cref="DbProvider" />
+	    public IPlatformTransactionManager TransactionManager
+	    {
+	        set { transactionManager = value; }
+	    }
+
+        /// <summary>
         /// Gets a value indicating whether this <see cref="SchedulerFactoryObject"/> is running.
         /// </summary>
         /// <value><c>true</c> if running; otherwise, <c>false</c>.</value>
@@ -487,20 +563,6 @@ namespace Spring.Scheduling.Quartz
                 }
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Return the TaskExecutor for the currently configured Quartz Scheduler,
-        /// to be used by LocalTaskExecutorThreadPool.
-        /// </summary>
-        /// <remarks>
-        /// This instance will be set before initialization of the corresponding
-        /// Scheduler, and reset immediately afterwards. It is thus only available
-        /// during configuration.
-        /// </remarks>
-        public static ITaskExecutor ConfigTimeTaskExecutor
-        {
-            get { return (ITaskExecutor) LogicalThreadContext.GetData(CONTEXT_KEY_CONFIG_TIME_TASK_EXECUTOR); }
         }
 
         #region IApplicationContextAware Members
@@ -637,25 +699,51 @@ namespace Spring.Scheduling.Quartz
             ISchedulerFactory schedulerFactory = (ISchedulerFactory) ObjectUtils.InstantiateType(schedulerFactoryType);
 
             InitSchedulerFactory(schedulerFactory);
-
-            // Get Scheduler instance from SchedulerFactory.
-            scheduler = CreateScheduler(schedulerFactory, schedulerName);
-            PopulateSchedulerContext();
-
-            if (!jobFactorySet && !(scheduler is RemoteScheduler)) 
+            
+		    if (taskExecutor != null) 
             {
- 	 	        // Use AdaptableJobFactory as default for a local Scheduler, unless when
- 	 	        // explicitly given a null value through the "jobFactory" bean property.
- 	 	        jobFactory = new AdaptableJobFactory();
- 	 	    }
-
-            if (jobFactory != null)
+			    // Make given TaskExecutor available for SchedulerFactory configuration.
+			    configTimeTaskExecutor = taskExecutor;
+		    }
+		    if (dbProvider != null) 
             {
-                if (jobFactory is ISchedulerContextAware)
+			    // Make given db provider available for SchedulerFactory configuration.
+			    configTimeDbProvider = dbProvider;
+		    }
+
+
+            try
+            {
+                // Get Scheduler instance from SchedulerFactory.
+                scheduler = CreateScheduler(schedulerFactory, schedulerName);
+                PopulateSchedulerContext();
+
+                if (!jobFactorySet && !(scheduler is RemoteScheduler)) 
                 {
-                    ((ISchedulerContextAware) jobFactory).SchedulerContext = scheduler.Context;
+ 	 	            // Use AdaptableJobFactory as default for a local Scheduler, unless when
+ 	 	            // explicitly given a null value through the "jobFactory" bean property.
+ 	 	            jobFactory = new AdaptableJobFactory();
+ 	 	        }
+
+                if (jobFactory != null)
+                {
+                    if (jobFactory is ISchedulerContextAware)
+                    {
+                        ((ISchedulerContextAware) jobFactory).SchedulerContext = scheduler.Context;
+                    }
+                    scheduler.JobFactory = jobFactory;
                 }
-                scheduler.JobFactory = jobFactory;
+            }
+            finally
+            {
+			    if (taskExecutor != null) 
+                {
+				    configTimeTaskExecutor = null;
+			    }
+			    if (dbProvider != null) 
+                {
+				    configTimeDbProvider = null;
+			    }
             }
 
             RegisterListeners();
@@ -677,7 +765,7 @@ namespace Spring.Scheduling.Quartz
         private void InitSchedulerFactory(ISchedulerFactory schedulerFactory)
         {
             if (configLocation != null || quartzProperties != null || schedulerName != null ||
-                taskExecutor != null)
+                taskExecutor != null || dbProvider != null)
             {
                 if (!(schedulerFactory is StdSchedulerFactory))
                 {
@@ -725,6 +813,11 @@ namespace Spring.Scheduling.Quartz
                     // if given quartz properties, merge to them to configuration
                 	MergePropertiesIntoMap(quartzProperties, mergedProps);
                 }
+
+        		if (dbProvider != null) 
+                {
+		        	mergedProps.Add(StdSchedulerFactory.PropertyJobStoreType, typeof(LocalDataSourceJobStore).FullName);
+		        }
 
 
                 // Make sure to set the scheduler name as configured in the Spring configuration.
@@ -845,6 +938,11 @@ namespace Spring.Scheduling.Quartz
         /// </summary>
         private void RegisterJobsAndTriggers()
         {
+		    ITransactionStatus transactionStatus = null;
+		    if (transactionManager != null) {
+			    transactionStatus = transactionManager.GetTransaction(new DefaultTransactionDefinition());
+		    }
+
             try
             {
                 if (jobSchedulingDataLocations != null)
@@ -897,12 +995,30 @@ namespace Spring.Scheduling.Quartz
             }
             catch (Exception ex)
             {
+			    if (transactionStatus != null) 
+                {
+				    try 
+                    {
+					    transactionManager.Rollback(transactionStatus);
+				    }
+				    catch (TransactionException) 
+                    {
+					    logger.Error("Job registration exception overridden by rollback exception", ex);
+					    throw;
+				    }
+			    }
+
                 if (ex is SchedulerException)
                 {
                     throw;
                 }
                 throw new SchedulerException("Registration of jobs and triggers failed: " + ex.Message, ex);
             }
+		    
+            if (transactionStatus != null) 
+            {
+			    transactionManager.Commit(transactionStatus);
+		    }
         }
 
         /// <summary>
@@ -1046,5 +1162,6 @@ namespace Spring.Scheduling.Quartz
                 }
             }
         }
+
     }
 }
