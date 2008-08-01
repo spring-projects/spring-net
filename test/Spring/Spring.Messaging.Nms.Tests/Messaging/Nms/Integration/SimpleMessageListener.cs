@@ -1,10 +1,10 @@
 
 
-using Spring.Messaging.Nms;
+using Spring.Messaging.Nms.Core;
 using Apache.NMS;
 using Common.Logging;
 
-namespace Spring.Messaging.Nms.Integration
+namespace Spring.Messaging.Nms.Core.Integration
 {
     public class SimpleMessageListener : IMessageListener
     {

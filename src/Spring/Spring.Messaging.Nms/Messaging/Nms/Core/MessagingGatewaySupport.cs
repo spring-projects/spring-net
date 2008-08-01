@@ -23,7 +23,7 @@ using Common.Logging;
 using Spring.Objects.Factory;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
     /// <summary>
     /// Convenient super class for application classes that need NMS access.

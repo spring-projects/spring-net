@@ -47,7 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Messaging\Nms\SessionDelegate.cs" />
+    <Compile Include="Messaging\Nms\Core\IExceptionListener.cs" />
+    <Compile Include="Messaging\Nms\Core\IMessageCreator.cs" />
+    <Compile Include="Messaging\Nms\Core\IMessageListener.cs" />
+    <Compile Include="Messaging\Nms\Core\IMessageOperations.cs" />
+    <Compile Include="Messaging\Nms\Core\IMessagePostProcessor.cs" />
+    <Compile Include="Messaging\Nms\Core\IProducerCallback.cs" />
+    <Compile Include="Messaging\Nms\Core\ISessionCallback.cs" />
+    <Compile Include="Messaging\Nms\Core\MessageCreatorDelegate.cs" />
+    <Compile Include="Messaging\Nms\Core\MessageTemplate.cs" />
+    <Compile Include="Messaging\Nms\Core\MessagingGatewaySupport.cs" />
+    <Compile Include="Messaging\Nms\Core\SessionDelegate.cs" />
     <Compile Include="Messaging\Nms\Config\MessageListenerContainerObjectDefinitionParser.cs" />
     <Compile Include="Messaging\Nms\Config\NmsNamespaceParser.cs" />
     <Compile Include="Messaging\Nms\Connections\CachedMessageProducer.cs" />
@@ -61,13 +71,6 @@
     <Compile Include="Messaging\Nms\Connections\MessageTransactionManager.cs" />
     <Compile Include="Messaging\Nms\Connections\SingleConnectionFactory.cs" />
     <Compile Include="Messaging\Nms\Connections\SynchedLocalTransactionFailedException.cs" />
-    <Compile Include="Messaging\Nms\IExceptionListener.cs" />
-    <Compile Include="Messaging\Nms\IMessageCreator.cs" />
-    <Compile Include="Messaging\Nms\IMessageListener.cs" />
-    <Compile Include="Messaging\Nms\IMessageOperations.cs" />
-    <Compile Include="Messaging\Nms\IMessagePostProcessor.cs" />
-    <Compile Include="Messaging\Nms\IProducerCallback.cs" />
-    <Compile Include="Messaging\Nms\ISessionCallback.cs" />
     <Compile Include="Messaging\Nms\Listener\AbstractListenerContainer.cs" />
     <Compile Include="Messaging\Nms\Listener\AbstractMessageListenerContainer.cs" />
     <Compile Include="Messaging\Nms\Listener\Adapter\ListenerExecutionFailedException.cs" />
@@ -75,9 +78,6 @@
     <Compile Include="Messaging\Nms\Listener\ISessionAwareMessageListener.cs" />
     <Compile Include="Messaging\Nms\Listener\LocallyExposedMessageResourceHolder.cs" />
     <Compile Include="Messaging\Nms\Listener\SimpleMessageListenerContainer.cs" />
-    <Compile Include="Messaging\Nms\MessageCreatorDelegate.cs" />
-    <Compile Include="Messaging\Nms\MessageTemplate.cs" />
-    <Compile Include="Messaging\Nms\MessagingGatewaySupport.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\IMessageConverter.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\MessageConversionException.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\SimpleMessageConverter.cs" />

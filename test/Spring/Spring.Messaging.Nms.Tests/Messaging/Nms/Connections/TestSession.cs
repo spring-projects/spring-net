@@ -24,7 +24,7 @@ using Apache.NMS.ActiveMQ;
 using Apache.NMS.ActiveMQ.Commands;
 using Rhino.Mocks;
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Nms.Core.Connections
 {
 
     public class TestSession : ISession

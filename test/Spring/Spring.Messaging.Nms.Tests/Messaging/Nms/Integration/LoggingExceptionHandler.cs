@@ -1,8 +1,8 @@
 using System;
-using Spring.Messaging.Nms;
+using Spring.Messaging.Nms.Core;
 using Common.Logging;
 
-namespace Spring.Messaging.Nms.Integration
+namespace Spring.Messaging.Nms.Core.Integration
 {
     /// <summary>
     /// 

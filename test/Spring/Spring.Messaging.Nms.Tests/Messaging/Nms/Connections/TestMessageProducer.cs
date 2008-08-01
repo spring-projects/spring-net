@@ -21,7 +21,7 @@
 using System;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Nms.Core.Connections
 {
 
     public class TestMessageProducer : IMessageProducer

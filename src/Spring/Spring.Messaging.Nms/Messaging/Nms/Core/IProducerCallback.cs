@@ -20,7 +20,7 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
     /// <summary> Callback for sending a message to a NMS destination.</summary>
     /// <remarks>

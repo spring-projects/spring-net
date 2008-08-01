@@ -20,7 +20,7 @@
 
 using System;
 using Common.Logging;
-using Spring.Messaging.Nms;
+using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Support;
 using Spring.Util;
 using Apache.NMS;

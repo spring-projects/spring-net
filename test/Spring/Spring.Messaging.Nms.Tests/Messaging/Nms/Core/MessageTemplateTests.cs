@@ -24,14 +24,16 @@ using System.Collections;
 using Apache.NMS;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Messaging.Nms.Connections;
-using Spring.Messaging.Nms.Support.Destinations;
+using Spring.Messaging.Nms.Core.Connections;
+using Spring.Messaging.Nms.Core.Connections;
+using Spring.Messaging.Nms.Core.Support.Destinations;
+using Spring.Messaging.Nms.Core.Support.Destinations;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
 #endregion
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
     /// <summary>
     /// This class contains tests for 

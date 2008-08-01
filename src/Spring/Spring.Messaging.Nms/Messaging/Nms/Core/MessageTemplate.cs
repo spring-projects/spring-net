@@ -28,7 +28,7 @@ using Spring.Transaction.Support;
 using Spring.Util;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
     /// <summary> Helper class that simplifies NMS access code.</summary>
     /// <remarks>

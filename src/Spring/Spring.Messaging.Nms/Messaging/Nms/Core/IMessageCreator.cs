@@ -20,27 +20,23 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
-    /// <summary> To be used with MessageTemplate's send method that
-    /// convert an object to a message.
-    /// </summary>
+    /// <summary> Creates a NMS message given a Session</summary>
     /// <remarks>
-    /// It allows for further modification of the message after it has been processed
-    /// by the converter. This is useful for setting of NMS Header and Properties.
+    /// <p>The Session typically is provided by an instance
+    /// of the MessageTemplate class.</p>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public interface IMessagePostProcessor
+    public interface IMessageCreator
     {
-        /// <summary> Apply a IMessagePostProcessor to the message. The returned message is
-        /// typically a modified version of the original.
-        /// </summary>
-        /// <param name="message">the NMS message from the IMessageConverter
+        /// <summary> Create a Message to be sent.</summary>
+        /// <param name="session">the NMS Session to be used to create the
+        /// <code>IMessage</code> (never <code>null</code>)
         /// </param>
-        /// <returns> the modified version of the Message
+        /// <returns> the <code>Message</code> to be sent
         /// </returns>
         /// <throws>NMSException if thrown by NMS API methods </throws>
-        IMessage PostProcessMessage(IMessage message);
-        
+        IMessage CreateMessage(ISession session);
     }
 }

@@ -20,7 +20,7 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
     /// <summary>Specifies a basic set of NMS operations.
 	/// </summary>

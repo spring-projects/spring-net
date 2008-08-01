@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using Spring.Messaging.Nms.Core;
 using Spring.Util;
 
 namespace Spring.Messaging.Nms.Connections

@@ -20,7 +20,7 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
     /// <summary>
     /// Callback delegate for code that operates on a Session. 

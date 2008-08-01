@@ -20,7 +20,7 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
     /// <summary>
     /// Delegate that creates a NMS message given a ISession

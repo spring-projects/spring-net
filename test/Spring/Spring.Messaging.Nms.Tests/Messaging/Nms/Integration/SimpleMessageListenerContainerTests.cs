@@ -23,12 +23,13 @@
 using System;
 using System.Threading;
 using NUnit.Framework;
-using Spring.Messaging.Nms.Listener;
+using Spring.Messaging.Nms.Core.Listener;
+using Spring.Messaging.Nms.Core.Listener;
 using Spring.Testing.NUnit;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Integration
+namespace Spring.Messaging.Nms.Core.Integration
 {
     /// <summary>
     /// This class contains tests for 

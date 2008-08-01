@@ -20,7 +20,7 @@
 
 using System;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms.Core
 {
     /// <summary>
     /// Exception handler for exceptions from the messaging infrastrcture.

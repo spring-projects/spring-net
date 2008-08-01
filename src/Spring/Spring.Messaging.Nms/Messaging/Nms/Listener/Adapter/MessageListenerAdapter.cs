@@ -24,10 +24,11 @@ using System.Collections;
 using System.Reflection;
 using Common.Logging;
 using Spring.Expressions;
-using Spring.Messaging.Nms.Listener;
+using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.Converter;
 using Spring.Messaging.Nms.Support.Destinations;
+using Spring.Messaging.Nms.Listener;
 using Spring.Util;
 using Apache.NMS;
 
