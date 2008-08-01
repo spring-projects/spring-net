@@ -1111,9 +1111,14 @@ namespace Spring.Objects.Factory.Xml
             ITestObject kerry = (ITestObject) xof.GetObject("spouse");
             ITestObject kerry2 = (ITestObject)xof.GetObject("spouse2");
             ArrayCtorDependencyObject rod7 = (ArrayCtorDependencyObject) xof.GetObject("rod7");
+#if NET_1_0 || NET_1_1
+            // Lack of OrderedDictionary means we can't predict the ordering of the autowiring.
+            Assert.IsNotNull(rod7.Spouse1);
+            Assert.IsNotNull(rod7.Spouse2);
+#else
             Assert.AreEqual(kerry, rod7.Spouse1);
             Assert.AreEqual(kerry2, rod7.Spouse2);
-
+#endif
         }
 
         public void AutowireWithParent()

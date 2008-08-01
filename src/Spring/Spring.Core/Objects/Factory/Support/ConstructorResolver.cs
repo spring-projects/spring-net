@@ -308,6 +308,7 @@ namespace Spring.Objects.Factory.Support
             // try all matching methods to see if they match the constructor arguments...
             foreach(MethodInfo factoryMethod in factoryMethods)
             {
+                Type[] paramTypes = new Type[] { };
 #endif
                 if (arguments == null || arguments.Length == 0)
                 {
