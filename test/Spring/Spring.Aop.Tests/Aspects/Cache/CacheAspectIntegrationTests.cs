@@ -42,15 +42,11 @@ namespace Spring.Aspects.Cache
     {
         private IApplicationContext context;
         private CacheAspect cacheAspect;
-        private ICache cache;
 
         [SetUp]
         public void SetUp()
         {
-            cache = new NonExpiringCache();
-
             context = new XmlApplicationContext();
-            ((IConfigurableApplicationContext) context).ObjectFactory.RegisterSingleton("inventors", cache);
 
             cacheAspect = new CacheAspect();
             cacheAspect.ApplicationContext = context;
@@ -59,6 +55,9 @@ namespace Spring.Aspects.Cache
         [Test]
         public void TestCaching()
         {
+            ICache cache = new NonExpiringCache();
+            ((IConfigurableApplicationContext)context).ObjectFactory.RegisterSingleton("inventors", cache);
+
             ProxyFactory pf = new ProxyFactory(new InventorStore());
             pf.AddAdvisors(cacheAspect);
 
@@ -81,6 +80,27 @@ namespace Spring.Aspects.Cache
 
             store.DeleteAll();
             Assert.AreEqual(0, cache.Count);
+        }
+
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-959")]
+        public void UseMethodInfoForKeyGeneration()
+        {
+            ICache cache = new NonExpiringCache();
+            ((IConfigurableApplicationContext)context).ObjectFactory.RegisterSingleton("defaultCache", cache);
+
+            ProxyFactory pf = new ProxyFactory(new GenericDao<string, int>());
+            pf.AddAdvisors(cacheAspect);
+
+            IGenericDao<string, int> dao = (IGenericDao<string, int>)pf.GetProxy();
+
+            Assert.AreEqual(0, cache.Count);
+
+            dao.Load(1);
+            Assert.AreEqual(1, cache.Count);
+
+            // actually, it should be null, because default(string) = null
+            // but it returns the NullValue marker created by the CacheResultAttribute
+            Assert.IsNotNull(cache.Get("String_1"));
         }
     }
 
@@ -132,6 +152,20 @@ namespace Spring.Aspects.Cache
         [InvalidateCache("inventors")]
         public void DeleteAll()
         {
+        }
+    }
+
+    public interface IGenericDao<T, IdT>
+    {
+        T Load(IdT id);
+    }
+
+    public sealed class GenericDao<T, IdT> : IGenericDao<T, IdT>
+    {
+        [CacheResult("defaultCache", "#Load.ReturnType.Name + '_' + #id")]
+        public T Load(IdT id)
+        {
+            return default(T);
         }
     }
 

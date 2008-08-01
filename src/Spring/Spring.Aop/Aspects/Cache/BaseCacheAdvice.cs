@@ -79,9 +79,11 @@ namespace Spring.Aspects.Cache
         /// </returns>
         protected static IDictionary PrepareVariables(MethodInfo method, object[] arguments)
         {
-            ParameterInfo[] parameters = method.GetParameters();
-
             IDictionary vars = new Hashtable();
+
+            vars[method.Name] = method;
+
+            ParameterInfo[] parameters = method.GetParameters();
             for (int i = 0; i < parameters.Length; i++)
             {
                 ParameterInfo p = parameters[i];
