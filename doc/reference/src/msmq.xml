@@ -146,8 +146,8 @@
     <classname>MessageQueueTemplate</classname> will take care of managing
     thread local access to a
     <classname>System.Messaging.MessageQueue</classname> as well as any
-    <classname>System.Messaging.IMessageFormatter</classname> instances.
-    </para>
+    <classname>System.Messaging.IMessageFormatter</classname>
+    instances.</para>
 
     <para>Furthermore, since this is a transactional queue (only the name
     gives it away), the message will be sent using a single local messaging
@@ -247,7 +247,7 @@
     developed to deal with them. This is left as a development task if you
     when using the System.Messaging APIs but Spring provides a strategy for
     handling poison messages, both for DTC based message reception as well as
-    for local messaging transactions. </para>
+    for local messaging transactions.</para>
 
     <para>In the last part this 'quick tour' we will configure the message
     listener container to handle poison messages. This is done by creating an
@@ -261,9 +261,9 @@
     corrective actions.</para>
 
     <programlisting>
-<emphasis role="bold">  &lt;!-- The 'retry' queue to send poison messages --&gt;</emphasis>
-  &lt;object id='retryQuestionTxQueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'&gt;
-    &lt;property name='Path' value='.\Private$\retryQuestionTxQueue'/&gt;
+<emphasis role="bold">  &lt;!-- The 'error' queue to send poison messages --&gt;</emphasis>
+  &lt;object id='errorQuestionTxQueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'&gt;
+    &lt;property name='Path' value='.\Private$\errorQuestionTxQueue'/&gt;
     &lt;property name='MessageReadPropertyFilterSetAll' value='true'/&gt;
   &lt;/object&gt;
 
@@ -278,14 +278,14 @@
 <emphasis role="bold">  &lt;!-- Poison message handling policy --&gt;</emphasis>
   &lt;object id="messageTransactionExceptionHandler" type="Spring.Messaging.Listener.SendToQueueExceptionHandler, Spring.Messaging"&gt;
     &lt;property name="MaxRetry" value="5"/&gt;
-    &lt;property name="MessageQueueObjectName" value="retryQuestionTxQueue"/&gt;
+    &lt;property name="MessageQueueObjectName" value="errorQuestionTxQueue"/&gt;
   &lt;/object&gt;</programlisting>
 
     <para>In the event of an exception while processing the message, the
     message transaction will be rolled back (putting the message back on the
     queue questionTxQueue for redelivery). If the same message causes an
     exception in processing 5 times ,then it will be sent transactionally to
-    the retryQuestionTxQueue and the message transaction will commit (removing
+    the errorQuestionTxQueue and the message transaction will commit (removing
     it from the queue questionTxQueue). You can also specify that certain
     exceptions should commit the transaction (remove from the queue) but this
     is not shown here ,see below for more informatio non this functionality
@@ -401,7 +401,7 @@ object ReceiveAndConvert(string messageQueueObjectName);</programlisting>
       properties that need to be set, perhaps creating a custom
       <classname>IMessageConverter</classname> would be appropriate.</para>
 
-      <para>Overloaded <literal>Send</literal> and <literal>Recieve</literal>
+      <para>Overloaded <literal>Send</literal> and <literal>Receive</literal>
       operations that use the algorithm listed above to set transactional
       delivery options are also available. These are listed below</para>
 
@@ -518,7 +518,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
 
       <para><classname>DefaultMessageQueueFactory</classname> leverages
       Spring's local thread storage support so it will work correctly in stand
-      alone and web applications. </para>
+      alone and web applications.</para>
 
       <para>You can use the <classname>DefaultMessageQueueFactory</classname>
       independent of the rest of Spring's MSMQ support should you need only
@@ -596,7 +596,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       <section>
         <title>NonTransactionalMessageListenerContainer</title>
 
-        <para>This container performs a Recieve operation on the
+        <para>This container performs a Receive operation on the
         <classname>MessageQueue</classname> without any transactional
         settings. As such messages will not be redelivered if an exception is
         thrown during message processing. Exceptions during message processing
@@ -786,7 +786,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
   <emphasis role="bold">&lt;!-- Poison message handling --&gt;</emphasis>
   &lt;object id="messageTransactionExceptionHandler" type="Spring.Messaging.Listener.SendToQueueExceptionHandler, Spring.Messaging"&gt;
     &lt;property name="MaxRetry" value="5"/&gt;
-    &lt;property name="MessageQueueObjectName" value="testTxRetryQueue"/&gt;
+    &lt;property name="MessageQueueObjectName" value="testTxErrorQueue"/&gt;
   &lt;/object&gt;
 
   <emphasis role="bold">&lt;!-- Classes you need to write --&gt;</emphasis>
@@ -955,7 +955,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       <itemizedlist>
         <listitem>
           <para><classname>XmlDocumentConverter</classname> - loads and saves
-          an XmlDocument to the messgae BodyStream. This lets you manipulate
+          an XmlDocument to the message BodyStream. This lets you manipulate
           directly the XML data independent of type serialization issues. This
           is quite useful if you use XPath expressions to pick out the
           relevant information to construct your business objects.</para>
