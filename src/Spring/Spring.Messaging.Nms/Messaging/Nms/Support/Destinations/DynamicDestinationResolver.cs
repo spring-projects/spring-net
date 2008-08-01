@@ -21,7 +21,7 @@
 using Spring.Util;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Support.IDestinations
+namespace Spring.Messaging.Nms.Support.Destinations
 {
     /// <summary> Simple DestinationResolver implementation resolving destination names
     /// as dynamic destinations.</summary>

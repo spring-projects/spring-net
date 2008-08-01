@@ -1,11 +1,33 @@
+#region License
+
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
+
 using System;
 using System.Collections;
+using System.Reflection;
 using Common.Logging;
 using Spring.Expressions;
 using Spring.Messaging.Nms.Listener;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.Converter;
-using Spring.Messaging.Nms.Support.IDestinations;
+using Spring.Messaging.Nms.Support.Destinations;
 using Spring.Util;
 using Apache.NMS;
 
@@ -146,7 +168,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
 	    /// <para>Alternatively, specify a JMS Destination object as "defaultResponseDestination".</para>
 	    /// </summary>
         /// <value>The name of the default response destination queue.</value>
-        public string DefaultResponseDestinationQueueName
+        public string DefaultResponseQueueName
         {
             set { defaultResponseDestination = new DestinationNameHolder(value, false); }
         }
@@ -158,7 +180,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
 	    /// <para>Alternatively, specify a JMS Destination object as "defaultResponseDestination".</para>
         /// </summary>
         /// <value>The name of the default response destination topic.</value>
-        public string DefaultResponseDestinationTopicName
+        public string DefaultResponseTopicName
         {
             set { defaultResponseDestination = new DestinationNameHolder(value, true); }
         }
@@ -238,6 +260,29 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         /// <param name="session">The session to operate on.</param>
         public void OnMessage(IMessage message, ISession session)
         {
+            if (handlerObject != this)
+            {
+                if (typeof(ISessionAwareMessageListener).IsInstanceOfType(handlerObject))
+                {
+                    if (session != null)
+                    {
+                        ((ISessionAwareMessageListener) handlerObject).OnMessage(message, session);
+                        return;
+                    }
+                    else if (!typeof(IMessageListener).IsInstanceOfType(handlerObject))
+                    {
+                        throw new InvalidOperationException("MessageListenerAdapter cannot handle a " +
+							"SessionAwareMessageListener delegate if it hasn't been invoked with a Session itself");
+                    }
+                }
+                if (typeof(IMessageListener).IsInstanceOfType(handlerObject))
+                {
+                    ((IMessageListener)handlerObject).OnMessage(message);
+                    return;
+                }
+            }
+
+            // Regular case: find a handler method reflectively.
             object convertedMessage = ExtractMessage(message);
 
 
@@ -250,7 +295,34 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
             
             //Invoke message handler method and get result.
-            object result = processingExpression.GetValue(handlerObject, vars);
+            object result;
+            try
+            {
+                result = processingExpression.GetValue(handlerObject, vars);
+            }
+            catch (NMSException)
+            {
+                throw;
+            }
+            // Will only happen if dynamic method invocation falls back to standard reflection.
+            catch (TargetInvocationException ex)
+            {
+                Exception targetEx = ex.InnerException;
+                if (ObjectUtils.IsAssignable(typeof(NMSException), targetEx))
+                {
+                    throw ReflectionUtils.UnwrapTargetInvocationException(ex);
+                }
+                else
+                {
+                    throw new ListenerExecutionFailedException("Listener method '" + defaultHandlerMethod + "' threw exception", targetEx);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ListenerExecutionFailedException("Failed to invoke target method '" + defaultHandlerMethod +
+                                                           "' with argument " + convertedMessage, ex);
+            }
+
             if (result != null)
             {
                 HandleResult(result, message, session);
@@ -478,9 +550,9 @@ namespace Spring.Messaging.Nms.Listener.Adapter
     /// </summary>
     internal class DestinationNameHolder
     {
-        private string name;
+        private readonly string name;
 
-        private bool isTopic;
+        private readonly bool isTopic;
 
         public DestinationNameHolder(string name, bool isTopic)
         {

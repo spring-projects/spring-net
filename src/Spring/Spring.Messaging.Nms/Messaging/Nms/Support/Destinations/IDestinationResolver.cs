@@ -20,7 +20,7 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Support.IDestinations
+namespace Spring.Messaging.Nms.Support.Destinations
 {
     /// <summary> Strategy interface for resolving NMS destinations.
     /// </summary>

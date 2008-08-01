@@ -23,7 +23,7 @@ using Common.Logging;
 using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.Converter;
-using Spring.Messaging.Nms.Support.IDestinations;
+using Spring.Messaging.Nms.Support.Destinations;
 using Spring.Transaction.Support;
 using Spring.Util;
 using Apache.NMS;
@@ -580,6 +580,25 @@ namespace Spring.Messaging.Nms
         #endregion
 
         #region IMessageOperations Implementation
+
+        /// <summary>
+        /// Execute the action specified by the given action object within
+        /// a NMS Session.
+        /// </summary>
+        /// <param name="del">delegate that exposes the session</param>
+        /// <returns>
+        /// the result object from working with the session
+        /// </returns>
+        /// <remarks>
+        /// 	<para>Note that the value of PubSubDomain affects the behavior of this method.
+        /// If PubSubDomain equals true, then a Session is passed to the callback.
+        /// If false, then a ISession is passed to the callback.</para>b
+        /// </remarks>
+        /// <throws>NMSException if there is any problem </throws>
+        public object Execute(SessionDelegate del)
+        {
+            return Execute(new ExecuteSessionCallbackUsingDelegate(del));
+        }
 
         /// <summary> Execute the action specified by the given action object within
         /// a NMS Session.
@@ -1272,7 +1291,23 @@ namespace Spring.Messaging.Nms
         }
         
         #endregion
+
+        private class ExecuteSessionCallbackUsingDelegate : ISessionCallback
+        {
+            private readonly SessionDelegate del;
+            public ExecuteSessionCallbackUsingDelegate(SessionDelegate del)
+            {
+                this.del = del;
+            }
+
+            public object DoInNms(ISession session)
+            {
+                return del(session);
+            }
+        }
     }
+
+
 
     internal class SimpleMessageCreator : IMessageCreator
     {

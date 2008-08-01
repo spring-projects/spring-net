@@ -20,12 +20,16 @@
 
 using System;
 using Apache.NMS;
+using Apache.NMS.ActiveMQ;
+using Apache.NMS.ActiveMQ.Commands;
+using Rhino.Mocks;
 
 namespace Spring.Messaging.Nms.Connections
 {
 
     public class TestSession : ISession
     {
+        private MockRepository mocks = new MockRepository();
         private int closeCount;
         private int createdCount;
 
@@ -63,7 +67,9 @@ namespace Spring.Messaging.Nms.Connections
 
         public IMessageConsumer CreateConsumer(IDestination destination, string selector)
         {
-            throw new NotImplementedException();
+            //IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            IMessageConsumer msgConsumer = (IMessageConsumer) mocks.CreateMock(typeof (IMessageConsumer));
+            return msgConsumer;
         }
 
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal)
@@ -78,7 +84,7 @@ namespace Spring.Messaging.Nms.Connections
 
         public IQueue GetQueue(string name)
         {
-            throw new NotImplementedException();
+            return new ActiveMQQueue(name);
         }
 
         public ITopic GetTopic(string name)

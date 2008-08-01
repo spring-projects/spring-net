@@ -52,6 +52,20 @@ namespace Spring.Messaging.Nms
 		/// </returns>
 		/// <throws>NMSException if there is any problem </throws>
 		object Execute(ISessionCallback action);
+
+        /// <summary> Execute the action specified by the given action object within
+        /// a NMS Session.
+        /// </summary>
+        /// <remarks>
+        /// <para>Note that the value of PubSubDomain affects the behavior of this method.
+        /// If PubSubDomain equals true, then a Session is passed to the callback.
+        /// If false, then a ISession is passed to the callback.</para>b
+        /// </remarks>
+        /// <param name="del">delegate that exposes the session</param>
+        /// <returns> the result object from working with the session
+        /// </returns>
+        /// <throws>NMSException if there is any problem </throws>
+        object Execute(SessionDelegate del);
 		
 		/// <summary> Send a message to a NMS destination. The callback gives access to
 		/// the NMS session and MessageProducer in order to do more complex

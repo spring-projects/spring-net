@@ -26,8 +26,9 @@ namespace Spring.Messaging.Nms
     /// Session
     /// </summary>
     /// <remarks>
-    /// <p>To be used with the MessageTemplate.Execute(ISessionCallback)}
-    /// method, often implemented as an anonymous inner class.</p>
+    /// <para>To be used with the MessageTemplate.Execute(ISessionCallback)}
+    /// method. See <see cref="SessionDelegate"/> for the equivalent callback
+    /// that can be used as a (anonymous) delegate.</para>
     /// </remarks>
     /// <author>Mark Pollack</author>
     /// <seealso cref="MessageTemplate.Execute(ISessionCallback,bool)">

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.springframework.net/nms"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"		
+		targetNamespace="http://www.springframework.net/nms"
+		elementFormDefault="qualified"
+		attributeFormDefault="unqualified"
+		vs:friendlyname="Spring.NET NMS Configuration" vs:ishtmlschema="false" vs:iscasesensitive="true" vs:requireattributequotes="true" vs:defaultnamespacequalifier="" vs:defaultnsprefix="">
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+	Defines the configuration elements for the Spring Framework's NMS support.
+	Allows for configuring NMS listener containers in XML 'shortcut' style.
+		]]></xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="listener-container">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+	Each listener child element will be hosted by a container whose configuration
+	is determined by this parent element. This variant builds standard NMS
+	listener containers, operating against a specified NMS ConnectionFactory.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="listener" type="listenerType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name="container-type" default="simple">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	The type of this listener container: "simple" is the only option as of Spring.NET 1.2
+					]]></xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="simple"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="connection-factory" type="xsd:string" default="connectionFactory">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	A reference to the NMS ConnectionFactory bean.
+	Default is "connectionFactory".
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="destination-resolver" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	A reference to the DestinationResolver strategy for resolving destination names.
+	Default is a DynamicDestinationResolver, using the NMS provider's queue/topic
+	name resolution.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="message-converter" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	A reference to the MessageConverter strategy for converting NMS Messages to
+	listener method arguments. Default is a SimpleMessageConverter.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="destination-type" default="queue">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	The NMS destination type for this listener: "queue", "topic" or "durableTopic".
+	The default is "queue".
+					]]></xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="queue"/>
+						<xsd:enumeration value="topic"/>
+						<xsd:enumeration value="durableTopic"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="client-id" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	The NMS client id for this listener container.
+	Needs to be specified when using durable subscriptions.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="acknowledge" default="auto">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	The native NMS acknowledge mode: "auto", "client", "dups-ok" or "transacted".
+	A value of "transacted" effectively activates a locally transacted Session;
+	as alternative, specify an external "transaction-manager" via the corresponding
+	attribute. Default is "auto".
+					]]></xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="auto"/>
+						<xsd:enumeration value="client"/>
+						<xsd:enumeration value="dups-ok"/>
+						<xsd:enumeration value="transacted"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="concurrency" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	The number of concurrent sessions/consumers to start for each listener.
+	Default is 1; keep concurrency limited to 1 in case of a topic listener
+	or if message ordering is important; consider raising it for general queues.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+
+	<xsd:complexType name="listenerType">
+			<xsd:attribute name="id" type="xsd:ID">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+	The unique identifier for a listener.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		<xsd:attribute name="destination" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	The destination name for this listener, resolved through the
+	container-wide IDestinationResolver strategy (if any). Required.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="subscription" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	The name for the durable subscription, if any.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="selector" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	The NMS message selector for this listener.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="ref" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	The object name of the listener object, implementing
+	the IMessageListener/ISessionAwareMessageListener interface
+	or defining the specified listener method. Required.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="method" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	The name of the listener method to invoke. If not specified,
+	the target object is supposed to implement the IMessageListener
+	or ISessionAwareMessageListener interface.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="response-destination" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+	The name of the default response destination to send response messages to.
+	This will be applied in case of a request message that does not carry
+	a "NMSReplyTo" field. The type of this destination will be determined
+	by the listener-container's "destination-type" attribute.
+	Note: This only applies to a listener method with a return value,
+	for which each result object will be converted into a response message.
+				]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	
+</xsd:schema>

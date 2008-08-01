@@ -461,7 +461,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 return session;
             }
-            return target.CreateSession();
+            return target.CreateSession(acknowledgementMode);
         }
 
         #region Pass through implementations to the target connection

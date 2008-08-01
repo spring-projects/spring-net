@@ -23,7 +23,7 @@ using Spring.Objects.Factory;
 using Spring.Util;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Support.IDestinations
+namespace Spring.Messaging.Nms.Support.Destinations
 {
     /// <summary> Base class for MessageTemplate} and other
     /// NMS-accessing gateway helpers, adding destination-related properties to

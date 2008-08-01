@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\Nms\SessionDelegate.cs" />
+    <Compile Include="Messaging\Nms\Config\MessageListenerContainerObjectDefinitionParser.cs" />
+    <Compile Include="Messaging\Nms\Config\NmsNamespaceParser.cs" />
     <Compile Include="Messaging\Nms\Connections\CachedMessageProducer.cs" />
     <Compile Include="Messaging\Nms\Connections\CachedSession.cs" />
     <Compile Include="Messaging\Nms\Connections\CachingConnectionFactory.cs" />
@@ -67,13 +70,14 @@
     <Compile Include="Messaging\Nms\ISessionCallback.cs" />
     <Compile Include="Messaging\Nms\Listener\AbstractListenerContainer.cs" />
     <Compile Include="Messaging\Nms\Listener\AbstractMessageListenerContainer.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\ListenerExecutionFailedException.cs" />
     <Compile Include="Messaging\Nms\Listener\Adapter\MessageListenerAdapter.cs" />
     <Compile Include="Messaging\Nms\Listener\ISessionAwareMessageListener.cs" />
     <Compile Include="Messaging\Nms\Listener\LocallyExposedMessageResourceHolder.cs" />
     <Compile Include="Messaging\Nms\Listener\SimpleMessageListenerContainer.cs" />
     <Compile Include="Messaging\Nms\MessageCreatorDelegate.cs" />
-    <Compile Include="Messaging\Nms\MessageGatewaySupport.cs" />
     <Compile Include="Messaging\Nms\MessageTemplate.cs" />
+    <Compile Include="Messaging\Nms\MessagingGatewaySupport.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\IMessageConverter.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\MessageConversionException.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\SimpleMessageConverter.cs" />
@@ -96,6 +100,11 @@
       <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
       <Name>Spring.Data.2005</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messaging\Nms\Config\spring-nms-1.2.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

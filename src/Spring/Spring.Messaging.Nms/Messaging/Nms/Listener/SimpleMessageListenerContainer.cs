@@ -223,6 +223,7 @@ namespace Spring.Messaging.Nms.Listener
             
 			
 	        SimpleMessageListener listener = new SimpleMessageListener(this, session);
+            // put in explicit registration with 'new' for compilation on .NET 1.1
             consumer.Listener += new Apache.NMS.MessageListener(listener.OnMessage); 
             return consumer;
         }

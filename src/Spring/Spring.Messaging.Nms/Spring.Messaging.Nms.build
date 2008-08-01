@@ -21,11 +21,16 @@
                 <include name="**/*.cs" />
                 <include name="../GenCommonAssemblyInfo.cs" />
             </sources>
-		        <references basedir="${current.bin.dir}">
-			        <include name="*.dll" />
-			        <exclude name="${project::get-name()}.dll" />
-				<exclude name="CloverRuntime.dll" />
-		        </references>
+	    <resources prefix="Spring" dynamicprefix="true" failonempty="true">
+        	<include name="**/*.keys" />
+	        <include name="**/*.xsd" />
+        	<exclude name="**/obj/**" />
+	    </resources>
+	    <references basedir="${current.bin.dir}">
+		<include name="*.dll" />
+		<exclude name="${project::get-name()}.dll" />
+		<exclude name="CloverRuntime.dll" />
+	    </references>
         </csc>
     </target>
 

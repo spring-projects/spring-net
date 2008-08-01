@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:nms="http://www.springframework.net/nms">
+
+  <nms:listener-container connection-factory="testConnectionFactory" 
+			destination-resolver="testDestinationResolver" message-converter="testMessageConverter">
+    <nms:listener id="listener1" destination="testDestination" ref="testObject1" method="SetName"/>
+    <nms:listener id="listener2" destination="testDestination" ref="testObject2" method="SetName" 
+                  response-destination="responseDestination"/>
+  </nms:listener-container>
+
+  <nms:listener-container>
+    <nms:listener destination="testDestination" ref="testObject3"/>
+  </nms:listener-container>
+
+
+  <!-- the default ConnectionFactory -->
+  <object id="connectionFactory" type="Spring.Messaging.Nms.Connections.TestConnectionFactory, Spring.Messaging.Nms.Tests"/>
+
+  <object id="testConnectionFactory" type="Spring.Messaging.Nms.Connections.TestConnectionFactory, Spring.Messaging.Nms.Tests"/>
+
+
+  <!--
+  <bean id="testActivationSpecFactory" class="org.springframework.jms.listener.endpoint.StubJmsActivationSpecFactory"/>
+  -->
+
+  <object id="testDestinationResolver" type="Spring.Messaging.Nms.Support.Destinations.DynamicDestinationResolver, Spring.Messaging.Nms"/>
+
+  <object id="testMessageConverter" type="Spring.Messaging.Nms.Support.Converter.SimpleMessageConverter, Spring.Messaging.Nms"/>
+
+
+  <object id="testObject1" type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+
+  <object id="testObject2"  type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+
+  <object id="testObject3"  type="Spring.Messaging.Nms.Connections.TestMessageListener, Spring.Messaging.Nms.Tests"/>
+
+</objects>
+

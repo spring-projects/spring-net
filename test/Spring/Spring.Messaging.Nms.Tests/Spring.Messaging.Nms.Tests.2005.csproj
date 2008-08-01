@@ -88,19 +88,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\CachingConnectionFactoryTests.cs" />
-    <Compile Include="Messaging\Nms\Connections\NmsTransactionManagerTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\MessageTransactionManagerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\SingleConnectionFactoryTests.cs" />
     <Compile Include="Messaging\Nms\Connections\TestConnection.cs" />
     <Compile Include="Messaging\Nms\Connections\TestExceptionListener.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestMessageListener.cs" />
     <Compile Include="Messaging\Nms\Connections\TestMessageProducer.cs" />
     <Compile Include="Messaging\Nms\Connections\TestSession.cs" />
     <Compile Include="Messaging\Nms\Integration\LoggingExceptionHandler.cs" />
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListener.cs" />
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestConnectionFactory.cs" />
+    <Compile Include="Messaging\Nms\MessageTemplateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.xml" />
+    <EmbeddedResource Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.xml" />
     <Content Include="Spring.Messaging.Nms.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

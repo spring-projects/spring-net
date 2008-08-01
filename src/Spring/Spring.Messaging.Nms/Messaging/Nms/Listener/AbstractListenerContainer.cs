@@ -24,7 +24,7 @@ using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support;
-using Spring.Messaging.Nms.Support.IDestinations;
+using Spring.Messaging.Nms.Support.Destinations;
 using Spring.Objects.Factory;
 
 namespace Spring.Messaging.Nms.Listener
