@@ -14,32 +14,20 @@
  * limitations under the License.
  */
 
-using System;
-using System.Data;
-using System.Data.SqlClient;
-
 using Quartz;
 using Quartz.Impl.AdoJobStore;
-using Quartz.Spi;
 using Quartz.Util;
 
 using Spring.Data.Support;
 
 namespace Spring.Scheduling.Quartz
 {
-
     /// <summary>
     /// Subclass of Quartz's JobStoreCMT class that delegates to a Spring-managed
     /// DataSource instead of using a Quartz-managed connection pool. This JobStore
-    /// will be used if SchedulerFactoryBean's "dbProvider" property is set.
+    /// will be used if SchedulerFactoryObject's "dbProvider" property is set.
     ///</summary>
     /// <remarks>
-    /// <p>Supports both transactional and non-transactional DataSource access.
-    /// With a non-XA DataSource and local Spring transactions, a single DataSource
-    /// argument is sufficient. In case of an XA DataSource and global JTA transactions,
-    /// SchedulerFactoryBean's "nonTransactionalDataSource" property should be set,
-    /// passing in a non-XA DataSource that will not participate in global transactions.</p>
-    ///
     /// <p>Operations performed by this JobStore will properly participate in any
     /// kind of Spring-managed transaction, as it uses Spring's DataSourceUtils
     /// connection handling methods that are aware of a current transaction.</p>
@@ -55,12 +43,12 @@ namespace Spring.Scheduling.Quartz
     /// <seealso cref="ConnectionUtils.DisposeConnection" />
     public class LocalDataSourceJobStore : JobStoreCMT
     {
-        /**
-         * Name used for the transactional ConnectionProvider for Quartz.
-         * This provider will delegate to the local Spring-managed DataSource.
-         * @see org.quartz.utils.DBConnectionManager#addConnectionProvider
-         * @see SchedulerFactoryBean#setDataSource
-         */
+        /// <summary>
+        /// Name used for the transactional ConnectionProvider for Quartz.
+        /// This provider will delegate to the local Spring-managed DataSource.
+        /// <seealso cref="DBConnectionManager.AddConnectionProvider" />
+        /// <seealso cref="SchedulerFactoryObject.DbProvider" />
+        /// </summary>
         public const string TX_DATA_SOURCE_PREFIX = "springTxDataSource.";
 
         private Data.Common.IDbProvider dbProvider;
@@ -92,126 +80,24 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
+        /// <summary>
+        /// Gets the non managed TX connection.
+        /// </summary>
+        /// <returns></returns>
         protected override ConnectionAndTransactionHolder GetNonManagedTXConnection()
         {
-            ConnectionTxPair pair = ConnectionUtils.GetConnectionTxPair(dbProvider);
+            ConnectionTxPair pair = ConnectionUtils.DoGetConnection(dbProvider);
             return new ConnectionAndTransactionHolder(pair.Connection, pair.Transaction);
         }
 
+        /// <summary>
+        /// Closes the connection.
+        /// </summary>
+        /// <param name="connectionAndTransactionHolder">The connection and transaction holder.</param>
         protected override void CloseConnection(ConnectionAndTransactionHolder connectionAndTransactionHolder)
         {
             // Will work for transactional and non-transactional connections.
             ConnectionUtils.DisposeConnection(connectionAndTransactionHolder.Connection, dbProvider);
         }
-
     }
-
-    ///<summary>
-    ///</summary>
-    public class JobStoreCMT : JobStoreSupport {
-
-    ///<summary>
-    ///</summary>
-    ///<param name="loadHelper"></param>
-    ///<param name="signaler"></param>
-    public override void Initialize(ITypeLoadHelper loadHelper, ISchedulerSignaler signaler)
-    {
-        if (LockHandler == null) {
-            // If the user hasn't specified an explicit lock handler, 
-            // then we *must* use DB locks with CMT...
-            UseDBLocks = true;
-        }
-
-        base.Initialize(loadHelper, signaler);
-
-        Log.Info("JobStoreCMT initialized.");
-    }
-    
-    ///<summary>
-    ///</summary>
-    public override void Shutdown() {
-
-        base.Shutdown();
-        
-        try {
-            DBConnectionManager.Instance.Shutdown(DataSource);
-        } catch (SqlException sqle) {
-            Log.Warn("Database connection shutdown unsuccessful.", sqle);
-        }
-    }
-
-    protected override ConnectionAndTransactionHolder GetNonManagedTXConnection()
-       {
-        IDbConnection conn;
-        try {
-            conn = DBConnectionManager.Instance.GetConnection(DataSource);
-        } catch (SqlException sqle) {
-            throw new JobPersistenceException(
-                "Failed to obtain DB connection from data source '"
-                        + DataSource + "': "
-                        + sqle, sqle);
-        } catch (Exception e) {
-            throw new JobPersistenceException(
-                "Failed to obtain DB connection from data source '"
-                        + DataSource + "': "
-                        + e, e,
-                SchedulerException.ErrorPersistenceCriticalFailure);
-        }
-
-        if (conn == null) { 
-            throw new JobPersistenceException(
-                "Could not get connection from DataSource '"
-                        + DataSource + "'"); 
-        }
-
-        // Set any connection connection attributes we are to override.
-        return new ConnectionAndTransactionHolder(conn, null);
-    }
-    
-    /**
-     * Execute the given callback having optionally aquired the given lock.  
-     * Because CMT assumes that the connection is already part of a managed
-     * transaction, it does not attempt to commit or rollback the 
-     * enclosing transaction.
-     * 
-     * @param lockName The name of the lock to aquire, for example 
-     * "TRIGGER_ACCESS".  If null, then no lock is aquired, but the
-     * txCallback is still executed in a transaction.
-     * 
-     * @see JobStoreSupport#executeInNonManagedTXLock(String, TransactionCallback)
-     * @see JobStoreTX#executeInLock(String, TransactionCallback)
-     * @see JobStoreSupport#getNonManagedTXConnection()
-     * @see JobStoreSupport#getConnection()
-     */
-    protected override object ExecuteInLock(
-            string lockName, 
-            ITransactionCallback txCallback){
-        bool transOwner = false;
-        ConnectionAndTransactionHolder conn = null;
-        try {
-            if (lockName != null) {
-                // If we aren't using db locks, then delay getting DB connection 
-                // until after aquiring the lock since it isn't needed.
-                if (LockHandler.RequiresConnection) {
-                    conn = GetNonManagedTXConnection();
-                }
-                
-                transOwner = LockHandler.ObtainLock(DbMetadata, conn, lockName);
-            }
-
-            if (conn == null) {
-                conn = GetNonManagedTXConnection();
-            }
-
-            return txCallback.Execute(conn);
-        } finally {
-            try {
-                ReleaseLock(conn, LockTriggerAccess, transOwner);
-            } finally {
-                CleanupConnection(conn);
-            }
-        }
-    }
-}
-
 }
