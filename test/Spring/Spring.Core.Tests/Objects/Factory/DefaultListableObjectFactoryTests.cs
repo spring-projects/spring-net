@@ -871,11 +871,30 @@ namespace Spring.Objects.Factory
                 Assert.IsNotNull(to);
                 Assert.AreEqual(35, to.Age);
                 Assert.AreEqual("Mark", to.Name);
+            }
+        }
 
-                TestObject to2 = lof.GetObject("prototype", new object[] {35, "Mark"}) as TestObject;
-                Assert.IsNotNull(to2);
-                Assert.AreEqual(35, to2.Age);
-                Assert.AreEqual("Mark", to2.Name);
+        [Test]
+        [Ignore("Ordering must now be strict when providing array of arguments for ctors")]
+        public void GetObjectWithCtorArgsOnPrototypeOutOfOrderArgs()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                RootObjectDefinition prototype
+                    = new RootObjectDefinition(typeof(TestObject));
+                prototype.IsSingleton = false;
+                lof.RegisterObjectDefinition("prototype", prototype);
+
+                try
+                {
+                    TestObject to2 = lof.GetObject("prototype", new object[] {35, "Mark"}) as TestObject;
+                    Assert.IsNotNull(to2);
+                    Assert.AreEqual(35, to2.Age);
+                    Assert.AreEqual("Mark", to2.Name);
+                } catch (ObjectCreationException ex)
+                {
+                    Assert.IsTrue(ex.Message.IndexOf("'Object of type 'System.Int32' cannot be converted to type 'System.String'") >= 0);
+                }
             }
         }
 
@@ -1228,8 +1247,7 @@ namespace Spring.Objects.Factory
 		[ExpectedException(typeof (UnsatisfiedDependencyException),
 			"Error creating object with name 'foo' : Unsatisfied dependency " +
 				"expressed through constructor argument with index 1 of type [System.Boolean] : " +
-				"There are '0' objects of type [System.Boolean] for autowiring constructor. There " +
-				"should have been exactly 1 to be able to autowire the 'b2' argument on the constructor of object 'foo'.")]
+                "No unique object of type [System.Boolean] is defined : Unsatisfied dependency of type [System.Boolean]: expected at least 1 matching object to wire the [b2] parameter on the constructor of object [foo]")]
 		public void DoubleBooleanAutowire()
 		{
 			RootObjectDefinition def = new RootObjectDefinition(typeof (DoubleBooleanConstructorObject));

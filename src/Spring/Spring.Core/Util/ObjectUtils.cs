@@ -57,8 +57,15 @@ namespace Spring.Util
         /// </summary>
         public static readonly object[] EmptyObjects = new object[] { };
 
+        private static MethodInfo GetHashCodeMethodInfo = null;
+
         #endregion
 
+        static ObjectUtils()
+		{
+			Type type = typeof(object);
+			GetHashCodeMethodInfo = type.GetMethod("GetHashCode");
+		}
         #region Constructor (s) / Destructor
 
         // CLOVER:OFF
@@ -506,6 +513,33 @@ namespace Spring.Util
         {
             AssertUtils.ArgumentNotNull(method, "method", "MethodInfo must not be null");
             return method.DeclaringType.FullName + "." + method.Name;
+        }
+
+        /// <summary>
+        /// Return a String representation of an object's overall identity.
+        /// </summary>
+        /// <param name="obj">The object (may be <code>null</code>).</param>
+        /// <returns>The object's identity as String representation,
+        /// or an empty String if the object was <code>null</code>
+        /// </returns>
+        public static object IdentityToString(object obj)
+        {
+            if (obj == null)
+            {
+                return string.Empty;
+            }
+            return obj.GetType().FullName + "@" + GetIdentityHexString(obj);
+        }
+
+        /// <summary>
+        /// Gets a hex String form of an object's identity hash code.
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns>The object's identity code in hex notation</returns>
+        public static string GetIdentityHexString(object obj)
+        {
+            int hashcode = (int)GetHashCodeMethodInfo.Invoke(obj, null);
+            return hashcode.ToString("X6");
         }
     }
 }

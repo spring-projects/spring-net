@@ -192,5 +192,14 @@ namespace Spring.Objects.Factory.Support
         /// The name of the factory object to use (if any).
         /// </summary>
         new string FactoryObjectName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance a candidate for getting autowired into some other
+        /// object.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is autowire candidate; otherwise, <c>false</c>.
+        /// </value>
+        new bool IsAutowireCandidate { get; set; }
     }
 }

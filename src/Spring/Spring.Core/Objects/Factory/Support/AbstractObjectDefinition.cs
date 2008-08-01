@@ -126,6 +126,7 @@ namespace Spring.Objects.Factory.Support
             InitMethodName = other.InitMethodName;
             DestroyMethodName = other.DestroyMethodName;
             DependsOn = new string[other.DependsOn.Length];
+            IsAutowireCandidate = other.IsAutowireCandidate;
             Array.Copy(other.DependsOn, DependsOn, other.DependsOn.Length);
             FactoryMethodName = other.FactoryMethodName;
             FactoryObjectName = other.FactoryObjectName;
@@ -487,6 +488,19 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance a candidate for getting autowired into some other
+        /// object.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is autowire candidate; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsAutowireCandidate
+        {
+            get { return autowireCandidate; }
+            set { autowireCandidate = value;}
+        }
+
+        /// <summary>
         /// The name of the initializer method.
         /// </summary>
         /// <remarks>
@@ -736,6 +750,7 @@ namespace Spring.Objects.Factory.Support
         private AutoWiringMode autowireMode = AutoWiringMode.No;
         private DependencyCheckingMode dependencyCheck = DependencyCheckingMode.None;
         private string[] dependsOn;
+        private bool autowireCandidate = true;
         private string initMethodName = string.Empty;
         private string destroyMethodName = string.Empty;
         private string factoryMethodName = string.Empty;

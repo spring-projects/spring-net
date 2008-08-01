@@ -24,9 +24,11 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Reflection;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Core;
+using Spring.Core.TypeConversion;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
@@ -146,6 +148,25 @@ namespace Spring.Objects.Factory.Support
         {
             get { return allowObjectDefinitionOverriding; }
             set { allowObjectDefinitionOverriding = value; }
+        }
+
+
+        /// <summary>
+        /// Get or set custom autowire candidate resolver for this IObjectFactory to use
+        /// when deciding whether a bean definition should be considered as a
+        /// candidate for autowiring.  Never <code>null</code>
+        /// </summary>
+        public IAutowireCandidateResolver AutowireCandidateResolver
+        {
+            get
+            {
+                return autowireCandidateResolver;
+            }
+            set
+            {
+                AssertUtils.ArgumentNotNull(value, "AutowireCandidateResolver"); 
+                autowireCandidateResolver = value;
+            }
         }
 
         #endregion
@@ -302,6 +323,16 @@ namespace Spring.Objects.Factory.Support
         /// List of object definition names, in registration order.
         /// </summary>
         private readonly IList objectDefinitionNames = new ArrayList();
+
+        /// <summary>
+        /// Resolver to use for checking if an object definition is an autowire candidate
+        /// </summary>
+        private IAutowireCandidateResolver autowireCandidateResolver = AutowireUtils.CreateAutowireCandidateResolver();
+
+        /// <summary>
+        /// IDictionary from dependency type to corresponding autowired value 
+        /// </summary>
+	    private readonly IDictionary resolvableDependencies = new Hashtable();
 
         #endregion
 
@@ -470,6 +501,40 @@ namespace Spring.Objects.Factory.Support
                         ex);
                 }
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Register a special dependency type with corresponding autowired value.
+        /// </summary>
+        /// <param name="dependencyType">Type of the dependency to register.
+        /// This will typically be a base interface such as IObjectFactory, with extensions of it resolved
+        /// as well if declared as an autowiring dependency (e.g. IListableBeanFactory),
+        /// as long as the given value actually implements the extended interface.</param>
+        /// <param name="autowiredValue">The autowired value.  This may also be an
+        /// implementation o the <see cref="IObjectFactory"/> interface,
+        /// which allows for lazy resolution of the actual target value.</param>
+        /// <remarks>
+        /// This is intended for factory/context references that are supposed
+        /// to be autowirable but are not defined as objects in the factory:
+        /// e.g. a dependency of type ApplicationContext resolved to the
+        /// ApplicationContext instance that the object is living in.
+        /// <para>
+        /// Note there are no such default types registered in a plain IObjectFactory,
+        /// not even for the BeanFactory interface itself.
+        /// </para>
+        /// </remarks>
+        public void RegisterResolvableDependency(Type dependencyType, object autowiredValue)
+        {
+            AssertUtils.ArgumentNotNull(dependencyType, "dependencyType");
+            if (autowiredValue != null)
+            {
+                AssertUtils.IsTrue((autowiredValue is IObjectFactory) || dependencyType.IsInstanceOfType(autowiredValue),
+                    "Value [" + autowiredValue + "] does not implement specified type [" + dependencyType.Name + "]");
+                if (!resolvableDependencies.Contains(dependencyType))
+                {
+                    this.resolvableDependencies.Add(dependencyType, autowiredValue);
+                }
             }
         }
 
@@ -889,5 +954,175 @@ namespace Spring.Objects.Factory.Support
         }
 
         #endregion
+
+        /// <summary>
+        /// Resolve the specified dependency against the objects defined in this factory.
+        /// </summary>
+        /// <param name="descriptor">The descriptor for the dependency.</param>
+        /// <param name="objectName">Name of the object which declares the present dependency.</param>
+        /// <param name="autowiredObjectNames">A list that all names of autowired object (used for
+        /// resolving the present dependency) are supposed to be added to.</param>
+        /// <returns>
+        /// the resolved object, or <code>null</code> if none found
+        /// </returns>
+        /// <exception cref="ObjectsException">if dependency resolution failed</exception>
+        public override object ResolveDependency(DependencyDescriptor descriptor, string objectName,
+                                                 IList autowiredObjectNames)
+        {
+            Type type = descriptor.DependencyType;
+            if (type.IsArray)
+            {
+                Type elementType = type.GetElementType();
+                IDictionary matchingObjects = FindAutowireCandidates(objectName, elementType, descriptor);
+                if (matchingObjects.Count == 0)
+                {
+                    if (descriptor.Required)
+                    {
+                        RaiseNoSuchObjectDefinitionException(elementType, "array of " + elementType.FullName, descriptor);
+                    }
+                    return null;
+                }
+                if (autowiredObjectNames != null)
+                {
+                    foreach (DictionaryEntry matchingObject in matchingObjects)
+                    {
+                        autowiredObjectNames.Add(matchingObject.Key);
+                    }
+                }
+                return TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects.Values, null);
+            } else if (typeof(ICollection).IsAssignableFrom(type) && type.IsInterface)
+            {
+                //TODO - handle generic types.
+                return null;
+
+            } else
+            {
+                IDictionary matchingObjects = FindAutowireCandidates(objectName, type, descriptor);
+                if (matchingObjects.Count == 0)
+                {
+                    if (descriptor.Required)
+                    {
+                       string methodType = (descriptor.MethodParameter.ConstructorInfo != null) ? "constructor" : "method";
+                       throw new NoSuchObjectDefinitionException(type,
+							"Unsatisfied dependency of type [" + type + "]: expected at least 1 matching object to wire the ["
+                            + descriptor.MethodParameter.ParameterName() + "] parameter on the " + methodType + " of object [" + objectName + "]"); 
+                    }
+                    return null;
+                }
+                if (matchingObjects.Count > 1)
+                {
+    
+                   throw new NoSuchObjectDefinitionException(type,
+							"expected single matching object but found " + matchingObjects.Count + ": " + matchingObjects);
+                }
+                DictionaryEntry entry = (DictionaryEntry)ObjectUtils.EnumerateFirstElement(matchingObjects);
+                if (autowiredObjectNames != null)
+                {
+                    autowiredObjectNames.Add(entry.Key);
+                }
+                return entry.Value;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Raises the no such object definition exception for an unresolvable dependency
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="dependencyDescription">The dependency description.</param>
+        /// <param name="descriptor">The descriptor.</param>
+        private void RaiseNoSuchObjectDefinitionException(Type type, string dependencyDescription, DependencyDescriptor descriptor)
+        {
+            throw new NoSuchObjectDefinitionException(type, dependencyDescription,
+                                                      "expected at least 1 object which qualifies as autowire candidate for this dependency. ");
+        }
+
+        private IDictionary FindAutowireCandidates(string objectName, Type requiredType, DependencyDescriptor descriptor)
+        {
+            string[] candidateNames =
+                ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(this, requiredType, true, descriptor.Eager);
+#if NET_1_0 || NET_1_1
+            IDictionary result = new Hashtable();
+#else
+            IDictionary result = new OrderedDictionary(candidateNames.Length);
+#endif
+            foreach (DictionaryEntry entry in resolvableDependencies)
+            {
+                Type autoWiringType = (Type) entry.Key;
+                if (autoWiringType.IsAssignableFrom(requiredType))
+                {
+                    object autowiringValue = this.resolvableDependencies[autoWiringType];
+                    if (requiredType.IsInstanceOfType(autowiringValue))
+                    {
+                        result.Add(ObjectUtils.IdentityToString(autowiringValue), autowiringValue);
+                        break;
+                    }
+                }          
+            }
+            for (int i = 0; i < candidateNames.Length; i++)
+            {
+                string candidateName = candidateNames[i];
+                if (!candidateName.Equals(objectName) && IsAutowireCandidate(candidateName, descriptor))
+                {
+                    result.Add(candidateName, GetObject(candidateName));
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Determines whether the specified object qualifies as an autowire candidate,
+        /// to be injected into other beans which declare a dependency of matching type.
+        /// This method checks ancestor factories as well.
+        /// </summary>
+        /// <param name="objectName">Name of the object to check.</param>
+        /// <param name="descriptor">The descriptor of the dependency to resolve.</param>
+        /// <returns>
+        /// 	<c>true</c> if the object should be considered as an autowire candidate; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="NoSuchObjectDefinitionException">if there is no object with the given name.</exception>
+        public bool IsAutowireCandidate(string objectName, DependencyDescriptor descriptor)
+        {
+            //Consider FactoryObjects as autowiring candidates.
+            bool isFactoryObject = (descriptor != null && descriptor.DependencyType != null &&
+                                    typeof (IFactoryObject).IsAssignableFrom(descriptor.DependencyType));
+            if (isFactoryObject)
+            {
+                objectName = ObjectFactoryUtils.TransformedObjectName(objectName);
+            }
+
+            if (!ContainsObjectDefinition(objectName))
+            {
+                if (ContainsSingleton(objectName))
+                {
+                    return true;
+                } else if (ParentObjectFactory is IConfigurableFactoryObject)
+                {
+                    // No object definition found in this factory -> delegate to parent
+                    return
+                        ((IConfigurableListableObjectFactory) ParentObjectFactory).IsAutowireCandidate(objectName, descriptor);
+                }
+            }
+            return IsAutowireCandidate(objectName, GetMergedObjectDefinition(objectName, true), descriptor);
+        }
+
+        /// <summary>
+        /// Determine whether the specified object definition qualifies as an autowire candidate,
+        /// to be injected into other beans which declare a dependency of matching type.
+        /// </summary>
+        /// <param name="objectName">Name of the object definition to check.</param>
+        /// <param name="rod">The merged object definiton to check.</param>
+        /// <param name="descriptor">The descriptor of the dependency to resolve.</param>
+        /// <returns>
+        /// 	<c>true</c> if the object should be considered as an autowire candidate; otherwise, <c>false</c>.
+        /// </returns>
+        private bool IsAutowireCandidate(string objectName, RootObjectDefinition rod, DependencyDescriptor descriptor)
+        {
+            ResolveObjectType(rod, objectName);
+            return
+                AutowireCandidateResolver.IsAutowireCandidate(
+                    new ObjectDefinitionHolder(rod, objectName, GetAliases(objectName)), descriptor);
+        }
     }
 }

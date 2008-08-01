@@ -80,6 +80,19 @@ namespace Spring.Objects.Factory
 		/// </remarks>
 		public const string FactoryObjectPrefix = "&";
 
+        /// <summary>
+        /// The string used as a separator in the generation of synthetic id's
+        /// for those object definitions explicitly that aren't assigned one.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// If a <see cref="System.Type"/>  name or parent object definition
+        /// name is not unique, "#1", "#2" etc will be appended, until such
+        /// time that the name becomes unique.
+        /// </p>
+        /// </remarks>
+        public const string GENERATED_OBJECT_NAME_SEPARATOR = "#";
+
 		/// <summary>
 		/// Count all object definitions in any hierarchy in which this
 		/// factory participates.

@@ -758,29 +758,13 @@ namespace Spring.Context.Support
             lock (SyncRoot)
             {
 
-                /*
-                #region Instrumentation
-
-                if (log.IsDebugEnabled)
-                {
-                    StackTrace stackTrace = new StackTrace(1, true);
-                    log.Debug(string.Format(
-                                  CultureInfo.InvariantCulture,
-                                  "Refreshing application context [{0}]. Called from:{1}",
-                                  Name, stackTrace));
-                }
-
-                #endregion
-                */
-
+                
                 _startupDate = DateTime.Now;
 
                 RefreshObjectFactory();
                 IConfigurableListableObjectFactory objectFactory = ObjectFactory;
 
-                EnsureKnownObjectPostProcessors(objectFactory);
-                objectFactory.IgnoreDependencyType(typeof(IResourceLoader));
-                objectFactory.IgnoreDependencyType(typeof(IApplicationContext));
+                PrepareObjectFactory(objectFactory);
 
                 PostProcessObjectFactory(objectFactory);
                 foreach (IObjectFactoryPostProcessor factoryProcessor in ObjectFactoryPostProcessors)
@@ -814,6 +798,20 @@ namespace Spring.Context.Support
                     ContextEvent, this,
                     new ContextEventArgs(ContextEventArgs.ContextEvent.Refreshed));
             }
+        }
+
+        private void PrepareObjectFactory(IConfigurableListableObjectFactory objectFactory)
+        {
+            EnsureKnownObjectPostProcessors(objectFactory);
+            objectFactory.IgnoreDependencyType(typeof(IResourceLoader));
+            objectFactory.IgnoreDependencyType(typeof(IApplicationContext));
+
+            objectFactory.RegisterResolvableDependency(typeof(IObjectFactory), objectFactory);
+            objectFactory.RegisterResolvableDependency(typeof(IResourceLoader), this);
+            objectFactory.RegisterResolvableDependency(typeof(IApplicationEventPublisher), this);
+            objectFactory.RegisterResolvableDependency(typeof(IApplicationContext), this);
+            objectFactory.RegisterResolvableDependency(typeof(IEventRegistry), this);
+
         }
 
         /// <summary>
@@ -1467,6 +1465,21 @@ namespace Spring.Context.Support
         public IObjectFactory ParentObjectFactory
         {
             get { return _parentApplicationContext; }
+        }
+
+        /// <summary>
+        /// Determines whether the local object factory contains a bean of the given name,
+        /// ignoring object defined in ancestor contexts.
+        /// This is an alternative to <code>ContainsObject</code>, ignoring an object
+        /// of the given name from an ancestor object factory.
+        /// </summary>
+        /// <param name="name">The name of the object to query.</param>
+        /// <returns>
+        /// 	<c>true</c> if objects with the specified name is defined in the local factory; otherwise, <c>false</c>.
+        /// </returns>
+        public bool ContainsLocalObject(string name)
+        {
+            return ObjectFactory.ContainsLocalObject(name);
         }
 
         #endregion

@@ -21,12 +21,13 @@
 #region Imports
 
 using System;
+using System.Collections;
 
 #endregion
 
 namespace Spring.Objects.Factory.Config
 {
-	/// <summary>
+    /// <summary>
     /// Extension of the <see cref="Spring.Objects.Factory.IObjectFactory"/>
     /// interface to be implemented by object factories that are capable of
     /// autowiring and expose this functionality for existing object instances.
@@ -130,5 +131,16 @@ namespace Spring.Objects.Factory.Config
         /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor.PostProcessAfterInitialization"/>
         object ApplyObjectPostProcessorsAfterInitialization (
             object instance, string name);
-	}
+
+        /// <summary>
+        ///  Resolve the specified dependency against the objects defined in this factory.
+        /// </summary>
+        /// <param name="descriptor">The descriptor for the dependency.</param>
+        /// <param name="objectName">Name of the object which declares the present dependency.</param>
+        /// <param name="autowiredObjectNames">A list that all names of autowired object (used for
+        /// resolving the present dependency) are supposed to be added to.</param>
+        /// <returns>the resolved object, or <code>null</code> if none found</returns>
+        /// <exception cref="ObjectsException">if dependency resolution failed</exception>
+	    object ResolveDependency(DependencyDescriptor descriptor, string objectName, IList autowiredObjectNames);
+    }
 }

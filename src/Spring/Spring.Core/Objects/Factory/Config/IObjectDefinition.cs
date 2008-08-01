@@ -203,5 +203,13 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         string FactoryObjectName { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance a candidate for getting autowired into some other
+        /// object.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is autowire candidate; otherwise, <c>false</c>.
+        /// </value>
+	    bool IsAutowireCandidate { get; }
 	}
 }

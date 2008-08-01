@@ -25,7 +25,7 @@ namespace Spring.Objects.Factory.Support
 {
     /// <summary>
     /// Default implementation of the <see cref="IObjectNameGenerator"/> interface, deleagting to
-    /// <see cref="ObjectDefinitionReaderUtils.GenerateObjectName"/>.
+    /// <see cref="ObjectDefinitionReaderUtils"/>'s GenerateObjectName.
     /// </summary>
     /// <remarks>Note that this implementation is only able to handle
     /// <see cref="IConfigurableObjectDefinition"/> subclasses such as

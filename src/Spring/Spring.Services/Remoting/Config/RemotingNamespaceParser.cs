@@ -233,7 +233,7 @@ namespace Spring.Remoting.Config
                 switch (child.LocalName)
                 {
                     case CaoFactoryObjectConstants.ConstructorArgumentsElement:
-                        properties.Add("ConstructorArguments", base.GetList(child, name, parserContext.ParserHelper));
+                        properties.Add("ConstructorArguments", base.GetList(child, name, parserContext));
                         break;
                 }
             }
@@ -277,7 +277,7 @@ namespace Spring.Remoting.Config
                         ParseLifeTime(properties, child, parserContext);
                         break;
                     case InterfacesConstants.InterfacesElement:
-                        properties.Add("Interfaces", base.GetList(child, name, parserContext.ParserHelper));
+                        properties.Add("Interfaces", base.GetList(child, name, parserContext));
                         break;
                 }
             }
@@ -331,7 +331,7 @@ namespace Spring.Remoting.Config
                         ParseLifeTime(properties, child, parserContext);
                         break;
                     case InterfacesConstants.InterfacesElement:
-                        properties.Add("Interfaces", base.GetList(child, name, parserContext.ParserHelper));
+                        properties.Add("Interfaces", base.GetList(child, name, parserContext));
                         break;
                 }
             }
@@ -374,7 +374,7 @@ namespace Spring.Remoting.Config
                         ParseLifeTime(properties, child, parserContext);
                         break;
                     case InterfacesConstants.InterfacesElement:
-                        properties.Add("Interfaces", base.GetList(child, name, parserContext.ParserHelper));
+                        properties.Add("Interfaces", base.GetList(child, name, parserContext));
                         break;
                 }
             }

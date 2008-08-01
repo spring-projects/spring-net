@@ -34,7 +34,6 @@ using Spring.Core.TypeResolution;
 using Spring.Expressions;
 using Spring.Objects;
 using Spring.Objects.Factory.Config;
-using Spring.Objects.Support;
 using Spring.Util;
 
 #endregion
@@ -345,12 +344,16 @@ namespace Spring.Objects.Factory.Support
             {
                 return;
             }
+            ObjectDefinitionValueResolver valueResolver = new ObjectDefinitionValueResolver(this, name, definition);
+
             MutablePropertyValues deepCopy = new MutablePropertyValues(properties);
             PropertyValue[] copiedProperties = deepCopy.PropertyValues;
             for (int i = 0; i < copiedProperties.Length; ++i)
             {
                 PropertyValue copiedProperty = copiedProperties[i];
-                object value = ResolveValueIfNecessary(name, definition, copiedProperty.Name, copiedProperty.Value);
+                //(string name, RootObjectDefinition definition, string argumentName, object argumentValue)
+                object value = valueResolver.ResolveValueIfNecessary(name, definition, copiedProperty.Name, copiedProperty.Value );
+                // object value = ResolveValueIfNecessary(name, definition, copiedProperty.Name, copiedProperty.Value);
                 PropertyValue propertyValue = new PropertyValue(copiedProperty.Name, value, copiedProperty.Expression);
                 // update mutable copy...
                 deepCopy.SetPropertyValueAt(propertyValue, i);
@@ -414,11 +417,11 @@ namespace Spring.Objects.Factory.Support
         public override void Dispose()
         {
             base.Dispose();
-            foreach (object o in _disposableInnerObjects)
+            foreach (object o in DisposableInnerObjects)
             {
                 DestroyObject(string.Format(CultureInfo.InvariantCulture, "(Inner object of Type '{0}')", o.GetType().FullName), o);
             }
-            _disposableInnerObjects.Clear();
+            DisposableInnerObjects.Clear();
         }
 
         /// <summary>
@@ -758,7 +761,7 @@ namespace Spring.Objects.Factory.Support
         /// instantiation within this class is performed by this method.
         /// </p>
         /// </remarks>
-        protected override object CreateObject(string name, RootObjectDefinition definition, object[] arguments)
+        protected internal override object CreateObject(string name, RootObjectDefinition definition, object[] arguments)
         {
             return CreateObject(name, definition, arguments, true);
         }
@@ -796,7 +799,7 @@ namespace Spring.Objects.Factory.Support
         /// instantiation within this class is performed by this method.
         /// </p>
         /// </remarks>
-        protected virtual object CreateObject(string name, RootObjectDefinition definition, object[] arguments, bool allowEagerCaching)
+        protected internal override object CreateObject(string name, RootObjectDefinition definition, object[] arguments, bool allowEagerCaching)
         {
             // guarantee the initialization of objects that the current one depends on..
             if (definition.DependsOn != null && definition.DependsOn.Length > 0)
@@ -924,12 +927,33 @@ namespace Spring.Objects.Factory.Support
         /// Creates an <see cref="IObjectWrapper"/> instance from the <see cref="RootObjectDefinition"/> passed in <paramref name="definition"/>
         /// using constructor <paramref name="arguments"/>
         /// </summary>
-        /// <param name="name">The name of the object to create - used for error messages.</param>
-        /// <param name="definition">The <see cref="RootObjectDefinition"/> describing the object to be created.</param>
+        /// <param name="objectName">The name of the object to create - used for error messages.</param>
+        /// <param name="objectDefinition">The <see cref="RootObjectDefinition"/> describing the object to be created.</param>
         /// <param name="arguments">optional arguments to pass to the constructor</param>
         /// <returns>An <see cref="IObjectWrapper"/> wrapping the already instantiated object</returns>
-        protected IObjectWrapper CreateObjectInstance(string name, RootObjectDefinition definition, object[] arguments)
+        protected IObjectWrapper CreateObjectInstance(string objectName, RootObjectDefinition objectDefinition, object[] arguments)
         {
+            // Make sure object class is actually resolved at this point.
+            Type objectType = ResolveObjectType(objectDefinition, objectName);
+            if (StringUtils.HasText(objectDefinition.FactoryMethodName))
+            {
+                return InstantiateUsingFactoryMethod(objectName, objectDefinition, arguments);
+            }
+
+            //TODO perf optimization when creating the same object
+
+            ConstructorInfo[] ctors = DetermineConstructorsFromObjectPostProcessors(objectType, objectName);
+            if (ctors != null ||
+                objectDefinition.ResolvedAutowireMode == AutoWiringMode.Constructor ||
+                objectDefinition.HasConstructorArgumentValues || !ObjectUtils.IsEmpty(arguments))
+            {
+                return AutowireConstructor(objectName, objectDefinition, ctors, arguments);
+            }
+
+            // No special handling: simply use no-arg constructor.
+            return InstantiateObject(objectName, objectDefinition);
+
+            /*
             IObjectWrapper instanceWrapper;
             if (StringUtils.HasText(definition.FactoryMethodName))
             {
@@ -951,6 +975,49 @@ namespace Spring.Objects.Factory.Support
                 InitObjectWrapper(instanceWrapper);
             }
             return instanceWrapper;
+            
+            */
+        }
+
+        /// <summary>
+        /// Instantiates the given object using its default constructor
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <param name="definition">The definition.</param>
+        /// <returns>IObjectWrapper for the new instance</returns>
+        protected virtual IObjectWrapper InstantiateObject(string objectName, RootObjectDefinition definition)
+        {
+            return new ObjectWrapper(InstantiationStrategy.Instantiate(definition, objectName, this));          
+        }
+
+        /// <summary>
+        /// Determines candidate constructors to use for the given bean, checking all registered
+        /// <see cref="SmartInstantiationAwareObjectPostProcessor"/>
+        /// </summary>
+        /// <param name="objectType">Raw type of the object.</param>
+        /// <param name="objectName">Name of the object.</param>
+        /// <returns>the candidate constructors, or <code>null</code> if none specified</returns>
+        /// <exception cref="ObjectsException">In case of errors</exception>
+        /// <seealso cref="SmartInstantiationAwareObjectPostProcessor.DetermineCandidateConstructors"/>
+        protected virtual ConstructorInfo[] DetermineConstructorsFromObjectPostProcessors(Type objectType, string objectName)
+        {
+            if (HasInstantiationAwareBeanPostProcessors)
+            {
+                foreach (IObjectPostProcessor objectPostProcessor in ObjectPostProcessors)
+                {
+                    if (ObjectUtils.IsAssignable(typeof(SmartInstantiationAwareObjectPostProcessor), objectPostProcessor))
+                    {
+                        SmartInstantiationAwareObjectPostProcessor iop =
+                            (SmartInstantiationAwareObjectPostProcessor) objectPostProcessor;
+                        ConstructorInfo[] ctors = iop.DetermineCandidateConstructors(objectType, objectName);
+                        if (ctors != null)
+                        {
+                            return ctors;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -986,464 +1053,39 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         protected virtual IObjectWrapper InstantiateUsingFactoryMethod(string name, RootObjectDefinition definition, object[] arguments)
         {
-            ConstructorArgumentValues cargs = definition.ConstructorArgumentValues;
-            ConstructorArgumentValues resolvedValues = new ConstructorArgumentValues();
-            int expectedArgCount = 0;
-
-            // we don't have arguments passed in programmatically, so we need to resolve the
-            // arguments specified in the constructor arguments held in the object definition...
-            if (arguments == null || arguments.Length == 0)
-            {
-                expectedArgCount = cargs.ArgumentCount;
-                ResolveConstructorArguments(name, definition, resolvedValues);
-            }
-            else
-            {
-                // if we have constructor args, don't need to resolve them...
-                expectedArgCount = arguments.Length;
-            }
-            ObjectWrapper wrapper = new ObjectWrapper();
-            InitObjectWrapper(wrapper);
-            bool isStatic = true;
-            Type factoryClass = null;
-            if (StringUtils.HasText(definition.FactoryObjectName))
-            {
-                // it's an instance method on the factory object's class...
-                factoryClass = GetObject(definition.FactoryObjectName).GetType();
-                isStatic = false;
-            }
-            else
-            {
-                // it's a static factory method on the object class...
-                factoryClass = definition.ObjectType;
-            }
-
-#if NET_2_0
-            GenericArgumentsHolder genericArgsInfo = new GenericArgumentsHolder(definition.FactoryMethodName);
-
-            MethodInfo[] factoryMethods = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
-            UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;
-            // try all matching methods to see if they match the constructor arguments...
-            for (int i = 0; i < factoryMethods.Length; i++)
-            {
-                unsatisfiedDependencyExceptionData = null;
-                MethodInfo factoryMethod = factoryMethods[i];
-
-                if (genericArgsInfo.ContainsGenericArguments)
-                {
-                    string[] unresolvedGenericArgs = genericArgsInfo.GetGenericArguments();
-                    if (factoryMethod.GetGenericArguments().Length != unresolvedGenericArgs.Length)
-                        continue;
-
-                    Type[] genericArgs = new Type[unresolvedGenericArgs.Length];
-                    for (int j = 0; j < unresolvedGenericArgs.Length; j++)
-                    {
-                        genericArgs[j] = TypeResolutionUtils.ResolveType(unresolvedGenericArgs[j]);
-                    }
-                    factoryMethod = factoryMethod.MakeGenericMethod(genericArgs);
-                }
-#else
-            MethodInfo[] factoryMethods = FindMethods(definition.FactoryMethodName, expectedArgCount, isStatic, factoryClass);
-            UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;            
-            // try all matching methods to see if they match the constructor arguments...
-            foreach(MethodInfo factoryMethod in factoryMethods)
-            {
-#endif
-                if (arguments == null || arguments.Length == 0)
-                {
-                    // try to create the required arguments...
-                    arguments = CreateArgumentArray(name, definition, resolvedValues, factoryMethod, out unsatisfiedDependencyExceptionData);
-                    if (arguments == null)
-                    {
-                        // if we failed to match this method, keep
-                        // trying new overloaded factory methods...
-                        continue;
-                    }
-                }
-                // if we get here, we found a factory method...
-
-                if (ReflectionUtils.GetMethodByArgumentValues(new MethodInfo[] { factoryMethod }, arguments) == null)
-                {
-                    continue;
-                }
-
-
-                object objectInstance = InstantiationStrategy.Instantiate(definition, name, this, factoryMethod, arguments);
-                wrapper.WrappedInstance = objectInstance;
-
-                #region Instrumentation
-
-                if (log.IsDebugEnabled)
-                {
-                    log.Debug(string.Format(CultureInfo.InvariantCulture, "Object '{0}' instantiated via factory method [{1}].", name, factoryMethod));
-                }
-
-                #endregion
-
-                return wrapper;
-            }
-
-
-
-            // if we get here, we didn't match any method...
-            throw new ObjectDefinitionStoreException(
-                    string.Format(CultureInfo.InvariantCulture, "Cannot find matching factory method '{0} on Type [{1}].", definition.FactoryMethodName,
-                                  factoryClass));
-        }
-
-        /// <summary>
-        /// Returns an array of all of those
-        /// <see cref="System.Reflection.MethodInfo">methods</see> exposed on the
-        /// <paramref name="searchType"/> that match the supplied criteria.
-        /// </summary>
-        /// <param name="methodName">
-        /// Methods that have this name (can be in the form of a regular expression).
-        /// </param>
-        /// <param name="expectedArgumentCount">
-        /// Methods that have exactly this many arguments.
-        /// </param>
-        /// <param name="isStatic">
-        /// Methods that are static / instance.
-        /// </param>
-        /// <param name="searchType">
-        /// The <see cref="System.Type"/> on which the methods (if any) are to be found.
-        /// </param>
-        /// <returns>
-        /// An array of all of those
-        /// <see cref="System.Reflection.MethodInfo">methods</see> exposed on the
-        /// <paramref name="searchType"/> that match the supplied criteria.
-        /// </returns>
-        private static MethodInfo[] FindMethods(string methodName, int expectedArgumentCount, bool isStatic, Type searchType)
-        {
-            ComposedCriteria methodCriteria = new ComposedCriteria();
-            methodCriteria.Add(new MethodNameMatchCriteria(methodName));
-            methodCriteria.Add(new MethodParametersCountCriteria(expectedArgumentCount));
-            BindingFlags methodFlags = BindingFlags.Public | BindingFlags.IgnoreCase | (isStatic ? BindingFlags.Static : BindingFlags.Instance);
-            MemberInfo[] methods =
-                    searchType.FindMembers(MemberTypes.Method, methodFlags, new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
-                                           methodCriteria);
-            return (MethodInfo[])ArrayList.Adapter(methods).ToArray(typeof(MethodInfo));
-        }
-
-        /// <summary>
-        /// Create an array of arguments to invoke a constructor or static factory method,
-        /// given the resolved constructor arguments values.
-        /// </summary>
-        /// <remarks>When return value is null the out parameter UnsatisfiedDependencyExceptionData will contain
-        /// information for use in throwing a UnsatisfiedDependencyException by the caller.  This avoids using
-        /// exceptions for flow control as in the original implementation.</remarks>
-        private object[] CreateArgumentArray(string name, RootObjectDefinition definition,
-            ConstructorArgumentValues resolvedValues, MethodBase methodOrCtor, out UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData)
-        {
-            string methodType = (methodOrCtor is ConstructorInfo) ? "constructor" : "factory method";
-            unsatisfiedDependencyExceptionData = null;
-            ParameterInfo[] argTypes = methodOrCtor.GetParameters();
-            object[] args = new object[argTypes.Length];
-            ISet alreadyUsedValues = new HybridSet();
-            for (int j = 0; j < argTypes.Length; ++j)
-            {
-                Type parameterType = argTypes[j].ParameterType;
-                string parameterName = argTypes[j].Name;
-                ConstructorArgumentValues.ValueHolder valueHolder = null;
-                if (resolvedValues.GetNamedArgumentValue(parameterName) != null)
-                {
-                    valueHolder = resolvedValues.GetArgumentValue(parameterName, parameterType, alreadyUsedValues);
-                }
-                else
-                {
-                    valueHolder = resolvedValues.GetArgumentValue(j, parameterType, alreadyUsedValues);
-                }
-                if (valueHolder != null)
-                {
-                    try
-                    {
-                        args[j] = TypeConversionUtils.ConvertValueIfNecessary(parameterType, valueHolder.Value, null);
-                        alreadyUsedValues.Add(valueHolder);
-                    }
-                    catch (TypeMismatchException ex)
-                    {
-                        string errorMessage = String.Format(CultureInfo.InvariantCulture,
-                                                           "Could not convert {0} argument value [{1}] to required type [{2}] : {3}",
-                                                           methodType, valueHolder.Value,
-                                                           parameterType, ex.Message);
-                        unsatisfiedDependencyExceptionData = new UnsatisfiedDependencyExceptionData(j, parameterType, errorMessage);
-
-
-                        return null;
-                    }
-                }
-                else
-                {
-                    if (definition.ResolvedAutowireMode != AutoWiringMode.Constructor)
-                    {
-                        string errorMessage = String.Format(CultureInfo.InvariantCulture,
-                                                          "Ambiguous {0} argument types - " +
-                                                          "Did you specify the correct object references as {0} arguments?",
-                                                          methodType);
-                        unsatisfiedDependencyExceptionData = new UnsatisfiedDependencyExceptionData(j, parameterType, errorMessage);
-
-                        return null;
-                    }
-                    IDictionary matchingObjects = FindMatchingObjects(parameterType);
-                    if (matchingObjects == null || matchingObjects.Count != 1)
-                    {
-                        string errorMessage = String.Format(CultureInfo.InvariantCulture,
-                                                           "There are '{0}' objects of type [{1}] for autowiring "
-                                                           +
-                                                           "{2}. There should have been exactly 1 to be able to "
-                                                           +
-                                                           "autowire the '{3}' argument on the {2} of object '{4}'.",
-                                                           (matchingObjects == null
-                                                                ? 0
-                                                                : matchingObjects.Count),
-                                                           parameterType, methodType,
-                                                           parameterName, name);
-                        unsatisfiedDependencyExceptionData = new UnsatisfiedDependencyExceptionData(j, parameterType, errorMessage);
-
-                        return null;
-                    }
-                    DictionaryEntry entry = (DictionaryEntry)ObjectUtils.EnumerateFirstElement(matchingObjects);
-                    args[j] = entry.Value;
-
-                    #region Instrumentation
-
-                    if (log.IsDebugEnabled)
-                    {
-                        log.Debug(
-                                string.Format(CultureInfo.InvariantCulture,
-                                              "Autowiring '{0}' argument by type from object name '{1}' via {2} to "
-                                              + "object named '{3}'.", parameterName, name, methodType, entry.Key));
-                    }
-
-                    #endregion
-                }
-            }
-
-            return args;
-        }
-
-        /// <summary>
-        /// Explicitly construct the object using the supplied constructor arguments.
-        /// Constructor arguments are matched by type.
-        /// </summary>
-        /// <param name="name">
-        /// The name of the object to autowire by type.
-        /// </param>
-        /// <param name="definition">
-        /// The object definition to update through autowiring.
-        /// </param>
-        /// <param name="args">Array of constructor argument values.</param>
-        /// <returns>
-        /// An <see cref="Spring.Objects.IObjectWrapper"/> for the new instance.
-        /// </returns>
-        protected IObjectWrapper AutowireConstructor(string name, RootObjectDefinition definition, object[] args)
-        {
-            ConstructorArgumentValues resolvedValues = new ConstructorArgumentValues();
-            for (int i = 0; i < args.Length; i++)
-            {
-                //This is assigning ctor arguments by type.
-                resolvedValues.AddGenericArgumentValue(args[i]);
-            }
-            return AutowireConstructor(name, definition, resolvedValues);
+            ConstructorResolver constructorResolver =
+                    new ConstructorResolver(this, this, InstantiationStrategy);
+            return constructorResolver.InstantiateUsingFactoryMethod(name, definition, arguments);
         }
 
         /// <summary>
         /// "autowire constructor" (with constructor arguments by type) behaviour.
         /// </summary>
-        /// <remarks>Passes an empty collection of constructor argument values
-        /// to overloaded method.
-        /// </remarks>
-        /// <param name="name">
-        /// The name of the object to autowire by type.
-        /// </param>
-        /// <param name="definition">
-        /// The object definition to update through autowiring.
-        /// </param>
+        /// <param name="name">The name of the object to autowire by type.</param>
+        /// <param name="definition">The object definition to update through autowiring.</param>
+        /// <param name="ctors">The chosen candidate constructors.</param>
+        /// <param name="explicitArgs">The argument values passed in programmatically via the GetObject method,
+        /// or <code>null</code> if none (-> use constructor argument values from object definition)</param>
         /// <returns>
         /// An <see cref="Spring.Objects.IObjectWrapper"/> for the new instance.
         /// </returns>
-        protected IObjectWrapper AutowireConstructor(string name, RootObjectDefinition definition)
-        {
-            return AutowireConstructor(name, definition, new ConstructorArgumentValues());
-        }
-
-        /// <summary>
-        /// "autowire constructor" (with constructor arguments by type) behaviour.
-        /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// Also applied if explicit constructor argument values are specified,
         /// matching all remaining arguments with objects from the object factory.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// This corresponds to constructor injection: in this mode, a Spring.NET
         /// object factory is able to host components that expect constructor-based
         /// dependency resolution.
-        /// </p>
+        /// </para>
         /// </remarks>
-        /// <param name="name">
-        /// The name of the object to autowire by type.
-        /// </param>
-        /// <param name="definition">
-        /// The object definition to update through autowiring.
-        /// </param>
-        /// <param name="argumentValues">
-        /// The collection on constructor argument values.
-        /// </param>
-        /// <returns>
-        /// An <see cref="Spring.Objects.IObjectWrapper"/> for the new instance.
-        /// </returns>
-        protected IObjectWrapper AutowireConstructor(string name, RootObjectDefinition definition, ConstructorArgumentValues argumentValues)
+        protected IObjectWrapper AutowireConstructor(string name, RootObjectDefinition definition, ConstructorInfo[] ctors, object[] explicitArgs)
         {
-            int minNrOfArgs = ResolveConstructorArguments(name, definition, argumentValues);
-            ConstructorInfo[] constructors = AutowireUtils.GetConstructors(definition, minNrOfArgs);
-            if (constructors == null || constructors.Length == 0)
-            {
-                throw new ObjectCreationException(definition.ResourceDescription, name,
-                                                  string.Format(CultureInfo.InvariantCulture,
-                                                                "'{0}' constructor arguments specified but no matching constructor found "
-                                                                + "in object '{1}' (hint: specify argument indexes, names, or "
-                                                                + "types to avoid ambiguities).", minNrOfArgs, name));
-            }
-            ObjectWrapper wrapper = new ObjectWrapper();
-            InitObjectWrapper(wrapper);
-            ConstructorInfo constructorToUse = null;
-            object[] argsToUse = null;
-            int weighting = Int32.MaxValue;
-            UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;
-            for (int i = 0; i < constructors.Length; ++i)
-            {
-                unsatisfiedDependencyExceptionData = null;
-                ConstructorInfo constructor = constructors[i];
-                if (constructorToUse != null &&
-                    constructorToUse.GetParameters().Length > constructor.GetParameters().Length)
-                {
-                    // already found greedy constructor that can be satisfied, so
-                    // don't look any further, there are only less greedy constructors left...
-                    break;
-                }
+            ConstructorResolver constructorResolver = 
+                new ConstructorResolver(this, this, InstantiationStrategy);
+            return constructorResolver.AutowireConstructor(name, definition, ctors, explicitArgs);
 
-                object[] args = CreateArgumentArray(name, definition, argumentValues, constructor, out unsatisfiedDependencyExceptionData);
-                if (args == null)
-                {
-                    if (i == constructors.Length - 1 && constructorToUse == null)
-                    {
-                        throw new UnsatisfiedDependencyException(definition.ResourceDescription,
-                                                                    name,
-                                                                    unsatisfiedDependencyExceptionData.ParameterIndex,
-                                                                    unsatisfiedDependencyExceptionData.ParameterType,
-                                                                    unsatisfiedDependencyExceptionData.ErrorMessage);
-                    }
-                    // try next constructor...
-                    continue;
-                }
-
-                int typeDiffWeight = AutowireUtils.GetTypeDifferenceWeight(constructor.GetParameters(), args);
-                if (typeDiffWeight < weighting)
-                {
-                    constructorToUse = constructor;
-                    argsToUse = args;
-                    weighting = typeDiffWeight;
-                }
-            }
-
-            if (constructorToUse == null)
-            {
-                throw new ObjectCreationException(definition.ResourceDescription, name, "Could not resolve matching constructor.");
-            }
-            wrapper.WrappedInstance = InstantiationStrategy.Instantiate(definition, name, this, constructorToUse, argsToUse);
-
-            #region Instrumentation
-
-            if (log.IsDebugEnabled)
-            {
-                log.Debug(string.Format(CultureInfo.InvariantCulture, "Object '{0}' instantiated via constructor [{1}].", name, constructorToUse));
-            }
-
-            #endregion
-
-            return wrapper;
-        }
-
-        /// <summary>
-        /// Resolves the <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues"/>
-        /// of the supplied <paramref name="definition"/>.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// 'Resolve' can be taken to mean that all of the <paramref name="definition"/>s
-        /// constructor arguments is resolved into a concrete object that can be plugged
-        /// into one of the <paramref name="definition"/>s constructors. Runtime object
-        /// references to other objects in this (or a parent) factory are resolved,
-        /// type conversion is performed, etc.
-        /// </p>
-        /// <p>
-        /// These resolved values are plugged into the supplied
-        /// <paramref name="resolvedValues"/> object, because we wouldn't want to touch
-        /// the <paramref name="definition"/>s constructor arguments in case it (or any of
-        /// its constructor arguments) is a prototype object definition.
-        /// </p>
-        /// <p>
-        /// This method is also used for handling invocations of static factory methods.
-        /// </p>
-        /// </remarks>
-        /// <param name="name">
-        /// The name of the object that is being resolved by this factory.
-        /// </param>
-        /// <param name="definition">
-        /// The definition associated with the above <paramref name="name"/>.
-        /// </param>
-        /// <param name="resolvedValues">
-        /// Where the resolved constructor arguments will be placed.
-        /// </param>
-        /// <returns>
-        /// The minimum number of arguments that any constructor for the supplied
-        /// <paramref name="definition"/> must have.
-        /// </returns>
-        private int ResolveConstructorArguments(string name, RootObjectDefinition definition, ConstructorArgumentValues resolvedValues)
-        {
-            int minNrOfArgs = 0;
-            if (definition.ConstructorArgumentValues != null)
-            {
-                minNrOfArgs = definition.ConstructorArgumentValues.ArgumentCount;
-                foreach (DictionaryEntry de in definition.ConstructorArgumentValues.IndexedArgumentValues)
-                {
-                    int index = (int)de.Key;
-                    if (index < 0)
-                    {
-                        throw new ObjectCreationException(definition.ResourceDescription, name, "Invalid constructor argument index: " + index);
-                    }
-                    if (index > minNrOfArgs)
-                    {
-                        minNrOfArgs = index + 1;
-                    }
-                    string argName = "constructor argument with index " + index;
-                    ConstructorArgumentValues.ValueHolder valueHolder = (ConstructorArgumentValues.ValueHolder)de.Value;
-                    object resolvedValue = ResolveValueIfNecessary(name, definition, argName, valueHolder.Value);
-                    resolvedValues.AddIndexedArgumentValue(index, resolvedValue,
-                        StringUtils.HasText(valueHolder.Type)
-                            ? TypeResolutionUtils.ResolveType(valueHolder.Type).AssemblyQualifiedName
-                            : null);
-                }
-                foreach (ConstructorArgumentValues.ValueHolder valueHolder in definition.ConstructorArgumentValues.GenericArgumentValues)
-                {
-                    string argName = "constructor argument";
-                    object resolvedValue = ResolveValueIfNecessary(name, definition, argName, valueHolder.Value);
-                    resolvedValues.AddGenericArgumentValue(resolvedValue,
-                        StringUtils.HasText(valueHolder.Type)
-                            ? TypeResolutionUtils.ResolveType(valueHolder.Type).AssemblyQualifiedName
-                            : null);
-                }
-                foreach (DictionaryEntry namedArgumentEntry in definition.ConstructorArgumentValues.NamedArgumentValues)
-                {
-                    string argumentName = (string)namedArgumentEntry.Key;
-                    string syntheticArgumentName = "constructor argument with name " + argumentName;
-                    ConstructorArgumentValues.ValueHolder valueHolder = (ConstructorArgumentValues.ValueHolder)namedArgumentEntry.Value;
-                    object resolvedValue = ResolveValueIfNecessary(name, definition, syntheticArgumentName, valueHolder.Value);
-                    resolvedValues.AddNamedArgumentValue(argumentName, resolvedValue);
-                }
-            }
-            return minNrOfArgs;
         }
 
         /// <summary>
@@ -1992,7 +1634,7 @@ namespace Spring.Objects.Factory.Support
             {
                 // keep a reference to the inner object instance, to be able to destroy
                 // it on factory shutdown...
-                _disposableInnerObjects.Add(instance);
+                DisposableInnerObjects.Add(instance);
             }
             return result;
         }
@@ -2238,7 +1880,7 @@ namespace Spring.Objects.Factory.Support
             RootObjectDefinition rod = new RootObjectDefinition(type, autowireMode, dependencyCheck);
             if (rod.ResolvedAutowireMode == AutoWiringMode.Constructor)
             {
-                return AutowireConstructor(type.Name, rod).WrappedInstance;
+                return AutowireConstructor(type.Name, rod, null, null).WrappedInstance;
             }
             else
             {
@@ -2371,22 +2013,25 @@ namespace Spring.Objects.Factory.Support
             return result;
         }
 
+        /// <summary>
+        /// Resolve the specified dependency against the objects defined in this factory.
+        /// </summary>
+        /// <param name="descriptor">The descriptor for the dependency.</param>
+        /// <param name="objectName">Name of the object which declares the present dependency.</param>
+        /// <param name="autowiredObjectNames">A list that all names of autowired object (used for
+        /// resolving the present dependency) are supposed to be added to.</param>
+        /// <returns>
+        /// the resolved object, or <code>null</code> if none found
+        /// </returns>
+        /// <exception cref="ObjectsException">if dependency resolution failed</exception>
+        public abstract object ResolveDependency(DependencyDescriptor descriptor, string objectName,
+                                                 IList autowiredObjectNames);
+
         #endregion
 
         #region Fields
 
-        /// <summary>
-        /// Set that holds all inner objects created by this factory that implement the IDisposable
-        /// interface, to be destroyed on call to Dispose.
-        /// </summary>
-        private ISet _disposableInnerObjects = new SynchronizedSet(new HybridSet());
-
         private IInstantiationStrategy instantiationStrategy = new MethodInjectingInstantiationStrategy();
-
-        /// <summary>
-        /// Cache of unfinished IFactoryObject instances: IFactoryObject name --> IObjectWrapper */
-        /// </summary>
-        private IDictionary factoryObjectInstanceCache = new Hashtable();
 
         /// <summary>
         /// Cache of filtered PropertyInfos: object Type -> PropertyInfo array 

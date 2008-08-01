@@ -335,18 +335,6 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Initializes the given <see cref="Spring.Objects.IObjectWrapper"/> with the
-        /// custom <see cref="System.ComponentModel.TypeConverter"/>s registered with
-        /// this factory.
-        /// </summary>
-        /// <param name="wrapper">
-        /// The <see cref="Spring.Objects.IObjectWrapper"/> to initialise.
-        /// </param>
-        protected void InitObjectWrapper(IObjectWrapper wrapper)
-        {
-        }
-
-        /// <summary>
         /// Create an object instance for the given object definition.
         /// </summary>
         /// <remarks>
@@ -376,8 +364,45 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// In case of errors.
         /// </exception>
-        protected abstract object CreateObject(string name, RootObjectDefinition definition, object[] arguments);
+        protected internal abstract object CreateObject(string name, RootObjectDefinition definition, object[] arguments);
 
+
+        /// <summary>
+        /// Create an object instance for the given object definition.
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <param name="definition">
+        /// The object definition for the object that is to be instantiated.
+        /// </param>
+        /// <param name="arguments">
+        /// The arguments to use if creating a prototype using explicit arguments to
+        /// a static factory method. It is invalid to use a non-<see langword="null"/> arguments value
+        /// in any other case.
+        /// </param>
+        /// <param name="allowEagerCaching">
+        /// Whether eager caching of singletons is allowed... typically true for
+        /// singlton objects, but never true for inner object definitions.
+        /// </param>
+        /// <returns>
+        /// A new instance of the object.
+        /// </returns>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// In case of errors.
+        /// </exception>
+        /// <remarks>
+        /// <p>
+        /// The object definition will already have been merged with the parent
+        /// definition in case of a child definition.
+        /// </p>
+        /// <p>
+        /// All the other methods in this class invoke this method, although objects
+        /// may be cached after being instantiated by this method. All object
+        /// instantiation within this class is performed by this method.
+        /// </p>
+        /// </remarks>
+        protected internal abstract object CreateObject(string name, RootObjectDefinition definition, object[] arguments,
+                                                        bool allowEagerCaching);
+        
         /// <summary>
         /// Destroy the target object.
         /// </summary>
@@ -530,7 +555,7 @@ namespace Spring.Objects.Factory.Support
         /// A merged <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
         /// with overridden properties.
         /// </returns>
-        protected virtual RootObjectDefinition GetMergedObjectDefinition(string name, IObjectDefinition definition)
+        protected internal virtual RootObjectDefinition GetMergedObjectDefinition(string name, IObjectDefinition definition)
         {
             if (definition == null)
             {
@@ -578,6 +603,7 @@ namespace Spring.Objects.Factory.Support
                                                          "Definition is neither a RootObjectDefinition nor a ChildObjectDefinition.");
             }
         }
+
         /*
                 /// <summary>
                 /// Merges the object definitions.
@@ -732,7 +758,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>
         /// The singleton instance of the object.
         /// </returns>
-        protected virtual object GetObjectForInstance(string name, object instance)
+        protected internal virtual object GetObjectForInstance(string name, object instance)
         {
             //string objectName = TransformedObjectName(name);
 
@@ -1229,7 +1255,7 @@ namespace Spring.Objects.Factory.Support
         /// encouraged to try to determine the actual return
         /// <see cref="System.Type"/> here, matching their strategy of resolving
         /// factory methods in the
-        /// <see cref="Spring.Objects.Factory.Support.AbstractObjectFactory.CreateObject"/>
+        /// <code>Spring.Objects.Factory.Support.AbstractObjectFactory.CreateObject</code>
         /// implementation.
         /// </p>
         /// </remarks>
@@ -1426,7 +1452,22 @@ namespace Spring.Objects.Factory.Support
 
         private IDictionary singletonsInCreation;
 
+        /// <summary>
+        /// Set that holds all inner objects created by this factory that implement the IDisposable
+        /// interface, to be destroyed on call to Dispose.
+        /// </summary>
+        private ISet disposableInnerObjects = new SynchronizedSet(new HybridSet());
+
         #endregion
+
+        /// <summary>
+        /// Set that holds all inner objects created by this factory that implement the IDisposable
+        /// interface, to be destroyed on call to Dispose.
+        /// </summary>
+        protected internal ISet DisposableInnerObjects
+        {
+            get { return disposableInnerObjects; }
+        }
 
         #region IHierarchicalObjectFactory Members
 
@@ -1440,6 +1481,23 @@ namespace Spring.Objects.Factory.Support
         {
             get { return parentObjectFactory; }
             set { parentObjectFactory = value; }
+        }
+
+        /// <summary>
+        /// Determines whether the local object factory contains a bean of the given name,
+        /// ignoring object defined in ancestor contexts.
+        /// This is an alternative to <code>ContainsObject</code>, ignoring an object
+        /// of the given name from an ancestor object factory.
+        /// </summary>
+        /// <param name="name">The name of the object to query.</param>
+        /// <returns>
+        /// 	<c>true</c> if objects with the specified name is defined in the local factory; otherwise, <c>false</c>.
+        /// </returns>
+        public bool ContainsLocalObject(string name)
+        {
+            string objectName = TransformedObjectName(name);
+            return ((ContainsSingleton(objectName) || ContainsObjectDefinition(objectName)) &&
+                    (!ObjectFactoryUtils.IsFactoryDereference(name) || IsFactoryObject(objectName)));
         }
 
         #endregion
@@ -1635,7 +1693,7 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>.
         public object GetObject(string name)
         {
-            return GetObject(name, typeof(object), ObjectUtils.EmptyObjects);
+            return GetObject(name, typeof(object), null);
         }
 
         /// <summary>
@@ -1774,7 +1832,7 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type)"/>
         public object GetObject(string name, Type requiredType)
         {
-            return GetObject(name, requiredType, ObjectUtils.EmptyObjects);
+            return GetObject(name, requiredType, null);
         }
 
         /// <summary>
@@ -2060,5 +2118,18 @@ namespace Spring.Objects.Factory.Support
         #endregion
 
 
+        /// <summary>
+        /// Determines whether the given object name is already in use within this factory,
+        /// i.e. whether there is a local object or alias registered under this name or
+        /// an inner object created with this name.
+        /// </summary>
+        /// <param name="objectName">Name of the object to check.</param>
+        /// <returns>
+        /// 	<c>true</c> if is object name in use; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsObjectNameInUse(string objectName)
+        {
+            return IsAlias(objectName) || ContainsLocalObject(objectName);
+        }
     }
 }

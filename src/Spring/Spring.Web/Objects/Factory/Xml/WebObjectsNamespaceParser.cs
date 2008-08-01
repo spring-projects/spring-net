@@ -69,7 +69,7 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         /// <param name="element">The object definition element.</param>
         /// <param name="id">The id / name of the object definition.</param>
-        /// <param name="parserHelper">the parser helper</param>
+        /// <param name="parserContext">the parser helper</param>
         /// <returns>The object (definition).</returns>
         /// <remarks>
         /// 	<p>
@@ -80,10 +80,10 @@ namespace Spring.Objects.Factory.Xml
         /// <see cref="Spring.Objects.Factory.Support.ObjectScope"/>
         /// <see cref="Spring.Objects.Factory.Support.IWebObjectDefinition"/>
         protected override IConfigurableObjectDefinition ParseObjectDefinition(
-            XmlElement element, string id, ObjectDefinitionParserHelper parserHelper)
+            XmlElement element, string id, ParserContext parserContext)
         {
-            parserHelper.ReaderContext.ObjectDefinitionFactory = objectDefinitionFactory;
-            IConfigurableObjectDefinition definition = base.ParseObjectDefinition(element, id, parserHelper);
+            parserContext.ReaderContext.ObjectDefinitionFactory = objectDefinitionFactory;
+            IConfigurableObjectDefinition definition = base.ParseObjectDefinition(element, id, parserContext);
             IWebObjectDefinition webDefinition = definition as IWebObjectDefinition;
             
             if (webDefinition != null)

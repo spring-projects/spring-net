@@ -526,6 +526,12 @@ namespace Spring.Objects
 			return s;
 		}
 
+        //Used in testing messaging
+        public void SetName(string name)
+        {
+            this.name = name;
+        }
+
 		/// <summary>
 		/// Throw the given exception
 		/// </summary>

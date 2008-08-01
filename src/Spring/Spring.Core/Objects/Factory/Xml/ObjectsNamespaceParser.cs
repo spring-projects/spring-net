@@ -214,11 +214,11 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="element">
         /// The element containing the event listener definition.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         protected virtual void ParseEventListenerDefinition(
-            string name, EventValues events, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, EventValues events, XmlElement element, ParserContext parserContext)
         {
             // get an appropriate IEventHandlerValue instance based upon the
             // attribute values of the listener element...
@@ -233,7 +233,7 @@ namespace Spring.Objects.Factory.Xml
             XmlAttribute sourceAtt = sourceElement.Attributes[0];
             if (StringUtils.IsNullOrEmpty(sourceAtt.Value))
             {
-                parserHelper.ReaderContext.ReportFatalException(sourceElement, string.Format(
+                parserContext.ReaderContext.ReportFatalException(sourceElement, string.Format(
                     CultureInfo.InvariantCulture,
                     "The single attribute of the <{0}/> element cannot be empty. Specify the " +
                         "object id (alias) or the full, assembly qualified Type name that is the " +
@@ -251,7 +251,7 @@ namespace Spring.Objects.Factory.Xml
                     break;
                 case ObjectDefinitionConstants.TypeAttribute:
                     // we're wiring up to a static event exposed on a Type (class)
-                    myHandler.Source = parserHelper.ReaderContext.Reader.Domain == null ?
+                    myHandler.Source = parserContext.ReaderContext.Reader.Domain == null ?
                         (object) sourceAtt.Value :
                         (object)TypeResolutionUtils.ResolveType(sourceAtt.Value);
                     break;
@@ -272,7 +272,7 @@ namespace Spring.Objects.Factory.Xml
             ObjectDefinitionHolder holder = null;
             try
             {
-                holder = ParseObjectDefinition(element, parserContext);
+                holder = ParseObjectDefinition(element, parserContext, false);
                 if (holder == null)
                 {
                     return;
@@ -300,7 +300,7 @@ namespace Spring.Objects.Factory.Xml
 
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, parserContext.ReaderContext.Registry);
         }
-        
+
 
         /// <summary>
         /// Parse a standard object definition into a
@@ -309,6 +309,8 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         /// <param name="element">The element containing the object definition.</param>
         /// <param name="parserContext">The parser context.</param>
+        /// <param name="nestedDefinition">if set to <c>true</c> if we are processing an inner
+        /// object definition.</param>
         /// <returns>
         /// The object (definition) wrapped within an
         /// <see cref="Spring.Objects.Factory.Config.ObjectDefinitionHolder"/>
@@ -324,41 +326,55 @@ namespace Spring.Objects.Factory.Xml
         /// as the canonical name, registering all others as aliases.
         /// </p>
         /// </remarks>
-        protected ObjectDefinitionHolder ParseObjectDefinition(XmlElement element, ParserContext parserContext)
+        protected ObjectDefinitionHolder ParseObjectDefinition(XmlElement element, ParserContext parserContext, bool nestedDefinition)
         {
             string id = element.GetAttribute(ObjectDefinitionConstants.IdAttribute);
-            string name = element.GetAttribute(ObjectDefinitionConstants.NameAttribute);
+            string nameAttr = element.GetAttribute(ObjectDefinitionConstants.NameAttribute);
             ArrayList aliases = new ArrayList();
-            if (StringUtils.HasText(name))
+            if (StringUtils.HasText(nameAttr))
             {
-                aliases.AddRange(GetObjectNames(name));
+                aliases.AddRange(GetObjectNames(nameAttr));
             }
+
             // if we ain't got an id, check if object is page definition or assign any existing (first) alias...
-            if (StringUtils.IsNullOrEmpty(id))
+            string objectName = id;
+            if (StringUtils.IsNullOrEmpty(objectName))
             {
-                id = CalculateId(element, aliases);
+                objectName = CalculateId(element, aliases);
             }
             
 
-            IConfigurableObjectDefinition definition = ParseObjectDefinition(element, id, parserContext.ParserHelper);
-            if (StringUtils.IsNullOrEmpty(id))
+            IConfigurableObjectDefinition definition = ParseObjectDefinition(element, objectName, parserContext);
+            if (definition != null)
             {
-                id = ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry);
-
-                #region Instrumentation
-
-                if (log.IsDebugEnabled)
+                if (StringUtils.IsNullOrEmpty(objectName))
                 {
-                    log.Debug(string.Format(
-                        "Neither XML '{0}' nor '{1}' specified - using object " +
-                            "class name [{2}] as the id.",
-                        id, ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute));
-                }
+                    if (nestedDefinition)
+                    {
+                        objectName =
+                            ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry, true);
+                    }
+                    else
+                    {
+                        objectName = ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry);
+                    }
 
-                #endregion
+                    #region Instrumentation
+
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug(string.Format(
+                                      "Neither XML '{0}' nor '{1}' specified - using object " +
+                                      "class name [{2}] as the id.",
+                                      id, ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute));
+                    }
+
+                    #endregion
+                }
+                string[] aliasesArray = (string[]) aliases.ToArray(typeof (string));
+                return new ObjectDefinitionHolder(definition, objectName, aliasesArray);
             }
-            string[] aliasesArray = (string[]) aliases.ToArray(typeof(string));
-            return new ObjectDefinitionHolder(definition, id, aliasesArray);
+            return null;
         }
 
         /// <summary>
@@ -413,10 +429,10 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         /// <param name="element">The element containing the object definition.</param>
         /// <param name="id">The id of the object definition.</param>
-        /// <param name="parserHelper">parsing state holder</param>
+        /// <param name="parserContext">parsing state holder</param>
         /// <returns>The object (definition).</returns>
         protected virtual IConfigurableObjectDefinition ParseObjectDefinition(
-            XmlElement element, string id, ObjectDefinitionParserHelper parserHelper)
+            XmlElement element, string id, ParserContext parserContext)
         {
             string typeName = null;
             try
@@ -427,7 +443,7 @@ namespace Spring.Objects.Factory.Xml
                     if (StringUtils.IsNullOrEmpty(typeName))
                     {
                         throw new ObjectDefinitionStoreException(
-                            parserHelper.ReaderContext.Resource, id,
+                            parserContext.ReaderContext.Resource, id,
                             "The 'type' attribute does not need to be present, but if it is it must not be empty: got '" + typeName + "'.");
                     }
                 }
@@ -435,15 +451,15 @@ namespace Spring.Objects.Factory.Xml
 
 
                 AbstractObjectDefinition od
-                    = parserHelper.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(
-                        typeName, parent, parserHelper.ReaderContext.Reader.Domain);
+                    = parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(
+                        typeName, parent, parserContext.ReaderContext.Reader.Domain);
 
 
-                MutablePropertyValues pvs = GetPropertyValueSubElements(id, element, parserHelper);
+                MutablePropertyValues pvs = GetPropertyValueSubElements(id, element, parserContext);
                 ConstructorArgumentValues arguments
-                    = GetConstructorArgSubElements(id, element, parserHelper);
-                EventValues events = GetEventHandlerSubElements(id, element, parserHelper);
-                MethodOverrides methodOverrides = GetMethodOverrideSubElements(id, element, parserHelper);
+                    = GetConstructorArgSubElements(id, element, parserContext);
+                EventValues events = GetEventHandlerSubElements(id, element, parserContext);
+                MethodOverrides methodOverrides = GetMethodOverrideSubElements(id, element, parserContext);
 
                 bool isPage = StringUtils.HasText(typeName) && typeName!= null && typeName.ToLower().EndsWith(".aspx");
                 if (!isPage)
@@ -464,13 +480,13 @@ namespace Spring.Objects.Factory.Xml
                 string dependencyCheck = element.GetAttribute(ObjectDefinitionConstants.DependencyCheckAttribute);
                 if (ObjectDefinitionConstants.DefaultValue.Equals(dependencyCheck))
                 {
-                    dependencyCheck = parserHelper.Defaults.DependencyCheck;
+                    dependencyCheck = parserContext.ParserHelper.Defaults.DependencyCheck;
                 }
                 od.DependencyCheck = GetDependencyCheck(dependencyCheck);
                 string autowire = element.GetAttribute(ObjectDefinitionConstants.AutowireAttribute);
                 if (ObjectDefinitionConstants.DefaultValue.Equals(autowire))
                 {
-                    autowire = parserHelper.Defaults.Autowire;
+                    autowire = parserContext.ParserHelper.Defaults.Autowire;
                 }
                 od.AutowireMode = GetAutowireMode(autowire);
                 string initMethodName = element.GetAttribute(ObjectDefinitionConstants.InitMethodAttribute);
@@ -491,12 +507,12 @@ namespace Spring.Objects.Factory.Xml
                 if (ObjectDefinitionConstants.DefaultValue.Equals(lazyInit) && od.IsSingleton)
                 {
                     // just apply default to singletons, as lazy-init has no meaning for prototypes...
-                    lazyInit = parserHelper.Defaults.LazyInit;
+                    lazyInit = parserContext.ParserHelper.Defaults.LazyInit;
                 }
                 od.IsLazyInit = IsTrueStringValue(lazyInit);
 
                 // try to get the line info
-                string resourceDescription = parserHelper.ReaderContext.Resource.Description;
+                string resourceDescription = parserContext.ParserHelper.ReaderContext.Resource.Description;
                 if (StringUtils.HasText(resourceDescription))
                 {
                     int line = ConfigurationUtils.GetLineNumber(element);
@@ -516,7 +532,7 @@ namespace Spring.Objects.Factory.Xml
             }
             catch (TypeLoadException ex)
             {
-                parserHelper.ReaderContext.ReportException(
+                parserContext.ReaderContext.ReportException(
                     element,
                     id,
                     string.Format(
@@ -526,7 +542,7 @@ namespace Spring.Objects.Factory.Xml
             }
             catch (ApplicationException ex)
             {
-                parserHelper.ReaderContext.ReportException(element, id, string.Empty, ex);
+                parserContext.ReaderContext.ReportException(element, id, string.Empty, ex);
             }
             return null;
         }
@@ -535,16 +551,16 @@ namespace Spring.Objects.Factory.Xml
         /// Parse method override argument subelements of the given object element.
         /// </summary>
         protected MethodOverrides GetMethodOverrideSubElements(
-            string name, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, XmlElement element, ParserContext parserContext)
         {
             MethodOverrides overrides = new MethodOverrides();
             foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.LookupMethodElement))
             {
-                ParseLookupMethodElement(name, overrides, (XmlElement) node, parserHelper);
+                ParseLookupMethodElement(name, overrides, (XmlElement)node, parserContext);
             }
             foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.ReplacedMethodElement))
             {
-                ParseReplacedMethodElement(name, overrides, (XmlElement) node, parserHelper);
+                ParseReplacedMethodElement(name, overrides, (XmlElement)node, parserContext);
             }
             return overrides;
         }
@@ -553,21 +569,21 @@ namespace Spring.Objects.Factory.Xml
         /// Parse <see cref="ObjectDefinitionConstants.LookupMethodElement"/> element and add parsed element to <paramref name="overrides"/>
         /// </summary>
         protected void ParseLookupMethodElement(
-            string name, MethodOverrides overrides, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, MethodOverrides overrides, XmlElement element, ParserContext parserContext)
         {
             string methodName = element.GetAttribute(ObjectDefinitionConstants.LookupMethodNameAttribute);
             string targetObjectName = element.GetAttribute(ObjectDefinitionConstants.LookupMethodObjectNameAttribute);
             if (StringUtils.IsNullOrEmpty(methodName))
             {
                 throw new ObjectDefinitionStoreException(
-                    parserHelper.ReaderContext.Resource, name,
+                    parserContext.ReaderContext.Resource, name,
                     string.Format("The '{0}' attribute is required for the '{1}' element.",
                                   ObjectDefinitionConstants.LookupMethodNameAttribute, ObjectDefinitionConstants.LookupMethodElement));
             }
             if (StringUtils.IsNullOrEmpty(targetObjectName))
             {
                 throw new ObjectDefinitionStoreException(
-                    parserHelper.ReaderContext.Resource, name,
+                    parserContext.ReaderContext.Resource, name,
                     string.Format("The '{0}' attribute is required for the '{1}' element.",
                                   ObjectDefinitionConstants.LookupMethodObjectNameAttribute, ObjectDefinitionConstants.LookupMethodElement));
             }
@@ -578,21 +594,21 @@ namespace Spring.Objects.Factory.Xml
         /// Parse <see cref="ObjectDefinitionConstants.ReplacedMethodElement"/> element and add parsed element to <paramref name="overrides"/>
         /// </summary>
         protected void ParseReplacedMethodElement(
-            string name, MethodOverrides overrides, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, MethodOverrides overrides, XmlElement element, ParserContext parserContext)
         {
             string methodName = element.GetAttribute(ObjectDefinitionConstants.ReplacedMethodNameAttribute);
             string targetReplacerObjectName = element.GetAttribute(ObjectDefinitionConstants.ReplacedMethodReplacerNameAttribute);
             if (StringUtils.IsNullOrEmpty(methodName))
             {
                 throw new ObjectDefinitionStoreException(
-                    parserHelper.ReaderContext.Resource, name,
+                    parserContext.ReaderContext.Resource, name,
                     string.Format("The '{0}' attribute is required for the '{1}' element.",
                                   ObjectDefinitionConstants.ReplacedMethodNameAttribute, ObjectDefinitionConstants.ReplacedMethodElement));
             }
             if (StringUtils.IsNullOrEmpty(targetReplacerObjectName))
             {
                 throw new ObjectDefinitionStoreException(
-                    parserHelper.ReaderContext.Resource, name,
+                    parserContext.ReaderContext.Resource, name,
                     string.Format("The '{0}' attribute is required for the '{1}' element.",
                                   ObjectDefinitionConstants.ReplacedMethodReplacerNameAttribute, ObjectDefinitionConstants.ReplacedMethodElement));
             }
@@ -604,7 +620,7 @@ namespace Spring.Objects.Factory.Xml
                 if (StringUtils.IsNullOrEmpty(match))
                 {
                     throw new ObjectDefinitionStoreException(
-                        parserHelper.ReaderContext.Resource, name,
+                        parserContext.ReaderContext.Resource, name,
                         string.Format("The '{0}' attribute is required for the '{1}' element.",
                                       ObjectDefinitionConstants.ReplacedMethodArgumentTypeMatchAttribute, ObjectDefinitionConstants.ReplacedMethodArgumentTypeElement));
                 }
@@ -617,12 +633,12 @@ namespace Spring.Objects.Factory.Xml
         /// Parse constructor argument subelements of the given object element.
         /// </summary>
         protected ConstructorArgumentValues GetConstructorArgSubElements(
-            string name, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, XmlElement element, ParserContext parserContext)
         {
             ConstructorArgumentValues arguments = new ConstructorArgumentValues();
             foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.ConstructorArgElement))
             {
-                ParseConstructorArgElement(name, arguments, (XmlElement) node, parserHelper);
+                ParseConstructorArgElement(name, arguments, (XmlElement)node, parserContext);
             }
             return arguments;
         }
@@ -631,12 +647,12 @@ namespace Spring.Objects.Factory.Xml
         /// Parse event handler subelements of the given object element.
         /// </summary>
         protected EventValues GetEventHandlerSubElements(
-            string name, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, XmlElement element, ParserContext parserContext)
         {
             EventValues events = new EventValues();
             foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.ListenerElement))
             {
-                ParseEventListenerDefinition(name, events, (XmlElement) node, parserHelper);
+                ParseEventListenerDefinition(name, events, (XmlElement)node, parserContext);
             }
             return events;
         }
@@ -650,19 +666,19 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="element">
         /// The element containing the top level object definition.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         /// <returns>
         /// The property (s) associated with the object (definition).
         /// </returns>
         protected virtual MutablePropertyValues GetPropertyValueSubElements(
-            string name, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, XmlElement element, ParserContext parserContext)
         {
             MutablePropertyValues properties = new MutablePropertyValues();
             foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.PropertyElement))
             {
-                ParsePropertyElement(name, properties, (XmlElement) node, parserHelper);
+                ParsePropertyElement(name, properties, (XmlElement) node, parserContext);
             }
             return properties;
         }
@@ -679,13 +695,13 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="element">
         /// The name of the element containing the ctor arg definition.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         protected virtual void ParseConstructorArgElement(
-            string name, ConstructorArgumentValues arguments, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, ConstructorArgumentValues arguments, XmlElement element, ParserContext parserContext)
         {
-            object val = GetPropertyValue(element, name, parserHelper);
+            object val = GetPropertyValue(element, name, parserContext);
             string indexAttr = element.GetAttribute(ObjectDefinitionConstants.IndexAttribute);
             string typeAttr = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
             string nameAttr = element.GetAttribute(ObjectDefinitionConstants.ArgumentNameAttribute);
@@ -695,7 +711,7 @@ namespace Spring.Objects.Factory.Xml
                 && StringUtils.HasText(nameAttr))
             {
                 throw new ObjectDefinitionStoreException(
-                    parserHelper.ReaderContext.Resource, name,
+                    parserContext.ReaderContext.Resource, name,
                     "Only one of the 'index' or 'name' attributes can be present per constructor argument.");
             }
             if (StringUtils.HasText(indexAttr))
@@ -706,7 +722,7 @@ namespace Spring.Objects.Factory.Xml
                     if (index < 0)
                     {
                         throw new ObjectDefinitionStoreException(
-                            parserHelper.ReaderContext.Resource, name,
+                            parserContext.ReaderContext.Resource, name,
                             "'index' cannot be lower than 0");
                     }
                     if (StringUtils.HasText(typeAttr))
@@ -721,7 +737,7 @@ namespace Spring.Objects.Factory.Xml
                 catch (FormatException)
                 {
                     throw new ObjectDefinitionStoreException(
-                        parserHelper.ReaderContext.Resource, name,
+                        parserContext.ReaderContext.Resource, name,
                         "Attribute 'index' of tag 'constructor-arg' must be an integer value.");
                 }
             }
@@ -761,21 +777,21 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="element">
         /// The name of the element containing the property definition.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         protected void ParsePropertyElement(
-            string name, MutablePropertyValues properties, XmlElement element, ObjectDefinitionParserHelper parserHelper)
+            string name, MutablePropertyValues properties, XmlElement element, ParserContext parserContext)
         {
             string propertyName = element.GetAttribute(ObjectDefinitionConstants.NameAttribute);
             if (StringUtils.IsNullOrEmpty(propertyName))
             {
                 throw new ObjectDefinitionStoreException(
-                    parserHelper.ReaderContext.Resource,
+                    parserContext.ReaderContext.Resource,
                     name,
                     "The 'property' element must have a 'name' attribute");
             }
-            object val = GetPropertyValue(element, name, parserHelper);
+            object val = GetPropertyValue(element, name, parserContext);
             properties.Add(new PropertyValue(propertyName, val));
         }
 
@@ -792,11 +808,11 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="name">
         /// The name of the object associated with the property.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         protected virtual object GetPropertyValue(
-            XmlElement element, string name, ObjectDefinitionParserHelper parserHelper)
+            XmlElement element, string name, ParserContext parserContext)
         {
             XmlAttribute inlineValueAtt = element.Attributes[ObjectDefinitionConstants.ValueAttribute];
             if (inlineValueAtt != null)
@@ -836,11 +852,11 @@ namespace Spring.Objects.Factory.Xml
             if (valueRefOrCollectionElement == null)
             {
                 throw new ObjectDefinitionStoreException(
-                    parserHelper.ReaderContext.Resource,
+                    parserContext.ReaderContext.Resource,
                     name,
                     "The '<property/>' element must have a subelement such as 'value' or 'ref'.");
             }
-            return ParsePropertySubElement(valueRefOrCollectionElement, name, parserHelper);
+            return ParsePropertySubElement(valueRefOrCollectionElement, name, parserContext);
         }
 
         /// <summary>
@@ -852,35 +868,35 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="name">
         /// The name of the object (definition) associated with the top level property.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         protected virtual object ParsePropertySubElement(
-            XmlElement element, string name, ObjectDefinitionParserHelper parserHelper)
+            XmlElement element, string name, ParserContext parserContext)
         {
             if (element.Name.Equals(ObjectDefinitionConstants.ObjectElement))
             {
-                return ParseObjectDefinition(element, "(inner object definition)", parserHelper);
+                return ParseObjectDefinition(element, parserContext, true);
             }
             else if (element.Name.Equals(ObjectDefinitionConstants.RefElement))
             {
-                return GetReference(element, parserHelper, name);
+                return GetReference(element, parserContext.ParserHelper, name);
             }
             else if (element.Name.Equals(ObjectDefinitionConstants.IdRefElement))
             {
-                return GetObjectReference(element, parserHelper, name);
+                return GetObjectReference(element, parserContext.ParserHelper, name);
             }
             else if (element.Name.Equals(ObjectDefinitionConstants.ListElement))
             {
-                return GetList(element, name, parserHelper);
+                return GetList(element, name, parserContext);
             }
             else if (element.Name.Equals(ObjectDefinitionConstants.SetElement))
             {
-                return GetSet(element, name, parserHelper);
+                return GetSet(element, name, parserContext);
             }
             else if (element.Name.Equals(ObjectDefinitionConstants.DictionaryElement))
             {
-                return GetDictionary(element, name, parserHelper);
+                return GetDictionary(element, name, parserContext);
             }
             else if (element.Name.Equals(ObjectDefinitionConstants.NameValuesElement))
             {
@@ -892,7 +908,7 @@ namespace Spring.Objects.Factory.Xml
             }
             else if (element.Name.Equals(ObjectDefinitionConstants.ExpressionElement))
             {
-                return GetExpression(element, name, parserHelper);
+                return GetExpression(element, name, parserContext);
             }
             else if (element.Name.Equals(ObjectDefinitionConstants.NullElement))
             {
@@ -907,11 +923,11 @@ namespace Spring.Objects.Factory.Xml
                 {
                     // The other parser uses nestings tags and thus returns the definition
                     // of the parsed object.
-                    return otherParser.ParseElement(element, new ParserContext(parserHelper.ReaderContext, parserHelper));
+                    return otherParser.ParseElement(element, new ParserContext(parserContext.ReaderContext, parserContext.ParserHelper));
                 }
             }
             throw new ObjectDefinitionStoreException(
-                parserHelper.ReaderContext.Resource,
+                parserContext.ReaderContext.Resource,
                 name,
                 "Unknown subelement of <property>: <" + element.Name + ">");
         }
@@ -995,11 +1011,11 @@ namespace Spring.Objects.Factory.Xml
             }
         }
 
-        private object GetExpression(XmlElement element, string name, ObjectDefinitionParserHelper parserHelper)
+        private object GetExpression(XmlElement element, string name, ParserContext parserContext)
         {
             string expression = element.GetAttribute(ObjectDefinitionConstants.ValueAttribute);
             ExpressionHolder holder = new ExpressionHolder(expression);
-            holder.Properties = GetPropertyValueSubElements(name, element, parserHelper);
+            holder.Properties = GetPropertyValueSubElements(name, element, parserContext);
             return holder;
         }
 
@@ -1012,11 +1028,11 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="name">
         /// The name of the object (definition) associated with the list definition.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         /// <returns>The list definition.</returns>
-        protected virtual IList GetList(XmlElement element, string name, ObjectDefinitionParserHelper parserHelper)
+        protected virtual IList GetList(XmlElement element, string name, ParserContext parserContext)
         {
             ManagedList list = new ManagedList();
 
@@ -1031,7 +1047,7 @@ namespace Spring.Objects.Factory.Xml
                 XmlElement ele = node as XmlElement;
                 if (ele != null)
                 {
-                    list.Add(ParsePropertySubElement(ele, name, parserHelper));
+                    list.Add(ParsePropertySubElement(ele, name, parserContext));
                 }
             }
             return list;
@@ -1046,11 +1062,11 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="name">
         /// The name of the object (definition) associated with the set definition.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         /// <returns>The set definition.</returns>
-        protected Set GetSet(XmlElement element, string name, ObjectDefinitionParserHelper parserHelper)
+        protected Set GetSet(XmlElement element, string name, ParserContext parserContext)
         {
             ManagedSet theSet = new ManagedSet();
             string elementTypeName = element.GetAttribute("element-type");
@@ -1063,7 +1079,7 @@ namespace Spring.Objects.Factory.Xml
                 XmlElement ele = node as XmlElement;
                 if (ele != null)
                 {
-                    object sub = ParsePropertySubElement(ele, name, parserHelper);
+                    object sub = ParsePropertySubElement(ele, name, parserContext);
                     theSet.Add(sub);
                 }
             }
@@ -1079,11 +1095,11 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="name">
         /// The name of the object (definition) associated with the dictionary definition.
         /// </param>
-        /// <param name="parserHelper">
+        /// <param name="parserContext">
         /// The namespace-aware parser.
         /// </param>
         /// <returns>The dictionary definition.</returns>
-        protected IDictionary GetDictionary(XmlElement element, string name, ObjectDefinitionParserHelper parserHelper)
+        protected IDictionary GetDictionary(XmlElement element, string name, ParserContext parserContext)
         {
             ManagedDictionary dictionary = new ManagedDictionary();
             string keyTypeName = element.GetAttribute("key-type");
@@ -1124,7 +1140,7 @@ namespace Spring.Objects.Factory.Xml
                         if (keyNode == null)
                         {
                             throw new ObjectDefinitionStoreException(
-                                parserHelper.ReaderContext.Resource, name,
+                                parserContext.ReaderContext.Resource, name,
                                 string.Format("One of either the '{0}' element, or the the '{1}' or '{2}' attributes " +
                                               "is required for the <{3}/> element.",
                                               ObjectDefinitionConstants.KeyElement,
@@ -1137,12 +1153,12 @@ namespace Spring.Objects.Factory.Xml
                         if (keyNodes == null || keyNodes.Count == 0)
                         {
                             throw new ObjectDefinitionStoreException(
-                                parserHelper.ReaderContext.Resource, name,
+                                parserContext.ReaderContext.Resource, name,
                                 string.Format("Malformed <{0}/> element... the value of the key must be " +
                                     "specified as a child value-style element.",
                                               ObjectDefinitionConstants.KeyElement));
                         }
-                        key = ParsePropertySubElement((XmlElement) keyNodes.Item(0), name, parserHelper);
+                        key = ParsePropertySubElement((XmlElement)keyNodes.Item(0), name, parserContext);
                     }
                 }
 
@@ -1182,12 +1198,12 @@ namespace Spring.Objects.Factory.Xml
                     if (valueElements == null || valueElements.Count == 0)
                     {
                         throw new ObjectDefinitionStoreException(
-                            parserHelper.ReaderContext.Resource, name,
+                            parserContext.ReaderContext.Resource, name,
                             string.Format("One of either the '{0}' or '{1}' attributes, or a value-style element " +
                                 "is required for the <{2}/> element.",
                                           ObjectDefinitionConstants.ValueAttribute, ObjectDefinitionConstants.DictionaryValueRefShortcutAttribute, ObjectDefinitionConstants.EntryElement));
                     }
-                    dictionary[key] = ParsePropertySubElement((XmlElement)valueElements.Item(0), name, parserHelper);
+                    dictionary[key] = ParsePropertySubElement((XmlElement)valueElements.Item(0), name, parserContext);
                 }
 
                 #endregion

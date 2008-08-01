@@ -117,5 +117,9 @@ namespace Spring.Objects.Factory
 	        get { throw new NotImplementedException(); }
 	    }
 
+	    public bool IsAutowireCandidate
+	    {
+	        get { throw new NotImplementedException(); }
+	    }
 	}
 }

@@ -64,11 +64,6 @@ namespace Spring.Objects
 			return this.Name;
 		}
 
-		public void SetName(string name)
-		{
-			this.Name = name;
-		}
-
         public object Echo(object obj)
         {
             if (obj is Exception)

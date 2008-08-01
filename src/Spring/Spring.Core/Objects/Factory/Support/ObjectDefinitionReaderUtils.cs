@@ -23,6 +23,7 @@
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Xml;
 using Spring.Objects.Support;
@@ -53,7 +54,7 @@ namespace Spring.Objects.Factory.Support
         /// time that the name becomes unique.
         /// </p>
         /// </remarks>
-        public const string GeneratedObjectIdSeparator = "#";
+        public const string GENERATED_OBJECT_NAME_SEPARATOR = ObjectFactoryUtils.GENERATED_OBJECT_NAME_SEPARATOR;
 
         /// <summary>
         /// Registers the supplied <paramref name="objectDefinition"/> with the
@@ -108,17 +109,16 @@ namespace Spring.Objects.Factory.Support
         /// <paramref name="objectDefinition"/> that is guaranteed to be unique
         /// within the scope of the supplied <paramref name="registry"/>.
         /// </summary>
-        /// <param name="objectDefinition">
-        /// The <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>
-        /// that requires a generated name.
-        /// </param>
-        /// <param name="registry">
-        /// The
+        /// <param name="objectDefinition">The <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>
+        /// that requires a generated name.</param>
+        /// <param name="registry">The
         /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
         /// that the supplied <paramref name="objectDefinition"/> is to be
         /// registered with (needed so that the uniqueness of any generated
-        /// name can be guaranteed).
-        /// </param>
+        /// name can be guaranteed).</param>
+        /// <param name="isInnerObject">if set to <c>true</c> if the given object
+        /// definition will be registed as an inner object or as a top level objener objects
+        /// verses top level objects.</param>
         /// <returns>
         /// An object definition name for the supplied
         /// <paramref name="objectDefinition"/> that is guaranteed to be unique
@@ -133,38 +133,58 @@ namespace Spring.Objects.Factory.Support
         /// If a unique name cannot be generated.
         /// </exception>
         public static string GenerateObjectName(
-            IConfigurableObjectDefinition objectDefinition, IObjectDefinitionRegistry registry)
+            IConfigurableObjectDefinition objectDefinition, IObjectDefinitionRegistry registry, bool isInnerObject)
         {
             AssertUtils.ArgumentNotNull(objectDefinition, "objectDefinition");
             AssertUtils.ArgumentNotNull(registry, "registry");
 
-            string starterName = objectDefinition.ObjectTypeName;
-            if (StringUtils.IsNullOrEmpty(starterName))
+            string generatedObjectName = objectDefinition.ObjectTypeName;
+            if (StringUtils.IsNullOrEmpty(generatedObjectName))
             {
                 if (objectDefinition is ChildObjectDefinition)
                 {
-                    starterName = ((ChildObjectDefinition) objectDefinition).ParentName + "$child";
+                    generatedObjectName = ((ChildObjectDefinition) objectDefinition).ParentName + "$child";
                 }
                 else if (objectDefinition.FactoryObjectName != null)
                 {
-                    starterName = objectDefinition.FactoryObjectName + "$created";
+                    generatedObjectName = objectDefinition.FactoryObjectName + "$created";
                 }
             }
-            if (StringUtils.IsNullOrEmpty(starterName))
+            if (StringUtils.IsNullOrEmpty(generatedObjectName))
             {
                 throw new ObjectDefinitionStoreException(
                     objectDefinition.ResourceDescription, String.Empty,
                     "Unnamed object definition specifies neither 'Type' nor 'Parent' " +
                     "nor 'FactoryObject' property values so a unique name cannot be generated.");
             }
-            String generatedName = starterName;
-            int counter = 0;
-            while (registry.ContainsObjectDefinition(generatedName))
+            String id = generatedObjectName;
+            if (isInnerObject)
             {
-                generatedName = new StringBuilder(starterName)
-                    .Append(GeneratedObjectIdSeparator).Append(++counter).ToString();
+                id = generatedObjectName + GENERATED_OBJECT_NAME_SEPARATOR + ObjectUtils.GetIdentityHexString(objectDefinition);
+            } else
+            {
+                int counter = -1;
+                while (counter == -1 && registry.ContainsObjectDefinition(id))
+                {
+                    counter++;
+                    id = generatedObjectName + GENERATED_OBJECT_NAME_SEPARATOR + counter;
+                } 
             }
-            return generatedName;
+
+            return id;
+        }
+
+        /// <summary>
+        /// Generates the name of the object for a top-level object definition unique within the given object factory.
+        /// </summary>
+        /// <param name="definition">The object definition to generate an object name for.</param>
+        /// <param name="registry">The registry to check for existing names.</param>
+        /// <returns>The generated object name</returns>
+        /// <exception cref="ObjectDefinitionStoreException">if no unique name can be generated for the given
+        /// object definition</exception>
+        public static string GenerateObjectName(IConfigurableObjectDefinition definition, IObjectDefinitionRegistry registry)
+        {
+            return GenerateObjectName(definition, registry, false);
         }
 
         /// <summary>

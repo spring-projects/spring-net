@@ -239,7 +239,12 @@ namespace Spring.Context.Support
 				get { return null; }
 			}
 
-			#endregion
+		    public bool ContainsLocalObject(string name)
+		    {
+		        return false;
+		    }
+
+		    #endregion
 
 			#region IMessageSource Members
 

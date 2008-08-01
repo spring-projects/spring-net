@@ -29,9 +29,10 @@ using Spring.Util;
 namespace Spring.Objects.Factory.Xml
 {
     /// <summary>
-    /// Sateful class used to parse XML object definitions.
+    /// Stateful class used to parse XML object definitions.
     /// </summary>
-    /// <remarks>Not all parsing code has been refactored into this class.</remarks>
+    /// <remarks>Not all parsing code has been refactored into this class. See 
+    /// BeanDefinitionParserDelegate in Java for how this class should evolve.</remarks>
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rod Johnson</author>

@@ -75,7 +75,18 @@
       <ref local="ego"/>
     </property>
   </object>
-	
+
+  <!-- This bean must not conflict with the actual inner beans named "innerBean" -->
+  <object id="innerObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <constructor-arg>
+      <value>outer</value>
+    </constructor-arg>
+    <constructor-arg type="int">
+      <value>0</value>
+    </constructor-arg>
+  </object>
+
+
   <object id="hasInnerObjects" type="Spring.Objects.TestObject, Spring.Core.Tests">
     <constructor-arg>
       <value>hasInner</value>
@@ -109,13 +120,23 @@
     <property name="someMap">
       <dictionary>
         <entry key="someKey">
-          <object type="Spring.Objects.TestObject, Spring.Core.Tests">
+          <object type="Spring.Objects.TestObject, Spring.Core.Tests" parent="jenny">
             <constructor-arg>
               <value>inner3</value>
             </constructor-arg>
             <constructor-arg type="System.Int32">
               <value>8</value>
             </constructor-arg>
+          </object>
+        </entry>
+        <entry key="someOtherKey">
+          <object parent="jenny">
+            <property name="name">
+              <value>inner4</value>
+            </property>
+            <property name="age">
+              <value>9</value>
+            </property>
           </object>
         </entry>
       </dictionary>
@@ -128,7 +149,7 @@
     </constructor-arg>
     <constructor-arg index="1" type="System.Int32">
       <value>5</value>
-    </constructor-arg>
+    </constructor-arg>    
     <property name="spouse">
       <object type="Spring.Objects.TestObject, Spring.Core.Tests">
         <property name="name">
@@ -148,22 +169,22 @@
           <property name="age">
             <value>7</value>
           </property>
-		  <property name="friends">
-			<list>
-				<object type="Spring.Objects.DerivedTestObject, Spring.Core.Tests">
-				<property name="name">
-					<value>innerFriendOfAFriend</value>
-				</property>
-				<property name="age">
-					<value>7</value>
-				</property>
-				</object>
-			</list>
-		  </property>
+		      <property name="friends">
+			      <list>
+				      <object type="Spring.Objects.DerivedTestObject, Spring.Core.Tests">
+				        <property name="name">
+				  	      <value>innerFriendOfAFriend</value>
+				        </property>
+				        <property name="age">
+					        <value>7</value>
+				        </property>
+				      </object>
+			      </list>
+		      </property>
         </object>
         <object type="Spring.Objects.Factory.DummyFactory, Spring.Core.Tests"/>
       </list>
-    </property>
+    </property>    
     <property name="someMap">
       <dictionary>
         <entry key="someKey">

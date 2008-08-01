@@ -65,6 +65,12 @@ namespace Spring.Objects.Factory
         {
             throw new System.NotImplementedException();
         }
+
+        protected override object CreateObject(string name, RootObjectDefinition definition, object[] arguments,
+                                               bool allowEagerCaching)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 	/// <summary>

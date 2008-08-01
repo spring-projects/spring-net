@@ -43,5 +43,18 @@ namespace Spring.Objects.Factory
 		/// if this factory does not have a parent.
 		/// </value>
 		IObjectFactory ParentObjectFactory { get; }
+
+
+        /// <summary>
+        /// Determines whether the local object factory contains a bean of the given name,
+        /// ignoring object defined in ancestor contexts.
+        /// This is an alternative to <code>ContainsObject</code>, ignoring an object
+        /// of the given name from an ancestor object factory.
+        /// </summary>
+        /// <param name="name">The name of the object to query.</param>
+        /// <returns>
+        /// 	<c>true</c> if objects with the specified name is defined in the local factory; otherwise, <c>false</c>.
+        /// </returns>
+	    bool ContainsLocalObject(string name);
 	}
 }

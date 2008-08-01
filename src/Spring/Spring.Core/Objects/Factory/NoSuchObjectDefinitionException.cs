@@ -96,6 +96,22 @@ namespace Spring.Objects.Factory
 			_objectName = name;
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NoSuchObjectDefinitionException"/> class.
+        /// </summary>
+        /// <param name="type">The required type of the object.</param>
+        /// <param name="dependencyDescription">A description of the originating dependency.</param>
+        /// <param name="message">A message describing the problem.</param>
+        public NoSuchObjectDefinitionException(Type type, string dependencyDescription, string message)
+            : base(string.Format(
+                CultureInfo.CurrentCulture,
+                "No matching object of type [{0}] found for dependency [{1}]: {2}",
+                type.FullName, dependencyDescription, message))
+
+        {
+            _objectType = type;
+        }
+
 		/// <summary>
 		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.NoSuchObjectDefinitionException"/> class.

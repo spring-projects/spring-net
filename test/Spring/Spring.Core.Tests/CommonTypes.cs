@@ -119,7 +119,12 @@ namespace Spring
 			get { return null; }
 		}
 
-		#endregion
+	    public bool ContainsLocalObject(string name)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    #endregion
 
 		#region IObjectFactory Members
 

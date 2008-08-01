@@ -289,6 +289,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\MethodInvocationException.cs" />
+    <Compile Include="Core\MethodParameter.cs" />
     <Compile Include="Core\MethodParametersCountCriteria.cs" />
     <Compile Include="Core\MethodParametersCriteria.cs" />
     <Compile Include="Core\MethodReturnTypeCriteria.cs" />
@@ -545,6 +546,7 @@
     <Compile Include="Objects\Factory\Config\CommandLineArgsVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\ConfigSectionVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\ConnectionStringsVariableSource.cs" />
+    <Compile Include="Objects\Factory\Config\DependencyDescriptor.cs" />
     <Compile Include="Objects\Factory\Config\IConfigurableFactoryObject.cs" />
     <Compile Include="Objects\Factory\Config\InstantiationAwareObjectPostProcessorAdapter.cs" />
     <Compile Include="Objects\Factory\Config\ISingletonObjectRegistry.cs" />
@@ -562,10 +564,14 @@
     <Compile Include="Objects\Factory\Config\VariableAccessor.cs" />
     <Compile Include="Objects\Factory\Config\VariablePlaceholderConfigurer.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
+    <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
+    <Compile Include="Objects\Factory\Support\ConstructorResolver.cs" />
     <Compile Include="Objects\Factory\Support\DefaultObjectNameGenerator.cs" />
     <Compile Include="Objects\Factory\Support\IConfigurableObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IObjectNameGenerator.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionBuilder.cs" />
+    <Compile Include="Objects\Factory\Support\ObjectDefinitionValueResolver.cs" />
+    <Compile Include="Objects\Factory\Support\SimpleAutowireCandidateResolver.cs" />
     <Compile Include="Objects\Factory\Xml\AbstractObjectDefinitionParser.cs" />
     <Compile Include="Objects\Factory\Xml\AbstractSimpleObjectDefinitionParser.cs" />
     <Compile Include="Objects\Factory\Xml\AbstractSingleObjectDefinitionParser.cs" />

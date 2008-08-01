@@ -133,7 +133,7 @@ namespace Spring.Objects.Factory.Support
 		/// </param>
 		/// <param name="args">The arguments to match.</param>
 		/// <returns>The accumulated weight for all arguments.</returns>
-		public static int GetTypeDifferenceWeight(ParameterInfo[] argTypes, object[] args)
+		public static int GetTypeDifferenceWeightOld(ParameterInfo[] argTypes, object[] args)
 		{
 			if (argTypes.Length != args.Length)
 			{
@@ -167,6 +167,65 @@ namespace Spring.Objects.Factory.Support
 			}
 			return result;
 		}
+
+        /// <summary>
+        /// Algorithm that judges the match between the declared parameter types of a candidate method
+        /// and a specific list of arguments that this method is supposed to be invoked with.
+        /// </summary>
+        /// <remarks>
+        /// Determines a weight that represents the class hierarchy difference between types and
+        /// arguments.  The following a an example based on the Java class hierarchy for Integer.    
+        /// A direct match, i.e. type Integer -> arg of class Integer, does not increase
+        /// the result - all direct matches means weight 0. A match between type Object and arg of
+        /// class Integer would increase the weight by 2, due to the superclass 2 steps up in the
+        /// hierarchy (i.e. Object) being the last one that still matches the required type Object.
+        /// Type Number and class Integer would increase the weight by 1 accordingly, due to the
+        /// superclass 1 step up the hierarchy (i.e. Number) still matching the required type Number.
+        /// Therefore, with an arg of type Integer, a constructor (Integer) would be preferred to a
+        /// constructor (Number) which would in turn be preferred to a constructor (Object).
+        /// All argument weights get accumulated.
+        /// </remarks>
+        /// <param name="paramTypes">The param types.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        public static int GetTypeDifferenceWeight(Type[] paramTypes, object[] args)
+        {
+            int result = 0;
+            for (int i = 0; i < paramTypes.Length; i++)
+            {
+                if (!ObjectUtils.IsAssignable(paramTypes[i], args[i]))
+                {
+                    return Int32.MaxValue;
+                }
+                if (args[i] != null)
+                {
+                    Type paramType = paramTypes[i];
+                    Type superType = args[i].GetType().BaseType;
+                    while (superType != null)
+                    {
+                        if (paramType.Equals(superType))
+                        {
+                            result = result + 2;
+                            superType = null;
+                        }                        
+                        if (paramType.IsAssignableFrom(superType))
+                        {
+                            result = result + 2;
+                            superType = superType.BaseType;
+                        }
+                        else
+                        {
+                            superType = null;
+                        }
+                    }
+                    if (paramType.IsInterface)
+                    {
+                        result = result + 1;
+                    }
+                }
+            }
+            return result;
+        }
 
         /// <summary>
         /// Determines whether the given object property is excluded from dependency checks.
@@ -280,6 +339,15 @@ namespace Spring.Objects.Factory.Support
                 }
             }
             return false;
+	    }
+
+        /// <summary>
+        /// Creates the autowire candidate resolver.
+        /// </summary>
+        /// <returns>A SimpleAutowireCandidateResolver</returns>
+	    public static IAutowireCandidateResolver CreateAutowireCandidateResolver()
+	    {
+            return new SimpleAutowireCandidateResolver();
 	    }
 	}
 }

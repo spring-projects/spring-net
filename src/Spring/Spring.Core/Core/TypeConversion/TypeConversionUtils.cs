@@ -63,9 +63,9 @@ namespace Spring.Core.TypeConversion
                 {
                     // convert individual elements to array elements
                     Type componentType = requiredType.GetElementType();
-                    if (newValue is IList)
+                    if (newValue is ICollection)
                     {
-                        IList elements = (IList) newValue;
+                        ICollection elements = (ICollection) newValue;
                         return ToArrayWithTypeConversion(componentType, elements, propertyName);
                     }
                     else if (newValue is string)
@@ -82,6 +82,7 @@ namespace Spring.Core.TypeConversion
                     }
                     else if (!newValue.GetType().IsArray)
                     {
+                        // A plain value: convert it to an array with a single component.
                         Array result = Array.CreateInstance(componentType, 1);
                         object val = ConvertValueIfNecessary(componentType, newValue, propertyName);
                         result.SetValue(val, 0);
@@ -163,15 +164,24 @@ namespace Spring.Core.TypeConversion
             return newValue;
         }
 
-        private static object ToArrayWithTypeConversion(Type componentType, IList elements, string propertyName)
+        private static object ToArrayWithTypeConversion(Type componentType, ICollection elements, string propertyName)
         {
             Array destination = Array.CreateInstance(componentType, elements.Count);
-            for (int i = 0; i < elements.Count; ++i)
+            int i = 0;
+            foreach (object element in elements)
             {
-                object value = ConvertValueIfNecessary(componentType, elements[i], propertyName + "[" + i + "]");
+                object value = ConvertValueIfNecessary(componentType, element, BuildIndexedPropertyName(propertyName, i));
                 destination.SetValue(value, i);
+                i++;
             }
             return destination;
+        }
+
+        private static string BuildIndexedPropertyName(string propertyName, int index)
+        {
+            return (propertyName != null ?
+                    propertyName + "[" + index + "]":
+                    null);
         }
 
         private static bool IsAssignableFrom(object newValue, Type requiredType)

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<objects xmlns="http://www.springframework.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+
+  <object id="rod4" type="Spring.Objects.Factory.Xml.DerivedConstructorDependenciesObject, Spring.Core.Tests"
+		autowire="constructor">
+    <constructor-arg index="0">
+      <description>bird</description>
+      <ref object="kerry2"/>
+    </constructor-arg>
+    <constructor-arg ref="kerry2"/>
+  </object>
+
+  <object id="kerry2" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="name" value="Kerry2"/>
+  </object>
+  
+  <object id="other" type="Spring.Objects.IndexedTestObject, Spring.Core.Tests" />
+	
+</objects>
