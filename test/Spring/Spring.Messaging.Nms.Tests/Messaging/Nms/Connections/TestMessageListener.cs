@@ -19,8 +19,9 @@
 #endregion
 
 using Apache.NMS;
+using Spring.Messaging.Nms.Core;
 
-namespace Spring.Messaging.Nms.Core.Connections
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     ///

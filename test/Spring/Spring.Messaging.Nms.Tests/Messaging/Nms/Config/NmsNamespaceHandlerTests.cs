@@ -26,17 +26,15 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Messaging.Nms.Core.Connections;
-using Spring.Messaging.Nms.Core.Connections;
-using Spring.Messaging.Nms.Core.Listener;
-using Spring.Messaging.Nms.Core.Listener;
+using Spring.Messaging.Nms.Core;
+using Spring.Messaging.Nms.Connections;
+using Spring.Messaging.Nms.Listener;
 using Spring.Objects;
 using Spring.Objects.Factory.Xml;
-using Spring.Testing.NUnit;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Core.Config
+namespace Spring.Messaging.Nms.Config
 {
     /// <summary>
     /// This class contains tests for 

@@ -24,11 +24,8 @@ using System.Collections;
 using Apache.NMS;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Messaging.Nms.Core.Connections;
-using Spring.Messaging.Nms.Core.Connections;
-using Spring.Messaging.Nms.Core.Support.Destinations;
-using Spring.Messaging.Nms.Core.Support.Destinations;
-using Spring.Transaction;
+using Spring.Messaging.Nms.Connections;
+using Spring.Messaging.Nms.Support.Destinations;
 using Spring.Transaction.Support;
 
 #endregion

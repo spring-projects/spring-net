@@ -19,8 +19,9 @@
 #endregion
 
 using System;
+using Spring.Messaging.Nms.Core;
 
-namespace Spring.Messaging.Nms.Core.Connections
+namespace Spring.Messaging.Nms.Connections
 {
     public class TestExceptionListener : IExceptionListener
     {

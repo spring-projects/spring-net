@@ -2,7 +2,7 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Core.Connections
+namespace Spring.Messaging.Nms.Connections
 {
     public class TestConnectionFactory : IConnectionFactory
     {

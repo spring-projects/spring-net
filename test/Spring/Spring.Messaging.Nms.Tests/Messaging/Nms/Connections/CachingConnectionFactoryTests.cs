@@ -26,7 +26,7 @@ using Rhino.Mocks;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Core.Connections
+namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     /// This class contains tests for 

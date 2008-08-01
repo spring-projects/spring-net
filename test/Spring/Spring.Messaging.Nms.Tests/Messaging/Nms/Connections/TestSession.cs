@@ -20,11 +20,10 @@
 
 using System;
 using Apache.NMS;
-using Apache.NMS.ActiveMQ;
 using Apache.NMS.ActiveMQ.Commands;
 using Rhino.Mocks;
 
-namespace Spring.Messaging.Nms.Core.Connections
+namespace Spring.Messaging.Nms.Connections
 {
 
     public class TestSession : ISession
