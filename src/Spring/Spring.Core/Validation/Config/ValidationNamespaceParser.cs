@@ -179,7 +179,7 @@ namespace Spring.Validation.Config
                     {
                         case ValidatorDefinitionConstants.PropertyElement:
                             string propertyName = child.GetAttribute(ValidatorDefinitionConstants.PropertyNameAttribute);
-                            properties.Add(propertyName, base.GetPropertyValue(child, name, parserContext));
+                            properties.Add(propertyName, base.ParsePropertyValue(child, name, parserContext));
                             break;
                         case ValidatorDefinitionConstants.MessageElement:
                             actions.Add(ParseErrorMessageAction(child, parserContext));
@@ -305,7 +305,7 @@ namespace Spring.Validation.Config
         {
             string typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
             string when = element.GetAttribute(ValidatorDefinitionConstants.WhenAttribute);
-            MutablePropertyValues properties = base.GetPropertyValueSubElements("validator:action", element, parserContext);
+            MutablePropertyValues properties = base.ParsePropertyElements("validator:action", element, parserContext);
             if (StringUtils.HasText(when))
             {
                 properties.Add("When", when);

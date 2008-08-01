@@ -79,11 +79,11 @@ namespace Spring.Objects.Factory.Xml
         /// </remarks>
         /// <see cref="Spring.Objects.Factory.Support.ObjectScope"/>
         /// <see cref="Spring.Objects.Factory.Support.IWebObjectDefinition"/>
-        protected override IConfigurableObjectDefinition ParseObjectDefinition(
+        protected override IConfigurableObjectDefinition ParseObjectDefinitionElement(
             XmlElement element, string id, ParserContext parserContext)
         {
             parserContext.ReaderContext.ObjectDefinitionFactory = objectDefinitionFactory;
-            IConfigurableObjectDefinition definition = base.ParseObjectDefinition(element, id, parserContext);
+            IConfigurableObjectDefinition definition = base.ParseObjectDefinitionElement(element, id, parserContext);
             IWebObjectDefinition webDefinition = definition as IWebObjectDefinition;
             
             if (webDefinition != null)
