@@ -626,8 +626,15 @@ namespace Spring.Web.Services
                             bool useNamespace = outMemberMapping.Namespace != outputMembersMapping.Namespace;
                             if (useMemberName || useNamespace)
                             {
-                                ReflectionUtils.CustomAttributeBuilderBuilder cabb =
-                                    new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(XmlElementAttribute));
+                                ReflectionUtils.CustomAttributeBuilderBuilder cabb;
+                                if (outMemberMapping.TypeName.StartsWith ("ArrayOf", StringComparison.Ordinal))
+                                {
+                                    cabb = new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(XmlArrayAttribute));
+                                }
+                                else
+                                {
+                                    cabb = new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(XmlElementAttribute));
+                                }
                                 if (useMemberName)
                                 {
                                     cabb.AddPropertyValue("ElementName", outMemberMapping.MemberName);

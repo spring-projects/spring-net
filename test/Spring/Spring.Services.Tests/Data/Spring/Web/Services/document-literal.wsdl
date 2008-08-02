@@ -26,6 +26,25 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="SayHelloArray">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SayHelloArrayResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="out" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
       <s:element name="LogHelloWorld">
         <s:complexType />
       </s:element>
@@ -53,6 +72,12 @@
   <wsdl:message name="SayHelloSoapOut">
     <wsdl:part name="parameters" element="tns:SayHelloResponse" />
   </wsdl:message>
+  <wsdl:message name="SayHelloArraySoapIn">
+    <wsdl:part name="parameters" element="tns:SayHelloArray" />
+  </wsdl:message>
+  <wsdl:message name="SayHelloArraySoapOut">
+    <wsdl:part name="parameters" element="tns:SayHelloArrayResponse" />
+  </wsdl:message>
   <wsdl:message name="LogHelloWorldSoapIn">
     <wsdl:part name="parameters" element="tns:LogHelloWorld" />
   </wsdl:message>
@@ -70,6 +95,10 @@
     <wsdl:operation name="SayHello">
       <wsdl:input message="tns:SayHelloSoapIn" />
       <wsdl:output message="tns:SayHelloSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SayHelloArray">
+      <wsdl:input message="tns:SayHelloArraySoapIn" />
+      <wsdl:output message="tns:SayHelloArraySoapOut" />
     </wsdl:operation>
     <wsdl:operation name="LogHelloWorld">
       <wsdl:input message="tns:LogHelloWorldSoapIn" />
@@ -92,6 +121,15 @@
     </wsdl:operation>
     <wsdl:operation name="SayHello">
       <soap:operation soapAction="http://www.springframwework.net/SayHello" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SayHelloArray">
+      <soap:operation soapAction="http://www.springframwework.net/SayHelloArray" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -135,6 +173,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SayHelloArray">
+      <soap12:operation soapAction="http://www.springframwework.net/SayHelloArray" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LogHelloWorld">
       <soap12:operation soapAction="http://www.springframwework.net/LogHelloWorld" style="document" />
       <wsdl:input>
@@ -153,10 +200,10 @@
   </wsdl:binding>
   <wsdl:service name="HelloWorldService">
     <wsdl:port name="HelloWorldServiceSoap" binding="tns:HelloWorldServiceSoap">
-      <soap:address location="http://localhost/HelloWorld/Service.asmx" />
+      <soap:address location="http://localhost/HelloWebService.asmx" />
     </wsdl:port>
     <wsdl:port name="HelloWorldServiceSoap12" binding="tns:HelloWorldServiceSoap12">
-      <soap12:address location="http://localhost/HelloWorld/Service.asmx" />
+      <soap12:address location="http://localhost/HelloWebService.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

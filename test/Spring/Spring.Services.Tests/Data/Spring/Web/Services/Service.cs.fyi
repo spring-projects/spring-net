@@ -31,6 +31,13 @@ public class HelloWorldService : System.Web.Services.WebService
     {
         return String.Format("Hello {0} !", name);
     }
+    
+    [WebMethod]
+    [return: XmlArray("out")]
+    public string[] SayHelloArray(string name)
+    {
+        return new string[] { "Hello ", name, " !" };
+    }
 
     [WebMethod]
     [SoapDocumentMethod(OneWay = true)]

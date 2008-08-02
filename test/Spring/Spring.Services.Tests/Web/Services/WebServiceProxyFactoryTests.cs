@@ -216,6 +216,48 @@ namespace Spring.Web.Services
         }
 
         [Test]
+        public void DocumentLiteralWithNamedOutArrayParameter()
+        {
+            WebServiceProxyFactory wspf = new WebServiceProxyFactory();
+            wspf.ServiceUri = new AssemblyResource("assembly://Spring.Services.Tests/Spring.Data.Spring.Web.Services/document-literal.wsdl");
+            wspf.ServiceInterface = typeof(IHelloWorld);
+            wspf.AfterPropertiesSet();
+
+            object proxy = wspf.GetObject();
+            Assert.IsNotNull(proxy);
+
+            Type proxyType = proxy.GetType();
+            Assert.IsTrue(proxy is IHelloWorld);
+            Assert.IsTrue(proxy is SoapHttpClientProtocol);
+
+            MethodInfo sayHelloArrayMethod = proxyType.GetMethod("SayHelloArray");
+            Assert.IsNotNull(sayHelloArrayMethod);
+
+            object[] sdmaAttrs = sayHelloArrayMethod.GetCustomAttributes(typeof(SoapDocumentMethodAttribute), false);
+            Assert.IsTrue(sdmaAttrs.Length > 0);
+
+            SoapDocumentMethodAttribute sdma = (SoapDocumentMethodAttribute)sdmaAttrs[0];
+            Assert.AreEqual("http://www.springframwework.net/SayHelloArray", sdma.Action);
+            Assert.AreEqual(SoapParameterStyle.Wrapped, sdma.ParameterStyle);
+            Assert.AreEqual(string.Empty, sdma.Binding);
+            Assert.AreEqual(false, sdma.OneWay);
+            Assert.AreEqual(string.Empty, sdma.RequestElementName);
+            Assert.AreEqual("http://www.springframwework.net", sdma.RequestNamespace);
+            Assert.AreEqual(string.Empty, sdma.ResponseElementName);
+            Assert.AreEqual("http://www.springframwework.net", sdma.ResponseNamespace);
+            Assert.AreEqual(SoapBindingUse.Literal, sdma.Use);
+
+            object[] xaAttrs = sayHelloArrayMethod.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(XmlArrayAttribute), false);
+            Assert.IsTrue(xaAttrs.Length > 0);
+
+            XmlArrayAttribute xaa = (XmlArrayAttribute)xaAttrs[0];
+            Assert.AreEqual("out", xaa.ElementName);
+
+            // Try to instantiate the proxy type
+            ObjectUtils.InstantiateType(proxyType);
+        }
+
+        [Test]
         public void RpcLiteralWithNamedOutParameter()
         {
             WebServiceProxyFactory wspf = new WebServiceProxyFactory();
@@ -251,6 +293,47 @@ namespace Spring.Web.Services
 
             XmlElementAttribute xea = (XmlElementAttribute)xeAttrs[0];
             Assert.AreEqual("out", xea.ElementName);
+
+            // Try to instantiate the proxy type
+            ObjectUtils.InstantiateType(proxyType);
+        }
+
+        [Test]
+        public void RpcLiteralWithNamedOutArrayParameter()
+        {
+            WebServiceProxyFactory wspf = new WebServiceProxyFactory();
+            wspf.ServiceUri = new AssemblyResource("assembly://Spring.Services.Tests/Spring.Data.Spring.Web.Services/rpc-literal.wsdl");
+            wspf.ServiceInterface = typeof(IHelloWorld);
+            wspf.AfterPropertiesSet();
+
+            object proxy = wspf.GetObject();
+            Assert.IsNotNull(proxy);
+
+            Type proxyType = proxy.GetType();
+            Assert.IsTrue(proxy is IHelloWorld);
+            Assert.IsTrue(proxy is SoapHttpClientProtocol);
+
+            MethodInfo sayHelloArrayMethod = proxyType.GetMethod("SayHelloArray");
+            Assert.IsNotNull(sayHelloArrayMethod);
+
+            object[] srmaAttrs = sayHelloArrayMethod.GetCustomAttributes(typeof(SoapRpcMethodAttribute), false);
+            Assert.IsTrue(srmaAttrs.Length > 0);
+
+            SoapRpcMethodAttribute srma = (SoapRpcMethodAttribute)srmaAttrs[0];
+            Assert.AreEqual("http://www.springframwework.net/SayHelloArray", srma.Action);
+            Assert.AreEqual(string.Empty, srma.Binding);
+            Assert.AreEqual(false, srma.OneWay);
+            Assert.AreEqual(string.Empty, srma.RequestElementName);
+            Assert.AreEqual("http://www.springframwework.net", srma.RequestNamespace);
+            Assert.AreEqual(string.Empty, srma.ResponseElementName);
+            Assert.AreEqual("http://www.springframwework.net", srma.ResponseNamespace);
+            Assert.AreEqual(SoapBindingUse.Literal, srma.Use);
+
+            object[] xaAttrs = sayHelloArrayMethod.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(XmlArrayAttribute), false);
+            Assert.IsTrue(xaAttrs.Length > 0);
+
+            XmlArrayAttribute xaa = (XmlArrayAttribute)xaAttrs[0];
+            Assert.AreEqual("out", xaa.ElementName);
 
             // Try to instantiate the proxy type
             ObjectUtils.InstantiateType(proxyType);
@@ -538,6 +621,7 @@ namespace Spring.Web.Services
         {
             string SayHelloWorld();
             string SayHello(string name);
+            string[] SayHelloArray(string name);
             void LogHelloWorld();
             void LogHello(string name);
         }
@@ -564,6 +648,11 @@ namespace Spring.Web.Services
             public string SayHello(string name)
             {
                 return String.Format("Hello {0} !", name);
+            }
+
+            public string[] SayHelloArray(string name)
+            {
+                return new string[] { "Hello ", name, " !" };
             }
 
             public void LogHelloWorld()
