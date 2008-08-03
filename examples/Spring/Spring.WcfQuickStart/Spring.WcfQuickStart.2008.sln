@@ -1,14 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.ClientApp.2008", "src\Spring.WcfQuickStart.ClientApp\Spring.WcfQuickStart.ClientApp.2008.csproj", "{D58B3101-4433-49C5-B41B-51134424FC42}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "D:\...\Spring.WcfQuickStart.Web.2008\", "src\Spring.WcfQuickStart.Web.2008\", "{B71CEEE1-9C92-4C79-94BE-46D6D4CDE95A}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WcfQuickStart.Web.2008", "src\Spring.WcfQuickStart.Web.2008", "{B71CEEE1-9C92-4C79-94BE-46D6D4CDE95A}"
 	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "3.5"
 		ProjectReferences = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}|Spring.Core.dll;{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}|Spring.Services.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Spring.WcfQuickStart.Web.2008"
 		Debug.AspNetCompiler.PhysicalPath = "src\Spring.WcfQuickStart.Web.2008\"
@@ -28,29 +25,13 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "D:\...\Spring.WcfQuickStart
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.2005", "..\..\..\src\Spring\Spring.Core\Spring.Core.2005.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.2008", "..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Services.2008", "..\..\..\src\Spring\Spring.Services\Spring.Services.2008.csproj", "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.ServerApp.2008", "src\Spring.WcfQuickStart.ServerApp\Spring.WcfQuickStart.ServerApp.2008.csproj", "{27AAD98C-4281-4DD4-9E20-1371C58C5283}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aop.2005", "..\..\..\src\Spring\Spring.Aop\Spring.Aop.2005.csproj", "{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aop.2008", "..\..\..\src\Spring\Spring.Aop\Spring.Aop.2008.csproj", "{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

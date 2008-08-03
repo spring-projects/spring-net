@@ -1,7 +1,7 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,8 +22,8 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
-    <MinFrameworkVersionRequired>3.0</MinFrameworkVersionRequired>
     <SignAssembly>false</SignAssembly>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\build\VS.Net.2008\Spring.Services\Debug\</OutputPath>
@@ -32,7 +32,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_5</DefineConstants>
     <DocumentationFile>Spring.Services.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -54,7 +54,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;NET_2_0;NET_3_0</DefineConstants>
+    <DefineConstants>TRACE;NET_2_0;NET_3_5</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -77,6 +77,9 @@
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
@@ -136,14 +139,15 @@
     </Compile>
     <EmbeddedResource Include="EnterpriseServices\EnterpriseServices.keys" />
     <EmbeddedResource Include="Remoting\Config\spring-remoting-1.1.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </EmbeddedResource>
     <None Include="Spring.Services.build" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spring.Core\Spring.Core.2005.csproj">
+    <ProjectReference Include="..\Spring.Core\Spring.Core.2008.csproj">
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2005</Name>
+      <Name>Spring.Core.2008</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
