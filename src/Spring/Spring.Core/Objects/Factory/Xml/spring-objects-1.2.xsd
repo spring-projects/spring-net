@@ -16,7 +16,7 @@
     <xsd:documentation>
       <![CDATA[
 	Spring XML Objects Schema, version 1.2
-	Authors: Rob Harrop, Juergen Hoeller, Mark Fisher, Griffin Caprio (.NET)
+	Authors: Rob Harrop, Juergen Hoeller, Mark Fisher, .NET team.
 
 	This defines a simple and consistent way of creating a namespace
 	of objects, managed by a Spring IObjectFactory, read by
@@ -67,6 +67,19 @@
       </xsd:annotation>
     </xsd:attribute>
   </xsd:complexType>
+
+  <xsd:simpleType name="nonNullString">
+    <xsd:annotation>
+      <xsd:documentation>
+        <![CDATA[
+  Defines a base type for any required string. Defines a string with a minimum length of 0
+        ]]>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
 
   <!-- Top-level <objects> tag -->
   <xsd:element name="objects">
@@ -164,7 +177,7 @@
     <xsd:complexType>
       <xsd:complexContent>
         <xsd:restriction base="xsd:anyType">
-          <xsd:attribute name="resource" type="xsd:string" use="required">
+          <xsd:attribute name="resource" type="nonNullString" use="required">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -191,7 +204,7 @@
     <xsd:complexType>
       <xsd:complexContent>
         <xsd:restriction base="xsd:anyType">
-          <xsd:attribute name="name" type="xsd:string" use="required">
+          <xsd:attribute name="name" type="nonNullString" use="required">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -200,7 +213,7 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:attribute>
-          <xsd:attribute name="alias" type="xsd:string" use="required">
+          <xsd:attribute name="alias" type="nonNullString" use="required">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -229,7 +242,7 @@
   </xsd:group>
 
   <xsd:attributeGroup name="objectAttributes">
-    <xsd:attribute name="name" type="xsd:string">
+    <xsd:attribute name="name" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -240,7 +253,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="type" type="xsd:string">
+    <xsd:attribute name="type" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -250,7 +263,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="parent" type="xsd:string">
+    <xsd:attribute name="parent" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -270,6 +283,18 @@
 	The remaining settings will always be taken from the child definition:
 	depends on, autowire mode, dependency check, scope, lazy init.
 				]]>
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="singleton" type="xsd:boolean" use="optional" default="true">
+      <xsd:annotation>
+        <xsd:documentation>
+          <![CDATA[
+Is this object a "singleton" (one shared instance, which will be returned 
+by all calls to GetObject() with the id), or a "prototype" (independent 
+instance resulting from each call to getObject(). Default is singleton.
+Singletons are most commonly used, and are ideal for multi-threaded service objects.
+          ]]>
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
@@ -513,7 +538,7 @@
         </xsd:restriction>
       </xsd:simpleType>
     </xsd:attribute>
-    <xsd:attribute name="depends-on" type="xsd:string">
+    <xsd:attribute name="depends-on" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -532,7 +557,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="init-method" type="xsd:string">
+    <xsd:attribute name="init-method" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -543,7 +568,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="destroy-method" type="xsd:string">
+    <xsd:attribute name="destroy-method" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -558,7 +583,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="factory-method" type="xsd:string">
+    <xsd:attribute name="factory-method" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -590,7 +615,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="factory-object" type="xsd:string">
+    <xsd:attribute name="factory-object" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -661,7 +686,7 @@
           <xsd:any namespace="##other" processContents="strict"/>
         </xsd:choice>
       </xsd:sequence>
-      <xsd:attribute name="index" type="xsd:string">
+      <xsd:attribute name="index" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -671,7 +696,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      <xsd:attribute name="name" type="xsd:string">
+      <xsd:attribute name="name" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -681,7 +706,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      <xsd:attribute name="type" type="xsd:string">
+      <xsd:attribute name="type" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -693,7 +718,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      <xsd:attribute name="ref" type="xsd:string">
+      <xsd:attribute name="ref" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -702,7 +727,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      <xsd:attribute name="value" type="xsd:string">
+      <xsd:attribute name="value" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -711,7 +736,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      <xsd:attribute name="expression" type="xsd:string">
+      <xsd:attribute name="expression" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -753,7 +778,7 @@
         <xsd:any namespace="##other" processContents="strict"/>
       </xsd:choice>
     </xsd:sequence>
-    <xsd:attribute name="name" type="xsd:string" use="required">
+    <xsd:attribute name="name" type="nonNullString" use="required">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -762,7 +787,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="ref" type="xsd:string">
+    <xsd:attribute name="ref" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -771,7 +796,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="value" type="xsd:string">
+    <xsd:attribute name="value" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -780,7 +805,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="expression" type="xsd:string">
+    <xsd:attribute name="expression" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -807,7 +832,7 @@
     <xsd:complexType>
       <xsd:complexContent>
         <xsd:restriction base="xsd:anyType">
-          <xsd:attribute name="name" type="xsd:string">
+          <xsd:attribute name="name" type="nonNullString">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -816,7 +841,7 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:attribute>
-          <xsd:attribute name="object" type="xsd:string">
+          <xsd:attribute name="object" type="nonNullString">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -849,7 +874,7 @@
           <xsd:element ref="arg-type"/>
         </xsd:choice>
       </xsd:sequence>
-      <xsd:attribute name="name" type="xsd:string">
+      <xsd:attribute name="name" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -861,7 +886,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      <xsd:attribute name="replacer" type="xsd:string">
+      <xsd:attribute name="replacer" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -887,7 +912,7 @@
     </xsd:annotation>
     <xsd:complexType mixed="true">
       <xsd:choice minOccurs="0" maxOccurs="unbounded"/>
-      <xsd:attribute name="match" type="xsd:string">
+      <xsd:attribute name="match" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -929,7 +954,7 @@
             <xsd:complexType>
               <xsd:complexContent>
                 <xsd:restriction base="xsd:anyType">
-                  <xsd:attribute name="object" type="xsd:string">
+                  <xsd:attribute name="object" type="nonNullString">
                     <xsd:annotation>
                       <xsd:documentation>
                         <![CDATA[
@@ -949,7 +974,7 @@
                       </xsd:documentation>
                     </xsd:annotation>
                   </xsd:attribute>
-                  <xsd:attribute name="type" type="xsd:string">
+                  <xsd:attribute name="type" type="nonNullString">
                     <xsd:annotation>
                       <xsd:documentation>
                         <![CDATA[
@@ -964,7 +989,7 @@
           </xsd:element>
         </xsd:choice>
       </xsd:sequence>
-      <xsd:attribute name="event" type="xsd:string">
+      <xsd:attribute name="event" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -973,7 +998,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      <xsd:attribute name="method" type="xsd:string" use="required">
+      <xsd:attribute name="method" type="nonNullString" use="required">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -997,7 +1022,7 @@
     <xsd:complexType>
       <xsd:complexContent>
         <xsd:restriction base="xsd:anyType">
-          <xsd:attribute name="object" type="xsd:string">
+          <xsd:attribute name="object" type="nonNullString">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -1017,7 +1042,7 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:attribute>
-          <xsd:attribute name="parent" type="xsd:string">
+          <xsd:attribute name="parent" type="nonNullString">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -1046,7 +1071,7 @@
     <xsd:complexType>
       <xsd:complexContent>
         <xsd:restriction base="xsd:anyType">
-          <xsd:attribute name="object" type="xsd:string">
+          <xsd:attribute name="object" type="nonNullString">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -1066,7 +1091,7 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:attribute>
-          <xsd:attribute name="parent" type="xsd:string">
+          <xsd:attribute name="parent" type="nonNullString">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
@@ -1094,7 +1119,7 @@
           <xsd:element ref="property"/>
         </xsd:choice>
       </xsd:sequence>
-      <xsd:attribute name="value" type="xsd:string" use="required">
+      <xsd:attribute name="value" type="nonNullString" use="required">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -1124,7 +1149,7 @@
     </xsd:annotation>
     <xsd:complexType mixed="true">
       <xsd:choice minOccurs="0" maxOccurs="unbounded"/>
-      <xsd:attribute name="type" type="xsd:string">
+      <xsd:attribute name="type" type="nonNullString">
         <xsd:annotation>
           <xsd:documentation>
             <![CDATA[
@@ -1252,7 +1277,7 @@
         <xsd:element ref="entry"/>
       </xsd:choice>
     </xsd:sequence>
-    <xsd:attribute name="key-type" type="xsd:string">
+    <xsd:attribute name="key-type" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -1261,7 +1286,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="value-type" type="xsd:string">
+    <xsd:attribute name="value-type" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -1278,7 +1303,7 @@
       <xsd:element ref="key" minOccurs="0"/>
       <xsd:group ref="collectionElements"/>
     </xsd:sequence>
-    <xsd:attribute name="key" type="xsd:string">
+    <xsd:attribute name="key" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -1288,7 +1313,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="key-ref" type="xsd:string">
+    <xsd:attribute name="key-ref" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -1297,7 +1322,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="value" type="xsd:string">
+    <xsd:attribute name="value" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -1306,7 +1331,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="value-ref" type="xsd:string">
+    <xsd:attribute name="value-ref" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -1315,7 +1340,7 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="expression" type="xsd:string">
+    <xsd:attribute name="expression" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -1331,7 +1356,7 @@
     <xsd:sequence>
       <xsd:group ref="collectionElements"/>
     </xsd:sequence>
-    <xsd:attribute name="element-type" type="xsd:string">
+    <xsd:attribute name="element-type" type="nonNullString">
       <xsd:annotation>
         <xsd:documentation>
           <![CDATA[
@@ -1354,7 +1379,7 @@
           </xsd:documentation>
         </xsd:annotation>
         <xsd:complexType mixed="true">
-          <xsd:attribute name="key" type="xsd:string" use="required">
+          <xsd:attribute name="key" type="nonNullString" use="required">
             <xsd:annotation>
               <xsd:documentation>
                 <![CDATA[
