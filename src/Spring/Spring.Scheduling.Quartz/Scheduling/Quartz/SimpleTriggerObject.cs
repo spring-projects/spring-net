@@ -51,7 +51,7 @@ namespace Spring.Scheduling.Quartz
 	/// <seealso cref="CronTriggerObject" />
 	public class SimpleTriggerObject : SimpleTrigger, IJobDetailAwareTrigger, IObjectNameAware, IInitializingObject
 	{
-		private long startDelay;
+		private TimeSpan startDelay = TimeSpan.Zero;
 		private JobDetail jobDetail;
 		private string objectName;
         private readonly Constants constants = new Constants(typeof(MisfireInstruction.SimpleTrigger), typeof(MisfireInstruction));
@@ -95,8 +95,8 @@ namespace Spring.Scheduling.Quartz
 
 		/// <summary> 
 		/// Set the delay before starting the job for the first time.
-		/// The given number of milliseconds will be added to the current
-		/// time to calculate the start time. Default is 0.
+		/// The given time span will be added to the current
+		/// time to calculate the start time. Default is <see cref="TimeSpan.Zero" />.
 		/// </summary>
 		/// <remarks>
 		/// This delay will just be applied if no custom start time was
@@ -105,7 +105,7 @@ namespace Spring.Scheduling.Quartz
 		/// Specifying a relative delay is appropriate in that case.
 		/// </remarks>
 		/// <seealso cref="Trigger.StartTimeUtc" />
-		public virtual long StartDelay
+		public virtual TimeSpan StartDelay
 		{
 			set { startDelay = value; }
 		}
@@ -180,7 +180,7 @@ namespace Spring.Scheduling.Quartz
 			}
 			if (StartTimeUtc == DateTime.MinValue)
 			{
-				StartTimeUtc = DateTime.UtcNow.AddMilliseconds(startDelay);
+				StartTimeUtc = DateTime.UtcNow.Add(startDelay);
 			}
 			if (jobDetail != null)
 			{

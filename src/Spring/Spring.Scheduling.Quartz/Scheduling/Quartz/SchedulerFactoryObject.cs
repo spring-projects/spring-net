@@ -151,7 +151,7 @@ namespace Spring.Scheduling.Quartz
         private Type schedulerFactoryType;
         private ISchedulerListener[] schedulerListeners;
         private string schedulerName;
-        private int startupDelay;
+        private TimeSpan startupDelay = TimeSpan.Zero;
         private ITaskExecutor taskExecutor;
         private ITriggerListener[] triggerListeners;
         private ArrayList triggers;
@@ -480,7 +480,7 @@ namespace Spring.Scheduling.Quartz
         }
 
         /// <summary> 
-        /// Set the number of seconds to wait after initialization before
+        /// Set the time span to wait after initialization before
         /// starting the scheduler asynchronously. Default is 0, meaning
         /// immediate synchronous startup on initialization of this object.
         /// </summary>
@@ -488,7 +488,7 @@ namespace Spring.Scheduling.Quartz
         /// Setting this to 10 or 20 seconds makes sense if no jobs
         /// should be run before the entire application has started up.
         /// </remarks>
-        public virtual int StartupDelay
+        public virtual TimeSpan StartupDelay
         {
             set { startupDelay = value; }
         }
@@ -1101,11 +1101,11 @@ namespace Spring.Scheduling.Quartz
         /// Start the Quartz Scheduler, respecting the "startDelay" setting.
         /// </summary>
         /// <param name="sched">the Scheduler to start</param>
-        /// <param name="startDelay">the number of seconds to wait before starting
+        /// <param name="startDelay">the time span to wait before starting
         /// the Scheduler asynchronously</param>
-        protected virtual void StartScheduler(IScheduler sched, int startDelay)
+        protected virtual void StartScheduler(IScheduler sched, TimeSpan startDelay)
         {
-            if (startDelay <= 0)
+            if (startDelay.TotalSeconds <= 0)
             {
                 logger.Info("Starting Quartz Scheduler now");
                 sched.Start();
@@ -1118,7 +1118,7 @@ namespace Spring.Scheduling.Quartz
                         string.Format("Will start Quartz Scheduler [{0}] in {1} seconds", sched.SchedulerName,
                                       startDelay));
                 }
-                sched.StartDelayed(startDelay);
+                sched.StartDelayed((int) startDelay.TotalSeconds);
             }
         }
 

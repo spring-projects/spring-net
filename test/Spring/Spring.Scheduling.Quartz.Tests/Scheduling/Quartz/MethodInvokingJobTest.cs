@@ -85,7 +85,7 @@ namespace Spring.Scheduling.Quartz
                 methodInvokingJob.Execute(CreateMinimalJobExecutionContext());
                 Assert.Fail("Successful invoke when method threw exception");
             }
-            catch (JobExecutionException)
+            catch (JobMethodInvocationFailedException)
             {
                 // ok
             }

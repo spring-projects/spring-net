@@ -23,7 +23,7 @@
     
     <object id="quartzSchedulerFactory" type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz">
         <property name="AutoStartup" value="true" />
-        <property name="StartupDelay" value="5" />
+        <property name="StartupDelay" value="5s" />
         <property name="QuartzProperties">
             <dictionary>
                 <entry key="quartz.threadPool.threadCount" value="10"/>
@@ -54,7 +54,7 @@
         <!-- see the example of method invoking job above -->
         <property name="jobDetail" ref="testJob" />
         <!-- 2 seconds -->
-        <property name="startDelay" value="2" />
+        <property name="startDelay" value="2s" />
         <!-- repeat every 3 seconds -->
         <property name="repeatInterval" value="3000" />
     </object>

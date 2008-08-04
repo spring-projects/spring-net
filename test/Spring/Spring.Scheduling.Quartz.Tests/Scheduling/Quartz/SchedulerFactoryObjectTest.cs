@@ -203,7 +203,7 @@ namespace Spring.Scheduling.Quartz
 
             factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
             factory.AutoStartup = true;
-            factory.StartupDelay = 2;
+            factory.StartupDelay = TimeSpan.FromSeconds(2);
             factory.AfterPropertiesSet();
         }
 

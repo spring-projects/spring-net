@@ -65,7 +65,7 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public override void TestAfterPropertiesSet_ValuesGiven()
         {
-            simpleTrigger.StartDelay = 100;
+            simpleTrigger.StartDelay = TimeSpan.FromMilliseconds(100);
             simpleTrigger.AfterPropertiesSet();
             base.TestAfterPropertiesSet_ValuesGiven();
         }
@@ -74,7 +74,7 @@ namespace Spring.Scheduling.Quartz
         public void TestAfterPropertiesSet_StartDelayGiven()
         {
             const int START_DELAY = 100000;
-            simpleTrigger.StartDelay = START_DELAY;
+            simpleTrigger.StartDelay = TimeSpan.FromMilliseconds(START_DELAY);
             DateTime startTime = DateTime.UtcNow;
             simpleTrigger.AfterPropertiesSet();
             AssertDateTimesEqualityWithAllowedDelta(startTime.AddMilliseconds(START_DELAY), simpleTrigger.StartTimeUtc, 1000);
