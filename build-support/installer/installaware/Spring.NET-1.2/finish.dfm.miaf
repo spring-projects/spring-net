@@ -1,0 +1,17 @@
+IF (checkSuccess.Caption = COMPLETE)  THEN  textComplete.Visible := True;
+IF (checkSuccess.Caption = REBOOT)  THEN  textReboot.Visible := True;
+IF (checkSuccess.Caption = CANCEL)  THEN  textCancelled.Visible := True;
+IF (checkSuccess.Caption = ERROR)  THEN  textError.Visible := True;
+IF (checkRemove.Caption = TRUE)  THEN  textRemove.Visible := True;
+IF (checkSuccess.Caption <> COMPLETE)  THEN  textComplete.Visible := False;
+IF (checkSuccess.Caption <> REBOOT)  THEN  textReboot.Visible := False;
+IF (checkSuccess.Caption <> CANCEL)  THEN  textCancelled.Visible := False;
+IF (checkSuccess.Caption <> ERROR)  THEN  textError.Visible := False;
+IF (checkRemove.Caption <> TRUE)  THEN  textRemove.Visible := False;
+IF (checkRemove.Caption = TRUE)  THEN  textComplete.Visible := False;
+IF (checkSuccess.Caption = CANCEL)  THEN  textRemove.Visible := False;
+IF (textReboot.Visible = True)  THEN  textRemove.Visible := false;
+IF (textComplete.Visible = True)  THEN  textRemove.Visible := false;
+IF (textError.Visible = True)  THEN  textRemove.Visible := false;
+IF (textCancelled.Visible = True)  THEN  textRemove.Visible := false;
+IF (checkSuccess.Caption = ERROR)  THEN  textRemove.Visible := False;

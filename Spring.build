@@ -717,13 +717,8 @@
 
     <call target="set-debug-build-configuration"/>
 
-
     <call target="package-release-files"/>
-    <copy todir="${current.package.dir}">
-      <fileset>
-        <include name="Spring.Net.sln"/>
-      </fileset>
-    </copy>
+
 
     <property name="project.zip-path" value="${package.dir}/${project.name}-${package.version}.zip"/>
     <!-- for some reason this isn't being properly excluded in src.to.copy -->
@@ -746,8 +741,9 @@
     <mkdir dir="${current.package.dir}/build-support/tools"/>
     <copy todir="${current.package.dir}/build-support/tools">
       <fileset basedir="tools">
-        <include name="**/*.exe"/>
-        <include name="**/*.jar"/>
+        <include name="antlr-2.7.6/*"/>
+        <include name="NAnt.NUnit2OutProc.Task/*"/>
+        <include name="nunit/*"/>
       </fileset>
     </copy>
   </target>
@@ -810,13 +806,15 @@
     <echo message="Current package directory = ${current.package.dir}"/>
     <copy todir="${current.package.dir}">
       <fileset>
-        <include name="${solution.file.1.1.2002}"/>
-        <include name="${solution.file.1.1.2003}"/>
-        <include name="${solution.file.1.1.2005}"/>
+        <include name="${solution.file.2002}"/>
+        <include name="${solution.file.2003}"/>
+        <include name="${solution.file.2005}"/>
+        <include name="${solution.file.2008}"/>
         <include name="readme.txt"/>
         <include name="changelog.txt"/>
         <include name="license.txt"/>
-        <include name="BreakingChanges-1.1.txt"/>
+        <include name="Spring.build"/>
+	<include name="Spring.include"/>
         <!-- exclude VS.Net stuff -->
         <exclude name="**/sdk-web/**"/>
         <exclude name="**/*.suo"/>
@@ -881,6 +879,10 @@
           <include name="**/Spring.Messaging.dll"/>
           <include name="**/Spring.Messaging.xml"/>
           <include name="**/Spring.Messaging.pdb"/>
+
+          <include name="**/Spring.Scheduling.Quartz.dll"/>
+          <include name="**/Spring.Scheduling.Quartz.xml"/>
+          <include name="**/Spring.Scheduling.Quartz.pdb"/>
 
           <include name="**/antlr.runtime.dll"/>
           <include name="**/Common.Logging.dll"/>
@@ -960,6 +962,7 @@
           <include name="**/Rhino.Mocks.dll"/>
           <include name="**/System.Web.Extensions.dll"/>
           <include name="**/Apache.NMS.dll"/>
+          <include name="**/Apache.NMS.ActiveMQ.dll"/>
           <include name="**/Apache.NMS.MSMQ.dll"/>
           <include name="**/EULA.rtf"/>
         </fileset>
@@ -987,6 +990,17 @@
     </if>
 
 
+    <mkdir dir="${current.package.dir}/lib/NHibernate20"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib/NHibernate20">
+        <fileset basedir="lib/NHibernate20">
+          <include name="**/*.dll"/>
+          <include name="**/*.license.txt"/>
+        </fileset>
+      </copy>
+    </if>
+
+
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
       <copy todir="${current.package.dir}/lib">
         <fileset basedir="lib">
@@ -997,11 +1011,19 @@
     </if>
 
     <!-- copy third-party icons -->
-    <mkdir dir="${current.package.dir}/icons"/>
-    <copy todir="${current.package.dir}/icons">
-      <fileset basedir="icons">
+    <mkdir dir="${current.package.dir}/build-support/icons"/>
+    <copy todir="${current.package.dir}/build-support/icons">
+      <fileset basedir="build-support/icons">
         <include name="*.ico"/>
         <include name="*.pal"/>
+      </fileset>
+    </copy>
+
+    <!-- copy additional convenience solution files -->
+    <mkdir dir="${current.package.dir}/build-support/solutions"/>
+    <copy todir="${current.package.dir}/build-support/solutions">
+      <fileset basedir="build-support/solutions">
+        <include name="*.sln"/>
       </fileset>
     </copy>
 
@@ -1187,9 +1209,10 @@
     <property name="build-winservices" value="true"/>
     <property name="build-web" value="true"/>
     <property name="build-examples" value="true"/>
-    <property name="solution.file.1.1.2002" value="Spring.Net.1.1.2002.sln"/>
-    <property name="solution.file.1.1.2003" value="Spring.Net.1.1.2003.sln"/>
-    <property name="solution.file.1.1.2005" value="Spring.Net.1.1.2005.sln"/>
+    <property name="solution.file.2002" value="Spring.Net.2002.sln"/>
+    <property name="solution.file.2003" value="Spring.Net.2003.sln"/>
+    <property name="solution.file.2005" value="Spring.Net.2005.sln"/>
+    <property name="solution.file.2008" value="Spring.Net.2008.sln"/>
     <fileset id="src.to.copy">
       <include name="src/Spring/Spring.Core/**"/>
       <include name="src/Spring/Spring.Aop/**"/>
@@ -1200,11 +1223,13 @@
       <include name="src/Spring/Spring.Services/Web/**"/>
       <include name="src/Spring/Spring.Services/Spring.Services.2003.csproj"/>
       <include name="src/Spring/Spring.Services/Spring.Services.2005.csproj"/>
+      <include name="src/Spring/Spring.Services/Spring.Services.2008.csproj"/>
       <include name="src/Spring/Spring.Services/*.build"/>
       <include name="src/Spring/Spring.Services/AssemblyInfo.cs"/>
       <include name="src/Spring/Spring.Data/**"/>
       <include name="src/Spring/Spring.Data.NHibernate/**"/>
       <include name="src/Spring/Spring.Data.NHibernate12/**"/>
+      <include name="src/Spring/Spring.Data.NHibernate20/**"/>
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/CommonAssemblyInfo.cs"/>
 
@@ -1217,6 +1242,7 @@
       <include name="test/Spring/Spring.Services.Tests/Web/**"/>
       <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.2003.csproj"/>
       <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.2005.csproj"/>
+      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.2008.csproj"/>
       <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build"/>
       <include name="test/Spring/Spring.Services.Tests/*.config"/>
       <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.dll.config"/>

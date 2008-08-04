@@ -16,8 +16,9 @@
 <!ENTITY overview     SYSTEM "overview.xml">
 <!ENTITY psa-intro    SYSTEM "psa-intro.xml">
 <!ENTITY remoting     SYSTEM "remoting.xml">
-<!ENTITY nms	      SYSTEM "nms.xml">
+<!ENTITY messaging    SYSTEM "messaging.xml">
 <!ENTITY msmq	      SYSTEM "msmq.xml">
+<!ENTITY scheduling   SYSTEM "scheduling.xml">
 <!ENTITY web          SYSTEM "web.xml">
 <!ENTITY ajax         SYSTEM "ajax.xml">
 <!ENTITY services     SYSTEM "services.xml">
@@ -300,23 +301,19 @@
 			</para>
 			<itemizedlist>
 				<listitem>
-					<para><xref linkend="nms"/></para>
+					<para><xref linkend="messaging"/></para>
 				</listitem>
 				<listitem>
 					<para><xref linkend="msmq"/></para>
 				</listitem>
-				<!--
 				<listitem>
 					<para><xref linkend="scheduling"/></para>
 				</listitem>
-				-->
 			</itemizedlist>
 		</partintro>
-		&nms;
+		&messaging;
 		&msmq;
-		<!--
 		&scheduling;
-		-->
 	</part>
 
 	<part id="index-vsnet">
