@@ -54,9 +54,9 @@ namespace Spring.Messaging.Nms.Core
             CreateMocks();
         }
 
-        private MessageTemplate CreateTemplate()
+        private NmsTemplate CreateTemplate()
         {
-            MessageTemplate template = new MessageTemplate();
+            NmsTemplate template = new NmsTemplate();
             template.DestinationResolver = mockDestinationResolver;
             template.SessionTransacted = UseTransactedTemplate;
             return template;
@@ -103,7 +103,7 @@ namespace Spring.Messaging.Nms.Core
         [Test]
         public void SessionCallback()
         {
-            MessageTemplate template = CreateTemplate();
+            NmsTemplate template = CreateTemplate();
             template.ConnectionFactory = mockConnectionFactory;
             mockSession.Close();
             LastCall.On(mockSession).Repeat.Once();
@@ -124,7 +124,7 @@ namespace Spring.Messaging.Nms.Core
         public void SessionCallbackWithinSynchronizedTransaction()
         {
             SingleConnectionFactory scf = new SingleConnectionFactory(mockConnectionFactory);
-            MessageTemplate template = CreateTemplate();
+            NmsTemplate template = CreateTemplate();
             template.ConnectionFactory = scf;
 
             mockConnection.Start();

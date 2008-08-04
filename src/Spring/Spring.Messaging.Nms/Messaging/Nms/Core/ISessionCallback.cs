@@ -31,7 +31,7 @@ namespace Spring.Messaging.Nms.Core
     /// that can be used as a (anonymous) delegate.</para>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    /// <seealso cref="MessageTemplate.Execute(ISessionCallback,bool)">
+    /// <seealso cref="NmsTemplate.Execute(ISessionCallback,bool)">
     /// </seealso>
     public interface ISessionCallback
     {

@@ -29,11 +29,11 @@ namespace Spring.Messaging.Nms.Support
     /// Generic utility methods for working with NMS. Mainly for internal use
     /// within the framework, but also useful for custom NMS access code.
     /// </summary>
-    public abstract class MessagingUtils
+    public abstract class NmsUtils
     {
         #region Logging
 
-        private static readonly ILog logger = LogManager.GetLogger(typeof(MessagingUtils));
+        private static readonly ILog logger = LogManager.GetLogger(typeof(NmsUtils));
 
         #endregion
 

@@ -33,7 +33,7 @@ namespace Spring.Messaging.Nms.Listener
     /// Common base class for all containers which need to implement listening
     /// based on a Connection (either shared or freshly obtained for each attempt).
     /// Inherits basic Connection and Session configuration handling from the
-    /// <see cref="MessagingAccessor"/> base class.
+    /// <see cref="NmsAccessor"/> base class.
     /// </summary>
     /// <para>
     /// This class provides basic lifecycle management, in particular management
@@ -45,7 +45,7 @@ namespace Spring.Messaging.Nms.Listener
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public abstract class AbstractListenerContainer : MessageDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
+    public abstract class AbstractListenerContainer : NmsDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
     {
         #region Logging
 
@@ -473,7 +473,7 @@ namespace Spring.Messaging.Nms.Listener
                 return con;
             } catch (NMSException)
             {
-                MessagingUtils.CloseConnection(con);
+                NmsUtils.CloseConnection(con);
                 throw;
             }
         }

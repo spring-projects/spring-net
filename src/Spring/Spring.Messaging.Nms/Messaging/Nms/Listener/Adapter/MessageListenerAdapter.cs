@@ -530,7 +530,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             }
             finally
             {
-                MessagingUtils.CloseMessageProducer(producer);
+                NmsUtils.CloseMessageProducer(producer);
             }
         }
 

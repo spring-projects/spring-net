@@ -47,11 +47,11 @@ namespace Spring.Messaging.Nms.Core
     /// <author>Mark Pollack</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class MessageTemplate : MessageDestinationAccessor, IMessageOperations
+    public class NmsTemplate : NmsDestinationAccessor, INmsOperations
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(MessageTemplate));
+        private readonly ILog logger = LogManager.GetLogger(typeof(NmsTemplate));
 
 
         #endregion
@@ -96,7 +96,7 @@ namespace Spring.Messaging.Nms.Core
         /// This constructor can be used to prepare a MessageTemplate via an ObjectFactory,
         /// typically setting the ConnectionFactory.</para>
         /// </remarks>
-        public MessageTemplate()
+        public NmsTemplate()
         {
             transactionalResourceFactory = new MessageTemplateResourceFactory(this);
             InitDefaultStrategies();
@@ -106,7 +106,7 @@ namespace Spring.Messaging.Nms.Core
         /// <summary> Create a new MessageTemplate, given a ConnectionFactory.</summary>
         /// <param name="connectionFactory">the ConnectionFactory to obtain IConnections from
         /// </param>
-        public MessageTemplate(IConnectionFactory connectionFactory)
+        public NmsTemplate(IConnectionFactory connectionFactory)
             : this()
         {
             ConnectionFactory = connectionFactory;
@@ -188,7 +188,7 @@ namespace Spring.Messaging.Nms.Core
             }
             finally
             {
-                MessagingUtils.CloseSession(sessionToClose);
+                NmsUtils.CloseSession(sessionToClose);
                 ConnectionFactoryUtils.ReleaseConnection(conToClose, ConnectionFactory, startConnection);
             }
         }
@@ -376,7 +376,7 @@ namespace Spring.Messaging.Nms.Core
         /// <returns> an appropriate IConnection fetched from the holder,
         /// or <code>null</code> if none found
         /// </returns>
-        protected virtual IConnection GetConnection(MessageResourceHolder holder)
+        protected virtual IConnection GetConnection(NmsResourceHolder holder)
         {
             return holder.GetConnection();
         }
@@ -388,7 +388,7 @@ namespace Spring.Messaging.Nms.Core
         /// <returns> an appropriate ISession fetched from the holder,
         /// or <code>null</code> if none found
         /// </returns>
-        protected virtual ISession GetSession(MessageResourceHolder holder)
+        protected virtual ISession GetSession(NmsResourceHolder holder)
         {
             return holder.GetSession();
         }
@@ -548,12 +548,12 @@ namespace Spring.Messaging.Nms.Core
                 if (session.Transacted && IsSessionLocallyTransacted(session))
                 {
                     // Transacted session created by this template -> commit.
-                    MessagingUtils.CommitIfNecessary(session);
+                    NmsUtils.CommitIfNecessary(session);
                 }
             }
             finally
             {
-                MessagingUtils.CloseMessageProducer(producer);
+                NmsUtils.CloseMessageProducer(producer);
             }
         }
 
@@ -969,8 +969,8 @@ namespace Spring.Messaging.Nms.Core
             try
             {
                 long timeout = ReceiveTimeout;
-                MessageResourceHolder resourceHolder =
-                (MessageResourceHolder)TransactionSynchronizationManager.GetResource(ConnectionFactory);
+                NmsResourceHolder resourceHolder =
+                (NmsResourceHolder)TransactionSynchronizationManager.GetResource(ConnectionFactory);
                 if (resourceHolder != null && resourceHolder.HasTimeout)
                 {
                     timeout = Convert.ToInt64(resourceHolder.TimeToLiveInMilliseconds);
@@ -984,7 +984,7 @@ namespace Spring.Messaging.Nms.Core
                     if (IsSessionLocallyTransacted(session))
                     {
                         // Transacted session created by this template -> commit.
-                        MessagingUtils.CommitIfNecessary(session);
+                        NmsUtils.CommitIfNecessary(session);
                     }
                 }
                 else if (IsClientAcknowledge(session))
@@ -999,7 +999,7 @@ namespace Spring.Messaging.Nms.Core
             }
             finally
             {
-                MessagingUtils.CloseMessageConsumer(consumer);
+                NmsUtils.CloseMessageConsumer(consumer);
             }
         }
 
@@ -1125,29 +1125,29 @@ namespace Spring.Messaging.Nms.Core
         /// </summary>
         private class MessageTemplateResourceFactory : ConnectionFactoryUtils.ResourceFactory
         {
-            private MessageTemplate enclosingTemplateInstance;
+            private NmsTemplate enclosingTemplateInstance;
 			
-            public MessageTemplateResourceFactory(MessageTemplate enclosingInstance)
+            public MessageTemplateResourceFactory(NmsTemplate enclosingInstance)
             {
                 InitBlock(enclosingInstance);
             }
 
-            private void InitBlock(MessageTemplate enclosingInstance)
+            private void InitBlock(NmsTemplate enclosingInstance)
             {
                 enclosingTemplateInstance = enclosingInstance;
             }
 
-            public MessageTemplate EnclosingInstance
+            public NmsTemplate EnclosingInstance
             {
                 get { return enclosingTemplateInstance; }
             }
 
-            public virtual IConnection GetConnection(MessageResourceHolder holder)
+            public virtual IConnection GetConnection(NmsResourceHolder holder)
             {
                 return EnclosingInstance.GetConnection(holder);
             }
 
-            public virtual ISession GetSession(MessageResourceHolder holder)
+            public virtual ISession GetSession(NmsResourceHolder holder)
             {
                 return EnclosingInstance.GetSession(holder);
             }
@@ -1170,10 +1170,10 @@ namespace Spring.Messaging.Nms.Core
 
         private class ProducerCreatorCallback : ISessionCallback
         {
-            private MessageTemplate jmsTemplate;
+            private NmsTemplate jmsTemplate;
             private IProducerCallback producerCallback;
 
-            public ProducerCreatorCallback(MessageTemplate jmsTemplate, IProducerCallback producerCallback)
+            public ProducerCreatorCallback(NmsTemplate jmsTemplate, IProducerCallback producerCallback)
             {
                 this.jmsTemplate = jmsTemplate;
 				this.producerCallback = producerCallback;
@@ -1188,7 +1188,7 @@ namespace Spring.Messaging.Nms.Core
                 }
                 finally
                 {
-                    MessagingUtils.CloseMessageProducer(producer);
+                    NmsUtils.CloseMessageProducer(producer);
                 }
 
             }
@@ -1196,18 +1196,18 @@ namespace Spring.Messaging.Nms.Core
 
         private class ReceiveCallback : ISessionCallback
         {
-            private MessageTemplate jmsTemplate;
+            private NmsTemplate jmsTemplate;
             private IDestination destination;
             private string destinationName;
 
 
-            public ReceiveCallback(MessageTemplate jmsTemplate, string destinationName)
+            public ReceiveCallback(NmsTemplate jmsTemplate, string destinationName)
             {
                 this.jmsTemplate = jmsTemplate;
                 this.destinationName = destinationName;
             }
 
-            public ReceiveCallback(MessageTemplate jmsTemplate, IDestination destination)
+            public ReceiveCallback(NmsTemplate jmsTemplate, IDestination destination)
             {
                 this.jmsTemplate = jmsTemplate;
                 this.destination = destination;
@@ -1231,11 +1231,11 @@ namespace Spring.Messaging.Nms.Core
 
         private class ConvertAndSendMessageCreator : IMessageCreator
         {
-            private MessageTemplate jmsTemplate;
+            private NmsTemplate jmsTemplate;
             private object objectToConvert;
             private IMessagePostProcessor messagePostProcessor;
 
-            public ConvertAndSendMessageCreator(MessageTemplate jmsTemplate, object message, IMessagePostProcessor messagePostProcessor)
+            public ConvertAndSendMessageCreator(NmsTemplate jmsTemplate, object message, IMessagePostProcessor messagePostProcessor)
             {
                 this.jmsTemplate = jmsTemplate;
                 objectToConvert = message;
@@ -1251,12 +1251,12 @@ namespace Spring.Messaging.Nms.Core
 
         private class ReceiveSelectedCallback : ISessionCallback
         {
-            private MessageTemplate jmsTemplate;
+            private NmsTemplate jmsTemplate;
             private string messageSelector;
             private string destinationName;
             private IDestination destination;
 
-            public ReceiveSelectedCallback(MessageTemplate jmsTemplate,
+            public ReceiveSelectedCallback(NmsTemplate jmsTemplate,
                                IDestination destination,
                                string messageSelector)
             {
@@ -1264,7 +1264,7 @@ namespace Spring.Messaging.Nms.Core
                 this.destination = destination;
                 this.messageSelector = messageSelector;
             }
-            public ReceiveSelectedCallback(MessageTemplate jmsTemplate,
+            public ReceiveSelectedCallback(NmsTemplate jmsTemplate,
                                            string destinationName,
                                            string messageSelector)
             {
@@ -1311,10 +1311,10 @@ namespace Spring.Messaging.Nms.Core
 
     internal class SimpleMessageCreator : IMessageCreator
     {
-        private MessageTemplate jmsTemplate;
+        private NmsTemplate jmsTemplate;
         private object objectToConvert;
         
-        public SimpleMessageCreator(MessageTemplate jmsTemplate, object objectToConvert)
+        public SimpleMessageCreator(NmsTemplate jmsTemplate, object objectToConvert)
         {
             this.jmsTemplate = jmsTemplate;
             this.objectToConvert = objectToConvert;
@@ -1334,32 +1334,32 @@ namespace Spring.Messaging.Nms.Core
     {
         private string destinationName;
         private IDestination destination;
-        private MessageTemplate jmsTemplate;
+        private NmsTemplate jmsTemplate;
         private IMessageCreator messageCreator;
         private IMessageCreatorDelegate messageCreatorDelegate;
 
-        public SendDestinationCallback(MessageTemplate jmsTemplate, string destinationName, IMessageCreator messageCreator)
+        public SendDestinationCallback(NmsTemplate jmsTemplate, string destinationName, IMessageCreator messageCreator)
         {
             this.jmsTemplate = jmsTemplate;
             this.destinationName = destinationName;
             this.messageCreator = messageCreator;
         }
 
-        public SendDestinationCallback(MessageTemplate jmsTemplate, IDestination destination, IMessageCreator messageCreator)
+        public SendDestinationCallback(NmsTemplate jmsTemplate, IDestination destination, IMessageCreator messageCreator)
         {
             this.jmsTemplate = jmsTemplate;
             this.destination = destination;
             this.messageCreator = messageCreator;
         }
 
-        public SendDestinationCallback(MessageTemplate jmsTemplate, string destinationName, IMessageCreatorDelegate messageCreatorDelegate)
+        public SendDestinationCallback(NmsTemplate jmsTemplate, string destinationName, IMessageCreatorDelegate messageCreatorDelegate)
         {
             this.jmsTemplate = jmsTemplate;
             this.destinationName = destinationName;
             this.messageCreatorDelegate = messageCreatorDelegate;
         }
 
-        public SendDestinationCallback(MessageTemplate jmsTemplate, IDestination destination, IMessageCreatorDelegate messageCreatorDelegate)
+        public SendDestinationCallback(NmsTemplate jmsTemplate, IDestination destination, IMessageCreatorDelegate messageCreatorDelegate)
         {
             this.jmsTemplate = jmsTemplate;
             this.destination = destination;

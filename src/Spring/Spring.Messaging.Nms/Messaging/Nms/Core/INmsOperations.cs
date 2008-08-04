@@ -36,7 +36,7 @@ namespace Spring.Messaging.Nms.Core
 	/// <author>Mark Pollack</author>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
-    public interface IMessageOperations
+    public interface INmsOperations
     {
         /// <summary> Execute the action specified by the given action object within
 		/// a NMS Session.

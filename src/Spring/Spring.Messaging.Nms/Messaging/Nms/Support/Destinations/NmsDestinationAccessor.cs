@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using Spring.Objects.Factory;
 using Spring.Util;
 using Apache.NMS;
 
@@ -35,7 +33,7 @@ namespace Spring.Messaging.Nms.Support.Destinations
     /// </remarks>
     /// <author>Juergen Hoeller </author>
     /// <author>Mark Pollack (.NET)</author>
-    public class MessageDestinationAccessor : MessagingAccessor
+    public class NmsDestinationAccessor : NmsAccessor
     {
         #region Fields
         

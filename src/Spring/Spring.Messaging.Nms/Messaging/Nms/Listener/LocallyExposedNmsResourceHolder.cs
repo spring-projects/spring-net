@@ -29,13 +29,13 @@ namespace Spring.Messaging.Nms.Listener
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class LocallyExposedMessageResourceHolder : MessageResourceHolder
+    public class LocallyExposedNmsResourceHolder : NmsResourceHolder
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocallyExposedMessageResourceHolder"/> class.
+        /// Initializes a new instance of the <see cref="LocallyExposedNmsResourceHolder"/> class.
         /// </summary>
         /// <param name="session">The session.</param>
-        public LocallyExposedMessageResourceHolder(ISession session) : base(session)
+        public LocallyExposedNmsResourceHolder(ISession session) : base(session)
         {
             
         }

@@ -34,11 +34,11 @@ namespace Spring.Messaging.Nms.Support
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class MessagingAccessor : IInitializingObject
+    public class NmsAccessor : IInitializingObject
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(MessagingAccessor));
+        private readonly ILog logger = LogManager.GetLogger(typeof(NmsAccessor));
 
         #endregion
         

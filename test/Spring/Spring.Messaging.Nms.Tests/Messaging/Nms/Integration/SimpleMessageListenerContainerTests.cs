@@ -51,11 +51,11 @@ namespace Spring.Messaging.Nms.Integration
             Assert.IsNotNull(listener);
             
 
-            MessageTemplate messageTemplate = (MessageTemplate) applicationContext["MessageTemplate"] as MessageTemplate;
-            Assert.IsNotNull(messageTemplate);
+            NmsTemplate nmsTemplate = (NmsTemplate) applicationContext["MessageTemplate"] as NmsTemplate;
+            Assert.IsNotNull(nmsTemplate);
 
             Assert.AreEqual(0, listener.MessageCount);
-            messageTemplate.ConvertAndSend("Hello World 1");
+            nmsTemplate.ConvertAndSend("Hello World 1");
 
             int waitInMillis = 2000;
             Thread.Sleep(waitInMillis);
@@ -63,7 +63,7 @@ namespace Spring.Messaging.Nms.Integration
 
             container.Stop();
             Console.WriteLine("container stopped.");
-            messageTemplate.ConvertAndSend("Hello World 2");
+            nmsTemplate.ConvertAndSend("Hello World 2");
             Thread.Sleep(waitInMillis);
             Assert.AreEqual(1, listener.MessageCount);
 

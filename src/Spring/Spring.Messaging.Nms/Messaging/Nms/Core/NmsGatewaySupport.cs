@@ -35,23 +35,23 @@ namespace Spring.Messaging.Nms.Core
     ///  through overriding the <code>createNmsTemplate</code> method.
     ///
     /// </remarks>
-    public class MessageGatewaySupport : IInitializingObject
+    public class NmsGatewaySupport : IInitializingObject
     {
 
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(MessageGatewaySupport));
+        private readonly ILog logger = LogManager.GetLogger(typeof(NmsGatewaySupport));
 
         #endregion
         
-        private MessageTemplate jmsTemplate;
+        private NmsTemplate jmsTemplate;
 
 
         /// <summary>
         /// Gets or sets the NMS template for the gateway.
         /// </summary>
         /// <value>The NMS template.</value>
-        public MessageTemplate MessageTemplate
+        public NmsTemplate NmsTemplate
         {
             get { return jmsTemplate; }
             set { jmsTemplate = value; }
@@ -83,9 +83,9 @@ namespace Spring.Messaging.Nms.Core
 	    ///
 	    /// <param name="connectionFactory">The connection factory.</param>
         /// <returns></returns>
-        protected virtual MessageTemplate CreateNmsTemplate(IConnectionFactory connectionFactory)
+        protected virtual NmsTemplate CreateNmsTemplate(IConnectionFactory connectionFactory)
         {
-            return new MessageTemplate(connectionFactory);
+            return new NmsTemplate(connectionFactory);
         }
 
         /// <summary>

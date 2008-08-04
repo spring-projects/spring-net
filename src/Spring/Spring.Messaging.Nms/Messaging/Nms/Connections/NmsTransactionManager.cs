@@ -40,7 +40,7 @@ namespace Spring.Messaging.Nms.Connections
     /// <para>
     /// Application code is required to retrieve the transactional Session via
     /// <see cref="ConnectionFactoryUtils.GetTransactionalSession"/>.  Spring's
-    /// <see cref="MessageTemplate"/> will autodetect a thread-bound Session and 
+    /// <see cref="NmsTemplate"/> will autodetect a thread-bound Session and 
     /// automatically participate in it.
     /// </para>
     /// <para>
@@ -58,20 +58,20 @@ namespace Spring.Messaging.Nms.Connections
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class MessageTransactionManager : AbstractPlatformTransactionManager, 
+    public class NmsTransactionManager : AbstractPlatformTransactionManager, 
         IResourceTransactionManager, IInitializingObject
     {
 
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(MessageTransactionManager));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(NmsTransactionManager));
 
         #endregion 
 
         private IConnectionFactory connectionFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageTransactionManager"/> class.
+        /// Initializes a new instance of the <see cref="NmsTransactionManager"/> class.
         /// </summary>
         /// <remarks>
         /// The ConnectionFactory has to be set before using the instance. 
@@ -84,17 +84,17 @@ namespace Spring.Messaging.Nms.Connections
 	    /// Only one manager is allowed to drive synchronization at any point of time.
         /// </para>
         /// </remarks>
-        public MessageTransactionManager()
+        public NmsTransactionManager()
         {
             TransactionSynchronization = TransactionSynchronizationState.Never;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageTransactionManager"/> class
+        /// Initializes a new instance of the <see cref="NmsTransactionManager"/> class
         /// given a ConnectionFactory.
         /// </summary>
         /// <param name="connectionFactory">The connection factory to obtain connections from.</param>
-        public MessageTransactionManager(IConnectionFactory connectionFactory) : this()
+        public NmsTransactionManager(IConnectionFactory connectionFactory) : this()
         {
             ConnectionFactory = connectionFactory;
             AfterPropertiesSet();
@@ -154,7 +154,7 @@ namespace Spring.Messaging.Nms.Connections
             MessageTransactionObject txObject = new MessageTransactionObject();
 
             txObject.ResourceHolder =
-                (MessageResourceHolder) TransactionSynchronizationManager.GetResource(ConnectionFactory);
+                (NmsResourceHolder) TransactionSynchronizationManager.GetResource(ConnectionFactory);
             return txObject;
         }
 
@@ -191,7 +191,7 @@ namespace Spring.Messaging.Nms.Connections
                 {
                     log.Debug("Created NMS transaction on Session [" + session + "] from Connection [" + con + "]");
                 }
-                txObject.ResourceHolder = new MessageResourceHolder(ConnectionFactory, con, session);
+                txObject.ResourceHolder = new NmsResourceHolder(ConnectionFactory, con, session);
                 txObject.ResourceHolder.SynchronizedWithTransaction = true;
                 int timeout = DetermineTimeout(definition);
                 if (timeout != DefaultTransactionDefinition.TIMEOUT_DEFAULT)
@@ -260,7 +260,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </exception>
         protected override void DoResume(object transaction, object suspendedResources)
         {
-            MessageResourceHolder conHolder = (MessageResourceHolder) suspendedResources;
+            NmsResourceHolder conHolder = (NmsResourceHolder) suspendedResources;
             TransactionSynchronizationManager.BindResource(ConnectionFactory, conHolder);
         }
 
@@ -402,10 +402,10 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         internal class MessageTransactionObject : ISmartTransactionObject
         {
-            private MessageResourceHolder resourceHolder;
+            private NmsResourceHolder resourceHolder;
 
 
-            public MessageResourceHolder ResourceHolder
+            public NmsResourceHolder ResourceHolder
             {
                 get { return resourceHolder; }
                 set { resourceHolder = value; }
