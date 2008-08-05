@@ -1412,8 +1412,32 @@ namespace Spring.Web.UI
         #region Application context support
 
         /// <summary>
-        /// Gets or sets Spring application context of the page.
+        /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
+        /// object runs in.
         /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// <p>
+        /// Normally this call will be used to initialize the object.
+        /// </p>
+        /// <p>
+        /// Invoked after population of normal object properties but before an
+        /// init callback such as
+        /// <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
+        /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+        /// or a custom init-method. Invoked after the setting of any
+        /// <see cref="Spring.Context.IResourceLoaderAware"/>'s
+        /// <see cref="Spring.Context.IResourceLoaderAware.ResourceLoader"/>
+        /// property.
+        /// </p>
+        /// </remarks>
+        /// <exception cref="Spring.Context.ApplicationContextException">
+        /// In the case of application context initialization errors.
+        /// </exception>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If thrown by any application context methods.
+        /// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual IApplicationContext ApplicationContext

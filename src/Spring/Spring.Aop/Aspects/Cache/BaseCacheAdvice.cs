@@ -42,12 +42,11 @@ namespace Spring.Aspects.Cache
         private IApplicationContext applicationContext;
         
         /// <summary>
-        /// Set the <see cref="Spring.Context.IApplicationContext"/> that this
+        /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
         /// object runs in.
         /// </summary>
         public IApplicationContext ApplicationContext
         {
-            get { return applicationContext; }
             set { applicationContext = value; }
         }
 

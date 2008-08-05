@@ -49,7 +49,7 @@ namespace Spring.Aspects.Cache
         }
 
         /// <summary>
-        /// Set the <see cref="Spring.Context.IApplicationContext"/> that this
+        /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
         /// object runs in.
         /// </summary>
         /// <remarks>
@@ -76,7 +76,6 @@ namespace Spring.Aspects.Cache
         /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
         public IApplicationContext ApplicationContext
         {
-            get { return ((IApplicationContextAware) Advice).ApplicationContext; }
             set { ((IApplicationContextAware)Advice).ApplicationContext = value; }
         }
 

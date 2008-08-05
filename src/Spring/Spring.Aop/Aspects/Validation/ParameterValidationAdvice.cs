@@ -61,14 +61,13 @@ namespace Spring.Aspects.Validation
         }
 
         /// <summary>
-        /// Gets or sets the application context to search for validators in.
+        /// Sets the application context to search for validators in.
         /// </summary>
         /// <value>
         /// The application context to search for validators in.
         /// </value>
         public IApplicationContext ApplicationContext
         {
-            get { return this.applicationContext; }
             set { this.applicationContext = value; }
         }
     }

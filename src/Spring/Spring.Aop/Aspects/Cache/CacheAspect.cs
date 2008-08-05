@@ -64,8 +64,9 @@ namespace Spring.Aspects.Cache
 	        get { return advisors; }
 	        set { throw new NotSupportedException("Cache aspect advisors cannot be set externally."); }
 	    }
+
 	    /// <summary>
-	    /// Set the <see cref="Spring.Context.IApplicationContext"/> that this
+	    /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
 	    /// object runs in.
 	    /// </summary>
 	    /// <remarks>
@@ -92,7 +93,6 @@ namespace Spring.Aspects.Cache
 	    /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
 	    public IApplicationContext ApplicationContext
 	    {
-	        get { return applicationContext; }
 	        set
 	        {
 	            applicationContext = value;

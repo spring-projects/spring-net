@@ -143,7 +143,7 @@ namespace Spring.Context.Support
 		#region IApplicationContextAware Members
 
 		/// <summary>
-		/// Set the <see cref="Spring.Context.IApplicationContext"/> that this
+		/// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
 		/// object runs in.
 		/// </summary>
 		/// <exception cref="Spring.Context.ApplicationContextException">

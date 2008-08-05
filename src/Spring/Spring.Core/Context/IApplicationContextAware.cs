@@ -67,7 +67,7 @@ namespace Spring.Context
     public interface IApplicationContextAware
     {
     	/// <summary>
-    	/// Set the <see cref="Spring.Context.IApplicationContext"/> that this
+    	/// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
     	/// object runs in.
     	/// </summary>
     	/// <remarks>
@@ -92,6 +92,6 @@ namespace Spring.Context
     	/// If thrown by any application context methods.
     	/// </exception>
     	/// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
-    	IApplicationContext ApplicationContext { set; get; }
+    	IApplicationContext ApplicationContext { set; }
     }
 }

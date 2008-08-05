@@ -568,7 +568,7 @@ namespace Spring.Scheduling.Quartz
         #region IApplicationContextAware Members
 
         /// <summary>
-        /// Set the <see cref="Spring.Context.IApplicationContext"/> that this
+        /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
         /// object runs in.
         /// </summary>
         /// <value></value>
@@ -597,7 +597,6 @@ namespace Spring.Scheduling.Quartz
         public virtual IApplicationContext ApplicationContext
         {
             set { applicationContext = value; }
-            get { return applicationContext; }
         }
 
         #endregion
