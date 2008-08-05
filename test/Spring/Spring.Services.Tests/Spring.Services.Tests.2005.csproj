@@ -177,6 +177,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\Spring\Remoting\saoSingleton-aop.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ServiceModel\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

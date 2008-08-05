@@ -1,4 +1,4 @@
-#if NET_3_5
+#if NET_3_0
 #region License
 
 /*
