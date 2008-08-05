@@ -57,7 +57,6 @@ namespace Spring.Web.Services
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    [WebServiceBinding(ConformsTo=WsiProfiles.BasicProfile1_1)]
     public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IFactoryObject, IObjectNameAware
     {
         #region Fields
@@ -500,7 +499,9 @@ namespace Spring.Web.Services
                 IList attrs = base.GetTypeAttributes(type);
 
                 bool containsWebServiceAttribute = false;
+#if NET_2_0
                 bool containsWebServiceBindingAttribute = false;
+#endif
                 for (int i = 0; i < attrs.Count; i++)
                 {
                     if (IsAttributeMatchingType(attrs[i], typeof(WebServiceAttribute)))
