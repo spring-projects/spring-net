@@ -54,6 +54,7 @@ namespace Spring.Context.Support
             return ContextRegistry.GetContext(); // this must fail!
         }
 
+#if NET_2_0
         [Test]
         public void ThrowsInvalidOperationExceptionOnRecursiveCallsToGetContext()
         {
@@ -75,6 +76,7 @@ namespace Spring.Context.Support
                 HookableContextHandler.SetSectionHandler(prevInst);
             }
         }
+#endif
 
 		[Test]
 		public void RegisterRootContext()
