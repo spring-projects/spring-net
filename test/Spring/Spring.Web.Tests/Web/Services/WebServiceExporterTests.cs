@@ -121,6 +121,57 @@ namespace Spring.Web.Services
             Assert.AreEqual(wse.Namespace, wsa.Namespace);
         }
 
+#if NET_2_0
+        [Test]
+        public void CreatesDefaultWebServiceBindingAttribute()
+        {
+            wse.ObjectName = "CreatesDefaultWebServiceBindingAttribute";
+            wse.TargetName = "noDecoratedService";
+            wse.AfterPropertiesSet();
+
+            Type proxyType = wse.ObjectType;
+            object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
+            Assert.IsNotEmpty(attrs);
+            Assert.AreEqual(1, attrs.Length);
+
+            WebServiceBindingAttribute wsba = attrs[0] as WebServiceBindingAttribute;
+            Assert.AreEqual(WsiProfiles.BasicProfile1_1, wsba.ConformsTo);
+        }
+
+        [Test]
+        public void CreatesWebServiceBindingAttributeWithNoWsiProfile()
+        {
+            wse.ObjectName = "CreatesWebServiceBindingAttributeWithNoWsiProfile";
+            wse.TargetName = "noDecoratedService";
+            wse.WsiProfile = WsiProfiles.None;
+            wse.AfterPropertiesSet();
+
+            Type proxyType = wse.ObjectType;
+            object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
+            Assert.IsNotEmpty(attrs);
+            Assert.AreEqual(1, attrs.Length);
+
+            WebServiceBindingAttribute wsba = attrs[0] as WebServiceBindingAttribute;
+            Assert.AreEqual(WsiProfiles.None, wsba.ConformsTo);
+        }
+
+        [Test]
+        public void UsesExistingWebServiceBindingAttributeWithDecoratedClass()
+        {
+            wse.ObjectName = "UsesExistingWebServiceBindingAttributeWithDecoratedClass";
+            wse.TargetName = "decoratedService";
+            wse.AfterPropertiesSet();
+
+            Type proxyType = wse.ObjectType;
+            object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
+            Assert.IsNotEmpty(attrs);
+            Assert.AreEqual(1, attrs.Length);
+
+            WebServiceBindingAttribute wsba = attrs[0] as WebServiceBindingAttribute;
+            Assert.AreEqual(WsiProfiles.None, wsba.ConformsTo);
+        }
+#endif
+
         [Test]
         public void CreatesDefaultWebMethodAttributeWithNoDecoratedMethod()
         {
@@ -264,6 +315,9 @@ namespace Spring.Web.Services
         }
 
         [WebService(Name = "Decorated service")]
+#if NET_2_0
+        [WebServiceBinding(ConformsTo=WsiProfiles.None)]
+#endif
         public class DecoratedService : IService
         {
             [WebMethod(Description="SomeMethod description")]

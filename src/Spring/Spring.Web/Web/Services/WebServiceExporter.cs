@@ -57,10 +57,14 @@ namespace Spring.Web.Services
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
+    [WebServiceBinding(ConformsTo=WsiProfiles.BasicProfile1_1)]
     public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IFactoryObject, IObjectNameAware
     {
         #region Fields
 
+#if NET_2_0
+        private WsiProfiles _wsiProfile = WsiProfiles.BasicProfile1_1;
+#endif
         private Type _webServiceBaseType = typeof(WebService);
         private string _targetName;
         private string _description;
@@ -99,6 +103,21 @@ namespace Spring.Web.Services
         #endregion
 
         #region Properties
+
+#if NET_2_0
+        /// <summary>
+        /// Gets or Sets the Web Services Interoperability (WSI) specification 
+        /// to which the Web Service claims to conform.
+        /// </summary>
+        /// <remarks>
+        /// Default is <see cref="System.Web.Services.WsiProfiles.BasicProfile1_1"/>
+        /// </remarks>
+        public WsiProfiles WsiProfile
+        {
+            get { return _wsiProfile; }
+            set { _wsiProfile = value; }
+        }
+#endif
 
         /// <summary>
         /// Gets or sets the base type that web service should inherit.
@@ -346,7 +365,11 @@ namespace Spring.Web.Services
         /// </summary>
         protected virtual void GenerateProxy()
         {
+#if NET_2_0
+            IProxyTypeBuilder builder = new WebServiceProxyTypeBuilder(TargetName, Description, Name, Namespace, WsiProfile);
+#else
             IProxyTypeBuilder builder = new WebServiceProxyTypeBuilder(TargetName, Description, Name, Namespace);
+#endif
             builder.Name = WebUtils.GetPageName(objectName);
             builder.BaseType = WebServiceBaseType;
             builder.TargetType = objectFactory.GetType(TargetName);
@@ -376,6 +399,9 @@ namespace Spring.Web.Services
 
             private string targetName;
             private CustomAttributeBuilder webServiceAttribute;
+#if NET_2_0
+            private CustomAttributeBuilder webServiceBindingAttribute;
+#endif
 
             #endregion
 
@@ -389,6 +415,30 @@ namespace Spring.Web.Services
                 // Creates a WebServiceAttribute from configuration info
                 this.webServiceAttribute = CreateWebServiceAttribute(description, name, ns);
             }
+#if NET_2_0
+            public WebServiceProxyTypeBuilder(
+                string targetName, string description, string name, string ns, WsiProfiles wsiProfile)
+            {
+                this.targetName = targetName;
+
+                // Creates a WebServiceAttribute from configuration info
+                this.webServiceAttribute = CreateWebServiceAttribute(description, name, ns);
+
+                // Creates a WebServiceAttribute from configuration info
+                this.webServiceBindingAttribute = CreateWebServiceBindingAttribute(wsiProfile);
+            }
+
+            private static CustomAttributeBuilder CreateWebServiceBindingAttribute(WsiProfiles wsiProfile)
+            {
+                ReflectionUtils.CustomAttributeBuilderBuilder cabb =
+                    new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(WebServiceBindingAttribute));
+                if (wsiProfile == WsiProfiles.BasicProfile1_1)
+                {
+                    cabb.AddPropertyValue("ConformsTo", wsiProfile);
+                }
+                return cabb.Build();
+            }
+#endif
 
             private static CustomAttributeBuilder CreateWebServiceAttribute(string description, string name, string ns)
             {
@@ -449,19 +499,37 @@ namespace Spring.Web.Services
             {
                 IList attrs = base.GetTypeAttributes(type);
 
+                bool containsWebServiceAttribute = false;
+                bool containsWebServiceBindingAttribute = false;
                 for (int i = 0; i < attrs.Count; i++)
                 {
                     if (IsAttributeMatchingType(attrs[i], typeof(WebServiceAttribute)))
                     {
                         // override existing WebServiceAttribute
+                        containsWebServiceAttribute = true;
                         attrs[i] = webServiceAttribute;
-
-                        return attrs;
+                    } 
+#if NET_2_0
+                    else if (IsAttributeMatchingType(attrs[i], typeof(WebServiceBindingAttribute)))
+                    {
+                        containsWebServiceBindingAttribute = true;
                     }
+#endif
                 }
 
-                // add missing WebServiceAttribute
-                attrs.Add(webServiceAttribute);
+                // Add missing WebServiceAttribute
+                if (!containsWebServiceAttribute)
+                {
+                    attrs.Add(webServiceAttribute);
+                }
+
+#if NET_2_0
+                // Add missing WebServiceBindingAttribute
+                if (!containsWebServiceBindingAttribute)
+                {
+                    attrs.Add(webServiceBindingAttribute);
+                }
+#endif
 
                 return attrs;
             }
