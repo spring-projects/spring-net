@@ -1117,7 +1117,7 @@ namespace Spring.Scheduling.Quartz
                         string.Format("Will start Quartz Scheduler [{0}] in {1} seconds", sched.SchedulerName,
                                       startDelay));
                 }
-                sched.StartDelayed((int) startDelay.TotalSeconds);
+                sched.StartDelayed(startDelay);
             }
         }
 

@@ -198,7 +198,7 @@ namespace Spring.Scheduling.Quartz
             // set expectations
             TestSchedulerFactory.MockScheduler.JobFactory = null;
             LastCall.IgnoreArguments();
-            TestSchedulerFactory.MockScheduler.StartDelayed(2);
+            TestSchedulerFactory.MockScheduler.StartDelayed(TimeSpan.FromSeconds(2));
             TestSchedulerFactory.Mockery.ReplayAll();
 
             factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
