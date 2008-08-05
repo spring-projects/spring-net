@@ -238,6 +238,7 @@ namespace Spring.Context.Support
                 instance.contextMap.Clear();
                 rootContextName = null;
                 ConfigurationUtils.RefreshSection(AbstractApplicationContext.ContextSectionName);
+                DynamicCodeManager.Clear();
                 if (Cleared != null)
                 {
                     Cleared(typeof(ContextRegistry), EventArgs.Empty);

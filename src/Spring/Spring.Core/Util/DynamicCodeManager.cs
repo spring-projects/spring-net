@@ -140,5 +140,16 @@ namespace Spring.Util
             AssemblyBuilder assembly = (AssemblyBuilder) module.Assembly;
             assembly.Save(assembly.GetName().Name + ".dll");            
         }
+
+        /// <summary>
+        /// Removes all registered <see cref="ModuleBuilder"/>s.
+        /// </summary>
+        public static void Clear()
+        {
+            lock (s_moduleCache.SyncRoot)
+            {
+                s_moduleCache.Clear();
+            }
+        }
     }
 }

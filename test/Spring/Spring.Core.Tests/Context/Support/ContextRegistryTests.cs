@@ -22,7 +22,12 @@
 
 using System;
 using System.Xml;
+
 using NUnit.Framework;
+
+using Spring.Objects;
+using Spring.Proxy;
+using Spring.Objects.Factory.Support;
 
 #endregion
 
@@ -40,7 +45,6 @@ namespace Spring.Context.Support
 		{
 			ContextRegistry.Clear();
 		}
-
 
         /// <summary>
         /// This handler simulates calls to ContextRegistry during context creation
@@ -130,6 +134,36 @@ namespace Spring.Context.Support
 			Assert.IsNull(context,
 				"Named context is not null even though a context has not been registered under the lookup name.");
 		}
+
+        [Test]
+        public void ClearWithDynamicProxies()
+        {
+            CompositionProxyTypeBuilder typeBuilder = new CompositionProxyTypeBuilder();
+            typeBuilder.TargetType = typeof(TestObject);
+            Type proxyType = typeBuilder.BuildProxyType();
+
+            XmlApplicationContext ctx1 = new XmlApplicationContext();
+            RootObjectDefinition od1 = new RootObjectDefinition(proxyType, false);
+            od1.PropertyValues.Add("Name", "Bruno");
+            ((DefaultListableObjectFactory)ctx1.ObjectFactory).RegisterObjectDefinition("testObject", od1);
+            ContextRegistry.RegisterContext(ctx1);
+
+            ITestObject to1 = ContextRegistry.GetContext().GetObject("testObject") as ITestObject;
+            Assert.IsNotNull(to1);
+            Assert.AreEqual("Bruno", to1.Name);
+
+            XmlApplicationContext ctx2 = new XmlApplicationContext();
+            RootObjectDefinition od2 = new RootObjectDefinition(proxyType, false);
+            od2.PropertyValues.Add("Name", "Baia");
+            ((DefaultListableObjectFactory)ctx2.ObjectFactory).RegisterObjectDefinition("testObject", od2);
+
+            ContextRegistry.Clear();
+
+            ITestObject to2 = ctx2.GetObject("testObject") as ITestObject;
+            Assert.IsNotNull(to2);
+            Assert.AreEqual("Baia", to2.Name);
+        }
+
 #if NET_2_0
         // TODO : Add support for .NET 1.x
         [Test]
