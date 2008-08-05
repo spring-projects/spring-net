@@ -163,6 +163,11 @@ namespace Spring.Context.Support
             lock (syncRoot)
             {
                 InitializeContextIfNeeded();
+                if (rootContextName == null)
+                {
+                    throw new ApplicationContextException(
+                        "No context registered. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.");
+                }
                 return GetContext(rootContextName);
             }
         }
@@ -195,21 +200,19 @@ namespace Spring.Context.Support
                 {
                     InitializeContextIfNeeded();
                     IApplicationContext ctx = (IApplicationContext)instance.contextMap[name];
+                    if (ctx == null)
+                    {
+                        throw new ApplicationContextException(String.Format(
+                            "No context registered under name '{0}'. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.", 
+                            name));
+                    }
 
                     #region Instrumentation
 
                     if (log.IsDebugEnabled)
                     {
-                        if (ctx == null)
-                        {
-                            log.Debug(String.Format(
-                                          "No context registered under name '{0}'.", name));
-                        }
-                        else
-                        {
-                            log.Debug(String.Format(
-                                          "Returning context '{0}' registered under name '{1}'.", ctx, name));
-                        }
+                        log.Debug(String.Format(
+                            "Returning context '{0}' registered under name '{1}'.", ctx, name));
                     }
 
                     #endregion

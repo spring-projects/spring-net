@@ -61,7 +61,8 @@ namespace Spring.Context.Support
                 new HookableContextHandler.CreateContextFromSectionHandler(GetContextRecursive));
             try
             {
-                ContextRegistry.GetContext("somename");                
+                ContextRegistry.GetContext("somename");
+                Assert.Fail("Should throw an exception");
             }
             catch(Exception ex)
             {
@@ -127,12 +128,22 @@ namespace Spring.Context.Support
 			ContextRegistry.GetContext("");
 		}
 
+        [Test]
+        [Ignore("How can we test that one ???")]
+        [ExpectedException(typeof(ApplicationContextException),
+            ExpectedMessage = "No context registered. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.")]
+        public void GetRootContextNotRegisteredThrowsException()
+        {
+            IApplicationContext context = ContextRegistry.GetContext();
+        }
+
+
 		[Test]
-		public void GetContextNotRegisteredReturnsNull()
+        [ExpectedException(typeof(ApplicationContextException), 
+            ExpectedMessage = "No context registered under name 'bingo'. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.")]
+		public void GetContextByNameNotRegisteredThrowsException()
 		{
 			IApplicationContext context = ContextRegistry.GetContext("bingo");
-			Assert.IsNull(context,
-				"Named context is not null even though a context has not been registered under the lookup name.");
 		}
 
         [Test]
