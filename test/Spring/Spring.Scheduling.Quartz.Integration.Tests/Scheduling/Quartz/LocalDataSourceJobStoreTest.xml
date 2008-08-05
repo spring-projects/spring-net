@@ -56,7 +56,7 @@
         <!-- 2 seconds -->
         <property name="startDelay" value="2s" />
         <!-- repeat every 3 seconds -->
-        <property name="repeatInterval" value="3000" />
+        <property name="repeatInterval" value="3s" />
     </object>
 
 
