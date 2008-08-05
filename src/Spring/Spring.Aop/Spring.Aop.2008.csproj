@@ -136,6 +136,7 @@
     <Compile Include="Aop\Config\AopNamespaceUtils.cs" />
     <Compile Include="Aop\Config\ConfigObjectDefinitionParser.cs" />
     <Compile Include="Aop\Framework\AopUtils.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\InheritanceBasedAopConfigurer.cs" />
     <Compile Include="Aop\Framework\DynamicMethodInvocation.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\CachedAopProxyFactory.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\DefaultAopProxyFactory.cs" />
