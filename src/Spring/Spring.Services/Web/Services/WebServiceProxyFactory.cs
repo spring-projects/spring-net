@@ -111,19 +111,6 @@ namespace Spring.Web.Services
         /// <remarks>
         /// Default is <see cref="System.Web.Services.Protocols.SoapHttpClientProtocol"/>
         /// </remarks>
-        [Obsolete("This property is obsolete, it has been replaced by WebServiceProxyBaseType")]
-        public Type ClientProtocolType
-        {
-            get { return _webServiceProxyBaseType; }
-            set { _webServiceProxyBaseType = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the base type that web service proxy should inherit.
-        /// </summary>
-        /// <remarks>
-        /// Default is <see cref="System.Web.Services.Protocols.SoapHttpClientProtocol"/>
-        /// </remarks>
         public Type WebServiceProxyBaseType
         {
             get { return _webServiceProxyBaseType; }
