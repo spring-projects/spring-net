@@ -33,8 +33,32 @@ namespace Spring
     /// Replace the original context handler with this hookable version for testing ContextRegistry
     /// </summary>
     /// <author>Erich Eichinger</author>
-    public class HookableContextHandler : ContextHandler, IConfigurationSectionHandler
+    public class HookableContextHandler : IConfigurationSectionHandler
     {
+        private IConfigurationSectionHandler baseHandler = new ContextHandler();
+
+        /// <summary>
+        /// May be used to wrap codeblocks within using(new Guard(new CreateContextFromSectionHandler(MyTestSectionHandler))) { ... }
+        /// </summary>
+        public class Guard : IDisposable
+        {
+            private readonly CreateContextFromSectionHandler _prevInst;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="T:System.Object"></see> class.
+            /// </summary>
+            public Guard(CreateContextFromSectionHandler sectionHandler)
+            {
+            	  NUnit.Framework.Assert.IsNotNull(sectionHandler);
+                _prevInst = SetSectionHandler(sectionHandler);
+            }
+
+            public void Dispose()
+            {
+                SetSectionHandler(_prevInst);
+            }
+        }
+
         public delegate object CreateContextFromSectionHandler(object parent, object configContext, XmlNode section);
 
         private static CreateContextFromSectionHandler s_callback;
@@ -52,24 +76,24 @@ namespace Spring
         }
 
         ///<summary>
-        ///Creates a configuration section handler.
+        ///Creates a configuration section.
         ///</summary>
         ///
         ///<returns>
-        ///The created section handler object.
+        ///The created section object.
         ///</returns>
         ///
         ///<param name="parent">Parent object.</param>
         ///<param name="section">Section XML node.</param>
         ///<param name="configContext">Configuration context object.</param><filterpriority>2</filterpriority>
-        new virtual public object Create(object parent, object configContext, XmlNode section)
-        {
+        public object Create(object parent, object configContext, XmlNode section)
+        {        		
             if (s_callback != null)
             {
                 return s_callback(parent, configContext, section);
             }
 
-            return base.Create(parent, configContext, section);
+            return baseHandler.Create(parent, configContext, section);
         }
     }
 }

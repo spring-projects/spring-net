@@ -21,6 +21,8 @@
 #region Imports
 
 using System;
+using System.Configuration;
+using System.Reflection;
 using System.Xml;
 
 using NUnit.Framework;
@@ -28,23 +30,53 @@ using NUnit.Framework;
 using Spring.Objects;
 using Spring.Proxy;
 using Spring.Objects.Factory.Support;
+using Spring.Reflection.Dynamic;
 
 #endregion
 
 namespace Spring.Context.Support
 {
-	/// <summary>
-	/// Unit tests for the ContextRegistry class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class ContextRegistryTests
-	{
-		[SetUp]
-		public void SetUp() 
-		{
-			ContextRegistry.Clear();
-		}
+    /// <summary>
+    /// Unit tests for the ContextRegistry class.
+    /// </summary>
+    /// <author>Rick Evans</author>
+    [TestFixture]
+    public sealed class ContextRegistryTests
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            ContextRegistry.Clear();
+            ResetConfigurationSystem();
+        }
+
+        private static void ResetConfigurationSystem()
+        {
+#if NET_2_0
+            FieldInfo initStateRef = typeof(ConfigurationManager).GetField("s_initState",BindingFlags.NonPublic|BindingFlags.Static);
+            object notStarted = Activator.CreateInstance(initStateRef.FieldType);
+            initStateRef.SetValue(null,notStarted);
+#endif
+#if NET_1_1
+            FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_initState",BindingFlags.NonPublic|BindingFlags.Static);
+            object notStarted = Activator.CreateInstance(initStateRef.FieldType);
+            initStateRef.SetValue(null,notStarted);
+#endif
+#if NET_1_0
+            FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_configurationInitialized",BindingFlags.NonPublic|BindingFlags.Static);
+            FieldInfo configSystemRef = typeof(ConfigurationSettings).GetField("_configSystem",BindingFlags.NonPublic|BindingFlags.Static);
+            initStateRef.SetValue(null,false);		
+            configSystemRef.SetValue(null,null);
+#endif
+        }
+
+        /// <summary>
+        /// This handler simulates an undefined configuration section
+        /// </summary>
+        private static object GetNullSection(object parent, object context, XmlNode section)
+        {
+            return null;
+        }
 
         /// <summary>
         /// This handler simulates calls to ContextRegistry during context creation
@@ -54,41 +86,36 @@ namespace Spring.Context.Support
             return ContextRegistry.GetContext(); // this must fail!
         }
 
-#if NET_2_0
         [Test]
         public void ThrowsInvalidOperationExceptionOnRecursiveCallsToGetContext()
         {
-            HookableContextHandler.CreateContextFromSectionHandler prevInst = HookableContextHandler.SetSectionHandler(
-                new HookableContextHandler.CreateContextFromSectionHandler(GetContextRecursive));
-            try
+            using (new HookableContextHandler.Guard(new HookableContextHandler.CreateContextFromSectionHandler(GetContextRecursive)))
             {
-                ContextRegistry.GetContext("somename");
-                Assert.Fail("Should throw an exception");
-            }
-            catch(Exception ex)
-            {
-                InvalidOperationException rootCause = ex.GetBaseException() as InvalidOperationException;
-                Assert.IsNotNull(rootCause);
-                Assert.AreEqual("root context is currently in creation.", rootCause.Message.Substring(0, 38));
-            }
-            finally
-            {
-                HookableContextHandler.SetSectionHandler(prevInst);
+                try
+                {
+                    ContextRegistry.GetContext("somename");
+                    Assert.Fail("Should throw an exception");
+                }
+                catch (ConfigurationException ex)
+                {
+                    InvalidOperationException rootCause = ex.GetBaseException() as InvalidOperationException;
+                    Assert.IsNotNull(rootCause);
+                    Assert.AreEqual("root context is currently in creation.", rootCause.Message.Substring(0, 38));
+                }
             }
         }
-#endif
 
-		[Test]
-		public void RegisterRootContext()
-		{
-			MockApplicationContext ctx = new MockApplicationContext();
-			ContextRegistry.RegisterContext(ctx);
-			IApplicationContext context = ContextRegistry.GetContext();
-			Assert.IsNotNull(context,
-				"Root context is null even though a context has been registered.");
-			Assert.IsTrue(Object.ReferenceEquals(ctx, context),
-				"Root context was not the same as the first context registered (it must be).");
-		}
+        [Test]
+        public void RegisterRootContext()
+        {
+            MockApplicationContext ctx = new MockApplicationContext();
+            ContextRegistry.RegisterContext(ctx);
+            IApplicationContext context = ContextRegistry.GetContext();
+            Assert.IsNotNull(context,
+                "Root context is null even though a context has been registered.");
+            Assert.IsTrue(Object.ReferenceEquals(ctx, context),
+                "Root context was not the same as the first context registered (it must be).");
+        }
 
         [Test]
         public void RegisterNamedRootContext()
@@ -103,50 +130,53 @@ namespace Spring.Context.Support
                 "Root context name is different even though the root context has been registered under the lookup name.");
         }
 
-		[Test]
-		public void RegisterNamedContext()
-		{
-			const string ctxName = "bingo";
-			MockApplicationContext ctx = new MockApplicationContext(ctxName);
-			ContextRegistry.RegisterContext(ctx);
-			IApplicationContext context = ContextRegistry.GetContext(ctxName);
-			Assert.IsNotNull(context,
-				"Named context is null even though a context has been registered under the lookup name.");
-			Assert.IsTrue(Object.ReferenceEquals(ctx, context),
-				"Named context was not the same as the registered context (it must be).");
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void GetContextWithNullName()
-		{
-			ContextRegistry.GetContext(null);
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void GetContextWithEmptyName()
-		{
-			ContextRegistry.GetContext("");
-		}
+        [Test]
+        public void RegisterNamedContext()
+        {
+            const string ctxName = "bingo";
+            MockApplicationContext ctx = new MockApplicationContext(ctxName);
+            ContextRegistry.RegisterContext(ctx);
+            IApplicationContext context = ContextRegistry.GetContext(ctxName);
+            Assert.IsNotNull(context,
+                "Named context is null even though a context has been registered under the lookup name.");
+            Assert.IsTrue(Object.ReferenceEquals(ctx, context),
+                "Named context was not the same as the registered context (it must be).");
+        }
 
         [Test]
-        [Ignore("How can we test that one ???")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetContextWithNullName()
+        {
+            ContextRegistry.GetContext(null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetContextWithEmptyName()
+        {
+            ContextRegistry.GetContext("");
+        }
+
+        [Test]
+//        [Ignore("How can we test that one ???")]
         [ExpectedException(typeof(ApplicationContextException),
             ExpectedMessage = "No context registered. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.")]
         public void GetRootContextNotRegisteredThrowsException()
         {
-            IApplicationContext context = ContextRegistry.GetContext();
+            using (new HookableContextHandler.Guard(new HookableContextHandler.CreateContextFromSectionHandler(GetNullSection)))
+            {
+                IApplicationContext context = ContextRegistry.GetContext();
+            }
         }
 
 
-		[Test]
-        [ExpectedException(typeof(ApplicationContextException), 
+        [Test]
+        [ExpectedException(typeof(ApplicationContextException),
             ExpectedMessage = "No context registered under name 'bingo'. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.")]
-		public void GetContextByNameNotRegisteredThrowsException()
-		{
-			IApplicationContext context = ContextRegistry.GetContext("bingo");
-		}
+        public void GetContextByNameNotRegisteredThrowsException()
+        {
+            IApplicationContext context = ContextRegistry.GetContext("bingo");
+        }
 
         [Test]
         public void ClearWithDynamicProxies()
@@ -190,14 +220,14 @@ namespace Spring.Context.Support
         }
 #endif
 
-		[Test(Description="SPRNET-105")]
-		[ExpectedException(typeof(ApplicationContextException))]
-		public void ChokesIfChildContextRegisteredUnderNameOfAnExistingContext()
-		{
-			MockApplicationContext original = new MockApplicationContext("original");
-			ContextRegistry.RegisterContext(original);
-			MockApplicationContext duplicate = new MockApplicationContext("original");
-			ContextRegistry.RegisterContext(duplicate);
-		}
-	}
+        [Test(Description = "SPRNET-105")]
+        [ExpectedException(typeof(ApplicationContextException))]
+        public void ChokesIfChildContextRegisteredUnderNameOfAnExistingContext()
+        {
+            MockApplicationContext original = new MockApplicationContext("original");
+            ContextRegistry.RegisterContext(original);
+            MockApplicationContext duplicate = new MockApplicationContext("original");
+            ContextRegistry.RegisterContext(duplicate);
+        }
+    }
 }
