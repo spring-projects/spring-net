@@ -3,7 +3,7 @@
 
 using Apache.NMS;
 using Spring.Messaging.Nms.Core;
-using Spring.NmsQuickStart.Common.Bo;
+using Spring.NmsQuickStart.Common.Data;
 using Spring.Objects.Factory;
 
 namespace Spring.NmsQuickStart.Client.Gateways

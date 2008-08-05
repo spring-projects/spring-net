@@ -20,12 +20,23 @@
 
 #endregion
 
-using Spring.NmsQuickStart.Common.Data;
+using System;
 
-namespace Spring.NmsQuickStart.Client.Gateways
+namespace Spring.NmsQuickStart.Common.Converters
 {
-    public interface IStockServiceGateway
+    /// <summary>
+    /// Provides a layer of indirection when adding the 'type' of the object as a message property.
+    /// </summary>
+    /// <author>Mark Pollack</author>
+    public interface ITypeMapper
     {
-        void Send(TradeRequest tradeRequest);
+        string TypeIdFieldName
+        {
+            get;
+        }
+        
+        string FromType(Type typeOfObjectToConvert);
+
+        Type ToType(string typeId);
     }
 }

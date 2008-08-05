@@ -1,7 +1,7 @@
 
 
 using Common.Logging;
-using Spring.NmsQuickStart.Common.Bo;
+using Spring.NmsQuickStart.Common.Data;
 
 namespace Spring.NmsQuickStart.Server.Handlers
 {

@@ -2,7 +2,7 @@
 
 using System.Collections;
 using Spring.NmsQuickStart.Client.Gateways;
-using Spring.NmsQuickStart.Common.Bo;
+using Spring.NmsQuickStart.Common.Data;
 
 namespace Spring.NmsQuickStart.Client.UI
 {
@@ -33,7 +33,7 @@ namespace Spring.NmsQuickStart.Client.UI
             tradeRequest.BuyRequest = true;
             tradeRequest.OrderType = "MARKET";
             tradeRequest.Quantity = 314000000;
-            tradeRequest.RequestId = "REQ-1";
+            tradeRequest.RequestID = "REQ-1";
             tradeRequest.Ticker = "CSCO";
             tradeRequest.UserName = "Joe Trader";
             

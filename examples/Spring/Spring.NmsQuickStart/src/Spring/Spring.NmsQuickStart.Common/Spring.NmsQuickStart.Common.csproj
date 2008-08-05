@@ -41,13 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bo\Trade.cs" />
-    <Compile Include="Bo\TradeRequest.cs" />
-    <Compile Include="Converters\AbstractNamedMessageConverter.cs" />
-    <Compile Include="Converters\MultiMessageConverter.cs" />
-    <Compile Include="Converters\INamedMessageConverter.cs" />
-    <Compile Include="Converters\TradeConverter.cs" />
-    <Compile Include="Converters\TradeRequestConverter.cs" />
+    <Compile Include="Converters\ITypeMapper.cs" />
+    <Compile Include="Converters\TypeMapper.cs" />
+    <Compile Include="Converters\XmlMessageConverter.cs" />
+    <Compile Include="Data\Trade.cs">
+      <DependentUpon>Trade.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Data\TradeRequest.cs">
+      <DependentUpon>TradeRequest.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +69,14 @@
       <Project>{AEB1578C-9018-4D49-B440-789F38DD2F29}</Project>
       <Name>Spring.Messaging.Nms.2005</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Trade.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\TradeRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

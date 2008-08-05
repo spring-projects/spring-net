@@ -1,5 +1,7 @@
 using System;
+using System.Threading;
 using Spring.Context.Support;
+using Spring.NmsQuickStart.Server.Gateways;
 
 namespace Spring.NmsQuickStart.Server
 {
@@ -12,6 +14,11 @@ namespace Spring.NmsQuickStart.Server
                 // Using Spring's IoC container
                 ContextRegistry.GetContext(); // Force Spring to load configuration
                 Console.Out.WriteLine("Server listening...");
+                MarketDataGateway marketDataGateway =
+                    ContextRegistry.GetContext().GetObject("MarketDataGateway") as MarketDataGateway;
+                ThreadStart job = new ThreadStart(marketDataGateway.SendMarketData);
+                Thread thread = new Thread(job);
+                thread.Start();
                 Console.Out.WriteLine("--- Press <return> to quit ---");
                 Console.ReadLine();
             }

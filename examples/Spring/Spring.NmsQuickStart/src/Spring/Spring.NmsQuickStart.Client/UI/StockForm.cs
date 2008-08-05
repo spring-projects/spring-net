@@ -3,7 +3,7 @@ using System.Collections;
 using System.Windows.Forms;
 using Common.Logging;
 using Spring.Context.Support;
-using Spring.NmsQuickStart.Common.Bo;
+using Spring.NmsQuickStart.Common.Data;
 
 namespace Spring.NmsQuickStart.Client.UI
 {

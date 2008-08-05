@@ -21,7 +21,7 @@
   <object name="NmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">
     <property name="ConnectionFactory" ref="ConnectionFactory"/>
     <property name="DefaultDestinationName" value="APP.STOCK.REQUEST"/>
-    <property name="MessageConverter" ref="MultiMessageConverter"/>
+    <property name="MessageConverter" ref="XmlMessageConverter"/>
   </object>
 
   <!-- Consume messages on queue APP.STOCK.JOE -->
@@ -46,10 +46,21 @@
     <property name="HandlerObject" ref="StockAppHandler"/>
     <property name="DefaultHandlerMethod" value="Handle"/>
     <!-- converter from JMS object to plain object -->
-    <property name="MessageConverter" ref="MultiMessageConverter"/>
+    <property name="MessageConverter" ref="XmlMessageConverter"/>
   </object>
 
 
+  <object name="XmlMessageConverter" type="Spring.NmsQuickStart.Common.Converters.XmlMessageConverter, Spring.NmsQuickStart.Common">
+    <property name="TypeMapper" ref="TypeMapper"/>
+  </object>
+
+  <object name="TypeMapper" type="Spring.NmsQuickStart.Common.Converters.TypeMapper, Spring.NmsQuickStart.Common">
+    <!-- use simple configuation style -->
+    <property name="DefaultNamespace" value="Spring.NmsQuickStart.Common.Data"/>
+    <property name="DefaultAssemblyName" value="Spring.NmsQuickStart.Common"/>
+  </object>
+  
+  <!--
   <object name="MultiMessageConverter" type="Spring.NmsQuickStart.Common.Converters.MultiMessageConverter, Spring.NmsQuickStart.Common">
     <property name="NamedMessageConverters">
       <list>
@@ -61,7 +72,7 @@
 
   <object name="TradeRequestConverter" type="Spring.NmsQuickStart.Common.Converters.TradeRequestConverter, Spring.NmsQuickStart.Common"/>
   <object name="TradeConverter" type="Spring.NmsQuickStart.Common.Converters.TradeConverter, Spring.NmsQuickStart.Common"/>
-
+  -->
 
 
 

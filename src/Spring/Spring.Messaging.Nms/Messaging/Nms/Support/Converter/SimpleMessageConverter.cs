@@ -42,7 +42,7 @@ namespace Spring.Messaging.Nms.Support.Converter
         /// <summary> Convert a .NET object to a NMS Message using the supplied session
         /// to create the message object.
         /// </summary>
-        /// <param name="object">the object to convert
+        /// <param name="objectToConvert">the object to convert
         /// </param>
         /// <param name="session">the Session to use for creating a NMS Message
         /// </param>
@@ -50,32 +50,32 @@ namespace Spring.Messaging.Nms.Support.Converter
         /// </returns>
         /// <throws>NMSException if thrown by NMS API methods </throws>
         /// <throws>MessageConversionException in case of conversion failure </throws>
-        public IMessage ToMessage(object @object, ISession session)
+        public IMessage ToMessage(object objectToConvert, ISession session)
         {
-            if (@object is IMessage)
+            if (objectToConvert is IMessage)
             {
-                return (IMessage) @object;
+                return (IMessage) objectToConvert;
             }
-            else if (@object is string)
+            else if (objectToConvert is string)
             {
-                return CreateMessageForString((string) @object, session);
+                return CreateMessageForString((string) objectToConvert, session);
             }
-            else if (@object is sbyte[])
+            else if (objectToConvert is sbyte[])
             {
-                return CreateMessageForByteArray((byte[]) @object, session);
+                return CreateMessageForByteArray((byte[]) objectToConvert, session);
             }
-            else if (@object is IDictionary)
+            else if (objectToConvert is IDictionary)
             {
-                return CreateMessageForMap((IDictionary) @object, session);
+                return CreateMessageForMap((IDictionary) objectToConvert, session);
             }
-            else if (@object is ISerializable)
+            else if (objectToConvert is ISerializable)
             {
                 return
-                    CreateMessageForSerializable(((ISerializable) @object), session);
+                    CreateMessageForSerializable(((ISerializable) objectToConvert), session);
             }
             else
             {
-                throw new MessageConversionException("Cannot convert object [" + @object + "] to NMS message");
+                throw new MessageConversionException("Cannot convert object [" + objectToConvert + "] to NMS message");
             }
         }
 

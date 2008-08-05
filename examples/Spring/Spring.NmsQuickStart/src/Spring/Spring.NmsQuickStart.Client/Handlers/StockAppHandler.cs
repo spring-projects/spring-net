@@ -3,7 +3,7 @@
 using System.Collections;
 using Common.Logging;
 using Spring.NmsQuickStart.Client.UI;
-using Spring.NmsQuickStart.Common.Bo;
+using Spring.NmsQuickStart.Common.Data;
 
 namespace Spring.NmsQuickStart.Client.Handlers
 {
@@ -24,7 +24,7 @@ namespace Spring.NmsQuickStart.Client.Handlers
             set { stockController = value; }
         }
 
-        public void HandleObject(IDictionary data)
+        public void Handle(Hashtable data)
         {
             log.Info(string.Format("Received market data.  Ticker = {0}, Price = {1}", data["TICKER"], data["PRICE"]));
 
