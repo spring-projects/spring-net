@@ -2,7 +2,7 @@
 #region License
 
 /*
- * Copyright © 2002-2007 the original author or authors.
+ * Copyright © 2002-2008 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,34 +23,35 @@
 
 using System;
 using System.ServiceModel;
-using System.ServiceModel.Activation;
 
 using Spring.Util;
+using Spring.Context.Support;
+using Spring.Context;
 
 #endregion
 
 namespace Spring.ServiceModel.Activation
 {
     /// <summary>
-    /// Factory that provides instances of <see cref="Spring.ServiceModel.ServiceHost" /> 
+    /// Factory that provides instances of <see cref="Spring.ServiceModel.SpringServiceHost" /> 
     /// to host objects created by Spring's IoC container.
     /// </summary>
     /// <author>Bruno Baia</author>
-    public class ServiceHostFactory : ServiceHostFactoryBase
+    public class ServiceHostFactory : System.ServiceModel.Activation.ServiceHostFactory
     {
         /// <summary>
-        /// Creates a <see cref="Spring.ServiceModel.ServiceHost"/> for 
+        /// Creates a <see cref="Spring.ServiceModel.SpringServiceHost"/> for 
         /// a specified Spring-managed object with a specific base address.
         /// </summary>
         /// <param name="reference">
-        /// A reference to a Spring-managed object 'contextName:objectName'.
+        /// A reference to a Spring-managed object or to a service type.
         /// </param>
         /// <param name="baseAddresses">
         /// The <see cref="System.Array"/> of type <see cref="System.Uri"/> that contains 
         /// the base addresses for the service hosted.
         /// </param>
         /// <returns>
-        /// A <see cref="Spring.ServiceModel.ServiceHost"/> for the Spring-managed object.
+        /// A <see cref="Spring.ServiceModel.SpringServiceHost"/> for the Spring-managed object.
         /// </returns>
         /// <exception cref="System.ArgumentException">
         /// If the Service attribute in the ServiceHost directive was not provided.
@@ -59,18 +60,21 @@ namespace Spring.ServiceModel.Activation
         {
             if (StringUtils.IsNullOrEmpty(reference))
             {
-                throw new ArgumentException("The service name was not provided in the ServiceHost directive.", "Service");
+                return base.CreateServiceHost(reference, baseAddresses);
             }
 
-            string[] refSplitted = reference.Split(':');
-            if (refSplitted.Length == 2)
+            IApplicationContext applicationContext = ContextRegistry.GetContext();
+            if (applicationContext.ContainsObject(reference))
             {
-                return new ServiceHost(refSplitted[0], refSplitted[1], baseAddresses);
+                return new SpringServiceHost(reference, applicationContext, baseAddresses);
             }
-            else
-            {
-                return new ServiceHost(reference, baseAddresses);
-            }
+
+            return base.CreateServiceHost(reference, baseAddresses);
+        }
+
+        protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
+        {
+            return new SpringServiceHost(serviceType, baseAddresses);
         }
     }
 }

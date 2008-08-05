@@ -42,8 +42,8 @@ namespace Spring.WcfQuickStart
                 Console.Out.WriteLine("--- Press <return> to quit ---");
                 Console.ReadLine();
 
-                // Programmatically (You need to comment 'ServiceExporter' object definition in App.config)
-                //using (ServiceHost serviceHost = new ServiceHost("calculator"))
+                // Programmatically (You need to comment 'calculatorServiceHost' object definition in App.config)
+                //using (SpringServiceHost serviceHost = new SpringServiceHost("calculator"))
                 //{
                 //    serviceHost.Open();
 

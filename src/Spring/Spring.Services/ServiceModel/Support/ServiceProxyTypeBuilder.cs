@@ -45,14 +45,13 @@ namespace Spring.ServiceModel.Support
         private static readonly MethodInfo GetObject =
             typeof(IObjectFactory).GetMethod("GetObject", new Type[] { typeof(string) });
 
-        private static readonly MethodInfo GetContext =
-            typeof(ContextRegistry).GetMethod("GetContext", Type.EmptyTypes);
-
-        private static readonly MethodInfo GetContextByName =
-            typeof(ContextRegistry).GetMethod("GetContext", new Type[] { typeof(string) });
-
-        private string contextName;
+        private IApplicationContext applicationContext;
         private string serviceName;
+
+        /// <summary>
+        /// Target instance calls should be delegated to.
+        /// </summary>
+        protected FieldBuilder applicationContextField;
 
         #endregion
 
@@ -62,21 +61,31 @@ namespace Spring.ServiceModel.Support
         /// Creates a new instance of the 
         /// <see cref="Spring.ServiceModel.Support.ServiceProxyTypeBuilder"/> class.
         /// </summary>
-        /// <param name="contextName">The name of the context to use.</param>
         /// <param name="serviceName">The name of the service within Spring's IoC container.</param>
+        /// <param name="applicationContext">The <see cref="IApplicationContext"/> to use.</param>
         /// <param name="serviceType">The type of the service.</param>
-        public ServiceProxyTypeBuilder(string contextName, string serviceName, Type serviceType)
+        public ServiceProxyTypeBuilder(string serviceName, IApplicationContext applicationContext, Type serviceType)
         {
-            this.contextName = contextName;
             this.serviceName = serviceName;
+            this.applicationContext = applicationContext;
 
-            this.Name = (contextName == null) ? serviceName : contextName + "." + serviceName;
+            this.Name = serviceName;
             this.TargetType = serviceType;
         }
 
         #endregion
 
         #region Protected Methods
+
+        public override Type BuildProxyType()
+        {
+            Type proxyType = base.BuildProxyType();
+
+            FieldInfo field = proxyType.GetField("__applicationContext", BindingFlags.NonPublic | BindingFlags.Static);
+            field.SetValue(proxyType, applicationContext);
+
+            return proxyType;
+        }
 
         /// <summary>
         /// Implements constructors for the proxy class.
@@ -101,17 +110,7 @@ namespace Spring.ServiceModel.Support
             ILGenerator il = cb.GetILGenerator();
 
             il.Emit(OpCodes.Ldarg_0);
-            if (contextName == null)
-            {
-                // call ContextRegistry.GetContext()
-                il.EmitCall(OpCodes.Call, GetContext, null);
-            }
-            else
-            {
-                // call ContextRegistry.GetContext(contextName)
-                il.Emit(OpCodes.Ldstr, contextName);
-                il.EmitCall(OpCodes.Call, GetContextByName, null);
-            }
+            il.Emit(OpCodes.Ldsfld, applicationContextField);
             il.Emit(OpCodes.Ldstr, serviceName);
             il.EmitCall(OpCodes.Callvirt, GetObject, null);
             il.Emit(OpCodes.Stfld, targetInstance);
@@ -127,7 +126,12 @@ namespace Spring.ServiceModel.Support
         /// <returns>The type builder to use.</returns>
         protected override TypeBuilder CreateTypeBuilder(string name, Type baseType)
         {
-            return DynamicProxyManager.CreateTypeBuilder(name, baseType);
+            TypeBuilder typeBuilder = DynamicProxyManager.CreateTypeBuilder(name, baseType);
+
+            applicationContextField = typeBuilder.DefineField("__applicationContext", typeof(IApplicationContext),
+                FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
+
+            return typeBuilder;
         }
 
         #endregion

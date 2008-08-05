@@ -126,13 +126,13 @@
     <Compile Include="Remoting\SaoFactoryObject.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ServiceModel\Activation\ServiceHostFactory.cs" />
-    <Compile Include="ServiceModel\ServiceExporter.cs">
+    <Compile Include="ServiceModel\Activation\ServiceHostFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ServiceModel\ServiceHost.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="ServiceModel\Activation\ServiceHostFactoryObject.cs" />
+    <Compile Include="ServiceModel\Support\SpringInstanceProvider.cs" />
+    <Compile Include="ServiceModel\Support\SpringServiceBehavior.cs" />
+    <Compile Include="ServiceModel\SpringServiceHost.cs" />
     <Compile Include="ServiceModel\Support\ServiceProxyTypeBuilder.cs" />
     <Compile Include="Web\Services\WebServiceProxyFactory.cs">
       <SubType>Code</SubType>

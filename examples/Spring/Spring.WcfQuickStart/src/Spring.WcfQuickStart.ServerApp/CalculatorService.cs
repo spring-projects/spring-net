@@ -1,12 +1,13 @@
 using System;
 using System.Threading;
+//using System.ServiceModel;
 
 namespace Spring.WcfQuickStart
 {
+    //[ServiceBehavior(InstanceContextMode=InstanceContextMode.Single)]
     public class CalculatorService : ICalculator
     {
         private int sleepInSeconds;
-
 
         public int SleepInSeconds
         {
