@@ -68,7 +68,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class MessageListenerAdapter : IMessageListener
+    public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageListener
     {
         #region Logging
 

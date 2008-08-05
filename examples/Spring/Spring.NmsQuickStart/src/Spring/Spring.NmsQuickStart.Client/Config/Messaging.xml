@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+         xmlns:nms="http://www.springframework.net/nms">
+
+
+  <object id="ConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
+    <constructor-arg index="0" value="tcp://localhost:61616"/>
+  </object>
+
+  <!-- NMS based implementation of technology neutral IStockServiceGateway -->
+  <object name="StockServiceGateway" type="Spring.NmsQuickStart.Client.Gateways.NmsStockServiceGateway, Spring.NmsQuickStart.Client">
+    <property name="NmsTemplate"  ref="NmsTemplate"/>
+    <property name="DefaultReplyToQueue">
+      <object type="Apache.NMS.ActiveMQ.Commands.ActiveMQQueue, Apache.NMS.ActiveMQ">
+        <constructor-arg value="APP.STOCK.JOE"/>
+      </object>
+    </property>
+  </object>
+
+
+  <object name="NmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">
+    <property name="ConnectionFactory" ref="ConnectionFactory"/>
+    <property name="DefaultDestinationName" value="APP.STOCK.REQUEST"/>
+    <property name="MessageConverter" ref="MultiMessageConverter"/>
+  </object>
+
+  <!-- Consume messages on queue APP.STOCK.JOE -->
+  <object id="MessagingContainer" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms">
+    <property name="ConnectionFactory" ref="ConnectionFactory"/>
+    <property name="DestinationName" value="APP.STOCK.JOE"/>
+    <property name="ConcurrentConsumers" value="1"/>
+    <property name="MessageListener" ref="MessageListenerAdapter"/>
+  </object>
+
+  <!-- Consume messages on topic APP.STOCK.MARKETDATA -->
+  <object id="MessagingContainerMarketData" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms">
+    <property name="ConnectionFactory" ref="ConnectionFactory"/>
+    <property name="PubSubDomain" value="true"/>
+    <property name="DestinationName" value="APP.STOCK.MARKETDATA"/>
+    <property name="ConcurrentConsumers" value="1"/>
+    <property name="MessageListener" ref="MessageListenerAdapter"/>
+  </object>
+
+  <!-- Plain object message handler -->
+  <object id="MessageListenerAdapter" type="Spring.Messaging.Nms.Listener.Adapter.MessageListenerAdapter, Spring.Messaging.Nms">
+    <property name="HandlerObject" ref="StockAppHandler"/>
+    <property name="DefaultHandlerMethod" value="Handle"/>
+    <!-- converter from JMS object to plain object -->
+    <property name="MessageConverter" ref="MultiMessageConverter"/>
+  </object>
+
+
+  <object name="MultiMessageConverter" type="Spring.NmsQuickStart.Common.Converters.MultiMessageConverter, Spring.NmsQuickStart.Common">
+    <property name="NamedMessageConverters">
+      <list>
+        <ref object="TradeRequestConverter"/>
+        <ref object="TradeConverter"/>
+      </list>
+    </property>
+  </object>
+
+  <object name="TradeRequestConverter" type="Spring.NmsQuickStart.Common.Converters.TradeRequestConverter, Spring.NmsQuickStart.Common"/>
+  <object name="TradeConverter" type="Spring.NmsQuickStart.Common.Converters.TradeConverter, Spring.NmsQuickStart.Common"/>
+
+
+
+
+</objects>

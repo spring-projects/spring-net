@@ -45,11 +45,11 @@ namespace Spring.Messaging.Nms.Support.Converter
         IMessage ToMessage(object objectToConvert, ISession session);
 
         /// <summary> Convert from a NMS Message to a .NET object.</summary>
-        /// <param name="message">the message to convert
+        /// <param name="messageToConvert">the message to convert
         /// </param>
         /// <returns> the converted .NET object
         /// </returns>
         /// <throws>MessageConversionException in case of conversion failure </throws>
-        object FromMessage(IMessage message);
+        object FromMessage(IMessage messageToConvert);
     }
 }

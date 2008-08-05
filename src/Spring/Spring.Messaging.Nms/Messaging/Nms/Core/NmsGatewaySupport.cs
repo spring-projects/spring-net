@@ -91,7 +91,7 @@ namespace Spring.Messaging.Nms.Core
         /// <summary>
         /// Ensures that the JmsTemplate is specified and calls <see cref="InitGateway"/>.
         /// </summary>
-        public void AfterPropertiesSet()
+        public virtual void AfterPropertiesSet()
         {
             if (jmsTemplate == null)
             {
