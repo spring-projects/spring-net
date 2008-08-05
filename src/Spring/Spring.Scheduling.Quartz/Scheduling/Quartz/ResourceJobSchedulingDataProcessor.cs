@@ -40,9 +40,8 @@ namespace Spring.Scheduling.Quartz
 			resourceLoader = new ConfigurableResourceLoader();
 		}
 
-
         /// <summary>
-        /// Gets and sets the <see cref="Spring.Core.IO.IResourceLoader"/>
+        /// Sets the <see cref="Spring.Core.IO.IResourceLoader"/>
         /// that this object runs in.
         /// </summary>
         /// <value></value>
@@ -59,7 +58,6 @@ namespace Spring.Scheduling.Quartz
 		public virtual IResourceLoader ResourceLoader
 		{
 			set { resourceLoader = (value != null ? value : new ConfigurableResourceLoader()); }
-			get { return resourceLoader; }
 		}
 
         /// <summary>

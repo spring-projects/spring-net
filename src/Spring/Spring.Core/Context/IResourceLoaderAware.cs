@@ -58,7 +58,7 @@ namespace Spring.Context
     public interface IResourceLoaderAware
     {
         /// <summary>
-        /// Gets and sets the <see cref="Spring.Core.IO.IResourceLoader"/>
+        /// Sets the <see cref="Spring.Core.IO.IResourceLoader"/>
         /// that this object runs in.
         /// </summary>
         /// <remarks>
@@ -76,7 +76,6 @@ namespace Spring.Context
         IResourceLoader ResourceLoader
         {
             set;
-			get;
         }
     }
 }
