@@ -1,4 +1,4 @@
-// $ANTLR 2.7.6 (2005-12-22): "Expressions/Expression.g" -> "ExpressionParser.cs"$
+// $ANTLR 2.7.6 (2005-12-22): "Expression.g" -> "ExpressionParser.cs"$
 
 namespace Spring.Expressions
 {
