@@ -16,7 +16,7 @@
 
 
   <!-- the default ConnectionFactory -->
-  <object id="connectionFactory" type="Spring.Messaging.Nms.Connections.TestConnectionFactory, Spring.Messaging.Nms.Tests"/>
+  <object id="ConnectionFactory" type="Spring.Messaging.Nms.Connections.TestConnectionFactory, Spring.Messaging.Nms.Tests"/>
 
   <object id="testConnectionFactory" type="Spring.Messaging.Nms.Connections.TestConnectionFactory, Spring.Messaging.Nms.Tests"/>
 

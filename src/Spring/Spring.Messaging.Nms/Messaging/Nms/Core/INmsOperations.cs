@@ -22,39 +22,41 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Core
 {
-    /// <summary>Specifies a basic set of NMS operations.
-	/// </summary>
-	/// <remarks>
-	/// <p>Implemented by NmsTemplate. Not often used but a useful option
-	/// to enhance testability, as it can easily be mocked or stubbed.</p>
-	/// 
-	/// <p>Provides <code>NmsTemplate's</code> <code>send(..)</code> and
-	/// <code>receive(..)</code> methods that mirror various NMS API methods.
-	/// See the NMS specification and NMS API docs for details on those methods.
-	/// </p>
-	/// </remarks>
-	/// <author>Mark Pollack</author>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Mark Pollack (.NET)</author>
+    /// <summary>
+    /// Specifies a basic set of NMS operations.
+    /// </summary>
+    /// <remarks>
+    /// 	<p>Implemented by NmsTemplate. Not often used but a useful option
+    /// to enhance testability, as it can easily be mocked or stubbed.</p>
+    /// 	<p>Provides <code>NmsTemplate's</code>
+    /// 		<code>send(..)</code> and
+    /// <code>receive(..)</code> methods that mirror various NMS API methods.
+    /// See the NMS specification and NMS API docs for details on those methods.
+    /// </p>
+    /// </remarks>
+    /// <author>Mark Pollack</author>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Mark Pollack (.NET)</author>
     public interface INmsOperations
     {
-        /// <summary> Execute the action specified by the given action object within
-		/// a NMS Session.
-		/// </summary>
-		/// <remarks>
-		/// <param name="action">callback object that exposes the session
-		/// </param>
-		/// <returns> the result object from working with the session
-		/// </returns>
-		/// <throws>NMSException if there is any problem </throws>
-		object Execute(ISessionCallback action);
-
-        /// <summary> Execute the action specified by the given action object within
+        /// <summary>
+        /// Execute the action specified by the given action object within
         /// a NMS Session.
         /// </summary>
-        /// <remarks>
+        /// <param name="action">callback object that exposes the session</param>
+        /// <returns>
+        /// the result object from working with the session
+        /// </returns>
+        /// <throws>NMSException if there is any problem </throws>
+		object Execute(ISessionCallback action);
+
+        /// <summary>
+        /// Execute the action specified by the given action object within
+        /// a NMS Session.
+        /// </summary>
         /// <param name="del">delegate that exposes the session</param>
-        /// <returns> the result object from working with the session
+        /// <returns>
+        /// the result object from working with the session
         /// </returns>
         /// <throws>NMSException if there is any problem </throws>
         object Execute(SessionDelegate del);

@@ -45,7 +45,7 @@ namespace Spring.Messaging.Nms.Config
     public class NmsNamespaceHandlerTests
     {
 
-        private static string DEFAULT_CONNECTION_FACTORY = "connectionFactory";
+        private static string DEFAULT_CONNECTION_FACTORY = "ConnectionFactory";
 
         private static string EXPLICIT_CONNECTION_FACTORY = "testConnectionFactory";
 
