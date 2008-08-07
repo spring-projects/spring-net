@@ -34,14 +34,6 @@ namespace Spring.Messaging.Nms.Integration
             lastReceivedMessage = message;
             messageCount++;
             LOG.Debug("Message listener count = " + messageCount);
-            ITextMessage textMessage = message as ITextMessage;
-            if (textMessage != null)
-            {
-                LOG.Info("Message Text = " + textMessage.Text);
-            } else
-            {
-                LOG.Warn("Can not process message of type " message.GetType());
-            }
         }
 
         #endregion
