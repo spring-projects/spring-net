@@ -641,7 +641,7 @@ namespace Spring.Data.NHibernate
 	        if (sfi != null)
 	        {
 	            
-                ConnectionProvider cp = sfi.ConnectionProvider as ConnectionProvider;
+                IConnectionProvider cp = sfi.ConnectionProvider as IConnectionProvider;
 	            if (cp != null)
 	            {
                     IConfigurableApplicationContext ctx =
@@ -653,11 +653,10 @@ namespace Spring.Data.NHibernate
                     }
 
 
-                    DriverBase db = cp.Driver as DriverBase;
+                    IDriver db = cp.Driver;
                     if (db != null)
                     {
                         Type hibCommandType = db.CreateCommand().GetType();
-                        //Type hibConnectionType = cp.Driver.ConnectionType;
 
                         string[] providerNames = ctx.GetObjectNamesForType(typeof(DbProvider), true, false);
                         string hibCommandAQN = hibCommandType.AssemblyQualifiedName;
@@ -666,12 +665,10 @@ namespace Spring.Data.NHibernate
                             IObjectDefinition objectdef = ctx.ObjectFactory.GetObjectDefinition(providerName);
                             ConstructorArgumentValues ctorArgs = objectdef.ConstructorArgumentValues;
                             ConstructorArgumentValues.ValueHolder vh = ctorArgs.NamedArgumentValues["dbmetadata"] as ConstructorArgumentValues.ValueHolder;
-                            IObjectDefinition od = vh.Value as IObjectDefinition;
+                            IObjectDefinition od = ((ObjectDefinitionHolder) vh.Value).ObjectDefinition;
                             ConstructorArgumentValues dbmdCtorArgs = od.ConstructorArgumentValues;
                             string commandType = dbmdCtorArgs.GetArgumentValue("commandType", typeof(string)).Value as string;
-                            string assemblyName = dbmdCtorArgs.GetArgumentValue("assemblyName", typeof(string)).Value as string;
-
-
+                            
                             if (hibCommandAQN.Equals(commandType))
                             {
                                 IDbProvider prov = Spring.Data.Common.DbProviderFactory.GetDbProvider(providerName);

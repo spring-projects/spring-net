@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}"
     >
@@ -110,11 +110,6 @@
                     HintPath = "..\..\..\lib\Net\1.1\antlr.runtime.dll"
                 />
                 <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\..\lib\NHibernate10\net\1.1\log4net.dll"
-                />
-                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\..\lib\NHibernate10\net\1.1\NHibernate.dll"
@@ -128,6 +123,11 @@
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\..\lib\NHibernate10\net\1.1\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\..\lib\NHibernate10\net\1.1\log4net.dll"
                 />
             </References>
         </Build>

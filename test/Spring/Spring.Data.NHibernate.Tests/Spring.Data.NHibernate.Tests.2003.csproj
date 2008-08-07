@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{8755D942-7828-4971-835B-37A5992C06C9}"
     >
@@ -148,6 +148,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Data\NHibernate\HibernateTransactionManagerTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\NHibernate\ISimpleService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -158,7 +163,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Data\NHibernate\LocalSessionFactoryObjectTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\NHibernate\NHTestObjectDao.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\NHibernate\SessionFactoryUtilsTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -51,10 +51,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.2003
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Integration.Tests.2003", "test\Spring\Spring.Data.NHibernate.Integration.Tests\Spring.Data.NHibernate.Integration.Tests.2003.csproj", "{8DA67FF2-C473-4329-8FF6-3747182196D7}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Tests.2003", "test\Spring\Spring.Data.NHibernate.Tests\Spring.Data.NHibernate.Tests.2003.csproj", "{8755D942-7828-4971-835B-37A5992C06C9}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -185,14 +181,6 @@ Global
 		{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}.Release.Build.0 = Release-1.1|.NET
 		{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}.Release-1.1.ActiveCfg = Release-1.1|.NET
 		{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}.Release-1.1.Build.0 = Release-1.1|.NET
-		{8DA67FF2-C473-4329-8FF6-3747182196D7}.Debug.ActiveCfg = Debug-1.1|.NET
-		{8DA67FF2-C473-4329-8FF6-3747182196D7}.Debug.Build.0 = Debug-1.1|.NET
-		{8DA67FF2-C473-4329-8FF6-3747182196D7}.Debug-1.1.ActiveCfg = Debug-1.1|.NET
-		{8DA67FF2-C473-4329-8FF6-3747182196D7}.Debug-1.1.Build.0 = Debug-1.1|.NET
-		{8DA67FF2-C473-4329-8FF6-3747182196D7}.Release.ActiveCfg = Release-1.1|.NET
-		{8DA67FF2-C473-4329-8FF6-3747182196D7}.Release.Build.0 = Release-1.1|.NET
-		{8DA67FF2-C473-4329-8FF6-3747182196D7}.Release-1.1.ActiveCfg = Release-1.1|.NET
-		{8DA67FF2-C473-4329-8FF6-3747182196D7}.Release-1.1.Build.0 = Release-1.1|.NET
 		{8755D942-7828-4971-835B-37A5992C06C9}.Debug.ActiveCfg = Debug-1.1|.NET
 		{8755D942-7828-4971-835B-37A5992C06C9}.Debug.Build.0 = Debug-1.1|.NET
 		{8755D942-7828-4971-835B-37A5992C06C9}.Debug-1.1.ActiveCfg = Debug-1.1|.NET

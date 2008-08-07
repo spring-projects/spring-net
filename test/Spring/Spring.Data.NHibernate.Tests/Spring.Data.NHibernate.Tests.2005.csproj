@@ -89,6 +89,7 @@
     <Compile Include="Data\NHibernate\ITestObjectDao.cs" />
     <Compile Include="Data\NHibernate\LocalSessionFactoryObjectTests.cs" />
     <Compile Include="Data\NHibernate\NHTestObjectDao.cs" />
+    <Compile Include="Data\NHibernate\SessionFactoryUtilsTests.cs" />
     <Compile Include="Data\NHibernate\SimpleService.cs" />
     <Compile Include="Data\NHibernate\Support\ConfigSectionSessionScopeSettingsTests.cs" />
     <Compile Include="Data\NHibernate\Support\SessionScopeSettingsTests.cs" />

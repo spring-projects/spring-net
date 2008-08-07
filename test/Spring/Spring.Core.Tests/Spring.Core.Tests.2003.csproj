@@ -1475,6 +1475,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Xml\ArrayCtorDependencyObject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Xml\ConstructorDependenciesObject.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1546,6 +1551,11 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Xml\ReadOnlyXmlTestResource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Xml\SiimpleCtorWiringTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

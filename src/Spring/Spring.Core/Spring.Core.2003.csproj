@@ -293,6 +293,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Context\ILifecycle.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Context\IMessageSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -499,6 +504,11 @@
                 />
                 <File
                     RelPath = "Core\MethodNameMatchCriteria.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\MethodParameter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1516,6 +1526,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\DependencyDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\DictionaryFactoryObject.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1592,6 +1607,11 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Config\IObjectPostProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Config\ISingletonObjectRegistry.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1761,6 +1781,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Support\ConstructorResolver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Support\DefaultListableObjectFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1782,6 +1807,11 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Support\DependencyCheckingMode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Support\IAutowireCandidateResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1876,6 +1906,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Support\ObjectDefinitionValueResolver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Support\PropertiesObjectDefinitionReader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1887,6 +1922,11 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Support\RootObjectDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Support\SimpleAutowireCandidateResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

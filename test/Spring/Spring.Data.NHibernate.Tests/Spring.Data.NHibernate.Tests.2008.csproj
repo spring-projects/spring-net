@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\NHibernate\Config\AopConfiguration.cs" />
+    <Compile Include="Data\NHibernate\SessionFactoryUtilsTests.cs" />
     <Compile Include="Data\NHibernate\HibernateTransactionManagerTests.cs" />
     <Compile Include="Data\NHibernate\ISimpleService.cs" />
     <Compile Include="Data\NHibernate\ITestObjectDao.cs" />
