@@ -55,8 +55,10 @@
     <Compile Include="Messaging\Nms\Core\IProducerCallback.cs" />
     <Compile Include="Messaging\Nms\Core\ISessionCallback.cs" />
     <Compile Include="Messaging\Nms\Core\MessageCreatorDelegate.cs" />
+    <Compile Include="Messaging\Nms\Core\MessagePostProcessorDelegate.cs" />
     <Compile Include="Messaging\Nms\Core\NmsTemplate.cs" />
     <Compile Include="Messaging\Nms\Core\NmsGatewaySupport.cs" />
+    <Compile Include="Messaging\Nms\Core\ProducerDelegate.cs" />
     <Compile Include="Messaging\Nms\Core\SessionDelegate.cs" />
     <Compile Include="Messaging\Nms\Config\MessageListenerContainerObjectDefinitionParser.cs" />
     <Compile Include="Messaging\Nms\Config\NmsNamespaceParser.cs" />

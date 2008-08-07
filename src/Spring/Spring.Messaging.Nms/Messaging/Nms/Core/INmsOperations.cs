@@ -25,10 +25,10 @@ namespace Spring.Messaging.Nms.Core
     /// <summary>Specifies a basic set of NMS operations.
 	/// </summary>
 	/// <remarks>
-	/// <p>Implemented by MessageTemplate. Not often used but a useful option
+	/// <p>Implemented by NmsTemplate. Not often used but a useful option
 	/// to enhance testability, as it can easily be mocked or stubbed.</p>
 	/// 
-	/// <p>Provides <code>MessageTemplate's</code> <code>send(..)</code> and
+	/// <p>Provides <code>NmsTemplate's</code> <code>send(..)</code> and
 	/// <code>receive(..)</code> methods that mirror various NMS API methods.
 	/// See the NMS specification and NMS API docs for details on those methods.
 	/// </p>
@@ -42,10 +42,6 @@ namespace Spring.Messaging.Nms.Core
 		/// a NMS Session.
 		/// </summary>
 		/// <remarks>
-        /// <para>Note that the value of PubSubDomain affects the behavior of this method.
-        /// If PubSubDomain equals true, then a Session is passed to the callback.
-        /// If false, then a ISession is passed to the callback.</para>b
-		/// </remarks>
 		/// <param name="action">callback object that exposes the session
 		/// </param>
 		/// <returns> the result object from working with the session
@@ -57,10 +53,6 @@ namespace Spring.Messaging.Nms.Core
         /// a NMS Session.
         /// </summary>
         /// <remarks>
-        /// <para>Note that the value of PubSubDomain affects the behavior of this method.
-        /// If PubSubDomain equals true, then a Session is passed to the callback.
-        /// If false, then a ISession is passed to the callback.</para>b
-        /// </remarks>
         /// <param name="del">delegate that exposes the session</param>
         /// <returns> the result object from working with the session
         /// </returns>
@@ -71,13 +63,23 @@ namespace Spring.Messaging.Nms.Core
 		/// the NMS session and MessageProducer in order to do more complex
 		/// send operations.
 		/// </summary>
-		/// <param name="action">callback object that exposes the session/producer pair
+		/// <param name="del">delegate that exposes the session/producer pair
 		/// </param>
 		/// <returns> the result object from working with the session
 		/// </returns>
 		/// <throws>NMSException  if there is any problem </throws>
-		object Execute(IProducerCallback action);
-		
+		object Execute(ProducerDelegate del);
+
+        /// <summary> Send a message to a NMS destination. The callback gives access to
+        /// the NMS session and MessageProducer in order to do more complex
+        /// send operations.
+        /// </summary>
+        /// <param name="action">callback object that exposes the session/producer pair
+        /// </param>
+        /// <returns> the result object from working with the session
+        /// </returns>
+        /// <throws>NMSException  if there is any problem </throws>
+        object Execute(IProducerCallback action);
 		
 		//-------------------------------------------------------------------------
 		// Convenience methods for sending messages
@@ -122,7 +124,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
         /// <throws>NMSException if there is any problem</throws>
-        void SendWithDelegate(IMessageCreatorDelegate messageCreatorDelegate);
+        void SendWithDelegate(MessageCreatorDelegate messageCreatorDelegate);
 
         /// <summary> Send a message to the specified destination.
         /// The IMessageCreator callback creates the message given a Session.
@@ -132,7 +134,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
         /// <throws>NMSException if there is any problem</throws>
-        void SendWithDelegate(IDestination destination, IMessageCreatorDelegate messageCreatorDelegate);
+        void SendWithDelegate(IDestination destination, MessageCreatorDelegate messageCreatorDelegate);
 
         /// <summary> Send a message to the specified destination.
         /// The IMessageCreator callback creates the message given a Session.
@@ -143,7 +145,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
         /// <throws>NMSException if there is any problem</throws>
-        void SendWithDelegate(string destinationName, IMessageCreatorDelegate messageCreatorDelegate);
+        void SendWithDelegate(string destinationName, MessageCreatorDelegate messageCreatorDelegate);
 		
 		//-------------------------------------------------------------------------
 		// Convenience methods for sending auto-converted messages
@@ -217,7 +219,40 @@ namespace Spring.Messaging.Nms.Core
 		/// </param>
 		/// <throws>NMSException if there is any problem</throws>
 		void ConvertAndSend(string destinationName, object message, IMessagePostProcessor postProcessor);
-		
+
+        /// <summary>
+        /// Send the given object to the default destination, converting the object
+        /// to a NMS message with a configured IMessageConverter. The IMessagePostProcessor
+        /// callback allows for modification of the message after conversion.
+        /// <p>This will only work with a default destination specified!</p>
+        /// </summary>
+        /// <param name="message">the object to convert to a message</param>
+        /// <param name="postProcessor">the callback to modify the message</param>
+        /// <throws>NMSException if there is any problem</throws>
+        void ConvertAndSendWithDelegate(object message, MessagePostProcessorDelegate postProcessor);
+
+        /// <summary>
+        /// Send the given object to the specified destination, converting the object
+        /// to a NMS message with a configured IMessageConverter. The IMessagePostProcessor
+        /// callback allows for modification of the message after conversion.
+        /// </summary>
+        /// <param name="destination">the destination to send this message to</param>
+        /// <param name="message">the object to convert to a message</param>
+        /// <param name="postProcessor">the callback to modify the message</param>
+        /// <throws>NMSException if there is any problem</throws>
+        void ConvertAndSendWithDelegate(IDestination destination, object message, MessagePostProcessorDelegate postProcessor);
+
+        /// <summary>
+        /// Send the given object to the specified destination, converting the object
+        /// to a NMS message with a configured IMessageConverter. The IMessagePostProcessor
+        /// callback allows for modification of the message after conversion.
+        /// </summary>
+        /// <param name="destinationName">the name of the destination to send this message to
+        /// (to be resolved to an actual destination by a DestinationResolver)</param>
+        /// <param name="message">the object to convert to a message.</param>
+        /// <param name="postProcessor">the callback to modify the message</param>
+        /// <throws>NMSException if there is any problem</throws>
+        void ConvertAndSendWithDelegate(string destinationName, object message, MessagePostProcessorDelegate postProcessor);
 		
 		//-------------------------------------------------------------------------
 		// Convenience methods for receiving messages

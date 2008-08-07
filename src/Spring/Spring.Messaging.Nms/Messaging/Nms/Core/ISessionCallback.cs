@@ -26,7 +26,7 @@ namespace Spring.Messaging.Nms.Core
     /// Session
     /// </summary>
     /// <remarks>
-    /// <para>To be used with the MessageTemplate.Execute(ISessionCallback)}
+    /// <para>To be used with the NmsTemplate.Execute(ISessionCallback)}
     /// method. See <see cref="SessionDelegate"/> for the equivalent callback
     /// that can be used as a (anonymous) delegate.</para>
     /// </remarks>

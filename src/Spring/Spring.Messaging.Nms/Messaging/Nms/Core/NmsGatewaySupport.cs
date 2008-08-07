@@ -29,9 +29,9 @@ namespace Spring.Messaging.Nms.Core
     /// Convenient super class for application classes that need NMS access.
     /// </summary>
     /// <remarks>
-    ///  Requires a ConnectionFactory or a MessageTemplate instance to be set.
-    ///  It will create its own MessageTemplate if a ConnectionFactory is passed in.
-    ///  A custom MessageTemplate instance can be created for a given ConnectionFactory
+    ///  Requires a ConnectionFactory or a NmsTemplate instance to be set.
+    ///  It will create its own NmsTemplate if a ConnectionFactory is passed in.
+    ///  A custom NmsTemplate instance can be created for a given ConnectionFactory
     ///  through overriding the <code>createNmsTemplate</code> method.
     ///
     /// </remarks>
@@ -59,7 +59,7 @@ namespace Spring.Messaging.Nms.Core
 
         /// <summary>
         /// Gets or sets he NMS connection factory to be used by the gateway.
-	    /// Will automatically create a MessageTemplate for the given ConnectionFactory.
+	    /// Will automatically create a NmsTemplate for the given ConnectionFactory.
         /// </summary>
         /// <value>The connection factory.</value>
         public IConnectionFactory ConnectionFactory
@@ -75,10 +75,10 @@ namespace Spring.Messaging.Nms.Core
         }
 
         /// <summary>
-        /// Creates a MessageTemplate for the given ConnectionFactory.
+        /// Creates a NmsTemplate for the given ConnectionFactory.
         /// </summary>
 	    /// <remarks>Only invoked if populating the gateway with a ConnectionFactory reference.
-	    /// Can be overridden in subclasses to provide a different MessageTemplate instance
+	    /// Can be overridden in subclasses to provide a different NmsTemplate instance
 	    /// </remarks>
 	    ///
 	    /// <param name="connectionFactory">The connection factory.</param>

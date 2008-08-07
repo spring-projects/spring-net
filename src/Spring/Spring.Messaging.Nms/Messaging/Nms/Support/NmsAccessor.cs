@@ -25,11 +25,11 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Support
 {
-    /// <summary> Base class for MessageTemplate and other NMS-accessing gateway helpers</summary>
+    /// <summary> Base class for NmsTemplate and other NMS-accessing gateway helpers</summary>
     /// <remarks>It defines common properties like the ConnectionFactory}. The subclass
     /// NmsIDestinationAccessor adds further, destination-related properties.
     /// <para>
-    /// Not intended to be used directly. See MessageTemplate.
+    /// Not intended to be used directly. See NmsTemplate.
     /// </para>
     /// </remarks>
     /// <author>Juergen Hoeller</author>

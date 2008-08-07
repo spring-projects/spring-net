@@ -75,7 +75,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         /// <remarks>
         /// The ConnectionFactory has to be set before using the instance. 
-        /// This constructor can be used to prepare a MessageTemplate via a ApplicationContext,
+        /// This constructor can be used to prepare a NmsTemplate via a ApplicationContext,
         /// typically setting the ConnectionFactory via ConnectionFactory property.
         /// <para>
         /// Turns off transaction synchronization by default, as this manager might

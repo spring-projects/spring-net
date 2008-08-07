@@ -218,7 +218,7 @@ namespace Spring.Messaging.Nms.Listener
 	    /// on some messaging providers.
 	    /// <para>Note that Sessions managed by an external transaction manager will
 	    /// always get exposed to <see cref="NmsTemplate"/>
-	    /// calls. So in terms of MessageTemplate exposure, this setting only affects
+	    /// calls. So in terms of NmsTemplate exposure, this setting only affects
 	    /// locally transacted Sessions.
 	    /// </para>
         /// </remarks>

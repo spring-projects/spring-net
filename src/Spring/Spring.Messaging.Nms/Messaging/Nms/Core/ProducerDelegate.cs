@@ -1,7 +1,9 @@
+ 
+
 #region License
 
 /*
- * Copyright © 2002-2006 the original author or authors.
+ * Copyright 2002-2008 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +24,15 @@ using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Core
 {
-    /// <summary>
-    /// Delegate that creates a NMS message given a ISession
+    /// <summary> Perform operations on the given Session and MessageProducer.
+    /// The message producer is not associated with any destination.
     /// </summary>
-    /// <param name="session">the NMS Session to be used to create the
-    /// <code>Message</code> (never <code>null</code>) 
+    /// <param name="session">the NMS <code>Session</code> object to use
     /// </param>
-    /// <returns> the <code>Message</code> to be sent
+    /// <param name="producer">the NMS <code>MessageProducer</code> object to use
+    /// </param>
+    /// <returns> a result object from working with the <code>Session</code>, if any (can be <code>null</code>) 
     /// </returns>
-    /// <throws>NMSException if thrown by NMS API methods </throws>
-    public delegate IMessage MessageCreatorDelegate(ISession session);
+    public delegate object ProducerDelegate(ISession session, IMessageProducer producer);
+
 }

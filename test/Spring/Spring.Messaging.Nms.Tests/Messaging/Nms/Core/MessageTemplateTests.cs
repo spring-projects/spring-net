@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System;
 using System.Collections;
 using Apache.NMS;
 using NUnit.Framework;
@@ -61,6 +62,7 @@ namespace Spring.Messaging.Nms.Core
             template.SessionTransacted = UseTransactedTemplate;
             return template;
         }
+
 
         protected virtual bool UseTransactedSession
         {
@@ -163,25 +165,25 @@ namespace Spring.Messaging.Nms.Core
                                      });
 
                 Assert.AreSame(mockSession, ConnectionFactoryUtils.GetTransactionalSession(scf, null, false));
-                Assert.AreSame(mockSession, ConnectionFactoryUtils.GetTransactionalSession(scf, scf.CreateConnection(), false));
+                Assert.AreSame(mockSession,
+                               ConnectionFactoryUtils.GetTransactionalSession(scf, scf.CreateConnection(), false));
 
                 //In Java this test was doing 'double-duty' and testing TransactionAwareConnectionFactoryProxy, which has
                 //not been implemented in .NET
 
                 template.Execute(delegate(ISession session)
-                     {
-                         bool b = session.Transacted;
-                         return null;
-                     });
+                                     {
+                                         bool b = session.Transacted;
+                                         return null;
+                                     });
 
                 IList synchs = TransactionSynchronizationManager.Synchronizations;
                 Assert.AreEqual(1, synchs.Count);
-                ITransactionSynchronization synch = (ITransactionSynchronization)synchs[0];
+                ITransactionSynchronization synch = (ITransactionSynchronization) synchs[0];
                 synch.BeforeCommit(false);
                 synch.BeforeCompletion();
                 synch.AfterCommit();
                 synch.AfterCompletion(TransactionSynchronizationStatus.Unknown);
-                
             }
             finally
             {

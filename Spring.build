@@ -1052,6 +1052,9 @@
           file="src/Spring/Spring.Services/Remoting/Config/spring-remoting-1.1.xsd"/>
 
     <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Services/Remoting/Config/spring-nms-1.2.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
           file="build-support/install-schema.build"/>
 
     <echo message="copying source code for release..."/>

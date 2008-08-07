@@ -190,7 +190,6 @@ namespace Spring.Messaging.Nms.Listener
             {
                 if (this.consumers == null)
                 {
-                    logger.Debug("InitializingConsumers **********");
                     this.sessions = new HashedSet();
                     this.consumers = new HashedSet();
                     IConnection con = SharedConnection;

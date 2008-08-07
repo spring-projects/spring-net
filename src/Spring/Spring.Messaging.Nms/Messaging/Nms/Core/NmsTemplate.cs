@@ -63,7 +63,7 @@ namespace Spring.Messaging.Nms.Core
         /// </summary>
         public static readonly long DEFAULT_RECEIVE_TIMEOUT = -1;
 
-        private MessageTemplateResourceFactory transactionalResourceFactory;
+        private NmsTemplateResourceFactory transactionalResourceFactory;
 
         private object defaultDestination;
 
@@ -90,20 +90,20 @@ namespace Spring.Messaging.Nms.Core
 
         #region Constructor (s)
 
-        /// <summary> Create a new MessageTemplate.</summary>
+        /// <summary> Create a new NmsTemplate.</summary>
         /// <remarks>
         /// <para>Note: The ConnectionFactory has to be set before using the instance.
-        /// This constructor can be used to prepare a MessageTemplate via an ObjectFactory,
+        /// This constructor can be used to prepare a NmsTemplate via an ObjectFactory,
         /// typically setting the ConnectionFactory.</para>
         /// </remarks>
         public NmsTemplate()
         {
-            transactionalResourceFactory = new MessageTemplateResourceFactory(this);
+            transactionalResourceFactory = new NmsTemplateResourceFactory(this);
             InitDefaultStrategies();
         }
 
 
-        /// <summary> Create a new MessageTemplate, given a ConnectionFactory.</summary>
+        /// <summary> Create a new NmsTemplate, given a ConnectionFactory.</summary>
         /// <param name="connectionFactory">the ConnectionFactory to obtain IConnections from
         /// </param>
         public NmsTemplate(IConnectionFactory connectionFactory)
@@ -130,7 +130,7 @@ namespace Spring.Messaging.Nms.Core
             if (defaultDestination == null)
             {
                 throw new SystemException(
-                    "No defaultDestination or defaultDestinationName specified. Check configuration of MessageTemplate.");
+                    "No defaultDestination or defaultDestinationName specified. Check configuration of NmsTemplate.");
             }
         }
 
@@ -139,7 +139,7 @@ namespace Spring.Messaging.Nms.Core
         {
             if (MessageConverter == null)
             {
-                throw new SystemException("No messageConverter registered. Check configuration of MessageTemplate.");
+                throw new SystemException("No messageConverter registered. Check configuration of NmsTemplate.");
             }
         }
 
@@ -493,7 +493,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="session">The session to operate on.</param>
         /// <param name="destination">The destination to send to.</param>
         /// <param name="messageCreatorDelegate">The message creator delegate callback to create a Message.</param>
-        protected internal virtual void DoSend(ISession session, IDestination destination, IMessageCreatorDelegate messageCreatorDelegate)
+        protected internal virtual void DoSend(ISession session, IDestination destination, MessageCreatorDelegate messageCreatorDelegate)
         {
             AssertUtils.ArgumentNotNull(messageCreatorDelegate, "IMessageCreatorDelegate must not be null");
             DoSend(session, destination, null, messageCreatorDelegate);
@@ -522,7 +522,7 @@ namespace Spring.Messaging.Nms.Core
         /// </param>
         /// <throws>NMSException if thrown by NMS API methods </throws>
         protected internal virtual void DoSend(ISession session, IDestination destination, IMessageCreator messageCreator,
-                                               IMessageCreatorDelegate messageCreatorDelegate)
+                                               MessageCreatorDelegate messageCreatorDelegate)
         {
 
 
@@ -630,13 +630,27 @@ namespace Spring.Messaging.Nms.Core
             return Execute(new ProducerCreatorCallback(this, action));
         }
 
+        /// <summary> Send a message to a NMS destination. The callback gives access to
+        /// the NMS session and MessageProducer in order to do more complex
+        /// send operations.
+        /// </summary>
+        /// <param name="del">delegate that exposes the session/producer pair
+        /// </param>
+        /// <returns> the result object from working with the session
+        /// </returns>
+        /// <throws>NMSException  if there is any problem </throws>
+        public object Execute(ProducerDelegate del)
+        {
+            return Execute(new ProducerCreatorCallback(this, del));
+        }
+
         /// <summary> Send a message to the default destination.
         /// <p>This will only work with a default destination specified!</p>
         /// </summary>
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
         /// <throws>NMSException if there is any problem</throws>
-        public void SendWithDelegate(IMessageCreatorDelegate messageCreatorDelegate)
+        public void SendWithDelegate(MessageCreatorDelegate messageCreatorDelegate)
         {
             CheckDefaultDestination();
             if (DefaultDestination != null)
@@ -657,7 +671,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
         /// <throws>NMSException if there is any problem</throws>
-        public void SendWithDelegate(IDestination destination, IMessageCreatorDelegate messageCreatorDelegate)
+        public void SendWithDelegate(IDestination destination, MessageCreatorDelegate messageCreatorDelegate)
         {
             Execute(new SendDestinationCallback(this, destination, messageCreatorDelegate), false);
         }
@@ -671,7 +685,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
         /// <throws>NMSException if there is any problem</throws>
-        public void SendWithDelegate(string destinationName, IMessageCreatorDelegate messageCreatorDelegate)
+        public void SendWithDelegate(string destinationName, MessageCreatorDelegate messageCreatorDelegate)
         {
             Execute(new SendDestinationCallback(this, destinationName, messageCreatorDelegate), false);
         }
@@ -823,6 +837,64 @@ namespace Spring.Messaging.Nms.Core
         /// </param>
         /// <throws>NMSException if there is any problem</throws>
         public void ConvertAndSend(string destinationName, object message, IMessagePostProcessor postProcessor)
+        {
+            CheckMessageConverter();
+            Send(destinationName, new ConvertAndSendMessageCreator(this, message, postProcessor));
+  
+        }
+
+
+        /// <summary>
+        /// Send the given object to the default destination, converting the object
+        /// to a NMS message with a configured IMessageConverter. The IMessagePostProcessor
+        /// callback allows for modification of the message after conversion.
+        /// <p>This will only work with a default destination specified!</p>
+        /// </summary>
+        /// <param name="message">the object to convert to a message</param>
+        /// <param name="postProcessor">the callback to modify the message</param>
+        /// <throws>NMSException if there is any problem</throws>
+        public void ConvertAndSendWithDelegate(object message, MessagePostProcessorDelegate postProcessor)
+        {
+            //Execute(new SendDestinationCallback(this, destination, messageCreatorDelegate), false);
+            CheckDefaultDestination();
+            if (DefaultDestination != null)
+            {
+                ConvertAndSendWithDelegate(DefaultDestination, message, postProcessor);
+            }
+            else
+            {
+                ConvertAndSendWithDelegate(DefaultDestinationName, message, postProcessor);
+            }
+        }
+
+        /// <summary>
+        /// Send the given object to the specified destination, converting the object
+        /// to a NMS message with a configured IMessageConverter. The IMessagePostProcessor
+        /// callback allows for modification of the message after conversion.
+        /// </summary>
+        /// <param name="destination">the destination to send this message to</param>
+        /// <param name="message">the object to convert to a message</param>
+        /// <param name="postProcessor">the callback to modify the message</param>
+        /// <throws>NMSException if there is any problem</throws>
+        public void ConvertAndSendWithDelegate(IDestination destination, object message,
+                                               MessagePostProcessorDelegate postProcessor)
+        {
+            CheckMessageConverter();
+            Send(destination, new ConvertAndSendMessageCreator(this, message, postProcessor));
+        }
+
+        /// <summary>
+        /// Send the given object to the specified destination, converting the object
+        /// to a NMS message with a configured IMessageConverter. The IMessagePostProcessor
+        /// callback allows for modification of the message after conversion.
+        /// </summary>
+        /// <param name="destinationName">the name of the destination to send this message to
+        /// (to be resolved to an actual destination by a DestinationResolver)</param>
+        /// <param name="message">the object to convert to a message.</param>
+        /// <param name="postProcessor">the callback to modify the message</param>
+        /// <throws>NMSException if there is any problem</throws>
+        public void ConvertAndSendWithDelegate(string destinationName, object message,
+                                               MessagePostProcessorDelegate postProcessor)
         {
             CheckMessageConverter();
             Send(destinationName, new ConvertAndSendMessageCreator(this, message, postProcessor));
@@ -1123,11 +1195,11 @@ namespace Spring.Messaging.Nms.Core
         /// <summary>
         /// ResourceFactory implementation that delegates to this template's callback methods.
         /// </summary>
-        private class MessageTemplateResourceFactory : ConnectionFactoryUtils.ResourceFactory
+        private class NmsTemplateResourceFactory : ConnectionFactoryUtils.ResourceFactory
         {
             private NmsTemplate enclosingTemplateInstance;
 			
-            public MessageTemplateResourceFactory(NmsTemplate enclosingInstance)
+            public NmsTemplateResourceFactory(NmsTemplate enclosingInstance)
             {
                 InitBlock(enclosingInstance);
             }
@@ -1172,6 +1244,7 @@ namespace Spring.Messaging.Nms.Core
         {
             private NmsTemplate jmsTemplate;
             private IProducerCallback producerCallback;
+            private ProducerDelegate producerDelegate;
 
             public ProducerCreatorCallback(NmsTemplate jmsTemplate, IProducerCallback producerCallback)
             {
@@ -1179,12 +1252,25 @@ namespace Spring.Messaging.Nms.Core
 				this.producerCallback = producerCallback;
             }
 
+            public ProducerCreatorCallback(NmsTemplate jmsTemplate, ProducerDelegate producerDelegate)
+            {
+                this.jmsTemplate = jmsTemplate;
+                this.producerDelegate = producerDelegate;
+            }
+
             public object DoInNms(ISession session)
             {
                 IMessageProducer producer = jmsTemplate.CreateProducer(session, null);
                 try
                 {
-                    return producerCallback.DoInNms(session, producer);
+                    if (producerCallback != null)
+                    {
+                        return producerCallback.DoInNms(session, producer);
+                    }
+                    else
+                    {
+                        return producerDelegate(session, producer);
+                    }
                 }
                 finally
                 {
@@ -1234,6 +1320,7 @@ namespace Spring.Messaging.Nms.Core
             private NmsTemplate jmsTemplate;
             private object objectToConvert;
             private IMessagePostProcessor messagePostProcessor;
+            private MessagePostProcessorDelegate messagePostProcessorDelegate;
 
             public ConvertAndSendMessageCreator(NmsTemplate jmsTemplate, object message, IMessagePostProcessor messagePostProcessor)
             {
@@ -1242,11 +1329,25 @@ namespace Spring.Messaging.Nms.Core
                 this.messagePostProcessor = messagePostProcessor;
             }
 
+            public ConvertAndSendMessageCreator(NmsTemplate jmsTemplate, object message, MessagePostProcessorDelegate messagePostProcessorDelegate)
+            {
+                this.jmsTemplate = jmsTemplate;
+                objectToConvert = message;
+                this.messagePostProcessorDelegate = messagePostProcessorDelegate;
+            }
+
             public IMessage CreateMessage(ISession session)
             {
                 IMessage msg = jmsTemplate.MessageConverter.ToMessage(objectToConvert, session);
-                return messagePostProcessor.PostProcessMessage(msg);
+                if (messagePostProcessor != null)
+                {
+                    return messagePostProcessor.PostProcessMessage(msg);
+                } else
+                {
+                    return messagePostProcessorDelegate(msg);
+                }
             }
+
         }
 
         private class ReceiveSelectedCallback : ISessionCallback
@@ -1336,7 +1437,7 @@ namespace Spring.Messaging.Nms.Core
         private IDestination destination;
         private NmsTemplate jmsTemplate;
         private IMessageCreator messageCreator;
-        private IMessageCreatorDelegate messageCreatorDelegate;
+        private MessageCreatorDelegate messageCreatorDelegate;
 
         public SendDestinationCallback(NmsTemplate jmsTemplate, string destinationName, IMessageCreator messageCreator)
         {
@@ -1352,14 +1453,14 @@ namespace Spring.Messaging.Nms.Core
             this.messageCreator = messageCreator;
         }
 
-        public SendDestinationCallback(NmsTemplate jmsTemplate, string destinationName, IMessageCreatorDelegate messageCreatorDelegate)
+        public SendDestinationCallback(NmsTemplate jmsTemplate, string destinationName, MessageCreatorDelegate messageCreatorDelegate)
         {
             this.jmsTemplate = jmsTemplate;
             this.destinationName = destinationName;
             this.messageCreatorDelegate = messageCreatorDelegate;
         }
 
-        public SendDestinationCallback(NmsTemplate jmsTemplate, IDestination destination, IMessageCreatorDelegate messageCreatorDelegate)
+        public SendDestinationCallback(NmsTemplate jmsTemplate, IDestination destination, MessageCreatorDelegate messageCreatorDelegate)
         {
             this.jmsTemplate = jmsTemplate;
             this.destination = destination;

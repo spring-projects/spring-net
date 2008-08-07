@@ -258,6 +258,44 @@
 &lt;/configuration&gt;</programlisting>
     </section>
 
+    <section id="xsd-config-body-schemas-remoting">
+      <title>The <literal>nms</literal> messaging schema</title>
+
+      <para>The <literal>nms</literal> tags are for use when you want to
+      configure Spring's messaging support. The tags are comprehensively
+      covered in the chapter <xref linkend="messaging" /></para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net"
+         <emphasis role="bold">xmlns:r="http://www.springframework.net/nms"</emphasis>&gt;
+
+<lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
+
+  &lt;!-- &lt;nms/&gt; remoting definitions here --&gt;
+
+&lt;/objects&gt;</programlisting>
+
+      <para>You will also need to configure the remoting namespace parser in
+      the main .NET application configuration file as shown below</para>
+
+      <programlisting>&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;     
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms" /&gt;
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
+    </section>
+
     <section id="xsd-config-body-schemas-validation">
       <title>The <literal>validation</literal> schema</title>
 
