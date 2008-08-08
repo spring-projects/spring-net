@@ -43,6 +43,7 @@
 <!ENTITY data-quickstart    SYSTEM "data-quickstart.xml">
 <!ENTITY tx-quickstart      SYSTEM "tx-quickstart.xml">
 <!ENTITY quartz-quickstart  SYSTEM "quartz-quickstart.xml">
+<!ENTITY nms-quickstart     SYSTEM "nms-quickstart.xml">
 <!ENTITY javadevelopers     SYSTEM "javadevelopers.xml">
 <!ENTITY misc               SYSTEM "misc.xml">
 <!ENTITY pooling-example    SYSTEM "pooling-example.xml">
@@ -366,6 +367,9 @@
 				<listitem>
 					<xref linkend="quartz-quickstart" />
 				</listitem>
+				<listitem>
+					<xref linkend="nms-quickstart" />
+				</listitem>
 			</itemizedlist>
 		</partintro>
 		&quickstarts;
@@ -376,6 +380,7 @@
 		&data-quickstart;
 		&tx-quickstart;
 		&quartz-quickstart;
+		&nms-quickstart;
 	</part>      
 	<part id="index-javadevelopers">
 		<title>Spring.NET for Java developers</title>

@@ -9,9 +9,9 @@
     a given time without any user interaction, usually to perform some
     administrative tasks. These tasks need to be scheduled, say to perform a
     job in the early hours of the morning before the start of business. This
-    functionality is provided by a using job scheduling software. Quartz.NET
-    is an excellent open source job scheduler that can be used for these
-    purposes. It provides a wealth of features ,such as persistent jobs and
+    functionality is provided by using job scheduling software. Quartz.NET is
+    an excellent open source job scheduler that can be used for these
+    purposes. It provides a wealth of features, such as persistent jobs and
     clustering. To find out more about Quartz.NET visit their <ulink
     url="http://quartznet.sourceforge.net/">web site</ulink>. Spring
     integration allows you to use Spring to configure Quartz jobs, triggers,
@@ -31,12 +31,13 @@
     in order to pass information between different job instances you stash
     data away in a hashtable that gets passed to the each Job instance upon
     its creation. Quartz's <classname>JobDetail</classname> class combines the
-    <classname>IJob</classname> and this hashtable of data. Instead of a
-    generic hashtable the class <classname>JobDataMap</classname> is used.
-    Triggers are registered with a Quartz <classname>IScheduler</classname>
-    implementation that manages the overall execution of the triggers and
-    jobs. The implementation <classname>StdSchedulerFactory</classname> is
-    generally used.</para>
+    <classname>IJob</classname> and this hashtable of data. Instead of the
+    standard <classname>System.Collections.Hashtable</classname> the class
+    <classname>JobDataMap</classname> is used. Triggers are registered with a
+    Quartz <classname>IScheduler</classname> implementation that manages the
+    overall execution of the triggers and jobs. The
+    <classname>StdSchedulerFactory</classname> implementation is generally
+    used.</para>
   </section>
 
   <section>
@@ -46,9 +47,9 @@
     Spring's convenience base class <classname>QuartzJobObject</classname> and
     another which does not inherit from any base class. The latter class is
     adapted by Spring to be a Job. Two triggers, one for each of the jobs, are
-    created, and these triggers are in turn registered with a scheduler. In
-    each case the job implementation will write information to the
-    console.</para>
+    created. These triggers are in turn registered with a scheduler. In each
+    case the job implementation will write information to the console when it
+    is executed.</para>
   </section>
 
   <section>
@@ -187,10 +188,11 @@
   &lt;/object&gt;</programlisting>
 
     <para>This creates an instances of Quartz's SimpleTrigger class (as
-    compared to its CronTrigger class used in the previous section. StartDelay
-    and RepeatInterval properties are TimeSpan objects than can be set using
-    the convenient strings such as 10s, 1h, etc, as supported by Spring's
-    custom TypeConverter.</para>
+    compared to its CronTrigger class used in the previous section).
+    <literal>StartDelay</literal> and <literal>RepeatInterval</literal>
+    properties are TimeSpan objects than can be set using the convenient
+    strings such as 10s, 1h, etc, as supported by Spring's custom
+    TypeConverter for TimeSpans.</para>
 
     <para>This trigger can then be added to the scheduler's list of registered
     triggers as shown below.</para>

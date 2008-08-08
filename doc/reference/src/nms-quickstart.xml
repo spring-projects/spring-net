@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="nms-quickstart">
+  <title>NMS QuickStart</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The NMS quick start application demonstrates how to use asynchronous
+    messaging to implement a system for purchasing a stock. To purchase a
+    stock, a client application will send a stock request message containing
+    the information about the stock, i.e. ticker symbol, quantity, etc. The
+    client request message will be recieved by the server where it will
+    perform business processing on the requst, for example to determine if the
+    user has sufficient credit to purchase the stock or if the user is even
+    allowed to make the purchase due to existing account restrictions. Usually
+    the server application will persist state about the request and forward it
+    on to an execute venue where the actual execution of the stock request is
+    peformed. In addition, market data for the stock will be sent from the
+    server process to the client. The high level messaging flow is shown
+    below.</para>
+
+    <para></para>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Message Destinations</title>
+
+    <para>To implement this flow using messaging the following queues and
+    topics will be used. All requests from the client to the server will be
+    sent on the queue named APP.STOCK.REQUEST. Responses to the requests will
+    be sent from the server to the client on a queue unique to each client. In
+    this example the queue name is of the form APP.STOCK.&lt;UserName&gt;, and
+    more specifically is configured to be APP.STOCK.JOE. Market data does not
+    need to be delivered to an individual client as many client applications
+    are interested in this shared information. As such, the server will send
+    market data information on a topic named APP.STOCK.MARKETDATA. The
+    messaging communication between the server and the execution venue is not
+    included as part of the application. An local implementation of the
+    service interface that represents the execution venue is used instead of
+    one based on messaging or another middleware technology. The messaging
+    flow showing the queues and topics used is shown below.</para>
+
+    <para> </para>
+
+    <para></para>
+  </section>
+
+  <section>
+    <title>Gateways</title>
+
+    <para>Gateways represent the service operation to send a message. The
+    client will send a stock request to the server based on the contract
+    defined by the <classname>IStockService</classname> interface . </para>
+
+    <programlisting>    public interface IStockService
+    {
+        void Send(TradeRequest tradeRequest);
+    }</programlisting>
+
+    <para>The server will send market data to the clients based on the
+    contract defined by the <classname>IMarketDataService</classname>
+    interface. </para>
+
+    <programlisting>    public interface IMarketDataService
+    {
+        void SendMarketData();
+    }</programlisting>
+
+    <para>The market data gateway has no method parameters as it is assumed
+    that implementations will manage the data to send internally. The
+    <classname>TradeRequest</classname> object is one of the data objects that
+    will be exchanged in the application and is discussed in the next
+    section.</para>
+
+    <para>The use of interfaces allows for multiple implementations to be
+    created. Implementations that use messaging to communicate will be based
+    on the Spring's <classname>NmsGateway</classname> class and will be
+    discussed later. stub or mock implementations can be used for testing
+    purposes. </para>
+  </section>
+
+  <section>
+    <title>Message Data</title>
+
+    <para>The <classname>TradeRequest</classname> object shown above contains
+    all the information required to process a stock order. To promote the
+    interoperability of this data across different platforms the
+    <classname>TradeRequest</classname> class is generated from an XML Schema
+    using Microsoft's Schema Definition Tool (xsd.exe). The schema for trade
+    request is shown below</para>
+
+    <programlisting>&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
+           targetNamespace="http://www.springframework.net/nms/common/2008-08-05"&gt;
+
+  &lt;xs:element name="TradeRequest"&gt;
+    &lt;xs:complexType&gt;
+      &lt;xs:sequence&gt;
+        &lt;xs:element name="Ticker" type="xs:string"/&gt;
+        &lt;xs:element name="Quantity" type="xs:long"/&gt;
+        &lt;xs:element name="Price" type="xs:decimal"/&gt;
+        &lt;xs:element name="OrderType" type="xs:string"/&gt;
+        &lt;xs:element name="AccountName" type="xs:string"/&gt;
+        &lt;xs:element name="BuyRequest" type="xs:boolean"/&gt;
+        &lt;xs:element name="UserName" type="xs:string"/&gt;
+        &lt;xs:element name="RequestID" type="xs:string"/&gt;
+      &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+  &lt;/xs:element&gt;
+
+&lt;/xs:schema&gt;
+</programlisting>
+
+    <para>Running xsd.exe on this schema will result in a class that contains
+    properties for each of the element names. A parital code listing of the
+    TradeRequest class is shown below</para>
+
+    <programlisting>//     This code was generated by a tool.
+    public partial class TradeRequest {
+
+        public string Ticker {
+            get {
+                return this.tickerField;
+            }
+            set {
+                this.tickerField = value;
+            }
+        }
+        
+        public long Quantity {
+            get {
+                return this.quantityField;
+            }
+            set {
+                this.quantityField = value;
+            }
+        }
+      
+      // Additional properties not shown for brevity.
+
+    }</programlisting>
+
+    <para>The schema and the <classname>TradeRequest</classname> class are
+    located in the project <classname>Spring.NmsQuickStart.Common</classname>.
+    This common project will be shared between the server and client for
+    convenience.</para>
+
+    <para>When sending a response back to the client the type
+    <classname>TradeResponse</classname> will be used. The schema for the
+    <classname>TradeResponse</classname> is shown below </para>
+
+    <programlisting>&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
+           targetNamespace="http://www.springframework.net/nms/common/2008-08-05"&gt;
+
+  &lt;xs:element name="TradeResponse"&gt;
+    &lt;xs:complexType&gt;
+      &lt;xs:sequence&gt;
+        &lt;xs:element name="Ticker" type="xs:string"/&gt;
+        &lt;xs:element name="Quantity" type="xs:integer"/&gt;
+        &lt;xs:element name="Price" type="xs:decimal"/&gt;
+        &lt;xs:element name="OrderType" type="xs:string"/&gt;
+        &lt;xs:element name="Error" type="xs:boolean"/&gt;
+        &lt;xs:element name="ErrorMessage" type="xs:string"/&gt;
+      &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+  &lt;/xs:element&gt;
+
+&lt;/xs:schema&gt;</programlisting>
+
+    <para>The <classname>TradeResponse</classname> type also generated from a
+    schema using xsd.exe. A partial code listing is shown below</para>
+
+    <programlisting>//     This code was generated by a tool.
+
+    public partial class TradeResponse {
+
+        public string Ticker {
+            get {
+                return this.tickerField;
+            }
+            set {
+                this.tickerField = value;
+            }
+        }
+        
+        public long Quantity {
+            get {
+                return this.quantityField;
+            }
+            set {
+                this.quantityField = value;
+            }
+        }
+
+      // Additional properties not shown for brevity.
+
+    }</programlisting>
+
+    <para>The market data information will be sent using a Hashtable data
+    structure.</para>
+  </section>
+
+  <section>
+    <title>Mesage Handlers</title>
+
+    <para>When the <classname>TradeRequest</classname> message is received by
+    the server, it wll be handled by the class
+    <classname>Spring.NmsQuickStart.Server.Handlers.StockAppHandler
+    </classname>shown below</para>
+
+    <programlisting>    public class StockAppHandler
+    {
+        private IExecutionVenueService executionVenueService;
+
+        private ICreditCheckService creditCheckService;
+
+        private ITradingService tradingService;
+        
+        public TradeResponse Handle(TradeRequest tradeRequest)
+        {
+            TradeResponse tradeResponse;
+            IList errors = new ArrayList();
+            if (creditCheckService.CanExecute(tradeRequest, errors))
+            {
+                tradeResponse = executionVenueService.ExecuteTradeRequest(tradeRequest);
+                tradingService.ProcessTrade(tradeRequest, tradeResponse);
+            }
+            else
+            {
+                tradeResponse = new TradeResponse();
+                tradeResponse.Error = true;
+                tradeResponse.ErrorMessage = errors[0].ToString();
+            }
+            return tradeResponse;
+        }
+    }</programlisting>
+
+    <para></para>
+  </section>
+</chapter>
