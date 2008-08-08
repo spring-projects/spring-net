@@ -11,14 +11,15 @@ namespace Spring.Scheduling.Quartz.Example
 	/// </summary>
     public class ExampleJob : QuartzJobObject
     {
-        private int timeout;
+
+        private string userName;
 
 		/// <summary>
 		/// Simple property that can be injected.
 		/// </summary>
-        public int Timeout
+        public string UserName
         {
-            set { timeout = value; }
+            set { userName = value; }
         }
 
 		/// <summary>
@@ -27,15 +28,9 @@ namespace Spring.Scheduling.Quartz.Example
 		/// <param name="context"></param>
         protected override void ExecuteInternal(JobExecutionContext context)
         {
-            Console.WriteLine("{0}: ExecuteInternal called, timeout: {1}", DateTime.Now, timeout);
+            Console.WriteLine("{0}: ExecuteInternal called, user name: {1}, next fire time {2}", 
+                DateTime.Now, userName, context.NextFireTimeUtc.Value.ToLocalTime());
         }
 
-		/// <summary>
-		/// Custom job execution method.
-		/// </summary>
-        public void DoIt()
-        {
-			Console.WriteLine("{0}: DoIt called, timeout: {1}", DateTime.Now, timeout);
-		}
     }
 }

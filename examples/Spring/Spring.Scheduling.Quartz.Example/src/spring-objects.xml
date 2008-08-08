@@ -7,26 +7,25 @@
     <!-- We can inject values throgh JobDataMap -->
     <property name="JobDataAsMap">
       <dictionary>
-        <entry key="timeout" value="5" />
+        <entry key="UserName" value="Alexandre" />
       </dictionary>
     </property>
   </object>
 
-  <object id="invokableJob" type="Spring.Scheduling.Quartz.Example.ExampleJob, Spring.Scheduling.Quartz.Example">
+  <object id="adminService" type="Spring.Scheduling.Quartz.Example.AdminService, Spring.Scheduling.Quartz.Example">
     <!-- we inject straight to target object -->
-    <property name="timeout" value="10" />
+    <property name="UserName" value="Gabriel" />
   </object>
-
+  
   <object id="jobDetail" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz">
     <!-- We don't actually need to implement IJob as we can use delegation -->
-    <property name="TargetObject" ref="invokableJob" />
-    <property name="TargetMethod" value="DoIt" />
+    <property name="TargetObject" ref="adminService" />
+    <property name="TargetMethod" value="DoAdminWork" />
   </object>
 
-
   <object id="jobDetailNonConcurrent" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz">
-    <property name="targetObject" ref="invokableJob" />
-    <property name="targetMethod" value="DoIt" />
+    <property name="targetObject" ref="adminService" />
+    <property name="targetMethod" value="DoAdminWork" />
     <!-- Automatic IStatefulJob wrapping -->
     <property name="concurrent" value="false" />
   </object>
@@ -35,9 +34,9 @@
     <!-- see the example of method invoking job above -->
     <property name="jobDetail" ref="jobDetail" />
     <!-- 5 seconds -->
-    <property name="startDelay" value="5000" />
+    <property name="startDelay" value="5s" />
     <!-- repeat every 5 seconds -->
-    <property name="repeatInterval" value="5000" />
+    <property name="repeatInterval" value="5s" />
   </object>
 
 
@@ -54,7 +53,6 @@
         <ref object="simpleTrigger" />
       </list>
     </property>
-    <property name="autoStartup" value="true" />
   </object>
   
 </objects>

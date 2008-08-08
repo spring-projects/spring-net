@@ -11,12 +11,15 @@ namespace Spring.Scheduling.Quartz.Example
             try
             {
                 XmlApplicationContext ctx = new XmlApplicationContext("spring-objects.xml");
-				Console.WriteLine("Spring configuration succeeded.");
+				Console.WriteLine("Spring configuration succeeded, quartz jobs running.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                Console.Out.WriteLine("--- Press <return> to quit ---");
+                Console.ReadLine();
             }
+            Console.Out.WriteLine("--- Press <return> to quit ---");
             Console.ReadLine();
         }
     }
