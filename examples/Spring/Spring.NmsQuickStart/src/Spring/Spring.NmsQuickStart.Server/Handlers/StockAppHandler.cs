@@ -9,9 +9,6 @@ namespace Spring.NmsQuickStart.Server.Handlers
 {
     public class StockAppHandler
     {
-
-        private static readonly ILog log = LogManager.GetLogger(typeof(StockAppHandler));
-
         private IExecutionVenueService executionVenueService;
 
         private ICreditCheckService creditCheckService;
