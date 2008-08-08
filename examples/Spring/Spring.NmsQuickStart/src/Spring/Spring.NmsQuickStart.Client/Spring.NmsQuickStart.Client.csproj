@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Gateways\IStockServiceGateway.cs" />
+    <Compile Include="Gateways\IStockService.cs" />
     <Compile Include="Gateways\NmsStockServiceGateway.cs" />
     <Compile Include="Handlers\StockAppHandler.cs" />
     <Compile Include="Program.cs" />

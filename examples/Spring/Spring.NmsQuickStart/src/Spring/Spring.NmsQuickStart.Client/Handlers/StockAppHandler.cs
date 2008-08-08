@@ -34,10 +34,10 @@ namespace Spring.NmsQuickStart.Client.Handlers
         }
 
 
-        public void Handle(Trade trade)
+        public void Handle(TradeResponse tradeResponse)
         {
-            log.Info(string.Format("Received trade.  Ticker = {0}, Price = {1}", trade.Ticker, trade.Price));
-            stockController.UpdateTrade(trade);
+            log.Info(string.Format("Received trade resonse.  Ticker = {0}, Price = {1}", tradeResponse.Ticker, tradeResponse.Price));
+            stockController.UpdateTrade(tradeResponse);
         }
 
         public void Handle(object catchAllObject)

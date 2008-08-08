@@ -14,11 +14,11 @@ namespace Spring.NmsQuickStart.Server
                 // Using Spring's IoC container
                 ContextRegistry.GetContext(); // Force Spring to load configuration
                 Console.Out.WriteLine("Server listening...");
-                MarketDataGateway marketDataGateway =
-                    ContextRegistry.GetContext().GetObject("MarketDataGateway") as MarketDataGateway;
-                ThreadStart job = new ThreadStart(marketDataGateway.SendMarketData);
+                IMarketDataService marketDataService =
+                    ContextRegistry.GetContext().GetObject("MarketDataGateway") as MarketDataServiceGateway;
+                ThreadStart job = new ThreadStart(marketDataService.SendMarketData);
                 Thread thread = new Thread(job);
-                thread.Start();
+                //thread.Start();
                 Console.Out.WriteLine("--- Press <return> to quit ---");
                 Console.ReadLine();
             }

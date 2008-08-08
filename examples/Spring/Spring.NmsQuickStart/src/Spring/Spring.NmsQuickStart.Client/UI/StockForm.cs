@@ -38,7 +38,7 @@ namespace Spring.NmsQuickStart.Client.UI
             log.Info("Sent trade request.");
         }
 
-        public void UpdateTrade(Trade trade)
+        public void UpdateTrade(TradeResponse trade)
         {
             Invoke(new MethodInvoker(
                        delegate

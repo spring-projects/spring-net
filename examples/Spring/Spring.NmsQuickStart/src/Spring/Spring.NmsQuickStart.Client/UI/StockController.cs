@@ -10,7 +10,7 @@ namespace Spring.NmsQuickStart.Client.UI
     {
         private StockForm stockForm;
               
-        private IStockServiceGateway stockServiceGateway;
+        private IStockService stockService;
 
 
         
@@ -20,10 +20,10 @@ namespace Spring.NmsQuickStart.Client.UI
             set { stockForm = value; }
         }
 
-        public IStockServiceGateway StockServiceGateway
+        public IStockService StockService
         {
-            get { return stockServiceGateway; }
-            set { stockServiceGateway = value; }
+            get { return stockService; }
+            set { stockService = value; }
         }
 
         public void SendTradeRequest()
@@ -37,7 +37,7 @@ namespace Spring.NmsQuickStart.Client.UI
             tradeRequest.Ticker = "CSCO";
             tradeRequest.UserName = "Joe Trader";
             
-            stockServiceGateway.Send(tradeRequest);
+            stockService.Send(tradeRequest);
         }
         
         
@@ -46,9 +46,9 @@ namespace Spring.NmsQuickStart.Client.UI
             stockForm.UpdateMarketData(marketDataDict);
         }
 
-        public void UpdateTrade(Trade trade)
+        public void UpdateTrade(TradeResponse tradeResponse)
         {
-            stockForm.UpdateTrade(trade);
+            stockForm.UpdateTrade(tradeResponse);
         }
 
     }

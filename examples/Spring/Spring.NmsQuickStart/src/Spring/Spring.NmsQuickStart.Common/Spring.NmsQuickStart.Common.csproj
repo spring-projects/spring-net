@@ -44,8 +44,8 @@
     <Compile Include="Converters\ITypeMapper.cs" />
     <Compile Include="Converters\TypeMapper.cs" />
     <Compile Include="Converters\XmlMessageConverter.cs" />
-    <Compile Include="Data\Trade.cs">
-      <DependentUpon>Trade.xsd</DependentUpon>
+    <Compile Include="Data\TradeResponse.cs">
+      <DependentUpon>TradeResponse.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\TradeRequest.cs">
       <DependentUpon>TradeRequest.xsd</DependentUpon>
@@ -71,11 +71,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Trade.xsd">
+    <None Include="Data\TradeResponse.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\TradeResponse.xsx">
+      <DependentUpon>TradeResponse.xsd</DependentUpon>
     </None>
     <None Include="Data\TradeRequest.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\TradeRequest.xsx">
+      <DependentUpon>TradeRequest.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

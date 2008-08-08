@@ -22,10 +22,10 @@
 
 using Spring.NmsQuickStart.Common.Data;
 
-namespace Spring.NmsQuickStart.Client.Gateways
+namespace Spring.NmsQuickStart.Server.Services
 {
-    public interface IStockServiceGateway
+    public interface ITradingService
     {
-        void Send(TradeRequest tradeRequest);
+        void ProcessTrade(TradeRequest request, TradeResponse response);
     }
 }

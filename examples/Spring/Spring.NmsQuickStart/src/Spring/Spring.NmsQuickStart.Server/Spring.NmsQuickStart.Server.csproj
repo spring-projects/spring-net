@@ -45,10 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Gateways\MarketDataGateway.cs" />
+    <Compile Include="Gateways\IMarketDataService.cs" />
+    <Compile Include="Gateways\MarketDataServiceGateway.cs" />
+    <Compile Include="Handlers\LoggingExceptionListener.cs" />
     <Compile Include="Handlers\StockAppHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ICreditCheckService.cs" />
+    <Compile Include="Services\IExecutionVenueService.cs" />
+    <Compile Include="Services\ITradingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

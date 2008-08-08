@@ -6,15 +6,15 @@ using Spring.Messaging.Nms.Core;
 
 namespace Spring.NmsQuickStart.Server.Gateways
 {
-    public class MarketDataGateway : NmsGatewaySupport
+    public class MarketDataServiceGateway : NmsGatewaySupport, IMarketDataService
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof (MarketDataGateway));
+        private static readonly ILog log = LogManager.GetLogger(typeof (MarketDataServiceGateway));
 
         private readonly Random random;
         private int sleepTimeInSeconds = 2;
 
 
-        public MarketDataGateway()
+        public MarketDataServiceGateway()
         {
             random = new Random();
         }

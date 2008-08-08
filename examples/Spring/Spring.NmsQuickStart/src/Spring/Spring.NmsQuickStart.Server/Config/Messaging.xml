@@ -15,17 +15,28 @@
     <property name="MessageConverter" ref="XmlMessageConverter"/>
   </object>
 
+
   <object name="MarketDataGateway" type="Spring.NmsQuickStart.Server.Gateways.MarketDataGateway, Spring.NmsQuickStart.Server">
     <property name="NmsTemplate" ref="NmsTemplate"/>
   </object>
 
   <!-- Consume messages on queue APP.STOCK.REQUEST -->
+  <!--
+  <nms:listener-container connection-factory="ConnectionFactory" concurrency="10">
+    <nms:listener ref="MessageListenerAdapter" destination="APP.STOCK.REQUEST" />
+  </nms:listener-container>
+  -->
+     
   <object id="MessageListenerContainer" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms">
     <property name="ConnectionFactory" ref="ConnectionFactory"/>
     <property name="DestinationName" value="APP.STOCK.REQUEST"/>
     <property name="ConcurrentConsumers" value="1"/>
     <property name="MessageListener" ref="MessageListenerAdapter"/>
+    <property name="ExceptionListener" ref="LoggingExceptionListener"/>
   </object>
+
+  <object name="LoggingExceptionListener" type="Spring.NmsQuickStart.Server.Handlers.LoggingExceptionListener, Spring.NmsQuickStart.Server"/>
+
 
   <!-- Plain object message handler -->
   <object id="MessageListenerAdapter" type="Spring.Messaging.Nms.Listener.Adapter.MessageListenerAdapter, Spring.Messaging.Nms">

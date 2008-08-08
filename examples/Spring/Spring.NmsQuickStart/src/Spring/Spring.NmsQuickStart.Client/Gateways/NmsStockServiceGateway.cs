@@ -8,7 +8,7 @@ using Spring.Objects.Factory;
 
 namespace Spring.NmsQuickStart.Client.Gateways
 {
-    public class NmsStockServiceGateway : NmsGatewaySupport, IStockServiceGateway, IInitializingObject
+    public class NmsStockServiceGateway : NmsGatewaySupport, IStockService, IInitializingObject
     {
         private IDestination defaultReplyToQueue;
         

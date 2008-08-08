@@ -22,15 +22,19 @@ namespace Spring.NmsQuickStart.Common.Data {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.springframework.net/nms/common/2008-08-05")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://www.springframework.net/nms/common/2008-08-05", IsNullable=false)]
-    public partial class Trade {
+    public partial class TradeResponse {
         
         private string tickerField;
         
-        private string quantityField;
+        private long quantityField;
         
         private decimal priceField;
         
         private string orderTypeField;
+        
+        private bool errorField;
+        
+        private string errorMessageField;
         
         /// <remarks/>
         public string Ticker {
@@ -43,8 +47,7 @@ namespace Spring.NmsQuickStart.Common.Data {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
-        public string Quantity {
+        public long Quantity {
             get {
                 return this.quantityField;
             }
@@ -70,6 +73,26 @@ namespace Spring.NmsQuickStart.Common.Data {
             }
             set {
                 this.orderTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public bool Error {
+            get {
+                return this.errorField;
+            }
+            set {
+                this.errorField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ErrorMessage {
+            get {
+                return this.errorMessageField;
+            }
+            set {
+                this.errorMessageField = value;
             }
         }
     }
