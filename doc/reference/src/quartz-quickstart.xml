@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="quartz-quickstart">
+  <title>Quartz QuickStart</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>In many applications the need arises to perform a certain action at
+    a given time without any user interaction, usually to perform some
+    administrative tasks. These tasks need to be scheduled, say to perform a
+    job in the early hours of the morning before the start of business. This
+    functionality is provided by a using job scheduling software. Quartz.NET
+    is an excellent open source job scheduler that can be used for these
+    purposes. It provides a wealth of features ,such as persistent jobs and
+    clustering. To find out more about Quartz.NET visit their <ulink
+    url="http://quartznet.sourceforge.net/">web site</ulink>. Spring
+    integration allows you to use Spring to configure Quartz jobs, triggers,
+    and schedulers and also provides integration with Spring's transaction
+    management features.</para>
+
+    <para>The full details of Quartz are outside the scope of this quickstart
+    but here is 'quick tour for the impatient' of the main classes and
+    interfaces used in Quartz so you can get your sea legs. A Quartz
+    <classname>IJob</classname> interface represents the task you would like
+    to execute. You either directly implement Quartz's
+    <classname>IJob</classname> interface or a convenience base class. The
+    Quartz <classname>ITrigger</classname> controls when a job is executed,
+    for example in the wee hours of the morning every weekday (This would be
+    done using Quartz's <classname>CronTrigger</classname> implementation.)
+    Instances of your job are created every time the trigger fires. As such,
+    in order to pass information between different job instances you stash
+    data away in a hashtable that gets passed to the each Job instance upon
+    its creation. Quartz's <classname>JobDetail</classname> class combines the
+    <classname>IJob</classname> and this hashtable of data. Instead of a
+    generic hashtable the class <classname>JobDataMap</classname> is used.
+    Triggers are registered with a Quartz <classname>IScheduler</classname>
+    implementation that manages the overall execution of the triggers and
+    jobs. The implementation <classname>StdSchedulerFactory</classname> is
+    generally used.</para>
+  </section>
+
+  <section>
+    <title>Application Overview</title>
+
+    <para>The sample application has two types of Jobs. One that inherits from
+    Spring's convenience base class <classname>QuartzJobObject</classname> and
+    another which does not inherit from any base class. The latter class is
+    adapted by Spring to be a Job. Two triggers, one for each of the jobs, are
+    created, and these triggers are in turn registered with a scheduler. In
+    each case the job implementation will write information to the
+    console.</para>
+  </section>
+
+  <section>
+    <title>Standard job scheduling</title>
+
+    <para>The Spring base class <classname>QuartzJobObject</classname>
+    implements <classname>IJob</classname> and allows for your object's
+    properties to be set via values that are stored inside Quartz's
+    <classname>JobDataMap</classname> that is passed along each time your job
+    is instantiated due a trigger firing. This class is shown below</para>
+
+    <programlisting>    public class ExampleJob : QuartzJobObject
+    {
+
+        private string userName;
+
+        public string UserName
+        {
+            set { userName = value; }
+        }
+
+        protected override void ExecuteInternal(JobExecutionContext context)
+        {
+            Console.WriteLine("{0}: ExecuteInternal called, user name: {1}, next fire time {2}", 
+                DateTime.Now, userName, context.NextFireTimeUtc.Value.ToLocalTime());
+        }
+
+    }</programlisting>
+
+    <para>The method <classname>ExecuteInternal</classname> is called when the
+    trigger fires and is where you would put your business logic. The
+    <classname>JobExecutionContext</classname> passed in lets you access
+    various pieces of information about the current job execution, such as the
+    JobDataMap or information on when the next time the trigger will fire. The
+    <classname>ExampleJob</classname> is configured by creating a
+    <classname>JobDetail</classname> object as shown below in the following
+    XML snippet taken from spring-objects.xml</para>
+
+    <programlisting>  &lt;object name="exampleJob" type="Spring.Scheduling.Quartz.JobDetailObject, Spring.Scheduling.Quartz"&gt;
+    &lt;property name="JobType" value="Spring.Scheduling.Quartz.Example.ExampleJob, Spring.Scheduling.Quartz.Example" /&gt;
+    &lt;!-- We can inject values throgh JobDataMap --&gt;
+    &lt;property name="JobDataAsMap"&gt;
+      &lt;dictionary&gt;
+        &lt;entry key="UserName" value="Alexandre" /&gt;
+      &lt;/dictionary&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para>The dictionary property of the
+    <classname>JobDetailObject</classname>,
+    <classname>JobDataAsMap</classname>, is used to set the values of the
+    ExampleJob's properties. This will result in the ExampleJob being
+    instantiated with it's UserName property value set to 'Alexandre' the
+    first time the trigger fires. </para>
+
+    <para>We then will schedule this job to be executed on 20 second
+    increments of every minute as shown below using Spring's
+    <classname>CronTriggerObject</classname> which creates a Quartz
+    CronTrigger.</para>
+
+    <programlisting>  &lt;object id="cronTrigger" type="Spring.Scheduling.Quartz.CronTriggerObject, Spring.Scheduling.Quartz"&gt;
+    &lt;property name="jobDetail" ref="exampleJob" /&gt;
+    &lt;!-- run every 20 second of minute --&gt;
+    &lt;property name="cronExpressionString" value="0/20 * * * * ?" /&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para>Lastly, we schedule this trigger with the scheduler as shown
+    below</para>
+
+    <programlisting>  &lt;object type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz"&gt;
+    &lt;property name="triggers"&gt;
+      &lt;list&gt;
+        &lt;ref object="cronTrigger" /&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para>Running this configuration will produce the following output</para>
+
+    <programlisting>8/8/2008 1:29:40 PM: ExecuteInternal called, user name: Alexandre, next fire time 8/8/2008 1:30:00 PM
+8/8/2008 1:30:00 PM: ExecuteInternal called, user name: Alexandre, next fire time 8/8/2008 1:30:20 PM
+8/8/2008 1:30:20 PM: ExecuteInternal called, user name: Alexandre, next fire time 8/8/2008 1:30:40 PM</programlisting>
+  </section>
+
+  <section>
+    <title>Scheduling arbitrary methods as jobs</title>
+
+    <para>It is very convenient to schedule the execution of method as a job.
+    The AdminService class in the example demonstrates this functionality and
+    is listed below.</para>
+
+    <programlisting>    public class AdminService
+    {
+        private string userName;
+
+        public string UserName
+        {
+            set { userName = value; }
+        }
+
+        public void DoAdminWork()
+        {
+            Console.WriteLine("{0}: DoAdminWork called, user name: {1}", DateTime.Now, userName);
+        }
+    }</programlisting>
+
+    <para>Note that it does not inherit from any base class. To instruct
+    Spring to create a <classname>JobDetail</classname> object for this method
+    we use Spring's factory object class
+    <classname>MethodInvokingJobDetailFactoryObject</classname> as shown
+    below</para>
+
+    <programlisting>  &lt;object id="adminService" type="Spring.Scheduling.Quartz.Example.AdminService, Spring.Scheduling.Quartz.Example"&gt;
+    &lt;!-- we inject straight to target object --&gt;
+    &lt;property name="UserName" value="admin-service" /&gt;
+  &lt;/object&gt;
+  
+  &lt;object id="jobDetail" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz"&gt;
+    &lt;!-- We don't actually need to implement IJob as we can use delegation --&gt;
+    &lt;property name="TargetObject" ref="adminService" /&gt;
+    &lt;property name="TargetMethod" value="DoAdminWork" /&gt;
+  &lt;/object&gt;
+</programlisting>
+
+    <para>Note that <classname>AdminSerivce</classname> object is configured
+    using Spring as you would do normally, without consideration for Quartz.
+    The trigger associated with the jobDetail object is listed below</para>
+
+    <programlisting>  &lt;object id="simpleTrigger" type="Spring.Scheduling.Quartz.SimpleTriggerObject, Spring.Scheduling.Quartz"&gt;
+    &lt;!-- see the example of method invoking job above --&gt;
+    &lt;property name="jobDetail" ref="jobDetail" /&gt;
+    &lt;!-- 5 seconds --&gt;
+    &lt;property name="startDelay" value="5s" /&gt;
+    &lt;!-- repeat every 5 seconds --&gt;
+    &lt;property name="repeatInterval" value="5s" /&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para>This creates an instances of Quartz's SimpleTrigger class (as
+    compared to its CronTrigger class used in the previous section. StartDelay
+    and RepeatInterval properties are TimeSpan objects than can be set using
+    the convenient strings such as 10s, 1h, etc, as supported by Spring's
+    custom TypeConverter.</para>
+
+    <para>This trigger can then be added to the scheduler's list of registered
+    triggers as shown below.</para>
+
+    <programlisting>  &lt;object type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz"&gt;
+    &lt;property name="triggers"&gt;
+      &lt;list&gt;
+        &lt;ref object="cronTrigger" /&gt;
+        &lt;ref object="simpleTrigger" /&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+</programlisting>
+
+    <para>The interleaved output of both these jobs being triggered is shown
+    below.</para>
+
+    <programlisting>8/8/2008 1:40:18 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:40:20 PM: ExecuteInternal called, user name: Alexandre, next fire time 8/8/2008 1:40:40 PM
+8/8/2008 1:40:23 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:40:28 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:40:33 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:40:38 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:40:40 PM: ExecuteInternal called, user name: Alexandre, next fire time 8/8/2008 1:41:00 PM
+8/8/2008 1:40:43 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:40:48 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:40:53 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:40:58 PM: DoAdminWork called, user name: Gabriel
+8/8/2008 1:41:00 PM: ExecuteInternal called, user name: Alexandre, next fire time 8/8/2008 1:41:20 PM
+8/8/2008 1:41:03 PM: DoAdminWork called, user name: Gabriel
+</programlisting>
+  </section>
+</chapter>
