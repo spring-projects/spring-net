@@ -41,6 +41,7 @@
 				<include name="System.EnterpriseServices.dll" />
 				<include name="System.Drawing.dll" />
 				<include name="System.Data.dll" />
+				<include name="System.Configuration.dll" />
 				<include name="System.Web.Services.dll" />
 				<include name="System.Runtime.Serialization.Formatters.Soap.dll" />
 				<include name="System.Windows.Forms.dll" />

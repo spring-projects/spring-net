@@ -308,6 +308,7 @@
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
+    <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
 
 
@@ -328,6 +329,7 @@
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
+    <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq-tests}"/>
   </target>
 
@@ -339,6 +341,7 @@
     <!-- disable namespaces not supported in net-1.0 -->
     <property name="build-web" value="false" />
     <property name="build-nms" value="false" />
+    <property name="build-quartz" value="false" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
     <call target="compile-test" />
@@ -349,6 +352,7 @@
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-nms" value="false" />
+    <property name="build-quartz" value="true" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
     <call target="compile-test" />
@@ -359,6 +363,7 @@
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-nms" value="true" />
+    <property name="build-quartz" value="true" />
     <property name="build-msmq" value="true" />
     <property name="build-msmq-tests" value="false" />
     <call target="compile-test" />
@@ -368,6 +373,10 @@
           depends="set-mono-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
+    <property name="build-nms" value="true" />
+    <property name="build-quartz" value="true" />
+    <property name="build-msmq" value="false" />
+    <property name="build-msmq-tests" value="false" />
     <call target="compile-test" />
   </target>
 

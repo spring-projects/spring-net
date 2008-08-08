@@ -28,6 +28,7 @@
 	    </resources>
 	    <references basedir="${current.bin.dir}">
 		<include name="*.dll" />
+		<include name="System.Data.Dll" />
 		<exclude name="${project::get-name()}.dll" />
 		<exclude name="CloverRuntime.dll" />
 	    </references>

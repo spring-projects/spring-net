@@ -17,7 +17,7 @@
 			<arg line="${compiler.args}"/>
 			<nowarn>
 				<warning number="${nowarn.numbers.test},0169" />
-				<warning number=",0219,0414" if="${nant.settings.currentframework=='mono-2.0'}"/>
+				<warning number="0219,0414" if="${nant.settings.currentframework=='mono-2.0'}"/>
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />

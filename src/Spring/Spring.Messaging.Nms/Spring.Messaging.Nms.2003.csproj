@@ -114,56 +114,36 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "Context\ILifecycle.cs"
+                    RelPath = "Messaging\Nms\Config\MessageListenerContainerObjectDefinitionParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\.DS_Store"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Messaging\Nms\IMessageCreator.cs"
+                    RelPath = "Messaging\Nms\Config\NmsNamespaceParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\Nms\IMessageListener.cs"
+                    RelPath = "Messaging\Nms\Config\spring-nms-1.2.xsd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Connections\CachedMessageProducer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\Nms\IMessagePostProcessor.cs"
+                    RelPath = "Messaging\Nms\Connections\CachedSession.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\Nms\INmsOperations.cs"
+                    RelPath = "Messaging\Nms\Connections\CachingConnectionFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\Nms\IProducerCallback.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Messaging\Nms\ISessionCallback.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Messaging\Nms\MessageCreatorDelegate.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Messaging\Nms\NmsGatewaySupport.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Messaging\Nms\NmsTemplate.cs"
+                    RelPath = "Messaging\Nms\Connections\ChainedExceptionListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -173,7 +153,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Messaging\Nms\Connections\IDecoratorSession.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Connections\ISmartConnectionFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Messaging\Nms\Connections\NmsResourceHolder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Connections\NmsTransactionManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Connections\SingleConnectionFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -183,12 +183,77 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\Nms\Listener\AbstractMessageListenerContainer.cs"
+                    RelPath = "Messaging\Nms\Core\IExceptionListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\Nms\Listener\DefaultMessageListenerContainer.cs"
+                    RelPath = "Messaging\Nms\Core\IMessageCreator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\IMessageListener.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\IMessagePostProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\INmsOperations.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\IProducerCallback.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\ISessionCallback.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\MessageCreatorDelegate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\MessagePostProcessorDelegate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\NmsGatewaySupport.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\NmsTemplate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\ProducerDelegate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Core\SessionDelegate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Listener\AbstractListenerContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Listener\AbstractMessageListenerContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -198,7 +263,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Messaging\Nms\Listener\LocallyExposedNmsResourceHolder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Messaging\Nms\Listener\SimpleMessageListenerContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messaging\Nms\Listener\Adapter\ListenerExecutionFailedException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -208,12 +283,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\Nms\Support\NmsAccessor.cs"
+                    RelPath = "Messaging\Nms\Support\MessageUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Messaging\Nms\Support\NmsUtils.cs"
+                    RelPath = "Messaging\Nms\Support\NmsAccessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
