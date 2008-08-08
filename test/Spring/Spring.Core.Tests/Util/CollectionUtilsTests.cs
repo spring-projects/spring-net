@@ -355,5 +355,21 @@ namespace Spring.Util
             }
 
         }
+
+        [Test]
+        public void ToArray()
+        {
+            ArrayList list = new ArrayList();
+            list.Add("mystring");
+            string[] strList = (string[]) CollectionUtils.ToArray(list, typeof(string));
+            Assert.AreEqual(1, strList.Length);
+
+            try
+            {
+                CollectionUtils.ToArray(list, typeof(Type));
+                Assert.Fail("should fail");
+            }
+            catch(InvalidCastException) {}
+        }
 	}
 }

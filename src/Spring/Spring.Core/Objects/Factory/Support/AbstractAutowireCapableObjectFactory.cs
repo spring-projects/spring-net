@@ -352,7 +352,7 @@ namespace Spring.Objects.Factory.Support
             {
                 PropertyValue copiedProperty = copiedProperties[i];
                 //(string name, RootObjectDefinition definition, string argumentName, object argumentValue)
-                object value = valueResolver.ResolveValueIfNecessary(name, definition, copiedProperty.Name, copiedProperty.Value );
+                object value = valueResolver.ResolveValueIfNecessary(name, definition, copiedProperty.Name, copiedProperty.Value);
                 // object value = ResolveValueIfNecessary(name, definition, copiedProperty.Name, copiedProperty.Value);
                 PropertyValue propertyValue = new PropertyValue(copiedProperty.Name, value, copiedProperty.Expression);
                 // update mutable copy...
@@ -389,21 +389,23 @@ namespace Spring.Objects.Factory.Support
         /// <param name="wrapper">
         /// The <see cref="Spring.Objects.IObjectWrapper"/> wrapping the target object.
         /// </param>
-        protected string[] UnsatisfiedObjectProperties(RootObjectDefinition definition, IObjectWrapper wrapper)
+        protected string[] UnsatisfiedNonSimpleProperties(RootObjectDefinition definition, IObjectWrapper wrapper)
         {
-            ArrayList result = new ArrayList();
-            ISet ignoredTypes = IgnoredDependencyTypes;
+            ListSet results = new ListSet();
+            IPropertyValues pvs = definition.PropertyValues;
             PropertyInfo[] properties = wrapper.GetPropertyInfos();
             foreach (PropertyInfo property in properties)
             {
                 string name = property.Name;
-                if (property.CanWrite && !ignoredTypes.Contains(property.PropertyType) && !result.Contains(name)
+                if (property.CanWrite
+                    && !IsExcludedFromDependencyCheck(property)
+                    && !pvs.Contains(name)
                     && !ObjectUtils.IsSimpleProperty(property.PropertyType))
                 {
-                    result.Add(name);
+                    results.Add(name);
                 }
             }
-            return (string[])result.ToArray(typeof(string));
+            return (string[])CollectionUtils.ToArray(results, typeof(string));
         }
 
         /// <summary>
@@ -601,7 +603,7 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         protected void AutowireByName(string name, RootObjectDefinition definition, IObjectWrapper wrapper, MutablePropertyValues properties)
         {
-            string[] propertyNames = UnsatisfiedObjectProperties(definition, wrapper);
+            string[] propertyNames = UnsatisfiedNonSimpleProperties(definition, wrapper);
             foreach (string propertyName in propertyNames)
             {
                 // look for a matching type
@@ -664,7 +666,7 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         protected void AutowireByType(string name, RootObjectDefinition definition, IObjectWrapper wrapper, MutablePropertyValues properties)
         {
-            string[] propertyNames = UnsatisfiedObjectProperties(definition, wrapper);
+            string[] propertyNames = UnsatisfiedNonSimpleProperties(definition, wrapper);
             foreach (string propertyName in propertyNames)
             {
                 // look for a matching type
@@ -987,7 +989,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>IObjectWrapper for the new instance</returns>
         protected virtual IObjectWrapper InstantiateObject(string objectName, RootObjectDefinition definition)
         {
-            return new ObjectWrapper(InstantiationStrategy.Instantiate(definition, objectName, this));          
+            return new ObjectWrapper(InstantiationStrategy.Instantiate(definition, objectName, this));
         }
 
         /// <summary>
@@ -1008,7 +1010,7 @@ namespace Spring.Objects.Factory.Support
                     if (ObjectUtils.IsAssignable(typeof(SmartInstantiationAwareObjectPostProcessor), objectPostProcessor))
                     {
                         SmartInstantiationAwareObjectPostProcessor iop =
-                            (SmartInstantiationAwareObjectPostProcessor) objectPostProcessor;
+                            (SmartInstantiationAwareObjectPostProcessor)objectPostProcessor;
                         ConstructorInfo[] ctors = iop.DetermineCandidateConstructors(objectType, objectName);
                         if (ctors != null)
                         {
@@ -1082,7 +1084,7 @@ namespace Spring.Objects.Factory.Support
         /// </remarks>
         protected IObjectWrapper AutowireConstructor(string name, RootObjectDefinition definition, ConstructorInfo[] ctors, object[] explicitArgs)
         {
-            ConstructorResolver constructorResolver = 
+            ConstructorResolver constructorResolver =
                 new ConstructorResolver(this, this, InstantiationStrategy);
             return constructorResolver.AutowireConstructor(name, definition, ctors, explicitArgs);
 
@@ -1193,11 +1195,20 @@ namespace Spring.Objects.Factory.Support
 
         }
 
-        private bool IsExcludedFromDependencyCheck(PropertyInfo pi)
+        /// <summary>
+        /// Determine whether the given bean property is excluded from dependency checks.
+        /// This implementation excludes properties whose type matches an ignored dependency type
+        /// or which are defined by an ignored dependency interface.
+        /// </summary>
+        /// <seealso cref="AbstractObjectFactory.IgnoreDependencyType(Type)"/>
+        /// <seealso cref="IgnoreDependencyInterface(Type)"/>
+        /// <param name="property">the <see cref="PropertyInfo"/> of the object property</param>
+        /// <returns>whether the object property is excluded</returns>
+        private bool IsExcludedFromDependencyCheck(PropertyInfo property)
         {
-            bool b1 = !pi.CanWrite; //AutowireUtils.IsExcludedFromDependencyCheck(pi);
-            bool b2 = IgnoredDependencyTypes.Contains(pi.PropertyType);
-            bool b3 = AutowireUtils.IsSetterDefinedInInterface(pi, ignoredDependencyInterfaces);
+            bool b1 = !property.CanWrite; //AutowireUtils.IsExcludedFromDependencyCheck(pi);
+            bool b2 = IgnoredDependencyTypes.Contains(property.PropertyType);
+            bool b3 = AutowireUtils.IsSetterDefinedInInterface(property, ignoredDependencyInterfaces);
             return b1 || b2 || b3;
             /*
             return AutowireUtils.IsExcludedFromDependencyCheck(pi) ||

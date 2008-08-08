@@ -202,6 +202,20 @@ namespace Spring.Util
 		}
 
         /// <summary>
+        /// Copies the elements of the <see cref="ICollection"/> to a 
+        /// new array of the specified element type.
+        /// </summary>
+		/// <param name="inputCollection">The <see cref="System.Collections.ICollection"/> instance to be converted.</param>
+        /// <param name="elementType">The element <see cref="Type"/> of the destination array to create and copy elements to</param>
+        /// <returns>An array of the specified element type containing copies of the elements of the <see cref="ICollection"/>.</returns>
+        public static Array ToArray(ICollection inputCollection, Type elementType)
+        {
+            Array array = Array.CreateInstance(elementType, inputCollection.Count);
+            inputCollection.CopyTo(array, 0);
+            return array;
+        }
+
+        /// <summary>
         /// Finds a value of the given type in the given collection.
         /// </summary>
         /// <param name="collection">The collection to search.</param>
