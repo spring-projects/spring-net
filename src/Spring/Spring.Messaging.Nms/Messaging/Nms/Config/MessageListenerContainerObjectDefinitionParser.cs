@@ -85,7 +85,7 @@ namespace Spring.Messaging.Nms.Config
 
         private readonly string RECOVERY_INTERVAL_ATTRIBUTE = "recovery-interval";
 
-        private readonly string MAX_RECOVERY_INTERVAL_ATTRIBUTE = "max-recovery-interval"; 
+        private readonly string MAX_RECOVERY_TIME_ATTRIBUTE = "max-recovery-time"; 
         
         private readonly string CONNECTION_FACTORY_ATTRIBUTE = "connection-factory";
         
@@ -392,7 +392,7 @@ namespace Spring.Messaging.Nms.Config
         }
         private TimeSpan ParseMaxRecoveryTime(XmlElement ele, ParserContext parserContext)
         {
-            string recoverTime = ele.GetAttribute(MAX_RECOVERY_INTERVAL_ATTRIBUTE);
+            string recoverTime = ele.GetAttribute(MAX_RECOVERY_TIME_ATTRIBUTE);
             if (!StringUtils.HasText(recoverTime))
             {
                 return SimpleMessageListenerContainer.DEFAULT_MAX_RECOVERY_TIME;
@@ -404,7 +404,7 @@ namespace Spring.Messaging.Nms.Config
             }
             catch (Exception ex)
             {
-                parserContext.ReaderContext.ReportException(ele, MAX_RECOVERY_INTERVAL_ATTRIBUTE,
+                parserContext.ReaderContext.ReportException(ele, MAX_RECOVERY_TIME_ATTRIBUTE,
                                             "Invalid max-recovery-time value [" + recoverTime + "]", ex);
                 return SimpleMessageListenerContainer.DEFAULT_MAX_RECOVERY_TIME;
             }

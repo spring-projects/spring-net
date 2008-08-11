@@ -1266,6 +1266,22 @@ namespace MyApp
               important; consider raising it for general
               queues.</para></entry>
             </row>
+
+            <row>
+              <entry>recovery-interval</entry>
+
+              <entry><para>The time interval between connection recovery attempts.  The default is 5 seconds.
+	      Specify as a TimeSpan value using Spring's TimeSpanConverter (e.g. 10s, 10m, 3h, etc)
+	      </para></entry>
+            </row>
+
+            <row>
+              <entry>max-recovery-time</entry>
+
+              <entry><para>The maximum time try reconnection attempts.  The default is 10 minutes.  Specify as a
+	      TimeSpan value using Spring's TimeSpanConverter (e.g. 10s, 10m, 3h, etc)
+	      </para></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>

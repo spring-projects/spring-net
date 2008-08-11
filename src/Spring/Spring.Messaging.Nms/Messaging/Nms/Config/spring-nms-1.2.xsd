@@ -123,7 +123,6 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      </xsd:attribute>
       <xsd:attribute name="max-recovery-time" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation>
