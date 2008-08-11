@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Messaging.Nms.Core;
@@ -44,6 +45,16 @@ namespace Spring.Messaging.Nms.Listener
 
         #region fields
 
+        /// <summary>
+        /// The default recovery time interval between connection reconnection attempts
+        /// </summary>
+        public static TimeSpan DEFAULT_RECOVERY_INTERVAL = new TimeSpan(0,0,0,5,0);
+
+        /// <summary>
+        /// The total time connection recovery will be attempted.
+        /// </summary>
+        public static TimeSpan DEFAULT_MAX_RECOVERY_TIME = new TimeSpan(0, 0, 10, 0, 0);
+
         private bool pubSubNoLocal = false;
 
         private int concurrentConsumers = 1;
@@ -53,6 +64,11 @@ namespace Spring.Messaging.Nms.Listener
         private ISet consumers;
 
         private object consumersMonitor = new object();
+
+        private TimeSpan recoveryInterval = DEFAULT_RECOVERY_INTERVAL;
+
+        private TimeSpan maxRecoveryTime = DEFAULT_MAX_RECOVERY_TIME;
+            
 
         #endregion
 
@@ -90,6 +106,26 @@ namespace Spring.Messaging.Nms.Listener
                 AssertUtils.IsTrue(value > 0, "'ConcurrentConsumer' value must be at least 1 (one)");
                 concurrentConsumers = value;
             }
+        }
+
+
+        /// <summary>
+        /// Sets the time interval between connection recovery attempts.  The default is 5 seconds.
+        /// </summary>
+        /// <value>The recovery interval.</value>
+        public TimeSpan RecoveryInterval
+        {
+            set { recoveryInterval = value; }
+        }
+
+
+        /// <summary>
+        /// Sets the max recovery time to try reconnection attempts.  The default is 10 minutes.
+        /// </summary>
+        /// <value>The max recovery time.</value>
+        public TimeSpan MaxRecoveryTime
+        {
+            set { maxRecoveryTime = value; }
         }
 
         /// <summary>
@@ -143,7 +179,7 @@ namespace Spring.Messaging.Nms.Listener
         protected override void PrepareSharedConnection(IConnection connection)
         {
             base.PrepareSharedConnection(connection);
-            connection.ExceptionListener += OnException;
+            connection.ExceptionListener += new ExceptionListener(OnException);
         }
 
 
@@ -156,7 +192,7 @@ namespace Spring.Messaging.Nms.Listener
         public void OnException(Exception exception)
         {
             // First invoke the user-specific ExceptionListener, if any.
-            InvokeExceptionListener(exception);
+            //InvokeExceptionListener(exception);
             // now try to recover the shared Connection and all consumers...
             if (logger.IsInfoEnabled)
             {
@@ -164,19 +200,72 @@ namespace Spring.Messaging.Nms.Listener
             }
             try
             {
-                lock(consumersMonitor)
+                lock (consumersMonitor)
                 {
                     sessions = null;
                     consumers = null;
                 }
-                RefreshSharedConnection();
+                RefreshConnectionUntilSuccessful();
                 InitializeConsumers();
                 logger.Info("Successfully refreshed NMS Connection");
-            } catch (NMSException recoverEx)
+            } catch (RecoveryTimeExceededException)
+            {
+                throw;
+            } catch (Exception recoverEx)
             {
                 logger.Debug("Failed to recover NMS Connection", recoverEx);
-                logger.Error("Encountered non-recoverable NMSException", exception);
+                logger.Error("Encountered non-recoverable Exception", exception);
+                throw;
             }
+        }
+
+        /// <summary>
+	    /// Refresh the underlying Connection, not returning before an attempt has been
+	    /// successful. Called in case of a shared Connection as well as without shared
+	    /// Connection, so either needs to operate on the shared Connection or on a
+	    /// temporary Connection that just gets established for validation purposes.
+	    /// </summary>
+	    /// <remarks>
+	    /// The default implementation retries until it successfully established a
+	    /// Connection, for as long as this message listener container is active.
+	    /// Applies the specified recovery interval between retries.
+        /// </remarks>
+        protected virtual void RefreshConnectionUntilSuccessful()
+        {
+            TimeSpan totalTryTime = new TimeSpan();
+            while (IsRunning)
+            {
+                try
+                {
+                    RefreshSharedConnection();
+                    break;
+                } catch (Exception ex)
+                {
+                    if (logger.IsInfoEnabled)
+                    {
+                        logger.Info("Could not refresh Connection - retrying in " + recoveryInterval, ex);
+                    }
+                }
+
+                if (totalTryTime > maxRecoveryTime)
+                {
+                    logger.Info("Could not refresh Connection after " + totalTryTime  + ".  Stopping reconnection attempts.");
+                    throw new RecoveryTimeExceededException("Could not recover after " + totalTryTime);                                       
+                }
+                
+                DateTime startTime = DateTime.Now;
+                SleepInBetweenRecoveryAttempts();
+                TimeSpan sleepTimeSpan = DateTime.Now - startTime;
+                totalTryTime += sleepTimeSpan;
+            }
+        }
+
+        /// <summary>
+        /// The amount of time to sleep in between recovery attempts.
+        /// </summary>
+        protected virtual void SleepInBetweenRecoveryAttempts()
+        {
+            Thread.Sleep(recoveryInterval);
         }
 
         /// <summary>

@@ -32,7 +32,7 @@ using Spring.Testing.NUnit;
 namespace Spring.Messaging.Nms.Integration
 {
     /// <summary>
-    /// This class contains tests for 
+    /// This class contains integration tests for the SimpleMessageListenerContainer
     /// </summary>
     /// <author>Mark Pollack</author>
     /// <version>$Id:$</version>

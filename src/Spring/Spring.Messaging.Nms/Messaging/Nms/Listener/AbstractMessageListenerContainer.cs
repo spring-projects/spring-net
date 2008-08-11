@@ -19,6 +19,8 @@
 #endregion
 
 using System;
+using System.Collections;
+using System.IO;
 using Common.Logging;
 using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Support;
@@ -260,7 +262,6 @@ namespace Spring.Messaging.Nms.Listener
             get { return acceptMessagesWhileStopping; }
             set { acceptMessagesWhileStopping = value; }
         }
-
 
         #endregion
 
@@ -538,7 +539,7 @@ namespace Spring.Messaging.Nms.Listener
             }
             if (ex is NMSException)
             {
-                InvokeExceptionListener((NMSException)ex);
+                InvokeExceptionListener(ex);
             }
             if (Active)
             {

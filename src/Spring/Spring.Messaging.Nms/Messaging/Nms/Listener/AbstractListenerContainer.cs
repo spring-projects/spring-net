@@ -435,24 +435,6 @@ namespace Spring.Messaging.Nms.Listener
                     sharedConnection.Start();
                 }
             }
-            /*
-            bool running = IsRunning;
-            lock (this.sharedConnectionMonitor)
-            {
-                MessagingUtils.CloseConnection(this.sharedConnection, running);
-
-                IConnection con = CreateConnection();
-                try
-                {
-                    PrepareSharedConnection(con);
-                }
-                catch (Exception)
-                {
-                    MessagingUtils.CloseConnection(con);
-                    throw;
-                }
-                this.sharedConnection = con;
-            }*/
         }
 
         /// <summary>
@@ -471,7 +453,7 @@ namespace Spring.Messaging.Nms.Listener
             {
                 PrepareSharedConnection(con);
                 return con;
-            } catch (NMSException)
+            } catch (Exception)
             {
                 NmsUtils.CloseConnection(con);
                 throw;

@@ -21,6 +21,7 @@
 using System;
 using System.Xml;
 using Apache.NMS;
+using Spring.Core.TypeConversion;
 using Spring.Messaging.Nms.Listener;
 using Spring.Messaging.Nms.Listener.Adapter;
 using Spring.Objects.Factory.Config;
@@ -82,8 +83,12 @@ namespace Spring.Messaging.Nms.Config
 
         private readonly string CONCURRENCY_ATTRIBUTE = "concurrency";
 
-        private readonly string CONNECTION_FACTORY_ATTRIBUTE = "connection-factory";
+        private readonly string RECOVERY_INTERVAL_ATTRIBUTE = "recovery-interval";
 
+        private readonly string MAX_RECOVERY_INTERVAL_ATTRIBUTE = "max-recovery-interval"; 
+        
+        private readonly string CONNECTION_FACTORY_ATTRIBUTE = "connection-factory";
+        
         #endregion
 
         #region IObjectDefinitionParser Members
@@ -231,6 +236,9 @@ namespace Spring.Messaging.Nms.Config
             {
                 containerDef.AddPropertyValue("ConcurrentConsumers", concurrency[1]);
             }
+            containerDef.AddPropertyValue("RecoveryInterval", ParseRecoveryInterval(containerElement, parserContext));
+
+            containerDef.AddPropertyValue("MaxRecoveryTime", ParseMaxRecoveryTime(containerElement, parserContext));             
 
             return containerDef;
         }
@@ -346,7 +354,7 @@ namespace Spring.Messaging.Nms.Config
 
         private int[] ParseConcurrency(XmlElement ele, ParserContext parserContext)
         {
-            String concurrency = ele.GetAttribute(CONCURRENCY_ATTRIBUTE);
+            string concurrency = ele.GetAttribute(CONCURRENCY_ATTRIBUTE);
             if (!StringUtils.HasText(concurrency))
             {
                 return null;
@@ -361,6 +369,44 @@ namespace Spring.Messaging.Nms.Config
                                                             "Invalid concurrency value [" + concurrency + "]: only " +
                                                             "integer (e.g. \"5\") values upported.", ex);
                 return null;
+            }
+        }
+
+        private TimeSpan ParseRecoveryInterval(XmlElement ele, ParserContext parserContext)
+        {
+            string recoveryInterval = ele.GetAttribute(RECOVERY_INTERVAL_ATTRIBUTE);
+            if (!StringUtils.HasText(recoveryInterval))
+            {
+                return SimpleMessageListenerContainer.DEFAULT_RECOVERY_INTERVAL;
+            }
+            try
+            {
+                TimeSpanConverter tsc = new TimeSpanConverter();
+                return (TimeSpan)tsc.ConvertFrom(recoveryInterval);
+            } catch (Exception ex)
+            {
+                parserContext.ReaderContext.ReportException(ele, RECOVERY_INTERVAL_ATTRIBUTE,
+                                            "Invalid recovery-interval value [" + recoveryInterval + "]", ex);
+                return SimpleMessageListenerContainer.DEFAULT_RECOVERY_INTERVAL;
+            }
+        }
+        private TimeSpan ParseMaxRecoveryTime(XmlElement ele, ParserContext parserContext)
+        {
+            string recoverTime = ele.GetAttribute(MAX_RECOVERY_INTERVAL_ATTRIBUTE);
+            if (!StringUtils.HasText(recoverTime))
+            {
+                return SimpleMessageListenerContainer.DEFAULT_MAX_RECOVERY_TIME;
+            }
+            try
+            {
+                TimeSpanConverter tsc = new TimeSpanConverter();
+                return (TimeSpan)tsc.ConvertFrom(recoverTime);
+            }
+            catch (Exception ex)
+            {
+                parserContext.ReaderContext.ReportException(ele, MAX_RECOVERY_INTERVAL_ATTRIBUTE,
+                                            "Invalid max-recovery-time value [" + recoverTime + "]", ex);
+                return SimpleMessageListenerContainer.DEFAULT_MAX_RECOVERY_TIME;
             }
         }
     }

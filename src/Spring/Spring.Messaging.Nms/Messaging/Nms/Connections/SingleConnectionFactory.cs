@@ -35,11 +35,15 @@ namespace Spring.Messaging.Nms.Connections
     /// details.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// You can either pass in a specific Connection directly or let this
     /// factory lazily create a Connection via a given target ConnectionFactory.
-    /// <para>Useful in order to keep using the same Connection for multiple
-    /// <see cref="NmsTemplate"/> calls, without having a pooling ConnectionFactory 
-    /// underneath. This may span any number of transactions, even concurrently executing transactions.
+    /// </para>
+    /// <para>
+    /// Useful for testing and in applications when you want to keep using the
+    /// same Connection for multiple <see cref="NmsTemplate"/>
+    /// calls, without having a pooling ConnectionFactory underneath. This may span
+    /// any number of transactions, even concurrently executing transactions.
     /// </para>
     /// <para>
     /// Note that Spring's message listener containers support the use of
@@ -83,6 +87,7 @@ namespace Spring.Messaging.Nms.Connections
         /// Synchronization monitor for the shared Connection
         /// </summary>
         private object connectionMonitor = new object();
+
 
         #endregion
 
@@ -180,7 +185,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </para>
         /// </remarks>
         /// <value>
-        /// 	<c>true</c> if [reconnect on exception]; otherwise, <c>false</c>.
+        /// 	<c>true</c> attempt to reconnect on exception during next access; otherwise, <c>false</c>.
         /// </value>
         public bool ReconnectOnException
         {
@@ -275,16 +280,10 @@ namespace Spring.Messaging.Nms.Connections
                 IExceptionListener listenerToUse = ExceptionListener;
                 if (ReconnectOnException)
                 {
-                    InternalChainedExceptionListener chained = new InternalChainedExceptionListener(this, listenerToUse);
-                    con.ExceptionListener += chained.OnException;
+                    //add reconnect exception handler first.
+                    con.ExceptionListener += new ExceptionListener(this.OnException);
                 }
-                else
-                {
-                    if (ExceptionListener != null)
-                    {
-                        con.ExceptionListener += ExceptionListener.OnException;                                     
-                    }
-                }
+                con.ExceptionListener += new ExceptionListener(listenerToUse.OnException);                              
             }
         }
 
@@ -389,25 +388,6 @@ namespace Spring.Messaging.Nms.Connections
         }
     }
 
-    internal class InternalChainedExceptionListener : ChainedExceptionListener, IExceptionListener
-    {
-        private IExceptionListener userListener;
-        public InternalChainedExceptionListener(IExceptionListener internalListener, IExceptionListener userListener)
-        {
-            AddListener(internalListener);
-            if (userListener != null)
-            {
-                AddListener(userListener);
-                this.userListener = userListener;
-            }                    
-        }
-
-        public IExceptionListener UserListener
-        {
-            get { return userListener; }
-        }
-    }
-
     internal class CloseSupressingConnection : IConnection
     {
         private IConnection target;
@@ -432,7 +412,8 @@ namespace Spring.Messaging.Nms.Connections
                 else
                 {
                     throw new ArgumentException(
-                        "Setting of 'ClientID' property not supported on wrapper for shared Connection." +
+                        "Setting of 'ClientID' property not supported on wrapper for shared Connection since" +
+                        "this is a shared connection that may serve any number of clients concurrently." +
                         "Set the 'ClientId' property on the SingleConnectionFactory instead.");    
                 }
                 
@@ -446,7 +427,7 @@ namespace Spring.Messaging.Nms.Connections
 
         public void Stop()
         {
-            //don't pass the call to the target.
+            //don't pass the call to the target as it would stop receiving for all clients sharing this connection.
         }
 
         public ISession CreateSession()
@@ -473,7 +454,10 @@ namespace Spring.Messaging.Nms.Connections
             {
                 target.ExceptionListener += value;
             }
-            remove { target.ExceptionListener -= value; }
+            remove
+            {
+                target.ExceptionListener -= value;                
+            }
         }
 
 

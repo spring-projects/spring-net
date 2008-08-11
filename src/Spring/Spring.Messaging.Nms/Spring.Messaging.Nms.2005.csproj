@@ -79,6 +79,7 @@
     <Compile Include="Messaging\Nms\Listener\Adapter\MessageListenerAdapter.cs" />
     <Compile Include="Messaging\Nms\Listener\ISessionAwareMessageListener.cs" />
     <Compile Include="Messaging\Nms\Listener\LocallyExposedNmsResourceHolder.cs" />
+    <Compile Include="Messaging\Nms\Listener\RecoveryTimeExceededException.cs" />
     <Compile Include="Messaging\Nms\Listener\SimpleMessageListenerContainer.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\IMessageConverter.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\MessageConversionException.cs" />

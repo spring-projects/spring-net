@@ -114,6 +114,25 @@
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
+      <xsd:attribute name="recovery-interval" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+	The TimeSpan interval to sleep in between connection recovery attemtps. Default is 5 seconds.
+					]]>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      </xsd:attribute>
+      <xsd:attribute name="max-recovery-time" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+	The TimeSpan interval in which connection recovery attempts will be made.  Default is 10 minutes.
+					]]>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 	
