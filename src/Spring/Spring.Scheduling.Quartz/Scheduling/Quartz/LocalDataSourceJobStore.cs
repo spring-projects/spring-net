@@ -38,7 +38,6 @@ namespace Spring.Scheduling.Quartz
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Marko Lahma (.NET)</author>
-    /// <seealso cref="SchedulerFactoryObject#DbProvider" />
     /// <seealso cref="ConnectionUtils.GetConnection" />
     /// <seealso cref="ConnectionUtils.DisposeConnection" />
     public class LocalDataSourceJobStore : JobStoreCMT
