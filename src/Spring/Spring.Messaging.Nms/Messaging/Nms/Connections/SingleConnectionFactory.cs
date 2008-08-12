@@ -31,8 +31,8 @@ namespace Spring.Messaging.Nms.Connections
     /// A ConnectionFactory adapter that returns the same Connection
     /// from all CreateConnection() calls, and ignores calls to
     /// Connection.Close().  According to the JMS Connection
-    /// model, this is perfectly thread-safe, check your vendor implmenetation for
-    /// details.
+    /// model, this is perfectly thread-safe. The 
+    /// shared Connection can be automatically recovered in case of an Exception.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -82,6 +82,12 @@ namespace Spring.Messaging.Nms.Connections
         /// Proxy Connection
         /// </summary>
         private IConnection connection;
+
+
+        /// <summary>
+        /// Whether the shared Connection has been started 
+        /// </summary>
+        private bool started = false;
 
         /// <summary>
         /// Synchronization monitor for the shared Connection
@@ -193,6 +199,27 @@ namespace Spring.Messaging.Nms.Connections
             set { reconnectOnException = value; }
         }
 
+        /// <summary>
+        /// Gets the connection monitor.
+        /// </summary>
+        /// <value>The connection monitor.</value>
+        internal object ConnectionMonitor
+        {
+            get { return connectionMonitor;  }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is started.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is started; otherwise, <c>false</c>.
+        /// </value>
+        internal bool IsStarted
+        {
+            get { return started;}
+            set { started = value; }
+        }
+
         #endregion
 
         #region IConnectionFactory Members
@@ -292,7 +319,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="con">The connection to operate on.</param>
         /// <param name="mode">The session ack mode.</param>
         /// <returns>the Session to use, or <code>null</code> to indicate
-	    /// creation of a default Session</returns>  
+	    /// creation of a raw standard Session</returns>  
         public virtual ISession GetSession(IConnection con, AcknowledgementMode mode)
         {
             return null;
@@ -313,11 +340,19 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="con">The connection.</param>
         protected virtual void CloseConnection(IConnection con)
         {
+            if (LOG.IsDebugEnabled)
+            {
+                LOG.Debug("Closing shared NMS Connection: " + this.target);
+            }
             try
             {
                 try
                 {
-                    con.Stop();
+                    if (this.started)
+                    {
+                        this.started = false;
+                        con.Stop();                        
+                    }
                 } finally
                 {
                     con.Close();
@@ -424,6 +459,16 @@ namespace Spring.Messaging.Nms.Connections
             // don't pass the call to the target.
         }
 
+        public void Start()
+        {
+            // Handle start method: track started state.
+            target.Start();
+            lock (singleConnectionFactory.ConnectionMonitor)
+            {
+                singleConnectionFactory.IsStarted = true;
+            }
+        }
+
         public void Stop()
         {
             //don't pass the call to the target as it would stop receiving for all clients sharing this connection.
@@ -471,10 +516,6 @@ namespace Spring.Messaging.Nms.Connections
             target.Dispose();
         }
 
-        public void Start()
-        {
-            target.Start();
-        }
 
         public bool IsStarted
         {
@@ -482,5 +523,13 @@ namespace Spring.Messaging.Nms.Connections
         }
         #endregion
 
+        /// <summary>
+        /// Add information to show this is a shared NMS connection
+        /// </summary>
+        /// <returns>Description of connection wrapper</returns>
+        public override string ToString()
+        {
+            return "Shared NMS Connection: " + this.target;
+        }
     }
 }

@@ -232,5 +232,64 @@ namespace Spring.Messaging.Nms.Connections
             Assert.AreEqual(2, con.CloseCount);
             Assert.AreEqual(1, listener.Count);
         }
+
+        [Test]
+        public void CachingConnectionFactory()
+        {
+            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
+            ISession txSession = (ISession)mocks.CreateMock(typeof(ISession));
+            ISession nonTxSession = (ISession)mocks.CreateMock(typeof(ISession));
+            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+
+            Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(txSession).Repeat.Once();
+            Expect.Call(txSession.Transacted).Return(true).Repeat.Twice();
+            txSession.Rollback();
+            LastCall.Repeat.Once();
+            txSession.Commit();
+            LastCall.Repeat.Once();            
+            txSession.Close();
+            LastCall.Repeat.Once();
+
+            Expect.Call(connection.CreateSession(AcknowledgementMode.ClientAcknowledge)).Return(nonTxSession).Repeat.Once();           
+            nonTxSession.Close();
+            LastCall.Repeat.Once();
+            connection.Start();
+            LastCall.Repeat.Twice();
+            connection.Stop();
+            LastCall.Repeat.Once();
+            connection.Close();
+            LastCall.Repeat.Once();
+
+            mocks.ReplayAll();
+
+            CachingConnectionFactory scf = new CachingConnectionFactory(connectionFactory);
+            scf.ReconnectOnException = false;
+
+            IConnection con1 = scf.CreateConnection();
+            ISession session1 = con1.CreateSession(AcknowledgementMode.Transactional);
+            bool b = session1.Transacted;
+            session1.Close();  // should be ignored
+            session1 = con1.CreateSession(AcknowledgementMode.ClientAcknowledge);
+            session1.Close();  // should be ignored
+            con1.Start();
+            con1.Close(); // should be ignored
+            IConnection con2 = scf.CreateConnection();
+            ISession session2 = con2.CreateSession(AcknowledgementMode.ClientAcknowledge);
+            session2.Close(); // should be ignored
+            session2 = con2.CreateSession(AcknowledgementMode.Transactional);
+            session2.Commit();
+            session2.Close(); // should be ignored
+            con2.Start();
+            con2.Close();
+            scf.Dispose();
+
+            mocks.Verify(connectionFactory);
+            mocks.Verify(connection);
+            mocks.Verify(txSession);
+            mocks.Verify(nonTxSession);
+
+
+        }
     }
 }

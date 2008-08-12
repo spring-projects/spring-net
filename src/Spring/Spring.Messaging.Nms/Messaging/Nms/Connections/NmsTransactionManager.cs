@@ -44,11 +44,21 @@ namespace Spring.Messaging.Nms.Connections
     /// automatically participate in it.
     /// </para>
     /// <para>
-    /// This transaction strategy will typically be used in combination with 
-    /// <see cref="SingleConnectionFactory"/>, which uses a single NMS Connection
-    /// for all NMS access in order to avoid the overhead of repeated Connection
-    /// creation.  Each transaction will then share the same NMS Connection, while still using
-    /// its own individual Session.
+    /// The use of <see cref="CachingConnectionFactory"/>as a target for this
+    /// transaction manager is strongly recommended. CachingConnectionFactory
+    /// uses a single NMS Connection for all NMS access in order to avoid the overhead
+    /// of repeated Connection creation, as well as maintaining a cache of Sessions.
+    /// Each transaction will then share the same NMS Connection, while still using
+    /// its own individual NMS Session.
+    /// </para>
+    /// <para>The use of a <i>raw</i> target ConnectionFactory would not only be inefficient
+    /// because of the lack of resource reuse. It might also lead to strange effects
+    /// when your NMS provider doesn't accept <code>MessageProducer.close()</code> calls
+    /// and/or <code>MessageConsumer.close()</code> calls before <code>Session.commit()</code>,
+    /// with the latter supposed to commit all the messages that have been sent through the
+    /// producer handle and received through the consumer handle. As a safe general solution,
+    /// always pass in a <see cref="CachingConnectionFactory"/> into this transaction manager's
+    /// ConnectionFactory property.
     /// </para>
     /// <para>
     /// Transaction synchronization is turned off by default, as this manager might be used

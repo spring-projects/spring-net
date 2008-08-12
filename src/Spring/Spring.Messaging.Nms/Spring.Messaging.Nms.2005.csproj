@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\Nms\Connections\CachedMessageConsumer .cs" />
     <Compile Include="Messaging\Nms\Core\IExceptionListener.cs" />
     <Compile Include="Messaging\Nms\Core\IMessageCreator.cs" />
     <Compile Include="Messaging\Nms\Core\IMessageListener.cs" />

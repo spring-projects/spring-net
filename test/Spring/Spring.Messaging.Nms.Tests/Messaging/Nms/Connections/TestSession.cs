@@ -143,17 +143,17 @@ namespace Spring.Messaging.Nms.Connections
 
         public void Commit()
         {
-            throw new NotImplementedException();
+
         }
 
         public void Rollback()
         {
-            throw new NotImplementedException();
+
         }
 
         public bool Transacted
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
         public AcknowledgementMode AcknowledgementMode

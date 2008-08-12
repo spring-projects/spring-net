@@ -28,6 +28,8 @@ namespace Spring.Messaging.Nms.Connections
     /// functionality. Allows access to the the underlying target Session.
     /// </summary>
     /// <author>Mark Pollack</author>
+    /// <see cref="ConnectionFactoryUtils.GetTargetSession(ISession)"/>
+    /// <see cref="CachingConnectionFactory"/>
     public interface IDecoratorSession : ISession
     {
         /// <summary>

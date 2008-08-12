@@ -273,6 +273,9 @@ namespace Spring.Messaging.Nms.Connections
             {
                 ConnectionFactoryUtils.ReleaseConnection(connection, connectionFactory, true);
             }
+            this.connections.Clear();
+            this.sessions.Clear();
+            this.sessionsPerIConnection.Clear();            
         }
 
         /// <summary>

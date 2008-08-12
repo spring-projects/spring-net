@@ -79,6 +79,23 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// Return the innermost target Session of the given Session. If the given
+        /// Session is a decorated session, it will be unwrapped until a non-decorated
+        /// Session is found. Otherwise, the passed-in Session will be returned as-is.
+        /// </summary>
+        /// <param name="session">The session to unwrap</param>
+        /// <returns>The innermost target Session, or the passed-in one if no decorator</returns>
+        public static ISession GetTargetSession(ISession session)
+        {
+            ISession sessionToUse = session;
+            while (sessionToUse is IDecoratorSession)
+            {
+                sessionToUse = ((IDecoratorSession) sessionToUse).TargetSession;
+            }
+            return sessionToUse;
+        }
+
+        /// <summary>
         /// Determines whether the given JMS Session is transactional, that is,
         /// bound to the current thread by Spring's transaction facilities.
         /// </summary>
@@ -214,7 +231,7 @@ namespace Spring.Messaging.Nms.Connections
             if (resourceHolderToUse != resourceHolder)
             {
                 TransactionSynchronizationManager.RegisterSynchronization(
-                    new MessageResourceSynchronization(resourceKey, resourceHolderToUse,
+                    new NmsResourceSynchronization(resourceHolderToUse, resourceKey,
                                                    resourceFactory.SynchedLocalTransactionAllowed));
                 resourceHolderToUse.SynchronizedWithTransaction = true;
                 TransactionSynchronizationManager.BindResource(resourceKey, resourceHolderToUse);
@@ -329,7 +346,7 @@ namespace Spring.Messaging.Nms.Connections
 
         /// <summary> Callback for resource cleanup at the end of a non-native NMS transaction
         /// </summary>
-        private class MessageResourceSynchronization : TransactionSynchronizationAdapter
+        private class NmsResourceSynchronization : TransactionSynchronizationAdapter
         {
             private object resourceKey;
 
@@ -339,7 +356,7 @@ namespace Spring.Messaging.Nms.Connections
 
             private bool holderActive = true;
 
-            public MessageResourceSynchronization(object resourceKey, NmsResourceHolder resourceHolder, bool transacted)
+            public NmsResourceSynchronization(NmsResourceHolder resourceHolder, object resourceKey, bool transacted)
             {
                 this.resourceKey = resourceKey;
                 this.resourceHolder = resourceHolder;

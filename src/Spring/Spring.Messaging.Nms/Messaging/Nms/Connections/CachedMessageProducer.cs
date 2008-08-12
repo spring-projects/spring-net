@@ -24,8 +24,8 @@ using Apache.NMS;
 namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
-    /// MessageProducer decorator that adapts specific settings
-    /// to a shared MessageProducer instance underneath.
+    /// MessageProducer decorator that adapts calls to a shared MessageProducer
+    /// instance underneath, managing QoS settings locally within the decorator.
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
@@ -33,16 +33,9 @@ namespace Spring.Messaging.Nms.Connections
     {
         private readonly IMessageProducer target;
 
-        private bool disableMessageID;
-
         private object originalDisableMessageID = null;
 
-        private bool disableMessageTimestamp;
-
         private object originalDisableMessageTimestamp = null;
-
-        //Not part of NMS spce
-        //private int deliveryMode;
 
         private bool persistent;
 
@@ -58,6 +51,9 @@ namespace Spring.Messaging.Nms.Connections
         public CachedMessageProducer(IMessageProducer target)
         {
             this.target = target;
+            this.persistent = target.Persistent;
+            this.priority = target.Priority;
+            this.timeToLive = target.TimeToLive;
         }
 
 
@@ -220,15 +216,15 @@ namespace Spring.Messaging.Nms.Connections
         {
             get
             {
-                return disableMessageID;
+                return target.DisableMessageID;
             }
             set
             {
                 if (originalDisableMessageID == null)
                 {
-                    originalDisableMessageID = value;
+                    originalDisableMessageID = target.DisableMessageID;
                 }
-                disableMessageID = value;
+                target.DisableMessageID = value;
             }
         }
 
@@ -242,15 +238,15 @@ namespace Spring.Messaging.Nms.Connections
         {
             get
             {
-                return disableMessageTimestamp;
+                return target.DisableMessageTimestamp;
             }
             set
             {
                 if (originalDisableMessageTimestamp == null)
                 {
-                    originalDisableMessageTimestamp = value;
+                    originalDisableMessageTimestamp = target.DisableMessageTimestamp;
                 }
-                disableMessageTimestamp = value;
+                target.DisableMessageTimestamp = value;
             }
         }
 
@@ -270,6 +266,16 @@ namespace Spring.Messaging.Nms.Connections
                 target.DisableMessageTimestamp = (bool) originalDisableMessageTimestamp;
                 originalDisableMessageTimestamp = null;
             }
+        }
+
+
+        /// <summary>
+        /// Returns string indicated this is a wrapped MessageProducer
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return "Cached NMS MessageProducer: " + this.target;
         }
     }
 }

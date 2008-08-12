@@ -43,7 +43,7 @@
 			<xsd:attribute name="connection-factory" type="xsd:string" default="ConnectionFactory">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-	A reference to the NMS ConnectionFactory bean.
+	A reference to the NMS ConnectionFactory object.
 	Default is "ConnectionFactory".
 					]]></xsd:documentation>
 				</xsd:annotation>

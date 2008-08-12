@@ -26,6 +26,9 @@ namespace Spring.Messaging.Nms.Connections
 
     public class TestMessageProducer : IMessageProducer
     {
+        private bool persistent;
+        private TimeSpan timeToLive = new TimeSpan(0,0,0,60,0); 
+
         public void Send(IMessage message)
         {
             throw new NotImplementedException();
@@ -83,20 +86,20 @@ namespace Spring.Messaging.Nms.Connections
 
         public bool Persistent
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return persistent; }
+            set { persistent = value; }
         }
 
         public TimeSpan TimeToLive
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return timeToLive; }
+            set { timeToLive = value; }
         }
 
         public byte Priority
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return 1; }
+            set {  }
         }
 
         public bool DisableMessageID
