@@ -40,7 +40,7 @@ namespace Spring.Messaging.Nms.Connections
     /// SessionCacheSize property in case of a high-concurrency environment.
     /// </remarks>
     /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack</author>
+    /// <author>Mark Pollack (.NET)</author>
     public class CachingConnectionFactory : SingleConnectionFactory
     {
         #region Logging Definition

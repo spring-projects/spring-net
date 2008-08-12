@@ -149,7 +149,7 @@ namespace Spring.Messaging.Nms.Connections
             IConnection connection = new TestConnection();
 
             Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
-
+            
             mocks.ReplayAll();
 
 

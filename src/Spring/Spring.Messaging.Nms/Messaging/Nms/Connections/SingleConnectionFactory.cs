@@ -275,15 +275,14 @@ namespace Spring.Messaging.Nms.Connections
             {
                 con.ClientId = ClientId;
             }
-            if (ExceptionListener != null || ReconnectOnException)
+            if (reconnectOnException)
             {
-                IExceptionListener listenerToUse = ExceptionListener;
-                if (ReconnectOnException)
-                {
-                    //add reconnect exception handler first.
-                    con.ExceptionListener += new ExceptionListener(this.OnException);
-                }
-                con.ExceptionListener += new ExceptionListener(listenerToUse.OnException);                              
+                //add reconnect exception handler first to exception chain.
+                con.ExceptionListener += new ExceptionListener(this.OnException);
+            }
+            if (ExceptionListener != null)
+            {
+                con.ExceptionListener += new ExceptionListener(ExceptionListener.OnException);                
             }
         }
 

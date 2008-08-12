@@ -898,7 +898,7 @@ namespace Spring.Messaging.Nms.Core
         {
             CheckMessageConverter();
             Send(destinationName, new ConvertAndSendMessageCreator(this, message, postProcessor));
-  
+
         }
 
         /// <summary> Receive a message synchronously from the default destination, but only

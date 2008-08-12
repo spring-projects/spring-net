@@ -23,7 +23,7 @@
   <object id="SimpleMessageListener" type="Spring.Messaging.Nms.Integration.SimpleMessageListener, Spring.Messaging.Nms.Tests"/>
 
 
-  <object name="NmsTemplate" type="Spring.Messaging.Nms.NmsTemplate, Spring.Messaging.Nms">
+  <object name="NmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">
     <property name="ConnectionFactory" ref="ConnectionFactory"/>
     <property name="DefaultDestinationName" value="test.queue"/>
   </object>

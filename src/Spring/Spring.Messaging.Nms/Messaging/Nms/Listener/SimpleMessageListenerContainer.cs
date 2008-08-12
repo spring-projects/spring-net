@@ -192,7 +192,7 @@ namespace Spring.Messaging.Nms.Listener
         public void OnException(Exception exception)
         {
             // First invoke the user-specific ExceptionListener, if any.
-            //InvokeExceptionListener(exception);
+            InvokeExceptionListener(exception);
             // now try to recover the shared Connection and all consumers...
             if (logger.IsInfoEnabled)
             {
