@@ -23,6 +23,7 @@
 <!ENTITY ajax         SYSTEM "ajax.xml">
 <!ENTITY services     SYSTEM "services.xml">
 <!ENTITY webservices  SYSTEM "webservices.xml">
+<!ENTITY wcf          SYSTEM "wcf.xml">
 <!ENTITY threading    SYSTEM "threading.xml">
 <!ENTITY pool         SYSTEM "pool.xml">
 <!ENTITY preface      SYSTEM "preface.xml">
@@ -285,12 +286,16 @@
 				<listitem>
 					<xref linkend="webservices" />
 				</listitem>
+				<listitem>
+					<xref linkend="wcf" />
+				</listitem>
 			</itemizedlist>
 		</partintro>
 		&psa-intro;
 		&remoting;
 		&services;
 		&webservices;
+		&wcf;
 	</part> 
 
 	<part id="spring-integration">

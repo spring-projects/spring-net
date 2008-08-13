@@ -44,13 +44,14 @@
 
       <listitem>
         <para>SonicMQ in namespace <literal>Spring.Messaging.Sonic</literal>,
-        'Jms' is sometimes used as the class prefix.</para>
+        'Jms' is sometimes used as the class prefix. (available 1.2
+        RC1)</para>
       </listitem>
 
       <listitem>
         <para>Websphere MQ in namespace
         <literal>Spring.Messaging.Xms</literal>, 'Xms' is sometimes used as
-        the class prefix</para>
+        the class prefix (available 1.2 RC1)</para>
       </listitem>
     </orderedlist>
 
@@ -1270,17 +1271,19 @@ namespace MyApp
             <row>
               <entry>recovery-interval</entry>
 
-              <entry><para>The time interval between connection recovery attempts.  The default is 5 seconds.
-	      Specify as a TimeSpan value using Spring's TimeSpanConverter (e.g. 10s, 10m, 3h, etc)
-	      </para></entry>
+              <entry><para>The time interval between connection recovery
+              attempts. The default is 5 seconds. Specify as a TimeSpan value
+              using Spring's TimeSpanConverter (e.g. 10s, 10m, 3h, etc)
+              </para></entry>
             </row>
 
             <row>
               <entry>max-recovery-time</entry>
 
-              <entry><para>The maximum time try reconnection attempts.  The default is 10 minutes.  Specify as a
-	      TimeSpan value using Spring's TimeSpanConverter (e.g. 10s, 10m, 3h, etc)
-	      </para></entry>
+              <entry><para>The maximum time try reconnection attempts. The
+              default is 10 minutes. Specify as a TimeSpan value using
+              Spring's TimeSpanConverter (e.g. 10s, 10m, 3h, etc)
+              </para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1300,7 +1303,7 @@ namespace MyApp
     implementation. The most important resource to cache is the JMS Connection
     since the flow of events in the message template class (EmsTemplate) is to
     create/close a connection on each operation and this is an expensive
-    operation. </para>
+    operation.</para>
 
     <para>Spring provides a convenience class, SingleConnectionFactory, in
     which the same Connection is returned on calls to CreateConnection() and
