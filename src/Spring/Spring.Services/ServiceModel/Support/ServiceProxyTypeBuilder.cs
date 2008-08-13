@@ -27,7 +27,6 @@ using System.Reflection.Emit;
 
 using Spring.Proxy;
 using Spring.Context;
-using Spring.Context.Support;
 using Spring.Objects.Factory;
 
 #endregion
@@ -77,6 +76,14 @@ namespace Spring.ServiceModel.Support
 
         #region Protected Methods
 
+        /// <summary>
+        /// Creates a proxy that delegates calls to an instance of the
+        /// target object.  This overriden implementation also sets the field __applicationContext.
+        /// </summary>
+        /// <exception cref="System.ArgumentException">
+        /// If the <see cref="IProxyTypeBuilder.TargetType"/>
+        /// does not implement any interfaces.
+        /// </exception>
         public override Type BuildProxyType()
         {
             Type proxyType = base.BuildProxyType();
@@ -119,7 +126,7 @@ namespace Spring.ServiceModel.Support
         }
 
         /// <summary>
-        /// Creates an appropriate type builder.
+        /// Creates an appropriate type builder. Add a field to hold a reference to the application context.
         /// </summary>
         /// <param name="name">The name to use for the proxy type name.</param>
         /// <param name="baseType">The type to extends if provided.</param>

@@ -34,41 +34,95 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.ServiceModel.Dispatcher
+namespace Spring.ServiceModel.Support
 {
+    /// <summary>
+    /// An implementation of IServiceBehavior that applies the <see cref="SpringInstanceProvider"/> to all endpoints.
+    /// </summary>
+    /// <author>Bruno Baia</author>
     public class SpringServiceBehavior : IServiceBehavior
     {
-        public SpringInstanceProvider InstanceProvider { get; set; }
+        private SpringInstanceProvider springInstanceProvider;
 
-        public string ContextName { get; set; }
+        private string contextName;
 
-        public SpringServiceBehavior()
+        /// <summary>
+        /// Gets or sets the spring instance provider.
+        /// </summary>
+        /// <value>The spring instance provider.</value>
+        public SpringInstanceProvider InstanceProvider
+        {
+            get { return springInstanceProvider; }
+        }
+
+
+        /// <summary>
+        /// Gets the name of the spring context used when creating this behavior.
+        /// </summary>
+        /// <value>The name of the context.</value>
+        public string ContextName
+        {
+            get { return contextName; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpringServiceBehavior"/> class and initializes the
+        /// SpringInstanceProvider
+        /// </summary>
+        public SpringServiceBehavior() : this((string)null)
+        {
+            springInstanceProvider = new SpringInstanceProvider(ContextRegistry.GetContext());
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpringServiceBehavior"/> class with a given Spring
+        /// context name.
+        /// </summary>
+        /// <param name="contextName">Name of the context.</param>
+        public SpringServiceBehavior(string contextName)
         {
             IApplicationContext applicationContext;
-            if (StringUtils.IsNullOrEmpty(ContextName))
+            if (StringUtils.IsNullOrEmpty(contextName))
             {
                 applicationContext = ContextRegistry.GetContext();
             }
             else
             {
-                applicationContext = ContextRegistry.GetContext(ContextName);
+                applicationContext = ContextRegistry.GetContext(contextName);
             }
-
-            InstanceProvider = new SpringInstanceProvider(applicationContext);
+            this.contextName = contextName;
+            springInstanceProvider = new SpringInstanceProvider(applicationContext);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpringServiceBehavior"/> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
         public SpringServiceBehavior(IApplicationContext applicationContext)
         {
-            InstanceProvider = new SpringInstanceProvider(applicationContext);
+            springInstanceProvider = new SpringInstanceProvider(applicationContext);
         }
 
         #region IServiceBehavior Members
 
+        /// <summary>
+        /// Provides the ability to pass custom data to binding elements to support the contract implementation.
+        /// No-op implementation
+        /// </summary>
+        /// <param name="serviceDescription">The service description of the service.</param>
+        /// <param name="serviceHostBase">The host of the service.</param>
+        /// <param name="endpoints">The service endpoints.</param>
+        /// <param name="bindingParameters">Custom objects to which binding elements have access.</param>
         public void AddBindingParameters(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase, 
             Collection<ServiceEndpoint> endpoints, BindingParameterCollection bindingParameters)
         {
         }
 
+        /// <summary>
+        /// Add the SpringInstanceProvider to all endpoint dispatcher.
+        /// </summary>
+        /// <param name="serviceDescription">The service description.</param>
+        /// <param name="serviceHostBase">The host that is currently being built.</param>
         public void ApplyDispatchBehavior(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
         {
             foreach (ChannelDispatcherBase cdb in serviceHostBase.ChannelDispatchers)
@@ -85,6 +139,14 @@ namespace Spring.ServiceModel.Dispatcher
             }
         }
 
+        /// <summary>
+        /// Provides the ability to inspect the service host and the service description to confirm that the service can run successfully.        
+        /// </summary>
+        /// <remarks>
+        /// No-op implementation
+        /// </remarks>
+        /// <param name="serviceDescription">The service description.</param>
+        /// <param name="serviceHostBase">The service host that is currently being constructed.</param>
         public void Validate(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
         {
         }

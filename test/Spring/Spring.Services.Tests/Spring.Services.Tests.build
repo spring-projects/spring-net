@@ -7,6 +7,7 @@
       * current.build.defines.csc - framework-specific build defines for C# compiler
 -->
   <target name="build">
+    <echo message="current.bin.dir = ${current.bin.dir}"/>
     <!-- build Spring.Services.Tests -->
     <csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
@@ -27,6 +28,7 @@
       </resources>
       <references basedir="${current.bin.dir}">
         <include name="*.dll" />
+        <include if="${net-3.0.installed}" name="${net-3.0.ReferenceInstallPath}\System.ServiceModel.dll" />-->
         <exclude name="${project::get-name()}.dll" />
 	<exclude name="CloverRuntime.dll" />
       </references>

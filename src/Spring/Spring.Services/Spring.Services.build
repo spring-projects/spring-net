@@ -8,9 +8,6 @@
 -->
   <target name="build">
     
-    <!-- TO REMOVE : for .NET 3.0 build -->
-    <!--<property if="${net-2.0}" name="current.build.defines.csc" value="${current.build.defines.csc},NET_3_0" />-->
-
     <!-- build Spring.Services -->
     <csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
@@ -41,9 +38,7 @@
         <include name="Spring.Aop.dll" />
         <include name="Spring.Web.dll" />
         <include name="System.Web.Services.dll" />
-
-        <!-- TO REMOVE : for .NET 3.0 build -->
-        <!--<include if="${net-2.0}" name="C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.ServiceModel.dll" />-->
+        <include if="${net-3.0.installed}" name="${net-3.0.ReferenceInstallPath}\System.ServiceModel.dll" />-->
         
       </references>
     </csc>

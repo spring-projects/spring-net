@@ -30,7 +30,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -120,6 +120,7 @@
     <Compile Include="Remoting\SimpleCounter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ServiceModel\ServiceExporterTests.cs" />
     <Compile Include="Web\Services\WebServiceProxyFactoryTests.cs" />
     <EmbeddedResource Include="Data\Spring\Web\Services\rpc-literal.wsdl" />
     <EmbeddedResource Include="Data\Spring\Web\Services\document-literal.wsdl" />
@@ -176,9 +177,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Spring\Remoting\saoSingleton-aop.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ServiceModel\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

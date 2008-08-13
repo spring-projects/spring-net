@@ -252,6 +252,24 @@
     </if>
   </target>
 
+  <target name="compile-build-3.0" description="Builds for .NET 3.0 if available">
+
+    <if test="${net-3.0.installed}">
+      <call target="compile-net-3.0"/>
+    </if>
+
+    <if test="${not net-3.0.installed}">
+      <if test="${property::exists('project.build.package') and project.build.package}">
+        .NET 3.0 Build Skipped for Package
+        <fail message="The .NET Framework 3.0 is not available."/>
+        <echo message="The .NET Framework 3.0 is not available. Build skipped during package."/>
+      </if>
+      <if test="${not(property::exists('project.build.package') and project.build.package)}">
+        <echo message="The .NET Framework 3.0 is not available. Build skipped."/>
+      </if>
+    </if>
+  </target>
+
 
   <!-- Targets for other .NET frameworks -->
 
@@ -377,6 +395,19 @@
     <call target="compile-test" />
   </target>
 
+  <target name="compile-net-3.0" description="Builds .NET Framework 3.0 version"
+          depends="set-net-3.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+    <call target="copykeys" if="${project.build.sign}"/>
+    <call target="common.generate-assemblyinfo"/>
+    <property name="build-nms" value="false" />
+    <property name="build-ems" value="false" />
+    <property name="build-ems-tests" value="false" />
+    <property name="build-quartz" value="false" />
+    <property name="build-msmq" value="false" />
+    <property name="build-msmq-tests" value="false" />
+    <call target="compile-test" />
+  </target>
+
   <target name="compile-mono-2.0" description="Builds MONO Framework 2.0 version"
           depends="set-mono-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
     <call target="copykeys" if="${project.build.sign}"/>
@@ -486,6 +517,25 @@
     <echo message="--------------------------"/>
       <call target="set-release-build-configuration"/>
       <call target="compile-build-2.0"/>
+    </if>
+  </target>
+
+
+  <target name="build-3.0">
+    <call target="set-build-namespaces-release"/>
+    <echo message="------------------------"/>
+    <echo message="Building .NET 3.0 DEBUG "/>
+    <echo message="------------------------"/>
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-3.0"/>
+
+
+    <if test="${property::exists('project.build.package') and project.build.package}">
+    <echo message="--------------------------"/>
+    <echo message="Building .NET 3.0 RELEASE "/>
+    <echo message="--------------------------"/>
+      <call target="set-release-build-configuration"/>
+      <call target="compile-build-3.0"/>
     </if>
   </target>
 
@@ -689,6 +739,7 @@
     <call target="${nant.target.root.name}-1.0" /> 
     <call target="${nant.target.root.name}-1.1" />
     <call target="${nant.target.root.name}-2.0" />
+    <call target="${nant.target.root.name}-3.0" />
 
     <!-- ignore Mono 2.0 for now -->
     <!-- <call target="${nant.target.root.name}-mono-2.0" /> -->
@@ -915,11 +966,22 @@
           <include name="**/Common.Logging.dll"/>
           <include name="**/Common.Logging.*.dll"/>
 
+	  <exclude name="**/3.0/**"/>
 	  <exclude name="**/release/Spring/**"/>
 	  <exclude name="**/debug/Spring/**"/>
           <exclude name="**/examples/**"/>
           <exclude name="**/results/**"/>
           <exclude name="mono/**"/>
+        </fileset>
+      </copy>
+    </if>
+
+    <if test="${net-3.0.installed}">
+      <copy todir="${current.package.dir}/bin/net">
+        <fileset basedir="./build/net">
+          <include name="**/Spring.Services.dll"/>
+          <include name="**/Spring.Services.xml"/>
+          <include name="**/Spring.Services.pdb"/>
         </fileset>
       </copy>
     </if>

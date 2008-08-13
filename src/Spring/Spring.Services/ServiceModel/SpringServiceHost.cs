@@ -27,7 +27,6 @@ using Spring.Util;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.ServiceModel.Support;
-using Spring.ServiceModel.Dispatcher;
 
 #endregion
 
@@ -41,7 +40,18 @@ namespace Spring.ServiceModel
     {
         private bool useSpringServiceBehavior = false;
 
-        public IApplicationContext ApplicationContext { get; set; }
+        private IApplicationContext applicationContext;
+
+
+        /// <summary>
+        /// Gets or sets the application context.
+        /// </summary>
+        /// <value>The application context.</value>
+        public IApplicationContext ApplicationContext
+        {
+            get { return applicationContext; }
+            set { applicationContext = value; }
+        }
 
         #region Constructor(s) / Destructor
 
@@ -78,11 +88,23 @@ namespace Spring.ServiceModel
             ApplicationContext = applicationContext;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpringServiceHost"/> class.
+        /// </summary>
+        /// <remarks>Calls the contructor with an IApplicationContext argument.</remarks>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="baseAddresses">The base addresses.</param>
         public SpringServiceHost(Type serviceType, params Uri[] baseAddresses)
             : this(serviceType, GetApplicationContext(null), baseAddresses)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpringServiceHost"/> class.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="applicationContext">The application context.</param>
+        /// <param name="baseAddresses">The base addresses.</param>
         public SpringServiceHost(Type serviceType, IApplicationContext applicationContext, params Uri[] baseAddresses)
             : base(serviceType, baseAddresses)
         {
@@ -116,6 +138,10 @@ namespace Spring.ServiceModel
 
         #endregion
 
+        /// <summary>
+        /// Invoked during the transition of a communication object into the opening state.  
+        /// Adds the SpringServiceBehavior.
+        /// </summary>
         protected override void OnOpening()
         {
             if (this.useSpringServiceBehavior && 

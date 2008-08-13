@@ -30,7 +30,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0</DefineConstants>
     <DocumentationFile>Spring.Services.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -40,7 +40,7 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>

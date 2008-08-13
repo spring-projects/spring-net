@@ -23,19 +23,15 @@
 
 using System;
 using System.ServiceModel;
-using System.ServiceModel.Activation;
-
-using Spring.Util;
 using Spring.Context;
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Config;
 
 #endregion
 
 namespace Spring.ServiceModel.Activation
 {
     /// <summary>
-    /// Factory that provides instances of <see cref="Spring.ServiceModel.ServiceHost" /> 
+    /// Factory that provides instances of <see cref="ServiceHost" /> 
     /// to host objects created with Spring's IoC container.
     /// </summary>
     /// <author>Bruno Baia</author>
@@ -198,6 +194,9 @@ namespace Spring.ServiceModel.Activation
 
         #region IDisposable Members
 
+        /// <summary>
+        /// Close the SpringServiceHost
+        /// </summary>
         public void Dispose()
         {
             if (springServiceHost != null)
