@@ -45,6 +45,8 @@ namespace Spring.Data
     {
         private static readonly string CURRENT_DBPROVIDER_SLOTNAME = Spring.Util.UniqueKey.GetTypeScopedString(typeof(MultiDelegatingDbProvider), "Current");
 
+        private IDbProvider defaultDbProvider;
+
         private IDictionary targetDbProviders = new SynchronizedHashtable();
 
         #region Constructors
@@ -66,6 +68,15 @@ namespace Spring.Data
         }
 
         #endregion
+
+        /// <summary>
+        /// Sets the default IDbProvider. This will be returned if no DbProvider is found in thread local storage.
+        /// </summary>
+        /// <value>The default db provider.</value>
+        public IDbProvider DefaultDbProvider
+        {
+            set { defaultDbProvider = value; }
+        }
 
         /// <summary>
         /// Sets the target db providers.
@@ -260,6 +271,10 @@ namespace Spring.Data
             if (targetDbProviders.Contains(dbProviderName))
             {
                 return (IDbProvider)targetDbProviders[dbProviderName];
+            }
+            if (defaultDbProvider != null)
+            {
+                return defaultDbProvider;
             }
             throw new InvalidDataAccessApiUsageException("'" + dbProviderName + "'"
                                         + "was not under the thread local key 'dbProviderName'");
