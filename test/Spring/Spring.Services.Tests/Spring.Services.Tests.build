@@ -28,7 +28,7 @@
       </resources>
       <references basedir="${current.bin.dir}">
         <include name="*.dll" />
-        <include if="${net-3.0.installed}" name="${net-3.0.ReferenceInstallPath}\System.ServiceModel.dll" />-->
+        <include if="${net-3.0.installed and net-3.0}" name="${net-3.0.ReferenceInstallPath}\System.ServiceModel.dll" />-->
         <exclude name="${project::get-name()}.dll" />
 	<exclude name="CloverRuntime.dll" />
       </references>

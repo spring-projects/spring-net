@@ -17,7 +17,7 @@
               value="${spring.basedir}/bin/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}/${current.build.config}"
               dynamic="true"/>
 
-
+        <property name="net-3.0" value="false"/>
 	<property name="registry.net-3.0.installed" value="0" overwrite="false"/>
 
 	<readregistry property="registry.net-3.0.installed"
@@ -384,6 +384,7 @@
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="nant.settings.currentframework" value="net-2.0"/>
         <property name="nant.settings.currentframework.number" value="2.0"/>
+	<!-- revision number used when generating assembly info -->
         <property name="nant.settings.currentframework.revisionnumber" value="3"/>
         <property name="net-2.0" value="true"/>
         <property name="net-3.0" value="true"/>
