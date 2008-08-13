@@ -155,7 +155,13 @@ namespace Spring.Core.TypeConversion
                     throw new TypeMismatchException(
                         CreatePropertyChangeEventArgs(propertyName, null, newValue), requiredType, ex);
                 }
+#if NET_2_0
+                if (newValue == null 
+                    && (requiredType == null 
+                        || !Type.GetType("System.Nullable`1").Equals(requiredType.GetGenericTypeDefinition())))
+#else                
                 if (newValue == null)
+#endif
                 {
                     throw new TypeMismatchException(
                         CreatePropertyChangeEventArgs(propertyName, null, newValue), requiredType);
