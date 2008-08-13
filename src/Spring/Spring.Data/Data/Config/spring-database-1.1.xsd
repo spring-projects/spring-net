@@ -187,6 +187,11 @@
               <xs:documentation>IBM iSeries DB2 Data Provider 10.0.0.0</xs:documentation>
             </xs:annotation>
           </xs:enumeration>
+          <xs:enumeration value="SQLite">
+            <xs:annotation>
+              <xs:documentation>Latest SQLite provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>          
           <xs:enumeration value="SQLite-1.0.43">
             <xs:annotation>
               <xs:documentation>SQLite 1.0.43 provider</xs:documentation>
@@ -195,6 +200,16 @@
           <xs:enumeration value="SQLite-1.0.44">
             <xs:annotation>
               <xs:documentation>SQLite 1.0.44 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SQLite-1.0.47">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.47 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>          
+          <xs:enumeration value="SQLite-1.0.56">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.56 provider</xs:documentation>
             </xs:annotation>
           </xs:enumeration>
           <xs:enumeration value="SybaseAse-12">
