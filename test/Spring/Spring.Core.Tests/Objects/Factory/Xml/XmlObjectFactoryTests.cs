@@ -1089,12 +1089,11 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [Ignore("FIX AUTOWIRING!")]
         public void Autowire()
         {
             XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("autowire.xml", GetType()));
             TestObject spouse = new TestObject("kerry", 0);
-            xof.RegisterSingleton("spouse", spouse);
+            xof.RegisterSingleton("Spouse", spouse);
             DoTestAutowire(xof);
         }
 
@@ -1121,13 +1120,15 @@ namespace Spring.Objects.Factory.Xml
 #endif
         }
 
+        [Test]
+        [Ignore("SPRNET-1005")]
         public void AutowireWithParent()
         {
             XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("autowire.xml", GetType()));
             DefaultListableObjectFactory lbf = new DefaultListableObjectFactory();
             MutablePropertyValues pvs = new MutablePropertyValues();
-            pvs.Add("name", "kerry");
-            lbf.RegisterObjectDefinition("spouse", new RootObjectDefinition(typeof(TestObject), pvs));
+            pvs.Add("Name", "kerry");
+            lbf.RegisterObjectDefinition("Spouse", new RootObjectDefinition(typeof(TestObject), pvs));
             xof.ParentObjectFactory = lbf;
             DoTestAutowire(xof);
         }
@@ -1135,7 +1136,7 @@ namespace Spring.Objects.Factory.Xml
         private void DoTestAutowire(XmlObjectFactory xof)
         {
             DependenciesObject rod1 = (DependenciesObject) xof.GetObject("rod1");
-            TestObject kerry = (TestObject) xof.GetObject("spouse");
+            TestObject kerry = (TestObject) xof.GetObject("Spouse");
             // Should have been autowired
             Assert.AreEqual(kerry, rod1.Spouse);
 
@@ -1172,7 +1173,7 @@ namespace Spring.Objects.Factory.Xml
 
             DependenciesObject rod5 = (DependenciesObject) xof.GetObject("rod5");
             // Should not have been autowired
-            Assert.IsNotNull(rod5.Spouse);
+            Assert.IsNull(rod5.Spouse);
 
             /* TODO include basc in
             IObjectFactory appCtx = (IObjectFactory) xof.GetObject("childAppCtx");
