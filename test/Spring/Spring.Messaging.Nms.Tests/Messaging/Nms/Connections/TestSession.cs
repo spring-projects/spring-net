@@ -59,7 +59,17 @@ namespace Spring.Messaging.Nms.Connections
             return new TestMessageProducer();
         }
 
+        public IMessageProducer CreateProducer(IDestination destination, TimeSpan requestTimeout)
+        {
+            throw new NotImplementedException();
+        }
+
         public IMessageConsumer CreateConsumer(IDestination destination)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IMessageConsumer CreateConsumer(IDestination destination, TimeSpan requestTimeout)
         {
             throw new NotImplementedException();
         }
@@ -71,12 +81,39 @@ namespace Spring.Messaging.Nms.Connections
             return msgConsumer;
         }
 
+        public IMessageConsumer CreateConsumer(IDestination destination, string selector, TimeSpan requestTimeout)
+        {
+            throw new NotImplementedException();
+        }
+
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal)
         {
             throw new NotImplementedException();
         }
 
+        public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal,
+                                               TimeSpan requestTimeout)
+        {
+            throw new NotImplementedException();
+        }
+
         public IMessageConsumer CreateDurableConsumer(ITopic destination, string name, string selector, bool noLocal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IMessageConsumer CreateDurableConsumer(ITopic destination, string name, string selector, bool noLocal,
+                                                      TimeSpan requestTimeout)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteDurableConsumer(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteDurableConsumer(string name, TimeSpan requestTimeout)
         {
             throw new NotImplementedException();
         }

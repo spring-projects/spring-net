@@ -43,6 +43,8 @@ namespace Spring.Messaging.Nms.Connections
 
         private TimeSpan timeToLive;
 
+        private TimeSpan requestTimeout;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedMessageProducer"/> class.
@@ -198,6 +200,17 @@ namespace Spring.Messaging.Nms.Connections
             set { timeToLive = value; }
         }
 
+
+        /// <summary>
+        /// Gets or sets the request timeout for the message producer.
+        /// </summary>
+        /// <value>The request timeout.</value>
+        public TimeSpan RequestTimeout
+        {
+            get { return requestTimeout; }
+            set { requestTimeout = value; }
+        }
+
         /// <summary>
         /// Gets or sets the priority of messages sent with this producer.
         /// </summary>
@@ -253,7 +266,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <summary>
         /// Reset properties.
         /// </summary>
-        public void Dispose()
+        public void Close()
         {
             // It's a cached MessageProducer... reset properties only.
             if (originalDisableMessageID != null)
@@ -266,6 +279,14 @@ namespace Spring.Messaging.Nms.Connections
                 target.DisableMessageTimestamp = (bool) originalDisableMessageTimestamp;
                 originalDisableMessageTimestamp = null;
             }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            target.Dispose();
         }
 
 

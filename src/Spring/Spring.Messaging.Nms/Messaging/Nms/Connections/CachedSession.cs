@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using Apache.NMS;
 using Common.Logging;
@@ -125,7 +126,7 @@ namespace Spring.Messaging.Nms.Connections
         /// Creates the producer, potentially returning a cached instance.
         /// </summary>
         /// <param name="destination">The destination.</param>
-        /// <returns></returns>
+        /// <returns>A message producer.</returns>
         public IMessageProducer CreateProducer(IDestination destination)
         {
             if (shouldCacheProducers)
@@ -163,6 +164,19 @@ namespace Spring.Messaging.Nms.Connections
             {
                 return target.CreateProducer(destination);
             }
+        }
+
+
+        /// <summary>
+        /// Creates the producer given the destinaton and requst timeout, potentially returning a cached instance.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="requestTimeout">The request timeout.</param>
+        /// <returns>The message producer</returns>
+        public IMessageProducer CreateProducer(IDestination destination, TimeSpan requestTimeout)
+        {
+            LOG.Warn("RequestTimeout for Producers created from CachedSession not yet supported");
+            return CreateProducer(destination, requestTimeout);
         }
 
         /// <summary>
@@ -256,46 +270,88 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
-        /// Creates the consumer.
+        /// Creates the consumer, potentially returning a cached instance. 
         /// </summary>
         /// <param name="destination">The destination.</param>
-        /// <returns></returns>
+        /// <returns>A message consumer</returns>
         public IMessageConsumer CreateConsumer(IDestination destination)
         {
             return CreateConsumer(destination, null, false, null);
         }
 
+
         /// <summary>
-        /// Creates the consumer.
+        /// Creates the consumer for the given destinaton and request timeout, potentially returning a cached instance. 
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="requestTimeout">The request timeout.</param>
+        /// <returns>A message consumer</returns>
+        public IMessageConsumer CreateConsumer(IDestination destination, TimeSpan requestTimeout)
+        {
+            LOG.Warn("RequestTimeout not yet supported in CachedSesion.");
+            return CreateConsumer(destination, null, false, null);
+        }
+
+        /// <summary>
+        /// Creates the consumer, potentially returning a cached instance. 
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="selector">The selector.</param>
-        /// <returns></returns>
+        /// <returns>A message consumer</returns>
         public IMessageConsumer CreateConsumer(IDestination destination, string selector)
         {
             return CreateConsumer(destination, selector, false, null);
         }
 
         /// <summary>
-        /// Creates the consumer.
+        /// Creates the consumer, potentially returning a cached instance.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="selector">The selector.</param>
+        /// <param name="requestTimeout">The request timeout.</param>
+        /// <returns>A message consumer.</returns>
+        public IMessageConsumer CreateConsumer(IDestination destination, string selector, TimeSpan requestTimeout)
+        {
+            LOG.Warn("RequestTimeout not yet supported in CachedSesion.");
+            return CreateConsumer(destination, selector, false, null);
+        }
+
+        /// <summary>
+        /// Creates the consumer, potentially returning a cached instance.
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="selector">The selector.</param>
         /// <param name="noLocal">if set to <c>true</c> [no local].</param>
-        /// <returns></returns>
+        /// <returns>A message consumer.</returns>
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal)
         {
             return CreateConsumer(destination, selector, noLocal, null);
         }
 
+
         /// <summary>
-        /// Creates the durable consumer.
+        /// Creates the consumer, potentially returning a cached instance.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="selector">The selector.</param>
+        /// <param name="noLocal">if set to <c>true</c> [no local].</param>
+        /// <param name="requestTimeout">The request timeout.</param>
+        /// <returns>A message consumer</returns>
+        public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal,
+                                               TimeSpan requestTimeout)
+        {
+            LOG.Warn("RequestTimeout not yet supported in CachedSesion.");
+            return CreateConsumer(destination, selector, noLocal, null);
+        }
+
+        /// <summary>
+        /// Creates the durable consumer, potentially returning a cached instance.
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="subscription">The name of the durable subscription.</param>
         /// <param name="selector">The selector.</param>
         /// <param name="noLocal">if set to <c>true</c> [no local].</param>
-        /// <returns></returns>
+        /// <returns>A message consumer</returns>
         public IMessageConsumer CreateDurableConsumer(ITopic destination, string subscription, string selector, bool noLocal)
         {
             this.transactionOpen = true;
@@ -307,6 +363,43 @@ namespace Spring.Messaging.Nms.Connections
             {
                 return target.CreateDurableConsumer(destination, subscription, selector, noLocal);
             }
+        }
+
+
+        /// <summary>
+        /// Creates the durable consumer, potentially returning a cached instance.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="selector">The selector.</param>
+        /// <param name="noLocal">if set to <c>true</c> [no local].</param>
+        /// <param name="requestTimeout">The request timeout.</param>
+        /// <returns>A message consumer</returns>
+        public IMessageConsumer CreateDurableConsumer(ITopic destination, string name, string selector, bool noLocal,
+                                                      TimeSpan requestTimeout)
+        {
+            LOG.Warn("RequestTimeout not yet supported in CachedSesion.");
+            return CreateDurableConsumer(destination, name, selector, noLocal);
+        }
+
+
+        /// <summary>
+        /// Deletes the durable consumer.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        public void DeleteDurableConsumer(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deletes the durable consumer.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="requestTimeout">The request timeout.</param>
+        public void DeleteDurableConsumer(string name, TimeSpan requestTimeout)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

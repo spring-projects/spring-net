@@ -326,6 +326,21 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// Template method for obtaining a (potentially cached) Session.
+        /// </summary>
+        /// <param name="con">The connection to operate on.</param>
+        /// <param name="mode">The session ack mode.</param>
+        /// <param name="requestTimeout">The request timeout.</param>
+        /// <returns>
+        /// the Session to use, or <code>null</code> to indicate
+        /// creation of a raw standard Session
+        /// </returns>
+        public virtual ISession GetSession(IConnection con, AcknowledgementMode mode, TimeSpan requestTimeout)
+        {
+            return null;
+        }
+
+        /// <summary>
         /// reate a JMS Connection via this template's ConnectionFactory.
         /// </summary>
         /// <returns></returns>
@@ -487,6 +502,17 @@ namespace Spring.Messaging.Nms.Connections
                 return session;
             }
             return target.CreateSession(acknowledgementMode);
+        }
+
+
+        public ISession CreateSession(AcknowledgementMode acknowledgementMode, TimeSpan requestTimeout)
+        {
+            ISession session = singleConnectionFactory.GetSession(target, acknowledgementMode, requestTimeout);
+            if (session != null)
+            {
+                return session;
+            }
+            return target.CreateSession(acknowledgementMode, requestTimeout);
         }
 
         #region Pass through implementations to the target connection

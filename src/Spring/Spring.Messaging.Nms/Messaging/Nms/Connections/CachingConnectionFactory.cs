@@ -253,6 +253,24 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// Template method for obtaining a (potentially cached) Session.
+        /// </summary>
+        /// <param name="con">The connection to operate on.</param>
+        /// <param name="mode">The session ack mode.</param>
+        /// <param name="requestTimeout">The request timeout.</param>
+        /// <returns>
+        /// the Session to use, or <code>null</code> to indicate
+        /// creation of a raw standard Session
+        /// </returns>
+        public override ISession GetSession(IConnection con, AcknowledgementMode mode, TimeSpan requestTimeout)
+        {
+            ISession session = GetSession(con, mode);       
+            LOG.Warn("RequestTimeout parameter not yet supported in CachingConnectionFactory");
+            return session;
+        }
+
+
+        /// <summary>
         /// Wraps the given Session so that it delegates every method call to the target session but
         /// adapts close calls. This is useful for allowing application code to
 	    /// handle a special framework Session just like an ordinary Session.

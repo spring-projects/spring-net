@@ -33,6 +33,11 @@ namespace Spring.Messaging.Nms.Connections
             return new TestSession();
         }
 
+        public ISession CreateSession(AcknowledgementMode acknowledgementMode, TimeSpan requestTimeout)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Close()
         {
             closeCount++;

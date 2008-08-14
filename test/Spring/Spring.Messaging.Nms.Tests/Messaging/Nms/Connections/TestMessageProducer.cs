@@ -27,7 +27,8 @@ namespace Spring.Messaging.Nms.Connections
     public class TestMessageProducer : IMessageProducer
     {
         private bool persistent;
-        private TimeSpan timeToLive = new TimeSpan(0,0,0,60,0); 
+        private TimeSpan timeToLive = new TimeSpan(0,0,0,60,0);
+        private TimeSpan requestTimeout;
 
         public void Send(IMessage message)
         {
@@ -45,6 +46,11 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         public void Send(IDestination destination, IMessage message, bool persistent, byte priority, TimeSpan timeToLive)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Close()
         {
             throw new NotImplementedException();
         }
@@ -94,6 +100,12 @@ namespace Spring.Messaging.Nms.Connections
         {
             get { return timeToLive; }
             set { timeToLive = value; }
+        }
+
+        public TimeSpan RequestTimeout
+        {
+            get { return requestTimeout; }
+            set { requestTimeout = value; }
         }
 
         public byte Priority
