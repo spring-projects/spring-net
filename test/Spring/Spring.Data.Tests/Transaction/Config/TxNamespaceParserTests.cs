@@ -29,6 +29,7 @@ using Spring.Aop.Config;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
+using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Transaction.Interceptor;
 
@@ -54,7 +55,11 @@ namespace Spring.Transaction.Config
         {
             Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/tx"));
             Assert.IsTrue(ctx.ContainsObjectDefinition(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME));
-            Assert.IsTrue(ctx.ContainsObjectDefinition("Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor"));
+           
+            string className = typeof(TransactionAttributeSourceAdvisor).FullName;
+            string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
+
+            Assert.IsTrue(ctx.ContainsObjectDefinition(targetName));
         }
 
 
