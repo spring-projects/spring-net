@@ -258,7 +258,7 @@
 &lt;/configuration&gt;</programlisting>
     </section>
 
-    <section id="xsd-config-body-schemas-remoting">
+    <section id="xsd-config-body-schemas-nms">
       <title>The <literal>nms</literal> messaging schema</title>
 
       <para>The <literal>nms</literal> tags are for use when you want to

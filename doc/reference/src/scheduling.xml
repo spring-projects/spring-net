@@ -140,7 +140,11 @@ public class ExampleJob extends QuartzJobObject {
 </programlisting>
 
       <note>
-        <para>By default, jobs will run in a concurrent fashion.</para>
+        <para>By default, jobs will run in a concurrent fashion. </para>
+
+        <para>Also note that when using MethodInvokingJobDetailFactoryObject
+        you can't use database persistence for Jobs. See the class
+        documentation for additional details.</para>
       </note>
     </section>
 

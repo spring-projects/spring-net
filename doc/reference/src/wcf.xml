@@ -7,7 +7,7 @@
 
     <para>Spring's WCF support allows you to configure your WCF services via
     dependency injection and add additional behavior to them using
-    Aspect-Oriented programming (AOP). </para>
+    Aspect-Oriented programming (AOP).</para>
 
     <para>There are two approaches in the 1.2 M1 release for configuring your
     services with DI which are discussed in the following sections. One
@@ -26,7 +26,7 @@
     the WcfQuickStart application in the examples directory.</para>
   </section>
 
-  <section id="Dependency Injection">
+  <section id="wcf-di">
     <title>Configuring WCF services via Dependency Injection</title>
 
     <para>In this approach the container will creates an implementation of
@@ -34,7 +34,7 @@
     instance of your service type from the Spring container. This dynamic
     proxy is then the final service type that is hosted.</para>
 
-    <section>
+    <section id="wcf-di-proxy">
       <title>Dependency Injection using dynamic proxies</title>
 
       <para>In this approach you develop your WCF services as you would
@@ -161,10 +161,13 @@
       <para>There are not many disadvantages to this approach other than the
       need to specify the service name as the name of the object definition in
       the Spring container and to ensure that singleton=false is used in the
-      object definition.</para>
+      object definition. You can also use
+      <classname>Spring.ServiceModel.Activation.ServiceHostFactory</classname>
+      to host your service inside IIS but should still refer to the service by
+      the name of the object in the Spring container.</para>
     </section>
 
-    <section>
+    <section id="wcf-di-extension-points">
       <title>Dependency Injection using WCF extensibility points.</title>
 
       <para>The second approach uses the extensibility points in WCF itself to
@@ -177,18 +180,18 @@
       and
       <classname>System.ServiceModel.Description.IServiceBehavior</classname>
       are used to integrate Spring directly into the instancing of WCF
-      services. </para>
+      services.</para>
 
       <para>Spring's implementation of
       <classname>IInstanceProvider</classname> is
-      <classname>Spring.ServiceModel.Dispatcher.SpringInstanceProvider</classname>.
+      <classname>Spring.ServiceModel.Support.SpringInstanceProvider</classname>.
       This implementation will look for an object by type in the Spring
       container and retrieve an instance configured using DI. If there is more
       than one object of the type registered with the container than an
       exception will be thrown. The
       <classname>SpringInstanceProvider</classname> is used by a custom
       service behavior class,
-      <classname>Spring.ServiceModel.Dispatcher.SpringServiceBehavior</classname>
+      <classname>Spring.ServiceModel.Support.SpringServiceBehavior</classname>
       where it is applied to all the service endpoints. This behavior is then
       added to the custom service host
       <classname>Spring.ServiceModel.Activation.SpringServiceHost</classname></para>
@@ -196,7 +199,7 @@
       <para>The service type is used to locate the object in the container. In
       your .svc file you specify the custom service host type and also the
       type of the service. Here is an example taken from the WcfQuickStart
-      application that shows the use of this approach inside IIS. </para>
+      application that shows the use of this approach inside IIS.</para>
 
       <programlisting>&lt;%@ ServiceHost Language="C#" Debug="true" Service="Spring.WcfQuickStart.CalculatorService" 
                                            Factory="Spring.ServiceModel.Activation.ServiceHostFactory" %&gt;
@@ -282,5 +285,9 @@
       <para>This will be shortened using a custom namespce in the 1.2 RC1
       release</para>
     </note>
+
+    <para>The value 'serverAppCalculatorEndpoint' refers to the name of an
+    enpoints in the &lt;client&gt; section of the standard WCF configuration
+    inside of App.config.</para>
   </section>
 </chapter>

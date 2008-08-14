@@ -189,13 +189,12 @@
       higher level than the traditional messaging APIs such as JMS and NMS
       since you are programing to a service interface and use metadata (either
       XML or attributes) to configure the messaging behavior. If you prefer to
-      use this service-oriented, RPC style approach, to messaging middleware
-      then look to see if a vendor provides a WCF binding for your messaging
-      provider. Note that even with the option of using WCF, many people
-      prefer to sit 'closer to the metal' when using messaging middleware, to
-      access specific features and functionality not available in WCF, or
-      simply because they are more comfortable with that programming
-      model.</para>
+      use this service-oriented, RPC style approach, then look to see if a
+      vendor provides a WCF binding for your messaging provider. Note that
+      even with the option of using WCF, many people prefer to sit 'closer to
+      the metal' when using messaging middleware, to access specific features
+      and functionality not available in WCF, or simply because they are more
+      comfortable with that programming model.</para>
     </section>
   </section>
 
@@ -1156,6 +1155,15 @@ namespace MyApp
               <entry><para>An optional message selector for this
               listener.</para></entry>
             </row>
+
+            <row>
+              <entry>pubsub-domain</entry>
+
+              <entry><para>An optional boolean value. Set to true for the publish-subscribe domain 
+	      (Topics) or false (the default) for point-to-point domain (Queues).  This is useful
+	      when using the default implementation for destination resolvers.
+              </para></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -1294,28 +1302,43 @@ namespace MyApp
   <section>
     <title>TIBCO EMS Specific Details</title>
 
-    <para>Caching of messaging resources is usually done by a wrapping the
-    'raw provider' provider implementation with an implementation that will
-    cache messaging resources. The resources that are candidates for caching
-    are the Connection, Session, and MessageProducer. The JMS specification
-    requires that the Connection be thread safe. The Session and
-    MessageProducer are not required to be thread safe but they are in TIBCO's
-    implementation. The most important resource to cache is the JMS Connection
-    since the flow of events in the message template class (EmsTemplate) is to
-    create/close a connection on each operation and this is an expensive
-    operation.</para>
+    <para>This section covers functionality and behavior that is different
+    than described previously and is specific to TIBCO EMS.</para>
 
-    <para>Spring provides a convenience class, SingleConnectionFactory, in
-    which the same Connection is returned on calls to CreateConnection() and
-    all calls to .Close() on the returned Connection are ignored. Since
-    TIBCO's Connection class does not have an interface nor virtual methods
-    this strategy is not possible. An alternative strategy used is to
-    'hard-code' the caching of these resources within EmsTemplate and
-    SimpleMessageContainer. This functionality is controlled by the property
-    <property>CacheJmsResources</property> and is set to true by default,
-    resulting in caching of Connection, Session, and MessageProducer. When
-    using the TIBCO EMS binding for the NMS APIs you do not need to set this
-    property and can instead use one of the wrapper implementations in Spring
-    based on the NMS API that performs caching of messaging resources.</para>
+    <section>
+      <title>Resource Management</title>
+
+      <para>Caching of messaging resources is usually done by a wrapping the
+      'raw provider' provider implementation with an implementation that will
+      cache messaging resources. The resources that are candidates for caching
+      are the Connection, Session, and MessageProducer. The JMS specification
+      requires that the Connection be thread safe. The Session and
+      MessageProducer are not required to be thread safe but they are in
+      TIBCO's implementation. The most important resource to cache is the EMS
+      Connection since the flow of events in the message template class
+      (EmsTemplate) is to create/close a connection on each operation and this
+      is an expensive operation.</para>
+
+      <para>Spring provides a convenience class, SingleConnectionFactory, in
+      which the same Connection is returned on calls to CreateConnection() and
+      all calls to .Close() on the returned Connection are ignored. Since
+      TIBCO's Connection class does not have an interface nor virtual methods
+      this strategy is not possible. An alternative strategy used is to
+      'hard-code' the caching of these resources within EmsTemplate and
+      SimpleMessageContainer. This functionality is controlled by the property
+      <property>CacheJmsResources</property> and is set to true by default,
+      resulting in caching of Connection, Session, and MessageProducer. When
+      using the TIBCO EMS binding for the NMS APIs you do not need to set this
+      property and can instead use one of the wrapper implementations in
+      Spring based on the NMS API that performs caching of messaging
+      resources.</para>
+    </section>
+
+    <section>
+      <title>Queue browsing in EmsTemplate</title>
+
+      <para>The following queue browsing operations are available on
+      EmsTemplate</para>
+    </section>
   </section>
 </chapter>

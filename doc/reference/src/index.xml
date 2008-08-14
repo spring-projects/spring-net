@@ -45,6 +45,7 @@
 <!ENTITY tx-quickstart      SYSTEM "tx-quickstart.xml">
 <!ENTITY quartz-quickstart  SYSTEM "quartz-quickstart.xml">
 <!ENTITY nms-quickstart     SYSTEM "nms-quickstart.xml">
+<!ENTITY wcf-quickstart     SYSTEM "wcf-quickstart.xml">
 <!ENTITY javadevelopers     SYSTEM "javadevelopers.xml">
 <!ENTITY misc               SYSTEM "misc.xml">
 <!ENTITY pooling-example    SYSTEM "pooling-example.xml">
@@ -59,7 +60,7 @@
     <title>The Spring.NET Framework</title>
     <subtitle>Reference Documentation</subtitle>
     <releaseinfo>Version 1.2.0 M1</releaseinfo>
-    <pubdate>Last Updated July 16, 2008</pubdate>
+    <pubdate>Last Updated August 15,2008</pubdate>
     <authorgroup>
       <author>
         <firstname>Mark</firstname>
@@ -375,6 +376,9 @@
 				<listitem>
 					<xref linkend="nms-quickstart" />
 				</listitem>
+				<listitem>
+					<xref linkend="wcf-quickstart" />
+				</listitem>
 			</itemizedlist>
 		</partintro>
 		&quickstarts;
@@ -386,6 +390,7 @@
 		&tx-quickstart;
 		&quartz-quickstart;
 		&nms-quickstart;
+		&wcf-quickstart;
 	</part>      
 	<part id="index-javadevelopers">
 		<title>Spring.NET for Java developers</title>

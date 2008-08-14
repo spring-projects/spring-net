@@ -24,9 +24,9 @@
     <classname>IJob</classname> interface represents the task you would like
     to execute. You either directly implement Quartz's
     <classname>IJob</classname> interface or a convenience base class. The
-    Quartz <classname>ITrigger</classname> controls when a job is executed,
-    for example in the wee hours of the morning every weekday (This would be
-    done using Quartz's <classname>CronTrigger</classname> implementation.)
+    Quartz <classname>Trigger</classname> controls when a job is executed, for
+    example in the wee hours of the morning every weekday . This would be done
+    using Quartz's <classname>CronTrigger</classname> implementation.
     Instances of your job are created every time the trigger fires. As such,
     in order to pass information between different job instances you stash
     data away in a hashtable that gets passed to the each Job instance upon
@@ -90,7 +90,7 @@
 
     <programlisting>  &lt;object name="exampleJob" type="Spring.Scheduling.Quartz.JobDetailObject, Spring.Scheduling.Quartz"&gt;
     &lt;property name="JobType" value="Spring.Scheduling.Quartz.Example.ExampleJob, Spring.Scheduling.Quartz.Example" /&gt;
-    &lt;!-- We can inject values throgh JobDataMap --&gt;
+    &lt;!-- We can inject values through JobDataMap --&gt;
     &lt;property name="JobDataAsMap"&gt;
       &lt;dictionary&gt;
         &lt;entry key="UserName" value="Alexandre" /&gt;
@@ -103,7 +103,7 @@
     <classname>JobDataAsMap</classname>, is used to set the values of the
     ExampleJob's properties. This will result in the ExampleJob being
     instantiated with it's UserName property value set to 'Alexandre' the
-    first time the trigger fires. </para>
+    first time the trigger fires.</para>
 
     <para>We then will schedule this job to be executed on 20 second
     increments of every minute as shown below using Spring's
@@ -174,9 +174,12 @@
   &lt;/object&gt;
 </programlisting>
 
-    <para>Note that <classname>AdminSerivce</classname> object is configured
+    <para>Note that <classname>AdminService</classname> object is configured
     using Spring as you would do normally, without consideration for Quartz.
-    The trigger associated with the jobDetail object is listed below</para>
+    The trigger associated with the jobDetail object is listed below. Also
+    note that when using MethodInvokingJobDetailFactoryObject you can't use
+    database persistence for Jobs. See the class documentation for additional
+    details.</para>
 
     <programlisting>  &lt;object id="simpleTrigger" type="Spring.Scheduling.Quartz.SimpleTriggerObject, Spring.Scheduling.Quartz"&gt;
     &lt;!-- see the example of method invoking job above --&gt;
