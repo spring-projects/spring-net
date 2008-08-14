@@ -30,6 +30,7 @@ using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Listener;
 using Spring.Objects;
+using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 
 #endregion
@@ -137,8 +138,10 @@ namespace Spring.Messaging.Nms.Config
             ITextMessage message3 = (ITextMessage)mocks.CreateMock(typeof(ITextMessage));
             mocks.Replay(message3);
             
-            //Default naming strategy is to use full type name.
-            IMessageListener listener3 = GetListener(typeof (SimpleMessageListenerContainer).FullName);
+            //Default naming strategy is to use full type name + # + number
+            string className = typeof(SimpleMessageListenerContainer).FullName;
+            string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
+            IMessageListener listener3 = GetListener(targetName);
             listener3.OnMessage(message3);
             Assert.AreSame(message3, testObject3.Message);
             mocks.Verify(message3);
