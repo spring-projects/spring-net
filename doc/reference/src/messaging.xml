@@ -252,6 +252,64 @@
           otherwise be part of a ConnectionFactory 'Wrappers' (to be discussed
           later) are provided.</para>
         </note></para>
+
+      <section>
+        <title>Caching EMS Resources</title>
+
+        <para>The class
+        Spring.Messaging.Nms.Connections.CachingConnectionFactory </para>
+      </section>
+    </section>
+
+    <section>
+      <title>Caching Messaging Resources</title>
+
+      <para>The standard API usage of NMS and other JMS inspired APIs involves
+      creating many intermediate objects. To send a message the following
+      'API' walk is performed</para>
+
+      <programlisting>IConnectionFactory-&gt;IConnection-&gt;ISession-&gt;IMessageProducer-&gt;Send</programlisting>
+
+      <para>Between the ConnectionFactory and the Send operation there are
+      three intermediate objects that are created and destroyed. To optimise
+      the resource usage and increase performance two implementations of
+      IConnectionFactory are provided. Note that the TIBCO EMS implementation
+      is not based on interfaces and an alternative strategy was selected for
+      the time being. See the last section in this manual for details.</para>
+
+      <section>
+        <title>SingleConnectionFactory</title>
+
+        <para><classname>Spring.Messaging.Nms.Connections.SingleConnectionFactory
+        </classname>will return the same connection on all calls to
+        CreateConnection and ignore calls to Close.</para>
+      </section>
+
+      <section>
+        <title>CachingConnectionFactory</title>
+
+        <para><classname>Spring.Messaging.Nms.Connections.CachingConnectionFactory</classname>
+        extends the functionality of SingleConnectionFactory and adds the
+        caching of Sessions, MessageProducers, and MessageConsumers. </para>
+
+        <para> The initial cache size is set to 1, use the property
+        <literal>SessionCacheSize</literal> to increase the number of cached
+        sessions. Note that the number of actual cached sessions will be more
+        than that number as sessions are cached based on their acknowledgment
+        mode, so there can be up to 4 cached session instances when
+        SessionCacheSize is set to one, one for each
+        <classname>AcknowledgementMode</classname>.
+        <classname>MessageProducers</classname> and
+        <classname>MessageConsumers</classname> are cached within their owning
+        session and also take into account the unique properties of the
+        producers and consumers when caching. </para>
+
+        <para><classname>MessageProducers</classname> are cached based on
+        their destination. <classname>MessageConsumers</classname> are cached
+        based on a key composed of the destination, selector, noLocal delivery
+        flag, and the durable subscription name (if creating durable
+        consumers).</para>
+      </section>
     </section>
 
     <section>
@@ -1159,9 +1217,10 @@ namespace MyApp
             <row>
               <entry>pubsub-domain</entry>
 
-              <entry><para>An optional boolean value. Set to true for the publish-subscribe domain 
-	      (Topics) or false (the default) for point-to-point domain (Queues).  This is useful
-	      when using the default implementation for destination resolvers.
+              <entry><para>An optional boolean value. Set to true for the
+              publish-subscribe domain (Topics) or false (the default) for
+              point-to-point domain (Queues). This is useful when using the
+              default implementation for destination resolvers.
               </para></entry>
             </row>
           </tbody>
