@@ -38,6 +38,12 @@ namespace Spring.Remoting
 	/// <author>Bruno Baia</author>
     public class CaoFactoryObject : IFactoryObject, IInitializingObject
     {
+        #region Logging
+
+        private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(CaoFactoryObject));
+
+        #endregion
+
 		#region Fields
 
         private string remoteTargetName;
@@ -133,7 +139,12 @@ namespace Spring.Remoting
 		/// <returns>the CAO proxy</returns>
 		public object GetObject()
 		{
-			ICaoRemoteFactory remoteFactory = (ICaoRemoteFactory) Activator.GetObject(typeof(ICaoRemoteFactory), serviceUrl.TrimEnd('/') + '/' + remoteTargetName);
+		    string url = serviceUrl.TrimEnd('/') + '/' + remoteTargetName;
+            if (LOG.IsDebugEnabled)
+            {
+                LOG.Debug("Accessing CAO object of type ICaoRemoteFactory object at url = [" + url + "]");
+            }
+			ICaoRemoteFactory remoteFactory = (ICaoRemoteFactory) Activator.GetObject(typeof(ICaoRemoteFactory), url);
 			
 			if (constructorArguments != null)
 			{
