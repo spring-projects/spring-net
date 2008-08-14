@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.springframework.net/nms/common/2008-08-05">
+  <xs:element name="TradeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Ticker" type="xs:string"/>
+        <xs:element name="Quantity" type="xs:long"/>
+        <xs:element name="Price" type="xs:decimal"/>
+        <xs:element name="OrderType" type="xs:string"/>
+        <xs:element name="ConfirmationNumber" type="xs:string"/>
+        <xs:element name="Error" type="xs:boolean"/>
+        <xs:element name="ErrorMessage" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

@@ -1,0 +1,85 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spring.MsmqQuickStart.Common</RootNamespace>
+    <AssemblyName>Spring.MsmqQuickStart.Common</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\TradeResponse.cs">
+      <DependentUpon>TradeResponse.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Data\TradeRequest.cs">
+      <DependentUpon>TradeRequest.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\src\Spring\Spring.Aop\Spring.Aop.2005.csproj">
+      <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
+      <Name>Spring.Aop.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.2005.csproj">
+      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
+      <Name>Spring.Core.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\src\Spring\Spring.Data\Spring.Data.2005.csproj">
+      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
+      <Name>Spring.Data.2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\src\Spring\Spring.Messaging\Spring.Messaging.2005.csproj">
+      <Project>{0E23AE41-D8D8-41C2-84A2-D35564049F0D}</Project>
+      <Name>Spring.Messaging.2005</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\TradeResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\TradeResponse.xsx">
+      <DependentUpon>TradeResponse.xsd</DependentUpon>
+    </None>
+    <None Include="Data\TradeRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\TradeRequest.xsx">
+      <DependentUpon>TradeRequest.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

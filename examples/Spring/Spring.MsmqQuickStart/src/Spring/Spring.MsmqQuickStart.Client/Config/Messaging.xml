@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+
+  <!-- MSMQ based implementation of technology neutral IStockServiceGateway -->
+  <object name="stockServiceGateway" type="Spring.MsmqQuickStart.Client.Gateways.MsmqStockServiceGateway, Spring.MsmqQuickStart.Client">
+    <!-- will automatically create an instance of MessageQueueTemplate based on DefaultMessageQueueObjectName-->
+    <property name="MessageQueueTemplate" ref="messageQueueTemplate"/>    
+    <property name="DefaultResponseQueueObjectName" value="responseTxQueue"/>
+  </object>
+
+  <object id="messageQueueTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+    <property name="DefaultMessageQueueObjectName" value="requestTxQueue"/>
+    <property name="MessageConverterObjectName" value="xmlMessageConverter"/>
+  </object>
+
+  <object id="xmlMessageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging">
+    <property name="TargetTypes">
+      <list>
+        <value>Spring.MsmqQuickStart.Common.Data.TradeRequest, Spring.MsmqQuickStart.Common</value>
+        <value>Spring.MsmqQuickStart.Common.Data.TradeResponse, Spring.MsmqQuickStart.Common</value>
+        <value>System.String, mscorlib</value>        
+      </list>
+    </property>
+  </object>
+
+
+  <object id="requestTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging">
+    <property name="Path" value=".\Private$\request.txqueue"/>
+    <property name="MessageReadPropertyFilterSetAll" value="true"/>
+  </object>
+
+  <object id="responseTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging">
+    <property name="Path" value=".\Private$\response.joe.txqueue"/>
+    <property name="MessageReadPropertyFilterSetAll" value="true"/>
+  </object>
+
+  <object id="deadTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging">
+    <property name="Path" value=".\Private$\dead.queue"/>
+    <property name="MessageReadPropertyFilterSetAll" value="true"/>
+  </object>
+
+
+  <!-- MSMQ Transaction Manager -->
+  <object id="messageQueueTransactionManager" type="Spring.Messaging.Core.MessageQueueTransactionManager, Spring.Messaging"/>
+
+  <!-- Message Listener Container that uses MSMQ transactional for receives -->
+  <object id="transactionalMessageListenerContainer" type="Spring.Messaging.Listener.TransactionalMessageListenerContainer, Spring.Messaging">
+    <property name="MessageQueueObjectName" value="responseTxQueue"/>
+    <property name="PlatformTransactionManager" ref="messageQueueTransactionManager"/>
+    <property name="MessageListener" ref="messageListenerAdapter"/>
+    <property name="MessageTransactionExceptionHandler" ref="sendToQueueExceptionHandler"/>
+
+  </object>
+
+  <!-- Delegate to plain .NET object for message handling -->
+  <object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging">
+    <property name="HandlerObject" ref="stockAppHandler"/>
+    <property name="DefaultHandlerMethod" value="Handle"/>
+    <property name="MessageConverterObjectName" value="xmlMessageConverter"/>
+  </object>
+
+  <object id="sendToQueueExceptionHandler" type="Spring.Messaging.Listener.SendToQueueExceptionHandler, Spring.Messaging">
+    <property name="MessageQueueObjectName" value="deadTxQueue"/>
+  </object>
+
+</objects>
