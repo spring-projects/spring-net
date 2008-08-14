@@ -2,7 +2,10 @@
 <objects xmlns="http://www.springframework.net">
 
   <object name="StockAppHandler" type="Spring.NmsQuickStart.Server.Handlers.StockAppHandler, Spring.NmsQuickStart.Server">
-
+    <constructor-arg ref="CreditCheckService"/>
+    <constructor-arg ref="ExecutionVenueService"/>
+    <constructor-arg ref="TradingService"/>
   </object>
+  
   
 </objects>

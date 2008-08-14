@@ -4,7 +4,7 @@
 
   <!-- MVC objects -->
   <object id="StockController" type="Spring.NmsQuickStart.Client.UI.StockController, Spring.NmsQuickStart.Client">    
-    <property name="StockServiceGateway" ref="StockServiceGateway"/>
+    <property name="StockService" ref="StockServiceGateway"/>
   </object>
 
   <object name="StockAppHandler" type="Spring.NmsQuickStart.Client.Handlers.StockAppHandler, Spring.NmsQuickStart.Client">

@@ -18,7 +18,7 @@ namespace Spring.NmsQuickStart.Server
                     ContextRegistry.GetContext().GetObject("MarketDataGateway") as MarketDataServiceGateway;
                 ThreadStart job = new ThreadStart(marketDataService.SendMarketData);
                 Thread thread = new Thread(job);
-                //thread.Start();
+                thread.Start();
                 Console.Out.WriteLine("--- Press <return> to quit ---");
                 Console.ReadLine();
             }

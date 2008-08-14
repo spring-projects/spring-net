@@ -11,7 +11,7 @@ namespace Spring.NmsQuickStart.Server.Gateways
         private static readonly ILog log = LogManager.GetLogger(typeof (MarketDataServiceGateway));
 
         private readonly Random random;
-        private int sleepTimeInSeconds = 2;
+        private TimeSpan sleepTimeInSeconds = new TimeSpan(0,0,0,10,0);
 
 
         public MarketDataServiceGateway()
@@ -19,7 +19,7 @@ namespace Spring.NmsQuickStart.Server.Gateways
             random = new Random();
         }
 
-        public int SleepTimeInSeconds
+        public TimeSpan SleepTimeInSeconds
         {
             set { sleepTimeInSeconds = value; }
         }
@@ -32,15 +32,15 @@ namespace Spring.NmsQuickStart.Server.Gateways
                 log.Info("Sending market data.");
                 NmsTemplate.ConvertAndSend(data);
                 log.Info("Sleeping " + sleepTimeInSeconds + " seconds before sending more market data.");
-                Thread.Sleep(sleepTimeInSeconds*1000);
+                Thread.Sleep(sleepTimeInSeconds);
             }
         }
 
         private IDictionary GenerateFakeMarketData()
         {
             IDictionary md = new Hashtable();
-            md.Add("TICKER", "CSCO");
-            md.Add("PRICE", "22" + string.Format("{0:#.###}", Math.Abs(Gaussian())));
+            md.Add("TICKER", "CSCO");            
+            md.Add("PRICE", string.Format("{0:##.##}", 22+Math.Abs(Gaussian())));
             return md;
         }
 

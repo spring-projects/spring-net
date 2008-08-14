@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <object name="CreditCheckService" type="Spring.NmsQuickStart.Server.Services.Stubs.CreditCheckServiceStub, Spring.NmsQuickStart.Server"/>
+
+  <object name="ExecutionVenueService" type="Spring.NmsQuickStart.Server.Services.Stubs.ExecutionVenueServiceStub, Spring.NmsQuickStart.Server"/>
+
+  <object name="TradingService" type="Spring.NmsQuickStart.Server.Services.Stubs.TradingServiceStub, Spring.NmsQuickStart.Server"/>
+
+</objects>

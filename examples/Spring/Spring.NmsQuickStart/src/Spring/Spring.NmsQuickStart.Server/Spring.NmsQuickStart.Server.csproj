@@ -54,6 +54,9 @@
     <Compile Include="Services\ICreditCheckService.cs" />
     <Compile Include="Services\IExecutionVenueService.cs" />
     <Compile Include="Services\ITradingService.cs" />
+    <Compile Include="Services\Stubs\CreditCheckServiceStub.cs" />
+    <Compile Include="Services\Stubs\ExecutionVenueServiceStub.cs" />
+    <Compile Include="Services\Stubs\TradingServiceStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -81,10 +84,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\ServiceStubs.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Config\Messaging.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Config\Services.xml">
+    <Content Include="Config\Handlers.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

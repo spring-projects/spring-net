@@ -32,6 +32,8 @@ namespace Spring.NmsQuickStart.Common.Data {
         
         private string orderTypeField;
         
+        private string confirmationNumberField;
+        
         private bool errorField;
         
         private string errorMessageField;
@@ -73,6 +75,16 @@ namespace Spring.NmsQuickStart.Common.Data {
             }
             set {
                 this.orderTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ConfirmationNumber {
+            get {
+                return this.confirmationNumberField;
+            }
+            set {
+                this.confirmationNumberField = value;
             }
         }
         

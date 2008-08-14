@@ -88,6 +88,8 @@ namespace Spring.Messaging.Nms.Config
         private readonly string MAX_RECOVERY_TIME_ATTRIBUTE = "max-recovery-time"; 
         
         private readonly string CONNECTION_FACTORY_ATTRIBUTE = "connection-factory";
+
+        private readonly string PUBSUB_DOMAIN_ATTRIBUTE = "pubsub-domain";
         
         #endregion
 
@@ -189,6 +191,10 @@ namespace Spring.Messaging.Nms.Config
                 containerObjectName =
                     parserContext.ReaderContext.GenerateObjectName(containerDefBuilder.RawObjectDefinition);
             }
+
+            string pubsubDomain = listenerElement.GetAttribute(PUBSUB_DOMAIN_ATTRIBUTE);
+            containerDefBuilder.AddPropertyValue("PubSubDomain", pubsubDomain);
+
 
             parserContext.Registry.RegisterObjectDefinition(containerObjectName, containerDefBuilder.ObjectDefinition);
         }

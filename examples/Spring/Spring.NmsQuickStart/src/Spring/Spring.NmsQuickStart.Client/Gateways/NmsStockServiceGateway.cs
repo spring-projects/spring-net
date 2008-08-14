@@ -1,6 +1,7 @@
 
 
 
+using System;
 using Apache.NMS;
 using Spring.Messaging.Nms.Core;
 using Spring.NmsQuickStart.Common.Data;
@@ -8,7 +9,7 @@ using Spring.Objects.Factory;
 
 namespace Spring.NmsQuickStart.Client.Gateways
 {
-    public class NmsStockServiceGateway : NmsGatewaySupport, IStockService, IInitializingObject
+    public class NmsStockServiceGateway : NmsGatewaySupport, IStockService
     {
         private IDestination defaultReplyToQueue;
         
@@ -19,25 +20,12 @@ namespace Spring.NmsQuickStart.Client.Gateways
 
         public void Send(TradeRequest tradeRequest)
         {            
-            NmsTemplate.ConvertAndSend(tradeRequest, new ReplyToPostProcessor(defaultReplyToQueue));
-        }
-
-        
-        public class ReplyToPostProcessor : IMessagePostProcessor
-        {
-            private IDestination replyToDestination;
-
-            public ReplyToPostProcessor(IDestination replyToDestination)
-            {
-                this.replyToDestination = replyToDestination;
-            }
-
-            public IMessage PostProcessMessage(IMessage message)
-            {
-                message.NMSReplyTo = replyToDestination;
-                return message;
-            }
-        }
-
+            NmsTemplate.ConvertAndSendWithDelegate(tradeRequest, delegate(IMessage message)
+                                                                     {
+                                                                         message.NMSReplyTo = defaultReplyToQueue;
+                                                                         message.NMSCorrelationID = new Guid().ToString();
+                                                                         return message;
+                                                                     });
+        }        
     }
 }

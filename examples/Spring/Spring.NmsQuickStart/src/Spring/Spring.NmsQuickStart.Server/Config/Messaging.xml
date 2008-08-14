@@ -6,8 +6,6 @@
     <constructor-arg index="0" value="tcp://localhost:61616"/>
   </object>
 
-
-
   <object name="NmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">
     <property name="ConnectionFactory" ref="ConnectionFactory"/>
     <property name="PubSubDomain" value="true"/>
@@ -16,28 +14,15 @@
   </object>
 
 
-  <object name="MarketDataGateway" type="Spring.NmsQuickStart.Server.Gateways.MarketDataGateway, Spring.NmsQuickStart.Server">
+  <object name="MarketDataGateway" type="Spring.NmsQuickStart.Server.Gateways.MarketDataServiceGateway, Spring.NmsQuickStart.Server">
     <property name="NmsTemplate" ref="NmsTemplate"/>
   </object>
 
   <!-- Consume messages on queue APP.STOCK.REQUEST -->
-  <!--
   <nms:listener-container connection-factory="ConnectionFactory" concurrency="10">
     <nms:listener ref="MessageListenerAdapter" destination="APP.STOCK.REQUEST" />
   </nms:listener-container>
-  -->
-     
-  <object id="MessageListenerContainer" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms">
-    <property name="ConnectionFactory" ref="ConnectionFactory"/>
-    <property name="DestinationName" value="APP.STOCK.REQUEST"/>
-    <property name="ConcurrentConsumers" value="1"/>
-    <property name="MessageListener" ref="MessageListenerAdapter"/>
-    <property name="ExceptionListener" ref="LoggingExceptionListener"/>
-  </object>
-
-  <object name="LoggingExceptionListener" type="Spring.NmsQuickStart.Server.Handlers.LoggingExceptionListener, Spring.NmsQuickStart.Server"/>
-
-
+   
   <!-- Plain object message handler -->
   <object id="MessageListenerAdapter" type="Spring.Messaging.Nms.Listener.Adapter.MessageListenerAdapter, Spring.Messaging.Nms">
     <property name="HandlerObject" ref="StockAppHandler"/>
@@ -56,20 +41,5 @@
     <property name="DefaultNamespace" value="Spring.NmsQuickStart.Common.Data"/>
     <property name="DefaultAssemblyName" value="Spring.NmsQuickStart.Common"/>
   </object>
-
-  <!--
-  <object name="MultiMessageConverter" type="Spring.NmsQuickStart.Common.Converters.MultiMessageConverter, Spring.NmsQuickStart.Common">
-    <property name="NamedMessageConverters">
-      <list>
-        <ref object="TradeRequestConverter"/>
-        <ref object="TradeConverter"/>
-      </list>
-    </property>
-  </object>
-
-  <object name="TradeRequestConverter" type="Spring.NmsQuickStart.Common.Converters.TradeRequestConverter, Spring.NmsQuickStart.Common"/>
-  <object name="TradeConverter" type="Spring.NmsQuickStart.Common.Converters.TradeConverter, Spring.NmsQuickStart.Common"/>  
-  -->
-
 
 </objects>

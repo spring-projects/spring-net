@@ -24,23 +24,13 @@
     <property name="MessageConverter" ref="XmlMessageConverter"/>
   </object>
 
-  <!-- Consume messages on queue APP.STOCK.JOE -->
-  <object id="MessagingContainer" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms">
-    <property name="ConnectionFactory" ref="ConnectionFactory"/>
-    <property name="DestinationName" value="APP.STOCK.JOE"/>
-    <property name="ConcurrentConsumers" value="1"/>
-    <property name="MessageListener" ref="MessageListenerAdapter"/>
-  </object>
 
-  <!-- Consume messages on topic APP.STOCK.MARKETDATA -->
-  <object id="MessagingContainerMarketData" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms">
-    <property name="ConnectionFactory" ref="ConnectionFactory"/>
-    <property name="PubSubDomain" value="true"/>
-    <property name="DestinationName" value="APP.STOCK.MARKETDATA"/>
-    <property name="ConcurrentConsumers" value="1"/>
-    <property name="MessageListener" ref="MessageListenerAdapter"/>
-  </object>
+  <nms:listener-container connection-factory="ConnectionFactory">
+    <nms:listener ref="MessageListenerAdapter" destination="APP.STOCK.JOE" />
+    <nms:listener ref="MessageListenerAdapter" destination="APP.STOCK.MARKETDATA" pubsub-domain="true"/>
+  </nms:listener-container>
 
+  
   <!-- Plain object message handler -->
   <object id="MessageListenerAdapter" type="Spring.Messaging.Nms.Listener.Adapter.MessageListenerAdapter, Spring.Messaging.Nms">
     <property name="HandlerObject" ref="StockAppHandler"/>
@@ -60,20 +50,5 @@
     <property name="DefaultAssemblyName" value="Spring.NmsQuickStart.Common"/>
   </object>
   
-  <!--
-  <object name="MultiMessageConverter" type="Spring.NmsQuickStart.Common.Converters.MultiMessageConverter, Spring.NmsQuickStart.Common">
-    <property name="NamedMessageConverters">
-      <list>
-        <ref object="TradeRequestConverter"/>
-        <ref object="TradeConverter"/>
-      </list>
-    </property>
-  </object>
-
-  <object name="TradeRequestConverter" type="Spring.NmsQuickStart.Common.Converters.TradeRequestConverter, Spring.NmsQuickStart.Common"/>
-  <object name="TradeConverter" type="Spring.NmsQuickStart.Common.Converters.TradeConverter, Spring.NmsQuickStart.Common"/>
-  -->
-
-
 
 </objects>
