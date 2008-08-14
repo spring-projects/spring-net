@@ -19,7 +19,6 @@ namespace Spring.WcfQuickStart
         {
             Thread.Sleep(sleepInSeconds*1000);
             return n1 + n2;
-
         }
 
         public double Subtract(double n1, double n2)
