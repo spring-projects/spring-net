@@ -31,6 +31,7 @@ using Spring.Collections;
 using Spring.Core.IO;
 using Spring.Expressions;
 using Spring.Objects.Factory.Config;
+using Spring.Objects.Factory.Support;
 
 #endregion
 
@@ -210,7 +211,10 @@ namespace Spring.Objects.Factory.Xml
             Assert.IsFalse(objectNames.Contains("aliasWithoutId2"));
             Assert.IsFalse(objectNames.Contains("aliasWithoutId3"));
 
-            TestObject tb4 = (TestObject) xof.GetObject(typeof (TestObject).FullName);
+            string className = typeof(TestObject).FullName;
+            string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
+
+            TestObject tb4 = (TestObject)xof.GetObject(targetName);
             Assert.AreEqual(null, tb4.Name);
         }
 

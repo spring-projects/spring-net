@@ -1638,6 +1638,7 @@ namespace Spring.Objects.Factory.Support
             {
                 return false;
             }
+            //TODO investigate looking in parent context as this differs from java.
         }
 
         /// <summary>

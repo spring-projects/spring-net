@@ -164,7 +164,7 @@ namespace Spring.Objects.Factory.Support
             } else
             {
                 int counter = -1;
-                while (counter == -1 && registry.ContainsObjectDefinition(id))
+                while (counter == -1 || registry.ContainsObjectDefinition(id))
                 {
                     counter++;
                     id = generatedObjectName + GENERATED_OBJECT_NAME_SEPARATOR + counter;

@@ -327,6 +327,7 @@
     <Compile Include="Objects\Factory\Xml\ArrayCtorDependencyObject.cs" />
     <Compile Include="Objects\Factory\Xml\LocaleTests.cs" />
     <Compile Include="Objects\Factory\Xml\ObjectFactorySectionHandlerTests.cs" />
+    <Compile Include="Objects\Factory\Xml\ObjectNameGenerationTests.cs" />
     <Compile Include="Objects\Factory\Xml\SiimpleCtorWiringTests.cs" />
     <Compile Include="Objects\LazyTestObject.cs" />
     <Compile Include="Objects\Support\MethodInvokerTests.cs">
@@ -782,6 +783,7 @@
     <Content Include="Data\Spring\Objects\Factory\Xml\collections.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\constructor-arg.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\array-autowire.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Xml\objectNameGeneration.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\simple-constructor-arg.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\expressions.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\default-autowire.xml" />
