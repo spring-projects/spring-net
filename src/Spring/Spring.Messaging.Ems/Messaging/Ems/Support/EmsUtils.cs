@@ -238,6 +238,27 @@ namespace Spring.Messaging.Ems.Support
 //			    // Ignore -> can only happen in case of a JTA transaction.
 //		    }
 	    }
-        
+
+        /// <summary>
+        /// Closes the given queue browser and ignore any thrown exception.
+        /// This is useful for typical <code>finally</code> blocks in manual EMS code.
+        /// </summary>
+        /// <param name="browser">The queue browser to close (may be <code>null</code>.</param>
+        public static void CloseQueueBrowser(QueueBrowser browser)
+        {
+            if (browser != null)
+            {
+                try
+                {
+                    browser.Close();
+                } catch (EMSException ex)
+                {
+                    logger.Debug("Could not close EMS QueueBrowser", ex);
+                } catch (Exception ex)
+                {
+                    logger.Debug("Unexpected exception on closing EMS QueueBrowser", ex);
+                }
+            }
+        }
     }
 }

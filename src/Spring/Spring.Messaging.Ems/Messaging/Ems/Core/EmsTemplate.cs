@@ -28,6 +28,7 @@ using Spring.Messaging.Ems.Support.Destinations;
 using Spring.Transaction.Support;
 using Spring.Util;
 using TIBCO.EMS;
+using Queue=TIBCO.EMS.Queue;
 
 namespace Spring.Messaging.Ems.Core
 {
@@ -164,8 +165,30 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the result object from working with the session
         /// </returns>
-        /// <throws>  EMSException if there is any problem </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public virtual object Execute(ISessionCallback action, bool startConnection)
+        {
+            return Execute(action.DoInEms, startConnection);
+        }
+
+
+        /// <summary> Execute the action specified by the given action object within a
+        /// EMS Session.
+        /// </summary>
+        /// <remarks> Generalized version of <code>execute(SessionCallback)</code>,
+        /// allowing the EMS Connection to be started on the fly.
+        /// <p>Use <code>execute(SessionCallback)</code> for the general case.
+        /// Starting the EMS Connection is just necessary for receiving messages,
+        /// which is preferably achieved through the <code>receive</code> methods.</p>
+        /// </remarks>
+        /// <param name="action">callback object that exposes the session
+        /// </param>
+        /// <param name="startConnection">Start the connection before performing callback action.
+        /// </param>
+        /// <returns> the result object from working with the session
+        /// </returns>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public virtual object Execute(SessionDelegate action, bool startConnection)
         {
             AssertUtils.ArgumentNotNull(action, "Callback object must not be null");
 
@@ -195,7 +218,7 @@ namespace Spring.Messaging.Ems.Core
                 {
                     logger.Debug("Executing callback on EMS Session [" + sessionToUse + "]");
                 }
-                return action.DoInEms(sessionToUse);
+                return action(sessionToUse);
             }
             finally
             {
@@ -433,7 +456,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the new EMS MessageProducer
         /// </returns>
-        /// <throws>  EMSException if thrown by EMS API methods </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         /// <seealso cref="DoCreateProducer">
         /// </seealso>
         /// <seealso cref="MessageIdEnabled">
@@ -487,7 +510,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the new EMS MessageProducer
         /// </returns>
-        /// <throws>EMSException if thrown by EMS API methods </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         protected virtual MessageProducer DoCreateProducer(Session session, Destination destination)
         {
             if (CacheEmsResources)
@@ -543,7 +566,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the new EMS MessageConsumer
         /// </returns>
-        /// <throws>  EMSException if thrown by EMS API methods </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         protected virtual MessageConsumer CreateConsumer(Session session, Destination destination,
                                                          string messageSelector)
         {
@@ -568,7 +591,7 @@ namespace Spring.Messaging.Ems.Core
         /// </remarks>
         /// <returns>A EMS Connection
         /// </returns>
-        /// <throws>EMSException if thrown by EMS API methods </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         protected override Connection CreateConnection()
         {
             if (CacheEmsResources)
@@ -596,7 +619,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the new EMS Session
         /// </returns>
-        /// <throws>EMSException if thrown by EMS API methods </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         protected override Session CreateSession(Connection con)
         {
             if (CacheEmsResources)
@@ -646,7 +669,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="messageCreatorDelegate">delegate callback to create a EMS Message
         /// </param>
-        /// <throws>EMSException if thrown by EMS API methods </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         protected internal virtual void DoSend(Session session, Destination destination, IMessageCreator messageCreator,
                                                MessageCreatorDelegate messageCreatorDelegate)
         {
@@ -656,7 +679,7 @@ namespace Spring.Messaging.Ems.Core
             try
             {
                 
-                Message message = null;
+                Message message;
                 if (messageCreator != null)
                 {
                     message = messageCreator.CreateMessage(session) ;
@@ -689,7 +712,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="message">the EMS Message to send
         /// </param>
-        /// <throws>  EMSException if thrown by EMS API methods </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         protected virtual void DoSend(MessageProducer producer, Message message)
         {
             if (ExplicitQosEnabled)
@@ -720,7 +743,7 @@ namespace Spring.Messaging.Ems.Core
         /// If PubSubDomain equals true, then a Session is passed to the callback.
         /// If false, then a Session is passed to the callback.</para>b
         /// </remarks>
-        /// <throws>EMSException if there is any problem </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object Execute(SessionDelegate del)
         {
             return Execute(new ExecuteSessionCallbackUsingDelegate(del));
@@ -736,7 +759,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the result object from working with the session
         /// </returns>
-        /// <throws>EMSException if there is any problem </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object Execute(ISessionCallback action)
         {
             return Execute(action, false);
@@ -750,7 +773,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the result object from working with the session
         /// </returns>
-        /// <throws>EMSException  if there is any problem </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object Execute(IProducerCallback action)
         {
             return Execute(new ProducerCreatorCallback(this, action));
@@ -764,7 +787,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the result object from working with the session
         /// </returns>
-        /// <throws>EMSException  if there is any problem </throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object Execute(ProducerDelegate del)
         {
             return Execute(new ProducerCreatorCallback(this, del));
@@ -775,7 +798,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void SendWithDelegate(MessageCreatorDelegate messageCreatorDelegate)
         {
             CheckDefaultDestination();
@@ -796,7 +819,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void SendWithDelegate(Destination destination, MessageCreatorDelegate messageCreatorDelegate)
         {
             Execute(new SendDestinationCallback(this, destination, messageCreatorDelegate), false);
@@ -810,7 +833,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="messageCreatorDelegate">delegate callback to create a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void SendWithDelegate(string destinationName, MessageCreatorDelegate messageCreatorDelegate)
         {
             Execute(new SendDestinationCallback(this, destinationName, messageCreatorDelegate), false);
@@ -821,7 +844,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <param name="messageCreator">callback to create a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void Send(IMessageCreator messageCreator)
         {
             CheckDefaultDestination();
@@ -842,7 +865,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="messageCreator">callback to create a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void Send(Destination destination, IMessageCreator messageCreator)
         {
             
@@ -856,7 +879,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="messageCreator">callback to create a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void Send(string destinationName, IMessageCreator messageCreator)
         {
             Execute(new SendDestinationCallback(this, destinationName, messageCreator), false);
@@ -867,7 +890,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <param name="message">the object to convert to a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSend(object message)
         {
             CheckDefaultDestination();
@@ -888,7 +911,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="message">the object to convert to a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSend(Destination destination, object message)
         {
             CheckMessageConverter();
@@ -903,7 +926,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="message">the object to convert to a message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSend(string destinationName, object message)
         {
             Send(destinationName, new SimpleMessageCreator(this, message));
@@ -918,7 +941,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="postProcessor">the callback to modify the message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSend(object message, IMessagePostProcessor postProcessor)
         {
             CheckDefaultDestination();
@@ -942,7 +965,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="postProcessor">the callback to modify the message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSend(Destination destination, object message, IMessagePostProcessor postProcessor)
         {
             CheckMessageConverter();
@@ -961,7 +984,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <param name="postProcessor">the callback to modify the message
         /// </param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSend(string destinationName, object message, IMessagePostProcessor postProcessor)
         {
             CheckMessageConverter();
@@ -975,7 +998,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <param name="message">the object to convert to a message</param>
         /// <param name="postProcessor">the callback to modify the message</param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSendWithDelegate(object message, MessagePostProcessorDelegate postProcessor)
         {
             //Execute(new SendDestinationCallback(this, destination, messageCreatorDelegate), false);
@@ -998,7 +1021,7 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="destination">the destination to send this message to</param>
         /// <param name="message">the object to convert to a message</param>
         /// <param name="postProcessor">the callback to modify the message</param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSendWithDelegate(Destination destination, object message,
                                                MessagePostProcessorDelegate postProcessor)
         {
@@ -1015,7 +1038,7 @@ namespace Spring.Messaging.Ems.Core
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="message">the object to convert to a message.</param>
         /// <param name="postProcessor">the callback to modify the message</param>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void ConvertAndSendWithDelegate(string destinationName, object message,
                                                MessagePostProcessorDelegate postProcessor)
         {
@@ -1032,7 +1055,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <returns> the message received by the consumer, or <code>null</code> if the timeout expires
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public Message Receive()
         {
             CheckDefaultDestination();
@@ -1055,7 +1078,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message received by the consumer, or <code>null</code> if the timeout expires
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public Message Receive(Destination destination)
         {
             return Execute(new ReceiveCallback(this, destination)) as Message;
@@ -1072,7 +1095,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message received by the consumer, or <code>null</code> if the timeout expires
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public Message Receive(string destinationName)
         {
             return Execute(new ReceiveCallback(this, destinationName)) as Message;
@@ -1089,7 +1112,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message received by the consumer, or <code>null</code> if the timeout expires
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public Message ReceiveSelected(string messageSelector)
         {
             CheckDefaultDestination();
@@ -1115,7 +1138,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message received by the consumer, or <code>null</code> if the timeout expires
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public Message ReceiveSelected(Destination destination, string messageSelector)
         {
             return Execute(new ReceiveSelectedCallback(this, destination, messageSelector), true) as Message;
@@ -1134,7 +1157,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message received by the consumer, or <code>null</code> if the timeout expires
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public Message ReceiveSelected(string destinationName, string messageSelector)
         {
             return Execute(new ReceiveSelectedCallback(this, destinationName, messageSelector), true) as Message;
@@ -1208,7 +1231,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <returns> the message produced for the consumer or <code>null</code> if the timeout expires.
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object ReceiveAndConvert()
         {
             CheckMessageConverter();
@@ -1225,7 +1248,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message produced for the consumer or <code>null</code> if the timeout expires.
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object ReceiveAndConvert(Destination destination)
         {
             CheckMessageConverter();
@@ -1244,7 +1267,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message produced for the consumer or <code>null</code> if the timeout expires.
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object ReceiveAndConvert(string destinationName)
         {
             CheckMessageConverter();
@@ -1263,11 +1286,11 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message produced for the consumer or <code>null</code> if the timeout expires.
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object ReceiveSelectedAndConvert(string messageSelector)
         {
             CheckMessageConverter();
-            return DoConvertFromMessage(ReceiveSelected(messageSelector)); ;
+            return DoConvertFromMessage(ReceiveSelected(messageSelector));
         }
 
         /// <summary> Receive a message synchronously from the specified destination, but only
@@ -1283,7 +1306,7 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message produced for the consumer or <code>null</code> if the timeout expires.
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object ReceiveSelectedAndConvert(Destination destination, string messageSelector)
         {
             CheckMessageConverter();
@@ -1304,14 +1327,242 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <returns> the message produced for the consumer or <code>null</code> if the timeout expires.
         /// </returns>
-        /// <throws>EMSException if there is any problem</throws>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object ReceiveSelectedAndConvert(string destinationName, string messageSelector)
         {
             CheckMessageConverter();
             return DoConvertFromMessage(ReceiveSelected(destinationName, messageSelector));
         }
 
+
+        /// <summary>
+        /// Browses messages in the default EMS queue. The callback gives access to the EMS
+        /// Session and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="action">The action callback object that exposes the session/browser pair.</param>
+        /// <returns>the result object from working with the session</returns>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>        
+        public object Browse(IBrowserCallback action)
+        {
+            AssertUtils.ArgumentNotNull(action, "action");
+            return BrowseWithDelegate(action.DoInEms);
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="queue">The queue to browse.</param>
+        /// <param name="action">The action callback object that exposes the session/browser pair.</param>
+        /// <returns>the result object from working with the session</returns>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>        
+        public object Browse(Queue queue, IBrowserCallback action)
+        {
+            AssertUtils.ArgumentNotNull(action, "action");
+            return BrowseSelectedWithDelegate(queue, null, action.DoInEms);
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="queueName">Name of the queue to browse, 
+        /// (to be resolved to an actual destination by a DestinationResolver)</param>
+        /// <param name="action">The action callback object that exposes the session/browser pair.</param>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public object Browse(string queueName, IBrowserCallback action)
+        {
+            AssertUtils.ArgumentNotNull(action, "action");
+            return BrowseSelectedWithDelegate(queueName, null, action.DoInEms);
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
+        /// <param name="action">The action callback object that exposes the session/browser pair.</param>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public object BrowseSelected(string messageSelector, IBrowserCallback action)
+        {
+            AssertUtils.ArgumentNotNull(action, "action");
+            return BrowseSelectedWithDelegate(messageSelector, action.DoInEms);
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="queue">The queue to browse.</param>
+        /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
+        /// <param name="action">The action callback object that exposes the session/browser pair.</param>
+        /// <returns></returns>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public object BrowseSelected(Queue queue, string messageSelector, IBrowserCallback action)
+        {
+            AssertUtils.ArgumentNotNull(action, "action");
+            return BrowseSelectedWithDelegate(queue, messageSelector, action.DoInEms);        
+        }
+
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="queueName">Name of the queue to browse, 
+        /// (to be resolved to an actual destination by a DestinationResolver)</param>
+        /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
+        /// <param name="action">The action callback object that exposes the session/browser pair.</param>
+        /// <returns></returns>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public object BrowseSelected(string queueName, string messageSelector, IBrowserCallback action)
+        {
+            AssertUtils.ArgumentNotNull(action, "action");
+            return BrowseSelectedWithDelegate(queueName, messageSelector, action.DoInEms);
+        }
+
+
+
+        /// <summary>
+        /// Browses messages in the default EMS queue. The callback gives access to the EMS
+        /// Session and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
+        /// <returns>the result object from working with the session</returns>
+        public object BrowseWithDelegate(BrowserDelegate action)
+        {
+            if (DefaultDestinationName != null)
+            {
+                return BrowseSelectedWithDelegate(DefaultDestinationName, action);
+            }
+            else
+            {
+                Destination destination = DefaultDestination;
+                if (!(destination is Queue))
+                {
+                    throw new InvalidOperationException("defaultDestination does not correspond to a Queue. Check configuration of NmsTemplate.");
+                }
+                return BrowseWithDelegate((Queue)destination, action);
+            }
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="queue">The queue to browse.</param>
+        /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
+        /// <returns>the result object from working with the session</returns>
+        public object BrowseWithDelegate(Queue queue, BrowserDelegate action)
+        {
+            return BrowseSelectedWithDelegate(queue, null, action);
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="queueName">Name of the queue to browse, 
+        /// (to be resolved to an actual destination by a DestinationResolver)</param>
+        /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public object BrowseWithDelegate(string queueName, BrowserDelegate action)
+        {
+            return BrowseSelectedWithDelegate(queueName, null, action);
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
+        /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public object BrowseSelectedWithDelegate(string messageSelector, BrowserDelegate action)
+        {
+            if (DefaultDestinationName != null)
+            {
+                return BrowseSelectedWithDelegate(DefaultDestinationName, messageSelector, action);
+            }
+            else
+            {
+                Destination destination = DefaultDestination;
+                if (!(destination is Queue))
+                {
+                    throw new InvalidOperationException("defaultDestination does not correspond to a Queue. Check configuration of NmsTemplate.");
+                }
+                return BrowseSelectedWithDelegate((Queue)destination, messageSelector, action);
+            }
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="queue">The queue to browse.</param>
+        /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
+        /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
+        /// <returns></returns>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public object BrowseSelectedWithDelegate(Queue queue, string messageSelector, BrowserDelegate action)
+        {
+            AssertUtils.ArgumentNotNull(action, "action");
+            return Execute(delegate(Session session)
+                               {
+                                   QueueBrowser browser = CreateBrowser(session, queue, messageSelector);
+                                   try
+                                   {
+                                       return action(session, browser);
+                                   }
+                                   finally
+                                   {
+                                       EmsUtils.CloseQueueBrowser(browser);
+                                   }
+                               }, true); 
+        }
+
+        /// <summary>
+        /// Browses messages in a EMS queue. The callback gives access to the EMS Session
+        /// and QueueBrowser in order to browse the queue and react to the contents.
+        /// </summary>
+        /// <param name="queueName">Name of the queue to browse, 
+        /// (to be resolved to an actual destination by a DestinationResolver)</param>
+        /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
+        /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
+        /// <returns></returns>
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
+        public object BrowseSelectedWithDelegate(string queueName, string messageSelector, BrowserDelegate action)
+        {
+            AssertUtils.ArgumentNotNull(action, "action");
+            return Execute(delegate(Session session)
+                               {
+                                   Queue queue = (Queue)DestinationResolver.ResolveDestinationName(session, queueName, false);
+                                   QueueBrowser browser = CreateBrowser(session, queue, messageSelector);
+                                   try
+                                   {
+                                       return action(session, browser);
+                                   }
+                                   finally
+                                   {
+                                       EmsUtils.CloseQueueBrowser(browser);
+                                   }
+                               }, true);  
+        }
+
         #endregion
+
+        /// <summary>
+        /// Creates the queue browser.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="queue">The queue.</param>
+        /// <param name="selector">The selector.</param>
+        /// <returns>A new queue browser</returns>
+        protected virtual QueueBrowser CreateBrowser(Session session, Queue queue, string selector)
+        {
+            return session.CreateBrowser(queue, selector);
+        }
+
 
         #region Supporting Internal Classes
 
