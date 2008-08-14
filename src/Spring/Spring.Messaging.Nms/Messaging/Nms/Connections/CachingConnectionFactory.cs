@@ -30,7 +30,7 @@ namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     /// <see cref="SingleConnectionFactory"/> subclass that adds
-    /// Session and MessageProducer caching.  This ConnectionFactory
+    /// Session, MessageProducer, and MessageConsumer caching.  This ConnectionFactory
     /// also switches the ReconnectOnException property to true
     /// by default, allowing for automatic recovery of the underlying
     /// Connection.

@@ -33,7 +33,6 @@ namespace Spring.Messaging.Nms.Core
     ///  It will create its own NmsTemplate if a ConnectionFactory is passed in.
     ///  A custom NmsTemplate instance can be created for a given ConnectionFactory
     ///  through overriding the <code>createNmsTemplate</code> method.
-    ///
     /// </remarks>
     public class NmsGatewaySupport : IInitializingObject
     {
@@ -44,7 +43,7 @@ namespace Spring.Messaging.Nms.Core
 
         #endregion
         
-        private NmsTemplate jmsTemplate;
+        private NmsTemplate nmsTemplate;
 
 
         /// <summary>
@@ -53,8 +52,8 @@ namespace Spring.Messaging.Nms.Core
         /// <value>The NMS template.</value>
         public NmsTemplate NmsTemplate
         {
-            get { return jmsTemplate; }
-            set { jmsTemplate = value; }
+            get { return nmsTemplate; }
+            set { nmsTemplate = value; }
         }
 
         /// <summary>
@@ -66,11 +65,11 @@ namespace Spring.Messaging.Nms.Core
         {
             get
             {
-                return (jmsTemplate != null ? this.jmsTemplate.ConnectionFactory : null);
+                return (nmsTemplate != null ? this.nmsTemplate.ConnectionFactory : null);
             }
             set
             {
-                this.jmsTemplate = CreateNmsTemplate(value);
+                this.nmsTemplate = CreateNmsTemplate(value);
             }
         }
 
@@ -93,7 +92,7 @@ namespace Spring.Messaging.Nms.Core
         /// </summary>
         public virtual void AfterPropertiesSet()
         {
-            if (jmsTemplate == null)
+            if (nmsTemplate == null)
             {
                 throw new ArgumentException("connectionFactory or jmsTemplate is required");
             }
