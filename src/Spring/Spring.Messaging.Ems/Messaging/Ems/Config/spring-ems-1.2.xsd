@@ -196,6 +196,16 @@
 				]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
+    <xsd:attribute name="pubsub-domain" type="xsd:boolean" use="optional" default="false">
+      <xsd:annotation>
+        <xsd:documentation>
+          <![CDATA[
+	Set to true for the publish-subscribe domain (Topics) or false (the default) for the
+   point-to-point domain (Queues).
+				]]>
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
 	</xsd:complexType>
 	
 </xsd:schema>
