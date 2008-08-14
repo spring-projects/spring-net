@@ -4,39 +4,40 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 	
-  <object id="rod1" type="Spring.Objects.Factory.DependenciesObject, Spring.Core.Tests"
+  <object id="rod1" type="Spring.Objects.Factory.Xml.DependenciesObject, Spring.Core.Tests"
       autowire="byType"
       dependency-check="objects">
 		<!-- Should pick up spouse automatically -->
   </object>
 	
-  <object id="rod1a" type="Spring.Objects.Factory.DependenciesObject, Spring.Core.Tests"
+  <object id="rod1a" type="Spring.Objects.Factory.Xml.DependenciesObject, Spring.Core.Tests"
       autowire="autodetect"
       dependency-check="objects">
 		<!-- Should pick up spouse automatically --></object>
 	
-  <object id="rod2" type="Spring.Objects.Factory.DependenciesObject, Spring.Core.Tests"
+  <object id="rod2" type="Spring.Objects.Factory.Xml.DependenciesObject, Spring.Core.Tests"
       autowire="byName"
       dependency-check="objects">
-		<!-- Should pick up spouse automatically --></object>
+		<!-- Should pick up spouse automatically -->
+  </object>
 	
-  <object id="rod3" type="Spring.Objects.Factory.ConstructorDependenciesObject, Spring.Core.Tests"
+  <object id="rod3" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
       autowire="constructor"
       dependency-check="objects">
 		<!-- Should pick up spouse automatically --></object>
 	
-  <object id="rod3a" type="Spring.Objects.Factory.ConstructorDependenciesObject, Spring.Core.Tests"
+  <object id="rod3a" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
       autowire="autodetect"
       dependency-check="objects">
 		<!-- Should pick up spouse automatically --></object>
 	
-  <object id="rod4" type="Spring.Objects.Factory.ConstructorDependenciesObject, Spring.Core.Tests"
+  <object id="rod4" type="Spring.Objects.Factory.Xml.ConstructorDependenciesObject, Spring.Core.Tests"
       singleton="false"
       dependency-check="objects">
 		<!-- Should not pick up spouse automatically -->
   </object>
 	
-  <object id="rod5" type="Spring.Objects.Factory.DependenciesObject, Spring.Core.Tests"
+  <object id="rod5" type="Spring.Objects.Factory.Xml.DependenciesObject, Spring.Core.Tests"
       singleton="false"
       autowire="constructor">
 		<!-- Should pick up spouse automatically -->
