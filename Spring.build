@@ -889,6 +889,7 @@
         <include name="license.txt"/>
         <include name="Spring.build"/>
 	<include name="Spring.include"/>
+        <include name="BreakingChanges-1.2.txt"/>
         <!-- exclude VS.Net stuff -->
         <exclude name="**/sdk-web/**"/>
         <exclude name="**/*.suo"/>
@@ -1051,8 +1052,9 @@
           <include name="**/Rhino.Mocks.dll"/>
           <include name="**/System.Web.Extensions.dll"/>
           <include name="**/Apache.NMS.dll"/>
+          <include name="**/Apache.NMS.pdb"/>
           <include name="**/Apache.NMS.ActiveMQ.dll"/>
-          <include name="**/Apache.NMS.MSMQ.dll"/>
+          <include name="**/Apache.NMS.ActiveMQ.pdb"/>
           <include name="**/EULA.rtf"/>
         </fileset>
       </copy>
@@ -1115,6 +1117,8 @@
         <include name="*.sln"/>
       </fileset>
     </copy>
+
+    <call target="package-tools"/>
 
     <!-- copy schema and dtd -->
     <mkdir dir="${current.package.dir}/doc/schema"/>
@@ -1369,7 +1373,9 @@
       <include name="examples/SpringAir/src/SpringAir.Web.2005/bin/*.refresh"/>
       <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>
       <include name="examples/Spring/Spring.NmsQuickStart/**"/>
-      
+      <include name="examples/Spring/Spring.MsmqQuickStart/**"/>      
+      <include name="examples/Spring/Spring.WcfQuickStart/**"/>      
+      <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>      
 
 
 

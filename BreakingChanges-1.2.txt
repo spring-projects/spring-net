@@ -1,0 +1,15 @@
+Changes (1.1.2 to 1.2 M1)
+
+Spring.Core
+-----------
+
+1. ContextRegistry.GetContext(string name) now throws an exception if no context has been registered under that name instead of returning null.
+
+2. Removed getter property of IApplicationContext in IApplicationContextAware
+
+3. Removed getter property of IResourceLoader in IResourceLoaderAware
+
+Spring.Services
+---------------
+1. Removed WebServiceProxyFactory.ClientProtocolType property (obsolete)
+2. WebServiceExporter generates WebServiceBinding attribute with WSI basic profile 1.1 by default.

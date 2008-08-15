@@ -1,11 +1,11 @@
-THE SPRING.NET FRAMEWORK, Release 1.1.2  (May 6, 2008)
+THE SPRING.NET FRAMEWORK, Release 1.2.0 M1  (August 14, 2008)
 --------------------------------------------------------------------
 http://www.springframework.net/
 
 
 1. INTRODUCTION
 
-The 1.1 release of Spring.NET contains
+The 1.2 release of Spring.NET contains
 
      * A full featured Inversion of Control container 
      * An Aspect Oriented Programming framework
@@ -25,6 +25,15 @@ The 1.1 release of Spring.NET contains
        - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
      * NUnit integration 
        - Provides Dependency Injection of test cases and Spring container loading and caching. .  Data access and transaction management features aid with integration testing.
+     * WCF integration
+       - Provides Dependency Injection and applicatin of AOP advice to WCF services
+     * Quartz integration
+       - Configure Quartz jobs using dependency injection and Spring's transactional support to
+         persist job details
+     * MSMQ integration
+       - Simplifies the use MSMQ by providing helper classes for message sending and receiving.  Integrates with Spring's transaction management features.
+     * NMS integration
+       - Simplifies the use of NMS by providing helper classes for message sending and receiving.
 
 Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002). 
 
@@ -45,6 +54,8 @@ Release contents:
 * "lib/NHibernate12" contains NHibernate 1.2 dlls
 * "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
 * "examples" contains sample applications.
+* "build-support" contains additonal applications need to build using NAnt as some convenience
+   VS.NET solution files.
 
 debug build is done using /DEBUG:full and release build using /DEBUG:pdbonly flags.
 
@@ -61,15 +72,15 @@ The Spring Framework is released under the terms of the Apache Software License 
 
 The "bin" directory contains the following distinct dll files for use in applications. Dependencies are those other than on the .NET BCL.
 
-* "Spring.Core" (~596 KB)
+* "Spring.Core" (~615 KB)
 - Contents: Inversion of control container. Collection classes. 
 - Dependencies: antlr.runtime, Common.Logging
 
-* "Spring.Aop" (~144 KB)
+* "Spring.Aop" (~150 KB)
 - Contents: Abstract Oriented Programming Framework.
 - Dependencies: Spring.Core, Common.Logging
 
-* "Spring.Data" (~312 KB)
+* "Spring.Data" (~320 KB)
 - Contents: Transaction and ADO.NET Framework.
 - Dependencies: Spring.Core, Spring.Aop
 
@@ -81,11 +92,15 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: NHibernate 1.2 integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
-* "Spring.Services" (~72 KB)
+* "Spring.Data.NHibernate20" (~90 KB)
+- Contents: NHibernate 2.0 RC1 integration
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
+
+* "Spring.Services" (~70 KB)
 - Contents: Web Services, Remoting, and Enterprise Component based services.
 - Dependencies: Spring.Core, Spring.Aop
 
-* "Spring.Web" (~156 KB)
+* "Spring.Web" (~165 KB)
 - Contents: ASP.NET based Web Application Framework.
 - Dependencies: Spring.Core, Spring.Aop
 
@@ -96,6 +111,19 @@ The "bin" directory contains the following distinct dll files for use in applica
 * "Spring.Testing.NUnit" (~24 KB)
 - Contents: NUnit Integration
 - Dependencies: Spring.Core, Spring.Data, NUnit
+
+* "Spring.Messaging" (~65 KB)
+- Contents: MSMQ Integration
+- Dependencies: Spring.Core, Spring.Data, System.Messaging
+
+* "Spring.Messaging.Nms" (~100 KB)
+- Contents: NMS Integration
+- Dependencies: Spring.Core, Spring.Data, Apache NMS
+
+* "Spring.Scheduling.Quartz" (~44 KB)
+- Contents: Quartz RC2 Integration
+- Dependencies: Spring.Core, Spring.Data, Quartz
+
 
 5. WHERE TO START?
 
@@ -114,16 +142,21 @@ Documented sample applications can be found in "examples":
 * DataQuickStart - Show use of Spring.Data data access features.
 * TxQuickStart - Show use of Spring's transaction features.
 * Data.NHibernate.Northwind - Show use of Spring's NHibernate features.
+* WCFQuickStart - Show use of DI and AOP with WCF
+* NMSQuickStart - Sample application using NMS
+* MSMQ QuickStart - Sample applicaiton usingMSMQ
+* Quartz Example - Scheduling using Quartz
 
 6. How to build
 
 VS.NET
 ------
-There are three solution file for different version of VS.NET
+There are four solution file for different version of VS.NET
 
-* Spring.Net.1.0.2002.sln for use with VS.NET 2002
-* Spring.Net.1.1.2003.sln for use with VS.NET 2003
-* Spring.Net.1.1.2005.sln for use with VS.NET 2005
+* Spring.Net.2002.sln for use with VS.NET 2002
+* Spring.Net.2003.sln for use with VS.NET 2003
+* Spring.Net.2005.sln for use with VS.NET 2005
+* Spring.Net.2008.sln for use with VS.NET 2008
 
 NAnt
 ----

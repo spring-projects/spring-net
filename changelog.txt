@@ -2,6 +2,59 @@ SPRING.NET FRAMEWORK CHANGELOG
 ==============================
 http://www.springframework.net
 
+Releaes 1.2.0, August 15, 2008
+
+
+Bug
+[SPRNET-542] - Spring NMS AbstractListenerContainer does not set or use the ExceptionListener correctly
+[SPRNET-939] - PageHandlerFactory does not behave like original factory w.r.t missing files
+[SPRNET-941] - Proxying method with generic type parameter fails when the type resolves to a value type at runtime.
+[SPRNET-942] - ExceptionHandlerAdvice doesn't allow for explicitly configured Handlers
+[SPRNET-945] - NameMatchTransactionAttributeSource to support conversion of string representation of  transaction attributes
+[SPRNET-948] - Missing dependency cycle check for request / session scoped singletons in Spring.Web
+[SPRNET-949] - Scoped object dictionaries (request,session) do not match case sensitivity setting of object factory
+[SPRNET-952] - ObjectCurrentlyInCreationException constructor mismatch doesn't show affected object's name
+[SPRNET-954] - DeclaredParameters property is not property initialized in AdoOperation subclasses
+[SPRNET-961] - Exception handling advice throws NullReferenceException when using swallow action on methods that return value types
+[SPRNET-970] - TypeConversionUtils should not throw TypeMismatchException on null value for System.Nullable
+[SPRNET-974] - SpEL ConstructorNode doesn't support non-public constructors
+[SPRNET-975] - Object alias names are not treated according to "caseSensitive" setting
+[SPRNET-985] - Autowire byType checks for UnsatisfiedDependencyException before honoring overrides
+[SPRNET-986] - Constructor autowiring for array types not working
+[SPRNET-988] - Add support for XmlArrayAttribute to WebServiceProxyFactory
+[SPRNET-994] - Null reference in SessionFactoryUtils.GetDbProvider
+[SPRNET-1002] - Object name generation when no name specified produces duplicate names
+
+Improvement
+[SPRNET-794] - Improve web-DI performance, in particular with GridViews
+[SPRNET-869] - WebServiceExporter to generate WebServiceBinding attribute with WSI basic profile 1.1 by default.
+[SPRNET-946] - Extend code example in chapter "19.4. Connection String management" of the reference documentation
+[SPRNET-947] - Singleton Cache Locks are too coarse grained for custom scopes (e.g. Request, Session)
+[SPRNET-955] - Provide better error message if dbprovider name is not found in thread local storage when using MultiDelegatingDbProvider
+[SPRNET-956] - Provide better error message if assembly name is not provided when specying method signature for MethodMapTransactionAttributeSource 
+[SPRNET-959] - Use 'invocation.Method' as variable for CacheResultAdvice Key expression resolution
+[SPRNET-976] - Register WebObjectFactory with EndSession and EndRequest events only when request|session scope is really used
+[SPRNET-977] - Avoid unnecessary use of HttpContextSwitch within WebObjectFactory.ConfigureObject()
+[SPRNET-978] - CaseInsensitiveHashtable is not serializable
+[SPRNET-999] - Add DefaultDbProvider property to MultiDelegatingDbProvider.
+
+New Feature
+[SPRNET-896] - Allow registering custom ICollectionProcessors in SpEL MethodNode
+[SPRNET-922] - NHibernate 2.0 RC1 Support
+[SPRNET-953] - Allow for circular dependencies of web-scoped singletons
+[SPRNET-980] - Quartz.NET Integration
+[SPRNET-982] - TIBCO EMS Integration
+[SPRNET-993] - Added InheritanceBasedAopConfigurer for true inheritance based AOP
+[SPRNET-1000] - Configure WCF services via dependency injection and add additional behavior to them using Aspect-Oriented programming (AOP)
+[SPRNET-1006] - ActiveMQ NMS integration
+
+
+Task
+[SPRNET-782] - Removed IApplicationContextAware.ApplicationContext getter from the interface.
+[SPRNET-811] - Removed WebServiceProxyFactory.ClientProtocolType property (obsolete)
+[SPRNET-990] - Removed IResourceLoaderAware.ResourceLoader getter from the interface.
+[SPRNET-991] - ContextRegistry.GetContext(string name) should throw an exception if no context has been registered under that name.
+
 Release 1.1.2, May 6, 2008
 
 Bug
