@@ -96,7 +96,7 @@
     <!-- no other header navigation (prev, next, etc.) -->
     <xsl:template name="header.navigation" />
     <xsl:param name="navig.showtitles">1</xsl:param>
-    <!-- let's have a 'Sponsored by Interface21' strapline (or somesuch) across the bottom of each page -->
+    <!-- let's have a 'Sponsored by SpringSource' strapline (or somesuch) across the bottom of each page -->
     <xsl:template name="footer.navigation">
         <xsl:param name="prev" select="/foo" />
         <xsl:param name="next" select="/foo" />
@@ -198,7 +198,7 @@
                                 </td>
                                 <td width="20%" align="center">
                                     <span style="color:white;font-size:90%;">
-                                        <a href="http://www.interface21.com/" title="Interface21 - Spring from the Source">Sponsored by Interface21</a>
+                                        <a href="http://www.springsource.com/" title="Sponsored by SpringSource</a>
                                     </span>
                                 </td>
                                 <td width="40%" align="right" valign="top">
