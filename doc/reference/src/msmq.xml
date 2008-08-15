@@ -88,6 +88,9 @@
     classes to write enterprise MSMQ applications than rolling your own
     infrastructure. Feedback and new feature requests are always
     welcome.</para>
+
+    <para>The Spring.MsmqQuickstart application located in the examples
+    directory of the distribution shows this functionality in action.</para>
   </section>
 
   <section>
@@ -427,6 +430,10 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       <classname>MessageQueueTemplate</classname>. The default value is
       <classname>MessageQueue.InfiniteTimeout </classname>(which is actually
       ~3 months).</para>
+
+      <para>The XML configuration snippit for defining a MessageQueueTemplate
+      is shown in the previous section and also is located in the MSMQ
+      quickstart application configuraiton file Messaging.xml</para>
     </section>
 
     <section>
@@ -649,7 +656,6 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
   <emphasis role="bold">&lt;!-- Delegate to plain .NET object for message handling --&gt;</emphasis>
   &lt;object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
     &lt;property name="DefaultResponseQueueName" value="msmqTestResponseQueue"/&gt;
-    &lt;property name="MessageConverterObjectName" value="messageConverter"/&gt;
     &lt;property name="HandlerObject" ref="simpleHandler"/&gt;
   &lt;/object&gt;
 
@@ -779,7 +785,6 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
   <emphasis role="bold">&lt;!-- Delegate to plain .NET object for message handling --&gt;</emphasis>
   &lt;object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
     &lt;property name="DefaultResponseQueueName" value="msmqTestResponseQueue"/&gt;
-    &lt;property name="MessageConverterObjectName" value="messageConverter"/&gt;
     &lt;property name="HandlerObject" ref="simpleHandler"/&gt;
   &lt;/object&gt;
 
@@ -837,8 +842,11 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         <literal>Commit</literal> and <literal>Rollback</literal>. A specific
         implementation is provided that will move the poison message to
         another queue after a maximum number of redelivery attempts. See
-        <classname>SendToQueueExceptionHandler</classname> described
-        below.</para>
+        <classname>SendToQueueExceptionHandler</classname> described below.
+        You can set a specific implementation to by setting
+        <classname>TransactionalMessageListenerContainer's</classname>
+        property
+        <classname>MessageTransactionExceptionHandler</classname></para>
 
         <para>The <literal>IMessageTransactionExceptionHandler</literal>
         implementation <classname>SendToQueueExceptionHandler</classname>
@@ -946,9 +954,29 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       </itemizedlist>
 
       <para>The default implementation used in
-      <classname>MessageQueueTemplate</classname> and the message listener is
-      an instance of XmlMessageConverter configured with a TargetType to be
-      System.String.</para>
+      <classname>MessageQueueTemplate</classname> and the message listener
+      containers is an instance of XmlMessageConverter configured with a
+      TargetType to be System.String. You specify the types that the
+      XmlMessageConverter can convert though either the array property
+      <classname>TargetTypes</classname> or
+      <classname>TargetTypeNames</classname>. Here is an example taken from
+      the QuickStart application</para>
+
+      <programlisting>  &lt;object id="xmlMessageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"&gt;
+    &lt;property name="TargetTypes"&gt;
+      &lt;list&gt;
+        &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeRequest, Spring.MsmqQuickStart.Common&lt;/value&gt;
+        &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeResponse, Spring.MsmqQuickStart.Common&lt;/value&gt;
+        &lt;value&gt;System.String, mscorlib&lt;/value&gt;        
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+      <para>You can specify other <classname>IMessageConverter</classname>
+      implementations using the
+      <classname>MessageConverterObjectName</classname> property on the
+      <classname>MessageQueueTemplate</classname> and
+      <classname>MessageListenerAdapter</classname>. </para>
 
       <para>Other implementations provided are</para>
 
@@ -988,7 +1016,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
   </section>
 
   <section>
-    <title>interface based message processing</title>
+    <title>Interface based message processing</title>
 
     <section>
       <section>
@@ -1077,12 +1105,12 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
 }</programlisting>
 
         <para>The following configuration shows how to hook up the adapter to
-        process incoming MSMQ messages.</para>
+        process incoming MSMQ messages using the default message converter.
+        </para>
 
         <programlisting>  <emphasis role="bold">&lt;!-- Delegate to plain .NET object for message handling --&gt;</emphasis>
   &lt;object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
     &lt;property name="DefaultResponseQueueName" value="msmqTestResponseQueue"/&gt;
-    &lt;property name="MessageConverterObjectName" value="messageConverter"/&gt;
     &lt;property name="HandlerObject" ref="myHandler"/&gt;
   &lt;/object&gt;</programlisting>
       </section>

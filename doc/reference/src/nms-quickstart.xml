@@ -25,6 +25,9 @@
         <imagedata fileref="images/nms-quickstart.jpg" scale="75" />
       </imageobject>
     </mediaobject>
+
+    <para>This example was developed with ActiveMQ 5.1 and the ActiveMQ NMS
+    library with subversion repository number 685750.</para>
   </section>
 
   <section>
@@ -55,7 +58,7 @@
     <para>Queues are shown in red and topics in green.</para>
   </section>
 
-  <section>
+  <section id="nms-gateways">
     <title>Gateways</title>
 
     <para>Gateways represent the service operation to send a message. The
@@ -89,7 +92,7 @@
     purposes.</para>
   </section>
 
-  <section>
+  <section id="nms-messagedata">
     <title>Message Data</title>
 
     <para>The <classname>TradeRequest</classname> object shown above contains
@@ -209,7 +212,7 @@
     structure.</para>
   </section>
 
-  <section>
+  <section id="nms-handlers">
     <title>Message Handlers</title>
 
     <para>When the <classname>TradeRequest</classname> message is received by
@@ -322,7 +325,7 @@
     <para>The implementations of the gateway interfaces inherit from Spring's
     helper class <classname>NmsGatewaySupport</classname> in order to get easy
     access to a NmsTemplate for sending. The implementation of the
-    IStockService interface is shown below</para>
+    <classname>IStockService</classname> interface is shown below</para>
 
     <programlisting>    public class NmsStockServiceGateway : NmsGatewaySupport, IStockService
     {
@@ -344,8 +347,14 @@
         }        
     }</programlisting>
 
-    <para>The use of an anonymous delegate allows makes it very easy to apply
-    any post processing logic to the converted message. </para>
+    <para>The <classname>Send</classname> method is using NmsTemplate's
+    <literal>ConvertAndSendWithDelegate(object obj,
+    MessagePostProcessorDelegate messagePostProcessorDelegate)</literal>
+    method. The anonymous delegate allows you to modify the message
+    properties, such as NMSReplyTo and NMSCorrelationID after the message has
+    been converted from an object but before it has been sent. The use of an
+    anonymous delegate allows makes it very easy to apply any post processing
+    logic to the converted message.</para>
 
     <para>The object definition for the
     <classname>NmsStockServiceGateway</classname> is shown below along with
@@ -380,11 +389,11 @@
     <para>A similar configuration is used on the server to configure the class
     <classname>Spring.NmsQuickStart.Server.Gateways.MarketDataServiceGateway
     </classname>that implements the <classname>IMarketDataService</classname>
-    interface. </para>
+    interface.</para>
 
     <para>Since the client is also a consumer of messages, on the topic
     APP.STOCK.MARKETDATA and the queue APP.STOCK.JOE (for Trader Joe!), two
-    message listener containers are defined as shown below. </para>
+    message listener containers are defined as shown below.</para>
 
     <programlisting>  &lt;nms:listener-container connection-factory="ConnectionFactory"&gt;
     &lt;nms:listener ref="MessageListenerAdapter" destination="APP.STOCK.JOE" /&gt;
