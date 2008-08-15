@@ -1328,14 +1328,7 @@
       <include name="src/Spring/Spring.Aop/**"/>
       <include name="src/Spring/Spring.Web/**"/>
       <include name="src/Spring/Spring.Web.Extensions/**"/>
-      <include name="src/Spring/Spring.Services/EnterpriseServices/**"/>
-      <include name="src/Spring/Spring.Services/Remoting/**"/>
-      <include name="src/Spring/Spring.Services/Web/**"/>
-      <include name="src/Spring/Spring.Services/Spring.Services.2003.csproj"/>
-      <include name="src/Spring/Spring.Services/Spring.Services.2005.csproj"/>
-      <include name="src/Spring/Spring.Services/Spring.Services.2008.csproj"/>
-      <include name="src/Spring/Spring.Services/*.build"/>
-      <include name="src/Spring/Spring.Services/AssemblyInfo.cs"/>
+      <include name="src/Spring/Spring.Services/**"/>
       <include name="src/Spring/Spring.Data/**"/>
       <include name="src/Spring/Spring.Data.NHibernate/**"/>
       <include name="src/Spring/Spring.Data.NHibernate12/**"/>
@@ -1350,17 +1343,7 @@
       <include name="test/Spring/Spring.Core.Tests/**"/>
       <include name="test/Spring/Spring.Aop.Tests/**"/>
       <include name="test/Spring/Spring.Web.Tests/**"/>
-      <include name="test/Spring/Spring.Services.Tests/Data/**"/>
-      <include name="test/Spring/Spring.Services.Tests/EnterpriseServices/**"/>
-      <include name="test/Spring/Spring.Services.Tests/Remoting/**"/>
-      <include name="test/Spring/Spring.Services.Tests/Web/**"/>
-      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.2003.csproj"/>
-      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.2005.csproj"/>
-      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.2008.csproj"/>
-      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build"/>
-      <include name="test/Spring/Spring.Services.Tests/*.config"/>
-      <include name="test/Spring/Spring.Services.Tests/Spring.Services.Tests.dll.config"/>
-      <include name="test/Spring/Spring.Services.Tests/AssemblyInfo.cs"/>
+      <include name="test/Spring/Spring.Services.Tests/**"/>
       <include name="test/Spring/Spring.Data.Tests/**"/>
       <include name="test/Spring/Spring.Data.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate.Tests/**"/>
@@ -1397,9 +1380,6 @@
       <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>      
 
 
-
-      <exclude name="src/Spring/Spring.Services/*WindowsService*"/>
-      <exclude name="test/Spring/Spring.Services/*WindowsService*"/>
       <!-- exclude VS.Net stuff -->
       <exclude name="**/sdk-web/**"/>
       <exclude name="**/*.suo"/>
