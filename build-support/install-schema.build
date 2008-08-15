@@ -113,13 +113,29 @@
 	    overwrite="true"/>
 
       <echo message="----------------------------------------------------------"/>
-      <echo message="Copying spring-tx-1.1t.xsd to ${vsXXXX.version} installation."/>
+      <echo message="Copying spring-tx-1.1.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
       <copy file="spring-tx-1.1.xsd" todir="${vsXXXX.xml.schemas}..\\..\\Xml\\Schemas" 
             verbose="true"
 	    overwrite="true"/>
-t
+
+      <echo message="----------------------------------------------------------"/>
+      <echo message="Copying spring-nms-1.2.xsd to ${vsXXXX.version} installation."/>
+      <echo message="----------------------------------------------------------"/>
+      <echo message=""/>
+      <copy file="spring-nms-1.2.xsd" todir="${vsXXXX.xml.schemas}..\\..\\Xml\\Schemas" 
+            verbose="true"
+	    overwrite="true"/>
+
+      <echo message="----------------------------------------------------------"/>
+      <echo message="Copying spring-ems-1.2.xsd to ${vsXXXX.version} installation."/>
+      <echo message="----------------------------------------------------------"/>
+      <echo message=""/>
+      <copy file="spring-ems-1.2.xsd" todir="${vsXXXX.xml.schemas}..\\..\\Xml\\Schemas" 
+            verbose="true"
+	    overwrite="true"/>
+
       <property name="vsXXXX.xml.schemas.notinstalled" value="false"/>
 
     <if test="${vsXXXX.xml.schemas.notinstalled}">

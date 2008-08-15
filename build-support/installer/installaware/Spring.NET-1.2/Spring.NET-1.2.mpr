@@ -454,6 +454,34 @@ $
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $
 $
 1
@@ -461,13 +489,13 @@ $
 FALSE
 L:\projects\spring-net\msi
 SpringSource
-Spring.NET 1.2 M1
+Spring.NET 1.2.0 M1
 {36A8EE3D-7025-4FAE-BF84-0523EADA7082}
 {1399F2CB-026A-4995-ADC7-9A921EEFB4E9}
-1.2
+1.2.0
 English
-Spring.NET 1.2 M1
-Spring.NET 1.2 M1
+Spring.NET 1.2.0 M1
+Spring.NET 1.2.0 M1
 Spring.NET authors
 All rights reserved
 {3A73E939-3C01-4C93-8CAB-39C3C40CFC05}
@@ -477,7 +505,7 @@ http://forum.springframework.net
 http://www.springframework.net
 All rights reserved
 FALSE
-Spring.NET-1.2-M1
+Spring.NET-1.2.0-M1
 TRUE
 FALSE
 
