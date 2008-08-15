@@ -63,7 +63,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate12.20
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Nms.2003", "src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2003.csproj", "{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.2003", "src\Spring\Spring.Scheduling.Quartz\Spring.Scheduling.Quartz.2003.csproj", "{0C0D8C65-90DE-4914-9940-4C684C54971B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -205,14 +205,14 @@ Global
 		{2E12AE3E-5690-46A5-9F89-80F1D3004ADB}.Release.Build.0 = Release|.NET
 		{2E12AE3E-5690-46A5-9F89-80F1D3004ADB}.Release-1.1.ActiveCfg = Release-1.1|.NET
 		{2E12AE3E-5690-46A5-9F89-80F1D3004ADB}.Release-1.1.Build.0 = Release-1.1|.NET
-		{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}.Debug.ActiveCfg = Debug|.NET
-		{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}.Debug.Build.0 = Debug|.NET
-		{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}.Debug-1.1.ActiveCfg = Debug|.NET
-		{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}.Debug-1.1.Build.0 = Debug|.NET
-		{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}.Release.ActiveCfg = Release|.NET
-		{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}.Release.Build.0 = Release|.NET
-		{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}.Release-1.1.ActiveCfg = Release|.NET
-		{C17B27C2-4343-45BA-9A21-73C3CEC19BAD}.Release-1.1.Build.0 = Release|.NET
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Debug.ActiveCfg = Debug|.NET
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Debug.Build.0 = Debug|.NET
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Debug-1.1.ActiveCfg = Debug|.NET
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Debug-1.1.Build.0 = Debug|.NET
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release.ActiveCfg = Release|.NET
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release.Build.0 = Release|.NET
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release-1.1.ActiveCfg = Release|.NET
+		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release-1.1.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		doc\NamespaceSummary.xml = doc\NamespaceSummary.xml
