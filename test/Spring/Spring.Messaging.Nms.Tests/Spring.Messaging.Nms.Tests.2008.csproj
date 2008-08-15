@@ -98,11 +98,13 @@
     <Compile Include="Messaging\Nms\Connections\TestMessageListener.cs" />
     <Compile Include="Messaging\Nms\Connections\TestMessageProducer.cs" />
     <Compile Include="Messaging\Nms\Connections\TestSession.cs" />
+    <Compile Include="Messaging\Nms\Core\MessageTemplateTests.cs" />
+    <Compile Include="Messaging\Nms\Core\SimpleMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Nms\Integration\LoggingExceptionHandler.cs" />
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListener.cs" />
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\TestConnectionFactory.cs" />
-    <Compile Include="Messaging\Nms\MessageTemplateTests.cs" />
+    <Compile Include="Messaging\Nms\StubQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.xml" />
