@@ -95,7 +95,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
-    <Content Include="spring-objects.xml" />
+    <Content Include="spring-objects.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="AdminService.cs" />
     <Compile Include="ExampleJob.cs">
       <SubType>Code</SubType>
@@ -108,7 +110,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>cmd /c copy $(ProjectDir)spring-objects.xml $(OutDir)
-cmd /c copy $(ProjectDir)App.config $(OutDir)Spring.Scheduling.Quartz.Example.exe.config</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
