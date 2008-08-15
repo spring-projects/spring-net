@@ -974,7 +974,6 @@
 
           <include name="**/antlr.runtime.dll"/>
           <include name="**/Common.Logging.dll"/>
-          <include name="**/Common.Logging.*.dll"/>
 
 	  <exclude name="**/3.0/**"/>
 	  <exclude name="**/release/Spring/**"/>
@@ -1054,6 +1053,7 @@
           <include name="**/DotNetMock*.dll"/>
           <include name="**/log4net.dll"/>
           <include name="**/Common.Logging.dll"/>
+          <include name="**/Common.Logging.Log4Net.dll"/>
           <include name="**/antlr.runtime.dll"/>
           <include name="**/nunit.*.dll"/>
           <include name="**/NUnitAsp.dll"/>
@@ -1064,6 +1064,8 @@
           <include name="**/Apache.NMS.pdb"/>
           <include name="**/Apache.NMS.ActiveMQ.dll"/>
           <include name="**/Apache.NMS.ActiveMQ.pdb"/>
+          <include name="**/Quartz.dll"/>	
+          <include name="**/Nullables.dll"/>	
           <include name="**/EULA.rtf"/>
         </fileset>
       </copy>
@@ -1338,6 +1340,10 @@
       <include name="src/Spring/Spring.Data.NHibernate/**"/>
       <include name="src/Spring/Spring.Data.NHibernate12/**"/>
       <include name="src/Spring/Spring.Data.NHibernate20/**"/>
+      <include name="src/Spring/Spring.Messaging/**"/>
+      <include name="src/Spring/Spring.Messaging.Ems/**"/>
+      <include name="src/Spring/Spring.Messaging.Nms/**"/>
+      <include name="src/Spring/Spring.Scheduling.Quartz/**"/>
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/CommonAssemblyInfo.cs"/>
 
@@ -1361,6 +1367,10 @@
       <include name="test/Spring/Spring.Data.NHibernate.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate20.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate20.Integration.Tests/**"/>
+      <include name="test/Spring/Spring.Messaging.Tests/**"/>
+      <include name="test/Spring/Spring.Messaging.Ems.Tests/**"/>
+      <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
+      <include name="test/Spring/Spring.Scheduling.Quartz.Tests/**"/>
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/CommonAssemblyInfo.cs"/>
 

@@ -28,6 +28,7 @@ Bug
 Improvement
 [SPRNET-794] - Improve web-DI performance, in particular with GridViews
 [SPRNET-869] - WebServiceExporter to generate WebServiceBinding attribute with WSI basic profile 1.1 by default.
+[SPRNET-928] - Add nant build file and supporting tools in the release.
 [SPRNET-946] - Extend code example in chapter "19.4. Connection String management" of the reference documentation
 [SPRNET-947] - Singleton Cache Locks are too coarse grained for custom scopes (e.g. Request, Session)
 [SPRNET-955] - Provide better error message if dbprovider name is not found in thread local storage when using MultiDelegatingDbProvider
