@@ -44,6 +44,10 @@
 
   <!-- Message Listener Container that uses MSMQ transactional for receives -->
   <object id="transactionalMessageListenerContainer" type="Spring.Messaging.Listener.TransactionalMessageListenerContainer, Spring.Messaging">
+    <!-- to increase the number of threads use the MaxConcurrentListeners property -->
+    <!--
+    <property name="MaxConcurrentListeners" value="10"/>
+    -->
     <property name="MessageQueueObjectName" value="requestTxQueue"/>
     <property name="PlatformTransactionManager" ref="messageQueueTransactionManager"/>
     <property name="MessageListener" ref="messageListenerAdapter"/>

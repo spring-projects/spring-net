@@ -4,7 +4,6 @@
 
   <!-- MSMQ based implementation of technology neutral IStockServiceGateway -->
   <object name="stockServiceGateway" type="Spring.MsmqQuickStart.Client.Gateways.MsmqStockServiceGateway, Spring.MsmqQuickStart.Client">
-    <!-- will automatically create an instance of MessageQueueTemplate based on DefaultMessageQueueObjectName-->
     <property name="MessageQueueTemplate" ref="messageQueueTemplate"/>    
     <property name="DefaultResponseQueueObjectName" value="responseTxQueue"/>
   </object>
@@ -24,7 +23,6 @@
     </property>
   </object>
 
-
   <object id="requestTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging">
     <property name="Path" value=".\Private$\request.txqueue"/>
     <property name="MessageReadPropertyFilterSetAll" value="true"/>
@@ -34,12 +32,6 @@
     <property name="Path" value=".\Private$\response.joe.txqueue"/>
     <property name="MessageReadPropertyFilterSetAll" value="true"/>
   </object>
-
-  <object id="deadTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging">
-    <property name="Path" value=".\Private$\dead.queue"/>
-    <property name="MessageReadPropertyFilterSetAll" value="true"/>
-  </object>
-
 
   <!-- MSMQ Transaction Manager -->
   <object id="messageQueueTransactionManager" type="Spring.Messaging.Core.MessageQueueTransactionManager, Spring.Messaging"/>
@@ -62,6 +54,11 @@
 
   <object id="sendToQueueExceptionHandler" type="Spring.Messaging.Listener.SendToQueueExceptionHandler, Spring.Messaging">
     <property name="MessageQueueObjectName" value="deadTxQueue"/>
+  </object>
+
+  <object id="deadTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging">
+    <property name="Path" value=".\Private$\dead.queue"/>
+    <property name="MessageReadPropertyFilterSetAll" value="true"/>
   </object>
 
 </objects>

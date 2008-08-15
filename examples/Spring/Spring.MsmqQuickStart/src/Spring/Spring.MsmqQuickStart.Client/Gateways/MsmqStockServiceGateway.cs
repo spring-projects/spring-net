@@ -11,6 +11,7 @@ namespace Spring.MsmqQuickStart.Client.Gateways
     public class MsmqStockServiceGateway : MessageQueueGatewaySupport, IStockService
     {
         private Random random = new Random();
+
         private string defaultResponseQueueObjectName;
 
         public string DefaultResponseQueueObjectName
@@ -28,13 +29,11 @@ namespace Spring.MsmqQuickStart.Client.Gateways
                                                                       return message;
                                                                   });
         }
-
        
         private MessageQueue GetResponseQueue()
         {
             return MessageQueueFactory.CreateMessageQueue(defaultResponseQueueObjectName);
         }
-
        
     }
 }

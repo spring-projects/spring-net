@@ -70,11 +70,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "Spring.Core"
-                    AssemblyName = "Spring.Core"
-                    HintPath = "..\..\..\..\lib\net\1.1\Spring.Core.dll"
-                />
-                <Reference
                     Name = "Common.Logging"
                     AssemblyName = "Common.Logging"
                     HintPath = "..\..\..\..\lib\net\1.1\Common.Logging.dll"
@@ -90,14 +85,24 @@
                     HintPath = "..\..\..\..\lib\net\1.1\Nullables.dll"
                 />
                 <Reference
-                    Name = "Spring.Scheduling.Quartz.2003"
-                    Project = "{0C0D8C65-90DE-4914-9940-4C684C54971B}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "Spring.Scheduling.Quartz"
+                    AssemblyName = "Spring.Scheduling.Quartz"
+                    HintPath = "..\..\..\..\bin\net\1.1\debug\Spring.Scheduling.Quartz.dll"
+                />
+                <Reference
+                    Name = "Spring.Core"
+                    AssemblyName = "Spring.Core"
+                    HintPath = "..\..\..\..\bin\net\1.1\debug\Spring.Core.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AdminService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "App.config"
                     BuildAction = "Content"
