@@ -2,7 +2,7 @@ SPRING.NET FRAMEWORK CHANGELOG
 ==============================
 http://www.springframework.net
 
-Releaes 1.2.0, August 15, 2008
+Release 1.2.0 M1, August 15, 2008
 
 
 Bug
