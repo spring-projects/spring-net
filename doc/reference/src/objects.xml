@@ -4861,7 +4861,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       <classname>IObjectFactory</classname> capabilities in a lot more depth
       than the said feature matrix.)</para>
 
-      <table id="context-introduction-ctx-vs-beanfactory-feature-matrix"
+      <table id="context-introduction-ctx-vs-objectfactory-feature-matrix"
              pgwide="1">
         <title>Feature Matrix</title>
 

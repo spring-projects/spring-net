@@ -1037,7 +1037,7 @@ namespace MyApp
     &lt;property name="MessageConverter"&gt;
         &lt;null/&gt;
     &lt;/property&gt;
-&lt;/bean&gt;</programlisting>
+&lt;/object&gt;</programlisting>
 
       <para>Please note that if the above 'MessageListener' receives a Message
       of a type other than ITextMessage, a
@@ -1129,8 +1129,7 @@ namespace MyApp
 &lt;/nms:listener-container&gt;</programlisting>
 
       <para>The example above is equivalent to creating two distinct listener
-      container bean definitions and two distinct MessageListenerAdapter bean
-      definitions as demonstrated in the section entitled <xref
+      container object definitions and two distinct MessageListenerAdapter object      definitions as demonstrated in the section entitled <xref
       linkend="message-listener-adapter" />. In addition to the attributes
       shown above, the listener element may contain several optional ones. The
       following table describes all available attributes:</para>

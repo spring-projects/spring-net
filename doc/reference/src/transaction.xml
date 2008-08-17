@@ -458,7 +458,7 @@
     <programlisting>TransactionInterceptor.CurrentTransactionStatus.RollbackOnly = true;</programlisting>
 
     <sect2 id="tx-understandingimpl">
-      <title id="beannameautoproxycreator-for-transactions">Understanding
+      <title id="objectnameautoproxycreator-for-transactions">Understanding
       Spring's declarative transaction implementation</title>
 
       <para>The aim of this section is to dispel the mystique that is
