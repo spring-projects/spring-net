@@ -32,7 +32,7 @@ namespace Spring.Scheduling.Quartz
     public class SpringDbProviderAdapter : IDbProvider
     {
         private readonly Data.Common.IDbProvider dbProvider;
-        private DbMetadata metadata;
+        private readonly DbMetadata metadata;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringDbProviderAdapter"/> class.
@@ -82,13 +82,41 @@ namespace Spring.Scheduling.Quartz
         }
     }
 
+    /// <summary>
+    /// Helper class to map between Quartz and Spring DB metadata.
+    /// </summary>
     public class SpringMetadataAdapter : DbMetadata
     {
-        private IDbMetadata metadata;
+        private readonly IDbMetadata metadata;
+        private readonly Enum dbTypeBinary;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpringMetadataAdapter"/> class.
+        /// </summary>
+        /// <param name="metadata">The metadata to wrap and adapt.</param>
         public SpringMetadataAdapter(IDbMetadata metadata)
         {
             this.metadata = metadata;
+            // determine correct binary enum type
+            Type parameterType = metadata.ParameterDbType;
+            FieldInfo blobField = parameterType.GetField("Blob");
+            FieldInfo imageField = parameterType.GetField("Image");
+            if (blobField != null)
+            {
+                // uses Blob, for example Oracle
+                dbTypeBinary = (Enum) blobField.GetValue(Activator.CreateInstance(parameterType));
+            }
+            else if (imageField != null)
+            {
+                // uses Image, SQL Server
+                dbTypeBinary = (Enum) imageField.GetValue(Activator.CreateInstance(parameterType));
+            }
+            else
+            {
+                // use standard binary type
+                dbTypeBinary = DbType.Binary;
+            }
+
         }
 
         public override string ProductName
@@ -165,7 +193,7 @@ namespace Spring.Scheduling.Quartz
 
         public override Enum DbBinaryType
         {
-            get { return DbType.Binary; }
+            get { return dbTypeBinary; }
         }
 
         public override bool UseParameterNamePrefixInParameterCollection
