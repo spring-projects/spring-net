@@ -287,27 +287,6 @@ namespace Spring.Data
                               string parameterName, Enum dbType, int size, object parameterValue);	    
 
 	    
-        /*
-        /// <summary>
-        /// Execute a query for a result list, given static SQL.
-        /// </summary>
-        /// <remarks>
-        /// The results will be mapped to a List (one entry for each row)
-        /// of IDictionaries (one entry for each column using he column 
-        /// name as the key).  Each element in the list will be of the form
-        /// returned by ths interfaces QueryForMap() methods.
-        /// </remarks>
-        /// <param name="cmdType">The type of the command.</param>
-        /// <param name="sql">The SQL query to execute</param>
-        /// <returns></returns>
-	    IList QueryForList(CommandType cmdType, string sql);
-        */
-	    //IDictionary QueryForDictionary(CommandType cmdType, string sql);
-        //TODO -
-        //Object QueryForObject(CommandType cmdType, String sql, Type requiredType) throws DataAccessException;
-	    //IDictionary QueryForDictionary
-	    //IList QueryForList
-
         #endregion
 
         #region Query for ObjectDelegate
@@ -402,19 +381,9 @@ namespace Spring.Data
 	    // each with either a IRowMapper, IResultSetExtractor, IRowCallback
 	    // and multiple output parameters.
 	    IDictionary QueryWithCommandCreator(IDbCommandCreator commandCreator, IList resultProcessors);
-       
-	    //TODO
-	    //Object QueryForObject(... Type requiredType)
-        //IDictionary QueryForDictionary
-        //IList QueryForList
-	    
+           
         #endregion
-	    
-        // ***************************************************************
-	    // NB: Complex DataSet/DataTable operations are best handled with
-	    //     DataSetOperations class in Spring.Data.Objects
-	    // ***************************************************************
-        
+	            
 	    #region DataTable Create operations without parameters
 	    
         DataTable DataTableCreate(CommandType commandType, string sql);
@@ -449,11 +418,7 @@ namespace Spring.Data
                                   ITableMapping tableMapping,
                                   IDataAdapterSetter dataAdapterSetter);	 
 	    
-	    
-	    //TODO
-	    /*
-        DataTable DataTableCreateWithParams(IDbDataAdapterCreator dataAdapterCreator);
-        */
+	   
 	    
         #endregion
 	    
@@ -497,17 +462,10 @@ namespace Spring.Data
                           IDbParameters parameters,
                           ITableMapping tableMapping,
                           IDataAdapterSetter dataAdapterSetter);	 
-	    
-	    //TODO
-	    /*
-        int DataTableFillWithParams(DataTable dataTable, 
-                          IDbDataAdapterCreator dataAdapterCreator);	 
-	    
-	    */
+
         #endregion
 	    
         #region DataTable Update operations
-        //TODO conflict options...
 	    
         int DataTableUpdateWithCommandBuilder(DataTable dataTable,
             CommandType commandType,
@@ -665,8 +623,6 @@ namespace Spring.Data
         #endregion	   
 	    
         #region DataSet Update operations
-	    //TODO expose RowUpdate event in a generic manner
-	    //TODO any way to integrate Accept/RejectChanges based on tx outcome?
 
         int DataSetUpdateWithCommandBuilder(DataSet dataSet,
             CommandType commandType,

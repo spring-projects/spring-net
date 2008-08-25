@@ -32,6 +32,8 @@ using Spring.Data.Common;
 using Spring.Data.Core;
 using Spring.Data.Support;
 using Spring.Objects;
+using Spring.Transaction;
+using Spring.Transaction.Support;
 
 #endregion
 
@@ -48,6 +50,7 @@ namespace Spring.Data
         
 	    IAdoOperations adoOperations;
 	    IDbProvider dbProvider;
+        private IPlatformTransactionManager transactionManager;
 	    
 		#endregion
 
@@ -82,13 +85,8 @@ namespace Spring.Data
             Assert.IsNotNull(ctx);
             dbProvider = ctx["DbProvider"] as IDbProvider;
             Assert.IsNotNull(dbProvider);
-	        UserCredentialsDbProvider userCredentialsDbProvider = dbProvider as UserCredentialsDbProvider;
-            Assert.IsNotNull(userCredentialsDbProvider);
-
-	        //userCredentialsDbProvider.Username = "User ID=springqa";
-	        //userCredentialsDbProvider.Password = "Password=springqa";
-            userCredentialsDbProvider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");
-            adoOperations = new AdoTemplate(userCredentialsDbProvider);
+            adoOperations = new AdoTemplate(dbProvider);
+	        transactionManager = new AdoPlatformTransactionManager(dbProvider);
             
         }
 	    
@@ -97,12 +95,10 @@ namespace Spring.Data
 	    [Test]
 	    public void FillDataSetNoParams()
 	    {
-	        String sql = "select TestObjectNo, Age, Name from TestObjects";
-	        DataSet dataSet = new DataSet();
-	        adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
-	        Assert.AreEqual(1, dataSet.Tables.Count);
-	        Assert.AreEqual(4, dataSet.Tables["Table"].Rows.Count);
-	        
+	        PopulateTestObjectsTable();
+	        string sql = ValidateTestObjects(4);
+	        DataSet dataSet;
+
 	        dataSet = new DataSet();
 	        adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] {"TestObjects"});
             Assert.AreEqual(1, dataSet.Tables.Count);
@@ -125,41 +121,92 @@ namespace Spring.Data
 	        }
 	        
 	    }
-	    
-	    [Test]
-	    public void UpdateDataSet()
+
+        [Test]
+        public void UpdateDataSet()
+        {
+            PopulateTestObjectsTable();
+            ValidateTestObjects(4);
+            DoUpdateDataSet();
+            ValidateTestObjects(5);
+
+        }
+
+        [Test]
+	    public void UpdateDataSetTxRollback()
+        {
+
+            PopulateTestObjectsTable();
+            ValidateTestObjects(4);
+            TransactionTemplate tt = new TransactionTemplate(transactionManager);
+            try
+            {
+                object result = tt.Execute(new DataSetUpdateTransactionCallback(this, true));
+                Assert.Fail("Should have thrown exception to rollback transaction.");
+            } catch (Exception e)
+            {
+                ValidateTestObjects(4);
+            }
+        }
+
+	    private void PopulateTestObjectsTable()
 	    {
+            adoOperations.ExecuteNonQuery(CommandType.Text, "truncate table TestObjects");
+            int age = 18;
+	        int counter = 0;
+            for (int i=0;i<4;i++)
+            {
+                String sql =
+                    String.Format("insert into TestObjects(Age, Name) VALUES ({0}, '{1}')", age++, "George" + counter++);
+                adoOperations.ExecuteNonQuery(CommandType.Text, sql);
+            }
+	    }
+
+        private string ValidateTestObjects(int count)
+        {
             String sql = "select TestObjectNo, Age, Name from TestObjects";
             DataSet dataSet = new DataSet();
-            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] {"TestObjects"});
-	        
-	        //Create and add new row.
+            adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
+            Assert.AreEqual(1, dataSet.Tables.Count);
+            Assert.AreEqual(count, dataSet.Tables["Table"].Rows.Count);
+            return sql;
+        }
+
+
+
+        public void DoUpdateDataSet()
+        {
+            String sql = "select TestObjectNo, Age, Name from TestObjects";
+            DataSet dataSet = new DataSet();
+            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] { "TestObjects" });
+
+            //Create and add new row.
             DataRow myDataRow = dataSet.Tables["TestObjects"].NewRow();
             myDataRow["Age"] = 101;
-            myDataRow["Name"] = "OldManWinter";    
+            myDataRow["Name"] = "OldManWinter";
             dataSet.Tables["TestObjects"].Rows.Add(myDataRow);
-	        
-	        //TODO - think about api...
-	        IDbCommand insertCommand = dbProvider.CreateCommand();
-	        insertCommand.CommandText = "insert into TestObjects(Age,Name) values (@Age,@Name)";
+
+            //TODO - think about api...
+            IDbCommand insertCommand = dbProvider.CreateCommand();
+            insertCommand.CommandText = "insert into TestObjects(Age,Name) values (@Age,@Name)";
             IDbParameters parameters = adoOperations.CreateDbParameters();
             parameters.Add("Name", DbType.String, 12, "Name");
-	        //TODO - remembering the -1 isn't all that natural... add string name, dbtype, string sourceCol)
-	        //or AddSourceCol("Age", SqlDbType.Int);  would copy into source col?
+            //TODO - remembering the -1 isn't all that natural... add string name, dbtype, string sourceCol)
+            //or AddSourceCol("Age", SqlDbType.Int);  would copy into source col?
             parameters.Add("Age", SqlDbType.Int, -1, "Age");
-	        
-	        //TODO - this isn't all that natural...
-	        ParameterUtils.CopyParameters(insertCommand, parameters);
-	        
-	        //insertCommand.Parameters.Add()
-	        
-	        adoOperations.DataSetUpdate(dataSet, "TestObjects", 
-	                                    insertCommand,
-	                                    null,
-	                                    null);
 
-	        //TODO avoid param Utils copy by adding argument...
-	        	        
+            //TODO - this isn't all that natural...
+            ParameterUtils.CopyParameters(insertCommand, parameters);
+
+            //insertCommand.Parameters.Add()
+
+            adoOperations.DataSetUpdate(dataSet, "TestObjects",
+                                        insertCommand,
+                                        null,
+                                        null);
+
+            //TODO avoid param Utils copy by adding argument...
+
             //adoOperations.DataSetUpdate(dataSet, "TestObjects", 
             //                            insertCommand, parameters,
             //                            null, null,
@@ -169,11 +216,10 @@ namespace Spring.Data
             //                            CommandType type, string sql, parameters,
             //                            null, null,
             //                            null, null);
-	        
-            //TODO how about breaking up the operations...
 
-	    }
-	    
+            //TODO how about breaking up the operations...
+        }
+
 	    [Test]
 	    public void ExecuteQueryWithResultSetExtractor()
 	    {
@@ -284,4 +330,32 @@ namespace Spring.Data
         }
 
 	}
+
+    internal class DataSetUpdateTransactionCallback : ITransactionCallback
+    {
+        private bool throwException;
+        private AdoTemplateTests adoTemplateTests;
+
+        public DataSetUpdateTransactionCallback(AdoTemplateTests adoTemplateTests, bool throwException)
+        {
+            this.throwException = throwException;
+            this.adoTemplateTests = adoTemplateTests;
+        }
+
+        /// <summary>
+        /// Gets called by TransactionTemplate.Execute within a 
+        /// transaction context.
+        /// </summary>
+        /// <param name="status">The associated transaction status.</param>
+        /// <returns>A result object or <c>null</c>.</returns>
+        public object DoInTransaction(ITransactionStatus status)
+        {
+            if (throwException)
+            {
+                throw new ArgumentException("Explicitly thrown exception");
+            }
+            adoTemplateTests.DoUpdateDataSet();
+            return null;
+        }
+    }
 }

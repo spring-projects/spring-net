@@ -330,7 +330,7 @@ namespace Spring.Data.Core
             try
             {
                 dataAdapter = DbProvider.CreateDataAdapter();
-                //TODO row updated event handling...
+                //TODO row updated event handling... (SPRNET-1014)
                 dataAdapter.SelectCommand = DbProvider.CreateCommand();
                 dataAdapter.SelectCommand.Connection = connectionTxPairToUse.Connection;
                 //TODO register for warnings on connection.
@@ -1150,7 +1150,8 @@ namespace Spring.Data.Core
             #endregion
 
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(null);
-            return (int)Execute(new DataAdapterFillCallback(dataTable,
+            return (int)Execute(new DataAdapterFillCallback(dbProvider,
+                                                            dataTable,
                                                             commandType, sql,
                                                             mappingCollection, null, null, null));
         }
@@ -1172,7 +1173,8 @@ namespace Spring.Data.Core
                 tableMappingName = "Table";
             }
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableMappingName });
-            return (int)Execute(new DataAdapterFillCallback(dataTable,
+            return (int)Execute(new DataAdapterFillCallback(dbProvider,
+                                                            dataTable,
                                                             commandType, sql,
                                                             mappingCollection, null, null, null));
 
@@ -1183,9 +1185,10 @@ namespace Spring.Data.Core
         {
             ValidateFillArguments(dataTable, sql, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
-            mappingCollection.Add((object)tableMapping);
+            mappingCollection.Add(tableMapping);
 
-            return (int)Execute(new DataAdapterFillCallback(dataTable,
+            return (int)Execute(new DataAdapterFillCallback(dbProvider,
+                                                            dataTable,
                                                             commandType, sql,
                                                             mappingCollection, null, null, null));
         }
@@ -1197,7 +1200,8 @@ namespace Spring.Data.Core
             ValidateFillArguments(dataTable, sql, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
             mappingCollection.Add((object)tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataTable,
+            return (int)Execute(new DataAdapterFillCallback(dbProvider,
+                                                            dataTable,
                                                             commandType, sql,
                                                             mappingCollection, setter, null, null));
         }
@@ -1212,7 +1216,7 @@ namespace Spring.Data.Core
         {
             ValidateFillWithParameterArguments(dataTable, sql, parameters);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(null);
-            return (int)Execute(new DataAdapterFillCallback(dataTable,
+            return (int)Execute(new DataAdapterFillCallback(dbProvider,dataTable,
                                                             commandType, sql,
                                                             mappingCollection, null, null,
                                                             parameters));
@@ -1228,7 +1232,7 @@ namespace Spring.Data.Core
                 tableMappingName = "Table";
             }
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableMappingName });
-            return (int)Execute(new DataAdapterFillCallback(dataTable,
+            return (int)Execute(new DataAdapterFillCallback(dbProvider, dataTable,
                                                             commandType, sql,
                                                             mappingCollection, null, null, parameters));
         }
@@ -1240,7 +1244,7 @@ namespace Spring.Data.Core
             ValidateFillWithParameterArguments(dataTable, sql, parameters, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
             mappingCollection.Add((object)tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataTable,
+            return (int)Execute(new DataAdapterFillCallback(dbProvider, dataTable,
                                                             commandType, sql,
                                                             mappingCollection, null, null, parameters));
         }
@@ -1253,7 +1257,7 @@ namespace Spring.Data.Core
             ValidateFillWithParameterArguments(dataTable, sql, parameters, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
             mappingCollection.Add((object)tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataTable,
+            return (int)Execute(new DataAdapterFillCallback(dbProvider, dataTable,
                                                             commandType, sql,
                                                             mappingCollection, dataAdapterSetter, null, parameters));
         }
@@ -1262,7 +1266,7 @@ namespace Spring.Data.Core
         #endregion
 
         #region DataTable Update operations
-        //TODO conflict options...
+       
 
         public int DataTableUpdateWithCommandBuilder(DataTable dataTable,
                                                      CommandType commandType,
@@ -1490,7 +1494,7 @@ namespace Spring.Data.Core
 
 
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(null);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             mappingCollection, null, null, null));
         }
@@ -1513,7 +1517,7 @@ namespace Spring.Data.Core
                 tableNames = new string[] { "Table" };
             }
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(tableNames);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             mappingCollection, null, null, null));
         }
@@ -1523,7 +1527,7 @@ namespace Spring.Data.Core
                                ITableMappingCollection tableMapping)
         {
             ValidateFillArguments(dataSet, sql, tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             tableMapping, null, null, null));
 
@@ -1534,7 +1538,7 @@ namespace Spring.Data.Core
                                IDataAdapterSetter setter)
         {
             ValidateFillArguments(dataSet, sql, tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             tableMapping, setter, null, null));
 
@@ -1546,7 +1550,7 @@ namespace Spring.Data.Core
                                IDataSetFillLifecycleProcessor fillLifecycleProcessor)
         {
             ValidateFillArguments(dataSet, sql, tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             tableMapping, setter, fillLifecycleProcessor, null));
 
@@ -1561,7 +1565,7 @@ namespace Spring.Data.Core
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(null);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             mappingCollection, null, null,
                                                             parameters));
@@ -1577,7 +1581,7 @@ namespace Spring.Data.Core
                 tableNames = new string[] { "Table" };
             }
             ITableMappingCollection tableMapping = DoCreateMappingCollection(tableNames);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             tableMapping, null, null, parameters));
 
@@ -1588,7 +1592,7 @@ namespace Spring.Data.Core
                                              ITableMappingCollection tableMapping)
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters, tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             tableMapping, null, null, parameters));
         }
@@ -1599,7 +1603,7 @@ namespace Spring.Data.Core
                                              IDataAdapterSetter dataAdapterSetter)
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters, tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             tableMapping, dataAdapterSetter, null, parameters));
         }
@@ -1611,7 +1615,7 @@ namespace Spring.Data.Core
                                              IDataSetFillLifecycleProcessor fillLifecycleProcessor)
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters, tableMapping);
-            return (int)Execute(new DataAdapterFillCallback(dataSet,
+            return (int)Execute(new DataAdapterFillCallback(DbProvider, dataSet,
                                                             commandType, sql,
                                                             tableMapping, dataAdapterSetter, fillLifecycleProcessor, parameters));
         }
@@ -1681,7 +1685,7 @@ namespace Spring.Data.Core
 
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableName });
 
-            return (int)Execute(new DataAdapterUpdateCallback(dataSet,
+            return (int)Execute(new DataAdapterUpdateCallback(DbProvider, dataSet,
                                                               mappingCollection,
                                                               insertCommand,
                                                               updateCommand,
@@ -1722,7 +1726,7 @@ namespace Spring.Data.Core
             }
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableName });
 
-            int returnVal = (int)Execute(new DataAdapterUpdateCallback(dataSet, mappingCollection,
+            int returnVal = (int)Execute(new DataAdapterUpdateCallback(DbProvider, dataSet, mappingCollection,
                                                                        insertCommand, updateCommand, deleteCommand, null));
 
             if (insertSql != null)
@@ -1751,7 +1755,7 @@ namespace Spring.Data.Core
         {
             ValidateUpdateArguments(dataSet, tableName);
             ITableMappingCollection tableMapping = DoCreateMappingCollection(new string[] { tableName });
-            return (int)Execute(new DataAdapterUpdateCallback(dataSet,
+            return (int)Execute(new DataAdapterUpdateCallback(DbProvider, dataSet,
                                                               tableMapping,
                                                               insertCommand,
                                                               updateCommand,
@@ -1767,7 +1771,7 @@ namespace Spring.Data.Core
                                  IDbCommand deleteCommand)
         {
             ValidateUpdateArguments(dataSet, tableMapping);
-            return (int)Execute(new DataAdapterUpdateCallback(dataSet,
+            return (int)Execute(new DataAdapterUpdateCallback(DbProvider, dataSet,
                                                               tableMapping,
                                                               insertCommand,
                                                               updateCommand,
@@ -1783,7 +1787,7 @@ namespace Spring.Data.Core
                                  IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateArguments(dataSet, tableMapping);
-            return (int)Execute(new DataAdapterUpdateCallback(dataSet,
+            return (int)Execute(new DataAdapterUpdateCallback(DbProvider, dataSet,
                                                               tableMapping,
                                                               insertCommand,
                                                               updateCommand,
@@ -1873,7 +1877,7 @@ namespace Spring.Data.Core
                 ParameterUtils.CopyParameters(deleteCommand, deleteParameters);
             }
 
-            int returnVal = (int)Execute(new DataAdapterUpdateCallback(dataTable, mappingCollection,
+            int returnVal = (int)Execute(new DataAdapterUpdateCallback(DbProvider, dataTable, mappingCollection,
                                                                        insertCommand, updateCommand, deleteCommand, null));
 
             if (insertSql != null)
@@ -2162,8 +2166,10 @@ namespace Spring.Data.Core
             private IDataAdapterSetter dataAdapterSetter;
             private IDataSetFillLifecycleProcessor fillLifecycleProcessor;
             private IDbParameters parameters;
+            private IDbProvider dbProvider;
 
-            public DataAdapterFillCallback(DataSet dataSet,
+            public DataAdapterFillCallback(IDbProvider dbProvider, 
+                                           DataSet dataSet,
                                            CommandType commandType,
                                            string sql,
                                            ITableMappingCollection mappingCollection,
@@ -2172,6 +2178,7 @@ namespace Spring.Data.Core
                                            IDbParameters parameters)
             {
                 containsDataSet = true;
+                this.dbProvider = dbProvider;
                 this.dataSet = dataSet;
                 this.commandType = commandType;
                 this.sql = sql;
@@ -2181,7 +2188,8 @@ namespace Spring.Data.Core
                 this.parameters = parameters;
             }
 
-            public DataAdapterFillCallback(DataTable dataTable,
+            public DataAdapterFillCallback(IDbProvider dbProvider, 
+                                           DataTable dataTable,
                                            CommandType commandType,
                                            string sql,
                                            ITableMappingCollection mappingCollection,
@@ -2190,6 +2198,7 @@ namespace Spring.Data.Core
                                            IDbParameters parameters)
             {
                 containsDataSet = false;
+                this.dbProvider = dbProvider;
                 this.dataTable = dataTable;
                 this.commandType = commandType;
                 this.sql = sql;
@@ -2203,8 +2212,13 @@ namespace Spring.Data.Core
 
             public object DoInDataAdapter(IDbDataAdapter dataAdapter)
             {
+                ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(dbProvider);
+                dataAdapter.SelectCommand.Connection = connectionTxPairToUse.Connection;
+                dataAdapter.SelectCommand.Transaction = connectionTxPairToUse.Transaction;
+
                 dataAdapter.SelectCommand.CommandType = commandType;
                 dataAdapter.SelectCommand.CommandText = sql;
+
                 //TODO investigate performance of cloning....would need to change signature to
                 //     DataTableMapping[] otherwise...
                 foreach (DataTableMapping dataTableMapping in mappingCollection)
@@ -2264,15 +2278,12 @@ namespace Spring.Data.Core
             private IDbCommand updateCommand;
             private IDbCommand deleteCommand;
             private IDataAdapterSetter dataAdapterSetter;
+            private IDbProvider dbProvider;
 
-            public DataAdapterUpdateCallback(DataSet dataSet,
-                                             ITableMappingCollection mappingCollection,
-                                             IDbCommand insertCommand,
-                                             IDbCommand updateCommand,
-                                             IDbCommand deleteCommand,
-                                             IDataAdapterSetter dataAdapterSetter)
+            public DataAdapterUpdateCallback(IDbProvider dbProvider, DataSet dataSet, ITableMappingCollection mappingCollection, IDbCommand insertCommand, IDbCommand updateCommand, IDbCommand deleteCommand, IDataAdapterSetter dataAdapterSetter)
             {
                 containsDataSet = true;
+                this.dbProvider = dbProvider;
                 this.dataSet = dataSet;
                 this.mappingCollection = mappingCollection;
                 this.insertCommand = insertCommand;
@@ -2281,14 +2292,10 @@ namespace Spring.Data.Core
                 this.dataAdapterSetter = dataAdapterSetter;
             }
 
-            public DataAdapterUpdateCallback(DataTable dataTable,
-                                             ITableMappingCollection mappingCollection,
-                                             IDbCommand insertCommand,
-                                             IDbCommand updateCommand,
-                                             IDbCommand deleteCommand,
-                                             IDataAdapterSetter dataAdapterSetter)
+            public DataAdapterUpdateCallback(IDbProvider dbProvider, DataTable dataTable, ITableMappingCollection mappingCollection, IDbCommand insertCommand, IDbCommand updateCommand, IDbCommand deleteCommand, IDataAdapterSetter dataAdapterSetter)
             {
                 containsDataSet = false;
+                this.dbProvider = dbProvider;
                 this.dataTable = dataTable;
                 this.mappingCollection = mappingCollection;
                 this.insertCommand = insertCommand;
@@ -2300,6 +2307,10 @@ namespace Spring.Data.Core
 
             public object DoInDataAdapter(IDbDataAdapter dataAdapter)
             {
+                ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(dbProvider);
+                dataAdapter.SelectCommand.Connection = connectionTxPairToUse.Connection;
+                dataAdapter.SelectCommand.Transaction = connectionTxPairToUse.Transaction;
+
                 //TODO - did not make copies of parameters...
                 if (insertCommand == null && updateCommand == null && deleteCommand == null)
                 {
