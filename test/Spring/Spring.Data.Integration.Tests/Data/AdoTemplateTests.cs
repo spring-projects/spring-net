@@ -143,7 +143,7 @@ namespace Spring.Data
             {
                 object result = tt.Execute(new DataSetUpdateTransactionCallback(this, true));
                 Assert.Fail("Should have thrown exception to rollback transaction.");
-            } catch (Exception e)
+            } catch (Exception)
             {
                 ValidateTestObjects(4);
             }
