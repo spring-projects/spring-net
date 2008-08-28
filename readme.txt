@@ -3,7 +3,6 @@ THE SPRING.NET FRAMEWORK, Release 1.2.0 M1  (August 14, 2008)
 http://www.springframework.net/
 
 
-
 1. INTRODUCTION
 
 The 1.2 release of Spring.NET contains
