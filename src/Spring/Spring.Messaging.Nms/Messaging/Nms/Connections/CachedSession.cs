@@ -255,7 +255,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 foreach (DictionaryEntry entry in cachedProducers)
                 {
-                    ((IMessageProducer)entry.Value).Dispose();
+                    ((IMessageProducer)entry.Value).Close();
                 }
                 foreach (DictionaryEntry entry in cachedConsumers)
                 {

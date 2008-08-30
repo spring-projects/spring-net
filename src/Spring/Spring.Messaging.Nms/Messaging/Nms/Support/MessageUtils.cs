@@ -124,7 +124,7 @@ namespace Spring.Messaging.Nms.Support
             {
                 try
                 {
-                    producer.Dispose();
+                    producer.Close();
                 }
                 catch (NMSException ex)
                 {
