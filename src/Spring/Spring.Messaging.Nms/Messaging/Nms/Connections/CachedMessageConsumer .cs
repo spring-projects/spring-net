@@ -42,6 +42,16 @@ namespace Spring.Messaging.Nms.Connections
             this.target = target;
         }
 
+
+        /// <summary>
+        /// Gets the target MessageConsumer, the consumer we are 'wrapping'
+        /// </summary>
+        /// <value>The target MessageConsumer.</value>
+        public IMessageConsumer Target
+        {
+            get { return target; }
+        }
+
         /// <summary>
         /// Register for message events. 
         /// </summary>

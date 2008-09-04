@@ -21,6 +21,7 @@
 #region Imports
 
 using Apache.NMS;
+using Apache.NMS.ActiveMQ.Commands;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -206,6 +207,53 @@ namespace Spring.Messaging.Nms.Connections
             Assert.AreSame(tmpA, tmpC);
 
             mocks.VerifyAll();
+        }
+
+
+        /// <summary>
+        /// Tests that the same underlying instance of the message consumer is returned after
+        /// creating a session, creating the consumer (A), closing the session, and creating another
+        /// consumer (B).  Assert that (A)=(B).
+        /// </summary>
+        [Test]
+        public void CachedMessageConsumer()
+        {
+            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            IConnection connection = new TestConnection();
+            
+
+            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+
+            mocks.ReplayAll();
+
+
+            CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
+            cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
+            IConnection con1 = cachingConnectionFactory.CreateConnection();
+
+            ISession sessionA = con1.CreateSession(AcknowledgementMode.Transactional);
+            IDestination destination = new ActiveMQQueue("test.dest");
+            IMessageConsumer consumerA = sessionA.CreateConsumer(destination);
+            TestMessageConsumer tmpA = GetTestMessageConsumer(consumerA);
+
+            sessionA.Close();
+
+            ISession sessionB = con1.CreateSession(AcknowledgementMode.Transactional);
+            IMessageConsumer consumerB = sessionB.CreateConsumer(destination);
+            TestMessageConsumer tmpB = GetTestMessageConsumer(consumerB);
+
+            Assert.AreSame(tmpA, tmpB);
+
+            mocks.VerifyAll();
+        }
+
+        private static TestMessageConsumer GetTestMessageConsumer(IMessageConsumer consumer)
+        {
+            CachedMessageConsumer cmp1 = consumer as CachedMessageConsumer;
+            Assert.IsNotNull(cmp1);
+            TestMessageConsumer tmp1 = cmp1.Target as TestMessageConsumer;
+            Assert.IsNotNull(tmp1);
+            return tmp1;
         }
 
         private static TestMessageProducer GetTestMessageProducer(IMessageProducer producer1)

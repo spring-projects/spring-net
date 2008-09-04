@@ -444,7 +444,7 @@ namespace Spring.Messaging.Nms.Connections
                 }
                 else
                 {
-                    return target.CreateConsumer(destination, selector);
+                    consumer = target.CreateConsumer(destination, selector);
                 }
                 if (LOG.IsDebugEnabled)
                 {

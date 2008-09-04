@@ -66,46 +66,47 @@ namespace Spring.Messaging.Nms.Connections
 
         public IMessageConsumer CreateConsumer(IDestination destination)
         {
-            throw new NotImplementedException();
+            return new TestMessageConsumer();
         }
 
         public IMessageConsumer CreateConsumer(IDestination destination, TimeSpan requestTimeout)
         {
-            throw new NotImplementedException();
+            return new TestMessageConsumer();
         }
 
         public IMessageConsumer CreateConsumer(IDestination destination, string selector)
         {
+            return new TestMessageConsumer();
             //IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IMessageConsumer msgConsumer = (IMessageConsumer) mocks.CreateMock(typeof (IMessageConsumer));
-            return msgConsumer;
+            //IMessageConsumer msgConsumer = (IMessageConsumer) mocks.CreateMock(typeof (IMessageConsumer));
+            //return msgConsumer;
         }
 
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, TimeSpan requestTimeout)
         {
-            throw new NotImplementedException();
+            return new TestMessageConsumer();
         }
 
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal)
         {
-            throw new NotImplementedException();
+            return new TestMessageConsumer();
         }
 
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal,
                                                TimeSpan requestTimeout)
         {
-            throw new NotImplementedException();
+            return new TestMessageConsumer();
         }
 
         public IMessageConsumer CreateDurableConsumer(ITopic destination, string name, string selector, bool noLocal)
         {
-            throw new NotImplementedException();
+            return new TestMessageConsumer();
         }
 
         public IMessageConsumer CreateDurableConsumer(ITopic destination, string name, string selector, bool noLocal,
                                                       TimeSpan requestTimeout)
         {
-            throw new NotImplementedException();
+            return new TestMessageConsumer();
         }
 
         public void DeleteDurableConsumer(string name)

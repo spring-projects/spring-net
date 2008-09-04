@@ -94,6 +94,7 @@
     <Compile Include="Messaging\Nms\Connections\SingleConnectionFactoryTests.cs" />
     <Compile Include="Messaging\Nms\Connections\TestConnection.cs" />
     <Compile Include="Messaging\Nms\Connections\TestExceptionListener.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestMessageConsumer.cs" />
     <Compile Include="Messaging\Nms\Connections\TestMessageListener.cs" />
     <Compile Include="Messaging\Nms\Connections\TestMessageProducer.cs" />
     <Compile Include="Messaging\Nms\Connections\TestSession.cs" />
