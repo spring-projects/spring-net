@@ -278,7 +278,6 @@ namespace Spring.Messaging.Ems.Listener
             {
                 if (this.consumers == null)
                 {
-                    logger.Debug("InitializingConsumers **********");
                     this.sessions = new HashedSet();
                     this.consumers = new HashedSet();
                     Connection con = SharedConnection;

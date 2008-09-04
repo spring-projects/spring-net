@@ -60,7 +60,7 @@ namespace Spring.Messaging.Nms.Connections
 
 
         /// <summary>
-        /// Gets the target MessageProducer, the procder we are 'wrapping'
+        /// Gets the target MessageProducer, the producer we are 'wrapping'
         /// </summary>
         /// <value>The target MessageProducer.</value>
         public IMessageProducer Target
