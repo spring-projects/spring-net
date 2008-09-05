@@ -105,7 +105,17 @@ namespace Spring.Scheduling.Quartz
 			set { concurrent = value; }
 		}
 
-		/// <summary> 
+
+        /// <summary>
+        /// Gets the job detail.
+        /// </summary>
+        /// <value>The job detail.</value>
+	    protected JobDetail JobDetail
+	    {
+	        get { return jobDetail; }
+	    }
+
+	    /// <summary> 
 		/// Set a list of JobListener names for this job, referring to
 		/// non-global JobListeners registered with the Scheduler.
 		/// </summary>
@@ -151,7 +161,7 @@ namespace Spring.Scheduling.Quartz
         /// probably fatal) exception.
         /// </note>
         /// </remarks>
-		public object GetObject()
+		public virtual object GetObject()
 		{
 			return jobDetail;
 		}
