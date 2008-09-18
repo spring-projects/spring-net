@@ -1097,7 +1097,8 @@ namespace Spring.Objects.Factory.Support
                 if (ContainsSingleton(objectName))
                 {
                     return true;
-                } else if (ParentObjectFactory is IConfigurableFactoryObject)
+                }
+                else if (ParentObjectFactory is IConfigurableListableObjectFactory)
                 {
                     // No object definition found in this factory -> delegate to parent
                     return

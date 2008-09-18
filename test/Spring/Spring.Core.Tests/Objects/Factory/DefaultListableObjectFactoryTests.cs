@@ -1440,8 +1440,38 @@ namespace Spring.Objects.Factory
             Assert.AreSame(testObject, resultObject);
         }
 
+        [Test]
+        public void HierarchicalObjectFactoryChildParentResolution()
+        {
+            DefaultListableObjectFactory parent = new DefaultListableObjectFactory();
+            DefaultListableObjectFactory child = new DefaultListableObjectFactory(parent);
+            parent.RegisterSingleton("parent", new Parent());
+            child.RegisterObjectDefinition("child", new RootObjectDefinition(typeof (Child), AutoWiringMode.AutoDetect));
+            Child c = (Child) child.GetObject("child");
+            Assert.IsNotNull(c);
+        }
+
         #region Helper Classes
 
+        public interface IParent
+        {
+
+        }
+
+        public class Parent : IParent
+        {
+
+        }
+
+        public interface IChild
+        {
+
+        }
+
+        public class Child : IChild
+        {
+            public Child(Parent parent) { }
+        }
         public class GoodDisposable : IDisposable
         {
             public static int DisposeCount = 0;
