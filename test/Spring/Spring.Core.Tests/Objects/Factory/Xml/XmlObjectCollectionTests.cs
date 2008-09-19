@@ -431,6 +431,19 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
+        public void PopulatedPropsWithSameKey()
+        {
+            IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
+            XmlObjectFactory xof = new XmlObjectFactory(resource);
+            HasMap hasMap = (HasMap) xof.GetObject("propsWithSameKey");
+            Assert.AreEqual(2, hasMap.Props.Count);
+            Assert.AreEqual("OnE,tWo", hasMap.Props["foo"]);
+            Assert.AreEqual(2, hasMap.Props.GetValues("bar").Length);
+            Assert.AreEqual("OnE", hasMap.Props.GetValues("bar")[0]);
+            Assert.AreEqual("tWo", hasMap.Props.GetValues("bar")[1]);
+        }
+
+        [Test]
         public void DelimitedProps()
         {
             IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());

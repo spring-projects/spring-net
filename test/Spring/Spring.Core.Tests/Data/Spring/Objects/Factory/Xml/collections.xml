@@ -361,6 +361,16 @@
 			</name-values>
 		</property>
 	</object>
+	<object id="propsWithSameKey" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+		<property name="props">
+			<name-values>
+				<add key="foo" value="OnE" />
+				<add key="foo" value="tWo" />
+				<add key="bar" value="OnE" />
+				<add key="bar" value="tWo" />
+			</name-values>
+		</property>
+	</object>
   <object id="delimitedProps" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
     <property name="props">
       <name-values>

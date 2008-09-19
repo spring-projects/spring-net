@@ -1296,7 +1296,7 @@ namespace Spring.Objects.Factory.Xml
                 }
                 else
                 {
-                    nvc[key] = value;
+                    nvc.Add(key,value);
                 }
             }
             return nvc;
