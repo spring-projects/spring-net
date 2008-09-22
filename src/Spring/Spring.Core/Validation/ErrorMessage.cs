@@ -57,6 +57,16 @@ namespace Spring.Validation
             this.parameters = parameters;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorMessage"/> class copying values from another instance.
+        /// </summary>
+        /// <param name="other">Another Error message instance to copy values from.</param>
+        protected ErrorMessage(ErrorMessage other)
+        {
+            this.id = other.id;
+            this.parameters = other.parameters;
+        }
+
         #endregion
 
         #region Properties
@@ -110,7 +120,7 @@ namespace Spring.Validation
         /// The <see cref="T:System.Xml.XmlReader"></see> stream 
         /// from which the object is deserialized. 
         /// </param>
-        public void ReadXml(XmlReader reader)
+        public virtual void ReadXml(XmlReader reader)
         {
             id = reader.GetAttribute("Id");
             if (!reader.IsEmptyElement)
@@ -131,9 +141,9 @@ namespace Spring.Validation
         /// The <see cref="T:System.Xml.XmlWriter"></see> stream 
         /// to which the object is serialized. 
         /// </param>
-        public void WriteXml(XmlWriter writer)
+        public virtual void WriteXml(XmlWriter writer)
         {
-            writer.WriteAttributeString("Id", id.ToString());
+            writer.WriteAttributeString("Id", id);
 
             if (parameters != null)
             {
@@ -168,7 +178,32 @@ namespace Spring.Validation
         }
 
         #endregion
-        
+
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            ErrorMessage other = obj as ErrorMessage;
+            return (other != null)
+                && (this.id == other.Id);
+        }
+
+        ///<summary>
+        ///Serves as a hash function for a particular type. <see cref="M:System.Object.GetHashCode"></see> is suitable for use in hashing algorithms and data structures like a hash table.
+        ///</summary>
+        ///<returns>
+        ///A hash code for the current <see cref="T:System.Object"></see>.
+        ///</returns>
+        public override int GetHashCode()
+        {
+            return id.GetHashCode();
+        }
+
         #region Data members
 
         private string id;

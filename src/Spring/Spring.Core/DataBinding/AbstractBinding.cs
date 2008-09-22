@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using Spring.Threading;
+using Spring.Collections;
 using Spring.Util;
 using Spring.Validation;
 
@@ -14,11 +14,16 @@ namespace Spring.DataBinding
     {
         #region Fields
 
+        /// <summary>
+        /// The name of the always filled error provider
+        /// </summary>
+        public static readonly string ALL_BINDINGERRORS_PROVIDER = "__all_bindingerrors";
+
         // each Binding instance needs its own ID
         private readonly string BINDING_ID = Guid.NewGuid().ToString("N");
 
         private BindingDirection direction = BindingDirection.Bidirectional;
-        private ErrorMessage errorMessage;
+        private BindingErrorMessage errorMessage;
         private string[] errorProviders;
 
         #endregion
@@ -32,17 +37,39 @@ namespace Spring.DataBinding
         ///     <c>true</c> if this binding evaluated without errors;
         ///     <c>false</c> otherwise.
         /// </value>
-        public bool IsValid
+        public bool IsValid(IValidationErrors errors)
         {
-            get
+            if (errors == null) return true;
+
+            IList errorList = errors.GetErrors(ALL_BINDINGERRORS_PROVIDER);
+            return (errorList == null) || (!errorList.Contains(this.ErrorMessage));
+        }
+
+        /// <summary>
+        /// Marks this binding's state as invalid for this validationErrors collection. 
+        /// Returns false if <paramref name="validationErrors"/> is null.
+        /// </summary>
+        /// <param name="validationErrors"></param>
+        /// <returns>false, if validationErrors is null</returns>
+        protected bool SetInvalid(IValidationErrors validationErrors)
+        {
+            if (validationErrors != null)
             {
-                object val = LogicalThreadContext.GetData(GetIsValidKey());
-                return val == null || (bool)val;
+                foreach (string provider in this.ErrorProviders)
+                {
+                    validationErrors.AddError(provider, this.ErrorMessage);
+                }
+                return true;
             }
-            set
-            {
-                LogicalThreadContext.SetData(GetIsValidKey(), value);
-            }
+            return false;
+        }
+
+        ///<summary>
+        /// Gets the unique ID of this binding instance.
+        ///</summary>
+        public string Id
+        {
+            get { return BINDING_ID; }
         }
 
         /// <summary>
@@ -59,7 +86,7 @@ namespace Spring.DataBinding
         /// Gets the error message.
         /// </summary>
         /// <value>The error message.</value>
-        public ErrorMessage ErrorMessage
+        public BindingErrorMessage ErrorMessage
         {
             get { return errorMessage; }
         }
@@ -73,6 +100,15 @@ namespace Spring.DataBinding
         }
 
         #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:System.Object"></see> class.
+        /// </summary>
+        protected AbstractBinding()
+        {
+            this.errorMessage = new BindingErrorMessage( this.Id, "Binding-Error");
+            this.errorProviders = new string[] { ALL_BINDINGERRORS_PROVIDER };
+        }
 
         #region IBinding Implementation
 
@@ -88,7 +124,7 @@ namespace Spring.DataBinding
         /// <param name="validationErrors">
         /// Validation errors collection that type conversion errors should be added to.
         /// </param>
-        public void BindSourceToTarget(object source, object target, IValidationErrors validationErrors)
+        public virtual void BindSourceToTarget(object source, object target, IValidationErrors validationErrors)
         {
             BindSourceToTarget(source, target, validationErrors, null);
         }
@@ -105,7 +141,7 @@ namespace Spring.DataBinding
         /// <param name="validationErrors">
         /// Validation errors collection that type conversion errors should be added to.
         /// </param>
-        public void BindTargetToSource(object source, object target, IValidationErrors validationErrors)
+        public virtual void BindTargetToSource(object source, object target, IValidationErrors validationErrors)
         {
             BindTargetToSource(source, target, validationErrors, null);
         }
@@ -162,19 +198,39 @@ namespace Spring.DataBinding
                 throw new ArgumentException("At least one error provider has to be specified.", "providers");
             }
 
-            this.errorMessage = new ErrorMessage(messageId, null);
+            this.errorMessage = new BindingErrorMessage(this.BINDING_ID, messageId, null);
+            Set providers = new HashedSet();
+            providers.Add(ALL_BINDINGERRORS_PROVIDER);
+            providers.AddAll(errorProviders);
+            errorProviders = new string[providers.Count];
+            providers.CopyTo(errorProviders, 0);
             this.errorProviders = errorProviders;
         }
 
         #endregion
 
-        #region Private Methods
-
-        private string GetIsValidKey()
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
         {
-            return "Binding." + BINDING_ID + ".IsValid";
+            AbstractBinding other = obj as AbstractBinding;
+            return (other != null) && (this.Id == other.Id);
         }
 
-        #endregion
+        ///<summary>
+        ///Serves as a hash function for a particular type. <see cref="M:System.Object.GetHashCode"></see> is suitable for use in hashing algorithms and data structures like a hash table.
+        ///</summary>
+        ///<returns>
+        ///A hash code for the current <see cref="T:System.Object"></see>.
+        ///</returns>
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }

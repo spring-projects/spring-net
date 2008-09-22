@@ -82,9 +82,9 @@ public partial class SuggestedFlights : Page
     protected override void LoadModel(object savedModel)
     {
         IDictionary model = (IDictionary)savedModel;
-        flights = (FlightSuggestions) model["flights"];
-        outboundFlightIndex = (int) model["outboundFlightIndex"];
-        returnFlightIndex = (int) model["returnFlightIndex"];
+        flights = (FlightSuggestions)model["flights"];
+        outboundFlightIndex = (int)model["outboundFlightIndex"];
+        returnFlightIndex = (int)model["returnFlightIndex"];
     }
 
     protected override object SaveModel()
@@ -103,12 +103,12 @@ public partial class SuggestedFlights : Page
     }
 
     #endregion
-    
+
     #region Page Lifecycle Methods
 
-    protected override void OnInitializeControls(EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
-        base.OnInitializeControls(e);
+        base.OnLoad(e);
 
         if (!IsPostBack)
         {
@@ -142,13 +142,24 @@ public partial class SuggestedFlights : Page
 
     protected void BookFlights(object sender, EventArgs e)
     {
-        FlightCollection flightsToBook = GetFlightsToBook();
-        Itinerary itinerary = new Itinerary(flightsToBook);
-        // TODO: forward to next logical page and get user details...
-        ReservationConfirmation confirmation = bookingAgent.Book(
-            new Reservation(new Passenger(1, "Aleksandar", "Seovic"), itinerary));
-        Session[Constants.ReservationConfirmationKey] = confirmation;
-        SetResult(ReservationConfirmed);
+        if ((flights.HasOutboundFlights && !HasOutboundFlight))
+        {
+            this.ValidationErrors.AddError("summary", new ErrorMessage("error.outboundFlight.required"));
+        }
+        if ((flights.HasReturnFlights && !HasReturnFlight))
+        {
+            this.ValidationErrors.AddError("summary", new ErrorMessage("error.returnFlight.required"));
+        }
+        if (this.ValidationErrors.IsEmpty)
+        {
+            FlightCollection flightsToBook = GetFlightsToBook();
+            Itinerary itinerary = new Itinerary(flightsToBook);
+            // TODO: forward to next logical page and get user details...
+            ReservationConfirmation confirmation = bookingAgent.Book(
+                new Reservation(new Passenger(1, "Aleksandar", "Seovic"), itinerary));
+            Session[Constants.ReservationConfirmationKey] = confirmation;
+            SetResult(ReservationConfirmed);
+        }
     }
 
     private FlightCollection GetFlightsToBook()
@@ -167,6 +178,11 @@ public partial class SuggestedFlights : Page
     private bool HasReturnFlight
     {
         get { return this.returnFlightIndex != NoFlightSelected; }
+    }
+
+    private bool HasOutboundFlight
+    {
+        get { return this.outboundFlightIndex != NoFlightSelected; }
     }
 
     #endregion

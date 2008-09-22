@@ -333,6 +333,7 @@
     <Compile Include="DataBinding\AbstractBinding.cs" />
     <Compile Include="DataBinding\AbstractSimpleBinding.cs" />
     <Compile Include="DataBinding\BaseBindingContainer.cs" />
+    <Compile Include="DataBinding\BindingErrorMessage.cs" />
     <Compile Include="DataBinding\IBindingContainer.cs" />
     <Compile Include="DataBinding\ListBinding.cs" />
     <Compile Include="DataBinding\SimpleExpressionBinding.cs" />

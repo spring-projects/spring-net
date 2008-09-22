@@ -187,9 +187,9 @@ namespace Spring.DataBinding
             catch (TypeMismatchException)
             {}
 
-            // make sure that the old value doesn't override current invalid value
+            // binding state is not remembered with ValidationErrors=null!
             dbm.BindTargetToSource(source, target, null);
-            Assert.AreEqual(false, source["boolValue"]);
+            Assert.AreEqual(target.DOB, source["boolValue"]);
         }
 
         [Test]
@@ -209,9 +209,14 @@ namespace Spring.DataBinding
             catch (TypeMismatchException)
             {}
 
-            // make sure that the old value doesn't override current invalid value
-            dbm.BindSourceToTarget(st, st, null);
-            Assert.AreEqual(new DateTime(1856, 7, 9), st.DOB);
+            // binding state is not remembered with ValidationErrors=null!
+            try
+            {
+                dbm.BindSourceToTarget(st, st, null);
+                Assert.Fail("Binding custom Place to date type should throw an exception.");
+            }
+            catch (TypeMismatchException)
+            {}
         }
 
         [Test]
@@ -228,7 +233,7 @@ namespace Spring.DataBinding
             dbm.AddBinding(binding);
 
             dbm.BindSourceToTarget(source, target, errors);
-            Assert.IsFalse(binding.IsValid);
+            Assert.IsFalse(binding.IsValid(errors));
             Assert.IsFalse(errors.IsEmpty);
             Assert.AreEqual(1, errors.GetErrors("errors").Count);
 
@@ -250,7 +255,7 @@ namespace Spring.DataBinding
             dbm.AddBinding(binding);
 
             dbm.BindTargetToSource(st, st, errors);
-            Assert.IsFalse(binding.IsValid);
+            Assert.IsFalse(binding.IsValid(errors));
             Assert.IsFalse(errors.IsEmpty);
             Assert.AreEqual(1, errors.GetErrors("errors").Count);
 

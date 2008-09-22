@@ -22,7 +22,7 @@ namespace Spring.DataBinding
         /// Creates a new instance of <see cref="BaseBindingContainer"/>.
         /// </summary>
         public BaseBindingContainer()
-        {}
+        { }
 
         #endregion
 
@@ -146,14 +146,14 @@ namespace Spring.DataBinding
         /// <returns>
         /// Added <see cref="SimpleExpressionBinding"/> instance.
         /// </returns>
-        public virtual IBinding AddBinding(string sourceExpression, string targetExpression, 
+        public virtual IBinding AddBinding(string sourceExpression, string targetExpression,
                                            BindingDirection direction, IFormatter formatter)
         {
             SimpleExpressionBinding binding = new SimpleExpressionBinding(sourceExpression, targetExpression);
             binding.Direction = direction;
             binding.Formatter = formatter;
             bindings.Add(binding);
-            
+
             return binding;
         }
 
@@ -173,7 +173,7 @@ namespace Spring.DataBinding
         /// <param name="validationErrors">
         /// Validation errors collection that type conversion errors should be added to.
         /// </param>
-        public void BindSourceToTarget(object source, object target, IValidationErrors validationErrors)
+        public virtual void BindSourceToTarget(object source, object target, IValidationErrors validationErrors)
         {
             BindSourceToTarget(source, target, validationErrors, null);
         }
@@ -214,7 +214,7 @@ namespace Spring.DataBinding
         /// <param name="validationErrors">
         /// Validation errors collection that type conversion errors should be added to.
         /// </param>
-        public void BindTargetToSource(object source, object target, IValidationErrors validationErrors)
+        public virtual void BindTargetToSource(object source, object target, IValidationErrors validationErrors)
         {
             BindTargetToSource(source, target, validationErrors, null);
         }
@@ -244,7 +244,7 @@ namespace Spring.DataBinding
         }
 
         /// <summary>
-        /// Sets error message that should be displayed in the case 
+        /// Implemented as a NOOP for containers.
         /// of a non-fatal binding error.
         /// </summary>
         /// <param name="messageId">
@@ -254,7 +254,7 @@ namespace Spring.DataBinding
         /// List of error providers message should be added to.
         /// </param>
         public virtual void SetErrorMessage(string messageId, params string[] errorProviders)
-        {}
+        { }
 
         #endregion
     }

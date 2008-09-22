@@ -9,6 +9,8 @@ Spring.Core
 
 3. Removed getter property of IResourceLoader in IResourceLoaderAware
 
+4. AbstractBinding.IsValid property changed to method AbstractBinding.IsValid( IValidationErrors )
+
 Spring.Services
 ---------------
 1. Removed WebServiceProxyFactory.ClientProtocolType property (obsolete)

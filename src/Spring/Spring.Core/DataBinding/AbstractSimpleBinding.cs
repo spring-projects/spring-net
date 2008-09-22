@@ -71,29 +71,16 @@ namespace Spring.DataBinding
         public override void BindSourceToTarget(object source, object target, IValidationErrors validationErrors,
                                                 IDictionary variables)
         {
-            if (this.IsValid
-                &&
-                (this.Direction == BindingDirection.Bidirectional || this.Direction == BindingDirection.SourceToTarget))
+            if (this.IsValid(validationErrors)
+                && (this.Direction == BindingDirection.Bidirectional || this.Direction == BindingDirection.SourceToTarget))
             {
                 try
                 {
                     DoBindSourceToTarget(source, target, variables);
-                    this.IsValid = true;
                 }
                 catch (Exception)
                 {
-                    this.IsValid = false;
-                    if (this.ErrorMessage != null && validationErrors != null)
-                    {
-                        foreach (string provider in this.ErrorProviders)
-                        {
-                            validationErrors.AddError(provider, this.ErrorMessage);
-                        }
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!SetInvalid(validationErrors)) throw;
                 }
             }
         }
@@ -115,7 +102,7 @@ namespace Spring.DataBinding
             object value = this.GetSourceValue(source, variables);
             if (this.Formatter != null && value is string)
             {
-                value = this.Formatter.Parse((string) value);
+                value = this.Formatter.Parse((string)value);
             }
             this.SetTargetValue(target, value, variables);
         }
@@ -138,29 +125,16 @@ namespace Spring.DataBinding
         public override void BindTargetToSource(object source, object target, IValidationErrors validationErrors,
                                                 IDictionary variables)
         {
-            if (this.IsValid
-                &&
-                (this.Direction == BindingDirection.Bidirectional || this.Direction == BindingDirection.TargetToSource))
+            if (this.IsValid(validationErrors)
+                && (this.Direction == BindingDirection.Bidirectional || this.Direction == BindingDirection.TargetToSource))
             {
                 try
                 {
                     DoBindTargetToSource(source, target, variables);
-                    this.IsValid = true;
                 }
                 catch (Exception)
                 {
-                    this.IsValid = false;
-                    if (this.ErrorMessage != null && validationErrors != null)
-                    {
-                        foreach (string provider in this.ErrorProviders)
-                        {
-                            validationErrors.AddError(provider, this.ErrorMessage);
-                        }
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!SetInvalid(validationErrors)) throw;
                 }
             }
         }

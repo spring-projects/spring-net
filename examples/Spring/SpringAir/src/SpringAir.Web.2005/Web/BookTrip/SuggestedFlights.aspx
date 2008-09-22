@@ -3,10 +3,12 @@
 
 <asp:Content ID="body" ContentPlaceHolderID="body" runat="server">
     <h4 align="center">
-        <asp:Label ID="caption" runat="server" /></h4>
-    <spring:ValidationSummary ID="validationSummary" Provider="summary" runat="server" />
+        <asp:Label ID="caption" runat="server" /></h4>    
     <br />
     <table cellspacing="0" cellpadding="0" width="90%" align="center" border="0">
+        <tr>
+            <td>&nbsp;<spring:ValidationSummary ID="validationSummary" Provider="summary" runat="server" /><br/></td>
+        </tr>    
         <tr>
             <td>
                 <input id="outboundFlight" type="hidden" name="outboundFlight" runat="server" />
