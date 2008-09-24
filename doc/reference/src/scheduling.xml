@@ -183,7 +183,7 @@ public class ExampleJob extends QuartzJobObject {
     &lt;property name="JobDetail" ref="ExampleJob" /&gt;
 
     &lt;!-- run every morning at 6 AM --&gt;
-    &lt;property name="CronExpression" value="0 0 6 * * ?" /&gt;
+    &lt;property name="CronExpressionString" value="0 0 6 * * ?" /&gt;
 &lt;/object&gt;
 </programlisting>
 
