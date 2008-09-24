@@ -1157,6 +1157,44 @@
     </constructor-arg>
   </object>
 
+
+  <!-- used with ASE12.5 and ASE15 -->
+  <object id="SybaseAse-AdoNet2" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Sybase Adaptive Server Enterprise 15.0.2, provider V1.15.192.0"/>
+        <constructor-arg name="assemblyName" value="Sybase.AdoNet2.AseClient, Version=1.15.192.0, Culture=neutral, PublicKeyToken=95d94fac46c88e1e" />
+        <constructor-arg name="connectionType" value="Sybase.Data.AseClient.AseConnection, Sybase.AdoNet2.AseClient, Version=1.15.192.0, Culture=neutral, PublicKeyToken=95d94fac46c88e1e"/>
+        <constructor-arg name="commandType" value="Sybase.Data.AseClient.AseCommand, Sybase.AdoNet2.AseClient, Version=1.15.192.0, Culture=neutral, PublicKeyToken=95d94fac46c88e1e"/>
+        <constructor-arg name="parameterType" value="Sybase.Data.AseClient.AseParameter, Sybase.AdoNet2.AseClient, Version=1.15.192.0, Culture=neutral, PublicKeyToken=95d94fac46c88e1e"/>
+        <constructor-arg name="dataAdapterType" value="Sybase.Data.AseClient.AseDataAdapter, Sybase.AdoNet2.AseClient, Version=1.15.192.0, Culture=neutral, PublicKeyToken=95d94fac46c88e1e"/>
+        <constructor-arg name="commandBuilderType" value="Sybase.Data.AseClient.AseCommandBuilder, Sybase.AdoNet2.AseClient, Version=1.15.192.0, Culture=neutral, PublicKeyToken=95d94fac46c88e1e"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="Sybase.Data.AseClient.AseDbType, Sybase.AdoNet2.AseClient, Version=1.15.192.0, Culture=neutral, PublicKeyToken=95d94fac46c88e1e"/>
+        <constructor-arg name="parameterDbTypeProperty" value="AseDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="@"/>
+        <constructor-arg name="exceptionType" value="Sybase.Data.AseClient.AseException, Sybase.AdoNet2.AseClient, Version=1.15.192.0, Culture=neutral, PublicKeyToken=95d94fac46c88e1e"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].MessageNumber.ToString()"/>
+
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>101,102,103,104,105,106,107,108,109,110,111,112,113,116,120,121,123,207,208,213,257,512</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>423,511,515,530,547,2601,2615,2714</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>1205</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+
+
   <!-- ODBC -->
 
   <object id="Odbc-1.1" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">

@@ -222,6 +222,11 @@
               <xs:documentation>Sybase ASE 15, 1.15.152 provider</xs:documentation>
             </xs:annotation>
           </xs:enumeration>
+          <xs:enumeration value="SybaseAse-AdoNet2">
+            <xs:annotation>
+              <xs:documentation>Sybase ADO.NET ASE 12.5 and ASE 15, 1.15.192.0 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
           <xs:enumeration value="Odbc-1.1">
             <xs:annotation>
               <xs:documentation>Microsoft ODBC, provider V1.0.5000.0 in framework .NET V1.1</xs:documentation>
