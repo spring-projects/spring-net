@@ -93,7 +93,7 @@ public class ExampleJob extends QuartzJobObject {
       the <classname>MethodInvokingJobDetailFactoryObject</classname> you can
       do exactly this:</para>
 
-      <programlisting>&lt;object id="JobDetail" class="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz"&gt;
+      <programlisting>&lt;object id="JobDetail" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz"&gt;
   &lt;property name="TargetObject" ref="ExampleBusinessObject" /&gt;
   &lt;property name="TargetMethod" value="DoIt" /&gt;
 &lt;/object&gt;</programlisting>
@@ -112,7 +112,7 @@ public class ExampleJob extends QuartzJobObject {
 }</programlisting>
 
       <programlisting>
-&lt;object id="ExampleBusinessObject" class="Examples.BusinessObjects.ExampleBusinessObject, Examples.BusinessObjects"/&gt;</programlisting>
+&lt;object id="ExampleBusinessObject" type="Examples.BusinessObjects.ExampleBusinessObject, Examples.BusinessObjects"/&gt;</programlisting>
 
       <para>Using the
       <classname>MethodInvokingJobDetailFactoryObject</classname>, you don't
@@ -132,7 +132,7 @@ public class ExampleJob extends QuartzJobObject {
       non-concurrent, set the <literal>concurrent</literal> flag to
       <literal>false</literal>.</para>
 
-      <programlisting>&lt;object id="JobDetail" class="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz"&gt;
+      <programlisting>&lt;object id="JobDetail" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz"&gt;
   &lt;property name="TargetObject" ref="ExampleBusinessObject" /&gt;
   &lt;property name="TargetMethod" value="DoIt" /&gt;
   &lt;property name="Concurrent" value="false" /&gt;
