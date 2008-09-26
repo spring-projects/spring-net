@@ -1,5 +1,3 @@
-<%@ Import namespace="log4net"%>
-<%@ Import namespace="log4net.Config"%>
 <%@ Application Language="C#" %>
 
 <script runat="server">
