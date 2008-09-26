@@ -56,14 +56,17 @@ namespace Spring.TxQuickStart
             NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
             IApplicationContext context = CreateContextFromXml();
             IDictionary dict = context.GetObjectsOfType(typeof (IAccountManager));
-            accountManager = context["accountManager"] as IAccountManager;
+            accountManager = context["accountManager"] as IAccountManager;  
             CleanDb(context);
         }
 
         private static IApplicationContext CreateContextFromXml()
         {
             return new XmlApplicationContext(
+            // use for demoing ado tx manager
                 "assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/system-test-local-config.xml" 
+            // use for demoing TransactionScope tx manager
+//                "assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/system-test-dtc-config.xml" 
                 );
         }
 
