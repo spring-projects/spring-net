@@ -35,6 +35,7 @@ namespace Spring.Messaging.Nms.Listener
     /// MessageConsumer.Listener method to create concurrent
     /// MessageConsumers for the specified listeners.
     /// </summary>
+    /// <author>Mark Pollack</author>
     public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, IExceptionListener
     {
         #region Logging

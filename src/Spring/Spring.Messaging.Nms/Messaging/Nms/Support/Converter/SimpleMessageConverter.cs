@@ -68,10 +68,10 @@ namespace Spring.Messaging.Nms.Support.Converter
             {
                 return CreateMessageForMap((IDictionary) objectToConvert, session);
             }
-            else if (objectToConvert is ISerializable)
+            else if (objectToConvert != null && objectToConvert.GetType().IsSerializable)
             {
                 return
-                    CreateMessageForSerializable(((ISerializable) objectToConvert), session);
+                    CreateMessageForSerializable(objectToConvert, session);
             }
             else
             {
@@ -173,7 +173,7 @@ namespace Spring.Messaging.Nms.Support.Converter
         /// </returns>
         /// <throws>  NMSException if thrown by NMS methods </throws>
         protected virtual IObjectMessage CreateMessageForSerializable(
-            ISerializable objectToSend, ISession session)
+            object objectToSend, ISession session)
         {
             return session.CreateObjectMessage(objectToSend);
         }
@@ -230,7 +230,7 @@ namespace Spring.Messaging.Nms.Support.Converter
         protected virtual object ExtractSerializableFromMessage(
             IObjectMessage message)
         {
-            return message.Body as ISerializable;
+            return message.Body;
         }
 
         #endregion

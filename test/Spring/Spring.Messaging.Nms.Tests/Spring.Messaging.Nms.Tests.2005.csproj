@@ -99,6 +99,7 @@
     <Compile Include="Messaging\Nms\Connections\TestMessageProducer.cs" />
     <Compile Include="Messaging\Nms\Connections\TestSession.cs" />
     <Compile Include="Messaging\Nms\Core\MessageTemplateTests.cs" />
+    <Compile Include="Messaging\Nms\Core\SimpleMessageConverterTests.cs" />
     <Compile Include="Messaging\Nms\Core\SimpleMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Nms\Integration\LoggingExceptionHandler.cs" />
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListener.cs" />
