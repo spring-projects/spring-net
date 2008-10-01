@@ -65,6 +65,16 @@ namespace Spring.Web.Support
         /// </summary>
         private static readonly Hashtable s_cachedInterceptionStrategies = new Hashtable();
 		
+        /// <summary>
+        /// Holds well-known Type/Strategy mappings.
+        /// </summary>
+        private static readonly Hashtable s_knownInterceptionStrategies = new Hashtable();
+
+        static ControlInterceptor()
+        {
+            s_knownInterceptionStrategies[typeof(ControlCollection)] = s_availableInterceptionStrategies[1];
+        }
+
         private ControlInterceptor()
         {
         }
@@ -119,19 +129,24 @@ namespace Spring.Web.Support
             }
             else
             {
-                // probe for a strategy
-                bool bOk = false;
-                for(int i=0;i<s_availableInterceptionStrategies.Length;i++)
+                // lookup well-known strategies
+                strategy = (IInterceptionStrategy) s_knownInterceptionStrategies[childControls.GetType()];
+                if (strategy == null)
                 {
-                    strategy = s_availableInterceptionStrategies[i];
-                    bOk = strategy.Intercept(defaultApplicationContext, ctlAccessor, ctlColAccessor);
-                    if (bOk) break;
-                }
-
-                if (!bOk)
-                {
-                    LogManager.GetLogger(typeof(ControlInterceptor)).Warn(string.Format("dependency injection not supported for control type {0}", ctlAccessor.GetTarget().GetType()));
-                    strategy = s_noopInterceptionStrategy;
+                    // probe for a strategy
+                    bool bOk = false;
+                    for (int i = 0; i < s_availableInterceptionStrategies.Length; i++)
+                    {
+                        strategy = s_availableInterceptionStrategies[i];
+                        bOk = strategy.Intercept( defaultApplicationContext, ctlAccessor, ctlColAccessor );
+                        if (bOk)
+                            break;
+                    }
+                    if (!bOk)
+                    {
+                        LogManager.GetLogger(typeof(ControlInterceptor)).Warn(string.Format("dependency injection not supported for control type {0}", ctlAccessor.GetTarget().GetType()));
+                        strategy = s_noopInterceptionStrategy;
+                    }
                 }
 
                 lock(s_cachedInterceptionStrategies)
