@@ -100,7 +100,6 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         {
             InitDefaultStrategies();
             handlerObject = this;
-            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
         }
 
         /// <summary>
@@ -141,6 +140,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             set
             {
                 defaultHandlerMethod = value;
+                processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
             }
         }
 
@@ -286,14 +286,14 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             // Regular case: find a handler method reflectively.
             object convertedMessage = ExtractMessage(message);
 
-
+           
             IDictionary vars = new Hashtable();
             vars["convertedObject"] = convertedMessage;
 
             //Need to parse each time since have overloaded methods and
             //expression processor caches target of first invocation.
             //TODO - check JIRA as I believe this has been fixed, otherwise, use regular reflection. -MLP
-            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
+            //processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
             
             //Invoke message handler method and get result.
             object result;
@@ -340,6 +340,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         protected virtual void InitDefaultStrategies()
         {
             MessageConverter = new SimpleMessageConverter();
+            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
         }
 
         /// <summary>

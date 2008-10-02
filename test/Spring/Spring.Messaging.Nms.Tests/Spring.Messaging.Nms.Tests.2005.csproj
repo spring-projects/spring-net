@@ -105,6 +105,9 @@
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListener.cs" />
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\TestConnectionFactory.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\IMessageContentsHandler.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\MessageContentsHandler.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\MessageListenerAdapterTests.cs" />
     <Compile Include="Messaging\Nms\StubQueue.cs" />
   </ItemGroup>
   <ItemGroup>
