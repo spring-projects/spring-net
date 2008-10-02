@@ -34,13 +34,13 @@ namespace Spring.Web.Support
     /// </summary>
     /// <author>Erich Eichinger</author>
     internal sealed class ControlInterceptor
-    {				
+    {
         private class NoOpInterceptionStrategy : IInterceptionStrategy
         {
-            private ILog Log = LogManager.GetLogger(typeof(NoOpInterceptionStrategy));
+            private ILog Log = LogManager.GetLogger( typeof( NoOpInterceptionStrategy ) );
 
-            public bool Intercept(IApplicationContext defaultApplicationContext, ControlAccessor ctlAccessor,
-                                  ControlCollectionAccessor ctlColAccessor)
+            public bool Intercept( IApplicationContext defaultApplicationContext, ControlAccessor ctlAccessor,
+                                  ControlCollectionAccessor ctlColAccessor )
             {
                 return true;
             }
@@ -55,16 +55,16 @@ namespace Spring.Web.Support
                 , new InterceptControlCollectionOwnerStrategy()
             };
 
-		/// <summary>
-		/// The last resort interception strategy...
-		/// </summary>
+        /// <summary>
+        /// The last resort interception strategy...
+        /// </summary>
         private static readonly IInterceptionStrategy s_noopInterceptionStrategy = new NoOpInterceptionStrategy();
 
         /// <summary>
         /// Holds a control.GetType()->IInterceptionStrategy table.
         /// </summary>
         private static readonly Hashtable s_cachedInterceptionStrategies = new Hashtable();
-		
+
         /// <summary>
         /// Holds well-known Type/Strategy mappings.
         /// </summary>
@@ -72,7 +72,7 @@ namespace Spring.Web.Support
 
         static ControlInterceptor()
         {
-            s_knownInterceptionStrategies[typeof(ControlCollection)] = s_availableInterceptionStrategies[1];
+            s_knownInterceptionStrategies[typeof( ControlCollection )] = s_availableInterceptionStrategies[1];
         }
 
         private ControlInterceptor()
@@ -82,7 +82,7 @@ namespace Spring.Web.Support
         /// <summary>
         /// Ensures, a control has been intercepted to support Web-DI. If not, the control will be intercepted.
         /// </summary>
-        public static void EnsureControlIntercepted(IApplicationContext defaultApplicationContext, Control control)
+        public static void EnsureControlIntercepted( IApplicationContext defaultApplicationContext, Control control )
         {
             if (control is LiteralControl)
             {
@@ -90,47 +90,63 @@ namespace Spring.Web.Support
             }
 
             // check control itself
-            if (IsDependencyInjectionAware(defaultApplicationContext, control))
+            if (IsDependencyInjectionAware( defaultApplicationContext, control ))
             {
                 return; // nothing more to do
             }
 
             // check control's ControlCollection
-            EnsureControlCollectionIntercepted(defaultApplicationContext, control);
+            EnsureControlCollectionIntercepted( defaultApplicationContext, control );
         }
 
-        private static void EnsureControlCollectionIntercepted(IApplicationContext defaultApplicationContext, Control control)
+        private static void EnsureControlCollectionIntercepted( IApplicationContext defaultApplicationContext, Control control )
         {
             // check the collection
-            ControlAccessor ctlAccessor = new ControlAccessor(control);
+            ControlAccessor ctlAccessor = new ControlAccessor( control );
             ControlCollection childControls = ctlAccessor.Controls;
-            if (IsDependencyInjectionAware(defaultApplicationContext, childControls))
+            if (IsDependencyInjectionAware( defaultApplicationContext, childControls ))
             {
                 return; // nothing more to do				
             }
 
             // check, if the collection's owner has already been intercepted
-            ControlCollectionAccessor ctlColAccessor = new ControlCollectionAccessor(childControls);
-            if (IsDependencyInjectionAware(defaultApplicationContext, ctlColAccessor.Owner))
+            ControlCollectionAccessor ctlColAccessor = new ControlCollectionAccessor( childControls );
+            if (IsDependencyInjectionAware( defaultApplicationContext, ctlColAccessor.Owner ))
             {
                 return; // nothing more to do				
             }
 
             // lookup strategy in cache
             IInterceptionStrategy strategy = null;
-            lock(s_cachedInterceptionStrategies)
+            lock (s_cachedInterceptionStrategies)
             {
-                strategy = (IInterceptionStrategy) s_cachedInterceptionStrategies[control.GetType()];
+                strategy = (IInterceptionStrategy)s_cachedInterceptionStrategies[control.GetType()];
             }
-			
+
             if (strategy != null)
             {
-                strategy.Intercept(defaultApplicationContext, ctlAccessor, ctlColAccessor);
+                strategy.Intercept( defaultApplicationContext, ctlAccessor, ctlColAccessor );
             }
             else
             {
-                // lookup well-known strategies
-                strategy = (IInterceptionStrategy) s_knownInterceptionStrategies[childControls.GetType()];
+                // nothing in cache - try well-known strategies for owner resp. child collection type
+                strategy = (IInterceptionStrategy)s_knownInterceptionStrategies[control.GetType()];
+                if (strategy == null)
+                {
+                    strategy = (IInterceptionStrategy)s_knownInterceptionStrategies[childControls.GetType()];
+                }
+
+                // try intercept using well-known strategy
+                if (strategy != null)
+                {
+                    bool bOk = strategy.Intercept( defaultApplicationContext, ctlAccessor, ctlColAccessor );
+                    if (!bOk)
+                    {
+                        strategy = null;
+                    }
+                }
+
+                // not well-known or didn't work out
                 if (strategy == null)
                 {
                     // probe for a strategy
@@ -144,19 +160,19 @@ namespace Spring.Web.Support
                     }
                     if (!bOk)
                     {
-                        LogManager.GetLogger(typeof(ControlInterceptor)).Warn(string.Format("dependency injection not supported for control type {0}", ctlAccessor.GetTarget().GetType()));
+                        LogManager.GetLogger( typeof( ControlInterceptor ) ).Warn( string.Format( "dependency injection not supported for control type {0}", ctlAccessor.GetTarget().GetType() ) );
                         strategy = s_noopInterceptionStrategy;
                     }
                 }
 
-                lock(s_cachedInterceptionStrategies)
-                {					
+                lock (s_cachedInterceptionStrategies)
+                {
                     s_cachedInterceptionStrategies[control.GetType()] = strategy;
                 }
-            }			
+            }
         }
 
-        private static bool IsDependencyInjectionAware(IApplicationContext defaultApplicationContext, object o)
+        private static bool IsDependencyInjectionAware( IApplicationContext defaultApplicationContext, object o )
         {
             ISupportsWebDependencyInjection diAware = o as ISupportsWebDependencyInjection;
             if (diAware != null)
