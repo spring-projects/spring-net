@@ -49,12 +49,12 @@ namespace Spring.Messaging.Nms.Listener
         /// <summary>
         /// The default recovery time interval between connection reconnection attempts
         /// </summary>
-        public static TimeSpan DEFAULT_RECOVERY_INTERVAL = new TimeSpan(0,0,0,5,0);
+        public static string DEFAULT_RECOVERY_INTERVAL = "5s";
 
         /// <summary>
         /// The total time connection recovery will be attempted.
         /// </summary>
-        public static TimeSpan DEFAULT_MAX_RECOVERY_TIME = new TimeSpan(0, 0, 10, 0, 0);
+        public static string DEFAULT_MAX_RECOVERY_TIME = "10m";
 
         private bool pubSubNoLocal = false;
 
@@ -66,9 +66,9 @@ namespace Spring.Messaging.Nms.Listener
 
         private object consumersMonitor = new object();
 
-        private TimeSpan recoveryInterval = DEFAULT_RECOVERY_INTERVAL;
+        private TimeSpan recoveryInterval = new TimeSpan(0, 0, 0, 5, 0);
 
-        private TimeSpan maxRecoveryTime = DEFAULT_MAX_RECOVERY_TIME;
+        private TimeSpan maxRecoveryTime = new TimeSpan(0, 0, 10, 0, 0);
             
 
         #endregion

@@ -40,7 +40,26 @@
 					</xsd:restriction>
 				</xsd:simpleType>
 			</xsd:attribute>
-			<xsd:attribute name="connection-factory" type="xsd:string" default="ConnectionFactory">
+      <xsd:attribute name="container-custom-type" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+	A custom listener container implementation class as fully qualified type name.
+	Default is Spring's SimpleMessageListenerContainer.
+					]]>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="auto-startup" type="xsd:boolean" default="true">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+	Set whether to automatically start the listeners after initialization.  Default is true, optionally set to false.
+					]]>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="connection-factory" type="xsd:string" default="ConnectionFactory">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
 	A reference to the NMS ConnectionFactory object.

@@ -22,6 +22,7 @@ using System;
 using System.Xml;
 using Apache.NMS;
 using Spring.Core.TypeConversion;
+using Spring.Core.TypeResolution;
 using Spring.Messaging.Nms.Listener;
 using Spring.Messaging.Nms.Listener.Adapter;
 using Spring.Objects.Factory.Config;
@@ -89,7 +90,11 @@ namespace Spring.Messaging.Nms.Config
         
         private readonly string CONNECTION_FACTORY_ATTRIBUTE = "connection-factory";
 
+        private readonly string CONTAINER_CUSTOM_TYPE = "container-custom-type";
+
         private readonly string PUBSUB_DOMAIN_ATTRIBUTE = "pubsub-domain";
+
+        private readonly string AUTO_STARTUP = "auto-startup";
         
         #endregion
 
@@ -202,12 +207,43 @@ namespace Spring.Messaging.Nms.Config
         private ObjectDefinitionBuilder ParseContainer(XmlElement listenerElement, XmlElement containerElement,
                                                        ParserContext parserContext)
         {
-            //Only support SimpleMessageListenerContainer
+            //Only support SimpleMessageListenerContainer or container-custom-type
+
+            Type containerType = typeof (SimpleMessageListenerContainer);
+            if (containerElement.HasAttribute(CONTAINER_CUSTOM_TYPE))
+            {
+                string customType = containerElement.GetAttribute(CONTAINER_CUSTOM_TYPE);
+                if (!StringUtils.HasLength(customType))
+                {
+                    parserContext.ReaderContext.ReportException(containerElement, CONTAINER_CUSTOM_TYPE,
+                                            "Listener container '" + CONTAINER_CUSTOM_TYPE +
+                                            "' attribute contains empty value.");
+                }
+                try
+                {
+                    containerType = TypeResolutionUtils.ResolveType(customType);
+                } catch (Exception ex)
+                {
+                    parserContext.ReaderContext.ReportException(containerElement, CONTAINER_CUSTOM_TYPE,
+                            "Invalid container-custom-type value [" + customType + "]", ex);
+                }
+            }            
+
             ObjectDefinitionBuilder containerDef =
-                parserContext.ParserHelper.CreateRootObjectDefinitionBuilder(typeof (SimpleMessageListenerContainer));
+                    parserContext.ParserHelper.CreateRootObjectDefinitionBuilder(containerType);
 
             ParseListenerConfiguration(listenerElement, parserContext, containerDef);
             ParseContainerConfiguration(containerElement, parserContext, containerDef);
+
+
+            if (containerElement.HasAttribute(AUTO_STARTUP))
+            {
+                string autoStartup = containerElement.GetAttribute(AUTO_STARTUP);
+                if (!StringUtils.HasText(autoStartup))
+                {
+                    containerDef.AddPropertyValue("AutoStartup", autoStartup);
+                }
+            }
 
             string connectionFactoryObjectName = "connectionFactory";
             if (containerElement.HasAttribute(CONNECTION_FACTORY_ATTRIBUTE))
@@ -219,6 +255,7 @@ namespace Spring.Messaging.Nms.Config
                                                                 "Listener container '" + CONNECTION_FACTORY_ATTRIBUTE +
                                                                 "' attribute contains empty value.");
                 }
+
             }
 
             containerDef.AddPropertyValue("ConnectionFactory", new RuntimeObjectReference(connectionFactoryObjectName));
@@ -237,10 +274,10 @@ namespace Spring.Messaging.Nms.Config
                 containerDef.AddPropertyValue("SessionAcknowledgeMode", acknowledgementMode);
             }
 
-            int[] concurrency = ParseConcurrency(containerElement, parserContext);
+            string concurrency = ParseConcurrency(containerElement, parserContext);
             if (concurrency != null)
             {
-                containerDef.AddPropertyValue("ConcurrentConsumers", concurrency[1]);
+                containerDef.AddPropertyValue("ConcurrentConsumers", concurrency);
             }
             containerDef.AddPropertyValue("RecoveryInterval", ParseRecoveryInterval(containerElement, parserContext));
 
@@ -358,60 +395,40 @@ namespace Spring.Messaging.Nms.Config
             return AcknowledgementMode.AutoAcknowledge;
         }
 
-        private int[] ParseConcurrency(XmlElement ele, ParserContext parserContext)
+        private string ParseConcurrency(XmlElement ele, ParserContext parserContext)
         {
             string concurrency = ele.GetAttribute(CONCURRENCY_ATTRIBUTE);
             if (!StringUtils.HasText(concurrency))
             {
                 return null;
-            }
-            try
+            } else
             {
-                return new int[] {1, Int32.Parse(concurrency)};
-            }
-            catch (FormatException ex)
+                return concurrency;
+            }            
+        }
+
+        private string ParseRecoveryInterval(XmlElement ele, ParserContext parserContext)
+        {
+            string recoveryInterval = ele.GetAttribute(RECOVERY_INTERVAL_ATTRIBUTE);
+            if (StringUtils.HasText(recoveryInterval))
             {
-                parserContext.ReaderContext.ReportException(ele, CONCURRENCY_ATTRIBUTE,
-                                                            "Invalid concurrency value [" + concurrency + "]: only " +
-                                                            "integer (e.g. \"5\") values upported.", ex);
-                return null;
+                return recoveryInterval;
+                
+            } else
+            {
+                return SimpleMessageListenerContainer.DEFAULT_RECOVERY_INTERVAL;
             }
         }
 
-        private TimeSpan ParseRecoveryInterval(XmlElement ele, ParserContext parserContext)
-        {
-            string recoveryInterval = ele.GetAttribute(RECOVERY_INTERVAL_ATTRIBUTE);
-            if (!StringUtils.HasText(recoveryInterval))
-            {
-                return SimpleMessageListenerContainer.DEFAULT_RECOVERY_INTERVAL;
-            }
-            try
-            {
-                TimeSpanConverter tsc = new TimeSpanConverter();
-                return (TimeSpan)tsc.ConvertFrom(recoveryInterval);
-            } catch (Exception ex)
-            {
-                parserContext.ReaderContext.ReportException(ele, RECOVERY_INTERVAL_ATTRIBUTE,
-                                            "Invalid recovery-interval value [" + recoveryInterval + "]", ex);
-                return SimpleMessageListenerContainer.DEFAULT_RECOVERY_INTERVAL;
-            }
-        }
-        private TimeSpan ParseMaxRecoveryTime(XmlElement ele, ParserContext parserContext)
+        private string ParseMaxRecoveryTime(XmlElement ele, ParserContext parserContext)
         {
             string recoverTime = ele.GetAttribute(MAX_RECOVERY_TIME_ATTRIBUTE);
             if (!StringUtils.HasText(recoverTime))
             {
-                return SimpleMessageListenerContainer.DEFAULT_MAX_RECOVERY_TIME;
+                return recoverTime;
             }
-            try
+            else
             {
-                TimeSpanConverter tsc = new TimeSpanConverter();
-                return (TimeSpan)tsc.ConvertFrom(recoverTime);
-            }
-            catch (Exception ex)
-            {
-                parserContext.ReaderContext.ReportException(ele, MAX_RECOVERY_TIME_ATTRIBUTE,
-                                            "Invalid max-recovery-time value [" + recoverTime + "]", ex);
                 return SimpleMessageListenerContainer.DEFAULT_MAX_RECOVERY_TIME;
             }
         }
