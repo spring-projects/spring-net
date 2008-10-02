@@ -58,6 +58,11 @@
           </xs:enumeration>
           <xs:enumeration value="System.Data.SqlServerCe">
             <xs:annotation>
+              <xs:documentation>Microsoft SQL Server Compact Edition, provider V3.5.1.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SqlServerCe-3.1">
+            <xs:annotation>
               <xs:documentation>Microsoft SQL Server Compact Edition, provider V9.0.242.0</xs:documentation>
             </xs:annotation>
           </xs:enumeration>

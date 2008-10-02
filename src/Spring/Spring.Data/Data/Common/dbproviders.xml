@@ -135,7 +135,44 @@
     </constructor-arg>
   </object>
 
-  <alias name="SqlServerCe-3.1" alias="System.Data.SqlServerCe"/>
+  <object id="SqlServerCe-3.5.1" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Microsoft SQL Server Compact Edition, provider V3.5.1.0" />
+        <constructor-arg name="assemblyName" value="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+        <constructor-arg name="connectionType" value="System.Data.SqlServerCe.SqlCeConnection, System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+        <constructor-arg name="commandType" value="System.Data.SqlServerCe.SqlCeCommand, System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+        <constructor-arg name="parameterType" value="System.Data.SqlServerCe.SqlCeParameter, System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+        <constructor-arg name="dataAdapterType" value="System.Data.SqlServerCe.SqlCeDataAdapter, System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+        <constructor-arg name="commandBuilderType" value="System.Data.SqlServerCe.SqlCeCommandBuilder, System.Data.SqlServerCe, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="not supported"/>
+        <constructor-arg name="parameterDbType" value="System.Data.SqlDbType, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="parameterDbTypeProperty" value="SqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="@"/>
+        <constructor-arg name="exceptionType" value="System.Data.SqlServerCe.SqlCeException, System.Data.SqlServerCe, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError.ToString()"/>
+        <!-- TODO select form system db all errors that have 'incorrect syntax' at the start of the error string-->
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value></value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value></value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value></value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value></value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+
+  <alias name="SqlServerCe-3.5.1" alias="System.Data.SqlServerCe"/>
 
   
   <!-- OLE DB -->
