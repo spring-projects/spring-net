@@ -25,7 +25,6 @@ using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Context;
-using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
 #endregion
@@ -134,10 +133,10 @@ namespace Spring.Web.Support
         {
             MockRepository mocks = new MockRepository();            
             TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
-            IApplicationContext simpleAppContext = (IApplicationContext) mocks.Stub(typeof(IApplicationContext));
-            IConfigurableApplicationContext allowedAppContext = (IConfigurableApplicationContext) mocks.Stub(typeof(IConfigurableApplicationContext));
+            IApplicationContext simpleAppContext = (IApplicationContext) mocks.DynamicMock(typeof(IApplicationContext));
+            IConfigurableApplicationContext allowedAppContext = (IConfigurableApplicationContext) mocks.DynamicMock(typeof(IConfigurableApplicationContext));
 
-            using(mocks.Record())
+            using(Record(mocks))
             {
                 Expect.Call(f.GetContextStub("/NullContext")).Return(null);
                 Expect.Call(f.GetContextStub("/NonConfigurableContext")).Return(simpleAppContext);
@@ -171,18 +170,16 @@ namespace Spring.Web.Support
         {
             MockRepository mocks = new MockRepository();            
             TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
-            IHttpHandler reusableHandler = (IHttpHandler) mocks.Stub(typeof(IHttpHandler));
-            Expect.Call(reusableHandler.IsReusable).Return(true);
-            IHttpHandler reusableHandler2 = (IHttpHandler) mocks.Stub(typeof(IHttpHandler));
-            Expect.Call(reusableHandler2.IsReusable).Return(true);
+            IHttpHandler reusableHandler = (IHttpHandler) mocks.DynamicMock(typeof(IHttpHandler));
 
             // if (IHttpHandler.IsReusable == true) => always returns the same handler instance 
             // - CreateHandlerInstance() is only called once
-            using(mocks.Record())
+            using(Record(mocks))
             {
+                Expect.Call(reusableHandler.IsReusable).Return(true);
                 Expect.Call(f.CreateHandlerInstanceStub(null, null, "reusable", null)).Return(reusableHandler);
             }
-            using (mocks.Playback())
+            using (Playback(mocks))
             {
                 Assert.AreSame( reusableHandler, f.GetHandler( null, null, "reusable", null ) );
                 Assert.AreSame( reusableHandler, f.GetHandler( null, null, "reusable", null ) );
@@ -201,16 +198,70 @@ namespace Spring.Web.Support
 
             // if (IHttpHandler.IsReusable == false) => always create new handler instance 
             // - CreateHandlerInstance() is called for each request
-            using(mocks.Record())
+            using(Record(mocks))
             {
                 Expect.Call(f.CreateHandlerInstanceStub(null, null, "notreusable", null)).Return(nonReusableHandler);
                 Expect.Call(f.CreateHandlerInstanceStub(null, null, "notreusable", null)).Return(nonReusableHandler2);
             }
-            using (mocks.Playback())
+            using (Playback(mocks))
             {
                 Assert.AreSame( nonReusableHandler, f.GetHandler( null, null, "notreusable", null ) );
                 Assert.AreSame( nonReusableHandler2, f.GetHandler( null, null, "notreusable", null ) );
             }
         }
+
+        #region Rhino.Mocks Compatibility Adapter
+
+        private static IDisposable Record(MockRepository mocks)
+        {
+#if !NET_1_1
+            return mocks.Record();
+#else
+            return new RecordModeChanger(mocks);
+#endif
+        }
+
+        private static IDisposable Playback(MockRepository mocks)
+        {
+#if !NET_1_1
+            return mocks.Playback();
+#else
+            return new PlaybackModeChanger(mocks);
+#endif
+        }
+
+#if NET_1_1
+        private class RecordModeChanger : IDisposable
+        {
+            private MockRepository _mocks;
+
+            public RecordModeChanger(MockRepository mocks)
+            {
+                _mocks = mocks;
+            }
+
+            public void Dispose()
+            {
+                _mocks.ReplayAll();
+            }
+        }
+
+        private class PlaybackModeChanger : IDisposable
+        {
+            private MockRepository _mocks;
+
+            public PlaybackModeChanger(MockRepository mocks)
+            {
+                _mocks = mocks;
+            }
+
+            public void Dispose()
+            {
+                _mocks.VerifyAll();
+            }
+        }
+#endif
+
+#endregion Rhino.Mocks Compatibility Adapter
     }
 }

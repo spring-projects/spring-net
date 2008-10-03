@@ -291,7 +291,7 @@
                 />
                 <File
                     RelPath = "Util\ControlInterceptionTests.cs"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File
@@ -355,11 +355,6 @@
                 />
                 <File
                     RelPath = "Web\UI\Controls\ValidationErrorsTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\UI\Controls\ValidationErrorTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
