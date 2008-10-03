@@ -423,7 +423,7 @@ namespace Spring.Messaging.Nms.Config
         private string ParseMaxRecoveryTime(XmlElement ele, ParserContext parserContext)
         {
             string recoverTime = ele.GetAttribute(MAX_RECOVERY_TIME_ATTRIBUTE);
-            if (!StringUtils.HasText(recoverTime))
+            if (StringUtils.HasText(recoverTime))
             {
                 return recoverTime;
             }
