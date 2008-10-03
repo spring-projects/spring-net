@@ -86,20 +86,11 @@ namespace Spring.Web.Script.Services
         public override IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated)
         {
             string filename = VirtualPathUtility.ToAbsolute(context.Request.FilePath);
-            string cacheKey = (string)webServiceData_GetCacheKey.Invoke(
-                null, new object[] { VirtualPathUtility.ToAbsolute(context.Request.FilePath) });
+            string cacheKey = (string)webServiceData_GetCacheKey.Invoke(null, new object[] { filename });
             object webServiceData = context.Cache.Get(cacheKey);
             if (webServiceData == null)
             {
-                IConfigurableApplicationContext appContext =
-                    WebApplicationContext.GetContext(url) as IConfigurableApplicationContext;
-
-                if (appContext == null)
-                {
-                    throw new InvalidOperationException(
-                        "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
-                }
-
+                IConfigurableApplicationContext appContext = base.GetCheckedApplicationContext(url);
                 string appRelativeVirtualPath = WebUtils.GetAppRelativePath(url);
                 NamedObjectDefinition nod = FindWebObjectDefinition(appRelativeVirtualPath, appContext.ObjectFactory);
 
@@ -125,6 +116,19 @@ namespace Spring.Web.Script.Services
         public override void ReleaseHandler(IHttpHandler handler)
         {
             this.scriptHandlerFactory.ReleaseHandler(handler);
+        }
+
+        /// <summary>
+        /// Create a handler instance for the given URL.
+        /// </summary>
+        /// <param name="context">The <see cref="HttpContext"/> instance for this request.</param>
+        /// <param name="requestType">The HTTP data transfer method (GET, POST, ...)</param>
+        /// <param name="url">The requested <see cref="HttpRequest.RawUrl"/>.</param>
+        /// <param name="physicalPath">The physical path of the requested resource.</param>
+        /// <returns>A handler instance for the current request.</returns>
+        protected override IHttpHandler CreateHandlerInstance( HttpContext context, string requestType, string url, string physicalPath )
+        {
+            throw new NotSupportedException();
         }
     }
 }

@@ -23,6 +23,8 @@
 using System;
 using System.Web;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Spring.Context;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
@@ -35,51 +37,180 @@ namespace Spring.Web.Support
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
-    public class AbstractHandlerFactoryTests : AbstractHandlerFactory
+    public class AbstractHandlerFactoryTests
     {
-        private class Type1 {}
-       
+        #region TestFindWebObjectDefinition Helper
+
+        private class TestFindWebObjectDefinitionHandlerFactory : AbstractHandlerFactory
+        {
+            private class Type1 { }
+
+            public void TestFindWebObjectDefinition()
+            {
+                NamedObjectDefinition nod;
+
+                nod = Find( "/path/o1.ext", "/path/o1.ext" );
+                Assert.AreEqual( typeof( Type1 ), nod.ObjectDefinition.ObjectType );
+                Assert.AreEqual( "/path/o1.ext", nod.Name );
+
+                nod = Find( "/path/o1.ext", "/o1.ext" );
+                Assert.IsNull( nod );
+
+                nod = Find( "/path/o1.ext", "/path/o1" );
+                Assert.IsNull( nod );
+
+                nod = Find( "/path/o1.ext", "o1.ext" );
+                Assert.AreEqual( typeof( Type1 ), nod.ObjectDefinition.ObjectType );
+                Assert.AreEqual( "o1.ext", nod.Name );
+
+                nod = Find( "/path/o1.ext", "o1" );
+                Assert.AreEqual( typeof( Type1 ), nod.ObjectDefinition.ObjectType );
+                Assert.AreEqual( "o1", nod.Name );
+            }
+
+            private static NamedObjectDefinition Find( string url, string objectName )
+            {
+                DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+                RootObjectDefinition rod = new RootObjectDefinition( typeof( Type1 ) );
+                of.RegisterObjectDefinition( objectName, rod );
+
+                return FindWebObjectDefinition( url, of );
+            }
+
+            #region AbstractHandlerFactory implementations
+
+            protected override IHttpHandler CreateHandlerInstance( HttpContext context, string requestType, string url, string physicalPath )
+            {
+                throw new NotImplementedException();
+            }
+
+            #endregion
+        }
+
+        #endregion TestFindWebObjectDefinition Helper
+
         [Test]
         public void FindWebObjectDefinition()
         {
-            NamedObjectDefinition nod;
-
-            nod = Find("/path/o1.ext", "/path/o1.ext");
-            Assert.AreEqual( typeof(Type1), nod.ObjectDefinition.ObjectType);
-            Assert.AreEqual( "/path/o1.ext", nod.Name);
-
-            nod = Find("/path/o1.ext", "/o1.ext");
-            Assert.IsNull(nod);
-
-            nod = Find("/path/o1.ext", "/path/o1");
-            Assert.IsNull(nod);
-
-            nod = Find("/path/o1.ext", "o1.ext");
-            Assert.AreEqual(typeof(Type1), nod.ObjectDefinition.ObjectType);
-            Assert.AreEqual("o1.ext", nod.Name);
-
-            nod = Find("/path/o1.ext", "o1");
-            Assert.AreEqual(typeof(Type1), nod.ObjectDefinition.ObjectType);
-            Assert.AreEqual("o1", nod.Name);
+            TestFindWebObjectDefinitionHandlerFactory f = new TestFindWebObjectDefinitionHandlerFactory();
+            f.TestFindWebObjectDefinition();
         }
 
-        private NamedObjectDefinition Find(string url, string objectName)
+        #region TestHandlerFactory
+
+        public class TestHandlerFactory : AbstractHandlerFactory
         {
-            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
-            RootObjectDefinition rod = new RootObjectDefinition(typeof(Type1));
-            of.RegisterObjectDefinition(objectName, rod);
+            public new IConfigurableApplicationContext GetCheckedApplicationContext(string virtualPath)
+            {
+                return base.GetCheckedApplicationContext(virtualPath);
+            }
 
-            return FindWebObjectDefinition( url, of );
+            protected override IHttpHandler CreateHandlerInstance(HttpContext context, string requestType, string url, string physicalPath )
+            {
+                return CreateHandlerInstanceStub(context, requestType, url, physicalPath);
+            }
+
+            public virtual IHttpHandler CreateHandlerInstanceStub(HttpContext context, string requestType, string url, string physicalPath)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override IApplicationContext GetContext( string virtualPath )
+            {
+                return GetContextStub( virtualPath );
+            }
+
+            public virtual IApplicationContext GetContextStub( string virtualPath )
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        #region AbstractHandlerFactory implementations
-
-        public override IHttpHandler GetHandler(HttpContext context, string requestType, string url,
-                                                string pathTranslated)
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
+
+        [Test]
+        public void GetCheckedApplicationContextThrowsExceptionsOnNonConfigurableContexts()
+        {
+            MockRepository mocks = new MockRepository();            
+            TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
+            IApplicationContext simpleAppContext = (IApplicationContext) mocks.Stub(typeof(IApplicationContext));
+            IConfigurableApplicationContext allowedAppContext = (IConfigurableApplicationContext) mocks.Stub(typeof(IConfigurableApplicationContext));
+
+            using(mocks.Record())
+            {
+                Expect.Call(f.GetContextStub("/NullContext")).Return(null);
+                Expect.Call(f.GetContextStub("/NonConfigurableContext")).Return(simpleAppContext);
+                Expect.Call(f.GetContextStub("/AllowedContext")).Return(allowedAppContext);
+            }
+
+            // (context == null) -> ArgumentException
+            try
+            {
+                f.GetCheckedApplicationContext("/NullContext");
+                Assert.Fail("should throw ArgumentException");
+            }
+            catch (ArgumentException)
+            {}
+
+            // !(context is IConfigurableApplicationContext) -> InvalidOperationException
+            try
+            {
+                f.GetCheckedApplicationContext("/NonConfigurableContext");
+                Assert.Fail("should throw InvalidOperationException");
+            }
+            catch (InvalidOperationException)
+            {}
+
+            // (context is IConfigurableApplicationContext) -> OK
+            Assert.AreSame(allowedAppContext, f.GetCheckedApplicationContext("/AllowedContext"));
+        }
+
+        [Test]
+        public void CachesReusableHandlers()
+        {
+            MockRepository mocks = new MockRepository();            
+            TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
+            IHttpHandler reusableHandler = (IHttpHandler) mocks.Stub(typeof(IHttpHandler));
+            Expect.Call(reusableHandler.IsReusable).Return(true);
+            IHttpHandler reusableHandler2 = (IHttpHandler) mocks.Stub(typeof(IHttpHandler));
+            Expect.Call(reusableHandler2.IsReusable).Return(true);
+
+            // if (IHttpHandler.IsReusable == true) => always returns the same handler instance 
+            // - CreateHandlerInstance() is only called once
+            using(mocks.Record())
+            {
+                Expect.Call(f.CreateHandlerInstanceStub(null, null, "reusable", null)).Return(reusableHandler);
+            }
+            using (mocks.Playback())
+            {
+                Assert.AreSame( reusableHandler, f.GetHandler( null, null, "reusable", null ) );
+                Assert.AreSame( reusableHandler, f.GetHandler( null, null, "reusable", null ) );
+            }
+        }
+
+        [Test]
+        public void DoesntCacheNonReusableHandlers()
+        {
+            MockRepository mocks = new MockRepository();            
+            TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
+            IHttpHandler nonReusableHandler = (IHttpHandler) mocks.DynamicMock(typeof(IHttpHandler));
+            Expect.Call(nonReusableHandler.IsReusable).Return(false);
+            IHttpHandler nonReusableHandler2 = (IHttpHandler) mocks.DynamicMock(typeof(IHttpHandler));
+            Expect.Call(nonReusableHandler2.IsReusable).Return(false);
+
+            // if (IHttpHandler.IsReusable == false) => always create new handler instance 
+            // - CreateHandlerInstance() is called for each request
+            using(mocks.Record())
+            {
+                Expect.Call(f.CreateHandlerInstanceStub(null, null, "notreusable", null)).Return(nonReusableHandler);
+                Expect.Call(f.CreateHandlerInstanceStub(null, null, "notreusable", null)).Return(nonReusableHandler2);
+            }
+            using (mocks.Playback())
+            {
+                Assert.AreSame( nonReusableHandler, f.GetHandler( null, null, "notreusable", null ) );
+                Assert.AreSame( nonReusableHandler2, f.GetHandler( null, null, "notreusable", null ) );
+            }
+        }
     }
 }

@@ -48,6 +48,14 @@ namespace Spring.Web.Support
             Assert.AreEqual("OK", result);
         }
 
+        [Test, Explicit]
+        public void UsesReadonlySession()
+        {
+            AspTestClient client = new AspTestClient();
+            string result = client.GetPage("ReadOnlySession.aspx");
+            Assert.AreEqual("OK", result);
+        }
+
         [Test]
         public void MaintainsSession()
         {
@@ -60,7 +68,7 @@ namespace Spring.Web.Support
             result = client.GetPage("MaintainsSession2.aspx");
             Assert.AreEqual("OK", result);
         }
-
+        
         [Test]
         public void BCLPageHandlerFactoryBehavior()
         {
@@ -124,5 +132,15 @@ namespace Spring.Web.Support
             Assert.AreEqual("OK", result);
         }
 #endif
+    }
+
+    [TestFixture]
+    public class PageHandlerFactoryStandaloneTests
+    {
+        [Test]
+        public void PageUsesReadonlySessionState()
+        {
+            
+        }
     }
 }
