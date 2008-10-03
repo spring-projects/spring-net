@@ -11,6 +11,13 @@ Spring.Core
 
 4. AbstractBinding.IsValid property changed to method AbstractBinding.IsValid( IValidationErrors )
 
+Spring.Data
+-----------
+
+1. The provider name System.Data.SqlServerCe is now aliased to SqlServerCe-3.5.1 (was SqlServerCe-3.1)
+
+2. Removed setter property RollbackOnly on ITransactionStatus, now use the method SetRollbackOnly() to 'doom' a transaction to always rollback.
+
 Spring.Services
 ---------------
 1. Removed WebServiceProxyFactory.ClientProtocolType property (obsolete)
