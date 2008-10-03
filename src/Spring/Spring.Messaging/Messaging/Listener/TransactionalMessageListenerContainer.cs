@@ -303,7 +303,7 @@ namespace Spring.Messaging.Listener
                     {
                         LOG.Trace("IOTimeout: Message to receive was already processed by another thread.");
                     }
-                    status.RollbackOnly = true;
+                    status.SetRollbackOnly();
                     return false; // no more peeking unless this is the last listener thread
                 }
                 else
@@ -342,7 +342,7 @@ namespace Spring.Messaging.Listener
 
                 #endregion
 
-                status.RollbackOnly = true;
+                status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
             }
 
@@ -388,7 +388,7 @@ namespace Spring.Messaging.Listener
 
                     #endregion
 
-                    status.RollbackOnly = true;
+                    status.SetRollbackOnly();
                     return false; // no more peeking unless this is the last listener thread
                 }
                 else
@@ -461,7 +461,7 @@ namespace Spring.Messaging.Listener
 
                         #endregion
 
-                        status.RollbackOnly = true;
+                        status.SetRollbackOnly();
                         return false; // no more peeking unless this is the last listener thread
                     }
                     else
@@ -500,7 +500,7 @@ namespace Spring.Messaging.Listener
 
                     #endregion
 
-                    status.RollbackOnly = true;
+                    status.SetRollbackOnly();
                     return false; // no more peeking unless this is the last listener thread
                 }
 

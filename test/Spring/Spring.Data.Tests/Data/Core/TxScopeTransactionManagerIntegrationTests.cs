@@ -134,7 +134,7 @@ namespace Spring.Data.Core
                                TransactionSynchronizationManager.RegisterSynchronization(sync);
                                Assert.AreEqual("txName", TransactionSynchronizationManager.CurrentTransactionName);
                                Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                               status.RollbackOnly = true;
+                               status.SetRollbackOnly();
                                return null;
                            }
             );

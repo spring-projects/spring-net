@@ -72,7 +72,7 @@ namespace Spring.Data
                                                    Console.WriteLine("tx 2 'IsNewTransaction' = " + status2.IsNewTransaction);
                                                    adoTemplate.ExecuteNonQuery(CommandType.Text, "insert into dbo.Debits (DebitAmount) VALUES (@amount)", "amount", DbType.Decimal, 0,555);
                                                    //throw new ArithmeticException("can't do the math.");
-                                                   status2.RollbackOnly = true;
+                                                   status2.SetRollbackOnly();
                                                    return null;
                                                });
                                
@@ -143,7 +143,7 @@ namespace Spring.Data
         {
             TransactionOptions transactionoptions = new TransactionOptions();
             transactionoptions.IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
-            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, transactionoptions))
+            using (TransactionScope ts = new TransactionScope())
             {
                 InnerMethod();
                 InnerMethod();

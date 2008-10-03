@@ -21,7 +21,7 @@ namespace Spring.Transaction.Support
 			Assert.IsNotNull( stat.SuspendedResources );
 			Assert.IsTrue( stat.IsNewTransaction );
 			Assert.IsTrue( ! stat.RollbackOnly );
-			stat.RollbackOnly = true;
+			stat.SetRollbackOnly();
 			Assert.IsTrue( stat.RollbackOnly );
 			txn.Verify();
 		}

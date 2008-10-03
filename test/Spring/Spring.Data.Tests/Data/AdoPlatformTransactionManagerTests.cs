@@ -768,7 +768,7 @@ namespace Spring.Data
 
         private object TransactionWithExceptionOnRollbackMethod(ITransactionStatus status)
         {
-            status.RollbackOnly = true;
+            status.SetRollbackOnly();
             return null;
         }
 
@@ -961,7 +961,7 @@ namespace Spring.Data
         private object TransactionWithPropagationNestedAndRollbackMethod(ITransactionStatus status)
         {
             Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-            status.RollbackOnly = true;
+            status.SetRollbackOnly();
             return null;
         }
     }
@@ -1222,7 +1222,7 @@ namespace Spring.Data
             Assert.IsTrue(!status.IsNewTransaction, "Isn't new transaction");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
-            status.RollbackOnly = true;
+            status.SetRollbackOnly();
             return null;
         }
     }
@@ -1256,7 +1256,7 @@ namespace Spring.Data
     {
         public object DoInTransaction(ITransactionStatus status)
         {
-            status.RollbackOnly = true;
+            status.SetRollbackOnly();
             return null;
         }
     }
@@ -1308,7 +1308,7 @@ namespace Spring.Data
             Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
-            status.RollbackOnly = true;
+            status.SetRollbackOnly();
             return null;
         }
     }
@@ -1402,7 +1402,7 @@ namespace Spring.Data
             Assert.IsTrue(TransactionSynchronizationManager.HasResource(dbProvider), "Has thread connection");
             Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
             Assert.IsTrue(!status.IsNewTransaction, "Is existing transaction");
-            status.RollbackOnly = true;
+            status.SetRollbackOnly();
             return null;
         }
     }

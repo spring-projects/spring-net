@@ -689,7 +689,7 @@ namespace Spring.Data.NHibernate
             HibernateTemplate ht = new HibernateTemplate(sf);
             ht.TemplateFlushMode = TemplateFlushMode.Eager;
             ht.Execute(new HibernateDelegate(Del));
-            status.RollbackOnly = true;
+            status.SetRollbackOnly();
             return null;
         }
 
@@ -775,7 +775,7 @@ namespace Spring.Data.NHibernate
             Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
             HibernateTemplate ht = new HibernateTemplate(sf);
             object returnValue = ht.Execute(new HibernateDelegate(Del));
-            status.RollbackOnly = true;
+            status.SetRollbackOnly();
             return null;
         }
 

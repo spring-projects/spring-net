@@ -260,7 +260,7 @@ namespace Spring.Data.Core
                 Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
                 Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
                 Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
-                status.RollbackOnly = true;
+                status.SetRollbackOnly();
                 return null; 
             }
         }

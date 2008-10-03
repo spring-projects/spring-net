@@ -229,7 +229,7 @@ namespace Spring.Transaction.Interceptor
         public override string GetDescription()
         {
             ITransactionStatus txStatus = TransactionInterceptor.CurrentTransactionStatus;
-            txStatus.RollbackOnly = true;
+            txStatus.SetRollbackOnly();
             return "test description";
         }
 

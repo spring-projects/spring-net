@@ -171,7 +171,7 @@ namespace Spring.Data.Core
                                                   Assert.IsTrue(status2.IsNewTransaction, "Is new transaction");
                                                   Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
                                                   Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
-                                                  status2.RollbackOnly = true;
+                                                  status2.SetRollbackOnly();
                                                   return null;
                                               });
 

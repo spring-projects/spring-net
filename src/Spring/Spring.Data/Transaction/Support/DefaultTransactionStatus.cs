@@ -217,10 +217,26 @@ namespace Spring.Transaction.Support
 			get { 
 				return ( LocalRollbackOnly || GlobalRollbackOnly); 
 			}
-            
-			set	{ if (value) {_rollbackOnly = value;} } 
 		}
-		#endregion
+
+        /// <summary>
+        /// Set the transaction rollback-only. This instructs the transaction manager that the only possible outcome of
+        /// the transaction may be a rollback, proceeding with the normal application
+        /// workflow though (i.e. no exception).
+        /// </summary>
+        /// <remarks>
+        /// 	<p>
+        /// For transactions managed by a <see cref="Spring.Transaction.Support.TransactionTemplate"/> or
+        /// <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/>.
+        /// An alternative way to trigger a rollback is throwing an transaction exception.
+        /// </p>
+        /// </remarks>
+	    public void SetRollbackOnly()
+	    {
+	        _rollbackOnly = true;	        
+	    }
+
+	    #endregion
 
 
         /// <summary>

@@ -121,7 +121,7 @@ namespace Spring.Messaging.Listener
 
                     #endregion
 
-                    status.RollbackOnly = true;
+                    status.SetRollbackOnly();
                     return false; // no more peeking unless this is the last listener thread
                 }
                 else
@@ -147,7 +147,7 @@ namespace Spring.Messaging.Listener
 
                 #endregion
 
-                status.RollbackOnly = true;
+                status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
             }
 

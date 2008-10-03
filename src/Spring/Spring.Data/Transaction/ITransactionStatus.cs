@@ -51,24 +51,26 @@ namespace Spring.Transaction
 		bool IsNewTransaction { get; }
 
 		/// <summary>
-        /// Gets / sets if the transaction is rollback-only.
+        /// Return whether the transaction has been marked as rollback-only, 
+        /// (either by the application or by the transaction infrastructure).
+        /// </summary>
+		bool RollbackOnly { get; }
+
+        /// <summary>
+        /// Set the transaction rollback-only. This instructs the transaction manager that the only possible outcome of
+        /// the transaction may be a rollback, proceeding with the normal application
+        /// workflow though (i.e. no exception).
         /// </summary>
         /// <remarks>
         /// <p>
-        /// This instructs the transaction manager that the only possible outcome of
-        /// the transaction may be a rollback, proceeding with the normal application
-        /// workflow though (i.e. no exception).
-        /// </p>
-        /// <p>
-        /// For transactions managed by a
-        /// <see cref="Spring.Transaction.Support.TransactionTemplate"/> or
+        /// For transactions managed by a <see cref="Spring.Transaction.Support.TransactionTemplate"/> or
         /// <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/>.
         /// An alternative way to trigger a rollback is throwing an transaction exception.
         /// </p>
         /// </remarks>
-		bool RollbackOnly { get; set; }
+	    void SetRollbackOnly();
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the current transaction object.
 		/// </summary>
 		/// <remarks>

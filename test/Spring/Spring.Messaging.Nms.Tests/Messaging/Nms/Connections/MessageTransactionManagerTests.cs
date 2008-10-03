@@ -153,7 +153,7 @@ namespace Spring.Messaging.Nms.Connections
             tt.Execute(delegate(ITransactionStatus status)
                            {
                                nt.Execute(new AssertSessionCallback(session));
-                               status.RollbackOnly = true;
+                               status.SetRollbackOnly();
                                return null;
                            });
             try
