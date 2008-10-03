@@ -1831,13 +1831,6 @@ namespace Spring.Context.Support
             {
             }
 
-//            public ObjectPostProcessorChecker(
-//                IConfigurableListableObjectFactory objectFactory, int objectPostProcessorTargetCount)
-//            {
-//                _objectFactory = objectFactory;
-//                _objectPostProcessorTargetCount = objectPostProcessorTargetCount;
-//            }
-
             public void Reset(IConfigurableListableObjectFactory objectFactory, int objectPostProcessorTargetCount)
             {
                 _objectFactory = objectFactory;

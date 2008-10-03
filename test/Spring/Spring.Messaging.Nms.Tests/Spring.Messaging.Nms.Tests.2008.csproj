@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA7A6931-7DBE-4A32-A312-51FAD2E80332}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -89,21 +89,27 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\CachingConnectionFactoryTests.cs" />
     <Compile Include="Messaging\Nms\Connections\MessageTransactionManagerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\SingleConnectionFactoryTests.cs" />
     <Compile Include="Messaging\Nms\Connections\TestConnection.cs" />
     <Compile Include="Messaging\Nms\Connections\TestExceptionListener.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestMessageConsumer.cs" />
     <Compile Include="Messaging\Nms\Connections\TestMessageListener.cs" />
     <Compile Include="Messaging\Nms\Connections\TestMessageProducer.cs" />
     <Compile Include="Messaging\Nms\Connections\TestSession.cs" />
     <Compile Include="Messaging\Nms\Core\MessageTemplateTests.cs" />
+    <Compile Include="Messaging\Nms\Core\SimpleMessageConverterTests.cs" />
     <Compile Include="Messaging\Nms\Core\SimpleMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Nms\Integration\LoggingExceptionHandler.cs" />
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListener.cs" />
     <Compile Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\TestConnectionFactory.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\IMessageContentsHandler.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\MessageContentsHandler.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\MessageListenerAdapterTests.cs" />
     <Compile Include="Messaging\Nms\StubQueue.cs" />
   </ItemGroup>
   <ItemGroup>
