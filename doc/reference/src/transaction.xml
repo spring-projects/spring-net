@@ -455,7 +455,13 @@
     rollback the transaction programmatically and you are using declarative
     transaction management, use the utility method</para>
 
-    <programlisting>TransactionInterceptor.CurrentTransactionStatus.RollbackOnly = true;</programlisting>
+    <programlisting>TransactionInterceptor.CurrentTransactionStatus.SetRollbackOnly();</programlisting>
+
+    <note>
+      <para>Prior to Spring.NET 1.2 RC1 the API call would be
+      <literal>TransactionInterceptor.CurrentTransactionStatus.RollbackOnly =
+      true;</literal></para>
+    </note>
 
     <sect2 id="tx-understandingimpl">
       <title id="objectnameautoproxycreator-for-transactions">Understanding

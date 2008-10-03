@@ -5062,6 +5062,17 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
   &lt;/spring&gt;
 
 &lt;/configuration&gt;</programlisting>
+
+      <para>You can also register custom parser programmatically using the
+      NamespaceParserRegistry. Here is an example taken from the code used in
+      the Transactions Quickstart application.</para>
+
+      <programlisting>NamespaceParserRegistry.RegisterParser(typeof(DatabaseNamespaceParser));
+NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
+NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+
+IApplicationContext context = 
+      new XmlApplicationContext("assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/system-test-local-config.xml");</programlisting>
     </sect2>
 
     <sect2 id="context-custom-resourcehandler">
@@ -5125,7 +5136,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       the configSecitons section of App.config. The type alias configuration
       section contains one or more &lt;alias&gt; elements each with a name and
       a type attribute. Below is an example that registers the alias for
-      WebServiceExporter </para>
+      WebServiceExporter</para>
 
       <programlisting>&lt;configuration&gt;
 
@@ -5144,7 +5155,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
 &lt;/configuration&gt;</programlisting>
 
-      <para> For an example showing type aliases for generic types see <xref
+      <para>For an example showing type aliases for generic types see <xref
       linkend="objects-creation-generic-types" />.</para>
 
       <para>Another way is to define an object of the type

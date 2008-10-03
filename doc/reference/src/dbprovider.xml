@@ -108,9 +108,14 @@
       </listitem>
 
       <listitem>
-        <para><literal>SqlServerCe-3.1</literal> (aliased to
-        <literal>System.Data.SqlServerCe</literal>) - Microsoft SQL Server
+        <para><literal>SqlServerCe-3.1</literal> - Microsoft SQL Server
         Compact Edition, provider V9.0.242.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SqlServerCe-3.5.1</literal> (aliased to
+        <literal>System.Data.SqlServerCe</literal>) - Microsoft SQL Server
+        Compact Edition, provider V3.5.1.0</para>
       </listitem>
 
       <listitem>
@@ -217,6 +222,11 @@
       <listitem>
         <para><literal>SybaseAse-15</literal> - Sybase ASE provider for ASE
         15.x</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SybaseAse-AdoNet2</literal> - Sybase ADO.NET 2.0
+        provider for ASE 12.x and 15.x</para>
       </listitem>
 
       <listitem>

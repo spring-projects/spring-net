@@ -188,7 +188,7 @@
     <para>With the building blocks described above you can use Spring in all
     sorts of scenarios, from simple stand alone console applications to
     fully-fledged enterprise applications using Spring's transaction
-    management functionality and web framework integration. </para>
+    management functionality and web framework integration.</para>
 
     <para>It is important to note that the Spring Framework <emphasis>does
     not</emphasis> force you to use everything within it; it is not an
@@ -198,13 +198,13 @@
     access features that Spring offers. The only things you need to do is wire
     up your business logic using Spring's IoC container and integrate it into
     your web layer using WebApplicationContext to locate middle tier services
-    and/or configure your standard ASP.NET pages with depdenency injection.
-    </para>
+    and/or configure your standard ASP.NET pages with depdenency
+    injection.</para>
 
     <para>While the Spring framework does not force any particular application
     architecure it encourages the use of a well layered application
     architecture with distinct tiers for the presentation, service, data
-    access, and database. </para>
+    access, and database.</para>
   </sect1>
 
   <sect1>
@@ -244,7 +244,13 @@
         - A calculator demonstrating remote service abstractions that let you
         'export' a plain .NET object (PONO) via .NET Remoting, Web Services,
         or an EnterpriseService ServiceComponent. Corresponding client side
-        proxies are also demonstrated. .</para>
+        proxies are also demonstrated.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="wcf-quickstart">WCF</link> - Shows a WCF based
+        calculator example that configures your WCF service via dependency
+        injection and apply AOP advice.</para>
       </listitem>
 
       <listitem>
@@ -282,6 +288,22 @@
         integration to simplify the use of NHibernate. Web tier is also
         included showing how to use the Open-Session In View approach to
         session management in the web tier.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="quartz-quickstart">Quartz Quickstart</link> -
+        Application that shows the use of Quartz.NET integration for
+        scheduling.</para>
+      </listitem>
+
+      <listitem>
+        <para><link lang="" linkend="msmq-quickstart">MSMQ</link> -
+        Application demonstrating MSMQ helper classes.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="nms-quickstart">NMS</link> - Applicatoin
+        demonstrating NMS helper classes.</para>
       </listitem>
     </itemizedlist>
   </sect1>

@@ -257,7 +257,7 @@
         <title>Caching EMS Resources</title>
 
         <para>The class
-        Spring.Messaging.Nms.Connections.CachingConnectionFactory </para>
+        Spring.Messaging.Nms.Connections.CachingConnectionFactory</para>
       </section>
     </section>
 
@@ -290,9 +290,9 @@
 
         <para><classname>Spring.Messaging.Nms.Connections.CachingConnectionFactory</classname>
         extends the functionality of SingleConnectionFactory and adds the
-        caching of Sessions, MessageProducers, and MessageConsumers. </para>
+        caching of Sessions, MessageProducers, and MessageConsumers.</para>
 
-        <para> The initial cache size is set to 1, use the property
+        <para>The initial cache size is set to 1, use the property
         <literal>SessionCacheSize</literal> to increase the number of cached
         sessions. Note that the number of actual cached sessions will be more
         than that number as sessions are cached based on their acknowledgment
@@ -302,7 +302,7 @@
         <classname>MessageProducers</classname> and
         <classname>MessageConsumers</classname> are cached within their owning
         session and also take into account the unique properties of the
-        producers and consumers when caching. </para>
+        producers and consumers when caching.</para>
 
         <para><classname>MessageProducers</classname> are cached based on
         their destination. <classname>MessageConsumers</classname> are cached
@@ -1129,7 +1129,8 @@ namespace MyApp
 &lt;/nms:listener-container&gt;</programlisting>
 
       <para>The example above is equivalent to creating two distinct listener
-      container object definitions and two distinct MessageListenerAdapter object      definitions as demonstrated in the section entitled <xref
+      container object definitions and two distinct MessageListenerAdapter
+      object definitions as demonstrated in the section entitled <xref
       linkend="message-listener-adapter" />. In addition to the attributes
       shown above, the listener element may contain several optional ones. The
       following table describes all available attributes:</para>
@@ -1271,7 +1272,7 @@ namespace MyApp
               <entry>connection-factory</entry>
 
               <entry><para>A reference to the NMS
-              <interfacename>ConnectionFactory</interfacename> bean (the
+              <interfacename>ConnectionFactory</interfacename> object (the
               default object name is
               <literal>'ConnectionFactory'</literal>).</para></entry>
             </row>
@@ -1350,6 +1351,14 @@ namespace MyApp
               default is 10 minutes. Specify as a TimeSpan value using
               Spring's TimeSpanConverter (e.g. 10s, 10m, 3h, etc)
               </para></entry>
+            </row>
+
+            <row>
+              <entry>auto-startup</entry>
+
+              <entry>Set whether to automatically start the listeners after
+              initialization. Default is true, optionally set to
+              false.</entry>
             </row>
           </tbody>
         </tgroup>
