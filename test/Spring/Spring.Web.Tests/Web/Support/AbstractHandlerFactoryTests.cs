@@ -25,6 +25,7 @@ using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Context;
+using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
 #endregion

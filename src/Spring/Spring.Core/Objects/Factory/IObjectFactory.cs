@@ -429,6 +429,41 @@ namespace Spring.Objects.Factory
         /// </exception>
 	    bool IsTypeMatch(string name, Type targetType);
 
+        /// <summary>
+        /// Return an unconfigured(!) instance (possibly shared or independent) of the given object name.
+        /// </summary>
+        /// <param name="name">The name of the object to return.</param>
+        /// <param name="requiredType">
+        /// The <see cref="System.Type"/> the object may match. Can be an interface or
+        /// superclass of the actual class. For example, if the value is the
+        /// <see cref="System.Object"/> class, this method will succeed whatever the
+        /// class of the returned instance.
+        /// </param>
+        /// <param name="arguments">
+        /// The arguments to use if creating a prototype using explicit arguments to
+        /// a <see lang="static"/> factory method. If there is no factory method and the
+        /// supplied <paramref name="arguments"/> array is not <see lang="null"/>, then
+        /// match the argument values by type and call the object's constructor.
+        /// </param>
+        /// <returns>The unconfigured(!) instance of the object.</returns>
+        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+        /// If there's no such object definition.
+        /// </exception>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object could not be created.
+        /// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectNotOfRequiredTypeException">
+        /// If the object is not of the required type.
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the supplied <paramref name="name"/> is <see langword="null"/>.
+        /// </exception>
+        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type, object[])"/>
+        /// <remarks>
+        ///  This method will only <b>instantiate</b> the requested object. It does <b>NOT</b> inject any dependencies!
+        /// </remarks>
+        object CreateObject(string name, Type requiredType, object[] arguments);
+
 		/// <summary>
 		/// Injects dependencies into the supplied <paramref name="target"/> instance
 		/// using the named object definition.

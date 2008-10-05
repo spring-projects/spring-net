@@ -26,7 +26,6 @@ using System.Web;
 using System.Web.Script.Services;
 
 using Spring.Context;
-using Spring.Context.Support;
 using Spring.Util;
 using Spring.Web.Services;
 using Spring.Web.Support;

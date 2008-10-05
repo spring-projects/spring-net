@@ -29,8 +29,11 @@ using System.Web;
 using System.Web.Hosting;
 using Common.Logging;
 using Spring.Collections;
+using Spring.Objects;
+using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
+using Spring.Objects.Support;
 using Spring.Util;
 
 #endregion

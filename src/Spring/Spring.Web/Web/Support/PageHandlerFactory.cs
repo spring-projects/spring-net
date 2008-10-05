@@ -32,10 +32,9 @@ using Common.Logging;
 using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Objects.Factory.Config;
+using Spring.Objects;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
-using Spring.Web.Process;
 
 #endregion
 
@@ -78,9 +77,9 @@ namespace Spring.Web.Support
         /// <param name="url">Requested page URL</param>
         /// <param name="physicalPath">Translated server path for the page</param>
         /// <returns>Instance of the IHttpHandler object that should be used to process request.</returns>
-        public override IHttpHandler GetHandler( HttpContext context, string requestType, string url, string physicalPath )
+        public override IHttpHandler GetHandler(HttpContext context, string requestType, string url, string physicalPath)
         {
-            new SecurityPermission( SecurityPermissionFlag.UnmanagedCode ).Assert();
+            new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
 
             return base.GetHandler(context, requestType, url, physicalPath);
         }
@@ -93,321 +92,31 @@ namespace Spring.Web.Support
         /// <param name="url">The requested <see cref="HttpRequest.RawUrl"/>.</param>
         /// <param name="physicalPath">The physical path of the requested resource.</param>
         /// <returns>A handler instance for the current request.</returns>
-        protected override IHttpHandler CreateHandlerInstance( HttpContext context, string requestType, string url, string physicalPath )
+        protected override IHttpHandler CreateHandlerInstance(HttpContext context, string requestType, string url, string physicalPath)
         {
-            IHttpHandler pageHandlerWrapper;
-            IConfigurableApplicationContext appContext = GetCheckedApplicationContext( url );
+            IHttpHandler handler;
+            IConfigurableApplicationContext appContext = GetCheckedApplicationContext(url);
 
             if (appContext == null)
             {
-                throw new InvalidOperationException(
-                    "Implementations of IApplicationContext must also implement IConfigurableApplicationContext" );
+                throw new InvalidOperationException("PageHandlerFactory requires an IConfigurableApplicationContext");
             }
 
-            string appRelativeVirtualPath = WebUtils.GetAppRelativePath( url );
-            NamedObjectDefinition namedPageDefinition = FindWebObjectDefinition( appRelativeVirtualPath, appContext.ObjectFactory );
+            string appRelativeVirtualPath = WebUtils.GetAppRelativePath(url);
+            NamedObjectDefinition namedPageDefinition = FindWebObjectDefinition(appRelativeVirtualPath, appContext.ObjectFactory);
 
             if (namedPageDefinition != null)
             {
-                Type pageType = namedPageDefinition.ObjectDefinition.ObjectType;
-                if (typeof( IRequiresSessionState ).IsAssignableFrom( pageType ))
-                {
-                    pageHandlerWrapper = new SessionAwarePageHandlerWrapper( appContext, namedPageDefinition.Name, url, null );
-                }
-                else
-                {
-                    pageHandlerWrapper = new PageHandlerWrapper( appContext, namedPageDefinition.Name, url, null );
-                }
+                handler = (IHttpHandler)appContext.CreateObject(namedPageDefinition.Name, typeof(IHttpHandler), null);
+                WebSupportModule.SetCurrentHandlerConfiguration(appContext, namedPageDefinition.Name, true);
             }
             else
             {
-                Type pageType = WebObjectUtils.GetCompiledPageType( url );
-                if (typeof( IRequiresSessionState ).IsAssignableFrom( pageType ))
-                {
-                    pageHandlerWrapper = new SessionAwarePageHandlerWrapper( appContext, appRelativeVirtualPath, url, physicalPath );
-                }
-                else
-                {
-                    pageHandlerWrapper = new PageHandlerWrapper( appContext, appRelativeVirtualPath, url, physicalPath );
-                }
-            }
-            return pageHandlerWrapper;
-        }
-    }
-
-    /// <summary>
-    /// Wrapper for handlers that do not require <see cref="HttpSessionState"/>.
-    /// </summary>
-    /// <remarks>
-    /// NOTE: This class has to extend System.Web.UI.Page instead of simply 
-    /// implementing IHttpHandler in order for Server.Transfer to work properly.
-    /// This in turn requires explicit IHttpHandler implementation in order to
-    /// override non-virtual methods from the base Page class.
-    /// </remarks>
-    internal class PageHandlerWrapper : Page, IHttpHandler
-    {
-#if NET_2_0 && !MONO_2_0
-        private static readonly FieldInfo fiHttpContext_CurrentHandler =
-            typeof( HttpContext ).GetField( "_currentHandler", BindingFlags.NonPublic | BindingFlags.Instance );
-#endif
-#if MONO_2_0
-	private static readonly FieldInfo fiHttpContext_CurrentHandler =
-             typeof(HttpContext).GetField("handler", BindingFlags.NonPublic | BindingFlags.Instance);
-#endif
-#if NET_2_0 || !MONO_2_0
-        private static readonly MethodInfo miPage_SetPreviousPage =
-                typeof( System.Web.UI.Page ).GetMethod( "SetPreviousPage", BindingFlags.NonPublic | BindingFlags.Instance );
-#endif
-
-        private readonly IApplicationContext appContext;
-        private readonly string pageId;
-        private readonly string url;
-        private readonly string path;
-
-        // cache handler if IsReusable == true
-        // since we don't use sync, make it volatile
-        private volatile IHttpHandler cachedHandler;
-
-        // holds shared state for handlerType
-        private Type handlerType;
-        private IDictionary handlerState;
-
-        private readonly object syncRoot = new object();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PageHandlerWrapper"/> class.
-        /// </summary>
-        /// <param name="appContext">Application context instance to retrieve page from.</param>
-        /// <param name="pageName">Name of the page object to execute.</param>
-        /// <param name="url">Requested page URL.</param>
-        /// <param name="path">Translated server path for the page.</param>
-        public PageHandlerWrapper( IApplicationContext appContext, string pageName, string url, string path )
-        {
-            this.appContext = appContext;
-            this.pageId = pageName;
-            this.url = url;
-            this.path = path;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PageHandlerWrapper"/> class.
-        /// </summary>
-        /// <param name="appContext">Application context instance to retrieve page from.</param>
-        /// <param name="pageName">Name of the page object to execute.</param>
-        public PageHandlerWrapper( IApplicationContext appContext, string pageName )
-            : this( appContext, pageName, null, null )
-        {
-        }
-
-        #region Properties
-
-        /// <summary>
-        /// Use for sync access to this PageHandler instance.
-        /// </summary>
-        public object SyncRoot
-        {
-            get { return syncRoot; }
-        }
-
-        /// <summary>
-        /// Gets <see cref="IDictionary"/> that contains handler state. 
-        /// </summary>
-        /// <remarks>
-        /// This <see cref="IDictionary"/> will be assigned to the <c>SharedState</c>
-        /// property of <see cref="IHttpHandler"/> instances that implement
-        /// <see cref="ISharedStateAware"/> interface.
-        /// </remarks>
-        public IDictionary HandlerState
-        {
-            get { return handlerState; }
-        }
-
-        #endregion
-
-        void IHttpHandler.ProcessRequest( HttpContext context )
-        {
-            IHttpHandler handler = cachedHandler;
-
-            if (handler == null)
-            {
-                if (path != null)
-                {
-                    handler = CreatePageInstance();
-                }
-                else
-                {
-                    handler = GetOrCreateProcessHandler( context );
-                }
-
-                // note, that we don't care about sync here. The last call wins (it's the most current handler instance anyway)
-                if (handler.IsReusable)
-                    cachedHandler = handler;
+                handler = WebObjectUtils.CreatePageInstance(url);
+                WebSupportModule.SetCurrentHandlerConfiguration(appContext, url, false);
             }
 
-            // replace handler proxy on context with "real" handler
-            if (this == context.Handler)
-            {
-                context.Handler = handler;
-            }
-
-#if NET_2_0
-            // this may happen under load, if GetHandler() 
-            // and ProcessRequest() are executed under different threads
-            // fix this...
-            if (this == context.CurrentHandler)
-            {
-                fiHttpContext_CurrentHandler.SetValue( context, handler );
-            }
-
-            if (handler is System.Web.UI.Page)
-            {
-                System.Web.UI.Page page = (Page)handler;
-
-                // TODO: to fix this would require a change to the Mono source as there is no mechanisim (public or private) for explicitly setting the 
-                // PreviousPage at the moment
-#if !MONO_2_0
-                // During Server.Transfer/Execute() the PreviousPage property gets set
-                if (this.PreviousPage != null)
-                {
-                    miPage_SetPreviousPage.Invoke( page, new object[] { this.PreviousPage } );
-                }
-#endif
-            }
-#endif
-
-            ApplySharedState( handler );
-            ApplyDependencyInjection( handler );
-
-            handler.ProcessRequest( context );
-        }
-
-        /// <summary>
-        /// Returns true because this wrapper handler can be reused.
-        /// Actual page is instantiated at the beginning of the ProcessRequest method.
-        /// </summary>
-        bool IHttpHandler.IsReusable
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        /// Creates a page instance corresponding to this handler's url.
-        /// </summary>
-        private IHttpHandler CreatePageInstance()
-        {
-            IHttpHandler handler;
-            handler = WebObjectUtils.CreatePageInstance( url );
-            if (handler is IApplicationContextAware)
-            {
-                ((IApplicationContextAware)handler).ApplicationContext = appContext;
-            }
             return handler;
-        }
-
-        /// <summary>
-        /// Gets or - if not found - creates a process handler instance.
-        /// </summary>
-        private IHttpHandler GetOrCreateProcessHandler( HttpContext context )
-        {
-            IHttpHandler handler = null;
-            string processId = context.Request[AbstractProcessHandler.ProcessIdParamName];
-            if (processId != null)
-            {
-                handler = (IHttpHandler)ProcessManager.GetProcess( processId );
-            }
-
-            if (handler == null)
-            {
-                handler = (IHttpHandler)this.appContext.GetObject( this.pageId );
-                if (handler is IProcess)
-                {
-                    ((IProcess)handler).Start( url );
-                }
-            }
-            return handler;
-        }
-
-        /// <summary>
-        /// Apply dependency injection stuff on the handler.
-        /// </summary>
-        /// <param name="handler"></param>
-        private void ApplyDependencyInjection( IHttpHandler handler )
-        {
-            if (handler is Control)
-            {
-                ControlInterceptor.EnsureControlIntercepted( appContext, (Control)handler );
-            }
-            else
-            {
-                if (handler is ISupportsWebDependencyInjection)
-                {
-                    ((ISupportsWebDependencyInjection)handler).DefaultApplicationContext = appContext;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Applies <see cref="HandlerState"/> to the given handler if applicable.
-        /// </summary>
-        private void ApplySharedState( IHttpHandler handler )
-        {
-            if (handler is ISharedStateAware)
-            {
-                CheckIfPageWasRecompiled( handler );
-                ((ISharedStateAware)handler).SharedState = this.handlerState;
-            }
-        }
-
-        /// <summary>
-        /// Checks, if page has been recompiled. Creates/discards handlerState if necessary.
-        /// </summary>
-        /// <param name="handler"></param>
-        private void CheckIfPageWasRecompiled( IHttpHandler handler )
-        {
-            if (handlerType != handler.GetType())
-            {
-                lock (SyncRoot)
-                {
-                    if (handlerType != handler.GetType())
-                    {
-                        // discard old handlerState and cache new pagetype
-                        handlerState = new SynchronizedHashtable();
-                        handlerType = handler.GetType();
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Wrapper for handlers that require <see cref="HttpSessionState"/>.
-    /// </summary>
-    /// <remarks>
-    /// Delays page object instantiation until ProcessRequest is called
-    /// in order to be able to access session state.
-    /// </remarks>
-    internal class SessionAwarePageHandlerWrapper : PageHandlerWrapper, IRequiresSessionState
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SessionAwarePageHandlerWrapper"/> class.
-        /// </summary>
-        /// <param name="appContext">Application context instance to retrieve page from.</param>
-        /// <param name="pageName">Name of the page object to execute.</param>
-        /// <param name="url">Requested page URL.</param>
-        /// <param name="path">Translated server path for the page.</param>
-        public SessionAwarePageHandlerWrapper( IApplicationContext appContext, string pageName, string url, string path )
-            : base( appContext, pageName, url, path )
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SessionAwarePageHandlerWrapper"/> class.
-        /// </summary>
-        /// <param name="appContext">Application context instance to retrieve page from.</param>
-        /// <param name="pageName">Name of the page object to execute.</param>
-        public SessionAwarePageHandlerWrapper( IApplicationContext appContext, string pageName )
-            : base( appContext, pageName )
-        {
         }
     }
 }

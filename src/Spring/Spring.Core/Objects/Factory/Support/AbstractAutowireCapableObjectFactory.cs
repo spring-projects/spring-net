@@ -729,44 +729,44 @@ namespace Spring.Objects.Factory.Support
             ignoredDependencyInterfaces.Add(type);
         }
 
-        /// <summary>
-        /// Create an object instance for the given object definition.
-        /// </summary>
-        /// <param name="name">The name of the object.</param>
-        /// <param name="definition">
-        /// The object definition for the object that is to be instantiated.
-        /// </param>
-        /// <param name="arguments">
-        /// The arguments to use if creating a prototype using explicit arguments to
-        /// a static factory method. It is invalid to use a non-<see langword="null"/> arguments value
-        /// in any other case.
-        /// </param>
-        /// <returns>
-        /// A new instance of the object.
-        /// </returns>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In case of errors.
-        /// </exception>
-        /// <remarks>
-        /// <p>
-        /// Delegates to the
-        /// <see cref="Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory.CreateObject (string,RootObjectDefinition,object[],bool)"/>
-        /// method version with the <c>allowEagerCaching</c> parameter set to <b>true</b>.
-        /// </p>
-        /// <p>
-        /// The object definition will already have been merged with the parent
-        /// definition in case of a child definition.
-        /// </p>
-        /// <p>
-        /// All the other methods in this class invoke this method, although objects
-        /// may be cached after being instantiated by this method. All object
-        /// instantiation within this class is performed by this method.
-        /// </p>
-        /// </remarks>
-        protected internal override object CreateObject(string name, RootObjectDefinition definition, object[] arguments)
-        {
-            return CreateObject(name, definition, arguments, true);
-        }
+//        /// <summary>
+//        /// Create an object instance for the given object definition.
+//        /// </summary>
+//        /// <param name="name">The name of the object.</param>
+//        /// <param name="definition">
+//        /// The object definition for the object that is to be instantiated.
+//        /// </param>
+//        /// <param name="arguments">
+//        /// The arguments to use if creating a prototype using explicit arguments to
+//        /// a static factory method. It is invalid to use a non-<see langword="null"/> arguments value
+//        /// in any other case.
+//        /// </param>
+//        /// <returns>
+//        /// A new instance of the object.
+//        /// </returns>
+//        /// <exception cref="Spring.Objects.ObjectsException">
+//        /// In case of errors.
+//        /// </exception>
+//        /// <remarks>
+//        /// <p>
+//        /// Delegates to the
+//        /// <see cref="Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory.CreateObject (string,RootObjectDefinition,object[],bool)"/>
+//        /// method version with the <c>allowEagerCaching</c> parameter set to <b>true</b>.
+//        /// </p>
+//        /// <p>
+//        /// The object definition will already have been merged with the parent
+//        /// definition in case of a child definition.
+//        /// </p>
+//        /// <p>
+//        /// All the other methods in this class invoke this method, although objects
+//        /// may be cached after being instantiated by this method. All object
+//        /// instantiation within this class is performed by this method.
+//        /// </p>
+//        /// </remarks>
+//        protected internal override object CreateObject(string name, RootObjectDefinition definition, object[] arguments)
+//        {
+//            return CreateObject(name, definition, arguments, true, false);
+//        }
 
         /// <summary>
         /// Create an object instance for the given object definition.
@@ -784,6 +784,9 @@ namespace Spring.Objects.Factory.Support
         /// Whether eager caching of singletons is allowed... typically true for
         /// singlton objects, but never true for inner object definitions.
         /// </param>
+        /// <param name="suppressConfigure">
+        /// Suppress injecting dependencies yet.
+        /// </param>
         /// <returns>
         /// A new instance of the object.
         /// </returns>
@@ -801,7 +804,7 @@ namespace Spring.Objects.Factory.Support
         /// instantiation within this class is performed by this method.
         /// </p>
         /// </remarks>
-        protected internal override object CreateObject(string name, RootObjectDefinition definition, object[] arguments, bool allowEagerCaching)
+        protected internal override object InstantiateObject(string name, RootObjectDefinition definition, object[] arguments, bool allowEagerCaching, bool suppressConfigure)
         {
             // guarantee the initialization of objects that the current one depends on..
             if (definition.DependsOn != null && definition.DependsOn.Length > 0)
@@ -875,7 +878,10 @@ namespace Spring.Objects.Factory.Support
                     eagerlyCached = true;
                 }
 
-                instance = ConfigureObject(name, definition, instanceWrapper);
+                if (!suppressConfigure)
+                {
+                    instance = ConfigureObject(name, definition, instanceWrapper);
+                }
             }
             catch (ObjectCreationException)
             {
@@ -1634,7 +1640,7 @@ namespace Spring.Objects.Factory.Support
             object result;
             try
             {
-                instance = CreateObject(innerObjectName, mod, ObjectUtils.EmptyObjects, false);
+                instance = InstantiateObject(innerObjectName, mod, ObjectUtils.EmptyObjects, false, false);
                 result = GetObjectForInstance(innerObjectName, instance);
             }
             catch (ObjectsException ex)

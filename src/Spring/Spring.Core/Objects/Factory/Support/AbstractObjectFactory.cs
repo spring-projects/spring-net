@@ -55,6 +55,32 @@ namespace Spring.Objects.Factory.Support
     public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     {
         /// <summary>
+        /// Makes a distinction between sort order and object identity. 
+        /// This is important when used with <see cref="ISet"/>, since most
+        /// implementations assume Order == Identity
+        /// </summary>
+        [Serializable]
+        private class ObjectOrderComparator : OrderComparator
+        {
+            /// <summary>
+            /// Handle the case when both objects have equal sort order priority. By default returns 0, 
+            /// but may be overriden for handling special cases.
+            /// </summary>
+            /// <param name="o1">The first object to compare.</param>
+            /// <param name="o2">The second object to compare.</param>
+            /// <returns>
+            /// -1 if first object is less then second, 1 if it is greater, or 0 if they are equal.
+            /// </returns>
+            protected override int CompareEqualOrder(object o1, object o2)
+            {
+                if (ReferenceEquals(o1,o2)) return 0;    
+                if (o1 == null) return 1;
+                if (o2 == null) return -1;
+                return o1.GetHashCode().CompareTo(o2.GetHashCode());
+            }
+        }
+
+        /// <summary>
         /// Marker object to be temporarily registered in the singleton cache,
         /// while instantiating an object (in order to be able to detect circular references).
         /// </summary>
@@ -160,11 +186,11 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Gets the <see cref="System.Collections.IList"/> of
+        /// Gets the <see cref="ISet"/> of
         /// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>s
         /// that will be applied to objects created by this factory.
         /// </summary>
-        public IList ObjectPostProcessors
+        public ISet ObjectPostProcessors
         {
             get { return objectPostProcessors; }
         }
@@ -203,6 +229,7 @@ namespace Spring.Objects.Factory.Support
 
         #region Methods
 
+
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
         /// </summary>
@@ -235,77 +262,8 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type)"/>
         public object GetObject(string name, Type requiredType, object[] arguments)
         {
-            string objectName = TransformedObjectName(name);
-            object instance = null;
-            // eagerly check singleton cache for manually registered singletons...                       
-            object sharedInstance = GetSingleton(objectName);
-
-            if (sharedInstance != null)
-            {
-                #region Instrumentation
-
-                if (IsSingletonCurrentlyInCreation(objectName))
-                {
-                    if (log.IsDebugEnabled)
-                    {
-                        log.Debug("Returning eagerly cached instance of singleton object '" + objectName +
-                                "' that is not fully initialized yet - a consequence of a circular reference");
-                    }
-                }
-                else
-                {
-                    if (log.IsDebugEnabled)
-                    {
-                        log.Debug(string.Format("Returning cached instance of singleton object '{0}'.", objectName));
-                    }
-                }
-
-                #endregion
-
-                instance = GetObjectForInstance(name, sharedInstance);
-            }
-            else
-            {
-                // check if object definition exists
-                RootObjectDefinition mergedObjectDefinition = null;
-                mergedObjectDefinition = GetMergedObjectDefinition(objectName, false);
-                if (mergedObjectDefinition == null)
-                {
-                    if (ParentObjectFactory != null)
-                    {
-                        return ParentObjectFactory.GetObject(name, requiredType, arguments);
-                    }
-                    throw new NoSuchObjectDefinitionException(name, "Cannot find definition for object [" + name + "]");
-                }
-
-                CheckMergedObjectDefinition(mergedObjectDefinition, objectName, requiredType, arguments);
-
-                // return IObjectDefinition instance itself for an abstract object-definition
-                if (mergedObjectDefinition.IsAbstract)
-                {
-                    instance = mergedObjectDefinition;
-                }
-                else if (mergedObjectDefinition.IsSingleton)
-                {
-                    // create object instance...
-                    sharedInstance = CreateAndCacheSingletonInstance(objectName, mergedObjectDefinition, arguments);
-                    instance = GetObjectForInstance(name, sharedInstance);
-                }
-                else
-                {
-                    // it's a prototype, so create a new instance...
-                    instance = CreateObject(name, mergedObjectDefinition, arguments);
-                }
-            }
-            // check that any required type matches the type of the actual object instance...
-            if (requiredType != null && !requiredType.IsAssignableFrom(instance.GetType()))
-            {
-                throw new ObjectNotOfRequiredTypeException(name, requiredType, instance);
-            }
-            return instance;
+            return GetObjectInternal(name, requiredType, arguments, false);
         }
-
-
 
         /// <summary>
         /// Apply the property values of the object definition with the supplied
@@ -334,37 +292,37 @@ namespace Spring.Objects.Factory.Support
             // explicit no-op...
         }
 
-        /// <summary>
-        /// Create an object instance for the given object definition.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// The object definition will already have been merged with the parent
-        /// definition in case of a child definition.
-        /// </p>
-        /// <p>
-        /// All the other methods in this class invoke this method, although objects
-        /// may be cached after being instantiated by this method. All object
-        /// instantiation within this class is performed by this method.
-        /// </p>
-        /// </remarks>
-        /// <param name="name">The name of the object.</param>
-        /// <param name="definition">
-        /// The object definition for the object that is to be instantiated.
-        /// </param>
-        /// <param name="arguments">
-        /// The arguments to use if creating a prototype using explicit arguments to
-        /// a <see lang="static"/>  factory method. If there is no factory method and the
-        /// supplied <paramref name="arguments"/> array is not <see lang="null"/>,
-        /// then match the argument values by type and call the object's constructor.
-        /// </param>
-        /// <returns>
-        /// A new instance of the object.
-        /// </returns>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In case of errors.
-        /// </exception>
-        protected internal abstract object CreateObject(string name, RootObjectDefinition definition, object[] arguments);
+//        /// <summary>
+//        /// Create an object instance for the given object definition.
+//        /// </summary>
+//        /// <remarks>
+//        /// <p>
+//        /// The object definition will already have been merged with the parent
+//        /// definition in case of a child definition.
+//        /// </p>
+//        /// <p>
+//        /// All the other methods in this class invoke this method, although objects
+//        /// may be cached after being instantiated by this method. All object
+//        /// instantiation within this class is performed by this method.
+//        /// </p>
+//        /// </remarks>
+//        /// <param name="name">The name of the object.</param>
+//        /// <param name="definition">
+//        /// The object definition for the object that is to be instantiated.
+//        /// </param>
+//        /// <param name="arguments">
+//        /// The arguments to use if creating a prototype using explicit arguments to
+//        /// a <see lang="static"/>  factory method. If there is no factory method and the
+//        /// supplied <paramref name="arguments"/> array is not <see lang="null"/>,
+//        /// then match the argument values by type and call the object's constructor.
+//        /// </param>
+//        /// <returns>
+//        /// A new instance of the object.
+//        /// </returns>
+//        /// <exception cref="Spring.Objects.ObjectsException">
+//        /// In case of errors.
+//        /// </exception>
+//        protected internal abstract object CreateObject(string name, RootObjectDefinition definition, object[] arguments);
 
 
         /// <summary>
@@ -383,6 +341,9 @@ namespace Spring.Objects.Factory.Support
         /// Whether eager caching of singletons is allowed... typically true for
         /// singlton objects, but never true for inner object definitions.
         /// </param>
+        /// <param name="suppressConfigure">
+        /// Create instance only - suppress injecting dependencies yet.
+        /// </param>
         /// <returns>
         /// A new instance of the object.
         /// </returns>
@@ -400,8 +361,8 @@ namespace Spring.Objects.Factory.Support
         /// instantiation within this class is performed by this method.
         /// </p>
         /// </remarks>
-        protected internal abstract object CreateObject(string name, RootObjectDefinition definition, object[] arguments,
-                                                        bool allowEagerCaching);
+        protected internal abstract object InstantiateObject(string name, RootObjectDefinition definition, object[] arguments,
+                                                        bool allowEagerCaching, bool suppressConfigure);
         
         /// <summary>
         /// Destroy the target object.
@@ -1380,6 +1341,7 @@ namespace Spring.Objects.Factory.Support
                     throw new ObjectNotOfRequiredTypeException(objectName, requiredType, objectType);
                 }
             }
+
             // check validity of the usage of the args parameter; this can
             // only be used for prototypes constructed via a factory method...
             if (arguments != null && arguments.Length > 0)
@@ -1429,7 +1391,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// ObjectPostProcessors to apply in CreateObject
         /// </summary>
-        private IList objectPostProcessors = new ArrayList();
+        private ISet objectPostProcessors = new SortedSet(new ObjectOrderComparator());
 
         /// <summary>
         /// Indicates whether any IInstantiationAwareBeanPostProcessors have been registered
@@ -1689,12 +1651,33 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
+        /// Return an unconfigured(!) instance (possibly shared or independent) of the given object name.
+        /// </summary>
+        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.CreateObject(string, Type, object[])"/>
+        /// <remarks>
+        ///  This method will only <b>instantiate</b> the requested object. It does <b>NOT</b> inject any dependencies!
+        /// </remarks>
+        public object CreateObject(string name, Type requiredType, object[] arguments)
+        {
+            return GetObjectInternal(name, requiredType, arguments, true);
+        }
+
+        /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
         /// </summary>
         /// <see cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>.
         public object GetObject(string name)
         {
-            return GetObject(name, typeof(object), null);
+            return GetObjectInternal(name, typeof(object), null, false);
+        }
+
+        /// <summary>
+        /// Return an instance (possibly shared or independent) of the given object name.
+        /// </summary>
+        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type)"/>
+        public object GetObject(string name, Type requiredType)
+        {
+            return GetObjectInternal(name, requiredType, null, false);
         }
 
         /// <summary>
@@ -1734,33 +1717,147 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public object GetObject(string name, object[] arguments)
         {
-            object instance = null;
-            string objectName = TransformedObjectName(name);
+            return GetObjectInternal(name, typeof(object), arguments, false);
 
-            // check if object definition exists
-            RootObjectDefinition mergedObjectDefinition = null;
-            mergedObjectDefinition = GetMergedObjectDefinition(objectName, false);
-            if (mergedObjectDefinition == null)
-            {
-                if (ParentObjectFactory != null)
-                {
-                    return ParentObjectFactory.GetObject(name, arguments);
-                }
-                throw new NoSuchObjectDefinitionException(name, "Cannot find definition for object [" + name + "]");
-            }
-
-            // Override constructor values and configure as a prototype
-            RootObjectDefinition tmpObjectDefinition = new RootObjectDefinition(mergedObjectDefinition);
-            tmpObjectDefinition.ConstructorArgumentValues = null;
-            tmpObjectDefinition.IsSingleton = false;
-
-            // create a new instance...
-            instance = CreateObject(name, tmpObjectDefinition, arguments);
-
-            return GetObjectForInstance(name, instance);
+//            string objectName = TransformedObjectName(name);
+//            object instance = null;
+//
+//            // check if object definition exists
+//            RootObjectDefinition mergedObjectDefinition = null;
+//            mergedObjectDefinition = GetMergedObjectDefinition(objectName, false);
+//            if (mergedObjectDefinition == null)
+//            {
+//                if (ParentObjectFactory != null)
+//                {
+//                    return ParentObjectFactory.GetObject(name, arguments);
+//                }
+//                throw new NoSuchObjectDefinitionException(name, "Cannot find definition for object [" + name + "]");
+//            }
+//
+//            // Override constructor values and configure as a prototype
+//            RootObjectDefinition tmpObjectDefinition = new RootObjectDefinition(mergedObjectDefinition);
+//            tmpObjectDefinition.ConstructorArgumentValues = null;
+//            tmpObjectDefinition.IsSingleton = false;
+//
+//            // create a new instance...
+//            instance = CreateObject(name, tmpObjectDefinition, arguments);
+//
+//            return GetObjectForInstance(name, instance);
         }
 
+        /// <summary>
+        /// Return an instance (possibly shared or independent) of the given object name, 
+        /// optionally injecting dependencies.
+        /// </summary>
+        /// <param name="name">The name of the object to return.</param>
+        /// <param name="requiredType">
+        /// The <see cref="System.Type"/> the object may match. Can be an interface or
+        /// superclass of the actual class. For example, if the value is the
+        /// <see cref="System.Object"/> class, this method will succeed whatever the
+        /// class of the returned instance.
+        /// </param>
+        /// <param name="arguments">
+        /// The arguments to use if creating a prototype using explicit arguments to
+        /// a <see lang="static"/> factory method. If there is no factory method and the
+        /// supplied <paramref name="arguments"/> array is not <see lang="null"/>, then
+        /// match the argument values by type and call the object's constructor.
+        /// </param>
+        /// <param name="suppressConfigure">whether to inject dependencies or not.</param>
+        /// <returns>The instance of the object.</returns>
+        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+        /// If there's no such object definition.
+        /// </exception>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object could not be created.
+        /// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectNotOfRequiredTypeException">
+        /// If the object is not of the required type.
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the supplied <paramref name="name"/> is <see langword="null"/>.
+        /// </exception>
+        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.CreateObject(string, Type, object[])"/>
+        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type, object[])"/>
+        protected object GetObjectInternal(string name, Type requiredType, object[] arguments, bool suppressConfigure)
+        {
+            string objectName = TransformedObjectName(name);
+            object instance = null;
+            // eagerly check singleton cache for manually registered singletons...                       
+            object sharedInstance = GetSingleton(objectName);
 
+            if (sharedInstance != null)
+            {
+                #region Instrumentation
+
+                if (IsSingletonCurrentlyInCreation(objectName))
+                {
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug("Returning eagerly cached instance of singleton object '" + objectName +
+                                  "' that is not fully initialized yet - a consequence of a circular reference");
+                    }
+                }
+                else
+                {
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug(string.Format("Returning cached instance of singleton object '{0}'.", objectName));
+                    }
+                }
+
+                #endregion
+
+                instance = GetObjectForInstance(name, sharedInstance);
+            }
+            else
+            {
+                // check if object definition exists
+                RootObjectDefinition mergedObjectDefinition = null;
+                mergedObjectDefinition = GetMergedObjectDefinition(objectName, false);
+                if (mergedObjectDefinition == null)
+                {
+                    if (ParentObjectFactory != null)
+                    {
+                        return ParentObjectFactory.GetObject(name, requiredType, arguments);
+                    }
+                    throw new NoSuchObjectDefinitionException(name, "Cannot find definition for object [" + name + "]");
+                }
+
+                if (arguments != null)
+                {
+                    // Override constructor values and configure as a prototype if arguments are specified
+                    mergedObjectDefinition = new RootObjectDefinition(mergedObjectDefinition);
+                    mergedObjectDefinition.ConstructorArgumentValues = null;
+                    mergedObjectDefinition.IsSingleton = false;
+                    mergedObjectDefinition.ConstructorArgumentValues = null;
+                }
+
+                CheckMergedObjectDefinition(mergedObjectDefinition, objectName, requiredType, arguments);
+
+                // return IObjectDefinition instance itself for an abstract object-definition
+                if (mergedObjectDefinition.IsAbstract)
+                {
+                    instance = mergedObjectDefinition;
+                }
+                else if (mergedObjectDefinition.IsSingleton)
+                {
+                    // create object instance...
+                    sharedInstance = CreateAndCacheSingletonInstance(objectName, mergedObjectDefinition, arguments);
+                    instance = GetObjectForInstance(name, sharedInstance);
+                }
+                else
+                {
+                    // it's a prototype, so create a new instance...
+                    instance = InstantiateObject(name, mergedObjectDefinition, arguments, true, suppressConfigure);
+                }
+            }
+            // check that any required type matches the type of the actual object instance...
+            if (requiredType != null && !requiredType.IsAssignableFrom(instance.GetType()))
+            {
+                throw new ObjectNotOfRequiredTypeException(name, requiredType, instance);
+            }
+            return instance;
+        }
 
         /// <summary>
         /// Creates a singleton instance for the specified object name and definition.
@@ -1797,7 +1894,7 @@ namespace Spring.Objects.Factory.Support
                     BeforeSingletonCreation(objectName);
                     try
                     {
-                        sharedInstance = CreateObject(objectName, objectDefinition, arguments);
+                        sharedInstance = InstantiateObject(objectName, objectDefinition, arguments, true, false);
                     }
                     finally
                     {
@@ -1825,15 +1922,6 @@ namespace Spring.Objects.Factory.Support
                 throw new ObjectCurrentlyInCreationException(name);
             }
             singletonsInCreation.Add(name, emptyObject);
-        }
-
-        /// <summary>
-        /// Return an instance (possibly shared or independent) of the given object name.
-        /// </summary>
-        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type)"/>
-        public object GetObject(string name, Type requiredType)
-        {
-            return GetObject(name, requiredType, null);
         }
 
         /// <summary>

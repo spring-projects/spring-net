@@ -1,4 +1,4 @@
-Changes (1.1.2 to 1.2 M1)
+Changes (1.1.2 to 1.2 RC1)
 
 Spring.Core
 -----------
@@ -21,4 +21,14 @@ Spring.Data
 Spring.Services
 ---------------
 1. Removed WebServiceProxyFactory.ClientProtocolType property (obsolete)
+
 2. WebServiceExporter generates WebServiceBinding attribute with WSI basic profile 1.1 by default.
+
+Spring.Web
+----------
+
+1. Moved Spring.Web.Support.ISharedStateAware to Spring.Objects.ISharedStateAware
+
+2. Dropped IProcess support
+
+3. IHttpHandler instance dependencies won't be injected until PreRequestHandlerExecute stage (to support "session"-scoped deps)

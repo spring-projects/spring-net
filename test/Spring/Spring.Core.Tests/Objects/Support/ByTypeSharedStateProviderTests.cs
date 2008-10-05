@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2004 the original author or authors.
+ * Copyright © 2002-2008 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,22 @@
 
 #endregion
 
-using System.Web;
+#region Imports
 
-namespace Spring.Web.Process
+using System;
+using NUnit.Framework;
+
+#endregion
+
+namespace Spring.Objects.Support
 {
     /// <summary>
-    /// Interface that should be implemented by all <see cref="IHttpHandler"/>s
-    /// that want to be aware of the <see cref="IProcess"/> they belong to. 
+    /// 
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public interface IProcessAware
+    /// <author>Erich Eichinger</author>
+    [TestFixture]
+    public class ByTypeSharedStateProviderTests
     {
-        /// <summary>
-        /// Gets or sets a process instance.
-        /// </summary>
-        IProcess Process { get; set; }
+         // TODO
     }
 }

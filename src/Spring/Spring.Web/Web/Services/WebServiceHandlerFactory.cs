@@ -29,6 +29,7 @@ using System.Web.Services;
 
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Web.Support;
 

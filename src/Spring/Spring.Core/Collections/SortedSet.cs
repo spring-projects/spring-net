@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections;
+using Spring.Util;
 
 #endregion
 
@@ -62,6 +63,15 @@ namespace Spring.Collections
 		{
 			InternalDictionary = new SortedList();
 		}
+
+		/// <summary>
+		/// Creates a new set instance based on a sorted tree using <param name="comparer"/> for ordering.
+		/// </summary>
+        public SortedSet(IComparer comparer)
+        {
+            AssertUtils.ArgumentNotNull(comparer, "comparer");
+			InternalDictionary = new SortedList(comparer);
+        }
 
 		/// <summary>
 		/// Creates a new set instance based on a sorted tree and initializes

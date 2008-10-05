@@ -81,6 +81,15 @@ namespace Spring.Objects.Factory.Support
 	    }
 
 	    /// <summary>
+	    /// This method is not supported by <see cref="StaticListableObjectFactory"/>.
+	    /// </summary>
+	    /// <exception cref="NotSupportedException" />
+	    public object CreateObject(string name, Type requiredType, object[] arguments)
+	    {
+	        throw new NotSupportedException("StaticListableObjectFactory does not support this method.");
+	    }
+
+	    /// <summary>
 	    /// Return an instance of the given object name.
 	    /// </summary>
 	    /// <param name="name">The name of the object to return.</param>

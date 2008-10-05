@@ -31,11 +31,6 @@ namespace Spring.Objects.Factory
 {
     public class TestAbstractObjectFactory : AbstractObjectFactory
     {
-        protected override object CreateObject(string name, RootObjectDefinition definition, object[] arguments)
-        {
-            throw new System.NotImplementedException();
-        }
-
         protected override void DestroyObject(string name, object target)
         {
             throw new System.NotImplementedException();
@@ -66,8 +61,8 @@ namespace Spring.Objects.Factory
             throw new System.NotImplementedException();
         }
 
-        protected override object CreateObject(string name, RootObjectDefinition definition, object[] arguments,
-                                               bool allowEagerCaching)
+        protected override object InstantiateObject(string name, RootObjectDefinition definition, object[] arguments,
+                                               bool allowEagerCaching, bool suppressConfigure)
         {
             throw new NotImplementedException();
         }

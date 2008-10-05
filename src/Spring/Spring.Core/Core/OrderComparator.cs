@@ -40,6 +40,7 @@ namespace Spring.Core
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
     /// <author>Aleksandar Seovic (.Net)</author>
+    [Serializable]
     public class OrderComparator : IComparer
 	{
         /// <summary>
@@ -73,8 +74,22 @@ namespace Spring.Core
             }
             else
             {
-                return 0;
+                return CompareEqualOrder(o1, o2);
             }
 		}
+
+        /// <summary>
+        /// Handle the case when both objects have equal sort order priority. By default returns 0, 
+        /// but may be overriden for handling special cases.
+        /// </summary>
+        /// <param name="o1">The first object to compare.</param>
+        /// <param name="o2">The second object to compare.</param>
+        /// <returns>
+        /// -1 if first object is less then second, 1 if it is greater, or 0 if they are equal.
+        /// </returns>
+        protected virtual int CompareEqualOrder(object o1, object o2)
+        {
+            return 0;
+        }
 	}
 }

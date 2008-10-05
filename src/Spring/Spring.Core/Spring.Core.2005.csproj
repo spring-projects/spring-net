@@ -554,6 +554,7 @@
     <Compile Include="Objects\Factory\Config\ObjectDefinitionHolder.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionVisitor.cs" />
     <Compile Include="Objects\Factory\Config\ResourceHandlerConfigurer.cs" />
+    <Compile Include="Objects\Factory\Config\SharedStateAwareProcessor.cs" />
     <Compile Include="Objects\Factory\Config\SmartInstantiationAwareObjectPostProcessor.cs" />
     <Compile Include="Objects\Factory\Config\TypeAliasConfigurer.cs" />
     <Compile Include="Objects\Factory\Config\PropertyFileVariableSource.cs" />
@@ -587,6 +588,8 @@
     <Compile Include="Objects\Factory\Xml\XmlObjectDefinitionStoreException.cs" />
     <Compile Include="Objects\Factory\Xml\XmlReaderContext.cs" />
     <Compile Include="Objects\FatalObjectException.cs" />
+    <Compile Include="Objects\ISharedStateAware.cs" />
+    <Compile Include="Objects\ISharedStateFactory.cs" />
     <Compile Include="Objects\MutablePropertyValues.cs" />
     <Compile Include="Objects\ObjectWrapper.cs" />
     <Compile Include="Objects\Events\IEventRegistry.cs">
@@ -888,6 +891,7 @@
     <Compile Include="Objects\Support\AbstractEventHandlerValue.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\Support\AbstractSharedStateFactory.cs" />
     <Compile Include="Objects\Support\AbstractWiringEventHandlerValue.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -897,6 +901,7 @@
     <Compile Include="Objects\Support\AutoWiringEventHandlerValue.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\Support\ByTypeSharedStateFactory.cs" />
     <Compile Include="Objects\Support\InstanceEventHandlerValue.cs">
       <SubType>Code</SubType>
     </Compile>

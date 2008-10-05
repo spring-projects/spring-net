@@ -327,7 +327,7 @@ namespace Spring.Objects.Factory.Support
                     scopedSingletonCache.Add(objectName, TemporarySingletonPlaceHolder);
                     try
                     {
-                        instance = CreateObject(objectName, objectDefinition, arguments, true);
+                        instance = InstantiateObject(objectName, objectDefinition, arguments, true, false);
                         AssertUtils.ArgumentNotNull(instance, "instance");
                         scopedSingletonCache[objectName] = instance;
                     }

@@ -22,6 +22,7 @@
 
 using System.Collections;
 using Spring.Globalization;
+using Spring.Objects;
 using Spring.Util;
 
 #endregion

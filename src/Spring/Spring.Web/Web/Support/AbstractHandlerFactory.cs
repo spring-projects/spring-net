@@ -48,6 +48,43 @@ namespace Spring.Web.Support
     /// <author>Aleksandar Seovic</author>
     public abstract class AbstractHandlerFactory : IHttpHandlerFactory
     {
+        #region NamedObjectDefinition Utility
+        /// <summary>
+        /// Holds a named <see cref="IObjectDefinition"/>
+        /// </summary>
+        /// <author>Erich Eichinger</author>
+        protected internal class NamedObjectDefinition
+        {
+            private readonly string _name;
+            private readonly IObjectDefinition _objectDefinition;
+
+            /// <summary>
+            /// Creates a new name/objectdefinition pair.
+            /// </summary>
+            public NamedObjectDefinition(string name, IObjectDefinition objectDefinition)
+            {
+                _name = name;
+                _objectDefinition = objectDefinition;
+            }
+
+            /// <summary>
+            /// Get the name of the attached object definition
+            /// </summary>
+            public string Name
+            {
+                get { return _name; }
+            }
+
+            /// <summary>
+            /// Get the <see cref="IObjectDefinition"/>.
+            /// </summary>
+            public IObjectDefinition ObjectDefinition
+            {
+                get { return _objectDefinition; }
+            }
+        }
+        #endregion
+
         /// <summary>
         /// Holds all handlers having <see cref="IHttpHandler.IsReusable"/> == true.
         /// </summary>
@@ -254,40 +291,6 @@ namespace Spring.Web.Support
             }
 
             return (pageDefinition == null) ? (NamedObjectDefinition)null : new NamedObjectDefinition( objectDefinitionName, pageDefinition );
-        }
-
-        /// <summary>
-        /// DO NOT USE - this is subject to change!
-        /// </summary>
-        protected internal class NamedObjectDefinition
-        {
-            private readonly string _name;
-            private readonly IObjectDefinition _objectDefinition;
-
-            /// <summary>
-            /// DO NOT USE
-            /// </summary>
-            public NamedObjectDefinition( string name, IObjectDefinition objectDefinition )
-            {
-                _name = name;
-                _objectDefinition = objectDefinition;
-            }
-
-            /// <summary>
-            /// DO NOT USE
-            /// </summary>
-            public string Name
-            {
-                get { return _name; }
-            }
-
-            /// <summary>
-            /// DO NOT USE
-            /// </summary>
-            public IObjectDefinition ObjectDefinition
-            {
-                get { return _objectDefinition; }
-            }
         }
     }
 }

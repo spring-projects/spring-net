@@ -138,6 +138,11 @@ namespace Spring
 			return false;
 		}
 
+	    public object CreateObject(string name, Type requiredType, object[] arguments)
+	    {
+            return null;
+	    }
+
 		public string[] GetAliases(string name)
 		{
 			return null;
@@ -232,7 +237,13 @@ namespace Spring
 			return null;
 		}
 
-		public object GetObject(string name, Type requiredType)
+		public object CreateObject(string name, Type requiredType, object[] arguments)
+	    {
+            innerExecute();
+            return null;
+	    }
+
+        public object GetObject(string name, Type requiredType)
 		{
 			innerExecute();
 			return null;

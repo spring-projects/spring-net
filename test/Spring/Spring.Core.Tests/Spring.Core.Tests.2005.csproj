@@ -315,6 +315,7 @@
     <Compile Include="Objects\Factory\Config\ObjectDefinitionVisitorTests.cs" />
     <Compile Include="Objects\Factory\Config\ResourceHandlerConfigurerTests.cs" />
     <Compile Include="Objects\Factory\Config\PropertyFileVariableSourceTests.cs" />
+    <Compile Include="Objects\Factory\Config\SharedStateAwareProcessorTests.cs" />
     <Compile Include="Objects\Factory\Config\SpecialFolderVariableSourceTests.cs" />
     <Compile Include="Objects\Factory\Config\EnvironmentVariableSourceTests.cs" />
     <Compile Include="Objects\Factory\Config\RegistryVariableSourceTests.cs" />
@@ -330,6 +331,8 @@
     <Compile Include="Objects\Factory\Xml\ObjectNameGenerationTests.cs" />
     <Compile Include="Objects\Factory\Xml\SiimpleCtorWiringTests.cs" />
     <Compile Include="Objects\LazyTestObject.cs" />
+    <Compile Include="Objects\Support\AbstractSharedStateFactoryTests.cs" />
+    <Compile Include="Objects\Support\ByTypeSharedStateProviderTests.cs" />
     <Compile Include="Objects\Support\MethodInvokerTests.cs">
       <SubType>Code</SubType>
     </Compile>

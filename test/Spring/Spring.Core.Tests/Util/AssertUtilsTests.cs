@@ -147,5 +147,32 @@ namespace Spring.Util
         {
             AssertUtils.ArgumentHasLength(new byte[1], "foo", "Bang!");
         }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ArgumentHasElementsArgumentIsNull()
+        {
+            AssertUtils.ArgumentHasElements(null, "foo");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ArgumentHasElementsArgumentIsEmpty()
+        {
+            AssertUtils.ArgumentHasElements(new object[0], "foo");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ArgumentHasElementsArgumentContainsNull()
+        {
+            AssertUtils.ArgumentHasElements(new object[] { new object(), null, new object() }, "foo");
+        }
+
+        [Test]
+        public void ArgumentHasElementsArgumentContainsNonNullsOnly()
+        {
+            AssertUtils.ArgumentHasElements(new object[] { new object(), new object(), new object() }, "foo");
+        }
     }
 }

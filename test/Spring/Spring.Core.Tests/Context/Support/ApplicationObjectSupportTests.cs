@@ -173,6 +173,11 @@ namespace Spring.Context.Support
 				return null;
 			}
 
+		    public object CreateObject(string name, Type requiredType, object[] arguments)
+		    {
+		        return null;
+		    }
+
 			public object GetObject(string name, Type requiredType)
 			{
 				return null;

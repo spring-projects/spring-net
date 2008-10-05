@@ -160,9 +160,6 @@
     <Compile Include="Util\WebUtils.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Web\Support\AbstractProcessHandler.cs" />
-    <Compile Include="Web\Process\IProcess.cs" />
-    <Compile Include="Web\Process\IProcessAware.cs" />
     <Compile Include="Web\Providers\ConfigurableActiveDirectoryMembershipProvider.cs" />
     <Compile Include="Web\Providers\ConfigurableSqlMembershipProvider.cs" />
     <Compile Include="Web\Providers\ConfigurableSqlProfileProvider.cs" />
@@ -185,7 +182,6 @@
     <Compile Include="Web\Support\AbstractHandlerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Web\Process\ProcessManager.cs" />
     <Compile Include="Web\Support\ContextMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -193,10 +189,8 @@
     <Compile Include="Web\Support\IInterceptionStrategy.cs" />
     <Compile Include="Web\Support\InterceptControlCollectionOwnerStrategy.cs" />
     <Compile Include="Web\Support\InterceptControlCollectionStrategy.cs" />
-    <Compile Include="Web\Support\ISharedStateAware.cs" />
     <Compile Include="Web\Support\ISupportsWebDependencyInjection.cs" />
     <Compile Include="Web\Support\PageHandlerFactory.cs">
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Web\Support\Result.cs">
       <SubType>Code</SubType>

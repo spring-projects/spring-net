@@ -33,6 +33,7 @@ using Spring.Objects.Events;
 using Spring.Objects.Events.Support;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
+using Spring.Objects.Support;
 using Spring.Util;
 
 #endregion
@@ -158,7 +159,8 @@ namespace Spring.Context.Support
         /// no public constructors.
         /// </p>
         /// </remarks>
-        protected AbstractApplicationContext() : this(null, true, null)
+        protected AbstractApplicationContext()
+            : this(null, true, null)
         {
         }
 
@@ -173,7 +175,8 @@ namespace Spring.Context.Support
         /// </p>
         /// </remarks>
         /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
-        protected AbstractApplicationContext(bool caseSensitive) : this(null, caseSensitive, null)
+        protected AbstractApplicationContext(bool caseSensitive)
+            : this(null, caseSensitive, null)
         {
         }
 
@@ -200,6 +203,7 @@ namespace Spring.Context.Support
             _defaultObjectPostProcessors = new ArrayList();
             AddDefaultObjectPostProcessor(new ObjectPostProcessorChecker());
             AddDefaultObjectPostProcessor(new ApplicationContextAwareProcessor(this));
+            AddDefaultObjectPostProcessor(new SharedStateAwareProcessor(new ISharedStateFactory[] { new ByTypeSharedStateFactory() }, Int32.MaxValue));
         }
 
         /// <summary>
@@ -279,7 +283,7 @@ namespace Spring.Context.Support
         /// </returns>
         public long StartupDateMilliseconds
         {
-            get { return (StartupDate.Ticks - TicksAtEpoch)/10000; }
+            get { return (StartupDate.Ticks - TicksAtEpoch) / 10000; }
         }
 
 
@@ -482,10 +486,10 @@ namespace Spring.Context.Support
 
         private void RegisterObjectPostProcessors(IConfigurableListableObjectFactory objectFactory)
         {
-            RegisterObjectPostProcessorChecker(objectFactory);
+            RefreshObjectPostProcessorChecker(objectFactory);
             IDictionary dict = GetObjectsOfType(typeof(IObjectPostProcessor), true, false);
             ArrayList objectProcessors = new ArrayList(dict.Values);
-            objectProcessors.Sort(new OrderComparator());
+            //            objectProcessors.Sort(new OrderComparator());
             foreach (IObjectPostProcessor objectPostProcessor in objectProcessors)
             {
                 ObjectFactory.AddObjectPostProcessor(objectPostProcessor);
@@ -502,19 +506,17 @@ namespace Spring.Context.Support
         }
 
         /// <summary>
-        /// Register an IObjectPostProcessorChecker that logs an info
+        /// Resets the well-known ObjectPostProcessorChecker that logs an info
         /// message when an object is created during IObjectPostProcessor
         /// instantiation, i.e. when an object is not eligible for being
         /// processed by all IObjectPostProcessors.
         /// </summary>
-        private void RegisterObjectPostProcessorChecker(IConfigurableListableObjectFactory objectFactory)
+        private void RefreshObjectPostProcessorChecker(IConfigurableListableObjectFactory objectFactory)
         {
-            int objectPostProcessorCount
-                = ObjectFactory.ObjectPostProcessorCount + 1
-                  + GetObjectNamesForType(typeof(IObjectPostProcessor), true, false).Length;
-//            ObjectFactory.AddObjectPostProcessor(
-//                new ObjectPostProcessorChecker(objectFactory, objectPostProcessorCount));
-            ((ObjectPostProcessorChecker) _defaultObjectPostProcessors[0]).Reset(objectFactory, objectPostProcessorCount);
+            int registeredObjectPostProcessorCount = GetObjectNamesForType(typeof(IObjectPostProcessor), true, false).Length;
+            int objectPostProcessorCount = ObjectFactory.ObjectPostProcessorCount + 1
+                                           + registeredObjectPostProcessorCount;
+            ((ObjectPostProcessorChecker)_defaultObjectPostProcessors[0]).Reset(objectFactory, objectPostProcessorCount);
         }
 
         /// <summary>
@@ -527,7 +529,7 @@ namespace Spring.Context.Support
                 object candidateRegistry = GetObject(EventRegistryObjectName);
                 if (candidateRegistry is IEventRegistry)
                 {
-                    _eventRegistry = (IEventRegistry) candidateRegistry;
+                    _eventRegistry = (IEventRegistry)candidateRegistry;
 
                     #region Instrumentation
 
@@ -612,7 +614,7 @@ namespace Spring.Context.Support
                 if (candidateSource is IMessageSource)
                 {
                     _messageSource
-                        = (IMessageSource) GetObject(MessageSourceObjectName);
+                        = (IMessageSource)GetObject(MessageSourceObjectName);
 
                     // make IMessageSource aware of any parent IMessageSource...
                     if (ParentContext != null)
@@ -758,7 +760,7 @@ namespace Spring.Context.Support
             lock (SyncRoot)
             {
 
-                
+
                 _startupDate = DateTime.Now;
 
                 RefreshObjectFactory();
@@ -823,7 +825,7 @@ namespace Spring.Context.Support
             // index 0 contains the ObjectPostProcessorChecker that is handled separately!
             for (int i = 1; i < _defaultObjectPostProcessors.Count; i++)
             {
-                objectFactory.AddObjectPostProcessor((IObjectPostProcessor) this._defaultObjectPostProcessors[i]);
+                objectFactory.AddObjectPostProcessor((IObjectPostProcessor)this._defaultObjectPostProcessors[i]);
             }
         }
 
@@ -1223,6 +1225,45 @@ namespace Spring.Context.Support
             return ObjectFactory.GetAliases(name);
         }
 
+
+        /// <summary>
+        /// Return an unconfigured(!) instance (possibly shared or independent) of the given object name.
+        /// </summary>
+        /// <param name="name">The name of the object to return.</param>
+        /// <param name="requiredType">
+        /// The <see cref="System.Type"/> the object may match. Can be an interface or
+        /// superclass of the actual class. For example, if the value is the
+        /// <see cref="System.Object"/> class, this method will succeed whatever the
+        /// class of the returned instance.
+        /// </param>
+        /// <param name="arguments">
+        /// The arguments to use if creating a prototype using explicit arguments to
+        /// a <see lang="static"/> factory method. If there is no factory method and the
+        /// supplied <paramref name="arguments"/> array is not <see lang="null"/>, then
+        /// match the argument values by type and call the object's constructor.
+        /// </param>
+        /// <returns>The unconfigured(!) instance of the object.</returns>
+        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+        /// If there's no such object definition.
+        /// </exception>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object could not be created.
+        /// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectNotOfRequiredTypeException">
+        /// If the object is not of the required type.
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the supplied <paramref name="name"/> is <see langword="null"/>.
+        /// </exception>
+        /// <seealso cref="IObjectFactory.CreateObject"/>
+        /// <remarks>
+        ///  This method will only <b>instantiate</b> the requested object. It does <b>NOT</b> inject any dependencies!
+        /// </remarks>
+        public object CreateObject(string name, Type requiredType, object[] arguments)
+        {
+            return ObjectFactory.CreateObject(name, requiredType, arguments);
+        }
+
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
         /// </summary>
@@ -1335,7 +1376,7 @@ namespace Spring.Context.Support
         /// <exception cref="System.ArgumentNullException">
         /// If the supplied <paramref name="name"/> is <see langword="null"/>.
         /// </exception>
-        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type)"/>
+        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type, object[])"/>
         public object GetObject(string name, Type requiredType, object[] arguments)
         {
             return ObjectFactory.GetObject(name, requiredType, arguments);
@@ -1819,9 +1860,9 @@ namespace Spring.Context.Support
             }
         }
 
-        #region IPostProcessor implementation 
+        #region IPostProcessor implementation
 
-        private sealed class ObjectPostProcessorChecker : IObjectPostProcessor
+        private sealed class ObjectPostProcessorChecker : IObjectPostProcessor, IOrdered
         {
             private int _objectPostProcessorTargetCount;
             private IConfigurableListableObjectFactory _objectFactory;
@@ -1858,6 +1899,11 @@ namespace Spring.Context.Support
                     #endregion
                 }
                 return obj;
+            }
+
+            public int Order
+            {
+                get { return Int32.MinValue; }
             }
         }
 

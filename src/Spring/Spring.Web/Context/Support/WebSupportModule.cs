@@ -26,15 +26,17 @@ using System.Reflection;
 using System.Web;
 using System.Web.Caching;
 using System.Web.SessionState;
-
+using System.Web.UI;
 using Common.Logging;
 using Spring.Core.IO;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Expressions;
+using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Threading;
 using Spring.Util;
+using Spring.Web.Support;
 
 #endregion
 
@@ -46,6 +48,28 @@ namespace Spring.Context.Support
     /// <author>Erich Eichinger</author>
     public class WebSupportModule : IHttpModule
     {
+        /// <summary>
+        /// Identifies the Objectdefinition used for the current IHttpHandler instance in TLS
+        /// </summary>
+        private static readonly string CURRENTHANDLER_OBJECTDEFINITION = "__spring.web" + new Guid().ToString();
+
+        /// <summary>
+        /// Holds the handler configuration information.
+        /// </summary>
+        private class HandlerConfigurationMetaData
+        {
+            public readonly IConfigurableApplicationContext ApplicationContext;
+            public readonly string ObjectDefinitionName;
+            public readonly bool IsContainerManaged;
+
+            public HandlerConfigurationMetaData(IConfigurableApplicationContext applicationContext, string objectDefinitionName, bool isContainerManaged)
+            {
+                ApplicationContext = applicationContext;
+                ObjectDefinitionName = objectDefinitionName;
+                IsContainerManaged = isContainerManaged;
+            }
+        }
+
         private static readonly ILog s_log;
 
         private static bool s_isInitialized = false;
@@ -64,28 +88,28 @@ namespace Spring.Context.Support
         /// </summary>
         static WebSupportModule()
         {
-            s_log = LogManager.GetLogger(typeof(WebSupportModule));
+            s_log = LogManager.GetLogger( typeof( WebSupportModule ) );
 
             // register additional resource handler
-            ResourceHandlerRegistry.RegisterResourceHandler(WebUtils.DEFAULT_RESOURCE_PROTOCOL, typeof(WebResource));
+            ResourceHandlerRegistry.RegisterResourceHandler( WebUtils.DEFAULT_RESOURCE_PROTOCOL, typeof( WebResource ) );
             // replace default IResource converter
-            TypeConverterRegistry.RegisterConverter(typeof(IResource),
+            TypeConverterRegistry.RegisterConverter( typeof( IResource ),
                                                     new ResourceConverter(
-                                                        new ConfigurableResourceLoader(WebUtils.DEFAULT_RESOURCE_PROTOCOL)));
+                                                        new ConfigurableResourceLoader( WebUtils.DEFAULT_RESOURCE_PROTOCOL ) ) );
             // default to hybrid thread storage implementation
-            LogicalThreadContext.SetStorage(new HybridContextStorage());
+            LogicalThreadContext.SetStorage( new HybridContextStorage() );
 
-            s_log.Debug("Set default resource protocol to 'web' and installed HttpContext-aware HybridContextStorage");
+            s_log.Debug( "Set default resource protocol to 'web' and installed HttpContext-aware HybridContextStorage" );
         }
 
         /// <summary>
         /// Registers this module for all events required by the Spring.Web framework
         /// </summary>
-        public virtual void Init(HttpApplication app)
+        public virtual void Init( HttpApplication app )
         {
-            lock (typeof(WebSupportModule))
+            lock (typeof( WebSupportModule ))
             {
-                s_log.Debug("Initializing Application instance");
+                s_log.Debug( "Initializing Application instance" );
                 if (!s_isInitialized)
                 {
                     HttpModuleCollection modules = app.Modules;
@@ -94,7 +118,7 @@ namespace Spring.Context.Support
                         if (modules[moduleKey] is SessionStateModule)
                         {
 #if !NET_1_1
-                            HookSessionEvent((SessionStateModule) modules[moduleKey]);
+                            HookSessionEvent( (SessionStateModule)modules[moduleKey] );
 #else
                             HookSessionEvent11();
 #endif
@@ -108,16 +132,85 @@ namespace Spring.Context.Support
                 VirtualEnvironment.SetInitialized();
             }
 
-            app.EndRequest += new EventHandler(VirtualEnvironment.RaiseEndRequest);
+            app.PreRequestHandlerExecute += new EventHandler( OnPreRequestHandlerExecute );
+            app.EndRequest += new EventHandler( VirtualEnvironment.RaiseEndRequest );
 
             // ensure context is instantiated
             IConfigurableApplicationContext appContext = WebApplicationContext.GetRootContext() as IConfigurableApplicationContext;
             // configure this app + it's module instances
             if (appContext == null)
             {
-                throw new InvalidOperationException("Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
+                throw new InvalidOperationException( "Implementations of IApplicationContext must also implement IConfigurableApplicationContext" );
             }
-            HttpApplicationConfigurer.Configure(appContext, app);
+            HttpApplicationConfigurer.Configure( appContext, app );
+        }
+
+        ///<summary>
+        /// Configures the current IHttpHandler as specified by <see cref="Spring.Web.Support.PageHandlerFactory"/>.
+        ///</summary>
+        private void OnPreRequestHandlerExecute( object sender, EventArgs e )
+        {
+            HandlerConfigurationMetaData hCfg = (HandlerConfigurationMetaData)LogicalThreadContext.GetData( CURRENTHANDLER_OBJECTDEFINITION );
+            if (hCfg != null)
+            {
+                HttpApplication app = (HttpApplication)sender;
+                //app.Context.Handler = 
+                    ConfigureHandler( app.Context.Handler, hCfg.ApplicationContext, hCfg.ObjectDefinitionName, hCfg.IsContainerManaged );
+            }
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="applicationContext"></param>
+        ///<param name="name"></param>
+        ///<param name="isContainerManaged"></param>
+        public static void SetCurrentHandlerConfiguration( IConfigurableApplicationContext applicationContext, string name, bool isContainerManaged )
+        {
+            LogicalThreadContext.SetData( CURRENTHANDLER_OBJECTDEFINITION, new HandlerConfigurationMetaData(applicationContext, name, isContainerManaged) );
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="handler"></param>
+        ///<param name="applicationContext"></param>
+        ///<param name="name"></param>
+        ///<param name="isContainerManaged"></param>
+        public IHttpHandler ConfigureHandler( IHttpHandler handler, IConfigurableApplicationContext applicationContext, string name, bool isContainerManaged)
+        {
+            ApplyDependencyInjectionInfrastructure(handler, applicationContext);
+
+            if (isContainerManaged)
+            {
+                handler = (IHttpHandler)applicationContext.ObjectFactory.ConfigureObject( handler, name );
+            }
+            else
+            {
+                // at a minimum we'll apply ObjectPostProcessors
+                handler = (IHttpHandler)applicationContext.ObjectFactory.ApplyObjectPostProcessorsBeforeInitialization(handler, name);
+                handler = (IHttpHandler)applicationContext.ObjectFactory.ApplyObjectPostProcessorsAfterInitialization(handler, name);
+            }
+
+            return handler;
+        }
+
+        /// <summary>
+        /// Apply dependency injection stuff on the handler.
+        /// </summary>
+        /// <param name="handler">the handler to be intercepted</param>
+        /// <param name="applicationContext">the context responsible for configuring this handler</param>
+        private static void ApplyDependencyInjectionInfrastructure(IHttpHandler handler, IApplicationContext applicationContext)
+        {
+            if (handler is Control)
+            {
+                ControlInterceptor.EnsureControlIntercepted(applicationContext, (Control)handler);
+            }
+            else
+            {
+                if (handler is ISupportsWebDependencyInjection)
+                {
+                    ((ISupportsWebDependencyInjection)handler).DefaultApplicationContext = applicationContext;
+                }
+            }
         }
 
         /// <summary>
@@ -130,15 +223,15 @@ namespace Spring.Context.Support
 
         #region Session Handling Stuff
 
-        private static void OnCacheItemRemoved(string key, object value, CacheItemRemovedReason reason)
+        private static void OnCacheItemRemoved( string key, object value, CacheItemRemovedReason reason )
         {
-            s_log.Debug("end session " + key + " because of " + reason);
+            s_log.Debug( "end session " + key + " because of " + reason );
 
             try
             {
-                HttpSessionState ss = CreateSessionState(key, value);
+                HttpSessionState ss = CreateSessionState( key, value );
 
-                VirtualEnvironment.RaiseEndSession(ss, reason);
+                VirtualEnvironment.RaiseEndSession( ss, reason );
             }
             catch (Exception ex)
             {
@@ -146,51 +239,51 @@ namespace Spring.Context.Support
                 // are we on a current request?
                 if (HttpContext.Current != null)
                 {
-                    s_log.Error(msg, ex);
+                    s_log.Error( msg, ex );
                 }
                 else
                 {
                     // this is an async session timout - log as fatal since this is the thread's exit point!
-                    s_log.Fatal(msg, ex);
+                    s_log.Fatal( msg, ex );
                 }
             }
             finally
             {
                 if (s_originalCallback != null)
                 {
-                    s_originalCallback(key, value, reason);
-                }                
+                    s_originalCallback( key, value, reason );
+                }
             }
         }
 
 #if !NET_1_1
-        private static void HookSessionEvent(SessionStateModule sessionStateModule)
+        private static void HookSessionEvent( SessionStateModule sessionStateModule )
         {
             // Hook only into InProcState - all others ignore SessionEnd anyway
-            object store = ExpressionEvaluator.GetValue(sessionStateModule, "_store");
+            object store = ExpressionEvaluator.GetValue( sessionStateModule, "_store" );
             if ((store != null) && store.GetType().Name == "InProcSessionStateStore")
             {
-                s_log.Debug("attaching to InProcSessionStateStore");
-                s_originalCallback = (CacheItemRemovedCallback) ExpressionEvaluator.GetValue(store, "_callback");
-                ExpressionEvaluator.SetValue(store, "_callback", new CacheItemRemovedCallback(OnCacheItemRemoved));
+                s_log.Debug( "attaching to InProcSessionStateStore" );
+                s_originalCallback = (CacheItemRemovedCallback)ExpressionEvaluator.GetValue( store, "_callback" );
+                ExpressionEvaluator.SetValue( store, "_callback", new CacheItemRemovedCallback( OnCacheItemRemoved ) );
 
-                CACHEKEYPREFIXLENGTH = (int) ExpressionEvaluator.GetValue(store, "CACHEKEYPREFIXLENGTH");
+                CACHEKEYPREFIXLENGTH = (int)ExpressionEvaluator.GetValue( store, "CACHEKEYPREFIXLENGTH" );
             }
         }
 
-        private static HttpSessionState CreateSessionState(string key, object state)
+        private static HttpSessionState CreateSessionState( string key, object state )
         {
-            string id = key.Substring(CACHEKEYPREFIXLENGTH);
+            string id = key.Substring( CACHEKEYPREFIXLENGTH );
             ISessionStateItemCollection sessionItems =
-                (ISessionStateItemCollection) ExpressionEvaluator.GetValue(state, "_sessionItems");
+                (ISessionStateItemCollection)ExpressionEvaluator.GetValue( state, "_sessionItems" );
             HttpStaticObjectsCollection staticObjects =
-                (HttpStaticObjectsCollection) ExpressionEvaluator.GetValue(state, "_staticObjects");
-            int timeout = (int) ExpressionEvaluator.GetValue(state, "_timeout");
-            TypeRegistry.RegisterType("SessionStateModule", typeof(SessionStateModule));
+                (HttpStaticObjectsCollection)ExpressionEvaluator.GetValue( state, "_staticObjects" );
+            int timeout = (int)ExpressionEvaluator.GetValue( state, "_timeout" );
+            TypeRegistry.RegisterType( "SessionStateModule", typeof( SessionStateModule ) );
             HttpCookieMode cookieMode =
-                (HttpCookieMode) ExpressionEvaluator.GetValue(null, "SessionStateModule.s_configCookieless");
+                (HttpCookieMode)ExpressionEvaluator.GetValue( null, "SessionStateModule.s_configCookieless" );
             SessionStateMode stateMode =
-                (SessionStateMode) ExpressionEvaluator.GetValue(null, "SessionStateModule.s_configMode");
+                (SessionStateMode)ExpressionEvaluator.GetValue( null, "SessionStateModule.s_configMode" );
             HttpSessionStateContainer container = new HttpSessionStateContainer(
                 id
                 , sessionItems
@@ -202,11 +295,11 @@ namespace Spring.Context.Support
                 , true
                 );
 
-            return (HttpSessionState) Activator.CreateInstance(
-                                          typeof(HttpSessionState)
+            return (HttpSessionState)Activator.CreateInstance(
+                                          typeof( HttpSessionState )
                                           , BindingFlags.Instance | BindingFlags.NonPublic
                                           , null
-                                          , new object[] {container}
+                                          , new object[] { container }
                                           , CultureInfo.InvariantCulture
                                           );
         }

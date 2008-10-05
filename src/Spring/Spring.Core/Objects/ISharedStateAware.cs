@@ -25,19 +25,19 @@ using System.Web;
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Objects
 {
     /// <summary>
-    /// This interface should be implemented by <see cref="IHttpHandler"/>s that want to 
-    /// have access to the shared state for the handler.
+    /// This interface should be implemented by classes that want to 
+    /// have access to the shared state.
     /// </summary>
     /// <remarks>
     /// <p>
     /// Shared state is very useful if you have data that needs to be shared by all instances
-    /// of the same page (or other <see cref="IHttpHandler"/>). 
+    /// of e.g. the same webform (or other <c>IHttpHandler</c>s). 
     /// </p>
     /// <p>
-    /// For example, <see cref="Spring.Web.UI.Page"/> class implements this interface, which allows  
+    /// For example, <c>Spring.Web.UI.Page</c> class implements this interface, which allows  
     /// each page derived from it to cache localizalization resources and parsed data binding 
     /// expressions only once and then reuse the cached values, regardless of how many instances 
     /// of the page are created.
@@ -47,12 +47,8 @@ namespace Spring.Web.Support
     {
         /// <summary>
         /// Gets or sets the <see cref="IDictionary"/> that should be used
-        /// to store shared state for the <see cref="IHttpHandler"/>.
+        /// to store shared state for this instance.
         /// </summary>
-        /// <value>
-        /// The <see cref="IDictionary"/> that should be used
-        /// to store shared state for the <see cref="IHttpHandler"/>.
-        /// </value>
         IDictionary SharedState { get; set; }
     }
 }

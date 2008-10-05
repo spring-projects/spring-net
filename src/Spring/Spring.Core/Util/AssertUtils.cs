@@ -168,6 +168,29 @@ namespace Spring.Util
             }
         }
 
+        /// <summary>
+        /// Checks the value of the supplied <see cref="ICollection"/> <paramref name="argument"/> and throws
+        /// an <see cref="ArgumentException"/> if it is <see langword="null"/>, contains no elements or only null elements.
+        /// </summary>
+        /// <param name="argument">The array or collection to check.</param>
+        /// <param name="name">The argument name.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the supplied <paramref name="argument"/> is <see langword="null"/>, 
+        /// contains no elements or only null elements.
+        /// </exception>
+        public static void ArgumentHasElements(ICollection argument, string name)
+        {
+            if (!ArrayUtils.HasElements(argument))
+            {
+                throw new ArgumentException(
+                    name,
+                    string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Argument '{0}' must not be null or resolve to an empty collection and must contain non-null elements", name));
+            }            
+        }
+
+
 	    /// <summary>
 	    /// Checks whether the specified <paramref name="argument"/> can be cast 
 	    /// into the <paramref name="requiredType"/>.
