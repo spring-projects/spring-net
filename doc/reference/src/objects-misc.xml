@@ -1,50 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="objects-misc">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="objects-misc" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>The IObjectWrapper and Type conversion</title>
 
-  <sect1 id="objects-misc-introduction">
+  <sect1 xml:id="objects-misc-introduction">
     <title>Introduction</title>
     <para>The concepts encapsulated by the
-    <classname>IObjectWrapper</classname> interface are fundamental to the
+    <literal>IObjectWrapper</literal> interface are fundamental to the
     workings of the core Spring.NET libraries The typical application
     developer most probably will not ever have the need to use the
-    <classname>IObjectWrapper</classname> directly... because this is
+    <literal>IObjectWrapper</literal> directly... because this is
     reference documentation however, we felt that some explanation of this
-    core interface might be right. The <classname>IObjectWrapper</classname>
+    core interface might be right. The <literal>IObjectWrapper</literal>
     is explained in this chapter since if you were going to use it at all, you
     would probably do that when trying to bind data to objects, which, nicely
     enough, is precisely the area that the
-    <classname>IObjectWrapper</classname> addresses.</para>
+    <literal>IObjectWrapper</literal> addresses.</para>
   </sect1>
 
-  <sect1 id="objects-objects">
+  <sect1 xml:id="objects-objects">
     <title>Manipulating objects using the IObjectWrapper</title>
 
     <para>One quite important concept of the <literal>Spring.Objects</literal>
     namespace is encapsulated in the definition
-    <classname>IObjectWrapper</classname> interface and its corresponding
-    implementation, the <classname>ObjectWrapper</classname> class. The
-    functionality offered by the <classname>IObjectWrapper</classname>
+    <literal>IObjectWrapper</literal> interface and its corresponding
+    implementation, the <literal>ObjectWrapper</literal> class. The
+    functionality offered by the <literal>IObjectWrapper</literal>
     includes methods to set and get property values (either individually or in
     bulk), get property descriptors (instances of the
-    <classname>System.Reflection.PropertyInfo</classname> class), and to query
+    <literal>System.Reflection.PropertyInfo</literal> class), and to query
     the readability and writability of properties. The
-    <classname>IObjectWrapper</classname> also offers support for nested
+    <literal>IObjectWrapper</literal> also offers support for nested
     properties, enabling the setting of properties on subproperties to an
-    unlimited depth. The <classname>IObjectWrapper</classname> usually isn't
+    unlimited depth. The <literal>IObjectWrapper</literal> usually isn't
     used by application code directly, but by framework classes such as the
-    various <classname>IObjectFactory</classname> implementations.</para>
+    various <literal>IObjectFactory</literal> implementations.</para>
 
-    <para>The way the <classname>IObjectWrapper</classname> works is partly
+    <para>The way the <literal>IObjectWrapper</literal> works is partly
     indicated by its name: <emphasis>it wraps an object</emphasis> to perform
     actions on a wrapped object instance... such actions would include the
     setting and getting of properties exposed on the wrapped object.</para>
 
     <para><emphasis>Note: the concepts explained in this section are not
     important to you if you're not planning to work with the
-    <classname>IObjectWrapper</classname> directly.</emphasis></para>
+    <literal>IObjectWrapper</literal> directly.</emphasis></para>
 
-    <sect2 id="objects-objects-conventions">
+    <sect2 xml:id="objects-objects-conventions">
       <title>Setting and getting basic and nested properties</title>
 
       <para>Setting and getting properties is done using the
@@ -59,7 +76,7 @@
       <methodname>GetPropertyValue()</methodname> methods have a number of
       conventions for indicating the path of a property. A property path is an
       expression that implementations of the
-      <classname>IObjectWrapper</classname> interface can use to look up the
+      <literal>IObjectWrapper</literal> interface can use to look up the
       properties of the wrapped object; some examples of property paths
       include...</para>
 
@@ -109,8 +126,8 @@
         </table></para>
 
       <para>Below you'll find some examples of working with the
-      <classname>IObjectWrapper</classname> to get and set properties.
-      Consider the following two classes: <programlisting>[C#]
+      <literal>IObjectWrapper</literal> to get and set properties.
+      Consider the following two classes: <programlisting language="csharp">[C#]
 public class Company
   {
     private string name;
@@ -127,7 +144,7 @@ public class Company
       get { return this.managingDirector; }
       set { this.managingDirector = value; }
     }
-}</programlisting> <programlisting>[C#]
+}</programlisting> <programlisting language="csharp">[C#]
 public class Employee
 {
     private string name;
@@ -148,8 +165,8 @@ public class Employee
 
       <para>The following code snippets show some examples of how to retrieve
       and manipulate some of the properties of
-      <classname>IObjectWrapper</classname>-wrapped <literal>Company</literal>
-      and <literal>Employee</literal> instances. <programlisting>[C#]
+      <literal>IObjectWrapper</literal>-wrapped <literal>Company</literal>
+      and <literal>Employee</literal> instances. <programlisting language="csharp">[C#]
 Company c = new Company();
 IObjectWrapper owComp = new ObjectWrapper(c);
 // setting the company name...
@@ -177,7 +194,7 @@ float salary = (float)owComp.GetPropertyValue("managingDirector.salary");</progr
       identifier. The following example (using the classes defined previously)
       should serve to illustrate this...</para>
 
-      <programlisting>[C#]
+      <programlisting language="csharp">[C#]
 // ok, let's create the director and bind it to the company...
 Employee don = new Employee();
 IObjectWrapper owDon = new ObjectWrapper(don);
@@ -197,7 +214,7 @@ Console.WriteLine(don.Salary); // puts 80000</programlisting>
       practice.</para>
     </sect2>
 
-    <sect2 id="objects-objects-other">
+    <sect2 xml:id="objects-objects-other">
       <title>Other features worth mentioning</title>
 
       <para>In addition to the features described in the preceding sections
@@ -214,7 +231,7 @@ Console.WriteLine(don.Salary); // puts 80000</programlisting>
             <para><emphasis>retrieving PropertyInfo instances</emphasis>:
             using <literal>GetPropertyInfo(string)</literal> and
             <literal>GetPropertyInfos()</literal> you can retrieve instances
-            of the <classname>System.Reflection.PropertyInfo</classname>
+            of the <literal>System.Reflection.PropertyInfo</literal>
             class, that might come in handy sometimes when you need access to
             the property metadata specific to the object being wrapped.</para>
           </listitem>
@@ -222,19 +239,19 @@ Console.WriteLine(don.Salary); // puts 80000</programlisting>
     </sect2>
   </sect1>
 
-  <sect1 id="objects-objects-conversion">
+  <sect1 xml:id="objects-objects-conversion">
     <title>Type conversion</title>
 
-    <para>If you associate a <classname>TypeConverter</classname> with the
-    definition of a custom <classname>Type</classname> using the standard .NET
+    <para>If you associate a <literal>TypeConverter</literal> with the
+    definition of a custom <literal>Type</literal> using the standard .NET
     mechanism (see the example code below), Spring.NET will use the associated
-    <classname>TypeConverter</classname> to do the conversion.<programlisting>[C#]
+    <literal>TypeConverter</literal> to do the conversion.<programlisting language="csharp">[C#]
 [TypeConverter (typeof (FooTypeConverter))]
 public class Foo
 {
 }</programlisting></para>
 
-    <para>The <classname>TypeConverter</classname> class from the
+    <para>The <literal>TypeConverter</literal> class from the
     <literal>System.ComponentModel</literal> namespace of the .NET BCL is used
     extensively by the various classes in the <literal>Spring.Core</literal>
     library, as said class <quote>... provides a unified way of converting
@@ -249,36 +266,36 @@ public class Foo
     <para>For example, a date can be represented in a human readable format
     (such as <literal>30th August 1984</literal>), while we're still able to
     convert the human readable form to the original date format or (even
-    better) to an instance of the <classname>System.DateTime</classname>
+    better) to an instance of the <literal>System.DateTime</literal>
     class. This behavior can be achieved by using the standard .NET idiom of
-    decorating a class with the <classname>TypeConverterAttribute</classname>.
+    decorating a class with the <literal>TypeConverterAttribute</literal>.
     Spring.NET also offers another means of associating a
-    <classname>TypeConverters</classname> with a class. You might want to do
+    <literal>TypeConverters</literal> with a class. You might want to do
     this to achieve a conversion that is not possible using standard idiom...
     for example, the <literal>Spring.Core</literal> library contains a custom
-    <classname>TypeConverter</classname> that converts comma-delimited strings
+    <literal>TypeConverter</literal> that converts comma-delimited strings
     to String array instances. Registering custom converters on an
-    <classname>IObjectWrapper</classname> instance gives the wrapper the
+    <literal>IObjectWrapper</literal> instance gives the wrapper the
     knowledge of how to convert properties to the desired
-    <classname>Type</classname>.</para>
+    <literal>Type</literal>.</para>
 
     <para>An example of where property conversion is used in Spring.NET is the
     setting of properties on objects, accomplished using the aforementioned
     <literal>TypeConverters</literal>. When mentioning
-    <classname>System.String</classname> as the value of a property of some
+    <literal>System.String</literal> as the value of a property of some
     object (declared in an XML file for instance), Spring.NET will (if the
-    type of the associated property is <classname>System.Type</classname>) use
-    the <classname>RuntimeTypeConverter</classname> class to try to resolve
-    the property value to a <classname>Type</classname> object. The example
+    type of the associated property is <literal>System.Type</literal>) use
+    the <literal>RuntimeTypeConverter</literal> class to try to resolve
+    the property value to a <literal>Type</literal> object. The example
     below demonstrates this automatic conversion of the
     <literal>Example.Xml.SAXParser</literal> (a string) into the corresponding
-    <classname>Type</classname> instance for use in this factory-style class.
-    <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+    <literal>Type</literal> instance for use in this factory-style class.
+    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
 &lt;object id="parserFactory" type="Example.XmlParserFactory, ExamplesLibrary"
 destroy-method="Close"&gt;
   &lt;property name="ParserClass" value="Example.Xml.SAXParser, ExamplesLibrary"/&gt;
 &lt;/object&gt;
-&lt;/objects&gt;</programlisting> <programlisting>[C#]
+&lt;/objects&gt;</programlisting> <programlisting language="csharp">[C#]
 public class XmlParserFactory
 {
 	private Type parserClass;
@@ -295,35 +312,35 @@ public class XmlParserFactory
 	}
 }</programlisting></para>
 
-    <sect2 id="objects-misc-enums">
+    <sect2 xml:id="objects-misc-enums">
       <title>Type Conversion for Enumerations</title>
 
       <para>The default type converter for enumerations is the
-      <classname>System.ComponentModel.EnumConverter</classname> class. To
+      <literal>System.ComponentModel.EnumConverter</literal> class. To
       specify the value for an enumerated property, simply use the name of the
-      property. For example the <classname>TestObject</classname> class has a
-      property of the enumerated type <classname>FileMode</classname>. One of
+      property. For example the <literal>TestObject</literal> class has a
+      property of the enumerated type <literal>FileMode</literal>. One of
       the values for this enumeration is named <literal>Create</literal>. The
       following XML fragment shows how to configure this property</para>
 
-      <programlisting>&lt;object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
+      <programlisting language="myxml">&lt;object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
   &lt;property name="name" value="Rod"/&gt;
   &lt;property name="FileMode" value="Create"/&gt;
 &lt;/object&gt;</programlisting>
     </sect2>
   </sect1>
 
-  <sect1 id="object-objects-builtin-converters">
+  <sect1 xml:id="object-objects-builtin-converters">
     <title>Built-in TypeConverters</title>
 
     <para>Spring.NET has a number of built-in
-    <classname>TypeConverters</classname> to make life easy. Each of those is
+    <literal>TypeConverters</literal> to make life easy. Each of those is
     listed below and they are all located in the
     <literal>Spring.Objects.TypeConverters</literal> namespace of the
     <literal>Spring.Core</literal> library.</para>
 
     <para><table frame="all">
-        <title>Built-in <classname>TypeConverters</classname></title>
+        <title>Built-in <literal>TypeConverters</literal></title>
 
         <tgroup cols="2">
           <colspec colname="c1" colwidth="3*" />
@@ -343,8 +360,8 @@ public class XmlParserFactory
               <entry><literal>RuntimeTypeConverter</literal></entry>
 
               <entry>Parses strings representing
-              <classname>System.Types</classname> to actual
-              <classname>System.Types</classname> and the other way
+              <literal>System.Types</literal> to actual
+              <literal>System.Types</literal> and the other way
               around.</entry>
             </row>
 
@@ -352,7 +369,7 @@ public class XmlParserFactory
               <entry><literal>FileInfoConverter</literal></entry>
 
               <entry>Capable of resolving strings to a
-              <classname>System.IO.FileInfo</classname> object.</entry>
+              <literal>System.IO.FileInfo</literal> object.</entry>
             </row>
 
             <row>
@@ -396,7 +413,7 @@ public class XmlParserFactory
 
               <entry>Capable of resolving a two part string (resource name,
               assembly name) to a
-              <classname>System.Resources.ResourceManager</classname>
+              <literal>System.Resources.ResourceManager</literal>
               object.</entry>
             </row>
 
@@ -405,7 +422,7 @@ public class XmlParserFactory
 
               <entry>Capable of resolving a comma separated list of Red,
               Green, Blue integer values to a
-              <classname>System.Drawing.Color</classname> structure.</entry>
+              <literal>System.Drawing.Color</literal> structure.</entry>
             </row>
 
             <row>
@@ -419,7 +436,7 @@ public class XmlParserFactory
       </table></para>
 
     <para>Spring.NET uses the standard .NET mechanisms for the resolution of
-    <classname>System.Types</classname>, including, but not limited to
+    <literal>System.Types</literal>, including, but not limited to
     checking any configuration files associated with your application,
     checking the Global Assembly Cache (GAC), and assembly probing.</para>
 

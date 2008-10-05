@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="javadevelopers">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="javadevelopers" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Spring.NET for Java Developers</title>
 
-  <sect1 id="jd-introduction">
+  <sect1 xml:id="jd-introduction">
     <title>Introduction</title>
 
     <para>This chapter is to help Java developers get their sea legs using
@@ -11,21 +28,21 @@
     experience when you start to use Spring.NET.</para>
   </sect1>
 
-  <sect1 id="jd-beans-objects">
+  <sect1 xml:id="jd-beans-objects">
     <title>Beans to Objects</title>
 
     <para>There are some simple name changes, basically everywhere you saw the
     word 'bean' you will now see the word 'object'. A comparison of a simple
     Spring configuration file highlights these small name changes. Here is the
     application.xml file for the sample MovieFinder application in Spring.Java
-    <programlisting>&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"&gt;
+    <programlisting language="myxml">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"&gt;
 &lt;beans&gt;
    &lt;bean id="MyMovieLister" class="MovieFinder.MovieLister"&gt;
        &lt;property name="finder" ref="MyMovieFinder"/&gt;
    &lt;/bean&gt;
    &lt;bean id="MyMovieFinder" class="MovieFinder.SimpleMovieFinder"/&gt;
 &lt;/beans&gt;</programlisting> Here is the corresponding file in Spring.NET
-    <programlisting>&lt;objects xmlns="http://www.springframework.net" 
+    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects-1.1.xsd"&gt;
   &lt;object name="MyMovieLister" 
@@ -46,9 +63,8 @@
     <para>The other XML Schema elements in Spring.NET are the same as in
     Spring.Java's DTD except for specifying string based key value pairs. In
     Java this is represented by the java.util.Properties class and the xml
-    element is name &lt;props&gt; as shown below <programlisting
-    format="linespecific" xml:space="preserve">
-&lt;property name="people"&gt;
+    element is name &lt;props&gt; as shown below 
+    <programlisting language="xml">&lt;property name="people"&gt;
   &lt;props&gt;
     &lt;prop key="PennAndTeller"&gt;The magic property&lt;/prop&gt;
     &lt;prop key="GeorgeCarlin"&gt;The funny property&lt;/prop&gt;
@@ -58,8 +74,7 @@
     the xml element &lt;name-values&gt;. The listing of the elements also
     follows the .NET convention of application configuration files using the
     &lt;add&gt; element with 'key' and 'value' attributes. This is show below
-    <programlisting format="linespecific" xml:space="preserve">
-&lt;property name="people"&gt;
+    <programlisting language="xml">&lt;property name="people"&gt;
   &lt;name-values&gt;
     &lt;add key="PennAndTeller" value="The magic property"/&gt;
     &lt;add key="GeorgeCarlin" value="The funny property"/&gt;
@@ -67,7 +82,7 @@
 &lt;/property&gt;</programlisting></para>
   </sect1>
 
-  <sect1 id="jd-propertyeditor-typeconverter">
+  <sect1 xml:id="jd-propertyeditor-typeconverter">
     <title>PropertyEditors to TypeConverters</title>
 
     <para>PropertyEditors from the java.beans package provide the ability to
@@ -90,11 +105,11 @@
     approach.</para>
   </sect1>
 
-  <sect1 id="jd-ResourceBundle-ResourceManager">
+  <sect1 xml:id="jd-ResourceBundle-ResourceManager">
     <title>ResourceBundle-ResourceManager</title>
   </sect1>
 
-  <sect1 id="jd-exceptions">
+  <sect1 xml:id="jd-exceptions">
     <title>Exceptions</title>
 
     <para>Exceptions in Java can either be checked or unchecked. .NET supports
@@ -104,7 +119,7 @@
     of .NET</para>
   </sect1>
 
-  <sect1 id="jd-app-config">
+  <sect1 xml:id="jd-app-config">
     <title>Application Configuration</title>
 
     <para>In Spring.Java it is very common to create an ObjectFactory or
@@ -135,7 +150,7 @@
     without coding or using more verbose XML as would be required in the
     current version of Spring.Java</para>
 
-    <programlisting>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+    <programlisting language="myxml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
 &lt;configuration&gt;
 
     &lt;configSections&gt;
@@ -177,35 +192,35 @@
 
     <para>The following code segment is used to retrieve the
     IApplicationContext from the .NET application configuration file.
-    <programlisting>IApplicationContext ctx
+    <programlisting language="csharp">IApplicationContext ctx
           = ConfigurationUtils.GetSection("spring/context") as IApplicationContext;</programlisting></para>
 
     <para>In order to enforce the usage of the named configuration section
     <literal>spring/context</literal> the preferred instantiation mechanism is
     via the use of the registry class ContextRegistry as shown below
-    <programlisting>IApplicationContext ctx = ContextRegistry.GetContext();</programlisting></para>
+    <programlisting language="csharp">IApplicationContext ctx = ContextRegistry.GetContext();</programlisting></para>
   </sect1>
 
-  <sect1 id="jd-aop-framework">
+  <sect1 xml:id="jd-aop-framework">
     <title>AOP Framework</title>
 
-    <sect2 id="NoTargetInInterceptorNames">
+    <sect2 xml:id="NoTargetInInterceptorNames">
       <title>Cannot specify target name at the end of interceptorNames for
       ProxyFactoryObject</title>
 
       <para>When configuring the list of interceptor names on a
-      <classname>ProxyFactoryObject</classname> instance (or object
+      <literal>ProxyFactoryObject</literal> instance (or object
       definition), one <emphasis>cannot</emphasis> specify the name of the
       target (i.e. the object being proxied) at the end of the list of
       interceptor names. This shortcut <emphasis>is</emphasis> valid in Spring
-      Java, where the <classname>ProxyFactoryBean</classname> will
+      Java, where the <literal>ProxyFactoryBean</literal> will
       automatically detect this, and use the last name in the interceptor
-      names list as the target of the <classname>ProxyFactoryBean</classname>.
+      names list as the target of the <literal>ProxyFactoryBean</literal>.
       The following configuration, which would be valid in Spring Java
       (barring the obvious element name changes), is <emphasis
       role="bold">not</emphasis> valid in Spring.NET (so don't do it).</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
     &lt;objects xmlns="http://www.springframework.net"&gt;
         &lt;object id="target" type="Spring.Objects.TestObject"&gt;
             &lt;property name="name" value="Bingo"/&gt;
@@ -219,7 +234,7 @@
     &lt;/objects&gt;</programlisting>
 
       <para>In Spring.NET, the <literal>InterceptorNames</literal> property of
-      the <classname>ProxyFactoryObject</classname> can
+      the <literal>ProxyFactoryObject</literal> can
       <emphasis>only</emphasis> be used to specify the names of interceptors.
       Use the <literal>TargetName</literal> property to specify the name of
       the target object that is to be proxied.</para>

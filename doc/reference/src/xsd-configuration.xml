@@ -1,8 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<appendix id="xsd-config">
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<appendix id="xsd-config" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>XML Schema-based configuration</title>
 
-  <section id="xsd-config-introduction">
+  <section xml:id="xsd-config-introduction">
     <title>Introduction</title>
 
     <para>This appendix details the use of XML Schema-based configuration in
@@ -28,16 +45,16 @@
     appendix entitled <xref linkend="extensible-xml" />.</para>
   </section>
 
-  <section id="xsd-config-body">
+  <section xml:id="xsd-config-body">
     <title>XML Schema-based configuration</title>
 
-    <section id="xsd-config-body-referencing">
+    <section xml:id="xsd-config-body-referencing">
       <title>Referencing the schemas</title>
 
       <para>As a reminder, you reference the standard objects schema as shown
       below</para>
 
-      <programlisting>
+      <programlisting language="myxml">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -64,7 +81,7 @@
     <para>The rest of this chapter gives an overview of custom XML Schema
     based configuration that are included with the release.</para>
 
-    <section id="xsd-config-body-schemas-tx">
+    <section xml:id="xsd-config-body-schemas-tx">
       <title>The <literal>tx</literal> (transaction) schema</title>
 
       <para>The <literal>tx</literal> tags deal with configuring objects in
@@ -88,10 +105,10 @@
       the following snippet references the correct schema so that the tags in
       the <literal>tx</literal> namespace are available to you.</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;object xmlns="http://www.springframework.net"
       xmlns:aop="http://www.springframework.net/aop"
-   <emphasis role="bold">   xmlns:tx="http://www.springframework.net/tx"</emphasis>&gt;
+      xmlns:tx="http://www.springframework.net/tx"&gt;
   
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -115,7 +132,7 @@
       parsers in the main .NET application configuration file as shown
       below</para>
 
-      <programlisting>&lt;configuration&gt;
+      <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -134,7 +151,7 @@
 &lt;/configuration&gt;</programlisting>
     </section>
 
-    <section id="xsd-config-body-schemas-aop">
+    <section xml:id="xsd-config-body-schemas-aop">
       <title>The <literal>aop</literal> schema</title>
 
       <para>The <literal>aop</literal> tags deal with configuring all things
@@ -147,9 +164,9 @@
       the following snippet references the correct schema so that the tags in
       the <literal>aop</literal> namespace are available to you.</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
-         <emphasis role="bold">xmlns:aop="http://www.springframework.net/aop"</emphasis>&gt;
+         xmlns:aop="http://www.springframework.net/aop"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -160,7 +177,7 @@
       <para>You will also need to configure the AOP namespace parser in the
       main .NET application configuration file as shown below</para>
 
-      <programlisting>&lt;configuration&gt;
+      <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -178,19 +195,19 @@
 &lt;/configuration&gt;</programlisting>
     </section>
 
-    <section id="xsd-config-body-schemas-db">
+    <section xml:id="xsd-config-body-schemas-db">
       <title>The <literal>db</literal> schema</title>
 
       <para>The <literal>db</literal> tags deal with creating
-      <classname>IDbProvider</classname> instances for a given database client
+      <literal>IDbProvider</literal> instances for a given database client
       library. The following snippet references the correct schema so that the
       tags in the <literal>db</literal> namespace are available to you. The
       tags are comprehensively covered in the chapter entitled <xref
       linkend="dbprovider" />.</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
-         <emphasis role="bold">xmlns:db="http://www.springframework.net/db"</emphasis>&gt;
+         xmlns:db="http://www.springframework.net/db"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -201,7 +218,7 @@
       <para>You will also need to configure the Database namespace parser in
       the main .NET application configuration file as shown below</para>
 
-      <programlisting>&lt;configuration&gt;
+      <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -219,7 +236,7 @@
 &lt;/configuration&gt;</programlisting>
     </section>
 
-    <section id="xsd-config-body-schemas-remoting">
+    <section xml:id="xsd-config-body-schemas-remoting">
       <title>The <literal>remoting</literal> schema</title>
 
       <para>The <literal>remoting</literal> tags are for use when you want to
@@ -227,9 +244,9 @@
       client side .NET remoting proxy. The tags are comprehensively covered in
       the chapter <xref linkend="remoting" /></para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
-         <emphasis role="bold">xmlns:r="http://www.springframework.net/remoting"</emphasis>&gt;
+         xmlns:r="http://www.springframework.net/remoting"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -240,7 +257,7 @@
       <para>You will also need to configure the remoting namespace parser in
       the main .NET application configuration file as shown below</para>
 
-      <programlisting>&lt;configuration&gt;
+      <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -258,16 +275,16 @@
 &lt;/configuration&gt;</programlisting>
     </section>
 
-    <section id="xsd-config-body-schemas-nms">
+    <section xml:id="xsd-config-body-schemas-nms">
       <title>The <literal>nms</literal> messaging schema</title>
 
       <para>The <literal>nms</literal> tags are for use when you want to
       configure Spring's messaging support. The tags are comprehensively
       covered in the chapter <xref linkend="messaging" /></para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
-         <emphasis role="bold">xmlns:r="http://www.springframework.net/nms"</emphasis>&gt;
+         xmlns:r="http://www.springframework.net/nms"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -278,7 +295,7 @@
       <para>You will also need to configure the remoting namespace parser in
       the main .NET application configuration file as shown below</para>
 
-      <programlisting>&lt;configuration&gt;
+      <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -296,7 +313,7 @@
 &lt;/configuration&gt;</programlisting>
     </section>
 
-    <section id="xsd-config-body-schemas-validation">
+    <section xml:id="xsd-config-body-schemas-validation">
       <title>The <literal>validation</literal> schema</title>
 
       <para>The <literal>validation</literal> tags are for use when you want
@@ -304,9 +321,9 @@
       comprehensively covered in the chapter <xref
       linkend="validation" /></para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net" 
-        <emphasis role="bold">xmlns:v="http://www.springframework.net/validation"</emphasis>&gt;
+        xmlns:v="http://www.springframework.net/validation"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -317,7 +334,7 @@
       <para>You will also need to configure the validation namespace parser in
       the main .NET application configuration file as shown below</para>
 
-      <programlisting>&lt;configuration&gt;
+      <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -335,7 +352,7 @@
 &lt;/configuration&gt;</programlisting>
     </section>
 
-    <section id="xsd-config-body-schemas-objects">
+    <section xml:id="xsd-config-body-schemas-objects">
       <title>The <literal>objects</literal> schema</title>
 
       <para>Last but not least we have the tags in the
@@ -345,7 +362,7 @@
       linkend="object-factory-properties-detailed" /> (and indeed in that
       entire <link linkend="objects">chapter</link>).</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
@@ -358,7 +375,7 @@
     </section>
   </section>
 
-  <section id="xsd-config-setup">
+  <section xml:id="xsd-config-setup">
     <title>Setting up your IDE</title>
 
     <para>To setup VS.NET to provide intellisence while editing XML file for

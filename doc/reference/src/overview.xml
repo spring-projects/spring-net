@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="introduction">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="introduction" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Introduction</title>
 
-  <sect1 id="introduction-overview">
+  <sect1 xml:id="introduction-overview">
     <title>Overview</title>
 
     <para>Spring.NET is an application framework that provides comprehensive
@@ -79,11 +96,12 @@
     started to use the term Dependency Injection. His article then continued
     to explain the ideas underpinning the Inversion of Control (IoC) and
     Dependency Injection (DI) principle. If you need a decent insight into IoC
-    and DI, please do refer to the article :
-    http://martinfowler.com/articles/injection.html.</para>
+    and DI, please do refer to the article : 
+    <ulink url="http://martinfowler.com/articles/injection.html">
+    http://martinfowler.com/articles/injection.html</ulink>.</para>
   </sect1>
 
-  <sect1 id="intro-modules">
+  <sect1 xml:id="intro-modules">
     <title>Modules</title>
 
     <para>The Spring Framework contains a lot of features, which are
@@ -111,7 +129,7 @@
     logging, performance monitoring, caching, method retry, and exception
     handling.</para>
 
-    <para><link linkend="index-middle-tier">Spring.Data</link> - Use this
+    <para><link linkend="spring-middle-tier">Spring.Data</link> - Use this
     module to achieve greater efficiency and consistency in writing data
     access functionality in ADO.NET and to perform declarative transaction
     management.</para>
@@ -133,7 +151,7 @@
     data binding, validation, and ASP.NET page/control/module/provider
     configuration.</para>
 
-    <para><link linkend="index-services">Spring.Services</link> - Use this
+    <para><link linkend="spring-services">Spring.Services</link> - Use this
     module to adapt plain .NET objects so they can be used with a specific
     distributed communication technology, such as .NET Remoting, Enterprise
     Services, and ASMX Web Services. These services can be configured via
@@ -296,10 +314,10 @@
         scheduling.</para>
       </listitem>
 
-      <listitem>
+      <!--<listitem>
         <para><link lang="" linkend="msmq-quickstart">MSMQ</link> -
         Application demonstrating MSMQ helper classes.</para>
-      </listitem>
+      </listitem>-->
 
       <listitem>
         <para><link linkend="nms-quickstart">NMS</link> - Applicatoin

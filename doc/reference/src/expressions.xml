@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="expressions">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="expressions" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Expression Evaluation</title>
 
-  <sect1 id="expressions-introduction">
+  <sect1 xml:id="expressions-introduction">
     <title>Introduction</title>
 
     <para>The Spring.Expressions namespace provides a powerful expression
@@ -33,12 +50,12 @@
     additional example usage.</para>
   </sect1>
 
-  <sect1 id="expressions-evaluating">
+  <sect1 xml:id="expressions-evaluating">
     <title>Evaluating Expressions</title>
 
     <para>The simplest, but not the most efficient way to perform expression
     evaluation is by using one of the static convenience methods of the
-    <classname>ExpressionEvaluator</classname> class:<programlisting>public static object GetValue(object root, string expression);
+    <literal>ExpressionEvaluator</literal> class:<programlisting language="csharp">public static object GetValue(object root, string expression);
 
 public static object GetValue(object root, string expression, IDictionary variables)
 
@@ -49,8 +66,8 @@ public static void SetValue(object root, string expression, IDictionary variable
     argument) will be evaluated against. The third argument is used to support
     variables in the expression and will be discussed later. Simple usage to
     get the value of an object property is shown below using the
-    <classname>Inventor</classname> class. You can find the class listing in
-    section <xref linkend="expressions-classes" />. <programlisting>Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+    <literal>Inventor</literal> class. You can find the class listing in
+    section <xref linkend="expressions-classes" />. <programlisting language="csharp">Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
 
 tesla.PlaceOfBirth.City = "Smiljan";
 
@@ -61,39 +78,39 @@ string evaluatedCity = (string) ExpressionEvaluator.GetValue(tesla, "PlaceOfBirt
     is 'Smiljan'. A period is used to navigate the nested properties of the
     object. Similarly to set the property of an object, say we want to rewrite
     history and change Tesla's city of birth, we would simply add the
-    following line <programlisting>ExpressionEvaluator.SetValue(tesla, "PlaceOfBirth.City", "Novi Sad");</programlisting></para>
+    following line <programlisting language="csharp">ExpressionEvaluator.SetValue(tesla, "PlaceOfBirth.City", "Novi Sad");</programlisting></para>
 
     <para>A much better way to evaluate expressions is to parse them once and
     then evaluate as many times as you want
-    using<classname>Expression</classname>class. Unlike
-    <classname>ExpressionEvaluator</classname>, which parses expression every
-    time you invoke one of its methods, <classname>Expression</classname>
+    using<literal>Expression</literal>class. Unlike
+    <literal>ExpressionEvaluator</literal>, which parses expression every
+    time you invoke one of its methods, <literal>Expression</literal>
     class will cache the parsed expression for increased performance. The
-    methods of this class are listed below: <programlisting>public static IExpression Parse(string expression)
+    methods of this class are listed below: <programlisting language="csharp">public static IExpression Parse(string expression)
 
 public override object Get(object context, IDictionary variables)
 
 public override void Set(object context, IDictionary variables, object newValue)</programlisting>
     The retrieval of the Name property in the previous example using the
-    Expression class is shown below <programlisting>IExpression exp = Expression.Parse("Name");
+    Expression class is shown below <programlisting language="csharp">IExpression exp = Expression.Parse("Name");
 
 string evaluatedName = (string) exp.GetValue(tesla, null);</programlisting></para>
 
     <para>The difference in performance between the two approaches, when
     evaluating the same expression many times, is several orders of magnitude,
     so you should only use convenience methods of the
-    <classname>ExpressionEvaluator</classname> class when you are doing
+    <literal>ExpressionEvaluator</literal> class when you are doing
     one-off expression evaluations. In all other cases you should parse the
     expression first and then evaluate it as many times as you need.</para>
 
     <para>There are a few exception classes to be aware of when using the
-    <classname>ExpressionEvaluator</classname>. These are
-    <classname>InvalidPropertyException</classname>, when you refer to a
+    <literal>ExpressionEvaluator</literal>. These are
+    <literal>InvalidPropertyException</literal>, when you refer to a
     property that doesn't exist,
-    <classname>NullValueInNestedPathException</classname>, when a null value
+    <literal>NullValueInNestedPathException</literal>, when a null value
     is encountered when traversing through the nested property list, and
-    <classname>ArgumentException</classname> and
-    <classname>NotSupportedException</classname> when you pass in values that
+    <literal>ArgumentException</literal> and
+    <literal>NotSupportedException</literal> when you pass in values that
     are in error in some other manner.</para>
 
     <para>The expression language is based on a grammar and uses <ulink
@@ -109,10 +126,10 @@ string evaluatedName = (string) exp.GetValue(tesla, null);</programlisting></par
     assemblies, which will remove this requirement.</para>
   </sect1>
 
-  <sect1 id="expressions-language-ref">
+  <sect1 xml:id="expressions-language-ref">
     <title>Language Reference</title>
 
-    <sect2 id="expressions-literals">
+    <sect2 xml:id="expressions-literals">
       <title>Literal expressions</title>
 
       <para>The types of literal expressions supported are strings, dates,
@@ -121,7 +138,7 @@ string evaluatedName = (string) exp.GetValue(tesla, null);</programlisting></par
       the backslash character. The following listing shows simple usage of
       literals. Typically they would not be used in isolation like this, but
       as part of a more complex expression, for example using a literal on one
-      side of a logical comparison operator. <programlisting>string helloWorld = (string) ExpressionEvaluator.GetValue(null, "'Hello World'"); // evals to "Hello World"
+      side of a logical comparison operator. <programlisting language="csharp">string helloWorld = (string) ExpressionEvaluator.GetValue(null, "'Hello World'"); // evals to "Hello World"
 
 string tonyPizza  = (string) ExpressionEvaluator.GetValue(null, "'Tony\\'s Pizza'"); // evals to "Tony's Pizza"
 
@@ -140,29 +157,29 @@ object nullValue = ExpressionEvaluator.GetValue(null, "null");</programlisting>
       Note that the extra backslash character in Tony's Pizza is to satisfy C#
       escape syntax. Numbers support the use of the negative sign, exponential
       notation, and decimal points. By default real numbers are parsed using
-      <classname>Double.Parse</classname> unless the format character "M" or
-      "F" is supplied, in which case <classname>Decimal.Parse</classname> and
-      <classname>Single.Parse</classname> would be used respectfully. As shown
+      <literal>Double.Parse</literal> unless the format character "M" or
+      "F" is supplied, in which case <literal>Decimal.Parse</literal> and
+      <literal>Single.Parse</literal> would be used respectfully. As shown
       above, if two arguments are given to the date literal then
-      <classname>DateTime.ParseExact</classname> will be used. Note that all
+      <literal>DateTime.ParseExact</literal> will be used. Note that all
       parse methods of classes that are used internally reference the
-      <classname>CultureInfo.InvariantCulture</classname>.</para>
+      <literal>CultureInfo.InvariantCulture</literal>.</para>
     </sect2>
 
     <!-- PROPERTIES -->
 
-    <sect2 id="expressions-properties">
+    <sect2 xml:id="expressions-properties">
       <title>Properties, Arrays, Lists, Dictionaries, Indexers</title>
 
       <para>As shown in the previous example in <xref
       linkend="expressions-evaluating" />, navigating through properties is
       easy, just use a period to indicate a nested property value. The
-      instances of <classname>Inventor</classname> class,
+      instances of <literal>Inventor</literal> class,
       <emphasis>pupin</emphasis> and <emphasis>tesla</emphasis>, were
       populated with data listed in section <xref
       linkend="expressions-classes" />. To navigate "down" and get Tesla's
       year of birth and Pupin's city of birth the following expressions are
-      used <programlisting>int year = (int) ExpressionEvaluator.GetValue(tesla, "DOB.Year"));  // 1856
+      used <programlisting language="csharp">int year = (int) ExpressionEvaluator.GetValue(tesla, "DOB.Year"));  // 1856
 
 string city = (string) ExpressionEvaluator.GetValue(pupin, "PlaCeOfBirTh.CiTy");  // "Idvor"</programlisting>
       For the sharp-eyed, that isn't a typo in the property name for place of
@@ -170,7 +187,7 @@ string city = (string) ExpressionEvaluator.GetValue(pupin, "PlaCeOfBirTh.CiTy");
       evaluation is case insensitive.</para>
 
       <para>The contents of arrays and lists are obtained using square bracket
-      notation. <programlisting>// Inventions Array
+      notation. <programlisting language="csharp">// Inventions Array
 string invention = (string) ExpressionEvaluator.GetValue(tesla, "Inventions[3]"); // "Induction motor"
 
 // Members List
@@ -182,7 +199,7 @@ string invention = (string) ExpressionEvaluator.GetValue(ieee, "Members[0].Inven
       <para>The contents of dictionaries are obtained by specifying the
       literal key value within the brackets. In this case, because keys for
       the <emphasis>Officers</emphasis> dictionary are strings, we can specify
-      string literal.<programlisting>// Officer's Dictionary
+      string literal.<programlisting language="csharp">// Officer's Dictionary
 Inventor pupin = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers['president']";
 
 string city = (string) ExpressionEvaluator.GetValue(ieee, "Officers['president'].PlaceOfBirth.City"); // "Idvor"
@@ -196,7 +213,7 @@ ExpressionEvaluator.SetValue(ieee, "Officers['advisors'][0].PlaceOfBirth.Country
 
       <para>Indexers are similarly referenced using square brackets. The
       following is a small example that shows the use of indexers.
-      Multidimensional indexers are also supported. <programlisting>public class Bar
+      Multidimensional indexers are also supported. <programlisting language="csharp">public class Bar
 {
     private int[] numbers = new int[] {1, 2, 3};
 
@@ -223,7 +240,7 @@ ExpressionEvaluator.SetValue(bar, "[1]", 3);  // set value to 3</programlisting>
         items with curly brackets:<programlisting>{1, 2, 3, 4, 5}
 {'abc', 'xyz'}</programlisting> If you want to ensure that a strongly typed
         array is initialized instead of a weakly typed list, you can use array
-        initializer instead: <programlisting>new int[] {1, 2, 3, 4, 5}
+        initializer instead: <programlisting language="csharp">new int[] {1, 2, 3, 4, 5}
 new string[] {'abc', 'xyz'}</programlisting></para>
 
         <para>Dictionary definition syntax is a bit different: you need to use
@@ -243,13 +260,13 @@ new string[] {'abc', 'xyz'}</programlisting></para>
       </sect3>
     </sect2>
 
-    <sect2 id="expressions-methods">
+    <sect2 xml:id="expressions-methods">
       <title>Methods</title>
 
       <para>Methods are invoked using typical C# programming syntax. You may
       also invoke methods on literals.</para>
 
-      <programlisting>//string literal 
+      <programlisting language="csharp">//string literal 
 char[] chars = (char[]) ExpressionEvaluator.GetValue(null, "'test'.ToCharArray(1, 2)"))  // 't','e'
 
 //date literal 
@@ -260,23 +277,23 @@ int year = (int) ExpressionEvaluator.GetValue(null, "date('1974/08/24').AddYears
 ExpressionEvaluator.GetValue(ieee, "Members[0].GetAge(date('2005-01-01')") // 149 (eww..a big anniversary is coming up ;)</programlisting>
     </sect2>
 
-    <sect2 id="expressions-operators">
+    <sect2 xml:id="expressions-operators">
       <title>Operators</title>
 
-      <sect3 id="expressions-relational">
+      <sect3 xml:id="expressions-relational">
         <title>Relational operators</title>
 
         <para>The relational operators; equal, not equal, less than, less than
         or equal, greater than, and greater than or equal are supported using
         standard operator notation. These operators take into account if the
-        object implements the <classname>IComparable</classname> interface.
+        object implements the <literal>IComparable</literal> interface.
         Enumerations are also supported but you will need to register the
         enumeration type, as described in Section <xref
         linkend="expressions-typeregistration" />, in order to use an
         enumeration value in an expression if it is not contained in the
         mscorlib.</para>
 
-        <programlisting>ExpressionEvaluator.GetValue(null, "2 == 2")  // true
+        <programlisting language="csharp">ExpressionEvaluator.GetValue(null, "2 == 2")  // true
 
 ExpressionEvaluator.GetValue(null, "date('1974-08-24') != DateTime.Today")  // true
 
@@ -286,12 +303,12 @@ ExpressionEvaluator.GetValue(null, "DateTime.Today &lt;= date('1974-08-24')") //
 
 ExpressionEvaluator.GetValue(null, "'Test' &gt;= 'test'") // true</programlisting>
 
-        <para>Enumerations can be evaluated as shown below <programlisting>FooColor fColor = new FooColor();
+        <para>Enumerations can be evaluated as shown below <programlisting language="csharp">FooColor fColor = new FooColor();
 
 ExpressionEvaluator.SetValue(fColor, "Color", KnownColor.Blue);
 
 bool trueValue = (bool) ExpressionEvaluator.GetValue(fColor, "Color == KnownColor.Blue"); //true</programlisting>
-        Where FooColor is the following class. <programlisting>public class FooColor
+        Where FooColor is the following class. <programlisting language="csharp">public class FooColor
 {
     private KnownColor knownColor;
 
@@ -308,7 +325,7 @@ bool trueValue = (bool) ExpressionEvaluator.GetValue(fColor, "Color == KnownColo
         <emphasis>like</emphasis> and <emphasis>between</emphasis>, as well as
         <emphasis>is</emphasis> and <emphasis>matches</emphasis> operators,
         which allow you to test if object is of a specific type or if the
-        value matches a regular expression.<programlisting>ExpressionEvaluator.GetValue(null, "3 in {1, 2, 3, 4, 5}")  // true
+        value matches a regular expression.<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "3 in {1, 2, 3, 4, 5}")  // true
 
 ExpressionEvaluator.GetValue(null, "'Abc' like '[A-Z]b*'")  // true
 
@@ -329,13 +346,13 @@ ExpressionEvaluator.GetValue(null, @"'5.00' matches '^-?\d+(\.\d{2})?$'")  // tr
         <emphasis>like</emphasis> operator pattern string.</para>
       </sect3>
 
-      <sect3 id="expressions-logical">
+      <sect3 xml:id="expressions-logical">
         <title>Logical operators</title>
 
         <para>The logical operators that are supported are
         <emphasis>and</emphasis>, <emphasis>or</emphasis>, and
         <emphasis>not</emphasis>. Their use is demonstrated
-        below<programlisting>// AND
+        below<programlisting language="csharp">// AND
 bool falseValue = (bool) ExpressionEvaluator.GetValue(null, "true and false"); //false
 
 string expression = @"IsMember('Nikola Tesla') and IsMember('Mihajlo Pupin')";
@@ -355,7 +372,7 @@ string expression = @"IsMember('Nikola Tesla') and !IsMember('Mihajlo Pupin')";
 bool falseValue = (bool) ExpressionEvaluator.GetValue(ieee, expression);</programlisting></para>
       </sect3>
 
-      <sect3 id="expressions-math">
+      <sect3 xml:id="expressions-math">
         <title>Mathematical operators</title>
 
         <para>The addition operator can be used on numbers, strings and dates.
@@ -363,7 +380,7 @@ bool falseValue = (bool) ExpressionEvaluator.GetValue(ieee, expression);</progra
         division can be used only on numbers. Other mathematical operators
         supported are modulus (%) and exponential power (^). Standard operator
         precedence is enforced. These operators are demonstrated below
-        <programlisting>// Addition
+        <programlisting language="csharp">// Addition
 int two = (int)ExpressionEvaluator.GetValue(null, "1 + 1"); // 2
 
 String testString = (String)ExpressionEvaluator.GetValue(null, "'test' + ' ' + 'string'"); //'test string'
@@ -407,7 +424,7 @@ int minusFortyFive = (int) ExpressionEvaluator.GetValue(null, "1+2-3*8^2/2/2"); 
       </sect3>
     </sect2>
 
-    <sect2 id="expressions-assignment">
+    <sect2 xml:id="expressions-assignment">
       <title>Assignment</title>
 
       <para>Setting of a property is done by using the assignment operator.
@@ -416,7 +433,7 @@ int minusFortyFive = (int) ExpressionEvaluator.GetValue(null, "1+2-3*8^2/2/2"); 
       <literal>SetValue</literal> offers the same functionality. Assignment in
       this manner is useful when combining multiple operators in an expression
       list, discussed in the next section. Some examples of assignment are
-      shown below <programlisting>Inventor inventor = new Inventor();
+      shown below <programlisting language="csharp">Inventor inventor = new Inventor();
 String aleks = (String) ExpressionEvaluator.GetValue(inventor, "Name = 'Aleksandar Seovic'");
 DateTime dt = (DateTime) ExpressionEvaluator.GetValue(inventor, "DOB = date('1974-08-24')");
 
@@ -424,14 +441,14 @@ DateTime dt = (DateTime) ExpressionEvaluator.GetValue(inventor, "DOB = date('197
 Inventor tesla = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers['vp'] = Members[0]");</programlisting></para>
     </sect2>
 
-    <sect2 id="expressions-explist">
+    <sect2 xml:id="expressions-explist">
       <title>Expression lists</title>
 
       <para>Multiple expressions can be evaluated against the same context
       object by separating them with a semicolon and enclosing the entire
       expression within parentheses. The value returned is the value of the
       last expression in the list. Examples of this are shown below
-      <programlisting>//Perform property assignments and then return Name property.
+      <programlisting language="csharp">//Perform property assignments and then return Name property.
 
 String pupin = (String) ExpressionEvaluator.GetValue(ieee.Members, 
   "( [1].PlaceOfBirth.City = 'Beograd'; [1].PlaceOfBirth.Country = 'Serbia'; [1].Name )"));
@@ -439,11 +456,11 @@ String pupin = (String) ExpressionEvaluator.GetValue(ieee.Members,
 // pupin = "Mihajlo Pupin"</programlisting></para>
     </sect2>
 
-    <sect2 id="expressions-types">
+    <sect2 xml:id="expressions-types">
       <title>Types</title>
 
       <para>In many cases, you can reference types by simply specifying type
-      name:<programlisting>ExpressionEvaluator.GetValue(null, "1 is int")
+      name:<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "1 is int")
 
 ExpressionEvaluator.GetValue(null, "DateTime.Today")
 
@@ -455,7 +472,7 @@ ExpressionEvaluator.GetValue(null, "new string[] {'abc', 'efg'}")</programlistin
       next section.</para>
 
       <para>For all other types, you need to use special
-      <literal>T(typeName)</literal> expression:<programlisting>Type dateType = (Type) ExpressionEvaluator.GetValue(null, "T(System.DateTime)")
+      <literal>T(typeName)</literal> expression:<programlisting language="csharp">Type dateType = (Type) ExpressionEvaluator.GetValue(null, "T(System.DateTime)")
 
 Type evalType = (Type) ExpressionEvaluator.GetValue(null, "T(Spring.Expressions.ExpressionEvaluator, Spring.Core)")
 
@@ -463,14 +480,14 @@ bool trueValue = (bool) ExpressionEvaluator.GetValue(tesla, "T(System.DateTime) 
 
       <note>
         <para>The implementation delegates to Spring's
-        <classname>ObjectUtils.ResolveType</classname> method for the actual
+        <literal>ObjectUtils.ResolveType</literal> method for the actual
         type resolution, which means that the types used within expressions
         are resolved in the exactly the same way as the types specified in
         Spring configuration files.</para>
       </note>
     </sect2>
 
-    <sect2 id="expressions-typeregistration">
+    <sect2 xml:id="expressions-typeregistration">
       <title>Type Registration</title>
 
       <para>To refer to a type within an expression that is not in the
@@ -480,7 +497,7 @@ bool trueValue = (bool) ExpressionEvaluator.GetValue(tesla, "T(System.DateTime) 
       used in expression that use the new operator or refer to a static
       properties of an object. Example usage is shown below.</para>
 
-      <programlisting>TypeRegistry.RegisterType("Society", typeof(Society));
+      <programlisting language="csharp">TypeRegistry.RegisterType("Society", typeof(Society));
 
 Inventor pupin = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers[Society.President]");</programlisting>
 
@@ -488,13 +505,13 @@ Inventor pupin = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers[Society
       <literal>typeAliases</literal> configuration section.</para>
     </sect2>
 
-    <sect2 id="expressions-ctor">
+    <sect2 xml:id="expressions-ctor">
       <title>Constructors</title>
 
       <para>Constructors can be invoked using the new operator. For classes
       outside mscorlib you will need to register your types so they can be
       resolved. Examples of using constructors are shown below:
-      <programlisting>// simple ctor
+      <programlisting language="csharp">// simple ctor
 DateTime dt = (DateTime) ExpressionEvaluator.GetValue(null, "new DateTime(1974, 8, 24)");
 
 // Register Inventor type then create new inventor instance within Add method inside an expression list.  
@@ -510,7 +527,7 @@ int three = (int) ExpressionEvaluator.GetValue(ieee.Members, "{ Add(new Inventor
       instantiation, similar to the way standard .NET attributes work. For
       example, you could create an instance of the <literal>Inventor</literal>
       class and set its <literal>Inventions</literal> property in a single
-      statement:<programlisting>
+      statement:<programlisting language="csharp">
 Inventor aleks = (Inventor) ExpressionEvaluator.GetValue(null, "new Inventor('Aleksandar Seovic', date('1974-08-24'), 'Serbian', Inventions = {'SPELL'})");
 </programlisting>The only rule you have to follow is that named arguments
       should be specified <emphasis>after</emphasis> standard constructor
@@ -520,7 +537,7 @@ Inventor aleks = (Inventor) ExpressionEvaluator.GetValue(null, "new Inventor('Al
       provides a convenient syntax for .NET attribute instance creation.
       Instead of using standard constructor syntax, you can use a somewhat
       shorter and more familiar syntax to create an instance of a .NET
-      attribute class:<programlisting>
+      attribute class:<programlisting language="csharp">
 WebMethodAttribute webMethod = (WebMethodAttribute) ExpressionEvaluator.GetValue(null, "@[WebMethod(true, CacheDuration = 60, Description = 'My Web Method')]");
 </programlisting>As you can see, with the exception of the
       <literal>@</literal> prefix, syntax is exactly the same as in C#.</para>
@@ -533,29 +550,29 @@ WebMethodAttribute webMethod = (WebMethodAttribute) ExpressionEvaluator.GetValue
       <literal>Attribute</literal> suffix, just like the C# compiler.</para>
     </sect2>
 
-    <sect2 id="expressions-variables">
+    <sect2 xml:id="expressions-variables">
       <title>Variables</title>
 
       <para>Variables can referenced in the expression using the syntax
       <literal>#</literal><emphasis>variableName</emphasis>. The variables are
       passed in and out of the expression using the dictionary parameter in
-      <classname>ExpressionEvaluator</classname>'s <literal>GetValue</literal>
-      or <literal>SetValue</literal> methods. <programlisting>public static object GetValue(object root, string expression, IDictionary variables)
+      <literal>ExpressionEvaluator</literal>'s <literal>GetValue</literal>
+      or <literal>SetValue</literal> methods. <programlisting language="csharp">public static object GetValue(object root, string expression, IDictionary variables)
 
 public static void SetValue(object root, string expression, IDictionary variables, object newValue)</programlisting>
       The variable name is the key value of the dictionary. Example usage is
-      shown below; <programlisting>IDictionary vars = new Hashtable();
+      shown below; <programlisting language="csharp">IDictionary vars = new Hashtable();
 vars["newName"] = "Mike Tesla";
 ExpressionEvaluator.GetValue(tesla, "Name = #newName", vars));</programlisting>
       You can also use the dictionary as a place to store values of the object
       as they are evaluated inside the expression. For example to change
-      Tesla's first name back again and keep the old value; <programlisting>ExpressionEvaluator.GetValue(tesla, "{ #oldName = Name; Name = 'Nikola Tesla' }", vars);
+      Tesla's first name back again and keep the old value; <programlisting language="csharp">ExpressionEvaluator.GetValue(tesla, "{ #oldName = Name; Name = 'Nikola Tesla' }", vars);
 String oldName = (String)vars["oldName"]; // Mike Tesla</programlisting>
       Variable names can also be used inside indexers or maps instead of
-      literal values. For example; <programlisting>vars["prez"] = "president";
+      literal values. For example; <programlisting language="csharp">vars["prez"] = "president";
 Inventor pupin = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers[#prez]", vars);</programlisting></para>
 
-      <sect3 id="expressions-this">
+      <sect3 xml:id="expressions-this">
         <title>The '#this' and '#root' variables</title>
 
         <para>There are two special variables that are always defined and can
@@ -564,24 +581,24 @@ Inventor pupin = (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers[#prez]"
 
         <para>The <literal>#this</literal> variable can be used to explicitly
         refer to the context for the node that is currently being
-        evaluated:<programlisting>// sets the name of the president and returns its instance
+        evaluated:<programlisting language="csharp">// sets the name of the president and returns its instance
 ExpressionEvaluator.GetValue(ieee, "Officers['president'].( #this.Name = 'Nikola Tesla'; #this )")</programlisting></para>
 
         <para>Similarly, the <literal>#root</literal> variable allows you to
-        refer to the root context for the expression:<programlisting>// removes president from the Officers dictionary and returns removed instance
+        refer to the root context for the expression:<programlisting language="csharp">// removes president from the Officers dictionary and returns removed instance
 ExpressionEvaluator.GetValue(ieee, "Officers['president'].( #root.Officers.Remove('president'); #this )")</programlisting></para>
       </sect3>
     </sect2>
 
-    <sect2 id="expressions-ternary">
+    <sect2 xml:id="expressions-ternary">
       <title>Ternary Operator (If-Then-Else)</title>
 
       <para>You can use the ternary operator for performing if-then-else
       conditional logic inside the expression. A minimal example is;
-      <programlisting>String aTrueString  = (String) ExpressionEvaluator.GetValue(null, "false ? 'trueExp' : 'falseExp'") // trueExp
+      <programlisting language="csharp">String aTrueString  = (String) ExpressionEvaluator.GetValue(null, "false ? 'trueExp' : 'falseExp'") // trueExp
 </programlisting> In this case, the boolean false results in returning the
       string value 'trueExp'. A less artificial example is shown below
-      <programlisting>ExpressionEvaluator.SetValue(ieee, "Name", "IEEE");
+      <programlisting language="csharp">ExpressionEvaluator.SetValue(ieee, "Name", "IEEE");
 IDictionary vars = new Hashtable();
 vars["queryName"] = "Nikola Tesla";
 
@@ -607,8 +624,8 @@ String queryResultString = (String) ExpressionEvaluator.GetValue(ieee, expressio
 
       <para>For example, let's say that we need a list of the cities where our
       inventors were born. This could be easily obtained by projecting on the
-      <literal>PlaceOfBirth.City</literal> property: <programlisting>IList placesOfBirth = (IList) ExpressionEvaluator.GetValue(ieee, "Members.!{PlaceOfBirth.City}")  // { 'Smiljan', 'Idvor' }
-</programlisting>Or we can get the list of officers' names:<programlisting>IList officersNames = (IList) ExpressionEvaluator.GetValue(ieee, "Officers.Values.!{Name}")  // { 'Nikola Tesla', 'Mihajlo Pupin' }
+      <literal>PlaceOfBirth.City</literal> property: <programlisting language="csharp">IList placesOfBirth = (IList) ExpressionEvaluator.GetValue(ieee, "Members.!{PlaceOfBirth.City}")  // { 'Smiljan', 'Idvor' }
+</programlisting>Or we can get the list of officers' names:<programlisting language="csharp">IList officersNames = (IList) ExpressionEvaluator.GetValue(ieee, "Officers.Values.!{Name}")  // { 'Nikola Tesla', 'Mihajlo Pupin' }
 </programlisting></para>
 
       <para>As you can see from the examples, projection uses
@@ -620,11 +637,11 @@ String queryResultString = (String) ExpressionEvaluator.GetValue(ieee, expressio
       <literal>?{</literal><emphasis>projectionExpression</emphasis><literal>}</literal>
       syntax, will filter the list and return a new list containing a subset
       of the original element list. For example, selection would allow us to
-      easily get a list of Serbian inventors:<programlisting>IList serbianInventors = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{Nationality == 'Serbian'}")  // { tesla, pupin }
+      easily get a list of Serbian inventors:<programlisting language="csharp">IList serbianInventors = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{Nationality == 'Serbian'}")  // { tesla, pupin }
 </programlisting>Or to get a list of inventors that invented
-      sonar:<programlisting>IList sonarInventors = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{'Sonar' in Inventions}")  // { pupin }
+      sonar:<programlisting language="csharp">IList sonarInventors = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{'Sonar' in Inventions}")  // { pupin }
 </programlisting>Or we can combine selection and projection to get a list of
-      sonar inventors' names:<programlisting>IList sonarInventorsNames = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{'Sonar' in Inventions}.!{Name}")  // { 'Mihajlo Pupin' }
+      sonar inventors' names:<programlisting language="csharp">IList sonarInventorsNames = (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{'Sonar' in Inventions}.!{Name}")  // { 'Mihajlo Pupin' }
 </programlisting></para>
 
       <para>As a convenience, Spring.NET Expression Language also supports a
@@ -635,7 +652,7 @@ String queryResultString = (String) ExpressionEvaluator.GetValue(ieee, expressio
       elements were found. In order to return a first match you should prefix
       your selection expression with <literal>^{</literal> instead of
       <literal>?{</literal>, and to return last match you should use
-      <literal>${</literal> prefix:<programlisting>ExpressionEvaluator.GetValue(ieee, "Members.^{Nationality == 'Serbian'}.Name")  // 'Nikola Tesla'
+      <literal>${</literal> prefix:<programlisting language="csharp">ExpressionEvaluator.GetValue(ieee, "Members.^{Nationality == 'Serbian'}.Name")  // 'Nikola Tesla'
 ExpressionEvaluator.GetValue(ieee, "Members.${Nationality == 'Serbian'}.Name")  // 'Mihajlo Pupin'
 </programlisting>Notice that we access the <literal>Name</literal> property
       directly on the selection result, because an actual matched instance is
@@ -643,7 +660,7 @@ ExpressionEvaluator.GetValue(ieee, "Members.${Nationality == 'Serbian'}.Name")  
       list.</para>
     </sect2>
 
-    <sect2 id="expressions-processors">
+    <sect2 xml:id="expressions-processors">
       <title>Collection Processors and Aggregators</title>
 
       <para>In addition to list projection and selection, Spring.NET
@@ -670,9 +687,9 @@ ExpressionEvaluator.GetValue(ieee, "Members.${Nationality == 'Serbian'}.Name")  
         <literal>Count</literal> or <literal>Length</literal> property
         depending on the context. Unlike its standard .NET counterparts, count
         aggregator can also be invoked on the <literal>null</literal> context
-        without throwing a <classname>NullReferenceException</classname>. It
+        without throwing a <literal>NullReferenceException</literal>. It
         will simply return zero in this case, which makes it much safer than
-        standard .NET properties within larger expression.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -3}.count()")  // 3
+        standard .NET properties within larger expression.<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "{1, 5, -3}.count()")  // 3
 ExpressionEvaluator.GetValue(null, "count()")  // 0
 </programlisting></para>
       </sect3>
@@ -685,7 +702,7 @@ ExpressionEvaluator.GetValue(null, "count()")  // 0
         or precision, it will automatically perform necessary conversion and
         the result will be the highest precision type. If any of the
         collection elements is not a number, this aggregator will throw an
-        <classname>InvalidArgumentException</classname>.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.sum()")  // 13 (int)
+        <literal>InvalidArgumentException</literal>.<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.sum()")  // 13 (int)
 ExpressionEvaluator.GetValue(null, "{5, 5.8, 12.2, 1}.sum()")  // 24.0 (double)
 </programlisting></para>
       </sect3>
@@ -698,7 +715,7 @@ ExpressionEvaluator.GetValue(null, "{5, 5.8, 12.2, 1}.sum()")  // 24.0 (double)
         the sum aggregator in order to be as precise as possible. Just like
         the sum aggregator, if any of the collection elements is not a number,
         it will throw an
-        <classname>InvalidArgumentException</classname>.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -4, 10}.average()")  // 3
+        <literal>InvalidArgumentException</literal>.<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "{1, 5, -4, 10}.average()")  // 3
 ExpressionEvaluator.GetValue(null, "{1, 5, -2, 10}.average()")  // 3.5
 </programlisting></para>
       </sect3>
@@ -710,9 +727,9 @@ ExpressionEvaluator.GetValue(null, "{1, 5, -2, 10}.average()")  // 3.5
         list. In order to determine what "the smallest" actually means, this
         aggregator relies on the assumption that the collection items are of
         the uniform type and that they implement the
-        <classname>IComparable</classname> interface. If that is not the case,
+        <literal>IComparable</literal> interface. If that is not the case,
         this aggregator will throw an
-        <classname>InvalidArgumentException</classname>.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.min()")  // -3
+        <literal>InvalidArgumentException</literal>.<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.min()")  // -3
 ExpressionEvaluator.GetValue(null, "{'abc', 'efg', 'xyz'}.min()")  // 'abc'
 </programlisting></para>
       </sect3>
@@ -724,9 +741,9 @@ ExpressionEvaluator.GetValue(null, "{'abc', 'efg', 'xyz'}.min()")  // 'abc'
         In order to determine what "the largest" actually means, this
         aggregator relies on the assumption that the collection items are of
         the uniform type and that they implement
-        <classname>IComparable</classname> interface. If that is not the case,
+        <literal>IComparable</literal> interface. If that is not the case,
         this aggregator will throw an
-        <classname>InvalidArgumentException</classname>.<programlisting>ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.max()")  // 10
+        <literal>InvalidArgumentException</literal>.<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.max()")  // 10
 ExpressionEvaluator.GetValue(null, "{'abc', 'efg', 'xyz'}.max()")  // 'xyz'
 </programlisting></para>
       </sect3>
@@ -736,7 +753,7 @@ ExpressionEvaluator.GetValue(null, "{'abc', 'efg', 'xyz'}.max()")  // 'xyz'
 
         <para>A non-null processor is a very simple collection processor that
         eliminates all <literal>null</literal> values from the
-        collection.<programlisting>ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', null, 'abc', 'def', null}.nonNull()")  // { 'abc', 'xyz', 'abc', 'def' }
+        collection.<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', null, 'abc', 'def', null}.nonNull()")  // { 'abc', 'xyz', 'abc', 'def' }
 ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', null, 'abc', 'def', null}.nonNull().distinct().sort()")  // { 'abc', 'def', 'xyz' }
 </programlisting></para>
       </sect3>
@@ -749,7 +766,7 @@ ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', null, 'abc', 'def', null}.no
         an optional <literal>Boolean</literal> argument that will determine
         whether <literal>null</literal> values should be included in the
         results. The default is <literal>false</literal>, which means that
-        they will not be included. <programlisting>ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.distinct(true).sort()")  // { null, 'abc', 'def', 'xyz' }
+        they will not be included. <programlisting language="csharp">ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.distinct(true).sort()")  // { null, 'abc', 'def', 'xyz' }
 ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.distinct(false).sort()")  // { 'abc', 'def', 'xyz' }
 </programlisting></para>
       </sect3>
@@ -758,9 +775,9 @@ ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.
         <title>Sort Processor</title>
 
         <para>The sort processor can be used to sort uniform collections of
-        elements that implement <classname>IComparable</classname>.</para>
+        elements that implement <literal>IComparable</literal>.</para>
 
-        <programlisting>ExpressionEvaluator.GetValue(null, "{1.2, 5.5, -3.3}.sort()")  // { -3.3, 1.2, 5.5 }
+        <programlisting language="csharp">ExpressionEvaluator.GetValue(null, "{1.2, 5.5, -3.3}.sort()")  // { -3.3, 1.2, 5.5 }
 ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.sort()")  // { null, 'abc', 'abc', 'def', 'def', 'xyz' }
 </programlisting>
 
@@ -775,7 +792,7 @@ ExpressionEvaluator.GetValue(null, "{ 'abc', 'xyz', 'abc', 'def', null, 'def' }.
         <para>The convert processor can be used to convert a collection of
         elements to a given Type.</para>
 
-        <programlisting>object[] arr = new object[] { "0", 1, 1.1m, "1.1", 1.1f };
+        <programlisting language="csharp">object[] arr = new object[] { "0", 1, 1.1m, "1.1", 1.1f };
 decimal[] result = (decimal[]) ExpressionEvaluator.GetValue(arr, "convert(decimal)");
 </programlisting>
       </sect3>
@@ -786,7 +803,7 @@ decimal[] result = (decimal[]) ExpressionEvaluator.GetValue(arr, "convert(decima
         <para>The reverse processor returns the reverse order of elements in
         the list</para>
 
-        <programlisting>object[] arr = new object[] { "0", 1, 2.1m, "3", 4.1f };
+        <programlisting language="csharp">object[] arr = new object[] { "0", 1, 2.1m, "3", 4.1f };
 object[] result = new ArrayList( (ICollection) ExpressionEvaluator.GetValue(arr, "reverse()") ).ToArray(); // { 4.1f, "3", 2.1m, 1, "0" }            </programlisting>
       </sect3>
 
@@ -796,13 +813,13 @@ object[] result = new ArrayList( (ICollection) ExpressionEvaluator.GetValue(arr,
         <para>Collections can be ordered in three ways, an expression, a SpEL
         lamda expreression, or a delegate.</para>
 
-        <programlisting><emphasis role="bold">// orderBy expression</emphasis>
+        <programlisting language="csharp">// orderBy expression
 IExpression exp = Expression.Parse("orderBy('ToString()')");
 object[] input = new object[] { 'b', 1, 2.0, "a" };
 object[] ordered = exp.GetValue(input);  // { 1, 2.0, "a", 'b' }
 
 
-<emphasis role="bold">// SpEL lambda expressions</emphasis>
+// SpEL lambda expressions
 IExpression exp = Expression.Parse("orderBy({|a,b| $a.ToString().CompareTo($b.ToString())})");
 object[] input = new object[] { 'b', 1, 2.0, "a" };
 object[] ordered = exp.GetValue(input);  // { 1, 2.0, "a", 'b' }
@@ -812,7 +829,7 @@ Expression.RegisterFunction( "compare", "{|a,b| $a.ToString().CompareTo($b.ToStr
 exp = Expression.Parse("orderBy(#compare)");
 ordered = exp.GetValue(input, vars);  // { 1, 2.0, "a", 'b' }
 
-<emphasis role="bold">// .NET delegate</emphasis>
+// .NET delegate
 private delegate int CompareCallback(object x, object y);
 private int CompareObjects(object x, object y)
 {
@@ -837,7 +854,7 @@ object[] ordered = exp.GetValue(input);  // { 1, 2.0, "a", 'b' }
         implementation that sums only the even numbers of an integer
         list</para>
 
-        <programlisting>        public class IntEvenSumCollectionProcessor : ICollectionProcessor
+        <programlisting language="csharp">        public class IntEvenSumCollectionProcessor : ICollectionProcessor
         {
             public object Process(ICollection source, object[] args)
             {
@@ -874,7 +891,7 @@ object[] ordered = exp.GetValue(input);  // { 1, 2.0, "a", 'b' }
       </sect3>
     </sect2>
 
-    <sect2 id="expressions-object-references">
+    <sect2 xml:id="expressions-object-references">
       <title>Spring Object References</title>
 
       <para>Expressions can refer to objects that are declared in Spring's
@@ -884,7 +901,7 @@ object[] ordered = exp.GetValue(input);  // { 1, 2.0, "a", 'b' }
       (<literal>Spring.RootContext</literal>) is used. Using the application
       context defined in the MovieFinder example from <xref
       linkend="quickstarts" />, the following expression returns the number of
-      movies directed by Roberto Benigni. <programlisting>public static void Main()
+      movies directed by Roberto Benigni. <programlisting language="csharp">public static void Main()
 {
   . . .
 
@@ -900,7 +917,7 @@ int numMovies = (int) ExpressionEvaluator.GetValue(null,
       example.</para>
     </sect2>
 
-    <sect2 id="expressions-lamda">
+    <sect2 xml:id="expressions-lamda">
       <title>Lambda Expressions</title>
 
       <para>A somewhat advanced, but a very powerful feature of Spring.NET
@@ -916,7 +933,7 @@ int numMovies = (int) ExpressionEvaluator.GetValue(null,
       </literal><emphasis>functionBody</emphasis><literal> }</literal></para>
 
       <para>For example, you could define a <literal>max</literal> function
-      and call it like this:<programlisting>ExpressionEvaluator.GetValue(null, "(#max = {|x,y| $x &gt; $y ? $x : $y }; #max(5,25))", new Hashtable())  // 25</programlisting></para>
+      and call it like this:<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "(#max = {|x,y| $x &gt; $y ? $x : $y }; #max(5,25))", new Hashtable())  // 25</programlisting></para>
 
       <para>As you can see, any arguments defined for the expression can be
       referenced within the function body using a <emphasis>local
@@ -927,7 +944,7 @@ int numMovies = (int) ExpressionEvaluator.GetValue(null,
       function name.</para>
 
       <para>Lambda expressions can be recursive, which means that you can
-      invoke the function within its own body:<programlisting>ExpressionEvaluator.GetValue(null, "(#fact = {|n| $n &lt;= 1 ? 1 : $n * #fact($n-1) }; #fact(5))", new Hashtable())  // 120</programlisting></para>
+      invoke the function within its own body:<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "(#fact = {|n| $n &lt;= 1 ? 1 : $n * #fact($n-1) }; #fact(5))", new Hashtable())  // 120</programlisting></para>
 
       <para>Notice that in both examples above we had to specify a
       <literal>variables</literal> parameter for the
@@ -945,13 +962,13 @@ int numMovies = (int) ExpressionEvaluator.GetValue(null,
       easy way to pre-register your lambda expressions by exposing a static
       <literal>Expression.RegisterFunction</literal> method, which takes
       function name, lambda expression and variables dictionary to register
-      function in as parameters:<programlisting>IDictionary vars = new Hashtable();
+      function in as parameters:<programlisting language="csharp">IDictionary vars = new Hashtable();
 Expression.RegisterFunction("sqrt", "{|n| Math.Sqrt($n)}", vars);
 Expression.RegisterFunction("fact", "{|n| $n &lt;= 1 ? 1 : $n * #fact($n-1)}", vars);</programlisting>Once
       the function registration is done, you can simply evaluate an expression
       that uses these functions, making sure that the <literal>vars</literal>
       dictionary is passed as a parameter to expression evaluation
-      engine:<programlisting>ExpressionEvaluator.GetValue(null, "#fact(5)", vars)  // 120
+      engine:<programlisting language="csharp">ExpressionEvaluator.GetValue(null, "#fact(5)", vars)  // 120
 ExpressionEvaluator.GetValue(null, "#sqrt(9)", vars)  // 3</programlisting></para>
 
       <para>Finally, because lambda expressions are treated as variables, they
@@ -961,7 +978,7 @@ ExpressionEvaluator.GetValue(null, "#sqrt(9)", vars)  // 3</programlisting></par
       argument and parameter <literal>n</literal> that will be passed to
       function <literal>f</literal> as the second. Then we invoke the
       functions registered in the previous example, as well as the lambda
-      expression defined inline, through our delegate:<programlisting>Expression.RegisterFunction("delegate", "{|f, n| $f($n) }", vars);
+      expression defined inline, through our delegate:<programlisting language="csharp">Expression.RegisterFunction("delegate", "{|f, n| $f($n) }", vars);
 ExpressionEvaluator.GetValue(null, "#delegate(#sqrt, 4)", vars)  // 2
 ExpressionEvaluator.GetValue(null, "#delegate(#fact, 5)", vars)  // 120
 ExpressionEvaluator.GetValue(null, "#delegate({|n| $n ^ 2 }, 5)", vars)  // 25</programlisting>While
@@ -980,7 +997,7 @@ ExpressionEvaluator.GetValue(null, "#delegate({|n| $n ^ 2 }, 5)", vars)  // 25</
       <para>For example, you can define a max delegate and call it like
       this</para>
 
-      <programlisting>private delegate double DoubleFunctionTwoArgs(double arg1, double arg2);
+      <programlisting language="csharp">private delegate double DoubleFunctionTwoArgs(double arg1, double arg2);
 
 private double Max(double arg1, double arg2)
 {
@@ -1013,13 +1030,13 @@ public void DoWork()
 
   <!-- SAMPLE CLASSES AND DATA -->
 
-  <sect1 id="expressions-classes">
+  <sect1 xml:id="expressions-classes">
     <title>Classes used in the examples</title>
 
     <para>The following simple classes are used to demonstrate the
     functionality of the expression language.</para>
 
-    <programlisting>public class Inventor
+    <programlisting language="csharp">public class Inventor
 {
     public string Name;
     public string Nationality;
@@ -1099,7 +1116,7 @@ public class Society
     <para>The code listings in this chapter use instances of the data
     populated with the following information.</para>
 
-    <programlisting>Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+    <programlisting language="csharp">Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
 tesla.Inventions = new string[]
     {
         "Telephone repeater", "Rotating magnetic field principle",

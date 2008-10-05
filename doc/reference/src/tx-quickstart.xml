@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="tx-quickstart">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="tx-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Transactions QuickStart</title>
 
   <section>
@@ -35,17 +52,17 @@
     is blatantly taken from the book <ulink
     url="http://www.apress.com/book/bookDisplay.html?bID=10002">Pro
     ADO.NET</ulink> by Sahil Malik. The transfer service is defined by the
-    interface <interfacename>IAccountManager</interfacename> with the
-    implementation <classname>AccountManager</classname> located in the
-    namespace <classname>Spring.TxQuickStart.Services</classname>. The money
+    interface <literal>IAccountManager</literal> with the
+    implementation <literal>AccountManager</literal> located in the
+    namespace <literal>Spring.TxQuickStart.Services</literal>. The money
     is recorded in a credit and debit table in the database. The SQL Server
     schema for the tables is located in the file CreditsDebitsSchema.sql.
     Transferring the money requires an ACID operation on these two tables. The
     credit operation is defined via a
-    <interfacename>IAccountCreditDao</interfacename> interface and the debit
-    operation via an <interfacename>IAccountDebitDao</interfacename>
+    <literal>IAccountCreditDao</literal> interface and the debit
+    operation via an <literal>IAccountDebitDao</literal>
     interface. Implementations of these interfaces using
-    <classname>AdoTemplate</classname> are in the namespace
+    <literal>AdoTemplate</literal> are in the namespace
     <package>Spring.TxQuickStart.Dao.Ado</package>.</para>
 
     <section>
@@ -53,7 +70,7 @@
 
       <para>The Manager and DAO interfaces are shown below</para>
 
-      <programlisting>    public interface IAccountManager
+      <programlisting language="csharp">    public interface IAccountManager
     {
         void DoTransfer(float creditAmount, float debitAmount);
     }
@@ -76,7 +93,7 @@
 
     <para>The implementation of the Account Credit DAO is shown below</para>
 
-    <programlisting>    public class AccountCreditDao : AdoDaoSupport, IAccountCreditDao
+    <programlisting language="csharp">    public class AccountCreditDao : AdoDaoSupport, IAccountCreditDao
     {
         public void CreateCredit(float creditAmount)
         {
@@ -88,7 +105,7 @@
 
     <para>and for the Debit DAO</para>
 
-    <programlisting>    public class AccountDebitDao : AdoDaoSupport, IAccountDebitDao
+    <programlisting language="csharp">    public class AccountDebitDao : AdoDaoSupport, IAccountDebitDao
     {
         public void DebitAccount(float debitAmount)
         {
@@ -99,17 +116,17 @@
     }</programlisting>
 
     <para>Both of these DAO implementations inherit from Spring's
-    <classname>AdoDaoSupport</classname> class that provides convenient access
-    to an <classname>AdoTemplate</classname> for performing data access
+    <literal>AdoDaoSupport</literal> class that provides convenient access
+    to an <literal>AdoTemplate</literal> for performing data access
     operations. With no other properties that can be configured in these
     implementations, the only configuration required is setting of
-    AdoDaoSupport's <classname>DbProvider</classname> property representing
+    AdoDaoSupport's <literal>DbProvider</literal> property representing
     the connection to the database.</para>
 
     <para>The implementation of the service layer interface,
-    <classname>IAccountManager</classname>, is shown below.</para>
+    <literal>IAccountManager</literal>, is shown below.</para>
 
-    <programlisting>    public class AccountManager : IAccountManager
+    <programlisting language="csharp">    public class AccountManager : IAccountManager
     {
 
         private IAccountCreditDao accountCreditDao;
@@ -160,7 +177,7 @@
 
     <para>The NUnit unit test for AccountManager is shown below</para>
 
-    <programlisting>    public class AccountManagerUnitTests
+    <programlisting language="csharp">    public class AccountManagerUnitTests
     {
         private IAccountManager accountManager;
 
@@ -196,7 +213,7 @@
     named application-config.xml and is an embedded resource inside the 'main'
     project, Spring.TxQuickStart.</para>
 
-    <programlisting>&lt;objects xmlns='http://www.springframework.net'&gt;
+    <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'&gt;
 
   &lt;!-- DAO Implementations --&gt;
   &lt;object id="accountCreditDao" type="Spring.TxQuickStart.Dao.Ado.AccountCreditDao, Spring.TxQuickStart"&gt;
@@ -225,7 +242,7 @@
     and what transaction manager (local or distribute) to use. The code for
     this integration style NUnit test is shown below</para>
 
-    <programlisting>    [TestFixture]
+    <programlisting language="csharp">    [TestFixture]
     public class AccountManagerTests 
     {
         private AdoTemplate adoTemplateCredit;
@@ -281,7 +298,7 @@
 
     <para>The essential element is to create an instance of Spring's
     application context where the relevant layers of the application are
-    'wired' together. The <classname>IAccountManager</classname>
+    'wired' together. The <literal>IAccountManager</literal>
     implementation is retrieved from the IoC container and stored as a field
     of the test class. The basic logic of the test is the same as in the unit
     test but in addition there is the verification of actions performed in the
@@ -301,7 +318,7 @@
     AdoPlatformTransactionManager. This configuration file is shown
     below</para>
 
-    <programlisting>&lt;objects xmlns="http://www.springframework.net"
+    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
          xmlns:db="http://www.springframework.net/database"
          xmlns:tx="http://www.springframework.net/tx"&gt;
 
@@ -354,7 +371,7 @@
     <para>To switch to a distributed transaction you can refer to the
     configuration file system-test-dtc-config.xml, which is shown below</para>
 
-    <programlisting>objects xmlns='http://www.springframework.net'
+    <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
          xmlns:db="http://www.springframework.net/database"
          xmlns:tx="http://www.springframework.net/tx"&gt;
 
@@ -409,7 +426,7 @@
       AccountManager's DoTransfer method (included in the sample code) is
       shown below.</para>
 
-      <programlisting>        [Transaction(NoRollbackFor = new Type[] { typeof(ArithmeticException) })]
+      <programlisting language="csharp">        [Transaction(NoRollbackFor = new Type[] { typeof(ArithmeticException) })]
         public void DoTransfer(float creditAmount, float debitAmount)
         {
             accountCreditDao.CreateCredit(creditAmount);
@@ -431,7 +448,7 @@
       database transaction. Running the test code below verifies that the
       exception still propagates out of the method.</para>
 
-      <programlisting>        [Test]   
+      <programlisting language="csharp">        [Test]   
         public void DeclarativeWithAttributesNoRollbackFor()
         {
             try
@@ -461,12 +478,12 @@
     additional functionality. Instead all you have to do is uncomment the
     line</para>
 
-    <programlisting>  &lt;import resource="assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/aspects-config.xml"/&gt;</programlisting>
+    <programlisting language="myxml">  &lt;import resource="assembly://Spring.TxQuickStart.Tests/Spring.TxQuickStart/aspects-config.xml"/&gt;</programlisting>
 
     <para>in either system-test-dtc-config.xml or system-test-local-config.xml
     The aspect configuration file is shown below</para>
 
-    <programlisting>&lt;objects xmlns='http://www.springframework.net'
+    <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
          xmlns:aop="http://www.springframework.net/aop"&gt;
 
 
@@ -515,11 +532,11 @@
     aspect, which is configured to use an order value of 1. The behavior for
     logging the exception is specified by creating and configuring an instance
     of
-    <classname>Spring.Aspects.Exceptions.ExceptionHandlerAdvice</classname>.
+    <literal>Spring.Aspects.Exceptions.ExceptionHandlerAdvice</literal>.
     The location where that behavior is applied, the pointcut, is the
     Transaction attribute. The logging of method arguments and execution time
     is specified by configuring an instance of
-    <classname>Spring.Aspects.Logging.SimpleLoggingAdvice</classname>.</para>
+    <literal>Spring.Aspects.Logging.SimpleLoggingAdvice</literal>.</para>
 
     <para>The AOP configuration section on the bottom is what ties together
     the behavior and where it will take place in the program flow. Under the

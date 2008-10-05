@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="remoting">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="remoting" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>.NET Remoting</title>
 
-  <section id="remoting-introduction">
+  <section xml:id="remoting-introduction">
     <title>Introduction</title>
 
     <para>Spring's .NET Remoting support allows you to export a 'plain .NET
@@ -32,7 +49,7 @@
     item.</para>
   </section>
 
-  <section id="remoting-publishsao">
+  <section xml:id="remoting-publishsao">
     <title>Publishing SAOs on the Server</title>
 
     <para>Exposing a Singleton SAO service can be done in two ways. The first
@@ -45,7 +62,7 @@
     <literal>RemotingServices.Marshal</literal>. This method overcomes the
     limitations of the first method. Example server side code for publishing
     an SAO singleton object with a predefined state is shown below
-    <programlisting>AdvancedMBRCalculator calc = new AdvancedMBRCalculator(217);
+    <programlisting language="csharp">AdvancedMBRCalculator calc = new AdvancedMBRCalculator(217);
 RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
 
     <para>The class AdvancedMBRCalculator used above inherits from
@@ -54,18 +71,18 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
     <para>If your design calls for configuring a singleton SAO, or using a
     non-default constructor, you can use the Spring IoC container to create
     the SAO instance, configure it, and register it with the .NET remoting
-    infrastructure. The <classname>SaoExporter</classname> class performs this
+    infrastructure. The <literal>SaoExporter</literal> class performs this
     task and most importantly, will automatically create a proxy class that
     inherits from MarshalbyRefObject if your business object does not already
     do so. The following XML taken from the <link
     linkend="remoting-quickstart">Remoting QuickStart</link> demonstrates its
     usage to an SAO Singleton object</para>
 
-    <section id="sao-singleton">
+    <section xml:id="sao-singleton">
       <title>SAO Singleton</title>
     </section>
 
-    <programlisting>&lt;object id="singletonCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services"&gt;
+    <programlisting language="myxml">&lt;object id="singletonCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services"&gt;
   &lt;constructor-arg type="int" value="217"/&gt;
 &lt;/object&gt;
 
@@ -80,14 +97,14 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
     "RemotedSaoSingletonCalculator". (The fully qualified url is
     tcp://localhost:8005/RemotedSaoSingleCallCalculator using the standard
     .NET channel configuration shown further below.)
-    <classname>AdvancedCalculator</classname> class implements the business
-    interface <classname>IAdvancedCalculator</classname>. The current proxy
+    <literal>AdvancedCalculator</literal> class implements the business
+    interface <literal>IAdvancedCalculator</literal>. The current proxy
     implementation requires that your business objects implement an interface.
     The interfaces' methods will be the ones exposed in the generated .NET
     remoting proxy. The initial memory of the calculator is set to 217 via the
-    constructor. The class <classname>AdvancedCalculator</classname>
+    constructor. The class <literal>AdvancedCalculator</literal>
     <emphasis>does not</emphasis> inherit from
-    <classname>MarshalByRefObject</classname>. Also note that the exporter
+    <literal>MarshalByRefObject</literal>. Also note that the exporter
     sets the lifetime of the SAO Singleton to infinite so that the singleton
     will not be garbage collected after 5 minutes (the .NET default lease
     time). If you would like to vary the lifetime properties, they are
@@ -95,7 +112,7 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
 
     <para>A custom schema is provided to make the object declaration even
     easier and with intellisense support for the attributes. This is shown
-    below<programlisting>&lt;objects xmlns="http://www.springframework.net" 
+    below<programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
          xmlns:r="http://www.springframework.net/remoting"&gt;
 
   &lt;r:saoExporter targetName="singletonCalculator" 
@@ -106,12 +123,12 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
 &lt;/objects&gt;</programlisting>Refer to the end of this chapter for more
     information on Spring's .NET custom schema.</para>
 
-    <section id="sao-singlecall">
+    <section xml:id="sao-singlecall">
       <title>SAO SingleCall</title>
     </section>
 
     <para>The following XML fragment shows how to expose the calculator
-    service in SAO 'SingleCall' mode. <programlisting>&lt;object id="prototypeCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" 
+    service in SAO 'SingleCall' mode. <programlisting language="myxml">&lt;object id="prototypeCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" 
         singleton="false"&gt;
   &lt;constructor-arg type="int" value="217"/&gt;
 &lt;/object&gt;
@@ -129,7 +146,7 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
     singleton calculator, the following standard AOP configuration is used to
     create the target for the SaoExporter</para>
 
-    <programlisting>&lt;object id="singletonCalculatorWeaved" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
+    <programlisting language="myxml">&lt;object id="singletonCalculatorWeaved" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
   &lt;property name="target" ref="singletonCalculator"/&gt;
   &lt;property name="interceptorNames"&gt;
     &lt;list&gt;
@@ -146,15 +163,15 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
     <note>As generally required with a .NET Remoting application, the
     arguments to your service methods should be Serializable.</note>
 
-    <sect2 id="remoting-configuration">
+    <sect2 xml:id="remoting-configuration">
       <title>Console Application Configuration</title>
 
-      <para>When using <classname>SaoExporter</classname> you can still use
+      <para>When using <literal>SaoExporter</literal> you can still use
       the standard remoting administration section in the application
       configuration file to register the channel.
-      <classname>ChannelServices</classname> as shown below</para>
+      <literal>ChannelServices</literal> as shown below</para>
 
-      <programlisting>&lt;system.runtime.remoting&gt;
+      <programlisting language="myxml">&lt;system.runtime.remoting&gt;
   &lt;application&gt;
     &lt;channels&gt;
       &lt;channel ref="tcp" port="8005" /&gt;
@@ -166,7 +183,7 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
       initialize the .NET Remoting infrastructure with a call to
       RemotingConfiguration (since we are using the .config file for channel
       registration) and then start the Spring application context. This is
-      shown below <programlisting>RemotingConfiguration.Configure("RemoteApp.exe.config");
+      shown below <programlisting language="csharp">RemotingConfiguration.Configure("RemoteApp.exe.config");
 
 IApplicationContext ctx = ContextRegistry.GetContext();
 
@@ -176,23 +193,23 @@ Console.ReadLine();
     </programlisting></para>
 
       <para>You can also put in the configuration file an instance of the
-      object <classname>Spring.Remoting.RemotingConfigurer</classname> to make
+      object <literal>Spring.Remoting.RemotingConfigurer</literal> to make
       the RemotingConfiguration call show above on your behalf during
       initialization of the IoC container. The
-      <classname>RemotingConfigurer</classname> implements the
-      <interfacename>IObjectFactoryPostProcessor</interfacename> interface,
+      <literal>RemotingConfigurer</literal> implements the
+      <literal>IObjectFactoryPostProcessor</literal> interface,
       which gets called after all object definitions have been loaded but
       before they have been instantiated, (See<xref
       linkend="objects-factory-customizing-factory-postprocessors" /> for more
       information). The RemotingConfigurer has two properties you can
-      configure. <classname>Filename</classname>, that specifies the filename
+      configure. <literal>Filename</literal>, that specifies the filename
       to load the .NET remoting configuration from (if null the default file
-      name is used) and <classname>EnsureSecurity</classname> which makes sure
+      name is used) and <literal>EnsureSecurity</literal> which makes sure
       the channel in encrypted (available only on .NET 2.0). As a convenience,
       the custom Spring remoting schema can be used to define an instance of
       this class as shown below, taken from the <link
       linkend="remoting-quickstart">Remoting QuickStart</link>
-      <programlisting>&lt;objects xmlns="http://www.springframework.net"
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
          xmlns:r="http://www.springframework.net/remoting"&gt;
 
   &lt;r:configurer filename="Spring.Calculator.RemoteApp.exe.config" /&gt;
@@ -205,7 +222,7 @@ Console.ReadLine();
       code in action.</para>
     </sect2>
 
-    <section id="iis-application">
+    <section xml:id="iis-application">
       <title>IIS Application Configuration</title>
 
       <para>If you are deploying a .NET remoting application inside IIS there
@@ -219,7 +236,7 @@ Console.ReadLine();
       Spring IoC container inside the application start method defined in
       Global.asax, as shown below</para>
 
-      <programlisting> void Application_Start(object sender, EventArgs e) 
+      <programlisting language="csharp"> void Application_Start(object sender, EventArgs e) 
  {
      // Code that runs on application startup
 
@@ -241,7 +258,7 @@ Console.ReadLine();
     </section>
   </section>
 
-  <section id="remoting-clientsao">
+  <section xml:id="remoting-clientsao">
     <title>Accessing a SAO on the Client</title>
 
     <para>Administrative type registration on the client side lets you easily
@@ -267,17 +284,17 @@ Console.ReadLine();
     object is a SAO object. A call to <literal>Activator.GetObject</literal>
     will instantiate a SAO proxy on the client. For CAO objects another
     mechanism is used and is discussed later. The code to obtain the SAO proxy
-    is shown below <programlisting>ICalculator calc = (ICalculator)Activator.GetObject (
+    is shown below <programlisting language="csharp">ICalculator calc = (ICalculator)Activator.GetObject (
   typeof (ICalculator),
   "tcp://localhost:8005/MyRemotedCalculator");</programlisting></para>
 
     <para>To obtain a reference to a SAO proxy within the IoC container, you
-    can use the object factory <classname>SaoFactoryObject</classname> in the
+    can use the object factory <literal>SaoFactoryObject</literal> in the
     Spring configuration file. The following XML taken from the <link
     linkend="remoting-quickstart"> Remoting QuickStart</link> demonstrates its
     usage.</para>
 
-    <programlisting>&lt;object id="calculatorService" type="Spring.Remoting.SaoFactoryObject, Spring.Services"&gt;
+    <programlisting language="myxml">&lt;object id="calculatorService" type="Spring.Remoting.SaoFactoryObject, Spring.Services"&gt;
   &lt;property name="ServiceInterface" value="Spring.Calculator.Interfaces.IAdvancedCalculator, Spring.Calculator.Contract" /&gt;
   &lt;property name="ServiceUrl" value="tcp://localhost:8005/RemotedSaoSingletonCalculator" /&gt;
 &lt;/object&gt;</programlisting>
@@ -287,11 +304,11 @@ Console.ReadLine();
     server and published object name.</para>
 
     <para>Other objects in the IoC container that depend on an implementation
-    of the interface <classname>ICalculator</classname> can now refer to the
+    of the interface <literal>ICalculator</literal> can now refer to the
     object "calculatorService", thereby using a remote implementation of this
     interface. The exposure of dependencies among objects within the IoC
     container lets you easily switch the implementation of
-    <classname>ICalculator</classname>. By using the IoC container changing
+    <literal>ICalculator</literal>. By using the IoC container changing
     the application to use a local instead of remote implementation is a
     configuration file change, not a code change. By promoting interface based
     programing, the ability to switch implementation makes it easier to unit
@@ -304,7 +321,7 @@ Console.ReadLine();
     integrate with the server implementation when it is ready.</para>
   </section>
 
-  <section id="remoting-cao-introduction">
+  <section xml:id="remoting-cao-introduction">
     <title>CAO best practices</title>
 
     <para>Creating a client activated object (CAO) is typically done by
@@ -320,7 +337,7 @@ Console.ReadLine();
     factory per class, we can create a generic SAO object factory to return
     CAO references to objects defined in Spring's application context. This
     functionality is encapsulated in Spring's
-    <classname>CaoExporter</classname> class. On the client side a reference
+    <literal>CaoExporter</literal> class. On the client side a reference
     is obtained using <literal>CaoFactoryObject</literal>. The client side
     factory object supports creation of the CAO object using constructor
     arguments. In addition to reducing the clutter and tedium around creating
@@ -334,14 +351,14 @@ Console.ReadLine();
     resources.</para>
   </section>
 
-  <section id="remoting-publishcao">
+  <section xml:id="remoting-publishcao">
     <title>Registering a CAO object on the Server</title>
 
     <para>To expose an object as a CAO on the server you should declare an
     object in the standard Spring configuration that is a 'prototype', that is
     the singleton property is set to false. This results in a new object being
     created each time it is retrieved from Spring's IoC container. An
-    implementation of <interfacename>ICaoRemoteFactory</interfacename> is what
+    implementation of <literal>ICaoRemoteFactory</literal> is what
     is exported via a call to RemotingServices.Marshal. This implementation
     uses Spring's IoC container to create objects and then dynamically create
     a .NET remoting proxy for the retrieved object. Note that the default
@@ -351,14 +368,14 @@ Console.ReadLine();
     <para>This is best shown using an example from the Remoting Quickstart
     application. Here is the definition of a simple calculator object,</para>
 
-    <para><programlisting>&lt;object id="prototypeCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" 
+    <para><programlisting language="myxml">&lt;object id="prototypeCalculator" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" 
         singleton="false"&gt;
   &lt;constructor-arg type="int" value="217" /&gt;
 &lt;/object&gt;</programlisting>To export this as a CAO object we can declare
-    the <classname>CaoExporter</classname> object directly in the server's XML
+    the <literal>CaoExporter</literal> object directly in the server's XML
     configuration file, as shown below</para>
 
-    <programlisting>&lt;object id="caoCalculator" type="Spring.Remoting.CaoExporter, Spring.Services"&gt;
+    <programlisting language="myxml">&lt;object id="caoCalculator" type="Spring.Remoting.CaoExporter, Spring.Services"&gt;
   &lt;property name="TargetName" value="prototypeCalculator" /&gt;
   &lt;property name="Infinite" value="false" /&gt;
   &lt;property name="InitialLeaseTime" value="2m" /&gt;
@@ -372,7 +389,7 @@ Console.ReadLine();
     <para>Alternatively, you can use the remoting schema and declare the CAO
     object as shown below</para>
 
-    <programlisting>&lt;r:caoExporter targetName="prototypeCalculator" infinite="false"&gt;
+    <programlisting language="myxml">&lt;r:caoExporter targetName="prototypeCalculator" infinite="false"&gt;
   &lt;r:lifeTime initialLeaseTime="2m" renewOnCallTime="1m" /&gt;
 &lt;/r:caoExporter&gt;</programlisting>
 
@@ -386,7 +403,7 @@ Console.ReadLine();
       from the Remoting QuickStart, a calculator with logging around advice is
       defined as shown below.</para>
 
-      <programlisting>&lt;object id="prototypeCalculatorWeaved" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
+      <programlisting language="myxml">&lt;object id="prototypeCalculatorWeaved" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
   &lt;property name="targetSource"&gt;
     &lt;object type="Spring.Aop.Target.PrototypeTargetSource, Spring.Aop"&gt;
       &lt;property name="TargetObjectName" value="prototypeCalculator" /&gt;
@@ -403,19 +420,19 @@ Console.ReadLine();
       linkend="aop" /> for more information. The CAO exporter then references
       with the name 'prototypeCalculatorWeaved' as shown below.</para>
 
-      <programlisting>&lt;r:caoExporter targetName="prototypeCalculatorWeaved" infinite="false"&gt;
+      <programlisting language="myxml">&lt;r:caoExporter targetName="prototypeCalculatorWeaved" infinite="false"&gt;
   &lt;r:lifeTime initialLeaseTime="2m" renewOnCallTime="1m" /&gt;
 &lt;/r:caoExporter&gt;</programlisting>
     </section>
   </section>
 
-  <section id="remoting-clientcao">
+  <section xml:id="remoting-clientcao">
     <title>Accessing a CAO on the Client</title>
 
     <para>On the client side a CAO reference is obtained by using the
-    <classname>CaoFactoryObject</classname> as shown below</para>
+    <literal>CaoFactoryObject</literal> as shown below</para>
 
-    <programlisting>&lt;object id="calculatorService" type="Spring.Remoting.CaoFactoryObject, Spring.Services"&gt;
+    <programlisting language="myxml">&lt;object id="calculatorService" type="Spring.Remoting.CaoFactoryObject, Spring.Services"&gt;
   &lt;property name="RemoteTargetName" value="prototypeCalculator" /&gt;
   &lt;property name="ServiceUrl" value="tcp://localhost:8005" /&gt;
 &lt;/object&gt;</programlisting>
@@ -424,14 +441,14 @@ Console.ReadLine();
     previous section. The property 'RemoteTargetName' identifies the object on
     the server side. Using this approach the client can obtain an reference
     though standard DI techniques to a remote object that implements the
-    <interfacename>IAdvancedCalculator</interfacename> interface. (As always,
+    <literal>IAdvancedCalculator</literal> interface. (As always,
     that doesn't mean the client should treat the object as if it was an
     in-process object).</para>
 
     <para>Alternatively, you can use the Remoting schema to shorten this
     definition and provide intellisense code completion</para>
 
-    <programlisting>&lt;r:caoFactory id="calculatorService" 
+    <programlisting language="myxml">&lt;r:caoFactory id="calculatorService" 
               remoteTargetName="prototypeCalculator" 
               serviceUrl="tcp://localhost:8005" /&gt;</programlisting>
 
@@ -440,12 +457,12 @@ Console.ReadLine();
 
       <para>Applying AOP advice to a client side CAO object is done just like
       any other object. Simply use the id of the object created by the
-      <classname>CaoFactoryObject</classname> as the AOP target, i.e.
+      <literal>CaoFactoryObject</literal> as the AOP target, i.e.
       'calculatorService' in the previous example.</para>
     </section>
   </section>
 
-  <section id="remoting-schema">
+  <section xml:id="remoting-schema">
     <title>XML Schema for configuration</title>
 
     <para>Please install the XSD schemas into VS.NET as described in <xref
@@ -455,7 +472,7 @@ Console.ReadLine();
     objects.</para>
   </section>
 
-  <section id="remoting-additional">
+  <section xml:id="remoting-additional">
     <title>Additional Resources</title>
 
     <para>Two articles that describe the process of creating a standard SAO

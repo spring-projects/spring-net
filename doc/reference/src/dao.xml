@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="dao">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="dao" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>DAO support</title>
 
-  <section id="dao-introduction">
+  <section xml:id="dao-introduction">
     <title>Introduction</title>
 
     <para>Spring promotes the use of data access interfaces in your
@@ -35,17 +52,17 @@
     catching exceptions that are specific to each technology.</para>
   </section>
 
-  <section id="dao-exceptions">
+  <section xml:id="dao-exceptions">
     <title>Consistent exception hierarchy</title>
 
     <para>Database exceptions in the ADO.NET API are not consistent across
     providers. The .NET 1.1 BCL did not provide a common base class for
     ADO.NET exceptions. As such you were required to handle exceptions
     specific to each provider such as
-    <classname>System.Data.SqlClient.SqlException</classname> or
-    <classname>System.Data.OracleClient.OracleException</classname>. The .NET
+    <literal>System.Data.SqlClient.SqlException</literal> or
+    <literal>System.Data.OracleClient.OracleException</literal>. The .NET
     2.0 BCL improved in this regard by introducing a common base class for
-    exceptions, <classname>System.Data.Common.DbException</classname>. However
+    exceptions, <literal>System.Data.Common.DbException</literal>. However
     the common DbException is not very portable either as it provides a vendor
     specific error code as the underlying piece of information as to what went
     wrong. This error code is different across providers for the same
@@ -54,10 +71,10 @@
 
     <para>To promote writing portable and descriptive exception handling code
     Spring provides a convenient translation from technology specific
-    exceptions like <classname>System.Data.SqlClient.SqlException</classname>
-    or <classname>System.Data.OracleClient.OracleException</classname> to its
+    exceptions like <literal>System.Data.SqlClient.SqlException</literal>
+    or <literal>System.Data.OracleClient.OracleException</literal> to its
     own exception hierarchy with the
-    <classname>Spring.Dao.DataAccessException</classname> as the root
+    <literal>Spring.Dao.DataAccessException</literal> as the root
     exception. These exceptions wrap the original exception so there is never
     any risk that one might lose any information as to what might have gone
     wrong.</para>
@@ -83,13 +100,13 @@
 
     <para>(Please note that the class hierarchy detailed in the above image
     shows only a subset of the whole, rich,
-    <classname>DataAccessException</classname> hierarchy.)</para>
+    <literal>DataAccessException</literal> hierarchy.)</para>
 
     <para>The exception translation functionality is in the namespace
     Spring.Data.Support and is based on the interface
     <literal>IAdoExceptionTranslator</literal> shown below.</para>
 
-    <programlisting>public interface IAdoExceptionTranslator
+    <programlisting language="csharp">public interface IAdoExceptionTranslator
 {
   DataAccessException Translate( string task, string sql, Exception exception );
 }</programlisting>
@@ -131,7 +148,7 @@
     codes that map to a
     <literal>DataIntegrityViolationException</literal>.</para>
 
-    <para><programlisting>&lt;objects xmlns='http://www.springframework.net'&gt;
+    <para><programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'&gt;
  
   &lt;alias name='SqlServer-2.0' alias='SqlServer2005'/&gt;
  
@@ -153,7 +170,7 @@
     periods in the name is a workaround.</para>
 
     <para>Another way to customize the mappings of error codes to exceptions
-    is to subclass <classname>ErrorCodeExceptionTranslator</classname> and
+    is to subclass <literal>ErrorCodeExceptionTranslator</literal> and
     override the method, <literal>DataAccessException
     TranslateException(string task, string sql, string errorCode, Exception
     exception)</literal>. This will be called before referencing the metadata
@@ -297,26 +314,26 @@
 
     <itemizedlist>
       <listitem>
-        <para><classname>AdoDaoSupport</classname> - super class for ADO.NET
+        <para><literal>AdoDaoSupport</literal> - super class for ADO.NET
         data access objects. Requires a
-        <interfacename>DbProvider</interfacename> to be provided; in turn,
-        this class provides a <classname>AdoTemplate</classname> instance
+        <literal>DbProvider</literal> to be provided; in turn,
+        this class provides a <literal>AdoTemplate</literal> instance
         initialized from the supplied
-        <interfacename>DbProvider</interfacename> to subclasses. See the
+        <literal>DbProvider</literal> to subclasses. See the
         documentation for <literal>AdoTemplate</literal> for more
         information.</para>
       </listitem>
 
       <listitem>
-        <para><classname>HibernateDaoSupport</classname> - super class for
+        <para><literal>HibernateDaoSupport</literal> - super class for
         NHibernate data access objects. Requires a
-        <interfacename>ISessionFactory</interfacename> to be provided; in
-        turn, this class provides a <classname>HibernateTemplate</classname>
+        <literal>ISessionFactory</literal> to be provided; in
+        turn, this class provides a <literal>HibernateTemplate</literal>
         instance initialized from the supplied
-        <interfacename>SessionFactory</interfacename> to subclasses. Can
+        <literal>SessionFactory</literal> to subclasses. Can
         alternatively be initialized directly via a
-        <classname>HibernateTemplate</classname>, to reuse the latter's
-        settings like <interfacename>SessionFactory</interfacename>, flush
+        <literal>HibernateTemplate</literal>, to reuse the latter's
+        settings like <literal>SessionFactory</literal>, flush
         mode, exception translator, etc. This is contained in a download
         separate from the main Spring.NET distribution.</para>
       </listitem>

@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="validation">
-  <title id="val-title">Validation Framework</title>
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="validation" xmlns="http://docbook.org/ns/docbook" version="5">
+  <title>Validation Framework</title>
 
   <section>
     <title>Introduction</title>
@@ -84,7 +101,7 @@
     validation rules defined for the Trip object in the SpringAir sample
     application:</para>
 
-    <para><programlisting>&lt;objects xmlns="http://www.springframework.net" xmlns:v="http://www.springframework.net/validation"&gt;
+    <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" xmlns:v="http://www.springframework.net/validation"&gt;
 
   &lt;object type="TripForm.aspx" parent="standardPage"&gt;
      &lt;property name="TripValidator" ref="tripValidator" /&gt;
@@ -255,13 +272,13 @@
       <para>The condition validator evaluates any logical expression that is
       supported by Spring's evaluation engine. The syntax is</para>
 
-      <programlisting>&lt;v:<emphasis role="bold">condition</emphasis> id="id" test="testCondition" when="applicabilityCondition" parent="parentValidator"&gt;
+      <programlisting language="myxml">&lt;v:condition id="id" test="testCondition" when="applicabilityCondition" parent="parentValidator"&gt;
   actions
-&lt;/v:<emphasis role="bold">condition</emphasis>&gt;</programlisting>
+&lt;/v:condition&gt;</programlisting>
 
       <para>An example is shown below</para>
 
-      <programlisting>&lt;v:condition test="StartingFrom.Date &gt;= DateTime.Today" when="StartingFrom.Date != DateTime.MinValue"&gt;
+      <programlisting language="myxml">&lt;v:condition test="StartingFrom.Date &gt;= DateTime.Today" when="StartingFrom.Date != DateTime.MinValue"&gt;
    &lt;v:message id="error.departureDate.inThePast" providers="departureDateErrors, validationSummary"/&gt;
 &lt;/v:condition&gt;</programlisting>
 
@@ -295,13 +312,13 @@
       <para>This validator ensures that the specified test value is not empty.
       The syntax is</para>
 
-      <programlisting>&lt;v:<emphasis role="bold">required</emphasis> id="id" test="requiredValue" when="applicabilityCondition" parent="parentValidator"&gt;
+      <programlisting language="myxml">&lt;v:required id="id" test="requiredValue" when="applicabilityCondition" parent="parentValidator"&gt;
   actions
-&lt;/v:<emphasis role="bold">required</emphasis>&gt;</programlisting>
+&lt;/v:required&gt;</programlisting>
 
       <para>An example is shown below</para>
 
-      <programlisting>&lt;v:required test="ReturningFrom.AirportCode"&gt;
+      <programlisting language="myxml">&lt;v:required test="ReturningFrom.AirportCode"&gt;
    &lt;v:message id="error.destinationAirport.required" providers="destinationAirportErrors, validationSummary"/&gt;
 &lt;/v:required&gt;</programlisting>
 
@@ -361,15 +378,15 @@
 
       <para>The syntax is</para>
 
-      <programlisting>&lt;v:<emphasis role="bold">regex</emphasis> id="id" test="valueToEvaluate" when="applicabilityCondition" parent="parentValidator"&gt;
-  &lt;<emphasis role="bold">v:property name="Expression" value="regularExpressionToMatch"</emphasis>/&gt;
+      <programlisting language="myxml">&lt;v:regex id="id" test="valueToEvaluate" when="applicabilityCondition" parent="parentValidator"&gt;
+  &lt;v:property name="Expression" value="regularExpressionToMatch"/&gt;
   &lt;v:property name="Options" value="regexOptions"/&gt;
   actions
-&lt;/v:<emphasis role="bold">regex</emphasis>&gt;</programlisting>
+&lt;/v:regex&gt;</programlisting>
 
       <para>An example is shown below</para>
 
-      <programlisting>&lt;v:regex test="ReturningFrom.AirportCode"&gt;
+      <programlisting language="myxml">&lt;v:regex test="ReturningFrom.AirportCode"&gt;
    &lt;v:property name="Expression" value="[A-Z][A-Z][A-Z]"/&gt;
    &lt;v:message id="error.destinationAirport.threeCharacters" providers="destinationAirportErrors, validationSummary"/&gt;
 &lt;/v:regex&gt;</programlisting>
@@ -389,13 +406,13 @@
 
       <para>The syntax is</para>
 
-      <programlisting>&lt;v:<emphasis role="bold">validator</emphasis> id="id" test="requiredValue" when="applicabilityCondition" type="validatorType" parent="parentValidator"&gt;
+      <programlisting language="myxml">&lt;v:validator id="id" test="requiredValue" when="applicabilityCondition" type="validatorType" parent="parentValidator"&gt;
   actions
-&lt;/v:<emphasis role="bold">validator</emphasis>&gt;</programlisting>
+&lt;/v:validator&gt;</programlisting>
 
       <para>An example is shown below</para>
 
-      <programlisting>&lt;v:validator test="ReturningFrom.AirportCode" type="MyNamespace.MyAirportCodeValidator, MyAssembly"&gt;
+      <programlisting language="myxml">&lt;v:validator test="ReturningFrom.AirportCode" type="MyNamespace.MyAirportCodeValidator, MyAssembly"&gt;
    &lt;v:message id="error.destinationAirport.invalid" providers="destinationAirportErrors, validationSummary"/&gt;
 &lt;/v:required&gt;</programlisting>
 
@@ -425,7 +442,7 @@
       TripMode.RoundTrip enum value. In order to achieve that we created
       following validator definition:</para>
 
-      <programlisting>&lt;v:group id="returnDateValidator" when="Mode == 'RoundTrip'"&gt;
+      <programlisting language="myxml">&lt;v:group id="returnDateValidator" when="Mode == 'RoundTrip'"&gt;
       // nested validators
 &lt;/v:group&gt;</programlisting>
 
@@ -463,13 +480,13 @@
 
       <para>The syntax is</para>
 
-      <programlisting>&lt;v:message id="messageId" providers="errorProviderList" when="messageApplicabilityCondition"&gt;
+      <programlisting language="myxml">&lt;v:message id="messageId" providers="errorProviderList" when="messageApplicabilityCondition"&gt;
   &lt;v:param value="paramExpression"/&gt;
 &lt;/v:message&gt;</programlisting>
 
       <para>An example is shown below</para>
 
-      <programlisting>&lt;v:message id="error.departureDate.inThePast" providers="departureDateErrors, validationSummary"&gt;
+      <programlisting language="myxml">&lt;v:message id="error.departureDate.inThePast" providers="departureDateErrors, validationSummary"&gt;
    &lt;v:param value="StartingFrom.Date.ToString('D')"/&gt;
    &lt;v:param value="DateTime.Today.ToString('D')"/&gt;
 &lt;/v:message&gt;</programlisting>
@@ -505,13 +522,13 @@
 
       <para>The syntax is</para>
 
-      <programlisting>&lt;v:action type="actionType" when="actionApplicabilityCondition"&gt;
+      <programlisting language="myxml">&lt;v:action type="actionType" when="actionApplicabilityCondition"&gt;
   properties
 &lt;/v:action&gt;</programlisting>
 
       <para>An example is shown below</para>
 
-      <programlisting>&lt;v:action type="Spring.Validation.Actions.ExpressionAction, Spring.Core" when="#page != null"&gt;
+      <programlisting language="myxml">&lt;v:action type="Spring.Validation.Actions.ExpressionAction, Spring.Core" when="#page != null"&gt;
    &lt;v:property name="Valid" value="#page.myPanel.Visible = true"/&gt;
    &lt;v:property name="Invalid" value="#page.myPanel.Visible = false"/&gt;
 &lt;/v:action&gt;</programlisting>
@@ -527,7 +544,7 @@
       implementation, which is fairly simple thing to do – all you need to do
       is implement <literal>IValidationAction</literal> interface:</para>
 
-      <programlisting>public interface IValidationAction
+      <programlisting language="csharp">public interface IValidationAction
 {
     /// &lt;summary&gt;
     /// Executes the action.
@@ -554,11 +571,11 @@
 
     <para>The syntax is shown below</para>
 
-    <programlisting>&lt;v:ref name="referencedValidatorId" context="validationContextForTheReferencedValidator"/&gt;</programlisting>
+    <programlisting language="myxml">&lt;v:ref name="referencedValidatorId" context="validationContextForTheReferencedValidator"/&gt;</programlisting>
 
     <para>An example is shown below</para>
 
-    <programlisting>&lt;v:group id="objectA.validator"&gt;
+    <programlisting language="myxml">&lt;v:group id="objectA.validator"&gt;
    &lt;v:ref name="objectC.validator" context="MyObjectC"/&gt;
    // other validators for ObjectA
 &lt;/v:group&gt;
@@ -588,7 +605,7 @@
     <para>You can also create Validators programmatically using the API. An
     example is shown below</para>
 
-    <programlisting>UserInfo userInfo = new UserInfo();  // has Name and Password props
+    <programlisting language="csharp">UserInfo userInfo = new UserInfo();  // has Name and Password props
 
 ValidatorGroup userInfoValidator = new ValidatorGroup();
 
@@ -610,7 +627,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
     useful for performing server-side validation.</para>
   </section>
 
-  <section id="validation-aspnet-usage">
+  <section xml:id="validation-aspnet-usage">
     <title>Usage tips within ASP.NET</title>
 
     <para>Now that you know how to configure validation rules, let's see what
@@ -620,7 +637,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
     <para>The first thing you need to do is inject validators you want to use
     into your ASP.NET page, as shown in the example below:</para>
 
-    <programlisting>&lt;objects xmlns="http://www.springframework.net" xmlns:v="http://www.springframework.net/validation"&gt;
+    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" xmlns:v="http://www.springframework.net/validation"&gt;
 
   &lt;object type="TripForm.aspx" parent="standardPage"&gt;
      &lt;property name="TripValidator" ref="tripValidator" /&gt;
@@ -635,7 +652,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
     <para>Once that's done, you need to perform validation in one or more of
     the page event handlers, which typically looks similar to this:</para>
 
-    <programlisting>public void SearchForFlights(object sender, EventArgs e)
+    <programlisting language="csharp">public void SearchForFlights(object sender, EventArgs e)
 {
     if (Validate(Controller.Trip, tripValidator))
     {
@@ -654,7 +671,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
     <literal>&lt;spring:validationSummary/&gt;</literal> controls to the
     ASP.NET form:</para>
 
-    <programlisting>&lt;%@ Page Language="c#" MasterPageFile="~/Web/StandardTemplate.master" Inherits="TripForm" CodeFile="TripForm.aspx.cs" %&gt;
+    <programlisting language="myxml">&lt;%@ Page Language="c#" MasterPageFile="~/Web/StandardTemplate.master" Inherits="TripForm" CodeFile="TripForm.aspx.cs" %&gt;
 &lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
 
 &lt;asp:Content ID="head" ContentPlaceHolderID="head" runat="server"&gt;
@@ -674,7 +691,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
 &lt;asp:Content ID="body" ContentPlaceHolderID="body" runat="server"&gt;
     &lt;div style="text-align: center"&gt;
         &lt;h4&gt;&lt;asp:Label ID="caption" runat="server"&gt;&lt;/asp:Label&gt;&lt;/h4&gt;
-        <emphasis role="bold">&lt;spring:ValidationSummary ID="validationSummary" runat="server" /&gt;</emphasis>
+        &lt;spring:ValidationSummary ID="validationSummary" runat="server" /&gt;
         &lt;table&gt;
             &lt;tr class="formLabel"&gt;
                 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
@@ -690,13 +707,13 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
                     &lt;asp:Label ID="leavingFrom" runat="server" /&gt;&lt;/td&gt;
                 &lt;td nowrap="nowrap"&gt;
                     &lt;asp:DropDownList ID="leavingFromAirportCode" AutoCallBack="true" runat="server" /&gt;
-                    <emphasis role="bold">&lt;spring:ValidationError id="departureAirportErrors" runat="server" /&gt;</emphasis>
+                    &lt;spring:ValidationError id="departureAirportErrors" runat="server" /&gt;
                 &lt;/td&gt;
                 &lt;td class="formLabel" align="right"&gt;
                     &lt;asp:Label ID="goingTo" runat="server" /&gt;&lt;/td&gt;
                 &lt;td nowrap="nowrap"&gt;
                     &lt;asp:DropDownList ID="goingToAirportCode" AutoCallBack="true" runat="server" /&gt;
-                    <emphasis role="bold">&lt;spring:ValidationError id="destinationAirportErrors" runat="server" /&gt;</emphasis>
+                    &lt;spring:ValidationError id="destinationAirportErrors" runat="server" /&gt;
                 &lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
@@ -704,14 +721,14 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
                     &lt;asp:Label ID="leavingOn" runat="server" /&gt;&lt;/td&gt;
                 &lt;td nowrap="nowrap"&gt;
                     &lt;spring:Calendar ID="leavingFromDate" runat="server" Width="75px" AllowEditing="true" Skin="system" /&gt;
-                    <emphasis role="bold">&lt;spring:ValidationError id="departureDateErrors" runat="server" /&gt;</emphasis>
+                    &lt;spring:ValidationError id="departureDateErrors" runat="server" /&gt;
                 &lt;/td&gt;
                 &lt;td class="formLabel" align="right"&gt;
                     &lt;asp:Label ID="returningOn" runat="server" /&gt;&lt;/td&gt;
                 &lt;td nowrap="nowrap"&gt;
                     &lt;div id="returningOnCalendar"&gt;
                         &lt;spring:Calendar ID="returningOnDate" runat="server" Width="75px" AllowEditing="true" Skin="system" /&gt;
-                        <emphasis role="bold">&lt;spring:ValidationError id="returnDateErrors" runat="server" /&gt;</emphasis>
+                        &lt;spring:ValidationError id="returnDateErrors" runat="server" /&gt;
                     &lt;/div&gt;
                 &lt;/td&gt;
             &lt;/tr&gt;
@@ -805,7 +822,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
       <literal>Spring.Web.Validation.IValidationErrorsRenderer</literal>
       interface:</para>
 
-      <programlisting>namespace Spring.Web.Validation
+      <programlisting language="csharp">namespace Spring.Web.Validation
 {
     /// &lt;summary&gt;
     /// This interface should be implemented by all validation errors renderers.
@@ -842,7 +859,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
         templates for <literal>&lt;spring:validationSummary&gt;</literal> and
         <literal>&lt;spring:validationError&gt;</literal> controls:</para>
 
-        <programlisting>&lt;!-- Validation errors renderer configuration --&gt;
+        <programlisting language="myxml">&lt;!-- Validation errors renderer configuration --&gt;
 &lt;object id="Spring.Web.UI.Controls.ValidationError" abstract="true"&gt;
   &lt;property name="Renderer"&gt;
     &lt;object type="Spring.Web.Validation.IconValidationErrorsRenderer, Spring.Web"&gt;

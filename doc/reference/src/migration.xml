@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="migration">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="migration" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Migrating from 1.1 M2</title>
 
-  <sect1 id="M2RC1-introduction">
+  <sect1 xml:id="M2RC1-introduction">
     <title>Introduction</title>
 
     <para>Several API changes were made after 1.1 M2 (before 1.1 RC1)due
@@ -19,7 +36,7 @@
     and higher</para>
   </sect1>
 
-  <sect1 id="migration-changes">
+  <sect1 xml:id="migration-changes">
     <title>Important Changes</title>
 
     <para>This section covers the common areas were you will need to make
@@ -35,39 +52,39 @@
 
       <para>The names of the section handlers to register custom schemas has
       changed, from ConfigParsersSectionHandler to
-      <classname>NamespaceParsersSectionHandler</classname>.</para>
+      <literal>NamespaceParsersSectionHandler</literal>.</para>
 
       <para>The target namespaces have changed, the 'directory' named /schema/
       has been removed. For example, the target schema changed from
       http://www.springframework.net/schema/tx to
-      <classname>http://www.springframework.net/tx.</classname></para>
+      <literal>http://www.springframework.net/tx.</literal></para>
 
       <para>A typical declaration to use custom schemas within your
       configuration file looks like this</para>
 
-      <programlisting>&lt;objects xmlns='http://www.springframework.net'
+      <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
          xmlns:db="http://www.springframework.net/database"
          xmlns:tx="http://www.springframework.net/tx"
          xmlns:aop="http://www.springframework.net/aop"&gt;</programlisting>
 
-      <para>The class <classname>XmlParserRegistry</classname> was renamed to
-      <classname>NamespaceParserRegistry</classname>.</para>
+      <para>The class <literal>XmlParserRegistry</literal> was renamed to
+      <literal>NamespaceParserRegistry</literal>.</para>
 
       <para>Renamed
-      <classname>Spring.Validation.ValidationConfigParser</classname> to
-      <classname>Spring.Validation.Config.ValidationNamespaceParser</classname></para>
+      <literal>Spring.Validation.ValidationConfigParser</literal> to
+      <literal>Spring.Validation.Config.ValidationNamespaceParser</literal></para>
 
-      <para>Renamed from <classname>DatabaseConfigParser</classname> to
-      <classname>DatabaseNamespaceParser</classname></para>
+      <para>Renamed from <literal>DatabaseConfigParser</literal> to
+      <literal>DatabaseNamespaceParser</literal></para>
 
-      <para>Renamed/Moved <classname>Remoting.RemotingConfigParser</classname>
+      <para>Renamed/Moved <literal>Remoting.RemotingConfigParser</literal>
       to
-      <classname>Remoting.Config.RemotingNamespaceParser</classname><parameter></parameter></para>
+      <literal>Remoting.Config.RemotingNamespaceParser</literal><parameter></parameter></para>
 
       <para>A typical registration of custom parsers within your configuration
       file looks like this</para>
 
-      <programlisting>&lt;configuration&gt;
+      <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -85,7 +102,7 @@
 
       <para>A manual registration would look like this</para>
 
-      <programlisting>NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+      <programlisting language="csharp">NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
 NamespaceParserRegistry.RegisterParser(typeof(DatabaseNamespaceParser));
 NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
 </programlisting>

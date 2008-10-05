@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="testing">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="testing" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Testing</title>
 
-  <section id="testing-introduction">
+  <section xml:id="testing-introduction">
     <title>Introduction</title>
 
     <para>The Spring team considers developer testing to be an absolutely
@@ -14,7 +31,7 @@
     linkend="integration-testing">integration testing</link>.</para>
   </section>
 
-  <section id="unit-testing">
+  <section xml:id="unit-testing">
     <title>Unit testing</title>
 
     <para>One of the main benefits of Dependency Injection is that your code
@@ -39,7 +56,7 @@
     <emphasis>unit</emphasis> tests for your IoC-based applications.</para>
   </section>
 
-  <section id="integration-testing">
+  <section xml:id="integration-testing">
     <title>Integration testing</title>
 
     <para>However, it is also important to be able to perform some integration
@@ -72,7 +89,7 @@
       with NUnit then you should add the following to your .config file, (in
       the form of MyAssembly.dll.config)</para>
 
-      <programlisting>&lt;runtime&gt;
+      <programlisting language="myxml">&lt;runtime&gt;
 
   &lt;assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1"&gt;
 
@@ -91,7 +108,7 @@
     </note>
 
     <para>The <literal>Spring.Testing.NUnit</literal> namespace provides
-    valuable NUnit <classname>TestCase</classname> superclasses for
+    valuable NUnit <literal>TestCase</literal> superclasses for
     integration testing using a Spring container. Note that as of NUnit 2.4
     these can be rewritten in terms of custom attributes via NUnit's new
     extensibility mechanism. This will be an additional option in an upcoming
@@ -124,7 +141,7 @@
       </listitem>
     </itemizedlist>
 
-    <section id="testing-ctx-management">
+    <section xml:id="testing-ctx-management">
       <title>Context management and caching</title>
 
       <para>The <literal><literal>Spring.Testing.NUnit</literal></literal>
@@ -140,11 +157,11 @@
       could reduce productivity.</para>
 
       <para>To address this issue, the
-      <classname>AbstractDependencyInjectionSpringContextTests</classname> has
+      <literal>AbstractDependencyInjectionSpringContextTests</literal> has
       an <literal>protected</literal> property that subclasses must implement
       to provide the location of context definition files:</para>
 
-      <programlisting>protected abstract string[] ConfigLocations { get; }</programlisting>
+      <programlisting language="csharp">protected abstract string[] ConfigLocations { get; }</programlisting>
 
       <para>Implementations of this method must provide an array containing
       the IResource locations of XML configuration metadata used to configure
@@ -160,34 +177,34 @@
       reloading - for example, by changing an object definition or the state
       of an application object - you can call the
       <methodname>SetDirty()</methodname> method on
-      <classname>AbstractDependencyInjectionSpringContextTests</classname> to
+      <literal>AbstractDependencyInjectionSpringContextTests</literal> to
       cause the test fixture to reload the configurations and rebuild the
       application context before executing the next test case.</para>
     </section>
 
-    <section id="testing-fixture-di">
+    <section xml:id="testing-fixture-di">
       <title>Dependency Injection of test fixtures</title>
 
       <para>When
-      <classname>AbstractDependencyInjectionSpringContextTests</classname>
+      <literal>AbstractDependencyInjectionSpringContextTests</literal>
       (and subclasses) load your application context, they can optionally
       configure instances of your test classes by Setter Injection. All you
       need to do is to define instance variables and the corresponding
       setters.
-      <classname>AbstractDependencyInjectionSpringContextTests</classname>
+      <literal>AbstractDependencyInjectionSpringContextTests</literal>
       will automatically locate the corresponding object in the set of
       configuration files specified in the
       <methodname>ConfigLocations</methodname> property.</para>
 
       <para>Consider the scenario where we have a class,
-      <classname>HibernateTitleDao</classname>, that performs data access
-      logic for say, the <classname>Title</classname> domain object. We want
+      <literal>HibernateTitleDao</literal>, that performs data access
+      logic for say, the <literal>Title</literal> domain object. We want
       to write integration tests that test all of the following areas:</para>
 
       <itemizedlist>
         <listitem>
           <para>The Spring configuration; basically, is everything related to
-          the configuration of the <classname>HibernateTitleDao</classname>
+          the configuration of the <literal>HibernateTitleDao</literal>
           object correct and present?</para>
         </listitem>
 
@@ -197,7 +214,7 @@
         </listitem>
 
         <listitem>
-          <para>The logic of the <classname>HibernateTitleDao</classname>;
+          <para>The logic of the <literal>HibernateTitleDao</literal>;
           does the configured instance of this class perform as
           anticipated?</para>
         </listitem>
@@ -206,8 +223,8 @@
       <para>Let's look at the test class itself (we will look at the
       configuration immediately afterwards).</para>
 
-      <programlisting>[TestFixture]
-public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyInjectionSpringContextTests</emphasis>  {
+      <programlisting language="csharp">[TestFixture]
+public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTests  {
 
     <lineannotation>// this instance will be (automatically) dependency injected</lineannotation>    
     private HibernateTitleDao titleDao;
@@ -234,10 +251,10 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
       (<literal>'classpath:com/foo/daos.xml'</literal>) looks like
       this:</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
 &lt;objects  xmlns="http://www.springframework.net"&gt;
 
-    <lineannotation>&lt;!-- this object will be injected into the <classname>HibernateTitleDaoTests</classname> class --&gt;</lineannotation>
+    <lineannotation>&lt;!-- this object will be injected into the <literal>HibernateTitleDaoTests</literal> class --&gt;</lineannotation>
     &lt;object id="titleDao" type="Spring.Samples.HibernateTitleDao, Spring.Samples"&gt;
         &lt;property name="sessionFactory" ref="sessionFactory"/&gt;
     &lt;/object&gt;
@@ -249,7 +266,7 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
 &lt;/objects&gt;</programlisting>
 
       <para>The
-      <classname>AbstractDependencyInjectionSpringContextTests</classname>
+      <literal>AbstractDependencyInjectionSpringContextTests</literal>
       classes uses <link linkend="objects-factory-autowire"><emphasis>autowire
       by type</emphasis></link>. Thus if you have multiple object definitions
       of the same type, you cannot rely on this approach for those particular
@@ -260,13 +277,13 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
 
       <para>If you don't want dependency injection applied to your test cases,
       simply don't declare any set properties. Alternatively, you can extend
-      the <classname>AbstractSpringContextTests</classname> - the root of the
+      the <literal>AbstractSpringContextTests</literal> - the root of the
       class hierarchy in the <literal>Spring.Testing.NUnit</literal>
       namespace. It merely contains convenience methods to load Spring
       contexts, and performs no Dependency Injection of the test
       fixture.</para>
 
-      <section id="testing-fixture-di-field">
+      <section xml:id="testing-fixture-di-field">
         <title>Field level injection</title>
 
         <para>If, for whatever reason, you don't fancy having setter
@@ -276,8 +293,8 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
         Spring XML configuration does not need to change, merely the test
         fixture).</para>
 
-        <programlisting>[TestFixture]
-public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyInjectionSpringContextTests</emphasis>  {
+        <programlisting language="csharp">[TestFixture]
+public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTests{
 
     public HibernateTitleDaoTests() {
     	<lineannotation>   // switch on field level injection</lineannotation>
@@ -307,7 +324,7 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
       </section>
     </section>
 
-    <section id="testing-tx">
+    <section xml:id="testing-tx">
       <title>Transaction management</title>
 
       <para>One common issue in tests that access a real database is their
@@ -317,23 +334,23 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
       data - cannot be done (or verified) outside a transaction.</para>
 
       <para>The
-      <classname>AbstractTransactionalDbProviderSpringContextTests</classname>
+      <literal>AbstractTransactionalDbProviderSpringContextTests</literal>
       superclass (and subclasses) exist to meet this need. By default, they
       create and roll back a transaction for each test. You simply write code
       that can assume the existence of a transaction. If you call
       transactionally proxied objects in your tests, they will behave
       correctly, according to their transactional semantics.</para>
 
-      <para><classname>AbstractTransactionalSpringContextTests</classname>
-      depends on a <classname>IPlatformTransactionManager</classname> object
+      <para><literal>AbstractTransactionalSpringContextTests</literal>
+      depends on a <literal>IPlatformTransactionManager</literal> object
       being defined in the application context. The name doesn't matter, due
       to the use of autowire by type.</para>
 
       <para>Typically you will extend the subclass,
-      <classname>AbstractTransactionalDbProviderSpringContextTests</classname>.
-      This also requires that a <classname>DbProvider</classname> object
+      <literal>AbstractTransactionalDbProviderSpringContextTests</literal>.
+      This also requires that a <literal>DbProvider</literal> object
       definition - again, with any name - be present in the configurations. It
-      creates an <classname>AdoTemplate</classname> instance variable that is
+      creates an <literal>AdoTemplate</literal> instance variable that is
       useful for convenient querying, and provides handy methods to delete the
       contents of selected tables (remember that the transaction will roll
       back by default, so this is safe to do).</para>
@@ -341,7 +358,7 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
       <para>If you want a transaction to commit - unusual, but occasionally
       useful when you want a particular test to populate the database - you
       can call the <methodname>SetComplete()</methodname> method inherited
-      from <classname>AbstractTransactionalSpringContextTests</classname>.
+      from <literal>AbstractTransactionalSpringContextTests</literal>.
       This will cause the transaction to commit instead of roll back.</para>
 
       <para>There is also convenient ability to end a transaction before the
@@ -357,27 +374,27 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
       operation of the UI through your NUnit test suite.</para>
     </section>
 
-    <section id="testing-superclasses">
+    <section xml:id="testing-superclasses">
       <title>Convenience variables</title>
 
       <para>When you extend the
-      <classname>AbstractTransactionalDbProviderSpringContextTests</classname>
+      <literal>AbstractTransactionalDbProviderSpringContextTests</literal>
       class you will have access to the following <literal>protected</literal>
       instance variables:</para>
 
       <itemizedlist>
         <listitem>
           <para><literal>applicationContext</literal> (a
-          <interfacename>IConfigurableApplicationContext</interfacename>):
+          <literal>IConfigurableApplicationContext</literal>):
           inherited from the
-          <classname>AbstractDependencyInjectionSpringContextTests</classname>
+          <literal>AbstractDependencyInjectionSpringContextTests</literal>
           superclass. Use this to perform explicit object lookup, or test the
           state of the context as a whole.</para>
         </listitem>
 
         <listitem>
           <para><literal>adoTemplate</literal>: inherited from
-          <classname>AbstractTransactionalDbProviderSpringContextTests</classname>.
+          <literal>AbstractTransactionalDbProviderSpringContextTests</literal>.
           Useful for querying to confirm state. For example, you might query
           before and after testing application code that creates an object and
           persists it using an ORM tool, to verify that the data appears in
@@ -385,7 +402,7 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
           of the same transaction.) You will need to tell your ORM tool to
           'flush' its changes for this to work correctly, for example using
           the <methodname>Flush()</methodname> method on NHibernate's
-          <classname>ISession</classname> interface.</para>
+          <literal>ISession</literal> interface.</para>
         </listitem>
       </itemizedlist>
 
@@ -394,10 +411,10 @@ public class HibernateTitleDaoTests <emphasis role="bold">: AbstractDependencyIn
       in many tests</para>
     </section>
 
-    <section id="testing-examples-petclinic"></section>
+    <section xml:id="testing-examples-petclinic"></section>
   </section>
 
-  <section id="testing-resources">
+  <section xml:id="testing-resources">
     <title>Further Resources</title>
 
     <para>This section contains links to further resources about testing in

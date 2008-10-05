@@ -1,5 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<chapter id="xml-config-reference">
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter id="xml-config-reference" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>XML Configuration Reference</title>
 
   <sect1>
@@ -56,7 +73,7 @@
         <para>Find below an example of defining an object that has no
         dependencies.</para>
 
-        <programlisting>&lt;object name="service" <co
+        <programlisting language="myxml">&lt;object name="service" <co
             id="xcf-plain-vanilla-object-name" />
         type="Example.Foo, FooAssembly"/&gt; <co
             id="xcf-plain-vanilla-object-type" /> <co
@@ -94,7 +111,7 @@
 
              of this chapter and 
 
-            <xref linkend="objects-factory-modes" />
+            <xref linkend="objects-factory-scopes" />
 
              in the reference documentation). 
           </callout>
@@ -102,8 +119,8 @@
 
         <para>Defining this object in one's context and then retrieving said
         object from said context will result in the creation of an instance of
-        the <classname>Foo</classname> class. The default constructor of the
-        <classname>Foo</classname> class will be invoked, and since no
+        the <literal>Foo</literal> class. The default constructor of the
+        <literal>Foo</literal> class will be invoked, and since no
         properties and other other configuration elementts are present, the
         resulting object will be returned as is. The simple case really is as
         simple as that.</para>
@@ -111,11 +128,11 @@
         <para>Further (un-annotated) examples of defining an object that has
         no dependencies can be found below...</para>
 
-        <programlisting>&lt;object id="anException" type="System.ArgumentException, Mscorlib"/&gt;</programlisting>
+        <programlisting language="myxml">&lt;object id="anException" type="System.ArgumentException, Mscorlib"/&gt;</programlisting>
 
-        <programlisting>&lt;object id="anEmptyList" type="System.Collections.ArrayList, Mscorlib"/&gt;</programlisting>
+        <programlisting language="myxml">&lt;object id="anEmptyList" type="System.Collections.ArrayList, Mscorlib"/&gt;</programlisting>
 
-        <programlisting>&lt;object id="anSqlCommand" type="System.Data.SqlClient.SqlCommand, System.Data"/&gt;</programlisting>
+        <programlisting language="myxml">&lt;object id="anSqlCommand" type="System.Data.SqlClient.SqlCommand, System.Data"/&gt;</programlisting>
       </sect3>
 
       <sect3>
@@ -140,16 +157,16 @@
 
       <para></para>
 
-      <sect3 id="xcf-primitives">
+      <sect3 xml:id="xcf-primitives">
         <title>Primitives</title>
 
         <para>This section details the various configuration options available
         for injecting, handoing, and otherwise defining the classic primitive
-        types. The <classname>string</classname> and
-        <classname>date</classname> types are not primitives, but they are
+        types. The <literal>string</literal> and
+        <literal>date</literal> types are not primitives, but they are
         described here nevertheless.</para>
 
-        <para>Spring.NET uses the <classname>TypeConverter</classname>
+        <para>Spring.NET uses the <literal>TypeConverter</literal>
         mechanism that is part of the SDK to handle the conversion from string
         values in one's XML configuration to the appropriate type. This
         reference does not go into detail about this mechanism, so you may
@@ -157,7 +174,7 @@
         if you are having type conversion issues... <xref
         linkend="objects-objects-conversion" /></para>
 
-        <sect4 id="xcf-numbers">
+        <sect4 xml:id="xcf-numbers">
           <title>Numbers</title>
 
           <para>This section describes configuring the various numeric types
@@ -168,7 +185,7 @@
           <para>Find below the class definition that is used to illustrate
           configuring numeric values in the following examples.</para>
 
-          <programlisting>[C#]
+          <programlisting language="csharp">[C#]
 namespace Example
 {
     public class Gauge
@@ -188,18 +205,18 @@ namespace Example
     }    
 }</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="setting" value="213"/&gt;
 &lt;/object&gt;</programlisting>
 
           <para>We can also use any of the normal supported conventions (such
           as hexadecimal) to set values, as shown below.</para>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="setting" value="0x10"/&gt;
 &lt;/object&gt;</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="sensitivity" value="31000.00"/&gt;
 &lt;/object&gt;</programlisting>
 
@@ -217,7 +234,7 @@ namespace Example
           <para>Find below the class definition that is used to illustrate
           configuring date values in the following examples.</para>
 
-          <programlisting>[C#]
+          <programlisting language="csharp">[C#]
 namespace Example
 {
     public class Gauge
@@ -231,20 +248,20 @@ namespace Example
     }    
 }</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="lastChecked" value=""/&gt;
 &lt;/object&gt;</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="lastChecked" value=""/&gt;
 &lt;/object&gt;</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="lastChecked" value=""/&gt;
 &lt;/object&gt;</programlisting>
         </sect4>
 
-        <sect4 id="xcf-booleans">
+        <sect4 xml:id="xcf-booleans">
           <title>Booleans</title>
 
           <para>Configuring boolean values in one's configuration file (s) is
@@ -266,7 +283,7 @@ namespace Example
           <para>Find below the class definition that is used to illustrate
           configuring boolean values in the following examples.</para>
 
-          <programlisting>[C#]
+          <programlisting language="csharp">[C#]
 namespace Example
 {
     public class Gauge
@@ -280,11 +297,11 @@ namespace Example
     }    
 }</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="IsSwitchedOn" value="true"/&gt;
 &lt;/object&gt;</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="IsSwitchedOn" value="false"/&gt;
 &lt;/object&gt;</programlisting>
 
@@ -297,43 +314,43 @@ namespace Example
           <para>If you wanted to use different values for the
           <literal>true</literal> and <literal>false</literal> string values
           (perhaps <literal>on</literal> and <literal>off</literal> values in
-          the case of the preceding <classname>Gauge</classname> example), you
-          would need to register a custom <classname>TypeConverter</classname>
+          the case of the preceding <literal>Gauge</literal> example), you
+          would need to register a custom <literal>TypeConverter</literal>
           implementation (see <xref
           linkend="objects-objects-conversion" />).</para>
         </sect4>
 
-        <sect4 id="xcf-strings">
+        <sect4 xml:id="xcf-strings">
           <title>Strings</title>
 
-          <para>Unsurprisingly, <classname>String</classname> values are the
+          <para>Unsurprisingly, <literal>String</literal> values are the
           easiest to configure. Consider the following example of strings that
           are defined as top level objects...</para>
 
-          <programlisting>&lt;object id="supportTeamEmail" type="string"&gt;
+          <programlisting language="myxml">&lt;object id="supportTeamEmail" type="string"&gt;
     &lt;constructor-arg index="0" value="support@my.company.com"/&gt;
 &lt;/object&gt;</programlisting>
 
-          <programlisting>&lt;object id="projectManagerEmail" type="string"&gt;
+          <programlisting language="myxml">&lt;object id="projectManagerEmail" type="string"&gt;
     &lt;constructor-arg index="0" value="projectManager@my.company.com"/&gt;
 &lt;/object&gt;</programlisting>
 
           <para>The <literal>index="0"</literal> attribute value pair of the
           <literal>constructor-arg</literal> element is required so that the
-          correct constructor of the <classname>String</classname> class can
+          correct constructor of the <literal>String</literal> class can
           be invoked... don't forget to put it in. (If you do forget to put it
           in, then a not-very-helpful
-          <classname>UnsatisfiedDependencyException</classname> will be thrown
+          <literal>UnsatisfiedDependencyException</literal> will be thrown
           by the Spring.NET container).</para>
         </sect4>
 
-        <sect4 id="xcf-enums">
+        <sect4 xml:id="xcf-enums">
           <title>Enumerations</title>
 
           <para>Find below the class definition and XML snippets that
           illustrate the configuration of enumerations.</para>
 
-          <programlisting>[C#]
+          <programlisting language="csharp">[C#]
 namespace Example
 {
     public enum RunningMode
@@ -356,11 +373,11 @@ namespace Example
     }    
 }</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="RunMode" value="Starting"/&gt;
 &lt;/object&gt;</programlisting>
 
-          <programlisting>&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
+          <programlisting language="myxml">&lt;object id="aGauge" type="Example.Gauge, FooAssembly"&gt;
     &lt;property name="RunMode" value="SwitchingOff"/&gt;
 &lt;/object&gt;</programlisting>
 
@@ -431,13 +448,13 @@ namespace Example
 
       <para></para>
 
-      <sect3 id="xcf-singleton">
+      <sect3 xml:id="xcf-singleton">
         <title>Singleton</title>
 
         <para></para>
       </sect3>
 
-      <sect3 id="xcf-prototype">
+      <sect3 xml:id="xcf-prototype">
         <title>Prototype</title>
 
         <para></para>
@@ -455,7 +472,7 @@ namespace Example
 
       <para>Perhaps unsurprisingly, implementations of the classic Factory
       pattern can be found all over the Spring.NET codebase... indeed, the
-      core <classname>IApplicationContext</classname> class is a compelling
+      core <literal>IApplicationContext</literal> class is a compelling
       example of a factory implementation (albeit a very sophisticated
       example). Spring.NET's support for the factory pattern extends into two
       distinct areas... supporting factories that are external to the
@@ -463,8 +480,8 @@ namespace Example
 
       <para>External factory classes would include any factory classes that
       you may have written: examples of this would include (perhaps)
-      <classname>IWiGFactory</classname> (to create
-      <classname>IWiG</classname> implementations), etc. You can integrate any
+      <literal>IWiGFactory</literal> (to create
+      <literal>IWiG</literal> implementations), etc. You can integrate any
       such existing factory classes directly into the Spring.NET container
       using the factory method support provided by the Spring IoC container.
       Examples of such integration are are provided below, but do see <xref
@@ -474,15 +491,15 @@ namespace Example
 
       <para>Spring.NET also has the notion of a special <emphasis>Factory
       Object</emphasis> (and this notion is encapsulated by the
-      <classname>IFactoryObject</classname> interface). The
-      <classname>IFactoryObject</classname> interface is (unsurprisingly) a
+      <literal>IFactoryObject</literal> interface). The
+      <literal>IFactoryObject</literal> interface is (unsurprisingly) a
       factory for creating one or more objects. Please do read <xref
       linkend="objects-factory-class-instance-factory-method" /> for a
-      comprehensive explanation of the <classname>IFactoryObject</classname>
+      comprehensive explanation of the <literal>IFactoryObject</literal>
       interface and the Spring.NET container's special treatment of objects
       that implement said interface. This section of the documentation will
       show some example configuration for all (well, most) of the
-      <classname>IFactoryObject</classname> implementations that come provided
+      <literal>IFactoryObject</literal> implementations that come provided
       out of the box with every Spring.NET release.</para>
 
       <sect3>
@@ -495,34 +512,34 @@ namespace Example
         <title>Factory Objects</title>
 
         <para>This section of the documentation presents examples for most of
-        the <classname>IFactoryObject</classname> implementations that come
+        the <literal>IFactoryObject</literal> implementations that come
         out of the box with every Spring.NET release. A notable exception to
-        this catalogue of <classname>IFactoryObject</classname> configuration
+        this catalogue of <literal>IFactoryObject</literal> configuration
         examples is the AOP-specific
-        <classname>ProxyFactoryObject</classname>... see <xref
+        <literal>ProxyFactoryObject</literal>... see <xref
         linkend="aop-quickstart" /> for more details regarding that particular
-        <classname>IFactoryObject</classname> implementation.</para>
+        <literal>IFactoryObject</literal> implementation.</para>
 
-        <para>Most (if not all) of the <classname>IFactoryObject</classname>
+        <para>Most (if not all) of the <literal>IFactoryObject</literal>
         implementations referenced in the following configuration examples can
         be found in the <literal>Spring.Objects.Factory.Config</literal>
         namespace; do also consult the attendant API documentation (because
-        most of the <classname>IFactoryObject</classname> implementations
+        most of the <literal>IFactoryObject</literal> implementations
         carry configuration examples specific to the objects that they
         create).</para>
 
         <sect4>
           <title>DelegateFactoryObject</title>
 
-          <para>One can use the <classname>DelegateFactoryObject</classname>
+          <para>One can use the <literal>DelegateFactoryObject</literal>
           to (unsurprisingly) create and configure
-          <classname>Delegate</classname> objects. One trenchant use case for
-          this <classname>IFactoryObject</classname> (and indeed the very
+          <literal>Delegate</literal> objects. One trenchant use case for
+          this <literal>IFactoryObject</literal> (and indeed the very
           reason that prompted it's creation) is to create declaratively a
-          <classname>ConfigListener</classname> delegate for use with the
-          IBatis.NET project's <classname>SqlMapper</classname> class. This
-          approach (of using the <classname>DelegateFactoryObject</classname>)
-          allows one to keep all of one's <classname>SqlMapper</classname>
+          <literal>ConfigListener</literal> delegate for use with the
+          IBatis.NET project's <literal>SqlMapper</literal> class. This
+          approach (of using the <literal>DelegateFactoryObject</literal>)
+          allows one to keep all of one's <literal>SqlMapper</literal>
           configuration together, nice and tidy, in the one place.</para>
 
           <para>So lets say we have a service object that we need to inject
@@ -531,7 +548,7 @@ namespace Example
           that supplies the method that will be passed to the delegate when it
           is created can be found below.</para>
 
-          <programlisting>[C#]
+          <programlisting language="csharp">[C#]
 namespace Example		
 {
     public delegate void GaugeCallback (object sender, GuageEventArgs e);
@@ -560,11 +577,11 @@ namespace Example
 }</programlisting>
 
           <para>The attendant configuration to supply an instance of the
-          <classname>Gauge</classname> class with a configured
-          <classname>GuageCallback</classname> delegate would look like
+          <literal>Gauge</literal> class with a configured
+          <literal>GuageCallback</literal> delegate would look like
           so...</para>
 
-          <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt;
+          <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
     &lt;object id="gauge" type="Example.Gauge, FooAssembly"&gt;
 		&lt;property name="callback"&gt;
 			&lt;object type="Spring.Objects.Factory.Config.DelegateFactoryObject"&gt;

@@ -264,14 +264,3 @@ div.warning * td {
 	font-size: 100%;
 }
 
-.programlisting .interfacename,
-.programlisting .literal,
-.programlisting .classname {
-    font-size: 95%;
-}
-
-/* everything in a <lineannotation/> is displayed in a nice green, comment-like color */
-.programlisting * .lineannotation,
-.programlisting * .lineannotation * {
-	color: green;
-}

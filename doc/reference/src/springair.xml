@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="springair">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="springair" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>SpringAir - Reference Application</title>
 
   <sect1>
@@ -87,7 +104,7 @@
     instantiate the IoC container. The important parts of that configuration
     are shown below</para>
 
-    <programlisting>&lt;spring&gt;
+    <programlisting language="myxml">&lt;spring&gt;
     &lt;parsers&gt;
         &lt;parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" /&gt;
     &lt;/parsers&gt;
@@ -142,7 +159,7 @@
     <para>The XML configuration to configure the TripForm form is shown
     below</para>
 
-    <programlisting>      &lt;object type="TripForm.aspx" parent="standardPage"&gt;
+    <programlisting language="myxml">      &lt;object type="TripForm.aspx" parent="standardPage"&gt;
         &lt;property name="BookingAgent" ref="bookingAgent" /&gt;
         &lt;property name="AirportDao" ref="airportDao" /&gt;
         &lt;property name="TripValidator" ref="tripValidator" /&gt;
@@ -172,7 +189,7 @@
     family of methods that are overridden to support the bi-directional data
     binding are listed below.</para>
 
-    <programlisting>    protected override void InitializeModel()
+    <programlisting language="csharp">    protected override void InitializeModel()
     {
         trip = new Trip();
         trip.Mode = TripMode.RoundTrip;
@@ -215,7 +232,7 @@
     below. Notice how much cleaner and more business focused the code reads
     than if you were using standard ASP.NET APIs.</para>
 
-    <programlisting>    protected void SearchForFlights(object sender, EventArgs e)
+    <programlisting language="csharp">    protected void SearchForFlights(object sender, EventArgs e)
     {
         if (Validate(trip, tripValidator))
         {
@@ -234,7 +251,7 @@
     defined declaratively in the XML configuration file and is shown
     below.</para>
 
-    <programlisting>   &lt;v:group id="tripValidator"&gt;
+    <programlisting language="myxml">   &lt;v:group id="tripValidator"&gt;
 
     &lt;v:required id="departureAirportValidator" test="StartingFrom.AirportCode"&gt;
 				  &lt;v:message id="error.departureAirport.required" providers="departureAirportErrors, validationSummary"/&gt;
@@ -290,7 +307,7 @@
     methods. Spring can expose this object as a web service by declaring the
     following XML defined in the top level Config/Services.xml file</para>
 
-    <programlisting>  &lt;object id="bookingAgentWebService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
+    <programlisting language="myxml">  &lt;object id="bookingAgentWebService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
     &lt;property name="TargetName" value="bookingAgent"/&gt;
     &lt;property name="Name" value="BookingAgent"/&gt;
     &lt;property name="Namespace" value="http://SpringAir/WebServices"/&gt;

@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<project name="DocBook" default="help" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+
+  <property name="project.basedir" value="${project::get-base-directory()}" />
+
+  <target name="help">
+    <echo message="Avalaible tasks :" />
+    <echo message=" all" />
+    <echo message=" html" />
+    <echo message=" html-help" />
+    <echo message=" pdf" />
+  </target>
+
+  <target name="all" depends="html,html-help,pdf"/>
+
+  <target name="html">
+    <echo message="Generating HTML format..." />
+    <!-- docbook -> html -->
+    <exec program="java" commandline='-cp "lib\saxon6-5-5\saxon.jar;lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet src/index.xml "lib\docbook-xsl-snapshot\html\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"' />
+    <!-- copy css to html dir -->
+    <copy todir="${project.basedir}\html\styles">
+      <fileset basedir="${project.basedir}\src\styles">
+        <include name="**"/>
+      </fileset>
+    </copy>
+    <!-- copy images to html dir -->
+    <copy todir="${project.basedir}\html\images">
+      <fileset basedir="${project.basedir}\src\images">
+        <include name="*.gif"/>
+        <include name="*.svg"/>
+        <include name="*.jpg"/>
+        <include name="*.png"/>
+      </fileset>
+    </copy>
+    <copy todir="${project.basedir}\html\images">
+      <fileset basedir="${project.basedir}\lib\docbook-xsl-snapshot\images">
+        <include name="**"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="html-help">
+    <echo message="Generating HTML Help format..." />
+    <!-- docbook -> HTML Help Workshop project (.hhp) -->
+    <exec program="java" commandline='-cp "lib\saxon6-5-5\saxon.jar;lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet src/index.xml "lib\docbook-xsl-snapshot\htmlhelp\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"' />
+    <!-- copy css to html dir -->
+    <copy todir="${project.basedir}\htmlhelp\styles">
+      <fileset basedir="${project.basedir}\src\styles">
+        <include name="**"/>
+      </fileset>
+    </copy>
+    <!-- copy images to htmlhelp dir -->
+    <copy todir="${project.basedir}\htmlhelp\images">
+      <fileset basedir="${project.basedir}\src\images">
+        <include name="*.gif"/>
+        <include name="*.svg"/>
+        <include name="*.jpg"/>
+        <include name="*.png"/>
+      </fileset>
+    </copy>
+    <copy todir="${project.basedir}\htmlhelp\images">
+      <fileset basedir="${project.basedir}\lib\docbook-xsl-snapshot\images">
+        <include name="**"/>
+      </fileset>
+    </copy>
+    <!-- HTML Help Workshop project (.hhp) -> HTML Help file (.chm) -->
+    <!--<readregistry property="hhc.path" key="SOFTWARE\Microsoft\HTML Help Workshop\InstallDir" hive="CurrentUser" />-->
+    <exec program="C:\Program Files\HTML Help Workshop\hhc.exe" commandline="${project.basedir}\htmlhelp\htmlhelp.hhp" failonerror="false" />
+    <!-- cleanup -->
+    <delete>
+      <fileset basedir="${project.basedir}\htmlhelp" >
+        <include name="**/**"/>
+        <exclude name="*.chm"/>
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="pdf">
+    <echo message="Generating PDF format..." />
+    <!-- docbook -> fop -->
+    <exec program="java" commandline='-cp "lib\saxon6-5-5\saxon.jar;lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet -o pdf/spring-net-reference.fo src/index.xml "lib\docbook-xsl-snapshot\fo\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"'/>
+    <!-- fop -> pdf -->
+    <exec program="${project.basedir}\lib\fop-0.95\fop.bat" commandline='-fo "${project.basedir}\pdf\spring-net-reference.fo" -pdf "${project.basedir}\pdf\spring-net-reference.pdf"'/>
+    <!-- Delete temporary fop file -->
+    <delete file="${project.basedir}\pdf\spring-net-reference.fo"/>
+  </target>
+
+</project>

@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="quartz-quickstart">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="quartz-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Quartz QuickStart</title>
 
   <section>
@@ -21,22 +38,22 @@
     <para>The full details of Quartz are outside the scope of this quickstart
     but here is 'quick tour for the impatient' of the main classes and
     interfaces used in Quartz so you can get your sea legs. A Quartz
-    <classname>IJob</classname> interface represents the task you would like
+    <literal>IJob</literal> interface represents the task you would like
     to execute. You either directly implement Quartz's
-    <classname>IJob</classname> interface or a convenience base class. The
-    Quartz <classname>Trigger</classname> controls when a job is executed, for
+    <literal>IJob</literal> interface or a convenience base class. The
+    Quartz <literal>Trigger</literal> controls when a job is executed, for
     example in the wee hours of the morning every weekday . This would be done
-    using Quartz's <classname>CronTrigger</classname> implementation.
+    using Quartz's <literal>CronTrigger</literal> implementation.
     Instances of your job are created every time the trigger fires. As such,
     in order to pass information between different job instances you stash
     data away in a hashtable that gets passed to the each Job instance upon
-    its creation. Quartz's <classname>JobDetail</classname> class combines the
-    <classname>IJob</classname> and this hashtable of data. Instead of the
-    standard <classname>System.Collections.Hashtable</classname> the class
-    <classname>JobDataMap</classname> is used. Triggers are registered with a
-    Quartz <classname>IScheduler</classname> implementation that manages the
+    its creation. Quartz's <literal>JobDetail</literal> class combines the
+    <literal>IJob</literal> and this hashtable of data. Instead of the
+    standard <literal>System.Collections.Hashtable</literal> the class
+    <literal>JobDataMap</literal> is used. Triggers are registered with a
+    Quartz <literal>IScheduler</literal> implementation that manages the
     overall execution of the triggers and jobs. The
-    <classname>StdSchedulerFactory</classname> implementation is generally
+    <literal>StdSchedulerFactory</literal> implementation is generally
     used.</para>
   </section>
 
@@ -44,7 +61,7 @@
     <title>Application Overview</title>
 
     <para>The sample application has two types of Jobs. One that inherits from
-    Spring's convenience base class <classname>QuartzJobObject</classname> and
+    Spring's convenience base class <literal>QuartzJobObject</literal> and
     another which does not inherit from any base class. The latter class is
     adapted by Spring to be a Job. Two triggers, one for each of the jobs, are
     created. These triggers are in turn registered with a scheduler. In each
@@ -55,13 +72,13 @@
   <section>
     <title>Standard job scheduling</title>
 
-    <para>The Spring base class <classname>QuartzJobObject</classname>
-    implements <classname>IJob</classname> and allows for your object's
+    <para>The Spring base class <literal>QuartzJobObject</literal>
+    implements <literal>IJob</literal> and allows for your object's
     properties to be set via values that are stored inside Quartz's
-    <classname>JobDataMap</classname> that is passed along each time your job
+    <literal>JobDataMap</literal> that is passed along each time your job
     is instantiated due a trigger firing. This class is shown below</para>
 
-    <programlisting>    public class ExampleJob : QuartzJobObject
+    <programlisting language="csharp">    public class ExampleJob : QuartzJobObject
     {
 
         private string userName;
@@ -79,16 +96,16 @@
 
     }</programlisting>
 
-    <para>The method <classname>ExecuteInternal</classname> is called when the
+    <para>The method <literal>ExecuteInternal</literal> is called when the
     trigger fires and is where you would put your business logic. The
-    <classname>JobExecutionContext</classname> passed in lets you access
+    <literal>JobExecutionContext</literal> passed in lets you access
     various pieces of information about the current job execution, such as the
     JobDataMap or information on when the next time the trigger will fire. The
-    <classname>ExampleJob</classname> is configured by creating a
-    <classname>JobDetail</classname> object as shown below in the following
+    <literal>ExampleJob</literal> is configured by creating a
+    <literal>JobDetail</literal> object as shown below in the following
     XML snippet taken from spring-objects.xml</para>
 
-    <programlisting>  &lt;object name="exampleJob" type="Spring.Scheduling.Quartz.JobDetailObject, Spring.Scheduling.Quartz"&gt;
+    <programlisting language="myxml">  &lt;object name="exampleJob" type="Spring.Scheduling.Quartz.JobDetailObject, Spring.Scheduling.Quartz"&gt;
     &lt;property name="JobType" value="Spring.Scheduling.Quartz.Example.ExampleJob, Spring.Scheduling.Quartz.Example" /&gt;
     &lt;!-- We can inject values through JobDataMap --&gt;
     &lt;property name="JobDataAsMap"&gt;
@@ -99,18 +116,18 @@
   &lt;/object&gt;</programlisting>
 
     <para>The dictionary property of the
-    <classname>JobDetailObject</classname>,
-    <classname>JobDataAsMap</classname>, is used to set the values of the
+    <literal>JobDetailObject</literal>,
+    <literal>JobDataAsMap</literal>, is used to set the values of the
     ExampleJob's properties. This will result in the ExampleJob being
     instantiated with it's UserName property value set to 'Alexandre' the
     first time the trigger fires.</para>
 
     <para>We then will schedule this job to be executed on 20 second
     increments of every minute as shown below using Spring's
-    <classname>CronTriggerObject</classname> which creates a Quartz
+    <literal>CronTriggerObject</literal> which creates a Quartz
     CronTrigger.</para>
 
-    <programlisting>  &lt;object id="cronTrigger" type="Spring.Scheduling.Quartz.CronTriggerObject, Spring.Scheduling.Quartz"&gt;
+    <programlisting language="myxml">  &lt;object id="cronTrigger" type="Spring.Scheduling.Quartz.CronTriggerObject, Spring.Scheduling.Quartz"&gt;
     &lt;property name="jobDetail" ref="exampleJob" /&gt;
     &lt;!-- run every 20 second of minute --&gt;
     &lt;property name="cronExpressionString" value="0/20 * * * * ?" /&gt;
@@ -119,7 +136,7 @@
     <para>Lastly, we schedule this trigger with the scheduler as shown
     below</para>
 
-    <programlisting>  &lt;object type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz"&gt;
+    <programlisting language="myxml">  &lt;object type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz"&gt;
     &lt;property name="triggers"&gt;
       &lt;list&gt;
         &lt;ref object="cronTrigger" /&gt;
@@ -141,7 +158,7 @@
     The AdminService class in the example demonstrates this functionality and
     is listed below.</para>
 
-    <programlisting>    public class AdminService
+    <programlisting language="csharp">    public class AdminService
     {
         private string userName;
 
@@ -157,12 +174,12 @@
     }</programlisting>
 
     <para>Note that it does not inherit from any base class. To instruct
-    Spring to create a <classname>JobDetail</classname> object for this method
+    Spring to create a <literal>JobDetail</literal> object for this method
     we use Spring's factory object class
-    <classname>MethodInvokingJobDetailFactoryObject</classname> as shown
+    <literal>MethodInvokingJobDetailFactoryObject</literal> as shown
     below</para>
 
-    <programlisting>  &lt;object id="adminService" type="Spring.Scheduling.Quartz.Example.AdminService, Spring.Scheduling.Quartz.Example"&gt;
+    <programlisting language="myxml">  &lt;object id="adminService" type="Spring.Scheduling.Quartz.Example.AdminService, Spring.Scheduling.Quartz.Example"&gt;
     &lt;!-- we inject straight to target object --&gt;
     &lt;property name="UserName" value="admin-service" /&gt;
   &lt;/object&gt;
@@ -174,14 +191,14 @@
   &lt;/object&gt;
 </programlisting>
 
-    <para>Note that <classname>AdminService</classname> object is configured
+    <para>Note that <literal>AdminService</literal> object is configured
     using Spring as you would do normally, without consideration for Quartz.
     The trigger associated with the jobDetail object is listed below. Also
     note that when using MethodInvokingJobDetailFactoryObject you can't use
     database persistence for Jobs. See the class documentation for additional
     details.</para>
 
-    <programlisting>  &lt;object id="simpleTrigger" type="Spring.Scheduling.Quartz.SimpleTriggerObject, Spring.Scheduling.Quartz"&gt;
+    <programlisting language="myxml">  &lt;object id="simpleTrigger" type="Spring.Scheduling.Quartz.SimpleTriggerObject, Spring.Scheduling.Quartz"&gt;
     &lt;!-- see the example of method invoking job above --&gt;
     &lt;property name="jobDetail" ref="jobDetail" /&gt;
     &lt;!-- 5 seconds --&gt;
@@ -200,7 +217,7 @@
     <para>This trigger can then be added to the scheduler's list of registered
     triggers as shown below.</para>
 
-    <programlisting>  &lt;object type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz"&gt;
+    <programlisting language="myxml">  &lt;object type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz"&gt;
     &lt;property name="triggers"&gt;
       &lt;list&gt;
         &lt;ref object="cronTrigger" /&gt;

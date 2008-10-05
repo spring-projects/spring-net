@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="data-quickstart">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="data-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Data Access QuickStart</title>
 
   <section>
@@ -14,40 +31,39 @@
     <para>The quick start contains pseudo DAO objects and a collection of
     NUnit tests to exercise them rather than a full blown application. To run
     the tests from within VS.NET install <ulink
-    url="http://www.testdriven.net/"><link
-    linkend="???">TestDriven.NET</link></ulink>, <ulink
+    url="http://www.testdriven.net/">TestDriven.NET</ulink>, <ulink
     url="http://www.jetbrains.com/resharper/">ReSharper</ulink>, or an
     equivalent . The listing of DAO classes and the parts of Spring.Data that
     they demonstrate is shown below.</para>
 
     <itemizedlist>
       <listitem>
-        <para><classname>CommandCallbackDao</classname> - Use of the
+        <para><literal>CommandCallbackDao</literal> - Use of the
         ICommandCallback and CommandCallbackDelegate</para>
       </listitem>
 
       <listitem>
-        <para><classname>ResultSetExtractorDao</classname> - Use of
+        <para><literal>ResultSetExtractorDao</literal> - Use of
         IResultSetExtractor and ResultSetExtractorDelegate</para>
       </listitem>
 
       <listitem>
-        <para><classname>RowCallbackDao</classname> - Use of IRowCallback and
+        <para><literal>RowCallbackDao</literal> - Use of IRowCallback and
         RowCallbackDelegate</para>
       </listitem>
 
       <listitem>
-        <para><classname>RowMapperDao</classname> - Use of IRowMapper and
+        <para><literal>RowMapperDao</literal> - Use of IRowMapper and
         RowMapperDelegate</para>
       </listitem>
 
       <listitem>
-        <para><classname>QueryForObject</classname> - Use of QueryForObject
+        <para><literal>QueryForObject</literal> - Use of QueryForObject
         method.</para>
       </listitem>
 
       <listitem>
-        <para><classname>StoredProcDao</classname> - Use of
+        <para><literal>StoredProcDao</literal> - Use of
         Spring.Data.Objects.StoredProcedure</para>
       </listitem>
     </itemizedlist>
@@ -63,7 +79,7 @@
       database connection string. The listing in
       DataQuickStart.GenericTemplate.ExampleTests.xml is shown below</para>
 
-      <programlisting>&lt;objects xmlns="http://www.springframework.net"
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
          xmlns:db="http://www.springframework.net/database"&gt;
 
   &lt;db:provider id="dbProvider" 
@@ -93,7 +109,7 @@
         which is responsible for performing data access operations. This is
         declared in ExampleTest.xml as shown below</para>
 
-        <programlisting>  &lt;object id="adoTemplate" type="Spring.Data.Generic.AdoTemplate, Spring.Data"&gt;
+        <programlisting language="myxml">  &lt;object id="adoTemplate" type="Spring.Data.Generic.AdoTemplate, Spring.Data"&gt;
     &lt;property name="DbProvider" ref="dbProvider"/&gt;
     &lt;property name="DataReaderWrapperType" value="Spring.Data.Support.NullMappingDataReader, Spring.Data"/&gt;
   &lt;/object&gt;
@@ -103,7 +119,7 @@
         previously defined. Also the property DataReaderWrapper is set to the
         NullMappingDataReader that ships with Spring. This provides convenient
         default values for null values returned from the database. To read
-        more about AdoTemplate, refer to the chapter, <link linkend="???">Data
+        more about AdoTemplate, refer to the chapter, <link linkend="ado">Data
         access using ADO.NET</link>.</para>
       </section>
     </section>
@@ -114,7 +130,7 @@
       <para>The code that exercises the use of a CommandCallback is shown
       below</para>
 
-      <programlisting>        [Test]
+      <programlisting language="csharp">        [Test]
         public void CallbackDaoTest()
         {
             CommandCallbackDao commandCallbackDao = ctx["commandCallbackDao"] as CommandCallbackDao;
@@ -124,7 +140,7 @@
 
       <para>The configuration of the CommandCallbackDao is shown below</para>
 
-      <programlisting>  &lt;object id="commandCallbackDao" type="Spring.DataQuickStart.Dao.GenericTemplate.CommandCallbackDao, Spring.DataQuickStart"&gt;
+      <programlisting language="myxml">  &lt;object id="commandCallbackDao" type="Spring.DataQuickStart.Dao.GenericTemplate.CommandCallbackDao, Spring.DataQuickStart"&gt;
     &lt;property name="AdoTemplate" ref="adoTemplate"/&gt;
   &lt;/object&gt;</programlisting>
 
@@ -134,7 +150,7 @@
       size of the result set returned etc. The implementation of the
       FindCountWithPostalCode is shown below</para>
 
-      <programlisting>        public virtual int FindCountWithPostalCodeWithDelegate(string postalCode)
+      <programlisting language="csharp">        public virtual int FindCountWithPostalCodeWithDelegate(string postalCode)
         {
             // Using anonymous delegates allows you to easily reference the
             // surrounding parameters for use with the DbCommand processing.

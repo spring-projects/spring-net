@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="resources">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="resources" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Resources</title>
 
-  <section id="objects-iresource">
+  <section xml:id="objects-iresource">
     <title>Introduction</title>
 
     <para>The <literal>IResource</literal> interface contained in the
     <literal>Spring.Core.IO</literal> namespace provides a common interface to
     describe and access data from diverse resource locations. This abstraction
-    lets you treat the <classname>InputStream</classname> from a file and from
+    lets you treat the <literal>InputStream</literal> from a file and from
     a URL in a polymorphic and protocol-independent manner... the .NET BCL
     does not provide such an abstraction. The <literal>IResource</literal>
     interface inherits from <literal>IInputStream</literal> that provides a
@@ -21,11 +38,11 @@
   </section>
 
   <section>
-    <title>The <interfacename>IResource</interfacename> interface</title>
+    <title>The <literal>IResource</literal> interface</title>
 
     <para>The IResource interface is shown below</para>
 
-    <programlisting>public interface IResource : IInputStreamSource
+    <programlisting language="csharp">public interface IResource : IInputStreamSource
 {
   bool IsOpen { get; }
 
@@ -61,7 +78,7 @@
             <entry><literal>InputStream</literal></entry>
 
             <entry>Inherited from IInputStream. Opens and returns a
-            <classname>System.IO.Stream</classname>. It is expected that each
+            <literal>System.IO.Stream</literal>. It is expected that each
             invocation returns a fresh Stream. It is the responsibility of the
             caller to close the stream.</entry>
           </row>
@@ -81,7 +98,7 @@
             cannot be read multiple times, and must be read once only and then
             closed to avoid resource leaks. Will be false for all usual
             resource implementations, with the exception of
-            <interfacename>InputStreamResource</interfacename>.</entry>
+            <literal>InputStreamResource</literal>.</entry>
           </row>
 
           <row>
@@ -100,7 +117,7 @@
           <row>
             <entry><literal>File</literal></entry>
 
-            <entry>Returns a <classname>System.IO.FileInfo</classname> for
+            <entry>Returns a <literal>System.IO.FileInfo</literal> for
             this resource if it can be resolved to an absolute file
             path.</entry>
           </row>
@@ -145,7 +162,7 @@
     <para>The Resource abstraction is used extensively in Spring itself, as an
     argument type in many method signatures when a resource is needed. Other
     methods in some Spring APIs (such as the constructors to various
-    <interfacename>IApplicationContext</interfacename> implementations), take
+    <literal>IApplicationContext</literal> implementations), take
     a String which is used to create a Resource appropriate to that context
     implementation</para>
 
@@ -206,7 +223,7 @@
 
            a wrapper around a raw 
 
-          <classname>System.IO.Stream</classname>
+          <literal>System.IO.Stream</literal>
 
            . Uri syntax is not supported. 
         </listitem>
@@ -227,37 +244,37 @@
       <title>Registering custom IResource implementations</title>
 
       <para>The configuration section handler,
-      <classname>ResourceHandlersSectionHandler</classname>, is used to
-      register any custom <interfacename>IResource</interfacename>
+      <literal>ResourceHandlersSectionHandler</literal>, is used to
+      register any custom <literal>IResource</literal>
       implementations you have created. In the configuration section you list
-      the type of <interfacename>IResource</interfacename> implementation and
+      the type of <literal>IResource</literal> implementation and
       the protocol prefix. Your custom
-      <interfacename>IResource</interfacename> implementation must provide a
+      <literal>IResource</literal> implementation must provide a
       constructor that takes a string as it's sole argument that represents
       the URI string. Refer to the SDK documentation for
-      <classname>ResourceHandlersSectionHandler</classname> for more
+      <literal>ResourceHandlersSectionHandler</literal> for more
       information. An example of the
-      <classname>ResourceHandlersSectionHandler</classname> is shown below for
-      a fictional <interfacename>IResource</interfacename> implementation that
+      <literal>ResourceHandlersSectionHandler</literal> is shown below for
+      a fictional <literal>IResource</literal> implementation that
       interfaces with a database.</para>
 
-      <programlisting>&lt;configuration&gt;
+      <programlisting language="myxml">&lt;configuration&gt;
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
 
       &lt;section name='context' type='Spring.Context.Support.ContextHandler, Spring.Core'/&gt;
 
-<emphasis role="bold">      &lt;section name="resourceHandlers" 
-               type="Spring.Context.Support.ResourceHandlersSectionHandler, Spring.Core"/&gt;</emphasis>
+      &lt;section name="resourceHandlers" 
+               type="Spring.Context.Support.ResourceHandlersSectionHandler, Spring.Core"/&gt;
 
     &lt;/sectionGroup&gt;
   &lt;/configSections&gt;
 
   &lt;spring&gt;
 
-<emphasis role="bold">    &lt;resourceHandlers&gt;
+    &lt;resourceHandlers&gt;
       &lt;handler protocol="db" type="MyCompany.MyApp.Resources.MyDbResource, MyAssembly"/&gt;
-    &lt;/resourceHandlers&gt;</emphasis>
+    &lt;/resourceHandlers&gt;
 
     &lt;context&gt;
       &lt;resource uri="db://user:pass@dbName/MyDefinitionsTable"/&gt;
@@ -269,21 +286,21 @@
   </section>
 
   <section>
-    <title>The <interfacename>IResourceLoader</interfacename></title>
+    <title>The <literal>IResourceLoader</literal></title>
 
     <para>To load resources given their Uri syntax, an implementation of the
-    <classname>IResourceLoader</classname> is used. The default implementation
-    is <classname>ConfigurableResourceLoader</classname>. Typically you will
+    <literal>IResourceLoader</literal> is used. The default implementation
+    is <literal>ConfigurableResourceLoader</literal>. Typically you will
     not need to access this class directly since the
-    <classname>IApplicationContext</classname> implements the
-    <classname>IResourceLoader</classname> interface that contains the single
+    <literal>IApplicationContext</literal> implements the
+    <literal>IResourceLoader</literal> interface that contains the single
     method <literal>IResource GetResource(string location)</literal>. The
     provided implementations of <literal>IApplicationContext</literal>
     delegate this method to an instance of
-    <classname>ConfigurableResourceLoader</classname> which supports the Uri
+    <literal>ConfigurableResourceLoader</literal> which supports the Uri
     protocols/schemes listed previously. If you do not specify a protocol then
     the file protocol is used. The following shows some sample
-    usage.<programlisting>IResource resource = appContext.GetResource("http://www.springframework.net/license.html");
+    usage.<programlisting language="csharp">IResource resource = appContext.GetResource("http://www.springframework.net/license.html");
 resource = appContext.GetResource("assembly://Spring.Core.Tests/Spring/TestResource.txt");
 resource = appContext.GetResource("https://sourceforge.net/");
 resource = appContext.GetResource("file:///C:/WINDOWS/ODBC.INI");
@@ -299,7 +316,7 @@ Console.WriteLine(reader.ReadToEnd());</programlisting> Other protocols can be
     <para>The <literal>CreateRelative</literal> method allows you to easily
     load resources based on a relative path name. In the case of relative
     assembly resources, the relative path navigates the namespace within an
-    assembly. For example: <programlisting>IResource res = new AssemblyResource("assembly://Spring.Core.Tests/Spring/TestResource.txt");
+    assembly. For example: <programlisting language="csharp">IResource res = new AssemblyResource("assembly://Spring.Core.Tests/Spring/TestResource.txt");
 IResource res2 = res.CreateRelative("./IO/TestIOResource.txt");</programlisting>
     This loads the resource <literal>TestResource.txt</literal> and then
     navigates to the <literal>Spring.Core.IO</literal> namespace and loads the
@@ -307,14 +324,14 @@ IResource res2 = res.CreateRelative("./IO/TestIOResource.txt");</programlisting>
   </section>
 
   <section>
-    <title>The <interfacename>IResourceLoaderAware</interfacename>
+    <title>The <literal>IResourceLoaderAware</literal>
     interface</title>
 
-    <para>The <interfacename>IResourceLoaderAware</interfacename> interface is
+    <para>The <literal>IResourceLoaderAware</literal> interface is
     a special marker interface, identifying objects that expect to be provided
-    with a <interfacename>IResourceLoader</interfacename> reference.</para>
+    with a <literal>IResourceLoader</literal> reference.</para>
 
-    <programlisting>public interface IResourceLoaderAware
+    <programlisting language="csharp">public interface IResourceLoaderAware
 {
   IResourceLoader ResourceLoader
   {
@@ -324,29 +341,29 @@ IResource res2 = res.CreateRelative("./IO/TestIOResource.txt");</programlisting>
 }</programlisting>
 
     <para>When a class implements
-    <interfacename>IResourceLoaderAware</interfacename> and is deployed into
+    <literal>IResourceLoaderAware</literal> and is deployed into
     an application context (as a Spring-managed object), it is recognized as
-    <interfacename>IResourceLoaderAware</interfacename> by the application
+    <literal>IResourceLoaderAware</literal> by the application
     context. The application context will then invoke the ResourceLoader
     property, supplying itself as the argument (remember, all application
     contexts in Spring implement the
-    <interfacename>IResourceLoader</interfacename> interface).</para>
+    <literal>IResourceLoader</literal> interface).</para>
 
     <para>Of course, since an
-    <interfacename>IApplicationContext</interfacename> is a
-    <interfacename>IResourceLoader</interfacename>, the object could also
-    implement the <interfacename>IApplicationContextAware</interfacename>
+    <literal>IApplicationContext</literal> is a
+    <literal>IResourceLoader</literal>, the object could also
+    implement the <literal>IApplicationContextAware</literal>
     interface and use the supplied application context directly to load
     resources, but in general, it's better to use the specialized
-    <interfacename>IResourceLoader</interfacename> interface if that's all
+    <literal>IResourceLoader</literal> interface if that's all
     that's needed. The code would just be coupled to the resource loading
     interface, which can be considered a utility interface, and not the whole
-    Spring <interfacename>IApplicationContext</interfacename>
+    Spring <literal>IApplicationContext</literal>
     interface.</para>
   </section>
 
   <section>
-    <title>Application contexts and <interfacename>IResource</interfacename>
+    <title>Application contexts and <literal>IResource</literal>
     paths</title>
 
     <para>An application context constructor (for a specific application
@@ -355,7 +372,7 @@ IResource res2 = res.CreateRelative("./IO/TestIOResource.txt");</programlisting>
     of the context. For example, you can create an XmlApplicationContext from
     two resources as follows:</para>
 
-    <programlisting>IApplicationContext context = new XmlApplicationContext(
+    <programlisting language="csharp">IApplicationContext context = new XmlApplicationContext(
 	"file://objects.xml", "assembly://MyAssembly/MyProject/objects-dal-layer.xml");
 </programlisting>
   </section>

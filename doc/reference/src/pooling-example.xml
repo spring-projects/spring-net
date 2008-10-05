@@ -60,12 +60,10 @@
     <para>
     In our case, as already said, we want to to implement a pool 
     of <literal>QueuedExecutor</literal>. Ok, here the declaration:   
-    <programlisting format='linespecific' xml:space='preserve'>
-public class QueuedExecutorPoolableFactory : IPoolableObjectFactory
+    <programlisting language="csharp">public class QueuedExecutorPoolableFactory : IPoolableObjectFactory
 {</programlisting>
     the first task a factory should do is to create objects:
-    <programlisting format='linespecific' xml:space='preserve'>
-object IPoolableObjectFactory.MakeObject()
+    <programlisting language="csharp">object IPoolableObjectFactory.MakeObject()
 {            
     // to actually make this work as a pooled executor
     // use a bounded queue of capacity 1.
@@ -76,8 +74,7 @@ object IPoolableObjectFactory.MakeObject()
     return new QueuedExecutor(new BoundedBuffer(1));
 }</programlisting>
     and should be also able to destroy them:
-    <programlisting format='linespecific' xml:space='preserve'>
-void IPoolableObjectFactory.DestroyObject(object o)
+    <programlisting language="csharp">void IPoolableObjectFactory.DestroyObject(object o)
 {
     // ah, self documenting code:
     // Here you can see that we decided to let the 
@@ -90,8 +87,7 @@ void IPoolableObjectFactory.DestroyObject(object o)
     When an object is taken from the pool, to satisfy a client request,
     may be the object should be activated. We can possibly implement the
     activation like this:
-    <programlisting format='linespecific' xml:space='preserve'>
-void IPoolableObjectFactory.ActivateObject(object o)
+    <programlisting language="csharp">void IPoolableObjectFactory.ActivateObject(object o)
 {
     QueuedExecutor executor = o as QueuedExecutor;
     executor.Restart();
@@ -113,8 +109,7 @@ void IPoolableObjectFactory.ActivateObject(object o)
     </para>
     </footnote>).
     Here we check that the worker thread exists:
-    <programlisting format='linespecific' xml:space='preserve'>
-bool IPoolableObjectFactory.ValidateObject(object o)
+    <programlisting language="csharp">bool IPoolableObjectFactory.ValidateObject(object o)
 {
     QueuedExecutor executor = o as QueuedExecutor;
     return executor.Thread != null;
@@ -124,16 +119,14 @@ bool IPoolableObjectFactory.ValidateObject(object o)
     Passivation, symmetrical to activation, is the process a pooled 
     object is subject to when the object is returned to the pool. In our 
     case we simply do nothing:
-    <programlisting format='linespecific' xml:space='preserve'>
-void IPoolableObjectFactory.PassivateObject(object o)
+    <programlisting language="csharp">void IPoolableObjectFactory.PassivateObject(object o)
 {
 }</programlisting>
     </para>
     <para>
     At this point, creating a pool is simply a matter of creating an 
     <literal>SimplePool</literal> as in:
-    <programlisting format='linespecific' xml:space='preserve'>
-pool = new SimplePool(new QueuedExecutorPoolableFactory(), size);</programlisting>
+    <programlisting language="csharp">pool = new SimplePool(new QueuedExecutorPoolableFactory(), size);</programlisting>
     </para>
     </sect2>
     <sect2>
@@ -143,8 +136,7 @@ pool = new SimplePool(new QueuedExecutorPoolableFactory(), size);</programlistin
     to be very important in these <literal>c#</literal> days, so we 
     implement a very simple helper (<literal>PooledObjectHolder</literal>)
     that can allow us to do things like:
-    <programlisting format='linespecific' xml:space='preserve'>
-using (PooledObjectHolder holder = PooledObjectHolder.UseFrom(pool))
+    <programlisting language="csharp">using (PooledObjectHolder holder = PooledObjectHolder.UseFrom(pool))
 {
     QueuedExecutor executor = (QueuedExecutor) holder.Pooled;
     executor.Execute(runnable);
@@ -154,8 +146,7 @@ using (PooledObjectHolder holder = PooledObjectHolder.UseFrom(pool))
     </para>
     <para>
     Here is the implementation:
-    <programlisting format='linespecific' xml:space='preserve'>
-public class PooledObjectHolder : IDisposable
+    <programlisting language="csharp">public class PooledObjectHolder : IDisposable
 {
     IObjectPool pool;
     object pooled;
@@ -204,8 +195,7 @@ public class PooledObjectHolder : IDisposable
     Please don't forget to destroy all the pooled istances once you have 
     finished! How? Well using something like this in 
     <literal>PooledQueuedExecutor</literal>:
-    <programlisting format='linespecific' xml:space='preserve'>
-public void Stop ()
+    <programlisting language="csharp">public void Stop ()
 {
     // waits for all the grep-task to have been queued ...
     foreach (ISync sync in syncs)
@@ -221,8 +211,7 @@ public void Stop ()
     <para>
     The use of the just built executor is quite straigtforward but a 
     little tricky if we want to really exploit the pool.
-    <programlisting format='linespecific' xml:space='preserve'>
-private PooledQueuedExecutor executor;
+    <programlisting language="csharp">private PooledQueuedExecutor executor;
 
 public ParallelGrep(int size)
 {
@@ -246,9 +235,8 @@ public void Stop()
     executor.Stop();
 }</programlisting>
     </para>
-    <para>    
-    <programlisting format='linespecific' xml:space='preserve'>
-public static void Main(string[] args)
+    <para>
+      <programlisting language="csharp">public static void Main(string[] args)
 {
     if (args.Length &lt; 3)
     {

@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="messaging">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="messaging" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Message Oriented Middleware</title>
 
   <section>
@@ -61,7 +78,7 @@
     <literal>NmsTemplate</literal>, <literal> EmsTemplate</literal> (etc.) is
     used. Asynchronous message consumption is performed though a
     multi-threaded message listener container,
-    <classname>SimpleMessageListenerContainer</classname>. This message
+    <literal>SimpleMessageListenerContainer</literal>. This message
     listener container is used to create Message-Driven PONOs (MDPs) which
     refer to a messaging callback class that consists of just 'plain .NET
     object's and is devoid of any specific messaging types or other artifacts.
@@ -73,7 +90,7 @@
     <literal>Spring.Messaging.&lt;Vendor&gt;.Core</literal> contains the
     messing template class (e.g. <literal>NmsTemplate</literal>). The template
     class simplifies the use of the messaging APIs by handling the creation
-    and release of resources, much like the <classname>AdoTemplate</classname>
+    and release of resources, much like the <literal>AdoTemplate</literal>
     does for ADO.NET. The JMS inspired APIs are low-level API, much like
     ADO.NET. As such, even the simplest of operations requires 10s of lines of
     code with the bulk of that code related to resource management of
@@ -205,35 +222,35 @@
       <title>Messaging Template overview</title>
 
       <para>Code that uses the messaging template classes
-      (<classname>NmsTemplate</classname>, <classname>EmsTemplate</classname>,
+      (<literal>NmsTemplate</literal>, <literal>EmsTemplate</literal>,
       etc) only needs to implement callback interfaces giving them a clearly
-      defined contract. The <classname>IMessageCreator</classname> callback
+      defined contract. The <literal>IMessageCreator</literal> callback
       interface creates a message given a Session provided by the calling code
       in <literal>NmsTemplate</literal>. In order to allow for more complex
       usage of the provider messaging API, the callback
-      <classname>ISessionCallback</classname> provides the user with the
+      <literal>ISessionCallback</literal> provides the user with the
       provider specific messaging Session and the callback
-      <classname>IProducerCallback</classname> exposes a provider specific
+      <literal>IProducerCallback</literal> exposes a provider specific
       Session and MessageProducer pair.</para>
 
       <para>Provider messaging APIs typically expose two types of send
       methods, one that takes delivery mode, priority, and time-to-live as
       quality of service (QOS) parameters and one that takes no QOS parameters
       which uses default values. Since there are many higher level send
-      methods in <classname>NmsTemplate</classname>, the setting of the QOS
+      methods in <literal>NmsTemplate</literal>, the setting of the QOS
       parameters have been exposed as properties on the template class to
       avoid duplication in the number of send methods. Similarly, the timeout
       value for synchronous receive calls is set using the property
-      <classname>ReceiveTimeout</classname>.</para>
+      <literal>ReceiveTimeout</literal>.</para>
 
       <note>
         <para>Instances of the <literal>NmsTemplate</literal> class are
         thread-safe once configured. This is important because it means that
         you can configure a single instance of a
-        <classname>NmsTemplate</classname> and then safely inject this shared
+        <literal>NmsTemplate</literal> and then safely inject this shared
         reference into multiple collaborators. To be clear, the
-        <classname>NmsTemplate</classname> is stateful, in that it maintains a
-        reference to a <classname>ConnectionFactory</classname>, but this
+        <literal>NmsTemplate</literal> is stateful, in that it maintains a
+        reference to a <literal>ConnectionFactory</literal>, but this
         state is not conversational state.</para>
       </note>
     </section>
@@ -241,7 +258,7 @@
     <section>
       <title>Connections</title>
 
-      <para>The <classname>NmsTemplate</classname> requires a reference to a
+      <para>The <literal>NmsTemplate</literal> requires a reference to a
       ConnectionFactory. The ConnectionFactory serves as the entry point for
       working with the provider's messaging API. It is used by the client
       application as a factory to create connections to the messaging server
@@ -268,7 +285,7 @@
       creating many intermediate objects. To send a message the following
       'API' walk is performed</para>
 
-      <programlisting>IConnectionFactory-&gt;IConnection-&gt;ISession-&gt;IMessageProducer-&gt;Send</programlisting>
+      <programlisting language="csharp">IConnectionFactory-&gt;IConnection-&gt;ISession-&gt;IMessageProducer-&gt;Send</programlisting>
 
       <para>Between the ConnectionFactory and the Send operation there are
       three intermediate objects that are created and destroyed. To optimise
@@ -280,15 +297,15 @@
       <section>
         <title>SingleConnectionFactory</title>
 
-        <para><classname>Spring.Messaging.Nms.Connections.SingleConnectionFactory
-        </classname>will return the same connection on all calls to
+        <para><literal>Spring.Messaging.Nms.Connections.SingleConnectionFactory
+        </literal>will return the same connection on all calls to
         CreateConnection and ignore calls to Close.</para>
       </section>
 
       <section>
         <title>CachingConnectionFactory</title>
 
-        <para><classname>Spring.Messaging.Nms.Connections.CachingConnectionFactory</classname>
+        <para><literal>Spring.Messaging.Nms.Connections.CachingConnectionFactory</literal>
         extends the functionality of SingleConnectionFactory and adds the
         caching of Sessions, MessageProducers, and MessageConsumers.</para>
 
@@ -298,14 +315,14 @@
         than that number as sessions are cached based on their acknowledgment
         mode, so there can be up to 4 cached session instances when
         SessionCacheSize is set to one, one for each
-        <classname>AcknowledgementMode</classname>.
-        <classname>MessageProducers</classname> and
-        <classname>MessageConsumers</classname> are cached within their owning
+        <literal>AcknowledgementMode</literal>.
+        <literal>MessageProducers</literal> and
+        <literal>MessageConsumers</literal> are cached within their owning
         session and also take into account the unique properties of the
         producers and consumers when caching.</para>
 
-        <para><classname>MessageProducers</classname> are cached based on
-        their destination. <classname>MessageConsumers</classname> are cached
+        <para><literal>MessageProducers</literal> are cached based on
+        their destination. <literal>MessageConsumers</literal> are cached
         based on a key composed of the destination, selector, noLocal delivery
         flag, and the durable subscription name (if creating durable
         consumers).</para>
@@ -323,7 +340,7 @@
       administratively. You can use these vendor specific APIs to perform
       dependency injection on references to JMS Destination objects in
       Spring's XML configuration file by creating am implementation of
-      <classname>IObjectFactory</classname> or alternatively configuring the
+      <literal>IObjectFactory</literal> or alternatively configuring the
       specific concrete class implementation for a messaging provider.</para>
 
       <para>However, this approach of administered objects can be quite
@@ -332,12 +349,12 @@
       unique to the messaging provider. Examples of such advanced destination
       management would be the creation of dynamic destinations or support for
       a hierarchical namespace of destinations. The
-      <classname>NmsTemplate</classname> delegates the resolution of a
+      <literal>NmsTemplate</literal> delegates the resolution of a
       destination name to a destination object by delegating to an
       implementation of the interface
-      <classname>IDestinationResolver</classname>.
-      <classname>DynamicDestinationResolver</classname> is the default
-      implementation used by <classname>NmsTemplate</classname> and
+      <literal>IDestinationResolver</literal>.
+      <literal>DynamicDestinationResolver</literal> is the default
+      implementation used by <literal>NmsTemplate</literal> and
       accommodates resolving dynamic destinations.</para>
 
       <para>Quite often the destinations used in a messaging application are
@@ -353,16 +370,16 @@
       dynamic destinations varies from provider to provider since the
       properties associated with the destination are vendor specific. However,
       a simple implementation choice that is sometimes made by vendors is to
-      use the <classname>TopicSession</classname> method
+      use the <literal>TopicSession</literal> method
       <literal>CreateTopic(string topicName)</literal> or the
-      <classname>QueueSession</classname> method <classname>CreateQueue(string
-      queueName)</classname> to create a new destination with default
+      <literal>QueueSession</literal> method <literal>CreateQueue(string
+      queueName)</literal> to create a new destination with default
       destination properties. Depending on the vendor implementation,
-      <classname>DynamicDestinationResolver</classname> may then also create a
+      <literal>DynamicDestinationResolver</literal> may then also create a
       physical destination instead of only resolving one.</para>
 
       <para>The boolean property <literal>PubSubDomain</literal> is used to
-      configure the <classname>NmsTemplate</classname> with knowledge of what
+      configure the <literal>NmsTemplate</literal> with knowledge of what
       messaging 'domain' is being used. By default the value of this property
       is false, indicating that the point-to-point domain, Queues, will be
       used. This property is infrequently used as the provider messaging APIs
@@ -370,10 +387,10 @@
       referring to 'Destinations' rather than 'Queues' or 'Topics'. However,
       this property does influence the behavior of dynamic destination
       resolution via implementations of the
-      <classname>IDestinationResolver</classname> interface.</para>
+      <literal>IDestinationResolver</literal> interface.</para>
 
       <para>You can also configure the NmsTemplate with a default destination
-      via the property <classname>DefaultDestination</classname>. The default
+      via the property <literal>DefaultDestination</literal>. The default
       destination will be used with send and receive operations that do not
       refer to a specific destination.</para>
     </section>
@@ -384,7 +401,7 @@
       <para>One of the most common uses of JMS is to concurrently process
       messages delivered asynchronously. A message listener container is used
       to receive messages from a message queue and drive the
-      <classname>IMessageListener</classname> that is injected into it. The
+      <literal>IMessageListener</literal> that is injected into it. The
       listener container is responsible for all threading of message reception
       and dispatches into the listener for processing. A message listener
       container is the intermediary between an Message-Driven PONO (MDP) and a
@@ -396,11 +413,11 @@
       infrastructure concerns to the framework.</para>
 
       <para>A subclass of
-      <classname>AbstractMessageListenerContainer</classname> is used to
+      <literal>AbstractMessageListenerContainer</literal> is used to
       receive messages from JMS and drive the Message-Driven PONOs (MDPs) that
       are injected into it. There are one subclasses of
-      <classname>AbstractMessageListenerContainer</classname> packaged with
-      Spring - <classname>SimpleMessageListenerContainer</classname>.
+      <literal>AbstractMessageListenerContainer</literal> packaged with
+      Spring - <literal>SimpleMessageListenerContainer</literal>.
       Additional subclasses, in particular to participate in distributed
       transactions (if the provider supports it), will be provided in future
       releases. SimpleMessageListenerContainer creates a fixed number of JMS
@@ -415,13 +432,13 @@
       manages transactions for a single ConnectionFactory. This allows
       messaging applications to leverage the managed transaction features of
       Spring as described in <xref linkend="transaction" />. The
-      <classname>NmsTransactionManager</classname> performs local resource
+      <literal>NmsTransactionManager</literal> performs local resource
       transactions, binding a Connection/Session pair from the specified
-      ConnectionFactory to the thread. <classname>NmsTemplate</classname>
+      ConnectionFactory to the thread. <literal>NmsTemplate</literal>
       automatically detects such transactional resources and operates on them
       accordingly.</para>
 
-      <para>Using Spring's <classname>SingleConnectionFactory</classname> will
+      <para>Using Spring's <literal>SingleConnectionFactory</literal> will
       result in a shared Connection, with each transaction having its own
       independent Session.</para>
     </section>
@@ -430,7 +447,7 @@
   <section>
     <title>Sending a Message</title>
 
-    <para>The <classname>NmsTemplate</classname> contains three convenience
+    <para>The <literal>NmsTemplate</literal> contains three convenience
     methods to send a message. The methods are listed below.</para>
 
     <itemizedlist>
@@ -453,20 +470,20 @@
     <para>The method differ in how the destination is specified. In first case
     the JMS Destination object is specified directly. The second case
     specifies the destination using a string that is then resolved to a
-    messaging <classname>Destination</classname> object using the
-    <classname>IDestinationResolver</classname> associated with the template.
+    messaging <literal>Destination</literal> object using the
+    <literal>IDestinationResolver</literal> associated with the template.
     The last method sends the message to the destination specified by
-    <classname>NmsTemplate</classname>''s
-    <classname>DefaultDestination</classname> property.</para>
+    <literal>NmsTemplate</literal>''s
+    <literal>DefaultDestination</literal> property.</para>
 
     <para>All methods take as an argument an instance of
-    <classname>IMessageCreator</classname> which defines the API contract for
+    <literal>IMessageCreator</literal> which defines the API contract for
     you to create the JMS message. The interface is show below</para>
 
-    <para><programlisting>public interface IMessageCreator {        
+    <para><programlisting language="csharp">public interface IMessageCreator {        
   IMessage CreateMessage(ISession session);
 }</programlisting>Intermediate Sessions and MessageProducers needed to send
-    the message are managed by <classname>NmsTemplate</classname>. The session
+    the message are managed by <literal>NmsTemplate</literal>. The session
     passed in to the method is never null. There is a similar set methods that
     use a delegate instead of the interface, which can be convenient when
     writing small implementation in .NET 2.0 using anonymous delegates.
@@ -492,7 +509,7 @@
 
     <para>The declaration of the delegate is</para>
 
-    <programlisting>public delegate IMessage MessageCreatorDelegate(ISession session);</programlisting>
+    <programlisting language="csharp">public delegate IMessage MessageCreatorDelegate(ISession session);</programlisting>
 
     <para>The following class shows how to use the SendWithDelegate method
     with an anonymous delegate to create a MapMessage from the supplied
@@ -501,7 +518,7 @@
     <literal>NmsTemplate</literal> is constructed by passing a reference to a
     ConnectionFactory.</para>
 
-    <programlisting>    public class SimplePublisher
+    <programlisting language="csharp">    public class SimplePublisher
     {
         private NmsTemplate template;
         
@@ -537,15 +554,15 @@
       <title>Using MessageConverters</title>
 
       <para>In order to facilitate the sending of domain model objects, the
-      <classname>NmsTemplate</classname> has various send methods that take a
+      <literal>NmsTemplate</literal> has various send methods that take a
       .NET object as an argument for a message's data content. The overloaded
-      methods <classname>ConvertAndSend</classname> and
-      <classname>ReceiveAndConvert</classname> in
-      <classname>NmsTemplate</classname> delegate the conversion process to an
-      instance of the <interfacename>IMessageConverter</interfacename>
+      methods <literal>ConvertAndSend</literal> and
+      <literal>ReceiveAndConvert</literal> in
+      <literal>NmsTemplate</literal> delegate the conversion process to an
+      instance of the <literal>IMessageConverter</literal>
       interface. This interface defines a simple contract to convert between
       .NET objects and JMS messages. The default implementation
-      <classname>SimpleMessageConverter</classname> supports conversion
+      <literal>SimpleMessageConverter</literal> supports conversion
       between String and TextMessage, byte[] and BytesMesssage, and
       System.Collections.IDictionary and MapMessage. By using the converter,
       you and your application code can focus on the business object that is
@@ -556,7 +573,7 @@
       converts objects to an XML string and vice-versa for sending via a
       TextMessage.</para>
 
-      <para>The family of <classname>ConvertAndSend</classname> messages are
+      <para>The family of <literal>ConvertAndSend</literal> messages are
       similar to that of the Send method with the additional argument of type
       IMessagePostProcessor. These methods are listed below.</para>
 
@@ -594,7 +611,7 @@
       <para>The example below uses the default message converter to send a
       Hashtable as a message to the destination "APP.STOCK".</para>
 
-      <para><programlisting>public void PublishUsingDict(string ticker, double price)
+      <para><programlisting language="csharp">public void PublishUsingDict(string ticker, double price)
 {
   IDictionary marketData = new Hashtable();
   marketData.Add("TICKER", ticker);
@@ -602,12 +619,12 @@
   template.ConvertAndSend("APP.STOCK.MARKETDATA", marketData);
 }</programlisting>To accommodate the setting of message's properties, headers,
       and body that can not be generally encapsulated inside a converter
-      class, the <classname>IMessageConverterPostProcessor</classname>
+      class, the <literal>IMessageConverterPostProcessor</literal>
       interface gives you access to the message after it has been converted
       but before it is sent. The example below demonstrates how to modify a
       message header and a property after a Hashtable is converted to a
       message using the IMessagePostProcessor. The methods
-      <classname>ConvertAndSendUsingDelegate</classname> allow for the use of
+      <literal>ConvertAndSendUsingDelegate</literal> allow for the use of
       a delegate to perform message post processing. This family of methods is
       listed below</para>
 
@@ -632,11 +649,11 @@
 
       <para>The declaration of the delegate is</para>
 
-      <programlisting>public delegate IMessage MessagePostProcessorDelegate(IMessage message);</programlisting>
+      <programlisting language="csharp">public delegate IMessage MessagePostProcessorDelegate(IMessage message);</programlisting>
 
       <para>The following code shows this in action.</para>
 
-      <para><programlisting>public void PublishUsingDict(string ticker, double price)
+      <para><programlisting language="csharp">public void PublishUsingDict(string ticker, double price)
 {
   IDictionary marketData = new Hashtable();
   marketData.Add("TICKER", ticker);
@@ -685,12 +702,12 @@
 
     <para>Where ISessionCallback and IProducerCallback are</para>
 
-    <para><programlisting>public interface IProducerCallback
+    <para><programlisting language="csharp">public interface IProducerCallback
 {
     object DoInJms(Session session, MessageProducer producer);
 }</programlisting>and</para>
 
-    <programlisting>public interface ISessionCallback
+    <programlisting language="csharp">public interface ISessionCallback
 {
     object DoInJms(Session session);
 }</programlisting>
@@ -698,7 +715,7 @@
     <para>The delegate signatures are listed below and mirror the interface
     method signature</para>
 
-    <programlisting>public delegate object SessionDelegate(ISession session);
+    <programlisting language="csharp">public delegate object SessionDelegate(ISession session);
 
 public delegate object ProducerDelegate(ISession session, IMessageProducer producer);</programlisting>
   </section>
@@ -712,12 +729,12 @@ public delegate object ProducerDelegate(ISession session, IMessageProducer produ
       <para>While messaging middleware is typically associated with
       asynchronous processing, it is possible to consume messages
       synchronously. The overloaded <code>Receive(..)</code> methods on
-      <classname>NmsTemplate</classname> provide this functionality. During a
+      <literal>NmsTemplate</literal> provide this functionality. During a
       synchronous receive, the calling thread blocks until a message becomes
       available. This can be a dangerous operation since the calling thread
       can potentially be blocked indefinitely. The property
       <code><property>ReceiveTimeout</property></code> on
-      <classname>NmsTemplate</classname> specifies how long the receiver
+      <literal>NmsTemplate</literal> specifies how long the receiver
       should wait before giving up waiting for a message.</para>
 
       <para>The <methodname>Receive</methodname> methods are listed
@@ -757,14 +774,14 @@ public delegate object ProducerDelegate(ISession session, IMessageProducer produ
       <para>The <methodname>Receive</methodname> method without arguments will
       use the <property>DefaultDestination</property>. The
       <methodname>ReceiveSelected</methodname> methods apply the provided
-      message selector string to the <classname>MessageConsumer</classname>
+      message selector string to the <literal>MessageConsumer</literal>
       that is created.</para>
 
       <para>The <methodname>ReceiveAndConvert</methodname> methods apply the
       template's message converter when receiving a message. The message
       converter to use is set using the property
-      <classname>MessageConverter</classname> and is the
-      <classname>SimpleMessageConverter</classname> implementation by default.
+      <literal>MessageConverter</literal> and is the
+      <literal>SimpleMessageConverter</literal> implementation by default.
       These methods are listed below.</para>
 
       <itemizedlist>
@@ -807,7 +824,7 @@ public delegate object ProducerDelegate(ISession session, IMessageProducer produ
       such as the IMessageListener interface shown below, taken from the TIBCO
       EMS provider.</para>
 
-      <programlisting>public interface IMessageListener
+      <programlisting language="csharp">public interface IMessageListener
 {
       void OnMessage(Message message);
 }</programlisting>
@@ -816,14 +833,14 @@ public delegate object ProducerDelegate(ISession session, IMessageProducer produ
       callback or even both a delegate and interface options. Apache ActiveMQ
       supports only the use of delegates for message reception callbacks. As a
       programming convenience in
-      <classname>Spring.Messaging.Nms.Core</classname> is an interface
-      <classname>IMessageListener</classname> that can be used with
+      <literal>Spring.Messaging.Nms.Core</literal> is an interface
+      <literal>IMessageListener</literal> that can be used with
       NMS.</para>
 
       <para>Below is a simple implementation of the IMessageListener interface
       that processing a message.</para>
 
-      <programlisting>using Spring.Messaging.Nms.Core;
+      <programlisting language="csharp">using Spring.Messaging.Nms.Core;
 using Apache.NMS;
 using Common.Logging;
 
@@ -862,15 +879,15 @@ namespace MyApp
       specifies various messaging configuration parameters, such as the
       ConnectionFactory, and the number of concurrent consumers to create.
       There is an abstract base class for message listener containers,
-      <classname>AbstractMessageListenerContainer</classname>, and one
+      <literal>AbstractMessageListenerContainer</literal>, and one
       concrete implementation,
-      <classname>SimpleMessageListenerContainer</classname>.
-      <classname>SimpleMessageListenerContainer</classname> creates a fixed
+      <literal>SimpleMessageListenerContainer</literal>.
+      <literal>SimpleMessageListenerContainer</literal> creates a fixed
       number of JMS Sessions/MessageConsumer pairs as set by the property
       <property>ConcurrentConsumers</property>. Here is a sample
       configuration</para>
 
-      <programlisting>
+      <programlisting language="myxml">
   &lt;object id="ConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ"&gt;
     &lt;constructor-arg index="0" value="tcp://localhost:61616"/&gt;
   &lt;/object&gt;
@@ -895,14 +912,14 @@ namespace MyApp
       via the properties <property>SubscriptionDurable</property> and
       <property>DurableSubscriptionName</property>. You may also register an
       exception listener using the property
-      <classname>ExceptionListener</classname>.</para>
+      <literal>ExceptionListener</literal>.</para>
 
       <para>A custom schema to create the
-      <classname>SimpleMessageListener</classname> container is also provided.
+      <literal>SimpleMessageListener</literal> container is also provided.
       Using this schema the configuration above looks like the
       following</para>
 
-      <programlisting>&lt;objects xmlns="http://www.springframework.net"
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
          xmlns:nms="http://www.springframework.net/nms"&gt;
 
   &lt;!-- other object definitions --&gt;
@@ -913,35 +930,35 @@ namespace MyApp
 &lt;/objects&gt;</programlisting>
 
       <para>Exceptions that are thrown during message processing can be passed
-      to an implementation of <classname>IExceptionHandler</classname> and
+      to an implementation of <literal>IExceptionHandler</literal> and
       registered with the container via the property
-      <classname>ExceptionListener</classname>. The registered
-      <classname>IExceptionHandler</classname> will be invoked if the
-      exception is of the type <classname>NMSException</classname> (or the
+      <literal>ExceptionListener</literal>. The registered
+      <literal>IExceptionHandler</literal> will be invoked if the
+      exception is of the type <literal>NMSException</literal> (or the
       equivalent root exception type for other providers). The
       SimpleMessageListenerContainer will logs the exception at error level
       and not propagate the exception to the provider. All handling of
       acknowledgement and/or transactions is done by the listener container.
       You can override the method
-      <classname>HandleListenerException</classname> to change this
+      <literal>HandleListenerException</literal> to change this
       behavior.</para>
 
       <para>Please refer to the Spring SDK documentation for additional
       description of the features and properties of
-      <classname>SimpleMessageListenerContainer</classname>.</para>
+      <literal>SimpleMessageListenerContainer</literal>.</para>
     </section>
 
     <section>
       <title>The ISessionAwareMessageListener interface</title>
 
-      <para>The <classname>ISessionAwareMessageListener</classname> interface
+      <para>The <literal>ISessionAwareMessageListener</literal> interface
       is a Spring-specific interface that provides a similar contract to the
-      messaging provider's <classname>IMessageListener</classname> interface
+      messaging provider's <literal>IMessageListener</literal> interface
       or Listener delegate/event, but also provides the message handling
       method with access to the Session from which the Message was
       received.</para>
 
-      <programlisting>public interface ISessionAwareMessageListener
+      <programlisting language="csharp">public interface ISessionAwareMessageListener
 {        
    void OnMessage(IMessage message, ISession session);
 }</programlisting>
@@ -950,7 +967,7 @@ namespace MyApp
       with the message listener container</para>
     </section>
 
-    <section id="message-listener-adapter">
+    <section xml:id="message-listener-adapter">
       <title>MessageListenerAdapater</title>
 
       <para>The MessageListenerAdapter class is the final component in
@@ -960,15 +977,15 @@ namespace MyApp
 
       <para>Consider the following interface definition. Notice that although
       the interface extends neither the
-      <classname>IMessageListener</classname> nor
-      <classname>ISessionAwareMessageListener</classname> interfaces, it can
+      <literal>IMessageListener</literal> nor
+      <literal>ISessionAwareMessageListener</literal> interfaces, it can
       still be used as a Message-Driven PONOs (MDP) via the use of the
-      <classname>MessageListenerAdapter</classname> class. Notice also how the
+      <literal>MessageListenerAdapter</literal> class. Notice also how the
       various message handling methods are strongly typed according to the
       contents of the various Message types that they can receive and
       handle.</para>
 
-      <programlisting>public interface MessageHandler {
+      <programlisting language="csharp">public interface MessageHandler {
 
     void HandleMessage(string message);
 
@@ -980,7 +997,7 @@ namespace MyApp
 
       <para>and a class that implements this interface...</para>
 
-      <programlisting>public class DefaultMessageHandler : IMessageHandler {
+      <programlisting language="csharp">public class DefaultMessageHandler : IMessageHandler {
     // stub implementations elided for bevity...
 }</programlisting>
 
@@ -989,16 +1006,16 @@ namespace MyApp
       messaging provider API dependencies at all. It truly is a PONO that we
       will make into an MDP via the following configuration.</para>
 
-      <programlisting><emphasis role="bold">&lt;object id="MessagleHandler" type="MyApp.DefaultMessageHandler, MyApp"/&gt;</emphasis>
+      <programlisting language="myxml">&lt;object id="MessagleHandler" type="MyApp.DefaultMessageHandler, MyApp"/&gt;
 
 &lt;object id="MessageListenerAdapter" type="Spring.Messaging.Nms.Listener.Adapter.MessageListenerAdapter, Spring.Messaging.Nms"&gt;
-  <emphasis role="bold">&lt;property name="HandlerObject" ref="MessagleHandler"/&gt;</emphasis>
+  &lt;property name="HandlerObject" ref="MessagleHandler"/&gt;
 &lt;/object&gt;
 
 &lt;object id="MessageListenerContainer" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms"&gt;
   &lt;property name="ConnectionFactory" ref="ConnectionFactory"/&gt;
   &lt;property name="DestinationName" value="APP.REQUEST"/&gt;
-  <emphasis role="bold">&lt;property name="MessageListener" ref="MessageListenerAdapter"/&gt;</emphasis>
+  &lt;property name="MessageListener" ref="MessageListenerAdapter"/&gt;
 &lt;/object&gt;</programlisting>
 
       <para>The previous examples relies on the fact that the default
@@ -1015,23 +1032,23 @@ namespace MyApp
       'Receive(..)' method is strongly typed to receive and respond only to
       NMS ITextMessage messages.</para>
 
-      <programlisting>public interface TextMessageHandler {
+      <programlisting language="csharp">public interface TextMessageHandler {
 
     void Receive(ITextMessage message);
 }</programlisting>
 
-      <programlisting>public class TextMessageHandler implements ITextMessageHandler {
+      <programlisting language="csharp">public class TextMessageHandler implements ITextMessageHandler {
     // implementation elided for clarity...
 }</programlisting>
 
       <para>The configuration of the attendant
-      <classname>MessageListenerAdapter</classname> would look like
+      <literal>MessageListenerAdapter</literal> would look like
       this</para>
 
-      <programlisting><emphasis role="bold">&lt;object id="MessagleHandler" type="MyApp.DefaultMessageHandler, MyApp"/&gt;</emphasis>
+      <programlisting language="myxml">&lt;object id="MessagleHandler" type="MyApp.DefaultMessageHandler, MyApp"/&gt;
 
 &lt;object id="MessageListenerAdapter" type="Spring.Messaging.Nms.Listener.Adapter.MessageListenerAdapter, Spring.Messaging.Nms"&gt;
-    <emphasis role="bold">&lt;property name="HandlerObject" ref="TextMessagleHandler"/&gt;</emphasis>
+    &lt;property name="HandlerObject" ref="TextMessagleHandler"/&gt;
     &lt;property name="DefaultHandlerMethod" value="Receive"/&gt;
     &lt;!-- we don't want automatic message context extraction --&gt;
     &lt;property name="MessageConverter"&gt;
@@ -1041,18 +1058,18 @@ namespace MyApp
 
       <para>Please note that if the above 'MessageListener' receives a Message
       of a type other than ITextMessage, a
-      <classname>ListenerExecutionFailedException</classname> will be thrown
+      <literal>ListenerExecutionFailedException</literal> will be thrown
       (and subsequently handled by the container by logging the
       exception).</para>
 
-      <para>If your <classname>IMessageConverter</classname> implementation
+      <para>If your <literal>IMessageConverter</literal> implementation
       will return multiple object types, overloading the handler method is
       perfectly acceptable, the most specific matching method will be used. A
       method with an object signature would be consider a 'catch-all' method
       of last resort. For example, you can have an handler interface as shown
       below.</para>
 
-      <para><programlisting>public interface IMyHandler
+      <para><programlisting language="csharp">public interface IMyHandler
 {
    void DoWork(string text);
    void DoWork(OrderRequest orderRequest);
@@ -1068,7 +1085,7 @@ namespace MyApp
       property of the original Message (if one exists) , or the default
       Destination set on the MessageListenerAdapter (if one has been
       configured). If no Destination is found then an
-      <classname>InvalidDestinationException</classname> will be thrown (and
+      <literal>InvalidDestinationException</literal> will be thrown (and
       please note that this exception will not be swallowed and will propagate
       up the call stack).</para>
 
@@ -1076,7 +1093,7 @@ namespace MyApp
       that supports multiple object types and has return values is shown
       below.</para>
 
-      <programlisting>public interface IMyHandler
+      <programlisting language="csharp">public interface IMyHandler
 {
    string DoWork(string text);
    OrderResponse DoWork(OrderRequest orderRequest);
@@ -1120,7 +1137,7 @@ namespace MyApp
       more &lt;listener/&gt; child elements. Here is an example of a basic
       configuration for two listeners.</para>
 
-      <programlisting>&lt;nms:listener-container&gt;
+      <programlisting language="myxml">&lt;nms:listener-container&gt;
 
     &lt;nms:listener destination="queue.orders" ref="OrderService" method="PlaceOrder"/&gt;
 
@@ -1166,7 +1183,7 @@ namespace MyApp
               role="bold">(required)</emphasis></entry>
 
               <entry><para>The destination name for this listener, resolved
-              through the <interfacename>IDestinationResolver</interfacename>
+              through the <literal>IDestinationResolver</literal>
               strategy.</para></entry>
             </row>
 
@@ -1182,8 +1199,8 @@ namespace MyApp
 
               <entry><para>The name of the handler method to invoke. If the
               <literal>ref</literal> points to a
-              <interfacename>IMessageListener</interfacename> or Spring
-              <interfacename>ISessionAwareMessageListener</interfacename>,
+              <literal>IMessageListener</literal> or Spring
+              <literal>ISessionAwareMessageListener</literal>,
               this attribute may be omitted.</para></entry>
             </row>
 
@@ -1234,7 +1251,7 @@ namespace MyApp
       to define highly-customized listener containers while still benefiting
       from the convenience of the namespace.</para>
 
-      <programlisting>&lt;jms:listener-container connection-factory="MyConnectionFactory"
+      <programlisting language="myxml">&lt;jms:listener-container connection-factory="MyConnectionFactory"
                         destination-resolver="MyDestinationResolver"                        
                         concurrency="10"&gt;
 
@@ -1246,8 +1263,8 @@ namespace MyApp
 
       <para>The following table describes all available attributes. Consult
       the class-level SDK documentation of the
-      <classname>AbstractMessageListenerContainer</classname> and its subclass
-      <classname>SimpleMessageListenerContainer</classname> for more detail on
+      <literal>AbstractMessageListenerContainer</literal> and its subclass
+      <literal>SimpleMessageListenerContainer</literal> for more detail on
       the individual properties.</para>
 
       <table id="nms-namespace-listener-container-tbl">
@@ -1272,7 +1289,7 @@ namespace MyApp
               <entry>connection-factory</entry>
 
               <entry><para>A reference to the NMS
-              <interfacename>ConnectionFactory</interfacename> object (the
+              <literal>ConnectionFactory</literal> object (the
               default object name is
               <literal>'ConnectionFactory'</literal>).</para></entry>
             </row>
@@ -1281,18 +1298,18 @@ namespace MyApp
               <entry>destination-resolver</entry>
 
               <entry><para>A reference to the
-              <interfacename>IDestinationResolver</interfacename> strategy for
+              <literal>IDestinationResolver</literal> strategy for
               resolving JMS
-              <interfacename>Destinations</interfacename>.</para></entry>
+              <literal>Destinations</literal>.</para></entry>
             </row>
 
             <row>
               <entry>message-converter</entry>
 
               <entry><para>A reference to the
-              <interfacename>IMessageConverter</interfacename> strategy for
+              <literal>IMessageConverter</literal> strategy for
               converting NMS Messages to listener method arguments. Default is
-              a <classname>SimpleMessageConverter</classname>.</para></entry>
+              a <literal>SimpleMessageConverter</literal>.</para></entry>
             </row>
 
             <row>
@@ -1319,7 +1336,7 @@ namespace MyApp
               <literal>auto</literal>, <literal>client</literal>,
               <literal>dups-ok</literal> or <literal>transacted</literal>. A
               value of <literal>transacted</literal> activates a locally
-              transacted <interfacename>Session</interfacename>. As an
+              transacted <literal>Session</literal>. As an
               alternative, specify the <literal>transaction-manager</literal>
               attribute described below. Default is
               <literal>auto</literal>.</para></entry>

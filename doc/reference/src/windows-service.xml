@@ -1,4 +1,22 @@
-<chapter id="windows-service">
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="windows-service" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>Windows Services</title>
 
   <sect1>
@@ -89,15 +107,15 @@
     the command line for 
     <literal>Spring.Services.WindowsService.Installer.exe</literal>
     is as follow:    
-      <programlisting format='linespecific'>Spring.Services.WindowsService.Installer.exe
+      <programlisting>Spring.Services.WindowsService.Installer.exe
 
 usage: 
  install service-exe-path service-display-name service-name
  uninstall service-name      [i|u] service-exe-path service-display-name service-name</programlisting>
       for example, to install, you can invoke it with the following:
-      <programlisting format='linespecific'>... install  Spring.Services.WindowsService.Process.exe "Spring.Service Support" spring-service</programlisting>
+      <programlisting>... install  Spring.Services.WindowsService.Process.exe "Spring.Service Support" spring-service</programlisting>
       and to uninstall it: 
-      <programlisting format='linespecific'>... uninstall  spring-service</programlisting>
+      <programlisting>... uninstall  spring-service</programlisting>
     </para>
     </sect2>
     <sect2>
@@ -111,8 +129,7 @@ usage:
     </para>
     <para>
     This file also define the context run by this process; here the file in its current beauty:
-      <programlisting format='linespecific'>
-&lt;configuration&gt;
+      <programlisting language="xml">&lt;configuration&gt;
 
     &lt;configSections&gt;
         &lt;section name=&quot;log4net&quot; type=&quot;System.Configuration.IgnoreSectionHandler&quot; /&gt;
@@ -170,6 +187,6 @@ usage:
     <para>
     Firstly, it is worth notice that in order to 'localize' the service (i.e. to know where it is installed to use that directory as
     base for the deploy dir as in the above file) you should define an object like this: the name is not 
-    very important, it is important that it is an <classname>IObjectFactoryPostProcessor</classname> and so will be 
+    very important, it is important that it is an <literal>IObjectFactoryPostProcessor</literal> and so will be 
     automatically applied to this application context:
       

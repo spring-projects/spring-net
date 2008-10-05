@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="dbprovider">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="dbprovider" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>DbProvider</title>
 
-  <section id="dbprovider-introduction">
+  <section xml:id="dbprovider-introduction">
     <title>Introduction</title>
 
     <para>Spring provides a generic factory for creating ADO.NET API artifacts
-    such as <code><classname>IDbConnection</classname></code> and
-    <code><classname>IDbCommand</classname></code>. The factory API is very
+    such as <code><literal>IDbConnection</literal></code> and
+    <code><literal>IDbCommand</literal></code>. The factory API is very
     similar to the one introduced in .NET 2.0 but adds extra metadata needed
     by Spring to support features provided by its DAO/ADO.NET framework such
     as error code translation to a DAO exception hierarchy. The factory itself
@@ -39,15 +56,15 @@
     calling context.</para>
   </section>
 
-  <section id="dbprovider-dbprovider">
+  <section xml:id="dbprovider-dbprovider">
     <title>IDbProvider and DbProviderFactory</title>
 
-    <para>The <code><interfacename>IDbProvider</interfacename></code> API is
+    <para>The <code><literal>IDbProvider</literal></code> API is
     shown below and should look familiar to anyone using .NET 2.0 data
     providers. Note that Spring's DbProvider abstraction can be used on .NET
     1.1 in addition to .NET 2.0</para>
 
-    <programlisting>    public interface IDbProvider
+    <programlisting language="csharp">    public interface IDbProvider
     {
         IDbCommand CreateCommand();
 
@@ -89,7 +106,7 @@
     create the string for a IDataParameter.ParameterName, typically contained
     inside a IDataParameterCollection.</para>
 
-    <para>The class <classname>DbProviderFactory</classname> creates
+    <para>The class <literal>DbProviderFactory</literal> creates
     IDbProvider instances given a provider name. The connection string
     property will be used to set the IDbConnection returned by the factory if
     present. The provider names, and corresponding database, currently
@@ -242,17 +259,17 @@
 
     <para>An example using DbProviderFactory is shown below</para>
 
-    <programlisting>IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");</programlisting>
+    <programlisting language="csharp">IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");</programlisting>
 
     <para>The default definitions of the providers are contained in the
     assembly resource
     <code>assembly://Spring.Data/Spring.Data.Common/dbproviders.xml</code>.
     Future additions to round out the database coverage are forthcoming. The
     current crude mechanism to add additional providers, or to apply any
-    standard Spring <interfacename>IApplicationContext</interfacename>
+    standard Spring <literal>IApplicationContext</literal>
     functionality, such as applying AOP advice, is to set the public static
     property DBPROVIDER_ADDITIONAL_RESOURCE_NAME in
-    <classname>DbProviderFactory</classname> to a Spring resource location.
+    <literal>DbProviderFactory</literal> to a Spring resource location.
     The default value is <code>file://dbProviders.xml</code>. (That isn't a
     typo, there is a difference in case with the name of the embedded
     resource). This crude mechanism will eventually be replaced with one based
@@ -264,7 +281,7 @@
     application, you should add an assembly redirect of the form shown
     below.</para>
 
-    <programlisting>&lt;dependentAssembly&gt;
+    <programlisting language="myxml">&lt;dependentAssembly&gt;
   &lt;assemblyIdentity name="MySql.Data" 
                            publicKeyToken="c5687fc88969c44d" 
                            culture="neutral"/&gt;
@@ -283,7 +300,7 @@
     below in the typical case of using it to specify the DbProvider property
     on an AdoTemplate.</para>
 
-    <programlisting>&lt;objects xmlns='http://www.springframework.net'
+    <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
          xmlns:db="http://www.springframework.net/database"&gt;
 
   &lt;db:provider id="DbProvider" 
@@ -302,7 +319,7 @@
     the rest of the Spring configuration locations as described in previous
     chapters.</para>
 
-    <programlisting>&lt;configuration&gt;
+    <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -335,7 +352,7 @@
 
     <para>An example of such a setting is shown below</para>
 
-    <programlisting>&lt;configuration&gt;
+    <programlisting language="myxml">&lt;configuration&gt;
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
       &lt;section name='context' type='Spring.Context.Support.ContextHandler, Spring.Core'/&gt;
@@ -367,7 +384,7 @@
     <para>Where <literal>Dao.xml</literal> has a connection string as shown
     below</para>
 
-    <programlisting>&lt;objects xmlns='http://www.springframework.net'
+    <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
          xmlns:db="http://www.springframework.net/database"&gt;
 
   &lt;db:provider id="DbProvider" 
@@ -391,17 +408,17 @@
     information.</para>
   </section>
 
-  <section id="dbprovider-additional">
+  <section xml:id="dbprovider-additional">
     <title>Additional IDbProvider implementations</title>
 
     <para>Spring provides some convenient implementations of the IDbProvider
     interface that add addtional behavior on top of the standard
     implementation.</para>
 
-    <section id="dbprovider-usercredentials">
+    <section xml:id="dbprovider-usercredentials">
       <title>UserCredentialsDbProvider</title>
 
-      <para>This <classname>UserCredentialsDbProvider</classname> will allow
+      <para>This <literal>UserCredentialsDbProvider</literal> will allow
       you to change the username and password of a database connection at
       runtime. The API contains the properties <literal>Username</literal> and
       <literal>Password</literal> which are used as the default strings
@@ -416,7 +433,7 @@
       You may retrieve the user information from an HTTP session for example.
       Example configuration and usage is shown below</para>
 
-      <programlisting>&lt;object id="DbProvider" type="Spring.Data.Common.UserCredentialsDbProvider, Spring.Data"&gt;
+      <programlisting language="myxml">&lt;object id="DbProvider" type="Spring.Data.Common.UserCredentialsDbProvider, Spring.Data"&gt;
   &lt;property name="TargetDbProvider" ref="targetDbProvider"/&gt;
   &lt;property name="Username" value="User ID=defaultName"/&gt;
   &lt;property name="Password" value="Password=defaultPass"/&gt;
@@ -431,7 +448,7 @@
       of the type <literal>UserCredentialsDbProvider</literal> instead of
       <literal>IDbProvider</literal>.</para>
 
-      <programlisting>userCredentialsDbProvider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");</programlisting>
+      <programlisting language="csharp">userCredentialsDbProvider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");</programlisting>
 
       <para><literal>UserCredentialsDbProvider's</literal> has a base class,
       <literal>DelegatingDbProvider</literal>, and is intended for you to use
@@ -442,21 +459,21 @@
       to the target <literal>IDbProvider</literal>.</para>
     </section>
 
-    <section id="dbprovider-multidelegating">
+    <section xml:id="dbprovider-multidelegating">
       <title>MultiDelegatingDbProvider</title>
 
       <para>There are use-cases in which there will need to be a runtime
       selection of the database to connect to among many possible candidates.
       This is often the case where the same schema is installed in separate
       databases for different clients. The
-      <classname>MultiDelegatingDbProvider</classname> implements the
-      <classname>IDbProvider</classname> interface and provides an abstraction
+      <literal>MultiDelegatingDbProvider</literal> implements the
+      <literal>IDbProvider</literal> interface and provides an abstraction
       to the multiple databases and can be used in DAO layer such that the DAO
       layer is unaware of the switching between databases.
-      <classname>MultiDelegatingDbProvider</classname> does its job by looking
+      <literal>MultiDelegatingDbProvider</literal> does its job by looking
       into thread local storage under the key dbProviderName. This storage
       location stores the name of the dbProvider that is to be used for
-      processing the request. <classname>MultiDelegatingDbProvider</classname>
+      processing the request. <literal>MultiDelegatingDbProvider</literal>
       is configured using the dictionary property
       <literal>TargetDbProviders</literal>. The key of this dictionary
       contains the name of a dbProvider and its value is a dbProvider object.
