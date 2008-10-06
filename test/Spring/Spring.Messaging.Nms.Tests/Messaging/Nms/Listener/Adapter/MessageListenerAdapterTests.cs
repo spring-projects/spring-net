@@ -42,14 +42,6 @@ namespace Spring.Messaging.Nms.Listener.Adapter
 
         private static string TEXT = "I fancy a good cuppa right now";
 
-        private static int NUMBER = 1;
-
-        private static SerializableObject OBJECT = new SerializableObject();
-
-        private static string CORRELATION_ID = "100";
-
-        private static string RESPONSE_TEXT = "... wi' some full fat creamy milk. Top banana.";
-
         [SetUp]
         public void Setup()
         {
