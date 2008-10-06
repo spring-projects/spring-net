@@ -175,10 +175,8 @@ namespace Spring.Context.Support
         ///<param name="applicationContext"></param>
         ///<param name="name"></param>
         ///<param name="isContainerManaged"></param>
-        public IHttpHandler ConfigureHandler( IHttpHandler handler, IConfigurableApplicationContext applicationContext, string name, bool isContainerManaged)
+        public static IHttpHandler ConfigureHandler( IHttpHandler handler, IConfigurableApplicationContext applicationContext, string name, bool isContainerManaged)
         {
-            ApplyDependencyInjectionInfrastructure(handler, applicationContext);
-
             if (isContainerManaged)
             {
                 handler = (IHttpHandler)applicationContext.ObjectFactory.ConfigureObject( handler, name );
@@ -191,26 +189,6 @@ namespace Spring.Context.Support
             }
 
             return handler;
-        }
-
-        /// <summary>
-        /// Apply dependency injection stuff on the handler.
-        /// </summary>
-        /// <param name="handler">the handler to be intercepted</param>
-        /// <param name="applicationContext">the context responsible for configuring this handler</param>
-        private static void ApplyDependencyInjectionInfrastructure(IHttpHandler handler, IApplicationContext applicationContext)
-        {
-            if (handler is Control)
-            {
-                ControlInterceptor.EnsureControlIntercepted(applicationContext, (Control)handler);
-            }
-            else
-            {
-                if (handler is ISupportsWebDependencyInjection)
-                {
-                    ((ISupportsWebDependencyInjection)handler).DefaultApplicationContext = applicationContext;
-                }
-            }
         }
 
         /// <summary>

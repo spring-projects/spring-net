@@ -10,7 +10,7 @@
     <h2><a href="../../Default.aspx">Welcome to Spring.NET Web Framework Quick Start Guide</a></h2>
     <h2><a href="../Default.aspx">Dependency Injection</a></h2>
     <div>
-    <h2>Hello World example</h2>    
+    <h2><a href="splashpage.aspx">Hello World example</a></h2>    
     <form id="form1" runat="server">
     <p>
     This very simple web form demonstrates dependency injection on pages and controls.

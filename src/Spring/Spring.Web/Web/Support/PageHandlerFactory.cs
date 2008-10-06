@@ -22,14 +22,9 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
-using System.Reflection;
 using System.Security.Permissions;
 using System.Web;
-using System.Web.SessionState;
 using System.Web.UI;
-using Common.Logging;
-using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
@@ -107,16 +102,60 @@ namespace Spring.Web.Support
 
             if (namedPageDefinition != null)
             {
-                handler = (IHttpHandler)appContext.CreateObject(namedPageDefinition.Name, typeof(IHttpHandler), null);
+                // is this a nested call (HttpServerUtility.Transfer() or HttpServerUtility.Execute())?
+                if (context.Handler != null)
+                {
+                    // all deps can/must be resolved now
+                    handler = (IHttpHandler)appContext.GetObject(namedPageDefinition.Name, typeof(IHttpHandler), null);
+                }
+                else
+                {
+                    // execution pipeline "entry-point" - create page instance only 
+                    // and defer configuration to PreRequestHandlerExecute step
+                    handler = (IHttpHandler)appContext.CreateObject(namedPageDefinition.Name, typeof(IHttpHandler), null);
+                }
                 WebSupportModule.SetCurrentHandlerConfiguration(appContext, namedPageDefinition.Name, true);
             }
             else
             {
                 handler = WebObjectUtils.CreatePageInstance(url);
-                WebSupportModule.SetCurrentHandlerConfiguration(appContext, url, false);
+                // is this a nested call (HttpServerUtility.Transfer() or HttpServerUtility.Execute())?
+                if (context.Handler != null)
+                {
+                    // apply ObjectPostProcessors now
+                    handler = WebSupportModule.ConfigureHandler(handler, appContext, url, false);
+                }
+                else
+                {
+                    // execution pipeline "entry-point" - create page instance only 
+                    // and defer configuration to PreRequestHandlerExecute step
+                    WebSupportModule.SetCurrentHandlerConfiguration(appContext, url, false);
+                }
             }
 
+            ApplyDependencyInjectionInfrastructure(handler, appContext);
+
             return handler;
+        }
+
+        /// <summary>
+        /// Apply dependency injection stuff on the handler.
+        /// </summary>
+        /// <param name="handler">the handler to be intercepted</param>
+        /// <param name="applicationContext">the context responsible for configuring this handler</param>
+        private static void ApplyDependencyInjectionInfrastructure(IHttpHandler handler, IApplicationContext applicationContext)
+        {
+            if (handler is Control)
+            {
+                ControlInterceptor.EnsureControlIntercepted(applicationContext, (Control)handler);
+            }
+            else
+            {
+                if (handler is ISupportsWebDependencyInjection)
+                {
+                    ((ISupportsWebDependencyInjection)handler).DefaultApplicationContext = applicationContext;
+                }
+            }
         }
     }
 }
