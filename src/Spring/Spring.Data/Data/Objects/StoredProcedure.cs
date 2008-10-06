@@ -54,7 +54,12 @@ namespace Spring.Data.Objects
 		{
             CommandType = CommandType.StoredProcedure;
 		}
-	    
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoredProcedure"/> class.
+        /// </summary>
+        /// <param name="dbProvider">The db provider.</param>
+        /// <param name="procedureName">Name of the stored procedure.</param>
         public StoredProcedure(IDbProvider dbProvider, string procedureName) : base(dbProvider, procedureName)
         {
     	    CommandType = CommandType.StoredProcedure;
