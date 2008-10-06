@@ -60,6 +60,7 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <WarningsAsErrors>1591</WarningsAsErrors>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>..\..\..\build\VS.Net.2008\Spring.Core\Release\</OutputPath>

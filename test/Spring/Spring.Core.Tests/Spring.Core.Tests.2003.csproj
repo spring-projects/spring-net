@@ -1395,6 +1395,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\SharedStateAwareProcessorTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\SpecialFolderVariableSourceTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1600,12 +1605,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Support\AbstractSharedStateFactoryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Support\ArgumentConvertingMethodInvokerTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Objects\Support\AutoWiringEventHandlerValueTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Support\ByTypeSharedStateProviderTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1326,6 +1326,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\ISharedStateAware.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\ISharedStateFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\MutablePropertyValues.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1716,6 +1726,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\SharedStateAwareProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\SmartInstantiationAwareObjectPostProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2068,6 +2083,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Support\AbstractSharedStateFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Support\AbstractWiringEventHandlerValue.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2079,6 +2099,11 @@
                 />
                 <File
                     RelPath = "Objects\Support\AutoWiringEventHandlerValue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Support\ByTypeSharedStateFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

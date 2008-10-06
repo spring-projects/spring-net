@@ -446,7 +446,7 @@ namespace Spring.Aop.Framework
             // Extend to get new interface
             TestObjectSubclass raw = new TestObjectSubclass();
             ProxyFactory factory = new ProxyFactory(raw);
-            Assert.AreEqual(7, factory.Interfaces.Length, "Found correct number of interfaces");
+            Assert.AreEqual(8, factory.Interfaces.Length, "Found correct number of interfaces");
             //System.out.println("Proxied interfaces are " + StringUtils.arrayToDelimitedString(factory.getProxiedInterfaces(), ","));
             ITestObject tb = (ITestObject) factory.GetProxy();
             Assert.IsTrue(tb is IOther, "Picked up secondary interface");

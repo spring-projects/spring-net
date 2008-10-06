@@ -30,6 +30,7 @@ using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
+using Spring.Objects.Support;
 
 #endregion
 
@@ -1013,6 +1014,179 @@ namespace Spring.Objects.Factory
                 Assert.IsNotNull(to2);
                 Assert.AreEqual(27, to2.Age);
                 Assert.AreEqual("Bruno", to2.Name);
+            }
+        }
+
+        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-368")]
+        public void CreateObjectWithCtorArgsAndCtorAutowiring()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                RootObjectDefinition prototype = new RootObjectDefinition(typeof(TestObject));
+                prototype.IsSingleton = false;
+                lof.RegisterObjectDefinition("prototype", prototype);
+
+                TestObject to = lof.CreateObject("prototype", typeof(TestObject), new object[] { "Bruno", 26, new NestedTestObject("Home") }) as TestObject;
+                Assert.IsNotNull(to);
+                Assert.AreEqual(26, to.Age);
+                Assert.AreEqual("Bruno", to.Name);
+                Assert.AreEqual("Home", to.Doctor.Company);
+            }
+        }
+
+        [Test]
+        public void CreateObjectWithCtorArgsOnPrototype()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                RootObjectDefinition prototype = new RootObjectDefinition(typeof(TestObject));
+                prototype.IsSingleton = false;
+                lof.RegisterObjectDefinition("prototype", prototype);
+
+                TestObject to = lof.CreateObject("prototype", typeof(TestObject), new object[] { "Mark", 35 }) as TestObject;
+                Assert.IsNotNull(to);
+                Assert.AreEqual(35, to.Age);
+                Assert.AreEqual("Mark", to.Name);
+            }
+        }
+
+        [Test]
+        [Ignore("Ordering must now be strict when providing array of arguments for ctors")]
+        public void CreateObjectWithCtorArgsOnPrototypeOutOfOrderArgs()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                RootObjectDefinition prototype
+                    = new RootObjectDefinition(typeof(TestObject));
+                prototype.IsSingleton = false;
+                lof.RegisterObjectDefinition("prototype", prototype);
+
+                try
+                {
+                    TestObject to2 = lof.CreateObject("prototype", typeof(TestObject), new object[] { 35, "Mark" }) as TestObject;
+                    Assert.IsNotNull(to2);
+                    Assert.AreEqual(35, to2.Age);
+                    Assert.AreEqual("Mark", to2.Name);
+                }
+                catch (ObjectCreationException ex)
+                {
+                    Assert.IsTrue(ex.Message.IndexOf("'Object of type 'System.Int32' cannot be converted to type 'System.String'") >= 0);
+                }
+            }
+        }
+
+        [Test]
+        public void CreateObjectWithCtorArgsOnSingleton()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                RootObjectDefinition singleton
+                    = new RootObjectDefinition(typeof(TestObject));
+                singleton.IsSingleton = true;
+                lof.RegisterObjectDefinition("singleton", singleton);
+
+                TestObject to = lof.CreateObject("singleton", typeof(TestObject), new object[] { "Mark", 35 }) as TestObject;
+                Assert.IsNotNull(to);
+                Assert.AreEqual(35, to.Age);
+                Assert.AreEqual("Mark", to.Name);
+            }
+        }
+
+        [Test]
+        public void CreateObjectWithCtorArgsOverrided()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                ConstructorArgumentValues arguments = new ConstructorArgumentValues();
+                arguments.AddNamedArgumentValue("age", 27);
+                arguments.AddNamedArgumentValue("name", "Bruno");
+                RootObjectDefinition singleton = new RootObjectDefinition(typeof(TestObject), arguments, new MutablePropertyValues());
+                singleton.IsSingleton = true;
+                lof.RegisterObjectDefinition("singleton", singleton);
+
+                TestObject to = lof.CreateObject("singleton", typeof(TestObject), new object[] { "Mark", 35 }) as TestObject;
+                Assert.IsNotNull(to);
+                Assert.AreEqual(35, to.Age);
+                Assert.AreEqual("Mark", to.Name);
+
+                TestObject to2 = lof.CreateObject("singleton", null, null) as TestObject;
+                Assert.IsNotNull(to2);
+                Assert.AreEqual(27, to2.Age);
+                Assert.AreEqual("Bruno", to2.Name);
+            }
+        }
+
+        [Test]
+        public void CreateObjectDoesNotConfigure()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                MutablePropertyValues properties = new MutablePropertyValues();
+                properties.Add(new PropertyValue("Age", 27));
+                properties.Add(new PropertyValue("Name", "Bruno"));
+                RootObjectDefinition singleton = new RootObjectDefinition(typeof(TestObject), null, properties);
+                singleton.IsSingleton = true;
+                lof.RegisterObjectDefinition("singleton", singleton);
+
+                TestObject to2 = lof.CreateObject("singleton", typeof(TestObject), null) as TestObject;
+                Assert.IsNotNull(to2);
+                // no props set
+                Assert.AreEqual(0, to2.Age);
+                Assert.AreEqual(null, to2.Name);
+                // no object postprocessors executed!
+                Assert.AreEqual(null, to2.ObjectName);
+                Assert.AreEqual(null, to2.ObjectFactory);
+                Assert.AreEqual(null, to2.SharedState);
+            }
+        }
+
+        [Test]
+        public void CreateObjectDoesAffectContainerManagedSingletons()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                lof.AddObjectPostProcessor(new SharedStateAwareProcessor(new ISharedStateFactory[] { new ByTypeSharedStateFactory() }, Int32.MaxValue ));
+
+                MutablePropertyValues properties = new MutablePropertyValues();
+                properties.Add(new PropertyValue("Age", 27));
+                properties.Add(new PropertyValue("Name", "Bruno"));
+                RootObjectDefinition singleton = new RootObjectDefinition(typeof(TestObject), null, properties);
+                singleton.IsSingleton = true;
+                lof.RegisterObjectDefinition("singleton", singleton);
+
+                // a call to GetObject() results in a normally configured instance
+                TestObject to = lof.GetObject("singleton") as TestObject;
+                Assert.IsNotNull(to);
+                // props set
+                Assert.AreEqual(27, to.Age);
+                Assert.AreEqual("Bruno", to.Name);
+                // object postprocessors executed!
+                Assert.AreEqual("singleton", to.ObjectName);
+                Assert.AreEqual(lof, to.ObjectFactory);
+                Assert.IsNotNull(to.SharedState);
+
+                // altough configured as singleton, calling CreateObject prevents the instance from being cached
+                // otherwise the container could not guarantee the results of calling GetObject() to other clients.
+                TestObject to2 = lof.CreateObject("singleton", typeof(TestObject), null) as TestObject;
+                Assert.IsNotNull(to2);
+                // no props set
+                Assert.AreEqual(0, to2.Age);
+                Assert.AreEqual(null, to2.Name);
+                // no object postprocessors executed!
+                Assert.AreEqual(null, to2.ObjectName);
+                Assert.AreEqual(null, to2.ObjectFactory);
+                Assert.AreEqual(null, to2.SharedState);
+
+                // a call to GetObject() results in a normally configured instance
+                TestObject to3 = lof.GetObject("singleton") as TestObject;
+                Assert.IsNotNull(to3);
+                // props set
+                Assert.AreEqual(27, to3.Age);
+                Assert.AreEqual("Bruno", to3.Name);
+                // object postprocessors executed!
+                Assert.AreEqual("singleton", to3.ObjectName);
+                Assert.AreEqual(lof, to3.ObjectFactory);
+                Assert.IsNotNull(to3.SharedState);
             }
         }
 

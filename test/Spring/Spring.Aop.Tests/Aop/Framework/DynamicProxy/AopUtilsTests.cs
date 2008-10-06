@@ -48,7 +48,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             DerivedTestObject testObject = new DerivedTestObject();
             IList interfaces = new ArrayList(testObject.GetType().GetInterfaces());
-            Assert.AreEqual(8, interfaces.Count, "Incorrect number of interfaces");
+            Assert.AreEqual(9, interfaces.Count, "Incorrect number of interfaces");
             Assert.IsTrue(interfaces.Contains(typeof (ITestObject)), "Does not contain ITestObject");
             Assert.IsTrue(interfaces.Contains(typeof (IOther)), "Does not contain IOther");
         }

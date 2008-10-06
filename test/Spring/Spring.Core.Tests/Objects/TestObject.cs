@@ -41,7 +41,7 @@ namespace Spring.Objects
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Mark Pollack (.NET)</author>
-    public class TestObject : MarshalByRefObject, ITestObject, IObjectFactoryAware, IComparable, IOther, IApplicationContextAware, IObjectNameAware, IInitializingObject
+    public class TestObject : MarshalByRefObject, ITestObject, IObjectFactoryAware, IComparable, IOther, IApplicationContextAware, IObjectNameAware, IInitializingObject, ISharedStateAware
 	{
 		#region Event testing members
 
@@ -381,6 +381,7 @@ namespace Spring.Objects
 	    private Size size;
 	    private bool initCompleted;
 
+        private IDictionary sharedState;
 	    #endregion
 
 		#region Constructor (s) / Destructor
@@ -582,6 +583,12 @@ namespace Spring.Objects
 		}
 
 		#endregion
+
+	    public IDictionary SharedState
+	    {
+	        get { return sharedState; }
+	        set { sharedState = value; }
+	    }
 	}
 
 	#region Inner Class : TestObjectConverter

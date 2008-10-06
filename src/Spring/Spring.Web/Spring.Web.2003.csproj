@@ -437,7 +437,7 @@
                 />
                 <File
                     RelPath = "Web\Support\PageHandlerFactory.cs"
-                    SubType = "ASPXCodeBehind"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

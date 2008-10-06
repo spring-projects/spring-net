@@ -22,7 +22,6 @@
 
 using System;
 using System.Collections;
-using System.Web.UI;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Objects.Factory.Support;
@@ -179,7 +178,7 @@ namespace Spring.Objects.Factory.Config
 
         private static IDisposable Record( MockRepository mocks )
         {
-#if !NET_1_1
+#if NET_2_0
             return mocks.Record();
 #else
             return new RecordModeChanger(mocks);
@@ -188,14 +187,14 @@ namespace Spring.Objects.Factory.Config
 
         private static IDisposable Playback( MockRepository mocks )
         {
-#if !NET_1_1
+#if NET_2_0
             return mocks.Playback();
 #else
             return new PlaybackModeChanger(mocks);
 #endif
         }
 
-#if NET_1_1
+#if !NET_2_0
         private class RecordModeChanger : IDisposable
         {
             private MockRepository _mocks;
