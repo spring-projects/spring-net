@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="msmq-quickstart">
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter xml:id="msmq-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
   <title>MSMQ QuickStart</title>
 
   <section>
@@ -8,7 +25,7 @@
     <para>The MSMQ quick start application demonstrates how to use
     asynchronous messaging to implement a system for purchasing a stock. Is
     follows the same basic approach as in the <link
-    linkend="nms-quickstart">NMS QuickStart </link>but is adapted as need for
+    linkend="nms-quickstart">NMS QuickStart</link> but is adapted as need for
     use with MSMQ. Please read the introduction in that chapter to get an
     overview of the system. </para>
 
@@ -23,11 +40,11 @@
     <para>To communicate between th client and server a pair of queues will be
     used. Messages sent from the client to the server will use the
     transactional queue named
-    <classname>.\Private$\request.txqueue</classname>. Messages sent from the
+    <literal>.\Private$\request.txqueue</literal>. Messages sent from the
     server to the client will use the transactional queue
-    <classname>.\Private$\response.joe.txqueue</classname>. The queue for
+    <literal>.\Private$\response.joe.txqueue</literal>. The queue for
     messages that cannot be processed, so called 'poison messages' will be
-    sent to the queue <classname>.\Private$\dead.queue</classname>. You can
+    sent to the queue <literal>.\Private$\dead.queue</literal>. You can
     create these queues using the computer management administration console.
     Private queues are used to simplify the application setup
     requirements.</para>
@@ -80,55 +97,55 @@
     configuration example for types generated from the XML Schema and a plain
     string.</para>
 
-    <programlisting>  &lt;object id="xmlMessageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"&gt;
-    &lt;property name="TargetTypes"&gt;
-      &lt;list&gt;
-        &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeRequest, Spring.MsmqQuickStart.Common&lt;/value&gt;
-        &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeResponse, Spring.MsmqQuickStart.Common&lt;/value&gt;
-        &lt;value&gt;System.String, mscorlib&lt;/value&gt;        
-      &lt;/list&gt;
-    &lt;/property&gt;
-  &lt;/object&gt;</programlisting>
+    <programlisting language="myxml">&lt;object id="xmlMessageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"&gt;
+  &lt;property name="TargetTypes"&gt;
+    &lt;list&gt;
+      &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeRequest, Spring.MsmqQuickStart.Common&lt;/value&gt;
+      &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeResponse, Spring.MsmqQuickStart.Common&lt;/value&gt;
+      &lt;value&gt;System.String, mscorlib&lt;/value&gt;        
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
   </section>
 
   <section>
     <title>Messaging Infrastructure</title>
 
     <para>The implementations of the gateway interfaces inherit from Spring's
-    helper class <classname>MessageQueueGatewaySupport</classname> in order to
-    get easy access to a <classname>MessageQueueTemplate</classname> for
-    sending. The implementation of the <classname>IStockService</classname>
+    helper class <literal>MessageQueueGatewaySupport</literal> in order to
+    get easy access to a <literal>MessageQueueTemplate</literal> for
+    sending. The implementation of the <literal>IStockService</literal>
     interface is shown below</para>
 
-    <programlisting>    public class MsmqStockServiceGateway : MessageQueueGatewaySupport, IStockService
+    <programlisting language="csharp">public class <classname>MsmqStockServiceGateway</classname> : <classname>MessageQueueGatewaySupport</classname>, <classname>IStockService</classname>
+{
+    private <classname>Random</classname> random = new <classname>Random</classname>();
+
+    private string defaultResponseQueueObjectName;
+
+    public string DefaultResponseQueueObjectName
     {
-        private Random random = new Random();
+        set { defaultResponseQueueObjectName = value; }
+    }
 
-        private string defaultResponseQueueObjectName;
+    public void Send(<classname>TradeRequest</classname> tradeRequest)
+    {
+        <classname>MessageQueueTemplate</classname>.ConvertAndSend(tradeRequest, delegate(<classname>Message</classname> message)
+                                                              {
+                                                                  message.ResponseQueue = GetResponseQueue();
+                                                                  message.AppSpecific = random.Next();
+                                                                  return message;
+                                                              });
+    }
+   
+    private <classname>MessageQueue</classname> GetResponseQueue()
+    {
+        return <classname>MessageQueueFactory</classname>.CreateMessageQueue(defaultResponseQueueObjectName);
+    }
+   
+}</programlisting>
 
-        public string DefaultResponseQueueObjectName
-        {
-            set { defaultResponseQueueObjectName = value; }
-        }
-
-        public void Send(TradeRequest tradeRequest)
-        {
-            MessageQueueTemplate.ConvertAndSend(tradeRequest, delegate(Message message)
-                                                                  {
-                                                                      message.ResponseQueue = GetResponseQueue();
-                                                                      message.AppSpecific = random.Next();
-                                                                      return message;
-                                                                  });
-        }
-       
-        private MessageQueue GetResponseQueue()
-        {
-            return MessageQueueFactory.CreateMessageQueue(defaultResponseQueueObjectName);
-        }
-       
-    }</programlisting>
-
-    <para>The <classname>Send</classname> method is using
+    <para>The <literal>Send</literal> method is using
     MessageQueueTemplate's <literal>ConvertAndSend(object obj,
     MessagePostProcessorDelegate messagePostProcessorDelegate)</literal>
     method. The anonymous delegate allows you to modify the message
@@ -137,85 +154,83 @@
     anonymous delegate allows makes it very easy to apply any post processing
     logic to the converted message.</para>
 
-    <para>The configuration for <classname>MsmqStockServiceGateway</classname>
+    <para>The configuration for <literal>MsmqStockServiceGateway</literal>
     and all its dependencies is shown below, highlighting important dependency
     links.</para>
 
-    <programlisting>  &lt;object name="stockServiceGateway" type="Spring.MsmqQuickStart.Client.Gateways.MsmqStockServiceGateway, Spring.MsmqQuickStart.Client"&gt;
-    &lt;property name="MessageQueueTemplate" ref="<emphasis role="bold">messageQueueTemplate</emphasis>"/&gt;    
-    &lt;property name="DefaultResponseQueueObjectName" value="responseTxQueue"/&gt;
-  &lt;/object&gt;
+    <programlisting language="myxml">&lt;object name="stockServiceGateway" type="Spring.MsmqQuickStart.Client.Gateways.MsmqStockServiceGateway, Spring.MsmqQuickStart.Client"&gt;
+  &lt;property name="MessageQueueTemplate" ref="<emphasis role="bold">messageQueueTemplate</emphasis>"/&gt;    
+  &lt;property name="DefaultResponseQueueObjectName" value="responseTxQueue"/&gt;
+&lt;/object&gt;
 
-  &lt;object id="<emphasis role="bold">messageQueueTemplate</emphasis>" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging"&gt;
-    &lt;property name="DefaultMessageQueueObjectName" value="requestTxQueue"/&gt;
-    &lt;property name="MessageConverterObjectName" value="<emphasis
-        role="bold">xmlMessageConverter</emphasis>"/&gt;
-  &lt;/object&gt;
+&lt;object id="<emphasis role="bold">messageQueueTemplate</emphasis>" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging"&gt;
+  &lt;property name="DefaultMessageQueueObjectName" value="requestTxQueue"/&gt;
+  &lt;property name="MessageConverterObjectName" value="<emphasis role="bold">xmlMessageConverter</emphasis>"/&gt;
+&lt;/object&gt;
 
-  &lt;object id="<emphasis role="bold">xmlMessageConverter</emphasis>" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"&gt;
-    &lt;property name="TargetTypes"&gt;
-      &lt;list&gt;
-        &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeRequest, Spring.MsmqQuickStart.Common&lt;/value&gt;
-        &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeResponse, Spring.MsmqQuickStart.Common&lt;/value&gt;
-        &lt;value&gt;System.String, mscorlib&lt;/value&gt;        
-      &lt;/list&gt;
-    &lt;/property&gt;
-  &lt;/object&gt;
+&lt;object id="<emphasis role="bold">xmlMessageConverter</emphasis>" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"&gt;
+  &lt;property name="TargetTypes"&gt;
+    &lt;list&gt;
+      &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeRequest, Spring.MsmqQuickStart.Common&lt;/value&gt;
+      &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeResponse, Spring.MsmqQuickStart.Common&lt;/value&gt;
+      &lt;value&gt;System.String, mscorlib&lt;/value&gt;        
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;
 
-  &lt;object id="requestTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging"&gt;
-    &lt;property name="Path" value=".\Private$\request.txqueue"/&gt;
-    &lt;property name="MessageReadPropertyFilterSetAll" value="true"/&gt;
-  &lt;/object&gt;
+&lt;object id="requestTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging"&gt;
+  &lt;property name="Path" value=".\Private$\request.txqueue"/&gt;
+  &lt;property name="MessageReadPropertyFilterSetAll" value="true"/&gt;
+&lt;/object&gt;
 
-  &lt;object id="responseTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging"&gt;
-    &lt;property name="Path" value=".\Private$\response.joe.txqueue"/&gt;
-    &lt;property name="MessageReadPropertyFilterSetAll" value="true"/&gt;
-  &lt;/object&gt;</programlisting>
+&lt;object id="responseTxQueue" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging"&gt;
+  &lt;property name="Path" value=".\Private$\response.joe.txqueue"/&gt;
+  &lt;property name="MessageReadPropertyFilterSetAll" value="true"/&gt;
+&lt;/object&gt;</programlisting>
 
     <para>Since the client also needs to listen to incoming messages on the
     responseTxQueue, a
-    <classname>TransactionalMessageListenerContainer</classname> is
+    <literal>TransactionalMessageListenerContainer</literal> is
     configured. The configuration for the message listener container and all
     its dependencies is shown below, highlighting important dependency
     links.</para>
 
-    <programlisting>  &lt;!-- MSMQ Transaction Manager --&gt;
-  &lt;object id="messageQueueTransactionManager" type="Spring.Messaging.Core.MessageQueueTransactionManager, Spring.Messaging"/&gt;
+    <programlisting language="myxml">&lt;!-- MSMQ Transaction Manager --&gt;
+&lt;object id="messageQueueTransactionManager" type="Spring.Messaging.Core.MessageQueueTransactionManager, Spring.Messaging"/&gt;
 
-  &lt;!-- Message Listener Container that uses MSMQ transactional for receives --&gt;
-  &lt;object id="transactionalMessageListenerContainer" type="Spring.Messaging.Listener.TransactionalMessageListenerContainer, Spring.Messaging"&gt;
-    &lt;property name="MessageQueueObjectName" value="responseTxQueue"/&gt;
-    &lt;property name="PlatformTransactionManager" ref="messageQueueTransactionManager"/&gt;
-    &lt;property name="MessageListener" ref="<emphasis role="bold">messageListenerAdapter</emphasis>"/&gt;
-    &lt;property name="MessageTransactionExceptionHandler" ref="<emphasis
-        role="bold">sendToQueueExceptionHandler</emphasis>"/&gt;
+&lt;!-- Message Listener Container that uses MSMQ transactional for receives --&gt;
+&lt;object id="transactionalMessageListenerContainer" type="Spring.Messaging.Listener.TransactionalMessageListenerContainer, Spring.Messaging"&gt;
+  &lt;property name="MessageQueueObjectName" value="responseTxQueue"/&gt;
+  &lt;property name="PlatformTransactionManager" ref="messageQueueTransactionManager"/&gt;
+  &lt;property name="MessageListener" ref="<emphasis role="bold">messageListenerAdapter</emphasis>"/&gt;
+  &lt;property name="MessageTransactionExceptionHandler" ref="<emphasis role="bold">sendToQueueExceptionHandler</emphasis>"/&gt;
 
-  &lt;/object&gt;
+&lt;/object&gt;
 
-  &lt;!-- Delegate to plain .NET object for message handling --&gt;
-  &lt;object id="<emphasis role="bold">messageListenerAdapter</emphasis>" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
-    &lt;property name="HandlerObject" ref="stockAppHandler"/&gt;
-    &lt;property name="DefaultHandlerMethod" value="Handle"/&gt;
-    &lt;property name="MessageConverterObjectName" value="xmlMessageConverter"/&gt;
-  &lt;/object&gt;
+&lt;!-- Delegate to plain .NET object for message handling --&gt;
+&lt;object id="<emphasis role="bold">messageListenerAdapter</emphasis>" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
+  &lt;property name="HandlerObject" ref="stockAppHandler"/&gt;
+  &lt;property name="DefaultHandlerMethod" value="Handle"/&gt;
+  &lt;property name="MessageConverterObjectName" value="xmlMessageConverter"/&gt;
+&lt;/object&gt;
 
-  &lt;object id="<emphasis role="bold">sendToQueueExceptionHandler</emphasis>" type="Spring.Messaging.Listener.SendToQueueExceptionHandler, Spring.Messaging"&gt;
-    &lt;property name="MessageQueueObjectName" value="<emphasis role="bold">deadTxQueue</emphasis>"/&gt;
-  &lt;/object&gt;
+&lt;object id="<emphasis role="bold">sendToQueueExceptionHandler</emphasis>" type="Spring.Messaging.Listener.SendToQueueExceptionHandler, Spring.Messaging"&gt;
+  &lt;property name="MessageQueueObjectName" value="<emphasis role="bold">deadTxQueue</emphasis>"/&gt;
+&lt;/object&gt;
 
-  &lt;object id="<emphasis role="bold">deadTxQueue</emphasis>" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging"&gt;
-    &lt;property name="Path" value=".\Private$\dead.queue"/&gt;
-    &lt;property name="MessageReadPropertyFilterSetAll" value="true"/&gt;
-  &lt;/object&gt;</programlisting>
+&lt;object id="<emphasis role="bold">deadTxQueue</emphasis>" type="Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging"&gt;
+  &lt;property name="Path" value=".\Private$\dead.queue"/&gt;
+  &lt;property name="MessageReadPropertyFilterSetAll" value="true"/&gt;
+&lt;/object&gt;</programlisting>
 
     <para>A similar configuration is used on the server to configure the class
-    <classname>Spring.MsmqQuickStart.Server.Gateways.MarketDataServiceGateway
-    </classname>that implements the <classname>IMarketDataService</classname>
+    <literal>Spring.MsmqQuickStart.Server.Gateways.MarketDataServiceGateway
+    </literal>that implements the <literal>IMarketDataService</literal>
     interface and a
-    <classname>TransactionalMessageListenerContainer</classname> to process
+    <literal>TransactionalMessageListenerContainer</literal> to process
     messages on the requestTxQueue. You can increase the number of processing
-    thread in the <classname>TransactionalMessageListenerContainer</classname>
-    by setting the property <classname>MaxConcurrentListeners</classname>, the
+    thread in the <literal>TransactionalMessageListenerContainer</literal>
+    by setting the property <literal>MaxConcurrentListeners</literal>, the
     default value is 1.</para>
   </section>
 

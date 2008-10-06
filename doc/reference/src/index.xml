@@ -43,7 +43,7 @@
   <!ENTITY tx-quickstart        SYSTEM "tx-quickstart.xml">
   <!ENTITY quartz-quickstart    SYSTEM "quartz-quickstart.xml">
   <!ENTITY nms-quickstart       SYSTEM "nms-quickstart.xml">
-  <!--<!ENTITY msmq-quickstart      SYSTEM "msmq-quickstart.xml">-->
+  <!ENTITY msmq-quickstart      SYSTEM "msmq-quickstart.xml">
   <!ENTITY wcf-quickstart       SYSTEM "wcf-quickstart.xml">
   <!ENTITY javadevelopers       SYSTEM "javadevelopers.xml">
   <!ENTITY misc                 SYSTEM "misc.xml">
@@ -381,9 +381,9 @@
         <listitem>
           <xref linkend="nms-quickstart" />
         </listitem>
-        <!--<listitem>
+        <listitem>
           <xref linkend="msmq-quickstart" />
-        </listitem>-->
+        </listitem>
         <listitem>
           <xref linkend="wcf-quickstart" />
         </listitem>
@@ -398,7 +398,7 @@
     &tx-quickstart;
     &quartz-quickstart;
     &nms-quickstart;
-    <!--&msmq-quickstart;-->
+    &msmq-quickstart;
     &wcf-quickstart;
   </part>
   <part xml:id="spring-javadevelopers">
