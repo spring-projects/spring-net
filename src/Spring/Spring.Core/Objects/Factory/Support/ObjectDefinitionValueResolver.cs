@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Runtime.Remoting;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Expressions;
@@ -115,7 +116,11 @@ namespace Spring.Objects.Factory.Support
             // we must check the argument value to see whether it requires a runtime
             // reference to another object to be resolved.
             // if it does, we'll attempt to instantiate the object and set the reference.
-            if (argumentValue is ObjectDefinitionHolder)
+            if (RemotingServices.IsTransparentProxy(argumentValue))
+            {
+                resolvedValue = argumentValue;
+            }
+            else if (argumentValue is ObjectDefinitionHolder)
             {
                 // contains an IObjectDefinition with name and aliases...
                 ObjectDefinitionHolder holder = (ObjectDefinitionHolder)argumentValue;

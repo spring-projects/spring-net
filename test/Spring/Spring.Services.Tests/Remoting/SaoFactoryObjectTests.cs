@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Lifetime;
 using NUnit.Framework;
@@ -28,6 +29,7 @@ using Spring.Aop.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
+using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Xml;
 
 #endregion
@@ -91,6 +93,84 @@ namespace Spring.Remoting
 			Assert.AreEqual(1, sc.Counter, "Remote object hasn't been activated by the server.");
 			sc.Count();
 			Assert.AreEqual(2, sc.Counter, "Remote object doesn't work in a 'Singleton' mode.");
+		}
+        
+        public class SPRNET967_SimpleCounterWrapper : MarshalByRefObject, ISimpleCounter
+        {
+            private ISimpleCounter service;
+
+            public SPRNET967_SimpleCounterWrapper()
+            {}
+
+            public SPRNET967_SimpleCounterWrapper(ISimpleCounter service)
+            {
+                this.service = service;
+            }
+
+            public ISimpleCounter Service
+            {
+                get { return service; }
+                set { service = value; }
+            }
+
+            public int Counter
+            {
+                get { return service.Counter; }
+                set { service.Counter = value; }
+            }
+
+            public void Count()
+            {
+                service.Count();
+            }
+        }
+
+        public class SPRNET967_SimpleCounterClient
+        {
+            private ISimpleCounter service;
+
+            public SPRNET967_SimpleCounterClient()
+            {}
+
+            public SPRNET967_SimpleCounterClient(ISimpleCounter service)
+            {
+                this.service = service;
+            }
+
+            public ISimpleCounter Service
+            {
+                get { return service; }
+                set { service = value; }
+            }
+
+            public int Counter
+            {
+                get { return service.Counter; }
+                set { service.Counter = value; }
+            }
+
+            public void Count()
+            {
+                service.Count();
+            }
+        }
+
+        [Test]
+		public void GetSaoWithSingletonModeAutowired_SPRNET967()
+		{
+            // register server by hand to avoid duplicate interfaces
+            SPRNET967_SimpleCounterWrapper svr = new SPRNET967_SimpleCounterWrapper( new SimpleCounter(1) );
+			RemotingServices.Marshal(svr, "RemotedSaoSingletonCounter");
+
+//            object svc = Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/RemotedSaoSingletonCounter");
+//            Assert.IsTrue( svc is IObjectDefinition );
+//            Assert.IsTrue( svc is ISimpleCounter );
+
+            IApplicationContext ctx = new XmlApplicationContext("assembly://Spring.Services.Tests/Spring.Data.Spring.Remoting/saoSingleton-autowired.xml");
+            ContextRegistry.RegisterContext(ctx);
+            SPRNET967_SimpleCounterClient client = (SPRNET967_SimpleCounterClient) ctx.GetObject("counterClient");
+            client.Count();
+            Assert.AreEqual(2, client.Counter);
 		}
 
         [Test]
