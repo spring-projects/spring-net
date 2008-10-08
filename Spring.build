@@ -326,7 +326,6 @@
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
 
@@ -348,7 +347,6 @@
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems-tests}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq-tests}"/>
   </target>
@@ -361,8 +359,6 @@
     <!-- disable namespaces not supported in net-1.0 -->
     <property name="build-web" value="false" />
     <property name="build-nms" value="false" />
-    <property name="build-ems" value="false" />
-    <property name="build-ems-tests" value="false" />
     <property name="build-quartz" value="false" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
@@ -374,8 +370,6 @@
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-nms" value="false" />
-    <property name="build-ems" value="false" />
-    <property name="build-ems-tests" value="false" />
     <property name="build-quartz" value="true" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
@@ -387,8 +381,6 @@
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-nms" value="true" />
-    <property name="build-ems" value="true" />
-    <property name="build-ems-tests" value="false" />
     <property name="build-quartz" value="true" />
     <property name="build-msmq" value="true" />
     <property name="build-msmq-tests" value="false" />
@@ -400,8 +392,6 @@
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-nms" value="false" />
-    <property name="build-ems" value="false" />
-    <property name="build-ems-tests" value="false" />
     <property name="build-quartz" value="false" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
@@ -413,8 +403,6 @@
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-nms" value="true" />
-    <property name="build-ems" value="true" />
-    <property name="build-ems-tests" value="false" />
     <property name="build-quartz" value="true" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
@@ -587,8 +575,6 @@
 	<delete dir="src/Spring/Spring.Services/bin" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Messaging.Nms/obj" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Messaging.Nms/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Messaging.Ems/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Messaging.Ems/bin" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Messaging/obj" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Messaging/bin" failonerror="false"/>
 	<delete dir="src/Spring/Spring.Scheduling.Quartz/obj" failonerror="false"/>
@@ -620,8 +606,6 @@
 	<delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Messaging.Nms.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Messaging.Ems.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Messaging.Ems.Tests/bin" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Messaging.Tests/obj" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Messaging.Tests/bin" failonerror="false"/>
 	<delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/obj" failonerror="false"/>
@@ -960,10 +944,6 @@
           <include name="**/Spring.Messaging.Nms.xml"/>
           <include name="**/Spring.Messaging.Nms.pdb"/>
 
-          <include name="**/Spring.Messaging.Ems.dll"/>
-          <include name="**/Spring.Messaging.Ems.xml"/>
-          <include name="**/Spring.Messaging.Ems.pdb"/>
-
           <include name="**/Spring.Messaging.dll"/>
           <include name="**/Spring.Messaging.xml"/>
           <include name="**/Spring.Messaging.pdb"/>
@@ -1159,9 +1139,6 @@
           file="src/Spring/Spring.Messaging.Nms/Messaging/Nms/Config/spring-nms-1.2.xsd"/>
 
     <copy todir="${current.package.dir}/doc/schema"
-          file="src/Spring/Spring.Messaging.Ems/Messaging/Ems/Config/spring-ems-1.2.xsd"/>
-
-    <copy todir="${current.package.dir}/doc/schema"
           file="build-support/install-schema.build"/>
 
     <echo message="copying source code for release..."/>
@@ -1334,7 +1311,6 @@
       <include name="src/Spring/Spring.Data.NHibernate12/**"/>
       <include name="src/Spring/Spring.Data.NHibernate20/**"/>
       <include name="src/Spring/Spring.Messaging/**"/>
-      <include name="src/Spring/Spring.Messaging.Ems/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
       <include name="src/Spring/Spring.Scheduling.Quartz/**"/>
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
@@ -1351,7 +1327,6 @@
       <include name="test/Spring/Spring.Data.NHibernate20.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate20.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
-      <include name="test/Spring/Spring.Messaging.Ems.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Scheduling.Quartz.Tests/**"/>
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
