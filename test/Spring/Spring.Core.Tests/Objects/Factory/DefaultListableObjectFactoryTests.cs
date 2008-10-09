@@ -915,6 +915,44 @@ namespace Spring.Objects.Factory
             Assert.AreEqual(expectedName, sing.Name, "Dependency was not resolved pulling manually registered instance out of the factory using factory method instantiation.");
         }
 
+        [Test]
+        public void GetObjectWithArgsOnFactoryObject()
+        {
+            using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
+            {
+                // DummyFactory produces a TestObject
+                RootObjectDefinition factoryObjectDef = new RootObjectDefinition(typeof(DummyFactory));
+                factoryObjectDef.IsSingleton = true;
+                lof.RegisterObjectDefinition("factoryObject", factoryObjectDef);
+
+                // verify preconditions
+                TestObject to = lof.GetObject("factoryObject", null, null) as TestObject;
+                Assert.IsNotNull(to);
+                Assert.AreEqual(25, to.Age);
+                Assert.AreEqual(DummyFactory.SINGLETON_NAME, to.Name);
+
+                try
+                {
+                    to = lof.GetObject("factoryObject", new object[] {}) as TestObject;
+                    Assert.Fail("should throw ObjectDefinitionStoreException");
+                }
+                catch (ObjectDefinitionStoreException ex)
+                {
+                    Assert.IsTrue( ex.Message.IndexOf("Cannot specify arguments in the GetObject () method when referring to a factory object definition") > -1);
+                }
+
+                try
+                {
+                    to = lof.GetObject("factoryObject", new object[] { "Mark", "35" }) as TestObject;
+                    Assert.Fail("should throw ObjectDefinitionStoreException");
+                }
+                catch (ObjectDefinitionStoreException ex)
+                {
+                    Assert.IsTrue( ex.Message.IndexOf("Cannot specify arguments in the GetObject () method when referring to a factory object definition") > -1);
+                }
+            }
+        }
+
         [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-368")]
         public void GetObjectWithCtorArgsAndCtorAutowiring()
         {

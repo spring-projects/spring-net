@@ -1347,13 +1347,21 @@ namespace Spring.Objects.Factory.Support
 
             // check validity of the usage of the args parameter; this can
             // only be used for prototypes constructed via a factory method...
-            if (arguments != null && arguments.Length > 0)
+            if (arguments != null)
             {
                 if (mergedObjectDefinition.IsSingleton)
                 {
                     throw new ObjectDefinitionStoreException( "Cannot specify arguments in the GetObject () method when "
                                                              + "referring to a singleton object definition." );
                 }
+
+                if (mergedObjectDefinition.HasObjectType
+                    && typeof( IFactoryObject ).IsAssignableFrom( mergedObjectDefinition.ObjectType ))
+                {
+                    throw new ObjectDefinitionStoreException( "Cannot specify arguments in the GetObject () method when "
+                                                             + "referring to a factory object definition." );                    
+                }
+
                 //MLP lets skip this check for now.
                 /*
                 else if (StringUtils.IsNullOrEmpty(mergedObjectDefinition.FactoryMethodName))
@@ -1671,7 +1679,7 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>.
         public object GetObject( string name )
         {
-            return GetObjectInternal( name, typeof( object ), null, false );
+            return GetObjectInternal( name, null, null, false );
         }
 
         /// <summary>
@@ -1720,7 +1728,7 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public object GetObject( string name, object[] arguments )
         {
-            return GetObjectInternal( name, typeof( object ), arguments, false );
+            return GetObjectInternal( name, null, arguments, false );
 
             //            string objectName = TransformedObjectName(name);
             //            object instance = null;
