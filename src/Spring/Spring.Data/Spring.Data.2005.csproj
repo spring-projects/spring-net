@@ -97,6 +97,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Dao\Attributes\PersistenceExceptionTranslationAdvisor.cs" />
+    <Compile Include="Dao\Attributes\PersistenceExceptionTranslationPostProcessor.cs" />
     <Compile Include="Dao\CannotAcquireLockException.cs" />
     <Compile Include="Dao\CannotSerializeTransactionException.cs" />
     <Compile Include="Dao\CleanupFailureDataAccessException.cs" />
@@ -116,9 +118,12 @@
     <Compile Include="Dao\ObjectRetrievalFailureException.cs" />
     <Compile Include="Dao\OptimisticLockingFailureException.cs" />
     <Compile Include="Dao\PermissionDeniedDataAccessException.cs" />
+    <Compile Include="Dao\Support\ChainedPersistenceExceptionTranslator.cs" />
     <Compile Include="Dao\Support\DaoSupport.cs" />
     <Compile Include="Dao\Support\DataAccessUtils.cs" />
     <Compile Include="Dao\Support\Generic\DataAccessUtils.cs" />
+    <Compile Include="Dao\Support\IPersistenceExceptionTranslator.cs" />
+    <Compile Include="Dao\Support\PersistenceExceptionTranslationInterceptor.cs" />
     <Compile Include="Dao\TypeMismatchDataAccessException.cs" />
     <Compile Include="Dao\UncategorizedDataAccessException.cs" />
     <Compile Include="Data\BadSqlGrammarException.cs" />

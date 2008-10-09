@@ -956,6 +956,9 @@
     <Compile Include="Reflection\Dynamic\DynamicMethod.cs" />
     <Compile Include="Reflection\Dynamic\DynamicProperty.cs" />
     <Compile Include="Reflection\Dynamic\DynamicReflectionManager.cs" />
+    <Compile Include="Stereotype\ComponentAttribute.cs" />
+    <Compile Include="Stereotype\RepositoryAttribute.cs" />
+    <Compile Include="Stereotype\ServiceAttribute.cs" />
     <Compile Include="Threading\CallContextStorage.cs" />
     <Compile Include="Threading\ISync.cs" />
     <Compile Include="Threading\IThreadStorage.cs" />

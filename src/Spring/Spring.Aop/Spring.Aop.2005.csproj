@@ -281,12 +281,15 @@
     <Compile Include="Aop\Support\AbstractRegularExpressionMethodPointcut.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Support\AttributeMatchingPointcut.cs" />
     <Compile Include="Aop\Support\AttributeMatchMethodPointcut.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Aop\Support\AttributeMatchMethodPointcutAdvisor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Support\AttributeMethodMatcher.cs" />
+    <Compile Include="Aop\Support\AttributeTypeFilter.cs" />
     <Compile Include="Aop\Support\ComposablePointcut.cs">
       <SubType>Code</SubType>
     </Compile>

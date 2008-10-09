@@ -143,7 +143,7 @@ namespace Spring.Aop.Support
 		}
 
         /// <summary>
-        /// Is the interfaces attributes of the method to be included in the search for the
+        /// Is the interfaces attributes of the method to be included in the search for theg 
         /// <see cref="Attribute"/>?
         /// </summary>
         /// <remarks>
