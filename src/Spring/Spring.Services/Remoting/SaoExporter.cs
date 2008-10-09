@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2004 the original author or authors.
+ * Copyright 2002-2008 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,15 +25,9 @@ using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Remoting;
-
-using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Proxy;
-using Spring.Context;
-using Spring.Context.Support;
-using Spring.Objects;
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Support;
 using Spring.Remoting.Support;
 using Spring.Util;
 
@@ -41,82 +35,119 @@ using Spring.Util;
 
 namespace Spring.Remoting
 {
-	/// <summary>
-	/// Publishes an instance of an object under
-	/// a given url as a Server Activated Object (SAO).
-	/// </summary>
-	/// <remarks>
-	/// Object can be exported either as SingleCall or Singleton.
-	/// </remarks>
-	/// <author>Aleksandar Seovic</author>
-	/// <author>Mark Pollack</author>
-	/// <author>Bruno Baia</author>
-	public class SaoExporter : ConfigurableLifetime, IApplicationContextAware, IObjectFactoryAware, IInitializingObject, IDisposable
-	{
-		#region Logging
+    /// <summary>
+    /// Publishes an instance of an object under
+    /// a given url as a Server Activated Object (SAO).
+    /// </summary>
+    /// <remarks>
+    /// Remoting servers exported by <see cref="SaoExporter"/> always correspond to <see cref="WellKnownObjectMode.Singleton"/>. 
+    /// Objects can be exported either as SingleCall or Singleton by marking the exported object identified by 
+    /// <see name="TargetName"/> as either singleton or prototype.
+    /// </remarks>
+    /// <author>Aleksandar Seovic</author>
+    /// <author>Mark Pollack</author>
+    /// <author>Bruno Baia</author>
+    /// <author>Erich Eichinger</author>
+    public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializingObject, IDisposable
+    {
+        #region Logging
 
-		private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(SaoExporter));
+        private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger( typeof( SaoExporter ) );
 
-		#endregion
+        #endregion
 
-		#region Fields
+        /// <summary>
+        /// Holds EXPORTER_ID to SaoExporter instance mappings.
+        /// </summary>
+        private static readonly IDictionary s_activeExporters = new Hashtable();
 
-		private string targetName;
-		private string applicationName;
-		private string serviceName;
+        ///<summary>
+        /// Returns the target object instance exported by the SaoExporter identified by <see cref="EXPORTER_ID"/>.
+        ///</summary>
+        ///<param name="exporterId"></param>
+        ///<returns></returns>
+        public static object GetTarget( string exporterId )
+        {
+            SaoExporter exporterInstance;
+            lock (s_activeExporters.SyncRoot)
+            {
+                exporterInstance = (SaoExporter)s_activeExporters[exporterId];
+            }
+            AssertUtils.ArgumentNotNull( exporterInstance, "exporterId", "Remoting Server object is not associated with any active SaoExporter" );
+            object target = exporterInstance.GetTargetInstance();
+            AssertUtils.ArgumentNotNull( target, "exporterId", string.Format( "Failed retrieving target object for SaoExporter ID {0}", exporterId ) );
+            return target;
+        }
+
+        #region Fields
+
+        private readonly string EXPORTER_ID = Guid.NewGuid().ToString();
+        private string targetName;
+        private string applicationName;
+        private string serviceName;
         private string[] interfaces;
 
-		private IApplicationContext applicationContext;
-		private IObjectFactory objectFactory;
+        private IObjectFactory objectFactory;
+        private MarshalByRefObject remoteObject;
 
-		private MarshalByRefObject remoteObject;
+        #endregion
 
-		#endregion
+        #region Constructor(s) / Destructor
 
-		#region Constructor(s) / Destructor
+        /// <summary>
+        /// Creates a new instance of the <see cref="SaoExporter"/> class.
+        /// </summary>
+        public SaoExporter()
+        {
+            lock (s_activeExporters.SyncRoot)
+            {
+                s_activeExporters[EXPORTER_ID] = this;
+            }
+        }
 
-		/// <summary>
-		/// Creates a new instance of the <see cref="SaoExporter"/> class.
-		/// </summary>
-		public SaoExporter()
-		{
-		}
+        /// <summary>
+        /// Cleanup before GC
+        /// </summary>
+        ~SaoExporter()
+        {
+            Dispose( false );
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Gets or sets the name of the target object definition.
-		/// </summary>
-		public string TargetName
-		{
-			get { return targetName; }
-			set { targetName = value; }
-		}
+        /// <summary>
+        /// Gets or sets the name of the target object definition.
+        /// </summary>
+        public string TargetName
+        {
+            get { return targetName; }
+            set { targetName = value; }
+        }
 
-		/// <summary>
-		/// Gets or sets the name of the remote application.
-		/// </summary>
-		public string ApplicationName
-		{
-			get { return applicationName; }
-			set { applicationName = value; }
-		}
+        /// <summary>
+        /// Gets or sets the name of the remote application.
+        /// </summary>
+        public string ApplicationName
+        {
+            get { return applicationName; }
+            set { applicationName = value; }
+        }
 
-		/// <summary>
-		/// Gets or sets the name of the exported remote service.
-		/// <remarks>
-		/// The name that will be used in the URI to refer to this service.
-		/// This will be of the form, tcp://host:port/ServiceName or
-		/// tcp://host:port/ApplicationName/ServiceName
-		/// </remarks>
-		/// </summary>
-		public string ServiceName
-		{
-			get { return serviceName; }
-			set { serviceName = value; }
-		}
+        /// <summary>
+        /// Gets or sets the name of the exported remote service.
+        /// <remarks>
+        /// The name that will be used in the URI to refer to this service.
+        /// This will be of the form, tcp://host:port/ServiceName or
+        /// tcp://host:port/ApplicationName/ServiceName
+        /// </remarks>
+        /// </summary>
+        public string ServiceName
+        {
+            get { return serviceName; }
+            set { serviceName = value; }
+        }
 
         /// <summary>
         /// Gets or sets the list of interfaces whose methods should be exported.
@@ -132,127 +163,119 @@ namespace Spring.Remoting
             set { interfaces = value; }
         }
 
-		#endregion
+        #endregion
 
-		#region IApplicationContextAware Members
+        #region IObjectFactoryAware Members
 
         /// <summary>
-        /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
-        /// object runs in.
+        /// Sets object factory to use.
         /// </summary>
-        /// <value></value>
-        /// <remarks>
-        /// <p>
-        /// Normally this call will be used to initialize the object.
-        /// </p>
-        /// <p>
-        /// Invoked after population of normal object properties but before an
-        /// init callback such as
-        /// <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
-        /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
-        /// or a custom init-method. Invoked after the setting of any
-        /// <see cref="Spring.Context.IResourceLoaderAware"/>'s
-        /// <see cref="Spring.Context.IResourceLoaderAware.ResourceLoader"/>
-        /// property.
-        /// </p>
-        /// </remarks>
-        /// <exception cref="Spring.Context.ApplicationContextException">
-        /// In the case of application context initialization errors.
-        /// </exception>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// If thrown by any application context methods.
-        /// </exception>
-        /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
-		public IApplicationContext ApplicationContext
-		{
-			set { applicationContext = value; }
-		}
+        public IObjectFactory ObjectFactory
+        {
+            set { objectFactory = value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region IObjectFactoryAware Members
+        #region IInitializingObject Members
 
-		/// <summary>
-		/// Sets object factory to use.
-		/// </summary>
-		public IObjectFactory ObjectFactory
-		{
-			set { objectFactory = value; }
-		}
+        /// <summary>
+        /// Publish the object 
+        /// </summary>
+        public void AfterPropertiesSet()
+        {
+            ValidateConfiguration();
+            Export();
+        }
 
-		#endregion
+        #endregion
 
-		#region IInitializingObject Members
+        #region IDisposable Members
 
-		/// <summary>
-		/// Publish the object 
-		/// </summary>
-		public void AfterPropertiesSet()
-		{
-			ValidateConfiguration();
-			Export();
-		}
+        /// <summary>
+        /// Disconnect the remote object from the registered remoting channels.
+        /// </summary>
+        public void Dispose()
+        {
+            GC.SuppressFinalize( this );
+            Dispose( true );
+        }
 
-		#endregion
-
-		#region IDisposable Members
-
-		/// <summary>
-		/// Disconnect the remote object from the registered remoting channels.
-		/// </summary>
-		public void Dispose()
-		{
-			RemotingServices.Disconnect(remoteObject);
-		}
-
-		#endregion
-		
-		#region Private Methods
-
-		private void ValidateConfiguration()
-		{
-			if (TargetName == null)
-			{
-				throw new ArgumentException("The TargetName property is required.");
-			}
-
-			if (ServiceName == null)
-			{
-				throw new ArgumentException("The ServiceName property is required.");
-			}
-		}
-
-		private void Export()
-		{
-            IProxyTypeBuilder builder = new SaoRemoteObjectProxyTypeBuilder(applicationContext.Name, targetName, this);
-			builder.TargetType = this.objectFactory.GetType(targetName);
-            if (interfaces != null && interfaces.Length > 0)
+        /// <summary>
+        /// Stops exporting the object identified by <see cref="TargetName"/>.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose( bool disposing )
+        {
+            if (disposing)
             {
-                builder.Interfaces = TypeResolutionUtils.ResolveInterfaceArray(interfaces);
+                RemotingServices.Disconnect( remoteObject );
+                lock (s_activeExporters.SyncRoot)
+                {
+                    s_activeExporters.Remove( this.EXPORTER_ID );
+                }
+                remoteObject = null;
+                objectFactory = null;
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private object GetTargetInstance()
+        {
+            return objectFactory.GetObject( targetName );
+        }
+
+        private void ValidateConfiguration()
+        {
+            if (TargetName == null)
+            {
+                throw new ArgumentException( "The TargetName property is required." );
             }
 
-			ConstructorInfo proxyConstructor = 
-				builder.BuildProxyType().GetConstructor(Type.EmptyTypes);
+            if (ServiceName == null)
+            {
+                throw new ArgumentException( "The ServiceName property is required." );
+            }
+        }
 
-			string objectUri = (applicationName != null ? applicationName + "/" + serviceName : serviceName);
+        private void Export()
+        {
+            if (remoteObject != null)
+            {
+                throw new InvalidOperationException("object is already exported");
+            }
 
-			remoteObject = (MarshalByRefObject) proxyConstructor.Invoke(ObjectUtils.EmptyObjects);
+            IProxyTypeBuilder builder = new SaoRemoteObjectProxyTypeBuilder( this );
+            builder.TargetType = this.objectFactory.GetType( targetName );
+            if (interfaces != null && interfaces.Length > 0)
+            {
+                builder.Interfaces = TypeResolutionUtils.ResolveInterfaceArray( interfaces );
+            }
 
-			RemotingServices.Marshal(remoteObject, objectUri);
+            Type proxyType = builder.BuildProxyType();
+            string objectUri = (applicationName != null ? applicationName + "/" + serviceName : serviceName);
 
-			#region Instrumentation
+            ConstructorInfo proxyConstructor = proxyType.GetConstructor( Type.EmptyTypes );
+            remoteObject = (MarshalByRefObject)proxyConstructor.Invoke( ObjectUtils.EmptyObjects );
 
-			if (LOG.IsDebugEnabled)
-			{
-				LOG.Debug(String.Format("Target '{0}' exported as '{1}'.", targetName, objectUri));
-			}
+            RemotingServices.Marshal( remoteObject, objectUri );
 
-			#endregion
-		}
+            #region Instrumentation
 
-		#endregion
+            if (LOG.IsDebugEnabled)
+            {
+                LOG.Debug( String.Format( "Target '{0}' exported as '{1}'.", targetName, objectUri ) );
+            }
 
-		#region SaoRemoteObjectProxyTypeBuilder inner class definition
+            #endregion
+        }
+
+        #endregion
+
+        #region SaoRemoteObjectProxyTypeBuilder inner class definition
 
         /// <summary>
         /// Builds a proxy type based on <see cref="BaseRemoteObject"/> to wrap a target object 
@@ -265,17 +288,9 @@ namespace Spring.Remoting
         {
             #region Fields
 
-            private static readonly MethodInfo TimeSpan_FromTicks =
-                typeof(TimeSpan).GetMethod("FromTicks", BindingFlags.Public | BindingFlags.Static);
+            private static readonly MethodInfo SaoExporter_GetTargetInstance = typeof( SaoExporter ).GetMethod( "GetTarget", new Type[] { typeof( string ) } );
 
-            private static readonly MethodInfo ContextRegistry_GetContext =
-                typeof(ContextRegistry).GetMethod("GetContext", new Type[1] { typeof(string) });
-
-            private static readonly MethodInfo IObjectFactory_GetObject =
-                typeof(IObjectFactory).GetMethod("GetObject", new Type[1] { typeof(string) });
-
-            private string contextName;
-            private string targetObjectName;
+            private SaoExporter _saoExporter;
 
             #endregion
 
@@ -285,23 +300,16 @@ namespace Spring.Remoting
             /// Creates a new instance of the 
             /// <see cref="SaoRemoteObjectProxyTypeBuilder"/> class.
             /// </summary>
-            /// <param name="contextName">
-            /// The name of the target object definition.
+            /// <param name="saoExporter">
+            /// The exporter to be associated with the proxy.
             /// </param>
-            /// <param name="targetObjectName">
-            /// The name of the application context that this object runs in.
-            /// </param>
-            /// <param name="lifetime">
-            /// The lifetime properties to be applied to the target object.
-            /// </param>
-            public SaoRemoteObjectProxyTypeBuilder(string contextName, string targetObjectName, ILifetime lifetime)
-                : base(lifetime)
+            public SaoRemoteObjectProxyTypeBuilder( SaoExporter saoExporter )
+                : base( saoExporter )
             {
-                this.contextName = contextName;
-                this.targetObjectName = targetObjectName;
+                this._saoExporter = saoExporter;
 
                 Name = "SaoRemoteObjectProxy";
-                BaseType = typeof(BaseRemoteObject);
+                BaseType = typeof( BaseRemoteObject );
             }
 
             #endregion
@@ -313,12 +321,10 @@ namespace Spring.Remoting
             /// the target instance on which calls should be delegated to.
             /// </summary>
             /// <param name="il">The IL generator to use.</param>
-            public override void PushTarget(ILGenerator il)
+            public override void PushTarget( ILGenerator il )
             {
-                il.Emit(OpCodes.Ldstr, this.contextName);
-                il.Emit(OpCodes.Call, ContextRegistry_GetContext);
-                il.Emit(OpCodes.Ldstr, this.targetObjectName);
-                il.Emit(OpCodes.Callvirt, IObjectFactory_GetObject);
+                il.Emit( OpCodes.Ldstr, this._saoExporter.EXPORTER_ID );
+                il.Emit( OpCodes.Call, SaoExporter_GetTargetInstance );
             }
 
             #endregion
@@ -331,17 +337,17 @@ namespace Spring.Remoting
             /// <param name="builder">
             /// The <see cref="System.Reflection.Emit.TypeBuilder"/> to use.
             /// </param>
-            protected override void ImplementConstructors(TypeBuilder builder)
+            protected override void ImplementConstructors( TypeBuilder builder )
             {
                 MethodAttributes attributes = MethodAttributes.Public |
                     MethodAttributes.HideBySig | MethodAttributes.SpecialName |
                     MethodAttributes.RTSpecialName;
-                ConstructorBuilder cb = builder.DefineConstructor(attributes,
-                  CallingConventions.Standard, Type.EmptyTypes);
+                ConstructorBuilder cb = builder.DefineConstructor( attributes,
+                  CallingConventions.Standard, Type.EmptyTypes );
 
                 ILGenerator il = cb.GetILGenerator();
-                GenerateRemoteObjectLifetimeInitialization(il);
-                il.Emit(OpCodes.Ret);
+                GenerateRemoteObjectLifetimeInitialization( il );
+                il.Emit( OpCodes.Ret );
             }
 
             /// <summary>
@@ -350,13 +356,13 @@ namespace Spring.Remoting
             /// <param name="builder">
             /// The <see cref="System.Type"/> builder to use for code generation.
             /// </param>
-            protected override void DeclareTargetInstanceField(TypeBuilder builder)
+            protected override void DeclareTargetInstanceField( TypeBuilder builder )
             {
             }
 
             #endregion
         }
 
-		#endregion
-	}
+        #endregion
+    }
 }

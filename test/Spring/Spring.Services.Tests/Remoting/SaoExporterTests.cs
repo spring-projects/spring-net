@@ -22,6 +22,8 @@
 
 using System;
 using NUnit.Framework;
+using Spring.Objects;
+using Spring.Objects.Factory.Support;
 
 #endregion
 
@@ -42,5 +44,46 @@ namespace Spring.Remoting
 			SaoExporter exp = new SaoExporter();
 			exp.AfterPropertiesSet();
 		}
+
+        [Test]
+        public void ExportSingleton()
+        {
+            using(DefaultListableObjectFactory of = new DefaultListableObjectFactory())
+            {
+                of.RegisterSingleton("simpleCounter", new SimpleCounter());
+                SaoExporter saoExporter = new SaoExporter();
+                saoExporter.ObjectFactory = of;
+                saoExporter.TargetName = "simpleCounter";
+                saoExporter.ServiceName = "RemotedSaoSingletonCounter";
+                saoExporter.AfterPropertiesSet();
+                of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
+
+                ISimpleCounter client = (ISimpleCounter) Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/RemotedSaoSingletonCounter" );
+                client.Count();
+                client.Count();
+
+                Assert.AreEqual(2, client.Counter);
+            }
+        }
+
+        [Test]
+        public void ExportSingleCall()
+        {
+            using(DefaultListableObjectFactory of = new DefaultListableObjectFactory())
+            {
+                of.RegisterObjectDefinition("simpleCounter", new RootObjectDefinition(typeof(SimpleCounter), false));
+                SaoExporter saoExporter = new SaoExporter();
+                saoExporter.ObjectFactory = of;
+                saoExporter.TargetName = "simpleCounter";
+                saoExporter.ServiceName = "RemotedSaoSingleCallCounter";
+                saoExporter.AfterPropertiesSet();
+                of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
+
+                ISimpleCounter client = (ISimpleCounter) Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/RemotedSaoSingleCallCounter" );
+                client.Count();
+                client.Count();
+                Assert.AreEqual(0, client.Counter);
+            }
+        }
 	}
 }
