@@ -477,13 +477,43 @@
       is configured using the dictionary property
       <literal>TargetDbProviders</literal>. The key of this dictionary
       contains the name of a dbProvider and its value is a dbProvider object.
-      (You can also provide this dictionary as a constructor argument.) During
-      request processing, once you have determined which target dbProvider
-      should be use, in this example database1ProviderName, you should execute
-      the following code
-      <literal>LogicalThreadContext.SetData("dbProviderName",
-      "database1ProviderName")</literal> and then call the data access
-      layer.</para>
+      (You can also provide this dictionary as a constructor argument.)
+<para>During request processing, once you have determined which target
+      dbProvider should be use, in this example database1ProviderName, you
+      should execute the following code is you are using Spring 1.2 M1 or
+      later</para>
+
+      <programlisting language="csharp">// Spring 1.2 M1 or later
+
+LogicalThreadContext.SetData(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME, "database1ProviderName")</programlisting>
+
+      <para>and the following ocde if you are using earlier versions</para>
+
+      <programlisting language="csharp">// Prior to Spring 1.2 M1
+
+<literal>LogicalThreadContext.SetData("dbProviderName", "database1ProviderName")</literal> </programlisting>
+
+      <para>and then call the data access layer.</para>
+
+      <para>Here is a sample configuration to build up an object definition
+      for <classname>MultiDelegatingDbProvider</classname>.</para>
+
+      <programlisting language="csharp">&lt;db:provider id="CreditAndDebitsDbProvider"
+               provider="System.Data.SqlClient"
+               connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa"/&gt;
+
+&lt;db:provider id="CreditDbProvider"
+              provider="System.Data.SqlClient"
+              connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Credits;User ID=springqa; Password=springqa"/&gt;
+
+&lt;object id="dbProviderDictionary" type="Spring.Collections.SynchronizedHashtable, Spring.Core"&gt;
+    &lt;property name="['DbProvider1']" ref="CreditAndDebitsDbProvider"/&gt;
+    &lt;property name="['DbProvider2']" ref="CreditDbProvider"/&gt;
+&lt;/object&gt;
+
+&lt;object id="DbProvider" type="Spring.Data.MultiDelegatingDbProvider, Spring.Data"&gt;
+  &lt;property name="TargetDbProviders" ref="dbProviderDictionary"/&gt;
+&lt;/object&gt;</programlisting>
 
       <para></para>
     </section>
