@@ -64,38 +64,38 @@
     providers. Note that Spring's DbProvider abstraction can be used on .NET
     1.1 in addition to .NET 2.0</para>
 
-    <programlisting language="csharp">    public interface IDbProvider
-    {
-        IDbCommand CreateCommand();
+    <programlisting language="csharp">public interface IDbProvider
+{
+  <classname>IDbCommand</classname> CreateCommand();
 
-        object CreateCommandBuilder();        
-        
-        IDbConnection CreateConnection();
+  object CreateCommandBuilder();        
 
-        IDbDataAdapter CreateDataAdapter();
-        
-        IDbDataParameter CreateParameter();
-        
-        string CreateParameterName(string name);
+  <classname>IDbConnection</classname> CreateConnection();
 
-        string CreateParameterNameForCollection(string name);
+  <classname>IDbDataAdapter</classname> CreateDataAdapter();
 
-        IDbMetadata DbMetadata
-        {
-            get;
-        }               
+  <classname>IDbDataParameter</classname> CreateParameter();
 
-        string ConnectionString
-        {
-            set;
-            get;
-        }
-        
-        string ExtractError(Exception e);
+  string CreateParameterName(string name);
 
-        bool IsDataAccessException(Exception e);
-        
-    }</programlisting>
+  string CreateParameterNameForCollection(string name);
+
+  <classname>IDbMetadata</classname> DbMetadata
+  {
+      get;
+  }               
+
+  string ConnectionString
+  {
+      set;
+      get;
+  }
+
+  string ExtractError(Exception e);
+
+  bool IsDataAccessException(Exception e);
+    
+}</programlisting>
 
     <para>ExtractError is used to return an error string for translation into
     a DAO exception. On .NET 1.1 the method IsDataAccessException is used to
@@ -259,7 +259,7 @@
 
     <para>An example using DbProviderFactory is shown below</para>
 
-    <programlisting language="csharp">IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");</programlisting>
+    <programlisting language="csharp"><classname>IDbProvider</classname> dbProvider = <classname>DbProviderFactory</classname>.GetDbProvider("System.Data.SqlClient");</programlisting>
 
     <para>The default definitions of the providers are contained in the
     assembly resource
@@ -304,8 +304,8 @@
          xmlns:db="http://www.springframework.net/database"&gt;
 
   &lt;db:provider id="DbProvider" 
-                provider="System.Data.SqlClient" 
-                connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/&gt;
+      provider="System.Data.SqlClient" 
+      connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/&gt;
   
   &lt;object id="adoTemplate" type="Spring.Data.AdoTemplate, Spring.Data"&gt;  
     &lt;property name="DbProvider" ref="DbProvider"/&gt;                
@@ -378,7 +378,6 @@
     &lt;add key="db.database" value="Northwind" /&gt;
   &lt;/databaseSettings&gt;
 
-
 &lt;/configuration&gt;</programlisting>
 
     <para>Where <literal>Dao.xml</literal> has a connection string as shown
@@ -388,8 +387,8 @@
          xmlns:db="http://www.springframework.net/database"&gt;
 
   &lt;db:provider id="DbProvider" 
-                provider="System.Data.SqlClient" 
-                connectionString="${db.datasource};Database=${db.database};User ID=${db.user};Password=${db.password};Trusted_Connection=False"/&gt;
+      provider="System.Data.SqlClient" 
+      connectionString="${db.datasource};Database=${db.database};User ID=${db.user};Password=${db.password};Trusted_Connection=False"/&gt;
   
   &lt;object id="adoTemplate" type="Spring.Data.AdoTemplate, Spring.Data"&gt;  
     &lt;property name="DbProvider" ref="DbProvider"/&gt;                
@@ -485,31 +484,29 @@
       later</para>
 
       <programlisting language="csharp">// Spring 1.2 M1 or later
-
-LogicalThreadContext.SetData(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME, "database1ProviderName")</programlisting>
+<classname>LogicalThreadContext</classname>.SetData(<classname>MultiDelegatingDbProvider</classname>.CURRENT_DBPROVIDER_SLOTNAME, "database1ProviderName")</programlisting>
 
       <para>and the following ocde if you are using earlier versions</para>
 
       <programlisting language="csharp">// Prior to Spring 1.2 M1
-
-<literal>LogicalThreadContext.SetData("dbProviderName", "database1ProviderName")</literal> </programlisting>
+<classname>LogicalThreadContext</classname>.SetData("dbProviderName", "database1ProviderName")</programlisting>
 
       <para>and then call the data access layer.</para>
 
       <para>Here is a sample configuration to build up an object definition
-      for <classname>MultiDelegatingDbProvider</classname>.</para>
+      for <literal>MultiDelegatingDbProvider</literal>.</para>
 
-      <programlisting language="csharp">&lt;db:provider id="CreditAndDebitsDbProvider"
-               provider="System.Data.SqlClient"
-               connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa"/&gt;
+      <programlisting language="myxml">&lt;db:provider id="CreditAndDebitsDbProvider"
+    provider="System.Data.SqlClient"
+    connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa"/&gt;
 
 &lt;db:provider id="CreditDbProvider"
-              provider="System.Data.SqlClient"
-              connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Credits;User ID=springqa; Password=springqa"/&gt;
+    provider="System.Data.SqlClient"
+    connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Credits;User ID=springqa; Password=springqa"/&gt;
 
 &lt;object id="dbProviderDictionary" type="Spring.Collections.SynchronizedHashtable, Spring.Core"&gt;
-    &lt;property name="['DbProvider1']" ref="CreditAndDebitsDbProvider"/&gt;
-    &lt;property name="['DbProvider2']" ref="CreditDbProvider"/&gt;
+  &lt;property name="['DbProvider1']" ref="CreditAndDebitsDbProvider"/&gt;
+  &lt;property name="['DbProvider2']" ref="CreditDbProvider"/&gt;
 &lt;/object&gt;
 
 &lt;object id="DbProvider" type="Spring.Data.MultiDelegatingDbProvider, Spring.Data"&gt;
