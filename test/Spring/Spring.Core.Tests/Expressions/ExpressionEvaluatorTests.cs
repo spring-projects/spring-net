@@ -134,6 +134,14 @@ namespace Spring.Expressions
 
         #endregion
 
+        [Test]
+        [Ignore("SPRNET-944")]
+        public void DateTests()
+        {
+            string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'"); 
+            Assert.AreEqual("date", dateLiteral);
+        }
+
         #region Serialization Tests
 
         /// <summary>
@@ -269,6 +277,8 @@ namespace Spring.Expressions
         }
 
         #endregion Serialization Tests
+
+        
 
         /// <summary>
         /// Should throw exception for null root object
