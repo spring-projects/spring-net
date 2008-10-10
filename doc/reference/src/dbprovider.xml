@@ -478,7 +478,8 @@
       <literal>TargetDbProviders</literal>. The key of this dictionary
       contains the name of a dbProvider and its value is a dbProvider object.
       (You can also provide this dictionary as a constructor argument.)
-<para>During request processing, once you have determined which target
+      </para>
+      <para>During request processing, once you have determined which target
       dbProvider should be use, in this example database1ProviderName, you
       should execute the following code is you are using Spring 1.2 M1 or
       later</para>
@@ -515,7 +516,6 @@ LogicalThreadContext.SetData(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNA
   &lt;property name="TargetDbProviders" ref="dbProviderDictionary"/&gt;
 &lt;/object&gt;</programlisting>
 
-      <para></para>
     </section>
   </section>
 </chapter>
