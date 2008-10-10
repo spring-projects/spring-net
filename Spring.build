@@ -644,28 +644,6 @@
  	<delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/bin" failonerror="false"/>
   </target>
 
-  <target name="prepare-docs" description="Create documentation from templates">
-    <if test="${file::exists('doc/CodeSmith/CodeSmithConsole.exe')}">
-      <foreach item="File" property="template.in">
-        <in>
-          <items>
-            <include name="doc/reference/src/templated/*.xml"/>
-          </items>
-        </in>
-        <do>
-          <property name="template.out" value="doc/reference/src/${path::get-file-name(template.in)}"/>
-          <echo message="${template.in} -> ${template.out}"/>
-          <exec program="doc/CodeSmith/CodeSmithConsole.exe" workingdir=".">
-            <arg value="/nologo"/>
-            <arg value="/template:${template.in}"/>
-            <arg value="/properties:doc/reference/src/templated/properties.props"/>
-            <arg value="/out:${template.out}"/>
-          </exec>
-        </do>
-      </foreach>
-    </if>
-  </target>
-
 
   <target name="package" depends="set-package-configuration" description="Build and Package distribution">
 
@@ -680,11 +658,14 @@
 
     <call target="build-all-function"/>
 
-    <call target="prepare-docs"/>
-    <exec workingdir="./doc" program="cmd.exe" commandline="/c ant refdoc"/>
+    <nant buildfile="./doc/reference" target="all"/>
 
     <call target="package-release-files"/>
 
+  </target>
+
+  <target name="docs">
+    <nant buildfile="./doc/reference/docbook.build" target="all"/>
   </target>
 
   <target name="releasepkg">
@@ -779,8 +760,7 @@
     <tstamp/>
     <property name="package.version" value="${tstamp.date}-${tstamp.time}"/>
 
-    <call target="prepare-docs"/>
-    <exec workingdir="./doc" program="cmd.exe" commandline="/c ant refdoc"/>
+    <nant buildfile="./doc/reference" target="all"/>
 
     <call target="set-debug-build-configuration"/>
 
@@ -1015,12 +995,10 @@
     <!-- copy user reference documentation -->
     <mkdir dir="${current.package.dir}/doc/reference"/>
     <copy todir="${current.package.dir}/doc/reference">
-      <fileset basedir="doc/output/reference">
+      <fileset basedir="doc/reference">
         <include name="html/**/*"/>
         <include name="pdf/**/*"/>
         <include name="htmlhelp/**/*"/>
-        <include name="styles/**/*"/>
-        <include name="images/**/*"/>
       </fileset>
     </copy>
 
