@@ -79,33 +79,13 @@ namespace Spring.Aop.Support
         {
             if (checkInherited)
             {
-                return FindAttribute(type, attributeType) != null;                
+                return AttributeUtils.FindAttribute(type, attributeType) != null;                
             } else
             {
                 return Attribute.GetCustomAttributes(type, attributeType, false) != null; 
             }                    
         }
 
-        private Attribute FindAttribute(Type type, Type attribType)
-        {
-            Attribute[] attributes = Attribute.GetCustomAttributes(type, attributeType, false);  // we will traverse hierarchy ourselves.
-            if (attributes.Length > 0)
-            {
-                return attributes[0];
-            }
-            foreach (Type interfaceType in type.GetInterfaces())
-            {
-                Attribute attrib = FindAttribute(interfaceType, attribType);
-                if (attrib != null)
-                {
-                    return attrib;
-                }
-            }
-            if (type.BaseType == null)
-            {
-                return null;
-            }
-            return FindAttribute(type.BaseType, attribType);
-        }
+
     }
 }

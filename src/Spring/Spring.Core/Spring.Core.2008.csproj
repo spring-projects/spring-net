@@ -993,6 +993,7 @@
     <Compile Include="Util\AssertUtils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\AttributeUtils.cs" />
     <Compile Include="Util\CollectionUtils.cs">
       <SubType>Code</SubType>
     </Compile>

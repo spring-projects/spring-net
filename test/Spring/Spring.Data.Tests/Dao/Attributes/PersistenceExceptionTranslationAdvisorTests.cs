@@ -21,7 +21,11 @@
 #region Imports
 
 using System;
+using System.Collections;
+using System.Runtime.Serialization;
 using NUnit.Framework;
+using Spring.Aop.Framework;
+using Spring.Dao.Support;
 using Spring.Stereotype;
 
 #endregion
@@ -36,17 +40,117 @@ namespace Spring.Dao.Attributes
     [TestFixture]
     public class PersistenceExceptionTranslationAdvisorTests
     {
+
+        private IndexOutOfRangeException doNotTranslate = new IndexOutOfRangeException();
+
+        private PersistenceException persistenceException = new PersistenceException();
+
         [SetUp]
         public void Setup()
         {
         }
 
         [Test]
-        public void Test()
+        public void NoTranslationNeeded()
         {
+            RepositoryInterfaceImpl target = new RepositoryInterfaceImpl();
+            IRepositoryInterface ri = CreateProxy(target);
+
+            ri.Throws();
+
+            target.Behavior = persistenceException;
+
+            try
+            {
+                ri.Throws();
+                Assert.Fail();
+            } catch (Exception ex)
+            {
+                Assert.AreSame(persistenceException, ex);
+            }
         }
 
+        [Test]
+        public void TranslationNotNeededForTheseExceptions()
+        {
+            RepositoryInterfaceImpl target = new StereotypedRepositoryInterfaceImpl();
+            IRepositoryInterface ri = CreateProxy(target);
+
+            ri.Throws();
+
+            target.Behavior = doNotTranslate;
+            try
+            {
+                ri.Throws();
+                Assert.Fail();
+            } catch (Exception ex)
+            {
+                Assert.AreSame(doNotTranslate, ex);
+            }
+        }
+
+        [Test]
+        public void TranslationNeededForTheseExceptions()
+        {
+            DoTestTranslationNeededForTheseExceptions((new StereotypedRepositoryInterfaceImpl()));
+        }
+
+        [Test]
+        public void TranslationNeededForTheseExceptionsOnSuperclass()
+        {
+            DoTestTranslationNeededForTheseExceptions((new MyStereotypedRepositoryInterfaceImpl()));            
+        }
+
+        [Test]
+        public void TranslationNeededForTheseExceptionsOnInterface()
+        {
+            DoTestTranslationNeededForTheseExceptions((new MyInterfaceStereotypedRepositoryInterfaceImpl()));
+        }
+
+        [Test]
+        public void TranslationNeededForTheseExceptionsOnInheritedInterface()
+        {
+            DoTestTranslationNeededForTheseExceptions((new MyInterfaceInheritedStereotypedRepositoryInterfaceImpl()));
+        }
+
+        private void DoTestTranslationNeededForTheseExceptions(RepositoryInterfaceImpl target)
+        {
+            IRepositoryInterface ri = CreateProxy(target);
+            target.Behavior = persistenceException;
+            try
+            {
+                ri.Throws();
+                Assert.Fail();
+            } catch (DataAccessException ex)
+            {
+                //Expected
+                Assert.AreSame(persistenceException, ex.InnerException);
+            } catch (PersistenceException ex)
+            {
+                Assert.Fail("Should have been translated");
+            }
+        }
+
+
+        private IRepositoryInterface CreateProxy(RepositoryInterfaceImpl target)
+        {
+            MapPersistenceExceptionTranslator mpet = new MapPersistenceExceptionTranslator();
+            mpet.AddTranslation(persistenceException, new InvalidDataAccessApiUsageException("", persistenceException));
+            ProxyFactory pf = new ProxyFactory(target);
+            pf.AddInterface(typeof(IRepositoryInterface));
+            AddPersistenceExceptionTranslation(pf, mpet);
+            return (IRepositoryInterface) pf.GetProxy();
+        }
+
+        protected virtual void AddPersistenceExceptionTranslation(ProxyFactory pf, IPersistenceExceptionTranslator pet)
+        {
+            pf.AddAdvisor(new PersistenceExceptionTranslationAdvisor(pet, typeof(RepositoryAttribute)));
+        }
     }
+
+
+
+
 #if !NET_1_0
     [Repository]
     public class StereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl
@@ -54,6 +158,23 @@ namespace Spring.Dao.Attributes
         // Extends above class just to add repository annotation
     }
 
+    public class MyStereotypedRepositoryInterfaceImpl : StereotypedRepositoryInterfaceImpl {
+	}
+
+    [Repository]
+    public interface IStereotypedInterface
+    {
+        
+    }
+    public class MyInterfaceStereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl, IStereotypedInterface
+    {
+    }
+
+    public interface IStereotypedInheritingInterface : IStereotypedInterface {
+	}
+
+    public class MyInterfaceInheritedStereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl, IStereotypedInheritingInterface {
+	}
 
     public class RepositoryInterfaceImpl : IRepositoryInterface
     {
@@ -78,6 +199,33 @@ namespace Spring.Dao.Attributes
     public interface IRepositoryInterface
     {
         void Throws();
+    }
+
+    [Serializable]
+    public class PersistenceException : ApplicationException
+    {
+        #region Constructor (s) / Destructor
+
+        public PersistenceException()
+        {
+        }
+
+        public PersistenceException(string message)
+            : base(message)
+        {
+        }
+
+        public PersistenceException(string message, Exception rootCause)
+            : base(message, rootCause)
+        {
+        }
+
+        protected PersistenceException(
+            SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+        #endregion
     }
 
 }

@@ -181,7 +181,7 @@ namespace Spring.Dao.Support
                 return invocation.Proceed();
             } catch (Exception ex)
             {
-                DataAccessException dex = this.persistenceExceptionTranslator.TranslateExceptionIfPossible(ex);
+                DataAccessException dex = DataAccessUtils.TranslateIfNecessary(ex, persistenceExceptionTranslator);
                 if (dex == null)
                 {
                     throw;

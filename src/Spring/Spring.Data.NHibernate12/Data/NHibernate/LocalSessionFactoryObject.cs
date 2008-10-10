@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System;
 using System.Collections;
 using System.Data;
 using Common.Logging;
@@ -27,7 +28,11 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using Spring.Core.IO;
+using Spring.Dao;
+using Spring.Dao.Attributes;
+using Spring.Dao.Support;
 using Spring.Data.Common;
+using Spring.Data.Support;
 using Spring.Objects.Factory;
 using Environment = NHibernate.Cfg.Environment;
 
@@ -46,11 +51,17 @@ namespace Spring.Data.NHibernate
 	/// that need it.
 	/// <para>
 	/// Hibernate configuration settings can be set using the IDictionary property 'HibernateProperties'.
-	///
 	/// </para>
-	/// </remarks>
+    /// <para>
+    /// This class implements the <see cref="IPersistenceExceptionTranslator"/> interface,
+    /// as autodetected by Spring's <see cref="PersistenceExceptionTranslationPostProcessor"/>
+    /// for AOP-based translation of PersistenceExceptionTranslationPostProcessor.
+    /// Hence, the presence of e.g. LocalSessionFactoryBean automatically enables
+    /// a PersistenceExceptionTranslationPostProcessor to translate Hibernate exceptions. 
+    /// </para>
+    /// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, System.IDisposable
+    public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IPersistenceExceptionTranslator, System.IDisposable
 	{
 		#region Fields
 
@@ -73,6 +84,8 @@ namespace Spring.Data.NHibernate
         private IDbProvider dbProvider;
 
 	    private bool exposeTransactionAwareSessionFactory = false;
+        
+        private IAdoExceptionTranslator adoExceptionTranslator;
 
 		#endregion
 
@@ -195,6 +208,29 @@ namespace Spring.Data.NHibernate
 	        set { exposeTransactionAwareSessionFactory = value; }
             get { return exposeTransactionAwareSessionFactory; }
 	    }
+
+        /// <summary>
+        /// Set the ADO.NET exception translator for this instance.
+        /// Applied to System.Data.Common.DbException (or provider specific exception type
+        /// in .NET 1.1) thrown by callback code, be it direct
+        /// DbException or wrapped Hibernate ADOExceptions.
+        /// <p>The default exception translator is either a ErrorCodeExceptionTranslator
+        /// if a DbProvider is available, or a FalbackExceptionTranslator otherwise
+        /// </p>
+        /// </summary>
+        /// <value>The ADO exception translator.</value>
+        public virtual IAdoExceptionTranslator AdoExceptionTranslator
+        {
+            set { adoExceptionTranslator = value; }
+            get
+            {
+                if (adoExceptionTranslator == null)
+                {
+                    adoExceptionTranslator = SessionFactoryUtils.NewAdoExceptionTranslator(sessionFactory);
+                }
+                return adoExceptionTranslator;
+            }
+        }
 
 	    #endregion
 
@@ -416,5 +452,69 @@ namespace Spring.Data.NHibernate
         }
 
         #endregion // DbProviderWrapper Helper class
+
+        #region IPersistenceExceptionTranslator Members
+
+        /// <summary>
+        /// Implementation of the PersistenceExceptionTranslator interface,
+        /// as autodetected by Spring's PersistenceExceptionTranslationPostProcessor.
+        /// Converts the exception if it is a HibernateException;
+        /// else returns <code>null</code> to indicate an unknown exception.
+        /// translate the given exception thrown by a persistence framework to a
+        /// corresponding exception from Spring's generic DataAccessException hierarchy,
+        /// if possible.
+        /// </summary>
+        /// <param name="ex">The exception thrown.</param>
+        /// <returns>
+        /// the corresponding DataAccessException (or <code>null</code> if the
+        /// exception could not be translated.
+        /// </returns>
+        /// <seealso cref="PersistenceExceptionTranslationPostProcessor"/>
+        public DataAccessException TranslateExceptionIfPossible(Exception ex)
+        {
+            if (ex is HibernateException)
+            {
+                return ConvertHibernateException((HibernateException)ex);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Convert the given HibernateException to an appropriate exception from the
+        /// Spring's DAO Exception hierarchy.
+        /// Will automatically apply a specified IAdoExceptionTranslator to a
+        /// Hibernate ADOException, else rely on Hibernate's default translation.
+        /// </summary>
+        /// <param name="ex">The Hibernate exception that occured.</param>
+        /// <returns>A corresponding DataAccessException</returns>
+        protected virtual DataAccessException ConvertHibernateException(HibernateException ex)
+        {
+            if (ex is ADOException)
+            {
+                return ConvertAdoAccessException((ADOException)ex);
+            }
+            return SessionFactoryUtils.ConvertHibernateAccessException(ex);
+        }
+
+        /// <summary>
+        /// Converts the ADO.NET access exception to an appropriate exception from the
+        /// <code>org.springframework.dao</code> hierarchy. Can be overridden in subclasses.
+        /// </summary>
+        /// <param name="ex">ADOException that occured, wrapping underlying ADO.NET exception.</param>
+        /// <returns>
+        /// the corresponding DataAccessException instance
+        /// </returns>
+        protected virtual DataAccessException ConvertAdoAccessException(ADOException ex)
+        {
+
+            string sqlString = (ex.SqlString != null)
+                ? ex.SqlString.ToString()
+                : string.Empty;
+            return AdoExceptionTranslator.Translate(
+                "Hibernate operation: " + ex.Message, sqlString, ex.InnerException);
+
+        }
+
+        #endregion
 	}
 }

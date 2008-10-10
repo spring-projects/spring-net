@@ -64,6 +64,20 @@ namespace Spring.Dao.Support
 	        enumerator.MoveNext();
 	        return enumerator.Current;
 	    }
+
+        /// <summary>
+        /// Return a translated exception if this is appropriate, or null if the exception could
+        /// not be translated. 
+        /// </summary>
+        /// <param name="rawException">The raw exception we may wish to translate.</param>
+        /// <param name="pet">The PersistenceExceptionTranslator to use to perform the translation.</param>
+        /// <returns>A translated exception if translation is possible, or or null if the exception could
+        /// not be translated.</returns>
+        public static DataAccessException TranslateIfNecessary(Exception rawException, IPersistenceExceptionTranslator pet)
+        {
+            AssertUtils.ArgumentNotNull(pet, "PersistenceExceptionTranslator must not be null");
+            return pet.TranslateExceptionIfPossible(rawException);
+        }
     	
 	    #endregion	    
 	}

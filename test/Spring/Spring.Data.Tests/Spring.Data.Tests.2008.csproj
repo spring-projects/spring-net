@@ -169,6 +169,10 @@
     <EmbeddedResource Include="Transaction\Config\TxNamespaceParserTests.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dao\Attributes\PersistenceExceptionTranslationAdvisorTests.cs" />
+    <Compile Include="Dao\Attributes\PersistenceExceptionTranslationInterceptorTests.cs" />
+    <Compile Include="Dao\Attributes\PersistenceExceptionTranslationPostProcessorTests.cs" />
+    <Compile Include="Dao\Support\DataAccessUtilsTests.cs" />
     <Compile Include="Data\Common\DbParametersTests.cs" />
     <Compile Include="Data\Common\UserCredentialsDbProviderTests.cs" />
     <Compile Include="Data\Core\ServiceDomainTransactionManagerTests.cs" />
