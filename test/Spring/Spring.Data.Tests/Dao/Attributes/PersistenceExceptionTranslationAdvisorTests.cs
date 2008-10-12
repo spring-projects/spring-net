@@ -18,6 +18,7 @@
 
 #endregion
 
+#if !NET_1_0
 #region Imports
 
 using System;
@@ -151,7 +152,7 @@ namespace Spring.Dao.Attributes
 
 
 
-#if !NET_1_0
+
     [Repository]
     public class StereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl
     {
@@ -194,7 +195,6 @@ namespace Spring.Dao.Attributes
             }
         }
     }
-#endif
 
     public interface IRepositoryInterface
     {
@@ -229,3 +229,4 @@ namespace Spring.Dao.Attributes
     }
 
 }
+#endif
