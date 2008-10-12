@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2008 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Web;
+using Spring.Collections;
 using Spring.Expressions;
 using Spring.Util;
 
@@ -73,7 +74,7 @@ namespace Spring.Web.Support
     /// <author>Aleksandar Seovic</author>
     /// <author>Matan Shapira</author>
     [Serializable]
-    public class Result
+    public class Result : IResult
     {
         #region Constants
 
@@ -122,15 +123,52 @@ namespace Spring.Web.Support
         /// If the supplied <paramref name="result"/> is <see langword="null"/> or
         /// contains only whitespace character(s).
         /// </exception>
-        public Result(string result)
+        /// <exception cref="ArgumentOutOfRangeException">if the result mode is unknown.</exception>
+        public Result( string result )
         {
-            AssertUtils.ArgumentHasText(result, "result");
-            result = ExtractAndSetResultMode(result);
-            int indexOfQueryStringDelimiter = result.IndexOf('?');
+            AssertUtils.ArgumentHasText( result, "result" );
+
+            result = ExtractAndSetResultMode( result );
+
+            int indexOfQueryStringDelimiter = result.IndexOf( '?' );
             if (indexOfQueryStringDelimiter > 0)
             {
-                ParseParameters(result.Substring(indexOfQueryStringDelimiter + 1));
-                result = result.Substring(0, indexOfQueryStringDelimiter);
+                ParseParameters( result.Substring( indexOfQueryStringDelimiter + 1 ) );
+                result = result.Substring( 0, indexOfQueryStringDelimiter );
+            }
+            targetPage = result.Trim();
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="Spring.Web.Support.Result"/> class.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// See both the class documentation (<see cref="Spring.Web.Support.Result"/>)
+        /// and the reference documentation for the Spring.Web library for a
+        /// discussion and examples of what values the supplied <paramref name="result"/>
+        /// can have.
+        /// </p>
+        /// </remarks>
+        /// <param name="resultMode">The desired result mode. May be null to use default mode.</param>
+        /// <param name="resultText">The result descriptor (without resultMode prefix!).</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the supplied <paramref name="resultText"/> is <see langword="null"/> or
+        /// contains only whitespace character(s).
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">if the result mode is unknown.</exception>
+        public Result( string resultMode, string resultText )
+        {
+            AssertUtils.ArgumentHasText( resultText, "resultText" );
+
+            this.SetResultMode( resultMode );
+
+            string result = resultText;
+            int indexOfQueryStringDelimiter = result.IndexOf( '?' );
+            if (indexOfQueryStringDelimiter > 0)
+            {
+                ParseParameters( result.Substring( indexOfQueryStringDelimiter + 1 ) );
+                result = result.Substring( 0, indexOfQueryStringDelimiter );
             }
             targetPage = result.Trim();
         }
@@ -202,23 +240,23 @@ namespace Spring.Web.Support
         /// Navigates to the <see cref="Spring.Web.Support.Result.TargetPage"/>
         /// defined by this result.
         /// </summary>
-        /// <param name="page">
+        /// <param name="context">
         /// The context object for parameter resolution. This is typically
         /// a <see cref="System.Web.UI.Page"/>.
         /// </param>
-        public virtual void Navigate(object page)
+        public virtual void Navigate( object context )
         {
             switch (Mode)
             {
                 case ResultMode.Redirect:
-                    DoRedirect(page);
+                    DoRedirect( context );
                     break;
                 case ResultMode.Transfer:
                 case ResultMode.TransferNoPreserve:
-                    DoTransfer(page);
+                    DoTransfer( context );
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(string.Format("Unknown ResultMode {0}", Mode));
+                    throw new ArgumentOutOfRangeException( string.Format( "Unknown ResultMode {0}", Mode ) );
             }
         }
 
@@ -226,33 +264,33 @@ namespace Spring.Web.Support
         /// Performs a server-side transfer to the
         /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this result.
         /// </summary>
-        /// <param name="page">
+        /// <param name="context">
         /// The context object for parameter resolution. This is typically
         /// a <see cref="System.Web.UI.Page"/>.
         /// </param>
         /// <seealso cref="System.Web.HttpServerUtility.Transfer(string,bool)"/>
-        protected virtual void DoTransfer(object page)
+        protected virtual void DoTransfer( object context )
         {
             HttpContext ctx = HttpContext.Current;
-            SetTransferParameters(ctx.Items, page);
-            ctx.Server.Transfer(TargetPage, PreserveForm);
+            SetTransferParameters( ctx.Items, context );
+            ctx.Server.Transfer( GetResolvedTargetPage( context ), PreserveForm );
         }
 
         /// <summary>
         /// Resolves transfer parameters and stores them into <see cref="IDictionary" /> instance.
         /// </summary>
         /// <param name="contextDictionary"></param>
-        /// <param name="page"></param>
-        protected void SetTransferParameters(IDictionary contextDictionary, object page)
+        /// <param name="context"></param>
+        protected void SetTransferParameters( IDictionary contextDictionary, object context )
         {
             if (this.parameters != null && this.parameters.Count > 0)
             {
                 foreach (DictionaryEntry entry in this.parameters)
                 {
                     string value = entry.Value.ToString();
-                    if (IsRuntimeExpression(value))
+                    if (IsRuntimeExpression( value ))
                     {
-                        contextDictionary[entry.Key] = ResolveRuntimeExpression(page, value);
+                        contextDictionary[entry.Key] = ResolveRuntimeExpression( context, value );
                     }
                     else
                     {
@@ -267,14 +305,14 @@ namespace Spring.Web.Support
         /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
         /// result.
         /// </summary>
-        /// <param name="page">
+        /// <param name="context">
         /// The context object for parameter resolution. This is typically
         /// a <see cref="System.Web.UI.Page"/>.
         /// </param>
         /// <seealso cref="System.Web.HttpResponse.Redirect(string)"/>
-        protected virtual void DoRedirect(object page)
+        protected virtual void DoRedirect( object context )
         {
-            HttpContext.Current.Response.Redirect(GetRedirectUri(page));
+            HttpContext.Current.Response.Redirect( GetRedirectUri( context ) );
         }
 
         /// <summary>
@@ -282,45 +320,74 @@ namespace Spring.Web.Support
         /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
         /// result.
         /// </summary>
-        /// <param name="page">
+        /// <param name="context">
         /// A redirect url string.
         /// </param>
-        public string GetRedirectUri(object page)
+        public virtual string GetRedirectUri( object context )
         {
-            StringBuilder url = new StringBuilder(256);
-            url.Append(TargetPage);
-            if (parameters != null && parameters.Count > 0)
+            string path = GetResolvedTargetPage( context );
+
+            IDictionary resolvedParameters = null;
+            if (this.Parameters != null && this.Parameters.Count > 0)
+            {
+                resolvedParameters = new CaseInsensitiveHashtable();
+                foreach (DictionaryEntry entry in this.Parameters)
+                {
+                    object key = ResolveRuntimeExpressionIfNecessary( context, entry.Key.ToString() );
+                    object value = ResolveRuntimeExpressionIfNecessary( context, entry.Value.ToString() );
+                    resolvedParameters[key] = value;
+                }
+            }
+
+            return BuildUrl( path, resolvedParameters );
+        }
+
+        protected virtual string BuildUrl( string resolvedPath, IDictionary resolvedParameters )
+        {
+            StringBuilder url = new StringBuilder( 256 );
+            url.Append( resolvedPath );
+            if (resolvedParameters != null && resolvedParameters.Count > 0)
             {
                 char separator = '?';
-                foreach (DictionaryEntry entry in parameters)
+                foreach (DictionaryEntry entry in resolvedParameters)
                 {
-                    url.Append(separator);
-                    url.Append(entry.Key).Append('=');
-                    string value = entry.Value.ToString();
-                    if (IsRuntimeExpression(value))
-                    {
-                        url.Append(HttpContext.Current.Server.UrlEncode(
-                                    ResolveRuntimeExpression(page, value).ToString()));
-                    }
-                    else
-                    {
-                        url.Append(HttpContext.Current.Server.UrlEncode(value));
-                    }
+                    url.Append( separator );
+                    url.Append( BuildUrlParameter( entry.Key.ToString(), entry.Value.ToString() ) );
                     separator = '&';
                 }
             }
             return url.ToString();
         }
 
-        private static bool IsRuntimeExpression(string value)
+        protected virtual string BuildUrlParameter( string key, string value )
         {
-            // allow for 2 alternative prefixes (SPRNET-864)
-            return (value.StartsWith("${") || value.StartsWith("%{")) && value.EndsWith("}");
+            return UrlEncode( key ) + "=" + UrlEncode( value );
         }
 
-        private static object ResolveRuntimeExpression(object page, string value)
+        protected static string UrlEncode( string value )
         {
-            return ExpressionEvaluator.GetValue(page, value.Substring(2, value.Length - 3));
+            HttpContext ctx = HttpContext.Current;
+            return (ctx == null) ? HttpUtility.UrlEncode( value ) : ctx.Server.UrlEncode( value );
+        }
+
+        protected object ResolveRuntimeExpressionIfNecessary( object context, string value )
+        {
+            if (IsRuntimeExpression( value ))
+            {
+                return ResolveRuntimeExpression( context, value );
+            }
+            return value;
+        }
+
+        private static bool IsRuntimeExpression( string value )
+        {
+            // allow for 2 alternative prefixes (SPRNET-864)
+            return (value.StartsWith( "${" ) || value.StartsWith( "%{" )) && value.EndsWith( "}" );
+        }
+
+        private static object ResolveRuntimeExpression( object context, string value )
+        {
+            return ExpressionEvaluator.GetValue( context, value.Substring( 2, value.Length - 3 ) );
         }
 
         /// <summary>
@@ -345,23 +412,40 @@ namespace Spring.Web.Support
         /// If the supplied <paramref name="result"/> starts with an illegal
         /// result mode (see <see cref="Spring.Web.Support.ResultMode"/>).
         /// </exception>
-        private string ExtractAndSetResultMode(string result)
+        private string ExtractAndSetResultMode( string result )
         {
-            int indexOfResultModeDelimiter = result.IndexOf(':');
+            int indexOfResultModeDelimiter = result.IndexOf( ':' );
             if (indexOfResultModeDelimiter > 0)
             {
-                try
-                {
-                    Mode = (ResultMode)Enum.Parse(typeof(ResultMode),
-                                                   result.Substring(0, indexOfResultModeDelimiter), true);
-                    return result.Substring(indexOfResultModeDelimiter + 1);
-                }
-                catch
-                {
-                    throw new ArgumentOutOfRangeException("result", result, "Illegal result mode.");
-                }
+                string resultMode = result.Substring( 0, indexOfResultModeDelimiter );
+                SetResultMode( resultMode );
+                return result.Substring( indexOfResultModeDelimiter + 1 );
             }
             return result;
+        }
+
+        /// <summary>
+        /// Set the actual <see cref="Mode"/> from the parsed <paramref name="resultMode"/> string.
+        /// </summary>
+        /// <param name="resultMode">the parsed result mode</param>
+        protected virtual void SetResultMode( string resultMode )
+        {
+            try
+            {
+                if (StringUtils.HasText( resultMode ))
+                {
+                    Mode = (ResultMode)Enum.Parse( typeof( ResultMode ), resultMode, true );
+                }
+            }
+            catch
+            {
+                throw new ArgumentOutOfRangeException( "resultMode", resultMode, "Illegal result mode." );
+            }
+        }
+
+        protected string GetResolvedTargetPage( object context )
+        {
+            return ResolveRuntimeExpressionIfNecessary( context, TargetPage ).ToString();
         }
 
         /// <summary>
@@ -370,19 +454,19 @@ namespace Spring.Web.Support
         /// <param name="queryString">
         /// The query string (may be <cref lang="null"/>).
         /// </param>
-        private void ParseParameters(string queryString)
+        private void ParseParameters( string queryString )
         {
-            if (StringUtils.HasText(queryString))
+            if (StringUtils.HasText( queryString ))
             {
-                this.parameters = new Hashtable();
-                string[] nameValuePairs = queryString.Split("&,".ToCharArray());
+                this.parameters = new CaseInsensitiveHashtable();
+                string[] nameValuePairs = queryString.Split( "&,".ToCharArray() );
                 foreach (string pair in nameValuePairs)
                 {
-                    int n = pair.IndexOf('=');
+                    int n = pair.IndexOf( '=' );
                     if (n > 0)
                     {
-                        string name = pair.Substring(0, n);
-                        string val = pair.Substring(n + 1).Trim();
+                        string name = pair.Substring( 0, n );
+                        string val = pair.Substring( n + 1 ).Trim();
                         this.parameters[name] = val;
                     }
                 }

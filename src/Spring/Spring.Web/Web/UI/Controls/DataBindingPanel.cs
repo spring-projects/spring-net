@@ -280,6 +280,7 @@ namespace Spring.Web.UI.Controls
             attributeCollection.Remove(ATTR_BINDINGTARGET);
             attributeCollection.Remove(ATTR_BINDINGSOURCE);
             attributeCollection.Remove(ATTR_BINDINGTYPE);
+            attributeCollection.Remove(ATTR_BINDINGDIRECTION);
             attributeCollection.Remove(ATTR_BINDINGFORMATTER);
         }
 

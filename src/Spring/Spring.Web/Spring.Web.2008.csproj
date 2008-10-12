@@ -124,6 +124,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\ISessionState.cs" />
+    <Compile Include="Web\Support\DefaultResultFactory.cs" />
+    <Compile Include="Web\Support\IResult.cs" />
+    <Compile Include="Web\Support\IResultFactory.cs" />
+    <Compile Include="Web\Support\ResultFactoryRegistry.cs" />
+    <Compile Include="Web\Support\WebFormsResultWebNavigator.cs" />
+    <Compile Include="Web\Support\IHierarchicalWebNavigator.cs" />
+    <Compile Include="Web\Support\IResultWebNavigator.cs" />
+    <Compile Include="Web\Support\IWebNavigable.cs" />
+    <Compile Include="Web\Support\IWebNavigator.cs" />
     <Compile Include="Web\UI\IValidationContainer.cs" />
     <Compile Include="Web\Support\MimeMediaType.cs" />
     <Compile Include="Web\Support\SharedStateResourceCache.cs">
@@ -260,6 +269,7 @@
     <Compile Include="Web\UI\Page.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Web\Support\ResultWebNavigator.cs" />
     <Compile Include="Web\UI\UserControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

@@ -21,7 +21,9 @@
 #region Imports
 
 using System;
+using System.Collections;
 using NUnit.Framework;
+using Spring.Util;
 
 #endregion
 
@@ -332,6 +334,33 @@ namespace Spring.Web.Support
             Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
                             "The TargetPage property is not being correctly extracted " +
                             "from the result string passed into the ctor.");
+        }
+
+        [Test]
+        public void TargetPageMayBeRuntimeExpression()
+        {
+            Result result = new Result("%{['var1']}");
+            string resultUri = result.GetRedirectUri( MakeDictionary("var1", "val1") );
+            Assert.AreEqual( "val1", resultUri );
+        }
+
+        [Test]
+        public void ParameterKeysAndValuesMayBeRuntimeExpression()
+        {
+            Result result = new Result("redirect:%{['var1']}?%{['var2']}=%{['var3']}");
+            string resultUri = result.GetRedirectUri( MakeDictionary("var1", "val1", "var2", "val2", "var3", "val3") );
+            Assert.AreEqual( "val1?val2=val3", resultUri );
+        }
+
+        private IDictionary MakeDictionary( params object[] args)
+        {
+            AssertUtils.IsTrue(args.Length % 2 == 0);
+            Hashtable ht= new Hashtable();
+            for(int i=0;i<args.Length;i+=2)
+            {
+                ht[args[i]] = args[i+1];
+            }
+            return ht;
         }
     }
 }

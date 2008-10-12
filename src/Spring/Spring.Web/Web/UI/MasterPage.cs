@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Web.UI;
+using Spring.Collections;
 using Spring.Validation;
 using Spring.Web.UI.Controls;
 using IValidator = Spring.Validation.IValidator;
@@ -100,13 +101,12 @@ namespace Spring.Web.UI
 #else
 
     #region ASP.NET 2.0 Spring Master Page Implementation
-
     
     /// <summary>
     /// Spring.NET Master Page implementation for ASP.NET 2.0
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, ISupportsWebDependencyInjection
+    public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, ISupportsWebDependencyInjection, IWebNavigable
     {
         #region Instance Fields
 
@@ -115,11 +115,21 @@ namespace Spring.Web.UI
         private IMessageSource messageSource;
         private IApplicationContext applicationContext;
         private IApplicationContext defaultApplicationContext;
+        private IWebNavigator webNavigator;
+        private IDictionary args;
 
         #endregion
 
-        #region Control lifecycle methods
+        #region Lifecycle methods
         
+        /// <summary>
+        /// Initialize a new MasterPage instance.
+        /// </summary>
+        public MasterPage()
+        {
+            InitializeNavigationSupport();
+        }
+
         /// <summary>
         /// Initializes user control.
         /// </summary>
@@ -412,6 +422,148 @@ namespace Spring.Web.UI
         {
             get { return Page.UserCulture; }
             set { Page.UserCulture = value; }
+        }
+
+        #endregion
+
+        #region Result support
+
+        /// <summary>
+        /// Ensure, that <see cref="WebNavigator"/> is set to a valid instance.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="WebNavigator"/> is not already set, creates and sets a new <see cref="WebFormsResultWebNavigator"/> instance.<br/>
+        /// Override this method if you don't want to inject a navigator, but need a different default.
+        /// </remarks>
+        protected virtual void InitializeNavigationSupport()
+        {
+            webNavigator = new WebFormsResultWebNavigator(this, null, true);
+        }
+
+        /// <summary>
+        /// Gets/Sets the navigator to be used for handling <see cref="SetResult(string, object)"/> calls.
+        /// </summary>
+        public IWebNavigator WebNavigator
+        {
+            get
+            {
+                return webNavigator;
+            }
+            set
+            {
+                webNavigator = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets map of result names to target URLs
+        /// </summary>
+        /// <remarks>
+        /// Using <see cref="Results"/> requires <see cref="WebNavigator"/> to implement <see cref="IResultWebNavigator"/>.
+        /// </remarks>
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
+        public virtual IDictionary Results
+        {
+            get
+            {
+                if (WebNavigator is IResultWebNavigator)
+                {
+                    return ((IResultWebNavigator)WebNavigator).Results;
+                }
+                return null;
+            }
+            set
+            {
+                if (WebNavigator is IResultWebNavigator)
+                {
+                    ((IResultWebNavigator)WebNavigator).Results = value;
+                    return;
+                }
+                throw new NotSupportedException("WebNavigator must be of type IResultWebNavigator to support Results");
+            }
+        }
+
+        /// <summary>
+        /// A convenience, case-insensitive table that may be used to e.g. pass data into SpEL expressions"/>.
+        /// </summary>
+        /// <remarks>
+        /// By default, e.g. <see cref="SetResult(string)"/> passes the control instance into an expression. Using
+        /// <see cref="Args"/> is an easy way to pass additional parameters into the expression
+        /// <example>
+        /// // config:
+        /// 
+        /// &lt;property Name=&quot;Results&quot;&gt;
+        ///   &lt;dictionary&gt;
+        ///   		&lt;entry key=&quot;ok_clicked&quot; value=&quot;redirect:~/ShowResult.aspx?result=%{Args['result']}&quot; /&gt;
+        ///   &lt;/dictionary&gt;
+        /// &lt;/property&gt;
+        /// 
+        /// // code:
+        /// 
+        /// void OnOkClicked(object sender, EventArgs e)
+        /// {
+        ///   Args[&quot;result&quot;] = txtUserInput.Text;
+        ///   SetResult(&quot;ok_clicked&quot;);
+        /// }
+        /// </example>
+        /// </remarks>
+        public IDictionary Args
+        {
+            get
+            {
+                if (args == null)
+                {
+                    args = new CaseInsensitiveHashtable();
+                }
+                return args;
+            }
+        }
+
+        /// <summary>
+        /// Redirects user to a URL mapped to specified result name.
+        /// </summary>
+        /// <param name="resultName">Result name.</param>
+        protected void SetResult( string resultName )
+        {
+            WebNavigator.NavigateTo( resultName, this );
+        }
+
+
+        /// <summary>
+        /// Redirects user to a URL mapped to specified result name.
+        /// </summary>
+        /// <param name="resultName">Name of the result.</param>
+        /// <param name="context">The context to use for evaluating the SpEL expression in the Result.</param>
+        protected void SetResult( string resultName, object context )
+        {
+            WebNavigator.NavigateTo( resultName, context );
+        }
+
+
+        /// <summary>
+        /// Returns a redirect url string that points to the 
+        /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
+        /// result evaluated using this Page for expression 
+        /// </summary>
+        /// <param name="resultName">Name of the result.</param>
+        /// <returns>A redirect url string.</returns>
+        protected string GetResultUrl( string resultName )
+        {
+            return ResolveUrl( WebNavigator.GetResultUri( resultName, this ) );
+        }
+
+        /// <summary>
+        /// Returns a redirect url string that points to the 
+        /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
+        /// result evaluated using this Page for expression 
+        /// </summary>
+        /// <param name="resultName">Name of the result.</param>
+        /// <param name="context">The context to use for evaluating the SpEL expression in the Result</param>
+        /// <returns>A redirect url string.</returns>
+        protected string GetResultUrl( string resultName, object context )
+        {
+            return ResolveUrl( WebNavigator.GetResultUri( resultName, context ) );
         }
 
         #endregion

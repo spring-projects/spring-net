@@ -71,7 +71,11 @@ namespace Spring.Web.UI.Controls
         /// <remarks>
         /// The url specified here is only rendered, if <see cref="SuppressAction"/> is true.
         /// </remarks>
+#if !NET_2_0
         public string Action
+#else
+        public new string Action
+#endif
         {
             get { return this.action; }
             set { this.action = value; }

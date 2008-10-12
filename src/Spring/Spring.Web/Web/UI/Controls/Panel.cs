@@ -88,6 +88,13 @@ namespace Spring.Web.UI.Controls
 
         private bool _suppressDependencyInjection;
         private bool _renderContainerTag;
+        private string _visibleConditionExpression;
+
+        public string VisibleIf
+        {
+            get { return _visibleConditionExpression; }
+            set { _visibleConditionExpression = value; }
+        }
 
         /// <summary>
         /// This flag controls, whether DI on child controls will be done or not
@@ -114,6 +121,12 @@ namespace Spring.Web.UI.Controls
         /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
+            bool visible = (_visibleConditionExpression != null) 
+                ? Spring.Expressions.ExpressionEvaluator.GetValue(this, _visibleConditionExpression).Equals(true)
+                : this.Visible;
+
+            if (!visible) return;
+
             if (_renderContainerTag)
             {
                 base.Render(writer);

@@ -41,19 +41,39 @@ namespace Spring.Web.UI
     {
         public class TestUserControl : UserControl
         {
+            private static int instanceCount = 0;
+
             public TestUserControl()
+                :this(string.Format("_ctl_{0}", instanceCount++), null)
+            {
+            }
+
+            public TestUserControl(string id)
+                :this(id, null)
             {
             }
 
             public TestUserControl(Control parent)
+                :this(null, parent)
             {
-                parent.Controls.Add(this);
+            }
+
+            public TestUserControl(string id, Control parent)
+            {
+                this.ID = id;
+                if (parent != null) parent.Controls.Add(this);
             }
 
             public new void SetResult(string name)
             {
                 base.SetResult(name);
             }
+
+            public override string ToString()
+            {
+                return string.Format("{0}[{1}]", base.ToString(), this.ClientID);
+            }
+
         }
 
         [Test]
@@ -85,7 +105,8 @@ namespace Spring.Web.UI
 
             using (mocks.Ordered())
             {
-                theResult.Navigate(c1);
+                // context is the control, that SetResult() was called on
+                theResult.Navigate(c111);
             }
             mocks.ReplayAll();
 

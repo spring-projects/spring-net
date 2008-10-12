@@ -21,8 +21,7 @@
 #region Imports
 
 using System;
-
-
+using System.Web.UI;
 
 #endregion
 
@@ -240,6 +239,52 @@ namespace Spring.Util
                 appRelativeVirtualPath = appRelativeVirtualPath.Substring(appPath.Length);
             }
             return appRelativeVirtualPath;            
+        }
+
+        ///<summary>
+        /// Returns the 'logical' parent of the specified control. Technically when dealing with masterpages and control hierarchy,
+        /// the order goes controls-&gtmasterpage-&gtpage. But one often wants the more logical order controls-&gtpage-&gtmasterpage.
+        ///</summary>
+        ///<param name="control">the control, who's parent is to be determined.</param>
+        ///<returns>the logical parent or <c>null</c> if the top of the hierarchy is reached.</returns>
+        /// <exception cref="ArgumentNullException">if <paramref name="control"/> is <c>null</c></exception>
+        public static Control GetLogicalParent(Control control)
+        {
+            AssertUtils.ArgumentNotNull(control, "control");
+
+            // to determine "correct" order of bubbling control->page->masterpage, 
+            // the trick below is necessary because technically the hierarchy goes 
+            // control->masterpage->page
+            if (control is System.Web.UI.Page)
+            {
+#if !NET_2_0
+                control = ((Spring.Web.UI.Page)control).Master;
+#else
+                control = ((System.Web.UI.Page)control).Master;
+#endif
+            }
+            else if (IsMaster(control))
+            {
+                control = null;
+            }
+            else if (IsMaster(control.Parent))
+            {
+                control = control.Page;  
+            }
+            else
+            {
+                control = control.Parent;
+            }
+            return control;
+        }
+
+        private static bool IsMaster(Control control)
+        {
+#if !NET_2_0
+            return (control is Spring.Web.UI.MasterPage);
+#else
+            return (control is System.Web.UI.MasterPage);
+#endif            
         }
     }
 }

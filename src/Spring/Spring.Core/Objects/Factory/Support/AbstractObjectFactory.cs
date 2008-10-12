@@ -1843,7 +1843,7 @@ namespace Spring.Objects.Factory.Support
                 || suppressConfigure)
             {
                 // Clone ObjectDefinition
-                mergedObjectDefinition = new RootObjectDefinition( mergedObjectDefinition );
+                mergedObjectDefinition = CreateRootObjectDefinition(mergedObjectDefinition);
                 mergedObjectDefinition.IsSingleton = false;
                 if (arguments != null)
                 {

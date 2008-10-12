@@ -38,6 +38,7 @@ using Spring.Context.Support;
 using Spring.Core;
 using Spring.DataBinding;
 using Spring.Globalization;
+using Spring.Util;
 using Spring.Validation;
 using Spring.Web.Support;
 using IValidator = Spring.Validation.IValidator;
@@ -51,7 +52,7 @@ namespace Spring.Web.UI
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, IWebDataBound, ISupportsWebDependencyInjection,
-                               IPostBackDataHandler,IValidationContainer
+                               IPostBackDataHandler, IValidationContainer, IWebNavigable
     {
         #region Static fields
 
@@ -67,10 +68,11 @@ namespace Spring.Web.UI
         private object controller;
         private ILocalizer localizer;
         private IMessageSource messageSource;
-        private IDictionary sharedState;
+        private IDictionary sharedState = new CaseInsensitiveHashtable();
         private IBindingContainer bindingManager;
         private IValidationErrors validationErrors = new ValidationErrors();
-        private IDictionary results;
+        private IWebNavigator webNavigator;
+        private IDictionary args;
         private IApplicationContext applicationContext;
         private IApplicationContext defaultApplicationContext;
         private bool needsUnbind = false;
@@ -78,6 +80,14 @@ namespace Spring.Web.UI
         #endregion
 
         #region Control lifecycle methods
+
+        /// <summary>
+        /// Initialize a new UserControl instance.
+        /// </summary>
+        public UserControl()
+        {
+            InitializeNavigationSupport();
+        }
 
 #if !NET_2_0
         /// <summary>
@@ -113,7 +123,7 @@ namespace Spring.Web.UI
         /// <summary>
         /// Initializes user control.
         /// </summary>
-        protected override void OnInit(EventArgs e)
+        protected override void OnInit( EventArgs e )
         {
             InitializeMessageSource();
             InitializeBindingManager();
@@ -124,23 +134,23 @@ namespace Spring.Web.UI
             }
             else
             {
-                LoadModel(LoadModelFromPersistenceMedium());
+                LoadModel( LoadModelFromPersistenceMedium() );
             }
 
-            base.OnInit(e);
+            base.OnInit( e );
 
-            OnInitializeControls(EventArgs.Empty);
+            OnInitializeControls( EventArgs.Empty );
         }
 
         /// <summary>
         /// Raises the <see cref="PreLoadViewState"/> event after page initialization.
         /// </summary>
-        protected internal virtual void OnPreLoadViewState(EventArgs e)
+        protected internal virtual void OnPreLoadViewState( EventArgs e )
         {
-            EventHandler handler = (EventHandler) base.Events[EventPreLoadViewState];
+            EventHandler handler = (EventHandler)base.Events[EventPreLoadViewState];
             if (handler != null)
             {
-                handler(this, e);
+                handler( this, e );
             }
         }
 
@@ -158,8 +168,8 @@ namespace Spring.Web.UI
         /// </remarks>
         public event EventHandler PreLoadViewState
         {
-            add { base.Events.AddHandler(EventPreLoadViewState, value); }
-            remove { base.Events.RemoveHandler(EventPreLoadViewState, value); }
+            add { base.Events.AddHandler( EventPreLoadViewState, value ); }
+            remove { base.Events.RemoveHandler( EventPreLoadViewState, value ); }
         }
 
         /// <summary>
@@ -170,16 +180,16 @@ namespace Spring.Web.UI
         /// has been called during <see cref="OnPreRender"/>
         /// </remarks>
         /// <returns>true if the server control's state changes as a result of the post back; otherwise false.</returns>
-        bool IPostBackDataHandler.LoadPostData(string postDataKey, NameValueCollection postCollection)
+        bool IPostBackDataHandler.LoadPostData( string postDataKey, NameValueCollection postCollection )
         {
-            return LoadPostData(postDataKey, postCollection);
+            return LoadPostData( postDataKey, postCollection );
         }
 
         /// <summary>
         /// This method is called during a postback if this control has been visible when being rendered to the client.
         /// </summary>
         /// <returns>true if the server control's state changes as a result of the post back; otherwise false.</returns>
-        protected virtual bool LoadPostData(string postDataKey, NameValueCollection postCollection)
+        protected virtual bool LoadPostData( string postDataKey, NameValueCollection postCollection )
         {
             // mark this control for unbinding form data during OnLoad()
             this.needsUnbind = true;
@@ -210,14 +220,14 @@ namespace Spring.Web.UI
         /// then raises Load event in order to execute all associated handlers.
         /// </summary>
         /// <param name="e">Event arguments.</param>
-        protected override void OnLoad(EventArgs e)
+        protected override void OnLoad( EventArgs e )
         {
             if (IsPostBack && needsUnbind)
             {
                 // unbind form data
                 UnbindFormData();
             }
-            base.OnLoad(e);
+            base.OnLoad( e );
         }
 
         /// <summary>
@@ -225,32 +235,32 @@ namespace Spring.Web.UI
         /// PreRender event afterwards.
         /// </summary>
         /// <param name="e">Event arguments.</param>
-        protected override void OnPreRender(EventArgs e)
+        protected override void OnPreRender( EventArgs e )
         {
             if (Visible)
             {
                 // causes IPostBackDataHandler.LoadPostData() to be called on next postback.
                 // this is used for indicating a required call to UnbindFormData()
-                Page.RegisterRequiresPostBack(this);
+                Page.RegisterRequiresPostBack( this );
 
                 BindFormData();
 
                 if (localizer != null)
                 {
-                    localizer.ApplyResources(this, messageSource, UserCulture);
+                    localizer.ApplyResources( this, messageSource, UserCulture );
                 }
                 else if (Page.Localizer != null)
                 {
-                    Page.Localizer.ApplyResources(this, messageSource, UserCulture);
+                    Page.Localizer.ApplyResources( this, messageSource, UserCulture );
                 }
             }
 
-            base.OnPreRender(e);
+            base.OnPreRender( e );
 
             object modelToSave = SaveModel();
             if (modelToSave != null)
             {
-                SaveModelToPersistenceMedium(modelToSave);
+                SaveModelToPersistenceMedium( modelToSave );
             }
         }
 
@@ -264,11 +274,11 @@ namespace Spring.Web.UI
         /// Raises InitializeControls event.
         /// </summary>
         /// <param name="e">Event arguments.</param>
-        protected virtual void OnInitializeControls(EventArgs e)
+        protected virtual void OnInitializeControls( EventArgs e )
         {
             if (InitializeControls != null)
             {
-                InitializeControls(this, e);
+                InitializeControls( this, e );
             }
         }
 
@@ -280,10 +290,10 @@ namespace Spring.Web.UI
         /// <returns>
         /// Returns the specified <see langword="UserControl"/> object, with dependencies injected.
         /// </returns>
-        protected virtual new Control LoadControl(string virtualPath)
+        protected virtual new Control LoadControl( string virtualPath )
         {
-            Control control = base.LoadControl(virtualPath);
-            control = WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
+            Control control = base.LoadControl( virtualPath );
+            control = WebDependencyInjectionUtils.InjectDependenciesRecursive( defaultApplicationContext, control );
             return control;
         }
 
@@ -297,10 +307,10 @@ namespace Spring.Web.UI
         /// <returns>
         /// Returns the specified <see langword="UserControl"/> object, with dependencies injected.
         /// </returns>
-        protected virtual new Control LoadControl( Type t, params object[] parameters)
+        protected virtual new Control LoadControl( Type t, params object[] parameters )
         {
             Control control = base.LoadControl( t, parameters );
-            control = WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
+            control = WebDependencyInjectionUtils.InjectDependenciesRecursive( defaultApplicationContext, control );
             return control;
         }
 #endif
@@ -339,7 +349,7 @@ namespace Spring.Web.UI
         /// The default implementation uses <see cref="System.Web.UI.Page.Session"/> to store and retrieve
         /// the model for the current <see cref="System.Web.HttpRequest.CurrentExecutionFilePath" />
         /// </remarks>
-        protected virtual void SaveModelToPersistenceMedium(object modelToSave)
+        protected virtual void SaveModelToPersistenceMedium( object modelToSave )
         {
             Session[Request.CurrentExecutionFilePath + this.UniqueID + ".Model"] = modelToSave;
         }
@@ -351,7 +361,7 @@ namespace Spring.Web.UI
         /// This method should be overriden by the developer
         /// in order to load data model for the page.
         /// </remarks>
-        protected virtual void LoadModel(object savedModel)
+        protected virtual void LoadModel( object savedModel )
         {
         }
 
@@ -386,7 +396,7 @@ namespace Spring.Web.UI
         public object Controller
         {
             get { return GetController(); }
-            set { SetController(value); }
+            set { SetController( value ); }
         }
 
         /// <summary>
@@ -397,7 +407,7 @@ namespace Spring.Web.UI
         /// but must ensure to also change the behaviour of <see cref="GetController"/> accordingly.
         /// </remarks>
         /// <param name="controller">Controller for the control.</param>
-        protected virtual void SetController(object controller)
+        protected virtual void SetController( object controller )
         {
             this.controller = controller;
         }
@@ -425,7 +435,7 @@ namespace Spring.Web.UI
         /// </returns>
         protected virtual object GetController()
         {
-            if(controller == null)
+            if (controller == null)
             {
                 return this;
             }
@@ -440,8 +450,8 @@ namespace Spring.Web.UI
         /// Returns a thread-safe dictionary that contains state that is shared by
         /// all instances of this control.
         /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         protected IDictionary SharedState
         {
             get
@@ -451,7 +461,7 @@ namespace Spring.Web.UI
                     string thisTypeKey = this.GetType().FullName + this.GetType().GetHashCode() + ".SharedState";
 
                     sharedState = Application[thisTypeKey] as IDictionary;
-                    if (sharedState==null)
+                    if (sharedState == null)
                     {
                         Application.Lock();
                         try
@@ -460,7 +470,7 @@ namespace Spring.Web.UI
                             if (sharedState == null)
                             {
                                 sharedState = new SynchronizedHashtable();
-                                Application.Add(thisTypeKey, sharedState);
+                                Application.Add( thisTypeKey, sharedState );
                             }
                         }
                         finally
@@ -478,103 +488,141 @@ namespace Spring.Web.UI
         #region Result support
 
         /// <summary>
-        /// Gets or sets map of result names to target URLs
+        /// Ensure, that <see cref="WebNavigator"/> is set to a valid instance.
         /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IDictionary Results
+        /// <remarks>
+        /// If <see cref="WebNavigator"/> is not already set, creates and sets a new <see cref="WebFormsResultWebNavigator"/> instance.<br/>
+        /// Override this method if you don't want to inject a navigator, but need a different default.
+        /// </remarks>
+        protected virtual void InitializeNavigationSupport()
+        {
+            webNavigator = new WebFormsResultWebNavigator(this, null, true);
+        }
+
+        /// <summary>
+        /// Gets/Sets the navigator to be used for handling <see cref="SetResult(string, object)"/> calls.
+        /// </summary>
+        public IWebNavigator WebNavigator
         {
             get
             {
-                if (results == null)
-                {
-                    results = new Hashtable();
-                }
-                return results;
+                return webNavigator;
             }
             set
             {
-                results = new Hashtable();
-                foreach (DictionaryEntry entry in value)
-                {
-                    if (entry.Value is Result)
-                    {
-                        results[entry.Key] = entry.Value;
-                    }
-                    else if (entry.Value is String)
-                    {
-                        results[entry.Key] = new Result((string)entry.Value);
-                    }
-                    else
-                    {
-                        throw new TypeMismatchException(
-                            "Unable to create result object. Please use either String or Result instances to define results.");
-                    }
-                }
+                webNavigator = value;
             }
         }
 
         /// <summary>
-        /// Redirects user to a URL mapped to specified result name.
+        /// Gets or sets map of result names to target URLs
         /// </summary>
-        /// <param name="resultName">Result name.</param>
-        protected void SetResult(string resultName)
+        /// <remarks>
+        /// Using <see cref="Results"/> requires <see cref="WebNavigator"/> to implement <see cref="IResultWebNavigator"/>.
+        /// </remarks>
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
+        public virtual IDictionary Results
         {
-            Result result = (Result)Results[resultName];
-            if (result == null)
+            get
             {
-                // bubble up result in the hierarchy
-                Control parent = this.Parent;
-                while(parent != null)
+                if (WebNavigator is IResultWebNavigator)
                 {
-                    if (parent is UserControl)
-                    {
-                        ((UserControl)parent).SetResult(resultName);
-                        return;
-                    }
-                    else if (parent is Page)
-                    {
-                        ((Page) parent).SetResult(resultName);
-                        return;
-                    }
-                    parent = parent.Parent;
+                    return ((IResultWebNavigator)WebNavigator).Results;
                 }
-                throw new ArgumentException(string.Format("No URL mapping found for the specified result '{0}'.", resultName), "resultName");
+                return null;
             }
+            set
+            {
+                if (WebNavigator is IResultWebNavigator)
+                {
+                    ((IResultWebNavigator)WebNavigator).Results = value;
+                    return;
+                }
+                throw new NotSupportedException("WebNavigator must be of type IResultWebNavigator to support Results");
+            }
+        }
 
-            result.Navigate(this);
+        /// <summary>
+        /// A convenience, case-insensitive table that may be used to e.g. pass data into SpEL expressions"/>.
+        /// </summary>
+        /// <remarks>
+        /// By default, e.g. <see cref="SetResult(string)"/> passes the control instance into an expression. Using
+        /// <see cref="Args"/> is an easy way to pass additional parameters into the expression
+        /// <example>
+        /// // config:
+        /// 
+        /// &lt;property Name=&quot;Results&quot;&gt;
+        ///   &lt;dictionary&gt;
+        ///   		&lt;entry key=&quot;ok_clicked&quot; value=&quot;redirect:~/ShowResult.aspx?result=%{Args['result']}&quot; /&gt;
+        ///   &lt;/dictionary&gt;
+        /// &lt;/property&gt;
+        /// 
+        /// // code:
+        /// 
+        /// void OnOkClicked(object sender, EventArgs e)
+        /// {
+        ///   Args[&quot;result&quot;] = txtUserInput.Text;
+        ///   SetResult(&quot;ok_clicked&quot;);
+        /// }
+        /// </example>
+        /// </remarks>
+        public IDictionary Args
+        {
+            get
+            {
+                if (args == null)
+                {
+                    args = new CaseInsensitiveHashtable();
+                }
+                return args;
+            }
         }
 
         /// <summary>
         /// Redirects user to a URL mapped to specified result name.
         /// </summary>
         /// <param name="resultName">Result name.</param>
+        protected void SetResult( string resultName )
+        {
+            WebNavigator.NavigateTo( resultName, this );
+        }
+
+
+        /// <summary>
+        /// Redirects user to a URL mapped to specified result name.
+        /// </summary>
+        /// <param name="resultName">Name of the result.</param>
         /// <param name="context">The context to use for evaluating the SpEL expression in the Result.</param>
-        protected void SetResult(string resultName, object context)
+        protected void SetResult( string resultName, object context )
         {
-            Result result = (Result)Results[resultName];
-            if (result == null)
-            {
-                // bubble up result in the hierarchy
-                Control parent = this.Parent;
-                while (parent != null)
-                {
-                    if (parent is UserControl)
-                    {
-                        ((UserControl)parent).SetResult(resultName, context);
-                        return;
-                    }
-                    else if (parent is Page)
-                    {
-                        ((Page)parent).SetResult(resultName, context);
-                        return;
-                    }
-                    parent = parent.Parent;
-                }
-                throw new ArgumentException(string.Format("No URL mapping found for the specified result '{0}'.", resultName), "resultName");
-            }
+            WebNavigator.NavigateTo( resultName, context );
+        }
 
-            result.Navigate(context);
+
+        /// <summary>
+        /// Returns a redirect url string that points to the 
+        /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
+        /// result evaluated using this Page for expression 
+        /// </summary>
+        /// <param name="resultName">Name of the result.</param>
+        /// <returns>A redirect url string.</returns>
+        protected string GetResultUrl( string resultName )
+        {
+            return ResolveUrl( WebNavigator.GetResultUri( resultName, this ) );
+        }
+
+        /// <summary>
+        /// Returns a redirect url string that points to the 
+        /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
+        /// result evaluated using this Page for expression 
+        /// </summary>
+        /// <param name="resultName">Name of the result.</param>
+        /// <param name="context">The context to use for evaluating the SpEL expression in the Result</param>
+        /// <returns>A redirect url string.</returns>
+        protected string GetResultUrl( string resultName, object context )
+        {
+            return ResolveUrl( WebNavigator.GetResultUri( resultName, context ) );
         }
 
         #endregion
@@ -598,7 +646,7 @@ namespace Spring.Web.UI
         /// <returns>
         /// <c>True</c> if all of the specified validators are valid, <c>False</c> otherwise.
         /// </returns>
-        public bool Validate(object validationContext, params IValidator[] validators)
+        public bool Validate( object validationContext, params IValidator[] validators )
         {
             IDictionary contextParams = CreateValidatorParameters();
             bool result = true;
@@ -606,9 +654,9 @@ namespace Spring.Web.UI
             {
                 if (validator == null)
                 {
-                    throw new ArgumentException("Validator is not defined.");
+                    throw new ArgumentException( "Validator is not defined." );
                 }
-                result = validator.Validate(validationContext, contextParams, this.validationErrors) && result;
+                result = validator.Validate( validationContext, contextParams, this.validationErrors ) && result;
             }
 
             return result;
@@ -660,7 +708,7 @@ namespace Spring.Web.UI
         /// Initializes the data bindings.
         /// </summary>
         protected virtual void InitializeDataBindings()
-        {}
+        { }
 
         /// <summary>
         /// Returns the key to be used for looking up a cached
@@ -707,7 +755,7 @@ namespace Spring.Web.UI
             this.bindingManager = sharedState[key] as BaseBindingManager;
             if (this.bindingManager == null)
             {
-                lock(sharedState.SyncRoot)
+                lock (sharedState.SyncRoot)
                 {
                     this.bindingManager = sharedState[key] as BaseBindingManager;
                     if (this.bindingManager == null)
@@ -715,10 +763,10 @@ namespace Spring.Web.UI
                         try
                         {
                             this.bindingManager = CreateBindingManager();
-                            if(bindingManager == null)
+                            if (bindingManager == null)
                             {
-                                throw new ArgumentNullException("bindingManager",
-                                                                "CreateBindingManager() must not return null");
+                                throw new ArgumentNullException( "bindingManager",
+                                                                "CreateBindingManager() must not return null" );
                             }
                             InitializeDataBindings();
                         }
@@ -728,7 +776,7 @@ namespace Spring.Web.UI
                             throw;
                         }
                         sharedState[key] = this.bindingManager;
-                        this.OnDataBindingsInitialized(EventArgs.Empty);
+                        this.OnDataBindingsInitialized( EventArgs.Empty );
                     }
                 }
             }
@@ -737,13 +785,13 @@ namespace Spring.Web.UI
         /// <summary>
         /// Raises the <see cref="DataBindingsInitialized"/> event.
         /// </summary>
-        protected virtual void OnDataBindingsInitialized(EventArgs e)
+        protected virtual void OnDataBindingsInitialized( EventArgs e )
         {
             EventHandler handler = (EventHandler)base.Events[EventDataBindingsInitialized];
 
-            if(handler != null)
+            if (handler != null)
             {
-                handler(this, e);
+                handler( this, e );
             }
         }
 
@@ -754,11 +802,11 @@ namespace Spring.Web.UI
         {
             add
             {
-                base.Events.AddHandler(EventDataBindingsInitialized, value);
+                base.Events.AddHandler( EventDataBindingsInitialized, value );
             }
             remove
             {
-                base.Events.RemoveHandler(EventDataBindingsInitialized, value);
+                base.Events.RemoveHandler( EventDataBindingsInitialized, value );
             }
         }
 
@@ -767,11 +815,11 @@ namespace Spring.Web.UI
         /// </summary>
         protected internal virtual void BindFormData()
         {
-            if(BindingManager.HasBindings)
+            if (BindingManager.HasBindings)
             {
-                BindingManager.BindTargetToSource(this, Controller, Page.ValidationErrors);
+                BindingManager.BindTargetToSource( this, Controller, Page.ValidationErrors );
             }
-            OnDataBound(EventArgs.Empty);
+            OnDataBound( EventArgs.Empty );
         }
 
         /// <summary>
@@ -779,11 +827,11 @@ namespace Spring.Web.UI
         /// </summary>
         protected internal virtual void UnbindFormData()
         {
-            if(BindingManager.HasBindings)
+            if (BindingManager.HasBindings)
             {
-                BindingManager.BindSourceToTarget(this, Controller, Page.ValidationErrors);
+                BindingManager.BindSourceToTarget( this, Controller, Page.ValidationErrors );
             }
-            OnDataUnbound(EventArgs.Empty);
+            OnDataUnbound( EventArgs.Empty );
         }
 
         /// <summary>
@@ -794,11 +842,11 @@ namespace Spring.Web.UI
         {
             add
             {
-                base.Events.AddHandler(EventDataBound, value);
+                base.Events.AddHandler( EventDataBound, value );
             }
             remove
             {
-                base.Events.RemoveHandler(EventDataBound, value);
+                base.Events.RemoveHandler( EventDataBound, value );
             }
         }
 
@@ -806,12 +854,12 @@ namespace Spring.Web.UI
         /// Raises DataBound event.
         /// </summary>
         /// <param name="e">Event arguments.</param>
-        protected virtual void OnDataBound(EventArgs e)
+        protected virtual void OnDataBound( EventArgs e )
         {
-            EventHandler handler = (EventHandler) base.Events[EventDataBound];
+            EventHandler handler = (EventHandler)base.Events[EventDataBound];
             if (handler != null)
             {
-                handler(this, e);
+                handler( this, e );
             }
         }
 
@@ -823,11 +871,11 @@ namespace Spring.Web.UI
         {
             add
             {
-                base.Events.AddHandler(EventDataUnbound, value);
+                base.Events.AddHandler( EventDataUnbound, value );
             }
             remove
             {
-                base.Events.RemoveHandler(EventDataUnbound, value);
+                base.Events.RemoveHandler( EventDataUnbound, value );
             }
         }
 
@@ -835,12 +883,12 @@ namespace Spring.Web.UI
         /// Raises DataBound event.
         /// </summary>
         /// <param name="e">Event arguments.</param>
-        protected virtual void OnDataUnbound(EventArgs e)
+        protected virtual void OnDataUnbound( EventArgs e )
         {
-            EventHandler handler = (EventHandler) base.Events[EventDataUnbound];
+            EventHandler handler = (EventHandler)base.Events[EventDataUnbound];
             if (handler != null)
             {
-                handler(this, e);
+                handler( this, e );
             }
         }
 
@@ -875,8 +923,8 @@ namespace Spring.Web.UI
         /// If thrown by any application context methods.
         /// </exception>
         /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         public virtual IApplicationContext ApplicationContext
         {
             get { return applicationContext; }
@@ -891,8 +939,8 @@ namespace Spring.Web.UI
         /// Gets or sets the localizer.
         /// </summary>
         /// <value>The localizer.</value>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         public ILocalizer Localizer
         {
             get { return localizer; }
@@ -910,8 +958,8 @@ namespace Spring.Web.UI
         /// Gets or sets the local message source.
         /// </summary>
         /// <value>The local message source.</value>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         public IMessageSource MessageSource
         {
             get { return messageSource; }
@@ -920,7 +968,7 @@ namespace Spring.Web.UI
                 messageSource = value;
                 if (messageSource != null && messageSource is AbstractMessageSource)
                 {
-                    ((AbstractMessageSource) messageSource).ParentMessageSource = applicationContext;
+                    ((AbstractMessageSource)messageSource).ParentMessageSource = applicationContext;
                 }
             }
         }
@@ -932,12 +980,12 @@ namespace Spring.Web.UI
         {
             if (this.MessageSource == null)
             {
-                string key = CreateSharedStateKey("MessageSource");
+                string key = CreateSharedStateKey( "MessageSource" );
                 IDictionary sharedState = this.SharedState;
                 IMessageSource messageSource = sharedState[key] as IMessageSource;
                 if (messageSource == null)
                 {
-                    lock(sharedState.SyncRoot)
+                    lock (sharedState.SyncRoot)
                     {
                         messageSource = sharedState[key] as IMessageSource;
                         if (messageSource == null)
@@ -947,7 +995,7 @@ namespace Spring.Web.UI
                             ResourceManager rm = GetLocalResourceManager();
                             if (rm != null)
                             {
-                                defaultMessageSource.ResourceManagers.Add(rm);
+                                defaultMessageSource.ResourceManagers.Add( rm );
                             }
                             sharedState[key] = defaultMessageSource;
                             messageSource = defaultMessageSource;
@@ -978,13 +1026,13 @@ namespace Spring.Web.UI
         }
 #else
         {
-            object resourceProvider = Page.GetLocalResourceProvider.Invoke(typeof(ResourceExpressionBuilder), new object[] {this});
+            object resourceProvider = Page.GetLocalResourceProvider.Invoke( typeof( ResourceExpressionBuilder ), new object[] { this } );
             MethodInfo GetLocalResourceAssembly =
-                    resourceProvider.GetType().GetMethod("GetLocalResourceAssembly", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assembly localResourceAssembly = (Assembly) GetLocalResourceAssembly.Invoke(resourceProvider, null);
+                    resourceProvider.GetType().GetMethod( "GetLocalResourceAssembly", BindingFlags.NonPublic | BindingFlags.Instance );
+            Assembly localResourceAssembly = (Assembly)GetLocalResourceAssembly.Invoke( resourceProvider, null );
             if (localResourceAssembly != null)
             {
-                return new ResourceManager(VirtualPathUtility.GetFileName(this.AppRelativeVirtualPath), localResourceAssembly);
+                return new ResourceManager( VirtualPathUtility.GetFileName( this.AppRelativeVirtualPath ), localResourceAssembly );
             }
             return null;
         }
@@ -995,9 +1043,9 @@ namespace Spring.Web.UI
         /// </summary>
         /// <param name="name">Resource name.</param>
         /// <returns>Message text.</returns>
-        public string GetMessage(string name)
+        public string GetMessage( string name )
         {
-            return messageSource.GetMessage(name, UserCulture);
+            return messageSource.GetMessage( name, UserCulture );
         }
 
         /// <summary>
@@ -1006,9 +1054,9 @@ namespace Spring.Web.UI
         /// <param name="name">Resource name.</param>
         /// <param name="args">Message arguments that will be used to format return value.</param>
         /// <returns>Formatted message text.</returns>
-        public string GetMessage(string name, params object[] args)
+        public string GetMessage( string name, params object[] args )
         {
-            return messageSource.GetMessage(name, UserCulture, args);
+            return messageSource.GetMessage( name, UserCulture, args );
         }
 
         /// <summary>
@@ -1016,16 +1064,16 @@ namespace Spring.Web.UI
         /// </summary>
         /// <param name="name">Resource name.</param>
         /// <returns>Resource object.</returns>
-        public object GetResourceObject(string name)
+        public object GetResourceObject( string name )
         {
-            return messageSource.GetResourceObject(name, UserCulture);
+            return messageSource.GetResourceObject( name, UserCulture );
         }
 
         /// <summary>
         /// Gets or sets user's culture
         /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         public virtual CultureInfo UserCulture
         {
             get { return Page.UserCulture; }
@@ -1040,11 +1088,11 @@ namespace Spring.Web.UI
         /// Overrides Page property to return <see cref="Spring.Web.UI.Page"/>
         /// instead of <see cref="System.Web.UI.Page"/>.
         /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
         public new Page Page
         {
-            get { return (Page) base.Page; }
+            get { return (Page)base.Page; }
         }
 
         #endregion
@@ -1057,7 +1105,7 @@ namespace Spring.Web.UI
         /// </summary>
         /// <param name="key">Key suffix</param>
         /// <returns>Generated unique shared state key.</returns>
-        protected string CreateSharedStateKey(string key)
+        protected string CreateSharedStateKey( string key )
         {
             return key;
         }
@@ -1072,16 +1120,16 @@ namespace Spring.Web.UI
         IApplicationContext ISupportsWebDependencyInjection.DefaultApplicationContext
         {
             get { return defaultApplicationContext; }
-            set { defaultApplicationContext = value;  }
+            set { defaultApplicationContext = value; }
         }
 
         /// <summary>
         /// Injects dependencies into control before adding it.
         /// </summary>
-        protected override void AddedControl(Control control,int index)
+        protected override void AddedControl( Control control, int index )
         {
             WebDependencyInjectionUtils.InjectDependenciesRecursive( defaultApplicationContext, control );
-            base.AddedControl(control,index);
+            base.AddedControl( control, index );
         }
 
         #endregion Dependency Injection Support

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2004 the original author or authors.
+ * Copyright 2002-2008 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Web;
 using System.Web.UI;
+using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Core;
 using Spring.DataBinding;
 using Spring.Globalization;
 using Spring.Globalization.Resolvers;
@@ -50,6 +50,10 @@ using IValidator = Spring.Validation.IValidator;
 
 namespace Spring.Web.UI
 {
+    #region Result support
+
+    #endregion
+
     /// <summary>
     /// Represents an .aspx file, also known as a Web Forms page, requested from a
     /// server that hosts an ASP.NET Web application.
@@ -73,7 +77,7 @@ namespace Spring.Web.UI
     [AspNetHostingPermission( SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal )]
     [AspNetHostingPermission( SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal )]
     public class Page : System.Web.UI.Page, IHttpHandler, IApplicationContextAware, ISharedStateAware,
-                        ISupportsWebDependencyInjection, IWebDataBound, IValidationContainer
+                        ISupportsWebDependencyInjection, IWebDataBound, IValidationContainer, IWebNavigable
     {
         #region Constants
 
@@ -108,15 +112,15 @@ namespace Spring.Web.UI
         private String masterPageFile;
 #endif
         private object controller;
-        private IDictionary sharedState;
+        private IDictionary sharedState = new CaseInsensitiveHashtable();
 
         private ILocalizer localizer;
         private ICultureResolver cultureResolver = new DefaultWebCultureResolver();
         private IMessageSource messageSource;
         private IBindingContainer bindingManager;
         private IValidationErrors validationErrors = new ValidationErrors();
-
-        private IDictionary results;
+        private IWebNavigator webNavigator;
+        private IDictionary args;
         private IApplicationContext applicationContext;
         private IApplicationContext defaultApplicationContext;
         private static readonly string traceCategory = "Spring.Page";
@@ -131,6 +135,11 @@ namespace Spring.Web.UI
         #endregion
 
         #region Page lifecycle methods
+
+        public Page()
+        {
+            InitializeNavigationSupport();
+        }
 
 #if !NET_2_0
         /// <summary>
@@ -1027,39 +1036,97 @@ namespace Spring.Web.UI
         #region Result support
 
         /// <summary>
-        /// Gets or sets map of result names to target URLs
+        /// Ensure, that <see cref="WebNavigator"/> is set to a valid instance.
         /// </summary>
-        [Browsable( false )]
-        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
-        public IDictionary Results
+        /// <remarks>
+        /// If <see cref="WebNavigator"/> is not already set, creates and sets a new <see cref="WebFormsResultWebNavigator"/> instance.<br/>
+        /// Override this method if you don't want to inject a navigator, but need a different default.
+        /// </remarks>
+        protected virtual void InitializeNavigationSupport()
+        {
+            webNavigator = new WebFormsResultWebNavigator( this, null, true );
+        }
+
+        /// <summary>
+        /// Gets/Sets the navigator to be used for handling <see cref="SetResult(string, object)"/> calls.
+        /// </summary>
+        public virtual IWebNavigator WebNavigator
         {
             get
             {
-                if (results == null)
-                {
-                    results = new Hashtable();
-                }
-                return results;
+                return webNavigator;
             }
             set
             {
-                results = new Hashtable();
-                foreach (DictionaryEntry entry in value)
+                webNavigator = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets map of result names to target URLs
+        /// </summary>
+        /// <remarks>
+        /// Using <see cref="Results"/> requires <see cref="WebNavigator"/> to implement <see cref="IResultWebNavigator"/>.
+        /// </remarks>
+        [Browsable( false )]
+        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
+        public virtual IDictionary Results
+        {
+            get
+            {
+                if (WebNavigator is IResultWebNavigator)
                 {
-                    if (entry.Value is Result)
-                    {
-                        results[entry.Key] = entry.Value;
-                    }
-                    else if (entry.Value is String)
-                    {
-                        results[entry.Key] = new Result( (string)entry.Value );
-                    }
-                    else
-                    {
-                        throw new TypeMismatchException(
-                            "Unable to create result object. Please use either String or Result instances to define results." );
-                    }
+                    return ((IResultWebNavigator)WebNavigator).Results;
                 }
+                return null;
+            }
+            set
+            {
+                if (WebNavigator is IResultWebNavigator)
+                {
+                    ((IResultWebNavigator)WebNavigator).Results = value;
+                    return;
+                }
+                throw new NotSupportedException( "WebNavigator must be of type IResultWebNavigator to support Results" );
+            }
+        }
+
+        /// <summary>
+        /// A convenience, case-insensitive table that may be used to e.g. pass data into SpEL expressions"/>.
+        /// </summary>
+        /// <remarks>
+        /// By default, e.g. <see cref="SetResult(string)"/> passes the control instance into an expression. Using
+        /// <see cref="Args"/> is an easy way to pass additional parameters into the expression
+        /// <example>
+        /// This example shows how to pass an arbitrary value 'age' into a result expression.
+        /// <code>
+        /// // config:
+        /// 
+        /// &lt;property Name=&quot;Results&quot;&gt;
+        ///   &lt;dictionary&gt;
+        ///   		&lt;entry key=&quot;ok_clicked&quot; value=&quot;redirect:~/ShowResult.aspx?age=%{Args['age']}&quot; /&gt;
+        ///   &lt;/dictionary&gt;
+        /// &lt;/property&gt;
+        /// 
+        /// // code:
+        /// 
+        /// void OnOkClicked(object sender, EventArgs e)
+        /// {
+        ///   Args[&quot;result&quot;] = txtAge.Text;
+        ///   SetResult(&quot;ok_clicked&quot;);
+        /// }
+        /// </code>
+        /// </example>
+        /// </remarks>
+        public IDictionary Args
+        {
+            get
+            {
+                if (args == null)
+                {
+                    args = new CaseInsensitiveHashtable();
+                }
+                return args;
             }
         }
 
@@ -1067,22 +1134,20 @@ namespace Spring.Web.UI
         /// Redirects user to a URL mapped to specified result name.
         /// </summary>
         /// <param name="resultName">Result name.</param>
-        protected internal void SetResult( string resultName )
+        protected void SetResult( string resultName )
         {
-            GetResult( resultName ).Navigate( this );
+            WebNavigator.NavigateTo( resultName, this );
         }
-
 
         /// <summary>
         /// Redirects user to a URL mapped to specified result name.
         /// </summary>
         /// <param name="resultName">Name of the result.</param>
         /// <param name="context">The context to use for evaluating the SpEL expression in the Result.</param>
-        protected internal void SetResult( string resultName, object context )
+        protected void SetResult( string resultName, object context )
         {
-            GetResult( resultName ).Navigate( context );
+            WebNavigator.NavigateTo( resultName, context );
         }
-
 
         /// <summary>
         /// Returns a redirect url string that points to the 
@@ -1091,10 +1156,9 @@ namespace Spring.Web.UI
         /// </summary>
         /// <param name="resultName">Name of the result.</param>
         /// <returns>A redirect url string.</returns>
-        protected internal string GetResultUrl( string resultName )
+        protected string GetResultUrl( string resultName )
         {
-            Result result = GetResult( resultName );
-            return ResolveUrl( result.GetRedirectUri( this ) );
+            return ResolveUrl( WebNavigator.GetResultUri( resultName, this ) );
         }
 
         /// <summary>
@@ -1105,25 +1169,10 @@ namespace Spring.Web.UI
         /// <param name="resultName">Name of the result.</param>
         /// <param name="context">The context to use for evaluating the SpEL expression in the Result</param>
         /// <returns>A redirect url string.</returns>
-        protected internal string GetResultUrl( string resultName, object context )
+        protected string GetResultUrl( string resultName, object context )
         {
-            Result result = GetResult( resultName );
-            return ResolveUrl( result.GetRedirectUri( context ) );
+            return ResolveUrl( WebNavigator.GetResultUri( resultName, context ) );
         }
-
-
-        private Result GetResult( string resultName )
-        {
-            Result result = (Result)Results[resultName];
-            if (result == null)
-            {
-                throw new ArgumentException(
-                    string.Format( "No URL mapping found for the specified result '{0}'.", resultName ), "resultName" );
-            }
-            return result;
-        }
-
-
 
         #endregion
 

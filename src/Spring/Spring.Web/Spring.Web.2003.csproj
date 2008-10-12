@@ -296,21 +296,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Web\Process\IProcess.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\Process\IProcessAware.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\Process\ProcessManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Web\Providers\ConfigurableActiveDirectoryMembershipProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -391,17 +376,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Web\Support\AbstractProcessHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Web\Support\ContextMonitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Web\Support\ControlInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\DefaultResultFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\IHierarchicalWebNavigator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -421,12 +411,32 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Web\Support\ISharedStateAware.cs"
+                    RelPath = "Web\Support\IResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\IResultFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\IResultWebNavigator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Web\Support\ISupportsWebDependencyInjection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\IWebNavigable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\IWebNavigator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -446,7 +456,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Web\Support\ResultFactoryRegistry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Web\Support\ResultMode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\ResultWebNavigator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -477,6 +497,11 @@
                 />
                 <File
                     RelPath = "Web\Support\WebDependencyInjectionUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\WebFormsResultWebNavigator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
