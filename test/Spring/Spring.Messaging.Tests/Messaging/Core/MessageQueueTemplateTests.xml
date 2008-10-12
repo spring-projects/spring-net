@@ -34,18 +34,18 @@
   </object>
 
   <object id="queue" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="MessageQueueObjectName" value="testtxqueue"/>
+    <property name="DefaultMessageQueueObjectName" value="testtxqueue"/>
     <property name="MessageConverterObjectName" value="messageConverter"/>
   </object>
 
 
   <object id="queue-noconverter" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="MessageQueueObjectName" value="testtxqueue"/>
+    <property name="DefaultMessageQueueObjectName" value="testtxqueue"/>
   </object>
 
 
   <object id="txqueue" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="MessageQueueObjectName" value="testtxqueue"/>
+    <property name="DefaultMessageQueueObjectName" value="testtxqueue"/>
     <property name="MessageConverterObjectName" value="messageConverter"/>
   </object>
 

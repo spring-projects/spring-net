@@ -18,10 +18,11 @@
 
 #endregion
 
-
+using System;
 using System.Collections;
 using System.Messaging;
 using Spring.Context;
+using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
 using Spring.Threading;
 using Spring.Util;
@@ -30,7 +31,8 @@ namespace Spring.Messaging.Core
 {
     /// <summary>
     /// A <see cref="IMessageQueueFactory"/> implementation that caches MessageQueue and IMessageConverter
-    /// instances.
+    /// instances.  The MessageQueue objects are created by retrieving them by-name from the 
+    /// ApplicationContext. 
     /// </summary>
     /// <author>Mark Pollack</author>
     public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationContextAware
@@ -41,9 +43,17 @@ namespace Spring.Messaging.Core
         private static readonly string CONVERTER_DICTIONARY_SLOTNAME =
             UniqueKey.GetTypeScopedString(typeof (DefaultMessageQueueFactory), "Converter");
 
-        private IApplicationContext applicationContext;
+        private IConfigurableApplicationContext applicationContext;
 
         #region IMessageQueueFactory Members
+
+        public void RegisterMessageQueue(string messageQueueObjectName,
+                                 MessageQueueCreatorDelegate messageQueueCreatorDelegate)
+        {
+            MessageQueueFactoryObject mqfo = new MessageQueueFactoryObject();
+            mqfo.MessageCreatorDelegate = messageQueueCreatorDelegate;
+            applicationContext.ObjectFactory.RegisterSingleton(messageQueueObjectName, mqfo);
+        }
 
         public MessageQueue CreateMessageQueue(string messageQueueObjectName)
         {
@@ -62,21 +72,40 @@ namespace Spring.Messaging.Core
             return queues[messageQueueObjectName] as MessageQueue;
         }
 
-        public IMessageConverter CreateMessageConverter(string messgaeConverterObjectName)
+        public bool ContainsMessageQueue(string messageQueueObjectName)
         {
-            AssertUtils.ArgumentHasText(messgaeConverterObjectName, "MessgaeFormatterObjectName");
+            return applicationContext.ContainsObject(messageQueueObjectName);
+        }
+
+        public void RegisterMessageConverter(string messageConverterName,
+                                             MessageConverterCreatorDelegate messageConverterCreatorDelegate)
+        {
+            MessageConverterFactoryObject mcfo = new MessageConverterFactoryObject();
+            mcfo.MessageConverterCreatorDelegate = messageConverterCreatorDelegate;
+            applicationContext.ObjectFactory.RegisterSingleton(messageConverterName, mcfo);
+        }
+
+        public IMessageConverter CreateMessageConverter(string messageConverterObjectName)
+        {
+            AssertUtils.ArgumentHasText(messageConverterObjectName, "MessgaeFormatterObjectName");
             IDictionary converters = LogicalThreadContext.GetData(CONVERTER_DICTIONARY_SLOTNAME) as IDictionary;
             if (converters == null)
             {
                 converters = new Hashtable();
                 LogicalThreadContext.SetData(CONVERTER_DICTIONARY_SLOTNAME, converters);
             }
-            if (!converters.Contains(messgaeConverterObjectName))
+            if (!converters.Contains(messageConverterObjectName))
             {
-                IMessageConverter mc = applicationContext.GetObject(messgaeConverterObjectName) as IMessageConverter;
-                converters.Add(messgaeConverterObjectName, mc);
+                IMessageConverter mc = applicationContext.GetObject(messageConverterObjectName) as IMessageConverter;
+                converters.Add(messageConverterObjectName, mc);
             }
-            return converters[messgaeConverterObjectName] as IMessageConverter;
+            return converters[messageConverterObjectName] as IMessageConverter;
+        }
+
+
+        public bool ContainsMessageConverter(string messageConverterObjectName)
+        {
+            return applicationContext.ContainsObject(messageConverterObjectName);
         }
 
         #endregion
@@ -112,7 +141,18 @@ namespace Spring.Messaging.Core
         public IApplicationContext ApplicationContext
         {
             get { return applicationContext; }
-            set { applicationContext = value; }
+            set
+            {
+                AssertUtils.ArgumentNotNull(value, "An ApplicationContext instance is required");
+                IConfigurableApplicationContext ctx = value as IConfigurableApplicationContext;
+                if (ctx == null)
+                {
+                    throw new InvalidOperationException(
+                        "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
+                }
+
+                applicationContext = ctx;
+            }
         }
 
         #endregion

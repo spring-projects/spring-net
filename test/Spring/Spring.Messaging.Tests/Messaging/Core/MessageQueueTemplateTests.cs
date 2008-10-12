@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Messaging;
 using System.Transactions;
 using NUnit.Framework;
 using Spring.Data.Core;
@@ -43,7 +44,46 @@ namespace Spring.Messaging.Core
     [TestFixture]
     public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContextTests
     {
-       [Test]
+
+        [Test]
+        public void MessageCreator()
+        {
+            MessageQueueTemplate mqt = applicationContext["txqueue"] as MessageQueueTemplate;
+            Assert.IsNotNull(mqt);        
+            string path = @".\Private$\mlptestqueue";
+            if (MessageQueue.Exists(path))
+            {
+                MessageQueue.Delete(path);
+            }
+            MessageQueue.Create(path, true);
+            mqt.MessageQueueFactory.RegisterMessageQueue("newQueueDefinition", delegate
+                                                                               {
+                                                                                   MessageQueue mq = new MessageQueue();
+                                                                                   mq.Path = path;                                                                                                      
+                                                                                   // other properties
+                                                                                   return mq;
+                                                                               });
+
+            Assert.IsTrue(mqt.MessageQueueFactory.ContainsMessageQueue("newQueueDefinition"));
+
+            SendAndReceive("newQueueDefinition",mqt);
+
+            SimpleCreator sc  = new SimpleCreator();
+            mqt.MessageQueueFactory.RegisterMessageQueue("fooQueueDefinition", sc.CreateQueue );
+
+        }
+
+        public class SimpleCreator
+        {
+            public MessageQueue CreateQueue()
+            {
+                return new MessageQueue();
+            }
+        }
+  
+        
+  
+        [Test]
         [ExpectedException(typeof (ArgumentException), ExpectedMessage = "DefaultMessageQueueObjectName is required.")]
         public void NoMessageQueueNameSpecified()
         {
@@ -86,12 +126,19 @@ namespace Spring.Messaging.Core
         {
             MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
-            ReceiveHelloWorld(q,1);
+            ReceiveHelloWorld(null,q,1);
         }
 
-        private static void ReceiveHelloWorld(MessageQueueTemplate q, int index)
+        private static void ReceiveHelloWorld(string messageQueueObjectName, MessageQueueTemplate q, int index)
         {
-            object o = q.ReceiveAndConvert();
+            object o = null;
+            if (messageQueueObjectName == null)
+            {
+                o = q.ReceiveAndConvert();
+            } else
+            {
+                o = q.ReceiveAndConvert(messageQueueObjectName);
+            }
             Assert.IsNotNull(o);
             string data = o as string;
             Assert.IsNotNull(data);
@@ -103,7 +150,7 @@ namespace Spring.Messaging.Core
         {
             MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
-            SendAndRecieve(q);
+            SendAndReceive(q);
         }
 
         [Test]
@@ -111,7 +158,7 @@ namespace Spring.Messaging.Core
         {
             MessageQueueTemplate q = applicationContext["txqueue"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
-            SendAndRecieve(q);
+            SendAndReceive(q);
         }
 
         [Test]
@@ -120,31 +167,44 @@ namespace Spring.Messaging.Core
             MessageQueueTemplate q = applicationContext["txqueue"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
             SendUsingMessageTxScope(q);
-            Receive(q);
+            Receive(null,q);
         }
 
-        private static void SendAndRecieve(MessageQueueTemplate q)
+        private static void SendAndReceive(MessageQueueTemplate q)
         {
-            SendUsingMessageTx(q);
-            Receive(q);
+            SendAndReceive(null, q);
         }
 
-        private static void Receive(MessageQueueTemplate q)
+        private static void SendAndReceive(string messageQueueObjectName, MessageQueueTemplate q)
         {
-            ReceiveHelloWorld(q,1);
-            ReceiveHelloWorld(q,2);
-            ReceiveHelloWorld(q,3);
+            SendUsingMessageTx(messageQueueObjectName, q);
+            Receive(messageQueueObjectName, q);
         }
 
-        private static void SendUsingMessageTx(MessageQueueTemplate q)
+        private static void Receive(string messageQueueObjectName, MessageQueueTemplate q)
+        {
+            ReceiveHelloWorld(messageQueueObjectName, q, 1);
+            ReceiveHelloWorld(messageQueueObjectName, q, 2);
+            ReceiveHelloWorld(messageQueueObjectName, q, 3);
+        }
+
+        private static void SendUsingMessageTx(string messageQueueObjectName, MessageQueueTemplate q)
         {
             IPlatformTransactionManager txManager = new MessageQueueTransactionManager();
             TransactionTemplate transactionTemplate = new TransactionTemplate(txManager);
             transactionTemplate.Execute(delegate(ITransactionStatus status)
                                             {
-                                                q.ConvertAndSend("Hello World 1");
-                                                q.ConvertAndSend("Hello World 2");
-                                                q.ConvertAndSend("Hello World 3");
+                                                if (messageQueueObjectName == null)
+                                                {
+                                                    q.ConvertAndSend("Hello World 1");
+                                                    q.ConvertAndSend("Hello World 2");
+                                                    q.ConvertAndSend("Hello World 3");
+                                                } else
+                                                {
+                                                    q.ConvertAndSend(messageQueueObjectName, "Hello World 1");
+                                                    q.ConvertAndSend(messageQueueObjectName, "Hello World 2");
+                                                    q.ConvertAndSend(messageQueueObjectName, "Hello World 3");
+                                                }
                                                 return null;
                                             });
         }

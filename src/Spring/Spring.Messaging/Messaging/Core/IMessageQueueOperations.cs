@@ -88,6 +88,11 @@ namespace Spring.Messaging.Core
         /// <exception cref="MessagingException">if thrown by MSMQ API methods</exception>    
         void ConvertAndSend(string messageQueueObjectName, object obj, MessagePostProcessorDelegate messagePostProcessorDelegate);
 
+        /*
+        void ConvertAndSend(QueueIdentifierType queueIdentifierType, string destinationValue, string messageQueueObjectName, object obj);
+
+        void ConvertAndSend(QueueIdentifierType queueIdentifierType, string destinationValue, string messageQueueObjectName, object obj, MessagePostProcessorDelegate messagePostProcessorDelegate);
+        */
         /// <summary>
         /// Receive and convert a message synchronously from the default message queue.  
         /// </summary>

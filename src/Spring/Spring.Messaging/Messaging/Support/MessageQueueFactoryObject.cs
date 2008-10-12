@@ -25,8 +25,13 @@ using Spring.Objects.Factory.Config;
 namespace Spring.Messaging.Support
 {
     /// <summary>
-    /// Factory for creating MessageQueues
+    /// Factory for creating MessageQueues.  This factory will create prototype instances, i.e. every call to GetObject
+    /// will return a new MessageQueue object.
     /// </summary>
+    /// <remarks>All MessageQueue constructor arguments are exposed as properties of the factory object.  As this
+    /// is a <see cref="IConfigurableFactoryObject"/> use the PropertyTemplate property to specify additional
+    /// configuration of the MessageQueue.
+    /// </remarks>
     /// <author>Mark Pollack</author>
     public class MessageQueueFactoryObject : IConfigurableFactoryObject
     {
@@ -45,7 +50,25 @@ namespace Spring.Messaging.Support
 
         private bool messageReadPropertyFilterSetDefaults = false;
 
-        //myQueue.MessageReadPropertyFilter.SetAll();
+        private MessageQueueCreatorDelegate messageCreatorDelegate;
+
+
+        /// <summary>
+        /// Gets or sets an instance of the MessageQueueCreator delegate that will be used to create the
+        /// MessageQueue object, instead of using the various public properties on this class such
+        /// as Path, AccessMode, etc.  Not intended for end-users but rather as a means to help
+        /// register MessageQueueFactoryObject at runtime using convenience method on the IMessageQueueFactory.
+        /// </summary>
+        /// <remarks>
+        /// Can also be specifed using an instance of MessageCreatorDelegate.  If both are specifed, the
+        /// Interface implementation has priority.
+        /// </remarks>
+        /// <value>The function that is responsbile for creating a message queue.</value>
+        public MessageQueueCreatorDelegate MessageCreatorDelegate
+        {
+            get { return messageCreatorDelegate; }
+            set { messageCreatorDelegate = value; }
+        }
 
         /// <summary>
         /// Gets or sets the path used to creat DefaultMessageQueue instance.
@@ -139,17 +162,24 @@ namespace Spring.Messaging.Support
         /// <returns>A newly configured MessageQueue object</returns>
         public object GetObject()
         {
-            MessageQueue.EnableConnectionCache = enableConnectionCache;
-            MessageQueue mq = new MessageQueue(Path, DenySharedReceive, EnableCache, AccessMode);
-            if (messageReadPropertyFilterSetDefaults)
+            if (MessageCreatorDelegate != null)
             {
-                mq.MessageReadPropertyFilter.SetDefaults();
+                return MessageCreatorDelegate();
             }
-            if (messageReadPropertyFilterSetAll)
+            else
             {
-                mq.MessageReadPropertyFilter.SetAll();
+                MessageQueue.EnableConnectionCache = enableConnectionCache;
+                MessageQueue mq = new MessageQueue(Path, DenySharedReceive, EnableCache, AccessMode);
+                if (messageReadPropertyFilterSetDefaults)
+                {
+                    mq.MessageReadPropertyFilter.SetDefaults();
+                }
+                if (messageReadPropertyFilterSetAll)
+                {
+                    mq.MessageReadPropertyFilter.SetAll();
+                }
+                return mq;
             }
-            return mq;
         }
 
         /// <summary>
