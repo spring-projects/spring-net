@@ -437,7 +437,7 @@ namespace Spring.Web.UI
         /// </remarks>
         protected virtual void InitializeNavigationSupport()
         {
-            webNavigator = new WebFormsResultWebNavigator(this, null, true);
+            webNavigator = new WebFormsResultWebNavigator(this, null, null, true);
         }
 
         /// <summary>
@@ -526,7 +526,7 @@ namespace Spring.Web.UI
         /// <param name="resultName">Result name.</param>
         protected void SetResult( string resultName )
         {
-            WebNavigator.NavigateTo( resultName, this );
+            WebNavigator.NavigateTo( resultName, this, null );
         }
 
 
@@ -537,7 +537,7 @@ namespace Spring.Web.UI
         /// <param name="context">The context to use for evaluating the SpEL expression in the Result.</param>
         protected void SetResult( string resultName, object context )
         {
-            WebNavigator.NavigateTo( resultName, context );
+            WebNavigator.NavigateTo( resultName, this, context );
         }
 
 
@@ -550,7 +550,7 @@ namespace Spring.Web.UI
         /// <returns>A redirect url string.</returns>
         protected string GetResultUrl( string resultName )
         {
-            return ResolveUrl( WebNavigator.GetResultUri( resultName, this ) );
+            return ResolveUrl( WebNavigator.GetResultUri( resultName, this, null ) );
         }
 
         /// <summary>
@@ -563,7 +563,7 @@ namespace Spring.Web.UI
         /// <returns>A redirect url string.</returns>
         protected string GetResultUrl( string resultName, object context )
         {
-            return ResolveUrl( WebNavigator.GetResultUri( resultName, context ) );
+            return ResolveUrl( WebNavigator.GetResultUri( resultName, this, context ) );
         }
 
         #endregion

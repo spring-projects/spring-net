@@ -109,6 +109,7 @@
     <Compile Include="Web\Support\AbstractHandlerFactoryTests.cs" />
     <Compile Include="Web\Support\MimeMediaTypeTests.cs" />
     <Compile Include="Web\Support\PageHandlerFactoryTests.cs" />
+    <Compile Include="Web\Support\ResultFactoryRegistryTests.cs" />
     <Compile Include="Web\Support\ResultTests.cs">
       <SubType>Code</SubType>
     </Compile>

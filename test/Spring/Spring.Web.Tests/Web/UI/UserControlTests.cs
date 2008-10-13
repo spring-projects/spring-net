@@ -105,8 +105,8 @@ namespace Spring.Web.UI
 
             using (mocks.Ordered())
             {
-                // context is the control, that SetResult() was called on
-                theResult.Navigate(c111);
+                // context is the control, that contains matching Result
+                theResult.Navigate(c1);
             }
             mocks.ReplayAll();
 

@@ -90,6 +90,13 @@ namespace Spring.Web.UI.Controls
         private bool _renderContainerTag;
         private string _visibleConditionExpression;
 
+        /// <summary>
+        /// An optional SpEL expression to control this Panel's <see cref="Control.Visible"/> state.
+        /// </summary>
+        /// <remarks>
+        /// This panel instance is the context for evaluating the given expression. If no expression is specified, visibility behavior
+        /// reverts to standard behavior.
+        /// </remarks>
         public string VisibleIf
         {
             get { return _visibleConditionExpression; }
@@ -116,24 +123,38 @@ namespace Spring.Web.UI.Controls
         }
 
         /// <summary>
-        /// Overridden to suppress rendering this control's tag
+        /// Overridden to set <see cref="Control.Visible"/> according to <see cref="VisibleIf"/> if necessary.
         /// </summary>
-        /// <param name="writer"></param>
-        protected override void Render(HtmlTextWriter writer)
+        protected override void OnPreRender( EventArgs e )
         {
-            bool visible = (_visibleConditionExpression != null) 
+            this.Visible = (_visibleConditionExpression != null) 
                 ? Spring.Expressions.ExpressionEvaluator.GetValue(this, _visibleConditionExpression).Equals(true)
                 : this.Visible;
 
-            if (!visible) return;
+            base.OnPreRender( e );
+        }
 
-            if (_renderContainerTag)
+        ///<summary>
+        ///Renders the HTML opening tag of the <see cref="Panel"></see> control to the specified writer.
+        ///</summary>
+        ///<param name="writer">An <see cref="T:System.Web.UI.HtmlTextWriter"></see> that represents the output stream to render HTML content on the client.</param>
+        public override void RenderBeginTag( HtmlTextWriter writer )
+        {
+            if (this.RenderContainerTag)
             {
-                base.Render(writer);
+                base.RenderBeginTag( writer );
             }
-            else
+        }
+
+        ///<summary>
+        ///Renders the HTML closing tag of the <see cref="Panel"></see> control to the specified writer.
+        ///</summary>
+        ///<param name="writer">An <see cref="T:System.Web.UI.HtmlTextWriter"></see> that represents the output stream to render HTML content on the client.</param>
+        public override void RenderEndTag( HtmlTextWriter writer )
+        {
+            if (this.RenderContainerTag)
             {
-                base.RenderContents(writer);
+                base.RenderEndTag( writer );
             }
         }
 

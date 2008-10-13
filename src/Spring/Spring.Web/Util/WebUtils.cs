@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Web;
 using System.Web.UI;
 
 #endregion
@@ -243,7 +244,7 @@ namespace Spring.Util
 
         ///<summary>
         /// Returns the 'logical' parent of the specified control. Technically when dealing with masterpages and control hierarchy,
-        /// the order goes controls-&gtmasterpage-&gtpage. But one often wants the more logical order controls-&gtpage-&gtmasterpage.
+        /// the order goes controls-&gt;masterpage-&gt;page. But one often wants the more logical order controls-&gt;page-&gt;masterpage.
         ///</summary>
         ///<param name="control">the control, who's parent is to be determined.</param>
         ///<returns>the logical parent or <c>null</c> if the top of the hierarchy is reached.</returns>
@@ -285,6 +286,22 @@ namespace Spring.Util
 #else
             return (control is System.Web.UI.MasterPage);
 #endif            
+        }
+
+        /// <summary>
+        /// Encode <paramref name="value"/> for use in URLs.
+        /// </summary>
+        /// <param name="value">the text to be encoded.</param>
+        /// <returns>the url-encoded <paramref name="value"/></returns>
+        /// <remarks>
+        /// This method may be used outside of a current request. If executed within a 
+        /// request, <see cref="HttpServerUtility.UrlEncode(string)"/> is used.
+        /// <see cref="HttpUtility.UrlEncode(string)"/> will be used otherwise.
+        /// </remarks>
+        public static string UrlEncode( string value )
+        {
+            HttpContext ctx = HttpContext.Current;
+            return (ctx == null) ? HttpUtility.UrlEncode( value ) : ctx.Server.UrlEncode( value );
         }
     }
 }

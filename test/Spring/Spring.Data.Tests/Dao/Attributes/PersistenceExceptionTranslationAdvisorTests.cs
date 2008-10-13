@@ -126,7 +126,7 @@ namespace Spring.Dao.Attributes
             {
                 //Expected
                 Assert.AreSame(persistenceException, ex.InnerException);
-            } catch (PersistenceException ex)
+            } catch (PersistenceException)
             {
                 Assert.Fail("Should have been translated");
             }

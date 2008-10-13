@@ -97,7 +97,7 @@ namespace Spring.Web.UI
             }
             catch(ArgumentException ae)
             {
-                string expected = string.Format("No result mapping found for the specified name '{0}'.", RESULTNAME);
+                string expected = string.Format("No mapping found for the specified destination '{0}'.", RESULTNAME);
                 string msg = ae.Message.Substring(0, expected.Length);
                 Assert.AreEqual(expected, msg);
             }

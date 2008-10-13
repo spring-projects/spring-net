@@ -288,9 +288,9 @@ namespace Spring.Web.Support
                 foreach (DictionaryEntry entry in this.parameters)
                 {
                     string value = entry.Value.ToString();
-                    if (IsRuntimeExpression( value ))
+                    if (IsSpELRuntimeExpression( value ))
                     {
-                        contextDictionary[entry.Key] = ResolveRuntimeExpression( context, value );
+                        contextDictionary[entry.Key] = ResolveValueIfNecessary( context, value );
                     }
                     else
                     {
@@ -333,8 +333,8 @@ namespace Spring.Web.Support
                 resolvedParameters = new CaseInsensitiveHashtable();
                 foreach (DictionaryEntry entry in this.Parameters)
                 {
-                    object key = ResolveRuntimeExpressionIfNecessary( context, entry.Key.ToString() );
-                    object value = ResolveRuntimeExpressionIfNecessary( context, entry.Value.ToString() );
+                    object key = ResolveValueIfNecessary( context, entry.Key.ToString() );
+                    object value = ResolveValueIfNecessary( context, entry.Value.ToString() );
                     resolvedParameters[key] = value;
                 }
             }
@@ -342,6 +342,12 @@ namespace Spring.Web.Support
             return BuildUrl( path, resolvedParameters );
         }
 
+        /// <summary>
+        /// Construct the actual url to be executed or returned.
+        /// </summary>
+        /// <param name="resolvedPath">the already evaluated <see cref="TargetPage"/></param>
+        /// <param name="resolvedParameters">the already evaluated parameters.</param>
+        /// <returns>the url to be returned by <see cref="GetRedirectUri"/></returns>
         protected virtual string BuildUrl( string resolvedPath, IDictionary resolvedParameters )
         {
             StringBuilder url = new StringBuilder( 256 );
@@ -351,43 +357,63 @@ namespace Spring.Web.Support
                 char separator = '?';
                 foreach (DictionaryEntry entry in resolvedParameters)
                 {
-                    url.Append( separator );
-                    url.Append( BuildUrlParameter( entry.Key.ToString(), entry.Value.ToString() ) );
+                    url.Append( separator );                    
+                    url = BuildUrlParameter( url, entry.Key.ToString(), entry.Value.ToString() );
                     separator = '&';
                 }
             }
             return url.ToString();
         }
 
-        protected virtual string BuildUrlParameter( string key, string value )
+        /// <summary>
+        /// Append the url parameter to the url being constructed.
+        /// </summary>
+        /// <param name="url">the <see cref="StringBuilder"/> containing the url constructed so far.</param>
+        /// <param name="key">the parameter key</param>
+        /// <param name="value">the parameter value</param>
+        /// <returns>the <see cref="StringBuilder"/> to use for further url construction.</returns>
+        protected virtual StringBuilder BuildUrlParameter( StringBuilder url, string key, string value )
         {
-            return UrlEncode( key ) + "=" + UrlEncode( value );
+            url.Append( WebUtils.UrlEncode( key ) )
+               .Append( '=' )
+               .Append( WebUtils.UrlEncode( value ) );
+
+            return url;
         }
 
-        protected static string UrlEncode( string value )
+        /// <summary>
+        /// Evaluates <paramref name="value"/> within <paramref name="context"/> and returns the evaluation result.
+        /// </summary>
+        /// <param name="context">the context to be used for evaluation.</param>
+        /// <param name="value">the string that might need evaluation</param>
+        /// <returns>the evaluation result. Unodified <paramref name="value"/> if no evalution occured.</returns>
+        protected virtual object ResolveValueIfNecessary( object context, string value )
         {
-            HttpContext ctx = HttpContext.Current;
-            return (ctx == null) ? HttpUtility.UrlEncode( value ) : ctx.Server.UrlEncode( value );
+            return ResolveSpELRuntimeExpressionIfNecessary( context, value );
         }
 
-        protected object ResolveRuntimeExpressionIfNecessary( object context, string value )
-        {
-            if (IsRuntimeExpression( value ))
-            {
-                return ResolveRuntimeExpression( context, value );
-            }
-            return value;
-        }
-
-        private static bool IsRuntimeExpression( string value )
+        /// <summary>
+        /// Checks, if value is a SpEL expression <c>${expression}</c> or <c>%{expression}</c>.
+        /// </summary>
+        private static bool IsSpELRuntimeExpression( string value )
         {
             // allow for 2 alternative prefixes (SPRNET-864)
             return (value.StartsWith( "${" ) || value.StartsWith( "%{" )) && value.EndsWith( "}" );
         }
 
-        private static object ResolveRuntimeExpression( object context, string value )
+        /// <summary>
+        /// If <paramref name="value"/> is a SpEL expression (<c>${expression}</c> or <c>%{expression}</c>), evaluates
+        /// the value against <paramref name="context"/>.
+        /// </summary>
+        protected static object ResolveSpELRuntimeExpressionIfNecessary( object context, string value )
         {
-            return ExpressionEvaluator.GetValue( context, value.Substring( 2, value.Length - 3 ) );
+            AssertUtils.ArgumentNotNull(value, "value");
+
+            if (IsSpELRuntimeExpression( value ))
+            {
+                return ExpressionEvaluator.GetValue( context, value.Substring( 2, value.Length - 3 ) );
+            }
+            return value;
         }
 
         /// <summary>
@@ -443,9 +469,14 @@ namespace Spring.Web.Support
             }
         }
 
+        /// <summary>
+        /// Resolves dynamic expression contained in <see cref="TargetPage"/> if any by calling <see cref="ResolveValueIfNecessary"/>.
+        /// </summary>
+        /// <param name="context">the context to be used for evaluating the expression</param>
+        /// <returns>the evaluated expression</returns>
         protected string GetResolvedTargetPage( object context )
         {
-            return ResolveRuntimeExpressionIfNecessary( context, TargetPage ).ToString();
+            return ResolveValueIfNecessary( context, TargetPage ).ToString();
         }
 
         /// <summary>
