@@ -1821,6 +1821,31 @@ namespace Spring.Context.Support
             _eventRegistry.Subscribe(subscriber, targetSourceType);
         }
 
+
+        /// <summary>
+        /// Unsubscribes to <b>all</b> events published, if the subscriber
+        /// implmenets compatible handler methods.
+        /// </summary>
+        /// <param name="subscriber">The subscriber to use</param>
+        public void Unsubscribe(object subscriber)
+        {
+            _eventRegistry.Unsubscribe(subscriber);
+        }
+
+        /// <summary>
+        /// Unsubscribes to the published events of all objects of a given
+        /// <see cref="System.Type"/>, if the subscriber implements
+        /// compatible handler methods.
+        /// </summary>
+        /// <param name="subscriber">The subscriber to use.</param>
+        /// <param name="targetSourceType">
+        /// The target <see cref="System.Type"/> to unsubscribe from
+        /// </param>
+        public void Unsubscribe(object subscriber, Type targetSourceType)
+        {
+            _eventRegistry.Unsubscribe(subscriber, targetSourceType);
+        }
+
         #endregion
 
         /// <summary>

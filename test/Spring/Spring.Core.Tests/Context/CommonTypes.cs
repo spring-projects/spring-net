@@ -584,11 +584,22 @@ namespace Spring.Context
 			throw new NotImplementedException();
 		}
 
-		#endregion
-
 		public void PublishEvent(object sender, ApplicationEventArgs e)
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+
+	    public void Unsubscribe(object subscriber)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public void Unsubscribe(object subscriber, Type targetSourceType)
+	    {
+	        throw new NotImplementedException();
+        }
+
+        #endregion
+    }
 }

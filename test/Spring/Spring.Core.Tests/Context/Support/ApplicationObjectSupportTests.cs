@@ -325,7 +325,18 @@ namespace Spring.Context.Support
 				throw new NotImplementedException();
 			}
 
-			#endregion
+
+		    public void Unsubscribe(object subscriber)
+		    {
+		        throw new NotImplementedException();
+		    }
+
+		    public void Unsubscribe(object subscriber, Type targetSourceType)
+		    {
+		        throw new NotImplementedException();
+		    }
+
+		    #endregion
 
 			public void PublishEvent(object sender, ApplicationEventArgs e)
 			{

@@ -111,13 +111,20 @@ namespace Spring.Objects.Events.Support.Tests
 
 		internal class SimpleSubscriber
 		{
+		    protected int _eventCount;
+
 			protected bool _eventRaised = false;
 
 			public SimpleSubscriber()
 			{
 			}
 
-			public bool EventRaised
+		    public int EventCount
+		    {
+		        get { return _eventCount; }
+		    }
+
+		    public bool EventRaised
 			{
 				get { return _eventRaised; }
 			}
@@ -132,6 +139,7 @@ namespace Spring.Objects.Events.Support.Tests
 			public void HandleClientEvents(object sender, MyClientEventArgs args)
 			{
 				_eventRaised = true;
+			    _eventCount++;
 			}
 		}
 
@@ -219,6 +227,28 @@ namespace Spring.Objects.Events.Support.Tests
 			Assert.IsTrue(sub.EventRaised, "Event Not Raised");
 			Assert.IsTrue(sub2.EventRaised, "Event Not Raised");
 		}
+
+        [Test]
+        public void PublishAllEventsMultipleSubscribersAndUnsubscribe()
+        {
+            IEventRegistry registry = new EventRegistry();
+            SimpleClient client = new SimpleClient("PublishAllEvents");
+            registry.PublishEvents(client);
+            EventSubscriber sub = new EventSubscriber();
+            EventSubscriber sub2 = new EventSubscriber();
+            registry.Subscribe(sub);
+            registry.Subscribe(sub2);
+            client.ClientMethodThatTriggersEvent();
+            Assert.IsTrue(sub.EventRaised, "Event Not Raised");
+            Assert.IsTrue(sub2.EventRaised, "Event Not Raised");
+            Assert.AreEqual(1, sub.EventCount);
+            Assert.AreEqual(1, sub2.EventCount);
+
+            registry.Unsubscribe(sub2);
+            client.ClientMethodThatTriggersEvent();
+            Assert.AreEqual(2, sub.EventCount);
+            Assert.AreEqual(1, sub2.EventCount);
+        }
 
 		[Test]
 		public void PublishAllEventsSubscribeToNamedEvents()
