@@ -124,9 +124,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\ISessionState.cs" />
+    <Compile Include="Web\Support\DefaultHandlerFactory.cs" />
     <Compile Include="Web\Support\DefaultResultFactory.cs" />
+    <Compile Include="Web\Support\HandlerMap.cs" />
+    <Compile Include="Web\Support\HandlerMapEntry.cs" />
     <Compile Include="Web\Support\IResult.cs" />
     <Compile Include="Web\Support\IResultFactory.cs" />
+    <Compile Include="Web\Support\MappingHandlerFactory.cs" />
+    <Compile Include="Web\Support\MappingHandlerFactoryConfigurer.cs" />
     <Compile Include="Web\Support\ResultFactoryRegistry.cs" />
     <Compile Include="Web\Support\WebFormsResultWebNavigator.cs" />
     <Compile Include="Web\Support\IHierarchicalWebNavigator.cs" />

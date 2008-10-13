@@ -120,12 +120,13 @@ namespace Spring.Web.Script.Services
         /// <summary>
         /// Create a handler instance for the given URL.
         /// </summary>
+        /// <param name="appContext">the application context corresponding to the current request</param>
         /// <param name="context">The <see cref="HttpContext"/> instance for this request.</param>
         /// <param name="requestType">The HTTP data transfer method (GET, POST, ...)</param>
-        /// <param name="url">The requested <see cref="HttpRequest.RawUrl"/>.</param>
+        /// <param name="rawUrl">The requested <see cref="HttpRequest.RawUrl"/>.</param>
         /// <param name="physicalPath">The physical path of the requested resource.</param>
         /// <returns>A handler instance for the current request.</returns>
-        protected override IHttpHandler CreateHandlerInstance( HttpContext context, string requestType, string url, string physicalPath )
+        protected override IHttpHandler CreateHandlerInstance( IConfigurableApplicationContext appContext, HttpContext context, string requestType, string rawUrl, string physicalPath )
         {
             throw new NotSupportedException();
         }

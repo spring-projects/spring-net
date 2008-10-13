@@ -82,22 +82,17 @@ namespace Spring.Web.Support
         /// <summary>
         /// Create a handler instance for the given URL.
         /// </summary>
+        /// <param name="appContext">the application context corresponding to the current request</param>
         /// <param name="context">The <see cref="HttpContext"/> instance for this request.</param>
         /// <param name="requestType">The HTTP data transfer method (GET, POST, ...)</param>
-        /// <param name="url">The requested <see cref="HttpRequest.RawUrl"/>.</param>
+        /// <param name="rawUrl">The requested <see cref="HttpRequest.RawUrl"/>.</param>
         /// <param name="physicalPath">The physical path of the requested resource.</param>
         /// <returns>A handler instance for the current request.</returns>
-        protected override IHttpHandler CreateHandlerInstance(HttpContext context, string requestType, string url, string physicalPath)
+        protected override IHttpHandler CreateHandlerInstance(IConfigurableApplicationContext appContext, HttpContext context, string requestType, string rawUrl, string physicalPath)
         {
             IHttpHandler handler;
-            IConfigurableApplicationContext appContext = GetCheckedApplicationContext(url);
 
-            if (appContext == null)
-            {
-                throw new InvalidOperationException("PageHandlerFactory requires an IConfigurableApplicationContext");
-            }
-
-            string appRelativeVirtualPath = WebUtils.GetAppRelativePath(url);
+            string appRelativeVirtualPath = WebUtils.GetAppRelativePath(rawUrl);
             NamedObjectDefinition namedPageDefinition = FindWebObjectDefinition(appRelativeVirtualPath, appContext.ObjectFactory);
 
             if (namedPageDefinition != null)
@@ -113,50 +108,17 @@ namespace Spring.Web.Support
                     // execution pipeline "entry-point" - create page instance only 
                     // and defer configuration to PreRequestHandlerExecute step
                     handler = (IHttpHandler)appContext.CreateObject(namedPageDefinition.Name, typeof(IHttpHandler), null);
+                    WebSupportModule.ConfigureHandler(context, handler, appContext, namedPageDefinition.Name, true);
                 }
-                WebSupportModule.SetCurrentHandlerConfiguration(appContext, namedPageDefinition.Name, true);
             }
             else
             {
-                handler = WebObjectUtils.CreateHandler(context, url);
-
-                // is this a nested call (HttpServerUtility.Transfer() or HttpServerUtility.Execute())?
-                if (context.Handler != null)
-                {
-                    // apply ObjectPostProcessors now
-                    handler = WebSupportModule.ConfigureHandler(handler, appContext, url, false);
-                }
-                else
-                {
-                    // execution pipeline "entry-point" - create page instance only 
-                    // and defer configuration to PreRequestHandlerExecute step
-                    WebSupportModule.SetCurrentHandlerConfiguration(appContext, url, false);
-                }
+                handler = WebObjectUtils.CreateHandler(context, rawUrl);
+                // let WebSupportModule handle configuration
+                handler = WebSupportModule.ConfigureHandler(context, handler, appContext, rawUrl, false);
             }
-
-            ApplyDependencyInjectionInfrastructure(handler, appContext);
 
             return handler;
-        }
-
-        /// <summary>
-        /// Apply dependency injection stuff on the handler.
-        /// </summary>
-        /// <param name="handler">the handler to be intercepted</param>
-        /// <param name="applicationContext">the context responsible for configuring this handler</param>
-        private static void ApplyDependencyInjectionInfrastructure(IHttpHandler handler, IApplicationContext applicationContext)
-        {
-            if (handler is Control)
-            {
-                ControlInterceptor.EnsureControlIntercepted(applicationContext, (Control)handler);
-            }
-            else
-            {
-                if (handler is ISupportsWebDependencyInjection)
-                {
-                    ((ISupportsWebDependencyInjection)handler).DefaultApplicationContext = applicationContext;
-                }
-            }
         }
     }
 }

@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Web;
+using System.Web.UI;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Context;
@@ -89,6 +90,32 @@ namespace Spring.Web.Support
         /// Holds all handlers having <see cref="IHttpHandler.IsReusable"/> == true.
         /// </summary>
         private readonly IDictionary _reusableHandlerCache = new CaseInsensitiveHashtable();
+
+        /// <summary>
+        /// Holds an instance of the instrinsic System.Web.UI.SimpleHandlerFactory
+        /// </summary>
+        private static IHttpHandlerFactory s_simpleHandlerFactory;
+
+        /// <summary>
+        /// Get the global instance of System.Web.UI.SimpleHandlerFactory
+        /// </summary>
+        /// <remarks>
+        /// This factory is a plaform version agnostic way to instantiate 
+        /// arbitrary handlers without the need for additional reflection.
+        /// </remarks>
+        public static IHttpHandlerFactory SimpleHandlerFactory
+        {
+            get
+            {
+                // instantiate lazy to avoid security exceptions in restricted reflection environments
+                if (s_simpleHandlerFactory == null)
+                {
+                    Type simpleHandlerFactoryType = typeof(IHttpHandler).Assembly.GetType("System.Web.UI.SimpleHandlerFactory");
+                    s_simpleHandlerFactory = (IHttpHandlerFactory)Activator.CreateInstance(simpleHandlerFactoryType, true);        
+                }
+                return s_simpleHandlerFactory;
+            }
+        }
 
         /// <summary>
         /// Holds the shared logger for all factories.
@@ -158,7 +185,11 @@ namespace Spring.Web.Support
                 handler = (IHttpHandler)_reusableHandlerCache[url];
                 if (handler == null)
                 {
-                    handler = CreateHandlerInstance( context, requestType, url, physicalPath );
+                    IConfigurableApplicationContext appContext = GetCheckedApplicationContext(url);
+
+                    handler = CreateHandlerInstance( appContext, context, requestType, url, physicalPath );
+
+                    ApplyDependencyInjectionInfrastructure(handler, appContext);
 
                     if (handler.IsReusable)
                     {
@@ -182,12 +213,13 @@ namespace Spring.Web.Support
         /// <summary>
         /// Create a handler instance for the given URL.
         /// </summary>
+        /// <param name="appContext">the application context corresponding to the current request</param>
         /// <param name="context">The <see cref="HttpContext"/> instance for this request.</param>
         /// <param name="requestType">The HTTP data transfer method (GET, POST, ...)</param>
-        /// <param name="url">The requested <see cref="HttpRequest.RawUrl"/>.</param>
+        /// <param name="rawUrl">The requested <see cref="HttpRequest.RawUrl"/>.</param>
         /// <param name="physicalPath">The physical path of the requested resource.</param>
         /// <returns>A handler instance for processing the current request.</returns>
-        protected abstract IHttpHandler CreateHandlerInstance( HttpContext context, string requestType, string url, string physicalPath );
+        protected abstract IHttpHandler CreateHandlerInstance( IConfigurableApplicationContext appContext, HttpContext context, string requestType, string rawUrl, string physicalPath );
 
         /// <summary>
         /// Get the application context instance corresponding to the given absolute url and checks 
@@ -291,6 +323,27 @@ namespace Spring.Web.Support
             }
 
             return (pageDefinition == null) ? (NamedObjectDefinition)null : new NamedObjectDefinition( objectDefinitionName, pageDefinition );
+        }
+
+        /// <summary>
+        /// Apply dependency injection stuff on the handler.
+        /// </summary>
+        /// <param name="handler">the handler to be intercepted</param>
+        /// <param name="applicationContext">the context responsible for configuring this handler</param>
+        private static void ApplyDependencyInjectionInfrastructure(IHttpHandler handler, IApplicationContext applicationContext)
+        {
+            if (handler is Control)
+            {
+                ControlInterceptor.EnsureControlIntercepted(applicationContext, (Control)handler);
+            }
+            else
+            {
+                if ( (handler is ISupportsWebDependencyInjection)
+                    && (((ISupportsWebDependencyInjection)handler).DefaultApplicationContext == null) )
+                {
+                    ((ISupportsWebDependencyInjection)handler).DefaultApplicationContext = applicationContext;
+                }
+            }
         }
     }
 }

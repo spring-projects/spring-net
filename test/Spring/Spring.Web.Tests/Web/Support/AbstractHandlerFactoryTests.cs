@@ -79,7 +79,7 @@ namespace Spring.Web.Support
 
             #region AbstractHandlerFactory implementations
 
-            protected override IHttpHandler CreateHandlerInstance( HttpContext context, string requestType, string url, string physicalPath )
+            protected override IHttpHandler CreateHandlerInstance( IConfigurableApplicationContext appContext, HttpContext context, string requestType, string url, string physicalPath )
             {
                 throw new NotImplementedException();
             }
@@ -105,12 +105,12 @@ namespace Spring.Web.Support
                 return base.GetCheckedApplicationContext(virtualPath);
             }
 
-            protected override IHttpHandler CreateHandlerInstance(HttpContext context, string requestType, string url, string physicalPath )
+            protected override IHttpHandler CreateHandlerInstance(IConfigurableApplicationContext appContext, HttpContext context, string requestType, string url, string physicalPath )
             {
-                return CreateHandlerInstanceStub(context, requestType, url, physicalPath);
+                return CreateHandlerInstanceStub(appContext, context, requestType, url, physicalPath);
             }
 
-            public virtual IHttpHandler CreateHandlerInstanceStub(HttpContext context, string requestType, string url, string physicalPath)
+            public virtual IHttpHandler CreateHandlerInstanceStub(IConfigurableApplicationContext appContext, HttpContext context, string requestType, string url, string physicalPath)
             {
                 throw new NotImplementedException();
             }
@@ -178,7 +178,7 @@ namespace Spring.Web.Support
             using(Record(mocks))
             {
                 Expect.Call(reusableHandler.IsReusable).Return(true);
-                Expect.Call(f.CreateHandlerInstanceStub(null, null, "reusable", null)).Return(reusableHandler);
+                Expect.Call(f.CreateHandlerInstanceStub(null, null, null, "reusable", null)).Return(reusableHandler);
             }
             using (Playback(mocks))
             {
@@ -201,8 +201,8 @@ namespace Spring.Web.Support
             // - CreateHandlerInstance() is called for each request
             using(Record(mocks))
             {
-                Expect.Call(f.CreateHandlerInstanceStub(null, null, "notreusable", null)).Return(nonReusableHandler);
-                Expect.Call(f.CreateHandlerInstanceStub(null, null, "notreusable", null)).Return(nonReusableHandler2);
+                Expect.Call(f.CreateHandlerInstanceStub(null, null, null, "notreusable", null)).Return(nonReusableHandler);
+                Expect.Call(f.CreateHandlerInstanceStub(null, null, null, "notreusable", null)).Return(nonReusableHandler2);
             }
             using (Playback(mocks))
             {

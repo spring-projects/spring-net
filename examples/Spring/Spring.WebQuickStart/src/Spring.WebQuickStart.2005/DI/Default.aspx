@@ -17,6 +17,8 @@
     <p>The inevitable "Hello World!" example demonstrates DI for pages, usercontrols and webcontrols</p>
     <h3><a href="NestedContexts/Default.aspx">Nested Contexts</a></h3>
     <p>This sample shows, how contexts are nested in webapplications</p>
+    <h3><a href="CustomHandlers/Default.aspx">Custom HTTP Handlers</a></h3>
+    <p>This sample shows, how to configure your custom IHttpHandler and IHttpHandlerFactory implementations</p>
     </div>
 </body>
 </html>
