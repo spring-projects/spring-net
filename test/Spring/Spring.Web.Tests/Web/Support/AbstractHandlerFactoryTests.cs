@@ -98,7 +98,7 @@ namespace Spring.Web.Support
 
         #region TestHandlerFactory
 
-        public class TestHandlerFactory : AbstractHandlerFactory
+        public abstract class TestHandlerFactory : AbstractHandlerFactory
         {
             public new IConfigurableApplicationContext GetCheckedApplicationContext(string virtualPath)
             {
@@ -110,20 +110,14 @@ namespace Spring.Web.Support
                 return CreateHandlerInstanceStub(appContext, context, requestType, url, physicalPath);
             }
 
-            public virtual IHttpHandler CreateHandlerInstanceStub(IConfigurableApplicationContext appContext, HttpContext context, string requestType, string url, string physicalPath)
-            {
-                throw new NotImplementedException();
-            }
+            public abstract IHttpHandler CreateHandlerInstanceStub(IConfigurableApplicationContext appContext, HttpContext context, string requestType, string url, string physicalPath);
 
             protected override IApplicationContext GetContext( string virtualPath )
             {
                 return GetContextStub( virtualPath );
             }
 
-            public virtual IApplicationContext GetContextStub( string virtualPath )
-            {
-                throw new NotImplementedException();
-            }
+            public abstract IApplicationContext GetContextStub( string virtualPath );
         }
 
 
@@ -172,13 +166,15 @@ namespace Spring.Web.Support
             MockRepository mocks = new MockRepository();            
             TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
             IHttpHandler reusableHandler = (IHttpHandler) mocks.DynamicMock(typeof(IHttpHandler));
+            IConfigurableApplicationContext appCtx = (IConfigurableApplicationContext) mocks.DynamicMock(typeof(IConfigurableApplicationContext));
 
             // if (IHttpHandler.IsReusable == true) => always returns the same handler instance 
             // - CreateHandlerInstance() is only called once
             using(Record(mocks))
             {
                 Expect.Call(reusableHandler.IsReusable).Return(true);
-                Expect.Call(f.CreateHandlerInstanceStub(null, null, null, "reusable", null)).Return(reusableHandler);
+                Expect.Call(f.GetContextStub("reusable")).Return(appCtx);
+                Expect.Call(f.CreateHandlerInstanceStub(appCtx, null, null, "reusable", null)).Return(reusableHandler);
             }
             using (Playback(mocks))
             {
@@ -196,13 +192,16 @@ namespace Spring.Web.Support
             Expect.Call(nonReusableHandler.IsReusable).Return(false);
             IHttpHandler nonReusableHandler2 = (IHttpHandler) mocks.DynamicMock(typeof(IHttpHandler));
             Expect.Call(nonReusableHandler2.IsReusable).Return(false);
+            IConfigurableApplicationContext appCtx = (IConfigurableApplicationContext) mocks.DynamicMock(typeof(IConfigurableApplicationContext));
 
             // if (IHttpHandler.IsReusable == false) => always create new handler instance 
             // - CreateHandlerInstance() is called for each request
             using(Record(mocks))
             {
-                Expect.Call(f.CreateHandlerInstanceStub(null, null, null, "notreusable", null)).Return(nonReusableHandler);
-                Expect.Call(f.CreateHandlerInstanceStub(null, null, null, "notreusable", null)).Return(nonReusableHandler2);
+                Expect.Call(f.GetContextStub("notreusable")).Return(appCtx);
+                Expect.Call(f.CreateHandlerInstanceStub(appCtx, null, null, "notreusable", null)).Return(nonReusableHandler);
+                Expect.Call(f.GetContextStub("notreusable")).Return(appCtx);
+                Expect.Call(f.CreateHandlerInstanceStub(appCtx, null, null, "notreusable", null)).Return(nonReusableHandler2);
             }
             using (Playback(mocks))
             {
