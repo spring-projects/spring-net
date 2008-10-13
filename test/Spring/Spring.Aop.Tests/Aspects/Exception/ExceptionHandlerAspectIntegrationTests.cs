@@ -30,6 +30,7 @@ using Spring.Aop.Framework;
 using Spring.Aspects.Exceptions;
 using Spring.Expressions;
 using Spring.Objects;
+using Spring.Util;
 
 #endregion
 
@@ -43,23 +44,63 @@ namespace Spring.Aspects.Exceptions
     public class ExceptionHandlerAspectIntegrationTests
     {
         private ExceptionHandlerAdvice exceptionHandlerAdvice;
-
+        private CaptureOutputLoggerFactoryAdapter loggerFactoryAdapter;
+        private ILoggerFactoryAdapter originalAdapter;
+        private static bool spelActionExecuted = false;
         [SetUp]
         public void Setup()
         {
-            LogManager.Adapter = new ConsoleOutLoggerFactoryAdapter(new NameValueCollection());
-            exceptionHandlerAdvice = new ExceptionHandlerAdvice();
+            originalAdapter = LogManager.Adapter;
+            loggerFactoryAdapter = new CaptureOutputLoggerFactoryAdapter();
+            LogManager.Adapter = loggerFactoryAdapter;
+            exceptionHandlerAdvice = new ExceptionHandlerAdvice();     
+        }
+
+        public void TearDown()
+        {
+            loggerFactoryAdapter.AdviceLogger.LogMessages.Clear();
+
+            //reset so other tests can produce some output if needed.
+            LogManager.Adapter = originalAdapter;
+        }
+
+        [Test]
+        public void ExecuteSpelAction()
+        {
+            string executeHandlerText =
+                "on exception name ArithmeticException execute Spring.Aspects.Exceptions.ExceptionHandlerAspectIntegrationTests.Executed(true)";
+            ITestObject to = CreateTestObjectProxy(executeHandlerText);
+
+            try
+            {
+                to.Exceptional(new ArithmeticException());
+            }
+            catch (ArithmeticException)
+            {
+                Assert.IsTrue(spelActionExecuted);
+            }
+        }
+
+        public static void Executed(bool val)
+        {
+            spelActionExecuted = val;
         }
 
         [Test]
         public void LoggingTest()
         {
+            CaptureOutputLoggerFactoryAdapter loggerFactoryAdapter = new CaptureOutputLoggerFactoryAdapter();
+            LogManager.Adapter = loggerFactoryAdapter;
+
             LogExceptionHandler logHandler = new LogExceptionHandler();
-            string testText = @"#log.Debug('Hello World, exception message = ' + #e.Message + ', target method = ' + #method.Name)";
+            logHandler.LogName = "adviceHandler";
+            string testText = @"'Hello World, exception message = ' + #e.Message + ', target method = ' + #method.Name";
             logHandler.SourceExceptionNames.Add("ArithmeticException");
             logHandler.ActionExpressionText = testText;
 
             exceptionHandlerAdvice.ExceptionHandlers.Add(logHandler);
+            
+            exceptionHandlerAdvice.AfterPropertiesSet();
             
             ProxyFactory pf = new ProxyFactory(new TestObject());
             pf.AddAdvice(exceptionHandlerAdvice);
@@ -71,7 +112,17 @@ namespace Spring.Aspects.Exceptions
                 Assert.Fail("Should have thrown exception when only logging");
             } catch (ArithmeticException)
             {
-                //TODO need to create adapter implementation to replay logged text.
+
+
+                bool found = false;
+                foreach (string message in loggerFactoryAdapter.AdviceLogger.LogMessages)
+                {
+                    if (message.IndexOf("Hello World") >= 0)
+                    {
+                        found = true;
+                    }
+                }
+                Assert.IsTrue(found, "did not find logging output");
             }
 
         }
@@ -81,7 +132,15 @@ namespace Spring.Aspects.Exceptions
         {
             string logHandlerText = "on exception name ArithmeticException log 'My Message, Method Name ' + #method.Name";
 
-            ExecuteLoggingHandler(logHandlerText);
+            ExecuteLoggingHandler(logHandlerText, "My Message");
+        }
+
+        [Test]
+        public void LoggingTestWithStringExplicitHandler()
+        {
+            string logHandlerText = "on exception name ArithmeticException log 'My Message, Method Name ' + #method.Name";
+
+            ExecuteLoggingHandler(logHandlerText, "My Message");
         }
 
         [Test]
@@ -89,18 +148,26 @@ namespace Spring.Aspects.Exceptions
         {
             string logHandlerText = "on exception (#e is T(System.ArithmeticException)) log 'My Message, Method Name ' + #method.Name";
 
-            ExecuteLoggingHandler(logHandlerText);
+            ExecuteLoggingHandler(logHandlerText, "My Message");
         }
 
         [Test]
-        public void LoggingTestWithConstraintExpressionWithExceptionHandler()
+        public void LoggingTestWithConstraintExpressionWithExceptionHandlerInList()
         {
             LogExceptionHandler exHandler = new LogExceptionHandler();
             exHandler.ConstraintExpressionText = "#e is T(System.ArithmeticException)";
-            exHandler.LogName = "Cms.Session.ExceptionHandler";
+            exHandler.LogName = "adviceHandler";
             exHandler.ActionExpressionText = "#log.Fatal('Request Timeout occured', #e)";
 
-            ExecuteLoggingHandler(exHandler);
+            ExecuteLoggingHandlerInList(exHandler, "Request Timeout");
+        }
+
+        [Test]
+        public void LoggingTestWithConstraintExpressionWithKeyedExceptionHandler()
+        {
+            LogExceptionHandler exHandler = new LogExceptionHandler();            
+            ExecuteLoggingHandlerWithKeyedLogHandler(exHandler,
+               @"on exception (#e is T(System.ArithmeticException)) log 'Request Timeout occured'", "Request Timeout");
         }
 
         [Test]
@@ -109,7 +176,7 @@ namespace Spring.Aspects.Exceptions
         {
             string logHandlerText = "on foobar name ArithmeticException log 'My Message, Method Name ' + #method.Name";
 
-            ExecuteLoggingHandler(logHandlerText);
+            ExecuteLoggingHandler(logHandlerText, "My Message");
         }
 
         [Test]
@@ -117,11 +184,8 @@ namespace Spring.Aspects.Exceptions
         {
             string logHandlerText = "on exception (#e is System.FooBar) log 'My Message, Method Name ' + #method.Name";
 
-            ExecuteLoggingHandler(logHandlerText);
-            
-            //No exception is expected.  
+            ExecuteLoggingHandler(logHandlerText, "[WARN]  Was not able to evaluate constraint expression [#e is System.FooBar]");            
 
-            //TODO need to make sure log statement was executed.
         }
 
         [Test]
@@ -129,14 +193,11 @@ namespace Spring.Aspects.Exceptions
         {
             string logHandlerText = "on exception (1+1) log 'My Message, Method Name ' + #method.Name";
 
-            ExecuteLoggingHandler(logHandlerText);
+            ExecuteLoggingHandler(logHandlerText, "[WARN]  Was not able to unbox constraint expression to boolean [1+1]");
 
-            //No exception is expected.  
-
-            //TODO need to make sure log statement was executed.
         }
 
-        private void ExecuteLoggingHandler(string logHandlerText)
+        private void ExecuteLoggingHandler(string logHandlerText, string searchString)
         {
             ITestObject to = CreateTestObjectProxy(logHandlerText);
 
@@ -146,13 +207,13 @@ namespace Spring.Aspects.Exceptions
             }
             catch (ArithmeticException)
             {
-                //TODO assert logging occured.
+                AssertSearchString(searchString);
             }
         }
 
-        private void ExecuteLoggingHandler(IExceptionHandler handler)
+        private void ExecuteLoggingHandlerInList(IExceptionHandler handler, string searchString)
         {
-            ITestObject to = CreateTestObjectProxy(handler);
+            ITestObject to = CreateTestObjectProxyInList(handler);
 
             try
             {
@@ -160,11 +221,23 @@ namespace Spring.Aspects.Exceptions
             }
             catch (ArithmeticException)
             {
-                //TODO assert logging occured.
+                AssertSearchString(searchString);
             }
         }
 
+        private void ExecuteLoggingHandlerWithKeyedLogHandler(IExceptionHandler handler, string handlerText, string searchString)
+        {
+            ITestObject to = CreateTestObjectProxyWithKeyedHandler(handler, handlerText);
 
+            try
+            {
+                to.Exceptional(new ArithmeticException());
+            }
+            catch (ArithmeticException)
+            {
+                AssertSearchString(searchString);
+            }
+        }
 
         [Test]
         public void TranslationWithString()
@@ -390,6 +463,19 @@ namespace Spring.Aspects.Exceptions
             return CreateProxy();
         }
 
+        private ITestObject CreateTestObjectProxyInList(IExceptionHandler exceptionHander)
+        {
+            exceptionHandlerAdvice.ExceptionHandlers.Add(exceptionHander);
+            return CreateProxy();
+        }
+
+        private ITestObject CreateTestObjectProxyWithKeyedHandler(IExceptionHandler exceptionHander, string handlerText)
+        {
+            exceptionHandlerAdvice.ExceptionHandlerDictionary.Add("log", exceptionHander);
+            exceptionHandlerAdvice.ExceptionHandlers.Add(handlerText);
+            return CreateProxy();
+        }
+
         private ITestObject CreateProxy()
         {
             exceptionHandlerAdvice.AfterPropertiesSet();
@@ -397,6 +483,19 @@ namespace Spring.Aspects.Exceptions
             pf.AddAdvice(exceptionHandlerAdvice);
             return (ITestObject)pf.GetProxy();
         }
-        
+
+        private void AssertSearchString(string searchString)
+        {
+            bool found = false;
+            foreach (string message in loggerFactoryAdapter.AdviceLogger.LogMessages)
+            {
+                if (message.IndexOf(searchString) >= 0)
+                {
+                    found = true;
+                }
+            }
+            Assert.IsTrue(found, "did not find logging output [" + searchString + "]  Logging values = "
+                                 + StringUtils.CollectionToCommaDelimitedString(loggerFactoryAdapter.AdviceLogger.LogMessages));
+        }
     }
 }

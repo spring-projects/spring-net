@@ -23,6 +23,9 @@ using System.Collections;
 using System.Reflection;
 using AopAlliance.Intercept;
 using Common.Logging;
+using Spring.Context;
+using Spring.Objects.Factory.Config;
+using Spring.Util;
 
 namespace Spring.Aspects.Exceptions
 {
@@ -72,14 +75,19 @@ namespace Spring.Aspects.Exceptions
         /// <summary>
         /// Log instance available to subclasses
         /// </summary>
-        protected static readonly ILog log = LogManager.GetLogger(typeof(ExceptionHandlerAdvice));
+        protected static ILog log  = LogManager.GetLogger(typeof(ExceptionHandlerAdvice));
 
         private IList exceptionHandlers = new ArrayList();
 
-        private string onExceptionNameRegex = @"^(on\s+exception\s+name)\s+(.*?)\s+(log|translate|wrap|replace|return|swallow)\s*(.*?)$";
+        /// <summary>
+        /// Holds shared handler definition templates
+        /// </summary>
+        private ExceptionHandlerTable exceptionHandlerTable = new ExceptionHandlerTable();
 
-        private string onExceptionRegex = @"^(on\s+exception\s+)(\(.*?\))\s+(log|translate|wrap|replace|return|swallow)\s*(.*?)$";
-           
+        private string onExceptionNameRegex = @"^(on\s+exception\s+name)\s+(.*?)\s+(log|translate|wrap|replace|return|swallow|execute)\s*(.*?)$";
+
+        private string onExceptionRegex = @"^(on\s+exception\s+)(\(.*?\))\s+(log|translate|wrap|replace|return|swallow|execute)\s*(.*?)$";
+
         #endregion
 
         #region Properties
@@ -114,6 +122,19 @@ namespace Spring.Aspects.Exceptions
             set { exceptionHandlers = value; }
         }
 
+
+        /// <summary>
+        /// Gets the exception handler dictionary.  Allows for registration of a specific handler where the key
+        /// is the action type.  This makes configuration of a custom exception handler easier, for example 
+        /// LogExceptionHandler, in that only 'user friendly' properties such as LogName, etc., need to be configured
+        /// and not 'user unfriendly' properties such as ConstraintExpressionText and ActionExpressionText.  
+        /// </summary>
+        /// <value>The exception handler dictionary.</value>
+        public ExceptionHandlerTable ExceptionHandlerDictionary
+        {
+            get { return exceptionHandlerTable; }
+        }
+       
         #endregion
 
         #region IMethodInterceptor implementation
@@ -241,6 +262,7 @@ namespace Spring.Aspects.Exceptions
                     }
                     newExceptionHandlers.Add(handler);
                 }
+                //explicitly configured advice, must also configure ConstraintExpressionText and ActionExpressionText!
                 IExceptionHandler handlerObject = o as IExceptionHandler;
                 if (handlerObject != null)
                 {
@@ -315,42 +337,113 @@ namespace Spring.Aspects.Exceptions
         {
             if (parsedAdviceExpression.ActionText.IndexOf("log") >= 0)
             {
-                //TODO support user selection of level, log.Debug , log.Info etc.
-                LogExceptionHandler handler = new LogExceptionHandler(parsedAdviceExpression.ExceptionNames);
+                IExceptionHandler handler;
+                if (exceptionHandlerTable.ContainsKey("log"))
+                {
+                    handler = exceptionHandlerTable["log"];
+                    AddExceptionNames(parsedAdviceExpression, handler);
+                } else
+                {
+                    handler = CreateLogExceptionHandler(parsedAdviceExpression.ExceptionNames);
+                }                
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
-                handler.ActionExpressionText = "#log.Trace(" + parsedAdviceExpression.ActionExpressionText + ")";
+                handler.ActionExpressionText = parsedAdviceExpression.ActionExpressionText;
                 return handler;
             }
             else if (parsedAdviceExpression.ActionText.IndexOf("translate") >= 0)
             {
-                TranslationExceptionHandler handler = new TranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
+                IExceptionHandler handler;
+                if (exceptionHandlerTable.Contains("translate"))
+                {
+                    handler = exceptionHandlerTable["translate"];
+                    AddExceptionNames(parsedAdviceExpression, handler);
+                }
+                else
+                {
+                    handler = CreateTranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
+                }                
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
                 handler.ActionExpressionText = parsedAdviceExpression.ActionExpressionText;
                 return handler;
             }
             else if (parsedAdviceExpression.ActionText.IndexOf("wrap") >= 0)
             {
-                TranslationExceptionHandler handler = new TranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
+
+                IExceptionHandler handler;
+                if (exceptionHandlerTable.Contains("wrap"))
+                {
+                    handler = exceptionHandlerTable["wrap"];
+                    AddExceptionNames(parsedAdviceExpression, handler);
+                }
+                else
+                {
+                    handler = CreateTranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
+                }                
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
-                handler.ActionExpressionText = ParseWrappedExceptionExpression("wrap", parsedAdviceExpression.AdviceExpression);
+                handler.ActionExpressionText = ParseWrappedExceptionExpression("wrap", parsedAdviceExpression.AdviceExpression);                
                 return handler;                
             }
             else if (parsedAdviceExpression.ActionText.IndexOf("replace") >= 0)
             {
-                TranslationExceptionHandler handler = new TranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
+
+                IExceptionHandler handler;
+                if (exceptionHandlerTable.Contains("replace"))
+                {
+                    handler = exceptionHandlerTable["replace"];
+                    AddExceptionNames(parsedAdviceExpression, handler);
+                } else
+                {
+                    handler = CreateTranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
+                }                 
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
                 handler.ActionExpressionText = ParseWrappedExceptionExpression("replace", parsedAdviceExpression.AdviceExpression);
                 return handler;
             }
             else if (parsedAdviceExpression.ActionText.IndexOf("swallow") >= 0)
             {
-                SwallowExceptionHandler handler = new SwallowExceptionHandler(parsedAdviceExpression.ExceptionNames);
+
+                IExceptionHandler handler;
+                if (exceptionHandlerTable.Contains("swallow"))
+                {
+                    handler = exceptionHandlerTable["swallow"];
+                    AddExceptionNames(parsedAdviceExpression, handler);
+                }
+                else
+                {
+                    handler = CreateSwallowExceptionHander(parsedAdviceExpression);
+                }
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
                 return handler;
             }
             else if (parsedAdviceExpression.ActionText.IndexOf("return") >= 0)
             {
-                ReturnValueExceptionHandler handler = new ReturnValueExceptionHandler(parsedAdviceExpression.ExceptionNames);
+
+                IExceptionHandler handler;
+                if (exceptionHandlerTable.Contains("return"))
+                {
+                    handler = exceptionHandlerTable["return"];
+                    AddExceptionNames(parsedAdviceExpression, handler);
+                }
+                else
+                {
+                    handler = CreateReturnValueExceptionHandler(parsedAdviceExpression);
+                }
+                handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
+                handler.ActionExpressionText = parsedAdviceExpression.ActionExpressionText;
+                return handler;
+            }
+            else if (parsedAdviceExpression.ActionText.IndexOf("execute") >= 0)
+            {
+                IExceptionHandler handler;
+                if (exceptionHandlerTable.Contains("execute"))
+                {
+                    handler = exceptionHandlerTable["execute"];
+                    AddExceptionNames(parsedAdviceExpression, handler);
+                }
+                else
+                {
+                    handler = CreateExecuteSpelExceptionHandler(parsedAdviceExpression);
+                }
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
                 handler.ActionExpressionText = parsedAdviceExpression.ActionExpressionText;
                 return handler;
@@ -360,6 +453,62 @@ namespace Spring.Aspects.Exceptions
                 log.Warn("Could not parse exception hander statement " + parsedAdviceExpression.AdviceExpression);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Creates the execute spel exception handler.
+        /// </summary>
+        /// <param name="parsedAdviceExpression">The parsed advice expression.</param>
+        /// <returns></returns>
+        protected virtual IExceptionHandler CreateExecuteSpelExceptionHandler(ParsedAdviceExpression parsedAdviceExpression)
+        {
+            IExceptionHandler handler;
+            handler = new ExecuteSpelExceptionHandler(parsedAdviceExpression.ExceptionNames);
+            return handler;
+        }
+
+        /// <summary>
+        /// Creates the return value exception handler.
+        /// </summary>
+        /// <param name="parsedAdviceExpression">The parsed advice expression.</param>
+        /// <returns></returns>
+        protected virtual IExceptionHandler CreateReturnValueExceptionHandler(ParsedAdviceExpression parsedAdviceExpression)
+        {
+            IExceptionHandler handler;
+            handler = new ReturnValueExceptionHandler(parsedAdviceExpression.ExceptionNames);
+            return handler;
+        }
+
+        /// <summary>
+        /// Creates the swallow exception hander.
+        /// </summary>
+        /// <param name="parsedAdviceExpression">The parsed advice expression.</param>
+        /// <returns></returns>
+        protected virtual IExceptionHandler CreateSwallowExceptionHander(ParsedAdviceExpression parsedAdviceExpression)
+        {
+            IExceptionHandler handler;
+            handler = new SwallowExceptionHandler(parsedAdviceExpression.ExceptionNames);
+            return handler;
+        }
+
+        /// <summary>
+        /// Creates the translation exception handler.
+        /// </summary>
+        /// <param name="exceptionNames">The exception names.</param>
+        /// <returns></returns>
+        protected virtual IExceptionHandler CreateTranslationExceptionHandler(string[] exceptionNames)
+        {
+            return new TranslationExceptionHandler(exceptionNames);
+        }
+
+        /// <summary>
+        /// Creates the log exception handler.
+        /// </summary>
+        /// <param name="exceptionNames">The exception names.</param>
+        /// <returns>Log exception</returns>
+        protected virtual LogExceptionHandler CreateLogExceptionHandler(string[] exceptionNames)
+        {
+            return new LogExceptionHandler(exceptionNames);
         }
 
         /// <summary>
@@ -404,7 +553,83 @@ namespace Spring.Aspects.Exceptions
         }
 
 
+        private void AddExceptionNames(ParsedAdviceExpression parsedAdviceExpression, IExceptionHandler handler)
+        {
+            foreach (string exceptionName in parsedAdviceExpression.ExceptionNames)
+            {
+                handler.SourceExceptionNames.Add(exceptionName);
+            }
+        }
+
+        #endregion
+
+        #region ExceptionHandlerTable class
+
+        /// <summary>
+        /// A specialized dictionary for key value pairs of (string, IExceptionHandler)
+        /// </summary>
+        public class ExceptionHandlerTable : Hashtable
+        {
+            /// <summary>
+            /// Adds the specified key.
+            /// </summary>
+            /// <param name="key">The key.</param>
+            /// <param name="value">The value.</param>
+            public void Add(string key, IExceptionHandler value)
+            {
+                lock (SyncRoot)
+                {
+                    base[key] = value;
+                }
+            }
+
+            /// <summary>
+            /// Gets the <see cref="Spring.Aspects.IExceptionHandler"/> with the specified key.
+            /// </summary>
+            /// <value></value>
+            public IExceptionHandler this[string key]
+            {
+                get
+                {
+                    lock (SyncRoot)
+                    {
+                        return (IExceptionHandler)base[key];
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Adds an element with the specified key and value into the <see cref="T:System.Collections.Hashtable"/>.
+            /// </summary>
+            /// <param name="key">The key of the element to add.</param>
+            /// <param name="value">The value of the element to add. The value can be null.</param>
+            /// <exception cref="T:System.ArgumentNullException">
+            /// 	<paramref name="key"/> is null. </exception>
+            /// <exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Hashtable"/>. 
+            /// or key is not a string or value is not an IExceptionHandler.</exception>
+            /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Hashtable"/> is read-only.-or- The <see cref="T:System.Collections.Hashtable"/> has a fixed size. </exception>
+            public override void Add(object key, object value)
+            {
+                AssertUtils.AssertArgumentType(key, "key", typeof(string), "Key must be a string");
+                AssertUtils.AssertArgumentType(value, "value", typeof(IExceptionHandler), "Key must be a IExceptionHandler");
+                this.Add((string)key, (IExceptionHandler)value);
+            }
+
+            /// <summary>
+            /// Gets the <see cref="System.Object"/> with the specified key.
+            /// </summary>
+            /// <value></value>
+            public override object this[object key]
+            {
+                get
+                {
+                    return this[(string)key];
+                }
+            }
+        }
 
         #endregion
     }
+
+
 }

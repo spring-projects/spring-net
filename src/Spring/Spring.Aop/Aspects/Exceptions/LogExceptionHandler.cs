@@ -37,6 +37,11 @@ namespace Spring.Aspects.Exceptions
         private LogLevel logLevel = LogLevel.Trace;
 
         private bool logMessageOnly = false;
+
+        private bool first = true;
+
+        private string actionExpressionText;
+
         #endregion
 
 
@@ -91,6 +96,35 @@ namespace Spring.Aspects.Exceptions
             set { logMessageOnly = value; }
         }
 
+
+        /// <summary>
+        /// Gets the action translation expression text.  Overridden to add approprate settings to
+        /// the SpEL expression that does the logging so that it depends on the values of LogLevel and
+        /// LogMessageOnly.  Those properties must be set to the desired values before calling this method.
+        /// 
+        /// </summary>
+        /// <value>The action translation expression.</value>
+        public override string ActionExpressionText
+        {
+            get { return actionExpressionText; }
+            set
+            {
+                if (first)
+                {
+                    first = false;
+                    string textPart1 = "#log." + LogLevel.ToString() + "(" + value;
+                    if (logMessageOnly)
+                    {
+                        actionExpressionText = textPart1 + ")";
+                    }
+                    else
+                    {
+                        actionExpressionText = textPart1 + ", #e)";
+                    }
+                } 
+            }
+        }
+
         /// <summary>
         /// Handles the exception.
         /// </summary>
@@ -100,8 +134,9 @@ namespace Spring.Aspects.Exceptions
         /// </returns>
         public override object HandleException(IDictionary callContextDictionary)
         {
-            ILog log = LogManager.GetLogger(logName);
-            callContextDictionary.Add("log", log);
+            //TODO log name is targettype.
+            ILog adviceLogger = LogManager.GetLogger(logName);
+            callContextDictionary.Add("log", adviceLogger);
             try
             {
                 IExpression expression = Expression.Parse(ActionExpressionText);
@@ -113,5 +148,6 @@ namespace Spring.Aspects.Exceptions
             }
             return "logged";            
         }
+
     }
 }

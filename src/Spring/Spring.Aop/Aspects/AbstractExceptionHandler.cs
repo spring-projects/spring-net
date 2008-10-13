@@ -79,7 +79,7 @@ namespace Spring.Aspects
         /// Gets the source exception names.
         /// </summary>
         /// <value>The source exception names.</value>
-        public IList SourceExceptionNames
+        public virtual IList SourceExceptionNames
         {
             get { return sourceExceptionNames; }
             set { sourceExceptionNames = value; }
@@ -89,7 +89,7 @@ namespace Spring.Aspects
         /// Gets the source exception types.
         /// </summary>
         /// <value>The source exception types.</value>
-        public IList SourceExceptionTypes
+        public virtual IList SourceExceptionTypes
         {
             get { return sourceExceptionTypes; }
             set { sourceExceptionTypes = value; }
@@ -99,7 +99,7 @@ namespace Spring.Aspects
         /// Gets the action translation expression text
         /// </summary>
         /// <value>The action translation expression.</value>
-        public string ActionExpressionText
+        public virtual string ActionExpressionText
         {
             get { return actionExpressionText; }
             set { actionExpressionText = value; }

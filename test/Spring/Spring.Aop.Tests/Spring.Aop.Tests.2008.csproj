@@ -251,6 +251,8 @@
     <Compile Include="Aspects\Cache\CacheParameterAdviceTests.cs" />
     <Compile Include="Aspects\Cache\CacheAspectIntegrationTests.cs" />
     <Compile Include="Aspects\Cache\InvalidateCacheAdviceTests.cs" />
+    <Compile Include="Aspects\Exception\CaptureOutputLogger.cs" />
+    <Compile Include="Aspects\Exception\CaptureOutputLoggerFactoryAdapter.cs" />
     <Compile Include="Aspects\Exception\ExceptionHandlerAspectIntegrationTests.cs" />
     <Compile Include="Aspects\Logging\SimpleLoggingAdviceTests.cs" />
     <Compile Include="Aspects\Logging\TestableSimpleLoggingAdvice.cs" />
