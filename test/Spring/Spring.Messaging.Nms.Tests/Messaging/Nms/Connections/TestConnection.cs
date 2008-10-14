@@ -43,6 +43,12 @@ namespace Spring.Messaging.Nms.Connections
             closeCount++;
         }
 
+        public TimeSpan RequestTimeout
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public AcknowledgementMode AcknowledgementMode
         {
             get { return AcknowledgementMode.ClientAcknowledge; }

@@ -658,7 +658,7 @@
 
     <call target="build-all-function"/>
 
-    <nant buildfile="./doc/reference" target="all"/>
+    <call target="docs"/>
 
     <call target="package-release-files"/>
 

@@ -189,6 +189,12 @@ namespace Spring.Messaging.Nms.Connections
 
         }
 
+        public TimeSpan RequestTimeout
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public bool Transacted
         {
             get { return true; }
