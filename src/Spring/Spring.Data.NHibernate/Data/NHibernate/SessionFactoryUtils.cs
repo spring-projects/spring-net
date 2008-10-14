@@ -652,8 +652,11 @@ namespace Spring.Data.NHibernate
                             "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
                     }
 
-
+#if NET_1_1
+					DriverBase db = cp.Driver as DriverBase;
+#else
                     IDriver db = cp.Driver;
+#endif
                     if (db != null)
                     {
                         Type hibCommandType = db.CreateCommand().GetType();
