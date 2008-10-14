@@ -127,6 +127,7 @@
     <Compile Include="Data\AutoDeclarativeTxTests.cs" />
     <Compile Include="Data\CallCreateTestObject.cs" />
     <Compile Include="Data\ConsoleLoggingAroundAdvice.cs" />
+    <Compile Include="Data\Objects\Generic\MappingVacationQuery.cs" />
     <Compile Include="Data\TestTxIsolationLevelTests.cs" />
     <Compile Include="Data\Generic\GenericAdoTemplateTests.cs" />
     <Compile Include="Data\Generic\ITestObjectDao.cs" />

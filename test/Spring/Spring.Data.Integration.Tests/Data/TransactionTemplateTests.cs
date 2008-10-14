@@ -153,6 +153,10 @@ namespace Spring.Data
         public void ExecuteTemplate()
         {
             TransactionTemplate tt = new TransactionTemplate(transactionManager);
+	        tt.Execute(delegate(ITransactionStatus status)
+	                       {
+	                           return null;
+	                       });
             object result = tt.Execute(new SimpleTransactionCallback(dbProvider));
             Assert.AreEqual(2, (int)result);
 

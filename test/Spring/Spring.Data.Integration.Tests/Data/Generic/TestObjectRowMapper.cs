@@ -34,12 +34,12 @@ namespace Spring.Data.Generic
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public class TestObjectRowMapper<T> : IRowMapper<T> where T : TestObject, new()
+    public class TestObjectRowMapper : IRowMapper<TestObject> 
     {
-        public T MapRow(IDataReader reader, int rowNum) 
+        public TestObject MapRow(IDataReader reader, int rowNum) 
         {
-            if (reader == null) return new T();
-            T to = new T();
+            if (reader == null) return new TestObject();
+            TestObject to = new TestObject();
             to.ObjectNumber = reader.GetInt32(0);
             to.Age = reader.GetInt32(1);
             to.Name = reader.GetString(2);

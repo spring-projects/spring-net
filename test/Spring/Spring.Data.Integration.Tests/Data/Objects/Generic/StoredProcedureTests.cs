@@ -52,7 +52,7 @@ namespace Spring.Data.Objects.Generic
         [Test]
         public void TestReflection()
         {
-            IRowMapper<TestObject> rm = new TestObjectRowMapper<TestObject>();
+            IRowMapper<TestObject> rm = new TestObjectRowMapper();
 
             NamedResultSetProcessor<TestObject> rsp = new NamedResultSetProcessor<TestObject>("Test", rm);
 
@@ -145,7 +145,7 @@ namespace Spring.Data.Objects.Generic
             : base(dbProvider, "SelectTestObjectAndVacations")
         {
             DeriveParameters();
-            AddRowMapper("testObjectRowMapper", new TestObjectRowMapper<TestObject>());
+            AddRowMapper("testObjectRowMapper", new TestObjectRowMapper());
             AddRowMapper("vacationRowMapper", new VacationRowMapper<Vacation>());
             Compile();
         }
@@ -163,7 +163,7 @@ namespace Spring.Data.Objects.Generic
             : base(dbProvider, "SelectByName")
         {           
             DeriveParameters();
-            AddRowMapper("testObjectRowMapper", new TestObjectRowMapper<TestObject>() );
+            AddRowMapper("testObjectRowMapper", new TestObjectRowMapper() );
             Compile();
         }
 

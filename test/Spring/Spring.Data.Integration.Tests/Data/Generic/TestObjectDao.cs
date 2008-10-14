@@ -40,14 +40,14 @@ namespace Spring.Data.Generic
         {
             return AdoTemplate.QueryWithRowMapper(CommandType.Text,
                 "select TestObjectNo, Age, Name from TestObjects",
-                new TestObjectRowMapper<TestObject>());
+                new TestObjectRowMapper());
         }
 
         public TestObject FindOne()
         {
             return AdoTemplate.QueryForObject(CommandType.Text,
                                               "",
-                                              new TestObjectRowMapper<TestObject>());
+                                              new TestObjectRowMapper());
         }
     }
 }
