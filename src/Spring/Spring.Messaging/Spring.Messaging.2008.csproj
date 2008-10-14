@@ -76,7 +76,6 @@
     <Compile Include="Messaging\Listener\TransactionAction.cs" />
     <Compile Include="Messaging\Listener\IExceptionHandler.cs" />
     <Compile Include="Messaging\Listener\IMessageListener.cs" />
-    <Compile Include="Messaging\Listener\SimpleMessageListenerContainer.cs" />
     <Compile Include="Messaging\MessagingException.cs" />
     <Compile Include="Messaging\Support\Converters\ActiveXMessageConverter.cs" />
     <Compile Include="Messaging\Support\Converters\BinaryMessageConverter.cs" />
