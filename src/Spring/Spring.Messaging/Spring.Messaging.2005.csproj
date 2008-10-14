@@ -52,6 +52,7 @@
     <Compile Include="Messaging\Core\IMessageQueueFactory.cs" />
     <Compile Include="Messaging\Core\MessagePostProcessorDelegate.cs" />
     <Compile Include="Messaging\Core\MessageQueueGatewaySupport.cs" />
+    <Compile Include="Messaging\Core\QueueIdentifierType.cs" />
     <Compile Include="Messaging\Listener\AbstractSendToQueueExceptionHandler.cs" />
     <Compile Include="Messaging\Listener\AbstractTransactionalMessageListenerContainer.cs" />
     <Compile Include="Messaging\Listener\DistributedTxMessageListenerContainer.cs" />
@@ -77,8 +78,11 @@
     <Compile Include="Messaging\Support\Converters\ActiveXMessageConverter.cs" />
     <Compile Include="Messaging\Support\Converters\BinaryMessageConverter.cs" />
     <Compile Include="Messaging\Support\Converters\IMessageConverter.cs" />
+    <Compile Include="Messaging\Support\Converters\MessageConverterCreatorDelegate.cs" />
+    <Compile Include="Messaging\Support\Converters\MessageConverterFactoryObject.cs" />
     <Compile Include="Messaging\Support\Converters\XmlDocumentConverter.cs" />
     <Compile Include="Messaging\Support\Converters\XmlMessageConverter.cs" />
+    <Compile Include="Messaging\Support\MessageQueueCreatorDelegate.cs" />
     <Compile Include="Messaging\Support\MessageQueueFactoryObject.cs" />
     <Compile Include="Messaging\Support\QueueUtils.cs" />
   </ItemGroup>
