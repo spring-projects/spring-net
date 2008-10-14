@@ -16,7 +16,7 @@
 		     >
 			<arg line="${compiler.args}"/>	
 			<nowarn>
-				<warning number="${nowarn.numbers},0108,0114,0612" />
+				<warning number="${nowarn.numbers},0108,0114,0612,0109" />
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />

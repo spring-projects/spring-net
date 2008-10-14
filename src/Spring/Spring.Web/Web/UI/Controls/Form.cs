@@ -74,9 +74,7 @@ namespace Spring.Web.UI.Controls
 #if !NET_2_0
         public string Action
 #else
-#pragma warning disable 0109
         public new string Action
-#pragma warning restore 0109
 #endif
         {
             get { return this.action; }
