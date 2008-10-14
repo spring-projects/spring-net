@@ -30,13 +30,27 @@ namespace Spring.Messaging.Nms.Support.Converter
     /// <author>Mark Pollack</author>
     public interface ITypeMapper
     {
+        /// <summary>
+        /// Gets the name of the field in the message that has type information..
+        /// </summary>
+        /// <value>The name of the type id field.</value>
         string TypeIdFieldName
         {
             get;
         }
-        
+
+        /// <summary>
+        /// Convert from a type to a string.
+        /// </summary>
+        /// <param name="typeOfObjectToConvert">The type of object to convert.</param>
+        /// <returns></returns>
         string FromType(Type typeOfObjectToConvert);
 
+        /// <summary>
+        /// Convert from a string to a type
+        /// </summary>
+        /// <param name="typeId">The type id.</param>
+        /// <returns></returns>
         Type ToType(string typeId);
     }
 }

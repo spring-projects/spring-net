@@ -394,6 +394,7 @@
     <Compile Include="Aspects\Cache\InvalidateCacheAdvisor.cs" />
     <Compile Include="Aspects\Cache\InvalidateCacheAdvice.cs" />
     <Compile Include="Aspects\Exceptions\ExceptionHandlerAdvice.cs" />
+    <Compile Include="Aspects\Exceptions\ExecuteSpelExceptionHandler.cs" />
     <Compile Include="Aspects\Exceptions\LogExceptionHandler.cs" />
     <Compile Include="Aspects\Exceptions\ReturnValueExceptionHandler.cs" />
     <Compile Include="Aspects\Exceptions\SwallowExceptionHandler.cs" />

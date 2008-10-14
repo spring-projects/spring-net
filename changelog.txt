@@ -2,6 +2,61 @@ SPRING.NET FRAMEWORK CHANGELOG
 ==============================
 http://www.springframework.net
 
+Release Version 1.2.0 RC1, October 15, 2008
+
+
+Bug
+[SPRNET-899] - HttpContext.CurrenHandler returns Spring's internal PageHandler instead of real Page
+[SPRNET-923] - Spring.Services generated proxies  should not use explicitly ContextRegistry.GetContext or WebApplicationContext.Current direclty
+[SPRNET-967] - SaoFactoryObject should cast TransparentProxies to the interface it implements before to return
+[SPRNET-1008] - Add check for [Serializable] in SimpleMessageConverter
+[SPRNET-1017] - Apache.NMS.ActiveMQ.ConnectionClosedException when using CachingConnectionFactory
+[SPRNET-1020] - Consumer caching was not taking place for queues.
+[SPRNET-1023] - Problems performing DI with Telerik RAD controls
+[SPRNET-1027] - Spring Page Handler Factory does not respect EnableSessionState="ReadOnly", page setting cached until app pool reload
+[SPRNET-1028] - DefaultListableObjectFactory.IsAutowireCandidate(string , DependencyDescriptor)  does not search parent container
+[SPRNET-1032] - <name-values> elements to not append values for same key value
+[SPRNET-1047] - ObjectPostProcessors order isn't respected when mixing <object order="x"> and ObjectFactory.AddObjectPostProcessor() registrations
+
+Improvement
+[SPRNET-547] - Add Unsubscribe functionality to IEventRegistry
+[SPRNET-567] - Allow parameters to be passed to Spring.Web.UI.Page.SetResult()
+[SPRNET-784] - WebServiceProxyFactory support for SoapHeaderAttribute with Direction=SoapHeaderDirection.In 
+[SPRNET-795] - Change TransactionStatus Rollback setter property to Rollback() method so the contract of setting it to true is more explicit
+[SPRNET-840] - Reduce PageHandlerFactory complexity
+[SPRNET-958] - Result mapping doesn't support expressions for TargetPage
+[SPRNET-960] - Allow for selection of logging level when using exception handling advice for logging
+[SPRNET-995] - IsValid state of AbstractBinding should not be stored in LogicalThreadContext
+[SPRNET-1016] - Apply local transaction to DataSet operations in AdoTemplate.
+[SPRNET-1019] - Messaging namespace parser should support use of PropertyPlaceholderConfigurer
+[SPRNET-1021] - Avoid antlr exception thrown for internal flow control when selecting handler method in MessageListenerAdapter
+[SPRNET-1024] - Add AutoStartup as an attribute of the <listener-container> element
+[SPRNET-1025] - Make GetObject virtual in MethodInvokingJobDetailFactoryObject and provide protected access to JobDetail object.
+[SPRNET-1038] - Eliminate storing binding state to TLS in Spring.DataBinding.AbstractBinding
+[SPRNET-1056] - Provide easier configuration of exception handlers in ExceptionTranslationAdvice.
+
+New Feature
+[SPRNET-711] - Add generic DI support for IHttpHandlers
+[SPRNET-713] - Add support for custom .ashx IHttpHandler implementations
+[SPRNET-815] - Add Sql Server Compact Edition 3.5 database provider
+[SPRNET-883] - Add support for translation of exceptions using PersistenceExceptionTranslationInterceptor.
+[SPRNET-936] - Add message converter to/from XML (NMS)
+[SPRNET-1039] - Add support for Sybase ADO.NET 2.0 provider
+[SPRNET-1040] - Support encrypting url parameters when using Page.SetResult()
+[SPRNET-1046] - Move hardcoded, Spring.Web specific ISharedStateAware handling to generic SharedStateAwareObjectPostProcessor
+[SPRNET-1055] - Provide ability to easily register to MessageQueueFactoryObject definitions with the container at runtime
+[SPRNET-1057] - Add new 'execute' action for ExceptionTranslationAdvice
+[SPRNET-1058] - Provide WCF Service export akin to those for Remoting and .asmx WebServices
+
+Refactoring
+[SPRNET-1052] - Extract "SetResult" related code into a reusable ResultNavigator component
+
+Task
+[SPRNET-1045] - Colorize code listings (XML/C#) in reference documentation
+[SPRNET-1048] - Drop IProcess support from Spring.Web
+[SPRNET-1050] - Provide sample configuration for using MultiDelegatingDbProvider
+
+
 Release 1.2.0 M1, August 15, 2008
 
 
@@ -40,6 +95,7 @@ Improvement
 [SPRNET-999] - Add DefaultDbProvider property to MultiDelegatingDbProvider.
 
 New Feature
+[SPRNET-753] - Add ILifecycle interface
 [SPRNET-896] - Allow registering custom ICollectionProcessors in SpEL MethodNode
 [SPRNET-922] - NHibernate 2.0 RC1 Support
 [SPRNET-953] - Allow for circular dependencies of web-scoped singletons

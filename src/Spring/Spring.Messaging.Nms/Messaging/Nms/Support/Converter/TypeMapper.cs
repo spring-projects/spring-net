@@ -1,3 +1,22 @@
+#region License
+
+/*
+ * Copyright © 2002-2006 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
 
 
 using System;
@@ -6,6 +25,9 @@ using Spring.Core.TypeResolution;
 
 namespace Spring.Messaging.Nms.Support.Converter
 {
+    /// <summary>
+    /// Provides a layer of indirection when adding the 'type' of the object as a message property.
+    /// </summary>
     public class TypeMapper : ITypeMapper
     {
         private string defaultNamespace;
@@ -15,12 +37,13 @@ namespace Spring.Messaging.Nms.Support.Converter
         private IDictionary idTypeMapping;
         private IDictionary typeIdMapping;
         
-        
-        //TODO generalize?
         private string defaultHashtableTypeId = "Hashtable";
 
         private Type defaultHashtableClass = typeof(Hashtable);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeMapper"/> [ERROR: invalid expression DeclaringTypeKind].
+        /// </summary>
         public TypeMapper()
         {
             idTypeMapping = new Hashtable();
@@ -28,23 +51,40 @@ namespace Spring.Messaging.Nms.Support.Converter
         }
 
 
+        /// <summary>
+        /// Gets or sets the id type mapping.
+        /// </summary>
+        /// <value>The id type mapping.</value>
         public IDictionary IdTypeMapping
         {
             get { return idTypeMapping; }
             set { idTypeMapping = value; }
         }
 
+        /// <summary>
+        /// Gets the name of the field in the message that has type information..
+        /// </summary>
+        /// <value>The name of the type id field.</value>
         public string TypeIdFieldName
         {
             get { return "__TypeId__"; }
         }
 
 
+        /// <summary>
+        /// Sets the default hashtable class.
+        /// </summary>
+        /// <value>The default hashtable class.</value>
         public Type DefaultHashtableClass
         {
             set { defaultHashtableClass = value; }
         }
 
+        /// <summary>
+        /// Convert from a type to a string.
+        /// </summary>
+        /// <param name="typeOfObjectToConvert">The type of object to convert.</param>
+        /// <returns></returns>
         public string FromType(Type typeOfObjectToConvert)
         {
 
@@ -62,6 +102,11 @@ namespace Spring.Messaging.Nms.Support.Converter
             }
         }
 
+        /// <summary>
+        /// Convert from a string to a type
+        /// </summary>
+        /// <param name="typeId">The type id.</param>
+        /// <returns></returns>
         public Type ToType(string typeId)
         {
             if (idTypeMapping.Contains(typeId))
@@ -82,6 +127,10 @@ namespace Spring.Messaging.Nms.Support.Converter
 
         }
 
+        /// <summary>
+        /// Gets or sets the default namespace.
+        /// </summary>
+        /// <value>The default namespace.</value>
         public string DefaultNamespace
         {
             get
@@ -95,6 +144,10 @@ namespace Spring.Messaging.Nms.Support.Converter
             
         }
 
+        /// <summary>
+        /// Gets or sets the default name of the assembly.
+        /// </summary>
+        /// <value>The default name of the assembly.</value>
         public string DefaultAssemblyName
         {
             get
@@ -107,6 +160,9 @@ namespace Spring.Messaging.Nms.Support.Converter
             }
         }
 
+        /// <summary>
+        /// Afters the properties set.
+        /// </summary>
         public void AfterPropertiesSet()
         {
             ValidateIdTypeMapping();

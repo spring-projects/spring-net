@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="aop-aspect-library" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="aop-aspect-library"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Aspect Library</title>
 
   <sect1 xml:id="aop-library-introduction">
@@ -54,8 +60,8 @@
     implement is <literal>Spring.Caching.ICache</literal> located in
     <literal>Spring.Core</literal>. Two implementations are provided,
     <literal>Spring.Caching.AspNetCache</literal> located in
-    <literal>Spring.Web</literal> which stores cache entries within an
-    ASP.NET cache and a simple implementation,
+    <literal>Spring.Web</literal> which stores cache entries within an ASP.NET
+    cache and a simple implementation,
     <literal>Spring.Caching.NonExpiringCache</literal> that stores cache
     entries in memory and never expires these entries. Custom implementations
     based on 3rd party implementations, such as Oracle Coherence, or
@@ -81,8 +87,8 @@
       </listitem>
 
       <listitem>
-        <para><literal>CacheResultItems</literal> - used when returning a collection as
-        a return value</para>
+        <para><literal>CacheResultItems</literal> - used when returning a
+        collection as a return value</para>
       </listitem>
 
       <listitem>
@@ -97,9 +103,8 @@
     </itemizedlist>
 
     <para>Each <literal>CacheResult</literal>,
-    <literal>CacheResultItems</literal>, and
-    <literal>CacheParameter</literal> attributes define the following
-    properties.</para>
+    <literal>CacheResultItems</literal>, and <literal>CacheParameter</literal>
+    attributes define the following properties.</para>
 
     <itemizedlist>
       <listitem>
@@ -125,14 +130,14 @@
       </listitem>
     </itemizedlist>
 
-    <para>The <literal>InvalidateCache</literal> attribute has properties
-    for the CacheName, the Key as well as the Condition, with the same
-    meanings as listed previously.</para>
+    <para>The <literal>InvalidateCache</literal> attribute has properties for
+    the CacheName, the Key as well as the Condition, with the same meanings as
+    listed previously.</para>
 
-    <para>Each <literal>ICache</literal> implementation will have
-    properties that are specific to a caching technology. In the case of
-    <literal>AspNetCache</literal>, the two important properties to
-    configure are:</para>
+    <para>Each <literal>ICache</literal> implementation will have properties
+    that are specific to a caching technology. In the case of
+    <literal>AspNetCache</literal>, the two important properties to configure
+    are:</para>
 
     <itemizedlist>
       <listitem>
@@ -202,32 +207,32 @@ public <classname>Airport</classname> GetAirport(long id)
 
     <para>The configuration to enable the caching aspect is shown below</para>
 
-    <programlisting language="myxml"><![CDATA[<object" id="CacheAspect" type="Spring.Aspects.Cache.CacheAspect, Spring.Aop"/>
+    <programlisting language="myxml">&lt;object" id="CacheAspect" type="Spring.Aspects.Cache.CacheAspect, Spring.Aop"/&gt;
 
-<object id="AspNetCache" type="Spring.Caching.AspNetCache, Spring.Web">
-  <property name="SlidingExpiration" value="true"/>
-  <property name="Priority" value="Low"/>
-  <property name="TimeToLive" value="00:02:00"/>
-</object>
+&lt;object id="AspNetCache" type="Spring.Caching.AspNetCache, Spring.Web"&gt;
+  &lt;property name="SlidingExpiration" value="true"/&gt;
+  &lt;property name="Priority" value="Low"/&gt;
+  &lt;property name="TimeToLive" value="00:02:00"/&gt;
+&lt;/object&gt;
 
-<!-- Apply aspects to DAOs -->
-<object type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
-  <property name="ObjectNames">
-    <list>
-      <value>*Dao</value>
-    </list>
-  </property>
-  <property name="InterceptorNames">
-    <list>
-      <value>CacheAspect</value>
-    </list>
-  </property>
-</object>]]></programlisting>
+&lt;!-- Apply aspects to DAOs --&gt;
+&lt;object type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop"&gt;
+  &lt;property name="ObjectNames"&gt;
+    &lt;list&gt;
+      &lt;value&gt;*Dao&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+  &lt;property name="InterceptorNames"&gt;
+    &lt;list&gt;
+      &lt;value&gt;CacheAspect&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
 
-    <para>in this example an <literal>ObjectNameAutoProxyCreator</literal>
-    was used to apply the cache aspect to objects that have Dao in their name.
-    The AspNetCache setting for TimeToLive will override the TimeToLive value
-    set at the method level via the attribute.</para>
+    <para>in this example an <literal>ObjectNameAutoProxyCreator</literal> was
+    used to apply the cache aspect to objects that have Dao in their name. The
+    AspNetCache setting for TimeToLive will override the TimeToLive value set
+    at the method level via the attribute.</para>
   </sect1>
 
   <sect1 xml:id="exception-aspect">
@@ -251,6 +256,11 @@ public <classname>Airport</classname> GetAirport(long id)
       <listitem>
         <para>swallow - the exception is ignored.</para>
       </listitem>
+
+      <listitem>
+        <para>execute - Execute an abritrary Spring Expression Language (SpEL
+        expression)</para>
+      </listitem>
     </itemizedlist>
 
     <para>The applicability of general exception handling advice depends
@@ -268,13 +278,13 @@ public <classname>Airport</classname> GetAirport(long id)
     could be referred to as a Domain Specific Language (DSL). Here is a simple
     example, which should hopefully be self explanatory.</para>
 
-    <para><programlisting language="myxml"><![CDATA[<object name="exceptionHandlingAdvice" type="Spring.Aspects.Exceptions.ExceptionHandlerAdvice, Spring.Aop">
-  <property name="exceptionHandlers">
-    <list>
-      <value>on exception name ArithmeticException wrap System.InvalidOperationException</value>
-    </list>
-  </property>
-</object>]]></programlisting>What this is instructing the advice to do is
+    <para><programlisting language="myxml">&lt;object name="exceptionHandlingAdvice" type="Spring.Aspects.Exceptions.ExceptionHandlerAdvice, Spring.Aop"&gt;
+  &lt;property name="exceptionHandlers"&gt;
+    &lt;list&gt;
+      &lt;value&gt;on exception name ArithmeticException wrap System.InvalidOperationException&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>What this is instructing the advice to do is
     the following bit of code when an ArithmeticException is thrown, throw new
     System.InvalidOperationException("Wrapped ArithmeticException", e), where
     e is the original ArithmeticException. The default message, "Wrapped
@@ -356,19 +366,19 @@ on exception name ArithmeticException return 12</programlisting>
     action, i.e. log(Debug,"LoggerName").</para>
 
     <para>Multiple exception handling statements can be specified within the
-    list shown above. The processing flow is on exception, the name of
-    the exception listed in the statement is compared to the thrown exception
-    to see if there is a match. A comma separated list of exceptions can be
-    used to group together the same action taken for different exception
-    names. If the action to take is logging, then the logging action is
-    performed and the search for other matching exception names continues. For
-    all other actions, namely translate, wrap, replace, swallow, return, once
-    an exception handler is matched, those in the chain are no longer
-    evaluated. Note, do not confuse this handler chain with the general advice
-    AOP advice chain. For translate, wrap, and replace actions a SpEL
-    expression is created and used to instantiate a new exception (in addition
-    to any other processing that may occur when evaluating the expression)
-    which is then thrown.</para>
+    list shown above. The processing flow is on exception, the name of the
+    exception listed in the statement is compared to the thrown exception to
+    see if there is a match. A comma separated list of exceptions can be used
+    to group together the same action taken for different exception names. If
+    the action to take is logging, then the logging action is performed and
+    the search for other matching exception names continues. For all other
+    actions, namely translate, wrap, replace, swallow, return, once an
+    exception handler is matched, those in the chain are no longer evaluated.
+    Note, do not confuse this handler chain with the general advice AOP advice
+    chain. For translate, wrap, and replace actions a SpEL expression is
+    created and used to instantiate a new exception (in addition to any other
+    processing that may occur when evaluating the expression) which is then
+    thrown.</para>
 
     <para>The exception handling DSL also supports the ability to provide a
     SpEL boolean expression to determine if the advice will apply instead of
@@ -393,23 +403,55 @@ on exception name ArithmeticException return 12</programlisting>
     likely be better off creating your own custom aspect class instead of a
     scripting approach.</para>
 
-    <para>You can also configure ExceptionHandlerAdvice to use an instance of
-    IExceptionHandler, for example to access more sophisticated logging
-    functionality than is available with the current log action in the DSL,
-    for example setting the logging level and pass the exception into the
-    logging subsystem</para>
+    <para>You can also configure the each of the Handlers individually based
+    on the action keyword. For example, to configure the logging properties on
+    the LogExceptionHandler.</para>
 
-    <programlisting language="myxml"><![CDATA[<object name="exceptionHandlingAdvice" type="Spring.Aspects.Exceptions.ExceptionHandlerAdvice, Spring.Aop">
-  <property name="exceptionHandlers">
-    <list>
-      <object type="Spring.Aspects.Exceptions.LogExceptionHandler">
-        <property name="LogName" value="Cms.Session.ExceptionHandler" />
-        <property name="ConstraintExpressionText" value="#e is T(System.Threading.ThreadAbortException)" />
-        <property name="ActionExpressionText" value="#log.Fatal('Request Timeout occured', #e)" />
-      </object> 
-    </list>
-  </property>
-</object>]]></programlisting>
+    <programlisting language="csharp">&lt;object name="logExceptionHandler" type="Spring.Aspects.Exceptions.LogExceptionHandler, Spring.Aop"&gt;
+  &lt;property name="LogName" value="Cms.Session.ExceptionHandler" /&gt;
+  &lt;property name="LogLevel" value="Debug"/&gt;
+  &lt;property name="LogMessageOnly" value="true"/&gt;
+&lt;/object&gt;
+
+&lt;object name="exceptionHandlingAdvice" type="Spring.Aspects.Exceptions.ExceptionHandlerAdvice, Spring.Aop"&gt;
+  &lt;property name="ExceptionHandlerDictionary"&gt;
+    &lt;dictionary&gt;
+      &lt;entry key="log" ref="logExceptionHandler"/&gt;
+    &lt;/dictionary&gt;
+  &lt;/property&gt;
+
+  &lt;property name="ExceptionHandlers"&gt;
+    &lt;list&gt;
+      &lt;value&gt;on exception name ArithmeticException,ArgumentException log 'My Message, Method Name ' + #method.Name&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;
+</programlisting>
+
+    <para>You can also configure <literal>ExceptionHandlerAdvice</literal> to
+    use an instance of <literal>IExceptionHandler</literal> by specifing it as
+    an entry in the ExceptionHandlers list. This gives you complete control
+    over all properties of the handler but you must set
+    ConstraintExpressionText and ActionExpressionText which are normally
+    parsed for you from the string. To use the case of configuring the
+    LogExceptionHandler, this approach also lets you specify advanced logging
+    functionality, but at a cost of some additional complexity. For example
+    setting the logging level and pass the exception into the logging
+    subsystem</para>
+
+    <programlisting language="myxml">&lt;object name="exceptionHandlingAdvice" type="Spring.Aspects.Exceptions.ExceptionHandlerAdvice, Spring.Aop"&gt;
+  &lt;property name="exceptionHandlers"&gt;
+    &lt;list&gt;
+      &lt;object type="Spring.Aspects.Exceptions.LogExceptionHandler"&gt;
+        &lt;property name="LogName" value="Cms.Session.ExceptionHandler" /&gt;
+        &lt;property name="ConstraintExpressionText" value="#e is T(System.Threading.ThreadAbortException)" /&gt;
+        &lt;property name="ActionExpressionText" value="#log.Fatal('Request Timeout occured', #e)" /&gt;
+      &lt;/object&gt; 
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+    <para></para>
 
     <para>The configuration of the logger name, level, and weather or not to
     pass the thrown exception as the second argument to the log method will be
@@ -455,6 +497,10 @@ on exception name ArithmeticException return 12</programlisting>
         <listitem>
           <para>swallow</para>
         </listitem>
+
+        <listitem>
+          <para>execute</para>
+        </listitem>
       </itemizedlist>
 
       <para>The form of the expression depends on the action. For logging, the
@@ -476,9 +522,10 @@ on exception name ArithmeticException return 12</programlisting>
 
     <para>The logging advice lets you log the information on method entry,
     exit and thrown exception (if any). The implementation is based on the
-    logging library, <ulink url="http://netcommon.sourceforge.net/">Common.Logging</ulink>, that provides
-    portability across different logging libraries. There are a number of
-    configuration options available, listed below</para>
+    logging library, <ulink
+    url="http://netcommon.sourceforge.net/">Common.Logging</ulink>, that
+    provides portability across different logging libraries. There are a
+    number of configuration options available, listed below</para>
 
     <itemizedlist>
       <listitem>
@@ -510,19 +557,19 @@ on exception name ArithmeticException return 12</programlisting>
     XML fragment. Alternatively, you can use the class
     <literal>SimpleLoggingAdvice</literal> programatically.</para>
 
-    <programlisting language="myxml"><![CDATA[<object name="loggingAdvice" type="Spring.Aspects.Logging.SimpleLoggingAdvice, Spring.Aop">
-  <property name="logUniqueIdentifier" value="true"/>               
-  <property name="logExecutionTime"    value="true"/>               
-  <property name="logMethodArguments"  value="true"/>
-  <property name="LogReturnValue"      value="true"/>
+    <programlisting language="myxml">&lt;object name="loggingAdvice" type="Spring.Aspects.Logging.SimpleLoggingAdvice, Spring.Aop"&gt;
+  &lt;property name="logUniqueIdentifier" value="true"/&gt;               
+  &lt;property name="logExecutionTime"    value="true"/&gt;               
+  &lt;property name="logMethodArguments"  value="true"/&gt;
+  &lt;property name="LogReturnValue"      value="true"/&gt;
 
-  <property name="Separator"           value=";"/>
-  <property name="LogLevel"            value="Info"/>
+  &lt;property name="Separator"           value=";"/&gt;
+  &lt;property name="LogLevel"            value="Info"/&gt;
 
 
-  <property name="HideProxyTypeNames"  value="true"/>
-  <property name="UseDynamicLogger"    value="true"/>
-</object>]]></programlisting>
+  &lt;property name="HideProxyTypeNames"  value="true"/&gt;
+  &lt;property name="UseDynamicLogger"    value="true"/&gt;
+&lt;/object&gt;</programlisting>
 
     <para>The default values for LogUniqueIdentifier, LogExecutionTime,
     LogMethodArguments and LogReturnValue are false. The default separator
@@ -568,8 +615,8 @@ on exception name ArithmeticException return 12</programlisting>
     use a GUID. You can alter this behavior by overriding the method
     <literal>string CreateUniqueIdentifier()</literal>. The
     <literal>SimpleLoggingAdvice</literal> class inherits from
-    <literal>AbstractLoggingAdvice</literal>, which has the abstract
-    method <literal>object InvokeUnderLog(IMethodInvocation invocation, ILog
+    <literal>AbstractLoggingAdvice</literal>, which has the abstract method
+    <literal>object InvokeUnderLog(IMethodInvocation invocation, ILog
     log)</literal> and you can also override the method <literal>ILog
     GetLoggerForInvocation(IMethodInvocation invocation)</literal> to
     customize the logger instance used for logging. Refer to the SDK
@@ -675,9 +722,9 @@ on exception (#e is T(System.ArithmeticException)) retry 3x rate (1*#n + 0.5)</p
     following XML fragment. Alternatively, you can use the
     <literal>RetryAdvice</literal> class programatically.</para>
 
-    <programlisting language="myxml"><![CDATA[<object name="exceptionHandlingAdvice" type="Spring.Aspects.RetryAdvice, Spring.Aop">
-  <property name="retryExpression" value="on exception name ArithmeticException retry 3x delay 1s"/>
-</object>]]></programlisting>
+    <programlisting language="myxml">&lt;object name="exceptionHandlingAdvice" type="Spring.Aspects.RetryAdvice, Spring.Aop"&gt;
+  &lt;property name="retryExpression" value="on exception name ArithmeticException retry 3x delay 1s"/&gt;
+&lt;/object&gt;</programlisting>
 
     <sect2>
       <title>Language Reference</title>
@@ -721,13 +768,13 @@ on exception (#e is T(System.ArithmeticException)) retry 3x rate (1*#n + 0.5)</p
     <para>To address some of the common needs for validation on the server
     side, Spring provides parameter validation advice so that applies Spring's
     validation rules to the method parameters. The class
-    <literal>ParameterValidationAdvice</literal> is used in conjunction
-    with the <literal>Validated</literal> attribute to specify which
-    validation rules are applied to method parameters. For example, to apply
-    parameter validation to the method SuggestFlights in the BookingAgent
-    class used in the <link linkend="springair">SpringAir sample
-    application</link>, you would apply the <literal>Validated</literal>
-    attribute to the method parameters as shown below.</para>
+    <literal>ParameterValidationAdvice</literal> is used in conjunction with
+    the <literal>Validated</literal> attribute to specify which validation
+    rules are applied to method parameters. For example, to apply parameter
+    validation to the method SuggestFlights in the BookingAgent class used in
+    the <link linkend="springair">SpringAir sample application</link>, you
+    would apply the <literal>Validated</literal> attribute to the method
+    parameters as shown below.</para>
 
     <programlisting language="csharp">public <classname>FlightSuggestions</classname> SuggestFlights( [<classname>Validated</classname>("tripValidator")] <classname>Trip</classname> trip)
 {
@@ -736,30 +783,29 @@ on exception (#e is T(System.ArithmeticException)) retry 3x rate (1*#n + 0.5)</p
 
     <para>The <literal>Validated</literal> attribute takes a string name that
     specifies the name of the validation rule, i.e. the name of the IValidator
-    object in the Spring application context. The
-    <literal>Validated</literal> attribute is located in the namespace
-    <literal>Spring.Validation</literal> of the <literal>Spring.Core</literal>
-    assembly.</para>
+    object in the Spring application context. The <literal>Validated</literal>
+    attribute is located in the namespace <literal>Spring.Validation</literal>
+    of the <literal>Spring.Core</literal> assembly.</para>
 
     <para>The configuration of the advice is to simply define the an instance
     of the <literal>ParameterValidationAdvice</literal> class and apply the
     advice, for example based on object names using an
     <literal>ObjectNameAutoProxyCreator</literal>, as shown below,</para>
 
-    <programlisting language="myxml"><![CDATA[<object id="validationAdvice" type="Spring.Aspects.Validation.ParameterValidationAdvice, Spring.Aop"/>
+    <programlisting language="myxml">&lt;object id="validationAdvice" type="Spring.Aspects.Validation.ParameterValidationAdvice, Spring.Aop"/&gt;
 
-<object type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
-  <property name="ObjectNames">
-    <list>
-      <value>bookingAgent</value>
-    </list>
-  </property>
-  <property name="InterceptorNames">
-    <list>
-      <value>validationAdvice</value>
-    </list>
-  </property>
-</object>]]></programlisting>
+&lt;object type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop"&gt;
+  &lt;property name="ObjectNames"&gt;
+    &lt;list&gt;
+      &lt;value&gt;bookingAgent&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+  &lt;property name="InterceptorNames"&gt;
+    &lt;list&gt;
+      &lt;value&gt;validationAdvice&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
 
     <para>When the advised method is invoked first the validation of each
     method parameter is performed. If all validation succeeds, then the method

@@ -474,6 +474,12 @@ namespace Spring.Messaging.Nms.Connections
             // don't pass the call to the target.
         }
 
+        public TimeSpan RequestTimeout
+        {
+            get { return target.RequestTimeout; }
+            set { target.RequestTimeout = value; }
+        }
+
         public void Start()
         {
             // Handle start method: track started state.
@@ -504,16 +510,6 @@ namespace Spring.Messaging.Nms.Connections
             return target.CreateSession(acknowledgementMode);
         }
 
-
-        public ISession CreateSession(AcknowledgementMode acknowledgementMode, TimeSpan requestTimeout)
-        {
-            ISession session = singleConnectionFactory.GetSession(target, acknowledgementMode, requestTimeout);
-            if (session != null)
-            {
-                return session;
-            }
-            return target.CreateSession(acknowledgementMode, requestTimeout);
-        }
 
         #region Pass through implementations to the target connection
 

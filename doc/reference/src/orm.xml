@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="orm" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="orm" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Object Relational Mapping (ORM) data access</title>
 
   <section xml:id="orm-introduction">
@@ -48,11 +53,11 @@
       <listitem>
         <para><emphasis>Ease of testing.</emphasis> Spring's IoC approach
         makes it easy to swap the implementations and config locations of
-        Hibernate <literal>SessionFactory</literal> instances,
-        ADO.NET <literal>DbProvider</literal> instances,
-        transaction managers, and mapper object implementations (if needed).
-        This makes it much easier to isolate and test each piece of
-        persistence-related code in isolation.</para>
+        Hibernate <literal>SessionFactory</literal> instances, ADO.NET
+        <literal>DbProvider</literal> instances, transaction managers, and
+        mapper object implementations (if needed). This makes it much easier
+        to isolate and test each piece of persistence-related code in
+        isolation.</para>
       </listitem>
 
       <listitem>
@@ -69,21 +74,20 @@
       <listitem>
         <para><emphasis>General resource management.</emphasis> Spring
         application contexts can handle the location and configuration of
-        Hibernate <literal>ISessionFactory</literal> instances,
-        ADO.NET <literal>DbProvider</literal> instances and other
-        related resources. This makes these values easy to manage and change.
-        Spring offers efficient, easy and safe handling of persistence
-        resources. For example: related code using NHibernate generally needs
-        to use the same NHibernate <literal>Session</literal> for
-        efficiency and proper transaction handling. Spring makes it easy to
-        transparently create and bind a <literal>Session</literal>
-        to the current thread, either by using an explicit 'template' wrapper
-        class at the code level or by exposing a current
-        <literal>Session</literal> through the Hibernate
-        <literal>SessionFactory</literal> (for DAOs based on plain
-        Hibernate 1.2 API). Thus Spring solves many of the issues that
-        repeatedly arise from typical NHibernate usage, for any transaction
-        environment (local or distributed).</para>
+        Hibernate <literal>ISessionFactory</literal> instances, ADO.NET
+        <literal>DbProvider</literal> instances and other related resources.
+        This makes these values easy to manage and change. Spring offers
+        efficient, easy and safe handling of persistence resources. For
+        example: related code using NHibernate generally needs to use the same
+        NHibernate <literal>Session</literal> for efficiency and proper
+        transaction handling. Spring makes it easy to transparently create and
+        bind a <literal>Session</literal> to the current thread, either by
+        using an explicit 'template' wrapper class at the code level or by
+        exposing a current <literal>Session</literal> through the Hibernate
+        <literal>SessionFactory</literal> (for DAOs based on plain Hibernate
+        1.2 API). Thus Spring solves many of the issues that repeatedly arise
+        from typical NHibernate usage, for any transaction environment (local
+        or distributed).</para>
       </listitem>
 
       <listitem>
@@ -157,13 +161,13 @@
       for appropriate conversion of specific API exceptions to a common
       infrastructure exception hierarchy. Spring introduces a DAO exception
       hierarchy, applicable to any data access strategy. For direct ADO.NET,
-      the <literal>AdoTemplate</literal> class mentioned in a previous
-      section cares for connection handling, and for proper conversion of
-      ADO.NET data access exceptions (not even singly rooted in .NET 1.1) to
-      Spring's <literal>DataAccessException</literal> hierarchy, including
-      translation of database-specific SQL error codes to meaningful exception
-      classes. It supports both distributed and local transactions, via
-      respective Spring transaction managers.</para>
+      the <literal>AdoTemplate</literal> class mentioned in a previous section
+      cares for connection handling, and for proper conversion of ADO.NET data
+      access exceptions (not even singly rooted in .NET 1.1) to Spring's
+      <literal>DataAccessException</literal> hierarchy, including translation
+      of database-specific SQL error codes to meaningful exception classes. It
+      supports both distributed and local transactions, via respective Spring
+      transaction managers.</para>
 
       <para>Spring also offers Hibernate support, consisting of a
       <literal>HibernateTemplate</literal> analogous to
@@ -200,23 +204,22 @@
       the other the .NET 2.0 TransactionScope API.</para>
 
       <para>The first strategy is encapsulated in the class
-      <literal>Spring.Data.NHibernate.HibernateTransactionManager
-      </literal>in both the <literal>Spring.Data.NHibernate
-      </literal>namespace. This strategy is preferred when you are using a
-      single database. ADO.NET operations can also participate in the same
-      transaction, either by using AdoTemplate or by retrieving the ADO.NET
-      connection/transaction object pair stored in thread local storage when
-      the transaction begins. Refer to the documentation of Spring's ADO.NET
-      framework for more information on retrieving and using the
-      connection/transaction pair without using AdoTemplate. You can use the
-      HibernateTransactionManager and associated classes such as
-      SessionFactory, HibernateTemplate directly as you would any third party
-      API, however they are most commonly used through Spring's XML
-      configuration file to gain the benefits of easy configuration for a
-      particular runtime environment and as the basis for the configuration of
-      a data access layer also configured using XML. An XML fragment showing
-      the declaration of <literal>HibernateTransactionManager</literal> is
-      shown below.</para>
+      <literal>Spring.Data.NHibernate.HibernateTransactionManager </literal>in
+      both the <literal>Spring.Data.NHibernate </literal>namespace. This
+      strategy is preferred when you are using a single database. ADO.NET
+      operations can also participate in the same transaction, either by using
+      AdoTemplate or by retrieving the ADO.NET connection/transaction object
+      pair stored in thread local storage when the transaction begins. Refer
+      to the documentation of Spring's ADO.NET framework for more information
+      on retrieving and using the connection/transaction pair without using
+      AdoTemplate. You can use the HibernateTransactionManager and associated
+      classes such as SessionFactory, HibernateTemplate directly as you would
+      any third party API, however they are most commonly used through
+      Spring's XML configuration file to gain the benefits of easy
+      configuration for a particular runtime environment and as the basis for
+      the configuration of a data access layer also configured using XML. An
+      XML fragment showing the declaration of
+      <literal>HibernateTransactionManager</literal> is shown below.</para>
 
       <programlisting language="myxml">  &lt;object id="HibernateTransactionManager"
         type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate"&gt;
@@ -227,17 +230,17 @@
   &lt;/object&gt;</programlisting>
 
       <para>The important property of
-      <literal>HibernateTransactionManager</literal> are the references to
-      the DbProvider and the Hibernate ISessionFactory. For more information
-      on the DbProvider, refer to the chapter <link
+      <literal>HibernateTransactionManager</literal> are the references to the
+      DbProvider and the Hibernate ISessionFactory. For more information on
+      the DbProvider, refer to the chapter <link
       linkend="dbprovider">DbProvider</link> and the following section on
       SessionFactory set up.</para>
 
       <para>The second strategy is to use the class
-      <literal>Sping.Data.TxScopeTransactionManager</literal> that uses
-      .NET 2.0 System.Transaction namespace and its corresponding
-      TransactionScope API. This is preferred when you are using multiple
-      transactional resources, such as multiple databases.</para>
+      <literal>Sping.Data.TxScopeTransactionManager</literal> that uses .NET
+      2.0 System.Transaction namespace and its corresponding TransactionScope
+      API. This is preferred when you are using multiple transactional
+      resources, such as multiple databases.</para>
 
       <para>Both strategies associate one Hibernate Session for the scope of
       the transaction (scope in the general demarcation sense, not
@@ -264,13 +267,13 @@
       <para>To avoid tying application objects to hard-coded resource lookups,
       Spring allows you to define resources like a
       <literal>DbProvider</literal> or a Hibernate
-      <literal>SessionFactory</literal> as objects in an
-      application context. Application objects that need to access resources
-      just receive references to such pre-defined instances via object
-      references (the DAO definition in the next section illustrates this).
-      The following excerpt from an XML application context definition shows
-      how to set up Spring's ADO.NET DbProvider and a Hibernate
-      <literal>SessionFactory</literal> on top of it:</para>
+      <literal>SessionFactory</literal> as objects in an application context.
+      Application objects that need to access resources just receive
+      references to such pre-defined instances via object references (the DAO
+      definition in the next section illustrates this). The following excerpt
+      from an XML application context definition shows how to set up Spring's
+      ADO.NET DbProvider and a Hibernate <literal>SessionFactory</literal> on
+      top of it:</para>
 
       <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
          xmlns:db="http://www.springframework.net/database"&gt;
@@ -352,9 +355,9 @@
         </listitem>
 
         <listitem>
-          <para>Delegate to the <literal>DbProvider</literal> itself as
-          the NHibernate connection provider instead of listing it via
-          property hibernate.connection.provider via
+          <para>Delegate to the <literal>DbProvider</literal> itself as the
+          NHibernate connection provider instead of listing it via property
+          hibernate.connection.provider via
           <literal>HibernateProperties</literal>.</para>
         </listitem>
       </itemizedlist>
@@ -364,8 +367,8 @@
       hibernate.connection.provider is used and a warning level message is
       logged. If you use Spring's <literal>DbProvider</literal> as the
       NHibernate connection provider then you can take advantage of
-      <literal>IDbProvider</literal> implementations that will let you
-      change the connection string at runtime such as <link lang=""
+      <literal>IDbProvider</literal> implementations that will let you change
+      the connection string at runtime such as <link lang=""
       linkend="dbprovider-usercredentials">UserCredentialsDbProvider</link>
       and <link
       linkend="dbprovider-multidelegating">MultiDelegatingDbProvider</link>.</para>
@@ -377,20 +380,19 @@
         linkend="dbprovider-multidelegating">MultiDelegatingDbProvider</link>
         only change the connection string at runtime based on values in thread
         local storage and do not clear out the Hibernate cache that is unique
-        to each <literal>ISessionFactory</literal> instance. As such, they
-        are only useful for selecting at runtime a single database instance.
+        to each <literal>ISessionFactory</literal> instance. As such, they are
+        only useful for selecting at runtime a single database instance.
         Cleaning up an existing session factory when switching to a new
         database is left to user code. Creating a new session factory per
         connection string (assuming the same mapping files can be used across
         all databases connections) is not currently supported. To support this
         functionality, you can subclass
-        <literal>LocalSessionFactoryObject</literal> and override the
-        method <literal>ISessionFactory NewSessionFactory(Configuration
+        <literal>LocalSessionFactoryObject</literal> and override the method
+        <literal>ISessionFactory NewSessionFactory(Configuration
         config)</literal> so that it returns an implementation of
         <literal>ISessionFactory</literal> that selects among multiple
         instances based on values in thread local storage, much like the
-        implementation of
-        <literal>MultiDelegatingDbProvider</literal>.</para>
+        implementation of <literal>MultiDelegatingDbProvider</literal>.</para>
       </note>
     </section>
 
@@ -401,13 +403,12 @@
       methods that can be part of any custom data access object or business
       service. There are no restrictions on the implementation of the
       surrounding object at all, it just needs to provide a Hibernate
-      <literal>SessionFactory</literal>. It can get the latter
-      from anywhere, but preferably as an object reference from a Spring IoC
-      container - via a simple <methodname>SessionFactory</methodname>
-      property setter. The following snippets show a DAO definition in a
-      Spring container, referencing the above defined
-      <literal>SessionFactory</literal>, and an example for a DAO
-      method implementation.</para>
+      <literal>SessionFactory</literal>. It can get the latter from anywhere,
+      but preferably as an object reference from a Spring IoC container - via
+      a simple <methodname>SessionFactory</methodname> property setter. The
+      following snippets show a DAO definition in a Spring container,
+      referencing the above defined <literal>SessionFactory</literal>, and an
+      example for a DAO method implementation.</para>
 
       <programlisting language="myxml">&lt;objects&gt;
 
@@ -437,11 +438,11 @@
 
       <para>The <literal>HibernateTemplate</literal> class provides many
       methods that mirror the methods exposed on the Hibernate
-      <literal>Session</literal> interface, in addition to a
-      number of convenience methods such as the one shown above. If you need
-      access to the <literal>Session</literal> to invoke methods
-      that are not exposed on the <literal>HibernateTemplate</literal>,
-      you can always drop down to a callback-based approach like so.</para>
+      <literal>Session</literal> interface, in addition to a number of
+      convenience methods such as the one shown above. If you need access to
+      the <literal>Session</literal> to invoke methods that are not exposed on
+      the <literal>HibernateTemplate</literal>, you can always drop down to a
+      callback-based approach like so.</para>
 
       <programlisting language="csharp">public class HibernateCustomerDao : ICustomerDao {
 
@@ -483,20 +484,20 @@
       inside the anonymous delegate implementation.</para>
 
       <para>A callback implementation effectively can be used for any
-      Hibernate data access. <literal>HibernateTemplate</literal> will
-      ensure that <literal>Session</literal> instances are
-      properly opened and closed, and automatically participate in
-      transactions. The template instances are thread-safe and reusable, they
-      can thus be kept as instance variables of the surrounding class. For
-      simple single step actions like a single Find, Load, SaveOrUpdate, or
-      Delete call, <literal>HibernateTemplate</literal> offers alternative
-      convenience methods that can replace such one line callback
-      implementations. Furthermore, Spring provides a convenient
+      Hibernate data access. <literal>HibernateTemplate</literal> will ensure
+      that <literal>Session</literal> instances are properly opened and
+      closed, and automatically participate in transactions. The template
+      instances are thread-safe and reusable, they can thus be kept as
+      instance variables of the surrounding class. For simple single step
+      actions like a single Find, Load, SaveOrUpdate, or Delete call,
+      <literal>HibernateTemplate</literal> offers alternative convenience
+      methods that can replace such one line callback implementations.
+      Furthermore, Spring provides a convenient
       <literal>HibernateDaoSupport</literal> base class that provides a
       <methodname>SessionFactory</methodname> property for receiving a
-      <literal>SessionFactory</literal> and for use by subclasses.
-      In combination, this allows for very simple DAO implementations for
-      typical requirements:</para>
+      <literal>SessionFactory</literal> and for use by subclasses. In
+      combination, this allows for very simple DAO implementations for typical
+      requirements:</para>
 
       <programlisting language="csharp">public class HibernateCustomerDao : HibernateDaoSupport, ICustomerDao
 {
@@ -512,22 +513,21 @@
       <title>Implementing Spring-based DAOs without callbacks</title>
 
       <para>As an alternative to using Spring's
-      <literal>HibernateTemplate</literal> to implement DAOs, data access
-      code can also be written in a more traditional fashion, without wrapping
-      the Hibernate access code in a callback, while still respecting and
-      participating in Spring's generic
-      <literal>DataAccessException</literal> hierarchy. The
-      <literal>HibernateDaoSupport</literal> base class offers methods to
-      access the current transactional <literal>Session</literal>
+      <literal>HibernateTemplate</literal> to implement DAOs, data access code
+      can also be written in a more traditional fashion, without wrapping the
+      Hibernate access code in a callback, while still respecting and
+      participating in Spring's generic <literal>DataAccessException</literal>
+      hierarchy. The <literal>HibernateDaoSupport</literal> base class offers
+      methods to access the current transactional <literal>Session</literal>
       and to convert exceptions in such a scenario; similar methods are also
       available as static helpers on the
-      <literal>SessionFactoryUtils</literal> class. Note that such code
-      will usually pass '<literal>false</literal>' as the value of the
+      <literal>SessionFactoryUtils</literal> class. Note that such code will
+      usually pass '<literal>false</literal>' as the value of the
       <methodname>DoGetSession(..)</methodname> method's
       '<literal>allowCreate</literal>' argument, to enforce running within a
       transaction (which avoids the need to close the returned
-      <literal>Session</literal>, as its lifecycle is managed by
-      the transaction). Asking for the</para>
+      <literal>Session</literal>, as its lifecycle is managed by the
+      transaction). Asking for the</para>
 
       <programlisting language="csharp">public class HibernateProductDao extends HibernateDaoSupport implements ProductDao {
 
@@ -540,20 +540,19 @@
     }
 }</programlisting>
 
-      <para>This code will not translate the Hibernate exception to a generic
-      DataAccessException.</para>
+      <para>This code will <emphasis>not</emphasis> translate the Hibernate
+      exception to a generic <literal>DataAccessException</literal>.</para>
     </section>
 
     <section xml:id="orm-hibernate-straight">
-      <title>Implementing DAOs based on plain Hibernate 1.2 API</title>
+      <title>Implementing DAOs based on plain Hibernate 1.2/2.0 API</title>
 
       <para>Hibernate 1.2 introduced a feature called "contextual Sessions",
-      where Hibernate itself manages one current
-      <literal>ISession</literal> per transaction. This is roughly
-      equivalent to Spring's synchronization of one Hibernate
-      <literal>Session</literal> per transaction. A corresponding
-      DAO implementation looks like as follows, based on the plain Hibernate
-      API:</para>
+      where Hibernate itself manages one current <literal>ISession</literal>
+      per transaction. This is roughly equivalent to Spring's synchronization
+      of one Hibernate <literal>Session</literal> per transaction. A
+      corresponding DAO implementation looks like as follows, based on the
+      plain Hibernate API:</para>
 
       <programlisting language="csharp">public class ProductDaoImpl implements IProductDao {
 
@@ -592,8 +591,8 @@ public class HibernateCustomerDao : ICustomerDao {
 
       <para>The above DAO follows the Dependency Injection pattern: it fits
       nicely into a Spring IoC container, just like it would if coded against
-      Spring's <literal>HibernateTemplate</literal>. Of course, such a DAO
-      can also be set up in plain C# (for example, in unit tests): simply
+      Spring's <literal>HibernateTemplate</literal>. Of course, such a DAO can
+      also be set up in plain C# (for example, in unit tests): simply
       instantiate it and call <methodname>SessionFactory</methodname> property
       with the desired factory reference. As a Spring object definition, it
       would look as follows:</para>
@@ -651,26 +650,72 @@ public class HibernateCustomerDao : ICustomerDao {
       of course appealing from a non-invasiveness perspective, and will no
       doubt feel more natural to Hibernate developers.</para>
 
-      <para>However, the DAO throws plain
-      <literal>HibernateException</literal> which means that callers can
-      only treat exceptions as generally fatal - unless they want to depend on
-      Hibernate's own exception hierarchy. Catching specific causes such as an
-      optimistic locking failure is not possible without tying the caller to
-      the implementation strategy. This trade off might be acceptable to
-      applications that are strongly Hibernate-based and/or do not need any
-      special exception treatment.</para>
+      <section xml:id="orm-hibernate-straight-ex">
+        <title>Exception Translation</title>
 
-      <para>Fortunately, Spring's
-      <literal>LocalSessionFactoryObject</literal> supports Hibernate's
-      <methodname>SessionFactory.GetCurrentSession()</methodname> method for
-      any Spring transaction strategy, returning the current Spring-managed
-      transactional <literal>Session</literal> even with
-      <literal>HibernateTransactionManager</literal>.</para>
+        <para>However, the DAO implemenation as shown throws plain
+        <literal>HibernateException</literal> which means that callers can
+        only treat exceptions as generally fatal - unless they want to depend
+        on Hibernate's own exception hierarchy. Catching specific causes such
+        as an optimistic locking failure is not possible without tying the
+        caller to the implementation strategy. This trade off might be
+        acceptable to applications that are strongly Hibernate-based and/or do
+        not need any special exception treatment. As an alternative you can
+        use Spring's exception translation advice to convert the NHibernate
+        exception to Spring's DataAccessException hierarchy.</para>
 
-      <para>In summary: DAOs can be implemented based on the plain Hibernate
-      1.2 API, while still being able to participate in Spring-managed
-      transactions. In this approach there is one session associated with the
-      transaction.</para>
+        <para>Spring offers a solution allowing exception translation to be
+        applied transparently through the <literal>[Repository]</literal>
+        attribute:</para>
+
+        <programlisting language="csharp">[Repository]
+public class HibernateCustomerDao : ICustomerDao {
+
+  // class body here
+
+}</programlisting>
+
+        <para>and register an exception translation post processor.</para>
+
+        <programlisting>&lt;objects&gt;
+
+  &lt;!-- configure session factory (omittied for brevity) --&gt;
+
+  &lt;!-- Exception translation object post processor --&gt;
+  &lt;object type="Spring.Dao.Attributes.PersistenceExceptionTranslationPostProcessor, Spring.Data"/&gt;
+
+  &lt;!-- Same DAO configuration as before --&gt;
+  &lt;object id="CustomerDao" type="Spring.Northwind.Dao.NHibernate.HibernateCustomerDao, Spring.Northwind.Dao.NHibernate"&gt;
+    &lt;property name="sessionFactory" ref="MySessionFactory"/&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+
+        <para>The postprocessor will automatically look for all exception
+        translators (implementations of the
+        <literal>IPersistenceExceptionTranslator</literal> interface) and
+        advise all object marked with the <literal>[Repository]</literal>
+        attribute so that the discovered translators can intercept and apply
+        the appropriate translation on the thrown exceptions. Spring's
+        <literal>LocalSessionFactory</literal> object implements the
+        <literal>IPersistenceExceptionTranslator</literal> interface and
+        performs the same exception translation as was done when using
+        <literal>HibernateTemplate</literal>.</para>
+
+        <para>The <literal>[Repository</literal>] attribute is definedin the
+        Spring.Data assembly, however it is used as a 'marker' attribute, and
+        you can provide your own if you would like to avoid coupling your DAO
+        implementation to a Spring attribute. This is done by setting
+        <literal>PersistenceExceptionTranslationPostProcessor's</literal>
+        property <literal>RepositoryAttributeType</literal> to your own
+        attribute type.</para>
+
+        <para><note>
+            <para>In summary: DAOs can be implemented based on the plain
+            Hibernate 1.2/2.0 API, while still being able to participate in
+            Spring-managed transactions and exception translation.</para>
+          </note></para>
+      </section>
     </section>
 
     <section xml:id="orm-hibernate-tx-programmatic">
@@ -680,10 +725,10 @@ public class HibernateCustomerDao : ICustomerDao {
       application, on top of such lower-level data access services spanning
       any number of operations. There are no restrictions on the
       implementation of the surrounding business service here as well, it just
-      needs a Spring <literal>PlatformTransactionManager</literal>. Again,
-      the latter can come from anywhere, but preferably as an object reference
-      via a <methodname>TransactionManager</methodname> property - just like
-      the <literal>productDAO</literal> should be set via a
+      needs a Spring <literal>PlatformTransactionManager</literal>. Again, the
+      latter can come from anywhere, but preferably as an object reference via
+      a <methodname>TransactionManager</methodname> property - just like the
+      <literal>productDAO</literal> should be set via a
       <methodname>setProductDao(..)</methodname> method. The following
       snippets show a transaction manager and a business service definition in
       a Spring application context, and an example for a business method
@@ -691,7 +736,23 @@ public class HibernateCustomerDao : ICustomerDao {
 
       <programlisting language="myxml">&lt;objects&gt;
 
-TO BE DONE
+  &lt;object id="HibernateTransactionManager"
+        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate"&gt;
+
+    &lt;property name="DbProvider" ref="DbProvider"/&gt;
+    &lt;property name="SessionFactory" ref="MySessionFactory"/&gt;
+
+  &lt;/object&gt;
+
+  &lt;!-- DAO definition not listed, see above for an example. --&gt;
+
+  &lt;object id="FulfillmentService" type="Spring.Northwind.Service.FulfillmentService, Spring.Northwind.Service"&gt;
+    &lt;property name="CustomerDao" ref="CustomerDao"/&gt;
+    &lt;property name="OrderDao" ref="OrderDao"/&gt;
+    &lt;property name="ShippingService" ref="ShippingService"/&gt;
+    &lt;property name="TransactionManager" ref="HibernateTransactionManager"/&gt;
+  &lt;/object&gt;
+
 
 &lt;/objects&gt;</programlisting>
 
@@ -707,9 +768,35 @@ TO BE DONE
 
     private IShippingService shippingService;
 
+
+    public TransactionManager TransactionManager
+    {
+       set { transactionTemplate = new TransactionTemplate(value);
+    }
     public void ProcessCustomer(string customerId)
     {
-           TO BE DONE
+      tt.Execute(delegate(ITransactionStatus status) 
+          {
+            //Find all orders for customer
+            Customer customer = CustomerDao.FindById(customerId);
+            foreach (Order order in customer.Orders)
+            {
+                //Validate Order
+                Validate(order);
+
+                //Ship with external shipping service
+                ShippingService.ShipOrder(order);
+
+                //Update shipping date
+                order.ShippedDate = DateTime.Now;
+
+                //Update shipment date
+                OrderDao.SaveOrUpdate(order);
+
+                //Other operations...Decrease product quantity... etc
+            }
+            return null;
+          });
     }
 }</programlisting>
     </section>
@@ -846,19 +933,17 @@ TO BE DONE
       <title>Transaction management strategies</title>
 
       <para>Both <literal>TransactionTemplate</literal> and
-      <literal>TransactionInterceptor</literal> (not yet seen explicitly
-      in above configuration, TransactionProxyFactoryObject uses a
+      <literal>TransactionInterceptor</literal> (not yet seen explicitly in
+      above configuration, TransactionProxyFactoryObject uses a
       TransactionInterceptor, you would have to specify it explicitly if you
       were using an ordinary ProxyFactoryObject.) delegate the actual
-      transaction handling to a
-      <literal>PlatformTransactionManager</literal> instance, which can be
-      a <literal>HibernateTransactionManager</literal> (for a single
-      Hibernate <literal>SessionFactory</literal>, using a
-      <literal>ThreadLocal</literal>
-      <literal>Session</literal> under the hood) or a
-      <literal>TxScopeTransactionManager</literal> (delegating to MS-DTC
-      for distributed transaction) for Hibernate applications. You could even
-      use a custom <literal>PlatformTransactionManager</literal>
+      transaction handling to a <literal>PlatformTransactionManager</literal>
+      instance, which can be a <literal>HibernateTransactionManager</literal>
+      (for a single Hibernate <literal>SessionFactory</literal>, using a
+      <literal>ThreadLocal</literal> <literal>Session</literal> under the
+      hood) or a <literal>TxScopeTransactionManager</literal> (delegating to
+      MS-DTC for distributed transaction) for Hibernate applications. You
+      could even use a custom <literal>PlatformTransactionManager</literal>
       implementation. So switching from native Hibernate transaction
       management to TxScopeTransactionManager, such as when facing distributed
       transaction requirements for certain deployments of your application, is
@@ -868,22 +953,20 @@ TO BE DONE
       as they just use the generic transaction management APIs.</para>
 
       <para>For distributed transactions across multiple Hibernate session
-      factories, simply combine
-      <literal>TxScopeTransactionManager</literal> as a transaction
-      strategy with multiple <literal>LocalSessionFactoryObject</literal>
-      definitions. Each of your DAOs then gets one specific
-      <literal>SessionFactory</literal> reference passed into it's
-      respective object property.</para>
+      factories, simply combine <literal>TxScopeTransactionManager</literal>
+      as a transaction strategy with multiple
+      <literal>LocalSessionFactoryObject</literal> definitions. Each of your
+      DAOs then gets one specific <literal>SessionFactory</literal> reference
+      passed into it's respective object property.</para>
 
       <programlisting>TO BE DONE
      </programlisting>
 
       <para><literal>HibernateTransactionManager</literal> can export the
-      ADO.NET <literal>Transaction</literal> used by Hibernate to
-      plain ADO.NET access code, for a specific
-      <literal>DbProvider</literal>. (matching connection string).
-      This allows for high-level transaction demarcation with mixed
-      Hibernate/ADO.NET data access!</para>
+      ADO.NET <literal>Transaction</literal> used by Hibernate to plain
+      ADO.NET access code, for a specific <literal>DbProvider</literal>.
+      (matching connection string). This allows for high-level transaction
+      demarcation with mixed Hibernate/ADO.NET data access!</para>
     </section>
 
     <section xml:id="orm-hibernate-web">

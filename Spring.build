@@ -14,10 +14,10 @@
   <!-- Include spring helpers -->
   <include buildfile="${spring.basedir}/Spring.include"/>
 
-  <property name="package.version" value="1.1.2" unless="${property::exists('project.version')}"/>
+  <property name="package.version" value="1.2.0" unless="${property::exists('project.version')}"/>
   <property name="using-clover" value="false"/>
   <!-- change this to sync the sdk doc version generated -->
-  <property name="package.version.docs" value="1.1.0" unless="${property::exists('project.version')}"/>
+  <property name="package.version.docs" value="1.2.0" unless="${property::exists('project.version')}"/>
   <!-- make system environment variables available as NAnt properties -->
   <sysinfo/>
 

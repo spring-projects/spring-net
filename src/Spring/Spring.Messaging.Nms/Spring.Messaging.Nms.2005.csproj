@@ -83,8 +83,11 @@
     <Compile Include="Messaging\Nms\Listener\RecoveryTimeExceededException.cs" />
     <Compile Include="Messaging\Nms\Listener\SimpleMessageListenerContainer.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\IMessageConverter.cs" />
+    <Compile Include="Messaging\Nms\Support\Converter\ITypeMapper.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\MessageConversionException.cs" />
     <Compile Include="Messaging\Nms\Support\Converter\SimpleMessageConverter.cs" />
+    <Compile Include="Messaging\Nms\Support\Converter\TypeMapper.cs" />
+    <Compile Include="Messaging\Nms\Support\Converter\XmlMessageConverter.cs" />
     <Compile Include="Messaging\Nms\Support\Destinations\DynamicDestinationResolver.cs" />
     <Compile Include="Messaging\Nms\Support\Destinations\IDestinationResolver.cs" />
     <Compile Include="Messaging\Nms\Support\Destinations\NmsDestinationAccessor.cs" />

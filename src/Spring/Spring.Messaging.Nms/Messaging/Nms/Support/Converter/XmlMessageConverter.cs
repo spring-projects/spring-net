@@ -9,6 +9,10 @@ using Spring.Messaging.Nms.Support.Converter;
 
 namespace Spring.Messaging.Nms.Support.Converter
 {
+    /// <summary>
+    /// Convert an object via XML serialization for sending via an ITextMessage
+    /// </summary>
+    /// <author>Mark Pollack</author>
     public class XmlMessageConverter : IMessageConverter
     {
         private IMessageConverter defaultMessageConverter = new SimpleMessageConverter();
@@ -17,11 +21,24 @@ namespace Spring.Messaging.Nms.Support.Converter
         private ITypeMapper typeMapper;
 
 
+        /// <summary>
+        /// Sets the type mapper.
+        /// </summary>
+        /// <value>The type mapper.</value>
         public ITypeMapper TypeMapper
         {
             set { typeMapper = value; }
         }
 
+        /// <summary>
+        /// Convert a .NET object to a NMS Message using the supplied session
+        /// to create the message object.
+        /// </summary>
+        /// <param name="objectToConvert">the object to convert</param>
+        /// <param name="session">the Session to use for creating a NMS Message</param>
+        /// <returns>the NMS Message</returns>
+        /// <throws>NMSException if thrown by NMS API methods </throws>
+        /// <throws>MessageConversionException in case of conversion failure </throws>
         public IMessage ToMessage(object objectToConvert, ISession session)
         {
             if (objectToConvert == null)
@@ -49,7 +66,12 @@ namespace Spring.Messaging.Nms.Support.Converter
             }
         }
 
-        private string GetXmlString(object objectToConvert)
+        /// <summary>
+        /// Gets the XML string for an object
+        /// </summary>
+        /// <param name="objectToConvert">The object to convert.</param>
+        /// <returns>XML string</returns>
+        protected virtual string GetXmlString(object objectToConvert)
         {
             string xmlString;
             XmlTextWriter xmlTextWriter = null;
@@ -72,6 +94,12 @@ namespace Spring.Messaging.Nms.Support.Converter
             return xmlString;
         }
 
+        /// <summary>
+        /// Convert from a NMS Message to a .NET object.
+        /// </summary>
+        /// <param name="messageToConvert">the message to convert</param>
+        /// <returns>the converted .NET object</returns>
+        /// <throws>MessageConversionException in case of conversion failure </throws>
         public object FromMessage(IMessage messageToConvert)
         {
             if (messageToConvert == null)
@@ -108,13 +136,23 @@ namespace Spring.Messaging.Nms.Support.Converter
             }
         }
 
-        private Type GetTargetType(ITextMessage message)
+        /// <summary>
+        /// Gets the type of the target given the message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns>Type of the target</returns>
+        protected virtual Type GetTargetType(ITextMessage message)
         {
             return typeMapper.ToType(message.Properties.GetString(typeMapper.TypeIdFieldName));
         }
 
 
-        private String UTF8ByteArrayToString(Byte[] characters)
+        /// <summary>
+        /// Converts a byte array to a UTF8 string.
+        /// </summary>
+        /// <param name="characters">The characters.</param>
+        /// <returns>UTF8 string</returns>
+        protected virtual String UTF8ByteArrayToString(Byte[] characters)
         {
             UTF8Encoding encoding = new UTF8Encoding();
 
@@ -124,11 +162,16 @@ namespace Spring.Messaging.Nms.Support.Converter
         }
 
 
-        private Byte[] StringToUTF8ByteArray(String pXmlString)
+        /// <summary>
+        /// Converts a UTF8 string to a byte array
+        /// </summary>
+        /// <param name="xmlString">The p XML string.</param>
+        /// <returns></returns>
+        protected virtual Byte[] StringToUTF8ByteArray(String xmlString)
         {
             UTF8Encoding encoding = new UTF8Encoding();
 
-            Byte[] byteArray = encoding.GetBytes(pXmlString);
+            Byte[] byteArray = encoding.GetBytes(xmlString);
 
             return byteArray;
         }

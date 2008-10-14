@@ -16,10 +16,16 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="webservices" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="webservices"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Web Services</title>
 
-  <sect1>
+  <sect1 xml:id="web-services-introduction">
     <title>Introduction</title>
 
     <para>While the out-of-the-box support for web services in .NET is
@@ -66,7 +72,7 @@
     example named 'calculator'. More information can be found here '<link
     linkend="websvc-example">Web Services example</link>'.</para>
 
-    <sect2>
+    <sect2 xml:id="web-services-noasmx">
       <title>Removing the need for .asmx files</title>
 
       <para>Unlike web pages, which use <literal>.aspx</literal> files to
@@ -107,8 +113,8 @@ namespace MyComany.MyApp.Services
       is:</para>
 
       <para><emphasis> 1. Register the
-      <literal>Spring.Web.Services.WebServiceFactoryHandler</literal> as
-      the HTTP handler for <literal>*.asmx</literal> requests within one's
+      <literal>Spring.Web.Services.WebServiceFactoryHandler</literal> as the
+      HTTP handler for <literal>*.asmx</literal> requests within one's
       <literal>web.config</literal> file. </emphasis></para>
 
       <programlisting language="myxml">
@@ -156,7 +162,7 @@ namespace MyComany.MyApp.Services
       <programlisting>http://localhost/MyWebApp/HelloWorld.asmx</programlisting>
     </sect2>
 
-    <sect2>
+    <sect2 xml:id="web-services-di">
       <title>Injecting dependencies into web services</title>
 
       <para>For arguments sake, let's say that we want to change the
@@ -228,8 +234,8 @@ namespace MyApp.Services
 &lt;/object&gt;
       </programlisting>
 
-      <para>The <literal>WebServiceExporter</literal> copies the existing
-      web service and method attribute values to the proxy implementation (if
+      <para>The <literal>WebServiceExporter</literal> copies the existing web
+      service and method attribute values to the proxy implementation (if
       indeed any are defined). Please note however that existing values can be
       overridden by setting properties on the
       <literal>WebServiceExporter</literal>.</para>
@@ -248,7 +254,7 @@ namespace MyApp.Services
       </tip>
     </sect2>
 
-    <sect2>
+    <sect2 xml:id="web-services-exporter">
       <title>Exposing PONOs as Web Services</title>
 
       <para>Now that we are generating a server-side proxy for the service,
@@ -260,12 +266,12 @@ namespace MyApp.Services
       target service's methods.</para>
 
       <para>This means that we can safely remove the
-      <literal>WebService</literal> and <literal>WebMethod</literal>
-      attribute declarations from the service implementation, and what we are
-      left with is a plain old .NET object (a PONO). The example above would
-      still work, because the proxy generator will automatically add
-      <literal>WebMethod</literal> attributes to all methods of the
-      exported interfaces.</para>
+      <literal>WebService</literal> and <literal>WebMethod</literal> attribute
+      declarations from the service implementation, and what we are left with
+      is a plain old .NET object (a PONO). The example above would still work,
+      because the proxy generator will automatically add
+      <literal>WebMethod</literal> attributes to all methods of the exported
+      interfaces.</para>
 
       <para>However, that is still not the ideal solution. You would lose
       information that the optional <literal>WebService</literal> and
@@ -424,11 +430,10 @@ namespace MyApp.Services
       <para>Spring.NET provides a simple <literal>IFactoryObject</literal>
       implementation that will generate a <emphasis>"proxy for
       proxy"</emphasis> (however obtuse that may sound). Basically, the
-      <literal>Spring.Web.Services.WebServiceProxyFactory</literal> class
-      will create a proxy for the VS.NET- / WSDL-generated proxy that
-      implements a specified service interface (thus solving the problem with
-      the web-service proxy classes mentioned in the preceding
-      paragraph).</para>
+      <literal>Spring.Web.Services.WebServiceProxyFactory</literal> class will
+      create a proxy for the VS.NET- / WSDL-generated proxy that implements a
+      specified service interface (thus solving the problem with the
+      web-service proxy classes mentioned in the preceding paragraph).</para>
 
       <para>At this point, an example may well be more illustrative in
       conveying what is happening; consider the following interface definition
@@ -457,26 +462,25 @@ namespace MyCompany.Services
 
       <para>What is important to notice is that the underlying implementation
       class for the web service does not have to implement the same
-      <literal>IHelloWorld</literal> service interface... so long as
-      matching methods with compliant signatures exist (a kind of duck
-      typing), Spring.NET will be able to create a proxy and delegate method
-      calls appropriately. If a matching method cannot be found, the
-      Spring.NET infrastructure code will throw an exception.</para>
+      <literal>IHelloWorld</literal> service interface... so long as matching
+      methods with compliant signatures exist (a kind of duck typing),
+      Spring.NET will be able to create a proxy and delegate method calls
+      appropriately. If a matching method cannot be found, the Spring.NET
+      infrastructure code will throw an exception.</para>
 
       <para>That said, if you control both the client and the server it is
       probably a good idea to make sure that the web service class on the
       server implements the service interface, especially if you plan on
-      exporting it using Spring.NET's
-      <literal>WebServiceExporter</literal>, which requires an interface
-      in order to work.</para>
+      exporting it using Spring.NET's <literal>WebServiceExporter</literal>,
+      which requires an interface in order to work.</para>
     </sect2>
 
     <sect2>
       <title>Generating proxies dynamically</title>
 
-      <para>The <literal>WebServiceProxyFactory</literal> can also
-      dynamically generate a web-service proxy. The XML object definition for
-      this factory object is shown below</para>
+      <para>The <literal>WebServiceProxyFactory</literal> can also dynamically
+      generate a web-service proxy. The XML object definition for this factory
+      object is shown below</para>
 
       <programlisting language="myxml">
         &lt;object id="calculatorService" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services"&gt;
@@ -507,8 +511,8 @@ namespace MyCompany.Services
     <sect2>
       <title>Configuring the proxy instance</title>
 
-      <para>The <literal>WebServiceProxyFactory</literal> also implements
-      the interface,
+      <para>The <literal>WebServiceProxyFactory</literal> also implements the
+      interface,
       <literal>Spring.Objects.Factory.IConfigurableFactoryObject</literal>,
       allowing to specify configuration for the product that the
       <literal>WebServiceProxyFactory</literal> creates. This is done by

@@ -591,6 +591,16 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// Gets or sets the request timeout.
+        /// </summary>
+        /// <value>The request timeout.</value>
+        public TimeSpan RequestTimeout
+        {
+            get { return target.RequestTimeout; }
+            set { target.RequestTimeout = value; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this <see cref="CachedSession"/> is transacted.
         /// </summary>
         /// <value><c>true</c> if transacted; otherwise, <c>false</c>.</value>

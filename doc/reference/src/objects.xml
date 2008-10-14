@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="objects" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="objects" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>The IoC container</title>
 
   <sect1 xml:id="objects-introduction">
@@ -34,11 +39,11 @@
     interface provides an advanced configuration mechanism capable of managing
     objects of any nature. The <literal><ulink
     url="http://www.springframework.net/doc/api/html/Spring.Context.IApplicationContext.html">IApplicationContext</ulink></literal>
-    interface builds on top of the <literal>IObjectFactory</literal> (it
-    is a sub-interface) and adds other functionality such as easier
-    integration with Spring.NET's Aspect Oriented Programming (AOP) features,
-    message resource handling (for use in internationalization), event
-    propagation and application layer-specific context such as
+    interface builds on top of the <literal>IObjectFactory</literal> (it is a
+    sub-interface) and adds other functionality such as easier integration
+    with Spring.NET's Aspect Oriented Programming (AOP) features, message
+    resource handling (for use in internationalization), event propagation and
+    application layer-specific context such as
     <literal>WebApplicationContext</literal> for use in web
     applications.</para>
 
@@ -47,9 +52,9 @@
     <literal>IApplicationContext</literal> adds more enterprise-centric
     functionality to it. The <literal>IApplicationContext</literal> is a
     complete superset of the <literal>IObjectFactory</literal>, and any
-    description of <literal>IObjectFactory</literal> capabilities and
-    behavior should be considered to apply to
-    <literal>IApplicationContext</literal>s as well.</para>
+    description of <literal>IObjectFactory</literal> capabilities and behavior
+    should be considered to apply to <literal>IApplicationContext</literal>s
+    as well.</para>
 
     <para>This chapter is divided into two parts, with the <link
     linkend="objects-basics">first part</link> covering the basic principles
@@ -75,9 +80,9 @@
     <sect2 xml:id="objects-factory">
       <title>The container</title>
 
-      <para>The <literal>IObjectFactory</literal> is the actual
-      representation of the Spring IoC container that is responsible for
-      instantiating, configuring, and managing a number of objects.</para>
+      <para>The <literal>IObjectFactory</literal> is the actual representation
+      of the Spring IoC container that is responsible for instantiating,
+      configuring, and managing a number of objects.</para>
 
       <para>The <literal>IObjectFactory</literal> interface is the central IoC
       container interface in Spring. Its responsibilities include
@@ -85,11 +90,11 @@
       and assembling the dependencies between these objects.</para>
 
       <para>There are a number of implementations of the
-      <literal>IObjectFactory</literal> interface that come supplied
-      straight out-of-the-box with Spring. The most commonly used
+      <literal>IObjectFactory</literal> interface that come supplied straight
+      out-of-the-box with Spring. The most commonly used
       <literal>IObjectFactory</literal> implementation is the
-      <literal>XmlObjectFactory</literal> class. This implementation
-      allows you to express the objects that compose your application, and the
+      <literal>XmlObjectFactory</literal> class. This implementation allows
+      you to express the objects that compose your application, and the
       doubtless rich interdependencies between such objects, in terms of XML.
       The <literal>XmlObjectFactory</literal> takes this XML configuration
       metadata and uses it to create a fully configured system or application.
@@ -97,12 +102,12 @@
       discussed in <xref linkend="objects-factory-client" />. Additional
       features offered by another implementation of
       <literal>IObjectFactory</literal>, the
-      <literal>IApplicationContext</literal>, are discussed in section
-      <xref linkend="context-introduction" />.</para>
+      <literal>IApplicationContext</literal>, are discussed in section <xref
+      linkend="context-introduction" />.</para>
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/container-in-action.gif" format="GIF" />
+          <imagedata fileref="images/container-in-action.gif" format="GIF"></imagedata>
         </imageobject>
       </mediaobject>
 
@@ -186,10 +191,10 @@ IObjectFactory factory = context;</programlisting>
       url="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</ulink>
       </literal> abstraction. The <literal>IResource</literal> interface
       provides a simple and uniform interface to a wide array of IO resources
-      that can represent themselves as
-      <literal>System.IO.Stream</literal>. An example for a file based
-      resource, not using the URL syntax but an implementation of the
-      IResource interface for file is shown below.<programlisting language="csharp">[C#]
+      that can represent themselves as <literal>System.IO.Stream</literal>. An
+      example for a file based resource, not using the URL syntax but an
+      implementation of the IResource interface for file is shown
+      below.<programlisting language="csharp">[C#]
 IResource input = new FileSystemResource ("objects.xml");
 IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
@@ -223,9 +228,9 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 &lt;/spring&gt;</programlisting> The context type (specified as the value of
       the <literal>type</literal> attribute of the <literal>context</literal>
       element) is wholly optional, and defaults to the
-      <literal>Spring.Context.Support.XmlApplicationContext</literal>
-      class, so the following XML snippet is functionally equivalent to the
-      first. <programlisting language="myxml">&lt;spring&gt;
+      <literal>Spring.Context.Support.XmlApplicationContext</literal> class,
+      so the following XML snippet is functionally equivalent to the first.
+      <programlisting language="myxml">&lt;spring&gt;
   &lt;context&gt;
     &lt;resource uri="file://services.xml"/&gt;
     &lt;resource uri="assembly://MyAssembly/MyDataAccess/data-access.xml"/&gt;
@@ -234,15 +239,16 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
       <para>To acquire a reference to an
       <literal>IApplicationContext</literal> using a custom configuration
-      section, one simply uses the following code; <programlisting language="csharp">IApplicationContext ctx = ContextRegistry.GetContext();</programlisting>
-      The <literal>ContextRegistry</literal> is used to both instantiate
-      the application context and to perform service locator style access to
-      other objects. (See <xref linkend="objects-servicelocator" /> for more
+      section, one simply uses the following code; <programlisting
+      language="csharp">IApplicationContext ctx = ContextRegistry.GetContext();</programlisting>
+      The <literal>ContextRegistry</literal> is used to both instantiate the
+      application context and to perform service locator style access to other
+      objects. (See <xref linkend="objects-servicelocator" /> for more
       information). The glue that makes this possible is an implementation of
       the Base Class Library (BCL) provided
-      <literal>IConfigurationSectionHandler</literal> interface, namely
-      the <literal>Spring.Context.Support.ContextHandler</literal> class.
-      The handler class needs to be registered in the
+      <literal>IConfigurationSectionHandler</literal> interface, namely the
+      <literal>Spring.Context.Support.ContextHandler</literal> class. The
+      handler class needs to be registered in the
       <literal>configSections</literal> section of the .NET configuration file
       as shown below. <programlisting language="myxml">&lt;configSections&gt;
   &lt;sectionGroup name="spring"&gt;
@@ -254,12 +260,11 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
       <para>In some usage scenarios, user code will not have to explicitly
       instantiate an appropriate implementation of the
-      <literal>IObjectFactory</literal> interface, since Spring.NET code
-      will do it. For example, the ASP.NET web layer provides support code to
-      load a Spring.NET <literal>IApplicationContext</literal>
-      automatically as part of the normal startup process of an ASP.NET web
-      application. Similar support for WinForms applications is being
-      investigated.</para>
+      <literal>IObjectFactory</literal> interface, since Spring.NET code will
+      do it. For example, the ASP.NET web layer provides support code to load
+      a Spring.NET <literal>IApplicationContext</literal> automatically as
+      part of the normal startup process of an ASP.NET web application.
+      Similar support for WinForms applications is being investigated.</para>
 
       <para>While programmatic manipulation of
       <literal>IObjectFactory</literal> instances will be described later, the
@@ -279,9 +284,9 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
       <para>Your XML object definitions can also be defined within the
       standard .NET application configuration file by registering the
-      <literal>Spring.Context.Support.DefaultSectionHandler</literal>
-      class as the configuration section handler for inline object
-      definitions. This allows you to completely configure one or more
+      <literal>Spring.Context.Support.DefaultSectionHandler</literal> class as
+      the configuration section handler for inline object definitions. This
+      allows you to completely configure one or more
       <literal>IApplicationContext</literal> instances within a single
       standard .NET application configuration file as shown in the following
       example. <programlisting language="myxml">&lt;configuration&gt;
@@ -311,8 +316,8 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
       described in <xref linkend="context-functionality-hierarchy" /> and
       <xref linkend="objects-factory-xml-import" />.</para>
 
-      <para>The <literal>IApplicationContext</literal> can be configured
-      to register other resource handlers, custom parsers to integrate
+      <para>The <literal>IApplicationContext</literal> can be configured to
+      register other resource handlers, custom parsers to integrate
       user-contributed XML schema into the object definitions section, type
       converters, and define type aliases. These features are discussed in
       section <xref linkend="context-configuration" /></para>
@@ -525,7 +530,7 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
         <sect4>
           <title>Aliasing objects</title>
-          
+
           <para>In an object definition itself, you may supply more than one
           name for the object, by using a combination of the id and name
           attributes as discussed in <xref linkend="objects-objectname" />.
@@ -620,8 +625,8 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
         constructor (i.e. a constructor that has no parameters) in the source
         code definition of your class.</para>
 
-        <para>The <literal>XmlObjectFactory</literal> implementation of
-        the <literal>IObjectFactory</literal> interface can consume object
+        <para>The <literal>XmlObjectFactory</literal> implementation of the
+        <literal>IObjectFactory</literal> interface can consume object
         definitions that have been defined in XML, for example...
         <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"/&gt;</programlisting></para>
 
@@ -631,16 +636,15 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
         <para>This XML fragment describes an object definition that will be
         identified by the <emphasis>exampleObject</emphasis> name, instances
-        of which will be of the <literal>Examples.ExampleObject</literal>
-        type that has been compiled into the
-        <literal>ExamplesLibrary</literal> assembly. Take special note of the
-        structure of the <literal>type</literal> attribute's value... the
-        namespace-qualified name of the class is specified, followed by a
-        comma, followed by (at a bare minimum) the name of the assembly that
-        contains the class. In the preceding example, the
-        <literal>ExampleObject</literal> class is defined in the
-        <literal>Examples</literal> namespace, and it has been compiled into
-        the <literal>ExamplesLibrary</literal> assembly.</para>
+        of which will be of the <literal>Examples.ExampleObject</literal> type
+        that has been compiled into the <literal>ExamplesLibrary</literal>
+        assembly. Take special note of the structure of the
+        <literal>type</literal> attribute's value... the namespace-qualified
+        name of the class is specified, followed by a comma, followed by (at a
+        bare minimum) the name of the assembly that contains the class. In the
+        preceding example, the <literal>ExampleObject</literal> class is
+        defined in the <literal>Examples</literal> namespace, and it has been
+        compiled into the <literal>ExamplesLibrary</literal> assembly.</para>
 
         <para>The name of the assembly that contains the type
         <emphasis>must</emphasis> be specified in the <literal>type</literal>
@@ -660,8 +664,8 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
         <para>If you have defined nested classes use the addition symbol, +,
         to reference the nested class. For example, if the class
         <literal>Examples.ExampleObject</literal> had a nested class
-        <literal>Person</literal> the XML declaration would be
-        <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject+Person, ExamplesLibrary"/&gt;</programlisting></para>
+        <literal>Person</literal> the XML declaration would be <programlisting
+        language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject+Person, ExamplesLibrary"/&gt;</programlisting></para>
 
         <para>If you are defining classes that have been compiled into
         assemblies that are available to your application (such as the
@@ -716,7 +720,8 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
         an object in the current (or parent/ancestor) container that contains
         the instance method that is to be invoked to create the object. The
         name of the factory method itself should still be set via the
-        <literal>'factory-method'</literal> attribute.<programlisting language="myxml">&lt;!-- the factory object, which contains an instance method called 'CreateInstance' --&gt;
+        <literal>'factory-method'</literal> attribute.<programlisting
+        language="myxml">&lt;!-- the factory object, which contains an instance method called 'CreateInstance' --&gt;
 &lt;object id="exampleFactory" type="..."&gt;
   &lt;!-- inject any dependencies required by this object --&gt;
 &lt;/object&gt;
@@ -797,7 +802,8 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
  &lt;alias name="GenericDictionary" type=" System.Collections.Generic.Dictionary&amp;lt;,&gt;" /&gt;
  &lt;alias name="myDictionary" type="System.Collections.Generic.Dictionary&amp;lt;int,string&gt;" /&gt;
 &lt;/typeAliases&gt;
-</programlisting> So that instead of something like this <programlisting language="myxml">&lt;object id="myGenericObject" 
+</programlisting> So that instead of something like this <programlisting
+        language="myxml">&lt;object id="myGenericObject" 
         type="GenericsPlay.ExampleGenericObject&amp;lt;System.Collections.Generic.Dictionary&amp;lt;int , string&gt;&gt;, GenericsPlay" /&gt;</programlisting>
         It can be shortened to <programlisting language="myxml">&lt;object id="myOtherGenericObject" 
         type="GenericsPlay.ExampleGenericObject&amp;lt;GenericDictionary&amp;lt;int , string&gt;&gt;, GenericsPlay" /&gt;</programlisting>
@@ -836,7 +842,8 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
         set { someStringKeyedDictionary = value; }
     }
 
-}</programlisting> The accompanying factory class is <programlisting language="csharp">
+}</programlisting> The accompanying factory class is <programlisting
+        language="csharp">
 public class TestGenericObjectFactory
 {
     public static TestGenericObject&lt;V, W&gt; StaticCreateInstance&lt;V, W&gt;()
@@ -851,7 +858,8 @@ public class TestGenericObjectFactory
 }
 </programlisting> The XML snippet to create an instance of TestGenericObject
         where <literal>V</literal> is a List of integers and
-        <literal>W</literal> is an integer is shown below <programlisting language="myxml">&lt;object id="myTestGenericObject"
+        <literal>W</literal> is an integer is shown below <programlisting
+        language="myxml">&lt;object id="myTestGenericObject"
         type="GenericsPlay.TestGenericObjectFactory, GenericsPlay"
         factory-method="StaticCreateInstance&amp;lt;System.Collections.Generic.List&amp;lt;int&gt;,int&gt;"
 /&gt;</programlisting> The StaticCreateInstance method is responsible for
@@ -878,9 +886,9 @@ public class TestGenericObjectFactory
     <sect2 xml:id="objects-factory-client">
       <title>Using the container</title>
 
-      <para>An <literal>IApplicationContext</literal> is essentially
-      nothing more than the interface for an advanced factory capable of
-      maintaining a registry of different objects and their dependencies. The
+      <para>An <literal>IApplicationContext</literal> is essentially nothing
+      more than the interface for an advanced factory capable of maintaining a
+      registry of different objects and their dependencies. The
       <literal>IApplicationContext</literal> enables you to read object
       definitions and access them. You create one and read in some object
       definition in the XML format as follows:</para>
@@ -891,10 +899,10 @@ public class TestGenericObjectFactory
       <para>Basically that is all there is to it. Using
       <literal>GetObject(string)</literal> or the indexer
       <literal>[string]</literal>, you can retrieve instances of your object;
-      the client-side view of the <literal>IApplicationContext</literal>
-      is simple. The <literal>IApplicationContext</literal> interface has
-      just a few other methods related to finding objects in the contianer,
-      but ideally your application code should never use them... indeed, your
+      the client-side view of the <literal>IApplicationContext</literal> is
+      simple. The <literal>IApplicationContext</literal> interface has just a
+      few other methods related to finding objects in the contianer, but
+      ideally your application code should never use them... indeed, your
       application code should have no calls to the
       <literal>GetObject(string)</literal> method at all, and thus no
       dependency on Spring APIs at all.</para>
@@ -1268,8 +1276,8 @@ namespace SimpleApp
               initialized with a configuration which describes all the
               objects. Most Spring.NET users use an
               <literal>IObjectFactory</literal> or
-              <literal>IApplicationContext</literal> variant that supports
-              XML format configuration files.</para>
+              <literal>IApplicationContext</literal> variant that supports XML
+              format configuration files.</para>
 
               <para></para>
             </listitem>
@@ -1294,16 +1302,16 @@ namespace SimpleApp
 
             <listitem>
               <para><anchor
-              id="object-factory-collaborators-typeconverter" />Each property
-              or constructor argument which is a value must be able to be
-              converted from whatever format it was specified in, to the
+              id="object-factory-collaborators-typeconverter"></anchor>Each
+              property or constructor argument which is a value must be able
+              to be converted from whatever format it was specified in, to the
               actual <literal>System.Type</literal> of that property or
               constructor argument. By default Spring.NET can convert a value
               supplied in string format to all built-in types, such as
               <literal>int</literal>, <literal>long</literal>,
               <literal>string</literal>, <literal>bool</literal>, etc.
-              Spring.NET uses <literal>TypeConverter</literal> definitions
-              to be able to convert string values to other, arbitrary types.
+              Spring.NET uses <literal>TypeConverter</literal> definitions to
+              be able to convert string values to other, arbitrary types.
               Refer to <xref linkend="objects-objects-conversion" /> for more
               information regarding type conversion, and how you can design
               your classes to be convertible by Spring.NET.</para>
@@ -1316,11 +1324,11 @@ namespace SimpleApp
         However, the object properties themselves are not set until the object
         is actually created. For those object that defined as singletons and
         set to be pre-instantiated (such as singleton object in an
-        <literal>IApplicationContext</literal>), creation happens at the
-        time that the container is created, but otherwise this is only when
-        the object is requested. When an object actually has to be created,
-        this will potentially cause a graph of other objects to be created, as
-        its dependencies and its dependencies' dependencies (and so on) are
+        <literal>IApplicationContext</literal>), creation happens at the time
+        that the container is created, but otherwise this is only when the
+        object is requested. When an object actually has to be created, this
+        will potentially cause a graph of other objects to be created, as its
+        dependencies and its dependencies' dependencies (and so on) are
         created and assigned.</para>
 
         <sidebar>
@@ -1362,12 +1370,12 @@ namespace SimpleApp
         that object or one of its dependencies. This could happen if the
         object throws an exception as a result of a missing or invalid
         property, for example. This potentially delayed visibility of some
-        configuration issues is why <literal>IApplicationContext</literal>
-        by default pre-instantiates singleton objects. At the cost of some
+        configuration issues is why <literal>IApplicationContext</literal> by
+        default pre-instantiates singleton objects. At the cost of some
         upfront time and memory to create these objects before they are
         actually needed, you find out about configuration issues when the
-        <literal>IApplicationContext</literal> is created, not later. If
-        you wish, you can still override this default behavior and set any of
+        <literal>IApplicationContext</literal> is created, not later. If you
+        wish, you can still override this default behavior and set any of
         these singleton objects to lazy-load (not be preinstantiated)</para>
 
         <para>If no circular dependencies are involved (see sidebar for a
@@ -1381,8 +1389,8 @@ namespace SimpleApp
         configure'</emphasis> to mean that the object will be instantiated (if
         not a pre-instantiated singleton), all of its dependencies will be
         set, and the relevant lifecycle methods (such as a configured init
-        method or the <literal>IIntializingObject</literal> callback
-        method) will all be invoked.</para>
+        method or the <literal>IIntializingObject</literal> callback method)
+        will all be invoked.</para>
       </sect3>
 
       <sect3 xml:id="objects-di-examples">
@@ -1390,7 +1398,8 @@ namespace SimpleApp
 
         <para>First, an example of using XML-based configuration metadata for
         setter-based DI. Find below a smallpart of a Spring XML configuration
-        file specifying some object definitions. <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"&gt;
+        file specifying some object definitions. <programlisting
+        language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"&gt;
 
     &lt;!-- setter injection using the ref attribute --&gt;
     &lt;property name="objectOne" ref="anotherExampleObject"/&gt;    
@@ -1554,10 +1563,10 @@ public class MixedIocObject
         <para>The <literal>&lt;value/&gt;</literal> element specifies a
         property or constructor argument as a human-readable string
         representation. As mentioned previously,
-        <literal>TypeConverter</literal> instances are used to convert
-        these string values from a <literal>System.String</literal> to the
-        actual property or argument type. Custom
-        <literal>TypeConverter</literal> implementations in the
+        <literal>TypeConverter</literal> instances are used to convert these
+        string values from a <literal>System.String</literal> to the actual
+        property or argument type. Custom <literal>TypeConverter</literal>
+        implementations in the
         <literal>Spring.Objects.TypeConverters</literal> namespace are used to
         augment the functionality offered by the .NET BCL's default
         <literal>TypeConverter</literal> implementations.</para>
@@ -1615,7 +1624,8 @@ public class MixedIocObject
           actual XML file, and the object name is the object
           <emphasis>id</emphasis>, the <literal>local</literal> attribute may
           be used, which will allow the XML parser itself to validate the
-          object name even earlier, at parse time. <programlisting language="myxml">&lt;property name="targetName"&gt;
+          object name even earlier, at parse time. <programlisting
+          language="myxml">&lt;property name="targetName"&gt;
   &lt;idref local="theTargetObject"/&gt; 
 &lt;/property&gt;</programlisting></para>
         </sect4>
@@ -1629,9 +1639,9 @@ public class MixedIocObject
         set the value of the specified property to be a reference to another
         object managed by the container, a collaborator, so to speak. As you
         saw in the previous example to set collection properties, we used the
-        <literal>SqlConnection</literal> instance from the initial example
-        as a collaborator and specified it using a &lt;ref object/&gt;
-        element. As mentioned in a previous section, the referred-to object is
+        <literal>SqlConnection</literal> instance from the initial example as
+        a collaborator and specified it using a &lt;ref object/&gt; element.
+        As mentioned in a previous section, the referred-to object is
         considered to be a dependency of the object who's property is being
         set, and will be initialized on demand as needed (if it is a singleton
         object it may have already been initialized by the container) before
@@ -1644,8 +1654,8 @@ public class MixedIocObject
         <literal>object</literal> attribute of the <literal>ref</literal> tag
         is the most general form, and will allow creating a reference to any
         object in the same <literal>IObjectFactory</literal> /
-        <literal>IApplicationContext</literal> (whether or not in the same
-        XML file), or parent <literal>IObjectFactory</literal> /
+        <literal>IApplicationContext</literal> (whether or not in the same XML
+        file), or parent <literal>IObjectFactory</literal> /
         <literal>IApplicationContext</literal>. The value of the
         <literal>object</literal> attribute may be the same as either the
         <literal>id</literal> attribute of the target object, or one of the
@@ -1673,11 +1683,11 @@ public class MixedIocObject
         values in the <literal>name</literal> attribute of the target object,
         and the target object <emphasis role="bold">must</emphasis> be in a
         parent <literal>IObjectFactory</literal> or
-        <literal>IApplicationContext</literal> of the current one. The
-        main use of this object reference variant is when there is a need to
-        wrap an existing object in a parent context with some sort of proxy
-        (which may have the same name as the parent), and needs the original
-        object so it may wrap it.</para>
+        <literal>IApplicationContext</literal> of the current one. The main
+        use of this object reference variant is when there is a need to wrap
+        an existing object in a parent context with some sort of proxy (which
+        may have the same name as the parent), and needs the original object
+        so it may wrap it.</para>
 
         <para>
           <programlisting language="myxml">&lt;ref parent="someObject"/&gt;</programlisting>
@@ -1781,25 +1791,24 @@ public class MixedIocObject
 
         <para>Spring supports setting values for classes that expose
         properties based on the generic collection interfaces
-        <literal>IList&lt;T&gt;</literal> and
-        <literal>IDictionary&lt;TKey, TValue&gt;</literal>. The type
-        parameter for these collections is specified by using the XML
-        attribute <literal>element-type</literal> for
-        <literal>IList&lt;T&gt;</literal> and the XML attributes
+        <literal>IList&lt;T&gt;</literal> and <literal>IDictionary&lt;TKey,
+        TValue&gt;</literal>. The type parameter for these collections is
+        specified by using the XML attribute <literal>element-type</literal>
+        for <literal>IList&lt;T&gt;</literal> and the XML attributes
         <literal>key-type</literal> and <literal>value-type</literal> for
-        <literal>IDictionary&lt;TKey, TValue&gt;</literal>. The values of
-        the collection are automaticaly converted from a string to the
-        appropriate type. If you are using your own user-defined type as a
-        generic type parameter you will likely need to register a custom type
-        converter. Refer to <xref linkend="objects-type-conversion" /> for
-        more information. The implementations of
-        <literal>IList&lt;T&gt;</literal> and
-        <literal>IDictionary&lt;TKey, TValue&gt;</literal> that is created
+        <literal>IDictionary&lt;TKey, TValue&gt;</literal>. The values of the
+        collection are automaticaly converted from a string to the appropriate
+        type. If you are using your own user-defined type as a generic type
+        parameter you will likely need to register a custom type converter.
+        Refer to <xref linkend="objects-type-conversion" /> for more
+        information. The implementations of <literal>IList&lt;T&gt;</literal>
+        and <literal>IDictionary&lt;TKey, TValue&gt;</literal> that is created
         are <literal>System.Collections.Generic.List</literal> and
         <literal>System.Collections.Generic.Dictionary</literal>.</para>
 
         <para>The following class represents a lottery ticket and demonstrates
-        how to set the values of a generic IList. <programlisting language="csharp">public class LotteryTicket { 
+        how to set the values of a generic IList. <programlisting
+        language="csharp">public class LotteryTicket { 
 
   List&lt;int&gt; list;
 
@@ -1833,10 +1842,11 @@ public class MixedIocObject
         demonstrates the use of generics using the
         <literal>Spring.Expressions.IExpression</literal> interface as the
         generic type parameter for the IList element-type and the value-type
-        for IDictionary. <literal>Spring.Expressions.IExpression</literal>
-        has an associated type converter,
+        for IDictionary. <literal>Spring.Expressions.IExpression</literal> has
+        an associated type converter,
         <literal>Spring.Objects.TypeConverters.ExpressionConverter</literal>
-        that is already pre-registered with Spring. <programlisting language="csharp">    public class GenericExpressionHolder
+        that is already pre-registered with Spring. <programlisting
+        language="csharp">    public class GenericExpressionHolder
     {
         private System.Collections.Generic.IList&lt;IExpression&gt; expressionsList;
 
@@ -2001,7 +2011,8 @@ public class MixedIocObject
 
 &lt;entry key="myKey"&gt;
   &lt;value&gt;hello&lt;/value&gt;
-&lt;/entry&gt;</programlisting> are equivalent to:<programlisting language="myxml">&lt;property name="myProperty" value="hello"/&gt;
+&lt;/entry&gt;</programlisting> are equivalent to:<programlisting
+        language="myxml">&lt;property name="myProperty" value="hello"/&gt;
 
 &lt;constructor-arg value="hello"/&gt; 
 
@@ -2019,7 +2030,8 @@ public class MixedIocObject
 
 &lt;constructor-arg index="0"&gt; 
   &lt;ref object="anotherObject"/&gt; 
-&lt;/constructor-arg&gt;</programlisting> is equivalent to... <programlisting language="myxml">&lt;property name="myProperty" ref="anotherObject"/&gt;
+&lt;/constructor-arg&gt;</programlisting> is equivalent to... <programlisting
+        language="myxml">&lt;property name="myProperty" ref="anotherObject"/&gt;
 
 &lt;constructor-arg index="0" ref="anotherObject"/&gt;</programlisting></para>
 
@@ -2031,12 +2043,14 @@ public class MixedIocObject
 
         <para>Finally, the entry element allows a shortcut form the specify
         the key and/or value of a dictionary, in the form of key/key-ref and
-        value/value-ref attributes. Therefore, the following <programlisting language="myxml">&lt;entry&gt; 
+        value/value-ref attributes. Therefore, the following <programlisting
+        language="myxml">&lt;entry&gt; 
   &lt;key&gt;
      &lt;ref object="MyKeyObject"/&gt;
   &lt;/key&gt; 
   &lt;ref object="MyValueObject"/&gt; 
-&lt;/entry&gt;</programlisting> Is equivalent to: <programlisting language="myxml">&lt;entry key-ref="MyKeyObject" value-ref="MyValueObject"/&gt;</programlisting>
+&lt;/entry&gt;</programlisting> Is equivalent to: <programlisting
+        language="myxml">&lt;entry key-ref="MyKeyObject" value-ref="MyValueObject"/&gt;</programlisting>
         As mentioned previously, the equivalence is to <literal>&lt;ref
         object="xxx"&gt;</literal> and not the local or parent forms of object
         references.</para>
@@ -2087,7 +2101,8 @@ public class MixedIocObject
       attribute may be used to explicitly force one or more objects to be
       initialized before the object using this element is initialized. Find
       below an example of using the '<literal>depends-on</literal>' attribute
-      to express a dependency on a single object.. <programlisting language="myxml">&lt;object id="objectOne" type="Examples.ExampleObject, ExamplesLibrary" depends-on="manager"&gt;
+      to express a dependency on a single object.. <programlisting
+      language="myxml">&lt;object id="objectOne" type="Examples.ExampleObject, ExamplesLibrary" depends-on="manager"&gt;
   &lt;property name="manager" ref="manager"/&gt;
 &lt;/object&gt;
 
@@ -2119,20 +2134,20 @@ public class MixedIocObject
     <sect2>
       <title>Lazily-instantiated objects</title>
 
-      <para>The default behavior for
-      <literal>IApplicationContext</literal> implementations is to eagerly
-      pre-instantiate all singleton objects at startup. Pre-instantiation
-      means that an <literal>IApplicationContext</literal> will eagerly
-      create and configure all of its singleton objects as part of its
-      initialization process. Generally this is a good thing, because it means
-      that any errors in the configuration or in the surrounding environment
-      will be discovered immediately (as opposed to possibly hours or even
-      days down the line).</para>
+      <para>The default behavior for <literal>IApplicationContext</literal>
+      implementations is to eagerly pre-instantiate all singleton objects at
+      startup. Pre-instantiation means that an
+      <literal>IApplicationContext</literal> will eagerly create and configure
+      all of its singleton objects as part of its initialization process.
+      Generally this is a good thing, because it means that any errors in the
+      configuration or in the surrounding environment will be discovered
+      immediately (as opposed to possibly hours or even days down the
+      line).</para>
 
       <para>However, there are times when this behavior is not what is wanted.
       If you do not want a singleton object to be pre-instantiated when using
-      an <literal>IApplicationContext</literal>, you can selectively
-      control this by marking an object definition as lazy-initialized. A
+      an <literal>IApplicationContext</literal>, you can selectively control
+      this by marking an object definition as lazy-initialized. A
       lazily-initialized object indicates to the IoC container whether or not
       an object instance should be created at startup or when it is first
       requested.</para>
@@ -2155,13 +2170,13 @@ public class MixedIocObject
       though an object definition may be marked up as being lazy-initialized,
       if the lazy-initialized object is the dependency of a singleton object
       that is not lazy-initialized, when the
-      <literal>IApplicationContext</literal> is eagerly pre-instantiating
-      the singleton, it will have to satisfy all of the singletons
-      dependencies, one of which will be the lazy-initialized object! So don't
-      be confused if the IoC container creates one of the objects that you
-      have explicitly configured as lazy-initialized at startup; all that
-      means is that the lazy-initialized object is being injected into a
-      non-lazy-initialized singleton object elsewhere.</para>
+      <literal>IApplicationContext</literal> is eagerly pre-instantiating the
+      singleton, it will have to satisfy all of the singletons dependencies,
+      one of which will be the lazy-initialized object! So don't be confused
+      if the IoC container creates one of the objects that you have explicitly
+      configured as lazy-initialized at startup; all that means is that the
+      lazy-initialized object is being injected into a non-lazy-initialized
+      singleton object elsewhere.</para>
 
       <para>It is also possible to control lazy-initialization at the
       container level by using the
@@ -2236,14 +2251,14 @@ public class MixedIocObject
 
                 <entry>This option gives you the ability to resolve
                 collaborators by type instead of by name. Supposing you have
-                an <literal>IObjectDefinition</literal> with a
-                collaborator typed <literal>SqlConnection</literal>,
-                Spring.NET will search the entire object factory for an object
-                definition of type <literal>SqlConnection</literal> and
-                use it as the collaborator. <emphasis>If 0 (zero) or more than
-                1 (one) object definitions of the desired type exist in the
-                container, a failure will be reported and you won't be able to
-                use autowiring for that specific object.</emphasis></entry>
+                an <literal>IObjectDefinition</literal> with a collaborator
+                typed <literal>SqlConnection</literal>, Spring.NET will search
+                the entire object factory for an object definition of type
+                <literal>SqlConnection</literal> and use it as the
+                collaborator. <emphasis>If 0 (zero) or more than 1 (one)
+                object definitions of the desired type exist in the container,
+                a failure will be reported and you won't be able to use
+                autowiring for that specific object.</emphasis></entry>
               </row>
 
               <row>
@@ -2640,13 +2655,13 @@ public class ReplacementComputeValue : IMethodReplacer
       method invocation into a constructor (as an argument) or as the value of
       a property setter. Similarly,
       <literal>PropertyRetrievingFactoryObject</literal> and
-      <literal>FieldRetrievingFactoryObject</literal> allow you to
-      retrieve values from another object's property or field value. These
-      classes implement the <literal>IFactoryObject</literal> interface
-      which indicates to Spring.NET that this object is itself a factory and
-      the factories product, not the factory itself, is what will be
-      associated with the object id. Factory objects are discussed further in
-      <xref linkend="objects-factory-lifecycle-factoryobject" /></para>
+      <literal>FieldRetrievingFactoryObject</literal> allow you to retrieve
+      values from another object's property or field value. These classes
+      implement the <literal>IFactoryObject</literal> interface which
+      indicates to Spring.NET that this object is itself a factory and the
+      factories product, not the factory itself, is what will be associated
+      with the object id. Factory objects are discussed further in <xref
+      linkend="objects-factory-lifecycle-factoryobject" /></para>
 
       <sect3>
         <title>Setting a reference to the value of property.</title>
@@ -2661,23 +2676,23 @@ public class ReplacementComputeValue : IMethodReplacer
         must obviously be static).</para>
 
         <para>In the case of a property exposed on an instance, the target
-        object that a <literal>PropertyRetrievingFactoryObject</literal>
-        will evaluate can be either an object instance specified directly
-        inline or a reference to another arbitrary object. In the case of a
-        static property exposed on a class, the target object will be the
-        class (the .NET <literal>System.Type</literal>) exposing the
-        property.</para>
+        object that a <literal>PropertyRetrievingFactoryObject</literal> will
+        evaluate can be either an object instance specified directly inline or
+        a reference to another arbitrary object. In the case of a static
+        property exposed on a class, the target object will be the class (the
+        .NET <literal>System.Type</literal>) exposing the property.</para>
 
         <para>The result of evaluating the property lookup may then be used in
         another object definition as a property value or constructor argument.
         Note that nested properties are supported for both instance and class
-        property lookups. The <literal>IFactoryObject</literal> is
-        discussed more generally in <xref
+        property lookups. The <literal>IFactoryObject</literal> is discussed
+        more generally in <xref
         linkend="objects-factory-lifecycle-factoryobject" />.</para>
 
         <para>Here's an example where a property path is used against another
         object instance. In this case, an inner object definition is used and
-        the property path is nested, i.e. spouse.age. <programlisting language="myxml">&lt;object name="person" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
+        the property path is nested, i.e. spouse.age. <programlisting
+        language="myxml">&lt;object name="person" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
   &lt;property name="age" value="20"/&gt;
   &lt;property name="spouse"&gt;
     &lt;object type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;                      
@@ -2732,8 +2747,8 @@ public class ReplacementComputeValue : IMethodReplacer
 
         <para>The <literal>FieldRetrievingFactoryObject</literal> class
         addresses much the same area of concern as the
-        <literal>PropertyRetrievingFactoryObject</literal> described in
-        the previous section. However, as its name might suggest, the
+        <literal>PropertyRetrievingFactoryObject</literal> described in the
+        previous section. However, as its name might suggest, the
         <literal>FieldRetrievingFactoryObject</literal> class is concerned
         with looking up the value of a <emphasis role="bold">public</emphasis>
         field exposed on either an instance or a class (and similarly, in the
@@ -2741,8 +2756,8 @@ public class ReplacementComputeValue : IMethodReplacer
         static).</para>
 
         <para>The following example demonstrates using a
-        <literal>FieldRetrievingFactoryObject</literal> to look up the
-        value of a (public, static) field exposed on a class</para>
+        <literal>FieldRetrievingFactoryObject</literal> to look up the value
+        of a (public, static) field exposed on a class</para>
 
         <para><programlisting language="myxml">&lt;object id="withTypesField" 
         type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+MyTestObject, Spring.Core.Tests"&gt;
@@ -2779,24 +2794,22 @@ public class ReplacementComputeValue : IMethodReplacer
         <title>Setting a property or constructor argument to the return value
         of a method invocation.</title>
 
-        <para>The <literal>MethodInvokingFactoryObject</literal> rounds
-        out the trio of classes that permit the setting of properties and
+        <para>The <literal>MethodInvokingFactoryObject</literal> rounds out
+        the trio of classes that permit the setting of properties and
         constructor arguments using the members of other objects and classes.
         Whereas the <literal>PropertyRetrievingFactoryObject</literal> and
         <literal>FieldRetrievingFactoryObject</literal> classes dealt with
         simply looking up and returning the value of property or field on an
-        object or class, the
-        <literal>MethodInvokingFactoryObject</literal> allows one to set a
-        constructor or property to the return value of an arbitrary method
-        invocation,</para>
+        object or class, the <literal>MethodInvokingFactoryObject</literal>
+        allows one to set a constructor or property to the return value of an
+        arbitrary method invocation,</para>
 
-        <para>The <literal>MethodInvokingFactoryObject</literal> class
-        handles both the case of invoking an (instance) method on another
-        object in the container, and the case of a static method call on an
-        arbitrary class. Additionally, it is sometimes necessary to invoke a
-        method just to perform some sort of initialization.... while the
-        mechanisms for handling object initialization have yet to be
-        introduced (see <xref
+        <para>The <literal>MethodInvokingFactoryObject</literal> class handles
+        both the case of invoking an (instance) method on another object in
+        the container, and the case of a static method call on an arbitrary
+        class. Additionally, it is sometimes necessary to invoke a method just
+        to perform some sort of initialization.... while the mechanisms for
+        handling object initialization have yet to be introduced (see <xref
         linkend="objects-factory-lifecycle-initializingobject" />), these
         mechanisms do not permit any arguments to be passed to any
         initialization method, and are confined to invoking an initialization
@@ -2807,8 +2820,8 @@ public class ReplacementComputeValue : IMethodReplacer
 
         <para>The following example (in an XML based
         <literal>IObjectFactory</literal> definition) uses the
-        <literal>MethodInvokingFactoryObject</literal> class to force a
-        call to a static factory method prior to the instantiation of the
+        <literal>MethodInvokingFactoryObject</literal> class to force a call
+        to a static factory method prior to the instantiation of the
         object...</para>
 
         <para><programlisting language="myxml">&lt;object id="force-init"
@@ -2825,16 +2838,16 @@ public class ReplacementComputeValue : IMethodReplacer
         thus the calling of its configured <literal>StaticMethod</literal>
         static initializer method, when <literal>myService</literal> is first
         initialized. Please note that in order to effect this initialization,
-        the <literal>MethodInvokingFactoryObject</literal> object
-        <emphasis role="bold">must</emphasis> be operating in
+        the <literal>MethodInvokingFactoryObject</literal> object <emphasis
+        role="bold">must</emphasis> be operating in
         <literal>singleton</literal> mode (the default.. see the next
         paragraph).</para>
 
         <para>Note that since this class is expected to be used primarily for
         accessing factory methods, this factory defaults to operating in
         <literal>singleton</literal> mode. As such, as soon as all of the
-        properties for a <literal>MethodInvokingFactoryObject</literal>
-        object have been set, and if the
+        properties for a <literal>MethodInvokingFactoryObject</literal> object
+        have been set, and if the
         <literal>MethodInvokingFactoryObject</literal> object is still in
         <literal>singleton</literal> mode, the method will be invoked
         immediately and the return value cached for later access. The first
@@ -2864,8 +2877,8 @@ public class ReplacementComputeValue : IMethodReplacer
         arguments is significant... the order of the values passed to the
         <methodname>Arguments</methodname> property must be the same as the
         order of the arguments defined on the method signature, including the
-        argument <literal>Type</literal>. This is shown in the example
-        below <programlisting language="myxml">&lt;object id="myObject" type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject, Spring.Core"&gt;
+        argument <literal>Type</literal>. This is shown in the example below
+        <programlisting language="myxml">&lt;object id="myObject" type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject, Spring.Core"&gt;
   &lt;property name="TargetType" value="Whatever.MyClassFactory, MyAssembly"/&gt;
   &lt;property name="TargetMethod" value="GetInstance"/&gt;
   
@@ -2882,11 +2895,11 @@ public class ReplacementComputeValue : IMethodReplacer
 
         <para>The second way involves passing an arguments dictionary to the
         <methodname>NamedArguments</methodname> property... this dictionary
-        maps argument names (<literal>String</literal>s) to argument
-        values (any object). The argument names are not case-sensitive, and
-        order is (obviously) not significant (since dictionaries by definition
-        do not have an order). This is shown in the example below
-        <programlisting language="myxml">&lt;object id="myObject" type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject, Spring.Core"&gt;
+        maps argument names (<literal>String</literal>s) to argument values
+        (any object). The argument names are not case-sensitive, and order is
+        (obviously) not significant (since dictionaries by definition do not
+        have an order). This is shown in the example below <programlisting
+        language="myxml">&lt;object id="myObject" type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject, Spring.Core"&gt;
   &lt;property name="TargetObject"&gt;
     &lt;object type="Whatever.MyClassFactory, MyAssembly"/&gt;
   &lt;/property&gt;
@@ -2917,12 +2930,13 @@ public class ReplacementComputeValue : IMethodReplacer
         invoked to the surrounding factory object.</para>
 
         <para>Finally, if you want to use
-        <literal>MethodInvokingFactoryObject</literal> in conjunction with
-        a method that has a variable length argument list, then please note
-        that the variable arguments need to be passed (and configured) as a
+        <literal>MethodInvokingFactoryObject</literal> in conjunction with a
+        method that has a variable length argument list, then please note that
+        the variable arguments need to be passed (and configured) as a
         <emphasis>list</emphasis>. Let us consider the following method
-        definition that uses the <literal>params</literal> keyword (in
-        C#), and its attendant (XML) configuration... <programlisting language="csharp">[C#]
+        definition that uses the <literal>params</literal> keyword (in C#),
+        and its attendant (XML) configuration... <programlisting
+        language="csharp">[C#]
 public class MyClassFactory
 {
     public object CreateObject(Type objectType, params string[] arguments)
@@ -2950,25 +2964,23 @@ public class MyClassFactory
     <sect2 xml:id="objects-objectfactories">
       <title>Provided IFactoryObject implementations</title>
 
-      <para>In addition to
-      <literal>PropertyRetrievingFactoryObject</literal>,
+      <para>In addition to <literal>PropertyRetrievingFactoryObject</literal>,
       <literal>MethodInvokingFactoryObject</literal>, and
-      <literal>FieldRetrievingFactoryObject </literal> Spring.NET comes
-      with other useful implementations of the
-      <literal>IFactoryObject</literal> interface. These are discussed
-      below.</para>
+      <literal>FieldRetrievingFactoryObject </literal> Spring.NET comes with
+      other useful implementations of the <literal>IFactoryObject</literal>
+      interface. These are discussed below.</para>
 
       <sect3 xml:id="objects-objectfactories-log4net">
         <title>Common logging</title>
 
-        <para>The <literal>LogFactoryObject</literal> is useful when you
-        would like to share a Common.Logging log object across a number of
-        classes instead of creating a logging instance per class or class
-        hierarchy. Information on the Common.Logging project can be found
-        <ulink url="http://netcommon.sourceforge.net/">here</ulink>. In the
-        example shown below the same logging instance, with a logging category
-        name of "DAOLogger", is used in both the SimpleAccountDao and
-        SimpleProductDao data access objects. <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
+        <para>The <literal>LogFactoryObject</literal> is useful when you would
+        like to share a Common.Logging log object across a number of classes
+        instead of creating a logging instance per class or class hierarchy.
+        Information on the Common.Logging project can be found <ulink
+        url="http://netcommon.sourceforge.net/">here</ulink>. In the example
+        shown below the same logging instance, with a logging category name of
+        "DAOLogger", is used in both the SimpleAccountDao and SimpleProductDao
+        data access objects. <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://www.springframework.net
          http://www.springframework.net/xsd/spring-objects.xsd" &gt;
@@ -3197,18 +3209,18 @@ public class MyClassFactory
     to another. When using the XML based file to configure the IoC container,
     string based property values are converted to the target property type.
     Spring will rely on the standard .NET support for type conversion unless
-    an alternative <literal>TypeConverter</literal> is registered for a
-    given type. How to register custom TypeConverters will be described
-    shortly. As a reminder, the standard .NET type converter support works by
-    associating a <literal>TypeConverter</literal> attribute with the
-    class definition by passing the type of the converter as an attribute
-    argument. <footnote>
+    an alternative <literal>TypeConverter</literal> is registered for a given
+    type. How to register custom TypeConverters will be described shortly. As
+    a reminder, the standard .NET type converter support works by associating
+    a <literal>TypeConverter</literal> attribute with the class definition by
+    passing the type of the converter as an attribute argument. <footnote>
         <para>More information about creating custom
         <literal>TypeConverter</literal> implementations can be found online
         at Microsoft's MSDN website, by searching for <emphasis>Implementing a
         Type Converter</emphasis>.</para>
       </footnote> For example, an abbreviated class definition for the BCL
-    type <literal>Font</literal> is shown below. <programlisting language="csharp">[Serializable, TypeConverter(typeof(FontConverter)), ...]
+    type <literal>Font</literal> is shown below. <programlisting
+    language="csharp">[Serializable, TypeConverter(typeof(FontConverter)), ...]
 public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDisposable
 {
   // Methods
@@ -3220,11 +3232,11 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       <title>Type Conversion for Enumerations</title>
 
       <para>The default type converter for enumerations is the
-      <literal>System.ComponentModel.EnumConverter</literal> class. To
-      specify the value for an enumerated property, simply use the name of the
+      <literal>System.ComponentModel.EnumConverter</literal> class. To specify
+      the value for an enumerated property, simply use the name of the
       property. For example the <literal>TestObject</literal> class has a
-      property of the enumerated type <literal>FileMode</literal>. One of
-      the values for this enumeration is named <literal>Create</literal>. The
+      property of the enumerated type <literal>FileMode</literal>. One of the
+      values for this enumeration is named <literal>Create</literal>. The
       following XML fragment shows how to configure this property</para>
 
       <programlisting language="myxml">&lt;object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
@@ -3237,10 +3249,9 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       <title>Built-in TypeConverters</title>
 
       <para>Spring.NET pre-registers a number of custom
-      <literal>TypeConverter</literal> instances (for example, to convert
-      a type expressed as a string into a real
-      <literal>System.Type</literal> object). Each of those is listed
-      below and they are all located in the
+      <literal>TypeConverter</literal> instances (for example, to convert a
+      type expressed as a string into a real <literal>System.Type</literal>
+      object). Each of those is listed below and they are all located in the
       <literal>Spring.Objects.TypeConverters</literal> namespace of the
       <literal>Spring.Core</literal> library.</para>
 
@@ -3364,9 +3375,9 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
         </table></para>
 
       <para>Spring.NET uses the standard .NET mechanisms for the resolution of
-      <literal>System.Types</literal>, including, but not limited to
-      checking any configuration files associated with your application,
-      checking the Global Assembly Cache (GAC), and assembly probing.</para>
+      <literal>System.Types</literal>, including, but not limited to checking
+      any configuration files associated with your application, checking the
+      Global Assembly Cache (GAC), and assembly probing.</para>
     </sect2>
 
     <sect2 xml:id="objects-type-conversion-custom-overview">
@@ -3379,8 +3390,8 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       <literal>IObjectFactory</literal> or
       <literal>IApplicationContext</literal> is to use the custom
       configuration section handler
-      <literal>TypeConverterSectionHandler</literal> This is demonstrated
-      in section <xref linkend="context-configuration" /></para>
+      <literal>TypeConverterSectionHandler</literal> This is demonstrated in
+      section <xref linkend="context-configuration" /></para>
 
       <para>An alternate approach, present for legacy reasons in the port of
       Spring.NET from the Java code base, is to use the object factory
@@ -3397,10 +3408,9 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
         <title>Using CustomConverterConfigurer</title>
 
         <para>This section shows in detail how to define a custom type
-        converter that does not use the .NET
-        <literal>TypeConverter</literal> attribute. The type converter
-        class is standalone and inherits from the
-        <literal>TypeConverter</literal> class. It uses the legacy factory
+        converter that does not use the .NET <literal>TypeConverter</literal>
+        attribute. The type converter class is standalone and inherits from
+        the <literal>TypeConverter</literal> class. It uses the legacy factory
         post-processor approach.</para>
 
         <para>Consider a user class <emphasis>ExoticType</emphasis>, and
@@ -3471,8 +3481,8 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
 }</programlisting> Finally, we use the
         <literal>CustomConverterConfigurer</literal> to register the new
         <literal>TypeConverter</literal> with the
-        <literal>IApplicationContext</literal>, which will then be able to
-        use it as needed: <programlisting language="myxml">&lt;object id="customConverterConfigurer" 
+        <literal>IApplicationContext</literal>, which will then be able to use
+        it as needed: <programlisting language="myxml">&lt;object id="customConverterConfigurer" 
 	type="Spring.Objects.Factory.Config.CustomConverterConfigurer, Spring.Core"&gt;
   &lt;property name="CustomConverters"&gt;
     &lt;dictionary&gt;
@@ -3503,12 +3513,12 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       objects.</para>
 
       <para>Internally, Spring.NET uses implementations of the
-      <literal>IObjectPostProcessor</literal> interface to process any
-      marker interfaces it can find and call the appropriate methods. If you
-      need custom features or other lifecycle behavior Spring.NET doesn't
-      offer out-of-the-box, you can implement an
-      <literal>IObjectPostProcessor</literal> yourself. More information
-      about this can be found in <xref
+      <literal>IObjectPostProcessor</literal> interface to process any marker
+      interfaces it can find and call the appropriate methods. If you need
+      custom features or other lifecycle behavior Spring.NET doesn't offer
+      out-of-the-box, you can implement an
+      <literal>IObjectPostProcessor</literal> yourself. More information about
+      this can be found in <xref
       linkend="objects-factory-customizing" />.</para>
 
       <para>All the different lifecycle marker interfaces are described
@@ -3521,8 +3531,8 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
         <literal>Spring.Objects.Factory.IInitializingObject</literal>
         interface gives you the ability to perform initialization work after
         all the necessary properties on an object are set by the container.
-        The <literal>IInitializingObject</literal> interface specifies
-        exactly one method: <itemizedlist spacing="compact">
+        The <literal>IInitializingObject</literal> interface specifies exactly
+        one method: <itemizedlist spacing="compact">
             <listitem>
               <para><methodname>void AfterPropertiesSet()</methodname>: called
               after all properties have been set by the container. This method
@@ -3588,19 +3598,19 @@ public class AnotherExampleObject : IInitializingObject
       <sect3 xml:id="objects-factory-lifecycle-disposableobject">
         <title>IDisposable / <literal>destroy-method</literal></title>
 
-        <para>The <literal>System.IDisposable</literal> interface provides
-        you with the ability to get a callback when an
+        <para>The <literal>System.IDisposable</literal> interface provides you
+        with the ability to get a callback when an
         <literal>IObjectFactory</literal> is destroyed. The
-        <literal>IDisposable</literal> interface specifies exactly one
-        method: <itemizedlist spacing="compact">
+        <literal>IDisposable</literal> interface specifies exactly one method:
+        <itemizedlist spacing="compact">
             <listitem>
               <para><literal>void Dispose()</literal>: and is called on
               destruction of the container. This allows you to release any
               resources you are keeping in this object (such as database
               connections). You can throw <emphasis>any</emphasis>
               <literal>Exception</literal> here... however, any such
-              <literal>Exception</literal> will not stop the destruction
-              of the container - it will only get logged.</para>
+              <literal>Exception</literal> will not stop the destruction of
+              the container - it will only get logged.</para>
             </listitem>
           </itemizedlist></para>
 
@@ -3652,22 +3662,20 @@ public class AnotherExampleObject : IDisposable
           </itemizedlist></para>
 
         <para>This allows objects to manipulate the
-        <literal>IObjectFactory</literal> that created them
-        Programatically, through the <literal>IObjectFactory</literal>
-        interface, or by casting the reference to a known subclass of this
-        which exposes additional functionality. Primarily this would consist
-        of programmatic retrieval of other objects. While there are cases when
-        this capability is useful, it should generally be avoided, since it
-        couples the code to Spring.NET, and does not follow the Inversion of
-        Control style, where collaborators are provided to objects as
-        properties.</para>
+        <literal>IObjectFactory</literal> that created them Programatically,
+        through the <literal>IObjectFactory</literal> interface, or by casting
+        the reference to a known subclass of this which exposes additional
+        functionality. Primarily this would consist of programmatic retrieval
+        of other objects. While there are cases when this capability is
+        useful, it should generally be avoided, since it couples the code to
+        Spring.NET, and does not follow the Inversion of Control style, where
+        collaborators are provided to objects as properties.</para>
       </sect3>
 
       <sect3 xml:id="objects-factory-aware-objectnameaware">
         <title>IObjectNameAware</title>
 
-        <para>The
-        <literal>Spring.Objects.Factory.IObjectNameAware</literal>
+        <para>The <literal>Spring.Objects.Factory.IObjectNameAware</literal>
         interface gives you the ability to let the container set the name of
         the object definition on the object instance itself. In those cases
         where your object needs to know what its name is, implement this
@@ -3695,13 +3703,13 @@ public class AnotherExampleObject : IDisposable
 
     <para>When working with an <literal>IObjectFactory</literal>
     Programatically, child object definitions are represented by the
-    <literal>ChildObjectDefinition</literal> class. Most users will never
-    work with them on this level, instead configuring object definitions
-    declaratively in something like the
-    <literal>XmlObjectFactory</literal>. In an
-    <literal>XmlObjectFactory</literal> object definition, a child object
-    definition is indicated simply by using the parent attribute, specifying
-    the parent object definition as the value of this attribute.</para>
+    <literal>ChildObjectDefinition</literal> class. Most users will never work
+    with them on this level, instead configuring object definitions
+    declaratively in something like the <literal>XmlObjectFactory</literal>.
+    In an <literal>XmlObjectFactory</literal> object definition, a child
+    object definition is indicated simply by using the parent attribute,
+    specifying the parent object definition as the value of this
+    attribute.</para>
 
     <para><programlisting language="myxml">&lt;object id="inheritedTestObject" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
   &lt;property name="name" value="parent"/&gt;
@@ -3771,17 +3779,18 @@ public class AnotherExampleObject : IDisposable
 
     <para>The Spring container is essentially nothing more than an advanced
     factory capable of maintaining a registry of different objects and their
-    dependencies. The <literal>IObjectFactory</literal> enables you to
-    read object definitions and access them using the object factory. When
-    using just the <literal>IObjectFactory</literal> you would create an
-    instance of one and then read in some object definitions in the XML format
-    as follows: <programlisting language="csharp">[C#]
+    dependencies. The <literal>IObjectFactory</literal> enables you to read
+    object definitions and access them using the object factory. When using
+    just the <literal>IObjectFactory</literal> you would create an instance of
+    one and then read in some object definitions in the XML format as follows:
+    <programlisting language="csharp">[C#]
 IResource input = new FileSystemResource ("objects.xml");
 XmlObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
     <para>That is pretty much it. Using <literal>GetObject(string)</literal>
     (or the more concise indexer method <literal>factory ["string"]</literal>)
-    you can retrieve instances of your objects... <programlisting language="csharp">[C#]
+    you can retrieve instances of your objects... <programlisting
+    language="csharp">[C#]
 object foo = factory.GetObject ("foo"); // gets the object defined as 'foo'
 object bar = factory ["bar"];           // same thing, just using the indexer
 </programlisting></para>
@@ -3801,9 +3810,9 @@ Console.WriteLine (three == four);        // prints 'false'
 </programlisting></para>
 
     <para>The client-side view of the <literal>IObjectFactory</literal> is
-    surprisingly simple. The <literal>IObjectFactory</literal> interface
-    has only seven methods (and the aforementioned indexer) for clients to
-    call: <itemizedlist spacing="compact">
+    surprisingly simple. The <literal>IObjectFactory</literal> interface has
+    only seven methods (and the aforementioned indexer) for clients to call:
+    <itemizedlist spacing="compact">
         <listitem>
           <para><literal>bool ContainsObject(string)</literal>: returns true
           if the <literal>IObjectFactory</literal> contains an object
@@ -3814,18 +3823,18 @@ Console.WriteLine (three == four);        // prints 'false'
           <para><literal>object GetObject(string)</literal>: returns an
           instance of the object registered under the given name. Depending on
           how the object was configured by the
-          <literal>IObjectFactory</literal> configuration, either a
-          singleton (and thus shared) instance or a newly created object will
-          be returned. An <literal>ObjectsException</literal> will be thrown
-          when either the object could not be found (in which case it'll be a
+          <literal>IObjectFactory</literal> configuration, either a singleton
+          (and thus shared) instance or a newly created object will be
+          returned. An <literal>ObjectsException</literal> will be thrown when
+          either the object could not be found (in which case it'll be a
           <literal>NoSuchObjectDefinitionException</literal>), or an exception
           occurred while instantiated and preparing the object.</para>
         </listitem>
 
         <listitem>
           <para><literal>Object this [string]</literal>: this is the indexer
-          for the <literal>IObjectFactory</literal> interface. It
-          functions in all other respects in exactly the same way as the
+          for the <literal>IObjectFactory</literal> interface. It functions in
+          all other respects in exactly the same way as the
           <literal>GetObject(string)</literal> method. The rest of this
           documentation will always refer to the
           <literal>GetObject(string)</literal> method, but be aware that you
@@ -3836,8 +3845,8 @@ Console.WriteLine (three == four);        // prints 'false'
         <listitem>
           <para><literal>Object GetObject(string, Type)</literal>: returns an
           object, registered under the given name. The object returned will be
-          cast to the given <literal>Type</literal>. If the object could
-          not be cast, corresponding exceptions will be thrown
+          cast to the given <literal>Type</literal>. If the object could not
+          be cast, corresponding exceptions will be thrown
           (<literal>ObjectNotOfRequiredTypeException</literal>). Furthermore,
           all rules of the <literal>GetObject(string)</literal> method apply
           (see above).</para>
@@ -3878,8 +3887,8 @@ Console.WriteLine (three == four);        // prints 'false'
       </itemizedlist></para>
 
     <para>A sub-interface of <literal>IObjectFactory</literal>,
-    <literal>IConfigurableObjectFactory</literal> adds some convenient
-    methods such as</para>
+    <literal>IConfigurableObjectFactory</literal> adds some convenient methods
+    such as</para>
 
     <itemizedlist>
       <listitem>
@@ -3926,11 +3935,10 @@ Console.WriteLine (three == four);        // prints 'false'
     <para>The IoC component of the Spring Framework has been designed for
     extension. There is typically no need for an application developer to
     subclass any of the various <literal>IObjectFactory</literal> or
-    <literal>IApplicationContext</literal> implementation classes. The
-    Spring IoC container can be infinitely extended by plugging in
-    implementations of special integration interfaces. The next few sections
-    are devoted to detailing all of these various integration
-    interfaces.</para>
+    <literal>IApplicationContext</literal> implementation classes. The Spring
+    IoC container can be infinitely extended by plugging in implementations of
+    special integration interfaces. The next few sections are devoted to
+    detailing all of these various integration interfaces.</para>
 
     <sect2 xml:id="objects-factory-customizing">
       <title>Customizing objects with
@@ -3947,15 +3955,14 @@ Console.WriteLine (three == four);        // prints 'false'
       <literal>IObjectPostProcessor</literal> implementations.</para>
 
       <para>You can configure multiple
-      <literal>IObjectPostProcessors</literal> if you wish. You can
-      control the order in which these
-      <literal>IObjectPostProcessor</literal> execute by setting the
-      'Order' property (you can only set this property if the
+      <literal>IObjectPostProcessors</literal> if you wish. You can control
+      the order in which these <literal>IObjectPostProcessor</literal> execute
+      by setting the 'Order' property (you can only set this property if the
       <literal>IObjectPostProcessor</literal> implements the
       <literal>IOrdered</literal> interface; if you write your own
-      <literal>IObjectPostProcessor</literal> you should consider
-      implementing the <literal>IOrdered</literal> interface too); consult
-      the SDK docs for the <literal>IObjectPostProcessor</literal> and
+      <literal>IObjectPostProcessor</literal> you should consider implementing
+      the <literal>IOrdered</literal> interface too); consult the SDK docs for
+      the <literal>IObjectPostProcessor</literal> and
       <literal>IOrdered</literal> interfaces for more details.</para>
 
       <note>
@@ -3965,20 +3972,20 @@ Console.WriteLine (three == four);        // prints 'false'
         <literal>IObjectPostProcessors</literal> get a chance to do their
         stuff. If you want to change the actual object definition (that is the
         recipe that defines the object), then you rather need to use a
-        <literal>IObjectFactoryPostProcessor</literal> (described below in
-        the section entitled <link
+        <literal>IObjectFactoryPostProcessor</literal> (described below in the
+        section entitled <link
         linkend="objects-factory-customizing-factory-postprocessors">Customizing
         configuration metadata with
         IObjectFactoryPostProcessors.</link></para>
 
         <para>Also, <literal>IObjectPostProcessors</literal> are scoped
         per-container. This is only relevant if you are using container
-        hierarchies. If you define a
-        <literal>IObjectPostProcessor</literal> in one container, it will
-        only do its stuff on the objects in that container. Objects that are
-        defined in another container will not be post-processed by
-        <literal>IObjectPostProcessors</literal> in another container,
-        even if both containers are part of the same hierarchy.</para>
+        hierarchies. If you define a <literal>IObjectPostProcessor</literal>
+        in one container, it will only do its stuff on the objects in that
+        container. Objects that are defined in another container will not be
+        post-processed by <literal>IObjectPostProcessors</literal> in another
+        container, even if both containers are part of the same
+        hierarchy.</para>
       </note>
 
       <para>The
@@ -3993,18 +4000,17 @@ object PostProcessAfterInitialization(object instance, string name);</programlis
       by the container, the post-processor will get a callback from the
       container both <emphasis>before</emphasis> any initialization methods
       (such as the <methodname>AfterPropertiesSet</methodname> method of the
-      <literal>IInitializingObject</literal> interface and any declared
-      init method) are called, and also afterwards. The post-processor is free
-      to do what it wishes with the object, including ignoring the callback
+      <literal>IInitializingObject</literal> interface and any declared init
+      method) are called, and also afterwards. The post-processor is free to
+      do what it wishes with the object, including ignoring the callback
       completely. An object post-processor will typically check for marker
       interfaces, or do something such as wrap an object with a proxy. Some
       Spring.NET AOP infrastructure classes are implemented as object
       post-processors as they do this proxy-wrapping logic.</para>
 
       <para>Other extensions to the <literal>IObjectPostProcessors</literal>
-      interface are
-      <literal>IInstantiationAwareObjectPostProcessor</literal> and
-      <literal>IDestructionAwareObjectPostProcessor</literal> defined
+      interface are <literal>IInstantiationAwareObjectPostProcessor</literal>
+      and <literal>IDestructionAwareObjectPostProcessor</literal> defined
       below <programlisting language="csharp">public interface IInstantiationAwareObjectPostProcessor : IObjectPostProcessor
 {
      object PostProcessBeforeInstantiation(Type objectType, string objectName);
@@ -4036,22 +4042,21 @@ public interface IDestructionAwareObjectPostProcessor : IObjectPostProcessor
       processing such as making sure that a property is set to a value if it
       contains a <literal>[Required]</literal> attribute or to perform
       attribute based wiring, i.e. adding the attribute
-      <literal>[Inject("objectName")]</literal> on a property. Both of
-      these features are scheduled to be included in Spring .12.</para>
+      <literal>[Inject("objectName")]</literal> on a property. Both of these
+      features are scheduled to be included in Spring .12.</para>
 
       <para>The <literal>IDestructionAwareObjectPostProcessor</literal>
       callback contains a single method,
-      <literal>PostProcessBeforeDestruction</literal>, which is called
-      before a singleton's destroy method is invoked.</para>
+      <literal>PostProcessBeforeDestruction</literal>, which is called before
+      a singleton's destroy method is invoked.</para>
 
-      <para>It is important to know that the
-      <literal>IObjectFactory</literal> treats object post-processors
-      slightly differently than the
+      <para>It is important to know that the <literal>IObjectFactory</literal>
+      treats object post-processors slightly differently than the
       <literal>IApplicationContext</literal>. An
       <literal>IApplicationContext</literal> will automatically detect any
       objects which are deployed into it that implement the
-      <literal>IObjectPostProcessor</literal> interface, and register them
-      as post-processors, to be then called appropriately by the factory on
+      <literal>IObjectPostProcessor</literal> interface, and register them as
+      post-processors, to be then called appropriately by the factory on
       object creation. Nothing else needs to be done other than deploying the
       post-processor in a similar fashion to any other object. On the other
       hand, when using plain <literal>IObjectFactories</literal>, object
@@ -4065,21 +4070,21 @@ factory.AddObjectPostProcessor(pp);
 ...</programlisting></para>
 
       <para>This explicit registration step is not convenient, and this is one
-      of the reasons why the various
-      <literal>IApplicationContext</literal> implementations are preferred
-      above plain <literal>IObjectFactory</literal> implementations in the
-      vast majority of Spring-backed applications, especially when using
+      of the reasons why the various <literal>IApplicationContext</literal>
+      implementations are preferred above plain
+      <literal>IObjectFactory</literal> implementations in the vast majority
+      of Spring-backed applications, especially when using
       IObjectPostProcessors.</para>
 
       <note>
         <para>IObjectPostProcessors and AOP auto-proxying</para>
 
         <para>Classes that implement the
-        <literal>IObjectPostProcessor</literal> interface are special, and
-        so they are treated differently by the container. All
-        <literal>IObjectPostProcessors</literal> and their directly
-        referenced object will be instantiated on startup, as part of the
-        special startup phase of the IApplicationContext, then all those
+        <literal>IObjectPostProcessor</literal> interface are special, and so
+        they are treated differently by the container. All
+        <literal>IObjectPostProcessors</literal> and their directly referenced
+        object will be instantiated on startup, as part of the special startup
+        phase of the IApplicationContext, then all those
         <literal>IObjectPostProcessors</literal> will be registered in a
         sorted fashion - and applied to all further objects. Since AOP
         auto-proxying is implemented as a
@@ -4088,8 +4093,8 @@ factory.AddObjectPostProcessor(pp);
         objects are eligible for auto-proxying (and thus will not have aspects
         'woven' into them). For any such object, you should see an info log
         message: “Object 'foo' is not eligible for getting processed by all
-        <literal>IObjectPostProcessors</literal> (for example: not
-        eligible for auto-proxying)”.</para>
+        <literal>IObjectPostProcessors</literal> (for example: not eligible
+        for auto-proxying)”.</para>
       </note>
 
       <para></para>
@@ -4188,8 +4193,8 @@ DEBUG - MovieApp Done.</programlisting>
         being<emphasis> 'required-to-be-set' </emphasis>(i.e. an setter
         property with this attribute applied must be configured to be
         dependency injected with a value), else an
-        <literal>ObjectInitializationException</literal> will be thrown by
-        the container at runtime.</para>
+        <literal>ObjectInitializationException</literal> will be thrown by the
+        container at runtime.</para>
 
         <para>The best way to illustrate the usage of this attribute is with
         an example.</para>
@@ -4236,22 +4241,22 @@ DEBUG - MovieApp Done.</programlisting>
         appropriately.</para>
 
         <para>This component is the
-        <literal>RequiredAttributeObjectPostProcessor</literal> class.
-        This is a special <literal>IObjectPostProcessor</literal>
-        implementation that is <literal>[Required]</literal>-aware and
-        actually provides the 'blow up if this required property has not been
-        set' logic. It is very easy to configure; simply drop the following
-        object definition into your Spring XML configuration.</para>
+        <literal>RequiredAttributeObjectPostProcessor</literal> class. This is
+        a special <literal>IObjectPostProcessor</literal> implementation that
+        is <literal>[Required]</literal>-aware and actually provides the 'blow
+        up if this required property has not been set' logic. It is very easy
+        to configure; simply drop the following object definition into your
+        Spring XML configuration.</para>
 
         <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Attributes.RequiredAttributeObjectPostProcessor, Spring.Core"/&gt;</programlisting>
 
         <para>Finally, one can configure an instance of the
-        <literal>RequiredAttributeObjectPostProcessor</literal> class to
-        look for another <literal>Attribute</literal> type. This is great if
-        you already have your own <literal>[Required]</literal>-style
-        attribute. Simply plug it into the definition of a
-        <literal>RequiredAttributeObjectPostProcessor</literal> and you
-        are good to go. By way of an example, let's suppose you (or your
+        <literal>RequiredAttributeObjectPostProcessor</literal> class to look
+        for another <literal>Attribute</literal> type. This is great if you
+        already have your own <literal>[Required]</literal>-style attribute.
+        Simply plug it into the definition of a
+        <literal>RequiredAttributeObjectPostProcessor</literal> and you are
+        good to go. By way of an example, let's suppose you (or your
         organization / team) have defined an attribute called [Mandatory]. You
         can make a <literal>RequiredAttributeObjectPostProcessor</literal>
         instance <literal>[Mandatory]</literal>-aware like so:</para>
@@ -4270,8 +4275,8 @@ DEBUG - MovieApp Done.</programlisting>
       <literal>Spring.Objects.Factory.Config.IObjectFactoryPostProcessor</literal>.
       The semantics of this interface are similar to the
       <literal>IObjectPostProcessor</literal>, with one major difference.
-      <literal>IObjectFactoryPostProcessors</literal> operate on; that is
-      to say, the Spring IoC container will allow
+      <literal>IObjectFactoryPostProcessors</literal> operate on; that is to
+      say, the Spring IoC container will allow
       <literal>IObjectFactoryPostProcessors</literal> to read the
       configuration metadata and potentially change it before the container
       has actually instantiated any other objects. By implementing this
@@ -4287,32 +4292,31 @@ DEBUG - MovieApp Done.</programlisting>
       <para>You can configure multiple
       <literal>IObjectFactoryPostProcessors</literal> if you wish. You can
       control the order in which these
-      <literal>IObjectFactoryPostProcessors</literal> execute by setting
-      the 'Order' property (you can only set this property if the
+      <literal>IObjectFactoryPostProcessors</literal> execute by setting the
+      'Order' property (you can only set this property if the
       <literal>IObjectFactoryPostProcessors</literal> implements the
       <literal>IOrdered</literal> interface; if you write your own
       <literal>IObjectFactoryPostProcessors</literal> you should consider
-      implementing the <literal>IOrdered</literal> interface too); consult
-      the SDK docs for the <literal>IObjectFactoryPostProcessors</literal>
-      and <literal>IOrdered</literal> interfaces for more details.</para>
+      implementing the <literal>IOrdered</literal> interface too); consult the
+      SDK docs for the <literal>IObjectFactoryPostProcessors</literal> and
+      <literal>IOrdered</literal> interfaces for more details.</para>
 
       <note>
         <para>If you want to change the actual object instances (the objects
         that are created from the configuration metadata), then you rather
-        need to use a <literal>IObjectObjectPostProcessor</literal>
-        (described above in the section entitled <link
+        need to use a <literal>IObjectObjectPostProcessor</literal> (described
+        above in the section entitled <link
         linkend="objects-factory-customizing">Customizing objects with
         <literal>IObjectPostProcessors</literal></link>.</para>
 
-        <para>Also, <literal>IObjectFactoryPostProcessors</literal> are
-        scoped per-container. This is only relevant if you are using container
+        <para>Also, <literal>IObjectFactoryPostProcessors</literal> are scoped
+        per-container. This is only relevant if you are using container
         hierarchies. If you define a
-        <literal>IObjectFactoryPostProcessors</literal> in one container,
-        it will only do its stuff on the object definitions in that container.
+        <literal>IObjectFactoryPostProcessors</literal> in one container, it
+        will only do its stuff on the object definitions in that container.
         Object definitions in another container will not be post-processed by
-        <literal>IObjectFactoryPostProcessors</literal> in another
-        container, even if both containers are part of the same
-        hierarchy.</para>
+        <literal>IObjectFactoryPostProcessors</literal> in another container,
+        even if both containers are part of the same hierarchy.</para>
       </note>
 
       <para>An object factory post-processor is executed manually (in the case
@@ -4326,9 +4330,9 @@ DEBUG - MovieApp Done.</programlisting>
       objects transactionally or with any other kind of proxy, as described
       later in this manual.</para>
 
-      <para>In an <literal>IObjectFactory</literal>, the process of
-      applying an <literal>IObjectFactoryPostProcessor</literal> is
-      manual, and will be similar to this:</para>
+      <para>In an <literal>IObjectFactory</literal>, the process of applying
+      an <literal>IObjectFactoryPostProcessor</literal> is manual, and will be
+      similar to this:</para>
 
       <para><programlisting language="csharp">XmlObjectFactory factory = new XmlObjectFactory(new FileSystemResource("objects.xml"));
 <lineannotation>// create placeholderconfigurer to bring in some property
@@ -4339,32 +4343,32 @@ cfg.setLocation(new FileSystemResource("ado.properties"));
 cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
       <para><anchor
-      id="objects-factory-autodetect-objectfactorypostprocessors" />This
+      id="objects-factory-autodetect-objectfactorypostprocessors"></anchor>This
       explicit registration step is not convenient, and this is one of the
       reasons why the various <literal>IApplicationContext</literal>
       implementations are preferred above plain
-      <literal>IObjectFactory</literal> implementations in the vast
-      majority of Spring-backed applications, especially when using
+      <literal>IObjectFactory</literal> implementations in the vast majority
+      of Spring-backed applications, especially when using
       <literal>IObjectFactoryPostProcessors</literal>.</para>
 
-      <para>An <literal>IApplicationContext</literal> will detect any
-      objects which are deployed into it that implement the
+      <para>An <literal>IApplicationContext</literal> will detect any objects
+      which are deployed into it that implement the
       <literal>ObjectFactoryPostProcessor</literal> interface, and
       automatically use them as object factory post-processors, at the
       appropriate time. Nothing else needs to be done other than deploying
       these post-processor in a similar fashion to any other object.</para>
 
       <note>
-        <para>Just as in the case of
-        <literal>IObjectPostProcessors</literal>, you typically don't want
-        to have <literal>IObjectFactoryPostProcessors</literal> marked as
-        being lazily-initialized. If they are marked as such, then the Spring
+        <para>Just as in the case of <literal>IObjectPostProcessors</literal>,
+        you typically don't want to have
+        <literal>IObjectFactoryPostProcessors</literal> marked as being
+        lazily-initialized. If they are marked as such, then the Spring
         container will never instantiate them, and thus they won't get a
         chance to apply their custom logic. If you are using the
         'default-lazy-init' attribute on the declaration of your
         &lt;objects/&gt; element, be sure to mark your various
-        <literal>IObjectFactoryPostProcessor</literal> object definitions
-        with 'lazy-init="false"'.</para>
+        <literal>IObjectFactoryPostProcessor</literal> object definitions with
+        'lazy-init="false"'.</para>
       </note>
 
       <sect3 xml:id="objects-factory-placeholderconfigurer">
@@ -4389,9 +4393,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         implement the <literal>IObjectFactoryPostProcessor</literal>
         interface. This means that as described here, applying a
         <literal>PropertyPlaceholderConfigurer</literal> is much more
-        convenient when using an <literal>IApplicationContext</literal>.
-        For this reason, it is recommended that users wishing to use this or
-        other object factory postprocessors use an
+        convenient when using an <literal>IApplicationContext</literal>. For
+        this reason, it is recommended that users wishing to use this or other
+        object factory postprocessors use an
         <literal>IApplicationContext</literal> instead of an
         <literal>IObjectFactory</literal>.</para>
 
@@ -4401,7 +4405,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         the main Spring.NET configuration file we use place holders, in the
         NAnt style of ${variableName}, and obtain their values from
         NameValueSections in the standard .NET application configuration file.
-        The Spring.NET configuration file looks like: <programlisting language="myxml">&lt;configuration&gt;
+        The Spring.NET configuration file looks like: <programlisting
+        language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -4463,16 +4468,16 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         <literal>${connection.string}</literal> match the key names used in
         the two NameValueSectionHandlers <literal>DaoConfiguration</literal>
         and <literal>DatabaseConfiguration</literal>. The
-        <literal>PropertyPlaceholderConfigurer</literal> refers to these
-        two sections via a comma delimited list of section names in the
+        <literal>PropertyPlaceholderConfigurer</literal> refers to these two
+        sections via a comma delimited list of section names in the
         <literal>configSections</literal> property. If you are using section
         groups, prefix the section group name, for example
         myConfigSection/DaoConfiguraiton.</para>
 
-        <para>The <literal>PropertyPlaceholderConfigurer</literal> class
-        also supports retrieving name value pairs from other
-        <literal>IResource</literal> locations. These can be specified
-        using the <literal>Location</literal> and <literal>Locations</literal>
+        <para>The <literal>PropertyPlaceholderConfigurer</literal> class also
+        supports retrieving name value pairs from other
+        <literal>IResource</literal> locations. These can be specified using
+        the <literal>Location</literal> and <literal>Locations</literal>
         properties of the <literal>PropertyPlaceHolderConfigurer</literal>
         class.</para>
 
@@ -4529,17 +4534,17 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
           property placeholders. The use of environment variables is
           controlled via the property
           <literal>EnvironmentVariableMode</literal>. This property is an
-          enumeration of the type
-          <literal>EnvironmentVariablesMode</literal> and has three
-          values, Never, Fallback, and Override. <literal>Fallback</literal>
-          is the default value and will resolve a property placeholder if it
-          was not already done so via a value from a resource location.
-          <literal>Override</literal> will apply environment variables before
-          applying values defined from a resource location.
-          <literal>Never</literal> will, quite appropriately, disable
-          environment variable substitution. An example of how the
-          <literal>PropertyPlaceholderConfigurer</literal> XML is modified
-          to enable override usage is shown below <programlisting language="myxml">&lt;object name="appConfigPropertyHolder" 
+          enumeration of the type <literal>EnvironmentVariablesMode</literal>
+          and has three values, Never, Fallback, and Override.
+          <literal>Fallback</literal> is the default value and will resolve a
+          property placeholder if it was not already done so via a value from
+          a resource location. <literal>Override</literal> will apply
+          environment variables before applying values defined from a resource
+          location. <literal>Never</literal> will, quite appropriately,
+          disable environment variable substitution. An example of how the
+          <literal>PropertyPlaceholderConfigurer</literal> XML is modified to
+          enable override usage is shown below <programlisting
+          language="myxml">&lt;object name="appConfigPropertyHolder" 
         type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core"&gt;
         &lt;property name="configSections" value="DaoConfiguration,DatabaseConfiguration"/&gt;
         &lt;property name="EnvironmentVariableMode" value="Override"/&gt;
@@ -4554,8 +4559,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
         <para>The <literal>PropertyOverrideConfigurer</literal>, another
         object factory post-processor, is similar to the
-        <literal>PropertyPlaceholderConfigurer</literal>, but in contrast
-        to the latter, the original definitions can have default values or no
+        <literal>PropertyPlaceholderConfigurer</literal>, but in contrast to
+        the latter, the original definitions can have default values or no
         values at all for object properties. If an overriding configuration
         file does not have an entry for a certain object property, the default
         context definition is used.</para>
@@ -4564,13 +4569,13 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         <emphasis>not</emphasis> aware of being overridden, so it is not
         immediately obvious when looking at the XML definition file that the
         override configurer is being used. In case that there are multiple
-        <literal>PropertyOverrideConfigurer</literal> instances that
-        define different values for the same object property, the last one
-        will win (due to the overriding mechanism).</para>
+        <literal>PropertyOverrideConfigurer</literal> instances that define
+        different values for the same object property, the last one will win
+        (due to the overriding mechanism).</para>
 
         <para>The example usage is similar to when using
-        <literal>PropertyPlaceHolderConfigurer</literal> except that the
-        key name refers to the name given to the object in the Spring.NET
+        <literal>PropertyPlaceHolderConfigurer</literal> except that the key
+        name refers to the name given to the object in the Spring.NET
         configuration file and is suffixed via 'dot' notation with the name of
         the property For example, if the application configuration file is
         <programlisting language="myxml">&lt;configuration&gt;
@@ -4671,11 +4676,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         <literal>VariableSource</literal> to a single
         <literal>IVariableSource</literal> instance or the list property
         <literal>VariableSources</literal> to a list of
-        <literal>IVariableSource</literal> instances. In the case of the
-        same property defined in multiple
-        <literal>IVariableSource</literal> implementations, the first one
-        in the list that contains the property value will be used.
-        <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core"&gt;
+        <literal>IVariableSource</literal> instances. In the case of the same
+        property defined in multiple <literal>IVariableSource</literal>
+        implementations, the first one in the list that contains the property
+        value will be used. <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core"&gt;
    &lt;property name="VariableSources"&gt;
       &lt;list&gt;
          &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
@@ -4744,16 +4748,16 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       places within the Spring Framework. Some examples of its use is
       described in <xref linkend="objects-advancedproperty-setting" /> for the
       <literal>PropertyRetrievingFactoryObject</literal> and
-      <literal>FieldRetrievingFactoryObject</literal>. An additional use
-      of creating an custom IFactoryObject implementation is to retrieve an
+      <literal>FieldRetrievingFactoryObject</literal>. An additional use of
+      creating an custom IFactoryObject implementation is to retrieve an
       object from an embedded resource file and use it to set another objects
       dependency. An example of this is provided <ulink
       url="http://jira.springframework.org/browse/SPRNET-133#action_19743">here</ulink>.</para>
 
       <para>Finally, there is sometimes a need to ask a container for an
-      actual <literal>IFactoryObject</literal> instance itself, not the
-      object it produces. This may be achieved by prepending the object id
-      with '<literal>&amp;</literal>' (sans quotes) when calling the
+      actual <literal>IFactoryObject</literal> instance itself, not the object
+      it produces. This may be achieved by prepending the object id with
+      '<literal>&amp;</literal>' (sans quotes) when calling the
       <literal>GetObject</literal> method of the
       <literal>IObjectFactory</literal> (including
       <literal>IApplicationContext</literal>). So for a given
@@ -4769,9 +4773,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
         <para>The
         <literal>Spring.Objects.Factory.IConfigurableFactoryObject</literal>
-        interface inherits from <literal>IFactoryObject</literal>
-        interface and adds the following property.<itemizedlist
-            spacing="compact">
+        interface inherits from <literal>IFactoryObject</literal> interface
+        and adds the following property.<itemizedlist spacing="compact">
             <listitem>
               <para><literal> IObjectDefinition ProductTemplate </literal>:
               Gets the template object definition that should be used to
@@ -4780,8 +4783,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
             </listitem>
           </itemizedlist></para>
 
-        <para><literal>IConfigurableFactoryObject</literal> implementions
-        you already have examples of in <xref linkend="client-side" /> are
+        <para><literal>IConfigurableFactoryObject</literal> implementions you
+        already have examples of in <xref linkend="client-side" /> are
         <literal>WebServiceProxyFactory</literal>.</para>
       </sect3>
     </sect2>
@@ -4809,8 +4812,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
     <literal>IApplicationContext</literal> interface, located in the
     <literal>Spring.Context</literal> namespace. Deriving from the
     <literal>IObjectFactory</literal> interface, it provides all the
-    functionality of the <literal>IObjectFactory</literal>. To be able to
-    work in a more framework-oriented fashion, using layering and hierarchical
+    functionality of the <literal>IObjectFactory</literal>. To be able to work
+    in a more framework-oriented fashion, using layering and hierarchical
     contexts, the <literal>Spring.Context</literal> namespace also provides
     the following functionality<itemizedlist spacing="compact">
         <listitem>
@@ -4843,28 +4846,27 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
     <sect2>
       <title>IObjectFactory or IApplicationContext?</title>
 
-      <para>Short version: use an
-      <emphasis><literal>IApplicationContext</literal></emphasis> unless
-      you have a really good reason for not doing so. For those of you that
-      are looking for slightly more depth as to the 'but why' of the above
-      recommendation, keep reading.</para>
+      <para>Short version: use an <emphasis>
+          <literal>IApplicationContext</literal>
+        </emphasis> unless you have a really good reason for not doing so. For
+      those of you that are looking for slightly more depth as to the 'but
+      why' of the above recommendation, keep reading.</para>
 
       <para>As the <literal>IApplicationContext</literal> includes all the
       functionality the object factory via its inheritance of the
-      <literal>IObjectFactory</literal> interface, it is generally
-      recommended to be used over the <literal>IObjectFactory</literal>
-      except for a few limited situations where memory consumption might be
-      critical. This may become more important if the .NET Compact Framework
-      is supported. The history of <literal>IObjectFactory</literal> comes
-      from the Spring Java framework, where the use of Spring in Applets was a
-      concern to reduce memory consumption. However, for most 'typical'
-      enterprise applications and systems, the
-      <literal>IApplicationContext</literal> is what you will want to use.
-      Spring generally makes heavy use of the
+      <literal>IObjectFactory</literal> interface, it is generally recommended
+      to be used over the <literal>IObjectFactory</literal> except for a few
+      limited situations where memory consumption might be critical. This may
+      become more important if the .NET Compact Framework is supported. The
+      history of <literal>IObjectFactory</literal> comes from the Spring Java
+      framework, where the use of Spring in Applets was a concern to reduce
+      memory consumption. However, for most 'typical' enterprise applications
+      and systems, the <literal>IApplicationContext</literal> is what you will
+      want to use. Spring generally makes heavy use of the
       <literal>IObjectPostProcessor</literal> extension point (to effect
       proxying and suchlike), and if you are using just a plain
-      <literal>IObjectFactory</literal> then a fair amount of support such
-      as transactions and AOP will not take effect (at least not without some
+      <literal>IObjectFactory</literal> then a fair amount of support such as
+      transactions and AOP will not take effect (at least not without some
       extra steps on your part), which could be confusing because nothing will
       actually be wrong with the configuration.</para>
 
@@ -4873,8 +4875,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       <literal>IApplicationContext</literal> interfaces (and attendant
       implementations). The following sections describe functionality that
       <literal>IApplicationContext</literal> adds to the basic
-      <literal>IObjectFactory</literal> capabilities in a lot more depth
-      than the said feature matrix.)</para>
+      <literal>IObjectFactory</literal> capabilities in a lot more depth than
+      the said feature matrix.)</para>
 
       <table id="context-introduction-ctx-vs-objectfactory-feature-matrix"
              pgwide="1">
@@ -4887,60 +4889,88 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
             <row>
               <entry align="center">Feature</entry>
 
-              <entry
-              align="center"><literal>IObjectFactory</literal></entry>
+              <entry align="center">
+                <literal>IObjectFactory</literal>
+              </entry>
 
-              <entry
-              align="center"><literal>IApplicationContext</literal></entry>
+              <entry align="center">
+                <literal>IApplicationContext</literal>
+              </entry>
             </row>
           </thead>
 
           <tbody>
             <row>
-              <entry><para>Object instantiation/wiring</para></entry>
+              <entry>
+                <para>Object instantiation/wiring</para>
+              </entry>
 
-              <entry align="center"><para>Yes</para></entry>
+              <entry align="center">
+                <para>Yes</para>
+              </entry>
 
-              <entry align="center"><para>Yes</para></entry>
+              <entry align="center">
+                <para>Yes</para>
+              </entry>
             </row>
 
             <row>
-              <entry><para>Automatic
-              <literal>IObjectPostProcessor</literal>
-              registration</para></entry>
+              <entry>
+                <para>Automatic <literal>IObjectPostProcessor</literal>
+                registration</para>
+              </entry>
 
-              <entry align="center"><para>No</para></entry>
+              <entry align="center">
+                <para>No</para>
+              </entry>
 
-              <entry align="center"><para>Yes</para></entry>
+              <entry align="center">
+                <para>Yes</para>
+              </entry>
             </row>
 
             <row>
-              <entry><para>Automatic
-              <literal>IObjectFactoryPostProcessor</literal>
-              registration</para></entry>
+              <entry>
+                <para>Automatic <literal>IObjectFactoryPostProcessor</literal>
+                registration</para>
+              </entry>
 
-              <entry align="center"><para>No</para></entry>
+              <entry align="center">
+                <para>No</para>
+              </entry>
 
-              <entry align="center"><para>Yes</para></entry>
+              <entry align="center">
+                <para>Yes</para>
+              </entry>
             </row>
 
             <row>
-              <entry><para>Convenient
-              <literal>IMessageSource</literal>
-              access</para></entry>
+              <entry>
+                <para>Convenient <literal>IMessageSource</literal>
+                access</para>
+              </entry>
 
-              <entry align="center"><para>No</para></entry>
+              <entry align="center">
+                <para>No</para>
+              </entry>
 
-              <entry align="center"><para>Yes</para></entry>
+              <entry align="center">
+                <para>Yes</para>
+              </entry>
             </row>
 
             <row>
-              <entry><para><literal>ApplicationEvent</literal>
-              publication</para></entry>
+              <entry>
+                <para><literal>ApplicationEvent</literal> publication</para>
+              </entry>
 
-              <entry align="center"><para>No</para></entry>
+              <entry align="center">
+                <para>No</para>
+              </entry>
 
-              <entry align="center"><para>Yes</para></entry>
+              <entry align="center">
+                <para>Yes</para>
+              </entry>
             </row>
 
             <row>
@@ -5095,14 +5125,14 @@ IApplicationContext context =
 
       <para>Creating a custom resource handler means implementing the
       <literal>IResource</literal> interface. The base class
-      <literal>AbstractResource</literal> is a useful starting point. Look
-      at the Spring source for classes such as
+      <literal>AbstractResource</literal> is a useful starting point. Look at
+      the Spring source for classes such as
       <literal>FileSystemResource</literal> or
       <literal>AssemblyResource</literal> for implementation tips. You can
       register your custom resource handler either within App.config, as shown
       in the program listing at the start of this section using a
-      .<literal>ResourceHandlersSectionHandler</literal> or define an
-      object of the type
+      .<literal>ResourceHandlersSectionHandler</literal> or define an object
+      of the type
       <literal>Spring.Objects.Factory.Config.ResourceHandlerConfigurer</literal>
       as you would any other Spring managed object. An example of the latter
       is shown below:</para>
@@ -5177,8 +5207,8 @@ IApplicationContext context =
       within the regular &lt;objects&gt; section of any standard Spring
       configuration file. This approach allows for more modularity in defining
       type aliases, for example if you can't access App.config/Web.config. An
-      example of registration using a
-      <literal>TypeAliasConfigurer</literal> is shown below</para>
+      example of registration using a <literal>TypeAliasConfigurer</literal>
+      is shown below</para>
 
       <programlisting language="myxml">&lt;object id="myTypeAlias" type="Spring.Objects.Factory.Config.TypeAliasConfigurer, Spring.Core"&gt;
       &lt;property name="TypeAliases"&gt;
@@ -5195,14 +5225,14 @@ IApplicationContext context =
       <title>Registering Type Converters</title>
 
       <para>The standard .NET mechanism for specifying a type converter is to
-      add a <literal>TypeConverter</literal> attribute to a type
-      definition to specify the type of the Converter. This is the preferred
-      way of defining type converters if you control the source code for the
-      type that you want to define a converter for. However, this
-      configuration section allows you to specify converters for the types
-      that you don't control, and it also allows you to override some of the
-      standard type converters, such as the ones that are defined for some of
-      the types in the .NET Base Class Library.</para>
+      add a <literal>TypeConverter</literal> attribute to a type definition to
+      specify the type of the Converter. This is the preferred way of defining
+      type converters if you control the source code for the type that you
+      want to define a converter for. However, this configuration section
+      allows you to specify converters for the types that you don't control,
+      and it also allows you to override some of the standard type converters,
+      such as the ones that are defined for some of the types in the .NET Base
+      Class Library.</para>
 
       <para>You can specify the type converters in App.config by using
       Spring.Context.Support.TypeConvertersSectionHandler as shown before or
@@ -5227,8 +5257,8 @@ IApplicationContext context =
 
     <para>As already stated in the previous section, the
     <literal>IApplicationContext</literal> has a couple of features that
-    distinguish it from the <literal>IObjectFactory</literal>. Let us
-    review them one-by-one.</para>
+    distinguish it from the <literal>IObjectFactory</literal>. Let us review
+    them one-by-one.</para>
 
     <sect2 xml:id="context-functionality-hierarchy">
       <title>Context Hierarchies</title>
@@ -5297,8 +5327,8 @@ IApplicationContext context =
     <sect2 xml:id="context-functionality-messagesource">
       <title>Using <literal>IMessageSource</literal></title>
 
-      <para>The <literal>IApplicationContext</literal> interface extends
-      an interface called <literal>IMessageSource</literal> and provides
+      <para>The <literal>IApplicationContext</literal> interface extends an
+      interface called <literal>IMessageSource</literal> and provides
       localization (i18n or internationalization) services for text messages
       and other resource data types such as images. This functionality makes
       it easier to use .NET's localization features at an application level
@@ -5332,9 +5362,9 @@ IApplicationContext context =
           <listitem>
             <para><literal>string GetMessage(string name, CultureInfo
             cultureInfo, params object[] args)</literal>: retrieves a message
-            from the <literal>IMessageSource</literal> using a variable
-            list of arguments as replacement values in the message. The
-            specified culture is used to resolve the message.</para>
+            from the <literal>IMessageSource</literal> using a variable list
+            of arguments as replacement values in the message. The specified
+            culture is used to resolve the message.</para>
           </listitem>
 
           <listitem>
@@ -5349,11 +5379,10 @@ IApplicationContext context =
 
           <listitem>
             <para><literal>string GetMessage(IMessageSourceResolvable
-            resolvable, <literal>CultureInfo</literal> culture)
-            </literal>: all properties used in the methods above are also
-            wrapped in a class - the
-            <literal>MessageSourceResolvable</literal>, which you can use in
-            this method.</para>
+            resolvable, <literal>CultureInfo</literal> culture) </literal>:
+            all properties used in the methods above are also wrapped in a
+            class - the <literal>MessageSourceResolvable</literal>, which you
+            can use in this method.</para>
           </listitem>
 
           <listitem>
@@ -5380,17 +5409,17 @@ IApplicationContext context =
         </itemizedlist></para>
 
       <para>When an <literal>IApplicationContext</literal> gets loaded, it
-      automatically searches for an <literal>IMessageSource</literal>
-      object defined in the context. The object has to have the name
+      automatically searches for an <literal>IMessageSource</literal> object
+      defined in the context. The object has to have the name
       <literal>messageSource</literal>. If such an object is found, all calls
       to the methods described above will be delegated to the message source
       that was found. If no message source was found, the
-      <literal>IApplicationContext</literal> checks to see if it has a
-      parent containing a similar object, with a similar name. If so, it uses
-      that object as the <literal>IMessageSource</literal>. If it can't
-      find any source for messages, an empty
-      <literal>StaticMessageSource</literal> will be instantiated in order to
-      be able to accept calls to the methods defined above.</para>
+      <literal>IApplicationContext</literal> checks to see if it has a parent
+      containing a similar object, with a similar name. If so, it uses that
+      object as the <literal>IMessageSource</literal>. If it can't find any
+      source for messages, an empty <literal>StaticMessageSource</literal>
+      will be instantiated in order to be able to accept calls to the methods
+      defined above.</para>
 
       <warning>
          
@@ -5401,23 +5430,23 @@ IApplicationContext context =
       </warning>
 
       <para>Spring.NET provides two <literal>IMessageSource</literal>
-      implementations. These are
-      <literal>ResourceSetMessageSource</literal> and
-      <literal>StaticMessageSource</literal>. Both implement
+      implementations. These are <literal>ResourceSetMessageSource</literal>
+      and <literal>StaticMessageSource</literal>. Both implement
       <literal>IHierarchicalMessageSource</literal> to resolve messages
       hierarchically. The <literal>StaticMessageSource</literal> is hardly
       ever used but provides programmatic ways to add messages to the source.
-      The <literal>ResourceSetMessageSource</literal> is more interesting
-      and an example is provided for in the distribution and discussed more
+      The <literal>ResourceSetMessageSource</literal> is more interesting and
+      an example is provided for in the distribution and discussed more
       extensively in the <xref linkend="quickstarts" /> section. The
-      <literal>ResourceSetMessageSource</literal> is configured by
-      providing a list of <literal>ResourceManager</literal>s. When a
-      message code is to be resolved, the list of ResourceManagers is searched
-      to resolve the code. For each <literal>ResourceManager</literal> a
+      <literal>ResourceSetMessageSource</literal> is configured by providing a
+      list of <literal>ResourceManager</literal>s. When a message code is to
+      be resolved, the list of ResourceManagers is searched to resolve the
+      code. For each <literal>ResourceManager</literal> a
       <literal>ResourceSet</literal> is retrieved and asked to resolve the
       code. Note that this search does not replace the standard hub-and-spoke
       search for localized resources. The ResourceManagers list specifies the
-      multiple 'hubs' where the standard search starts. <programlisting language="myxml">&lt;object name="messageSource" type="Spring.Context.Support.ResourceSetMessageSource, Spring.Core"&gt;
+      multiple 'hubs' where the standard search starts. <programlisting
+      language="myxml">&lt;object name="messageSource" type="Spring.Context.Support.ResourceSetMessageSource, Spring.Core"&gt;
   &lt;property name="resourceManagers"&gt;
     &lt;list&gt;
        &lt;value&gt;Spring.Examples.AppContext.MyResource, Spring.Examples.AppContext&lt;/value&gt;
@@ -5430,9 +5459,9 @@ IApplicationContext context =
       assembly name. This will be converted to a ResourceManager via the
       <literal>ResourceManagerConverter</literal> TypeConverter. This
       converter can be similarly used to set a property on any object that is
-      of the type <literal>ResourceManager.</literal> You may also specify
-      an instance of the <literal>ResourceManager</literal> to use via an
-      object reference. The convenience class
+      of the type <literal>ResourceManager.</literal> You may also specify an
+      instance of the <literal>ResourceManager</literal> to use via an object
+      reference. The convenience class
       <literal>Spring.Objects.Factory.Config.ResourceManagerFactoryObject</literal>
       can be used to conveniently create an instance of a ResourceManager.
       <programlisting language="myxml">&lt;object name="myResourceManager" type="Spring.Objects.Factory.Config.ResourceManagerFactoryObject, Spring.Core"&gt;
@@ -5471,7 +5500,8 @@ IApplicationContext context =
       '<literal>{0} is required {1}</literal>' and another key name
       <literal>field.firstname</literal> with the value '<literal>First
       name</literal>'. The following code will create the string
-      '<literal>First name is required dude!</literal>' <programlisting language="csharp">string[] codes = {"field.firstname"};
+      '<literal>First name is required dude!</literal>' <programlisting
+      language="csharp">string[] codes = {"field.firstname"};
 DefaultMessageResolvable dmr = new DefaultMessageResolvable(codes, null);
 ctx.GetMessage("error.required", 
 		new object[] { dmr, "dude!" }, 
@@ -5482,14 +5512,13 @@ ctx.GetMessage("error.required",
       program, <literal>Spring.Examples.AppContext</literal>, that
       demonstrates usage of these features.</para>
 
-      <para>The <literal>IMessageSourceAware</literal> interface can also
-      be used to acquire a reference to any
-      <literal>IMessageSource</literal> that has been defined. Any object
-      that is defined in an <literal>IApplicationContext</literal> that
-      implements the <literal>IMessageSourceAware</literal> interface will
-      be injected with the application context's
-      <literal>IMessageSource</literal> when it (the object) is being
-      created and configured.</para>
+      <para>The <literal>IMessageSourceAware</literal> interface can also be
+      used to acquire a reference to any <literal>IMessageSource</literal>
+      that has been defined. Any object that is defined in an
+      <literal>IApplicationContext</literal> that implements the
+      <literal>IMessageSourceAware</literal> interface will be injected with
+      the application context's <literal>IMessageSource</literal> when it (the
+      object) is being created and configured.</para>
     </sect2>
 
     <sect2 xml:id="context-functionality-resources">
@@ -5541,13 +5570,26 @@ ctx.GetMessage("error.required",
             from a source object of a particular type for which it has
             matching handler methods.</para>
           </listitem>
-        </itemizedlist> <literal>IApplicationContext</literal> implements
-      this interface and delegates the implementation to an instance of
-      <literal>Spring.Objects.Events.Support.EventRegistry</literal>. You
-      are free to create and use as many EventRegistries as you like but since
-      it is common to use only one in an application,
-      <literal>IApplicationContext</literal> provides convenient access to
-      a single instance.</para>
+
+          <listitem>
+            <para><literal>void Unsubscribe(object subscriber )</literal>:
+            Unsubscribe all events from the source object for which it has
+            matching handler methods.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>void Unsubscribe(object subscriber, Type
+            targetSourceType )</literal>: Unsubscribe all events from a source
+            object of a particular type for which it has matching handler
+            methods.</para>
+          </listitem>
+        </itemizedlist> <literal>IApplicationContext</literal> implements this
+      interface and delegates the implementation to an instance of
+      <literal>Spring.Objects.Events.Support.EventRegistry</literal>. You are
+      free to create and use as many EventRegistries as you like but since it
+      is common to use only one in an application,
+      <literal>IApplicationContext</literal> provides convenient access to a
+      single instance.</para>
 
       <para>Within the
       <literal>example/Spring/Spring.Examples.EventRegistry</literal>
@@ -5567,8 +5609,9 @@ MyEventPublisher publisher = (MyEventPublisher)ctx.GetObject("MyEventPublisher")
 // Publishes events to the context.
 ctx.PublishEvents( publisher );
 </programlisting> One of the two subscribers subscribes to all events
-      published to the <literal>IApplicationContext</literal> instance,
-      using the publisher type as the filter criteria.<programlisting language="csharp">// Gets first instance of subscriber
+      published to the <literal>IApplicationContext</literal> instance, using
+      the publisher type as the filter criteria.<programlisting
+      language="csharp">// Gets first instance of subscriber
 MyEventSubscriber subscriber = (MyEventSubscriber)ctx.GetObject("MyEventSubscriber");
 
 // Gets second instance of subscriber
@@ -5588,23 +5631,21 @@ ctx.Subscribe( subscriber, typeof(MyEventPublisher) );</programlisting> This
       <title>Event notification from
       <literal>IApplicationContext</literal></title>
 
-      <para>Event handling in the <literal>IApplicationContext</literal>
-      is provided through the <literal>IApplicationListener</literal>
-      interface that contains the single method <literal>void
-      OnApplicationEvent( object source, ApplicationEventArgs
-      applicationEventArgs )</literal>. Classes that implement the
-      <literal>IApplicationListener</literal> interface are automatically
-      registered as a listener with the
-      <literal>IApplicationContext</literal>. Publishing an event is done
-      via the context's <literal>PublishEvent( ApplicationEventArgs eventArgs
+      <para>Event handling in the <literal>IApplicationContext</literal> is
+      provided through the <literal>IApplicationListener</literal> interface
+      that contains the single method <literal>void OnApplicationEvent( object
+      source, ApplicationEventArgs applicationEventArgs )</literal>. Classes
+      that implement the <literal>IApplicationListener</literal> interface are
+      automatically registered as a listener with the
+      <literal>IApplicationContext</literal>. Publishing an event is done via
+      the context's <literal>PublishEvent( ApplicationEventArgs eventArgs
       )</literal> method. This implementation is based on the traditional
       <emphasis>Observer</emphasis> design pattern.</para>
 
-      <para>The event argument type,
-      <literal>ApplicationEventArgs</literal>, adds the time of the event
-      firing as a property. The derived class
-      <literal>ContextEventArgs</literal> is used to notify observers on
-      the lifecycle events of the application context. It contains a property
+      <para>The event argument type, <literal>ApplicationEventArgs</literal>,
+      adds the time of the event firing as a property. The derived class
+      <literal>ContextEventArgs</literal> is used to notify observers on the
+      lifecycle events of the application context. It contains a property
       <literal>ContextEvent Event</literal> that returns the enumeration
       <literal>Refreshed</literal> or <literal>Closed.</literal>. The
       <literal>Refreshed</literal> enumeration value indicated that the
@@ -5620,11 +5661,12 @@ ctx.Subscribe( subscriber, typeof(MyEventPublisher) );</programlisting> This
 
       <para>Implementing custom events can be done as well. Simply call the
       <literal>PublishEvent</literal> method on the
-      <literal>IApplicationContext</literal>, specifying a parameter which
-      is an instance of your custom event argument subclass.</para>
+      <literal>IApplicationContext</literal>, specifying a parameter which is
+      an instance of your custom event argument subclass.</para>
 
       <para>Let's have a look at an example. First, the
-      <literal>IApplicationContext</literal>: <programlisting language="myxml">&lt;object id="emailer" type="Example.EmailObject"&gt;
+      <literal>IApplicationContext</literal>: <programlisting
+      language="myxml">&lt;object id="emailer" type="Example.EmailObject"&gt;
     &lt;property name="blackList"&gt;
         &lt;list&gt;
             &lt;value&gt;black@list.org&lt;/value&gt;
@@ -5638,8 +5680,8 @@ ctx.Subscribe( subscriber, typeof(MyEventPublisher) );</programlisting> This
     &lt;property name="notificationAddress"&gt;
         &lt;value&gt;spam@list.org&lt;/value&gt;
     &lt;/property&gt;
-&lt;/object&gt;</programlisting> and then, the actual objects:
-      <programlisting language="csharp">public class EmailObject : IApplicationContextAware {
+&lt;/object&gt;</programlisting> and then, the actual objects: <programlisting
+      language="csharp">public class EmailObject : IApplicationContextAware {
 
     // the blacklist
     private IList blackList;
@@ -5724,8 +5766,8 @@ public class BlackListNotifier : IApplicationListener
       interface, have <link
       linkend="objects-factory-customizing">already</link> been mentioned. It
       is worth mentioning again here though, that post-processors are much
-      more convenient to use in <literal>IApplicationContext</literal>s
-      than in plain <literal>IObjectFactory</literal> instances. In an
+      more convenient to use in <literal>IApplicationContext</literal>s than
+      in plain <literal>IObjectFactory</literal> instances. In an
       <literal>IApplicationContext</literal>, any deployed object which
       implements the above marker interface is automatically detected and
       registered as an object post-processor, to be called appropriately at
@@ -5754,8 +5796,8 @@ public class BlackListNotifier : IApplicationListener
       <para>The <literal>PropertyPlaceholderConfigurer</literal> has <link
       linkend="objects-factory-placeholderconfigurer">already</link> been
       described in the context of its use within an
-      <literal>IObjectFactory</literal>. It is worth mentioning here
-      though, that it is generally more convenient to use it with an
+      <literal>IObjectFactory</literal>. It is worth mentioning here though,
+      that it is generally more convenient to use it with an
       <literal>IApplicationContext</literal>, since the context will
       automatically recognize and apply any object factory post-processors,
       such as this one, when they are simply deployed into it like any other
@@ -5808,14 +5850,13 @@ ctx.refresh();</programlisting>
     <para>The majority of the code inside an application is best written in a
     Dependency Injection (Inversion of Control) style, where that code is
     served out of an <literal>IObjectFactory</literal> or
-    <literal>IApplicationContext</literal> container, has its own
-    dependencies supplied by the container when it is created, and is
-    completely unaware of the container. However, there is sometimes a need
-    for singleton (or quasi-singleton) style access to an
-    <literal>IObjectFactory</literal> or
-    <literal>IApplicationContext</literal>. For example, third party code
-    may try to construct a new object directly without the ability to force it
-    to get these objects out of the IObjectFactory. Similarly, nested user
+    <literal>IApplicationContext</literal> container, has its own dependencies
+    supplied by the container when it is created, and is completely unaware of
+    the container. However, there is sometimes a need for singleton (or
+    quasi-singleton) style access to an <literal>IObjectFactory</literal> or
+    <literal>IApplicationContext</literal>. For example, third party code may
+    try to construct a new object directly without the ability to force it to
+    get these objects out of the IObjectFactory. Similarly, nested user
     control components in a WinForms application are created inside the
     generated code in InitializeComponent. If this user control would like to
     obtain references to objects contained in the container it can use the
@@ -5823,16 +5864,16 @@ ctx.refresh();</programlisting>
     obtain the object it requires. (Note support for DI in WinForms is under
     development.)</para>
 
-    <para>The <literal>Spring.Context.Support.ContextRegistry</literal>
-    class allows you to obtain a reference to an
-    <literal>IApplicationContext</literal> via a static locator method.
-    The <literal>ContextRegistry</literal> is initialized when creating an
+    <para>The <literal>Spring.Context.Support.ContextRegistry</literal> class
+    allows you to obtain a reference to an
+    <literal>IApplicationContext</literal> via a static locator method. The
+    <literal>ContextRegistry</literal> is initialized when creating an
     <literal>IApplicationContext</literal> through use of the
-    <literal>ContextHandler</literal> discussed previously. The simple
-    static method <literal>GetContext()</literal> can then be used to retrieve
-    the context. Alternatively, if you create an
-    <literal>IApplicationContext</literal> though other means you can
-    register it with the <literal>ContextRegistry</literal> via the method
+    <literal>ContextHandler</literal> discussed previously. The simple static
+    method <literal>GetContext()</literal> can then be used to retrieve the
+    context. Alternatively, if you create an
+    <literal>IApplicationContext</literal> though other means you can register
+    it with the <literal>ContextRegistry</literal> via the method
     <literal>void RegisterContext(IApplicationContext context)</literal> in
     the start-up code of your application. Hierarchical context retrieval is
     also supported though the use of the <literal>GetContext(string
@@ -5859,7 +5900,35 @@ ctx.refresh();</programlisting>
     will be reread from disk when it is retrieved again. Note that in a web
     application RefeshSection will not work as advertised and you will need to
     touch the web.config files to reload a configuration.</para>
+  </sect1>
 
-    <para></para>
+  <sect1>
+    <title>Stereotype attributes</title>
+
+    <para>Beginning with Spring 1.2, the [Repository] attribute was introduced
+    as a marker for any class that fulfills the role or stereotype of a
+    repository (a.k.a. Data Access Object or DAO). Among the possibilities for
+    leveraging such a marker is the automatic translation of exceptions as
+    described in <link linkend="orm-hibernate-straight-ex">Exception
+    Translation.</link></para>
+
+    <para>Spring 1.2 introduces further stereotype annotations: [Component]
+    and [Service]. [Component] serves as a generic stereotype for any
+    Spring-managed component; whereas, [Repository] and [Service] serve as
+    specializations of [Component] for more specific use cases (e.g., in the
+    persistence and service layers, respectively). The ASP.NET MVC
+    [Controller] attribute will serve this purpose for the controller layer.
+    What this means is that you can annotate your component classes with
+    [Component], but by annotating them with [Repository] or [Service] your
+    classes are more properly suited for processing by tools or associating
+    with aspects. For example, these stereotype annotations make ideal targets
+    for pointcuts. Of course, it is also possible that [Repository] and
+    [Service] may carry additional semantics in future releases of the Spring
+    Framework. Thus, if you are making a decision between using [Component] or
+    [Service] for your service layer, [Service] is clearly the better choice.
+    Similarly, as stated above, [Repository] is already supported as a marker
+    for automatic exception translation in your persistence layer. The next
+    version of Spring will use the [Component] attribute to perform attribute
+    based autowiring by-type as in the Spring Java Framework.</para>
   </sect1>
 </chapter>
