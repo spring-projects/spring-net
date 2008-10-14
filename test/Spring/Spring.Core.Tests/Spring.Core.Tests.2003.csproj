@@ -582,6 +582,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\TypeConversion\TypeConversionUtilsTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\TypeConversion\TypeConverterRegistryTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -896,6 +901,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Expressions\ConstructorNodeTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Expressions\ExpressionEvaluatorTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -966,7 +976,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Globalization\Formatters\FilteringFormatterTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Globalization\Formatters\FloatFormatterTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Globalization\Formatters\HasTextFilteringFormatterTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1560,6 +1580,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Xml\ObjectNameGenerationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Xml\ReadOnlyXmlTestResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1888,6 +1913,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Util\SystemUtilsTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\UniqueKeyTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1919,6 +1949,11 @@
                 />
                 <File
                     RelPath = "Validation\ValidationErrorsTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\ValidationExceptionTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

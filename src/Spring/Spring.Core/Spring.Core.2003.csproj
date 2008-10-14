@@ -1271,7 +1271,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Globalization\Formatters\FilteringFormatter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Globalization\Formatters\FloatFormatter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Globalization\Formatters\HasTextFilteringFormatter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2252,6 +2262,21 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Stereotype\ComponentAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Stereotype\RepositoryAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Stereotype\ServiceAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Threading\CallContextStorage.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2313,6 +2338,11 @@
                 />
                 <File
                     RelPath = "Util\AssertUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\AttributeUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

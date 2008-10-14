@@ -229,12 +229,37 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dao\Attributes\PersistenceExceptionTranslationAdvisor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dao\Attributes\PersistenceExceptionTranslationPostProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dao\Support\ChainedPersistenceExceptionTranslator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dao\Support\DaoSupport.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Dao\Support\DataAccessUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dao\Support\IPersistenceExceptionTranslator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dao\Support\PersistenceExceptionTranslationInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

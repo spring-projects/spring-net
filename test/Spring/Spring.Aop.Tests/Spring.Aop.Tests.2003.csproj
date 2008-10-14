@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{2111596A-0327-4C9D-8919-294FBD988A23}"
     >
@@ -113,6 +113,11 @@
                     Name = "Common.Logging"
                     AssemblyName = "Common.Logging"
                     HintPath = "..\..\..\lib\Net\1.1\Common.Logging.dll"
+                />
+                <Reference
+                    Name = "Rhino.Mocks"
+                    AssemblyName = "Rhino.Mocks"
+                    HintPath = "..\..\..\lib\Net\1.1\Rhino.Mocks.dll"
                 />
             </References>
         </Build>
@@ -366,6 +371,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aop\Framework\DynamicProxy\InheritanceAopProxyTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aop\Framework\DynamicProxy\MockTargetSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -451,6 +461,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aspects\RetryAdviceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aspects\Cache\CacheAspectIntegrationTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -471,7 +486,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aspects\Exception\CaptureOutputLogger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Exception\CaptureOutputLoggerFactoryAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aspects\Exception\ExceptionHandlerAspectIntegrationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Logging\SimpleLoggingAdviceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Logging\TestableSimpleLoggingAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Validation\ParameterValidationAdviceTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -386,7 +386,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Web\Support\DefaultHandlerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Web\Support\DefaultResultFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\DefaultResultWebNavigator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\HandlerMap.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\HandlerMapEntry.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -441,6 +461,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Web\Support\MappingHandlerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\MappingHandlerFactoryConfigurer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Web\Support\MimeMediaType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -462,11 +492,6 @@
                 />
                 <File
                     RelPath = "Web\Support\ResultMode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\Support\ResultWebNavigator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -502,6 +527,11 @@
                 />
                 <File
                     RelPath = "Web\Support\WebFormsResultWebNavigator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\WebNavigableWebNavigatorAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

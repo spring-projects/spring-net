@@ -397,6 +397,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aop\Framework\AutoProxy\InheritanceBasedAopConfigurer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aop\Framework\AutoProxy\ITargetSourceCreator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -423,6 +428,11 @@
                 />
                 <File
                     RelPath = "Aop\Framework\DynamicProxy\AdvisedProxy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\DynamicProxy\BaseAopProxyMethodBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -462,6 +472,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aop\Framework\DynamicProxy\InheritanceAopProxyTypeBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aop\Framework\DynamicProxy\IntroductionProxyMethodBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -492,12 +507,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aop\Support\AttributeMatchingPointcut.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aop\Support\AttributeMatchMethodPointcut.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Support\AttributeMatchMethodPointcutAdvisor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\AttributeMethodMatcher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\AttributeTypeFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -763,6 +793,11 @@
                 />
                 <File
                     RelPath = "Aspects\Exceptions\ExceptionHandlerAdvice.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aspects\Exceptions\ExecuteSpelExceptionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

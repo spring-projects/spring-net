@@ -23,7 +23,7 @@
                 StartupObject = ""
             >
                 <Config
-                    Name = "Debug"
+                    Name = "Debug-1.1"
                     AllowUnsafeBlocks = "false"
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
@@ -43,7 +43,7 @@
                     WarningLevel = "4"
                 />
                 <Config
-                    Name = "Release"
+                    Name = "Release-1.1"
                     AllowUnsafeBlocks = "false"
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
