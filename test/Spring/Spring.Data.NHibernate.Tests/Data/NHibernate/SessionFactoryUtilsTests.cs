@@ -47,6 +47,7 @@ namespace Spring.Data.NHibernate
     [TestFixture]
     public class SessionFactoryUtilsTests
     {
+#if !NET_1_1
         [Test]
         public void SessionFactoryUtilsWithGetDbProvider()
         {
@@ -68,7 +69,7 @@ namespace Spring.Data.NHibernate
             
             mockery.VerifyAll();
         }
-
+#endif
     }
 
    

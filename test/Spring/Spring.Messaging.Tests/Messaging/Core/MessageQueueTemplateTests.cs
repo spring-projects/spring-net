@@ -44,7 +44,7 @@ namespace Spring.Messaging.Core
     [TestFixture]
     public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContextTests
     {
-
+#if NET_2_0 || NET_3_0
         [Test]
         public void MessageCreator()
         {
@@ -72,7 +72,7 @@ namespace Spring.Messaging.Core
             mqt.MessageQueueFactory.RegisterMessageQueue("fooQueueDefinition", sc.CreateQueue );
 
         }
-
+#endif
         public class SimpleCreator
         {
             public MessageQueue CreateQueue()

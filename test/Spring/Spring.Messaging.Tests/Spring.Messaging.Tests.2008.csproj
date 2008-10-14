@@ -84,7 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Listener\NonTransactionalMessageListenerContainerTests.xml" />
-    <EmbeddedResource Include="Messaging\Listener\SimpleMessageListenerContainerTests.xml" />
     <EmbeddedResource Include="Messaging\Listener\TransactionalMessageListenerContainerTests.xml" />
     <EmbeddedResource Include="Messaging\queue-context.xml" />
     <EmbeddedResource Include="Messaging\Core\MessageQueueTemplateTests.xml" />
@@ -105,9 +104,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Messaging\Listener\SimpleMessageListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Messaging\Listener\SimpleMessageListenerContainerTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Messaging\Listener\TransactionalMessageListenerContainerTests.cs">
