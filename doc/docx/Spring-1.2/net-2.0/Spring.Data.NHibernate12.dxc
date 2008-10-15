@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.NHibernate12.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Data.NHibernate12" RelatedProject="Spring-1.2.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <dtscrollpos>148</dtscrollpos>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Data.NHibernate12" tid="##SUMMARY" q="" cd="39675.0756597222"><![CDATA[<P>This assembly provides integration of NHibernate 1.2 with Spring concepts.</P>
+<P>Contains SessionFactory helper classes, a template plus callback for Hibernate access, and an implementation of Sprnig's transaction SPI for local Hibernate transactions.</P>]]></c>
+<c eid="Spring.Data.NHibernate12~Spring.Data.NHibernate_namespace" tid="##SUMMARY" q="" cd="39675.0759027778">Contains</c>
+<c eid="Spring.Data.NHibernate12~Spring.Data.NHibernate.Generic_namespace" tid="##SUMMARY" q="" cd="39675.0785185185">Generic implementation of HibernateTemplate</c>
+<c eid="Spring.Data.NHibernate12~Spring.Data.NHibernate.Generic.Support_namespace" tid="##SUMMARY" q="" cd="39675.0786226852">Generic implementation of base DAO class</c>
+<c eid="Spring.Data.NHibernate12~Spring.Data.NHibernate.Support_namespace" tid="##SUMMARY" q="" cd="39675.0777083333">Provides Open Session In View module, base DAO class for HibernateTemplate usage, and SessionScope utilty class</c>
+    </DocumentXComments>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\Spring.Net\build\net\1.1\debug\Spring.Data.NHibernate.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Data.NHibernate" RelatedProject="Spring-1.1.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Data.NHibernate" tid="##PROJECT_GETTINGSTARTED" q="" cd="39234.7355439815"><![CDATA[The reference documentation and sample application, NHibernate Northwind&nbsp;are the best places to get started using the functionality contained in Spring.Data.NHibernate]]></c>
+<c eid="Spring.Data.NHibernate" tid="##PROJECT_INTRODUCTION" q="" cd="39234.7377662037"><![CDATA[<P>The Spring Framework provides integration with <SPAN class=emphasis><EM>NHibernate </EM></SPAN>in terms of resource management, DAO implementation support, and transaction strategies.</P>
+<P>Some of the benefits of using the Spring Framework to create your ORM DAOs include:</P>
+<UL>
+<LI><SPAN class=emphasis><EM>Ease of testing.</EM></SPAN> Spring's IoC approach makes it easy to swap the implementations and config locations of Hibernate <FONT color=#000000><CODE class=interfacename>SessionFactory</CODE> instances, ADO.NET <CODE class=interfacename>DbProvider</CODE> instances, transaction managers, and mapper object implementations (if needed). </FONT></LI>
+<LI>Common data access exceptions.Spring can wrap exceptions from your O/R mapping tool of choice, converting them from proprietary exceptions to a common runtime DataAccessException hierarchy.</LI>
+<LI><SPAN class=emphasis><EM>General resource management.</EM></SPAN> Spring application contexts can handle the location and configuration of Hibernate <FONT color=#000000><CODE class=interfacename>ISessionFactory</CODE> instances, ADO.NET <CODE class=interfacename>DbProvider</CODE> instances and other related resources.&nbsp; For example: related code using NHibernate generally needs to use the same NHibernate </FONT><FONT color=#000000><CODE class=interfacename>Session</CODE> for efficiency and proper transaction handling. Spring makes it easy to transparently create and bind a <CODE class=interfacename>Session</CODE> to the current thread</FONT></LI>
+<LI><SPAN class=emphasis><EM>Integrated transaction management.</EM></SPAN> Spring allows you to wrap your O/R mapping code with either a declarative, AOP style method interceptor, or an explicit 'template' wrapper class at the code level. In either case, transaction semantics are handled for you, and proper transaction handling (rollback, etc) in case of exceptions is taken care of.</LI></UL>]]></c>
+<c eid="Spring.Data.NHibernate~Spring.Data.NHibernate_namespace" tid="##SUMMARY" q="" cd="39423.5240046296">Provides integration of NHibernate with Spring concepts</c>
+<c eid="Spring.Data.NHibernate~Spring.Data.NHibernate.Support_namespace" tid="##SUMMARY" q="" cd="39423.5241782407">Classes supporting the Spring.Data.NHibernate namespace</c>
+    </DocumentXComments>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\Spring.Net\bin\net\2.0\debug\Spring.Web.Extensions.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Web.Extensions" RelatedProject="Spring-1.1.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Web.Extensions" tid="##PROJECT_INTRODUCTION" q="" cd="39413.494837963"><![CDATA[Spring's ASP.NET AJAX integration allows for a plain .NET object (PONO), that is one that doesn't have any attributes or special base classes, to be exported as a web service, configured, via dependency injection, 'decorated' by applying AOP, and then exposed to client side java script.]]></c>
+<c eid="Spring.Web.Extensions" tid="##PROJECT_GETTINGSTARTED" q="" cd="39245.5166087963"><![CDATA[The reference documentation and sample application, listed under the shortcut 'AJAX', directory examples\Spring\Spring.Web.Extensions.Example, are the best places to get started using the functionality contained in Spring.Web.Extensions.]]></c>
+    </DocumentXComments>

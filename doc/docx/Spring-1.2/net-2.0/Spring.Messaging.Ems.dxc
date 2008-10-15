@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.Ems.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Messaging.Ems" RelatedProject="Spring-1.2.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <dtscrollpos>493</dtscrollpos>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Messaging.Ems" tid="##SUMMARY" q="" cd="39675.0839467593">This package contains integration classes for TIBCO EMS, allowing for Spring-style EMS access.</c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Config_namespace" tid="##SUMMARY" q="" cd="39675.08375"><![CDATA[Support package for declarative messaging configuration,<BR>with XML schema being the primary configuration format.]]></c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Connections_namespace" tid="##SUMMARY" q="" cd="39675.0841898148">Provides a PlatformTransactionManager implementation for a single EMS ConnectionFactory</c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Core_namespace" tid="##SUMMARY" q="" cd="39675.0846759259"><![CDATA[Core namespace of the EMS support.<BR>Provides a EmsTemplate class and various callback interfaces/delegates.]]></c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Listener_namespace" tid="##SUMMARY" q="" cd="39675.0847222222"><![CDATA[This namespace contains the base message listener container facility.<BR>]]></c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Listener.Adapter_namespace" tid="##SUMMARY" q="" cd="39675.0848958333">Message listener adapter mechanism that delegates to target listener methods, converting messages to appropriate message content types (such as String or byte array) that get passed into listener methods.</c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Support_namespace" tid="##SUMMARY" q="" cd="39675.0850462963"><![CDATA[This package provides generic EMS support classes,<BR>to be used by higher-level classes like EmsTemplate.]]></c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Support.Converter_namespace" tid="##SUMMARY" q="" cd="39675.0853009259"><![CDATA[Provides a MessageConverter abstraction to convert<BR>between .NET objects and EMS messages.]]></c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Support.Destinations_namespace" tid="##SUMMARY" q="" cd="39675.0855092593">Support namespace for managing destinations</c>
+    </DocumentXComments>
