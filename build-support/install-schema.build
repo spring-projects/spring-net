@@ -101,7 +101,7 @@
       <echo message=""/>
       <copy file="spring-objects-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}"
             verbose="true"
-	    overwrite="true"/>
+	          overwrite="true"/>
 
       <echo message="-------------------------------------------------------"/>
       <echo message="Copying spring-tool-1.1.xsd to ${vsXXXX.version} installation."/>
@@ -109,7 +109,7 @@
       <echo message=""/>
       <copy file="spring-tool-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}"
             verbose="true"
-	    overwrite="true"/>
+	          overwrite="true"/>
 
       <echo message="----------------------------------------------------------"/>
       <echo message="Copying spring-validation-1.1.xsd to ${vsXXXX.version} installation."/>
@@ -117,7 +117,7 @@
       <echo message=""/>
       <copy file="spring-validation-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}"
             verbose="true"
-	    overwrite="true"/>
+	          overwrite="true"/>
 
       <echo message="----------------------------------------------------------"/>
       <echo message="Copying spring-aop-1.1.xsd to ${vsXXXX.version} installation."/>
@@ -125,7 +125,7 @@
       <echo message=""/>
       <copy file="spring-aop-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}"
             verbose="true"
-	    overwrite="true"/>
+	          overwrite="true"/>
 
       <echo message="----------------------------------------------------------"/>
       <echo message="Copying spring-remoting-1.1.xsd to ${vsXXXX.version} installation."/>
@@ -133,7 +133,7 @@
       <echo message=""/>
       <copy file="spring-remoting-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}"
             verbose="true"
-	    overwrite="true"/>
+	          overwrite="true"/>
 
       <echo message="----------------------------------------------------------"/>
       <echo message="Copying spring-database.xsd to ${vsXXXX.version} installation."/>
@@ -141,7 +141,7 @@
       <echo message=""/>
       <copy file="spring-database-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
-	    overwrite="true"/>
+	          overwrite="true"/>
 
       <echo message="----------------------------------------------------------"/>
       <echo message="Copying spring-tx-1.1.xsd to ${vsXXXX.version} installation."/>
@@ -149,7 +149,7 @@
       <echo message=""/>
       <copy file="spring-tx-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
-	    overwrite="true"/>
+	          overwrite="true"/>
 
       <echo message="----------------------------------------------------------"/>
       <echo message="Copying spring-nms-1.2.xsd to ${vsXXXX.version} installation."/>
@@ -163,11 +163,9 @@
       <echo message="Copying spring-ems-1.2.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
-<!--      
       <copy file="spring-ems-1.2.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
-	    overwrite="true" />
--->
+      	    overwrite="true" />
       <property name="vsXXXX.xml.schemas.notinstalled" value="false"/>
 
     <if test="${vsXXXX.xml.schemas.notinstalled}">
