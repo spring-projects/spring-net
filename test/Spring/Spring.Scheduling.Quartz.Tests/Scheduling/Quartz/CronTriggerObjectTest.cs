@@ -14,7 +14,6 @@
 * limitations under the License.
 */
 
-using System;
 using System.Collections;
 
 using NUnit.Framework;
@@ -55,26 +54,7 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-        [Test]
-        public override void TestAfterPropertiesSet_Defaults()
-        {
-            cronTrigger.AfterPropertiesSet();
-            base.TestAfterPropertiesSet_Defaults();
-            AssertDateTimesEqualityWithAllowedDelta(DateTime.UtcNow, cronTrigger.StartTimeUtc, 1000);
-            Assert.AreEqual(TimeZone.CurrentTimeZone, cronTrigger.TimeZone, "trigger time zone mismatch");
-        }
-
-        [Test]
-        public override void TestAfterPropertiesSet_ValuesGiven()
-        {
-            TimeZone TZ = TimeZone.CurrentTimeZone;
-            cronTrigger.TimeZone = TZ;
-            cronTrigger.AfterPropertiesSet();
-            base.TestAfterPropertiesSet_ValuesGiven();
-            Assert.AreSame(TZ, cronTrigger.TimeZone, "trigger time zone mismatch");
-        }
-
-        
+       
         [Test]
         public override void TestAfterPropertiesSet_JobDetailGiven()
         {
