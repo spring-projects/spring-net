@@ -647,6 +647,7 @@
 
   <target name="package" depends="set-package-configuration" description="Build and Package distribution">
 
+    <property name="project.build.sign" value="true"/>
     <property name="project.build.package" value="true"/>
 
     <call target="clean-current-package-dir"/>
@@ -654,6 +655,7 @@
     <property name="nant.target.root.name" value="build"/>
 
     <call target="set-build-namespaces-release"/>
+    <property name="project.build.sign" value="true"/>
     <property name="project.build.package" value="true"/>
 
     <call target="build-all-function"/>
@@ -787,8 +789,9 @@
     <!-- copy third-party tools -->
     <mkdir dir="${current.package.dir}/build-support/tools"/>
     <copy todir="${current.package.dir}/build-support/tools">
-      <fileset basedir="tools">
+      <fileset basedir="build-support/tools">
         <include name="antlr-2.7.6/*"/>
+        <include name="HttpRequestRecorder/*"/>
         <include name="NAnt.NUnit2OutProc.Task/*"/>
         <include name="nunit/*"/>
       </fileset>

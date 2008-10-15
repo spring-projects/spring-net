@@ -203,22 +203,16 @@
              XXX is the number of days from the year the project 'started', property project.year.  -->
             <![CDATA[
                 public static void ScriptMain(Project project) {
-		    int frameworkRevision = Convert.ToInt32(project.Properties["nant.settings.currentframework.revisionnumber"]);
-                    Version version = new Version(project.Properties["package.version"]);
-                    int major = version.Major;
-                    int minor = version.Minor;
-                    int build = version.Build;
-                    int revision = version.Revision;
- 
-                    int startYear = Convert.ToInt32(project.Properties["project.year"]);
-                    DateTime start = new DateTime(startYear, 1, 1);
-		    TimeSpan ts = DateTime.Now - start;
-                    revision = ts.Days;
-                    revision = revision + (frameworkRevision*10000);
-		    
 
-                    version = new Version(major, minor, build, revision);
-                    project.Properties["project.version.numeric"] = version.ToString();
+
+	            string frameworkRevisionNumber = project.Properties["nant.settings.currentframework.revisionnumber"];
+            	    int startYear = Convert.ToInt32(project.Properties["project.year"]);
+            	    DateTime start = new DateTime(startYear, 1, 1);
+                    TimeSpan ts = DateTime.Now - start;
+                    int days = ts.Days;
+                    string version = project.Properties["package.version"].ToString() + "." + frameworkRevisionNumber + days.ToString();            
+            	    project.Properties["project.version.numeric"] = version.ToString();
+
                 }
             ]]>
         </code>
@@ -326,7 +320,7 @@
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="nant.settings.currentframework" value="net-1.0"/>
         <property name="nant.settings.currentframework.number" value="1.0"/>
-        <property name="nant.settings.currentframework.revisionnumber" value="0"/>
+        <property name="nant.settings.currentframework.revisionnumber" value="10"/>
         <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
         <property name="current.build.defines.csc" value="${build.defines.csc},NET,NET_1_0" dynamic="true"/>
         <property name="current.build.defines.jsc" value="${build.defines.jsc},NET,NET_1_0" dynamic="true"/>
@@ -346,7 +340,7 @@
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="nant.settings.currentframework" value="net-1.1"/>
         <property name="nant.settings.currentframework.number" value="1.1"/>
-        <property name="nant.settings.currentframework.revisionnumber" value="1"/>
+        <property name="nant.settings.currentframework.revisionnumber" value="11"/>
         <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
         <property name="current.build.defines.csc" value="${build.defines.csc},NET,NET_1_1" dynamic="true"/>
         <property name="current.build.defines.jsc" value="${build.defines.jsc},NET,NET_1_1" dynamic="true"/>
@@ -365,7 +359,7 @@
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="nant.settings.currentframework" value="net-2.0"/>
         <property name="nant.settings.currentframework.number" value="2.0"/>
-        <property name="nant.settings.currentframework.revisionnumber" value="2"/>
+        <property name="nant.settings.currentframework.revisionnumber" value="20"/>
         <property name="net-2.0" value="true"/>
         <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
         <property name="current.build.defines.csc" value="${build.defines.csc},NET,NET_2_0" dynamic="true"/>
@@ -385,7 +379,7 @@
         <property name="nant.settings.currentframework" value="net-2.0"/>
         <property name="nant.settings.currentframework.number" value="2.0"/>
 	<!-- revision number used when generating assembly info -->
-        <property name="nant.settings.currentframework.revisionnumber" value="3"/>
+        <property name="nant.settings.currentframework.revisionnumber" value="30"/>
         <property name="net-2.0" value="true"/>
         <property name="net-3.0" value="true"/>
         <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
