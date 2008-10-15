@@ -3,9 +3,9 @@
 
 <asp:Content runat="server" ContentPlaceHolderId="content">
     <p>
-    Just like in the previous example, you should put a breakpoint
-    on the Debug.Write(Employee) statement in the event handler for the Save button, 
-    so you can see how Employee object was populated by the framework.
+    This example demonstrates the navigation support. Instead of directly redirecting to concrete links,
+    Spring.Web allows for "symbolic" names for navigation targets and navigate to such a target by
+    calling SetResult( symbolicName ) on the page object.
     </p>
 <spring:DataBindingPanel runat="server">
     <table cellpadding="3" cellspacing="3" border="0">
@@ -13,10 +13,17 @@
         <tr>
             <td></td>
             <td>
-                You need to enter a value greater than 21 to pass.
+                You need to enter a value greater than 21 to pass!
             </td>
         </tr>
 </spring:Panel>    
+        <tr>
+            <td></td>
+            <td>
+            By entering a value greater 21 in the box below, you will be redirected to the "Ok" page. Otherwise
+            "InvalidInput" will show up:
+            </td>
+        </tr>
         <tr>
             <td>Your age:</td>
             <td>
