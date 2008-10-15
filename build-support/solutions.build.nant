@@ -67,8 +67,10 @@ Rebuilding Solutions using Nant and "solutions.build":
 	<target name="RebuildAllSolutions-2.0" dependes="Clean">
 		<foreach item="File" property="filename">
 		    <in>
-		        <items basedir="examples">
+		        <items basedir="examples/Spring">
 		            <include name="**/*.2005.sln" />
+		            <include name="Spring.Data.NHibernate/Spring.Northwind.sln" />
+		            <include name="Spring.WcfQuickStart/Spring.WcfQuickStart.2008.sln" />
 		        </items>
 		    </in>
 		    <do>
