@@ -1,0 +1,146 @@
+<?xml version="1.0" ?>
+<!--
+Contains tests for Spring.NET Release Distributions
+
+Requirements:
+This script uses tasks from nantcontrib
+
+Steps to perform for running tests:
+- Copy this script to Spring.NET installation root directory
+- Open Command Prompt within root directory
+- execute nant -f:test.release.nant
+
+-->
+<project name="Spring.NET Release Tests" default="TestAll">
+
+  <property name="spring.basedir" value="${project::get-base-directory()}"/>
+	<property name="spring.version.major" value="1" />
+	<property name="spring.version.minor" value="2" />
+	<property name="spring.version.build" value="0" />
+	<property name="spring.version.revision" value="287" />
+	<property name="spring.version.display" value="${spring.version.major}.${spring.version.minor}.${spring.version.build}" />
+	
+	<target name="TestAll">
+		<call target="CheckAssemblies" />
+	</target>
+	
+	<target name="CheckAssemblies">
+		<call target="CheckAssemblies-net-1.0" />	
+		<call target="CheckAssemblies-net-1.1" />
+		<call target="CheckAssemblies-net-2.0" />
+		<call target="CheckAssemblies-net-3.0" />
+	</target>
+	
+	<target name="CheckAssemblies-net-1.0">
+		<property name="platform.displayname" value=".NET" />
+		<property name="platform.name" value="net" />
+		<property name="platform.version.major" value="1" />
+		<property name="platform.version.minor" value="0" />
+		<call target="_set-platform-common" />
+		<call target="_check-assemblies" />
+	</target>
+	
+	<target name="CheckAssemblies-net-1.1">
+		<property name="platform.displayname" value=".NET" />
+		<property name="platform.name" value="net" />
+		<property name="platform.version.major" value="1" />
+		<property name="platform.version.minor" value="1" />
+		<call target="_set-platform-common" />
+		<call target="_check-assemblies" />
+	</target>
+	
+	<target name="CheckAssemblies-net-2.0">
+		<property name="platform.displayname" value=".NET" />
+		<property name="platform.name" value="net" />
+		<property name="platform.version.major" value="2" />
+		<property name="platform.version.minor" value="0" />
+		<call target="_set-platform-common" />
+		<call target="_check-assemblies" />
+	</target>
+	
+	<target name="CheckAssemblies-net-3.0">
+		<property name="platform.displayname" value=".NET" />
+		<property name="platform.name" value="net" />
+		<property name="platform.version.major" value="3" />
+		<property name="platform.version.minor" value="0" />
+		<call target="_set-platform-common" />
+		<!-- call target="_check-assemblies" / -->
+	</target>
+
+	<target name="_set-platform-common">
+		<property name="platform.binaries.path" value="${spring.basedir}/bin/${platform.name}/${platform.version.major}.${platform.version.minor}" />
+		<property name="platform.binaries.path.release" value="${platform.binaries.path}/release" />
+		<property name="platform.binaries.path.debug" value="${platform.binaries.path}/debug" />
+	</target>
+		
+<!--
+Checks all assemblies for a specific platform version
+-->	
+	<target name="_check-assemblies">	  
+		<echo message="------------------------------------------" />
+		<echo message="Checking assemblies for ${platform.displayname} ${platform.version.major}.${platform.version.minor}" />
+		<echo message="------------------------------------------" />
+		<echo message="" />		
+	  <foreach item="File" property="currentAssembly.codebase">
+	  	<in>
+	  		<items>
+		    	<include name="${platform.binaries.path.release}/*.dll"/>
+		    	<include name="${platform.binaries.path.debug}/*.dll"/>
+		   	</items>
+		  </in>
+		  <do>
+		  	<property name="currentAssembly.fullname" value="${assemblyname::get-full-name(assemblyname::get-assembly-name(currentAssembly.codebase))}" />
+		  	<property name="currentAssembly.name" value="${assemblyname::get-name(assemblyname::get-assembly-name(currentAssembly.codebase))}" />
+
+<!-- perform checks -->		  	
+		  	<echo message="checking '${currentAssembly.codebase}' '=> ${currentAssembly.fullname}" />
+				<call target="CheckAssemblySignature" />				
+				<call target="CheckFileVersionInfo" if="${string::starts-with(currentAssembly.name, 'Spring.')}" />
+		  </do>
+		</foreach>
+	</target>
+	
+
+<!-- 
+Checks the assemblies are signed using the right key
+Expects:
+	currentAssembly.fullname: current assembly's display name
+	currentAssembly.name:     current assembly's simple display name
+-->	
+	<target name="CheckAssemblySignature">
+<!-- set public key -->
+		  	<property name="expectedPublicKeyToken" value="65e474d141e25e07" />		  	
+		  	<property name="expectedPublicKeyToken" value="af08829b84f0328e" if="${currentAssembly.name == 'Common.Logging'}" />
+			  <fail message="assembly '${currentAssembly.codebase}' is not signed" if="${not string::ends-with(currentAssembly.fullname, 'PublicKeyToken='+expectedPublicKeyToken)}" />		
+
+<!-- try GAC install/uninstall -->
+			  <gac-install force="true">
+			  	<assemblies><include name="${currentAssembly.codebase}" /></assemblies>
+			  </gac-install>
+			  <gac-uninstall>
+			  	<assemblies><assembly name="${currentAssembly.fullname}" /></assemblies>
+			  </gac-uninstall>			  
+	</target>
+
+<!-- 
+Expects:
+	currentAssembly.fullname: current assembly's display name
+	currentAssembly.name:     current assembly's simple display name
+-->	
+	<target name="CheckFileVersionInfo">
+		<property name="expected.companyname" value="SpringSource" />
+		<property name="expected.fileversion" value="${spring.version.display}.${platform.version.major}${platform.version.minor}${spring.version.revision}" />
+		<property name="expected.productname" value="Spring.NET Framework ${spring.version.display} for ${platform.displayname} ${platform.version.major}.${platform.version.minor}" />
+		<property name="expected.productversion" value="${expected.fileversion}" />
+		
+		<property name="actual.fileversion" value="${fileversioninfo::get-file-version(fileversioninfo::get-version-info(currentAssembly.codebase))}" />
+		<property name="actual.companyname" value="${fileversioninfo::get-company-name(fileversioninfo::get-version-info(currentAssembly.codebase))}" />
+		<property name="actual.productname" value="${fileversioninfo::get-product-name(fileversioninfo::get-version-info(currentAssembly.codebase))}" />
+		<property name="actual.productversion" value="${fileversioninfo::get-product-version(fileversioninfo::get-version-info(currentAssembly.codebase))}" />
+		
+		<echo if="${ expected.companyname != actual.companyname }" message="WARNING: 'Company Name' mismatch: ${actual.companyname}" />
+		<echo if="${ expected.fileversion != actual.fileversion }" message="WARNING: 'Fileversion' mismatch: ${actual.fileversion}, expected ${expected.fileversion}" />
+		<echo if="${ expected.productname != actual.productname }" message="WARNING: 'Product Name' mismatch: ${actual.productname}" />
+		<echo if="${ expected.productversion != actual.productversion }" message="WARNING: 'Product Version' mismatch: ${actual.productversion}" />
+	</target>
+</project>
