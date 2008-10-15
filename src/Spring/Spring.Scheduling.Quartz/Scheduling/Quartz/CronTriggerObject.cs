@@ -156,10 +156,6 @@ namespace Spring.Scheduling.Quartz
 			{
 				StartTimeUtc = DateTime.UtcNow;
 			}
-			if (TimeZone == null)
-			{
-				TimeZone = TimeZone.CurrentTimeZone;
-			}
 			if (jobDetail != null)
 			{
 				JobName = jobDetail.Name;
