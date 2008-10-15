@@ -3,6 +3,16 @@
 
   <target name="locations"
 	  descriptions="Shows directories where .xsd files will be copied">
+
+
+    <property name="vsXXXX.version" value="VS.NET 2008"/>
+    <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir"/>
+    <property name="vsXXXX.relative.dir" value="..\\..\\Xml\\Schemas"/>
+    <!-- retrieve location of VS.NET 2008 schema store -->
+    <readregistry property="vs2008.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
+                  failonerror="false"/>
+    <echo message="VS.NET 2008 xsd install directory = ${vs2008.xml.schemas}${vsXXXX.relative.dir}"/>
+
     <property name="vsXXXX.version" value="VS.NET 2005"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\8.0\InstallDir"/>
     <property name="vsXXXX.relative.dir" value="..\\..\\Xml\\Schemas"/>
@@ -10,11 +20,32 @@
     <readregistry property="vs2005.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
                   failonerror="false"/>
     <echo message="VS.NET 2005 xsd install directory = ${vs2005.xml.schemas}${vsXXXX.relative.dir}"/>
+
+    <property name="vsXXXX.version" value="VS.NET 2003"/>
+    <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\7.1\InstallDir"/>
+    <property name="vsXXXX.relative.dir" value="..\\Packages\schemas\xml"/>
+    <!-- retrieve location of VS.NET 2003 schema store -->
+    <readregistry property="vs2003.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
+                  failonerror="false"/>
+    <echo message="VS.NET 2003 xsd install directory = ${vs2003.xml.schemas}${vsXXXX.relative.dir}"/>
   </target>
 
 
   <target name="deploy-schema"
-          description="Deploys the Schema to VS.Net schemas dirs. Copies VS 7.0, 7.1, 8.0">
+          description="Deploys the Schema to VS.Net schemas dirs. Copies VS 7.0, 7.1, 8.0, 9.0">
+
+    <!-- deploy spring schema to the VS.NET 2008 schema store -->
+    <property name="vsXXXX.version" value="VS.NET 2008"/>
+    <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir"/>
+    <property name="vsXXXX.relative.dir" value="..\\..\\Xml\\Schemas"/>
+    <!-- retrieve location of VS.NET 2005 schema store -->
+    <readregistry property="vs2008.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
+                  failonerror="false"/>
+    <property name="vsXXXX.xml.schemas.notinstalled" value="true"/>
+    <if test="${property::exists('vs2008.xml.schemas')}">
+      <property name="vsXXXX.xml.schemas" value="${vs2008.xml.schemas}"/>
+      <call target="_deploy-schema"/>
+    </if>
 
     <!-- deploy spring schema to the VS.NET 2005 schema store -->
     <property name="vsXXXX.version" value="VS.NET 2005"/>
@@ -61,7 +92,7 @@
   <!-- 'private' scoped parameterised version of the 'deploy-schema' target -->
 
 
-  <target name="_deploy-schema">
+  <target name="_deploy-schema" depends="_clean">
 
       <!-- deploy schema to VS.NET XXXX schema store -->
       <echo message="-------------------------------------------------------"/>
@@ -108,7 +139,7 @@
       <echo message="Copying spring-database.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
-      <copy file="spring-database-1.1.xsd" todir="${vsXXXX.xml.schemas}..\\..\\Xml\\Schemas" 
+      <copy file="spring-database-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
 	    overwrite="true"/>
 
@@ -116,7 +147,7 @@
       <echo message="Copying spring-tx-1.1.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
-      <copy file="spring-tx-1.1.xsd" todir="${vsXXXX.xml.schemas}..\\..\\Xml\\Schemas" 
+      <copy file="spring-tx-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
 	    overwrite="true"/>
 
@@ -124,7 +155,7 @@
       <echo message="Copying spring-nms-1.2.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
-      <copy file="spring-nms-1.2.xsd" todir="${vsXXXX.xml.schemas}..\\..\\Xml\\Schemas" 
+      <copy file="spring-nms-1.2.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
 	    overwrite="true"/>
 
@@ -132,10 +163,11 @@
       <echo message="Copying spring-ems-1.2.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
-      <copy file="spring-ems-1.2.xsd" todir="${vsXXXX.xml.schemas}..\\..\\Xml\\Schemas" 
+<!--      
+      <copy file="spring-ems-1.2.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
-	    overwrite="true"/>
-
+	    overwrite="true" />
+-->
       <property name="vsXXXX.xml.schemas.notinstalled" value="false"/>
 
     <if test="${vsXXXX.xml.schemas.notinstalled}">
@@ -145,4 +177,16 @@
     </if>
   </target>
 
+	<target name="_clean">
+    <echo message="-------------------------------------------------"/>
+    <echo message="Removing previously installed spring schema files"/>
+    <echo message="from ${vsXXXX.version} installation."/>
+    <echo message="-------------------------------------------------"/>
+    <echo message=""/>
+		<delete failonerror="false">
+			<fileset basedir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}">
+				<include name="spring-*.xsd"/>
+			</fileset>
+		</delete>
+	</target>
 </project>
