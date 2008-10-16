@@ -30,7 +30,7 @@
     <para>Spring.NET's web application framework aims to increase your
     productivity writing ASP.NET WebForms applications. It offers a unique
     value proposition to creating ASP.NET applications not found in other .NET
-    web framework. </para>
+    web framework.</para>
 
     <para>The goal of the framework is to make it easy to write 'thin and
     clean' web applications. By thin, what is meant is that the WebForm's
@@ -109,13 +109,13 @@
         page to apply to different parts of your web application are easy to
         perform.</para>
 
-        <para> </para>
+        <para></para>
       </listitem>
     </itemizedlist>
 
     <para>All you know about ASP.NET development still applies, Spring's
     approach is to 'embrace and extend' the basic ASP.NET programming model so
-    you can be as productive as possible. </para>
+    you can be as productive as possible.</para>
 
     <note>
       <para>Support for ASP.NET MVC is planned for Spring.NET 2.0 and previews
@@ -639,7 +639,7 @@
       <literal>&lt;object/&gt;</literal> element).</para>
     </sect2>
 
-    <sect2>
+    <sect2 xml:id="web-di-modules">
       <title>Injecting dependencies into custom HTTP modules</title>
 
       <para>You can perform dependency injection on custom HTTP modules
@@ -677,6 +677,89 @@
 &lt;/object&gt;</programlisting>
 
       <para>You can see this example in action in the Web Quickstart.</para>
+    </sect2>
+
+    <sect2 xml:id="web-di-handler">
+      <title>Injecting dependencies into HTTP handlers and handler
+      factories</title>
+
+      <para>You can perform dependency injection on
+      <literal>IHttpHandlers</literal> and
+      <literal>IHttpHandlerFactory</literal>. This effectively allows for a
+      fully Spring-managed <literal>&lt;httpHandlers&gt;</literal>
+      configuration section. To configure an <literal>IHttpHandler</literal>
+      or <literal>IHttpHandlerFactory</literal> you should register Spring's
+      <literal>MappingHandlerFactory</literal> with a specific path or
+      wildcard string (i.e. *.aspx) using the standard configuration of an
+      <literal>&lt;httpHandler&gt;</literal> in web.config. This is shown
+      below</para>
+
+      <programlisting>&lt;system.web&gt;
+  &lt;httpHandlers&gt;
+    &lt;!-- 
+      the lines below map *any* request ending with *.ashx or *.whatever
+      to the global(!) MappingHandlerFactory. Further "specialication" 
+      of which handler to map to is done within MappingHandlerFactory's configuration -
+      use MappingHandlerFactoryConfigurer for this (see below)
+    --&gt;
+    &lt;add verb="*" path="*.ashx" type="Spring.Web.Support.MappingHandlerFactory, Spring.Web" validate="true"/&gt;
+    &lt;add verb="*" path="*.whatever" type="Spring.Web.Support.MappingHandlerFactory, Spring.Web" validate="false"/&gt;
+  &lt;/httpHandlers&gt;
+&lt;/system.web&gt;</programlisting>
+
+      <para>The specialization of which specific handler is mapped to the path
+      is done by configuration of <literal>Spring's
+      MappingHandlerFactoryConfigurer</literal> class. The
+      MappingHandlerFactoryConfigurer is configured by specifying a dictionary
+      of key value paris, the key value is a regular expression that will
+      match the request URL and the value is an instance of an IHttpHandler or
+      IHttpHandlerFactory configured via dependency injection.</para>
+
+      <para>the configuration of MappingHandlerFactoryConfigurer is shown
+      below</para>
+
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+
+    &lt;!-- configures the global GenericHandlerFactory instance --&gt;
+    &lt;object name="mappingHandlerFactoryConfigurer" type="Spring.Web.Support.MappingHandlerFactoryConfigurer, Spring.Web"&gt;
+        &lt;property name="HandlerMap"&gt;
+            &lt;dictionary&gt;
+                &lt;!-- map any request ending with *.whatever to NoOpHandler --&gt;
+                &lt;entry key="\.whatever$" value="myCustomHandler" /&gt;
+                &lt;entry key="\.ashx$" value="standardHandlerFactory" /&gt;
+            &lt;/dictionary&gt;
+        &lt;/property&gt;
+    &lt;/object&gt;
+
+    &lt;object name="standardHandlerFactory" type="Spring.Web.Support.DefaultHandlerFactory, Spring.Web" /&gt;
+
+    &lt;!-- defines a standard singleton that will handle *.whatever requests --&gt;
+    &lt;object name="myCustomHandler" type="MyCustomHttpHandler, App_Code"&gt;
+        &lt;property name="MessageText" value="This text is injected via Spring" /&gt;
+    &lt;/object&gt;
+    
+    &lt;!-- 
+        used for configuring ~/DemoHandler.ashx custom handler
+        note, that this is an abstract definition because 'type' is not specified 
+    --&gt;
+    &lt;object name="DemoHandler.ashx"&gt;
+        &lt;property name="OutputText"&gt;
+            &lt;value&gt;This text is injected via Spring&lt;/value&gt;
+        &lt;/property&gt;
+    &lt;/object&gt;
+&lt;/objects&gt;</programlisting>
+
+      <para>Spring's <literal>DefaultHandlerFactory</literal> will use the
+      .NET class System.Web.UI.SimpleHandlerFactory to create handler instaces
+      and will configure each instances used an object definition whose name
+      matches the request url's filename. The abstract object definition of
+      <literal>DemoHandler.ashx</literal> is an example of this approach. You
+      may also configure standard classes that implment the IHttpHandler
+      interface as demonstrated in the example above for the class
+      <literal>MyCustomHttpHandler</literal>.</para>
+
+      <para>Please refer to the Web Quickstart application too see this in
+      action.</para>
     </sect2>
 
     <sect2>
@@ -2346,6 +2429,15 @@ private void SetLanguage(object sender, CommandEventArgs e)
     the client and back to the server, so transfer mode is recommended as the
     preferred result mode (it is also the current default).</para>
 
+    <tip>
+      <para>If you should need to customize how to a redirect request is
+      generate, for example to encrypt the request parameters, subclass the
+      Request object and override one or more protected methods, for example
+      <literal>string BuildUrl( string resolvedPath, IDictionary
+      resolvedParameters )</literal>. See the API documentation for additional
+      information.</para>
+    </tip>
+
     <para>The above example shows independent result object definitions, which
     are useful for global results such as a home- and login- page.
     <literal>Result</literal> definitions that are only going to be used by
@@ -2426,6 +2518,62 @@ protected override void OnInit(EventArgs e)
     defined constants. This would be a good thing to do in the case of a
     logical result name such as "home" that is likely to be referenced by many
     pages.</para>
+
+    <sect2 xml:id="web-resultmapping-custom">
+      <title>Registering user define transfer modes</title>
+
+      <para>You may also register a custom interpreter that can parse the
+      short-hand string representation that creates a Result object.. The
+      string representation can be broken down into two parts shown
+      below</para>
+
+      <programlisting>&lt;resultmode&gt;:&lt;textual result representation&gt;</programlisting>
+
+      <para>The interface <literal>IResultFactory</literal> is responsible for
+      creating an IResult object from these two pieces, as shown below</para>
+
+      <programlisting language="csharp">public interface IResultFactory
+{
+    IResult CreateResult( string resultMode, string resultText );
+}</programlisting>
+
+      <para>A <literal>ResultFactoryRegistry</literal> is used to associate a
+      given resultmode string with an <literal>IResultFactory</literal>
+      implementation. Here is an example</para>
+
+      <programlisting>class MySpecialResultLogic : IResult
+{
+  ...
+}
+
+class MySpecialResultLogicFactory : IResultFactory
+{
+   IResult Create( string mode, string expression ) { 
+     /* ... convert 'expression' into MySpecialResultLogic */ 
+   }
+}
+
+// register with global factory
+ResultFactoryRegistry.RegisterResultFactory( "mySpecialMode", new MySpecialResultLogicFactory );
+</programlisting>
+
+      <para>You would then use the custom 'continue' mode in your page as
+      shown below</para>
+
+      <programlisting>// configure your Results
+&lt;object type="mypage.aspx"&gt;
+   &lt;property name="Results"&gt;
+      &lt;dictionary&gt;
+         &lt;entry key="continue" value="mySpecialMode:&lt;some MySpecialResultLogic string representation&gt;" /&gt;
+      &lt;/dictionary&gt;
+   &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+      <para>The result redirection is done as before, by calling
+      <literal>myPage.SetResult("continue");</literal></para>
+
+      <para></para>
+    </sect2>
   </sect1>
 
   <sect1 xml:id="web-clientscripting">
