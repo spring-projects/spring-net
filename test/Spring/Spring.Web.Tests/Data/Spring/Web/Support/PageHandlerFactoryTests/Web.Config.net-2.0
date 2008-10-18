@@ -13,9 +13,9 @@
 
     </configSections>
 
-	<runtime>
-		<assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
-			<!--
+    <runtime>
+        <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+            <!--
 			<dependentAssembly>
 				<assemblyIdentity name="Common.Logging" publicKeyToken="65e474d141e25e07" />
 				<bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535" newVersion="1.0.2.0" />
@@ -35,9 +35,9 @@
 				<bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535" newVersion="2.4.5.0" />
 			</dependentAssembly>
 -->
-		</assemblyBinding>
-	</runtime>
-	
+        </assemblyBinding>
+    </runtime>
+
     <!-- to see logging output in the attached debugger -->
     <common>
         <logging>
@@ -59,8 +59,8 @@
         </httpModules>
 
         <httpHandlers>
-			<add verb="*" path="*.oaspx" type="System.Web.UI.PageHandlerFactory"/>
-			<add verb="*" path="*.aspx" type="Spring.Web.Support.PageHandlerFactory, Spring.Web"/>
+            <add verb="*" path="*.oaspx" type="System.Web.UI.PageHandlerFactory"/>
+            <add verb="*" path="*.aspx" type="Spring.Web.Support.PageHandlerFactory, Spring.Web"/>
             <add verb="*" path="*.testmethod" type="NUnitAspEx.AspTestMethodHandler, NUnitAspEx" validate="false" />
         </httpHandlers>
 
@@ -73,6 +73,18 @@
         </context>
         <objects xmlns="http://www.springframework.net">
 
+            <!-- Tests TypeAliasConfigurer http://jira.springframework.org/browse/SPRNET-1029 -->
+            <object id="DomainAliases" type="Spring.Objects.Factory.Config.TypeAliasConfigurer, Spring.Core">
+                <property name="TypeAliases">
+                    <dictionary>
+                        <entry key="GenericTestObject" value="Spring.Objects.TestGenericObject&lt;int,string>, Spring.Core.Tests" />
+                        <entry key="TestObject" value="Spring.Objects.TestObject, Spring.Core.Tests" />
+                    </dictionary>
+                </property>
+            </object>
+            <object id="mySingleton" type="GenericTestObject" />
+            <object id="myOtherSingleton" type="TestObject" />
+            
             <object type="TransferAfterSetResult.aspx">
                 <property name="Results">
                     <dictionary>
