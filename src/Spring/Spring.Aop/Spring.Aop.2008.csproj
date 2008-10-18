@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -137,6 +137,7 @@
     <Compile Include="Aop\Config\ConfigObjectDefinitionParser.cs" />
     <Compile Include="Aop\Framework\AopUtils.cs" />
     <Compile Include="Aop\Framework\AutoProxy\InheritanceBasedAopConfigurer.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\DynamicMethodInvocation.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\CachedAopProxyFactory.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\DefaultAopProxyFactory.cs" />

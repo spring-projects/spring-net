@@ -340,7 +340,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Subclasses should override this method to return true if this
         /// object should not be considered for autoproxying by this post processor.
         /// Sometimes we need to be able to avoid this happening if it will lead to
-        /// a circular reference. This implementation returns true.
+        /// a circular reference. This implementation returns false.
         /// </summary>
         /// <param name="objectType">the type of the object</param>
         /// <param name="objectName">the name of the object</param>

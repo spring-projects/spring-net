@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2111596A-0327-4C9D-8919-294FBD988A23}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -131,6 +131,7 @@
     <Compile Include="Aop\Framework\AutoProxy\OrderedLogicalThreadContextCheckAdvisor.cs" />
     <Compile Include="Aop\Framework\AbstractMethodInvocationTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\CreatesTestObject.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreatorTests.cs" />
     <Compile Include="Aop\Framework\DynamicMethodInvocationTests.cs" />
     <Compile Include="Aop\Framework\CountingAfterReturningAdvice.cs" />
     <Compile Include="Aop\Framework\CountingBeforeAdvice.cs">

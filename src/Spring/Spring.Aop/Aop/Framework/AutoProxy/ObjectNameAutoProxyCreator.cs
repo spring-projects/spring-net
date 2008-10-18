@@ -59,34 +59,50 @@ namespace Spring.Aop.Framework.AutoProxy
         public IList ObjectNames
         {
             set { objectNames = value; }
+            get { return objectNames; }
+        }
+
+        /// <summary>
+        /// Determines, whether the given object shall be proxied.
+        /// </summary>
+        /// <returns>
+        /// <see cref="AbstractAutoProxyCreator.PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS"/> if the object shall be proxied.<br/>
+        /// <see cref="AbstractAutoProxyCreator.DO_NOT_PROXY"/> otherwise.
+        /// </returns>
+        protected override object[] GetAdvicesAndAdvisorsForObject( Type objType, string name, ITargetSource customTargetSource )
+        {
+            if (ShallProxy( objType, name, customTargetSource ))
+            {
+                return PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS;
+            }
+            return DO_NOT_PROXY;
         }
 
         /// <summary>
         /// Identify as object to proxy if the object name is in the configured list of names.
         /// </summary>
-        protected override object[] GetAdvicesAndAdvisorsForObject(Type objType, string name, ITargetSource customTargetSource)
+        protected virtual bool ShallProxy( Type objType, string name, ITargetSource customTargetSource )
         {
             if (objectNames != null)
             {
                 for (int i = 0; i < objectNames.Count; i++)
                 {
-                    string mappedName = String.Copy((string) objectNames[i]);
-                    if (typeof (IFactoryObject).IsAssignableFrom(objType))
+                    string mappedName = String.Copy( (string)objectNames[i] );
+                    if (typeof( IFactoryObject ).IsAssignableFrom( objType ))
                     {
-                        if (!name.StartsWith(ObjectFactoryUtils.FactoryObjectPrefix))
+                        if (!name.StartsWith( ObjectFactoryUtils.FactoryObjectPrefix ))
                         {
-                            continue;                           
+                            continue;
                         }
-                        mappedName = mappedName.Substring(ObjectFactoryUtils.FactoryObjectPrefix.Length);
+                        mappedName = mappedName.Substring( ObjectFactoryUtils.FactoryObjectPrefix.Length );
                     }
-                    if (IsMatch(name, mappedName))
+                    if (IsMatch( name, mappedName ))
                     {
-                        return PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS;
+                        return true;
                     }
                 }
             }
-            return DO_NOT_PROXY;
-
+            return false;
         }
 
         /// <summary>
@@ -101,11 +117,9 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="objectName">the object name to check</param>
         /// <param name="mappedName">the name in the configured list of names</param>
         /// <returns>if the names match</returns>
-        protected virtual bool IsMatch(string objectName, string mappedName)
+        protected virtual bool IsMatch( string objectName, string mappedName )
         {
-            return PatternMatchUtils.SimpleMatch(mappedName, objectName);          
+            return PatternMatchUtils.SimpleMatch( mappedName, objectName );
         }
-
-
     }
 }
