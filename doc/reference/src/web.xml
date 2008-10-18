@@ -30,7 +30,7 @@
     <para>Spring.NET's web application framework aims to increase your
     productivity writing ASP.NET WebForms applications. It offers a unique
     value proposition to creating ASP.NET applications not found in other .NET
-    web framework.</para>
+    web frameworks.</para>
 
     <para>The goal of the framework is to make it easy to write 'thin and
     clean' web applications. By thin, what is meant is that the WebForm's
@@ -42,8 +42,8 @@
     contain any reference to UI elements. This makes it possible to test your
     event handler code in integration style tests. Last but not least,
     Spring's web framework reduces the incidental complexity of common tasks
-    in the web tier, for example the conversion of HTML control data to object
-    and then vice-versa after the request has been processed by the
+    in the web tier, for example the conversion of HTML control data to
+    objects and then vice-versa after the request has been processed by the
     application layer.</para>
 
     <para>Highlights of Spring's Web framework are</para>
@@ -72,7 +72,7 @@
         definitions can be defined at the application, session or request
         scope. This makes it easy to inject, say a session scoped shopping
         cart, into your page without having to do any lower level
-        programming</para>
+        programming.</para>
       </listitem>
 
       <listitem>
@@ -98,7 +98,7 @@
         through 'result mapping'</link>. Instead of hard coding urls and data
         to direct where a page should go next, result mappings are externally
         defined and configured that associate logical names and a URL (+
-        data). This also allows to encryption of values that are sent via
+        data). This also allows for the encryption of values that are sent via
         Response.Redirect.</para>
       </listitem>
 
@@ -2520,7 +2520,7 @@ protected override void OnInit(EventArgs e)
     pages.</para>
 
     <sect2 xml:id="web-resultmapping-custom">
-      <title>Registering user define transfer modes</title>
+      <title>Registering user defined transfer modes</title>
 
       <para>You may also register a custom interpreter that can parse the
       short-hand string representation that creates a Result object.. The
