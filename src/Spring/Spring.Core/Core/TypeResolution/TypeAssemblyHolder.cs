@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2008 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,8 +97,12 @@ namespace Spring.Core.TypeResolution
 
         private void SplitTypeAndAssemblyNames(string originalTypeName)
         {
-            int typeAssemblyIndex
-                = originalTypeName.IndexOf(TypeAssemblySeparator);
+            // generic types may look like:
+            // Spring.Objects.TestGenericObject`2[[System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]][] , Spring.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+            //
+            // start searching for assembly separator after the last bracket if any
+            int typeAssemblyIndex = originalTypeName.LastIndexOf(']');
+            typeAssemblyIndex = originalTypeName.IndexOf(TypeAssemblySeparator, typeAssemblyIndex+1);
             if (typeAssemblyIndex < 0)
             {
                 unresolvedTypeName = originalTypeName;

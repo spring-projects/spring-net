@@ -265,6 +265,7 @@
     <Compile Include="Core\TypeConversion\UriConverterTests.cs" />
     <Compile Include="Core\TypeResolution\CachedTypeResolverTests.cs" />
     <Compile Include="Core\TypeResolution\GenericTypeResolverTests.cs" />
+    <Compile Include="Core\TypeResolution\TypeAssemblyHolderTests.cs" />
     <Compile Include="Core\TypeResolution\TypeRegistryTests.cs" />
     <Compile Include="Core\TypeResolution\TypeResolutionUtilsTests.cs" />
     <Compile Include="Core\TypeResolution\TypeResolverTests.cs" />
