@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System;
 using System.Web;
 using System.Web.UI;
 using NUnit.Framework;
@@ -39,43 +40,6 @@ namespace Spring.Web.UI
     [TestFixture]
     public class UserControlTests : TestWebContextTests
     {
-        public class TestUserControl : UserControl
-        {
-            private static int instanceCount = 0;
-
-            public TestUserControl()
-                :this(string.Format("_ctl_{0}", instanceCount++), null)
-            {
-            }
-
-            public TestUserControl(string id)
-                :this(id, null)
-            {
-            }
-
-            public TestUserControl(Control parent)
-                :this(null, parent)
-            {
-            }
-
-            public TestUserControl(string id, Control parent)
-            {
-                this.ID = id;
-                if (parent != null) parent.Controls.Add(this);
-            }
-
-            public new void SetResult(string name)
-            {
-                base.SetResult(name);
-            }
-
-            public override string ToString()
-            {
-                return string.Format("{0}[{1}]", base.ToString(), this.ClientID);
-            }
-
-        }
-
         [Test]
         public void SetResultSelectsCorrectResult()
         {
@@ -126,6 +90,23 @@ namespace Spring.Web.UI
             ConditionValidator v2 = new ConditionValidator("#usercontrol == #this", null);
 
             Assert.IsTrue(c1.Validate(c1, v1, v2));
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NoNullModelPersistenceMediumAllowed()
+        {
+            TestUserControl tuc = new TestUserControl();
+            tuc.ModelPersistenceMedium = null;
+        }
+
+        [Test]
+        public void StoresAndLoadsModelUsingModelPersistenceMedium()
+        {
+            TestUserControl tuc = new TestUserControl();
+            tuc.ModelPersistenceMedium = new DictionaryModelPersistenceMedium();
+            tuc.SaveModelToPersistenceMedium( this );
+            Assert.AreEqual(this, tuc.LoadModelFromPersistenceMedium());
         }
     }
 }

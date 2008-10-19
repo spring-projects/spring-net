@@ -319,15 +319,22 @@ namespace Spring.Web.UI
 
         #region Model Management Support
 
+        private IModelPersistenceMedium modelPersistenceMedium = new SessionModelPersistenceMedium();
+
         /// <summary>
-        /// Initializes data model when the page is first loaded.
+        /// Set the <see cref="IModelPersistenceMedium"/> strategy for storing model 
+        /// instances between requests.
         /// </summary>
         /// <remarks>
-        /// This method should be overriden by the developer
-        /// in order to initialize data model for the page.
+        /// By default the <see cref="SessionModelPersistenceMedium"/> strategy is used.
         /// </remarks>
-        protected virtual void InitializeModel()
+        public IModelPersistenceMedium ModelPersistenceMedium
         {
+            set
+            {
+                AssertUtils.ArgumentNotNull(value, "ModelPersistenceMedium");
+                modelPersistenceMedium = value;
+            }
         }
 
         /// <summary>
@@ -339,7 +346,8 @@ namespace Spring.Web.UI
         /// </remarks>
         protected virtual object LoadModelFromPersistenceMedium()
         {
-            return Session[Request.CurrentExecutionFilePath + this.UniqueID + ".Model"];
+            //return Session[Request.CurrentExecutionFilePath + this.UniqueID + ".Model"];
+            return modelPersistenceMedium.LoadFromMedium(this);
         }
 
         /// <summary>
@@ -351,7 +359,19 @@ namespace Spring.Web.UI
         /// </remarks>
         protected virtual void SaveModelToPersistenceMedium( object modelToSave )
         {
-            Session[Request.CurrentExecutionFilePath + this.UniqueID + ".Model"] = modelToSave;
+            //Session[Request.CurrentExecutionFilePath + this.UniqueID + ".Model"] = modelToSave;
+            modelPersistenceMedium.SaveToMedium(this, modelToSave);
+        }
+
+        /// <summary>
+        /// Initializes data model when the page is first loaded.
+        /// </summary>
+        /// <remarks>
+        /// This method should be overriden by the developer
+        /// in order to initialize data model for the page.
+        /// </remarks>
+        protected virtual void InitializeModel()
+        {
         }
 
         /// <summary>

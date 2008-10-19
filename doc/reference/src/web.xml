@@ -1311,27 +1311,27 @@ class MyControl : Control, ISupportsWebDependencyInjection
     each one:<orderedlist>
         <listitem>
           <para>When the page is initially loaded (<literal>IsPostback ==
-          false</literal>), the <literal>InitializeModel</literal> method is
+          false</literal>), the <literal>InitializeModel</literal>() method is
           called which initializes the trip object by creating a new instance
           and setting its properties to desired values. Right before the page
-          is rendered, <literal>the SaveModel</literal> method will be invoked
-          and whatever the value it returns will be stored within the HTTP
-          Session. Finally, on each postback, <literal>the LoadModel</literal>
-          method will be called and the value returned by the previous call to
-          <literal>SaveModel</literal> will be passed to it as an
-          argument.</para>
+          is rendered, <literal>the SaveModel</literal>() method will be
+          invoked and whatever the value it returns will be stored within the
+          HTTP Session. Finally, on each postback, <literal>the
+          LoadModel()</literal> method will be called and the value returned
+          by the previous call to <literal>SaveModel</literal> will be passed
+          to it as an argument.</para>
 
           <para>In this particular case the implementation is very simple
           because our whole model is just the <literal>trip</literal> object.
-          As such, <literal>SaveModel</literal> simply returns the
-          <literal>trip</literal> object and <literal>LoadModel</literal>
-          casts the <literal>savedModel</literal> argument to
+          As such, <literal>SaveModel</literal>() simply returns the
+          <literal>trip</literal> object and <literal>LoadModel()</literal>
+          casts the <literal>savedModel</literal>() argument to
           <literal>Trip</literal> and assigns it to the
           <literal>trip</literal> field within the page. In the more complex
           scenarios, you will typically return a dictionary containing your
-          model objects from the <literal>SaveModel</literal> method, and read
-          the values from that dictionary within the
-          <literal>LoadModel</literal>.</para>
+          model objects from the <literal>SaveModel</literal>() method, and
+          read the values from that dictionary within the
+          <literal>LoadModel</literal>().</para>
         </listitem>
 
         <listitem>
@@ -1798,6 +1798,37 @@ protected override void InitializeDataBindings()
       <note>
          The Visual Studio Web Form Editor will of course complain about binding attributes because it doesn't know them. You can safely ignore those warnings. 
       </note>
+    </sect2>
+
+    <sect2>
+      <title>Customizing Model Persistence</title>
+
+      <para>As was already mentioned in the introduction to this chapter,
+      model management needs an application developer to override
+      <literal>InitializeModel()</literal>, <literal>SaveModel() </literal>and
+      <literal>LoadModel()</literal> for storing model information between
+      requests in the user's session. On web farms this of course storing
+      information in a user's session is not a good strategy. Thus it is
+      possible to choose another persistence strategy by setting a
+      Spring.Web.UI.Page's resp. Spring.Web.UI.UserControl's
+      ModelPersistenceMedium property:</para>
+
+      <para><programlisting language="myxml">&lt;object id="modelPersister" type="Sample.DatabaseModelPersistenceMedium, MyCode"/&gt;
+
+&lt;object type="UserRegistration.aspx"&gt;
+    &lt;property name="ModelPersistenceMedium" ref="modelPersister"/&gt;
+&lt;/object&gt;</programlisting>To implement any arbitrary persistence
+      strategy, one simply needs to implement the IModelPersistenceMedium
+      interface:</para>
+
+      <para><programlisting language="myxml">public interface IModelPersistenceMedium
+{
+  // Load the model for the specified control context.
+  object LoadFromMedium( Control context );
+
+  // Save the specified model object.
+  void SaveToMedium( Control context, object modelToSave );
+}</programlisting></para>
     </sect2>
   </sect1>
 

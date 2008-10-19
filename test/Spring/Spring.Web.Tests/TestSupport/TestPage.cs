@@ -68,5 +68,15 @@ namespace Spring.TestSupport
             string result = sw.GetStringBuilder().ToString();
             return result;
         }
+
+        public new void SaveModelToPersistenceMedium(object model)
+        {
+            base.SaveModelToPersistenceMedium(model);
+        }
+
+        public new object LoadModelFromPersistenceMedium()
+        {
+            return base.LoadModelFromPersistenceMedium();
+        }
     }
 }

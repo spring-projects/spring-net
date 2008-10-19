@@ -128,6 +128,7 @@
     <Compile Include="Web\Support\DefaultResultFactory.cs" />
     <Compile Include="Web\Support\HandlerMap.cs" />
     <Compile Include="Web\Support\HandlerMapEntry.cs" />
+    <Compile Include="Web\UI\IModelPersistenceMedium.cs" />
     <Compile Include="Web\Support\IResult.cs" />
     <Compile Include="Web\Support\IResultFactory.cs" />
     <Compile Include="Web\Support\LocalResourceManager.cs" />
@@ -277,6 +278,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Web\Support\DefaultResultWebNavigator.cs" />
+    <Compile Include="Web\UI\SessionModelPersistenceMedium.cs" />
     <Compile Include="Web\UI\UserControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

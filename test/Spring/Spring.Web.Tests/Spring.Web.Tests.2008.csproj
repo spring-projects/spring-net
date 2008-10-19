@@ -134,9 +134,15 @@
     <Compile Include="Web\UI\Controls\HeadTests.cs" />
     <Compile Include="Web\UI\Controls\ValidationErrorsTests.cs" />
     <Compile Include="Web\UI\Controls\ValidationSummaryTests.cs" />
+    <Compile Include="TestSupport\DictionaryModelPersistenceMedium.cs" />
     <Compile Include="Web\UI\PageTests.cs">
     </Compile>
-    <Compile Include="Web\UI\UserControlTests.cs" />
+    <Compile Include="TestSupport\TestUserControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\UI\SessionModelPersistenceMediumTests.cs" />
+    <Compile Include="Web\UI\UserControlTests.cs">
+    </Compile>
     <None Include="Data\Spring\Context\Support\WebApplicationContextTests\Web.Config" />
     <None Include="Data\Spring\Web\Support\PageHandlerFactoryTests\Web.Config.net-1.1" />
     <None Include="Data\Spring\Web\Support\PageHandlerFactoryTests\Web.Config.net-2.0" />

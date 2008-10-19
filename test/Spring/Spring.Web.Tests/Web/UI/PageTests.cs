@@ -124,5 +124,22 @@ namespace Spring.Web.UI
             page.SetResult("theResult");
             mocks.VerifyAll();
         }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NoNullModelPersistenceMediumAllowed()
+        {
+            TestPage tuc = new TestPage();
+            tuc.ModelPersistenceMedium = null;
+        }
+
+        [Test]
+        public void StoresAndLoadsModelUsingModelPersistenceMedium()
+        {
+            TestPage tuc = new TestPage();
+            tuc.ModelPersistenceMedium = new DictionaryModelPersistenceMedium();
+            tuc.SaveModelToPersistenceMedium( this );
+            Assert.AreEqual(this, tuc.LoadModelFromPersistenceMedium());
+        }
     }
 }
