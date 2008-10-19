@@ -35,6 +35,24 @@ namespace Spring.Objects.Factory.Config
     [TestFixture]
     public class VariablePlaceholderConfigurerTests
     {
+        private class DictionaryVariableSource : IVariableSource
+        {
+            private Hashtable variables = new Hashtable();
+
+            public DictionaryVariableSource(params string[] args)
+            {
+                for(int i=0;i<args.Length;i+=2)
+                {
+                    variables[args[i]] = args[i+1];
+                }
+            }
+
+            public string ResolveVariable(string name)
+            {
+                return (string) variables[name];
+            }
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -72,6 +90,31 @@ namespace Spring.Objects.Factory.Config
 
         }
 
-        
+        [Test]
+        public void UsesCustomVariablePrefixSuffix()
+        {
+            StaticApplicationContext ac = new StaticApplicationContext();
+
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            pvs.Add("age", "%[maxResults]%");
+            pvs.Add("name", "%[name]%");
+            ac.RegisterSingleton("tb1", typeof(TestObject), pvs);
+
+            IList variableSources = new ArrayList();
+            variableSources.Add( new DictionaryVariableSource( new string[] { "maxResults", "35", "name", "Erich" } ) );
+
+
+            pvs = new MutablePropertyValues();
+            pvs.Add("VariableSources", variableSources);
+            pvs.Add("PlaceholderPrefix", "%[");
+            pvs.Add("PlaceholderSuffix", "]%");
+
+            ac.RegisterSingleton("configurer", typeof(VariablePlaceholderConfigurer), pvs);
+            ac.Refresh();
+
+            TestObject tb1 = (TestObject)ac.GetObject("tb1");
+            Assert.AreEqual(35, tb1.Age);
+            Assert.AreEqual("Erich", tb1.Name);            
+        }        
     }
 }
