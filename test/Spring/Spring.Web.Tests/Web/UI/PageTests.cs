@@ -47,6 +47,13 @@ namespace Spring.Web.UI
     public class PageTests : TestWebContextTests
     {
         [Test]
+        public void NoSharedStateAtConstruction()
+        {
+            Page page = new Page();            
+            Assert.IsNull(page.SharedState);
+        }
+
+        [Test]
         public void Validate()
         {           
             Page page = new TestPage(HttpContext.Current);

@@ -130,6 +130,7 @@
     <Compile Include="Web\Support\HandlerMapEntry.cs" />
     <Compile Include="Web\Support\IResult.cs" />
     <Compile Include="Web\Support\IResultFactory.cs" />
+    <Compile Include="Web\Support\LocalResourceManager.cs" />
     <Compile Include="Web\Support\MappingHandlerFactory.cs" />
     <Compile Include="Web\Support\MappingHandlerFactoryConfigurer.cs" />
     <Compile Include="Web\Support\ResultFactoryRegistry.cs" />

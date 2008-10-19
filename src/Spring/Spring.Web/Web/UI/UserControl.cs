@@ -68,7 +68,7 @@ namespace Spring.Web.UI
         private object controller;
         private ILocalizer localizer;
         private IMessageSource messageSource;
-        private IDictionary sharedState = new CaseInsensitiveHashtable();
+        private IDictionary sharedState;
         private IBindingContainer bindingManager;
         private IValidationErrors validationErrors = new ValidationErrors();
         private IWebNavigator webNavigator;
@@ -1020,23 +1020,23 @@ namespace Spring.Web.UI
         /// </remarks>
         /// <returns>Local ResourceManager instance.</returns>
         private ResourceManager GetLocalResourceManager()
+        {
 #if !NET_2_0
-        {
             return new ResourceManager(GetType().BaseType);
-        }
 #else
-        {
-            object resourceProvider = Page.GetLocalResourceProvider.Invoke( typeof( ResourceExpressionBuilder ), new object[] { this } );
-            MethodInfo GetLocalResourceAssembly =
-                    resourceProvider.GetType().GetMethod( "GetLocalResourceAssembly", BindingFlags.NonPublic | BindingFlags.Instance );
-            Assembly localResourceAssembly = (Assembly)GetLocalResourceAssembly.Invoke( resourceProvider, null );
-            if (localResourceAssembly != null)
-            {
-                return new ResourceManager( VirtualPathUtility.GetFileName( this.AppRelativeVirtualPath ), localResourceAssembly );
-            }
-            return null;
-        }
+//            object resourceProvider = Page.GetLocalResourceProvider.Invoke( typeof( ResourceExpressionBuilder ), new object[] { this } );
+//            MethodInfo GetLocalResourceAssembly =
+//                    resourceProvider.GetType().GetMethod( "GetLocalResourceAssembly", BindingFlags.NonPublic | BindingFlags.Instance );
+//            Assembly localResourceAssembly = (Assembly)GetLocalResourceAssembly.Invoke( resourceProvider, null );
+//            if (localResourceAssembly != null)
+//            {
+//                return new LocalResourceManager( VirtualPathUtility.GetFileName( this.AppRelativeVirtualPath ), localResourceAssembly );
+//            }
+//            return null;
+
+            return new LocalResourceManager( this.AppRelativeVirtualPath );
 #endif
+        }
 
         /// <summary>
         /// Returns message for the specified resource name.

@@ -40,7 +40,7 @@
     <call target="set-build-namespaces-all"/>
   </if>
 
-  <call target="set-framework-configuration"/>
+  <!-- call target="set-framework-configuration"/ -->
   <call target="set-user-overrides"/>
 
   <!-- Targets that check settings -->

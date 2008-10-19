@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="Web\Services\WebServiceExporterTests.cs" />
     <Compile Include="Web\Support\AbstractHandlerFactoryTests.cs" />
+    <Compile Include="Web\Support\LocalResourceManagerTests.cs" />
     <Compile Include="Web\Support\MimeMediaTypeTests.cs" />
     <Compile Include="Web\Support\PageHandlerFactoryTests.cs" />
     <Compile Include="Web\Support\ResultFactoryRegistryTests.cs" />

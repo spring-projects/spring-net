@@ -112,7 +112,7 @@ namespace Spring.Web.UI
         private String masterPageFile;
 #endif
         private object controller;
-        private IDictionary sharedState = new CaseInsensitiveHashtable();
+        private IDictionary sharedState;
 
         private ILocalizer localizer;
         private ICultureResolver cultureResolver = new DefaultWebCultureResolver();
@@ -214,6 +214,10 @@ namespace Spring.Web.UI
         protected override void OnPreInit( EventArgs e )
 #endif
         {
+            if (SharedState == null)
+            {
+                SharedState = new CaseInsensitiveHashtable();
+            }
             InitializeCulture();
             InitializeMessageSource();
 #if !NET_2_0
@@ -1589,15 +1593,17 @@ namespace Spring.Web.UI
 #if !NET_2_0
             return new ResourceManager(GetType().BaseType);
 #else
-            object resourceProvider = GetLocalResourceProvider.Invoke( typeof( ResourceExpressionBuilder ), new object[] { this } );
-            MethodInfo GetLocalResourceAssembly =
-                    resourceProvider.GetType().GetMethod( "GetLocalResourceAssembly", BindingFlags.NonPublic | BindingFlags.Instance );
-            Assembly localResourceAssembly = (Assembly)GetLocalResourceAssembly.Invoke( resourceProvider, null );
-            if (localResourceAssembly != null)
-            {
-                return new ResourceManager( VirtualPathUtility.GetFileName( this.AppRelativeVirtualPath ), localResourceAssembly );
-            }
+//            object resourceProvider = GetLocalResourceProvider.Invoke( typeof( ResourceExpressionBuilder ), new object[] { this } );
+//            MethodInfo GetLocalResourceAssembly =
+//                    resourceProvider.GetType().GetMethod( "GetLocalResourceAssembly", BindingFlags.NonPublic | BindingFlags.Instance );
+//            Assembly localResourceAssembly = (Assembly)GetLocalResourceAssembly.Invoke( resourceProvider, null );
+//            if (localResourceAssembly != null)
+//            {
+//                return new LocalResourceManager( VirtualPathUtility.GetFileName( this.AppRelativeVirtualPath ), localResourceAssembly );
+//            }
 
+            return new LocalResourceManager( this.AppRelativeVirtualPath );
+            // TODO: investigate HttpContext.GetLocalResourceObject()
             return null;
 #endif
         }
