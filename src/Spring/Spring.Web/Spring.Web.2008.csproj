@@ -168,8 +168,8 @@
     <Compile Include="Objects\Factory\Xml\WebObjectsNamespaceParser.cs" />
     <Compile Include="Threading\HttpContextStorage.cs" />
     <Compile Include="Threading\HybridContextStorage.cs" />
-    <Compile Include="Util\ControlAccessor.cs" />
-    <Compile Include="Util\ControlCollectionAccessor.cs" />
+    <Compile Include="Web\Support\ControlAccessor.cs" />
+    <Compile Include="Web\Support\ControlCollectionAccessor.cs" />
     <Compile Include="Util\HttpContextSwitch.cs" />
     <Compile Include="Util\IVirtualEnvironment.cs" />
     <Compile Include="Util\VirtualEnvironment.cs" />

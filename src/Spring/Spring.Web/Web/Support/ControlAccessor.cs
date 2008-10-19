@@ -28,15 +28,15 @@ using Spring.Web.Support;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Web.Support
 {
-	/// <summary>
-	/// Helper class for easier access to reflected Control members.
-	/// </summary>
-	/// <author>Erich Eichinger</author>
-	internal class ControlAccessor
-	{
-		private static readonly MethodInfo s_miClear = GetMethod("Clear");
+    /// <summary>
+    /// Helper class for easier access to reflected Control members.
+    /// </summary>
+    /// <author>Erich Eichinger</author>
+    internal class ControlAccessor
+    {
+        private static readonly MethodInfo s_miClear = GetMethod("Clear");
         private static MethodInfo GetMethod(string name)
         {
             return typeof(Control).GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
@@ -53,9 +53,9 @@ namespace Spring.Util
 
 #if NET_2_0
         private static readonly CreateControlCollectionDelegate BaseCreateControlCollection = (CreateControlCollectionDelegate) Delegate.CreateDelegate(typeof(CreateControlCollectionDelegate), GetMethod("CreateControlCollection"));
-	    private static readonly AddedControlDelegate BaseAddedControl = (AddedControlDelegate) Delegate.CreateDelegate(typeof (AddedControlDelegate), GetMethod("AddedControl"));
-	    private static readonly RemovedControlDelegate BaseRemovedControl = (RemovedControlDelegate) Delegate.CreateDelegate(typeof (RemovedControlDelegate), GetMethod("RemovedControl"));
-	    private static readonly VoidMethodDelegate BaseClearNamingContainer = (VoidMethodDelegate) Delegate.CreateDelegate(typeof (VoidMethodDelegate), GetMethod("ClearNamingContainer"));
+        private static readonly AddedControlDelegate BaseAddedControl = (AddedControlDelegate) Delegate.CreateDelegate(typeof (AddedControlDelegate), GetMethod("AddedControl"));
+        private static readonly RemovedControlDelegate BaseRemovedControl = (RemovedControlDelegate) Delegate.CreateDelegate(typeof (RemovedControlDelegate), GetMethod("RemovedControl"));
+        private static readonly VoidMethodDelegate BaseClearNamingContainer = (VoidMethodDelegate) Delegate.CreateDelegate(typeof (VoidMethodDelegate), GetMethod("ClearNamingContainer"));
 #else
         private class DynamicMethodWrapper
         {
@@ -119,78 +119,78 @@ namespace Spring.Util
 
         private readonly Control _targetControl;
 
-		/// <summary>
-		/// Instantiates a new Accessor.
-		/// </summary>
-		/// <param name="control"></param>
-		public ControlAccessor(Control control)
-		{
-			this._targetControl = control;
-		}
+        /// <summary>
+        /// Instantiates a new Accessor.
+        /// </summary>
+        /// <param name="control"></param>
+        public ControlAccessor(Control control)
+        {
+            this._targetControl = control;
+        }
 
-		/// <summary>
-		/// Returns the underlying ControlCollection instance.
-		/// </summary>
-		public Control GetTarget()
-		{
-			return _targetControl;
-		}
+        /// <summary>
+        /// Returns the underlying ControlCollection instance.
+        /// </summary>
+        public Control GetTarget()
+        {
+            return _targetControl;
+        }
 
-		/// <summary>
-		/// Gets or sets the ControlCollection of the target without accessing the target's <see cref="Control.Controls"/> property.
-		/// </summary>
-		/// <remarks>
-		/// If the underlying collection is null, it is automatically created.
-		/// </remarks>
-		public ControlCollection Controls
-		{
-			get
-			{
-				ControlCollection controls = GetChildControlCollection();
-				if (controls == null)
-				{
+        /// <summary>
+        /// Gets or sets the ControlCollection of the target without accessing the target's <see cref="Control.Controls"/> property.
+        /// </summary>
+        /// <remarks>
+        /// If the underlying collection is null, it is automatically created.
+        /// </remarks>
+        public ControlCollection Controls
+        {
+            get
+            {
+                ControlCollection controls = GetChildControlCollection();
+                if (controls == null)
+                {
                     controls = InterceptControlCollectionStrategy.TryCreateCollection(_targetControl);
                     if (controls == null)
                     {
-					    controls = BaseCreateControlCollection(_targetControl);                        
+                        controls = BaseCreateControlCollection(_targetControl);                        
                     }
-				    SetChildControlCollection(controls);
-				}
-				return controls;
-			}
-			set { SetChildControlCollection(value); }
-		}
+                    SetChildControlCollection(controls);
+                }
+                return controls;
+            }
+            set { SetChildControlCollection(value); }
+        }
 
-		public void AddedControl(Control control, int index)
-		{
-		    BaseAddedControl(_targetControl, control, index);
-		}
+        public void AddedControl(Control control, int index)
+        {
+            BaseAddedControl(_targetControl, control, index);
+        }
 
-		public void RemovedControl(Control control)
-		{
-		    BaseRemovedControl(_targetControl, control);
+        public void RemovedControl(Control control)
+        {
+            BaseRemovedControl(_targetControl, control);
 
-			if (!_targetControl.HasControls())
-			{
-				// clear naming table etc. if collection has been cleared
-				// this is because we can't intercept Control.ClearNamingTable(),
-				// which is called by ControlCollection.Clear() after removing all controls
-				StackFrame frame = new StackFrame(3, false);
-				if (frame.GetMethod() == s_miClear)
-				{
-					if (_targetControl is INamingContainer)
-					{
-						//s_miClearNamingContainer.Invoke(_targetControl, null);
-					    BaseClearNamingContainer(_targetControl);
-					}
-				}
-			}
-		}
+            if (!_targetControl.HasControls())
+            {
+                // clear naming table etc. if collection has been cleared
+                // this is because we can't intercept Control.ClearNamingTable(),
+                // which is called by ControlCollection.Clear() after removing all controls
+                StackFrame frame = new StackFrame(3, false);
+                if (frame.GetMethod() == s_miClear)
+                {
+                    if (_targetControl is INamingContainer)
+                    {
+                        //s_miClearNamingContainer.Invoke(_targetControl, null);
+                        BaseClearNamingContainer(_targetControl);
+                    }
+                }
+            }
+        }
 
         private static readonly SafeField ControlsArrayField = new SafeField(typeof(ControlCollection).GetField("_controls", BindingFlags.Instance|BindingFlags.NonPublic));
         public void SetControlAt(Control control, int index)
         {
-             Control[] controls = (Control[]) ControlsArrayField.GetValue(this.Controls);
+            Control[] controls = (Control[]) ControlsArrayField.GetValue(this.Controls);
             controls[index] = control;
         }
 
@@ -303,5 +303,5 @@ namespace Spring.Util
             fControls.SetValue(_targetControl, controls);
 		}
 #endif
-	}
+    }
 }

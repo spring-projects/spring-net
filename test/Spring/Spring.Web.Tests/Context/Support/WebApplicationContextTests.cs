@@ -71,7 +71,7 @@ namespace Spring.Context.Support
             }
             catch(ObjectCreationException oce1)
             {
-                Assert.IsTrue(-1 < oce1.Message.IndexOf("without a valid HttpContext.Current instance"));
+                Assert.IsTrue(-1 < oce1.Message.IndexOf("'request' scoped web singleton object 'requestScopedObject' requires a valid Request"));
             }
 
             try
@@ -81,7 +81,7 @@ namespace Spring.Context.Support
             }
             catch (ObjectCreationException oce1)
             {
-                Assert.IsTrue(-1 < oce1.Message.IndexOf("without a valid HttpContext.Current instance"));
+                Assert.IsTrue(-1 < oce1.Message.IndexOf("'session' scoped web singleton object 'sessionScopedObject' requires a valid Session"));
             }
 
             return null;
