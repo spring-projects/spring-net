@@ -57,13 +57,37 @@ namespace Spring.Web.Services
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IFactoryObject, IObjectNameAware
+    public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IFactoryObject, IObjectNameAware, IDisposable
     {
+        /// <summary>
+        /// Holds EXPORTER_ID to WebServiceExporter instance mappings.
+        /// </summary>
+        private static readonly IDictionary s_activeExporters = new Hashtable();
+
+        ///<summary>
+        /// Returns the target object instance exported by the WebServiceExporter identified by <see cref="EXPORTER_ID"/>.
+        ///</summary>
+        ///<param name="exporterId"></param>
+        ///<returns></returns>
+        public static object GetTarget( string exporterId )
+        {
+            WebServiceExporter exporterInstance;
+            lock (s_activeExporters.SyncRoot)
+            {
+                exporterInstance = (WebServiceExporter)s_activeExporters[exporterId];
+            }
+            AssertUtils.ArgumentNotNull( exporterInstance, "exporterId", "Remoting Server object is not associated with any active SaoExporter" );
+            object target = exporterInstance.GetTargetInstance();
+            AssertUtils.ArgumentNotNull( target, "exporterId", string.Format( "Failed retrieving target object for SaoExporter ID {0}", exporterId ) );
+            return target;
+        }
+
         #region Fields
 
 #if NET_2_0
         private WsiProfiles _wsiProfile = WsiProfiles.BasicProfile1_1;
 #endif
+        private readonly string EXPORTER_ID = Guid.NewGuid().ToString();
         private Type _webServiceBaseType = typeof(WebService);
         private string _targetName;
         private string _description;
@@ -93,11 +117,52 @@ namespace Spring.Web.Services
         #region Constructor(s) / Destructor
 
         /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Web.Services.WebServiceExporter"/> class.
+        /// Creates a new instance of the <see cref="WebServiceExporter"/> class.
         /// </summary>
         public WebServiceExporter()
-        {}
+        {
+            lock (s_activeExporters.SyncRoot)
+            {
+                s_activeExporters[EXPORTER_ID] = this;
+            }
+        }
+
+        /// <summary>
+        /// Cleanup before GC
+        /// </summary>
+        ~WebServiceExporter()
+        {
+            Dispose( false );
+        }
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Disconnect the remote object from the registered remoting channels.
+        /// </summary>
+        public void Dispose()
+        {
+            GC.SuppressFinalize( this );
+            Dispose( true );
+        }
+
+        /// <summary>
+        /// Stops exporting the object identified by <see cref="TargetName"/>.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose( bool disposing )
+        {
+            if (disposing)
+            {
+                lock (s_activeExporters.SyncRoot)
+                {
+                    s_activeExporters.Remove( this.EXPORTER_ID );
+                }
+                objectFactory = null;
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -261,6 +326,11 @@ namespace Spring.Web.Services
 
         #region IFactoryObject Members
 
+        private object GetTargetInstance()
+        {
+            return objectFactory.GetObject( TargetName );
+        }
+
         /// <summary>
         /// Return an instance (possibly shared or independent) of the object
         /// managed by this factory.
@@ -365,9 +435,9 @@ namespace Spring.Web.Services
         protected virtual void GenerateProxy()
         {
 #if NET_2_0
-            IProxyTypeBuilder builder = new WebServiceProxyTypeBuilder(TargetName, Description, Name, Namespace, WsiProfile);
+            IProxyTypeBuilder builder = new WebServiceProxyTypeBuilder(this, Description, Name, Namespace, WsiProfile);
 #else
-            IProxyTypeBuilder builder = new WebServiceProxyTypeBuilder(TargetName, Description, Name, Namespace);
+            IProxyTypeBuilder builder = new WebServiceProxyTypeBuilder(this, Description, Name, Namespace);
 #endif
             builder.Name = WebUtils.GetPageName(objectName);
             builder.BaseType = WebServiceBaseType;
@@ -390,13 +460,8 @@ namespace Spring.Web.Services
         {
             #region Fields
 
-            private static readonly MethodInfo GetObject = 
-                typeof(IObjectFactory).GetMethod("GetObject", new Type[] {typeof(string)});
-
-            private static readonly MethodInfo GetApplicationContext =
-                typeof(WebApplicationContext).GetProperty("Current", BindingFlags.Public | BindingFlags.Static, null, typeof(IApplicationContext), Type.EmptyTypes, null).GetGetMethod();
-
-            private string targetName;
+            private static readonly MethodInfo WebServiceExporter_GetTargetInstance = typeof( WebServiceExporter ).GetMethod( "GetTarget", new Type[] { typeof( string ) } );
+            private WebServiceExporter exporter;
             private CustomAttributeBuilder webServiceAttribute;
 #if NET_2_0
             private CustomAttributeBuilder webServiceBindingAttribute;
@@ -406,19 +471,17 @@ namespace Spring.Web.Services
 
             #region Constructor(s) / Destructor
 
-            public WebServiceProxyTypeBuilder(
-                string targetName, string description, string name, string ns)
+            public WebServiceProxyTypeBuilder(WebServiceExporter exporter, string description, string name, string ns)
             {
-                this.targetName = targetName;
+                this.exporter = exporter;
 
                 // Creates a WebServiceAttribute from configuration info
                 this.webServiceAttribute = CreateWebServiceAttribute(description, name, ns);
             }
 #if NET_2_0
-            public WebServiceProxyTypeBuilder(
-                string targetName, string description, string name, string ns, WsiProfiles wsiProfile)
+            public WebServiceProxyTypeBuilder(WebServiceExporter exporter, string description, string name, string ns, WsiProfiles wsiProfile)
             {
-                this.targetName = targetName;
+                this.exporter = exporter;
 
                 // Creates a WebServiceAttribute from configuration info
                 this.webServiceAttribute = CreateWebServiceAttribute(description, name, ns);
@@ -466,9 +529,7 @@ namespace Spring.Web.Services
             /// Implements constructors for the proxy class.
             /// </summary>
             /// <remarks>
-            /// This implementation generates a constructor 
-            /// that gets instance of the target object using 
-            /// <see cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>.
+            /// This implementation generates an empty noop default constructor 
             /// </remarks>
             /// <param name="builder">
             /// The <see cref="System.Type"/> builder to use.
@@ -483,15 +544,23 @@ namespace Spring.Web.Services
                     attributes, CallingConventions.Standard, Type.EmptyTypes);
 
                 ILGenerator il = cb.GetILGenerator();
-
-                il.Emit(OpCodes.Ldarg_0);
-                il.EmitCall(OpCodes.Call, GetApplicationContext, null);
-                il.Emit(OpCodes.Ldstr, targetName);
-                il.EmitCall(OpCodes.Callvirt, GetObject, null);
-                il.Emit(OpCodes.Stfld, targetInstance);
-
-
                 il.Emit(OpCodes.Ret);
+            }
+
+            /// <summary>
+            /// Generates the IL instructions that pushes 
+            /// the target instance on which calls should be delegated to.
+            /// </summary>
+            /// <remarks>
+            /// This will cause the builder to generate 
+            /// <c>WebServiceExporter.GetTarget( EXPORTER_ID ).&lt;targetmethod&gt;(..)</c>
+            /// for each exported method.
+            /// </remarks>
+            /// <param name="il">The IL generator to use.</param>
+            public override void PushTarget( ILGenerator il )
+            {
+                il.Emit( OpCodes.Ldstr, this.exporter.EXPORTER_ID );
+                il.Emit( OpCodes.Call, WebServiceExporter_GetTargetInstance );
             }
 
             protected override IList GetTypeAttributes(Type type)

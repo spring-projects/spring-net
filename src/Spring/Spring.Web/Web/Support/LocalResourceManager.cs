@@ -33,7 +33,7 @@ namespace Spring.Web.Support
 {
     /// <summary>
     /// This ResourceManager implementation swallows <see cref="MissingManifestResourceException"/>s and 
-    /// simply returns <c>null</c> from <see cref="GetObject(string,CultureInfo"/> if no resource is found.
+    /// simply returns <c>null</c> from <see cref="GetObject(string,CultureInfo)"/> if no resource is found.
     /// </summary>
     /// <author>Erich Eichinger</author>
     internal class LocalResourceManager : ResourceManager
@@ -81,7 +81,7 @@ namespace Spring.Web.Support
                 return HttpContext.GetLocalResourceObject(_virtualPath, name, culture);
                 //return base.GetObject( name, culture );
             }
-            catch (MissingManifestResourceException ex)
+            catch (MissingManifestResourceException)
             {     
                 _isMissingManifest = true;
             }

@@ -1601,10 +1601,9 @@ namespace Spring.Web.UI
 //            {
 //                return new LocalResourceManager( VirtualPathUtility.GetFileName( this.AppRelativeVirtualPath ), localResourceAssembly );
 //            }
+//            return null;
 
             return new LocalResourceManager( this.AppRelativeVirtualPath );
-            // TODO: investigate HttpContext.GetLocalResourceObject()
-            return null;
 #endif
         }
 
