@@ -529,7 +529,7 @@
       <literal>Session</literal>, as its lifecycle is managed by the
       transaction). Asking for the</para>
 
-      <programlisting language="csharp">public class HibernateProductDao extends HibernateDaoSupport implements ProductDao {
+      <programlisting language="csharp">public class HibernateProductDao : HibernateDaoSupport, IProductDao {
 
         public Customer SaveOrUpdate(Customer customer)
         {
