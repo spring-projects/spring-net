@@ -60,6 +60,30 @@ namespace Spring.Reflection.Dynamic
         /// A new property value.
         /// </param>
         void SetValue(object target, object value);
+
+        /// <summary>
+        /// Gets the value of the dynamic property for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to get property value from.
+        /// </param>
+        /// <param name="index">Optional index values for indexed properties. This value should be null reference for non-indexed properties.</param>
+        /// <returns>
+        /// A property value.
+        /// </returns>
+        object GetValue(object target, params object[] index);
+
+        /// <summary>
+        /// Gets the value of the dynamic property for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to set property value on.
+        /// </param>
+        /// <param name="value">
+        /// A new property value.
+        /// </param>
+        /// <param name="index">Optional index values for indexed properties. This value should be null reference for non-indexed properties.</param>
+        void SetValue(object target, object value, params object[] index);
     }
 
     #endregion
@@ -91,10 +115,10 @@ namespace Spring.Reflection.Dynamic
         /// </summary>
         private class DynamicPropertyCacheEntry
         {
-            public readonly GetterDelegate Getter;
-            public readonly SetterDelegate Setter;
+            public readonly PropertyGetterDelegate Getter;
+            public readonly PropertySetterDelegate Setter;
 
-            public DynamicPropertyCacheEntry(GetterDelegate getter, SetterDelegate setter)
+            public DynamicPropertyCacheEntry(PropertyGetterDelegate getter, PropertySetterDelegate setter)
             {
                 Getter = getter;
                 Setter = setter;
@@ -120,8 +144,8 @@ namespace Spring.Reflection.Dynamic
 
         #endregion
 
-        private readonly GetterDelegate getter;
-        private readonly SetterDelegate setter;
+        private readonly PropertyGetterDelegate getter;
+        private readonly PropertySetterDelegate setter;
 
         /// <summary>
         /// Creates a new instance of the safe property wrapper.
@@ -155,6 +179,21 @@ namespace Spring.Reflection.Dynamic
         /// Gets the value of the dynamic property for the specified target object.
         /// </summary>
         /// <param name="target">
+        /// Target object to get property value from.
+        /// </param>
+        /// <param name="index">Optional index values for indexed properties. This value should be null reference for non-indexed properties.</param>
+        /// <returns>
+        /// A property value.
+        /// </returns>
+        public object GetValue(object target, params object[] index)
+        {
+            return getter(target, index);
+        }
+
+        /// <summary>
+        /// Gets the value of the dynamic property for the specified target object.
+        /// </summary>
+        /// <param name="target">
         /// Target object to set property value on.
         /// </param>
         /// <param name="value">
@@ -163,6 +202,21 @@ namespace Spring.Reflection.Dynamic
         public void SetValue(object target, object value)
         {
             setter(target, value);
+        }
+
+        /// <summary>
+        /// Gets the value of the dynamic property for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to set property value on.
+        /// </param>
+        /// <param name="value">
+        /// A new property value.
+        /// </param>
+        /// <param name="index">Optional index values for indexed properties. This value should be null reference for non-indexed properties.</param>
+        public void SetValue(object target, object value, params object[] index)
+        {
+            setter(target, value, index);
         }
 
 #else
@@ -239,8 +293,9 @@ namespace Spring.Reflection.Dynamic
                     {
                         dynamicProperty.SetValue(target, value);
                     }
-                    catch (InvalidCastException)
+                    catch (InvalidCastException ex)
                     {
+                        Log.Debug("Failed optimized set", ex);
                         isOptimizedSet = false;
                         propertyInfo.SetValue(target, value, null);
                     }
@@ -267,6 +322,64 @@ namespace Spring.Reflection.Dynamic
                                   (target != null ? target.GetType().FullName : "<null>")), ex);
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Gets the value of the dynamic indexer for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to get indexer value from.
+        /// </param>
+        /// <param name="index">
+        /// Indexer arguments.
+        /// </param>
+        /// <returns>
+        /// A indexer value.
+        /// </returns>
+        public object GetValue(object target, object[] index)
+        {
+            if (isOptimizedGet)
+            {
+                try
+                {
+                    return dynamicProperty.GetValue(target, index);
+                }
+                catch (InvalidCastException)
+                {
+                    isOptimizedSet = false;
+                }
+            }
+            return propertyInfo.GetValue(target, index);
+        }
+
+        /// <summary>
+        /// Sets the value of the dynamic indexer for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to set indexer value on.
+        /// </param>
+        /// <param name="index">
+        /// Indexer arguments.
+        /// </param>
+        /// <param name="value">
+        /// A new indexer value.
+        /// </param>
+        public void SetValue(object target, object value, object[] index)
+        {
+            if (isOptimizedSet)
+            {
+                try
+                {
+                    dynamicProperty.SetValue(target, value, index);
+                    return;
+                }
+                catch (InvalidCastException ex)
+                {
+                    Log.Debug("Failed optimized set", ex);
+                    isOptimizedSet = false;
+                }
+            }
+            propertyInfo.SetValue(target, value, index);
         }
 #endif
         /// <summary>
@@ -364,7 +477,9 @@ namespace Spring.Reflection.Dynamic
             tb.AddInterfaceImplementation(typeof(IDynamicProperty));
 
             GenerateGetValue(tb, property);
+            GenerateGetIndexedValue(tb, property);
             GenerateSetValue(tb, property);
+            GenerateSetIndexedValue(tb, property);
 
             Type dynamicPropertyType = tb.CreateType();
             ConstructorInfo ctor = dynamicPropertyType.GetConstructor(Type.EmptyTypes);
@@ -398,6 +513,41 @@ namespace Spring.Reflection.Dynamic
             else
             {
                 ThrowInvalidOperationException(il, "Cannot get value of a non-readable property");
+            }
+        }
+
+        private static void GenerateGetIndexedValue(TypeBuilder tb, PropertyInfo indexer)
+        {
+            MethodBuilder getValueMethod =
+                tb.DefineMethod("GetValue", METHOD_ATTRIBUTES, typeof(object), new Type[] { typeof(object), typeof(object[]) });
+            getValueMethod.DefineParameter(1, ParameterAttributes.None, "target");
+            getValueMethod.DefineParameter(2, ParameterAttributes.None, "index");
+            
+            ILGenerator il = getValueMethod.GetILGenerator();
+            if (indexer.CanRead)
+            {
+                MethodInfo getMethod = indexer.GetGetMethod();
+                bool isValueType = indexer.DeclaringType.IsValueType;
+                bool isStatic = getMethod.IsStatic;
+                
+                if (!isStatic)
+                {
+                    SetupTargetInstance(il, indexer.DeclaringType);
+                }
+
+                Type[] argTypes = ReflectionUtils.GetParameterTypes(getMethod);
+                for (int i = 0; i < argTypes.Length; i++)
+                {
+                    SetupIndexerArgument(il, 2, argTypes[i], i, true);
+                }
+
+                InvokeMethod(il, isStatic, isValueType, getMethod);
+                ProcessReturnValue(il, indexer.PropertyType);
+                il.Emit(OpCodes.Ret);
+            }
+            else
+            {
+                ThrowInvalidOperationException(il, "Cannot get value of a non-readable indexer");
             }
         }
 
@@ -437,6 +587,71 @@ namespace Spring.Reflection.Dynamic
             else
             {
                 ThrowInvalidOperationException(il, "Cannot set value of a read-only property");
+            }
+        }
+
+        private static void GenerateSetIndexedValue(TypeBuilder tb, PropertyInfo indexer)
+        {
+            MethodBuilder setValueMethod =
+                tb.DefineMethod("SetValue", METHOD_ATTRIBUTES, typeof(void),
+                new Type[] { typeof(object), typeof(object), typeof(object[]) });
+            setValueMethod.DefineParameter(1, ParameterAttributes.None, "target");
+            setValueMethod.DefineParameter(2, ParameterAttributes.None, "value");
+            setValueMethod.DefineParameter(3, ParameterAttributes.None, "index");
+
+            ILGenerator il = setValueMethod.GetILGenerator();
+            if (indexer.CanWrite)
+            {
+                bool isValueType = indexer.DeclaringType.IsValueType;
+                if (isValueType)
+                {
+                    ThrowInvalidOperationException(il, "Cannot set indexer value on a value type due to boxing.");
+                }
+                else
+                {
+                    MethodInfo setMethod = indexer.GetSetMethod();
+                    bool isStatic = setMethod.IsStatic;
+
+                    if (!isStatic)
+                    {
+                        SetupTargetInstance(il, indexer.DeclaringType);
+                    }
+
+                    Type[] argTypes = ReflectionUtils.GetParameterTypes(setMethod);
+                    for (int i = 0; i < argTypes.Length - 1; i++)
+                    {
+                        SetupIndexerArgument(il, 3, argTypes[i], i, true);
+                    }
+
+                    SetupArgument(il, indexer.PropertyType, 2);
+                    InvokeMethod(il, isStatic, isValueType, setMethod);
+                    il.Emit(OpCodes.Ret);
+                }
+            }
+            else
+            {
+                ThrowInvalidOperationException(il, "Cannot set value of a read-only indexer");
+            }
+        }
+
+        private static OpCode[] LdArgOpCodes = { OpCodes.Ldarg_0, OpCodes.Ldarg_1, OpCodes.Ldarg_2, OpCodes.Ldarg_3 };
+
+        private static void SetupIndexerArgument(ILGenerator il, int indexArgumentPosition, Type argumentType, int argumentPosition, bool isObjectArray)
+        {
+            il.Emit(LdArgOpCodes[indexArgumentPosition]);
+            if (isObjectArray)
+            {
+                il.Emit(OpCodes.Ldc_I4, argumentPosition);
+                il.Emit(OpCodes.Ldelem_Ref);
+            }
+            if (argumentType.IsValueType)
+            {
+                il.Emit(OpCodes.Unbox, argumentType);
+                il.Emit(OpCodes.Ldobj, argumentType);
+            }
+            else
+            {
+                il.Emit(OpCodes.Castclass, argumentType);
             }
         }
 

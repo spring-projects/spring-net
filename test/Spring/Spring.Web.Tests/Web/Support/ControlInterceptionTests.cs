@@ -30,7 +30,7 @@ using Spring.Web.Support;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Web.Support
 {
     /// <summary>
     /// Unit tests for the ControlInterceptor class.
@@ -40,7 +40,7 @@ namespace Spring.Util
     public class ControlInterceptionTests
     {
         private const string RES_OBJECTS =
-            "assembly://Spring.Web.Tests/Spring.Util/ControlInterceptionTests.objects.xml";
+            "assembly://Spring.Web.Tests/Spring.Web.Support/ControlInterceptionTests.objects.xml";
 
 				static ControlInterceptionTests()
 				{

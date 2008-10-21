@@ -640,6 +640,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Reflection\Dynamic\BasePropertyTests.cs" />
+    <EmbeddedResource Include="Reflection\Dynamic\SafePropertyTests_TestObject.vb" />
     <Compile Include="Reflection\Dynamic\DynamicConstructorTests.cs" />
     <Compile Include="Reflection\Dynamic\DynamicFieldTests.cs" />
     <Compile Include="Reflection\Dynamic\DynamicIndexerTests.cs" />

@@ -245,6 +245,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TestSupport\DictionaryModelPersistenceMedium.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "TestSupport\NUnitAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -256,6 +261,11 @@
                 />
                 <File
                     RelPath = "TestSupport\TestPage.cs"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TestSupport\TestUserControl.cs"
                     SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
@@ -290,15 +300,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Util\ControlInterceptionTests.cs"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Util\ControlInterceptionTests.objects.xml"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "Util\WebDIPerformanceTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -315,6 +316,20 @@
                 />
                 <File
                     RelPath = "Web\Support\AbstractHandlerFactoryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\ControlInterceptionTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\ControlInterceptionTests.objects.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web\Support\LocalResourceManagerTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -340,6 +355,11 @@
                 />
                 <File
                     RelPath = "Web\UI\PageTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\UI\SessionModelPersistenceMediumTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -21,8 +21,10 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
+using Spring.Reflection.Dynamic;
 using Spring.Util;
 
 #endregion
@@ -48,7 +50,7 @@ namespace Spring.Reflection.Dynamic
         /// <returns>
         /// A indexer value.
         /// </returns>
-        object GetValue(object target, int index);
+        object GetValue( object target, int index );
 
         /// <summary>
         /// Gets the value of the dynamic indexer for the specified target object.
@@ -62,7 +64,7 @@ namespace Spring.Reflection.Dynamic
         /// <returns>
         /// A indexer value.
         /// </returns>
-        object GetValue(object target, object index);
+        object GetValue( object target, object index );
 
         /// <summary>
         /// Gets the value of the dynamic indexer for the specified target object.
@@ -76,7 +78,7 @@ namespace Spring.Reflection.Dynamic
         /// <returns>
         /// A indexer value.
         /// </returns>
-        object GetValue(object target, object[] index);
+        object GetValue( object target, object[] index );
 
         /// <summary>
         /// Gets the value of the dynamic indexer for the specified target object.
@@ -90,7 +92,7 @@ namespace Spring.Reflection.Dynamic
         /// <param name="value">
         /// A new indexer value.
         /// </param>
-        void SetValue(object target, int index, object value);
+        void SetValue( object target, int index, object value );
 
         /// <summary>
         /// Gets the value of the dynamic indexer for the specified target object.
@@ -104,7 +106,7 @@ namespace Spring.Reflection.Dynamic
         /// <param name="value">
         /// A new indexer value.
         /// </param>
-        void SetValue(object target, object index, object value);
+        void SetValue( object target, object index, object value );
 
         /// <summary>
         /// Gets the value of the dynamic indexer for the specified target object.
@@ -118,12 +120,153 @@ namespace Spring.Reflection.Dynamic
         /// <param name="value">
         /// A new indexer value.
         /// </param>
-        void SetValue(object target, object[] index, object value);
+        void SetValue( object target, object[] index, object value );
     }
 
     #endregion
 
     #region Safe wrapper
+
+#if NET_2_0
+    /// <summary>
+    /// Safe wrapper for the dynamic indexer.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="SafeIndexer"/> will attempt to use dynamic
+    /// indexer if possible, but it will fall back to standard
+    /// reflection if necessary.
+    /// </remarks>    
+    [Obsolete("Use SafeProperty instead", false)]
+    public class SafeIndexer : IDynamicIndexer
+    {
+        private PropertyInfo indexerProperty;
+
+        /// <summary>
+        /// Internal PropertyInfo accessor.
+        /// </summary>
+        internal PropertyInfo IndexerProperty
+        {
+            get { return indexerProperty; }
+        }
+
+        private SafeProperty property;
+
+        /// <summary>
+        /// Creates a new instance of the safe indexer wrapper.
+        /// </summary>
+        /// <param name="indexerInfo">Indexer to wrap.</param>
+        public SafeIndexer( PropertyInfo indexerInfo )
+        {
+            AssertUtils.ArgumentNotNull( indexerInfo, "You cannot create a dynamic indexer for a null value." );
+
+            this.indexerProperty = indexerInfo;
+            this.property = new SafeProperty( indexerInfo );
+        }
+
+        /// <summary>
+        /// Gets the value of the dynamic indexer for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to get indexer value from.
+        /// </param>
+        /// <param name="index">
+        /// Indexer arguments.
+        /// </param>
+        /// <returns>
+        /// A indexer value.
+        /// </returns>
+        public object GetValue( object target, int index )
+        {
+            return property.GetValue( target, index );
+        }
+
+        /// <summary>
+        /// Gets the value of the dynamic indexer for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to get the indexer value from.
+        /// </param>
+        /// <param name="index">
+        /// Indexer argument.
+        /// </param>
+        /// <returns>
+        /// A indexer value.
+        /// </returns>
+        public object GetValue( object target, object index )
+        {
+            return property.GetValue( target, index );
+        }
+
+        /// <summary>
+        /// Gets the value of the dynamic indexer for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to get indexer value from.
+        /// </param>
+        /// <param name="index">
+        /// Indexer arguments.
+        /// </param>
+        /// <returns>
+        /// A indexer value.
+        /// </returns>
+        public object GetValue( object target, object[] index )
+        {
+            return property.GetValue( target, index );
+        }
+
+        /// <summary>
+        /// Sets the value of the dynamic indexer for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to set indexer value on.
+        /// </param>
+        /// <param name="index">
+        /// Indexer arguments.
+        /// </param>
+        /// <param name="value">
+        /// A new indexer value.
+        /// </param>
+        public void SetValue( object target, int index, object value )
+        {
+            property.SetValue( target, value, index );
+        }
+
+        /// <summary>
+        /// Sets the value of the dynamic indexer for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to set indexer value on.
+        /// </param>
+        /// <param name="index">
+        /// Indexer arguments.
+        /// </param>
+        /// <param name="value">
+        /// A new indexer value.
+        /// </param>
+        public void SetValue( object target, object index, object value )
+        {
+            property.SetValue( target, value, index );
+        }
+
+        /// <summary>
+        /// Sets the value of the dynamic indexer for the specified target object.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to set indexer value on.
+        /// </param>
+        /// <param name="index">
+        /// Indexer arguments.
+        /// </param>
+        /// <param name="value">
+        /// A new indexer value.
+        /// </param>
+        public void SetValue( object target, object[] index, object value )
+        {
+            property.SetValue( target, value, index );
+        }
+    }
+
+#else
 
     /// <summary>
     /// Safe wrapper for the dynamic indexer.
@@ -132,10 +275,19 @@ namespace Spring.Reflection.Dynamic
     /// <see cref="SafeIndexer"/> will attempt to use dynamic
     /// indexer if possible, but it will fall back to standard
     /// reflection if necessary.
-    /// </remarks>
+    /// </remarks>    
     public class SafeIndexer : IDynamicIndexer
     {
         private PropertyInfo indexerProperty;
+
+        /// <summary>
+        /// Internal PropertyInfo accessor.
+        /// </summary>
+        internal PropertyInfo IndexerProperty
+        {
+            get { return indexerProperty; }
+        }
+
         private IDynamicIndexer dynamicIndexer;
         private bool isOptimizedGet = false;
         private bool isOptimizedSet = false;
@@ -334,18 +486,38 @@ namespace Spring.Reflection.Dynamic
                 indexerProperty.SetValue(target, value, index);
             }
         }
-
-        /// <summary>
-        /// Internal PropertyInfo accessor.
-        /// </summary>
-        internal PropertyInfo IndexerProperty
-        {
-            get { return indexerProperty; }
-        }
     }
+#endif
 
     #endregion
-    
+
+#if NET_2_0
+    /// <summary>
+    /// Factory class for dynamic indexers.
+    /// </summary>
+    /// <author>Aleksandar Seovic</author>
+    [Obsolete( "Use DynamicProperty instead", false )]
+    public sealed class DynamicIndexer : BaseDynamicMember
+    {
+        /// <summary>
+        /// Prevent instantiation
+        /// </summary>
+        private DynamicIndexer() { }
+
+        /// <summary>
+        /// Creates dynamic indexer instance for the specified <see cref="PropertyInfo"/>.
+        /// </summary>
+        /// <param name="indexer">Indexer info to create dynamic indexer for.</param>
+        /// <returns>Dynamic indexer for the specified <see cref="PropertyInfo"/>.</returns>
+        public static IDynamicIndexer Create( PropertyInfo indexer )
+        {
+            AssertUtils.ArgumentNotNull( indexer, "You cannot create a dynamic indexer for a null value." );
+
+            IDynamicIndexer dynamicIndexer = new SafeIndexer( indexer );
+            return dynamicIndexer;
+        }
+    }
+#else
     /// <summary>
     /// Factory class for dynamic indexers.
     /// </summary>
@@ -354,7 +526,7 @@ namespace Spring.Reflection.Dynamic
     {
         private static readonly CreateIndexerCallback s_createCallback = new CreateIndexerCallback(CreateInternal);
 
-        #region Create Method
+    #region Create Method
 
         /// <summary>
         /// Creates dynamic indexer instance for the specified <see cref="PropertyInfo"/>.
@@ -500,12 +672,8 @@ namespace Spring.Reflection.Dynamic
             }
             if (argumentType.IsValueType)
             {
-#if NET_2_0
-                il.Emit(OpCodes.Unbox_Any, argumentType);
-#else
 				il.Emit(OpCodes.Unbox, argumentType);
 				il.Emit(OpCodes.Ldobj, argumentType);
-#endif
             }
             else
             {
@@ -513,6 +681,8 @@ namespace Spring.Reflection.Dynamic
             }
         }
         
-        #endregion
+    #endregion
     }
-}
+#endif
+
+} // namespace

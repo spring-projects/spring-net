@@ -21,7 +21,11 @@
 #region Imports
 
 using System;
+using System.CodeDom.Compiler;
+using System.IO;
 using System.Reflection;
+using System.Text;
+using Microsoft.VisualBasic;
 using NUnit.Framework;
 
 #endregion
@@ -39,6 +43,53 @@ namespace Spring.Reflection.Dynamic
         protected override IDynamicProperty Create(PropertyInfo property)
         {
             return new SafeProperty(property);
+        }
+
+
+        [Test]
+        public void CanGetSetSimpleProperty()
+        {
+            object o = GetVisualBasicTestObject();
+            IDynamicProperty simpleProperty = Create(o.GetType().GetProperty("SimpleProperty"));
+            simpleProperty.SetValue(o, "CanGetSimpleText", "args");
+            Assert.AreEqual("CanGetSimpleText", ThisLastPropertyValue.GetValue(o));
+            Assert.AreEqual("CanGetSimpleText", simpleProperty.GetValue(o));
+        }
+
+        [Test]
+        public void CanGetSetSimpleIndexer()
+        {
+            object o = GetVisualBasicTestObject();
+            IDynamicProperty simpleProperty = Create(o.GetType().GetProperty("SimpleIndexer"));
+
+            // write
+            simpleProperty.SetValue(o, "CanGetSetSimpleIndexer", 2);
+            Assert.AreEqual("CanGetSetSimpleIndexer", ThisLastPropertyValue.GetValue(o));
+            Assert.AreEqual(2, ThisArg1.GetValue(o));
+
+            // read
+            object value = simpleProperty.GetValue(o, 3);
+            Assert.AreEqual("CanGetSetSimpleIndexer", value);
+            Assert.AreEqual(3, ThisArg1.GetValue(o));
+        }
+
+        [Test]
+        public void CanGetSetComplexIndexer()
+        {
+            object o = GetVisualBasicTestObject();
+            IDynamicProperty property = Create(o.GetType().GetProperty("ComplexIndexer"));
+
+            // write
+            property.SetValue(o, "CanGetSetComplexIndexer", 2, "Arg2");
+            Assert.AreEqual("CanGetSetComplexIndexer", ThisLastPropertyValue.GetValue(o));
+            Assert.AreEqual(2.0, (double)ThisArg1.GetValue(o));
+            Assert.AreEqual("Arg2", ThisArg2.GetValue(o));
+
+            // read
+            object value = property.GetValue(o, 3, "Arg3");
+            Assert.AreEqual("CanGetSetComplexIndexer", value);
+            Assert.AreEqual(3.0, (double)ThisArg1.GetValue(o));
+            Assert.AreEqual("Arg3", ThisArg2.GetValue(o));
         }
 
 #if NET_2_0
@@ -76,6 +127,60 @@ namespace Spring.Reflection.Dynamic
             Assert.AreEqual(123, first.GetValue(something));
         }	
 #endif
+
+        #region VB TestClass Code
+
+        private static Type s__visualBasicTestObjectType;
+        private static IDynamicField ThisLastPropertyValue;
+        private static IDynamicField ThisArg1;
+        private static IDynamicField ThisArg2;
+        private static IDynamicField ThisOptionalArg;
+        private static IDynamicField ThisParamsArg;
+
+        protected static object GetVisualBasicTestObject()
+        {
+            if (s__visualBasicTestObjectType == null)
+            {
+                // compile vb test class
+                string vbSourceCode = new StreamReader( Assembly.GetExecutingAssembly().GetManifestResourceStream( typeof( BasePropertyTests ), "SafePropertyTests_TestObject.vb" ) ).ReadToEnd();
+
+                CompilerParameters args = new CompilerParameters();
+                args.OutputAssembly = "VbTestObject.dll";
+                args.GenerateInMemory = true;
+                args.GenerateExecutable = false;
+                args.IncludeDebugInformation = true;
+                args.Evidence = Assembly.GetExecutingAssembly().Evidence;
+#if NET_2_0
+                CodeDomProvider provider = CodeDomProvider.CreateProvider( "VisualBasic" );
+                CompilerResults results = provider.CompileAssemblyFromSource( args, vbSourceCode );
+#else
+                CodeDomProvider provider = new VBCodeProvider();
+                ICodeCompiler compiler = provider.CreateCompiler();
+                CompilerResults results = compiler.CompileAssemblyFromSource( args, vbSourceCode );
+#endif
+                if (results.Errors.HasErrors)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach (CompilerError error in results.Errors)
+                    {
+                        sb.Append( error.ToString() ).Append( "\n\r" );
+                    }
+                    throw new TypeLoadException( "failed compiling test class: " + sb );
+                }
+                s__visualBasicTestObjectType = results.CompiledAssembly.GetType( "VbTestObject" );
+                ThisLastPropertyValue = DynamicField.Create( s__visualBasicTestObjectType.GetField("ThisLastPropertyValue") );
+                ThisArg1 = DynamicField.Create( s__visualBasicTestObjectType.GetField("ThisArg1") );
+                ThisArg2 = DynamicField.Create( s__visualBasicTestObjectType.GetField("ThisArg2") );
+                ThisOptionalArg = DynamicField.Create( s__visualBasicTestObjectType.GetField("ThisOptionalArg") );
+                ThisParamsArg = DynamicField.Create( s__visualBasicTestObjectType.GetField("ThisParamsArgs") );
+            }
+
+            object s__visualBasicTestObject = Activator.CreateInstance(s__visualBasicTestObjectType);
+
+            return s__visualBasicTestObject;
+        }
+
+        #endregion
     }
 
     #region Test Classes

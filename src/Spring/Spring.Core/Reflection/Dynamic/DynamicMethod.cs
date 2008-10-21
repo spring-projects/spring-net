@@ -49,7 +49,7 @@ namespace Spring.Reflection.Dynamic
         /// <returns>
         /// A method return value.
         /// </returns>
-        object Invoke(object target, object[] arguments);
+        object Invoke(object target, params object[] arguments);
     }
 
     #endregion
@@ -66,7 +66,71 @@ namespace Spring.Reflection.Dynamic
     /// </remarks>
     public class SafeMethod : IDynamicMethod
     {
-        private MethodInfo method;
+        private readonly MethodInfo methodInfo;
+
+        /// <summary>
+        /// Gets the class, that declares this method
+        /// </summary>
+        public Type DeclaringType
+        {
+            get { return methodInfo.DeclaringType; }
+        }
+
+#if NET_2_0
+        #region Generated Function Cache
+
+        private static readonly IDictionary methodCache = new Hashtable();
+
+        /// <summary>
+        /// Obtains cached property info or creates a new entry, if none is found.
+        /// </summary>
+        private static FunctionDelegate GetOrCreateDynamicMethod(MethodInfo methodInfo)
+        {
+            FunctionDelegate method = (FunctionDelegate)methodCache[methodInfo];
+            if (method == null)
+            {
+                method = DynamicReflectionManager.CreateMethod(methodInfo);
+                lock (methodCache)
+                {
+                    methodCache[methodInfo] = method;
+                }
+            }
+            return method;
+        }
+
+        #endregion
+
+        private readonly FunctionDelegate method;
+
+        /// <summary>
+        /// Creates a new instance of the safe method wrapper.
+        /// </summary>
+        /// <param name="methodInfo">Method to wrap.</param>
+        public SafeMethod(MethodInfo methodInfo)
+        {
+            AssertUtils.ArgumentNotNull(methodInfo, "You cannot create a dynamic method for a null value.");
+
+            this.methodInfo = methodInfo;
+            this.method = GetOrCreateDynamicMethod(methodInfo);
+        }
+
+        /// <summary>
+        /// Invokes dynamic method.
+        /// </summary>
+        /// <param name="target">
+        /// Target object to invoke method on.
+        /// </param>
+        /// <param name="arguments">
+        /// Method arguments.
+        /// </param>
+        /// <returns>
+        /// A method return value.
+        /// </returns>
+        public object Invoke(object target, object[] arguments)
+        {
+            return this.method(target, arguments);
+        }
+#else
         private IDynamicMethod dynamicMethod;
         private bool isOptimized = false;
 
@@ -76,21 +140,13 @@ namespace Spring.Reflection.Dynamic
         /// <param name="method">Method to wrap.</param>
         public SafeMethod(MethodInfo method)
         {
-            this.method = method;
+            this.methodInfo = method;
             if (method.IsPublic && 
                 ReflectionUtils.IsTypeVisible(method.DeclaringType, DynamicReflectionManager.ASSEMBLY_NAME))
             {
                 this.dynamicMethod = DynamicMethod.Create(method);
                 this.isOptimized = true;
             }
-        }
-
-        /// <summary>
-        /// Gets the class, that declares this method
-        /// </summary>
-        public Type DeclaringType
-        {
-            get { return method.DeclaringType; }
         }
 
         /// <summary>
@@ -123,12 +179,12 @@ namespace Spring.Reflection.Dynamic
                         throw;
                     }
                     isOptimized = false;
-                    return method.Invoke(target, arguments);
+                    return methodInfo.Invoke(target, arguments);
                 }
             }
             else
             {
-                return method.Invoke(target, arguments);
+                return methodInfo.Invoke(target, arguments);
             }
         }
 
@@ -136,10 +192,32 @@ namespace Spring.Reflection.Dynamic
         {
             return e.TargetSite.DeclaringType.FullName.IndexOf(DynamicReflectionManager.ASSEMBLY_NAME) >= 0;
         }
+#endif
     }
 
     #endregion
     
+#if NET_2_0
+    /// <summary>
+    /// Factory class for dynamic methods.
+    /// </summary>
+    /// <author>Aleksandar Seovic</author>
+    public class DynamicMethod : BaseDynamicMember
+    {
+        /// <summary>
+        /// Creates dynamic method instance for the specified <see cref="MethodInfo"/>.
+        /// </summary>
+        /// <param name="method">Method info to create dynamic method for.</param>
+        /// <returns>Dynamic method for the specified <see cref="MethodInfo"/>.</returns>
+        public static IDynamicMethod Create(MethodInfo method)
+        {
+            AssertUtils.ArgumentNotNull(method, "You cannot create a dynamic method for a null value.");
+
+            IDynamicMethod dynamicMethod = new SafeMethod(method);
+            return dynamicMethod;
+        }
+    }
+#else
     /// <summary>
     /// Factory class for dynamic methods.
     /// </summary>
@@ -187,104 +265,11 @@ namespace Spring.Reflection.Dynamic
             invokeMethod.DefineParameter(2, ParameterAttributes.None, "args");
 
             ILGenerator il = invokeMethod.GetILGenerator();
-            bool isValueType = method.DeclaringType.IsValueType;
-            bool isStatic = method.IsStatic;
-
-            IDictionary outArgs = new Hashtable();
-            ParameterInfo[] args = method.GetParameters();
-            for (int i = 0; i < args.Length; i++)
-            {
-                if (IsOutputOrRefArgument(args[i]))
-                {
-                    SetupOutputArgument(il, args[i], outArgs);
-                }
-            }
-
-            if (!isStatic)
-            {
-                SetupTargetInstance(il, method.DeclaringType);
-            }
-
-            for (int i = 0; i < args.Length; i++)
-            {
-                SetupMethodArgument(il, args[i], outArgs);
-            }
-            InvokeMethod(il, isStatic, isValueType, method);
-            for (int i = 0; i < args.Length; i++)
-            {
-                if (IsOutputOrRefArgument(args[i]))
-                {
-                    ProcessOutputArgument(il, args[i], outArgs);
-                }
-            }
-            ProcessReturnValue(il, method.ReturnType);
-            il.Emit(OpCodes.Ret);
-        }
-
-        private static bool IsOutputOrRefArgument(ParameterInfo argInfo)
-        {
-            return argInfo.IsOut || argInfo.ParameterType.Name.EndsWith("&");
-        }
-
-        private static void SetupOutputArgument(ILGenerator il, ParameterInfo argInfo, IDictionary outArgs)
-        {
-            Type argType = argInfo.ParameterType.GetElementType();
-
-            LocalBuilder lb = il.DeclareLocal(argType);
-            if (!argInfo.IsOut)
-            {
-                PushArgumentValue(il, argType, argInfo.Position);
-                il.Emit(OpCodes.Stloc, lb);
-            }
-            outArgs[argInfo.Position] = lb;
-        }
-
-        private static void ProcessOutputArgument(ILGenerator il, ParameterInfo argInfo, IDictionary outArgs)
-        {
-            Type argType = argInfo.ParameterType.GetElementType();
-
-            il.Emit(OpCodes.Ldarg_2);
-            il.Emit(OpCodes.Ldc_I4, argInfo.Position);
-            il.Emit(OpCodes.Ldloc, (LocalBuilder)outArgs[argInfo.Position]);
-            if (argType.IsValueType)
-            {
-                il.Emit(OpCodes.Box, argType);
-            }
-            il.Emit(OpCodes.Stelem_Ref);
-        }
-
-        private static void SetupMethodArgument(ILGenerator il, ParameterInfo argInfo, IDictionary outArgs)
-        {
-            if (IsOutputOrRefArgument(argInfo))
-            {
-                il.Emit(OpCodes.Ldloca_S, (LocalBuilder)outArgs[argInfo.Position]);
-            }
-            else
-            {
-                PushArgumentValue(il, argInfo.ParameterType, argInfo.Position);
-            }
-        }
-
-        private static void PushArgumentValue(ILGenerator il, Type argumentType, int argumentPosition)
-        {
-            il.Emit(OpCodes.Ldarg_2);
-            il.Emit(OpCodes.Ldc_I4, argumentPosition);
-            il.Emit(OpCodes.Ldelem_Ref);
-            if (argumentType.IsValueType)
-            {
-#if NET_2_0
-                il.Emit(OpCodes.Unbox_Any, argumentType);
-#else
-				il.Emit(OpCodes.Unbox, argumentType);
-				il.Emit(OpCodes.Ldobj, argumentType);
-#endif
-            }
-            else
-            {
-                il.Emit(OpCodes.Castclass, argumentType);
-            }
+            DynamicReflectionManager.EmitInvokeMethod(il, method, true);
         }
 
         #endregion
     }
+
+#endif
 }

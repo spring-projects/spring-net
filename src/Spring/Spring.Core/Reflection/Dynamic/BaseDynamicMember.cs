@@ -34,6 +34,8 @@ namespace Spring.Reflection.Dynamic
     /// <author>Aleksandar Seovic</author>
     public class BaseDynamicMember
     {
+//#if NET_2_0
+//#else
         /// <summary>
         /// Method attributes constant.
         /// </summary>
@@ -56,12 +58,12 @@ namespace Spring.Reflection.Dynamic
             if (targetType.IsValueType)
             {
                 LocalBuilder target = il.DeclareLocal(targetType);
-#if NET_2_0 
-                il.Emit(OpCodes.Unbox_Any, targetType);
-#else
+//#if NET_2_0 
+//                il.Emit(OpCodes.Unbox_Any, targetType);
+//#else
             	il.Emit(OpCodes.Unbox, targetType);
             	il.Emit(OpCodes.Ldobj, targetType);
-#endif          
+//#endif          
             	il.Emit(OpCodes.Stloc, target);
                 il.Emit(OpCodes.Ldloca, target);
             }
@@ -82,12 +84,12 @@ namespace Spring.Reflection.Dynamic
             il.Emit(OpCodes.Ldarg, argumentPosition);
             if (argumentType.IsValueType)
             {
-#if NET_2_0 
-				il.Emit(OpCodes.Unbox_Any, argumentType);
-#else
+//#if NET_2_0 
+//				il.Emit(OpCodes.Unbox_Any, argumentType);
+//#else
 				il.Emit(OpCodes.Unbox, argumentType);
 				il.Emit(OpCodes.Ldobj, argumentType);
-#endif          
+//#endif          
             }
             else
             {
@@ -142,5 +144,6 @@ namespace Spring.Reflection.Dynamic
             il.Emit(OpCodes.Newobj, invalidOperationException);
             il.Emit(OpCodes.Throw);
         }
+//#endif
     }
 }

@@ -21,9 +21,12 @@
 #region Imports
 
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Spring.Objects;
+
+#if NET_2_0
+using System.Collections.Generic;
+#endif
 
 #endregion
 
@@ -39,10 +42,6 @@ namespace Spring.Core.TypeResolution
         [Test]
         public void CanTakeQualifiedType()
         {
-            string tn = typeof(int[]).AssemblyQualifiedName;
-            tn = typeof(TestGenericObject<int,string>[]).AssemblyQualifiedName;
-            tn = typeof(List<int>).AssemblyQualifiedName;
-
             Type testType = typeof(TestObject);
             TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.AssemblyQualifiedName);
             Assert.IsTrue(tah.IsAssemblyQualified);

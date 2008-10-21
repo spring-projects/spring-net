@@ -40,7 +40,7 @@ namespace Spring.Expressions
             | BindingFlags.Instance | BindingFlags.Static
             | BindingFlags.IgnoreCase;
 
-        private SafeIndexer indexer;
+        private SafeProperty indexer;
 
         /// <summary>
         /// Create a new instance
@@ -191,7 +191,7 @@ namespace Spring.Expressions
                 EvaluationContext evalContext = new EvaluationContext(context, variables);
                 InitializeIndexerProperty(context, evalContext);
 
-                return indexer.IndexerProperty;
+                return indexer.PropertyInfo;
             }
         }
 
@@ -260,7 +260,7 @@ namespace Spring.Expressions
         private void SetGenericIndexer(object context, EvaluationContext evalContext,object newValue)
         {
             object[] indices = InitializeIndexerProperty( context, evalContext );
-            indexer.SetValue( context,indices,newValue );
+            indexer.SetValue( context, newValue, indices );
         }
 
         private object[] InitializeIndexerProperty(object context, EvaluationContext evalContext)
@@ -281,7 +281,7 @@ namespace Spring.Expressions
                         }
                         else
                         {
-                            indexer = new SafeIndexer(indexerProperty);
+                            indexer = new SafeProperty(indexerProperty);
                         }
                     }
                 }

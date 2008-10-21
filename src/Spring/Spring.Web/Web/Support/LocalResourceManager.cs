@@ -29,6 +29,8 @@ using Spring.Util;
 
 #endregion
 
+#if NET_2_0
+
 namespace Spring.Web.Support
 {
     /// <summary>
@@ -89,3 +91,5 @@ namespace Spring.Web.Support
         }
     }
 }
+
+#endif

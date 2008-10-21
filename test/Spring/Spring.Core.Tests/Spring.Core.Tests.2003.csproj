@@ -1745,6 +1745,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Reflection\Dynamic\SafePropertyTests_TestObject.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Resources\Images.resx"
                     BuildAction = "EmbeddedResource"
                 />

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{91766D21-C568-459F-9BEA-759B011F23CF}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -127,6 +127,7 @@
     <Compile Include="Data\AutoDeclarativeTxTests.cs" />
     <Compile Include="Data\CallCreateTestObject.cs" />
     <Compile Include="Data\ConsoleLoggingAroundAdvice.cs" />
+    <Compile Include="Data\OracleAdoTemplateTests.cs" />
     <Compile Include="Data\TestTxIsolationLevelTests.cs" />
     <Compile Include="Data\Generic\GenericAdoTemplateTests.cs" />
     <Compile Include="Data\Generic\ITestObjectDao.cs" />
@@ -184,6 +185,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\TestTxIsolationLevel.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\CreateTestObject.sql" />
+    <Content Include="Data\CreditsDebitsSchema.sql" />
+    <Content Include="Data\DTC1.1AppContext.xml" />
+    <Content Include="Data\testobjects-sqlserver.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

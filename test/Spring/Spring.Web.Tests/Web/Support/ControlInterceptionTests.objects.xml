@@ -2,7 +2,7 @@
 
 <objects xmlns="http://www.springframework.net">
 
-  <object id="Spring.Util.MockControl" abstract="true">
+  <object id="Spring.Web.Support.MockControl" abstract="true">
 	<property name="GotIt" value="true" />
   </object>
 

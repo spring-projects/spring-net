@@ -261,16 +261,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Util\ControlAccessor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Util\ControlCollectionAccessor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Util\HttpContextSwitch.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -381,6 +371,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Web\Support\ControlAccessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\ControlCollectionAccessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Web\Support\ControlInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -457,6 +457,11 @@
                 />
                 <File
                     RelPath = "Web\Support\IWebNavigator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\Support\LocalResourceManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -546,6 +551,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Web\UI\IModelPersistenceMedium.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Web\UI\IValidationContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -558,6 +568,11 @@
                 <File
                     RelPath = "Web\UI\Page.cs"
                     SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\UI\SessionModelPersistenceMedium.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

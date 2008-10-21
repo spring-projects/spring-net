@@ -1,6 +1,9 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Text;
 using NUnit.Framework;
 using Spring.Context.Support;
 
@@ -73,6 +76,44 @@ namespace Spring.Reflection.Dynamic
             IDynamicProperty year = Create(typeof(DateTime).GetProperty("Year"));
             Assert.AreEqual(mostImportantDayInTheWorldEver.Year, year.GetValue(mostImportantDayInTheWorldEver));
         }
+
+        [Test]
+        public void AccessInheritedPropertyFromBaseClass()
+        {
+            IDynamicProperty p = Create(typeof(ClassWithNonReadableProperty).GetProperty("MyBaseProperty"));
+            BaseClass baseObject = new BaseClass();
+            baseObject.MyBaseProperty = "testtext";
+            Assert.AreEqual("testtext", p.GetValue(baseObject));
+        }
+
+        [Test]
+        public void AccessInheritedPropertyFromDerivedClass()
+        {
+            IDynamicProperty p = Create(typeof(BaseClass).GetProperty("MyBaseProperty"));
+            ClassWithNonReadableProperty derivedObject = new ClassWithNonReadableProperty();
+            derivedObject.MyBaseProperty = "testtext";
+            Assert.AreEqual("testtext", p.GetValue(derivedObject));
+        }
+
+        [Test]
+        public void AccessOverriddenProperty()
+        {
+            IDynamicProperty pVirt = Create(typeof(BaseClass).GetProperty("MyVirtualBaseProperty"));
+            IDynamicProperty pOverridden = Create(typeof(ClassWithNonReadableProperty).GetProperty("MyVirtualBaseProperty"));
+
+            Assert.AreEqual("MyVirtualBasePropertyText", pVirt.GetValue(new BaseClass()));
+            try
+            {
+                Assert.AreEqual("MyVirtualBasePropertyText", pOverridden.GetValue(new BaseClass()));
+                Assert.Fail();
+            }
+            catch (InvalidCastException)
+            {
+            }
+            Assert.AreEqual("MyOverridenDerivedPropertyText", pVirt.GetValue(new ClassWithNonReadableProperty()));
+            Assert.AreEqual("MyOverridenDerivedPropertyText", pOverridden.GetValue(new ClassWithNonReadableProperty()));
+        }
+
 
         [Test]
         public void TestStaticProperties()
@@ -178,7 +219,7 @@ namespace Spring.Reflection.Dynamic
 
     #region IL generation helper classes (they help if you look at them in Reflector ;-)
 
-    public class ValueTypeProperty : IDynamicProperty
+    public class ValueTypeProperty //: IDynamicProperty
     {
         public object GetValue(object target)
         {
@@ -191,7 +232,7 @@ namespace Spring.Reflection.Dynamic
         }
     }
 
-    public class ValueTypeTarget : IDynamicProperty
+    public class ValueTypeTarget //: IDynamicProperty
     {
         public object GetValue(object target)
         {
@@ -205,7 +246,7 @@ namespace Spring.Reflection.Dynamic
         }
     }
 
-    public class StaticProperty : IDynamicProperty
+    public class StaticProperty //: IDynamicProperty
     {
         public object GetValue(object target)
         {
@@ -256,13 +297,34 @@ namespace Spring.Reflection.Dynamic
         }
     }
 
-    public class ClassWithNonReadableProperty
+    public class BaseClass
+    {
+        private string myBaseProperty;
+
+        public string MyBaseProperty
+        {
+            set { myBaseProperty = value; }
+            get { return myBaseProperty; }
+        }        
+
+        public virtual string MyVirtualBaseProperty
+        {
+            get { return "MyVirtualBasePropertyText"; }
+        }
+    }
+
+    public class ClassWithNonReadableProperty : BaseClass
     {
         private string myProperty;
 
         public string MyProperty
         {
             set { myProperty = value; }
+        }
+
+        public override string MyVirtualBaseProperty
+        {
+            get { return "MyOverridenDerivedPropertyText"; }
         }
     }
 

@@ -108,6 +108,38 @@ namespace Spring.Reflection.Dynamic
             Assert.IsFalse((bool) isNullOrEmpty.Invoke(null, new object[] { "Ana Maria" }));
         }
 
+        [Test]
+        public void TestArgumentTypeCasts()
+        {
+            IDynamicMethod sqrt = DynamicMethod.Create(typeof(Math).GetMethod("Sqrt"));
+            object result = sqrt.Invoke(null, new object[] { 4 } );
+            Assert.AreEqual( Math.Sqrt(4), result );
+
+            try
+            {
+                sqrt.Invoke(null, new object[] { null } );
+                Assert.Fail();
+            }
+            catch (InvalidCastException)
+            {
+            }
+
+            try
+            {
+                sqrt.Invoke(null, new object[] { "4" } );
+                Assert.Fail();
+            }
+            catch (InvalidCastException)
+            {}
+        }
+
+        private void CodeForReflection()
+        {
+            object val = 4;
+            Type argType = typeof(double);
+            Math.Sqrt( (double)Convert.ChangeType(val, argType) );            
+        }
+
 	    [Test]
         public void TestRefOutMethods()
 	    {

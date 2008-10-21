@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 using Spring.Util;
@@ -62,7 +63,59 @@ namespace Spring.Reflection.Dynamic
     /// </remarks>
     public class SafeConstructor : IDynamicConstructor
     {
-        private ConstructorInfo constructor;
+        private ConstructorInfo constructorInfo;
+
+#if NET_2_0
+        #region Generated Function Cache
+
+        private static readonly IDictionary constructorCache = new Hashtable();
+
+        /// <summary>
+        /// Obtains cached constructor info or creates a new entry, if none is found.
+        /// </summary>
+        private static ConstructorDelegate GetOrCreateDynamicConstructor(ConstructorInfo constructorInfo)
+        {
+            ConstructorDelegate method = (ConstructorDelegate)constructorCache[constructorInfo];
+            if (method == null)
+            {
+                method = DynamicReflectionManager.CreateConstructor(constructorInfo);
+                lock (constructorCache)
+                {
+                    constructorCache[constructorInfo] = method;
+                }
+            }
+            return method;
+        }
+
+        #endregion
+
+        private ConstructorDelegate constructor;
+
+        /// <summary>
+        /// Creates a new instance of the safe constructor wrapper.
+        /// </summary>
+        /// <param name="constructorInfo">Constructor to wrap.</param>
+        public SafeConstructor(ConstructorInfo constructorInfo)
+        {
+            this.constructorInfo = constructorInfo;
+            this.constructor = GetOrCreateDynamicConstructor(constructorInfo);
+        }
+
+
+        /// <summary>
+        /// Invokes dynamic constructor.
+        /// </summary>
+        /// <param name="arguments">
+        /// Constructor arguments.
+        /// </param>
+        /// <returns>
+        /// A constructor value.
+        /// </returns>
+        public object Invoke(object[] arguments)
+        {
+            return constructor(arguments);
+        }
+#else
         private IDynamicConstructor dynamicConstructor;
         private bool isOptimized = false;
         
@@ -72,7 +125,7 @@ namespace Spring.Reflection.Dynamic
         /// <param name="constructor">Constructor to wrap.</param>
         public SafeConstructor(ConstructorInfo constructor)
         {
-            this.constructor = constructor;
+            this.constructorInfo = constructor;
             if (constructor.IsPublic &&
                 ReflectionUtils.IsTypeVisible(constructor.DeclaringType, DynamicReflectionManager.ASSEMBLY_NAME))
             {
@@ -80,7 +133,7 @@ namespace Spring.Reflection.Dynamic
                 this.isOptimized = true;
             }
         }
-        
+
         /// <summary>
         /// Invokes dynamic constructor.
         /// </summary>
@@ -103,18 +156,40 @@ namespace Spring.Reflection.Dynamic
                 catch (InvalidCastException)
                 {
                     isOptimized = false;
-                    return constructor.Invoke(arguments);
+                    return constructorInfo.Invoke(arguments);
                 }
             }
             else
             {
-                return constructor.Invoke(arguments);
+                return constructorInfo.Invoke(arguments);
             }
         }
+#endif
     }
 
     #endregion
+
+#if NET_2_0
+    /// <summary>
+    /// Factory class for dynamic constructors.
+    /// </summary>
+    /// <author>Aleksandar Seovic</author>
+    public class DynamicConstructor : BaseDynamicMember
+    {
+        /// <summary>
+        /// Creates dynamic constructor instance for the specified <see cref="ConstructorInfo"/>.
+        /// </summary>
+        /// <param name="constructorInfo">Constructor info to create dynamic constructor for.</param>
+        /// <returns>Dynamic constructor for the specified <see cref="ConstructorInfo"/>.</returns>
+        public static IDynamicConstructor Create(ConstructorInfo constructorInfo)
+        {
+            AssertUtils.ArgumentNotNull(constructorInfo, "You cannot create a dynamic constructor for a null value.");
+
+            return new SafeConstructor(constructorInfo);
+        }
+    }
     
+#else
     /// <summary>
     /// Factory class for dynamic constructors.
     /// </summary>
@@ -162,37 +237,9 @@ namespace Spring.Reflection.Dynamic
 
             ILGenerator il = invokeMethod.GetILGenerator();
 
-            Type[] argTypes = ReflectionUtils.GetParameterTypes(constructor);
-            for (int i = 0; i < argTypes.Length; i++)
-            {
-                SetupConstructorArgument(il, argTypes[i], i);
-            }
-            
-            il.Emit(OpCodes.Newobj, constructor);
-            ProcessReturnValue(il, constructor.DeclaringType);
-            il.Emit(OpCodes.Ret);
+            DynamicReflectionManager.EmitInvokeConstructor(il, constructor, true);
         }
-
-        private static void SetupConstructorArgument(ILGenerator il, Type argumentType, int argumentPosition)
-        {
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Ldc_I4, argumentPosition);
-            il.Emit(OpCodes.Ldelem_Ref);
-            if (argumentType.IsValueType)
-            {
-#if NET_2_0 
-                il.Emit(OpCodes.Unbox_Any, argumentType);
-#else
-            	il.Emit(OpCodes.Unbox, argumentType);
-				il.Emit(OpCodes.Ldobj, argumentType);
-#endif
-            }
-            else
-            {
-                il.Emit(OpCodes.Castclass, argumentType);
-            }
-        }
-        
         #endregion
     }
+#endif
 }

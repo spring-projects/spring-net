@@ -21,8 +21,11 @@
 #region Imports
 
 using System;
+using System.CodeDom.Compiler;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Text;
 using NUnit.Framework;
 using Spring.Context.Support;
 
@@ -30,52 +33,52 @@ using Spring.Context.Support;
 
 namespace Spring.Reflection.Dynamic
 {
-	/// <summary>
+    /// <summary>
     /// Unit tests for the DynamicProperty class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-	[TestFixture]
+    [TestFixture]
     public class DynamicPropertyTests : BasePropertyTests
     {
-       protected override IDynamicProperty Create(PropertyInfo property)
+        protected override IDynamicProperty Create( PropertyInfo property )
         {
-            return DynamicProperty.Create(property);
+            return DynamicProperty.Create( property );
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestNonReadableProperties()
         {
-            IDynamicProperty nonReadableProperty = 
-                Create(typeof(ClassWithNonReadableProperty).GetProperty("MyProperty"));
-            nonReadableProperty.GetValue(null);
+            IDynamicProperty nonReadableProperty =
+                Create( typeof( ClassWithNonReadableProperty ).GetProperty( "MyProperty" ) );
+            nonReadableProperty.GetValue( null );
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestNonWritableInstanceProperty()
         {
             IDynamicProperty nonWritableProperty =
-                Create(typeof(Inventor).GetProperty("PlaceOfBirth"));
-            nonWritableProperty.SetValue(null, null);
+                Create( typeof( Inventor ).GetProperty( "PlaceOfBirth" ) );
+            nonWritableProperty.SetValue( null, null );
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestAttemptingToSetPropertyOfValueTypeInstance()
         {
             MyStruct myYearHolder = new MyStruct();
-            IDynamicProperty year = Create(typeof(MyStruct).GetProperty("Year"));
-            year.SetValue(myYearHolder, 2004);
+            IDynamicProperty year = Create( typeof( MyStruct ).GetProperty( "Year" ) );
+            year.SetValue( myYearHolder, 2004 );
         }
-        
+
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestNonWritableStaticProperty()
         {
             IDynamicProperty nonWritableProperty =
-                Create(typeof(DateTime).GetProperty("Today"));
-            nonWritableProperty.SetValue(null, null);
-        }	    
+                Create( typeof( DateTime ).GetProperty( "Today" ) );
+            nonWritableProperty.SetValue( null, null );
+        }
     }
 }

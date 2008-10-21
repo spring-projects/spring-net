@@ -85,10 +85,10 @@ namespace Spring.Reflection.Dynamic
         /// </summary>
         private class DynamicFieldCacheEntry
         {
-            public readonly GetterDelegate Getter;
-            public readonly SetterDelegate Setter;
+            public readonly FieldGetterDelegate Getter;
+            public readonly FieldSetterDelegate Setter;
 
-            public DynamicFieldCacheEntry(GetterDelegate getter, SetterDelegate setter)
+            public DynamicFieldCacheEntry(FieldGetterDelegate getter, FieldSetterDelegate setter)
             {
                 Getter = getter;
                 Setter = setter;
@@ -114,8 +114,8 @@ namespace Spring.Reflection.Dynamic
 
         #endregion
 
-        private readonly GetterDelegate getter;
-        private readonly SetterDelegate setter;
+        private readonly FieldGetterDelegate getter;
+        private readonly FieldSetterDelegate setter;
 
         /// <summary>
         /// Creates a new instance of the safe field wrapper.
