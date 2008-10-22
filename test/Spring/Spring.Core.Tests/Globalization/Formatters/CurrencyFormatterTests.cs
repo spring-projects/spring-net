@@ -54,7 +54,7 @@ namespace Spring.Globalization.Formatters
             CurrencyFormatter fmt = new CurrencyFormatter();
             fmt.Format("not a number");
         }
-
+#if !MONO
         [Test]
         public void FormatUsingDefaults()
         {
@@ -154,6 +154,6 @@ namespace Spring.Globalization.Formatters
             Assert.AreEqual(-1234, fmt.Parse("-1'23'4,00 Дин."));
             Assert.AreEqual(-1234.56, fmt.Parse("-1'23'4,56 Дин."));
         }
-
+#endif
     }
 }

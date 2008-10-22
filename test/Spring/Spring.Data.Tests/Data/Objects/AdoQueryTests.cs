@@ -115,7 +115,7 @@ namespace Spring.Data.Objects
             query.DeclaredParameters.Add(COLUMN_NAMES[0], COLUMN_TYPES[0]);
             query.DeclaredParameters.Add(COLUMN_NAMES[1], COLUMN_TYPES[1]);
             query.Compile();
-            IList list = query.Query();
+            query.Query();
 
             mocks.VerifyAll();
         }

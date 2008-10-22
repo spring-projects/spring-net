@@ -36,6 +36,7 @@ namespace Spring.Transaction.Support
 		public void InvalidDeadline()
 		{
 			int time = TimeToLiveInSeconds;
+            Assert.IsNotNull(time); //just to avoid mono msc CS0219 error
 		}
 
         /*

@@ -1204,7 +1204,7 @@ namespace Spring.Expressions
             Assert.IsFalse(
                 (bool)ExpressionEvaluator.GetValue(null, "DateTime.Today between {DateTime.Now, DateTime.Now}"));
         }
-
+#if !MONO
         /// <summary>
         /// Tests LIKE operator.
         /// </summary>
@@ -1222,7 +1222,7 @@ namespace Spring.Expressions
             Assert.IsTrue((bool)ExpressionEvaluator.GetValue(null, "'Ana Maria Seovic' like '*Maria*'"));
             Assert.IsTrue((bool)ExpressionEvaluator.GetValue(null, "'Marija Seovic' like '*Seovic'"));
         }
-
+#endif
         /// <summary>
         /// Tests MATCHES operator.
         /// </summary>

@@ -1662,6 +1662,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             ITestObject it = (ITestObject) CreateProxy(pf);
             Assert.AreEqual(dp.count, 0);
             int age = it.Age;
+            Assert.IsNotNull(age);  // avoid mono mcs CS0218
             Assert.AreEqual(dp.count, 1);
             it.Age = 11;
             Assert.AreEqual(it.Age, 11);
@@ -1681,6 +1682,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             ITestObject it = (ITestObject)CreateProxy(pf);
             Assert.AreEqual(dp.count, 0);
             int age = it.Age;
+            Assert.IsNotNull(age); // avoid mono mcs error CS0219
             // Statically vetoed
             Assert.AreEqual(0, dp.count);
             it.Age = 11;
@@ -1741,6 +1743,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             ITestObject it = (ITestObject) CreateProxy(pf);
             Assert.AreEqual(ni.Count, 0);
             int age = it.Age;
+            Assert.IsNotNull(age); // avoid mono mcs error CS0219
             Assert.AreEqual(ni.Count, 1);
             it.Age = 11;
             Assert.AreEqual(it.Age, 11);

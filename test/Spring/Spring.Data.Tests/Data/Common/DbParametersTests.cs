@@ -69,10 +69,7 @@ namespace Spring.Data.Common
             Assert.AreEqual("foo", springParameter.Value);
         }
 
-        private static void TestParameterNaming(DbParameters dbParameters)
-        {
 
-        }
     }
 }
 #endif

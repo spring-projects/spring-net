@@ -78,6 +78,7 @@ namespace Spring.Transaction.Config
 
             // try with non-transaction
             int i = testObject.Age;
+            Assert.IsNotNull(i);
             Assert.AreEqual(1, ptm.begun, "Should not have started another transaction");
 
             // try with exceptional

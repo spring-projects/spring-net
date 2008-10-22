@@ -331,8 +331,7 @@ namespace Spring.Data
 
             IDbProvider dbProvider2 = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
             IDbConnection connection2 = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction2 = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
-
+           
             Expect.Call(dbProvider2.CreateConnection()).Return(connection2);
             connection2.Open();
             Exception failure = new Exception("can't open connection");
@@ -454,8 +453,7 @@ namespace Spring.Data
 
             IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
             IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
-
+            
             Expect.Call(dbProvider.CreateConnection()).Return(connection);
             connection.Open();
             LastCall.On(connection).Repeat.Once();

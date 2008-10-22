@@ -25,6 +25,13 @@
 			</resources>
 			<references basedir="${current.bin.dir}">
 				<include name="*.dll" />
+				<include name="System.Data.dll" if="${nant.settings.currentframework == 'mono-2.0'}"/>
+				<include name="System.Data.Common.dll" if="${nant.settings.currentframework == 'mono-2.0'}"/>
+				<include name="System.Data.OracleClient.dll" if="${nant.settings.currentframework == 'mono-2.0'}"/>
+				<include name="System.Drawing.dll" if="${nant.settings.currentframework == 'mono-2.0'}"/>
+				<include name="System.EnterpriseServices.dll" if="${nant.settings.currentframework == 'mono-2.0'}"/>
+				<include name="System.Transactions.dll" if="${nant.settings.currentframework == 'mono-2.0'}"/>
+				<include name="Common.Logging.dll" if="${nant.settings.currentframework == 'mono-2.0'}"/>
 				<exclude name="${project::get-name()}.dll" />
 				<exclude name="CloverRuntime.dll" />
 			</references>

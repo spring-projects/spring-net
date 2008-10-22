@@ -67,7 +67,7 @@ namespace Spring.Globalization
             Assert.AreEqual("Croatia", tesla.PlaceOfBirth.Country);
             Assert.AreEqual("Smiljan", tesla.PlaceOfBirth.City);
         }
-
+#if !MONO
         [Test]
         public void TestSerbianLatin()
         {
@@ -89,7 +89,7 @@ namespace Spring.Globalization
             Assert.AreEqual("Хрватска", tesla.PlaceOfBirth.Country);
             Assert.AreEqual("Смиљан", tesla.PlaceOfBirth.City);
         }
-
+#endif
         [Test]
         public void NullReferenceHandling()
         {
@@ -123,7 +123,7 @@ namespace Spring.Globalization
             }
             catch (ArgumentNullException) { }
         }
-
+#if !MONO
         [Test]
         public void DefaultResolvesUsingCurrentUICulture()
         {
@@ -131,7 +131,7 @@ namespace Spring.Globalization
             Assert.AreEqual("Nikola Tesla", tesla.Name);
             Assert.AreEqual("Srbin", tesla.Nationality);
         }
-
+#endif
         private Inventor CreateInventor(CultureInfo culture)
         {
             Inventor inventor = new Inventor();

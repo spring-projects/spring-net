@@ -28,6 +28,7 @@ namespace Spring.Transaction.Support
 		public void SynchronizationsInvalid()
 		{
 			IList syncs = TransactionSynchronizationManager.Synchronizations;
+            Assert.IsNotNull(syncs); // to avoid mono mcs error 219
 		}
 		[Test]
 		[ExpectedException(typeof(InvalidOperationException))]

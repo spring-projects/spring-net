@@ -52,6 +52,7 @@ namespace Spring.Data.Common
             public override void DoExecute()
             {
                 object result = DbProviderFactory.GetDbProvider(providerName);
+                Assert.IsNotNull(result);
             }
         }
 
@@ -108,6 +109,7 @@ namespace Spring.Data.Common
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US", false);
             IApplicationContext ctx = DbProviderFactory.ApplicationContext;            
+            Assert.IsNotNull(ctx);
             Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR", false);
             IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-2.0");
             AssertIsSqlServer2005(provider);

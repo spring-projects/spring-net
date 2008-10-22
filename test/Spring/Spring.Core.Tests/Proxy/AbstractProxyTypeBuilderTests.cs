@@ -256,12 +256,13 @@ namespace Spring.Proxy
             Assert.AreEqual("blah", wsa.Name);
             Assert.AreEqual("http://mynamespace.com", wsa.Namespace);
         }
-
+#if !MONO
         // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
         [Test]
 #if !NET_2_0
         [Ignore("GetCustomAttributes() does not return SecurityAttribute in .NET 1.x")]
 #endif
+
         public void ProxySecurityAttribute()
         {
             IProxyTypeBuilder builder = GetProxyBuilder();
@@ -274,7 +275,7 @@ namespace Spring.Proxy
             Assert.IsNotNull(attrs, "Should have had 2 attribute applied to the target type.");
             Assert.AreEqual(2, attrs.Length, "Should have had 2 attribute applied to the target type.");
         }
-
+#endif
         [Test]
         public void ProxySpecificTargetTypeAttributeWithArrayConstructor()
         {

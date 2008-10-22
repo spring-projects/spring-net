@@ -193,7 +193,7 @@ namespace Spring.Context.Support
             string msg = String.Format(CultureInfo.CurrentUICulture, "\"Hello World\"");
             Assert.AreEqual("\"Hello World\"", msg);
         }
-
+#if !MONO
         [Test]
         public void MessageAccessFallbackTurnedOff()
         {
@@ -213,7 +213,7 @@ namespace Spring.Context.Support
         {
             DoTestMessageAccess(true, false);
         }
-
+#endif
 
         /// <summary>
         /// Test to string shows expected message with base name listing.
@@ -225,7 +225,7 @@ namespace Spring.Context.Support
             Assert.AreEqual("ResourceSetMessageSource with ResourceManagers of base names = [Spring.Resources.Spring.Context.Tests]",
                             messageSource.ToString(), "ToString not as expected");
         }
-
+#if !MONO
         /// <summary>
         /// Happy day scenario where the requested message key is found and substitutions are made.
         /// </summary>
@@ -235,7 +235,7 @@ namespace Spring.Context.Support
             messageSource.ResourceManagers = resourceManagerList;
             GetMessageLocalizaitonFallbacks(messageSource);
         }
-
+#endif
         private void GetMessageLocalizaitonFallbacks(IMessageSource msgSource)
         {
             Assert.AreEqual("This is Spring.NET",
@@ -332,7 +332,7 @@ namespace Spring.Context.Support
             Assert.AreEqual(35, to.Age);
         }
 #endif
-
+#if !MONO
         /// <summary>
         /// Test when the code being resolves itself implements IMessageResolvable.
         /// </summary>
@@ -345,7 +345,7 @@ namespace Spring.Context.Support
             messageSource.ResourceManagers = resourceManagerList;
             Assert.AreEqual(messageSource.GetMessage("error.required", CultureInfo.CurrentCulture, dmr, "dude!"), "First name is required dude!", "message not as expected");
         }
-
+#endif
         /// <summary>
         /// Get exception when resource doesn't exist.
         /// </summary>

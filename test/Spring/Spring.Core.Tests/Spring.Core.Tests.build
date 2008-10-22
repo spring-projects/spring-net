@@ -28,6 +28,7 @@
       </sources>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
 				<include name="**/*.resx" />
+				<exclude name="**/*.*sr*.resx" if="${nant.settings.currentframework == 'mono-2.0'}"/>
 				<include name="**/*.xsd" />
 				<include name="**/*.txt" />
 				<include name="**/*.vb" />

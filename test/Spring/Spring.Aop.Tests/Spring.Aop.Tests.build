@@ -14,7 +14,7 @@
                      output="${current.bin.dir}/${project::get-name()}.dll"
 		     doc="${current.bin.dir}/${project::get-name()}.xml">
 			<nowarn>
-				<warning number="${nowarn.numbers.test}" />
+				<warning number="${nowarn.numbers.test},0219" />
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />
@@ -32,6 +32,9 @@
 					<exclude name="obj/**/*" />
 			</resources>
 			<references basedir="${current.bin.dir}">
+				<include name="System.Data.dll" />		
+				<include name="System.Web.dll" />		
+				<include name="System.Xml.dll" />		
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
 				<exclude name="CloverRuntime.dll" />

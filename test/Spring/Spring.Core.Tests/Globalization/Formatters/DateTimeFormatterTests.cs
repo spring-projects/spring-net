@@ -54,7 +54,7 @@ namespace Spring.Globalization.Formatters
             DateTimeFormatter fmt = new DateTimeFormatter("d");
             fmt.Format("not a date");
         }
-
+#if !MONO
         [Test]
         public void FormatUsingDefaults()
         {
@@ -94,5 +94,6 @@ namespace Spring.Globalization.Formatters
             Assert.AreEqual(new DateTime(2004, 8, 14), fmt.Parse("14-авг-2004"));
             Assert.AreEqual(new DateTime(1974, 8, 24), fmt.Parse("24-авг-1974"));
         }
+#endif
     }
 }
