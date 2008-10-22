@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-
+using System.Web.UI.WebControls;
 using NUnit.Framework;
 
 namespace Spring.DataBinding
@@ -31,6 +31,23 @@ namespace Spring.DataBinding
     [TestFixture]
     public class SimpleExpressionBindingTests
     {
+#if NET_2_0
+        private class BindToNullable_TestEntity
+        {
+            public Nullable<short> SortOrder { get;set; }
+        }
+
+        [Test(Description="http://jira.springframework.org/browse/SPRNET-996")]
+        public void BindToNullable()
+        {
+            TextBox textBox = new TextBox();
+            textBox.Text = string.Empty;
+            BindToNullable_TestEntity entity = new BindToNullable_TestEntity();
+            new SimpleExpressionBinding("Text", "SortOrder").BindSourceToTarget(textBox, entity, null);
+            Assert.IsNull(entity.SortOrder);
+        }
+#endif
+
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void WithNullMesageId()
@@ -65,6 +82,5 @@ namespace Spring.DataBinding
         {
             new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", new string[0]);
         }
-
     }
 }
