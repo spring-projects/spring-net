@@ -693,7 +693,7 @@
   <target name="dailysnapshot">
     <property name="nant.target.root.name" value="daily-build"/>
     <property name="project.build.sign" value="true"/>
-    <call target="copykeys"/>
+    <!-- call target="copykeys"/ -->
     <call target="build-all-function"/>
     <call target="package-cvs"/>
     <!-- only copy the supporting tools directory for the daily build. -->

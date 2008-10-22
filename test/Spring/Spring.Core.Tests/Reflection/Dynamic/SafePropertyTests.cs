@@ -149,7 +149,6 @@ namespace Spring.Reflection.Dynamic
                 args.GenerateInMemory = true;
                 args.GenerateExecutable = false;
                 args.IncludeDebugInformation = true;
-                args.Evidence = Assembly.GetExecutingAssembly().Evidence;
 #if NET_2_0
                 CodeDomProvider provider = CodeDomProvider.CreateProvider( "VisualBasic" );
                 CompilerResults results = provider.CompileAssemblyFromSource( args, vbSourceCode );
