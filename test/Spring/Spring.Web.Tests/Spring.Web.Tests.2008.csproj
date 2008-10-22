@@ -114,15 +114,15 @@
     <Compile Include="TestSupport\VoidDelegate.cs" />
     <Compile Include="Threading\HttpContextStorageTests.cs" />
     <Compile Include="Threading\HybridContextStorageTests.cs" />
-    <Compile Include="Util\ControlInterceptionTests.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="Util\WebDIPerformanceTests.cs" />
     <Compile Include="Util\WebUtilsTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Web\Services\WebServiceExporterTests.cs" />
     <Compile Include="Web\Support\AbstractHandlerFactoryTests.cs" />
+    <Compile Include="Web\Support\ControlInterceptionTests.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Web\Support\LocalResourceManagerTests.cs" />
     <Compile Include="Web\Support\MimeMediaTypeTests.cs" />
     <Compile Include="Web\Support\PageHandlerFactoryTests.cs" />
@@ -149,9 +149,6 @@
     <None Include="Spring.Web.Tests.build" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Util\ControlInterceptionTests.objects.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Context\Support\HttpApplicationConfigurerTests.xml" />
     <Content Include="Data\Spring\Context\Support\WebApplicationContextTests\Dummy.aspx" />
     <Content Include="Data\Spring\Objects\Factory\Support\TestForm.aspx" />
@@ -160,6 +157,7 @@
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession2.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\DisablesSession.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResultSave.aspx" />
+    <EmbeddedResource Include="Web\Support\ControlInterceptionTests.objects.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">

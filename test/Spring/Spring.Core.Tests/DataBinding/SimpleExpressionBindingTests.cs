@@ -19,7 +19,6 @@
 #endregion
 
 using System;
-using System.Web.UI.WebControls;
 using NUnit.Framework;
 
 namespace Spring.DataBinding
@@ -40,7 +39,7 @@ namespace Spring.DataBinding
         [Test(Description="http://jira.springframework.org/browse/SPRNET-996")]
         public void BindToNullable()
         {
-            TextBox textBox = new TextBox();
+            System.Web.UI.WebControls.TextBox textBox = new System.Web.UI.WebControls.TextBox();
             textBox.Text = string.Empty;
             BindToNullable_TestEntity entity = new BindToNullable_TestEntity();
             new SimpleExpressionBinding("Text", "SortOrder").BindSourceToTarget(textBox, entity, null);
