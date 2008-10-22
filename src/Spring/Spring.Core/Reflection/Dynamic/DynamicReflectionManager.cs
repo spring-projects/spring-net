@@ -419,11 +419,17 @@ namespace Spring.Reflection.Dynamic
                 {
                     EmitTarget( il, fieldInfo.DeclaringType, isInstanceMethod );
                 }
+
                 il.Emit( OpCodes.Ldarg_1 );
                 if (fieldInfo.FieldType.IsValueType)
                 {
                     EmitUnbox( il, fieldInfo.FieldType );
                 }
+                else
+                {
+                    il.Emit( OpCodes.Castclass, fieldInfo.FieldType );
+                }
+
                 if (fieldInfo.IsStatic)
                 {
                     il.Emit( OpCodes.Stsfld, fieldInfo );
@@ -489,6 +495,10 @@ namespace Spring.Reflection.Dynamic
                 if (propertyInfo.PropertyType.IsValueType)
                 {
                     EmitUnbox( il, propertyInfo.PropertyType );
+                }
+                else
+                {
+                    il.Emit( OpCodes.Castclass, propertyInfo.PropertyType );
                 }
 
                 // call setter

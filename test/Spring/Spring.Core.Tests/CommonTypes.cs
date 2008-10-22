@@ -346,6 +346,18 @@ namespace Spring
             set { dob = value; }
         }
 
+        /// <summary>
+        /// R/W PlaceOfBirth property
+        /// </summary>
+        public Place POB
+        {
+            get { return pob; }
+            set { pob = value; }
+        }
+
+        /// <summary>
+        /// Readonly
+        /// </summary>
         public Place PlaceOfBirth
         {
             get { return pob; }

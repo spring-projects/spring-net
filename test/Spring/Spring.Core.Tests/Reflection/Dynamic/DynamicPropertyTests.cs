@@ -40,6 +40,8 @@ namespace Spring.Reflection.Dynamic
     [TestFixture]
     public class DynamicPropertyTests : BasePropertyTests
     {
+        private const BindingFlags BINDANY = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+
         protected override IDynamicProperty Create( PropertyInfo property )
         {
             return DynamicProperty.Create( property );
@@ -79,6 +81,22 @@ namespace Spring.Reflection.Dynamic
             IDynamicProperty nonWritableProperty =
                 Create( typeof( DateTime ).GetProperty( "Today" ) );
             nonWritableProperty.SetValue( null, null );
+        }
+
+        [Test]
+        public void TestSetIncompatibleType()
+        {
+            IDynamicProperty inventorPlace = Create( typeof( Inventor ).GetProperty("POB") );
+            try { inventorPlace.SetValue( new Inventor(), new object() ); Assert.Fail(); }
+            catch (InvalidCastException) { }
+            try { inventorPlace.SetValue( new Inventor(), new DateTime() ); Assert.Fail(); }
+            catch (InvalidCastException) { }
+
+            IDynamicProperty inventorDOB = Create( typeof( Inventor ).GetProperty("DOB") );
+            try { inventorDOB.SetValue( new Inventor(), 2 ); Assert.Fail(); }
+            catch (InvalidCastException) { }
+            try { inventorDOB.SetValue( new Inventor(), new Place() ); Assert.Fail(); }
+            catch (InvalidCastException) { }                       
         }
     }
 }
