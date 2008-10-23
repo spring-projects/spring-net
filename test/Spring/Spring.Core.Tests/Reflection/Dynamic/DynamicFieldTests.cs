@@ -37,7 +37,7 @@ namespace Spring.Reflection.Dynamic
     [TestFixture]
     public class DynamicFieldTests
     {
-        private const BindingFlags BINDANY = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+        protected const BindingFlags BINDANY = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
         protected Inventor tesla;
         protected Inventor pupin;
         protected Society ieee;
@@ -158,22 +158,6 @@ namespace Spring.Reflection.Dynamic
             IDynamicField myField = Create( typeof( MyStaticStruct ).GetField( "staticYear" ) );
             myField.SetValue( null, 2008 );
             Assert.AreEqual( 2008, myField.GetValue( null ) );
-        }
-
-        [Test]
-        public void TestSetIncompatibleType()
-        {
-            IDynamicField inventorPlace = Create( typeof( Inventor ).GetField( "pob", BINDANY ) );
-            try { inventorPlace.SetValue( new Inventor(), new object() ); Assert.Fail(); }
-            catch (InvalidCastException) { }
-            try { inventorPlace.SetValue( new Inventor(), new DateTime() ); Assert.Fail(); }
-            catch (InvalidCastException) { }
-
-            IDynamicField inventorDOB = Create( typeof( Inventor ).GetField( "dob", BINDANY ) );
-            try { inventorDOB.SetValue( new Inventor(), 2 ); Assert.Fail(); }
-            catch (InvalidCastException) { }
-            try { inventorDOB.SetValue( new Inventor(), new Place() ); Assert.Fail(); }
-            catch (InvalidCastException) { }                       
         }
 
         #region Performance tests

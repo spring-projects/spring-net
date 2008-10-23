@@ -249,25 +249,30 @@ namespace Spring.Reflection.Dynamic
                 try
                 {
                     dynamicField.SetValue(target, value);
+                    return;
                 }
                 catch (InvalidCastException)
                 {
                     isOptimizedSet = false;
-                    if (!canSet)
-                    {
-                        throw new InvalidOperationException("Cannot set value of a read-only field or a constant.");
-                    }
-
-                    fieldInfo.SetValue(target, value);
                 }
             }
-            else
+
+            if (!canSet)
             {
-                if (!canSet)
-                {
-                    throw new InvalidOperationException("Cannot set value of a read-only field or a constant.");
-                }
+                throw new InvalidOperationException("Cannot set value of a read-only field or a constant.");
+            }
+
+            try
+            {
                 fieldInfo.SetValue(target, value);
+            }
+            catch(ArgumentException)
+            {
+                if (value != null && !fieldInfo.GetType().IsAssignableFrom(value.GetType()))
+                {
+                    throw new InvalidCastException();
+                }
+                throw;
             }
         }
 #endif

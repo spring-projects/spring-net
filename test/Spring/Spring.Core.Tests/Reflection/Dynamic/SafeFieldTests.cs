@@ -70,6 +70,22 @@ namespace Spring.Reflection.Dynamic
             TestStaticMembersOf(typeof(MyClassWithPrivateFields), MyClassWithPrivateFields.GetStaticReadonlyRefValue());
         }
 
+        [Test]
+        public void TestSetIncompatibleType()
+        {
+            IDynamicField inventorPlace = Create( typeof( Inventor ).GetField( "pob", BINDANY ) );
+            try { inventorPlace.SetValue( new Inventor(), new object() ); Assert.Fail(); }
+            catch (InvalidCastException) { }
+            try { inventorPlace.SetValue( new Inventor(), new DateTime() ); Assert.Fail(); }
+            catch (InvalidCastException) { }
+
+            IDynamicField inventorDOB = Create( typeof( Inventor ).GetField( "dob", BINDANY ) );
+            try { inventorDOB.SetValue( new Inventor(), 2 ); Assert.Fail(); }
+            catch (InvalidCastException) { }
+            try { inventorDOB.SetValue( new Inventor(), new Place() ); Assert.Fail(); }
+            catch (InvalidCastException) { }                       
+        }
+
         private void TestStaticMembersOf(Type type, object expectedRoRefValue)
         {
             // ro const int
