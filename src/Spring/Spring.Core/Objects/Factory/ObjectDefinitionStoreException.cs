@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright  2002-2005 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -139,9 +139,8 @@ namespace Spring.Objects.Factory
 			IResource resourceLocation,
 			string name,
 			string message,
-			Exception rootCause) : this
-			(resourceLocation == null ? string.Empty : resourceLocation.Description,
-			name, message, rootCause)
+			Exception rootCause) 
+            : this( (resourceLocation == null ? string.Empty : resourceLocation.Description), name, message, rootCause)
 		{
 		}
 
@@ -165,10 +164,10 @@ namespace Spring.Objects.Factory
 			string name,
 			string message,
 			Exception rootCause)
-			: base(
+			: base( 
 				string.Format(
-					"Error registering object with name '{0}' defined in '{1}' : {2}",
-					name,
+					"Error registering object {0}defined in '{1}' : {2}",
+					name == null ? string.Empty : string.Format("with name '{0}' ", name),
 					resourceDescription,
 					message),
 				rootCause)

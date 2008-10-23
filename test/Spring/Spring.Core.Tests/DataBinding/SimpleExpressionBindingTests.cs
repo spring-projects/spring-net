@@ -33,7 +33,8 @@ namespace Spring.DataBinding
 #if NET_2_0
         private class BindToNullable_TestEntity
         {
-            public Nullable<short> SortOrder { get;set; }
+            private Nullable<short> sortOrder;
+            public Nullable<short> SortOrder { get { return sortOrder; } set { sortOrder = value; } }
         }
 
         [Test(Description="http://jira.springframework.org/browse/SPRNET-996")]

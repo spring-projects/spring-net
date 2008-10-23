@@ -27,6 +27,7 @@ using System.Security.Policy;
 using System.Xml;
 using NUnit.Framework;
 using Spring.Objects;
+using Spring.Objects.Factory;
 using Spring.Util;
 
 #endregion
@@ -63,6 +64,48 @@ namespace Spring.Context.Support
 			Assert.AreEqual(ctx, ContextRegistry.GetContext());
 			Assert.AreEqual(1, ContextRegistry.GetContext().ObjectDefinitionCount);
 		}
+
+        [Test]
+        public void CreateRootContextFailure()
+        {
+            const string xmlData =
+                      @"<context type='Spring.Context.Support.XmlApplicationContext, Spring.Core'>
+	<resource uri='assembly://Spring.Core.Tests/DoesNotExist.xml'/>
+</context>";
+            CreateConfigurationElement(xmlData);
+
+            ContextHandler ctxHandler = new ContextHandler();
+            try
+            {
+                IApplicationContext ctx = (IApplicationContext) ctxHandler.Create(null, null, configurationElement);
+                Assert.Fail("");
+            }
+            catch(ConfigurationException cfgex)
+            {
+                Assert.IsInstanceOfType( typeof(ObjectDefinitionStoreException), cfgex.InnerException );
+            }
+        }
+
+        [Test]
+        public void CreateChildContextFailure()
+        {
+            const string xmlData =
+                      @"<context type='Spring.Context.Support.XmlApplicationContext, Spring.Core'>
+	<resource uri='assembly://Spring.Core.Tests/DoesNotExist.xml'/>
+</context>";
+            CreateConfigurationElement(xmlData);
+
+            ContextHandler ctxHandler = new ContextHandler();
+            try
+            {
+                IApplicationContext ctx = (IApplicationContext) ctxHandler.Create(new StaticApplicationContext(), null, configurationElement);
+                Assert.Fail("");
+            }
+            catch(ConfigurationException cfgex)
+            {
+                Assert.IsInstanceOfType( typeof(ObjectDefinitionStoreException), cfgex.InnerException );
+            }
+        }
 
 		/// <summary>
 		/// Expect failure when using a type that does not inherit from IApplicationContext

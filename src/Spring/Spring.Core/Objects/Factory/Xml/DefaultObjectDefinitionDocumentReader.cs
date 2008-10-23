@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright  2002-2005 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,6 +149,9 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         /// <param name="root">The root element to start parsing from.</param>
         /// <param name="helper">The <see cref="ObjectDefinitionParserHelper"/> instance to use.</param>
+        /// <exception cref="ObjectDefinitionStoreException">
+        /// in case an error happens during parsing and registering object definitions
+        /// </exception>
         protected virtual void ParseObjectDefinitions(XmlElement root, ObjectDefinitionParserHelper helper)
         {
             foreach (XmlNode node in root.ChildNodes)
@@ -156,31 +159,21 @@ namespace Spring.Objects.Factory.Xml
                 if (node.NodeType == XmlNodeType.Element)
                 {
                     XmlElement element = (XmlElement) node;
-                    INamespaceParser parser = GetNamespaceParser(element, helper);
-                    ParserContext parserContext = new ParserContext(helper.ReaderContext, helper);
-                    parser.ParseElement(element, parserContext);
+                    try
+                    {
+                        INamespaceParser parser = GetNamespaceParser(element, helper);
+                        ParserContext parserContext = new ParserContext(helper.ReaderContext, helper);
+                        parser.ParseElement(element, parserContext);
+                    }
+                    catch( ObjectDefinitionStoreException )
+                    {
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        helper.ReaderContext.ReportException(node, null, "Failed parsing element", ex);
+                    }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Parses the default element.
-        /// </summary>
-        /// <param name="element">The element.</param>
-        /// <param name="helper">The helper.</param>
-        private void ParseDefaultElement(XmlElement element, ObjectDefinitionParserHelper helper)
-        {
-            if (element.LocalName == ObjectDefinitionConstants.ImportElement)
-            {
-                ImportObjectDefinitionResource(element);
-            }
-            else if (element.LocalName == ObjectDefinitionConstants.AliasElement)
-            {
-                ParseAlias(element, ReaderContext.Registry);
-            }
-            else if (element.LocalName == ObjectDefinitionConstants.ObjectElement)
-            {
-                RegisterObjectDefinition(element, helper);
             }
         }
 

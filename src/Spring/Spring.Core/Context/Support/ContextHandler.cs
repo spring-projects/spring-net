@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright  2002-2005 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ using Common.Logging;
 using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Objects;
+using Spring.Reflection.Dynamic;
 using Spring.Util;
 
 #endregion
@@ -546,8 +547,7 @@ namespace Spring.Context.Support
 	        protected override IApplicationContext InvokeContextConstructor(
 	            ConstructorInfo ctor)
 	        {
-	            return (IApplicationContext) ObjectUtils.InstantiateType(
-	                       ctor, new object[] {ContextName, CaseSensitive, Resources});
+                return (IApplicationContext)(new SafeConstructor(ctor).Invoke(new object[] {ContextName, CaseSensitive, Resources}));
 	        }
 	    }
 
@@ -574,8 +574,7 @@ namespace Spring.Context.Support
 	        protected override IApplicationContext InvokeContextConstructor(
 	            ConstructorInfo ctor)
 	        {
-	            return (IApplicationContext) ObjectUtils.InstantiateType(
-	                       ctor, new object[] {ContextName, CaseSensitive, this.parentContext, Resources});
+                return (IApplicationContext)(new SafeConstructor(ctor).Invoke(new object[] {ContextName, CaseSensitive, this.parentContext, Resources}));
 	        }
 
 	        private IApplicationContext parentContext;

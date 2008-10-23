@@ -232,6 +232,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\IO\AssemblyResourceTest.cs" />
+    <Compile Include="Core\IO\ConfigSectionResourceTests.cs" />
     <Compile Include="Core\IO\ConfigurableResourceLoaderTests.cs" />
     <Compile Include="Core\IO\FileSystemResourceCommonTests.cs" />
     <Compile Include="Core\IO\FileSystemResourceTests.cs" />
@@ -655,6 +656,7 @@
     <Compile Include="StreamHelperDecorator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestResourceLoader.cs" />
     <Compile Include="Threading\AsyncTestMethod.cs" />
     <Compile Include="Threading\AsyncTestTask.cs" />
     <Compile Include="Threading\CallContextStorageTests.cs" />
@@ -755,6 +757,7 @@
     <EmbeddedResource Include="Context\Support\invalidType.xml" />
     <EmbeddedResource Include="Core\TypeResolution\aliasedObjects.xml" />
     <EmbeddedResource Include="Core\IO\TestResource.txt" />
+    <EmbeddedResource Include="Core\IO\ConfigSectionResourceTests_config1.xml" />
     <Content Include="Data\PathMatcher\EmptyPattern.test" />
     <Content Include="Data\PathMatcher\Examples.test" />
     <Content Include="Data\PathMatcher\InBetween.test" />

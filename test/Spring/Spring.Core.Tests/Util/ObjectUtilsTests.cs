@@ -26,9 +26,11 @@ using System.Collections;
 using System.Collections.Generic;
 #endif
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Security.Policy;
 using NUnit.Framework;
 using Spring.Objects;
+using Spring.Objects.Factory;
 using Spring.Util;
 
 #endregion
@@ -116,6 +118,22 @@ namespace Spring.Util
             Assert.IsNotNull(foo, "Failed to instantiate an instance of a valid Type.");
             Assert.IsTrue(foo is TestObject, "The instantiated instance was not an instance of the type that was passed in.");
         }
+
+        [Test]
+        public void InstantiateTypeThrowingWithinPublicConstructor()
+        {
+            try
+            {
+                ObjectUtils.InstantiateType(typeof(ThrowingWithinConstructor));
+                Assert.Fail();
+            }
+            catch(FatalReflectionException ex)
+            {
+                // no nasty "TargetInvocationException" is in between!
+                Assert.AreEqual( typeof(ThrowingWithinConstructorException), ex.InnerException.GetType() );
+            }
+        }
+
 #if NET_2_0
         [Test]
         [ExpectedException(typeof(FatalReflectionException))]
@@ -348,6 +366,29 @@ namespace Spring.Util
             private string _name;
         }
 
+        [Serializable]
+        private class ThrowingWithinConstructorException : TestException
+        {
+            public ThrowingWithinConstructorException()
+            {}
+
+            public ThrowingWithinConstructorException(string message) : base(message)
+            {}
+
+            public ThrowingWithinConstructorException(string message, Exception inner) : base(message, inner)
+            {}
+
+            protected ThrowingWithinConstructorException(SerializationInfo info, StreamingContext context) : base(info, context)
+            {}
+        }
+
+        public class ThrowingWithinConstructor
+        {
+            public ThrowingWithinConstructor()
+            {
+                throw new ThrowingWithinConstructorException();
+            }
+        }
         #endregion
     }
 }

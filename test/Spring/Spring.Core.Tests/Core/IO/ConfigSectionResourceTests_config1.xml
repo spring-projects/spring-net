@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <configSections>
+        <sectionGroup name='spring'>
+            <section name='objects' type='Spring.Context.Support.DefaultSectionHandler, Spring.Core' />
+        </sectionGroup>
+    </configSections>
+    <spring>
+        <context type='Spring.Context.Support.XmlApplicationContext, Spring.Core' name='Parent'>
+            <resource uri='config://spring/objects' />
+        </context>
+
+        <objects xmlns='http://www.springframework.net'>
+            <object id='Parent' type='Spring.Objects.TestObject,Spring.Core.Tests'>
+                <property name='name' value='Parent' />
+            </object>
+        </objects>
+    </spring>
+</configuration>

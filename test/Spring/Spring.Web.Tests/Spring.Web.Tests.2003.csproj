@@ -321,7 +321,7 @@
                 />
                 <File
                     RelPath = "Web\Support\ControlInterceptionTests.cs"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File

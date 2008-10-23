@@ -33,11 +33,14 @@
 				<include name="**/*.txt" />
 				<include name="**/*.vb" />
 				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+<!--				
 				<include name="**/SimpleAppContext.xml" />
 				<include name="**/Factory/Attributes/*.xml" />
 				<include name="**/Context/Support/*.xml" />
 				<include name="**/aliasedObjects.xml" />
 				<include name="**/contextlifecycle.xml" />
+-->				
 			</resources>
 			<references basedir="${current.bin.dir}">
 				<include name="System.EnterpriseServices.dll" />

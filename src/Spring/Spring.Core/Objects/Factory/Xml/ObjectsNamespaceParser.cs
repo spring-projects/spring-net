@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright  2002-2005 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -278,9 +278,14 @@ namespace Spring.Objects.Factory.Xml
                     return;
                 }
             }
+            catch(ObjectDefinitionStoreException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
-              throw new ObjectDefinitionStoreException(string.Format("Failed parsing object definition '{0}'", element.OuterXml), ex);
+              //throw new ObjectDefinitionStoreException(string.Format("Failed parsing object definition '{0}'", element.OuterXml), ex);
+                parserContext.ReaderContext.ReportException(element, null, null, ex);
             }
 
 
@@ -340,6 +345,7 @@ namespace Spring.Objects.Factory.Xml
             string objectName = id;
             if (StringUtils.IsNullOrEmpty(objectName))
             {
+                // TODO (EE): pass parserContext to CalculateId as well (resolving relative Urls in WebApps is parserContext-dependent) (EE)
                 objectName = CalculateId(element, aliases);
             }
             
@@ -540,7 +546,7 @@ namespace Spring.Objects.Factory.Xml
                         typeName),
                     ex);
             }
-            catch (ApplicationException ex)
+            catch (Exception ex)
             {
                 parserContext.ReaderContext.ReportException(element, id, string.Empty, ex);
             }

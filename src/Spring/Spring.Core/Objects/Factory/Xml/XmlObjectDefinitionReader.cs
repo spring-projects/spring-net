@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright  2002-2005 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -230,6 +230,10 @@ namespace Spring.Objects.Factory.Xml
                 throw new XmlObjectDefinitionStoreException(resource.Description,
                                                             "Line " + ex.LineNumber + " in XML document from " +
                                                             resource + " is invalid.  " + ex.Message, ex);
+            }
+            catch(ObjectDefinitionStoreException)
+            {
+                throw;
             }
             catch (Exception ex)
             {

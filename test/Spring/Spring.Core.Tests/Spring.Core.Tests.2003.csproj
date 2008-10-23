@@ -132,6 +132,11 @@
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -191,6 +196,11 @@
                 <File
                     RelPath = "TestResource.txt"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TestResourceLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Caching\AbstractCacheTests.cs"
@@ -476,6 +486,15 @@
                     RelPath = "Core\IO\AssemblyResourceTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\IO\ConfigSectionResourceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\IO\ConfigSectionResourceTests_config1.xml"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Core\IO\ConfigurableResourceLoaderTests.cs"

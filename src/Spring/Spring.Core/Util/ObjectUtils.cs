@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright  2002-2005 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ using System.Reflection;
 using System.Runtime.Remoting;
 using Common.Logging;
 using Spring.Objects;
+using Spring.Reflection.Dynamic;
 
 #endregion
 
@@ -246,7 +247,9 @@ namespace Spring.Util
 #endif
             try
             {
-                return constructor.Invoke(arguments);
+                // replaced with SafeConstructor() to avoid nasty "TargetInvocationException"s
+                //return constructor.Invoke(arguments);
+                return (new SafeConstructor(constructor)).Invoke(arguments);
             }
             catch (Exception ex)
             {
