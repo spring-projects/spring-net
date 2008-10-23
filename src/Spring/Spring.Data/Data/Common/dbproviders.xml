@@ -630,7 +630,49 @@
     </constructor-arg>
   </object>
 
-  <alias name="MySql-5.1.4" alias="MySql.Data.MySqlClient"/>
+  <object id="MySql-5.2.3" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="MySQL, MySQL provider 5.2.3.0"  />
+        <constructor-arg name="assemblyName" value="MySql.Data, Version=5.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="connectionType" value="MySql.Data.MySqlClient.MySqlConnection, MySql.Data, Version=5.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="commandType" value="MySql.Data.MySqlClient.MySqlCommand, MySql.Data, Version=5.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="parameterType" value="MySql.Data.MySqlClient.MySqlParameter, MySql.Data, Version=5.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="dataAdapterType" value="MySql.Data.MySqlClient.MySqlDataAdapter, MySql.Data, Version=5.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="commandBuilderType" value="MySql.Data.MySqlClient.MySqlCommandBuilder, MySql.Data, Version=5.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="MySql.Data.MySqlClient.MySqlDbType, MySql.Data, Version=5.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="parameterDbTypeProperty" value="MySqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="?"/>
+        <constructor-arg name="exceptionType" value="MySql.Data.MySqlClient.MySqlException, MySql.Data, Version=5.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Number.ToString()"/>
+
+        <property name="ErrorCodes.badSqlGrammarCodes">
+          <value>1054,1064,1146</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>1</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>630,839,840,893,1062,1169,1215,1216,1217,1451,1452,1557</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>1205</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>1213</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+  
+  <alias name="MySql-5.2.3" alias="MySql.Data.MySqlClient"/>
 
 
   <object id="Npgsql-1.0" type="Spring.Data.Common.DbProvider, Spring.Data"  singleton="false">

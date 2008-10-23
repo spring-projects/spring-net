@@ -83,7 +83,7 @@
           </xs:enumeration>
           <xs:enumeration value="MySql.Data.MySqlClient">
             <xs:annotation>
-              <xs:documentation>MySQL provider 5.1.4.0</xs:documentation>
+              <xs:documentation>MySQL provider 5.2.3.0</xs:documentation>
             </xs:annotation>
           </xs:enumeration>
           <xs:enumeration value="System.Data.SQLite">

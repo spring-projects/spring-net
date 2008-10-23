@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="dbprovider" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="dbprovider" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>DbProvider</title>
 
   <section xml:id="dbprovider-introduction">
@@ -59,10 +64,10 @@
   <section xml:id="dbprovider-dbprovider">
     <title>IDbProvider and DbProviderFactory</title>
 
-    <para>The <code><literal>IDbProvider</literal></code> API is
-    shown below and should look familiar to anyone using .NET 2.0 data
-    providers. Note that Spring's DbProvider abstraction can be used on .NET
-    1.1 in addition to .NET 2.0</para>
+    <para>The <code><literal>IDbProvider</literal></code> API is shown below
+    and should look familiar to anyone using .NET 2.0 data providers. Note
+    that Spring's DbProvider abstraction can be used on .NET 1.1 in addition
+    to .NET 2.0</para>
 
     <programlisting language="csharp">public interface IDbProvider
 {
@@ -106,11 +111,11 @@
     create the string for a IDataParameter.ParameterName, typically contained
     inside a IDataParameterCollection.</para>
 
-    <para>The class <literal>DbProviderFactory</literal> creates
-    IDbProvider instances given a provider name. The connection string
-    property will be used to set the IDbConnection returned by the factory if
-    present. The provider names, and corresponding database, currently
-    configured are listed below.</para>
+    <para>The class <literal>DbProviderFactory</literal> creates IDbProvider
+    instances given a provider name. The connection string property will be
+    used to set the IDbConnection returned by the factory if present. The
+    provider names, and corresponding database, currently configured are
+    listed below.</para>
 
     <itemizedlist>
       <listitem>
@@ -183,9 +188,14 @@
       </listitem>
 
       <listitem>
-        <para><literal>MySql-5.1.4</literal> - (aliased to
-        <literal>MySql.Data.MySqlClient</literal>) MySQL, MySQL provider
+        <para><literal>MySql-5.1.4</literal> - MySQL, MySQL provider
         5.1.2.2</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>MySql-5.2.3</literal> (aliased to
+        <literal>MySql.Data.MySqlClient</literal>) MySQL, MySQL provider
+        5.2.3.0</para>
       </listitem>
 
       <listitem>
@@ -257,6 +267,14 @@
       </listitem>
     </itemizedlist>
 
+    <note>
+      <para>If your exact version of the database provider is not listed, you
+      can pick the general provider name, i.e.
+      <literal>MySql.Data.MySqlClient</literal>, and then perform an assembly
+      redirect in App.config. This will often be sufficient to upgrade to
+      newer versions.</para>
+    </note>
+
     <para>An example using DbProviderFactory is shown below</para>
 
     <programlisting language="csharp"><classname>IDbProvider</classname> dbProvider = <classname>DbProviderFactory</classname>.GetDbProvider("System.Data.SqlClient");</programlisting>
@@ -266,14 +284,14 @@
     <code>assembly://Spring.Data/Spring.Data.Common/dbproviders.xml</code>.
     Future additions to round out the database coverage are forthcoming. The
     current crude mechanism to add additional providers, or to apply any
-    standard Spring <literal>IApplicationContext</literal>
-    functionality, such as applying AOP advice, is to set the public static
-    property DBPROVIDER_ADDITIONAL_RESOURCE_NAME in
-    <literal>DbProviderFactory</literal> to a Spring resource location.
-    The default value is <code>file://dbProviders.xml</code>. (That isn't a
-    typo, there is a difference in case with the name of the embedded
-    resource). This crude mechanism will eventually be replaced with one based
-    on a custom configuration section in App.config/Web.config.</para>
+    standard Spring <literal>IApplicationContext</literal> functionality, such
+    as applying AOP advice, is to set the public static property
+    DBPROVIDER_ADDITIONAL_RESOURCE_NAME in
+    <literal>DbProviderFactory</literal> to a Spring resource location. The
+    default value is <code>file://dbProviders.xml</code>. (That isn't a typo,
+    there is a difference in case with the name of the embedded resource).
+    This crude mechanism will eventually be replaced with one based on a
+    custom configuration section in App.config/Web.config.</para>
 
     <para>It may happen that the version number of an assembly you have
     downloaded is different than the one listed above. If it is a point
@@ -417,9 +435,9 @@
     <section xml:id="dbprovider-usercredentials">
       <title>UserCredentialsDbProvider</title>
 
-      <para>This <literal>UserCredentialsDbProvider</literal> will allow
-      you to change the username and password of a database connection at
-      runtime. The API contains the properties <literal>Username</literal> and
+      <para>This <literal>UserCredentialsDbProvider</literal> will allow you
+      to change the username and password of a database connection at runtime.
+      The API contains the properties <literal>Username</literal> and
       <literal>Password</literal> which are used as the default strings
       representing the user and password in the connection string. You can
       then change the value of these properties in the connection string by
@@ -466,18 +484,18 @@
       This is often the case where the same schema is installed in separate
       databases for different clients. The
       <literal>MultiDelegatingDbProvider</literal> implements the
-      <literal>IDbProvider</literal> interface and provides an abstraction
-      to the multiple databases and can be used in DAO layer such that the DAO
+      <literal>IDbProvider</literal> interface and provides an abstraction to
+      the multiple databases and can be used in DAO layer such that the DAO
       layer is unaware of the switching between databases.
       <literal>MultiDelegatingDbProvider</literal> does its job by looking
       into thread local storage under the key dbProviderName. This storage
       location stores the name of the dbProvider that is to be used for
-      processing the request. <literal>MultiDelegatingDbProvider</literal>
-      is configured using the dictionary property
+      processing the request. <literal>MultiDelegatingDbProvider</literal> is
+      configured using the dictionary property
       <literal>TargetDbProviders</literal>. The key of this dictionary
       contains the name of a dbProvider and its value is a dbProvider object.
-      (You can also provide this dictionary as a constructor argument.)
-      </para>
+      (You can also provide this dictionary as a constructor argument.)</para>
+
       <para>During request processing, once you have determined which target
       dbProvider should be use, in this example database1ProviderName, you
       should execute the following code is you are using Spring 1.2 M1 or
@@ -512,7 +530,6 @@
 &lt;object id="DbProvider" type="Spring.Data.MultiDelegatingDbProvider, Spring.Data"&gt;
   &lt;property name="TargetDbProviders" ref="dbProviderDictionary"/&gt;
 &lt;/object&gt;</programlisting>
-
     </section>
   </section>
 </chapter>
