@@ -20,6 +20,8 @@
 
 #region Imports
 
+using System;
+using System.Xml;
 using NUnit.Framework;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Support;
@@ -101,6 +103,58 @@ namespace Spring.Objects.Factory.Xml
             Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test2")).Name);
             Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test3")).Name);
             Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test4")).Name);
+        }
+
+        [Test]
+        [ExpectedException(typeof(XmlObjectDefinitionStoreException))]
+        public void ThrowsObjectDefinitionStoreExceptionOnValidationError()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+                @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net'>  
+	<INVALIDELEMENT id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' />
+</objects>
+"));                       
+        }
+
+        #region ThrowsObjectDefinitionStoreExceptionOnErrorDuringObjectDefinitionRegistration Helper
+
+        private class TestXmlObjectDefinitionReader : XmlObjectDefinitionReader
+        {
+            public TestXmlObjectDefinitionReader(IObjectDefinitionRegistry registry) : base(registry)
+            {}
+
+            private class ThrowingObjectDefinitionDocumentReader : IObjectDefinitionDocumentReader
+            {
+                public void RegisterObjectDefinitions(XmlDocument doc, XmlReaderContext readerContext)
+                {
+                    throw new TestException("RegisterObjectDefinitions");
+                }
+            }
+
+            protected override IObjectDefinitionDocumentReader CreateObjectDefinitionDocumentReader()
+            {
+                return new ThrowingObjectDefinitionDocumentReader();
+            }
+
+        }
+
+        #endregion
+
+        [Test]
+        [ExpectedException(typeof(ObjectDefinitionStoreException))]
+        public void ThrowsObjectDefinitionStoreExceptionOnErrorDuringObjectDefinitionRegistration()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            XmlObjectDefinitionReader reader = new TestXmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+                @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net'>  
+	<object id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' />
+</objects>
+"));                       
         }
     }
 }

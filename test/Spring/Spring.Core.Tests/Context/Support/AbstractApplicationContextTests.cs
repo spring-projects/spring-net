@@ -22,10 +22,13 @@
 
 using System;
 using NUnit.Framework;
+using Spring.Core;
+using Spring.Core.IO;
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
+using Spring.Objects.Factory.Xml;
 
 #endregion
 
@@ -310,5 +313,21 @@ namespace Spring.Context.Support
 			myContext.Refresh();
 			Assert.AreEqual(defaultProcessors, objectFactory.ObjectPostProcessors.Count);
 		}
+
+        [Test]
+        [ExpectedException(typeof(CannotLoadObjectTypeException))]
+        public void ThrowsCannotLoadObjectTypeExceptionOnInvalidTypename()
+        {
+            MockApplicationContext myContext = new MockApplicationContext("myContext");
+            DefaultListableObjectFactory objectFactory = (DefaultListableObjectFactory)myContext.ObjectFactory;
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(objectFactory);
+            reader.LoadObjectDefinitions(new StringResource(
+                @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net'>  
+	<object id='test2' type='DOESNOTEXIST' />
+</objects>
+"));      
+            myContext.Refresh();
+        }
 	}
 }

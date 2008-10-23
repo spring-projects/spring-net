@@ -26,6 +26,7 @@ using System.Globalization;
 using System.Reflection;
 using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Spring.Core.IO;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
