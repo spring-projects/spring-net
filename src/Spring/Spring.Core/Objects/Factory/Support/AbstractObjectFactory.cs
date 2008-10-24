@@ -1507,7 +1507,10 @@ namespace Spring.Objects.Factory.Support
                     return pof.IsSingleton( OriginalObjectName( name ) );
                 }
                 RootObjectDefinition od = GetMergedObjectDefinition( objectName, false );
-
+                if (od == null)
+                {
+                    throw new NoSuchObjectDefinitionException(objectName);
+                }
                 // In case of IFactoryObject, return singleton status of created object if not a dereference
                 if (od.IsSingleton)
                 {

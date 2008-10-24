@@ -757,6 +757,7 @@
     <EmbeddedResource Include="Context\Support\invalidType.xml" />
     <EmbeddedResource Include="Core\TypeResolution\aliasedObjects.xml" />
     <EmbeddedResource Include="Core\IO\TestResource.txt" />
+    <EmbeddedResource Include="Context\Support\innerObjectsWithPostProcessor.xml" />
     <EmbeddedResource Include="Core\IO\ConfigSectionResourceTests_config1.xml" />
     <Content Include="Data\PathMatcher\EmptyPattern.test" />
     <Content Include="Data\PathMatcher\Examples.test" />

@@ -32,6 +32,7 @@ using Common.Logging;
 using Common.Logging.Simple;
 using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
@@ -559,6 +560,7 @@ namespace Spring.Objects.Factory.Xml
             Assert.IsTrue(davesJen == jenksJen, "1 jen instance");
             Assert.IsTrue(davesJen == jen, "1 jen instance");
         }
+
 
         [Test]
         public void InnerObjects()
@@ -2042,4 +2044,6 @@ namespace Spring.Objects.Factory.Xml
 
         #endregion
     }
+
+  
 }

@@ -36,6 +36,27 @@ namespace Spring.Context.Support
     public sealed class XmlApplicationContextTests
     {
         [Test]
+        public void InnerObjectWithPostProcessing()
+        {
+           try
+            {
+                XmlApplicationContext ctx = new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/innerObjectsWithPostProcessor.xml");           
+                ctx.GetObject("hasInnerObjects");
+            } catch (System.NullReferenceException e)
+            {
+                Assert.Fail("Should not throw NullReferenceException",e);
+            } catch (ObjectCreationException e)
+            {
+                NoSuchObjectDefinitionException ex = e.InnerException as NoSuchObjectDefinitionException;
+                Assert.IsNotNull(ex);
+                //Pass   
+            } catch (Exception e)
+            {
+                Assert.Fail("Expect only ObjectCreationException to be thrown", e);
+            }
+        }
+
+        [Test]
         public void SingleConfigLocation()
         {
             XmlApplicationContext ctx =
@@ -344,6 +365,37 @@ namespace Spring.Context.Support
             }
 
             #endregion
+        }
+
+        #endregion
+    }
+    public class SingletonTestingObjectPostProcessor : IObjectPostProcessor, IApplicationContextAware
+    {
+        private IApplicationContext applicationContext;
+        #region IObjectPostProcessor Members
+
+        public object PostProcessBeforeInitialization(object instance, string name)
+        {
+            return instance;
+        }
+
+        public object PostProcessAfterInitialization(object instance, string objectName)
+        {
+            Console.WriteLine("post process " + objectName);
+            if (this.applicationContext.IsSingleton(objectName))
+            {
+                return instance;
+            }
+            return instance;
+        }
+
+        #endregion
+
+        #region IApplicationContextAware Members
+
+        public IApplicationContext ApplicationContext
+        {
+            set { this.applicationContext = value; }
         }
 
         #endregion

@@ -596,7 +596,7 @@ namespace Spring.Objects.Factory.Support
                         ((AbstractObjectFactory) ParentObjectFactory).GetObjectDefinition(name, includeAncestors);
                 }
             }
-            return definition;
+            return definition;            
         }
 
         #endregion
