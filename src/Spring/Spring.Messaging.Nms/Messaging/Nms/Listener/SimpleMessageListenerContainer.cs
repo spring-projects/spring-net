@@ -323,18 +323,27 @@ namespace Spring.Messaging.Nms.Listener
         /// <throws>NMSException if destruction failed </throws>
         protected override void DoShutdown()
         {
-            logger.Debug("Closing NMS MessageConsumers");
-            foreach (IMessageConsumer messageConsumer in consumers)
+            lock (consumersMonitor)
             {
-                NmsUtils.CloseMessageConsumer(messageConsumer);
+                if (consumers != null)
+                {
+                    logger.Debug("Closing NMS MessageConsumers");
+                    foreach (IMessageConsumer messageConsumer in consumers)
+                    {
+                        NmsUtils.CloseMessageConsumer(messageConsumer);
+                    }
+                }
+                if (sessions != null)
+                {
+                    logger.Debug("Closing NMS Sessions");
+                    foreach (ISession session in sessions)
+                    {
+                        NmsUtils.CloseSession(session);
+                    }
+                }
+                consumers = null;
+                sessions = null;
             }
-            logger.Debug("Closing NMS Sessions");
-            foreach (ISession session in sessions)
-            {
-                NmsUtils.CloseSession(session);
-            }
-            consumers = null;
-            sessions = null;
         }
 
 
