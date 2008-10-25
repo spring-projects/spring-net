@@ -139,7 +139,7 @@ namespace Spring.Core.IO
         {
             get
             {
-                return StringUtils.Surround("config [", sectionName, "]");
+                return string.Format("config [{0}#{1}]", ConfigurationUtils.GetFileName(configElement), sectionName);
             }
         }
 

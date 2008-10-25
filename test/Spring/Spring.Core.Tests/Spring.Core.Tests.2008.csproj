@@ -673,6 +673,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\CollectionUtilsTests.cs" />
+    <Compile Include="Util\ConfigXmlDocumentTests.cs" />
     <Compile Include="Util\ObjectUtilsTests.cs" />
     <Compile Include="Util\PatternMatchUtilsTests.cs" />
     <Compile Include="Util\DefensiveEventRaiserTests.cs">
@@ -831,6 +832,7 @@
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithAllRequiredPropertiesProvided.xml" />
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithCustomAttribute.xml" />
     <Content Include="Spring.Core.Tests.dll.config" />
+    <EmbeddedResource Include="Util\ConfigXmlDocumentTests_SampleConfig.xml" />
     <EmbeddedResource Include="Context\contextlifecycle.xml" />
     <EmbeddedResource Include="Context\Support\objects.xml" />
     <EmbeddedResource Include="Objects\Factory\TestResource.txt" />

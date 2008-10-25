@@ -208,9 +208,17 @@ namespace Spring.Objects.Factory.Xml
         {
             try
             {
-                XmlReader reader = 
-                        XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(),
-                                                        new ValidationEventHandler(HandleValidation));       
+                XmlReader reader;
+
+                if (SystemUtils.MonoRuntime)
+                {
+                    reader = XmlUtils.CreateReader(stream);
+                }
+                else
+                {
+                    reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(),
+                        new ValidationEventHandler(HandleValidation));       
+                }
 
                 #region Instrumentation
 
@@ -221,7 +229,7 @@ namespace Spring.Objects.Factory.Xml
 
                 #endregion
 
-                XmlDocument doc = new XmlDocument();
+                XmlDocument doc = new ConfigXmlDocument();
                 doc.Load(reader);
                 return RegisterObjectDefinitions(doc, resource);
             }

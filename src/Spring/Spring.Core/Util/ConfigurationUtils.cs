@@ -196,6 +196,10 @@ namespace Spring.Util
         /// <returns>The line number of the specified node.</returns>
         public static int GetLineNumber(XmlNode node)
         {
+            if (node is ITextPosition)
+            {
+                return ((ITextPosition)node).LineNumber;
+            }
 #if !NET_2_0
             return ConfigurationException.GetXmlNodeLineNumber(node);
 #else
@@ -210,6 +214,10 @@ namespace Spring.Util
         /// <returns>The name of the file specified node is defined in.</returns>
         public static string GetFileName(XmlNode node)
         {
+            if (node is ITextPosition)
+            {
+                return ((ITextPosition)node).Filename;
+            }
 #if !NET_2_0
             return ConfigurationException.GetXmlNodeFilename(node);
 #else

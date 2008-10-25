@@ -73,7 +73,7 @@ namespace Spring
         public static Uri GetUri(object context, string ext)
         {
             string resname = context.GetType().AssemblyQualifiedName + "#" + ext;
-            Uri uri = new Uri("testres://(local)/" + resname, false);
+            Uri uri = new Uri("testres://./" + resname, false);
             return uri;
         }
 

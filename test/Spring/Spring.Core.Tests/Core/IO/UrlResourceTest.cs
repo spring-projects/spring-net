@@ -59,7 +59,7 @@ namespace Spring.Core.IO
             Assert.AreEqual("C:\\temp", urlResource.File.FullName);
         }
 
-        [Test]
+        [Test, Explicit]
         public void ExistsValidHttp()
         {
             UrlResource urlResource = new UrlResource("http://www.springframework.net/");

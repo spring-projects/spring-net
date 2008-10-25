@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -999,13 +999,18 @@
     </Compile>
     <Compile Include="Util\CompareUtils.cs" />
     <Compile Include="Util\ConfigurationUtils.cs" />
+    <Compile Include="Util\ConfigXmlAttribute.cs" />
+    <Compile Include="Util\ConfigXmlDocument.cs" />
+    <Compile Include="Util\ConfigXmlElement.cs" />
     <Compile Include="Util\FatalReflectionException.cs" />
+    <Compile Include="Util\ITextPosition.cs" />
     <Compile Include="Util\ObjectUtils.cs" />
     <Compile Include="Util\ReflectionException.cs" />
     <Compile Include="Util\SystemUtils.cs" />
     <Compile Include="Util\DynamicCodeManager.cs" />
     <Compile Include="Util\Generic\CollectionUtils.cs" />
     <Compile Include="Util\PatternMatchUtils.cs" />
+    <Compile Include="Util\TextPositionInfo.cs" />
     <Compile Include="Util\UniqueKey.cs" />
     <Compile Include="Core\TypeConversion\UniqueKeyConverter.cs" />
     <Compile Include="Util\XmlUtils.cs" />

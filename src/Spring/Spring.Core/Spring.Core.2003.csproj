@@ -2362,6 +2362,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Util\ConfigXmlAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\ConfigXmlDocument.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\ConfigXmlElement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\DelegateInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2378,6 +2393,11 @@
                 />
                 <File
                     RelPath = "Util\FatalReflectionException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\ITextPosition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2423,6 +2443,11 @@
                 />
                 <File
                     RelPath = "Util\SystemUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\TextPositionInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
