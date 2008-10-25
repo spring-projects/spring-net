@@ -44,7 +44,7 @@ namespace Spring.Validation
         #region Fields
 
         private IList validators = new ArrayList();
-
+        private bool shortcircuitEvaluate = false;
         #endregion
 
         #region Constructors
@@ -83,6 +83,19 @@ namespace Spring.Validation
             set { validators = value; }
         }
 
+        /// <summary>
+        /// When set <c>true</c>, shortcircuits evaluation.
+        /// </summary>
+        /// <remarks>
+        /// The validators within the group will only be validated 
+        /// in order until the first validator fails.
+        /// </remarks>
+        public bool ShortcircuitEvaluate
+        {
+            get { return shortcircuitEvaluate; }
+            set { shortcircuitEvaluate = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -101,6 +114,10 @@ namespace Spring.Validation
                 foreach (IValidator validator in validators)
                 {
                     valid = validator.Validate(validationContext, contextParams, errors) && valid;
+                    if (shortcircuitEvaluate && !valid)
+                    {
+                        break;
+                    }
                 }
                 ProcessActions(valid, validationContext, contextParams, errors);
             }

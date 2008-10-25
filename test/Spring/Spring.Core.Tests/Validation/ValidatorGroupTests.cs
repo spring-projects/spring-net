@@ -57,6 +57,25 @@ namespace Spring.Validation
         }
 
         [Test]
+        public void WhenAllValidatorsReturnFalseFast()
+        {
+            ValidatorGroup vg = new ValidatorGroup();
+            vg.ShortcircuitEvaluate = true;
+            vg.Validators.Add(new FalseValidator());
+            vg.Validators.Add(new FalseValidator());
+            vg.Validators.Add(new FalseValidator());
+
+            IValidationErrors errors = new ValidationErrors();
+            errors.AddError("existingErrors", new ErrorMessage("error", null));
+
+            bool valid = vg.Validate(new object(), errors);
+
+            Assert.IsFalse(valid, "Validation should fail when all inner validators return false.");
+            Assert.AreEqual(1, errors.GetErrors("errors").Count);
+            Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        }
+
+        [Test]
         public void WhenAllValidatorsReturnTrue()
         {
             ValidatorGroup vg = new ValidatorGroup("true");
