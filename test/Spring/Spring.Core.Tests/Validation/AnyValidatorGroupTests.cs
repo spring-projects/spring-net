@@ -21,7 +21,7 @@
 #region Imports
 
 using NUnit.Framework;
-
+using Rhino.Mocks;
 using Spring.Expressions;
 
 #endregion
@@ -35,6 +35,13 @@ namespace Spring.Validation
     [TestFixture]
     public sealed class AnyValidatorGroupTests
     {
+        [Test]
+        public void DefaultsToFastValidate()
+        {
+            AnyValidatorGroup vg = new AnyValidatorGroup();
+            Assert.IsTrue(vg.FastValidate);
+        }
+
         [Test]
         public void WhenAllValidatorsReturnFalse()
         {
@@ -72,9 +79,33 @@ namespace Spring.Validation
         }
 
         [Test]
-        public void WhenSingleValidatorReturnsTrue()
+        public void WhenSingleValidatorReturnsTrueFastAndFastValidateIsTrue()
         {
             AnyValidatorGroup vg = new AnyValidatorGroup(Expression.Parse("true"));
+            vg.FastValidate = true;
+
+            WhenSingleValidatorReturnsTrue(vg);
+            // validators are called only until validation result is known
+            Assert.IsTrue( ((BaseTestValidator)vg.Validators[0]).WasCalled );
+            Assert.IsTrue( ((BaseTestValidator)vg.Validators[1]).WasCalled );
+            Assert.IsFalse( ((BaseTestValidator)vg.Validators[2]).WasCalled );
+        }
+
+        [Test]
+        public void WhenSingleValidatorReturnsTrueAndFastValidateIsFalse()
+        {
+            AnyValidatorGroup vg = new AnyValidatorGroup(Expression.Parse("true"));
+            vg.FastValidate = false;
+
+            WhenSingleValidatorReturnsTrue(vg);
+            // ALL validators are called
+            Assert.IsTrue( ((BaseTestValidator)vg.Validators[0]).WasCalled );
+            Assert.IsTrue( ((BaseTestValidator)vg.Validators[1]).WasCalled );
+            Assert.IsTrue( ((BaseTestValidator)vg.Validators[2]).WasCalled );            
+        }
+
+        private static void WhenSingleValidatorReturnsTrue(AnyValidatorGroup vg)
+        {
             vg.Validators.Add(new FalseValidator());
             vg.Validators.Add(new TrueValidator());
             vg.Validators.Add(new FalseValidator());

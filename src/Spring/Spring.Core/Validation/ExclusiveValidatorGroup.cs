@@ -82,7 +82,7 @@ namespace Spring.Validation
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
         protected override bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
         {
-            IValidationErrors tmpErrors = new ValidationErrors();
+            ValidationErrors tmpErrors = new ValidationErrors();
             bool valid = false;
             foreach (IValidator validator in Validators)
             {
@@ -99,6 +99,11 @@ namespace Spring.Validation
                 {
                     valid = true;
                 }
+            }
+
+            if (!valid)
+            {
+                errors.MergeErrors(tmpErrors);
             }
 
             return valid;            

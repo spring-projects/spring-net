@@ -21,6 +21,13 @@ namespace Spring.Validation
     public class CollectionValidatorTests
     {
         [Test]
+        public void DefaultsToFastValidateIsFalse()
+        {
+            CollectionValidator cg = new CollectionValidator();
+            Assert.IsFalse(cg.FastValidate);
+        }
+
+        [Test]
         public void TestCollection()
         {
             IList persons = new ArrayList();

@@ -27,12 +27,30 @@ using Spring.Validation.Actions;
 
 namespace Spring.Validation
 {
+    public abstract class BaseTestValidator : BaseValidator
+    {
+        private bool _wasCalled;
+
+        public bool WasCalled
+        {
+            get { return _wasCalled; }
+        }
+
+        public override bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        {
+            _wasCalled = true;
+            return base.Validate (validationContext, contextParams, errors);
+        }
+    
+    }
+
     /// <summary>
     /// Helper classes for validation tests.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    public class TrueValidator : BaseValidator
+    public class TrueValidator : BaseTestValidator
     {
+
         public TrueValidator()
         {}
 
@@ -47,7 +65,7 @@ namespace Spring.Validation
         }
     }
 
-    public class FalseValidator : BaseValidator
+    public class FalseValidator : BaseTestValidator
     {
         public FalseValidator()
         {
