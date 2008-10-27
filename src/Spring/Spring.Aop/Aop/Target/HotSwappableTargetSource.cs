@@ -67,7 +67,13 @@ namespace Spring.Aop.Target
 		/// </remarks>
 		public virtual Type TargetType
 		{
-			get { return _target.GetType(); }
+			get
+			{
+                lock(this)
+                {
+                    return _target.GetType();
+                }
+			}
 		}
 
 		/// <summary>
