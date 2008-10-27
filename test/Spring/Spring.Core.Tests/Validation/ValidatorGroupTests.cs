@@ -60,7 +60,7 @@ namespace Spring.Validation
         public void WhenAllValidatorsReturnFalseFast()
         {
             ValidatorGroup vg = new ValidatorGroup();
-            vg.ShortcircuitEvaluate = true;
+            vg.FastValidate = true;
             vg.Validators.Add(new FalseValidator());
             vg.Validators.Add(new FalseValidator());
             vg.Validators.Add(new FalseValidator());

@@ -36,6 +36,9 @@ namespace Spring.Validation
     /// for the contained validators, but only if this validator is not valid (meaning, when none
     /// of the contained validators are valid).
     /// </p>
+    /// <p>
+    /// By default, this validator group uses <c><see cref="ValidatorGroup.FastValidate"/> == true</c> semantics.
+    /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
     public class ExclusiveValidatorGroup : ValidatorGroup
@@ -46,57 +49,60 @@ namespace Spring.Validation
         /// Initializes a new instance of the <see cref="ExclusiveValidatorGroup"/> class.
         /// </summary>
         public ExclusiveValidatorGroup()
-        {}
+        {
+            this.FastValidate = true;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExclusiveValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
         public ExclusiveValidatorGroup(string when) : base(when)
-        {}
+        {
+            this.FastValidate = true;            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExclusiveValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
         public ExclusiveValidatorGroup(IExpression when) : base(when)
-        {}
+        {
+            this.FastValidate = true;            
+        }
 
         #endregion
 
         /// <summary>
-        /// Validates the specified object.
+        /// Actual implementation how to validate the specified object.
         /// </summary>
         /// <param name="validationContext">The object to validate.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        public override bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        protected override bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
         {
             IValidationErrors tmpErrors = new ValidationErrors();
-            bool valid = true;
-
-            if (EvaluateWhen(validationContext, contextParams))
+            bool valid = false;
+            foreach (IValidator validator in Validators)
             {
-                valid = false;
-                foreach (IValidator validator in Validators)
+                bool tmpValid = validator.Validate(validationContext, contextParams, tmpErrors);
+                if (valid && tmpValid)
                 {
-                    bool tmpValid = validator.Validate(validationContext, contextParams, tmpErrors);
-                    if (valid && tmpValid)
+                    valid = false;
+                    if (this.FastValidate)
                     {
-                        valid = false;
                         break;
                     }
-                    else if (tmpValid)
-                    {
-                        valid = true;
-                    }
                 }
-
-                ProcessActions(valid, validationContext, contextParams, errors);
+                else if (tmpValid)
+                {
+                    valid = true;
+                }
             }
 
-            return valid;
+            return valid;            
         }
+
     }
 }

@@ -29,7 +29,6 @@ namespace Spring.Validation
     {
         #region Fields
 
-        private bool validateAll = false;
         private bool includeElementErrors = false;
         private IExpression context;        
 
@@ -41,10 +40,11 @@ namespace Spring.Validation
         /// Gets or sets the value that indicates whether to validate all elements of the collection
         /// regardless of the errors.
         /// </summary>        
+        /// <remarks>This is just an alias for <see cref="ValidatorGroup.FastValidate"/></remarks>
         public bool ValidateAll
         {
-            get { return validateAll; }
-            set { validateAll = value; }
+            get { return !base.FastValidate; }
+            set { base.FastValidate = !value; }
         }
         
         /// <summary>
@@ -89,7 +89,7 @@ namespace Spring.Validation
         /// all error messages returned by the item validators</param>        
         public CollectionValidator(bool validateAll, bool includeElementErrors)
         {
-            this.validateAll = validateAll;
+            this.FastValidate = validateAll;
             this.includeElementErrors = includeElementErrors;
         }
 
@@ -106,7 +106,7 @@ namespace Spring.Validation
         public CollectionValidator(IExpression when, bool validateAll, bool includeElementErrors)
             : base(when)
         {
-            this.validateAll = validateAll;
+            this.FastValidate = validateAll;
             this.includeElementErrors = includeElementErrors;
         }
 
@@ -122,7 +122,7 @@ namespace Spring.Validation
         public CollectionValidator(string when, bool validateAll, bool includeElementErrors)
             : this((when != null ? Expression.Parse(when) : null), validateAll,includeElementErrors)
         {
-            this.validateAll = validateAll;
+            this.FastValidate = validateAll;
         }
 
         #endregion
@@ -150,41 +150,47 @@ namespace Spring.Validation
                 throw new ArgumentException("The type of the object for validation must be subtype of IEnumerable.");
             }
 
+            return base.Validate(validationContext, contextParams, errors);
+        }
+
+        /// <summary>
+        /// Actual implementation how to validate the specified object.
+        /// </summary>
+        /// <param name="validationContext">The object to validate.</param>
+        /// <param name="contextParams">Additional context parameters.</param>
+        /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
+        /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
+        protected override bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
+        {
             bool valid = true;
+            IEnumerable collectionToValidate = (validationContext is IDictionary
+                ? ((IDictionary) validationContext).Values
+                : (IEnumerable) validationContext);
 
-            if (EvaluateWhen(validationContext, contextParams))
-            {
-                IEnumerable collectionToValidate = (validationContext is IDictionary
-                                                        ? ((IDictionary) validationContext).Values
-                                                        : (IEnumerable) validationContext);
-
-                // decide whether to pass new validation errors collection 
-                //(and discard error messages returned by the item validators)
-                // OR to pass validation errors collection that was passed to this method
-                //(and collect all error messages returned by the item validators)
-                IValidationErrors err = (includeElementErrors)? errors : new ValidationErrors();
+            // decide whether to pass new validation errors collection 
+            //(and discard error messages returned by the item validators)
+            // OR to pass validation errors collection that was passed to this method
+            //(and collect all error messages returned by the item validators)
+            IValidationErrors err = (includeElementErrors)? errors : new ValidationErrors();
                 
-                foreach (object objectToValidate in collectionToValidate)
-                {
-                    foreach (IValidator validator in Validators)
-                    {                                                                        
-                        valid = validator.Validate(objectToValidate, contextParams, err) && valid;
-                        if (!valid && !validateAll)
-                        {
-                            break;
-                        }
-                    }
-
-                    if (!valid && !validateAll)
+            foreach (object objectToValidate in collectionToValidate)
+            {
+                foreach (IValidator validator in this.Validators)
+                {                                                                        
+                    valid = validator.Validate(objectToValidate, contextParams, err) && valid;
+                    if (!valid && this.FastValidate)
                     {
                         break;
                     }
                 }
-                
-                ProcessActions(valid, validationContext, contextParams, errors);
-            }
 
+                if (!valid && this.FastValidate)
+                {
+                    break;
+                }
+            }                
             return valid;
         }
+
     }
 }

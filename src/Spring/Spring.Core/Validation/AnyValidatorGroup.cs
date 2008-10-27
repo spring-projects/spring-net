@@ -47,21 +47,27 @@ namespace Spring.Validation
         /// Initializes a new instance of the <see cref="AnyValidatorGroup"/> class.
         /// </summary>
         public AnyValidatorGroup()
-        {}
+        {
+            this.FastValidate = true;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnyValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
         public AnyValidatorGroup(string when) : base(when)
-        {}
+        {
+            this.FastValidate = true;            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnyValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
         public AnyValidatorGroup(IExpression when) : base(when)
-        {}
+        {
+            this.FastValidate = true;            
+        }
 
         #endregion
 
@@ -72,30 +78,23 @@ namespace Spring.Validation
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        public override bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        protected override bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
         {
             ValidationErrors tmpErrors = new ValidationErrors();
-            bool valid = true;
-
-            if (EvaluateWhen(validationContext, contextParams))
+            bool valid = false;
+            foreach (IValidator validator in Validators)
             {
-                valid = false;
-                foreach (IValidator validator in Validators)
+                valid = validator.Validate(validationContext, contextParams, tmpErrors) || valid;
+                if (valid && FastValidate)
                 {
-                    valid = validator.Validate(validationContext, contextParams, tmpErrors) || valid;
-                    if (valid)
-                    {
-                        break;
-                    }
+                    break;
                 }
-
-                if (!valid)
-                {
-                    errors.MergeErrors(tmpErrors);
-                }
-                ProcessActions(valid, validationContext, contextParams, errors);
             }
 
+            if (!valid)
+            {
+                errors.MergeErrors(tmpErrors);
+            }
             return valid;
         }
     }

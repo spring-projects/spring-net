@@ -44,7 +44,7 @@ namespace Spring.Validation
         #region Fields
 
         private IList validators = new ArrayList();
-        private bool shortcircuitEvaluate = false;
+        private bool fastValidate = false;
         #endregion
 
         #region Constructors
@@ -90,10 +90,10 @@ namespace Spring.Validation
         /// The validators within the group will only be validated 
         /// in order until the first validator fails.
         /// </remarks>
-        public bool ShortcircuitEvaluate
+        public bool FastValidate
         {
-            get { return shortcircuitEvaluate; }
-            set { shortcircuitEvaluate = value; }
+            get { return fastValidate; }
+            set { fastValidate = value; }
         }
 
         #endregion
@@ -107,21 +107,34 @@ namespace Spring.Validation
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
         public override bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
         {
-            bool valid = true;
-
             if (EvaluateWhen(validationContext, contextParams))
             {
-                foreach (IValidator validator in validators)
-                {
-                    valid = validator.Validate(validationContext, contextParams, errors) && valid;
-                    if (shortcircuitEvaluate && !valid)
-                    {
-                        break;
-                    }
-                }
+                bool valid = ValidateGroup(contextParams, errors, validationContext);
                 ProcessActions(valid, validationContext, contextParams, errors);
+                return valid;
             }
 
+            return true;
+        }
+
+        /// <summary>
+        /// Actual implementation how to validate the specified object.
+        /// </summary>
+        /// <param name="validationContext">The object to validate.</param>
+        /// <param name="contextParams">Additional context parameters.</param>
+        /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
+        /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
+        protected virtual bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
+        {
+            bool valid = true;
+            foreach (IValidator validator in validators)
+            {
+                valid = validator.Validate(validationContext, contextParams, errors) && valid;
+                if (!valid && FastValidate)
+                {
+                    break;
+                }
+            }
             return valid;
         }
 
