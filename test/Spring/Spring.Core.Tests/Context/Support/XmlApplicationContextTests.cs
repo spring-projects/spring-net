@@ -42,17 +42,13 @@ namespace Spring.Context.Support
             {
                 XmlApplicationContext ctx = new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/innerObjectsWithPostProcessor.xml");           
                 ctx.GetObject("hasInnerObjects");
-            } catch (System.NullReferenceException e)
-            {
-                Assert.Fail("Should not throw NullReferenceException",e);
-            } catch (ObjectCreationException e)
+                Assert.Fail("should throw ObjectCreationException");
+            }
+            catch (ObjectCreationException e)
             {
                 NoSuchObjectDefinitionException ex = e.InnerException as NoSuchObjectDefinitionException;
                 Assert.IsNotNull(ex);
                 //Pass   
-            } catch (Exception e)
-            {
-                Assert.Fail("Expect only ObjectCreationException to be thrown", e);
             }
         }
 

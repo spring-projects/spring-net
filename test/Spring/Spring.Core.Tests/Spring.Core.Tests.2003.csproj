@@ -363,6 +363,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Context\Support\innerObjectsWithPostProcessor.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Context\Support\invalidType.xml"
                     BuildAction = "EmbeddedResource"
                 />
