@@ -2060,10 +2060,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Objects\Factory\Xml\spring-objects-1.2.xsd"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "Objects\Factory\Xml\spring-tool-1.1.xsd"
                     BuildAction = "EmbeddedResource"
                 />

@@ -86,6 +86,19 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
+        /// Constructs a "assembly://..." qualified schemaLocation url using the given type
+        /// to obtain the assembly name.
+        /// </summary>
+        public static string GetAssemblySchemaLocation( Type schemaLocationAssemblyHint, string schemaLocation)
+        {
+            if (schemaLocationAssemblyHint != null)
+            {
+                return "assembly://" + schemaLocationAssemblyHint.Assembly.FullName + schemaLocation;
+            }
+            return schemaLocation;                        
+        }
+
+        /// <summary>
         /// Returns a parser for the given namespace.
         /// </summary>
         /// <param name="namespaceURI">
@@ -236,6 +249,10 @@ namespace Spring.Objects.Factory.Xml
                 if (StringUtils.IsNullOrEmpty(schemaLocation))
                 {
                     schemaLocation = defaults.SchemaLocation;
+                    if (defaults.SchemaLocationAssemblyHint != null)
+                    {
+                        schemaLocation = GetAssemblySchemaLocation(defaults.SchemaLocationAssemblyHint, schemaLocation);
+                    }
                 }
             }
 
@@ -249,16 +266,25 @@ namespace Spring.Objects.Factory.Xml
                 parsers[namespaceUri] = parser;
                 if (StringUtils.HasText(schemaLocation) && !schemas.Contains(namespaceUri))
                 {
-                    IResourceLoader resourceLoader = new ConfigurableResourceLoader();
-                    IResource schema = resourceLoader.GetResource(schemaLocation);
-                    try {
-                        schemas.Add(namespaceUri, new XmlTextReader(schema.InputStream));
-                    } catch (Exception e)
-                    {
-                        throw new ArgumentException("Could not load schema from resource = " + schema, e);
-                    }
-                    
+                    RegisterSchema(namespaceUri, schemaLocation);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Register a schema as well-known
+        /// </summary>
+        /// <param name="namespaceUri"></param>
+        /// <param name="schemaLocation"></param>
+        private static void RegisterSchema(string namespaceUri, string schemaLocation)
+        {
+            IResourceLoader resourceLoader = new ConfigurableResourceLoader();
+            IResource schema = resourceLoader.GetResource(schemaLocation);
+            try {
+                schemas.Add(namespaceUri, new XmlTextReader(schema.InputStream));
+            } catch (Exception e)
+            {
+                throw new ArgumentException("Could not load schema from resource = " + schema, e);
             }
         }
 

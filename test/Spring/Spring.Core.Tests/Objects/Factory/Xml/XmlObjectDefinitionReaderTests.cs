@@ -96,13 +96,29 @@ namespace Spring.Objects.Factory.Xml
 		<property name='name'><value></value></property>
 	</object>
 	<object id='test4' type='Spring.Objects.TestObject, Spring.Core.Tests'>
-		<property name='name'><value> &#x000a;&#x000d;&#x0009;</value></property>
+		<property name='name'><value xml:space='default'> &#x000a;&#x000d;&#x0009;</value></property>
 	</object>
 </objects>
 "));
             Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test2")).Name);
             Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test3")).Name);
             Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test4")).Name);
+        }
+
+        [Test]
+        public void WhitespaceValuesArePreservedForValueElementWhenSpaceIsSetToPreserve()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+                @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net'>  
+	<object id='test4' type='Spring.Objects.TestObject, Spring.Core.Tests'>
+		<property name='name'><value xml:space='preserve'> &#x000a;&#x000d;&#x0009;</value></property>
+	</object>
+</objects>
+"));
+            Assert.AreEqual(" \n\r\t", ((TestObject) of.GetObject("test4")).Name);
         }
 
         [Test]

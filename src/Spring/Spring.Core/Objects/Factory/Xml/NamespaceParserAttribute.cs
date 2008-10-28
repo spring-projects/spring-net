@@ -31,9 +31,6 @@ namespace Spring.Objects.Factory.Xml
     /// Attribute that should be used to specify the default namespace
     /// and schema location for a custom namespace parser.
     /// </summary>
-    /// <remarks>
-    /// If 
-    /// </remarks>
     /// <author>Aleksandar Seovic</author>
     [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public class NamespaceParserAttribute : Attribute
@@ -72,14 +69,7 @@ namespace Spring.Objects.Factory.Xml
 		/// </remarks>
         public string SchemaLocation
         {
-            get
-            {
-            	if (schemaLocationAssemblyHint != null)
-            	{
-            		return "assembly://" + schemaLocationAssemblyHint.Assembly.FullName + schemaLocation;
-            	}
-            	return schemaLocation;
-            }
+            get { return schemaLocation; }
             set { schemaLocation = value; }
         }
 

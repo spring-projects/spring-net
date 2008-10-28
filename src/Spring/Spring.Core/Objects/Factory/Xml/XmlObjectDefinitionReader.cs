@@ -259,6 +259,11 @@ namespace Spring.Objects.Factory.Xml
             if (args.Severity == XmlSeverityType.Error)
             {
 #if !NET_1_0
+                // ignore validation errors for well-known 'xml' namespace. This seems to be a bug in net 1.0 + 1.1
+                if (args.Exception.Message.IndexOf("http://www.w3.org/XML/1998/namespace:") > -1)
+                {
+                    return;
+                }
                 throw new XmlException(args.Message, args.Exception, args.Exception.LineNumber, args.Exception.LinePosition);
 #else
 				throw new XmlException(args.Message, args.Exception);

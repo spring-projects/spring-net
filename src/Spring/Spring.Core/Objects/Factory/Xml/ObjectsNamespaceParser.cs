@@ -27,7 +27,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
-
+using System.Xml.Schema;
 using Common.Logging;
 
 using Spring.Collections;
@@ -1320,11 +1320,13 @@ namespace Spring.Objects.Factory.Xml
         /// </remarks>
         protected string ParseTextValueElement(XmlElement element, string name)
         {
-            if (element == null || StringUtils.IsNullOrEmpty(element.InnerText))
-            {
-                return String.Empty;
-            }
-            return element.InnerText;
+            if (element == null) return string.Empty;
+
+            string innerText = element.InnerText;
+            // check the xml:space attribute
+            bool preserveWhitespace = 0 == string.Compare("preserve", element.GetAttribute("space", "http://www.w3.org/XML/1998/namespace"), true);
+            bool isEmpty = preserveWhitespace ? innerText.Length == 0 : StringUtils.IsNullOrEmpty(innerText);
+            return isEmpty ? String.Empty : innerText;
         }
 
         /// <summary>

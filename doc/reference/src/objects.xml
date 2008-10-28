@@ -34,11 +34,11 @@
       </footnote> principle</para>
 
     <para>The <literal>Spring.Core</literal> assembly provides the basis for
-    the Spring.NET Inversion of Control container. The <literal><ulink
-    url="http://www.springframework.net/doc/api/html/Spring.Objects.Factory.IObjectFactory.html">IObjectFactory</ulink></literal>
+    the Spring.NET Inversion of Control container. The <literal><link
+    ns6:href="http://www.springframework.net/doc/api/html/Spring.Objects.Factory.IObjectFactory.html">IObjectFactory</link></literal>
     interface provides an advanced configuration mechanism capable of managing
-    objects of any nature. The <literal><ulink
-    url="http://www.springframework.net/doc/api/html/Spring.Context.IApplicationContext.html">IApplicationContext</ulink></literal>
+    objects of any nature. The <literal><link
+    ns6:href="http://www.springframework.net/doc/api/html/Spring.Context.IApplicationContext.html">IApplicationContext</link></literal>
     interface builds on top of the <literal>IObjectFactory</literal> (it is a
     sub-interface) and adds other functionality such as easier integration
     with Spring.NET's Aspect Oriented Programming (AOP) features, message
@@ -187,12 +187,12 @@ IObjectFactory factory = context;</programlisting>
       ASP.NET pages.</para>
 
       <para>You may be wondering what the assembly URL is all about. The above
-      example uses Spring.NET's <literal> <ulink
-      url="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</ulink>
-      </literal> abstraction. The <literal>IResource</literal> interface
-      provides a simple and uniform interface to a wide array of IO resources
-      that can represent themselves as <literal>System.IO.Stream</literal>. An
-      example for a file based resource, not using the URL syntax but an
+      example uses Spring.NET's <classname><link
+      ns6:href="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</link></classname>
+      abstraction. The <literal>IResource</literal> interface provides a
+      simple and uniform interface to a wide array of IO resources that can
+      represent themselves as <literal>System.IO.Stream</literal>. An example
+      for a file based resource, not using the URL syntax but an
       implementation of the IResource interface for file is shown
       below.<programlisting language="csharp">[C#]
 IResource input = new FileSystemResource ("objects.xml");
@@ -207,11 +207,19 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
       <para>The following snippet shows the use of the URI syntax for
       referring to a resource that has been embedded inside a .NET assembly,
-      <literal>assembly://&lt;AssemblyName&gt;/&lt;NameSpace&gt;/&lt;ResourceName&gt;
-      </literal> <note>
-           To create an embedded resource using Visual Studio you must set the Build Action of the .xml configuration file to Embedded Resource in the file property editor. Also, you will need to explicitly rebuild the project containing the configuration file if it is the only change you make between successive builds. If using NAnt to build, add a &lt;resources&gt; section to the csc task. For example usage, look at the Spring.Core.Tests.build file included the distribution. 
-        </note> The <literal>IResource</literal> abstraction is explained
-      further in <xref linkend="objects-iresource" />.</para>
+      <literal>assembly://&lt;AssemblyName&gt;/&lt;NameSpace&gt;/&lt;ResourceName&gt;</literal>.
+      The <literal>IResource</literal> abstraction is explained further in
+      <xref linkend="objects-iresource" />.</para>
+
+      <note>
+        <para>To create an embedded resource using Visual Studio you must set
+        the Build Action of the .xml configuration file to Embedded Resource
+        in the file property editor. Also, you will need to explicitly rebuild
+        the project containing the configuration file if it is the only change
+        you make between successive builds. If using NAnt to build, add a
+        &lt;resources&gt; section to the csc task. For example usage, look at
+        the Spring.Core.Tests.build file included the distribution.</para>
+      </note>
 
       <para>The preferred way to create an
       <literal>IApplicationContext</literal> or
@@ -1254,6 +1262,10 @@ namespace SimpleApp
           choice will already have been made for you - a legacy class may not
           expose any setter methods, and so constructor injection will be the
           only type of DI available to you.</para>
+
+          <para>Since you can mix both, Constructor- and Setter-based DI, it
+          is a good rule of thumb to use constructor arguments for mandatory
+          dependencies and setters for optional dependencies.</para>
         </sidebar>
 
         <para>The <literal>IObjectFactory</literal> supports both of these
@@ -1278,8 +1290,6 @@ namespace SimpleApp
               <literal>IObjectFactory</literal> or
               <literal>IApplicationContext</literal> variant that supports XML
               format configuration files.</para>
-
-              <para></para>
             </listitem>
 
             <listitem>
@@ -1288,27 +1298,21 @@ namespace SimpleApp
               static-factory method when that is used instead of a normal
               constructor. These dependencies will be provided to the object,
               <emphasis>when the object is actually created</emphasis>.</para>
-
-              <para></para>
             </listitem>
 
             <listitem>
               <para>Each property or constructor argument is either an actual
               definition of the value to set, or a reference to another object
               in the container.</para>
-
-              <para></para>
             </listitem>
 
             <listitem>
-              <para><anchor
-              id="object-factory-collaborators-typeconverter"></anchor>Each
-              property or constructor argument which is a value must be able
-              to be converted from whatever format it was specified in, to the
-              actual <literal>System.Type</literal> of that property or
-              constructor argument. By default Spring.NET can convert a value
-              supplied in string format to all built-in types, such as
-              <literal>int</literal>, <literal>long</literal>,
+              <para>Each property or constructor argument which is a value
+              must be able to be converted from whatever format it was
+              specified in, to the actual <literal>System.Type</literal> of
+              that property or constructor argument. By default Spring.NET can
+              convert a value supplied in string format to all built-in types,
+              such as <literal>int</literal>, <literal>long</literal>,
               <literal>string</literal>, <literal>bool</literal>, etc.
               Spring.NET uses <literal>TypeConverter</literal> definitions to
               be able to convert string values to other, arbitrary types.
@@ -1556,7 +1560,7 @@ public class MixedIocObject
       &lt;<literal>constructor-arg/&gt;</literal> elements for this
       purpose.a</para>
 
-      <sect3>
+      <sect3 xml:id="objects-simple-values">
         <title>Straight values (primitives, <literal>strings</literal>,
         etc.)</title>
 
@@ -1579,16 +1583,14 @@ public class MixedIocObject
         for configuration of its <literal>ConnectionString</literal>
         property.</para>
 
-        <para>
-          <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+        <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
   &lt;object id="myConnection" type="System.Data.SqlClient.SqlConnection"&gt;
       &lt;!-- results in a call to the setter of the ConnectionString property --&gt;
       &lt;property
           name="ConnectionString"
           value="Integrated Security=SSPI;database=northwind;server=mySQLServer"/&gt;
   &lt;/object&gt;
-&lt;/objects&gt;</programlisting>
-        </para>
+&lt;/objects&gt;</programlisting></para>
 
         <sect4>
           <title>The idref element</title>
@@ -1628,6 +1630,24 @@ public class MixedIocObject
           language="myxml">&lt;property name="targetName"&gt;
   &lt;idref local="theTargetObject"/&gt; 
 &lt;/property&gt;</programlisting></para>
+        </sect4>
+
+        <sect4>
+          <title>Whitespace Handling</title>
+
+          <para>Usually all leading and trailing whitespaces are trimmed from
+          a &lt;value /&gt; element's text. In some cases it is necessary to
+          maintain whitespaces exactly as they are written into the xml
+          element. The parser does understand the xml:space attribute in this
+          case:</para>
+
+          <programlisting language="myxml">&lt;property name="myProp"&gt;
+  &lt;value xml:space="preserve"&gt; &amp;#x000a;&amp;#x000d;&amp;#x0009;&lt;/value&gt;
+&lt;/property&gt;</programlisting>
+
+          <para>The above configuration will result in the string " \n\r\t".
+          Note, that you don't have to explicitely specifiy the 'xml'
+          namespace on top of your configuration.</para>
         </sect4>
       </sect3>
 
@@ -1689,9 +1709,7 @@ public class MixedIocObject
         may have the same name as the parent), and needs the original object
         so it may wrap it.</para>
 
-        <para>
-          <programlisting language="myxml">&lt;ref parent="someObject"/&gt;</programlisting>
-        </para>
+        <para><programlisting language="myxml">&lt;ref parent="someObject"/&gt;</programlisting></para>
       </sect3>
 
       <sect3 xml:id="objects-inline-object">
@@ -1773,13 +1791,10 @@ public class MixedIocObject
         additive behavior for collection properties that are exposed in this
         manner.</para>
 
-        <para>
-          <emphasis>Note that the value of a Dictionary entry, or a set value,
-          can also again be any of the elements:</emphasis>
-
-          <programlisting>(object | ref | idref | expression | list | set | dictionary |
-      name-values | value | null)</programlisting>
-        </para>
+        <para><emphasis>Note that the value of a Dictionary entry, or a set
+        value, can also again be any of the elements:</emphasis>
+        <programlisting>(object | ref | idref | expression | list | set | dictionary |
+      name-values | value | null)</programlisting></para>
 
         <para>The shortcut forms for value and references are useful to reduce
         XML verbosity when setting collection properties. See <xref
@@ -1975,21 +1990,26 @@ public class MixedIocObject
     &lt;property name="['one']" value="uno"/&gt;
 &lt;/object&gt;</programlisting></para>
 
-        <note>The use of the property expression parser in Release 1.0.2
-        changed how you configure indexer properties. The following section
-        describes this usage. <para> The older style configuration uses the
-        following syntax <programlisting language="myxml">&lt;object id="objectWithIndexer" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
+        <note>
+          <para>The use of the property expression parser in Release 1.0.2
+          changed how you configure indexer properties. The following section
+          describes this usage.</para>
+
+          <para>The older style configuration uses the following syntax
+          <programlisting language="myxml">&lt;object id="objectWithIndexer" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
     &lt;property name="Item[0]" value="my string value"/&gt;
 &lt;/object&gt;</programlisting> You can also change the name used to identify
-        the indexer by adorning your indexer method declaration with the
-        attribute <literal>[IndexerName("MyItemName")]</literal>. You would
-        then use the string <literal>MyItemName[0]</literal> to configure the
-        first element of that indexer. </para> <para>There are some
-        limitations to be aware in the older indexer configuration. The
-        indexer can only be of a single parameter that is convertible from a
-        string to the indexer parameter type. Also, multiple indexers are not
-        supported. You can get around that last limitation currently if you
-        use the IndexerName attribute. </para></note>
+          the indexer by adorning your indexer method declaration with the
+          attribute <literal>[IndexerName("MyItemName")]</literal>. You would
+          then use the string <literal>MyItemName[0]</literal> to configure
+          the first element of that indexer.</para>
+
+          <para>There are some limitations to be aware in the older indexer
+          configuration. The indexer can only be of a single parameter that is
+          convertible from a string to the indexer parameter type. Also,
+          multiple indexers are not supported. You can get around that last
+          limitation currently if you use the IndexerName attribute.</para>
+        </note>
       </sect3>
 
       <sect3 xml:id="objects-shortcutforms">
@@ -2035,11 +2055,13 @@ public class MixedIocObject
 
 &lt;constructor-arg index="0" ref="anotherObject"/&gt;</programlisting></para>
 
-        <note>The shortcut form is equivalent to a <literal>&lt;ref
-        object="xxx"&gt;</literal> element; there is no shortcut for either
-        the <literal>&lt;ref local="xxx"&gt;</literal> or <literal>&lt;ref
-        parent="xxx"&gt;</literal> elements. For a local or parent
-        <literal>ref</literal>, you must still use the long form.</note>
+        <note>
+          <para>The shortcut form is equivalent to a <literal>&lt;ref
+          object="xxx"&gt;</literal> element; there is no shortcut for either
+          the <literal>&lt;ref local="xxx"&gt;</literal> or <literal>&lt;ref
+          parent="xxx"&gt;</literal> elements. For a local or parent
+          <literal>ref</literal>, you must still use the long form.</para>
+        </note>
 
         <para>Finally, the entry element allows a shortcut form the specify
         the key and/or value of a dictionary, in the form of key/key-ref and
@@ -2059,33 +2081,34 @@ public class MixedIocObject
       <sect3 xml:id="objects-referencing-compound-properties">
         <title>Compound property names and Spring expression
         references</title>
-      </sect3>
 
-      <para>Note that compound or nested property names are perfectly legal
-      when setting object properties. Property names are interpreted using the
-      <link linkend="expressions">Spring Expression Language</link> (SpEL) and
-      therefore can leverage its many features to set property names. For
-      example, in this object definition a simple nested property name is
-      configured</para>
+        <para>Note that compound or nested property names are perfectly legal
+        when setting object properties. Property names are interpreted using
+        the <link linkend="expressions">Spring Expression Language</link>
+        (SpEL) and therefore can leverage its many features to set property
+        names. For example, in this object definition a simple nested property
+        name is configured</para>
 
-      <programlisting language="myxml">&lt;object id="foo" type="Spring.Foo, Spring.Foo"&gt; 
+        <programlisting language="myxml">&lt;object id="foo" type="Spring.Foo, Spring.Foo"&gt; 
   &lt;property name="bar.baz.name" value="Bingo"/&gt; 
 &lt;/object&gt;</programlisting>
 
-      <para>As an example of some alternative ways to declare the property
-      name, you can use SpEL's support for indexers to configure a Dictionary
-      key value pair as an alternative to the nested
-      <literal>&lt;dictionary&gt;</literal> element. More importantly, you can
-      use the 'expression' element to refer to a Spring expression as the
-      value of the property. Simple examples of this are shown below</para>
+        <para>As an example of some alternative ways to declare the property
+        name, you can use SpEL's support for indexers to configure a
+        Dictionary key value pair as an alternative to the nested
+        <literal>&lt;dictionary&gt;</literal> element. More importantly, you
+        can use the 'expression' element to refer to a Spring expression as
+        the value of the property. Simple examples of this are shown
+        below</para>
 
-      <programlisting language="myxml">&lt;property name=“minValue” expression=“int.MinValue” /&gt;
+        <programlisting language="myxml">&lt;property name=“minValue” expression=“int.MinValue” /&gt;
 
 &lt;property name=“weekFromToday” expression="DateTime.Today + 7"/&gt;</programlisting>
 
-      <para>Using SpEL's support for method evaluation, you can easily call
-      static method on various helper classes in your XML
-      configuraiton.</para>
+        <para>Using SpEL's support for method evaluation, you can easily call
+        static method on various helper classes in your XML
+        configuraiton.</para>
+      </sect3>
     </sect2>
 
     <sect2 xml:id="objects-factory-dependson">
@@ -2120,15 +2143,15 @@ public class MixedIocObject
 &lt;object id="manager" type="Examples.ManagerObject, ExamplesLibrary" /&gt;
 &lt;object id="accountDao" type="Examples.AdoAccountDao, ExamplesLibrary" /&gt;</programlisting>
 
-      <para><note>
-          <para>The '<literal>depends-on</literal>' attribute and property is
-          used not only to specify an initialization time dependency, but also
-          to specify the corresponding destroy time dependency (in the case of
-          singleton objects only). Dependent objects that are defined in the
-          'depends-on' attribute will be destroyed after the relevant object
-          itself is destroyed. This thus allows you to control shutdown order
-          too</para>
-        </note></para>
+      <note>
+        <para>The '<literal>depends-on</literal>' attribute and property is
+        used not only to specify an initialization time dependency, but also
+        to specify the corresponding destroy time dependency (in the case of
+        singleton objects only). Dependent objects that are defined in the
+        'depends-on' attribute will be destroyed after the relevant object
+        itself is destroyed. This thus allows you to control shutdown order
+        too</para>
+      </note>
     </sect2>
 
     <sect2>
@@ -2439,7 +2462,7 @@ public class MixedIocObject
       instance of object B every time one is needed.</para>
 
       <para>One solution to this problem is to forego some inversion of
-      control. Object A can be <link lang=""
+      control. Object A can be <link
       linkend="objects-factory-aware-objectfactoryaware">made aware of the
       container</link> by implementing the
       <literal>IObjectFactoryAware</literal> interface, and <link
@@ -2495,9 +2518,9 @@ namespace Fiona.Apple
         The Spring framework implements this method injection by a dynamically
         generating a subclass overriding the method using the classes in the
         <literal>System.Reflection.Emit</literal> namespace. You can read more
-        about the motivation for Method Injection in <ulink
-        url="http://blog.springframework.com/rod/?p=1">this blog
-        entry</ulink>.</para>
+        about the motivation for Method Injection in <link
+        ns6:href="http://blog.springframework.com/rod/?p=1">this blog
+        entry</link>.</para>
 
         <para>So if you look at the code from the previous code snipped (the
         <literal>CommandManager</literal> class), the Spring container is
@@ -2944,7 +2967,7 @@ public class MyClassFactory
         return ... // implementation elided for clarity...
     }
 }</programlisting> <programlisting language="myxml">&lt;object id="myMethodObject" type="Whatever.MyClassFactory, MyAssembly" /&gt;
-				
+
 &lt;object id="paramsMethodObject" type="Spring.Objects.Factory.Config.MethodInvokingFactoryObject, Spring.Core"&gt;
   &lt;property name="TargetObject" ref="myMethodObject"/&gt;
   &lt;property name="TargetMethod" value="CreateObject"/&gt;
@@ -2976,11 +2999,12 @@ public class MyClassFactory
         <para>The <literal>LogFactoryObject</literal> is useful when you would
         like to share a Common.Logging log object across a number of classes
         instead of creating a logging instance per class or class hierarchy.
-        Information on the Common.Logging project can be found <ulink
-        url="http://netcommon.sourceforge.net/">here</ulink>. In the example
-        shown below the same logging instance, with a logging category name of
-        "DAOLogger", is used in both the SimpleAccountDao and SimpleProductDao
-        data access objects. <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
+        Information on the Common.Logging project can be found <link
+        ns6:href="http://netcommon.sourceforge.net/">here</link>. In the
+        example shown below the same logging instance, with a logging category
+        name of "DAOLogger", is used in both the SimpleAccountDao and
+        SimpleProductDao data access objects. <programlisting
+        language="myxml">&lt;objects xmlns="http://www.springframework.net" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://www.springframework.net
          http://www.springframework.net/xsd/spring-objects.xsd" &gt;
@@ -3545,15 +3569,11 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
           </itemizedlist></para>
 
         <note>
-           Generally, the use of the 
-
-          <literal>IInitializingObject</literal>
-
-           can be avoided. The 
-
-          <literal>Spring.Core</literal>
-
-           library provides support for a generic init-method, given to the object definition in the object configuration store (be it XML, or a database, etc). 
+          <para>Generally, the use of the
+          <literal>IInitializingObject</literal> can be avoided. The
+          <literal>Spring.Core</literal> library provides support for a
+          generic init-method, given to the object definition in the object
+          configuration store (be it XML, or a database, etc).</para>
         </note>
 
         <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" init-method="init"/&gt;
@@ -3575,23 +3595,15 @@ public class AnotherExampleObject : IInitializingObject
 }</programlisting> but does not couple the code to Spring.NET.</para>
 
         <note>
-           When deploying an object in 
-
-          <literal>prototype</literal>
-
-           mode, the lifecycle of the object changes slightly. By definition, Spring.NET cannot manage the complete lifecycle of a non-singleton / 
-
-          <literal>prototype</literal>
-
-           object, since after it is created, it is given to the client and the container no longer keeps a reference to the object. You can think of Spring.NET's role when talking about a non-singleton ( 
-
-          <literal>prototype</literal>
-
-           ) object as a replacement for the 
-
-          <literal>new</literal>
-
-           operator. Any lifecycle aspects past that point have to be handled by the client. 
+          <para>When deploying an object in <literal>prototype</literal> mode,
+          the lifecycle of the object changes slightly. By definition,
+          Spring.NET cannot manage the complete lifecycle of a non-singleton /
+          <literal>prototype</literal> object, since after it is created, it
+          is given to the client and the container no longer keeps a reference
+          to the object. You can think of Spring.NET's role when talking about
+          a non-singleton ( <literal>prototype</literal> ) object as a
+          replacement for the <literal>new</literal> operator. Any lifecycle
+          aspects past that point have to be handled by the client.</para>
         </note>
       </sect3>
 
@@ -3615,11 +3627,12 @@ public class AnotherExampleObject : IInitializingObject
           </itemizedlist></para>
 
         <note>
-          <emphasis>Note: If you choose you can avoid having your class
+          <para><emphasis>Note: If you choose you can avoid having your class
           implement <literal>IDisposable</literal> since the
           <literal>Spring.Core</literal> library provides support for a
           generic destroy-method, given to the object definition in the object
-          configuration store (be it XML, or a database, etc).</emphasis>
+          configuration store (be it XML, or a database,
+          etc).</emphasis></para>
         </note>
 
         <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" destroy-method="cleanup"/&gt;
@@ -3762,15 +3775,14 @@ public class AnotherExampleObject : IDisposable
     ignore object definitions that are considered abstract.</para>
 
     <note>
-       Application contexts (but not simple object factories) will by default pre-instantiate all singletons. Therefore it is important (at least for singleton objects) that if you have a (parent) object definition which you intend to use only as a template, and this definition specifies a class, you must make sure to set the 
-
-      <emphasis>abstract</emphasis>
-
-       attribute to 
-
-      <emphasis>true</emphasis>
-
-       , otherwise the application context will actually (attempt to) pre-instantiate the abstract object. 
+      <para>Application contexts (but not simple object factories) will by
+      default pre-instantiate all singletons. Therefore it is important (at
+      least for singleton objects) that if you have a (parent) object
+      definition which you intend to use only as a template, and this
+      definition specifies a class, you must make sure to set the
+      <emphasis>abstract</emphasis> attribute to <emphasis>true</emphasis> ,
+      otherwise the application context will actually (attempt to)
+      pre-instantiate the abstract object.</para>
     </note>
   </sect1>
 
@@ -4343,7 +4355,7 @@ cfg.setLocation(new FileSystemResource("ado.properties"));
 cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
       <para><anchor
-      id="objects-factory-autodetect-objectfactorypostprocessors"></anchor>This
+      xml:id="objects-factory-autodetect-objectfactorypostprocessors" />This
       explicit registration step is not convenient, and this is one of the
       reasons why the various <literal>IApplicationContext</literal>
       implementations are preferred above plain
@@ -4489,19 +4501,14 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         expect using <literal>NameValueCollection.Add</literal>.</para>
 
         <note>
-           In an ASP.NET environment you must specify the full, four-part name of the assembly when using a 
-
-          <literal>NameValueFileSectionHandler</literal>
-
-           
-
-          <programlisting language="myxml">
+          <para>In an ASP.NET environment you must specify the full, four-part
+          name of the assembly when using a
+          <literal>NameValueFileSectionHandler</literal> <programlisting
+          language="myxml">
             &lt;section name="hibernateConfiguration"
             type="System.Configuration.NameValueFileSectionHandler, System,
             Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/&gt;
-          </programlisting>
-
-           
+          </programlisting></para>
         </note>
 
         <sect4>
@@ -4751,8 +4758,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       <literal>FieldRetrievingFactoryObject</literal>. An additional use of
       creating an custom IFactoryObject implementation is to retrieve an
       object from an embedded resource file and use it to set another objects
-      dependency. An example of this is provided <ulink
-      url="http://jira.springframework.org/browse/SPRNET-133#action_19743">here</ulink>.</para>
+      dependency. An example of this is provided <link
+      ns6:href="http://jira.springframework.org/browse/SPRNET-133#action_19743">here</link>.</para>
 
       <para>Finally, there is sometimes a need to ask a container for an
       actual <literal>IFactoryObject</literal> instance itself, not the object
@@ -4846,11 +4853,11 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
     <sect2>
       <title>IObjectFactory or IApplicationContext?</title>
 
-      <para>Short version: use an <emphasis>
-          <literal>IApplicationContext</literal>
-        </emphasis> unless you have a really good reason for not doing so. For
-      those of you that are looking for slightly more depth as to the 'but
-      why' of the above recommendation, keep reading.</para>
+      <para>Short version: use an
+      <emphasis><literal>IApplicationContext</literal></emphasis> unless you
+      have a really good reason for not doing so. For those of you that are
+      looking for slightly more depth as to the 'but why' of the above
+      recommendation, keep reading.</para>
 
       <para>As the <literal>IApplicationContext</literal> includes all the
       functionality the object factory via its inheritance of the
@@ -4878,8 +4885,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       <literal>IObjectFactory</literal> capabilities in a lot more depth than
       the said feature matrix.)</para>
 
-      <table id="context-introduction-ctx-vs-objectfactory-feature-matrix"
-             pgwide="1">
+      <anchor xml:id="context-introduction-ctx-vs-objectfactory-feature-matrix" />
+
+      <table pgwide="1">
         <title>Feature Matrix</title>
 
         <tgroup cols="3">
@@ -4889,88 +4897,57 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
             <row>
               <entry align="center">Feature</entry>
 
-              <entry align="center">
-                <literal>IObjectFactory</literal>
-              </entry>
+              <entry align="center"><literal>IObjectFactory</literal></entry>
 
-              <entry align="center">
-                <literal>IApplicationContext</literal>
-              </entry>
+              <entry
+              align="center"><literal>IApplicationContext</literal></entry>
             </row>
           </thead>
 
           <tbody>
             <row>
-              <entry>
-                <para>Object instantiation/wiring</para>
-              </entry>
+              <entry><para>Object instantiation/wiring</para></entry>
 
-              <entry align="center">
-                <para>Yes</para>
-              </entry>
+              <entry align="center"><para>Yes</para></entry>
 
-              <entry align="center">
-                <para>Yes</para>
-              </entry>
+              <entry align="center"><para>Yes</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>Automatic <literal>IObjectPostProcessor</literal>
-                registration</para>
-              </entry>
+              <entry><para>Automatic <literal>IObjectPostProcessor</literal>
+              registration</para></entry>
 
-              <entry align="center">
-                <para>No</para>
-              </entry>
+              <entry align="center"><para>No</para></entry>
 
-              <entry align="center">
-                <para>Yes</para>
-              </entry>
+              <entry align="center"><para>Yes</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>Automatic <literal>IObjectFactoryPostProcessor</literal>
-                registration</para>
-              </entry>
+              <entry><para>Automatic
+              <literal>IObjectFactoryPostProcessor</literal>
+              registration</para></entry>
 
-              <entry align="center">
-                <para>No</para>
-              </entry>
+              <entry align="center"><para>No</para></entry>
 
-              <entry align="center">
-                <para>Yes</para>
-              </entry>
+              <entry align="center"><para>Yes</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para>Convenient <literal>IMessageSource</literal>
-                access</para>
-              </entry>
+              <entry><para>Convenient <literal>IMessageSource</literal>
+              access</para></entry>
 
-              <entry align="center">
-                <para>No</para>
-              </entry>
+              <entry align="center"><para>No</para></entry>
 
-              <entry align="center">
-                <para>Yes</para>
-              </entry>
+              <entry align="center"><para>Yes</para></entry>
             </row>
 
             <row>
-              <entry>
-                <para><literal>ApplicationEvent</literal> publication</para>
-              </entry>
+              <entry><para><literal>ApplicationEvent</literal>
+              publication</para></entry>
 
-              <entry align="center">
-                <para>No</para>
-              </entry>
+              <entry align="center"><para>No</para></entry>
 
-              <entry align="center">
-                <para>Yes</para>
-              </entry>
+              <entry align="center"><para>Yes</para></entry>
             </row>
 
             <row>
@@ -5379,10 +5356,10 @@ IApplicationContext context =
 
           <listitem>
             <para><literal>string GetMessage(IMessageSourceResolvable
-            resolvable, <literal>CultureInfo</literal> culture) </literal>:
-            all properties used in the methods above are also wrapped in a
-            class - the <literal>MessageSourceResolvable</literal>, which you
-            can use in this method.</para>
+            resolvable, CultureInfo culture) </literal>: all properties used
+            in the methods above are also wrapped in a class - the
+            <literal>MessageSourceResolvable</literal>, which you can use in
+            this method.</para>
           </listitem>
 
           <listitem>
@@ -5422,11 +5399,13 @@ IApplicationContext context =
       defined above.</para>
 
       <warning>
-         
-
         <title>Fallback behavior</title>
 
-         The fallback rules for localized resources seem to have a bug that is fixed by applying Service Pack 1 for .NET 1.1. This affects the use of IMessageSource.GetMessage methods that specify CultureInfo. The core of the issue in the .NET BCL is the method ResourceManager.GetObject that accepts CultureInfo. . 
+        <para>The fallback rules for localized resources seem to have a bug
+        that is fixed by applying Service Pack 1 for .NET 1.1. This affects
+        the use of IMessageSource.GetMessage methods that specify CultureInfo.
+        The core of the issue in the .NET BCL is the method
+        ResourceManager.GetObject that accepts CultureInfo.</para>
       </warning>
 
       <para>Spring.NET provides two <literal>IMessageSource</literal>
