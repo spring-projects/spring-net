@@ -82,6 +82,11 @@ blockquote {
     margin-right: 0px;
 }
 
+.title {
+    font-size: 110%; 
+    font-weight: 800;
+}
+
 h1, h2, h3, h4, h6, H6    {
     color: #000000;
     font-weight: 500;
@@ -201,8 +206,12 @@ pre {
     background-color: #F4F4F4;
 }
 
-ul, ol, li {
+ul {
     list-style: disc;
+}
+
+ol {
+    list-style: decimal;
 }
 
 hr {
@@ -248,14 +257,21 @@ hr {
 	font-family: "Courier New", Courier, monospace;
 }
 
+code {
+    font-family: "Courier New", Courier, monospace;
+    /*font-size-adjust: 0.47;*/
+    font-size: 110%;
+}
+
+/*
 a code {
 	font-family: Verdana, Arial;
-	font-size: 12px;
 }
 
 td code {
     font-size: 110%;
 }
+*/
 
 div.note * td,
 div.tip * td,
