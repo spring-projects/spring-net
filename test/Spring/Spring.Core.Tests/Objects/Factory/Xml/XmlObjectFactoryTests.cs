@@ -993,15 +993,10 @@ namespace Spring.Objects.Factory.Xml
                 reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("invalid.xml", GetType()));
                 Assert.Fail("Should have thrown XmlObjectDefinitionStoreException");
             }
-#if !NET_1_0
-            catch (XmlObjectDefinitionStoreException e)
+            catch (ObjectDefinitionStoreException e)
             {
                 Assert.AreEqual(0, e.Message.IndexOf("Line 21 in XML document"));
             }
-#else
-            catch (XmlObjectDefinitionStoreException)
-            {}
-#endif
         }
 
         [Test]
@@ -1014,16 +1009,10 @@ namespace Spring.Objects.Factory.Xml
                 reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("invalid.xml", GetType()));  
                 Assert.Fail("Should have thrown XmlObjectDefinitionStoreException");
             }
-#if !NET_1_0
-            catch (XmlObjectDefinitionStoreException e)
+            catch (ObjectDefinitionStoreException e)
             {
                 Assert.AreEqual(0, e.Message.IndexOf("Line 21 in XML document"));
             }
-#else
-            catch (XmlObjectDefinitionStoreException)
-            {}
-#endif
-
         }
 
         [Test]

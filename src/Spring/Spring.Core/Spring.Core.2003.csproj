@@ -2069,11 +2069,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Objects\Factory\Xml\XmlObjectDefinitionStoreException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Objects\Factory\Xml\XmlObjectFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

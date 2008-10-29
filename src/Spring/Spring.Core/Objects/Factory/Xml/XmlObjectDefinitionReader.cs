@@ -235,9 +235,15 @@ namespace Spring.Objects.Factory.Xml
             }
             catch (XmlException ex)
             {
-                throw new XmlObjectDefinitionStoreException(resource.Description,
+                throw new ObjectDefinitionStoreException(resource.Description,
                                                             "Line " + ex.LineNumber + " in XML document from " +
-                                                            resource + " is invalid.  " + ex.Message, ex);
+                                                            resource + " is not well formed.  " + ex.Message, ex);
+            }
+            catch (XmlSchemaException ex)
+            {
+                throw new ObjectDefinitionStoreException(resource.Description,
+                                                            "Line " + ex.LineNumber + " in XML document from " +
+                                                            resource + " violates the schema.  " + ex.Message, ex);
             }
             catch(ObjectDefinitionStoreException)
             {
@@ -258,16 +264,15 @@ namespace Spring.Objects.Factory.Xml
         {
             if (args.Severity == XmlSeverityType.Error)
             {
-#if !NET_1_0
+                XmlSchemaException ex = args.Exception;
+#if !NET_2_0
                 // ignore validation errors for well-known 'xml' namespace. This seems to be a bug in net 1.0 + 1.1
-                if (args.Exception.Message.IndexOf("http://www.w3.org/XML/1998/namespace:") > -1)
+                if (ex.Message.IndexOf("http://www.w3.org/XML/1998/namespace:") > -1)
                 {
                     return;
                 }
-                throw new XmlException(args.Message, args.Exception, args.Exception.LineNumber, args.Exception.LinePosition);
-#else
-				throw new XmlException(args.Message, args.Exception);
 #endif
+                throw ex;
             }
             else
             {

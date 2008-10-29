@@ -122,17 +122,45 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(XmlObjectDefinitionStoreException))]
         public void ThrowsObjectDefinitionStoreExceptionOnValidationError()
         {
-            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
-            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
-            reader.LoadObjectDefinitions(new StringResource(
-                @"<?xml version='1.0' encoding='UTF-8' ?>
-<objects xmlns='http://www.springframework.net'>  
-	<INVALIDELEMENT id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' />
-</objects>
-"));                       
+            try 
+            {
+                DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+                XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+                reader.LoadObjectDefinitions(new StringResource(
+                                                @"<?xml version='1.0' encoding='UTF-8' ?>
+                                                <objects xmlns='http://www.springframework.net'>  
+	                                                <INVALIDELEMENT id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' />
+                                                </objects>
+                                                "));                       
+                Assert.Fail();
+            }
+            catch(ObjectDefinitionStoreException ex)
+            {
+                Assert.IsTrue( ex.Message.IndexOf("Line 3 in XML document from  violates the schema.") > -1);
+            }
+        }
+
+        [Test]
+        public void ThrowsObjectDefinitionStoreExceptionOnInvalidXml()
+        {
+            try
+            {
+                DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+                XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+                reader.LoadObjectDefinitions(new StringResource(
+                                                 @"<?xml version='1.0' encoding='UTF-8' ?>
+                                                <objects xmlns='http://www.springframework.net'>  
+	                                                <object id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests'>
+                                                </objects>
+                                                "));
+                Assert.Fail();
+            }
+            catch(ObjectDefinitionStoreException ex)
+            {
+                Assert.IsTrue( ex.Message.IndexOf("Line 4 in XML document from  is not well formed.") > -1);
+            }
         }
 
         #region ThrowsObjectDefinitionStoreExceptionOnErrorDuringObjectDefinitionRegistration Helper
