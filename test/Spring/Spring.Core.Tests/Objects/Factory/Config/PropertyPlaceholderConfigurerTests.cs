@@ -557,6 +557,19 @@ namespace Spring.Objects.Factory.Config
 			Assert.AreEqual("A DefName", to.Name);
         }
 
+		[Test]
+		public void ViaXMLAndConfigSection()
+		{
+			IResource resource = new ReadOnlyXmlTestResource("PropertyResourceConfigurerTests.xml", GetType());
+			XmlObjectFactory xbf = new XmlObjectFactory(resource);
+			PropertyPlaceholderConfigurer ppc = (PropertyPlaceholderConfigurer) xbf.GetObject("ConfigSectionPlaceholderConfigurer");
+			Assert.IsNotNull(ppc);
+			ppc.PostProcessObjectFactory(xbf);
+
+            Assert.AreEqual("name from section", ((TestObject)xbf.GetObject("Test3")).Name);
+            Assert.AreEqual("name from sectiongroup/section", ((TestObject)xbf.GetObject("Test4")).Name);
+        }
+
         [Test]
         public void WithTypes()
         {
