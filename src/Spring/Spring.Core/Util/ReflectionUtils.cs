@@ -231,7 +231,7 @@ namespace Spring.Util
                 ParameterInfo[] parameters = m.GetParameters();
                 bool isMatch = true;
                 bool isExactMatch = true;
-                object[] paramValues = argValues;
+                object[] paramValues = (argValues==null)?new object[0] : argValues;
 
                 try
                 {
@@ -246,19 +246,26 @@ namespace Spring.Util
                         }
                     }
 
-                    for (int i = 0; i < parameters.Length; i++)
+                    if (parameters.Length != paramValues.Length)
                     {
-                        Type paramType = parameters[i].ParameterType;
-                        object paramValue = paramValues[i];
-                        if ((paramValue == null && paramType.IsValueType)
-                            || (paramValue != null && !paramType.IsAssignableFrom(paramValue.GetType())))
+                        isMatch = false;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < parameters.Length; i++)
                         {
-                            isMatch = false;
-                            break;
-                        }
-                        if (paramValue == null || paramType != paramValue.GetType())
-                        {
-                            isExactMatch = false;
+                            Type paramType = parameters[i].ParameterType;
+                            object paramValue = paramValues[i];
+                            if ((paramValue == null && paramType.IsValueType)
+                                || (paramValue != null && !paramType.IsAssignableFrom(paramValue.GetType())))
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                            if (paramValue == null || paramType != paramValue.GetType())
+                            {
+                                isExactMatch = false;
+                            }
                         }
                     }
                 }

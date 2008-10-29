@@ -48,6 +48,69 @@ namespace Spring.Util
 	[TestFixture]
 	public sealed class ReflectionUtilsTests
 	{
+        #region Helper class for http://jira.springframework.org/browse/SPRNET-992 tests
+
+        public class Foo
+        {
+            public readonly string a = "";
+            public readonly int b = -1;
+            public readonly char c = '0';
+
+            public Foo(string a, int b, char c)
+            {
+                this.a = a;
+                this.b = b;
+                this.c = c;
+            }
+
+            public Foo(string a)
+            {
+                this.a = a;
+            }
+
+            public Foo()
+            {
+            }
+        } 
+
+        #endregion
+
+        [Test(Description="http://jira.springframework.org/browse/SPRNET-992")]
+        public void ShouldPickDefaultConstructorWithoutArgs()
+        {
+            object[] args = new object[] {};
+            ConstructorInfo best = ReflectionUtils.GetConstructorByArgumentValues(typeof (Foo).GetConstructors(), null);
+            Foo foo = (Foo) best.Invoke(args);
+
+            Assert.AreEqual("", foo.a);
+            Assert.AreEqual(-1, foo.b);
+            Assert.AreEqual('0', foo.c);
+        }
+
+        [Test(Description="http://jira.springframework.org/browse/SPRNET-992")]
+        public void ShouldPickDefaultConstructor()
+        {
+            object[] args = new object[] {};
+            ConstructorInfo best = ReflectionUtils.GetConstructorByArgumentValues(typeof (Foo).GetConstructors(), args);
+            Foo foo = (Foo) best.Invoke(args);
+
+            Assert.AreEqual("", foo.a);
+            Assert.AreEqual(-1, foo.b);
+            Assert.AreEqual('0', foo.c);
+        }
+
+        [Test(Description="http://jira.springframework.org/browse/SPRNET-992")]
+        public void ShouldPickSingleArgConstructor()
+        {
+            object[] args = new object[] { "b"};
+            ConstructorInfo best = ReflectionUtils.GetConstructorByArgumentValues(typeof(Foo).GetConstructors(), args);
+            Foo foo = (Foo)best.Invoke(args);
+
+            Assert.AreEqual("b", foo.a);
+            Assert.AreEqual(-1, foo.b);
+            Assert.AreEqual('0', foo.c);
+        } 
+
 		[Test]
 		public void GetParameterTypes()
 		{
