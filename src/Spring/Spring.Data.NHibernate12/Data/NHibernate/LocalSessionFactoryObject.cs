@@ -304,9 +304,9 @@ namespace Spring.Data.NHibernate
                     hibernateProperties.Contains(Environment.ConnectionProvider))
                 {
                     #region Logging
-                    if (log.IsWarnEnabled)
+                    if (log.IsInfoEnabled)
                     {
-                        log.Warn("Overriding use of Spring's Hibernate Connection Provider with [" +
+                        log.Info("Overriding use of Spring's Hibernate Connection Provider with [" +
                                  hibernateProperties[Environment.ConnectionProvider] + "]");
                     }
                     #endregion 
