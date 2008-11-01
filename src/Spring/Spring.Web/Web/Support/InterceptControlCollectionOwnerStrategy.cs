@@ -18,6 +18,7 @@
 
 #region Imports
 
+using System.Web.UI;
 using Spring.Context;
 
 #endregion
@@ -33,7 +34,10 @@ namespace Spring.Web.Support
         public bool Intercept(IApplicationContext defaultApplicationContext, ControlAccessor ctlAccessor,
                               ControlCollectionAccessor ctlColAccessor)
         {
-            ctlColAccessor.Owner = new SupportsWebDependencyInjectionOwnerProxy(defaultApplicationContext, ctlAccessor.GetTarget() );
+            Control target = ctlAccessor.GetTarget();
+            ctlColAccessor.Owner = target is INamingContainer 
+                ? new NamingContainerSupportsWebDependencyInjectionOwnerProxy(defaultApplicationContext, target)
+                : new SupportsWebDependencyInjectionOwnerProxy(defaultApplicationContext, target);
             return true;
         }
     }

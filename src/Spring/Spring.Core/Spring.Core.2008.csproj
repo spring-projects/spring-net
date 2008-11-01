@@ -602,7 +602,6 @@
     <Compile Include="Objects\Factory\Xml\NamespaceParserSupport.cs" />
     <Compile Include="Objects\Factory\Xml\ObjectDefinitionParserHelper.cs" />
     <Compile Include="Objects\Factory\Xml\ParserContext.cs" />
-    <Compile Include="Objects\Factory\Xml\XmlObjectDefinitionStoreException.cs" />
     <Compile Include="Objects\Factory\Xml\XmlReaderContext.cs" />
     <Compile Include="Objects\FatalObjectException.cs" />
     <Compile Include="Objects\ISharedStateAware.cs" />

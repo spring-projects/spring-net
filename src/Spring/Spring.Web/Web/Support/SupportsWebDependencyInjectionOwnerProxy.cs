@@ -18,9 +18,11 @@
 
 #region Imports
 
+using System.Reflection;
 using System.Web.UI;
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.Reflection.Dynamic;
 using Spring.Web.Support;
 
 #endregion
@@ -28,7 +30,7 @@ using Spring.Web.Support;
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// Wraps a Control to make it DI aware
+    /// Wraps a ControlCollection.Owner control to make it DI aware
     /// </summary>
     /// <author>Erich Eichinger</author>
     internal class SupportsWebDependencyInjectionOwnerProxy : Control, ISupportsWebDependencyInjection
@@ -77,6 +79,26 @@ namespace Spring.Web.Support
         protected override void RemovedControl(Control control)
         {
             _targetControl.RemovedControl(control);
+        }
+    }
+
+    /// <summary>
+    /// Wraps a ControlCollection.Owner control implementing INamingContainer to make it DI aware
+    /// </summary>
+    /// <author>Erich Eichinger</author>
+    internal class NamingContainerSupportsWebDependencyInjectionOwnerProxy : SupportsWebDependencyInjectionOwnerProxy
+        , INamingContainer
+    {
+#if NET_2_0
+        private static readonly SafeField refOccasionalFields = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance|BindingFlags.NonPublic));
+#endif
+
+        public NamingContainerSupportsWebDependencyInjectionOwnerProxy(IApplicationContext defaultApplicationContext, Control targetControl) : base(defaultApplicationContext, targetControl)
+        {
+#if NET_2_0
+            object targetOccasionalFields = refOccasionalFields.GetValue(targetControl);
+            refOccasionalFields.SetValue(this, targetOccasionalFields);
+#endif            
         }
     }
 }
