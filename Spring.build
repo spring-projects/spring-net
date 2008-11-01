@@ -762,7 +762,7 @@
     <tstamp/>
     <property name="package.version" value="${tstamp.date}-${tstamp.time}"/>
 
-    <nant buildfile="./doc/reference" target="all"/>
+    <nant buildfile="./doc/reference/docbook.build" target="all"/>
 
     <call target="set-debug-build-configuration"/>
 
