@@ -34,6 +34,7 @@ using Spring.Core.TypeResolution;
 using Spring.Expressions;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
+using Spring.Reflection.Dynamic;
 using Spring.Threading;
 using Spring.Util;
 using Spring.Web.Support;
@@ -77,6 +78,10 @@ namespace Spring.Context.Support
         // Required for Session End event handling
         private static int CACHEKEYPREFIXLENGTH = 0;
         private static CacheItemRemovedCallback s_originalCallback;
+#if NET_2_0
+        // required to enable accessing HttpContext.Request during IHttpModule.Init() in integrated mode
+        private static readonly SafeField ContextHideRequestResponse = new SafeField(typeof(HttpContext).GetField("HideRequestResponse", BindingFlags.Instance|BindingFlags.NonPublic));
+#endif
 
         /// <summary>
         /// For webapplications always
@@ -142,7 +147,24 @@ namespace Spring.Context.Support
             {
                 throw new InvalidOperationException("Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
             }
+
+#if NET_2_0
+            // TODO: this is only a workaround to get us up & running in IIS7/integrated mode
+            // We must review all code for relative virtual paths - they must be resolved to application-relative paths
+            // during parsing of the object definitions
+            bool hideRequestResponse = (bool) ContextHideRequestResponse.GetValue(app.Context);
+            ContextHideRequestResponse.SetValue(app.Context, false);
+            try
+            {
+                HttpApplicationConfigurer.Configure(appContext, app);
+            }
+            finally
+            {
+                ContextHideRequestResponse.SetValue(app.Context, hideRequestResponse);
+            }
+#else
             HttpApplicationConfigurer.Configure(appContext, app);
+#endif
         }
 
         #region IHttpHandler configuration

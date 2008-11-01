@@ -34,6 +34,7 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Objects.Support;
+using Spring.Reflection.Dynamic;
 using Spring.Util;
 
 #endregion
@@ -161,8 +162,11 @@ namespace Spring.Context.Support
                     {
                         string firstRequestPath = HttpRuntime.AppDomainAppVirtualPath.TrimEnd('/') + "/dummy.context";
                         log.Info("Forcing first request " + firstRequestPath);
-                        HttpRuntime.ProcessRequest(
-                            new SimpleWorkerRequest(firstRequestPath, string.Empty, new StringWriter()));
+                        SafeMethod fnProcessRequestNow = new SafeMethod(typeof(HttpRuntime).GetMethod("ProcessRequestNow", BindingFlags.Static|BindingFlags.NonPublic));
+                        SimpleWorkerRequest wr = new SimpleWorkerRequest(firstRequestPath, string.Empty, new StringWriter());
+                        fnProcessRequestNow.Invoke(null, new object[] { wr });
+//                        HttpRuntime.ProcessRequest(
+//                            wr);
                         log.Info("Successfully processed first request!");
                     }
                     catch (Exception ex)
