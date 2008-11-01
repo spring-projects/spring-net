@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
@@ -101,6 +102,8 @@ namespace Spring.Objects.Factory.Support
         protected AbstractObjectDefinition(IObjectDefinition other)
         {
             AssertUtils.ArgumentNotNull(other, "other");
+            this.OverrideFrom(other);
+
             AbstractObjectDefinition aod = other as AbstractObjectDefinition;
             if (aod != null)
             {
@@ -668,22 +671,18 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         public virtual void OverrideFrom(IObjectDefinition other)
         {
-            AbstractObjectDefinition aod = other as AbstractObjectDefinition;
-            if (aod != null)
-            {
-                if (aod.HasObjectType)
-                {
-                    ObjectType = other.ObjectType;
-                }
-                MethodOverrides.AddAll(aod.MethodOverrides);
-                DependencyCheck = aod.DependencyCheck;
-            }
+            AssertUtils.ArgumentNotNull(other, "other");
+
             IsAbstract = other.IsAbstract;
             IsSingleton = other.IsSingleton;
             IsLazyInit = other.IsLazyInit;
             ConstructorArgumentValues.AddAll(other.ConstructorArgumentValues);
             PropertyValues.AddAll(other.PropertyValues.PropertyValues);
             EventHandlerValues.AddAll(other.EventHandlerValues);
+            if (StringUtils.HasText(other.ObjectTypeName))
+            {
+                ObjectTypeName = other.ObjectTypeName;
+            }
             if (StringUtils.HasText(other.InitMethodName))
             {
                 InitMethodName = other.InitMethodName;
@@ -700,10 +699,29 @@ namespace Spring.Objects.Factory.Support
             {
                 FactoryMethodName = other.FactoryMethodName;
             }
-            DependsOn = new string[other.DependsOn.Length];
-            Array.Copy(other.DependsOn, DependsOn, other.DependsOn.Length);
+            if (ArrayUtils.HasLength(other.DependsOn))
+            {
+                ArrayList deps = new ArrayList(other.DependsOn);
+                if (ArrayUtils.HasLength(DependsOn))
+                {
+                    deps.AddRange(DependsOn);
+                }
+                DependsOn = (string[]) deps.ToArray(typeof(string));
+            }
             AutowireMode = other.AutowireMode;
             ResourceDescription = other.ResourceDescription;
+
+            AbstractObjectDefinition aod = other as AbstractObjectDefinition;
+            if (aod != null)
+            {
+                if (aod.HasObjectType)
+                {
+                    ObjectType = other.ObjectType;
+                }
+
+                MethodOverrides.AddAll(aod.MethodOverrides);
+                DependencyCheck = aod.DependencyCheck;
+            }
         }
 
         /// <summary>
