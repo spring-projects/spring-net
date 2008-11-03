@@ -93,9 +93,9 @@ namespace Spring.Aspects.Cache
             bool cacheHit = false;
             object returnValue = GetReturnValue(invocation, resultInfo, out cacheHit);
 
-            if (!cacheHit && itemInfoArray.Length > 0 && returnValue is ICollection)
+            if (!cacheHit && itemInfoArray.Length > 0 && returnValue is IEnumerable)
             {
-                CacheResultItems((ICollection)returnValue, itemInfoArray);
+                CacheResultItems((IEnumerable)returnValue, itemInfoArray);
             }
 
             return returnValue;
@@ -189,7 +189,7 @@ namespace Spring.Aspects.Cache
         /// <param name="itemInfoArray">
         /// Attributes specifying where and how to cache each item from the collection.
         /// </param>
-        private void CacheResultItems(ICollection items, CacheResultItemsAttribute[] itemInfoArray)
+        private void CacheResultItems(IEnumerable items, CacheResultItemsAttribute[] itemInfoArray)
         {
             foreach (CacheResultItemsAttribute itemInfo in itemInfoArray)
             {
