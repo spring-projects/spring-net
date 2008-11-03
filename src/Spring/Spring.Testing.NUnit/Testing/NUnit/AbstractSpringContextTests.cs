@@ -43,17 +43,37 @@ namespace Spring.Testing.NUnit
         /// Map of context keys returned by subclasses of this class, to
         /// Spring contexts.
         /// </summary>
-	    private static IDictionary contextKeyToContextMap = new Hashtable();
+	    private static readonly IDictionary contextKeyToContextMap;
+
+        /// <summary>
+        /// Static ctor to avoid "beforeFieldInit" problem.
+        /// </summary>
+        static AbstractSpringContextTests()
+        {
+            contextKeyToContextMap = new Hashtable();
+        }
+
+        /// <summary>
+        /// Disposes any cached context instance and removes it from cache.
+        /// </summary>
+        public static void ClearContextCache()
+        {
+            foreach(IApplicationContext ctx in contextKeyToContextMap.Values)
+            {
+                ctx.Dispose();
+            }
+            contextKeyToContextMap.Clear();
+        }
 
         /// <summary>
         /// Logger available to subclasses.
         /// </summary>
-        protected ILog logger;
+        protected readonly ILog logger;
 
         /// <summary>
         /// Default constructor for AbstractSpringContextTests.
         /// </summary>
-	    public AbstractSpringContextTests()
+	    protected AbstractSpringContextTests()
         {
             logger = LogManager.GetLogger(GetType());
         }

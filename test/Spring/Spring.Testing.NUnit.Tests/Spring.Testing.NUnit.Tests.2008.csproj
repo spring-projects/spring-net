@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4D6D616B-7643-4D6B-8E5E-14ECFDB9AF82}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -45,9 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Testing\NUnit\BaseTestAppContextTests.cs" />
-    <Compile Include="Testing\NUnit\AnotherTest\LoadAppContextTests.cs" />
-    <Compile Include="Testing\NUnit\CachedAppContextTests.cs" />
+    <Compile Include="Testing\NUnit\AbstractDependencyInjectionSpringContextTestsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">
@@ -72,12 +70,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Testing\NUnit\TestApplicationContext.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Spring.Testing.NUnit.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Testing\NUnit\TestApplicationContext.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

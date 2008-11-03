@@ -94,6 +94,11 @@
                     Project = "{C5585365-561C-4EC4-8956-87FFBD9AB1CD}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Spring.Core.2003"
+                    Project = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -108,23 +113,13 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Testing\NUnit\BaseTestAppContextTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Testing\NUnit\CachedAppContextTests.cs"
+                    RelPath = "Testing\NUnit\AbstractDependencyInjectionSpringContextTestsTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Testing\NUnit\TestApplicationContext.xml"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Testing\NUnit\AnotherTest\LoadAppContextTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
             </Include>
         </Files>

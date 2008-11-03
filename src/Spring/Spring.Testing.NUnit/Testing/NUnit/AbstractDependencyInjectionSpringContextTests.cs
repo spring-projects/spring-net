@@ -25,6 +25,7 @@ using System.Reflection;
 using NUnit.Framework;
 
 using Spring.Context;
+using Spring.Context.Support;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -77,6 +78,7 @@ namespace Spring.Testing.NUnit
     /// <author>Aleksandar Seovic (.NET)</author>
     public abstract class AbstractDependencyInjectionSpringContextTests : AbstractSpringContextTests
     {
+        private bool registerContextWithContextRegistry = true;
         private bool populateProtectedVariables = false;
         private AutoWiringMode autowireMode = AutoWiringMode.ByType;
         private bool dependencyCheck = true;
@@ -97,6 +99,17 @@ namespace Spring.Testing.NUnit
         /// </summary>
         public AbstractDependencyInjectionSpringContextTests()
         {}
+
+        /// <summary>
+        /// Controls, whether the <see cref="applicationContext"/> instance will
+        /// be registered/unregistered with the global <see cref="ContextRegistry"/> before and after each test.
+        /// Defaults to <c>true</c>.
+        /// </summary>
+        public bool RegisterContextWithContextRegistry
+        {
+            get { return registerContextWithContextRegistry; }
+            set { registerContextWithContextRegistry = value; }
+        }
 
         /// <summary>
         /// Gets or sets a flag specifying whether to populate protected 
@@ -163,9 +176,13 @@ namespace Spring.Testing.NUnit
         /// Test setup method.
         /// </summary>
         [SetUp]
-        protected virtual void SetUp()
+        public virtual void SetUp()
         {
             this.applicationContext = GetContext(ContextKey);
+            if (RegisterContextWithContextRegistry)
+            {
+                ContextRegistry.RegisterContext(this.applicationContext);
+            }
             InjectDependencies();
             try
             {
@@ -339,7 +356,7 @@ namespace Spring.Testing.NUnit
         /// Test teardown method.
         /// </summary>
         [TearDown]
-        protected void TearDown()
+        public void TearDown()
         {
             try
             {
@@ -348,6 +365,13 @@ namespace Spring.Testing.NUnit
             catch (Exception ex)
             {
                 logger.Error("OnTearDown error", ex);
+            }
+            finally
+            {
+                if (RegisterContextWithContextRegistry)
+                {
+                    ContextRegistry.Clear();
+                }                
             }
         }
 
