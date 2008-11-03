@@ -78,7 +78,7 @@ namespace Spring.Expressions
             }
             else if (left is String || right is String)
             {
-                return left.ToString() + right.ToString();
+                return string.Concat(left, right);
             }
             else if ((left is IList || left is ISet) && (right is IList || right is ISet))
             {

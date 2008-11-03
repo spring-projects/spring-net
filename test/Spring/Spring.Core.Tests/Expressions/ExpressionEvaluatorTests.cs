@@ -1286,6 +1286,8 @@ namespace Spring.Expressions
             Assert.AreEqual("test 2", ExpressionEvaluator.GetValue(null, "'test' + ' ' + 2"));
             Assert.AreEqual("test " + DateTime.Today.ToString(),
                             ExpressionEvaluator.GetValue(null, "'test' + ' ' + DateTime.Today"));
+            Assert.AreEqual("test", ExpressionEvaluator.GetValue(null, "'test' + #this")); // can concat null
+            Assert.AreEqual("test", ExpressionEvaluator.GetValue(null, "#this+'test'")); // can concat null
 
             // dates
             DateTime anaDOB = new DateTime(2004, 8, 14);
