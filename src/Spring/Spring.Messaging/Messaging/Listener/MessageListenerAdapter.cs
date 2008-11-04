@@ -118,6 +118,8 @@ namespace Spring.Messaging.Listener
 
         #endregion
 
+        #region Fields
+
         private IApplicationContext applicationContext;
 
         private object handlerObject;
@@ -134,18 +136,30 @@ namespace Spring.Messaging.Listener
 
         private IMessageQueueFactory messageQueueFactory;
 
+        #endregion
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageListenerAdapter"/> class.
+        /// </summary>
         public MessageListenerAdapter()
         {
+            InitDefaultStrategies();
             handlerObject = this;
-            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
-            messageQueueTemplate = new MessageQueueTemplate();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageListenerAdapter"/> class.
+        /// </summary>
+        /// <param name="handlerObject">The handler object.</param>
         public MessageListenerAdapter(object handlerObject)
         {
+            InitDefaultStrategies();
             this.handlerObject = handlerObject;
         }
+
+        #endregion
 
         public object HandlerObject
         {
@@ -156,11 +170,40 @@ namespace Spring.Messaging.Listener
         public string DefaultHandlerMethod
         {
             get { return defaultHandlerMethod; }
-            set { defaultHandlerMethod = value; }
+            set { 
+                defaultHandlerMethod = value;
+                processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
+            }
         }
 
         #region IInitializingObject Members
 
+        /// <summary>
+        /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
+        /// after it has injected all of an object's dependencies.
+        /// </summary>
+        /// <remarks>
+        /// 	<p>
+        /// This method allows the object instance to perform the kind of
+        /// initialization only possible when all of it's dependencies have
+        /// been injected (set), and to throw an appropriate exception in the
+        /// event of misconfiguration.
+        /// </p>
+        /// 	<p>
+        /// Please do consult the class level documentation for the
+        /// <see cref="Spring.Objects.Factory.IObjectFactory"/> interface for a
+        /// description of exactly <i>when</i> this method is invoked. In
+        /// particular, it is worth noting that the
+        /// <see cref="Spring.Objects.Factory.IObjectFactoryAware"/>
+        /// and <see cref="Spring.Context.IApplicationContextAware"/>
+        /// callbacks will have been invoked <i>prior</i> to this method being
+        /// called.
+        /// </p>
+        /// </remarks>
+        /// <exception cref="System.Exception">
+        /// In the event of misconfiguration (such as the failure to set a
+        /// required property) or if initialization fails.
+        /// </exception>
         public void AfterPropertiesSet()
         {
             if (messageQueueFactory == null)
@@ -276,25 +319,18 @@ namespace Spring.Messaging.Listener
             }
         }
 
-
-        protected virtual string GetHandlerMethodName(Message originalMessage, object extractedMessage)
-        {
-            return DefaultHandlerMethod;
-        }
-
         #region IMessageListener Members
 
+        /// <summary>
+        /// Called when message is received.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public virtual void OnMessage(Message message)
         {
             object convertedMessage = ExtractMessage(message);
 
             IDictionary vars = new Hashtable();
             vars["convertedObject"] = convertedMessage;
-
-            //Need to parse each time since have overloaded methods and
-            //expression processor caches target of first invocation.
-            //TODO - use regular reflection.
-            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
 
             //Invoke message handler method and get result.
             object result = processingExpression.GetValue(handlerObject, vars);
@@ -309,6 +345,26 @@ namespace Spring.Messaging.Listener
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets the name of the handler method.
+        /// </summary>
+        /// <param name="originalMessage">The original message.</param>
+        /// <param name="extractedMessage">The extracted message.</param>
+        /// <returns>The name of the handler method.</returns>
+        protected virtual string GetHandlerMethodName(Message originalMessage, object extractedMessage)
+        {
+            return DefaultHandlerMethod;
+        }
+
+        /// <summary>
+        /// Initialize the default implementations for the adapter's strategies.
+        /// </summary>
+        protected virtual void InitDefaultStrategies()
+        {
+            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
+            messageQueueTemplate = new MessageQueueTemplate();
+        }
 
         protected virtual object ExtractMessage(Message message)
         {
