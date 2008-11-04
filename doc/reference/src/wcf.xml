@@ -246,7 +246,7 @@
     attributes that get applied to each method and on that class. Here is a
     simple example</para>
 
-    <programlisting>&lt;object id="HelloWorldExporter" type="Spring.ServiceModel.ServiceExporter, Spring.Services"&gt;
+    <programlisting language="myxml">&lt;object id="HelloWorldExporter" type="Spring.ServiceModel.ServiceExporter, Spring.Services"&gt;
     &lt;property name="TargetName" value="HelloWorld"/&gt;
     &lt;property name="MemberAttributes"&gt;
         &lt;dictionary&gt;
@@ -271,6 +271,6 @@
     existing RCP based approach, such as using .NET remoting, to WCF in order
     to take advantage of the WCF runtime and avoid editing much existing code.
     You can then incrementally refactor and/or create new operations that use
-    <literal>DataContractSerializer</literal>. </para>
+    <literal>DataContractSerializer</literal>.</para>
   </section>
 </chapter>

@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="msmq" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="msmq" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Message Oriented Middleware - MSMQ</title>
 
   <section>
@@ -46,14 +51,14 @@
     reference to a particular middleware technology. Spring provides the
     'adapter' classes that converts between the middleware world, in this case
     MSMQ, and the oo-world of your business processing. This is done through
-    the use of Spring's <literal>MessageListenerAdapter</literal> class
-    and <literal>IMessageConverters</literal>.</para>
+    the use of Spring's <literal>MessageListenerAdapter</literal> class and
+    <literal>IMessageConverters</literal>.</para>
 
     <para>The namespace <literal>Spring.Messaging</literal> provides the core
     functionality for messaging. It contains the class
     <literal>MessageQueueTemplate</literal> that simplifies the use of
-    <literal>System.Messaging.MessageQueue</literal> by handling the lack
-    of thread-safety in most of
+    <literal>System.Messaging.MessageQueue</literal> by handling the lack of
+    thread-safety in most of
     <literal>System.Messaging.MessageQueue's</literal> methods (for example
     <literal>Send</literal>). A single instance of
     <literal>MessageQueueTemplate</literal> can be used throughout your
@@ -65,11 +70,11 @@
     <literal>MessageQueueTemplate</literal> class is also aware of the
     presence of either an 'ambient' <literal>System.Transaction's</literal>
     transaction or a local
-    <literal>System.Messaging.MessageQueueTransaction</literal>. As such
-    if you use <literal>MessageQueueTemplate's</literal> send and receive
+    <literal>System.Messaging.MessageQueueTransaction</literal>. As such if
+    you use <literal>MessageQueueTemplate's</literal> send and receive
     methods, unlike with plain use of
-    <literal>System.Messaging.MessageQueue</literal>, you do not need to
-    keep track of this information yourself and call the correct overloaded
+    <literal>System.Messaging.MessageQueue</literal>, you do not need to keep
+    track of this information yourself and call the correct overloaded
     <literal>System.Messaging.MessageQueue</literal> method for a specific
     transaction environment. When using a
     <literal>System.Messaging.MessageQueueTransaction</literal> this would
@@ -98,13 +103,12 @@
     On the sending side, it involves you learning how to use
     <literal>MessageQueueTemplate</literal>. In both cases you will quite
     likely want to take advantage of using
-    <literal>MessageListenerConverters</literal> so you can better
-    structure the translation from the System.Messaging.Message data structure
-    to your business objects. After the initial learning hurdle, you should
-    find that you will be much more productive leveraging Spring's helper
-    classes to write enterprise MSMQ applications than rolling your own
-    infrastructure. Feedback and new feature requests are always
-    welcome.</para>
+    <literal>MessageListenerConverters</literal> so you can better structure
+    the translation from the System.Messaging.Message data structure to your
+    business objects. After the initial learning hurdle, you should find that
+    you will be much more productive leveraging Spring's helper classes to
+    write enterprise MSMQ applications than rolling your own infrastructure.
+    Feedback and new feature requests are always welcome.</para>
 
     <para>The Spring.MsmqQuickstart application located in the examples
     directory of the distribution shows this functionality in action.</para>
@@ -120,10 +124,10 @@
     demonstrated).</para>
 
     <para>On the client side you create an instance of the
-    <literal>MessageQueueTemplate</literal> class and configure it to use
-    a <literal>MessageQueue</literal>. This can be done programmatically
-    but it is common to use dependency injection and Spring's XML
-    configuration file to configure your client class as shown below.</para>
+    <literal>MessageQueueTemplate</literal> class and configure it to use a
+    <literal>MessageQueue</literal>. This can be done programmatically but it
+    is common to use dependency injection and Spring's XML configuration file
+    to configure your client class as shown below.</para>
 
     <programlisting language="myxml">  &lt;object id='questionTxQueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'&gt;
     &lt;property name='Path' value='.\Private$\questionTxQueue'/&gt;
@@ -143,9 +147,9 @@
 
     <para>The <literal>MessageQueue</literal> object is created via an
     instance of <literal>MessageQueueFactoryObject</literal> and the
-    <literal>MessageQueueTemplate</literal> refers to this factory object
-    by name and not by reference. The <literal>SimpleSender</literal>
-    class looks like this</para>
+    <literal>MessageQueueTemplate</literal> refers to this factory object by
+    name and not by reference. The <literal>SimpleSender</literal> class looks
+    like this</para>
 
     <programlisting language="csharp">public class QuestionService : IQuestionService
 {
@@ -163,33 +167,31 @@
 }</programlisting>
 
     <para>This class can be shared across multiple threads and the
-    <literal>MessageQueueTemplate</literal> will take care of managing
-    thread local access to a
-    <literal>System.Messaging.MessageQueue</literal> as well as any
-    <literal>System.Messaging.IMessageFormatter</literal>
+    <literal>MessageQueueTemplate</literal> will take care of managing thread
+    local access to a <literal>System.Messaging.MessageQueue</literal> as well
+    as any <literal>System.Messaging.IMessageFormatter</literal>
     instances.</para>
 
     <para>Furthermore, since this is a transactional queue (only the name
     gives it away), the message will be sent using a single local messaging
     transaction. The conversion from the string to the underling message is
-    managed by an instance of the <literal>IMessageConverter</literal>
-    class. By default an implementation that uses an
+    managed by an instance of the <literal>IMessageConverter</literal> class.
+    By default an implementation that uses an
     <literal>XmlMessageFormatter</literal> with a
-    <literal>TargetType</literal> of <literal>System.String</literal> is
-    used. You can configure the <literal>MessageQueueTemplate</literal> to use
-    other <literal>IMessageConveter</literal> implementations that do
-    conversions above and beyond what the 'stock'
-    <literal>IMessageFormatters</literal> do. See the section on
-    MessageConverters for more details.</para>
+    <literal>TargetType</literal> of <literal>System.String</literal> is used.
+    You can configure the <literal>MessageQueueTemplate</literal> to use other
+    <literal>IMessageConveter</literal> implementations that do conversions
+    above and beyond what the 'stock' <literal>IMessageFormatters</literal>
+    do. See the section on MessageConverters for more details.</para>
 
     <para>On the receiving side we would like to consume the messages
     transactionally from the queue. Since no other database operations are
     being performed in our server side processing, we select the
-    <literal>TransactionMessageListenerContainer</literal> and configure
-    it to use the <literal>MessageQueueTransactionManager</literal>. The
+    <literal>TransactionMessageListenerContainer</literal> and configure it to
+    use the <literal>MessageQueueTransactionManager</literal>. The
     <literal>MessageQueueTransactionManager</literal> an implementation of
-    Spring's <literal>IPlatformTransactionManager</literal> abstraction
-    that provides a uniform API on top of various transaction manager
+    Spring's <literal>IPlatformTransactionManager</literal> abstraction that
+    provides a uniform API on top of various transaction manager
     (ADO.NET,NHibernate, MSMQ, etc). Spring's
     <literal>MessageQueueTransactionManager</literal> is responsible for
     createing, committing, and rolling back a MSMQ
@@ -247,9 +249,9 @@
 }</programlisting>
 
     <para>That is general idea. You write the sender class using
-    <literal>MessageQueueTemplate</literal> and the consumer class which
-    does not refer to any messaging specific class. The rest is configuration
-    of Spring provided helper classes.</para>
+    <literal>MessageQueueTemplate</literal> and the consumer class which does
+    not refer to any messaging specific class. The rest is configuration of
+    Spring provided helper classes.</para>
 
     <para>Note that if the <literal>HandleObject</literal> method has returned
     a string value a reply message would be sent to a response queue. The
@@ -271,8 +273,8 @@
 
     <para>In the last part this 'quick tour' we will configure the message
     listener container to handle poison messages. This is done by creating an
-    instance of <literal>SendToQueueExceptionHandler</literal> and setting
-    the property <literal>MaxRetry</literal> to be the number of exceptions or
+    instance of <literal>SendToQueueExceptionHandler</literal> and setting the
+    property <literal>MaxRetry</literal> to be the number of exceptions or
     retry attempts we are willing to tolerate before taking corrective
     actions. In this case, the corrective action is to send the message to
     another queue. We can then create other message listener containers to
@@ -335,10 +337,10 @@
       <literal>MessageQueueTemplate's</literal> property
       <literal>MessageQueue</literal>. A
       <literal>MessageQueueTemplate</literal> is created by passing a
-      reference to the name of a
-      <literal>MessageQueueFactoryObject</literal>, you can think of it as
-      a friendly name for your <literal>MessagingQueue</literal> and the
-      recipe of how to create an instance of it. See the following section on
+      reference to the name of a <literal>MessageQueueFactoryObject</literal>,
+      you can think of it as a friendly name for your
+      <literal>MessagingQueue</literal> and the recipe of how to create an
+      instance of it. See the following section on
       <literal>MessageQueueFactoryObject</literal> for more
       information.</para>
 
@@ -355,14 +357,12 @@
       <literal>MessageConverter</literal>. The default implementation,
       <literal>XmlMessageConverter</literal>, uses an
       <literal>XmlMessageFormatter</literal> with its
-      <literal>TargetType</literal> set to
-      <literal>System.String</literal>. Note that
-      <literal>System.Messaging.IMessageFormatter</literal> classes are
-      also not thread safe, so <literal>MessageQueueTemplate</literal>
+      <literal>TargetType</literal> set to <literal>System.String</literal>.
+      Note that <literal>System.Messaging.IMessageFormatter</literal> classes
+      are also not thread safe, so <literal>MessageQueueTemplate</literal>
       ensures that thread-local instances of
-      <literal>IMessageConverter</literal> are used (as they generally
-      wrap <literal>IMessageFormatter's</literal> that are not
-      thread-safe).</para>
+      <literal>IMessageConverter</literal> are used (as they generally wrap
+      <literal>IMessageFormatter's</literal> that are not thread-safe).</para>
 
       <para>You can use the <literal>MessageQueueTemplate</literal> to send
       messages to other MessageQueues by specifying their queue 'object name',
@@ -384,36 +384,56 @@ object ReceiveAndConvert();
 object ReceiveAndConvert(string messageQueueObjectName);</programlisting>
 
       <para>The transactional settings of the underlying overloaded
-      <literal>System.Messaging.MessageQueue</literal> Send method that
-      are used are based on the following algorithm. If the message queue is
-      transactional and there is an ambient
-      <literal>MessageQueueTransaction</literal> in thread local storage
-      (put there via the use of Spring's
-      <literal>MessageQueueTransactionManager</literal> or
-      <literal>TransactionalMessageListenerContainer</literal>), the
-      message will be sent transactionally using the
-      <literal>MessageQueueTransaction</literal> object in thread local
-      storage. This lets you group together multiple messaging operations
-      within the same transaction without having to explicitly pass around the
-      <literal>MessageQueueTransaction</literal> object. If the message
-      queue is transactional but there is no ambient
-      <literal>MessageQueueTransaction</literal>, then a single message
-      transaction is created on each messaging operation.
-      (MessageQueueTransactionType = Single). If there is an ambient
-      System.Transactions transaction then that transaction will be used
-      (MessageQueueTransactionType = Automatic). Finally, if the queue is not
-      transactional, then a non-transactional send
-      (MessageQueueTransactionType = None) is used.</para>
+      <literal>System.Messaging.MessageQueue</literal> Send method that are
+      used are based on the following algorithm.</para>
 
-      <para>The delegate <literal>MessagePostProcessorDelegate</literal>
-      has the following signature</para>
+      <orderedlist>
+        <listitem>
+          <para>If the message queue is transactional and there is an ambient
+          <literal>MessageQueueTransaction</literal> in thread local storage
+          (put there via the use of Spring's
+          <literal>MessageQueueTransactionManager</literal> or
+          <literal>TransactionalMessageListenerContainer</literal>), the
+          message will be sent transactionally using the
+          <literal>MessageQueueTransaction</literal> object in thread local
+          storage. </para>
+
+          <note>
+            <para>This lets you group together multiple messaging operations
+            within the same transaction without having to explicitly pass
+            around the <literal>MessageQueueTransaction</literal>
+            object.</para>
+          </note>
+        </listitem>
+
+        <listitem>
+          <para>f the message queue is transactional but there is no ambient
+          <literal>MessageQueueTransaction</literal>, then a single message
+          transaction is created on each messaging operation.
+          (MessageQueueTransactionType = Single).</para>
+        </listitem>
+
+        <listitem>
+          <para>If there is an ambient System.Transactions transaction then
+          that transaction will be used (MessageQueueTransactionType =
+          Automatic).</para>
+        </listitem>
+
+        <listitem>
+          <para>If the queue is not transactional, then a non-transactional
+          send (MessageQueueTransactionType = None) is used.</para>
+        </listitem>
+      </orderedlist>
+
+      <para> The delegate <literal>MessagePostProcessorDelegate</literal> has
+      the following signature</para>
 
       <programlisting language="csharp">public delegate Message MessagePostProcessorDelegate(Message message);</programlisting>
 
       <para>This lets you modify the message after it has been converted from
-      and object to a message using the
-      <literal>IMessageConverter</literal> but before it is sent. This is
-      useful for setting <literal>Message</literal> properties (e.g.
+      and object to a message using the <literal>IMessageConverter</literal>
+      but before it is sent. This is useful for setting
+      <literal>Message</literal> properties (e.g.
       <literal>CorrelationId</literal>, <literal>AppSpecific</literal>,
       <literal>TimeToReachQueue</literal>). Using anonymous delegates in .NET
       2.0 makes this a very succinct coding task. If you have elaborate
@@ -440,12 +460,12 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       multiple threads. This <literal>Send</literal> method is commonly used
       when getting the <literal>MessageQueue</literal> from the
       <literal>ResponseQueue</literal> property of a
-      <literal>Message</literal> during an asynchronous receive process.
-      The receive timeout of the <literal>Receive</literal> operations is set
+      <literal>Message</literal> during an asynchronous receive process. The
+      receive timeout of the <literal>Receive</literal> operations is set
       using the <literal>ReceiveTimeout</literal> property of
       <literal>MessageQueueTemplate</literal>. The default value is
-      <literal>MessageQueue.InfiniteTimeout </literal>(which is actually
-      ~3 months).</para>
+      <literal>MessageQueue.InfiniteTimeout </literal>(which is actually ~3
+      months).</para>
 
       <para>The XML configuration snippit for defining a MessageQueueTemplate
       is shown in the previous section and also is located in the MSMQ
@@ -455,15 +475,15 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     <section>
       <title>MessageQueueFactoryObject</title>
 
-      <para>The <literal>MessageQueueFactoryObject</literal> is
-      responsible for creating <literal>MessageQueue</literal> instances.
-      You configure the factory with some basic information, namely the
-      constructor parameters you are familiar with already when creating a
-      standard <literal>MessageQueue</literal> instance, and then setting
+      <para>The <literal>MessageQueueFactoryObject</literal> is responsible
+      for creating <literal>MessageQueue</literal> instances. You configure
+      the factory with some basic information, namely the constructor
+      parameters you are familiar with already when creating a standard
+      <literal>MessageQueue</literal> instance, and then setting
       <literal>MessageQueue</literal> properties, such a Label etc. Some
-      configuration tasks of a <literal>MessageQueue</literal> involve
-      calling methods, for example to set which properties of the message to
-      read. These available as properties to set on the
+      configuration tasks of a <literal>MessageQueue</literal> involve calling
+      methods, for example to set which properties of the message to read.
+      These available as properties to set on the
       <literal>MessageQueueFactoryObject</literal>. An example declarative
       configuration is shown below</para>
 
@@ -484,15 +504,14 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
   &lt;/object&gt;</programlisting>
 
       <para>Whenever an object reference is made to 'testqueue' an new
-      instance of the <literal>MessageQueue</literal> class is created.
-      This Spring's so-called 'prototype' model, which differs from
-      'singleton' mode. In the singleton creation mode whenever an object
-      reference is made to a 'testqueue' the same
-      <literal>MessageQueue</literal> instance would be used. So that a
-      new instance can be retrieved based on need, the message listener
-      containers take as an argument the name of the
-      <literal>MessageQueueFactoryObject</literal> and not a reference.
-      (i.e. use of 'value' instead of 'ref' in the XML).</para>
+      instance of the <literal>MessageQueue</literal> class is created. This
+      Spring's so-called 'prototype' model, which differs from 'singleton'
+      mode. In the singleton creation mode whenever an object reference is
+      made to a 'testqueue' the same <literal>MessageQueue</literal> instance
+      would be used. So that a new instance can be retrieved based on need,
+      the message listener containers take as an argument the name of the
+      <literal>MessageQueueFactoryObject</literal> and not a reference. (i.e.
+      use of 'value' instead of 'ref' in the XML).</para>
 
       <note>
         <para>The <literal>MessageQueueFactoryObject</literal> class is an
@@ -521,8 +540,8 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       <literal>Receive</literal>.</para>
 
       <para>To isolate the creation logic of these classes, the factory
-      interface <literal>IMessageQueueFactory</literal> is used. The
-      interface is shown below</para>
+      interface <literal>IMessageQueueFactory</literal> is used. The interface
+      is shown below</para>
 
       <programlisting language="csharp">    public interface IMessageQueueFactory
     {
@@ -532,21 +551,21 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     }</programlisting>
 
       <para>A provided implementation,
-      <literal>DefaultMessageQueueFactory</literal> will create an
-      instance of each class per-thread. It delegates the creation of the
-      <literal>MessageQueue</literal> instance to the Spring container.
-      The argument, messageConverterObjectName, must be the id/name of a
+      <literal>DefaultMessageQueueFactory</literal> will create an instance of
+      each class per-thread. It delegates the creation of the
+      <literal>MessageQueue</literal> instance to the Spring container. The
+      argument, messageConverterObjectName, must be the id/name of a
       <literal>MessageQueueFactoryObject</literal> defined in the Spring
       container.</para>
 
-      <para><literal>DefaultMessageQueueFactory</literal> leverages
-      Spring's local thread storage support so it will work correctly in stand
-      alone and web applications.</para>
+      <para><literal>DefaultMessageQueueFactory</literal> leverages Spring's
+      local thread storage support so it will work correctly in stand alone
+      and web applications.</para>
 
       <para>You can use the <literal>DefaultMessageQueueFactory</literal>
       independent of the rest of Spring's MSMQ support should you need only
-      the functionality it offers. <literal>MessageQueueTemplate</literal>
-      and the listener containers create an instance of
+      the functionality it offers. <literal>MessageQueueTemplate</literal> and
+      the listener containers create an instance of
       <literal>DefaultMessageQueueFactory</literal> by default. Should you
       want to share the same instance across these two classes, or provide
       your own custom implementation, use the property
@@ -562,8 +581,8 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       messages delivered asynchronously. This support is provided in Spring by
       message listener containers. A message listener container is the
       intermediary between an <literal>IMessageListener</literal> and a
-      <literal>MessageQueue</literal>. (Note, message listener containers
-      are conceptually different than Spring's Inversion of Control container,
+      <literal>MessageQueue</literal>. (Note, message listener containers are
+      conceptually different than Spring's Inversion of Control container,
       though it integrates and leverages the IoC container.) The message
       listener container takes care of registering to receive messages,
       participating in transactions, resource acquisition and release,
@@ -572,17 +591,16 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       receiving a message (and possibly responding to it), and delegate
       boilerplate MSMQ infrastructure concerns to the framework.</para>
 
-      <para>A subclass of
-      <literal>AbstractMessageListenerContainer</literal> is used to
-      receive messages from a <literal>MessageQueue</literal>. Which
-      subclass you pick depends on your transaction processing requirements.
-      The following subclasses are available in the namespace
+      <para>A subclass of <literal>AbstractMessageListenerContainer</literal>
+      is used to receive messages from a <literal>MessageQueue</literal>.
+      Which subclass you pick depends on your transaction processing
+      requirements. The following subclasses are available in the namespace
       <literal>Spring.Messaging.Listener</literal></para>
 
       <itemizedlist>
         <listitem>
-          <para><literal>NonTransactionalMessageListenerContainer</literal>
-          - does not surround the receive operation with a transaction</para>
+          <para><literal>NonTransactionalMessageListenerContainer</literal> -
+          does not surround the receive operation with a transaction</para>
         </listitem>
 
         <listitem>
@@ -620,12 +638,12 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         <title>NonTransactionalMessageListenerContainer</title>
 
         <para>This container performs a Receive operation on the
-        <literal>MessageQueue</literal> without any transactional
-        settings. As such messages will not be redelivered if an exception is
-        thrown during message processing. Exceptions during message processing
-        can be handled via an implementation of the interface
-        <literal>IExceptionHandler</literal>. This can be set via the
-        property <literal>ExceptionHandler</literal> on the listener. The
+        <literal>MessageQueue</literal> without any transactional settings. As
+        such messages will not be redelivered if an exception is thrown during
+        message processing. Exceptions during message processing can be
+        handled via an implementation of the interface
+        <literal>IExceptionHandler</literal>. This can be set via the property
+        <literal>ExceptionHandler</literal> on the listener. The
         <literal>IExceptionHandler</literal> interface is shown below</para>
 
         <programlisting language="csharp">    public interface IExceptionHandler
@@ -634,8 +652,8 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     }</programlisting>
 
         <para>An example of configuring a
-        <literal>NonTransactionalMessageListenerContainer</literal> with
-        an <literal>IExceptionHandler</literal> is shown below</para>
+        <literal>NonTransactionalMessageListenerContainer</literal> with an
+        <literal>IExceptionHandler</literal> is shown below</para>
 
         <programlisting language="myxml">
   &lt;!-- Queue to receive from --&gt;
@@ -698,9 +716,8 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
 
         <para>This message listener container performs receive operations
         within the context of local transaction. This class requires an
-        instance of Spring's
-        <literal>IPlatformTransactionManager</literal>, either
-        <literal>AdoPlatformTransactionManager</literal>,
+        instance of Spring's <literal>IPlatformTransactionManager</literal>,
+        either <literal>AdoPlatformTransactionManager</literal>,
         <literal>HibernateTransactionManager</literal>, or
         <literal>MessageQueueTransactionManager</literal>.</para>
 
@@ -709,13 +726,13 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         <literal>MessageQueueTransaction</literal> will be started before
         receiving the message and used as part of the container's receive
         operation. As with other
-        <literal>IPlatformTransactionManager</literal> implementation's,
-        the transactional resources (in this case an instance of the
-        <literal>MessageQueueTransaction</literal> class) is bound to
-        thread local storage. <literal>MessageQueueTemplate</literal> will
-        look in thread-local storage and use this 'ambient' transaction if
-        found for its send and receive operations. The message listener is
-        invoked and if no exception occurs, then the
+        <literal>IPlatformTransactionManager</literal> implementation's, the
+        transactional resources (in this case an instance of the
+        <literal>MessageQueueTransaction</literal> class) is bound to thread
+        local storage. <literal>MessageQueueTemplate</literal> will look in
+        thread-local storage and use this 'ambient' transaction if found for
+        its send and receive operations. The message listener is invoked and
+        if no exception occurs, then the
         <literal>MessageQueueTransactionManager</literal> will commit the
         <literal>MessageQueueTransaction</literal>.</para>
 
@@ -726,14 +743,14 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         <literal>TransactionalMessageListenerContainer</literal> will call
         it's <literal>IMessageTransactionExceptionHandler</literal>
         implementation to determine if the
-        <literal>MessageQueueTransaction</literal> should commit (removing
-        the message from the queue) or rollback (leaving the message on the
-        queue for redelivery).<note>
+        <literal>MessageQueueTransaction</literal> should commit (removing the
+        message from the queue) or rollback (leaving the message on the queue
+        for redelivery).<note>
             <para>The use of a transactional service layer in combination with
-            a <literal>MessageQueueTransactionManager</literal> is a
-            powerful combination that can be used to achieve "exactly one"
-            transaction message processing with database operations. This
-            requires a little extra programming effort and is a more efficient
+            a <literal>MessageQueueTransactionManager</literal> is a powerful
+            combination that can be used to achieve "exactly one" transaction
+            message processing with database operations. This requires a
+            little extra programming effort and is a more efficient
             alternative than using distributed transactions which are commonly
             associated with this functionality since both the database and the
             message transaction commit or rollback together.</para>
@@ -818,18 +835,18 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
 
         <para>If you specify either
         <literal>AdoPlatformTransactionManager</literal> or
-        <literal>HibernateTransactionManager</literal> then a local
-        database transaction will be started before the receiving the message.
-        By default, the container will also start a local
-        <literal>MessageQueueTransaction</literal> after the local
-        database transaction has started, but before the receiving the
-        message. This <literal>MessageQueueTransaction</literal> will be
-        used to receive the message. By default the
-        <literal>MessageQueueTransaction</literal> will be bound to thread
-        local storage so that any <literal>MessageQueueTemplate</literal>
-        send or receive operations will participate transparently in the same
-        <literal>MessageQueueTransaction</literal>. If you do not want
-        this behavior set the property
+        <literal>HibernateTransactionManager</literal> then a local database
+        transaction will be started before the receiving the message. By
+        default, the container will also start a local
+        <literal>MessageQueueTransaction</literal> after the local database
+        transaction has started, but before the receiving the message. This
+        <literal>MessageQueueTransaction</literal> will be used to receive the
+        message. By default the <literal>MessageQueueTransaction</literal>
+        will be bound to thread local storage so that any
+        <literal>MessageQueueTemplate</literal> send or receive operations
+        will participate transparently in the same
+        <literal>MessageQueueTransaction</literal>. If you do not want this
+        behavior set the property
         <literal>ExposeContainerManagedMessageQueueTransaction</literal> to
         false.</para>
 
@@ -837,17 +854,17 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         processing when using either either
         <literal>AdoPlatformTransactionManager</literal> or
         <literal>HibernateTransactionManager</literal> the container's
-        <literal>IMessageTransactionExceptionHandler</literal> will
-        determine if the <literal>MessageQueueTransaction</literal> should
-        commit (removing it from the queue) or rollback (placing it back on
-        the queue for redelivery). The listener exception will always trigger
-        a rollback in the 'outer' database transaction.</para>
+        <literal>IMessageTransactionExceptionHandler</literal> will determine
+        if the <literal>MessageQueueTransaction</literal> should commit
+        (removing it from the queue) or rollback (placing it back on the queue
+        for redelivery). The listener exception will always trigger a rollback
+        in the 'outer' database transaction.</para>
 
         <para>Poison message handing, that is, the endless redelivery of a
         message due to exceptions during processing, can be detected using
         implementations of the
-        <literal>IMessageTransactionExceptionHandler</literal>. This
-        interface is shown below</para>
+        <literal>IMessageTransactionExceptionHandler</literal>. This interface
+        is shown below</para>
 
         <programlisting language="csharp">public interface IMessageTransactionExceptionHandler
 {
@@ -858,18 +875,17 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         <literal>Commit</literal> and <literal>Rollback</literal>. A specific
         implementation is provided that will move the poison message to
         another queue after a maximum number of redelivery attempts. See
-        <literal>SendToQueueExceptionHandler</literal> described below.
-        You can set a specific implementation to by setting
-        <literal>TransactionalMessageListenerContainer's</literal>
-        property
+        <literal>SendToQueueExceptionHandler</literal> described below. You
+        can set a specific implementation to by setting
+        <literal>TransactionalMessageListenerContainer's</literal> property
         <literal>MessageTransactionExceptionHandler</literal></para>
 
         <para>The <literal>IMessageTransactionExceptionHandler</literal>
-        implementation <literal>SendToQueueExceptionHandler</literal>
-        keeps track of the Message's <literal>Id</literal> property in memory
-        with a count of how many times an exception has occurred. If that
-        count is greater than the handler's <literal>MaxRetry</literal> count
-        it will be sent to another queue using the provided
+        implementation <literal>SendToQueueExceptionHandler</literal> keeps
+        track of the Message's <literal>Id</literal> property in memory with a
+        count of how many times an exception has occurred. If that count is
+        greater than the handler's <literal>MaxRetry</literal> count it will
+        be sent to another queue using the provided
         <literal>MessageQueueTransaction</literal>. The queue to send the
         message to is specified via the property
         <literal>MessageQueueObjectName</literal>.</para>
@@ -894,8 +910,8 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
 
         <para>Exceptions in message listener processing are handled by
         implementations of the
-        <literal>IDistributedTransactionExceptionHandler</literal>
-        interface. This interface is shown below</para>
+        <literal>IDistributedTransactionExceptionHandler</literal> interface.
+        This interface is shown below</para>
 
         <programlisting language="csharp">    public interface IDistributedTransactionExceptionHandler
     {
@@ -933,13 +949,13 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       <title>Using MessageConverters</title>
 
       <para>In order to facilitate the sending of business model objects, the
-      <literal>MessageQueueTemplate</literal> has various send methods
-      that take a .NET object as an argument for a message's data content. The
+      <literal>MessageQueueTemplate</literal> has various send methods that
+      take a .NET object as an argument for a message's data content. The
       overloaded methods ConvertAndSend and ReceiveAndConvert in
-      <literal>MessageQueue</literal> delegate the conversion process to
-      an instance of the <literal>IMessageConverter</literal>
-      interface. This interface defines a simple contract to convert between
-      .NET objects and JMS messages. The interface is shown below</para>
+      <literal>MessageQueue</literal> delegate the conversion process to an
+      instance of the <literal>IMessageConverter</literal> interface. This
+      interface defines a simple contract to convert between .NET objects and
+      JMS messages. The interface is shown below</para>
 
       <programlisting language="csharp">    public interface IMessageConverter : ICloneable
     {
@@ -949,8 +965,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     }</programlisting>
 
       <para>There are a standard implementations provided the simply wrap
-      existing <literal>IMessageFormatter</literal>
-      implementations.</para>
+      existing <literal>IMessageFormatter</literal> implementations.</para>
 
       <itemizedlist>
         <listitem>
@@ -974,9 +989,8 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       containers is an instance of XmlMessageConverter configured with a
       TargetType to be System.String. You specify the types that the
       XmlMessageConverter can convert though either the array property
-      <literal>TargetTypes</literal> or
-      <literal>TargetTypeNames</literal>. Here is an example taken from
-      the QuickStart application</para>
+      <literal>TargetTypes</literal> or <literal>TargetTypeNames</literal>.
+      Here is an example taken from the QuickStart application</para>
 
       <programlisting language="myxml">  &lt;object id="xmlMessageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"&gt;
     &lt;property name="TargetTypes"&gt;
@@ -989,17 +1003,16 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
   &lt;/object&gt;</programlisting>
 
       <para>You can specify other <literal>IMessageConverter</literal>
-      implementations using the
-      <literal>MessageConverterObjectName</literal> property on the
-      <literal>MessageQueueTemplate</literal> and
-      <literal>MessageListenerAdapter</literal>. </para>
+      implementations using the <literal>MessageConverterObjectName</literal>
+      property on the <literal>MessageQueueTemplate</literal> and
+      <literal>MessageListenerAdapter</literal>.</para>
 
       <para>Other implementations provided are</para>
 
       <itemizedlist>
         <listitem>
-          <para><literal>XmlDocumentConverter</literal> - loads and saves
-          an XmlDocument to the message BodyStream. This lets you manipulate
+          <para><literal>XmlDocumentConverter</literal> - loads and saves an
+          XmlDocument to the message BodyStream. This lets you manipulate
           directly the XML data independent of type serialization issues. This
           is quite useful if you use XPath expressions to pick out the
           relevant information to construct your business objects.</para>
@@ -1038,15 +1051,15 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       <section>
         <title>MessageListenerAdapater</title>
 
-        <para>The <literal>MessageListenerAdapter</literal> allows methods
-        of a class that does not implement the
+        <para>The <literal>MessageListenerAdapter</literal> allows methods of
+        a class that does not implement the
         <literal>IMessageListener</literal> interface to be invoked upon
         message delivery. Lets call this class the 'message handler' class. To
         achieve this goal the <literal>MessageListenerAdapter</literal>
-        implements the standard <literal>IMessageListener</literal>
-        interface to receive a message and then delegates the processing to
-        the message handler class. Since the message handler class does not
-        contain methods that refer to MSMQ artifacts such as Message, the
+        implements the standard <literal>IMessageListener</literal> interface
+        to receive a message and then delegates the processing to the message
+        handler class. Since the message handler class does not contain
+        methods that refer to MSMQ artifacts such as Message, the
         <literal>MessageListenerAdapter</literal> uses a
         <literal>IMessageConverter</literal> to bridge the MSMQ and 'plain
         object' worlds. As a reminder, the default
@@ -1103,11 +1116,11 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         then be sent to the <literal>ResponseQueue</literal> defined in the
         Message's <literal>ResponseQueue</literal> property of the original
         Message, or the <literal>DefaultResponseQueueName</literal> on the
-        <literal>MessageListenerAdapter</literal> (if one has been
-        configured) will be used. If not <literal>ResponseQueue</literal> is
-        found then an Spring <literal>MessagingException</literal> will be
-        thrown. Please note that this exception will not be swallowed and will
-        propagate up the call stack.</para>
+        <literal>MessageListenerAdapter</literal> (if one has been configured)
+        will be used. If not <literal>ResponseQueue</literal> is found then an
+        Spring <literal>MessagingException</literal> will be thrown. Please
+        note that this exception will not be swallowed and will propagate up
+        the call stack.</para>
 
         <para>Here is an example of Handler signatures that have various
         return types.</para>
@@ -1121,8 +1134,8 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
 }</programlisting>
 
         <para>The following configuration shows how to hook up the adapter to
-        process incoming MSMQ messages using the default message converter.
-        </para>
+        process incoming MSMQ messages using the default message
+        converter.</para>
 
         <programlisting language="myxml">  &lt;!-- Delegate to plain .NET object for message handling --&gt;
   &lt;object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
