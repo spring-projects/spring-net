@@ -30,20 +30,27 @@ using Spring.Util;
 
 namespace Spring.Web.Support
 {
+#if !MONO
     /// <summary>
     /// SimpleHandlerFactory is used to wrap any arbitrary <see cref="IHttpHandlerFactory"/> to make it "Spring-aware".
     /// </summary>
     /// <remarks>
-    /// By default, an instance of <see cref="System.Web.UI.SimpleHandlerFactory"/> is used as underlying factory.
+    /// By default, an instance of <see cref="System.Web.UI.SimpleHandlerFactory"/> is used as underlying factory.    
     /// </remarks>
     /// <author>Erich Eichinger</author>
+#endif
     public class DefaultHandlerFactory : AbstractHandlerFactory
     {
         private readonly IHttpHandlerFactory _innerFactory;
-
+#if !MONO
         /// <summary>
         /// Creates a new instance, using a <see cref="System.Web.UI.SimpleHandlerFactory"/> as underlying factory.
         /// </summary>
+#else
+        /// <summary>
+        /// Creates a new instance of the DefaultHandlerFactory
+        /// </summary>
+#endif
         public DefaultHandlerFactory()
             : this(SimpleHandlerFactory)
         { }
