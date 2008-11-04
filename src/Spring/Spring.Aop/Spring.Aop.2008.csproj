@@ -136,8 +136,11 @@
     <Compile Include="Aop\Config\AopNamespaceUtils.cs" />
     <Compile Include="Aop\Config\ConfigObjectDefinitionParser.cs" />
     <Compile Include="Aop\Framework\AopUtils.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\AbstractFilteringAutoProxyCreator.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\AttributeAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\AutoProxy\InheritanceBasedAopConfigurer.cs" />
     <Compile Include="Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreator.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\TypeNameAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\DynamicMethodInvocation.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\CachedAopProxyFactory.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\DefaultAopProxyFactory.cs" />
@@ -359,6 +362,7 @@
     <Compile Include="Aop\Support\TypeFilters.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Support\TypeNameTypeFilter.cs" />
     <Compile Include="Aop\Support\UnionPointcut.cs">
       <SubType>Code</SubType>
     </Compile>

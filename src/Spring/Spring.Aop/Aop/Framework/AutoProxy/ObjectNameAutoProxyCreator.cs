@@ -30,7 +30,7 @@ using Spring.Util;
 namespace Spring.Aop.Framework.AutoProxy
 {
     /// <summary>
-    /// Object Auto Proxy Creator
+    /// AutoProxyCreator that identifies objects to proxy via a list of names.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -46,9 +46,15 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <seealso cref="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator.IsMatch"/>
     /// <author>Juergen Hoeller</author>
     /// <author>Adhari C Mahendra (.NET)</author>
-    public class ObjectNameAutoProxyCreator : AbstractAutoProxyCreator
+    public class ObjectNameAutoProxyCreator : AbstractFilteringAutoProxyCreator
     {
         private IList objectNames;
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="ObjectNameAutoProxyCreator"/>.
+        /// </summary>
+        public ObjectNameAutoProxyCreator()
+        {}
 
         /// <summary>
         /// Set the names of the objects in IList fashioned way that should automatically 
@@ -63,46 +69,14 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         /// <summary>
-        /// Determines, whether the given object shall be proxied.
-        /// </summary>
-        /// <returns>
-        /// <see cref="AbstractAutoProxyCreator.PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS"/> if the object shall be proxied.<br/>
-        /// <see cref="AbstractAutoProxyCreator.DO_NOT_PROXY"/> otherwise.
-        /// </returns>
-        protected override object[] GetAdvicesAndAdvisorsForObject( Type objType, string name, ITargetSource customTargetSource )
-        {
-            if (ShallProxy( objType, name, customTargetSource ))
-            {
-                return PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS;
-            }
-            return DO_NOT_PROXY;
-        }
-
-        /// <summary>
         /// Identify as object to proxy if the object name is in the configured list of names.
         /// </summary>
-        protected virtual bool ShallProxy( Type objType, string name, ITargetSource customTargetSource )
+        protected override bool IsEligibleForProxying( Type objType, string name )
         {
-            if (objectNames != null)
-            {
-                for (int i = 0; i < objectNames.Count; i++)
-                {
-                    string mappedName = String.Copy( (string)objectNames[i] );
-                    if (typeof( IFactoryObject ).IsAssignableFrom( objType ))
-                    {
-                        if (!name.StartsWith( ObjectFactoryUtils.FactoryObjectPrefix ))
-                        {
-                            continue;
-                        }
-                        mappedName = mappedName.Substring( ObjectFactoryUtils.FactoryObjectPrefix.Length );
-                    }
-                    if (IsMatch( name, mappedName ))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            AssertUtils.ArgumentNotNull(this.ObjectNames, "ObjectNames");
+            
+            bool shallProxy = PatternMatchUtils.IsObjectNameMatch(objType, name, this.ObjectNames, new PatternMatchUtils.ObjectNameMatchPredicate(IsMatch), ObjectFactoryUtils.FactoryObjectPrefix);
+            return shallProxy;
         }
 
         /// <summary>

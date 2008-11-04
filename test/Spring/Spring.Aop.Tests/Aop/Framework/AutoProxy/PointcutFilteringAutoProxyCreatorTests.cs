@@ -37,57 +37,29 @@ namespace Spring.Aop.Framework.AutoProxy
     public class PointcutFilteringAutoProxyCreatorTests
     {
         [Test]
-        public void CreatesProxyOnlyIfPointcutAndObjectNameMatch()
-        {
-            // is match
-            PointcutFilteringAutoProxyCreator apc = new PointcutFilteringAutoProxyCreator();
-            apc.ObjectNames = new string[] { "test*" } ;;
-            apc.Pointcut = new SdkRegularExpressionMethodPointcut(".*\\.GetHashCode");
-            object result = apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
-            Assert.IsTrue(AopUtils.IsAopProxy(result));
-
-            apc = new PointcutFilteringAutoProxyCreator();
-            apc.ObjectNames = new string[] { "test*" } ;;
-            apc.Pointcut = new SdkRegularExpressionMethodPointcut(".*\\.GetHashCODE");
-            result = apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
-            Assert.IsFalse(AopUtils.IsAopProxy(result));
-
-            apc = new PointcutFilteringAutoProxyCreator();
-            apc.ObjectNames = new string[] { "tesT*" } ;;
-            apc.Pointcut = new SdkRegularExpressionMethodPointcut(".*\\.GetHashCode");
-            result = apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
-            Assert.IsFalse(AopUtils.IsAopProxy(result));
-        }
-
-        [Test]
         public void CreatesProxyOnPointcutMatch()
         {
             PointcutFilteringAutoProxyCreator apc = new PointcutFilteringAutoProxyCreator();
-            apc.ObjectNames = null;
             apc.Pointcut = new SdkRegularExpressionMethodPointcut(".*\\.GetHashCode");
             object result = apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
             Assert.IsTrue(AopUtils.IsAopProxy(result));
         }
 
         [Test]
-        public void CreatesProxyOnNameMatch()
+        public void DoesNotCreateProxyIfNoPointcutMatch()
         {
             PointcutFilteringAutoProxyCreator apc = new PointcutFilteringAutoProxyCreator();
-            apc.ObjectNames = new string[] { "test*" } ;
-            apc.Pointcut = null;
+            apc.Pointcut = new SdkRegularExpressionMethodPointcut(".*\\.DOEsNOTExist");
             object result = apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
-            Assert.IsTrue(AopUtils.IsAopProxy(result));
+            Assert.IsFalse(AopUtils.IsAopProxy(result));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void ThrowsArgumentExceptionIfNoCriteriaSpecified()
         {
             PointcutFilteringAutoProxyCreator apc = new PointcutFilteringAutoProxyCreator();
-            apc.ObjectNames = new string[] {} ;
-            apc.Pointcut = null;
-            object result = apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
-            Assert.IsTrue(AopUtils.IsAopProxy(result));
+            apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
         }
     }
 }

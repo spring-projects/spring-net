@@ -34,7 +34,7 @@ namespace Spring.Aop.Framework.AutoProxy
     /// be further restricted by specifying object name patterns like with <see cref="ObjectNameAutoProxyCreator"/>.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    public class PointcutFilteringAutoProxyCreator : ObjectNameAutoProxyCreator
+    public class PointcutFilteringAutoProxyCreator : AbstractFilteringAutoProxyCreator
     {
         private IPointcut _pointcut;
 
@@ -44,34 +44,18 @@ namespace Spring.Aop.Framework.AutoProxy
         public IPointcut Pointcut
         {
             set { _pointcut = value; }
+            get { return _pointcut; }
         }
 
         /// <summary>
         /// Determines, whether the given object shall be proxied.
         /// </summary>
-        protected override bool ShallProxy( Type objType, string name, ITargetSource customTargetSource )
+        protected override bool IsEligibleForProxying( Type objType, string name )
         {
-            if (CollectionUtils.IsEmpty( ObjectNames ) && _pointcut == null)
-            {
-                throw new ArgumentException("At least one of ObjectNames and Pointcut criteria are required");
-            }
+            AssertUtils.ArgumentNotNull(_pointcut, "Pointcut");
 
-            bool isObjectNameMatch = base.ShallProxy( objType, name, customTargetSource );
-
-            // we have a name match, but empty pointcut -> ok
-            if (isObjectNameMatch && _pointcut==null)
-            {
-                return true;
-            }
-
-            // positive name match or no names specified -> get the pointcut match
-            if ( (isObjectNameMatch || CollectionUtils.IsEmpty(ObjectNames) )
-                && _pointcut != null)
-            {
-                return AopUtils.CanApply( _pointcut, objType, null );
-            }
-
-            return false;
+            bool shallProxy = AopUtils.CanApply( _pointcut, objType, null );
+            return shallProxy;
         }
     }
 }

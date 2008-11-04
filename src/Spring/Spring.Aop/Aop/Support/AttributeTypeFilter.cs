@@ -31,8 +31,23 @@ namespace Spring.Aop.Support
     public class AttributeTypeFilter : ITypeFilter
     {
         private readonly Type attributeType;
-
         private readonly bool checkInherited;
+
+        /// <summary>
+        /// The attribute <see cref="Type"/> for this filter.
+        /// </summary>
+        public Type AttributeType
+        {
+            get { return attributeType; }
+        }
+
+        /// <summary>
+        /// Indicates, whether this filter considers base types for filtering.
+        /// </summary>
+        public bool CheckInherited
+        {
+            get { return checkInherited; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributeTypeFilter"/> class for the
@@ -80,9 +95,11 @@ namespace Spring.Aop.Support
             if (checkInherited)
             {
                 return AttributeUtils.FindAttribute(type, attributeType) != null;                
-            } else
+            }
+            else
             {
-                return Attribute.GetCustomAttributes(type, attributeType, false) != null; 
+                object[] atts = type.GetCustomAttributes(attributeType, false);
+                return ArrayUtils.HasLength(atts);
             }                    
         }
 
