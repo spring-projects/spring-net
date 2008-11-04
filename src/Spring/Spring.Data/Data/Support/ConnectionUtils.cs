@@ -67,7 +67,7 @@ namespace Spring.Data.Support
             if (dbProvider != null)
             {
                 ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.GetResource(dbProvider);
-                if (conHolder != null && connectionEquals(conHolder.Connection, conn))
+                if (conHolder != null && ConnectionEquals(conHolder.Connection, conn))
                 {
                     // It's the transactional connection bound to the thread so don't close it.
                     conHolder.Released();
@@ -175,7 +175,6 @@ namespace Spring.Data.Support
 	        return new ConnectionTxPair(conn, null);
 	    }
 
-	    //TODO exception translation?
         /// <summary>
         /// Do the connection mgmt.
         /// </summary>
@@ -189,7 +188,7 @@ namespace Spring.Data.Support
 
 	    }
 
-	    private static bool connectionEquals(IDbConnection heldCon, IDbConnection passedInCon)
+	    private static bool ConnectionEquals(IDbConnection heldCon, IDbConnection passedInCon)
 	    {
 	        return (heldCon == passedInCon || heldCon.Equals(passedInCon) ||
                 getTargetConnection(heldCon).Equals(passedInCon));
