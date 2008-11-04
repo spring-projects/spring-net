@@ -152,6 +152,11 @@ namespace Spring.Messaging.Listener
 
         #endregion
 
+        /// <summary>
+        /// Initializes this container.  Calls the abstract method DoStart if the 
+        /// property <see cref="AutoStartup"/> is set to true, then calls 
+        /// <see cref="DoInitialize"/>
+        /// </summary>
         public virtual void Initialize()
         {
             lock (lifecycleMonitor)
@@ -166,6 +171,10 @@ namespace Spring.Messaging.Listener
             DoInitialize();
         }
 
+        /// <summary>
+        /// Sets the container state to inactive and not running, calls template method 
+        /// <see cref="DoShutdown"/>
+        /// </summary>
         public virtual void Shutdown()
         {
             LOG.Debug("Shutting down MessageListenerContainer");
@@ -178,11 +187,17 @@ namespace Spring.Messaging.Listener
             DoShutdown();
         }
 
+        /// <summary>
+        /// Starts this container.
+        /// </summary>
         public virtual void Start()
         {
             DoStart();
         }
 
+        /// <summary>
+        /// Sets the state to running, can be overridden in subclasses.
+        /// </summary>
         protected virtual void DoStart()
         {
             lock (lifecycleMonitor)
@@ -192,11 +207,17 @@ namespace Spring.Messaging.Listener
             }
         }
 
+        /// <summary>
+        /// Stops this instance.
+        /// </summary>
         public virtual void Stop()
         {
             DoStop();
         }
 
+        /// <summary>
+        /// Template method suitable for overriding that stops the container.
+        /// </summary>
         public virtual void DoStop()
         {
             lock (lifecycleMonitor)

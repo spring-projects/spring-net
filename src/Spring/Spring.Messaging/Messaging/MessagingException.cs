@@ -3,6 +3,10 @@ using System.Runtime.Serialization;
 
 namespace Spring.Messaging
 {
+    /// <summary>
+    /// Base exception class for exceptions thrown by Spring in Spring.Messaging
+    /// </summary>
+    /// <author>Mark Pollack</author>
     public class MessagingException : ApplicationException
     {
         #region Constructor (s) / Destructor

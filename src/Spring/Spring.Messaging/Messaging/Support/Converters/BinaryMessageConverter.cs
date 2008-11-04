@@ -18,44 +18,73 @@
 
 #endregion
 
-
-using System;
 using System.Messaging;
 using System.Runtime.Serialization.Formatters;
 
 namespace Spring.Messaging.Support.Converters
 {
+    /// <summary>
+    /// An <see cref="IMessageConverter"/> implementation that delegates to an instance of
+    /// <see cref="BinaryMessageFormatter"/> to convert messages.  
+    /// </summary>
+    /// <author>Mark Pollack</author>
     public class BinaryMessageConverter : IMessageConverter
     {
-        private BinaryMessageFormatter binaryMessageFormatter;
+        private readonly BinaryMessageFormatter binaryMessageFormatter;
 
-        private FormatterTypeStyle typeFormat;
-        private FormatterAssemblyStyle topObjectFormat;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryMessageConverter"/> class.
+        /// </summary>
         public BinaryMessageConverter()
         {
             binaryMessageFormatter = new BinaryMessageFormatter();
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryMessageConverter"/> class.
+        /// </summary>
+        /// <param name="binaryMessageFormatter">The binary message formatter.</param>
         public BinaryMessageConverter(BinaryMessageFormatter binaryMessageFormatter)
         {
-            this.binaryMessageFormatter = binaryMessageFormatter;
+            this.binaryMessageFormatter = binaryMessageFormatter;            
         }
 
+        /// <summary>
+        /// Gets or sets the type format used in the <see cref="BinaryMessageFormatter"/>
+        /// </summary>
+        /// <value>The type format.</value>
         public FormatterTypeStyle TypeFormat
         {
-            get { return typeFormat; }
-            set { typeFormat = value; }
+            get
+            {
+                return binaryMessageFormatter.TypeFormat;
+            }
+            set { 
+                binaryMessageFormatter.TypeFormat = value;
+            }
         }
 
+        /// <summary>
+        /// Gets or sets the top object format used in the <see cref="BinaryMessageFormatter"/>
+        /// </summary>
+        /// <value>The top object format.</value>
         public FormatterAssemblyStyle TopObjectFormat
         {
-            get { return topObjectFormat; }
-            set { topObjectFormat = value; }
+            get { return binaryMessageFormatter.TopObjectFormat; }
+            set
+            {                
+                binaryMessageFormatter.TopObjectFormat = value;
+            }
         }
 
         #region IMessageConverter Members
 
+        /// <summary>
+        /// Convert the given object to a Message using the <see cref="BinaryMessageFormatter"/>
+        /// </summary>
+        /// <param name="obj">The object to send.</param>
+        /// <returns>Message to send</returns>
         public Message ToMessage(object obj)
         {
             Message m = new Message();
@@ -64,6 +93,11 @@ namespace Spring.Messaging.Support.Converters
             return m;
         }
 
+        /// <summary>
+        /// Convert the given message to a object using the <see cref="BinaryMessageFormatter"/>
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns>the object</returns>
         public object FromMessage(Message message)
         {
             message.Formatter = binaryMessageFormatter;
@@ -74,8 +108,15 @@ namespace Spring.Messaging.Support.Converters
 
         #region ICloneable Members
 
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
         public object Clone()
         {
+            //takes into account TypeFormat and TypeObjectFormat
             BinaryMessageConverter mc = new BinaryMessageConverter(binaryMessageFormatter.Clone() as BinaryMessageFormatter);
             return mc;
         }

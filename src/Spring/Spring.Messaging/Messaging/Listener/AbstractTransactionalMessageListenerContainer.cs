@@ -58,12 +58,20 @@ namespace Spring.Messaging.Listener
         private DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
 
 
+        /// <summary>
+        /// Gets or sets the platform transaction manager.
+        /// </summary>
+        /// <value>The platform transaction manager.</value>
         public IPlatformTransactionManager PlatformTransactionManager
         {
             get { return platformTransactionManager; }
             set { platformTransactionManager = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the transaction definition.
+        /// </summary>
+        /// <value>The transaction definition.</value>
         public DefaultTransactionDefinition TransactionDefinition
         {
             get { return transactionDefinition; }
@@ -80,6 +88,14 @@ namespace Spring.Messaging.Listener
             set { transactionDefinition.TransactionTimeout = value; }
         }
 
+        /// <summary>
+        /// Subclasses perform a receive opertion on the message queue and execute the
+        /// message listener
+        /// </summary>
+        /// <param name="mq">The DefaultMessageQueue.</param>
+        /// <returns>
+        /// true if received a message, false otherwise
+        /// </returns>
         protected override bool DoReceiveAndExecute(MessageQueue mq)
         {
             bool messageReceived = false;
@@ -100,9 +116,20 @@ namespace Spring.Messaging.Listener
             return messageReceived;
         }
 
+        /// <summary>
+        /// Does the receive and execute using platform transaction manager.
+        /// </summary>
+        /// <param name="mq">The message queue.</param>
+        /// <param name="status">The transactional status.</param>
+        /// <returns>true if should continue peeking, false otherwise.</returns>
         protected abstract bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
                                                                                    ITransactionStatus status);
 
+        /// <summary>
+        /// Rollback the transaction on exception.
+        /// </summary>
+        /// <param name="status">The transactional status.</param>
+        /// <param name="ex">The exception.</param>
         protected void RollbackOnException(ITransactionStatus status, Exception ex)
         {
             LOG.Debug("Initiating transaction rollback on listener exception", ex);

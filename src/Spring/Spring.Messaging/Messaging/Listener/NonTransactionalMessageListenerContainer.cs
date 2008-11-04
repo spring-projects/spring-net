@@ -32,6 +32,7 @@ namespace Spring.Messaging.Listener
     /// Exceptions that occur during message processing are handled by an instance 
     /// of <see cref="IExceptionHandler"/>.
     /// </remarks>
+    /// <author>Mark Pollack</author>
     public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageListenerContainer
     {
         #region Logging Definition
@@ -43,6 +44,10 @@ namespace Spring.Messaging.Listener
         private IExceptionHandler exceptionHandler;
 
 
+        /// <summary>
+        /// Gets or sets the exception handler.
+        /// </summary>
+        /// <value>The exception handler.</value>
         public IExceptionHandler ExceptionHandler
         {
             get { return exceptionHandler; }
@@ -50,6 +55,11 @@ namespace Spring.Messaging.Listener
         }
 
 
+        /// <summary>
+        /// Handles the listener exception.
+        /// </summary>
+        /// <param name="e">The exception.</param>
+        /// <param name="message">The message delivered that resultd in an processing exception.</param>
         protected virtual void HandleListenerException(Exception e, Message message)
         {
             IExceptionHandler exceptionHandler = ExceptionHandler;
@@ -59,6 +69,14 @@ namespace Spring.Messaging.Listener
             }
         }
 
+        /// <summary>
+        /// Perform a receive opertion on the message queue and execute the
+        /// message listener
+        /// </summary>
+        /// <param name="mq">The DefaultMessageQueue.</param>
+        /// <returns>
+        /// true if received a message, false otherwise
+        /// </returns>
         protected override bool DoReceiveAndExecute(MessageQueue mq)
         {
             Message message = null;

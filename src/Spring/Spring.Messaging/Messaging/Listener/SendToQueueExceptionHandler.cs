@@ -25,6 +25,12 @@ using Common.Logging;
 
 namespace Spring.Messaging.Listener
 {
+    /// <summary>
+    /// Keeps track of the Message's Id property in memory with a count of how many times an 
+    /// exception has occurred. If that count is greater than the handler's MaxRetry count it 
+    /// will be sent to another queue using the provided MessageQueueTransaction. The queue to 
+    /// send the message to is specified via the property MessageQueueObjectName.
+    /// </summary>
     public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, IMessageTransactionExceptionHandler
     {
         #region Logging Definition
@@ -58,6 +64,17 @@ namespace Spring.Messaging.Listener
 
         #region IMessageTransactionExceptionHandler Members
 
+        /// <summary>
+        /// Called when an exception is thrown during listener processing under the
+        /// scope of a <see cref="MessageQueueTransaction"/>.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="messageQueueTransaction">The message queue transaction.</param>
+        /// <returns>
+        /// An action indicating if the caller should commit or rollback the
+        /// <see cref="MessageQueueTransaction"/>
+        /// </returns>
         public TransactionAction OnException(Exception exception, Message message,
                                              MessageQueueTransaction messageQueueTransaction)
         {
@@ -100,6 +117,13 @@ namespace Spring.Messaging.Listener
 
         #region Protected Methods
 
+        /// <summary>
+        /// Determines whether this exception was already processed.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        /// <returns>
+        /// 	<c>true</c> if the exception was already processed; otherwise, <c>false</c>.
+        /// </returns>
         protected virtual bool IsMessageAlreadyProcessedException(Exception exception)
         {
             if (MessageAlreadyProcessedExceptionNames != null)
@@ -115,6 +139,12 @@ namespace Spring.Messaging.Listener
             return false;
         }
 
+        /// <summary>
+        /// Sends the message to queue.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="messageQueueTransaction">The message queue transaction.</param>
+        /// <returns>TransactionAction.Commit</returns>
         protected virtual TransactionAction SendMessageToQueue(Message message,
                                                                MessageQueueTransaction messageQueueTransaction)
         {

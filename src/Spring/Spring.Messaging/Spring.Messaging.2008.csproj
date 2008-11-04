@@ -20,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Spring.Messaging.xml</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,7 +53,6 @@
     <Compile Include="Messaging\Support\Converters\MessageConverterCreatorDelegate.cs" />
     <Compile Include="Messaging\Core\DefaultMessageQueueFactory.cs" />
     <Compile Include="Messaging\Support\MessageQueueCreatorDelegate.cs" />
-    <Compile Include="Messaging\Core\QueueIdentifierType.cs" />
     <Compile Include="Messaging\Core\IMessageQueueFactory.cs" />
     <Compile Include="Messaging\Core\MessagePostProcessorDelegate.cs" />
     <Compile Include="Messaging\Listener\AbstractSendToQueueExceptionHandler.cs" />

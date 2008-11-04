@@ -47,6 +47,12 @@ namespace Spring.Messaging.Core
 
         #region IMessageQueueFactory Members
 
+        /// <summary>
+        /// Registers the message queue, its creation specified via the factory method
+        /// MessageQueueCreatorDelegate, with the provided name in the application context
+        /// </summary>
+        /// <param name="messageQueueObjectName">Name of the message queue object.</param>
+        /// <param name="messageQueueCreatorDelegate">The message queue creator delegate.</param>
         public void RegisterMessageQueue(string messageQueueObjectName,
                                  MessageQueueCreatorDelegate messageQueueCreatorDelegate)
         {
@@ -55,6 +61,13 @@ namespace Spring.Messaging.Core
             applicationContext.ObjectFactory.RegisterSingleton(messageQueueObjectName, mqfo);
         }
 
+        /// <summary>
+        /// Creates the message queue given its name in the application context.
+        /// </summary>
+        /// <param name="messageQueueObjectName">Name of the message queue object.</param>
+        /// <returns>
+        /// A MessageQueue instance configured via the application context
+        /// </returns>
         public MessageQueue CreateMessageQueue(string messageQueueObjectName)
         {
             AssertUtils.ArgumentHasText(messageQueueObjectName, "DefaultMessageQueueObjectName");
@@ -72,11 +85,23 @@ namespace Spring.Messaging.Core
             return queues[messageQueueObjectName] as MessageQueue;
         }
 
+        /// <summary>
+        /// Determines whether the application context contains the message queue object definition.
+        /// </summary>
+        /// <param name="messageQueueObjectName">Name of the message queue object.</param>
+        /// <returns>
+        /// 	<c>true</c> if the application context contains the specified message queue object name; otherwise, <c>false</c>.
+        /// </returns>
         public bool ContainsMessageQueue(string messageQueueObjectName)
         {
             return applicationContext.ContainsObject(messageQueueObjectName);
         }
 
+        /// <summary>
+        /// Registers the message converter.
+        /// </summary>
+        /// <param name="messageConverterName">Name of the message converter.</param>
+        /// <param name="messageConverterCreatorDelegate">The message converter creator delegate.</param>
         public void RegisterMessageConverter(string messageConverterName,
                                              MessageConverterCreatorDelegate messageConverterCreatorDelegate)
         {
@@ -85,6 +110,13 @@ namespace Spring.Messaging.Core
             applicationContext.ObjectFactory.RegisterSingleton(messageConverterName, mcfo);
         }
 
+        /// <summary>
+        /// Creates the message converter given its name in the application context.
+        /// </summary>
+        /// <param name="messageConverterObjectName">Name of the message converter object.</param>
+        /// <returns>
+        /// A IMessageConverter instance configured via the application context
+        /// </returns>
         public IMessageConverter CreateMessageConverter(string messageConverterObjectName)
         {
             AssertUtils.ArgumentHasText(messageConverterObjectName, "MessgaeFormatterObjectName");
@@ -103,6 +135,13 @@ namespace Spring.Messaging.Core
         }
 
 
+        /// <summary>
+        /// Determines whether the application context contains the message queue object definition.
+        /// </summary>
+        /// <param name="messageConverterObjectName">Name of the message converter object.</param>
+        /// <returns>
+        /// 	<c>true</c> if the application context contains the specified message message converter object name; otherwise, <c>false</c>.
+        /// </returns>
         public bool ContainsMessageConverter(string messageConverterObjectName)
         {
             return applicationContext.ContainsObject(messageConverterObjectName);

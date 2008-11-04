@@ -28,6 +28,9 @@ using Spring.Transaction.Support;
 
 namespace Spring.Messaging.Support
 {
+    /// <summary>
+    /// Utility methods to support Spring's MSMQ functionality
+    /// </summary>
     public class QueueUtils
     {
 
@@ -54,6 +57,12 @@ namespace Spring.Messaging.Support
             return messageConverterObjectName;
             
         }
+
+        /// <summary>
+        /// Gets the message queue transaction from thread local storage
+        /// </summary>
+        /// <param name="resourceFactory">The resource factory.</param>
+        /// <returns>null if not found in thread local storage</returns>
         public static MessageQueueTransaction GetMessageQueueTransaction(IResourceFactory resourceFactory)
         {
             MessageQueueResourceHolder resourceHolder =
@@ -64,25 +73,10 @@ namespace Spring.Messaging.Support
             {
                 return resourceHolder.MessageQueueTransaction;
             }
-            if (!TransactionSynchronizationManager.SynchronizationActive)
+            else
             {
                 return null;
-            }
-            throw new NotImplementedException();
-            /*
-                MessageQueueResourceHolder resourceHolderToUse = resourceHolder;
-                if (resourceHolderToUse == null)
-                {
-                    resourceHolderToUse = new MessageQueueResourceHolder(new MessageQueueTransaction());
-                }
-                if (resourceHolderToUse != resourceHolder)
-                {
-                    TransactionSynchronizationManager.RegisterSynchronization(
-                            new MessageQueueResourceSynchronization(resourceHolderToUse, resourceFactory.SynchedLocalTransactionAllowed));
-                    resourceHolderToUse.SynchronizedWithTransaction = true;
-                    TransactionSynchronizationManager.BindResource(MessageQueueTransactionManager.CURRENT_TRANSACTION_SLOTNAME, resourceHolderToUse);
-                }
-                return resourceHolderToUse.MessageQueueTransaction;*/
+            }                
         }
     }
 
@@ -144,8 +138,18 @@ namespace Spring.Messaging.Support
         #endregion
     }
 
+    /// <summary> Callback interface for resource creation.
+    /// Serving as argument for the <code>GetMessageQueueTransaction</code> method.
+    /// </summary>
     public interface IResourceFactory
     {
+        /// <summary>
+        /// Return whether to allow for a local transaction that is synchronized with
+        /// a Spring-managed transaction (where the main transaction might be a ADO.NET-based
+        /// one for a specific IDbProvider, for example), with the MSMQ transaction
+        /// committing right after the main transaction.
+        /// Returns whether to allow for synchronizing a local MSMQ transaction
+        /// </summary>
         bool SynchedLocalTransactionAllowed { get; }
     }
 }

@@ -158,6 +158,10 @@ namespace Spring.Messaging.Listener
 
         #region Protected Methods
 
+        /// <summary>
+        /// Validates that the <see cref="messageQueueObjectName"/> is not null.  If <see cref="MessageQueueFactory"/>
+        /// is null, a <see cref="DefaultMessageQueueFactory"/> is created.  Can be be overridden in subclasses.
+        /// </summary>
         protected override void ValidateConfiguration()
         {
             if (MessageQueueObjectName == null)
@@ -173,6 +177,14 @@ namespace Spring.Messaging.Listener
         }
 
 
+        /// <summary>
+        /// Template method that execute listener with the provided message if
+        /// <see cref="AbstractListenerContainer.Running"/> is true. Subclasses will call
+        /// this method at the appropriate point in their processing lifecycle, for example 
+        /// committing or rolling back a transaction if needed.
+        /// </summary>
+        /// <remarks>Calls the template method <see cref="InvokeListener"/></remarks>
+        /// <param name="message">The message.</param>
         protected virtual void DoExecuteListener(Message message)
         {
             if (!Running)
@@ -187,6 +199,11 @@ namespace Spring.Messaging.Listener
             InvokeListener(message);
         }
 
+        /// <summary>
+        /// Invokes the listener if it is not null.  Invokes the method <see cref="DoInvokeListener"/>.
+        /// Can be overridden in subclasses.
+        /// </summary>        
+        /// <param name="message">The message.</param>
         protected virtual void InvokeListener(Message message)
         {
             if (MessageListener != null)
@@ -199,6 +216,11 @@ namespace Spring.Messaging.Listener
             }
         }
 
+        /// <summary>
+        /// Invokes the listener.  Can be overriden in subclasses.
+        /// </summary>
+        /// <param name="listener">The listener.</param>
+        /// <param name="message">The message.</param>
         protected virtual void DoInvokeListener(IMessageListener listener, Message message)
         {
             listener.OnMessage(message);

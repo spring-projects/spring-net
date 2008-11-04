@@ -25,6 +25,13 @@ using Common.Logging;
 
 namespace Spring.Messaging.Listener
 {
+    /// <summary>
+    /// detects poison messages by tracking the Message Id  property in memory with a count of how many 
+    /// times an exception has occurred. If that count is greater than the handler's MaxRetry count it 
+    /// will be sent to another queue. The queue to send the message to is specified via the property M
+    /// essageQueueObjectName.
+    /// </summary>
+    /// <remarks>Exception handler when using DistributedTxMessageListenerContainer</remarks>
     public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQueueExceptionHandler,
                                                                      IDistributedTransactionExceptionHandler
     {
@@ -37,6 +44,19 @@ namespace Spring.Messaging.Listener
 
         #region IDistributedTransactionExceptionHandler Members
 
+        /// <summary>
+        /// Determines whether the incoming message is a poison message.  This method is
+        /// called before the <see cref="IMessageListener"/> is invoked.
+        /// </summary>
+        /// <param name="message">The incoming message.</param>
+        /// <returns>
+        /// 	<c>true</c> if it is a poison message; otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// The <see cref="DistributedTxMessageListenerContainer"/> will call
+        /// <see cref="HandlePoisonMessage"/> if this method returns true and will
+        /// then commit the distibuted transaction (removing the message from the queue).
+        /// </remarks>
         public bool IsPoisonMessage(Message message)
         {
             string messageId = message.Id;
@@ -56,11 +76,20 @@ namespace Spring.Messaging.Listener
             }
         }
 
+        /// <summary>
+        /// Handles the poison message.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public void HandlePoisonMessage(Message message)
         {
             SendMessageToQueue(message);
         }
 
+        /// <summary>
+        /// Called when an exception is thrown in listener processing.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        /// <param name="message">The message.</param>
         public void OnException(Exception exception, Message message)
         {
             string messageId = message.Id;
@@ -84,6 +113,10 @@ namespace Spring.Messaging.Listener
 
         #endregion
 
+        /// <summary>
+        /// Sends the message to queue.
+        /// </summary>
+        /// <param name="message">The message.</param>
         protected virtual void SendMessageToQueue(Message message)
         {
             MessageQueue mq = MessageQueueFactory.CreateMessageQueue(MessageQueueObjectName);

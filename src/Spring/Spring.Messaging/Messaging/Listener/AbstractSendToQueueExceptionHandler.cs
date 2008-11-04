@@ -7,6 +7,14 @@ using Spring.Objects.Factory;
 
 namespace Spring.Messaging.Listener
 {
+    /// <summary>
+    /// Provides common functionality to exception handlers that will send the exceptional message to 
+    /// another queue.
+    /// </summary>
+    /// <remarks>Allows for setting of MaxRetry limit and contains an internal dictionary to keep track
+    /// of the Message Ids of messages.
+    /// </remarks>
+    /// <author>Mark Pollack</author>
     public class AbstractSendToQueueExceptionHandler : IInitializingObject, IApplicationContextAware
     {
         private int maxRetry = 5;
@@ -15,7 +23,15 @@ namespace Spring.Messaging.Listener
         private string messageQueueObjectName;
         private IApplicationContext applicationContext;
 
+        /// <summary>
+        /// Synchronization object for access to messageMap protected variable
+        /// </summary>
         protected object messageMapMonitor = new object();
+
+
+        /// <summary>
+        /// In-memory storage to keep track of Message Ids that have been already processed.
+        /// </summary>
         protected IDictionary messageMap = new Hashtable();
 
         /// <summary>

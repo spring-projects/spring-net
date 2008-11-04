@@ -419,6 +419,11 @@ namespace Spring.Messaging.Listener
         }
 
 
+        /// <summary>
+        /// Configures the initial peek thread, setting it to be a background thread.  
+        /// Can be overridden in subclasses.
+        /// </summary>
+        /// <param name="thread">The peek thread.</param>
         protected virtual void ConfigureInitialPeekThread(Thread thread)
         {
             thread.IsBackground = true;

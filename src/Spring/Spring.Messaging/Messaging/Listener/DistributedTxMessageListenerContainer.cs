@@ -84,6 +84,15 @@ namespace Spring.Messaging.Listener
             base.Initialize();
         }
 
+        /// <summary>
+        /// Does the receive and execute using TxPlatformTransactionManager.  Starts a distributed
+        /// transaction before calling Receive.
+        /// </summary>
+        /// <param name="mq">The message queue.</param>
+        /// <param name="status">The transactional status.</param>
+        /// <returns>
+        /// true if should continue peeking, false otherwise.
+        /// </returns>
         protected override bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
                                                                                    ITransactionStatus status)
         {
@@ -186,6 +195,12 @@ namespace Spring.Messaging.Listener
             return true;
         }
 
+        /// <summary>
+        /// Handles the distributed transaction listener exception by calling the 
+        /// <see cref="IDistributedTransactionExceptionHandler"/> if not null.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        /// <param name="message">The message.</param>
         protected virtual void HandleDistributedTransactionListenerException(Exception exception, Message message)
         {
             IDistributedTransactionExceptionHandler exceptionHandler = DistributedTransactionExceptionHandler;

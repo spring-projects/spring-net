@@ -269,24 +269,61 @@ namespace Spring.Messaging.Core
 
         #region IMessageQueueOperations Members
 
+        /// <summary>
+        /// Send the given object to the default destination, converting the object
+        /// to a MSMQ message with a configured IMessageConverter.
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <remarks>This will only work with a default destination queue specified!</remarks>
         public void ConvertAndSend(object obj)
         {
             CheckDefaultMessageQueue();
             ConvertAndSend(DefaultMessageQueueObjectName, obj);
         }
 
+        /// <summary>
+        /// Send the given object to the default destination, converting the object
+        /// to a MSMQ message with a configured IMessageConverter. The IMessagePostProcessor
+        /// callback allows for modification of the message after conversion.
+        /// <p>This will only work with a default destination specified!</p>
+        /// </summary>
+        /// <param name="obj">the object to convert to a message</param>
+        /// <param name="messagePostProcessorDelegate">the callback to modify the message</param>
+        /// <exception cref="MessagingException">if thrown by MSMQ API methods</exception>
         public void ConvertAndSend(object obj, MessagePostProcessorDelegate messagePostProcessorDelegate)
         {
             CheckDefaultMessageQueue();
             ConvertAndSend(DefaultMessageQueueObjectName, obj, messagePostProcessorDelegate);
         }
 
+        /// <summary>
+        /// Send the given object to the specified destination, converting the object
+        /// to a MSMQ message with a configured <see cref="IMessageConverter"/> and resolving the
+        /// destination name to a <see cref="MessageQueue"/> using a <see cref="IMessageQueueFactory"/>
+        /// </summary>
+        /// <param name="messageQueueObjectName">the name of the destination queue
+        /// to send this message to (to be resolved to an actual MessageQueue
+        /// by a IMessageQueueFactory)</param>
+        /// <param name="obj">the object to convert to a message</param>
+        /// <throws>NMSException if there is any problem</throws>
         public void ConvertAndSend(string messageQueueObjectName, object obj)
         {
             Message msg = MessageConverter.ToMessage(obj);
             Send(MessageQueueFactory.CreateMessageQueue(messageQueueObjectName), msg);
         }
 
+        /// <summary>
+        /// Send the given object to the specified destination, converting the object
+        /// to a MSMQ message with a configured <see cref="IMessageConverter"/> and resolving the
+        /// destination name to a <see cref="MessageQueue"/> with an <see cref="IMessageQueueFactory"/>
+        /// The <see cref="MessagePostProcessorDelegate"/> callback allows for modification of the message after conversion.
+        /// </summary>
+        /// <param name="messageQueueObjectName">the name of the destination queue
+        /// to send this message to (to be resolved to an actual MessageQueue
+        /// by a IMessageQueueFactory)</param>
+        /// <param name="obj">the object to convert to a message</param>
+        /// <param name="messagePostProcessorDelegate">the callback to modify the message</param>
+        /// <exception cref="MessagingException">if thrown by MSMQ API methods</exception>
         public void ConvertAndSend(string messageQueueObjectName, object obj,
                                    MessagePostProcessorDelegate messagePostProcessorDelegate)
         {
@@ -295,6 +332,13 @@ namespace Spring.Messaging.Core
             Send(MessageQueueFactory.CreateMessageQueue(messageQueueObjectName), msgToSend);
         }
 
+        /// <summary>
+        /// Receive and convert a message synchronously from the default message queue.
+        /// </summary>
+        /// <returns>The converted object</returns>
+        /// <exception cref="MessageQueueException">if thrown by MSMQ API methods.  Note an
+        /// exception will be thrown if the timeout of the syncrhonous recieve operation expires.
+        /// </exception>
         public object ReceiveAndConvert()
         {
             MessageQueue mq = DefaultMessageQueue;
@@ -302,6 +346,14 @@ namespace Spring.Messaging.Core
             return DoConvertMessage(m);
         }
 
+        /// <summary>
+        /// Receives and convert a message synchronously from the specified message queue.
+        /// </summary>
+        /// <param name="messageQueueObjectName">Name of the message queue object.</param>
+        /// <returns>the converted object</returns>
+        /// <exception cref="MessageQueueException">if thrown by MSMQ API methods.  Note an
+        /// exception will be thrown if the timeout of the syncrhonous recieve operation expires.
+        /// </exception>
         public object ReceiveAndConvert(string messageQueueObjectName)
         {
             MessageQueue mq = MessageQueueFactory.CreateMessageQueue(messageQueueObjectName);
@@ -309,26 +361,64 @@ namespace Spring.Messaging.Core
             return DoConvertMessage(m);
         }
 
+        /// <summary>
+        /// Receives a message on the default message queue using the transactional settings as dicted by MessageQueue's Transactional property and
+        /// the current Spring managed ambient transaction.
+        /// </summary>
+        /// <returns>A message.</returns>
         public Message Receive()
         {
             return DefaultMessageQueue.Receive(ReceiveTimeout);
         }
 
+        /// <summary>
+        /// Receives  a message on the specified queue using the transactional settings as dicted by MessageQueue's Transactional property and
+        /// the current Spring managed ambient transaction.
+        /// </summary>
+        /// <param name="messageQueueObjectName">Name of the message queue object.</param>
+        /// <returns></returns>
         public Message Receive(string messageQueueObjectName)
         {
             return MessageQueueFactory.CreateMessageQueue(messageQueueObjectName).Receive(ReceiveTimeout);
         }
 
+        /// <summary>
+        /// Sends the specified message to the default message queue using the
+        /// transactional settings as dicted by MessageQueue's Transactional property and
+        /// the current Spring managed ambient transaction.
+        /// </summary>
+        /// <param name="message">The message to send</param>
         public void Send(Message message)
         {
             Send(DefaultMessageQueue, message);
         }
 
+        /// <summary>
+        /// Sends the specified message to the message queue using the
+        /// transactional settings as dicted by MessageQueue's Transactional property and
+        /// the current Spring managed ambient transaction.
+        /// </summary>
+        /// <param name="messageQueueObjectName">Name of the message queue object.</param>
+        /// <param name="message">The message.</param>
         public void Send(string messageQueueObjectName, Message message)
         {
             Send(MessageQueueFactory.CreateMessageQueue(messageQueueObjectName), message);
         }
 
+        /// <summary>
+        /// Sends the specified message on the provided MessageQueue using the
+        /// transactional settings as dicted by MessageQueue's Transactional property and
+        /// the current Spring managed ambient transaction.
+        /// </summary>
+        /// <param name="messageQueue">The DefaultMessageQueue to send a message to.</param>
+        /// <param name="message">The message to send</param>
+        /// <para>
+        /// Note that it is the callers responsibility to ensure that the MessageQueue instance
+        /// passed into this not being access simultaneously by other threads.
+        /// </para>
+        /// <remarks>A transactional send (either local or DTC transaction) will be
+        /// attempted for a transacitonal queue, falling back to a single-transaction send
+        /// to a transactional queue if there is not ambient Spring managed transaction.</remarks>
         public virtual void Send(MessageQueue messageQueue, Message message)
         {
             DoSend(messageQueue, message);
@@ -338,6 +428,13 @@ namespace Spring.Messaging.Core
 
         #region Protected Methods
 
+        /// <summary>
+        /// Sends the message to the given message queue.
+        /// </summary>
+        /// <remarks>If System.Transactions.Transaction.Current is null, then send based on
+        /// the transaction semantics of the queue definition.  See <see cref="DoSendMessageQueueTransactional"/> </remarks>
+        /// <param name="messageQueue">The message queue.</param>
+        /// <param name="message">The message.</param>
         protected virtual void DoSend(MessageQueue messageQueue, Message message)
         {
             if (System.Transactions.Transaction.Current == null)
@@ -350,6 +447,34 @@ namespace Spring.Messaging.Core
             }
         }
 
+        /// <summary>
+        /// Send the message queue selecting the appropriate transactional delivery options.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// If the message queue is transactional and there is an ambient MessageQueueTransaction 
+        /// in thread local storage (put there via the use of Spring's MessageQueueTransactionManager 
+        /// or TransactionalMessageListenerContainer), the message will be sent transactionally using the 
+        /// MessageQueueTransaction object in thread local storage. This lets you group together multiple 
+        /// messaging operations within the same transaction without having to explicitly pass around the 
+        /// MessageQueueTransaction object.
+        /// </para>
+        /// <para>
+        /// If the message queue is transactional but there is no ambient MessageQueueTransaction, 
+        /// then a single message transaction is created on each messaging operation. 
+        /// (MessageQueueTransactionType = Single). 
+        /// </para>
+        /// <para>
+        /// If there is an ambient System.Transactions transaction then that transaction will 
+        /// be used (MessageQueueTransactionType = Automatic). 
+        /// </para>
+        /// <para>
+        /// If the queue is not transactional, then a non-transactional send 
+        /// (MessageQueueTransactionType = None) is used.
+        /// </para>
+        /// </remarks>
+        /// <param name="mq">The mq.</param>
+        /// <param name="msg">The MSG.</param>
         protected virtual void DoSendMessageQueueTransactional(MessageQueue mq, Message msg)
         {
             MessageQueueTransaction transactionToUse = QueueUtils.GetMessageQueueTransaction(null);
@@ -400,11 +525,21 @@ namespace Spring.Messaging.Core
         }
 
 
+        /// <summary>
+        /// Sends using MessageQueueTransactionType.Automatic transaction type
+        /// </summary>
+        /// <param name="mq">The message queue.</param>
+        /// <param name="msg">The message.</param>
         protected virtual void DoSendTxScope(MessageQueue mq, Message msg)
         {
             mq.Send(msg, MessageQueueTransactionType.Automatic);
         }
 
+        /// <summary>
+        /// Template method to convert the message if it is not null.
+        /// </summary>
+        /// <param name="m">The message.</param>
+        /// <returns>The converted message ,or null if no message converter is set.</returns>
         protected virtual object DoConvertMessage(Message m)
         {
             if (m != null)
@@ -417,6 +552,9 @@ namespace Spring.Messaging.Core
             }
         }
 
+        /// <summary>
+        /// Checks if the default message queue if defined.
+        /// </summary>
         protected virtual void CheckDefaultMessageQueue()
         {
             if (DefaultMessageQueueObjectName == null)

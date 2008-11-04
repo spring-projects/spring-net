@@ -241,6 +241,14 @@ namespace Spring.Messaging.Listener
 
         #region Protected Methods
 
+        /// <summary>
+        /// Does the receive and execute using platform transaction manager.
+        /// </summary>
+        /// <param name="mq">The message queue.</param>
+        /// <param name="status">The transactional status.</param>
+        /// <returns>
+        /// true if should continue peeking, false otherwise.
+        /// </returns>
         protected override bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
                                                                                    ITransactionStatus status)
         {
@@ -273,6 +281,12 @@ namespace Spring.Messaging.Listener
             throw new NotImplementedException("Try using NonTransactionalMessageListenerContainer instead.");
         }
 
+        /// <summary>
+        /// Does the recieve and execute using message queue transaction manager.
+        /// </summary>
+        /// <param name="mq">The message queue.</param>
+        /// <param name="status">The transactional status.</param>
+        /// <returns>true if should continue peeking, false otherise</returns>
         protected virtual bool DoRecieveAndExecuteUsingMessageQueueTransactionManager(MessageQueue mq,
                                                                                       ITransactionStatus status)
         {
@@ -291,7 +305,6 @@ namespace Spring.Messaging.Listener
 
             try
             {
-                //TODO check that GetMessageQueueTransction  doesn't return null.
                 message = mq.Receive(TimeSpan.Zero, QueueUtils.GetMessageQueueTransaction(null));
             }
             catch (MessageQueueException ex)
@@ -403,6 +416,12 @@ namespace Spring.Messaging.Listener
             return true;
         }
 
+        /// <summary>
+        /// Does the recieve and execute using a local MessageQueueTransaction.
+        /// </summary>
+        /// <param name="mq">The mqessage queue.</param>
+        /// <param name="status">The transactional status.</param>
+        /// <returns>true if should continue peeking, false otherwise.</returns>
         protected virtual bool DoRecieveAndExecuteUsingResourceTransactionManagerWithTxQueue(MessageQueue mq,
                                                                                              ITransactionStatus status)
         {
@@ -598,6 +617,13 @@ namespace Spring.Messaging.Listener
         }
 
 
+        /// <summary>
+        /// Handles the transactional listener exception.
+        /// </summary>
+        /// <param name="e">The exception thrown while processing the message.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="messageQueueTransaction">The message queue transaction.</param>
+        /// <returns>The TransactionAction retruned by the TransactionalExceptionListener</returns>
         protected virtual TransactionAction HandleTransactionalListenerException(Exception e, Message message,
                                                                                  MessageQueueTransaction
                                                                                      messageQueueTransaction)
@@ -628,14 +654,22 @@ namespace Spring.Messaging.Listener
         }
 
 
+        /// <summary>
+        /// Invokes the transactional exception listener.
+        /// </summary>
+        /// <param name="e">The exception thrown during message processing.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="messageQueueTransaction">The message queue transaction.</param>
+        /// <returns>TransactionAction.Rollback if no exception handler is defined, otherwise the 
+        /// TransactionAction returned by the exception handler</returns>
         protected virtual TransactionAction InvokeTransactionalExceptionListener(Exception e, Message message,
                                                                                  MessageQueueTransaction
                                                                                      messageQueueTransaction)
         {
-            IMessageTransactionExceptionHandler exMessageTransaction = MessageTransactionExceptionHandler;
-            if (exMessageTransaction != null)
+            IMessageTransactionExceptionHandler exceptionHandler = MessageTransactionExceptionHandler;
+            if (exceptionHandler != null)
             {
-                return exMessageTransaction.OnException(e, message, messageQueueTransaction);
+                return exceptionHandler.OnException(e, message, messageQueueTransaction);
             }
             else
             {

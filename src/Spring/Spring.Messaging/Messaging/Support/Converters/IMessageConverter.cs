@@ -23,6 +23,9 @@ using System.Messaging;
 
 namespace Spring.Messaging.Support.Converters
 {
+    /// <summary>
+    /// An interface specifying the contract to convert to and from <see cref="Message"/> objects.
+    /// </summary>
     public interface IMessageConverter : ICloneable
     {
         /// <summary>

@@ -29,6 +29,10 @@ namespace Spring.Messaging.Core
     /// <author>Mark Pollack</author>
     public class LocallyExposedMessageQueueResourceHolder : MessageQueueResourceHolder
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocallyExposedMessageQueueResourceHolder"/> class.
+        /// </summary>
+        /// <param name="messageQueueTransaction">The message queue transaction.</param>
         public LocallyExposedMessageQueueResourceHolder(MessageQueueTransaction messageQueueTransaction)
             : base(messageQueueTransaction)
         {

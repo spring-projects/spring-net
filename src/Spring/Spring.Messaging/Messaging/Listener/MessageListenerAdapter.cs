@@ -161,12 +161,28 @@ namespace Spring.Messaging.Listener
 
         #endregion
 
+        /// <summary>
+        /// Gets or sets the handler object to delegate message listening to.
+        /// </summary>
+        /// <remarks>
+        /// Specified listener methods have to be present on this target object.
+        /// If no explicit handler object has been specified, listener
+        /// methods are expected to present on this adapter instance, that is,
+        /// on a custom subclass of this adapter, defining listener methods.
+        /// </remarks>
+        /// <value>The handler object.</value>
         public object HandlerObject
         {
             get { return handlerObject; }
             set { handlerObject = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the default handler method to delegate to,
+        /// for the case where no specific listener method has been determined.
+        /// Out-of-the-box value is "HandleMessage".
+        /// </summary>
+        /// <value>The default handler method.</value>
         public string DefaultHandlerMethod
         {
             get { return defaultHandlerMethod; }
@@ -256,18 +272,42 @@ namespace Spring.Messaging.Listener
 
         #endregion
 
+        /// <summary>
+        /// Gets or sets the message queue factory.
+        /// </summary>
+        /// <value>The message queue factory.</value>
         public IMessageQueueFactory MessageQueueFactory
         {
             get { return messageQueueFactory; }
             set { messageQueueFactory = value; }
         }
 
+        /// <summary>
+        /// Sets the name of the default response queue to send response messages to.
+        /// This will be applied in case of a request message that does not carry a
+        /// "ResponseQueue" value.
+        /// <para>Alternatively, specify a response queue via the property
+        /// <see cref="DefaultResponseQueue"/>.</para>
+        /// </summary>
+        /// <value>The name of the default response destination queue.</value>
         public string DefaultResponseQueueName
         {
             get { return defaultResponseQueueName; }
             set { defaultResponseQueueName = value; }
         }
 
+        /// <summary>
+        /// Sets the default destination to send response messages to. This will be applied
+        /// in case of a request message that does not carry a "ResponseQueue" property
+        /// Response destinations are only relevant for listener methods that return
+        /// result objects, which will be wrapped in a response message and sent to a
+        /// response destination.
+        /// <para>
+        /// Alternatively, specify a "DefaultResponseQueueName" 
+        /// to be dynamically resolved via the MessageQueueFactory.
+        /// </para>
+        /// </summary>
+        /// <value>The default response destination.</value>
         public MessageQueue DefaultResponseQueue
         {
             get
@@ -280,42 +320,36 @@ namespace Spring.Messaging.Listener
                 {
                     return null;
                 }
-                /*
-                DefaultMessageQueue mq = LogicalThreadContext.GetData(CURRENT_RESPONSEQUEUE_SLOTNAME) as DefaultMessageQueue;
-                if (mq == null)
-                {
-                    mq = ApplicationContext.GetObject(DefaultResponseQueueName) as DefaultMessageQueue;
-                    LogicalThreadContext.SetData(CURRENT_RESPONSEQUEUE_SLOTNAME, mq);
-                }
-                return mq;
-                 */
             }
         }
 
 
+        /// <summary>
+        /// Gets or sets the name of the message converter object used to resolved a <see cref="IMessageConverter"/>
+        /// instance.
+        /// </summary>
+        /// <value>The name of the message converter object.</value>
         public string MessageConverterObjectName
         {
             get { return messageConverterObjectName; }
             set { messageConverterObjectName = value; }
         }
 
+        /// <summary>
+        /// Gets message converter that will convert incoming MSMQ messages to
+        /// listener method arguments, and objects returned from listener
+        /// methods back to MSMQ messages.
+        /// </summary>
+        /// <remarks>
+        /// <para>The converter used is the one returned by CreateMessageConverter on MessageQueueFactory.
+        /// </para>
+        /// </remarks>
+        /// <value>The message converter.</value>
         public IMessageConverter MessageConverter
         {
             get
             {
                 return messageQueueFactory.CreateMessageConverter(MessageConverterObjectName);
-                /*
-                if (messageConverter == null)
-                {
-                    throw new InvalidOperationException("No MessageConverter registered. Check configuration of MessageQueueTemplate.");
-                }
-                IMessageConverter mc = LogicalThreadContext.GetData(CURRENT_CONVERTER_SLOTNAME) as IMessageConverter;
-                if (mc == null)
-                {
-                    mc = messageConverter.Clone() as IMessageConverter;
-                    LogicalThreadContext.SetData(CURRENT_CONVERTER_SLOTNAME, mc);
-                }
-                return mc;*/
             }
         }
 
@@ -366,6 +400,12 @@ namespace Spring.Messaging.Listener
             messageQueueTemplate = new MessageQueueTemplate();
         }
 
+        /// <summary>
+        /// Extracts the message body from the given message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns>the content of the message, to be passed into the
+        /// listener method as argument</returns>
         protected virtual object ExtractMessage(Message message)
         {
             IMessageConverter converter = MessageConverter;
@@ -389,12 +429,23 @@ namespace Spring.Messaging.Listener
             SendResponse(destination, response);
         }
 
+        /// <summary>
+        /// Sends the given response message to the given destination.
+        /// </summary>
+        /// <param name="destination">The destination to send to.</param>
+        /// <param name="response">The outgoing message about to be sent.</param>
         protected virtual void SendResponse(MessageQueue destination, Message response)
         {
             //Will send with appropriate transaction semantics 
             messageQueueTemplate.Send(destination, response);
         }
 
+        /// <summary>
+        /// Builds a MSMQ message to be sent as response based on the given result object.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns>the MSMQ <code>Message</code> (never <code>null</code>)</returns>
+        /// <exception cref="MessagingException">If no messgae converter is specified.</exception>
         protected virtual Message BuildMessage(object result)
         {
             IMessageConverter converter = MessageConverter;
@@ -421,11 +472,32 @@ namespace Spring.Messaging.Listener
             }
         }
 
+        /// <summary>
+        /// Post-process the given response message before it will be sent. The default implementation
+        /// sets the response's correlation id to the request message's correlation id.
+        /// </summary>
+        /// <param name="request">The original incoming message.</param>
+        /// <param name="response">The outgoing MSMQ message about to be sent.</param>
         protected virtual void PostProcessResponse(Message request, Message response)
         {
             response.CorrelationId = request.CorrelationId;
         }
 
+        /// <summary>
+        /// Determine a response destination for the given message.
+        /// </summary>
+        /// <remarks>
+        /// <para>The default implementation first checks the MSMQ ResponseQueue
+        ///  of the supplied request; if that is not <code>null</code>
+        /// it is returned; if it is <code>null</code>, then the configured
+        /// <see cref="DefaultResponseQueue"/> default response destination}
+        /// is returned; if this too is <code>null</code>, then an
+        /// <see cref="MessagingException"/>is thrown.
+        /// </para>
+        /// </remarks>
+        /// <param name="request">The request.</param>
+        /// <param name="response">The response.</param>
+        /// <returns></returns>
         protected virtual MessageQueue GetResponseDestination(Message request, Message response)
         {
             MessageQueue replyTo = request.ResponseQueue;
