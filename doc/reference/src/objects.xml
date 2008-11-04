@@ -2111,6 +2111,163 @@ public class MixedIocObject
       </sect3>
     </sect2>
 
+    <sect2>
+      <title>Declarative Event Listener Registration</title>
+
+      <para>In C# events are built right into the language thanks to the
+      <literal>event</literal> keyword. Under the scenes, events are
+      essentially a shorthand notation for delegates with some additional
+      guidelines as to what the parameters to an event handler method should
+      be (i.e. a sender <literal>System.Object</literal> and an
+      <literal>System.EventArgs</literal> object).</para>
+
+      <para><programlisting language="csharp">public class EventSource
+public event EventHandler Click;</programlisting></para>
+
+      <para>In use, .NET events are combined with one or more event handler
+      methods. Each handler method is programmatically added, or removed, from
+      the event and corresponds to an object's method that should be invoked
+      when a particular event occurs. When more than one handler method is
+      added to an event, then each of the registered methods will be invoked
+      in turn when an event occurs.</para>
+
+      <para><programlisting language="csharp">TestObject source = new TestObject();
+TestEventHandler eventListener1 = new TestEventHandler();
+TestEventHandler eventListener2 = new TestEventHandler();
+
+source.Click += eventListener1.HandleEvent; // Adding the first event handler method to the event
+source.Click += eventListener2.HandleEvent; // Adding a second event handler method to the event
+
+source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventListener2.HandleEvent</programlisting></para>
+
+      <para>When OnClick() is invoked, the event is fired.</para>
+
+      <para><programlisting language="csharp">public void OnClick()
+{
+   if (Click != null)
+   {
+      Click(this, EventArgs.Empty); // Fire the event off to the registered handler methods
+   }
+}</programlisting></para>
+
+      <para>One of the not so nice things about using events is that, without
+      employing late binding, you declare the objects that are registered with
+      a particular event programmatically. Spring .NET offers a way to
+      declaratively register your handler methods with particular events using
+      the <literal>&lt;listener&gt;</literal> element inside your
+      <literal>&lt;object&gt;</literal> elements.</para>
+
+      <sect3>
+        <title>Declarative event handlers</title>
+
+        <para>Rather than having to specifically declare in your code that you
+        are adding a method to be invoked on an event, using the
+        <literal>&lt;listener&gt;</literal> element you can register a plain
+        object's methods with the corresponding event declaratively in your
+        application configuration.</para>
+
+        <para>Using the <literal>listener</literal> element you can:
+        <itemizedlist>
+            <listitem>
+              <link linkend="objects-simple-event-configuration">Configure a
+              method to be invoked when an event is fired.</link>
+            </listitem>
+
+            <listitem>
+              <link linkend="objects-handler-reg-ex-configuration">Register a
+              collection of handler methods based on a regular
+              expression.</link>
+            </listitem>
+
+            <listitem>
+              <link linkend="objects-event-name-reg-ex-configuration">Register
+              a handler method against an event name that contains a regular
+              expression.</link>
+            </listitem>
+          </itemizedlist></para>
+      </sect3>
+
+      <sect3 xml:id="objects-simple-event-configuration">
+        <title>Configuring a method to be invoked when an event is
+        fired</title>
+
+        <para>The same event registration in the example above can be achieved
+        using configuration using the <literal>&lt;listener&gt;</literal>
+        element.</para>
+
+        <para><programlisting language="myxml">&lt;object id="eventListener1" type="SpringdotNETEventsExample.TestEventHandler, SpringdotNETEventsExample"&gt;
+   &lt;!-- wired up to an event exposed on an instance --&gt;
+   &lt;listener event="Click" method="HandleEvent"&gt;
+      &lt;ref object="source"/&gt;
+   &lt;/listener&gt;
+&lt;/object&gt;
+
+&lt;object id="eventListener2" type="SpringdotNETEventsExample.TestEventHandler, SpringdotNETEventsExample"&gt;
+   &lt;!-- wired up to an event exposed on an instance --&gt;
+   &lt;listener event="Click" method="HandleEvent"&gt;
+      &lt;ref object="source"/&gt;
+   &lt;/listener&gt;
+&lt;/object&gt;</programlisting></para>
+
+        <para>In this case the two different objects will have their
+        <literal>HandleEvent</literal> method invoked, as indicated explicitly
+        using the <literal>method</literal> attribute, when a
+        <literal>Click</literal> event, as specified by the
+        <literal>event</literal> attribute, is triggered on the object
+        referred to by the <literal>ref</literal> element.</para>
+      </sect3>
+
+      <sect3 xml:id="objects-handler-reg-ex-configuration">
+        <title>Registering a collection of handler methods based on a regular
+        expression</title>
+
+        <para>Regular expressions can be employed to wire up more than one
+        handler method to an object that contains one or more events.</para>
+
+        <para><programlisting language="myxml">&lt;object id="eventListener" type="SpringdotNETEventsExample.TestEventHandler, SpringdotNETEventsExample"&gt;
+   &lt;listener method="Handle.+"&gt;
+      &lt;ref object="source"/&gt;
+   &lt;/listener&gt;
+&lt;/object&gt;</programlisting></para>
+
+        <para>Here all the <literal>eventListener</literal>'s handler methods
+        that begin with 'Handle', and that have the corresponding two
+        parameters of a <literal>System.Object</literal> and a
+        <literal>System.EventArgs</literal>, will be registered against all
+        events exposed by the <literal>source</literal> object.</para>
+
+        <para>You can also use the name of the event in regular expression to
+        filter your handler methods based on the type of event
+        triggered.</para>
+
+        <para><programlisting language="myxml">&lt;object id="eventListener" type="SpringdotNETEventsExample.TestEventHandler, SpringdotNETEventsExample"&gt;
+   &lt;!-- For the Click event, the HandleClick handler method will be invoked. --&gt;
+   &lt;listener method="Handle${event}"&gt;
+      &lt;ref object="source"/&gt;
+   &lt;/listener&gt;
+&lt;/object&gt;</programlisting></para>
+      </sect3>
+
+      <sect3 xml:id="objects-event-name-reg-ex-configuration">
+        <title>Registering a handler method against an event name that
+        contains a regular expression</title>
+
+        <para>Finally, you can register an object's handler methods against a
+        selection of events, filtering based on their name using a regular
+        expression.</para>
+
+        <para><programlisting language="myxml">&lt;object id="eventListener" type="SpringdotNETEventsExample.TestEventHandler, SpringdotNETEventsExample"&gt;
+   &lt;listener method="HandleEvent" event="Cl.+"&gt;
+      &lt;ref object="source"/&gt;
+   &lt;/listener&gt;
+&lt;/object&gt;</programlisting></para>
+
+        <para>In this example the <literal>eventListener</literal>'s
+        <literal>HandleEvent</literal> handler method will be invoked for any
+        event that begins with 'Cl'.</para>
+      </sect3>
+    </sect2>
+
     <sect2 xml:id="objects-factory-dependson">
       <title>Using <literal>depends-on</literal></title>
 

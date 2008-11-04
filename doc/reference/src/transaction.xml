@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="transaction" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="transaction"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Transaction management</title>
 
   <sect1 xml:id="tx-introduction">
@@ -40,7 +46,8 @@
 
       <listitem>
         <para>Provides a simple API for <link
-        linkend="transaction-programmatic">programmatic</link> transaction management</para>
+        linkend="transaction-programmatic">programmatic</link> transaction
+        management</para>
       </listitem>
 
       <listitem>
@@ -76,9 +83,10 @@
       </listitem>
 
       <listitem>
-        <para>The fourth section, entitled <link linkend="transaction-programmatic">Programmatic
-        transaction management</link>, covers support for programmatic
-        transaction management.</para>
+        <para>The fourth section, entitled <link
+        linkend="transaction-programmatic">Programmatic transaction
+        management</link>, covers support for programmatic transaction
+        management.</para>
       </listitem>
     </itemizedlist>
   </sect1>
@@ -215,16 +223,16 @@
 
     <para>This is primarily a 'SPI' (Service Provider Interface), although it
     can be used Programatically. Note that in keeping with the Spring
-    Framework's philosophy, <literal>IPlatformTransactionManager</literal>
-    is an interface, and can thus be easily mocked or stubbed as necessary.
-    <literal>IPlatformTransactionManager</literal> implementations
-    are defined like any other object in the IoC container. The following
-    implementations are provided</para>
+    Framework's philosophy, <literal>IPlatformTransactionManager</literal> is
+    an interface, and can thus be easily mocked or stubbed as necessary.
+    <literal>IPlatformTransactionManager</literal> implementations are defined
+    like any other object in the IoC container. The following implementations
+    are provided</para>
 
     <itemizedlist>
       <listitem>
-        <para><literal>AdoPlatformTransactionManager</literal> - local
-        ADO.NET based transactions</para>
+        <para><literal>AdoPlatformTransactionManager</literal> - local ADO.NET
+        based transactions</para>
       </listitem>
 
       <listitem>
@@ -238,8 +246,8 @@
       </listitem>
 
       <listitem>
-        <para><literal>HibernatePlatformTransactionManager</literal> -
-        local transaction manager for use with NHibernate or mixed
+        <para><literal>HibernatePlatformTransactionManager</literal> - local
+        transaction manager for use with NHibernate or mixed
         ADO.NET/NHibernate data access operations.</para>
       </listitem>
     </itemizedlist>
@@ -261,11 +269,10 @@
     <para>The <literal>GetTransaction(..)</literal> method returns a
     <literal>ITransactionStatus</literal> object, depending on a
     <literal>ITransactionDefinition</literal> parameters. The returned
-    <literal>ITransactionStatus</literal> might represent a new or
-    existing transaction (if there was a matching transaction in the current
-    call stack - with the implication being that a
-    <literal>ITransactionStatus</literal> is associated with a logical
-    thread of execution.</para>
+    <literal>ITransactionStatus</literal> might represent a new or existing
+    transaction (if there was a matching transaction in the current call stack
+    - with the implication being that a <literal>ITransactionStatus</literal>
+    is associated with a logical thread of execution.</para>
 
     <para>The <literal>ITransactionDefinition</literal> interface
     specified</para>
@@ -305,28 +312,25 @@
     concepts is essential to using the Spring Framework or indeed any other
     transaction management solution.</para>
 
-    <para>The <literal>ITransactionStatus</literal> interface
-    provides a simple way for transactional code to control transaction
-    execution and query transaction status.</para>
+    <para>The <literal>ITransactionStatus</literal> interface provides a
+    simple way for transactional code to control transaction execution and
+    query transaction status.</para>
 
     <para>Regardless of whether you opt for declarative or programmatic
     transaction management in Spring, defining the correct
-    <literal>IPlatformTransactionManager</literal> implementation
-    is absolutely essential. In good Spring fashion, this important definition
+    <literal>IPlatformTransactionManager</literal> implementation is
+    absolutely essential. In good Spring fashion, this important definition
     typically is made using via Dependency Injection.</para>
 
-    <para><literal>IPlatformTransactionManager</literal>
-    implementations normally require knowledge of the environment in which
-    they work, ADO.NET, NHibernate, etc. The following example shows how a
-    standard ADO.NET based
-    <literal>IPlatformTransactionManager</literal> can be
-    defined.</para>
+    <para><literal>IPlatformTransactionManager</literal> implementations
+    normally require knowledge of the environment in which they work, ADO.NET,
+    NHibernate, etc. The following example shows how a standard ADO.NET based
+    <literal>IPlatformTransactionManager</literal> can be defined.</para>
 
-    <para>We must define a Spring <literal>IDbProvider</literal>
-    and then use Spring's
-    <literal>AdoPlatformTransactionManager</literal>, giving it a
-    reference to the <literal>IDbProvider</literal>. For more information
-    on the <literal>IDbProvider</literal> abstraction refer to the next
+    <para>We must define a Spring <literal>IDbProvider</literal> and then use
+    Spring's <literal>AdoPlatformTransactionManager</literal>, giving it a
+    reference to the <literal>IDbProvider</literal>. For more information on
+    the <literal>IDbProvider</literal> abstraction refer to the next
     chapter.</para>
 
     <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
@@ -463,9 +467,9 @@
     specify which exceptions should cause automatic roll back. We specify this
     declaratively, in configuration, not in code. So, while we can still set
     <literal>RollbackOnly</literal> on the
-    <literal>ITransactionStatus</literal> object to roll the
-    current transaction back Programatically, most often we can specify a rule
-    that MyApplicationException must always result in rollback. This has the
+    <literal>ITransactionStatus</literal> object to roll the current
+    transaction back Programatically, most often we can specify a rule that
+    MyApplicationException must always result in rollback. This has the
     significant advantage that business objects don't need to depend on the
     transaction infrastructure. For example, they typically don't need to
     import any Spring APIs, transaction or other. If you would like to
@@ -481,8 +485,8 @@
     </note>
 
     <sect2 xml:id="tx-understandingimpl">
-      <title>Understanding
-      Spring's declarative transaction implementation</title>
+      <title>Understanding Spring's declarative transaction
+      implementation</title>
 
       <para>The aim of this section is to dispel the mystique that is
       sometimes associated with the use of declarative transactions. It is all
@@ -522,7 +526,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/tx.png" />
+          <imagedata fileref="images/tx.png"></imagedata>
         </imageobject>
       </mediaobject>
 
@@ -534,9 +538,9 @@
 
       <itemizedlist>
         <listitem>
-          <para><literal>ProxyFactoryObject</literal>. The common
-          properties to set are the reference to the object to proxy (the
-          target object) and a reference to the transaction advice. See <xref
+          <para><literal>ProxyFactoryObject</literal>. The common properties
+          to set are the reference to the object to proxy (the target object)
+          and a reference to the transaction advice. See <xref
           linkend="aop-proxyfactoryobject" /> for more details.</para>
         </listitem>
 
@@ -555,10 +559,10 @@
             </listitem>
 
             <listitem>
-              <para><literal>DefaultAdvisorAutoProxyCreator</literal>
-              which specifies one or more "advisors" i.e an object
-              representing an aspect, including both an advice and a pointcut
-              targeting it to specific joinpoints. See <xref
+              <para><literal>DefaultAdvisorAutoProxyCreator</literal> which
+              specifies one or more "advisors" i.e an object representing an
+              aspect, including both an advice and a pointcut targeting it to
+              specific joinpoints. See <xref
               linkend="aop-advisorautoproxy" /></para>
             </listitem>
           </itemizedlist>
@@ -567,8 +571,8 @@
 
       <para>There is also a convenience subclass of
       <literal>ProxyFactoryObject</literal>, namely
-      <literal>TransactionProxyFactoryObject</literal>, that sets some
-      common default values for the specific case of applying transactional
+      <literal>TransactionProxyFactoryObject</literal>, that sets some common
+      default values for the specific case of applying transactional
       advice.</para>
 
       <para>The <literal>DefaultAdvisorAutoProxyCreator</literal> is very
@@ -610,11 +614,11 @@
       <para>Consider the following interface. The intent is to convey the
       concepts to you so you can concentrate on the transaction usage and not
       have to worry about domain specific details. The
-      <literal>ITestObjectManager</literal> is a poor-mans
-      business service layer - the implementation of which will make two DAO
-      calls. Clearly this example is overly simplistic from the service layer
-      perspective as there isn't any business logic at all!. The 'service'
-      interface is shown below.</para>
+      <literal>ITestObjectManager</literal> is a poor-mans business service
+      layer - the implementation of which will make two DAO calls. Clearly
+      this example is overly simplistic from the service layer perspective as
+      there isn't any business logic at all!. The 'service' interface is shown
+      below.</para>
 
       <programlisting language="csharp">public interface ITestObjectManager 
 {
@@ -623,8 +627,8 @@
   void DeleteTwoTestObjects(string name1, string name2);
 }</programlisting>
 
-      <para>The implementation of
-      <literal>ITestObjectManager</literal> is shown below</para>
+      <para>The implementation of <literal>ITestObjectManager</literal> is
+      shown below</para>
 
       <programlisting language="csharp">public class TestObjectManager : ITestObjectManager 
 {
@@ -669,8 +673,8 @@
 }</programlisting>
 
       <para>The Create and Delete method implementation is shown below. Note
-      that this uses the <literal>AdoTemplate</literal> class discussed in
-      the following chapter. Refer to <xref linkend="resource-sync" /> for
+      that this uses the <literal>AdoTemplate</literal> class discussed in the
+      following chapter. Refer to <xref linkend="resource-sync" /> for
       information on the interaction between Spring's high level persistence
       integration APIs and transaction management features.</para>
 
@@ -691,15 +695,14 @@
    }
 }</programlisting>
 
-      <para>The <literal>TestObjectManager</literal> is configured with
-      the DAO objects by standard dependency injection techniques. The client
+      <para>The <literal>TestObjectManager</literal> is configured with the
+      DAO objects by standard dependency injection techniques. The client
       code, which in this case directly asks the Spring IoC container for an
-      instance of <literal>ITestObjectManager</literal>, will
-      receive a transaction proxy with transaction options based on the
-      attribute metadata. Note that typically the
-      <literal>ITestObjectManager</literal> would be set on yet
-      another higher level object via dependency injection, for example a web
-      service.</para>
+      instance of <literal>ITestObjectManager</literal>, will receive a
+      transaction proxy with transaction options based on the attribute
+      metadata. Note that typically the <literal>ITestObjectManager</literal>
+      would be set on yet another higher level object via dependency
+      injection, for example a web service.</para>
 
       <para>The client calling code is shown below</para>
 
@@ -807,26 +810,26 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
       <itemizedlist>
         <listitem>
-          <para><literal>TransactionInterceptor</literal> is the AOP
-          advice responsible for performing transaction management
+          <para><literal>TransactionInterceptor</literal> is the AOP advice
+          responsible for performing transaction management
           functionality.</para>
         </listitem>
 
         <listitem>
-          <para><literal>TransactionAttributeSourceAdvisor</literal> is an
-          AOP Advisor that holds the TransactionInterceptor, which is the
-          advice, and a pointcut (where to apply the advice), in the form of a
+          <para><literal>TransactionAttributeSourceAdvisor</literal> is an AOP
+          Advisor that holds the TransactionInterceptor, which is the advice,
+          and a pointcut (where to apply the advice), in the form of a
           TransactionAttributeSource.</para>
         </listitem>
 
         <listitem>
-          <para><literal>AttributesTransactionAttributeSource</literal> is
-          an implementation of the
-          <literal>ITransactionAttributeSource</literal> interface that
-          defines where to get the transaction metadata defining the
-          transaction semantics (isolation level, propagation behavior, etc)
-          that should be applied to specific methods of specific classes. The
-          transaction metadata is specified via implementations of the
+          <para><literal>AttributesTransactionAttributeSource</literal> is an
+          implementation of the <literal>ITransactionAttributeSource</literal>
+          interface that defines where to get the transaction metadata
+          defining the transaction semantics (isolation level, propagation
+          behavior, etc) that should be applied to specific methods of
+          specific classes. The transaction metadata is specified via
+          implementations of the
           <literal>ITransactionAttributeSource</literal> interface. This
           example shows the use of the implementation
           <literal>Spring.Transaction.Interceptor.AttributesTransactionAttributeSource</literal>
@@ -848,8 +851,8 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
             </listitem>
 
             <listitem>
-              <para><literal>AttributesTransactionAttributeSource</literal>
-              : Use a standard. .NET attributes to specify the transactional
+              <para><literal>AttributesTransactionAttributeSource</literal> :
+              Use a standard. .NET attributes to specify the transactional
               information. See <literal>TransactionAttribute</literal> class
               for more information.</para>
             </listitem>
@@ -877,8 +880,8 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
             </listitem>
 
             <listitem>
-              <para><literal>MethodMapTransactionAttributeSource</literal>
-              : Similar to NameMatchTransactionAttributeSource but specifies
+              <para><literal>MethodMapTransactionAttributeSource</literal> :
+              Similar to NameMatchTransactionAttributeSource but specifies
               that only fully qualified method names (i.e. type.method,
               assembly) and wildcards can be used at the start or end of the
               method name for matching multiple methods.</para>
@@ -887,8 +890,8 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
         </listitem>
 
         <listitem>
-          <para><literal>DefaultAdvisorAutoProxyCreator</literal>: looks
-          for Advisors in the context, and automatically creates proxy objects
+          <para><literal>DefaultAdvisorAutoProxyCreator</literal>: looks for
+          Advisors in the context, and automatically creates proxy objects
           which are the transactional wrappers</para>
         </listitem>
       </itemizedlist>
@@ -944,7 +947,7 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
          xmlns:db="http://www.springframework.net/database"
          xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects.xsd
          http://www.springframework.net/schema/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd"
-         http://www.springframework.net/schema/tx http://www.springframework.net/schema/tx/spring-database.xsd"&gt; 
+         http://www.springframework.net/schema/db http://www.springframework.net/schema/db/spring-database.xsd"&gt; 
 
     &lt;db:provider id="DbProvider" 
                   provider="SqlServer-1.1" 
@@ -980,13 +983,12 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
           <para>You can actually omit the
           <literal>'transaction-manager'</literal> attribute in the
           <literal>&lt;tx:attribute-driven/&gt;</literal> tag if the object
-          name of the
-          <literal>IPlatformTransactionManager</literal> that you
+          name of the <literal>IPlatformTransactionManager</literal> that you
           want to wire in has the name
           <literal>'transactionManager'</literal>. If the
-          <literal>PlatformTransactionManager</literal> object
-          that you want to dependency inject has any other name, then you have
-          to be explicit and use the <literal>'transaction-manager'</literal>
+          <literal>PlatformTransactionManager</literal> object that you want
+          to dependency inject has any other name, then you have to be
+          explicit and use the <literal>'transaction-manager'</literal>
           attribute as in the example above.</para>
         </tip>The various optional elements of the
       &lt;tx:attribute-driven/&gt; tag are summarised in the following
@@ -1011,57 +1013,68 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
             <tbody>
               <row>
-                <entry><literal>transaction-manager</literal></entry>
+                <entry>
+                  <literal>transaction-manager</literal>
+                </entry>
 
                 <entry>No</entry>
 
                 <entry>transactionManager</entry>
 
-                <entry><para>The name of transaction manager to use. Only
-                required if the name of the transaction manager is not
-                <literal>transactionManager</literal>, as in the example
-                above.</para></entry>
+                <entry>
+                  <para>The name of transaction manager to use. Only required
+                  if the name of the transaction manager is not
+                  <literal>transactionManager</literal>, as in the example
+                  above.</para>
+                </entry>
               </row>
 
               <row>
-                <entry><literal>proxy-target-type</literal></entry>
+                <entry>
+                  <literal>proxy-target-type</literal>
+                </entry>
 
                 <entry>No</entry>
 
-                <entry></entry>
+                <entry />
 
-                <entry><para>Controls what type of transactional proxies are
-                created for classes annotated with the
-                <literal>[Transaction]</literal> attribute. If
-                "<literal>proxy-target-type</literal>" attribute is set to
-                "<literal>true</literal>", then class-based proxies will be
-                created (proxy inherits from target class, however calls are
-                still delegated to target object via composition. This allows
-                for casting to base class. If
-                "<literal>proxy-target-type</literal>" is
-                "<literal>false</literal>" or if the attribute is omitted,
-                then a pure composition based proxy is created and you can
-                only cast the proxy to implemented interfaces. (See the
-                section entitled <xref linkend="aop-proxy-mechanism" /> for a
-                detailed examination of the different proxy
-                types.)</para></entry>
+                <entry>
+                  <para>Controls what type of transactional proxies are
+                  created for classes annotated with the
+                  <literal>[Transaction]</literal> attribute. If
+                  "<literal>proxy-target-type</literal>" attribute is set to
+                  "<literal>true</literal>", then class-based proxies will be
+                  created (proxy inherits from target class, however calls are
+                  still delegated to target object via composition. This
+                  allows for casting to base class. If
+                  "<literal>proxy-target-type</literal>" is
+                  "<literal>false</literal>" or if the attribute is omitted,
+                  then a pure composition based proxy is created and you can
+                  only cast the proxy to implemented interfaces. (See the
+                  section entitled <xref linkend="aop-proxy-mechanism" /> for
+                  a detailed examination of the different proxy types.)</para>
+                </entry>
               </row>
 
               <row>
-                <entry><literal>order</literal></entry>
+                <entry>
+                  <literal>order</literal>
+                </entry>
 
                 <entry>No</entry>
 
-                <entry></entry>
+                <entry />
 
-                <entry><para>Defines the order of the transaction advice that
-                will be applied to objects annotated with
-                <code>[Transaction]</code>. More on the rules related to
-                ordering of AOP advice can be found in the AOP chapter (see
-                section <xref lang="" linkend="aop-advice-ordering" />). Note
-                that not specifying any ordering will leave the decision as to
-                what order advice is run in to the AOP
-                subsystem.</para></entry>
+                <entry>
+                  <para>Defines the order of the transaction advice that will
+                  be applied to objects annotated with
+                  <code>[Transaction]</code>. More on the rules related to
+                  ordering of AOP advice can be found in the AOP chapter (see
+                  section <xref lang="" linkend="aop-advice-ordering" />).
+                  Note that not specifying any ordering will leave the
+                  decision as to what order advice is run in to the AOP
+                  subsystem.</para>
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -1214,23 +1227,29 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
             <tbody>
               <row>
-                <entry><literal>name</literal></entry>
+                <entry>
+                  <literal>name</literal>
+                </entry>
 
                 <entry>Yes</entry>
 
-                <entry></entry>
+                <entry />
 
-                <entry><para>The method name(s) with which the transaction
-                attributes are to be associated. The wildcard (*) character
-                can be used to associate the same transaction attribute
-                settings with a number of methods; for example,
-                <literal>'Get*'</literal>,
-                <literal>'Handle*'</literal>,<literal> 'On*Event'</literal>,
-                and so forth.</para></entry>
+                <entry>
+                  <para>The method name(s) with which the transaction
+                  attributes are to be associated. The wildcard (*) character
+                  can be used to associate the same transaction attribute
+                  settings with a number of methods; for example,
+                  <literal>'Get*'</literal>,
+                  <literal>'Handle*'</literal>,<literal> 'On*Event'</literal>,
+                  and so forth.</para>
+                </entry>
               </row>
 
               <row>
-                <entry><literal>propagation</literal></entry>
+                <entry>
+                  <literal>propagation</literal>
+                </entry>
 
                 <entry>No</entry>
 
@@ -1240,7 +1259,9 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
               </row>
 
               <row>
-                <entry><literal>isolation</literal></entry>
+                <entry>
+                  <literal>isolation</literal>
+                </entry>
 
                 <entry>No</entry>
 
@@ -1250,7 +1271,9 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
               </row>
 
               <row>
-                <entry><literal>timeout</literal></entry>
+                <entry>
+                  <literal>timeout</literal>
+                </entry>
 
                 <entry>No</entry>
 
@@ -1260,7 +1283,9 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
               </row>
 
               <row>
-                <entry><literal>read-only</literal></entry>
+                <entry>
+                  <literal>read-only</literal>
+                </entry>
 
                 <entry>No</entry>
 
@@ -1270,7 +1295,9 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
               </row>
 
               <row>
-                <entry><literal>EnterpriseServicesInteropOption</literal></entry>
+                <entry>
+                  <literal>EnterpriseServicesInteropOption</literal>
+                </entry>
 
                 <entry>No</entry>
 
@@ -1281,28 +1308,36 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
               </row>
 
               <row>
-                <entry><literal>rollback-for</literal></entry>
+                <entry>
+                  <literal>rollback-for</literal>
+                </entry>
 
                 <entry>No</entry>
 
-                <entry></entry>
+                <entry />
 
-                <entry><para>The <literal>Exception(s)</literal> that will
-                trigger rollback; comma-delimited. For example,
-                <literal>'MyProduct.MyBusinessException,ValidationException'</literal></para></entry>
+                <entry>
+                  <para>The <literal>Exception(s)</literal> that will trigger
+                  rollback; comma-delimited. For example,
+                  <literal>'MyProduct.MyBusinessException,ValidationException'</literal></para>
+                </entry>
               </row>
 
               <row>
-                <entry><literal>no-rollback-for</literal></entry>
+                <entry>
+                  <literal>no-rollback-for</literal>
+                </entry>
 
                 <entry>No</entry>
 
-                <entry></entry>
+                <entry />
 
-                <entry><para>The <literal>Exception(s)</literal> that will
-                <emphasis>not</emphasis> trigger rollback; comma-delimited.
-                For example,
-                <literal>'MyProduct.MyBusinessException,ValidationException'</literal></para></entry>
+                <entry>
+                  <para>The <literal>Exception(s)</literal> that will
+                  <emphasis>not</emphasis> trigger rollback; comma-delimited.
+                  For example,
+                  <literal>'MyProduct.MyBusinessException,ValidationException'</literal></para>
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -1365,14 +1400,17 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
           <tbody>
             <row>
-              <entry align="center"><emphasis
-              role="bold">Property</emphasis></entry>
+              <entry align="center">
+                <emphasis role="bold">Property</emphasis>
+              </entry>
 
-              <entry align="center"><emphasis
-              role="bold">Type</emphasis></entry>
+              <entry align="center">
+                <emphasis role="bold">Type</emphasis>
+              </entry>
 
-              <entry align="center"><emphasis
-              role="bold">Description</emphasis></entry>
+              <entry align="center">
+                <emphasis role="bold">Description</emphasis>
+              </entry>
             </row>
 
             <row>
@@ -1388,7 +1426,9 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
             <row>
               <entry>Isolation</entry>
 
-              <entry><literal>System.Data.IsolationLevel</literal></entry>
+              <entry>
+                <literal>System.Data.IsolationLevel</literal>
+              </entry>
 
               <entry>optional isolation level</entry>
             </row>
@@ -1496,9 +1536,8 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
       <link linkend="tx-firstexample">first example</link>. The use of
       Spring's autoproxy functionality defines criteria to select a collection
       of objects to create a transactional AOP proxy. There are two AutoProxy
-      classes that you can use,
-      <literal>ObjectNameAutoProxyCreator</literal> and
-      <literal>DefaultAdvisorAutoProxyCreator</literal>. If you are using
+      classes that you can use, <literal>ObjectNameAutoProxyCreator</literal>
+      and <literal>DefaultAdvisorAutoProxyCreator</literal>. If you are using
       the new transaction namespace support you do not need to configure these
       objects as a DefaultAdvisorAutoProxyCreator is created 'under the
       covers' while parsing the transaction namespace elements</para>
@@ -1759,8 +1798,7 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
       </listitem>
 
       <listitem>
-        <para>Using a
-        <literal>IPlatformTransactionManager</literal>
+        <para>Using a <literal>IPlatformTransactionManager</literal>
         implementation directly</para>
       </listitem>
     </itemizedlist>
@@ -1775,16 +1813,16 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
       <para>The TransactionTemplate adopts the same approach as other Spring
       templates such as <literal>AdoTemplate</literal> and
-      <literal>HibernateTemplate</literal>. It uses a callback approach,
-      to free application code from having to do the boilerplate acquisition
-      and release of resources, and results in code that is intention driven,
-      in that the code that is written focuses solely on what the developer
-      wants to do. Granted that the using construct of System.Transaction
-      alleviates much of this. One key difference with the approach taken with
-      the TransactionTemplate is that a commit is assumed - throwing an
-      exception triggers a rollback instead of using the TransactionScope API
-      to commit or rollback. This also allows for the use of rollback rules,
-      that is a commit can still occur for exceptions of certain types. <note>
+      <literal>HibernateTemplate</literal>. It uses a callback approach, to
+      free application code from having to do the boilerplate acquisition and
+      release of resources, and results in code that is intention driven, in
+      that the code that is written focuses solely on what the developer wants
+      to do. Granted that the using construct of System.Transaction alleviates
+      much of this. One key difference with the approach taken with the
+      TransactionTemplate is that a commit is assumed - throwing an exception
+      triggers a rollback instead of using the TransactionScope API to commit
+      or rollback. This also allows for the use of rollback rules, that is a
+      commit can still occur for exceptions of certain types. <note>
           <para>As you will immediately see in the examples that follow, using
           the <literal>TransactionTemplate</literal> absolutely couples you to
           Spring's transaction infrastructure and APIs. Whether or not
@@ -1799,8 +1837,8 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
       execute in the context of a transaction. You will then pass an instance
       of your custom ITransactionCallback to the Execute(..) method exposed on
       the TransactionTemplate. Note that the
-      <literal>ITransactionCallback</literal> can be used to
-      return a value:</para>
+      <literal>ITransactionCallback</literal> can be used to return a
+      value:</para>
 
       <programlisting language="csharp">public class SimpleService : IService
 {
@@ -1826,11 +1864,10 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
       delegates, which provides a particularly elegant means to invoke a
       callback function as local variables can be referred to inside the
       delegate, i.e. userId. In this case the
-      <literal>ITransactionStatus</literal> was not exposed in the
-      delegate (delegate can infer the signature to use), but one could also
-      obtain a reference to the
-      <literal>ITransactionStatus</literal> instance and set the
-      <literal>RollbackOnly</literal> property to trigger a rollback - or
+      <literal>ITransactionStatus</literal> was not exposed in the delegate
+      (delegate can infer the signature to use), but one could also obtain a
+      reference to the <literal>ITransactionStatus</literal> instance and set
+      the <literal>RollbackOnly</literal> property to trigger a rollback - or
       alternatively throw an exception. This is shown below</para>
 
       <programlisting language="csharp">tt.Execute(delegate(ITransactionStatus status)
@@ -1846,8 +1883,8 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
       <para>If you are using .NET 1.1 then you should provide a normal
       delegate reference or an instance of a class that implements the
-      <literal>ITransactionCallback</literal> interface. This is
-      shown below</para>
+      <literal>ITransactionCallback</literal> interface. This is shown
+      below</para>
 
       <programlisting language="csharp">tt.Execute(new TransactionRollbackTxCallback(amount));
 
@@ -1872,9 +1909,9 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
       <para>Application classes wishing to use the
       <literal>TransactionTemplate</literal> must have access to a
-      <literal>IPlatformTransactionManager</literal> (which will
-      typically be supplied to the class via dependency injection). It is easy
-      to unit test such classes with a mock or stub
+      <literal>IPlatformTransactionManager</literal> (which will typically be
+      supplied to the class via dependency injection). It is easy to unit test
+      such classes with a mock or stub
       <literal>IPlatformTransactionManager</literal>.</para>
 
       <sect3>
@@ -1882,11 +1919,11 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
         <para>Transaction settings such as the propagation mode, the isolation
         level, the timeout, and so forth can be set on the
-        <literal>TransactionTemplate</literal> either programmatically or
-        in configuration. <literal>TransactionTemplate</literal> instances
-        by default have the default transactional settings. Find below an
-        example of programmatically customizing the transactional settings for
-        a specific <literal>TransactionTemplate</literal>.</para>
+        <literal>TransactionTemplate</literal> either programmatically or in
+        configuration. <literal>TransactionTemplate</literal> instances by
+        default have the default transactional settings. Find below an example
+        of programmatically customizing the transactional settings for a
+        specific <literal>TransactionTemplate</literal>.</para>
 
         <programlisting language="csharp">public class SimpleService : IService
 {
@@ -1912,8 +1949,8 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 </programlisting>
 
         <para>Find below an example of defining a
-        <literal>TransactionTemplate</literal> with some custom
-        transactional settings, using Spring XML configuration. The
+        <literal>TransactionTemplate</literal> with some custom transactional
+        settings, using Spring XML configuration. The
         '<literal>sharedTransactionTemplate</literal>' can then be injected
         into as many services as are required.</para>
 
@@ -1923,15 +1960,14 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
   &lt;property name="TransactionTimeout" value="30"/&gt;
 &lt;/object&gt;</programlisting>
 
-        <para>Finally, instances of the
-        <literal>TransactionTemplate</literal> class are threadsafe, in
-        that instances do not maintain any conversational state.
-        <literal>TransactionTemplate</literal> instances do however
-        maintain configuration state, so while a number of classes may choose
-        to share a single instance of a
+        <para>Finally, instances of the <literal>TransactionTemplate</literal>
+        class are threadsafe, in that instances do not maintain any
+        conversational state. <literal>TransactionTemplate</literal> instances
+        do however maintain configuration state, so while a number of classes
+        may choose to share a single instance of a
         <literal>TransactionTemplate</literal>, if a class needed to use a
-        <literal>TransactionTemplate</literal> with different settings
-        (for example, a different isolation level), then two distinct
+        <literal>TransactionTemplate</literal> with different settings (for
+        example, a different isolation level), then two distinct
         <literal>TransactionTemplate</literal> instances would need to be
         created and used.</para>
       </sect3>
@@ -1991,10 +2027,10 @@ transactionManager.Commit(status);</programlisting>
     Typical application code should not need to rely on using this class but
     in some cases it is convenient to receive events around the lifecycle of
     the transaction, i.e. before committing, after committing.
-    <literal>TransactionSynchronizationManager</literal> provides a method
-    to register a callback object that is informed on all significant stages
-    in the transaction lifecycle. Note that you can register for lifecycle
-    call back information for any of the transaction managers you use, be it
+    <literal>TransactionSynchronizationManager</literal> provides a method to
+    register a callback object that is informed on all significant stages in
+    the transaction lifecycle. Note that you can register for lifecycle call
+    back information for any of the transaction managers you use, be it
     NHibernate or local ADO.NET transactions.</para>
 
     <para>The method to register a callback with the
@@ -2023,7 +2059,7 @@ transactionManager.Commit(status);</programlisting>
   void AfterCompletion( TransactionSynchronizationStatus status );
 }</programlisting>
 
-    <para>The <literal>TransactionSynchronizationStatus</literal> is an
-    enum with the values Committed, Rolledback, and Unknown.</para>
+    <para>The <literal>TransactionSynchronizationStatus</literal> is an enum
+    with the values Committed, Rolledback, and Unknown.</para>
   </sect1>
 </chapter>
