@@ -76,6 +76,8 @@ namespace Spring.Messaging.Nms.Listener.Adapter
 
         #endregion
 
+        #region Fields
+
         /// <summary>
         /// The default handler method name.
         /// </summary>
@@ -92,6 +94,10 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
 
         private IMessageConverter messageConverter;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageListenerAdapter"/> class with default settings.
@@ -111,6 +117,8 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             InitDefaultStrategies();
             this.handlerObject = handlerObject;
         }
+
+        #endregion
 
         /// <summary>
         /// Gets or sets the handler object to delegate message listening to.
@@ -466,7 +474,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
 	    /// <para>The default implementation first checks the JMS Reply-To
 	    /// Destination of the supplied request; if that is not <code>null</code>
 	    /// it is returned; if it is <code>null</code>, then the configured
-	    /// <see cref="ResolveDefaultResponseDestination"/> default response destination}
+	    /// <see cref="DefaultResponseDestination"/> default response destination
 	    /// is returned; if this too is <code>null</code>, then an
 	    /// <see cref="InvalidDestinationException"/>is thrown.
 	    /// </para>
