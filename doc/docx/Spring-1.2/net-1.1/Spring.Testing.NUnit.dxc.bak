@@ -17,4 +17,5 @@
 <LI>
 <P>Data access using ADO.NET or an ORM tool. This would include such things such as the correctness of SQL statements / or NHibernate XML mapping files.</P></LI></UL></DIV>
 <P>The Spring Framework provides first class support for integration testing in the form of the classes that are packaged in the <FONT color=#000000><CODE class=filename>Spring.Testing.NUnit.dll</CODE> library</FONT></P>]]></c>
+<c eid="Spring.Testing.NUnit~Spring.Testing.NUnit_namespace" tid="##SUMMARY" q="" cd="39423.5247569444">Classes for Applicationcontext-ased and transactional tests with NUnit</c>
     </DocumentXComments>

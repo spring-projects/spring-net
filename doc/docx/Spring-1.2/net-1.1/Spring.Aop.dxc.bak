@@ -10,6 +10,12 @@
 </UserData>
 <c eid="Spring.Aop" tid="##PROJECT_INTRODUCTION" q="" cd="38813.6247569444"><![CDATA[<P><SPAN class=emphasis><EM>Aspect-Oriented Programming</EM></SPAN> (<SPAN class=emphasis><EM>AOP</EM></SPAN>) complements OOP by providing another way of thinking about program structure. Whereas OO decomposes applications into a hierarchy of objects, AOP decomposes programs into <SPAN class=emphasis><EM>aspects</EM></SPAN> or <SPAN class=emphasis><EM>concerns.&nbsp;</EM> This enables the modularization of concerns such as transaction management that would otherwise cut across multiple objects (such concerns are often termed <SPAN class=emphasis><EM>crosscutting</EM></SPAN> concerns).</SPAN></P>]]></c>
 <c eid="Spring.Aop" tid="##PROJECT_GETTINGSTARTED" q="" cd="39245.5270833333"><![CDATA[The <A href="http://www.springframework.net/doc-latest/reference/html/aop-quickstart.html">AOP Quickstart</A> included in the distribution is a good starting point to explore the functionality offered in Spring.NET's AOP Framework.]]></c>
+<c eid="Spring.Aop" tid="##SUMMARY" q="" cd="39756.7044097222"><![CDATA[<P>Provides Spring's Aspect Oriented Programming (AOP) functionality.&nbsp; Spring AOP offers:</P>
+<UL>
+<LI>Introduction support</LI>
+<LI>A Pointcut abstraction, supporting "static" pointcuts&nbsp;&nbsp;(class and method-based) and "dynamic" pointcuts (also considering method arguments).</LI>
+<LI>A&nbsp;full range of advice types, including around, before, after returning and throws advice.</LI>
+<LI>Extensibility allowing arbitrary custom advice types to&nbsp;be plugged in without modifying the core framework.<BR><BR>Spring AOP can be used programmatically or (preferably) integrated with the Spring IoC container.<BR></LI></UL>]]></c>
 <c eid="Spring.Aop~AopAlliance.Aop_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[AOP framework interfaces based on the <A href="http://aopalliance.sourceforge.net/">AOP Alliance</A> API.]]></c>
 <c eid="Spring.Aop~AopAlliance.Intercept_namespace" tid="##SUMMARY" q="" cd="38813.6244675926">AOP Alliance interception interfaces.</c>
 <c eid="Spring.Aop~Spring.Aop_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[<P>Core Spring.NET AOP interfaces, built on top of and implementing all of the AOP Alliance AOP interoperability interfaces.</P>
@@ -20,6 +26,7 @@
 <LI>A&nbsp;full range of advice types, including around, before, after returning and throws advice.</LI>
 <LI>Extensibility points allowing arbitrary custom advice types to be plugged in without modifying the core framework.</LI></OL>
 <P>Spring.NET AOP can be used programmatically or (preferably) in conjunction with the Spring.NET IoC container.</P>]]></c>
+<c eid="Spring.Aop~Spring.Aop.Config_namespace" tid="##SUMMARY" q="" cd="39423.6115856481">Custom schema for configuration</c>
 <c eid="Spring.Aop~Spring.Aop.Framework_namespace" tid="##SUMMARY" q="" cd="38813.6244675926"><![CDATA[<P>Basic AOP infrastructure compliant with the <A href="http://aopalliance.sourceforge.net/">AOP Alliance</A>&nbsp;interfaces.</P>
 <P>Spring.NET AOP supports proxying interfaces or classes, introductions, and offers static and dynamic pointcuts.<BR></P>
 <P>Any Spring.NET AOP proxy can be cast to the %ProxyConfig:Spring.Aop~Spring.Aop.Framework.ProxyConfig% AOP configuration interface in this namespace to add or remove interceptors.</P>

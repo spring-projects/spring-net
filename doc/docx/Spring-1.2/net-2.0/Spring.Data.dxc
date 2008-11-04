@@ -3,9 +3,9 @@
     <IgnoreWordList/>
 <UserData>
     <InPlaceEditor>
-        <dtscrollpos>704</dtscrollpos>
         <inheritedMembers>on</inheritedMembers>
         <protectedMembers>on</protectedMembers>
+        <dtscrollpos>1139</dtscrollpos>
     </InPlaceEditor>
 </UserData>
 <c eid="Spring.Data" tid="##PROJECT_INTRODUCTION" q="" cd="39053.9773611111"><![CDATA[<P>The Spring.Data assembly provides an implementation of best practice approaches to data access.</P>
@@ -42,7 +42,8 @@
 <P>Simple DataReader to Object mapping framework.</P></LI></UL></UL>
 <P>&nbsp;</P>
 <P>For more information refer to the Getting Started section within this documentation and the reference documentation, the latest copy of which can be found on the <A href="www.springframework.net">Spring.NET web site</A>.</P>]]></c>
-<c eid="Spring.Data" tid="##PROJECT_GETTINGSTARTED" q="" cd="39053.9774884259">The reference documentation and Spring.DataQuickStart are the best places to get started using the functionality contained in Spring.Data.</c>
+<c eid="Spring.Data" tid="##PROJECT_GETTINGSTARTED" q="" cd="39756.6902083333"><![CDATA[The reference documentation and <A href="http://www.springframework.net/doc-latest/reference/html/data-quickstart.html">Spring.DataQuickStart</A> are the best places to get started using the functionality contained in Spring.Data.]]></c>
+<c eid="Spring.Data" tid="##SUMMARY" q="" cd="39756.6897800926">Foundational support for Data Access, providing and ADO.NET Framework, declarative transaction management, and exception translation features.</c>
 <c eid="Spring.Data~Spring.Dao_namespace" tid="##SUMMARY" q="" cd="39053.9757638889"><![CDATA[<P>Exception hierarchy enabling sophisticated error handling independent of the data access approach in use. </P>
 <P>For example, when DAOs and data access frameworks use the exceptions in this package (and custom subclasses), calling code can detect and handle common problems such as deadlocks without being tied to a particular data access strategy such as ADO.NET or ORM libraries, as well as vendor specific error codes.</P>]]></c>
 <c eid="Spring.Data~Spring.Dao.Support_namespace" tid="##SUMMARY" q="" cd="39053.975787037">Support classes for DAO implementations, providing miscellaneous utility methods.</c>
