@@ -329,7 +329,9 @@
     <Compile Include="Objects\Factory\Support\ObjectDefinitionBuilderTests.cs" />
     <Compile Include="Objects\Factory\Xml\ArrayCtorDependencyObject.cs" />
     <Compile Include="Objects\Factory\Xml\LocaleTests.cs" />
+    <Compile Include="Objects\Factory\Xml\NamespaceParserRegistryTests.cs" />
     <Compile Include="Objects\Factory\Xml\ObjectFactorySectionHandlerTests.cs" />
+    <Compile Include="Objects\Factory\Xml\ObjectNameGenerationTests.cs" />
     <Compile Include="Objects\Factory\Xml\SiimpleCtorWiringTests.cs" />
     <Compile Include="Objects\LazyTestObject.cs" />
     <Compile Include="Objects\Support\AbstractSharedStateFactoryTests.cs" />
@@ -748,6 +750,8 @@
     <None Include="Context\Support\testobject.xsx">
       <DependentUpon>testobject.xsd</DependentUpon>
     </None>
+    <EmbeddedResource Include="Objects\Factory\Xml\NamespaceParserRegistryTests_TestSchema.xsd" />
+    <EmbeddedResource Include="Objects\Factory\Xml\NamespaceParserRegistryTests_TestSchema_2.xsd" />
     <None Include="Spring.Core.Tests.build" />
     <EmbeddedResource Include="Context\Support\contextB.xml" />
     <EmbeddedResource Include="Context\Support\contextC.xml" />

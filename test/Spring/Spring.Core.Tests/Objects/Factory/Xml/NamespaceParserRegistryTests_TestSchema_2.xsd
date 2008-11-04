@@ -1,0 +1,11 @@
+<xsd:schema targetNamespace="http://www.example.com/common"
+	    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	    elementFormDefault="qualified"
+	    attributeFormDefault="unqualified">
+
+  <xsd:attributeGroup name="CommonAttributes">
+    <xsd:attribute name="class" type="xsd:NMTOKEN" use="optional"/>
+    <xsd:attribute name="id" type="xsd:ID" use="required"/>
+  </xsd:attributeGroup>
+
+</xsd:schema>

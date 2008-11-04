@@ -1593,6 +1593,19 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Xml\NamespaceParserRegistryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Xml\NamespaceParserRegistryTests_TestSchema.xsd"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Objects\Factory\Xml\NamespaceParserRegistryTests_TestSchema_2.xsd"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Objects\Factory\Xml\NullAppender.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

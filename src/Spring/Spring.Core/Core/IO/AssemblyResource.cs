@@ -248,6 +248,19 @@ namespace Spring.Core.IO
     		}
     	}
 
+#if NET_2_0
+        /// <summary>
+        /// Returns the <see cref="System.Uri"/> handle for this resource.
+        /// </summary>
+        /// <seealso cref="Spring.Core.IO.IResource.Uri"/>
+        public override Uri Uri
+        {
+            get
+            {
+                return new Uri(_fullResourceName);
+            }
+        }
+#endif
     	#endregion
 
         /// <summary>

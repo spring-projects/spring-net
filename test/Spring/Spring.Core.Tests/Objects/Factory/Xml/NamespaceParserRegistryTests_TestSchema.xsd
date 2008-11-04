@@ -1,0 +1,20 @@
+<xsd:schema targetNamespace="http://www.example.com/brief"
+	    xmlns:brief="http://www.example.com/brief"
+	    xmlns:ex="http://www.example.com/common"
+	    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	    elementFormDefault="qualified"
+	    attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.example.com/common" schemaLocation="NamespaceParserRegistryTests_TestSchema_2.xsd"/>
+
+    <xsd:element name="brief">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="kopf" type="xsd:string"/>
+                <xsd:element name="inhalt" type="xsd:string"/>
+            </xsd:sequence>
+            <xsd:attributeGroup ref="ex:CommonAttributes"/>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

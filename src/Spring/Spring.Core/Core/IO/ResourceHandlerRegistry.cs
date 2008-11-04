@@ -110,14 +110,14 @@ namespace Spring.Core.IO
         {
             lock (resourceHandlers.SyncRoot)
             {
-                resourceHandlers["config"] = GetResourceConstructor(typeof(ConfigSectionResource));
-                resourceHandlers["file"] = GetResourceConstructor(typeof(FileSystemResource));
-                resourceHandlers["http"] = GetResourceConstructor(typeof(UrlResource));
-                resourceHandlers["https"] = GetResourceConstructor(typeof(UrlResource));
+                RegisterResourceHandler("config", typeof(ConfigSectionResource));
+                RegisterResourceHandler("file", typeof(FileSystemResource));
+                RegisterResourceHandler("http", typeof(UrlResource));
+                RegisterResourceHandler("https", typeof(UrlResource));
 #if NET_2_0
-                resourceHandlers["ftp"] = GetResourceConstructor(typeof(UrlResource));
+                RegisterResourceHandler("ftp", typeof(UrlResource));
 #endif
-                resourceHandlers["assembly"] = GetResourceConstructor(typeof(AssemblyResource));
+                RegisterResourceHandler("assembly", typeof(AssemblyResource));
 
                 // register custom resource handlers
                 ConfigurationUtils.GetSection(ResourcesSectionName);
@@ -244,10 +244,33 @@ namespace Spring.Core.IO
 
             lock (resourceHandlers.SyncRoot)
             {
+#if NET_2_0
+                // register generic uri parser for this scheme
+                if (!UriParser.IsKnownScheme(protocolName))
+                {
+                    UriParser.Register(new TolerantUriParser(), protocolName, 0);
+                }
+#endif
                 IDynamicConstructor ctor = GetResourceConstructor(handlerType);
                 resourceHandlers[protocolName] = ctor;
             }
         }
+
+#if NET_2_0
+        /// <summary>
+        /// Allows to create any arbitrary Url format
+        /// </summary>
+        private class TolerantUriParser : GenericUriParser
+        {
+            private const GenericUriParserOptions DefaultOptions = GenericUriParserOptions.Default
+                                                                |GenericUriParserOptions.GenericAuthority
+                                                                |GenericUriParserOptions.AllowEmptyAuthority;
+
+            public TolerantUriParser() 
+                : base(DefaultOptions)
+            {}
+        }
+#endif
 
         private static IDynamicConstructor GetResourceConstructor(Type handlerType)
         {

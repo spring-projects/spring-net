@@ -71,6 +71,7 @@ namespace Spring.Core.IO
         protected const string DefaultBasePathPlaceHolder = "~";
 
         private string protocol;
+        private string resourceName;
         private string basePathPlaceHolder = DefaultBasePathPlaceHolder;
 
         #region Constructor (s) / Destructor
@@ -109,7 +110,8 @@ namespace Spring.Core.IO
         protected AbstractResource(string resourceName)
         {
             AssertUtils.ArgumentHasText(resourceName, "resourceName");
-            protocol = ConfigurableResourceLoader.GetProtocol(resourceName);
+            this.protocol = ConfigurableResourceLoader.GetProtocol(resourceName);
+            this.resourceName = resourceName;
         }
 
         #endregion
@@ -196,6 +198,7 @@ namespace Spring.Core.IO
             get { return false; }
         }
 
+#if !NET_2_0
         /// <summary>
         /// Returns the <see cref="System.Uri"/> handle for this resource.
         /// </summary>
@@ -222,7 +225,19 @@ namespace Spring.Core.IO
                     Description + " cannot be resolved to a Uri.");
             }
         }
-
+#else
+        /// <summary>
+        /// Returns the <see cref="System.Uri"/> handle for this resource.
+        /// </summary>
+        /// <seealso cref="Spring.Core.IO.IResource.Uri"/>
+        public virtual Uri Uri
+        {
+            get
+            {
+                return new Uri(resourceName);
+            }
+        }
+#endif
         /// <summary>
         /// Returns a <see cref="System.IO.FileInfo"/> handle for this resource.
         /// </summary>

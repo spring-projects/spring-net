@@ -48,6 +48,26 @@ namespace Spring.Objects.Factory.Xml
     public class NamespaceParserRegistry
     {
         /// <summary>
+        /// Resolves xml entities by using the <see cref="IResourceLoader"/> infrastructure.
+        /// </summary>
+        private class XmlResourceUrlResolver : XmlUrlResolver
+        {
+            public override object GetEntity( Uri absoluteUri, string role, Type ofObjectToReturn )
+            {
+                IResourceLoader resourceLoader = new ConfigurableResourceLoader();
+                IResource resource = resourceLoader.GetResource(absoluteUri.AbsoluteUri);
+                return resource.InputStream;
+                //return base.GetEntity( absoluteUri, role, ofObjectToReturn );
+            }
+
+            public override Uri ResolveUri( Uri baseUri, string relativeUri )
+            {
+                // TODO: resolve Uri using IResource instance
+                return base.ResolveUri( baseUri, relativeUri );
+            }
+        }
+
+        /// <summary>
         /// Name of the .Net config section that contains definitions 
         /// for custom config parsers.
         /// </summary>
@@ -55,12 +75,12 @@ namespace Spring.Objects.Factory.Xml
 
         #region Fields
 
-        private static IDictionary parsers = new HybridDictionary();
+        private readonly static IDictionary parsers;
 
 #if !NET_2_0
-        private static XmlSchemaCollection schemas = new XmlSchemaCollection();
+        private readonly static XmlSchemaCollection schemas;
 #else
-        private static XmlSchemaSet schemas = new XmlSchemaSet();
+        private readonly static XmlSchemaSet schemas;
 #endif
 
         #endregion
@@ -70,19 +90,23 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         static NamespaceParserRegistry()
         {
-            lock (parsers.SyncRoot)
-            lock (schemas)
-            {
-                //TODO - externalize default list of parsers.
-                RegisterParser(new ObjectsNamespaceParser());
-                //This is done simple as a means to avoid cyclic dependencies with Factory.Xml
-                //which implementations of parsers typically use.
-                RegisterParser(ObjectUtils.InstantiateType(typeof(NamespaceParserRegistry).Assembly, 
-                    "Spring.Validation.Config.ValidationNamespaceParser") as INamespaceParser);
+            parsers = new HybridDictionary();
+#if !NET_2_0
+            schemas = new XmlSchemaCollection();
+#else
+            schemas = new XmlSchemaSet();
+            schemas.XmlResolver = new XmlResourceUrlResolver();
+#endif
 
-                // register custom config parsers
-                ConfigurationUtils.GetSection(ConfigParsersSectionName);
-            }
+            //TODO - externalize default list of parsers.
+            RegisterParser(new ObjectsNamespaceParser());
+            //This is done simple as a means to avoid cyclic dependencies with Factory.Xml
+            //which implementations of parsers typically use.
+            RegisterParser(ObjectUtils.InstantiateType(typeof(NamespaceParserRegistry).Assembly, 
+                "Spring.Validation.Config.ValidationNamespaceParser") as INamespaceParser);
+
+            // register custom config parsers
+            ConfigurationUtils.GetSection(ConfigParsersSectionName);
         }
 
         /// <summary>
@@ -280,9 +304,20 @@ namespace Spring.Objects.Factory.Xml
         {
             IResourceLoader resourceLoader = new ConfigurableResourceLoader();
             IResource schema = resourceLoader.GetResource(schemaLocation);
-            try {
-                schemas.Add(namespaceUri, new XmlTextReader(schema.InputStream));
-            } catch (Exception e)
+            try
+            {
+#if NET_1_0
+                XmlTextReader schemaDocument = new XmlTextReader(schemaLocation, schema.InputStream);
+                schemas.Add(namespaceUri, schemaDocument);
+#elif NET_1_1
+                XmlTextReader schemaDocument = new XmlTextReader(schemaLocation, schema.InputStream);
+                schemas.Add(namespaceUri, schemaDocument, new XmlResourceUrlResolver());
+#else
+                XmlTextReader schemaDocument = new XmlTextReader(schema.Uri.AbsoluteUri, schema.InputStream);
+                schemas.Add(namespaceUri, schemaDocument);
+#endif
+            }
+            catch (Exception e)
             {
                 throw new ArgumentException("Could not load schema from resource = " + schema, e);
             }
