@@ -764,6 +764,52 @@
       </object>
     </constructor-arg>
   </object>
+
+
+  <object id="Npgsql-2.0" type="Spring.Data.Common.DbProvider, Spring.Data"  singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata, Spring.Data">
+        <constructor-arg name="productName" value="Npgsql"  />
+        <constructor-arg name="assemblyName" value="Npgsql, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"/>
+        <constructor-arg name="connectionType" value="Npgsql.NpgsqlConnection, Npgsql, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"/>
+        <constructor-arg name="commandType" value="Npgsql.NpgsqlCommand, Npgsql, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"/>
+        <constructor-arg name="parameterType" value="Npgsql.NpgsqlParameter, Npgsql, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"/>
+        <constructor-arg name="dataAdapterType" value="Npgsql.NpgsqlDataAdapter, Npgsql, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"/>
+        <constructor-arg name="commandBuilderType" value="Npgsql.NpgsqlCommandBuilder, Npgsql, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="NpgsqlTypes.NpgsqlDbType, Npgsql, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"/>
+        <constructor-arg name="parameterDbTypeProperty" value="NpgsqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value=":"/>
+        <constructor-arg name="exceptionType" value="Npgsql.NpgsqlException, Npgsql, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Code"/>
+        <!-- error codes taken from http://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
+        <property name="ErrorCodes.badSqlGrammarCodes">
+          <value>03000,42000,42601,42602,42622,42804,42P01</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>53000,53100,53200,53300</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>23000,23502,23503,23505,23514</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>55P03</value>
+        </property>
+        <property name="ErrorCodes.CannotSerializeTransactionCodes">
+          <value>40001</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>40P01</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
   
   <!-- DB2 9.0.0 for .NET 1.1 -->
   <object id="DB2-9.0.0-1.1" type="Spring.Data.Common.DbProvider, Spring.Data"  singleton="false">
