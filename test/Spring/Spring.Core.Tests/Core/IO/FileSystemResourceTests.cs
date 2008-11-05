@@ -41,6 +41,14 @@ namespace Spring.Core.IO
         }
         
         [Test]
+        public void LeadingProtocolIsNotTreatedRelative()
+        {
+            FileSystemResource res = new FileSystemResource(@"file://\\server\share\samples\artfair\");
+            FileSystemResource res2 = (FileSystemResource) res.CreateRelative(@"file://./index.html");            
+            Assert.AreEqual(new Uri(Path.Combine(Environment.CurrentDirectory, "index.html")).AbsolutePath, res2.Uri.AbsolutePath);
+        }
+
+        [Test]
         [ExpectedException(typeof (UriFormatException))]
         public void RelativeUncResourceTooManyBackLevels()
         {
