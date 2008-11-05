@@ -209,6 +209,11 @@
       </listitem>
 
       <listitem>
+        <para><literal>Npgsql-2.0</literal> - Postgresql provider
+        2.0.0.0</para>
+      </listitem>
+
+      <listitem>
         <para><literal>DB2-9.0.0-1.1</literal> - IBM DB2 Data Provider 9.0.0
         for .NET Framework 1.1</para>
       </listitem>
@@ -272,7 +277,24 @@
       can pick the general provider name, i.e.
       <literal>MySql.Data.MySqlClient</literal>, and then perform an assembly
       redirect in App.config. This will often be sufficient to upgrade to
-      newer versions.</para>
+      newer versions. As shown below</para>
+
+      <programlisting>&lt;runtime&gt;
+
+  &lt;assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1"&gt;
+
+    &lt;dependentAssembly&gt;
+      &lt;assemblyIdentity name="Npgsql" 
+                        publicKeyToken="5d8b90d52f46fda7" 
+                        culture="neutral"/&gt;
+      &lt;bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535
+                       newVersion="2.0.0.0"/&gt;
+
+    &lt;/dependentAssembly&gt;
+
+  &lt;/assemblyBinding&gt;
+
+&lt;/runtime&gt;</programlisting>
     </note>
 
     <para>An example using DbProviderFactory is shown below</para>

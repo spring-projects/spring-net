@@ -24,7 +24,7 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Message Oriented Middleware - MSMQ</title>
 
-  <section>
+  <section xml:id="msmq-introduction">
     <title>Introduction</title>
 
     <para>The goals of Spring's MSMQ 3.0 messaging support is to raise the
@@ -114,7 +114,7 @@
     directory of the distribution shows this functionality in action.</para>
   </section>
 
-  <section>
+  <section xml:id="msmq-quick-tour">
     <title>A quick tour for the impatient</title>
 
     <para>Here is a quick example of how to use Spring's MSMQ support to
@@ -322,10 +322,10 @@
     also a good place to get started.</para>
   </section>
 
-  <section>
+  <section xml:id="msmq-using">
     <title>Using Spring MSMQ</title>
 
-    <section>
+    <section xml:id="msmq-messagequeuetemplate">
       <title>MessageQueueTemplate</title>
 
       <para>The <literal>MessageQueueTemplate</literal> is used for
@@ -396,7 +396,7 @@ object ReceiveAndConvert(string messageQueueObjectName);</programlisting>
           <literal>TransactionalMessageListenerContainer</literal>), the
           message will be sent transactionally using the
           <literal>MessageQueueTransaction</literal> object in thread local
-          storage. </para>
+          storage.</para>
 
           <note>
             <para>This lets you group together multiple messaging operations
@@ -425,7 +425,7 @@ object ReceiveAndConvert(string messageQueueObjectName);</programlisting>
         </listitem>
       </orderedlist>
 
-      <para> The delegate <literal>MessagePostProcessorDelegate</literal> has
+      <para>The delegate <literal>MessagePostProcessorDelegate</literal> has
       the following signature</para>
 
       <programlisting language="csharp">public delegate Message MessagePostProcessorDelegate(Message message);</programlisting>
@@ -472,7 +472,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       quickstart application configuraiton file Messaging.xml</para>
     </section>
 
-    <section>
+    <section xml:id="msmq-messagequeuefactoryobject">
       <title>MessageQueueFactoryObject</title>
 
       <para>The <literal>MessageQueueFactoryObject</literal> is responsible
@@ -526,7 +526,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       </note>
     </section>
 
-    <section>
+    <section xml:id="msmq-messageconverter">
       <title>MessageQueue and IMessageConverter resource management</title>
 
       <para><literal>MessageQueues</literal> and
@@ -574,7 +574,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       classe.s</para>
     </section>
 
-    <section>
+    <section xml:id="msmq-messagelistenercontainer">
       <title>Message Listener Containers</title>
 
       <para>One of the most common uses of MSMQ is to concurrently process
@@ -634,7 +634,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       Future implementations will use a custom (and pluggable) thread
       pool.</para>
 
-      <section>
+      <section xml:id="msmq-NonTransactionalMessageListenerContainer">
         <title>NonTransactionalMessageListenerContainer</title>
 
         <para>This container performs a Receive operation on the
@@ -711,7 +711,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
 }</programlisting>
       </section>
 
-      <section>
+      <section xml:id="msmq-TransactionalMessageListenerContainer">
         <title>TransactionalMessageListenerContainer</title>
 
         <para>This message listener container performs receive operations
@@ -891,7 +891,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         <literal>MessageQueueObjectName</literal>.</para>
       </section>
 
-      <section>
+      <section xml:id="msmq-DistributedTxMessageListenerContainer">
         <title>DistributedTxMessageListenerContainer</title>
 
         <para>This message listener container performs receive operations
@@ -942,7 +942,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     </section>
   </section>
 
-  <section>
+  <section xml:id="msmq-using-messageconverters">
     <title>MessageConverters</title>
 
     <section>
@@ -1044,10 +1044,10 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     </section>
   </section>
 
-  <section>
+  <section xml:id="msmq-interface-based-processing">
     <title>Interface based message processing</title>
 
-    <section>
+    <section xml:id="msmq-MessageListenerAdapater">
       <section>
         <title>MessageListenerAdapater</title>
 
@@ -1146,7 +1146,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     </section>
   </section>
 
-  <section>
+  <section xml:id="msmq-wcf-comparison">
     <title>Comparison with using WCF</title>
 
     <para>The goals of Spring's MSMQ messaging support are quite similar to

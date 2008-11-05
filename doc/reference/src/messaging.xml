@@ -143,7 +143,7 @@
       'I'.</para>
     </note>
 
-    <section>
+    <section xml:id="activemq-intro-soc">
       <title>Separation of Concerns</title>
 
       <para>The use of MessageConverters and a PONO programming model promote
@@ -166,7 +166,7 @@
       requirement in enterprise messaging architectures.</para>
     </section>
 
-    <section>
+    <section xml:id="activemq-intro-interop">
       <title>Interoperability and provider portability</title>
 
       <para>Messaging is a traditional area of Interoperability across
@@ -204,7 +204,7 @@
       different messaging providers.</para>
     </section>
 
-    <section>
+    <section xml:id="activemq-intro-wcf">
       <title>The role of Messaging API in a 'WCF world'</title>
 
       <para>Windows Communication Foundation (WCF) also supports message
@@ -227,10 +227,10 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="activemq-using">
     <title>Using Spring Messaging</title>
 
-    <section>
+    <section xml:id="activemq-using-messagetemplate">
       <title>Messaging Template overview</title>
 
       <para>Code that uses the messaging template classes
@@ -267,7 +267,7 @@
       </note>
     </section>
 
-    <section>
+    <section xml:id="activemq-using-connections">
       <title>Connections</title>
 
       <para>The <literal>NmsTemplate</literal> requires a reference to a
@@ -278,7 +278,7 @@
       vendor specific such as SSL configuration options.</para>
     </section>
 
-    <section>
+    <section xml:id="activemq-using-caching-resources">
       <title>Caching Messaging Resources</title>
 
       <para>The standard API usage of NMS and other JMS inspired APIs involves
@@ -292,7 +292,7 @@
       the resource usage and increase performance two implementations of
       IConnectionFactory are provided.</para>
 
-      <section>
+      <section xml:id="activemq-using-caching-singleconnectionfactory">
         <title>SingleConnectionFactory</title>
 
         <para><literal>Spring.Messaging.Nms.Connections.SingleConnectionFactory
@@ -300,7 +300,7 @@
         CreateConnection and ignore calls to Close.</para>
       </section>
 
-      <section>
+      <section xml:id="activemq-using-caching-cachingconnectionfactory">
         <title>CachingConnectionFactory</title>
 
         <para><literal>Spring.Messaging.Nms.Connections.CachingConnectionFactory</literal>
@@ -326,7 +326,7 @@
       </section>
     </section>
 
-    <section>
+    <section xml:id="activemq-using-destination-mgmt">
       <title>Destination Management</title>
 
       <para>In Java implementations of JMS, Connections and Destinations are
@@ -419,7 +419,7 @@
       startup and uses them throughout the lifespan of the container.</para>
     </section>
 
-    <section>
+    <section xml:id="activemq-using-txmgmt">
       <title>Transaction Management</title>
 
       <para>Spring provides a <literal>NmsTransactionManager</literal> that
@@ -438,7 +438,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="activemq-sending-messages">
     <title>Sending a Message</title>
 
     <para>The <literal>NmsTemplate</literal> contains three convenience

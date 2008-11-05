@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="scheduling" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="scheduling" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns42="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1999/xlink"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Scheduling and Thread Pooling</title>
 
   <section xml:id="scheduling-introduction">
@@ -24,24 +29,22 @@
 
     <para>The Spring Framework features integration classes for scheduling
     support. Currently, Spring supports the Quartz Scheduler (<ulink
-    url="http://quartznet.sourceforge.net/"></ulink>). The scheduler is set up
-    using a <literal>IFactoryObject</literal> with optional
-    references to <literal>Trigger</literal> instances, respectively.
-    Furthermore, a convenience class for both the Quartz Scheduler is
-    available that allows you to invoke a method of an existing target
-    object.</para>
+    url="http://quartznet.sourceforge.net/" />). The scheduler is set up using
+    a <literal>IFactoryObject</literal> with optional references to
+    <literal>Trigger</literal> instances, respectively. Furthermore, a
+    convenience class for the Quartz Scheduler is available that allows you to
+    invoke a method of an existing target object.</para>
   </section>
 
   <section xml:id="scheduling-quartz">
     <title>Using the Quartz.NET Scheduler</title>
 
-    <para>Quartz uses <literal>Trigger</literal>,
-    <literal>Job</literal> and <literal>JobDetail</literal> objects to
-    realize scheduling of all kinds of jobs. For the basic concepts behind
-    Quartz, have a look at <ulink
-    url="http://quartznet.sourceforge.net/"></ulink>. For convenience
-    purposes, Spring offers a couple of classes that simplify the usage of
-    Quartz within Spring-based applications.</para>
+    <para>Quartz uses <literal>Trigger</literal>, <literal>Job</literal> and
+    <literal>JobDetail</literal> objects to realize scheduling of all kinds of
+    jobs. For the basic concepts behind Quartz, have a look at <ulink
+    url="http://quartznet.sourceforge.net/" />. For convenience purposes,
+    Spring offers a couple of classes that simplify the usage of Quartz within
+    Spring-based applications.</para>
 
     <section xml:id="scheduling-quartz-jobdetail">
       <title>Using the JobDetailObject</title>
@@ -69,9 +72,8 @@
       time), but the <literal>JobDetailObject</literal> also maps the
       properties from the job data map to properties of the actual job. So in
       this case, if the <literal>ExampleJob</literal> contains a property
-      named <literal>Timeout</literal>, the
-      <literal>JobDetailObject</literal> will automatically apply
-      it:</para>
+      named <literal>Timeout</literal>, the <literal>JobDetailObject</literal>
+      will automatically apply it:</para>
 
       <programlisting language="csharp">namespace Example.Quartz;
 
@@ -107,8 +109,8 @@ public class ExampleJob extends QuartzJobObject {
       <literal>MethodInvokingJobDetailFactoryObject</literal></title>
 
       <para>Often you just need to invoke a method on a specific object. Using
-      the <literal>MethodInvokingJobDetailFactoryObject</literal> you can
-      do exactly this:</para>
+      the <literal>MethodInvokingJobDetailFactoryObject</literal> you can do
+      exactly this:</para>
 
       <programlisting language="myxml">&lt;object id="JobDetail" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz"&gt;
   &lt;property name="TargetObject" ref="ExampleBusinessObject" /&gt;
@@ -131,21 +133,19 @@ public class ExampleJob extends QuartzJobObject {
       <programlisting language="myxml">
 &lt;object id="ExampleBusinessObject" type="Examples.BusinessObjects.ExampleBusinessObject, Examples.BusinessObjects"/&gt;</programlisting>
 
-      <para>Using the
-      <literal>MethodInvokingJobDetailFactoryObject</literal>, you don't
-      need to create one-line jobs that just invoke a method, and you only
-      need to create the actual business object and wire up the detail
-      object.</para>
+      <para>Using the <literal>MethodInvokingJobDetailFactoryObject</literal>,
+      you don't need to create one-line jobs that just invoke a method, and
+      you only need to create the actual business object and wire up the
+      detail object.</para>
 
       <para>By default, Quartz Jobs are stateless, resulting in the
       possibility of jobs interfering with each other. If you specify two
-      triggers for the same <literal>JobDetail</literal>, it might be
-      possible that before the first job has finished, the second one will
-      start. If <literal>JobDetail</literal> classes implement the
-      <literal>Stateful</literal> interface, this won't happen.
-      The second job will not start before the first one has finished. To make
-      jobs resulting from the
-      <literal>MethodInvokingJobDetailFactoryObject</literal>
+      triggers for the same <literal>JobDetail</literal>, it might be possible
+      that before the first job has finished, the second one will start. If
+      <literal>JobDetail</literal> classes implement the
+      <literal>Stateful</literal> interface, this won't happen. The second job
+      will not start before the first one has finished. To make jobs resulting
+      from the <literal>MethodInvokingJobDetailFactoryObject</literal>
       non-concurrent, set the <literal>concurrent</literal> flag to
       <literal>false</literal>.</para>
 
@@ -157,7 +157,7 @@ public class ExampleJob extends QuartzJobObject {
 </programlisting>
 
       <note>
-        <para>By default, jobs will run in a concurrent fashion. </para>
+        <para>By default, jobs will run in a concurrent fashion.</para>
 
         <para>Also note that when using MethodInvokingJobDetailFactoryObject
         you can't use database persistence for Jobs. See the class
@@ -172,16 +172,16 @@ public class ExampleJob extends QuartzJobObject {
       <para>We've created job details and jobs. We've also reviewed the
       convenience class that allows to you invoke a method on a specific
       object. Of course, we still need to schedule the jobs themselves. This
-      is done using triggers and a
-      <literal>SchedulerFactoryObject</literal>. Several triggers are
-      available within Quartz. Spring offers two subclassed triggers with
-      convenient defaults: <literal>CronTriggerObject</literal> and
+      is done using triggers and a <literal>SchedulerFactoryObject</literal>.
+      Several triggers are available within Quartz. Spring offers two
+      subclassed triggers with convenient defaults:
+      <literal>CronTriggerObject</literal> and
       <literal>SimpleTriggerObject</literal></para>
 
       <para>Triggers need to be scheduled. Spring offers a
-      <literal>SchedulerFactoryObject</literal> that exposes triggers to
-      be set as properties. <literal>SchedulerFactoryObject</literal>
-      schedules the actual jobs with those triggers.</para>
+      <literal>SchedulerFactoryObject</literal> that exposes triggers to be
+      set as properties. <literal>SchedulerFactoryObject</literal> schedules
+      the actual jobs with those triggers.</para>
 
       <para>Find below a couple of examples:</para>
 
@@ -220,9 +220,9 @@ public class ExampleJob extends QuartzJobObject {
 </programlisting>
 
       <para>More properties are available for the
-      <literal>SchedulerFactoryObjecct</literal> for you to set, such as
-      the calendars used by the job details, properties to customize Quartz
-      with, etc. Have a look at the <ulink
+      <literal>SchedulerFactoryObjecct</literal> for you to set, such as the
+      calendars used by the job details, properties to customize Quartz with,
+      etc. Have a look at the <ulink
       url="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/scheduling/quartz/SchedulerFactoryBean.html">SchedulerFactoryObject
       SDK docs</ulink> for more information.</para>
     </section>
