@@ -90,9 +90,9 @@ namespace Spring.Web.UI
         private static readonly object EventPreInit = new object();
         private static readonly object EventInitComplete = new object();
 #else
-        internal static readonly MethodInfo GetLocalResourceProvider =
-                typeof( ResourceExpressionBuilder ).GetMethod( "GetLocalResourceProvider", BindingFlags.NonPublic | BindingFlags.Static, null,
-                                                            new Type[] { typeof( TemplateControl ) }, null );
+//        internal static readonly MethodInfo GetLocalResourceProvider =
+//                typeof( ResourceExpressionBuilder ).GetMethod( "GetLocalResourceProvider", BindingFlags.NonPublic | BindingFlags.Static, null,
+//                                                            new Type[] { typeof( TemplateControl ) }, null );
 #endif
 
         #endregion
