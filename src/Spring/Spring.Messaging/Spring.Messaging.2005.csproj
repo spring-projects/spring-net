@@ -52,7 +52,6 @@
     <Compile Include="Messaging\Core\IMessageQueueFactory.cs" />
     <Compile Include="Messaging\Core\MessagePostProcessorDelegate.cs" />
     <Compile Include="Messaging\Core\MessageQueueGatewaySupport.cs" />
-    <Compile Include="Messaging\Core\QueueIdentifierType.cs" />
     <Compile Include="Messaging\Listener\AbstractSendToQueueExceptionHandler.cs" />
     <Compile Include="Messaging\Listener\AbstractTransactionalMessageListenerContainer.cs" />
     <Compile Include="Messaging\Listener\DistributedTxMessageListenerContainer.cs" />

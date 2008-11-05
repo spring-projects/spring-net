@@ -491,6 +491,7 @@
     <Compile Include="Expressions\StringLiteralNode.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Expressions\SyntaxErrorException.cs" />
     <Compile Include="Expressions\TernaryNode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -585,7 +586,6 @@
     <Compile Include="Objects\Factory\Xml\NamespaceParserSupport.cs" />
     <Compile Include="Objects\Factory\Xml\ObjectDefinitionParserHelper.cs" />
     <Compile Include="Objects\Factory\Xml\ParserContext.cs" />
-    <Compile Include="Objects\Factory\Xml\XmlObjectDefinitionStoreException.cs" />
     <Compile Include="Objects\Factory\Xml\XmlReaderContext.cs" />
     <Compile Include="Objects\FatalObjectException.cs" />
     <Compile Include="Objects\ISharedStateAware.cs" />
@@ -982,13 +982,18 @@
     </Compile>
     <Compile Include="Util\CompareUtils.cs" />
     <Compile Include="Util\ConfigurationUtils.cs" />
+    <Compile Include="Util\ConfigXmlAttribute.cs" />
+    <Compile Include="Util\ConfigXmlDocument.cs" />
+    <Compile Include="Util\ConfigXmlElement.cs" />
     <Compile Include="Util\FatalReflectionException.cs" />
+    <Compile Include="Util\ITextPosition.cs" />
     <Compile Include="Util\ObjectUtils.cs" />
     <Compile Include="Util\ReflectionException.cs" />
     <Compile Include="Util\SystemUtils.cs" />
     <Compile Include="Util\DynamicCodeManager.cs" />
     <Compile Include="Util\Generic\CollectionUtils.cs" />
     <Compile Include="Util\PatternMatchUtils.cs" />
+    <Compile Include="Util\TextPositionInfo.cs" />
     <Compile Include="Util\UniqueKey.cs" />
     <Compile Include="Core\TypeConversion\UniqueKeyConverter.cs" />
     <Compile Include="Util\XmlUtils.cs" />

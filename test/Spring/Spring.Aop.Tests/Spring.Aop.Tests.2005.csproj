@@ -124,12 +124,15 @@
     </Compile>
     <Compile Include="Aop\Framework\AutoProxy\AdvisorAutoProxyCreatorCircularReferencesTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AdvisorAutoProxyCreatorTests.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\AttributeAutoProxyCreatorTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\LogicalThreadContextAdvice.cs" />
     <Compile Include="Aop\Framework\AutoProxy\NoSetterProperties.cs" />
     <Compile Include="Aop\Framework\AutoProxy\ObjectNameAutoProxyCreatorTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\OrderedLogicalThreadContextCheckAdvisor.cs" />
     <Compile Include="Aop\Framework\AbstractMethodInvocationTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\CreatesTestObject.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreatorTests.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\TypeNameAutoProxyCreatorTests.cs" />
     <Compile Include="Aop\Framework\DynamicMethodInvocationTests.cs" />
     <Compile Include="Aop\Framework\CountingAfterReturningAdvice.cs" />
     <Compile Include="Aop\Framework\CountingBeforeAdvice.cs">

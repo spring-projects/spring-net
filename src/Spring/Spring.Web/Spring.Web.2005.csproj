@@ -123,8 +123,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\ISessionState.cs" />
+    <Compile Include="Web\Support\ControlAccessor.cs" />
+    <Compile Include="Web\Support\ControlCollectionAccessor.cs" />
     <Compile Include="Web\Support\DefaultResultFactory.cs" />
     <Compile Include="Web\Support\DefaultResultWebNavigator.cs" />
+    <Compile Include="Web\Support\LocalResourceManager.cs" />
     <Compile Include="Web\Support\MappingHandlerFactory.cs" />
     <Compile Include="Web\Support\MappingHandlerFactoryConfigurer.cs" />
     <Compile Include="Web\Support\HandlerMap.cs" />
@@ -139,6 +142,7 @@
     <Compile Include="Web\Support\DefaultHandlerFactory.cs" />
     <Compile Include="Web\Support\WebFormsResultWebNavigator.cs" />
     <Compile Include="Web\Support\WebNavigableWebNavigatorAdapter.cs" />
+    <Compile Include="Web\UI\IModelPersistenceMedium.cs" />
     <Compile Include="Web\UI\IValidationContainer.cs" />
     <Compile Include="Web\Support\MimeMediaType.cs" />
     <Compile Include="Web\Support\SharedStateResourceCache.cs">
@@ -167,8 +171,6 @@
     <Compile Include="Objects\Factory\Xml\WebObjectsNamespaceParser.cs" />
     <Compile Include="Threading\HttpContextStorage.cs" />
     <Compile Include="Threading\HybridContextStorage.cs" />
-    <Compile Include="Util\ControlAccessor.cs" />
-    <Compile Include="Util\ControlCollectionAccessor.cs" />
     <Compile Include="Util\HttpContextSwitch.cs" />
     <Compile Include="Util\IVirtualEnvironment.cs" />
     <Compile Include="Util\VirtualEnvironment.cs" />
@@ -275,6 +277,7 @@
     <Compile Include="Web\UI\Page.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Web\UI\SessionModelPersistenceMedium.cs" />
     <Compile Include="Web\UI\UserControl.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

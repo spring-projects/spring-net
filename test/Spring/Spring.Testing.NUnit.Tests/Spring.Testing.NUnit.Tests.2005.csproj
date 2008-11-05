@@ -44,9 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Testing\NUnit\BaseTestAppContextTests.cs" />
-    <Compile Include="Testing\NUnit\AnotherTest\LoadAppContextTests.cs" />
-    <Compile Include="Testing\NUnit\CachedAppContextTests.cs" />
+    <Compile Include="Testing\NUnit\AbstractDependencyInjectionSpringContextTestsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2005.csproj">

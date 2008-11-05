@@ -360,6 +360,7 @@
     <Compile Include="DataBinding\IDataBound.cs" />
     <Compile Include="Expressions\DefaultNode.cs" />
     <Compile Include="Expressions\ExpressionConverter.cs" />
+    <Compile Include="Expressions\SyntaxErrorException.cs" />
     <Compile Include="Expressions\Parser\ExpressionLexer.cs" />
     <Compile Include="Expressions\Parser\ExpressionParser.cs" />
     <Compile Include="Expressions\Processors\AverageAggregator.cs" />
@@ -1118,7 +1119,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>rem $(ProjectDir)\..\..\..\tools\antlr-2.7.6\antlr-2.7.6.exe -o $(ProjectDir)\Expressions\Parser $(ProjectDir)\Expressions\Expression.g
+    <PreBuildEvent>rem $(ProjectDir)..\..\..\build-support\tools\antlr-2.7.6\antlr-2.7.6.exe -o $(ProjectDir)Expressions\Parser $(ProjectDir)Expressions\Expression.g
 </PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>

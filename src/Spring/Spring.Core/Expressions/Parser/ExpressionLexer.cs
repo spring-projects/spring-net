@@ -364,7 +364,6 @@ tryAgain:
 						break; }
 						if ( null==returnToken_ ) goto tryAgain; // found SKIP token
 						_ttype = returnToken_.Type;
-						_ttype = testLiteralsTable(_ttype);
 						returnToken_.Type = _ttype;
 						return returnToken_;
 					}

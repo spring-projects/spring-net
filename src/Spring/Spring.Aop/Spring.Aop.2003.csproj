@@ -392,6 +392,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aop\Framework\AutoProxy\AbstractFilteringAutoProxyCreator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\AttributeAutoProxyCreator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Aop\Framework\AutoProxy\DefaultAdvisorAutoProxyCreator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -408,6 +418,16 @@
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\ObjectNameAutoProxyCreator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\TypeNameAutoProxyCreator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -618,6 +638,11 @@
                 />
                 <File
                     RelPath = "Aop\Support\TypeFilters.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Support\TypeNameTypeFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

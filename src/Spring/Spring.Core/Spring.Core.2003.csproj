@@ -1122,6 +1122,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Expressions\SyntaxErrorException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Expressions\TernaryNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

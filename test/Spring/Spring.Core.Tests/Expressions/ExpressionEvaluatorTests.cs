@@ -33,6 +33,7 @@ using System.Runtime.Serialization.Formatters.Soap;
 using System.Text;
 using System.Threading;
 using System.Web.Services;
+using antlr;
 using antlr.collections;
 using NUnit.Framework;
 using Spring.Collections;
@@ -133,14 +134,6 @@ namespace Spring.Expressions
         }
 
         #endregion
-
-        [Test]
-        [Ignore("SPRNET-944")]
-        public void DateTests()
-        {
-            string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'"); 
-            Assert.AreEqual("date", dateLiteral);
-        }
 
         #region Serialization Tests
 
@@ -279,6 +272,26 @@ namespace Spring.Expressions
         #endregion Serialization Tests
 
         
+        [Test(Description="SPRNET-944")]
+        public void DateTests()
+        {
+            string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'"); 
+            Assert.AreEqual("date", dateLiteral);
+        }
+
+        [Test]
+        public void ThrowsSyntaxErrorException()
+        {
+            try
+            {
+                ExpressionEvaluator.GetValue(null, "'date"); // unclose string literal
+                Assert.Fail();
+            }
+            catch (RecognitionException ex)
+            {
+                Assert.AreEqual("Syntax Error on line 1, column 6: expecting ''', found '<EOF>' in expression"+Environment.NewLine+"''date'", ex.Message);
+            }
+        }
 
         /// <summary>
         /// Should throw exception for null root object

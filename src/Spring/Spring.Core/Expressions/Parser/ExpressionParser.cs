@@ -100,7 +100,7 @@ namespace Spring.Expressions
     public override void reportError(RecognitionException ex)
     {
 		//base.reportError(ex);
-        throw ex;
+        throw new antlr.TokenStreamRecognitionException(ex);
     }
 
     public override void reportError(string error)
