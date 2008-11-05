@@ -283,7 +283,19 @@
     <DotNetProperties IncludeRelationshipDiagrams="True" IncludeInheritanceHierarchies="True" IncludeBaseMembers="False" StandardInterfaces="System.*,Microsoft.*" OnlyLinkInherited="True" ExternalDocs="True" UseCommentFiles="True" DrillCommentFiles="True" GenerateXMLLinks="False" XMLIsland="" NoInheritedTopics="True" NoInheritedInLists="False" CreateXMLCommentFile="False" ExcludedLanguages="Delphi,JScript,CPP,CPP2005" GenerateAttributes="True" AttributeFilter="" AttributeFilterInclude="False" VBNETDefaultConstructor="False" LinkOverridenMembersToBaseImplementation="False" UseOverloadSummaryForMasterSummary="False" ExcludeEditorBrowsable="True" GenerateBreadCrumbs="True" IncludeAssemblyBreadCrumb="False"/>
     <DatabaseProperties DocumentViewSource="True" DocumentTriggerSource="True" DocumentProcedureSource="True" RetainTaggedComments="False"/>
     <XSDProperties UseCustomSettings="False" PageNestingLevels="2" SuppressSingleObjectDiagrams="True" ElementFillColor="15780518" ElementTextColor="0" ElementBorderColor="10789024" ElementBorders="True" ElementRefFillColor="12648447" ElementRefTextColor="0" ElementRefBorderColor="10789024" ElementRefBorders="True" ComplexTypeFillColor="15780518" ComplexTypeTextColor="0" ComplexTypeBorderColor="10789024" ComplexTypeBorders="True" AnyFillColor="13421772" AnyTextColor="0" AnyBorderColor="10789024" AnyBorders="True" NotationTextColor="8421504" RootLinesColor="10789024" DropShadows="False" BoldCaptions="True" GroupParticleSequenceImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\sequence.gif" GroupParticleChoiceImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\choice.gif" GroupParticleAllImageFilename="K:\Program Files\Innovasys\documentx5\Configuration\Templates\XMLSchema\xDiagramImages\all.gif"/>
-    <CommentFiles/>
+    <CommentFiles>
+        <CommentFile FileName="..\net-1.1\Spring.Core.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Core.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Aop.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Aop.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Web.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Web.dll"/>
+        <CommentFile FileName="Spring.Web.Extensions.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Web.Extensions.dll"/>
+        <CommentFile FileName="Spring.Services.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\3.0\debug\Spring.Services.dll"/>
+        <CommentFile FileName="Spring.Data.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.dll"/>
+        <CommentFile FileName="Spring.Data.NHibernate20.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.NHibernate20.dll"/>
+        <CommentFile FileName="..\net-1.1\Spring.Testing.NUnit.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Testing.NUnit.dll"/>
+        <CommentFile FileName="Spring.Messaging.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.dll"/>
+        <CommentFile FileName="Spring.Messaging.Nms.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.Nms.dll"/>
+        <CommentFile FileName="Spring.Scheduling.Quartz.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Scheduling.Quartz.dll"/>
+    </CommentFiles>
     <DocType Name="dx.net" Template="Visual Studio 2005 Style" UseHelpTemplates="False">
         <TOCSource TOCSource="0" SpecificTOCName=""/>
         <ModelCommentProfile Version="5.0" Namespace="dx.net" Name="" Description=""/>
