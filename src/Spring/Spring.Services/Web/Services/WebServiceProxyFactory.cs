@@ -611,27 +611,51 @@ namespace Spring.Web.Services
                             XmlMemberMapping outMemberMapping = outputMembersMapping[0];
                             bool useMemberName = (outMemberMapping.MemberName != operation.Name + "Result");
                             bool useNamespace = outMemberMapping.Namespace != outputMembersMapping.Namespace;
-                            if (useMemberName || useNamespace)
+                            bool useTypeNamespace = outMemberMapping.TypeNamespace != XmlSchema.Namespace &&
+                                                    outMemberMapping.TypeNamespace != outputMembersMapping.Namespace;
+                            if (useMemberName || useNamespace || useTypeNamespace)
                             {
-                                ReflectionUtils.CustomAttributeBuilderBuilder cabb;
                                 if (outMemberMapping.TypeName.StartsWith ("ArrayOf", StringComparison.Ordinal))
                                 {
-                                    cabb = new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(XmlArrayAttribute));
+                                    if (useMemberName || useNamespace)
+                                    {
+                                        ReflectionUtils.CustomAttributeBuilderBuilder cabb =
+                                            new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(XmlArrayAttribute));
+                                        if (useMemberName)
+                                        {
+                                            cabb.AddPropertyValue("ElementName", outMemberMapping.MemberName);
+                                        }
+                                        if (useNamespace)
+                                        {
+                                            cabb.AddPropertyValue("Namespace", outMemberMapping.Namespace);
+                                        }
+                                        attrs.Add(cabb.Build());
+                                    }
+                                    if (useTypeNamespace)
+                                    {
+                                        ReflectionUtils.CustomAttributeBuilderBuilder cabb =
+                                            new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(XmlArrayItemAttribute));
+                                        cabb.AddPropertyValue("Namespace", outMemberMapping.TypeNamespace);
+                                        attrs.Add(cabb.Build());
+                                    }
                                 }
                                 else
                                 {
-                                    cabb = new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(XmlElementAttribute));
+                                    if (useMemberName || useNamespace)
+                                    {
+                                        ReflectionUtils.CustomAttributeBuilderBuilder cabb =
+                                            new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(XmlElementAttribute));
+                                        if (useMemberName)
+                                        {
+                                            cabb.AddPropertyValue("ElementName", outMemberMapping.MemberName);
+                                        }
+                                        if (useNamespace)
+                                        {
+                                            cabb.AddPropertyValue("Namespace", outMemberMapping.Namespace);
+                                        }
+                                        attrs.Add(cabb.Build());
+                                    }
                                 }
-                                if (useMemberName)
-                                {
-                                    cabb.AddPropertyValue("ElementName", outMemberMapping.MemberName);
-                                }
-                                if (useNamespace)
-                                {
-                                    cabb.AddPropertyValue("Namespace", outMemberMapping.Namespace);
-                                }
-
-                                attrs.Add(cabb.Build());
                             }
                         }
                     }
