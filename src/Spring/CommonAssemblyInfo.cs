@@ -14,8 +14,8 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("net-2.0.win32; Release")]
 #endif
 [assembly: AssemblyCompany("http://www.springframework.net")]
-[assembly: AssemblyProduct("Spring.NET Framework 1.2.0 RC1")]
-[assembly: AssemblyCopyright("Copyright 2002-2007 Spring.NET Framework Team.")]
+[assembly: AssemblyProduct("Spring.NET Framework 1.2.0")]
+[assembly: AssemblyCopyright("Copyright 2002-2008 Spring.NET Framework Team.")]
 [assembly: AssemblyTrademark("Apache License, Version 2.0")]
 [assembly: AssemblyCulture("")]
 
