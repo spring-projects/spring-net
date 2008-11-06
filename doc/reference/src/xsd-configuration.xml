@@ -76,10 +76,18 @@
       <literal>&lt;object/&gt;</literal> definitions into like you have always
       done. However, the entire point of using custom schema tags is to make
       configuration easier.</para>
-    </section>
 
-    <para>The rest of this chapter gives an overview of custom XML Schema
-    based configuration that are included with the release.</para>
+      <para>The rest of this chapter gives an overview of custom XML Schema
+      based configuration that are included with the release.</para>
+
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+	configure the namespace parsers that come with Spring
+	via a custom section in App.config.  You will still need to register custom namespace
+	parsers if you are writing your own.</para>
+      </note>
+
+    </section>
 
     <section xml:id="xsd-config-body-schemas-tx">
       <title>The <literal>tx</literal> (transaction) schema</title>
@@ -132,6 +140,13 @@
       parsers in the main .NET application configuration file as shown
       below</para>
 
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+	configure the namespace parsers that come with Spring
+	via a custom section in App.config.  You will still need to register custom namespace
+	parsers if you are writing your own.</para>
+      </note>
+
       <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
@@ -177,6 +192,13 @@
       <para>You will also need to configure the AOP namespace parser in the
       main .NET application configuration file as shown below</para>
 
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+	configure the namespace parsers that come with Spring
+	via a custom section in App.config.  You will still need to register custom namespace
+	parsers if you are writing your own.</para>
+      </note>
+
       <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
@@ -218,6 +240,13 @@
       <para>You will also need to configure the Database namespace parser in
       the main .NET application configuration file as shown below</para>
 
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+	configure the namespace parsers that come with Spring
+	via a custom section in App.config.  You will still need to register custom namespace
+	parsers if you are writing your own.</para>
+      </note>
+
       <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
@@ -257,6 +286,13 @@
       <para>You will also need to configure the remoting namespace parser in
       the main .NET application configuration file as shown below</para>
 
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+	configure the namespace parsers that come with Spring
+	via a custom section in App.config.  You will still need to register custom namespace
+	parsers if you are writing your own.</para>
+      </note>
+
       <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
@@ -294,6 +330,13 @@
 
       <para>You will also need to configure the remoting namespace parser in
       the main .NET application configuration file as shown below</para>
+
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+	configure the namespace parsers that come with Spring
+	via a custom section in App.config.  You will still need to register custom namespace
+	parsers if you are writing your own.</para>
+      </note>
 
       <programlisting language="myxml">&lt;configuration&gt;
 
@@ -333,6 +376,13 @@
 
       <para>You will also need to configure the validation namespace parser in
       the main .NET application configuration file as shown below</para>
+
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+	configure the namespace parsers that come with Spring
+	via a custom section in App.config.  You will still need to register custom namespace
+	parsers if you are writing your own.</para>
+      </note>
 
       <programlisting language="myxml">&lt;configuration&gt;
 
