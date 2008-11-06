@@ -2211,6 +2211,14 @@ Saving speaker...
       </sect3>
 
       <sect3>
+        <title>AttributeAutoProxyCreator</title>
+
+        <para>An AutoProxyCreator, that identifies objects to be proxied by
+        checking any System.Attribute defined on a given type and that types
+        interfaces.</para>
+      </sect3>
+
+      <sect3>
         <title>AbstractFilteringAutoProxyCreator</title>
 
         <para>The base class for AutoProxyCreator implementations that mark
