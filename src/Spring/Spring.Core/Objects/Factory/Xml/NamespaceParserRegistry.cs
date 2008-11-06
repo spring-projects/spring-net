@@ -23,8 +23,10 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
+using Spring.Collections;
 using Spring.Core;
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
@@ -76,6 +78,7 @@ namespace Spring.Objects.Factory.Xml
         #region Fields
 
         private readonly static IDictionary parsers;
+        private readonly static IDictionary wellknownNamespaceParserTypeNames;
 
 #if !NET_2_0
         private readonly static XmlSchemaCollection schemas;
@@ -97,16 +100,52 @@ namespace Spring.Objects.Factory.Xml
             schemas = new XmlSchemaSet();
             schemas.XmlResolver = new XmlResourceUrlResolver();
 #endif
+            wellknownNamespaceParserTypeNames = new CaseInsensitiveHashtable();
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/tx"] = "Spring.Transaction.Config.TxNamespaceParser, Spring.Data";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/aop"] = "Spring.Aop.Config.AopNamespaceParser, Spring.Aop";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/db"] = "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/remoting"] = "Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/nms"] = "Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/validation"] = "Spring.Validation.Config.ValidationNamespaceParser, Spring.Core";
 
+            Reset();
+        }
+
+        /// <summary>
+        /// Reset the list of registered parsers to "factory"-setting
+        /// </summary>
+        /// <remarks>use for unit tests only</remarks>
+        public static void Reset()
+        {
             //TODO - externalize default list of parsers.
             RegisterParser(new ObjectsNamespaceParser());
-            //This is done simple as a means to avoid cyclic dependencies with Factory.Xml
-            //which implementations of parsers typically use.
-            RegisterParser(ObjectUtils.InstantiateType(typeof(NamespaceParserRegistry).Assembly, 
-                "Spring.Validation.Config.ValidationNamespaceParser") as INamespaceParser);
-
             // register custom config parsers
             ConfigurationUtils.GetSection(ConfigParsersSectionName);
+        }
+
+        /// <summary>
+        /// Registers the <see cref="INamespaceParser"/> type for wellknown namespaces
+        /// </summary>
+        /// <returns><c>true</c> if the parser could be registered, <c>false</c> otherwise</returns>
+        internal static bool RegisterWellknownNamespaceParserType(string namespaceUri)
+        {
+            if (parsers[namespaceUri] != null) return true;
+
+            if (wellknownNamespaceParserTypeNames.Contains(namespaceUri))
+            {
+                string parserTypeName = (string) wellknownNamespaceParserTypeNames[namespaceUri];                
+                // assume, that all Spring.XXX assemblies have same version + public key
+                // get the ", Version=x.x.x.x, Culture=neutral, PublicKeyToken=65e474d141e25e07" part of Spring.Core and append it
+                string name = typeof(NamespaceParserRegistry).Assembly.GetName().Name;
+                string fullname = typeof(NamespaceParserRegistry).Assembly.GetName().FullName;
+                string versionCulturePublicKey = fullname.Substring(name.Length);
+
+                parserTypeName = parserTypeName + versionCulturePublicKey;
+                Type parserType = Type.GetType(parserTypeName, true);
+                RegisterParser(parserType);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -134,7 +173,16 @@ namespace Spring.Objects.Factory.Xml
         /// </returns>
         public static INamespaceParser GetParser(string namespaceURI)
         {
-            return (INamespaceParser) parsers[namespaceURI];
+            INamespaceParser parser = (INamespaceParser) parsers[namespaceURI];
+            if (parser == null)
+            {
+                bool ok = RegisterWellknownNamespaceParserType(namespaceURI);
+                if (ok)
+                {
+                    parser = (INamespaceParser) parsers[namespaceURI];
+                }
+            }
+            return parser;
         }
 
         /// <summary>

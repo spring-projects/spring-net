@@ -45,8 +45,8 @@ namespace Spring.Transaction.Config
         [SetUp]
         public void SetUp()
         {
-            NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
-            NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+            //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
+            //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
             ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Transaction.Config/TxNamespaceParserTests.xml");
         }
 

@@ -56,9 +56,10 @@ namespace Spring.Data
         [SetUp]
         public void RollbackTestSetup()
         {
-            NamespaceParserRegistry.RegisterParser(typeof (DatabaseNamespaceParser));
-            NamespaceParserRegistry.RegisterParser(typeof (TxNamespaceParser));
-            NamespaceParserRegistry.RegisterParser(typeof (AopNamespaceParser));
+            // WELLKNOWN
+//            NamespaceParserRegistry.RegisterParser(typeof (DatabaseNamespaceParser));
+//            NamespaceParserRegistry.RegisterParser(typeof (TxNamespaceParser));
+//            NamespaceParserRegistry.RegisterParser(typeof (AopNamespaceParser));
             IApplicationContext ctx =
                 new XmlApplicationContext(
                     "assembly://Spring.Data.Integration.Tests/Spring.Data/TestTxIsolationLevel.xml");

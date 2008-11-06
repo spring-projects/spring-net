@@ -1,0 +1,22 @@
+<xsd:schema targetNamespace="http://www.example.com/brief"
+	    xmlns:brief="http://www.example.com/brief"
+	    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	    elementFormDefault="qualified"
+	    attributeFormDefault="unqualified">
+
+  <xsd:attributeGroup name="CommonAttributes">
+    <xsd:attribute name="class" type="xsd:NMTOKEN" use="optional"/>
+    <xsd:attribute name="id" type="xsd:ID" use="required"/>
+  </xsd:attributeGroup>
+  
+    <xsd:element name="brief">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="kopf" type="xsd:string"/>
+                <xsd:element name="inhalt" type="xsd:string"/>
+            </xsd:sequence>
+            <xsd:attributeGroup ref="CommonAttributes"/>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Web;
 using System.Xml;
 using NUnit.Framework;
@@ -99,5 +100,15 @@ namespace Spring
 	        Assert.IsNotNull(stm, "Resource '{0}' in assembly '{1}' not found", resname, contextType.Assembly.FullName);
 	        return stm;
 	    }
+
+        /// <summary>
+        /// returns  an "assembly://" uri for the specified manifest resource, scoped by the namespace of the specified type.
+        /// ("assembly://hint.assemblyname_without_version/hint.Namespace/name")
+        /// </summary>
+        /// <see cref="Assembly.GetManifestResourceStream(Type,string)"/>
+        public static string GetAssemblyResourceUri( Type hint,  string name)
+        {
+            return "assembly://" + hint.Assembly.FullName.Split(',')[0].Trim() + "/" + hint.Namespace + "/" + name;
+        }
 	}
 }

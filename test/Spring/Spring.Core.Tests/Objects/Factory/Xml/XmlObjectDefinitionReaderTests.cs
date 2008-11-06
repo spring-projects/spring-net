@@ -24,7 +24,9 @@ using System;
 using System.Xml;
 using NUnit.Framework;
 using Spring.Core.IO;
+using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
+using Spring.Validation;
 
 #endregion
 
@@ -66,6 +68,49 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
+        public void AutoRegistersWellknownNamespaceParser()
+        {
+            try
+            {
+                NamespaceParserRegistry.Reset();
+
+                DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+                XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+                reader.LoadObjectDefinitions(new StringResource(
+                                                 @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net' 
+         xmlns:v='http://www.springframework.net/validation'>  
+      <v:required id='tripValidator' test='true' />
+</objects>
+"));
+                Assert.AreEqual(typeof(RequiredValidator), of.GetObject("tripValidator").GetType());
+            }
+            finally
+            {
+                NamespaceParserRegistry.Reset();                
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(ObjectDefinitionStoreException))]
+        public void ThrowsOnUnknownNamespaceUri()
+        {
+            NamespaceParserRegistry.Reset();
+
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+                                             @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net' 
+     xmlns:x='http://www.springframework.net/XXXX'>  
+  <x:group id='tripValidator' />
+</objects>
+"));
+            Assert.Fail();
+        }
+
+
+        [Test]
         public void WhitespaceValuesArePreservedForValueAttribute()
         {
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
@@ -104,6 +149,7 @@ namespace Spring.Objects.Factory.Xml
             Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test3")).Name);
             Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test4")).Name);
         }
+
 
         [Test]
         public void WhitespaceValuesArePreservedForValueElementWhenSpaceIsSetToPreserve()

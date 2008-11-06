@@ -53,6 +53,42 @@ namespace Spring.Objects.Factory.Xml
     /// <author>Rick Evans (.NET)</author>
     public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
     {
+        #region Utility Classes
+
+        /// <summary>
+        /// For retrying the parse process
+        /// </summary>
+        private class RetryParseException : Exception
+        {
+            public RetryParseException()
+            {}
+        }
+
+#if !NET_2_0
+        private class ValidationEventHandlerWrapper
+        {
+            private XmlReader _sender;
+            private XmlObjectDefinitionReader _owner;
+
+            public XmlReader Reader
+            {
+                set { _sender = value; }
+            }
+
+            public ValidationEventHandlerWrapper(XmlObjectDefinitionReader owner)
+            {
+                _owner = owner;
+            }
+
+            public void HandleValidation(object sender, ValidationEventArgs args)
+            {
+                _owner.HandleValidation(_sender,args);
+            }
+        }
+#endif
+
+        #endregion
+
         #region Fields
 
         [NonSerialized]
@@ -208,29 +244,27 @@ namespace Spring.Objects.Factory.Xml
         {
             try
             {
-                XmlReader reader;
+                // create local copy of data
+                byte[] xmlData = IOUtils.ToByteArray( stream );
 
-                if (SystemUtils.MonoRuntime)
+                XmlDocument doc;
+                // loop until no unregistered, wellknown namespaces left
+                while(true)
                 {
-                    reader = XmlUtils.CreateReader(stream);
+                    XmlReader reader = null;
+                    try
+                    {
+                        MemoryStream xmlDataStream = new MemoryStream(xmlData);
+                        reader = CreateValidatingReader(xmlDataStream);
+                        doc = new ConfigXmlDocument();
+                        doc.Load(reader);
+                        break;
+                    }
+                    catch(RetryParseException)
+                    {
+                        if (reader != null) reader.Close();
+                    }
                 }
-                else
-                {
-                    reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(),
-                        new ValidationEventHandler(HandleValidation));       
-                }
-
-                #region Instrumentation
-
-                if (log.IsDebugEnabled)
-                {
-                    log.Debug("Using the following XmlReader implementation : " + reader.GetType());
-                }
-
-                #endregion
-
-                XmlDocument doc = new ConfigXmlDocument();
-                doc.Load(reader);
                 return RegisterObjectDefinitions(doc, resource);
             }
             catch (XmlException ex)
@@ -255,6 +289,37 @@ namespace Spring.Objects.Factory.Xml
             }
         }
 
+        private XmlReader CreateValidatingReader(MemoryStream stream)
+        {
+            XmlReader reader;
+            if (SystemUtils.MonoRuntime)
+            {
+                reader = XmlUtils.CreateReader(stream);
+            }
+            else
+            {                    
+#if !NET_2_0
+                // only because 1.0/1.1 don't pass the sender into the handler callback...
+                ValidationEventHandlerWrapper validationEventHandlerWrapper = new ValidationEventHandlerWrapper(this);
+                reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(),
+                                                         new ValidationEventHandler(validationEventHandlerWrapper.HandleValidation));       
+                validationEventHandlerWrapper.Reader = reader;
+#else
+                reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(), HandleValidation);       
+#endif
+            }
+
+            #region Instrumentation
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug("Using the following XmlReader implementation : " + reader.GetType());
+            }
+            return reader;
+
+            #endregion
+        }
+
         /// <summary>
         /// Validation callback for a validating XML reader.
         /// </summary>
@@ -265,6 +330,20 @@ namespace Spring.Objects.Factory.Xml
             if (args.Severity == XmlSeverityType.Error)
             {
                 XmlSchemaException ex = args.Exception;
+                XmlReader xmlReader = (XmlReader) sender;
+                if (!NamespaceParserRegistry.GetSchemas().Contains(xmlReader.NamespaceURI)
+#if NET_2_0
+                    && ex is XmlSchemaValidationException
+#endif
+                    )
+                {
+                    // try wellknown parsers
+                    bool registered = NamespaceParserRegistry.RegisterWellknownNamespaceParserType(xmlReader.NamespaceURI);
+                    if (registered)
+                    {                  
+                        throw new RetryParseException();
+                    }
+                }
 #if !NET_2_0
                 // ignore validation errors for well-known 'xml' namespace. This seems to be a bug in net 1.0 + 1.1
                 if (ex.Message.IndexOf("http://www.w3.org/XML/1998/namespace:") > -1)

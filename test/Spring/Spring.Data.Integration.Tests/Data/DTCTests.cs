@@ -46,8 +46,9 @@ namespace Spring.Data
             //BasicConfigurator.Configure();
             Console.WriteLine("Hello");
             LogManager.Adapter = new ConsoleOutLoggerFactoryAdapter(new NameValueCollection());
-            NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
-            NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+
+            //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
+            //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
             string ctxName = "DTCAppContext.xml"; // for .NET 2.0
             //string ctxName = "DTC1.1AppContext.xml"; // for .NET 1.1
             ctx =

@@ -64,7 +64,7 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void CanLoadSchemaImportingOtherSchemaByRelativePath()
         {
-            string schemaLocation = GetAssemblyResource( this.GetType(), "NamespaceParserRegistryTests_TestSchema.xsd" );
+            string schemaLocation = TestResourceLoader.GetAssemblyResourceUri( this.GetType(), "NamespaceParserRegistryTests_TestSchema.xsd" );
             NamespaceParserRegistry.RegisterParser(new TestNamespaceParser(), "http://www.example.com/brief", schemaLocation);
             XmlReader vr = XmlUtils.CreateValidatingReader( new StringResource(
                                             @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -74,9 +74,5 @@ namespace Spring.Objects.Factory.Xml
             newDoc.Load(vr);
         }
 #endif
-        private string GetAssemblyResource( Type hint,  string name)
-        {
-            return "assembly://" + hint.Assembly.FullName.Split(',')[0].Trim() + "/" + hint.Namespace + "/" + name;
-        }
     }
 }

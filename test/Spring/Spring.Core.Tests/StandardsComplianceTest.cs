@@ -76,7 +76,8 @@ namespace Spring
 
         protected void ProcessAssembly (Assembly a) {
             foreach (Type t in a.GetTypes ()) {
-                if (IsCheckedType (t)) {
+                if ( (t.IsPublic||t.IsNestedPublic)
+                    && IsCheckedType (t)) {
                     CheckStandardsCompliance (a, t);
                 }
             }

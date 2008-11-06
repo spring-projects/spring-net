@@ -58,7 +58,8 @@ namespace Spring.Messaging.Nms.Config
         [SetUp]
         public void Setup()
         {
-            NamespaceParserRegistry.RegisterParser(typeof(NmsNamespaceParser));
+            // WELLKNOWN
+            //NamespaceParserRegistry.RegisterParser(typeof(NmsNamespaceParser));
             ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("NmsNamespaceHandlerTests.xml", GetType()));
             mocks = new MockRepository();
         }

@@ -44,8 +44,9 @@ namespace Spring.Aop.Config
 
         [SetUp]
         public void Setup()
-        {
-            NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+        {            
+            // IS WELLKNOWN NOW
+            //NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
             //ctx = new XmlApplicationContext( "assembly://Spring.Aop.Tests/Spring.Aop.Config/AopNamespaceParserTests.xml");
             ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("AopNamespaceParserTests.xml", this.GetType()));
         }

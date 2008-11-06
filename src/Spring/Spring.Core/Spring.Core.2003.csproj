@@ -2393,6 +2393,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Util\IoUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\ITextPosition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
