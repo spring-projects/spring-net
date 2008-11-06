@@ -118,12 +118,18 @@ namespace Spring.Scheduling.Quartz
             Expect.Call(scheduler.GetJobDetail("myJob1", SchedulerConstants.DefaultGroup)).Return(null);
             Expect.Call(scheduler.GetTrigger("myTrigger0", SchedulerConstants.DefaultGroup)).Return(null);
             Expect.Call(scheduler.GetTrigger("myTrigger1", SchedulerConstants.DefaultGroup)).Return(null);
-            Expect.Call(delegate { scheduler.AddJob(jobDetail0, true); }).IgnoreArguments();
+            
+            scheduler.AddJob(jobDetail0, true);
+            LastCall.IgnoreArguments();
             Expect.Call(scheduler.ScheduleJob(trigger0)).Return(DateTime.UtcNow);
-            Expect.Call(delegate { scheduler.AddJob(jobDetail1, true); }).IgnoreArguments();
+            scheduler.AddJob(jobDetail1, true);
+            LastCall.IgnoreArguments();
             Expect.Call(scheduler.ScheduleJob(trigger1)).Return(DateTime.UtcNow);
-            Expect.Call(delegate { scheduler.Start(); });
-            Expect.Call(delegate { scheduler.Shutdown(false); });
+            scheduler.Start();
+            LastCall.IgnoreArguments();
+            scheduler.Shutdown(false);
+            LastCall.IgnoreArguments();
+
 
             mockery.ReplayAll();
 
@@ -200,7 +206,8 @@ namespace Spring.Scheduling.Quartz
             Expect.Call(scheduler.GetTrigger("myTrigger1", SchedulerConstants.DefaultGroup)).Return(new SimpleTrigger());
             if (overwrite)
             {
-                Expect.Call(delegate { scheduler.AddJob(jobDetail1, true); }).IgnoreArguments();
+                scheduler.AddJob(jobDetail1, true);
+                LastCall.IgnoreArguments();
                 Expect.Call(scheduler.RescheduleJob("myTrigger1", SchedulerConstants.DefaultGroup, trigger1)).Return(
                     DateTime.UtcNow);
             }
@@ -208,11 +215,11 @@ namespace Spring.Scheduling.Quartz
             {
                 Expect.Call(scheduler.GetJobDetail("myJob0", SchedulerConstants.DefaultGroup)).Return(null);
             }
-            Expect.Call(delegate { scheduler.AddJob(jobDetail0, true); }).IgnoreArguments();
+            scheduler.AddJob(jobDetail0, true);
+            LastCall.IgnoreArguments();
             Expect.Call(scheduler.ScheduleJob(trigger0)).Return(DateTime.UtcNow);
-            ;
-            Expect.Call(delegate { scheduler.Start(); });
-            Expect.Call(delegate { scheduler.Shutdown(false); });
+            scheduler.Start();
+            scheduler.Shutdown(false);
 
             mockery.ReplayAll();
 
@@ -289,7 +296,8 @@ namespace Spring.Scheduling.Quartz
             Expect.Call(scheduler.GetTrigger("myTrigger1", SchedulerConstants.DefaultGroup)).Return(new SimpleTrigger());
             if (overwrite)
             {
-                Expect.Call(delegate { scheduler.AddJob(jobDetail1, true); }).IgnoreArguments();
+                scheduler.AddJob(jobDetail1, true);
+                LastCall.IgnoreArguments();
                 Expect.Call(scheduler.RescheduleJob("myTrigger1", SchedulerConstants.DefaultGroup, trigger1)).Return(
                     DateTime.UtcNow);
             }
@@ -297,7 +305,10 @@ namespace Spring.Scheduling.Quartz
             {
                 Expect.Call(scheduler.GetJobDetail("myJob0", SchedulerConstants.DefaultGroup)).Return(null);
             }
-            Expect.Call(delegate { scheduler.AddJob(jobDetail0, true); }).IgnoreArguments();
+            
+            scheduler.AddJob(jobDetail0, true);
+            LastCall.IgnoreArguments();
+
             Expect.Call(scheduler.ScheduleJob(trigger0)).Throw(new ObjectAlreadyExistsException(""));
             if (overwrite)
             {
@@ -305,8 +316,8 @@ namespace Spring.Scheduling.Quartz
                     DateTime.UtcNow);
             }
 
-            Expect.Call(delegate { scheduler.Start(); });
-            Expect.Call(delegate { scheduler.Shutdown(false); });
+            scheduler.Start();
+            scheduler.Shutdown(false);
 
             mockery.ReplayAll();
 
@@ -347,13 +358,13 @@ namespace Spring.Scheduling.Quartz
             ITriggerListener triggerListener = new TestTriggerListener();
 
             Expect.Call(scheduler.JobFactory = (jobFactory));
-            Expect.Call(delegate { scheduler.AddSchedulerListener(schedulerListener); });
-            Expect.Call(delegate { scheduler.AddGlobalJobListener(globalJobListener); });
-            Expect.Call(delegate { scheduler.AddJobListener(jobListener); });
-            Expect.Call(delegate { scheduler.AddGlobalTriggerListener(globalTriggerListener); });
-            Expect.Call(delegate { scheduler.AddTriggerListener(triggerListener); });
-            Expect.Call(delegate { scheduler.Start(); });
-            Expect.Call(delegate { scheduler.Shutdown(false); });
+            scheduler.AddSchedulerListener(schedulerListener); 
+            scheduler.AddGlobalJobListener(globalJobListener);
+            scheduler.AddJobListener(jobListener); 
+            scheduler.AddGlobalTriggerListener(globalTriggerListener);
+            scheduler.AddTriggerListener(triggerListener); 
+            scheduler.Start();
+            scheduler.Shutdown(false);
 
             mockery.ReplayAll();
 
@@ -430,7 +441,7 @@ namespace Spring.Scheduling.Quartz
             {
                 Thread.Sleep(4000);
             }
-            catch (ThreadInterruptedException ex)
+            catch (ThreadInterruptedException)
             {
                 // fall through
             }
@@ -453,7 +464,7 @@ namespace Spring.Scheduling.Quartz
             {
                 Thread.Sleep(4000);
             }
-            catch (ThreadInterruptedException ex)
+            catch (ThreadInterruptedException)
             {
                 // fall through
             }
@@ -512,12 +523,14 @@ namespace Spring.Scheduling.Quartz
             Expect.Call(scheduler.GetJobDetail("myJob1", SchedulerConstants.DefaultGroup)).Return(null);
             Expect.Call(scheduler.GetTrigger("myTrigger0", SchedulerConstants.DefaultGroup)).Return(null);
             Expect.Call(scheduler.GetTrigger("myTrigger1", SchedulerConstants.DefaultGroup)).Return(null);
-            Expect.Call(delegate { scheduler.AddJob(jobDetail0, true); }).IgnoreArguments();
-            Expect.Call(delegate { scheduler.AddJob(jobDetail1, true); }).IgnoreArguments();
+            scheduler.AddJob(jobDetail0, true);
+            LastCall.IgnoreArguments();
+            scheduler.AddJob(jobDetail1, true);
+            LastCall.IgnoreArguments();
             Expect.Call(scheduler.ScheduleJob(trigger0)).Return(DateTime.UtcNow);
             Expect.Call(scheduler.ScheduleJob(trigger1)).Return(DateTime.UtcNow);
-            Expect.Call(delegate { scheduler.Start(); });
-            Expect.Call(delegate { scheduler.Shutdown(false); });
+            scheduler.Start();
+            scheduler.Shutdown(false); 
 
             mockery.ReplayAll();
 
@@ -547,8 +560,8 @@ namespace Spring.Scheduling.Quartz
             IScheduler scheduler = (IScheduler) mockery.CreateMock(typeof (IScheduler));
             SchedulerContext schedulerContext = new SchedulerContext();
             Expect.Call(scheduler.Context).Return(schedulerContext).Repeat.Times(4);
-            Expect.Call(delegate { scheduler.Start(); });
-            Expect.Call(delegate { scheduler.Shutdown(false); });
+            scheduler.Start();
+            scheduler.Shutdown(false);
 
             mockery.ReplayAll();
 
