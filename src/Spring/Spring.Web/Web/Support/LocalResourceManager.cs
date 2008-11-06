@@ -89,6 +89,24 @@ namespace Spring.Web.Support
             }
             return null;
         }
+
+        ///<summary>
+        ///Provides the implementation for finding a <see cref="T:System.Resources.ResourceSet"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///The specified <see cref="T:System.Resources.ResourceSet"></see>.
+        ///</returns>
+        ///
+        ///<param name="culture">The <see cref="T:System.Globalization.CultureInfo"></see> to look for. </param>
+        ///<param name="tryParents">If the <see cref="T:System.Resources.ResourceSet"></see> cannot be loaded, try parent <see cref="T:System.Globalization.CultureInfo"></see> objects to see if they exist. </param>
+        ///<param name="createIfNotExists">If true and if the <see cref="T:System.Resources.ResourceSet"></see> has not been loaded yet, load it. </param>
+        ///<exception cref="T:System.Resources.MissingManifestResourceException">The main assembly does not contain a .resources file and it is required to look up a resource. </exception>
+        protected override ResourceSet InternalGetResourceSet( CultureInfo culture, bool createIfNotExists, bool tryParents )
+        {
+            //return base.InternalGetResourceSet( culture, createIfNotExists, tryParents );
+            return null;
+        }
     }
 }
 
