@@ -1,4 +1,4 @@
-Changes (1.1.2 to 1.2 RC1)
+Changes (1.1.2 to 1.2 RC1 or greater)
 
 Spring.Core
 -----------
