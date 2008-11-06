@@ -184,6 +184,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Scheduling\Quartz\SchedulerAccessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Scheduling\Quartz\SchedulerAccessorObject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Scheduling\Quartz\SchedulerFactoryObject.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
