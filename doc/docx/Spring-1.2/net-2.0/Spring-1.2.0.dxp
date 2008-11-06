@@ -16,7 +16,7 @@
     <CommentExtraction UnTaggedBlocks="False" UnTaggedEnumerations="False" UnTaggedEvents="False" UnTaggedModules="False" UnTaggedUDTs="False" UnTaggedVariables="False" HelpDescriptionImport="3"/>
     <Diagrams PageNestingLevels="2" OverviewNestingLevels="3" SupressSingleObjectDiagrams="True" DiagramStyleSource="0" ObjFillColor="0" ObjTextColor="0" ObjBorderColor="0" ColFillColor="0" ColTextColor="0" ColBorderColor="0" UseDropShadow="False" CenterCaptions="False" DiagramBold="False" BorderWidth="0" UseDiagramShapes="False"/>
     <VariableValues>
-        <VariableValue Name="CopyrightNotice" Value="&amp;copy; 2004-2009 Spring.NET Authors. All Rights Reserved."/>
+        <VariableValue Name="CopyrightNotice" Value="&amp;copy; 2004-2008 Spring.NET Authors. All Rights Reserved."/>
         <VariableValue Name="FeedbackLink" Value="&lt;a href=&quot;forum.springframework.net&quot;&gt;Send comments&lt;/a&gt; on this topic."/>
     </VariableValues>
     <AdditionalFiles/>
