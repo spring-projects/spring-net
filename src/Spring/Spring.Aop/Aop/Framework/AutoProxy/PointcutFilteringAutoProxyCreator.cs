@@ -30,8 +30,7 @@ using Spring.Util;
 namespace Spring.Aop.Framework.AutoProxy
 {
     /// <summary>
-    /// This AutoProxyCreator only proxies objects matching the specified <see cref="IPointcut"/>. Additionally, proxy creation may
-    /// be further restricted by specifying object name patterns like with <see cref="ObjectNameAutoProxyCreator"/>.
+    /// This AutoProxyCreator only proxies objects matching the specified <see cref="IPointcut"/>.
     /// </summary>
     /// <author>Erich Eichinger</author>
     public class PointcutFilteringAutoProxyCreator : AbstractFilteringAutoProxyCreator
