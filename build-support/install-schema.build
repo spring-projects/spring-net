@@ -7,7 +7,7 @@
 
     <property name="vsXXXX.version" value="VS.NET 2008"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir"/>
-    <property name="vsXXXX.relative.dir" value="..\\..\\Xml\\Schemas"/>
+    <property name="vsXXXX.relative.dir" value="..\..\Xml\Schemas"/>
     <!-- retrieve location of VS.NET 2008 schema store -->
     <readregistry property="vs2008.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
                   failonerror="false"/>
@@ -15,7 +15,7 @@
 
     <property name="vsXXXX.version" value="VS.NET 2005"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\8.0\InstallDir"/>
-    <property name="vsXXXX.relative.dir" value="..\\..\\Xml\\Schemas"/>
+    <property name="vsXXXX.relative.dir" value="..\..\Xml\Schemas"/>
     <!-- retrieve location of VS.NET 2005 schema store -->
     <readregistry property="vs2005.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
                   failonerror="false"/>
@@ -23,7 +23,7 @@
 
     <property name="vsXXXX.version" value="VS.NET 2003"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\7.1\InstallDir"/>
-    <property name="vsXXXX.relative.dir" value="..\\Packages\schemas\xml"/>
+    <property name="vsXXXX.relative.dir" value="..\Packages\schemas\xml"/>
     <!-- retrieve location of VS.NET 2003 schema store -->
     <readregistry property="vs2003.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
                   failonerror="false"/>
@@ -37,7 +37,7 @@
     <!-- deploy spring schema to the VS.NET 2008 schema store -->
     <property name="vsXXXX.version" value="VS.NET 2008"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir"/>
-    <property name="vsXXXX.relative.dir" value="..\\..\\Xml\\Schemas"/>
+    <property name="vsXXXX.relative.dir" value="..\..\Xml\Schemas"/>
     <!-- retrieve location of VS.NET 2005 schema store -->
     <readregistry property="vs2008.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
                   failonerror="false"/>
@@ -55,7 +55,7 @@
     <!-- deploy spring schema to the VS.NET 2005 schema store -->
     <property name="vsXXXX.version" value="VS.NET 2005"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\8.0\InstallDir"/>
-    <property name="vsXXXX.relative.dir" value="..\\..\\Xml\\Schemas"/>
+    <property name="vsXXXX.relative.dir" value="..\..\Xml\Schemas"/>
     <!-- retrieve location of VS.NET 2005 schema store -->
     <readregistry property="vs2005.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
                   failonerror="false"/>
@@ -74,7 +74,7 @@
     <!-- deploy spring schema to the VS.NET 2003 schema store -->
     <property name="vsXXXX.version" value="VS.NET 2003"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\7.1\InstallDir"/>
-    <property name="vsXXXX.relative.dir" value="..\\Packages\schemas\xml"/>
+    <property name="vsXXXX.relative.dir" value="..\Packages\schemas\xml"/>
     <!-- retrieve location of VS.NET 2003 schema store -->
     <readregistry property="vs2003.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
                   failonerror="false"/>
@@ -93,7 +93,7 @@
     <!-- deploy spring schema to the VS.NET 2002 schema store -->
     <property name="vsXXXX.version" value="VS.NET 2002"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\7.0\InstallDir"/>
-    <property name="vsXXXX.relative.dir" value="..\\Packages\schemas\xml"/>
+    <property name="vsXXXX.relative.dir" value="..\Packages\schemas\xml"/>
     <!-- retrieve location of VS.NET 2003 schema store -->
     <readregistry property="vs2002.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
                   failonerror="false"/>
