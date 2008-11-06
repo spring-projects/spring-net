@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="aop" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="aop" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns2="http://www.w3.org/1999/xlink"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Aspect Oriented Programming with Spring.NET</title>
 
   <sect1 xml:id="aop-introduction-concepts">
@@ -172,8 +177,8 @@
       accomplish the same thing. Using the most specific advice type provides
       a simpler programming model with less potential for errors. For example,
       you don't need to invoke the <literal>proceed()</literal> method on the
-      <literal>IMethodInvocation</literal> used for around advice, and
-      hence can't fail to invoke it.</para>
+      <literal>IMethodInvocation</literal> used for around advice, and hence
+      can't fail to invoke it.</para>
 
       <para>The pointcut concept is the key to AOP, distinguishing AOP from
       older technologies offering interception. Pointcuts enable advice to be
@@ -205,25 +210,23 @@
       an object representing an aspect, including both an advice and a
       pointcut targeting it to specific joinpoints.</para>
 
-      <para>Different advice types are
-      <literal>IMethodInterceptor</literal> (from the AOP Alliance
-      interception API); and the advice interfaces defined in the
-      <literal>Spring.Aop</literal> namespace. All advices must implement the
-      <literal>AopAlliance.Aop.IAdvice</literal> tag interface. Advices
-      supported out the box are <literal>IMethodInterceptor</literal> ;
-      <literal>IThrowsAdvice</literal>;
-      <literal>IBeforeAdvice</literal>; and
-      <literal>IAfterReturningAdvice</literal>. We'll discuss advice types
+      <para>Different advice types are <literal>IMethodInterceptor</literal>
+      (from the AOP Alliance interception API); and the advice interfaces
+      defined in the <literal>Spring.Aop</literal> namespace. All advices must
+      implement the <literal>AopAlliance.Aop.IAdvice</literal> tag interface.
+      Advices supported out the box are <literal>IMethodInterceptor</literal>
+      ; <literal>IThrowsAdvice</literal>; <literal>IBeforeAdvice</literal>;
+      and <literal>IAfterReturningAdvice</literal>. We'll discuss advice types
       in detail below.</para>
 
       <para>Spring.NET provides a .NET translation of the Java interfaces
       defined by the <ulink url="http://aopalliance.sourceforge.NET/">
-      <emphasis>AOP Alliance</emphasis></ulink>. Around advice must implement
-      the AOP Alliance
-      <literal>AopAlliance.Interceptr.IMethodInterceptor</literal>
-      interface. Whilst there is wide support for the AOP Alliance in Java,
-      Spring.NET is currently the only .NET AOP framework that makes use of
-      these interfaces. In the short term, this will provide a consistent
+          <emphasis>AOP Alliance</emphasis>
+        </ulink>. Around advice must implement the AOP Alliance
+      <literal>AopAlliance.Interceptr.IMethodInterceptor</literal> interface.
+      Whilst there is wide support for the AOP Alliance in Java, Spring.NET is
+      currently the only .NET AOP framework that makes use of these
+      interfaces. In the short term, this will provide a consistent
       programming model for those doing development in both .NET and Java, and
       in the longer term, we hope to see more .NET projects adopt the AOP
       Alliance interfaces.</para>
@@ -318,8 +321,8 @@
       composition operations (such as performing a "union" with another method
       matcher).</para>
 
-      <para>The <literal>ITypeFilter</literal> interface is used to
-      restrict the pointcut to a given set of target classes. If the
+      <para>The <literal>ITypeFilter</literal> interface is used to restrict
+      the pointcut to a given set of target classes. If the
       <literal>Matches()</literal> method always returns true, all target
       types will be matched:</para>
 
@@ -328,8 +331,8 @@
     bool Matches(Type type);
 }</programlisting>
 
-      <para>The <literal>IMethodMatcher</literal> interface is normally
-      more important. The complete interface is shown below:</para>
+      <para>The <literal>IMethodMatcher</literal> interface is normally more
+      important. The complete interface is shown below:</para>
 
       <programlisting language="csharp">public interface IMethodMatcher
 {
@@ -346,9 +349,9 @@
       avoid the need for a test on every method invocation. If the 2-argument
       matches method returns true for a given method, and the
       <literal>IsRuntime</literal> property for the
-      <literal>IMethodMatcher</literal> returns true, the 3-argument
-      matches method will be invoked on every method invocation. This enables
-      a pointcut to look at the arguments passed to the method invocation
+      <literal>IMethodMatcher</literal> returns true, the 3-argument matches
+      method will be invoked on every method invocation. This enables a
+      pointcut to look at the arguments passed to the method invocation
       immediately before the target advice is to execute.</para>
 
       <para>Most <literal>IMethodMatchers</literal> are static, meaning that
@@ -441,13 +444,12 @@
            
 
           <para>As a convenience, Spring provides the
-          <literal>RegularExpressionMethodPointcutAdvisor</literal> class
-          that allows us to reference an <literal>IAdvice</literal>
-          instance as well as defining the pointcut rules (remember that an
-          <literal>IAdvice</literal> instance can be an interceptor,
-          before advice, throws advice etc.) This simplifies wiring, as the
-          one object serves as both pointcut and advisor, as shown
-          below:</para>
+          <literal>RegularExpressionMethodPointcutAdvisor</literal> class that
+          allows us to reference an <literal>IAdvice</literal> instance as
+          well as defining the pointcut rules (remember that an
+          <literal>IAdvice</literal> instance can be an interceptor, before
+          advice, throws advice etc.) This simplifies wiring, as the one
+          object serves as both pointcut and advisor, as shown below:</para>
 
            
 
@@ -466,9 +468,8 @@
 
            
 
-          <para>The
-          <literal>RegularExpressionMethodPointcutAdvisor</literal> class
-          can be used with any <literal>Advice</literal> type.</para>
+          <para>The <literal>RegularExpressionMethodPointcutAdvisor</literal>
+          class can be used with any <literal>Advice</literal> type.</para>
 
            If you only have one pattern you can use the property name 
 
@@ -480,19 +481,19 @@
 
            and specifying a list. 
 
-          <para>You may also specify a <literal>Regex</literal> object
-          from the <literal>System.Text.RegularExpressions</literal>
-          namespace. The built in <literal>RegexConverter</literal> class
-          will perform the conversion. See <xref
-          linkend="object-objects-builtin-converters" /> for more information
-          on Spring's build in type converters. The Regex object is created as
-          any other object within the IoC container. Using an inner-object
-          definition for the Regex object is a handy way to keep the
-          definition close to the PointcutAdvisor declaration. Note that the
-          class <literal>SdkRegularExpressionMethodPointcut</literal> has
-          a <methodname>DefaultOptions</methodname> property to set the
-          regular expression options if they are not explicitly specified in
-          the constructor.</para>
+          <para>You may also specify a <literal>Regex</literal> object from
+          the <literal>System.Text.RegularExpressions</literal> namespace. The
+          built in <literal>RegexConverter</literal> class will perform the
+          conversion. See <xref linkend="object-objects-builtin-converters" />
+          for more information on Spring's build in type converters. The Regex
+          object is created as any other object within the IoC container.
+          Using an inner-object definition for the Regex object is a handy way
+          to keep the definition close to the PointcutAdvisor declaration.
+          Note that the class
+          <literal>SdkRegularExpressionMethodPointcut</literal> has a
+          <methodname>DefaultOptions</methodname> property to set the regular
+          expression options if they are not explicitly specified in the
+          constructor.</para>
 
            
         </sect4>
@@ -506,9 +507,8 @@
           configure itself. The class
           <literal>AttributeMatchMethodPointcut</literal> provides this
           functionality. Sample usage that will match all methods that have
-          the attribute
-          <literal>Spring.Attributes.CacheAttribute</literal> is shown
-          below. <programlisting language="myxml">&lt;object id="cachePointcut" type="Spring.Aop.Support.AttributeMatchMethodPointcut, Spring.Aop"&gt; 
+          the attribute <literal>Spring.Attributes.CacheAttribute</literal> is
+          shown below. <programlisting language="myxml">&lt;object id="cachePointcut" type="Spring.Aop.Support.AttributeMatchMethodPointcut, Spring.Aop"&gt; 
     &lt;property name="Attribute" value="Spring.Attributes.CacheAttribute, Spring.Core"/&gt;        
 &lt;/object&gt;</programlisting></para>
 
@@ -528,10 +528,10 @@
           information on this particular advice.</para>
 
           <para>As a convenience the class
-          <literal>AttributeMatchMethodPointcutAdvisor</literal> is
-          provided to defining an attribute based Advisor as a somewhat
-          shorter alternative to using the generic DefaultPointcutAdvisor. An
-          example is shown below.<programlisting language="myxml">&lt;object id="AspNetCacheAdvice" type="Spring.Aop.Support.AttributeMatchMethodPointcutAdvisor, Spring.Aop"&gt; 
+          <literal>AttributeMatchMethodPointcutAdvisor</literal> is provided
+          to defining an attribute based Advisor as a somewhat shorter
+          alternative to using the generic DefaultPointcutAdvisor. An example
+          is shown below.<programlisting language="myxml">&lt;object id="AspNetCacheAdvice" type="Spring.Aop.Support.AttributeMatchMethodPointcutAdvisor, Spring.Aop"&gt; 
    &lt;property name="advice"&gt; 
       &lt;object type="Aspect.AspNetCacheAdvice, Aspect"/&gt; 
    &lt;/property&gt; 
@@ -742,8 +742,8 @@ public int GetAge(IPerson person)
         possibility of inadvertently failing to proceed down the interceptor
         chain.</para>
 
-        <para>The <literal>IMethodBeforeAdvice</literal> interface is
-        shown below.</para>
+        <para>The <literal>IMethodBeforeAdvice</literal> interface is shown
+        below.</para>
 
         <programlisting language="csharp">public interface IMethodBeforeAdvice : IBeforeAdvice
 {
@@ -814,9 +814,9 @@ public int GetAge(IPerson person)
 }</programlisting>
 
         <para>The following advice is invoked if a
-        <literal>SqlException</literal> is thrown. Unlike the above
-        advice, it declares 4 arguments, so that it has access to the invoked
-        method, method arguments and target object:</para>
+        <literal>SqlException</literal> is thrown. Unlike the above advice, it
+        declares 4 arguments, so that it has access to the invoked method,
+        method arguments and target object:</para>
 
         <programlisting language="csharp">public class SqlExceptionThrowsAdviceWithArguments : IThrowsAdvice {
 
@@ -828,9 +828,9 @@ public int GetAge(IPerson person)
         <para>The final example illustrates how these two methods could be
         used in a single class, which handles both
         <literal>RemotingException</literal> and
-        <literal>SqlException</literal>. Any number of throws advice
-        methods can be combined in a single class, as can be seen in the
-        following example.</para>
+        <literal>SqlException</literal>. Any number of throws advice methods
+        can be combined in a single class, as can be seen in the following
+        example.</para>
 
         <programlisting language="csharp">public class CombinedThrowsAdvice : IThrowsAdvice {
 
@@ -850,24 +850,22 @@ public int GetAge(IPerson person)
         <literal>AfterThrowing</literal> method will <emphasis
         role="bold">only</emphasis> be invoked if the type of the thrown
         exception is <literal>RemotingException</literal>... if a
-        <literal>RemotingException</literal> has been thrown and
-        subsequently wrapped inside another exception before the exception
-        bubbles up to the throws advice interceptor, then the throws advice
-        that handles <literal>RemotingException</literal>s will <emphasis
+        <literal>RemotingException</literal> has been thrown and subsequently
+        wrapped inside another exception before the exception bubbles up to
+        the throws advice interceptor, then the throws advice that handles
+        <literal>RemotingException</literal>s will <emphasis
         role="bold">never</emphasis> be called. Consider a business method
         that is advised by throws advice that handles
         <literal>RemotingException</literal>s; if during the course of a
         method invocation said business method throws a RemoteException... and
-        subsequently wraps said <literal>RemotingException</literal>
-        inside a business-specific
-        <literal>BadConnectionException</literal> (see the code snippet
-        below) before throwing the exception, then the throws advice will
-        never be able to respond to the
-        <literal>RemotingException</literal>... because all the throws
-        advice sees is a <literal>BadConnectionException</literal>. The
-        fact that the <literal>RemotingException</literal> is wrapped up
-        inside the <literal>BadConnectionException</literal> is
-        immaterial.</para>
+        subsequently wraps said <literal>RemotingException</literal> inside a
+        business-specific <literal>BadConnectionException</literal> (see the
+        code snippet below) before throwing the exception, then the throws
+        advice will never be able to respond to the
+        <literal>RemotingException</literal>... because all the throws advice
+        sees is a <literal>BadConnectionException</literal>. The fact that the
+        <literal>RemotingException</literal> is wrapped up inside the
+        <literal>BadConnectionException</literal> is immaterial.</para>
 
         <programlisting language="csharp">public void BusinessMethod()
     {
@@ -890,8 +888,8 @@ public int GetAge(IPerson person)
         <title>After Returning advice</title>
 
         <para>An after returning advice in Spring.NET must implement the
-        <literal>Spring.Aop.IAfterReturningAdvice</literal> interface,
-        shown below:</para>
+        <literal>Spring.Aop.IAfterReturningAdvice</literal> interface, shown
+        below:</para>
 
         <programlisting language="csharp">public interface IAfterReturningAdvice : IAdvice
 {
@@ -956,8 +954,8 @@ public int GetAge(IPerson person)
         declaration that implements the tag interface
         <literal>IAdvice</literal>. <note>The need for implementing this
         marker interface will likely be removed in future versions.</note> As
-        an example, consider the interface <literal>IAuditable</literal>
-        that describes the last modified time of an object.</para>
+        an example, consider the interface <literal>IAuditable</literal> that
+        describes the last modified time of an object.</para>
 
          
 
@@ -979,15 +977,16 @@ public int GetAge(IPerson person)
          
 
         <para>Access to the advised object can be obtained by implementing the
-        interface <literal>ITargetAware</literal> <programlisting language="csharp">public interface ITargetAware
+        interface <literal>ITargetAware</literal> <programlisting
+        language="csharp">public interface ITargetAware
 {
   IAopProxy TargetProxy
   {
     set;
   }
-}</programlisting> with the <literal>IAopProxy</literal> reference
-        providing a layer of indirection through which the advised object can
-        be accessed. <programlisting language="csharp">public interface IAopProxy
+}</programlisting> with the <literal>IAopProxy</literal> reference providing a
+        layer of indirection through which the advised object can be accessed.
+        <programlisting language="csharp">public interface IAopProxy
 {
   object GetProxy();
 }</programlisting></para>
@@ -1036,10 +1035,9 @@ public int GetAge(IPerson person)
 
         <para>Introduction advice is not associated with a pointcut, since it
         applies at the class and not the method level. As such, introductions
-        use their own subclass of the interface
-        <literal>IAdvisor</literal>, namely
-        <literal>IIntroductionAdvisor</literal>, to specify the types that
-        the introduction can be applied to.</para>
+        use their own subclass of the interface <literal>IAdvisor</literal>,
+        namely <literal>IIntroductionAdvisor</literal>, to specify the types
+        that the introduction can be applied to.</para>
 
          
 
@@ -1072,9 +1070,9 @@ public int GetAge(IPerson person)
          
 
         <para>Spring.NET provides a default implementation of this interface
-        (the <literal>DefaultIntroductionAdvisor</literal> class) that
-        should be sufficient for the majority of situations when you need to
-        use introductions. The most simple implementation of an introduction
+        (the <literal>DefaultIntroductionAdvisor</literal> class) that should
+        be sufficient for the majority of situations when you need to use
+        introductions. The most simple implementation of an introduction
         advisor is a subclass that simply passes a new instance the base
         constructor. Passing a new instance is important since we want a new
         instance of the mixin classed used for each advised object.</para>
@@ -1133,18 +1131,18 @@ public int GetAge(IPerson person)
 
     <para>Apart from the special case of introductions, any advisor can be
     used with any advice. The
-    <literal>Spring.Aop.Support.DefaultPointcutAdvisor</literal> class is
-    the most commonly used advisor implementation. For example, it can be used
+    <literal>Spring.Aop.Support.DefaultPointcutAdvisor</literal> class is the
+    most commonly used advisor implementation. For example, it can be used
     with a <literal>IMethodInterceptor</literal>,
-    <literal>IBeforeAdvice</literal> or
-    <literal>IThrowsAdvice</literal> and any pointcut definition.</para>
+    <literal>IBeforeAdvice</literal> or <literal>IThrowsAdvice</literal> and
+    any pointcut definition.</para>
 
     <para>Other convenience implementations provided are:
     <literal>AttributeMatchMethodPointcutAdvisor</literal> shown in usage
     previously in <xref linkend="aop-attribute-pointcut" /> for use with
     attribute based pointcuts.
-    <literal>RegularExpressionMethodPointcutAdvisor</literal> that will
-    apply pointcuts based on the matching a regular expression to method
+    <literal>RegularExpressionMethodPointcutAdvisor</literal> that will apply
+    pointcuts based on the matching a regular expression to method
     names.</para>
 
     <para>It is possible to mix advisor and advice types in Spring.NET in the
@@ -1154,14 +1152,13 @@ public int GetAge(IPerson person)
   </sect1>
 
   <sect1 xml:id="aop-proxyfactoryobject">
-    <title>Using the ProxyFactoryObject to create
-    AOP proxies</title>
+    <title>Using the ProxyFactoryObject to create AOP proxies</title>
 
     <para>If you're using the Spring.NET IoC container for your business
     objects - generally a good idea - you will want to use one of Spring.NET's
-    AOP-specific <literal>IFactoryObject</literal> implementations
-    (remember that a factory object introduces a layer of indirection,
-    enabling it to create objects of a different type - <xref
+    AOP-specific <literal>IFactoryObject</literal> implementations (remember
+    that a factory object introduces a layer of indirection, enabling it to
+    create objects of a different type - <xref
     linkend="objects-advancedproperty-setting" />).</para>
 
     <para>The basic way to create an AOP proxy in Spring.NET is to use the
@@ -1173,21 +1170,20 @@ public int GetAge(IPerson person)
     <sect2 xml:id="aop-pfb-1">
       <title>Basics</title>
 
-      <para>The <literal>ProxyFactoryObject</literal>, like other
-      Spring.NET <literal>IFactoryObject</literal> implementations,
-      introduces a level of indirection. If you define a
-      <literal>ProxyFactoryObject</literal> with name
-      <literal>foo</literal>, what objects referencing <literal>foo</literal>
-      see is not the <literal>ProxyFactoryObject</literal> instance
-      itself, but an object created by the
-      <literal>ProxyFactoryObject's</literal> implementation of the
-      <literal>GetObject() </literal>method. This method will create an AOP
-      proxy wrapping a target object.</para>
+      <para>The <literal>ProxyFactoryObject</literal>, like other Spring.NET
+      <literal>IFactoryObject</literal> implementations, introduces a level of
+      indirection. If you define a <literal>ProxyFactoryObject</literal> with
+      name <literal>foo</literal>, what objects referencing
+      <literal>foo</literal> see is not the
+      <literal>ProxyFactoryObject</literal> instance itself, but an object
+      created by the <literal>ProxyFactoryObject's</literal> implementation of
+      the <literal>GetObject() </literal>method. This method will create an
+      AOP proxy wrapping a target object.</para>
 
       <para>One of the most important benefits of using a
-      <literal>ProxyFactoryObject</literal> or other IoC-aware classes
-      that create AOP proxies, is that it means that advice and pointcuts can
-      also be managed by IoC. This is a powerful feature, enabling certain
+      <literal>ProxyFactoryObject</literal> or other IoC-aware classes that
+      create AOP proxies, is that it means that advice and pointcuts can also
+      be managed by IoC. This is a powerful feature, enabling certain
       approaches that are hard to achieve with other AOP frameworks. For
       example, an advice may itself reference application objects (besides the
       target, which should be available in any AOP framework), benefiting from
@@ -1198,8 +1194,8 @@ public int GetAge(IPerson person)
       <title>ProxyFactoryObject Properties</title>
 
       <para>Like most <literal>IFactoryObject</literal> implementations
-      provided with Spring.NET, the <literal>ProxyFactoryObject</literal>
-      is itself a Spring.NET configurable object. Its properties are used
+      provided with Spring.NET, the <literal>ProxyFactoryObject</literal> is
+      itself a Spring.NET configurable object. Its properties are used
       to:</para>
 
       <itemizedlist>
@@ -1213,9 +1209,9 @@ public int GetAge(IPerson person)
       </itemizedlist>
 
       <para>Some key properties are inherited from the
-      <literal>Spring.Aop.Framework.ProxyConfig</literal> class: this
-      class is the superclass for all AOP proxy factories in Spring.NET. Some
-      of the key properties include:</para>
+      <literal>Spring.Aop.Framework.ProxyConfig</literal> class: this class is
+      the superclass for all AOP proxy factories in Spring.NET. Some of the
+      key properties include:</para>
 
       <itemizedlist>
         <listitem>
@@ -1283,8 +1279,8 @@ public int GetAge(IPerson person)
           <para>The names are object names in the current container, including
           objectnames from container hierarchies. You can't mention object
           references here since doing so would result in the
-          <literal>ProxyFactoryObject</literal> ignoring the singleton
-          setting of the advise.</para>
+          <literal>ProxyFactoryObject</literal> ignoring the singleton setting
+          of the advise.</para>
         </listitem>
 
         <listitem>
@@ -1456,8 +1452,7 @@ public int GetAge(IPerson person)
       <para>Let's look at an example of configuring the proxy objects
       retrieved from <literal>ProxyFactoryObject</literal>.</para>
 
-      <para>
-        <programlisting language="myxml">
+      <para><programlisting language="myxml">
           &lt;!-- create the object to reference --&gt;
           &lt;object id="RealObjectTarget" type="MyRealObject" singleton="false"/&gt;
           &lt;!-- create the proxied object for everyone to use--&gt;
@@ -1466,18 +1461,18 @@ public int GetAge(IPerson person)
           &lt;property name="isSingleton" value="false"/&gt;
           &lt;property name="targetName" value="RealObjectTarget" /&gt;
           &lt;/object&gt;
-        </programlisting>If you are using a prototype as the target you must set the
-        <literal>TargetName</literal> property with the name/object id of your
-        object and not use the property <literal>Target</literal> with a
-        reference to that object. This will then allow a new proxy to be created
-        around a new prototype target instance.
-      </para>
-      <para>
-        Consider the above Spring.Net object configuration. Notice that the 
-        <literal>IsSingleton</literal> property of the <literal>ProxyFactoryObject</literal> 
-        instance is set to false. This means that each proxy object will be unique. 
-        Thus, you can configure each proxy object with its' own individual advice(s) 
-        using the following syntax <programlisting language="csharp">
+        </programlisting>If you are using a prototype as the target you must
+      set the <literal>TargetName</literal> property with the name/object id
+      of your object and not use the property <literal>Target</literal> with a
+      reference to that object. This will then allow a new proxy to be created
+      around a new prototype target instance.</para>
+
+      <para>Consider the above Spring.Net object configuration. Notice that
+      the <literal>IsSingleton</literal> property of the
+      <literal>ProxyFactoryObject</literal> instance is set to false. This
+      means that each proxy object will be unique. Thus, you can configure
+      each proxy object with its' own individual advice(s) using the following
+      syntax <programlisting language="csharp">
 // Will return un-advised instance of proxy object
 MyInterface myProxyObject1 = (MyInterface)ctx.GetObject("MyObject");
 
@@ -1594,28 +1589,28 @@ MyInterface myProxyObject2 = (MyInterface)ctx.GetObject("MyObject");
     <title>Proxying mechanisms</title>
 
     <para>Spring creates AOP proxies built at runtime through the use of the
-    TypeBuilder API. </para>
+    TypeBuilder API.</para>
 
     <para>Two types of proxies can be created, composition based or
     inheritance based. If the target object implements at least one interface
     then a composition based proxy will be created, otherwise an inheritance
-    based proxy will be created. </para>
+    based proxy will be created.</para>
 
     <para>The composition based proxy is implemented by creating a type that
     implements all the interfaces specified on the target object. The actual
     class name of this dynamic type is 'GUID' like. A private field holds the
     target object and the dynamic type implementation will first execute any
     advice before or after making the target object method call on the target
-    object. </para>
+    object.</para>
 
     <para>The inheritance based mechanism creates a dynamic type where that
     inherits from the target type. This lets you downcast to the target type
     if needed. Please note that in both cases a target method implementation
     that calls other methods on the target object will not be advised. To
     force inheritance based proxies you should either set the
-    <literal>ProxyTargetType</literal> to true property of a ProxyFactory
-    or set the XML namespace element <literal>proxy-target-type =
-    true</literal> when using an AOP schema based configuration.</para>
+    <literal>ProxyTargetType</literal> to true property of a ProxyFactory or
+    set the XML namespace element <literal>proxy-target-type = true</literal>
+    when using an AOP schema based configuration.</para>
 
     <note>
       <para>An important alternative approach to inheritance based proxies is
@@ -2201,6 +2196,28 @@ Saving speaker...
       </sect3>
 
       <sect3>
+        <title>PointcutFilteringAutoProxyCreator</title>
+
+        <para>An AutoProxyCreator that identified objects to proxy by matching
+        a specified <literal>IPointcut</literal>.</para>
+      </sect3>
+
+      <sect3>
+        <title>TypeNameAutoProxyCreator</title>
+
+        <para>An AutoProxyCreator that identifies objects to proxy by matching
+        their <literal>Type.FullName</literal> against a list of
+        patterns.</para>
+      </sect3>
+
+      <sect3>
+        <title>AbstractFilteringAutoProxyCreator</title>
+
+        <para>The base class for AutoProxyCreator implementations that mark
+        objects eligible for proxying based on arbitrary criteria.</para>
+      </sect3>
+
+      <sect3>
         <title>AbstractAutoProxyCreator</title>
 
         <para>This is the superclass of DefaultAdvisorAutoProxyCreator. You
@@ -2448,11 +2465,11 @@ object oldTarget = swapper.swap(newTarget);</programlisting></para>
 &lt;/object&gt;</programlisting>
 
       <para>This advisor is obtained by calling a convenience method on the
-      <literal>AbstractPoolingTargetSource</literal> class, hence the use
-      of <literal>MethodInvokingFactoryObject</literal>. This advisor's
-      name (<literal>'poolConfigAdvisor'</literal> here) must be in the list
-      of interceptor names in the <literal>ProxyFactoryObject</literal>
-      exposing the pooled object.</para>
+      <literal>AbstractPoolingTargetSource</literal> class, hence the use of
+      <literal>MethodInvokingFactoryObject</literal>. This advisor's name
+      (<literal>'poolConfigAdvisor'</literal> here) must be in the list of
+      interceptor names in the <literal>ProxyFactoryObject</literal> exposing
+      the pooled object.</para>
 
       <para>The cast will look as follows:</para>
 
