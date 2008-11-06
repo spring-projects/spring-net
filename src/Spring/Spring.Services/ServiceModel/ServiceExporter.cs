@@ -192,7 +192,7 @@ namespace Spring.ServiceModel
 		{
             string contextName = (applicationContext.Name == AbstractApplicationContext.DefaultRootContextName) ? null : applicationContext.Name;
             Type targetType = objectFactory.GetType(targetName);
-            IProxyTypeBuilder builder = new ServiceProxyTypeBuilder(contextName, targetName, targetType);
+            IProxyTypeBuilder builder = new ServiceProxyTypeBuilder(targetName, applicationContext, targetType);
             if (Contracts != null && Contracts.Length > 0)
             {
                 builder.Interfaces = TypeResolutionUtils.ResolveInterfaceArray(Contracts);
