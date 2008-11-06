@@ -50,15 +50,20 @@ namespace Spring.Scheduling.Quartz
 	/// <author>Alef Arendsen</author>
 	/// <seealso cref="Concurrent" />
 	/// <seealso cref="MethodInvokingFactoryObject" />
-	public class MethodInvokingJobDetailFactoryObject : ArgumentConvertingMethodInvoker, IFactoryObject, IObjectNameAware,
-	                                                  IInitializingObject
+	public class MethodInvokingJobDetailFactoryObject : ArgumentConvertingMethodInvoker, 
+                                                        IObjectFactoryAware,
+                                                        IFactoryObject, 
+                                                        IObjectNameAware,
+	                                                    IInitializingObject
 	{
 		private string name;
 		private string group;
 		private bool concurrent = true;
 		private string[] jobListenerNames;
+	    private string targetObjectName;
 		private string objectName;
 		private JobDetail jobDetail;
+	    private IObjectFactory objectFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MethodInvokingJobDetailFactoryObject"/> class.
@@ -146,6 +151,30 @@ namespace Spring.Scheduling.Quartz
 		}
 
         /// <summary>
+        /// Set the name of the target object in the Spring object factory.
+        /// </summary>
+	    /// <remarks>
+	    /// This is an alternative to specifying <see cref="TargetObject" /> 
+	    /// allowing for non-singleton objects to be invoked. Note that specified
+	    /// "TargetObject" and <see cref="TargetType" /> values will
+	    /// override the corresponding effect of this "targetObjectName" setting
+	    ///(i.e. statically pre-define the object type or even the target object).
+        /// </remarks>
+	    public string TargetObjectName
+	    {
+	        set { targetObjectName = value; }
+	    }
+
+	    /// <summary>
+        /// Sets the object factory.
+        /// </summary>
+        /// <value>The object factory.</value>
+	    public IObjectFactory ObjectFactory
+	    {
+	        set { objectFactory = value; }
+	    }
+
+	    /// <summary>
         /// Return an instance (possibly shared or independent) of the object
         /// managed by this factory.
         /// </summary>
@@ -174,7 +203,18 @@ namespace Spring.Scheduling.Quartz
         /// <value></value>
 		public virtual Type ObjectType
 		{
-			get { return typeof (JobDetail); }
+			get
+			{
+                if (targetObjectName != null)
+                {
+                    if (objectFactory == null)
+                    {
+                        throw new InvalidOperationException("ObjectFactory must be set when using 'TargetObjectName'");
+                    }
+                    return objectFactory.GetType(targetObjectName);
+                }
+			    return typeof (JobDetail);
+			}
 		}
 
         /// <summary>

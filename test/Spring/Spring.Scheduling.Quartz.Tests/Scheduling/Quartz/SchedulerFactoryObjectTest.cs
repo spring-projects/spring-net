@@ -50,6 +50,11 @@ namespace Spring.Scheduling.Quartz
         {
             factory = new SchedulerFactoryObject();
             TestSchedulerFactory.Mockery.BackToRecordAll();
+
+            Expect
+                .Call(TestSchedulerFactory.MockScheduler.SchedulerName)
+                .Return("scheduler")
+                .Repeat.Any();
         }
 
         [Test]

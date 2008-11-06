@@ -100,6 +100,10 @@ namespace Spring.Scheduling.Quartz
 			{
                 return new DelegatingJob((ThreadStart)jobObject);
 			}
+            else if (jobObject is IThreadRunnable)
+            {
+                return new DelegatingJob(new ThreadStart(((IThreadRunnable) jobObject).Run));
+            }
 			else
 			{
 				throw new ArgumentException(

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E823D54C-CE82-4868-929F-5F95A999F61E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -58,6 +58,8 @@
     <Compile Include="Scheduling\Quartz\MethodInvokingRunnable.cs" />
     <Compile Include="Scheduling\Quartz\QuartzJobObject.cs" />
     <Compile Include="Scheduling\Quartz\ResourceJobSchedulingDataProcessor.cs" />
+    <Compile Include="Scheduling\Quartz\SchedulerAccessorObject.cs" />
+    <Compile Include="Scheduling\Quartz\SchedulerAccessor.cs" />
     <Compile Include="Scheduling\Quartz\SchedulerFactoryObject.cs" />
     <Compile Include="Scheduling\Quartz\SchedulingException.cs" />
     <Compile Include="Scheduling\Quartz\SimpleThreadPoolTaskExecutor.cs" />

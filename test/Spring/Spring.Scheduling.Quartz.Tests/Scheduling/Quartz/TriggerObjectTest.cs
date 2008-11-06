@@ -20,6 +20,8 @@ using NUnit.Framework;
 
 using Quartz;
 
+using Spring.Objects.Factory;
+
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>
@@ -40,6 +42,8 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public virtual void TestAfterPropertiesSet_Defaults()
         {
+            ((IInitializingObject) trigger).AfterPropertiesSet();
+
             Assert.AreEqual(TRIGGER_NAME, trigger.Name, "trigger name mismatch");
             Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.Group, "trigger group name mismatch");
             AssertDateTimesEqualityWithAllowedDelta(DateTime.UtcNow, trigger.StartTimeUtc, 1000);
@@ -50,6 +54,8 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public virtual void TestAfterPropertiesSet_ValuesGiven()
         {
+            ((IInitializingObject)trigger).AfterPropertiesSet();
+
             const string NAME = "newName";
             const string GROUP = "newGroup";
             DateTime START_TIME = new DateTime(10000000);
@@ -65,6 +71,8 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public virtual void TestAfterPropertiesSet_JobDetailGiven()
         {
+            ((IInitializingObject)trigger).AfterPropertiesSet();
+            
             const string jobName = "jobName";
             const string jobGroup = "jobGroup";
             Assert.AreEqual(jobName, trigger.JobName, "trigger job name was not from job detail");
@@ -74,7 +82,9 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public virtual void TestTriggerListenerNames_Valis()
         {
-            string[] LISTENER_NAMES = new string[] {"Foo", "Bar", "Baz"};
+            ((IInitializingObject)trigger).AfterPropertiesSet();
+
+            string[] LISTENER_NAMES = new string[] { "Foo", "Bar", "Baz" };
             trigger.TriggerListenerNames = LISTENER_NAMES;
             CollectionAssert.AreEqual(LISTENER_NAMES, trigger.TriggerListenerNames, "Trigger listeners were not equal");
         }

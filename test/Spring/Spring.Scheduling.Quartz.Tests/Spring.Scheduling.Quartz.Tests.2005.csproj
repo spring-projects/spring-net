@@ -58,11 +58,18 @@
       <Project>{E823D54C-CE82-4868-929F-5F95A999F61E}</Project>
       <Name>Spring.Scheduling.Quartz.2005</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2005.csproj">
+      <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
+      <Name>Spring.Core.Tests.2005</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Scheduling\Quartz\AdaptableJobFactoryTest.cs" />
+    <Compile Include="Scheduling\Quartz\QuartzSupportTests.cs" />
+    <Compile Include="Scheduling\Quartz\QuartzTestObject.cs" />
     <Compile Include="Scheduling\Quartz\SchedulerFactoryObjectTest.cs" />
     <Compile Include="Scheduling\Quartz\SpringObjectJobFactoryTest.cs" />
+    <Compile Include="Scheduling\Quartz\TestMethodInvokingTask.cs" />
     <Compile Include="Scheduling\Quartz\TestUtil.cs" />
     <Compile Include="Scheduling\Quartz\TriggerObjectTest.cs" />
     <Compile Include="Scheduling\Quartz\SimpleTriggerObjectTest.cs" />
@@ -75,6 +82,23 @@
     <None Include="Spring.Scheduling.Quartz.Tests.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="job-scheduling-data.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="multipleAnonymousMethodInvokingJobDetailFB.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="multipleSchedulers.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="schedulerAccessorObject.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="schedulerRepositoryExposure.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
