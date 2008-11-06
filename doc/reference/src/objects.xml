@@ -5221,6 +5221,13 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       attribute. Below is an example that registers all the namespaces
       provided in Spring.</para>
 
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
+      </note>
+
       <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
