@@ -302,7 +302,7 @@
       </listitem>
 
       <listitem>
-        <para>NHibernate Northwind: Demonstrates use of Spring's NHibernate
+        <para><link linkend="nh-quickstart">NHibernate Northwind</link>: Demonstrates use of Spring's NHibernate
         integration to simplify the use of NHibernate. Web tier is also
         included showing how to use the Open-Session In View approach to
         session management in the web tier.</para>

@@ -41,6 +41,7 @@
   <!ENTITY web-quickstart       SYSTEM "web-quickstart.xml">
   <!ENTITY data-quickstart      SYSTEM "data-quickstart.xml">
   <!ENTITY tx-quickstart        SYSTEM "tx-quickstart.xml">
+  <!ENTITY nh-quickstart        SYSTEM "nh-quickstart.xml">
   <!ENTITY quartz-quickstart    SYSTEM "quartz-quickstart.xml">
   <!ENTITY nms-quickstart       SYSTEM "nms-quickstart.xml">
   <!ENTITY msmq-quickstart      SYSTEM "msmq-quickstart.xml">
@@ -376,6 +377,9 @@
           <xref linkend="tx-quickstart" />
         </listitem>
         <listitem>
+          <xref linkend="nh-quickstart" />
+        </listitem>
+        <listitem>
           <xref linkend="quartz-quickstart" />
         </listitem>
         <listitem>
@@ -396,6 +400,7 @@
     &springair;
     &data-quickstart;
     &tx-quickstart;
+    &nh-quickstart;
     &quartz-quickstart;
     &nms-quickstart;
     &msmq-quickstart;
