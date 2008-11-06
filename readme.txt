@@ -1,4 +1,4 @@
-THE SPRING.NET FRAMEWORK, Release 1.2.0 RC1  (October 15, 2008)
+THE SPRING.NET FRAMEWORK, Release 1.2.0  (November 7, 2008)
 --------------------------------------------------------------------
 http://www.springframework.net/
 

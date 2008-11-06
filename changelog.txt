@@ -2,6 +2,65 @@ SPRING.NET FRAMEWORK CHANGELOG
 ==============================
 http://www.springframework.net
 
+
+Release Version 1.2.0, November 7, 2008
+
+Release Notes - Spring.NET - Version 1.2.0
+
+
+Bug
+[SPRNET-533] - xml <import> "directive" doesn't correctly resolve relative paths
+[SPRNET-863] - Passing name of inner object to IApplicationContext.IsSingleton() throws NullReferenceException
+[SPRNET-944] - Throws exception when evaluating literal 'date' in expression
+[SPRNET-957] - TypeAssemblyHolder doesn't work correctly for a generic full type name
+[SPRNET-966] - XML object definition parser strips whitespaces from values
+[SPRNET-971] - MessageSource resource lookup throws MissingManifestResourceException
+[SPRNET-988] - Add support for XmlArrayAttribute & XmlArrayItemAttribute to WebServiceProxyFactory
+[SPRNET-992] - ReflectionUtils.GetConstructorByArgumentValues throws System.IndexOutOfRangeException: Index was outside the bounds of the array.
+[SPRNET-996] - DataBinding null values to nullable type fails
+[SPRNET-997] - IIS7 integrated pipeline "The HttpRuntime.ProcessRequest method is not supported by IIS integrated pipeline mode"
+[SPRNET-1022] - MissingManifestResourceException when resolving resources in web apps
+[SPRNET-1035] - VariablePlaceholderConfigurer placeholder prefix is not configurable
+[SPRNET-1044] - Sync behavior of AbstractObjectFactory.GetObject( string name, object[] arguments) and .GetObject( string name, Type requiredType, object[] arguments)
+[SPRNET-1060] - Issue hooking up Spring.Web.Providers.xAdapter in test unit environment
+[SPRNET-1065] - Extraneous connection open in DataSet operations on AdoTemplate
+[SPRNET-1066] - Wrong assembly version number used to specify CommandBuilder Type and Exception Type for SQL CE 3.5 provider
+[SPRNET-1070] - SimpleMessageListenerContainer to check for null sessions and consumers when shutting down.
+[SPRNET-1074] - Remove required constraint on method attribute in listener element
+[SPRNET-1079] - custom namespace schema has problem with <import namespace=".." > element
+[SPRNET-1084] - Telerik RadGrid Control is broken with Spring RC1
+[SPRNET-1085] - Spring.Web.UI.Page throws exception when a custom ResourceProviderFactory is configured
+[SPRNET-1086] - Parent/Child ObjectDefinitions are merged incorrectly 
+[SPRNET-1088] - SpEL doesn't allow to concat string null 
+
+Improvement
+[SPRNET-605] - Improve DynamicMethodInvocation by reusing SafeMethod instance
+[SPRNET-672] - Provide strategy interface to make Model persistence customizable in Spring.Web.UI.Page
+[SPRNET-701] - Self-registering namespace parsers
+[SPRNET-912] - Ensure line number to top level error message when there are XML parsing errors.
+[SPRNET-969] - Improve dynamic reflection library for constructor and method invocations
+[SPRNET-1030] - CacheResultItem should work on IEnumerable
+[SPRNET-1033] - Enable short-circuit validation for validationgroup
+[SPRNET-1059] - WebServiceExporter generated proxy should not access ContextRegistry.GetContext or WebApplicationContext.Current
+[SPRNET-1062] - MessageHandlerAdapter for MSMQ should use Expression.Parse when dispatching handler method to avoid throwing first chance exception
+[SPRNET-1068] - Improve exception handling during object definition loading
+[SPRNET-1083] - Change logging level when overriding NHibernate ConnectionProvider in LocalSessionFactoryObject with Spring's IDbProvider to INFO from WARN
+
+New Feature
+[SPRNET-924] - Provide an AutoProxyCreator implementations based on object type names, class attributes, and type names
+
+Refactoring
+[SPRNET-1061] - Eliminate cyclic dependency in Spring.Web assembly Spring.Util.*/Spring.Web.Support.* namespace
+
+Task
+[SPRNET-828] - Add section on wiring .NET event to the reference documentation
+[SPRNET-1007] - Remove extraneous 'bean' references in reference documentation
+[SPRNET-1051] - Update to use postgresql driver 2.0.0.0
+[SPRNET-1053] - Investigate NET 3.5 Service Pack 1 issues w.r.t. Spring.NET
+[SPRNET-1067] - Add MySql 5.2.3 ado.net provider
+[SPRNET-1082] - Bad packaging in 3.5 lib directory
+
+
 Release Version 1.2.0 RC1, October 16, 2008
 
 
