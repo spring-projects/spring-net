@@ -483,27 +483,27 @@ $
 $
 $
 1
-3
+4
 FALSE
 L:\projects\spring-net\msi
 SpringSource
-Spring.NET 1.2.0 RC1
-{6C1FCE15-B44B-496D-BB67-90905E1F0B9C}
-{3AE6266E-F7B3-4E82-A747-2C5FFF04DE4C}
+Spring for .NET 1.2.0
+{8B88F31C-1C3A-42CF-97A7-E5DD86C329B1}
+{42A083F8-74C4-4AF3-8601-5B99FDC59C69}
 1.2.0
 English
-Spring.NET 1.2.0 RC1
-Spring.NET 1.2.0 RC1
-Spring.NET authors
+Spring for .NET 1.2.0
+Spring for .NET 1.2.0
+Spring for .NET authors
 All rights reserved
-{6F207B9E-503C-4FF5-A906-2E4893E940D8}
-Spring.NET
-Spring.NET
+{DE4F2B4C-E765-442C-9E8F-BD971EF8772C}
+Spring for .NET
+Spring for .NET
 http://forum.springframework.net
 http://www.springframework.net
 All rights reserved
 FALSE
-Spring.NET-1.2.0-RC1
+Spring.NET-1.2.0
 TRUE
 FALSE
 
