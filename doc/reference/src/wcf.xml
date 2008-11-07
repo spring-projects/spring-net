@@ -38,13 +38,30 @@
   <section xml:id="wcf-di">
     <title>Configuring WCF services via Dependency Injection</title>
 
-    <para>In this approach the container will creates an implementation of
-    your service interface (a dynamic proxy) that retrieves a configured
-    instance of your service type from the Spring container. This dynamic
-    proxy is then the final service type that is hosted.</para>
+    <para>The technical approach used to perform dependency injection is based
+    on dynamically creating an implementation of your service interface (a
+    dynamic proxy) that retrieves a configured instance of your service type
+    from the Spring container. This dynamic proxy is then the final service
+    type that is hosted.<note>
+        <para>An alternative implementation approach that uses extensibility
+        points in WCF to delegate to Spring to create and configure your WCF
+        service was tried but proved to be limited in its range of
+        applicability. This approach was first taken (afaik) by Oran Dennison
+        on his <link
+        ns6:href="http://orand.blogspot.com/2006/10/wcf-service-dependency-injection.html">blog</link>
+        and several other folks on the web since then. The issue in using this
+        approach is that if the service is configured to be a singleton, for
+        example using
+        <literal>[ServiceBehavior(InstanceContextMode=InstanceContextMode.Single)]
+        </literal>then the invocation of the IInstanceProvider is
+        short-circuited. See the notes on the MSDN class documentation <link
+        ns6:href="http://msdn.microsoft.com/en-us/library/system.servicemodel.dispatcher.iinstanceprovider.aspx">here</link>.
+        While this would be the preferred approach, no acceptable work around
+        was found.</para>
+      </note></para>
 
     <section xml:id="wcf-di-proxy">
-      <title>Dependency Injection using dynamic proxies</title>
+      <title>Dependency Injection</title>
 
       <para>In this approach you develop your WCF services as you would
       normally do. For example here is a sample service type taken from the
