@@ -49,6 +49,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Spring.Core, Version=1.2.0.30311, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\bin\net\3.0\debug\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Services, Version=1.2.0.30311, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\bin\net\3.0\debug\Spring.Services.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -61,16 +69,6 @@
     <Compile Include="ICalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">
-      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Services\Spring.Services.2008.csproj">
-      <Project>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Project>
-      <Name>Spring.Services.2008</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
