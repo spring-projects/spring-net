@@ -1044,17 +1044,7 @@ namespace Spring.Web.UI
 #if !NET_2_0
             return new ResourceManager(GetType().BaseType);
 #else
-//            object resourceProvider = Page.GetLocalResourceProvider.Invoke( typeof( ResourceExpressionBuilder ), new object[] { this } );
-//            MethodInfo GetLocalResourceAssembly =
-//                    resourceProvider.GetType().GetMethod( "GetLocalResourceAssembly", BindingFlags.NonPublic | BindingFlags.Instance );
-//            Assembly localResourceAssembly = (Assembly)GetLocalResourceAssembly.Invoke( resourceProvider, null );
-//            if (localResourceAssembly != null)
-//            {
-//                return new LocalResourceManager( VirtualPathUtility.GetFileName( this.AppRelativeVirtualPath ), localResourceAssembly );
-//            }
-//            return null;
-
-            return new LocalResourceManager( this.AppRelativeVirtualPath );
+            return LocalResourceManager.GetLocalResourceManager(this);
 #endif
         }
 

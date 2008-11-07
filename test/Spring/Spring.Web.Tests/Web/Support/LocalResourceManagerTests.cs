@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Diagnostics;
 using NUnit.Framework;
 using NUnitAspEx;
 
@@ -42,7 +43,8 @@ namespace Spring.Web.Support
         {
             AspTestClient client = new AspTestClient();
             string result = client.GetPage("WithResources.aspx");
-            Assert.AreEqual("<span id=\"Result\"></span>", result);            
+            Trace.Write(result);
+            Assert.AreEqual("<span id=\"Result\">FromResource</span>", result);            
         }
 
         [Test]

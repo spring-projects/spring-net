@@ -25,6 +25,11 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Web;
+using System.Web.Compilation;
+using System.Web.UI;
+using Spring.Expressions;
+using Spring.Globalization;
+using Spring.Reflection.Dynamic;
 using Spring.Util;
 
 #endregion
@@ -35,78 +40,178 @@ namespace Spring.Web.Support
 {
     /// <summary>
     /// This ResourceManager implementation swallows <see cref="MissingManifestResourceException"/>s and 
-    /// simply returns <c>null</c> from <see cref="GetObject(string,CultureInfo)"/> if no resource is found.
+    /// simply returns <c>null</c> from <see cref="ResourceManager.GetObject(string,CultureInfo)"/> if no resource is found.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    internal class LocalResourceManager : ResourceManager
+    internal abstract class LocalResourceManager : ResourceManager
     {
-        private string _virtualPath;
-        private bool _isMissingManifest = false;
+        private delegate IResourceProvider GetResourceProviderDelegate( TemplateControl control );
+        private static readonly GetResourceProviderDelegate getLocalResourceProvider = (GetResourceProviderDelegate)Delegate.CreateDelegate( typeof( GetResourceProviderDelegate ), typeof( ResourceExpressionBuilder ).GetMethod( "GetLocalResourceProvider", BindingFlags.Static | BindingFlags.NonPublic, null, new Type[] { typeof( TemplateControl ) }, null ) );
+        private static readonly Type LocalResXResourceProviderFactoryType = typeof( IResourceProvider ).Assembly.GetType( "System.Web.Compilation.ResXResourceProviderFactory", true );
+        private static readonly Type LocalResXResourceProviderType = typeof( IResourceProvider ).Assembly.GetType( "System.Web.Compilation.LocalResXResourceProvider", true );
+        private static readonly ResourceProviderFactory LocalResXResourceProviderFactory = (ResourceProviderFactory)Activator.CreateInstance( LocalResXResourceProviderFactoryType, true );
+        private static readonly SafeMethod fnGetLocalResourceAssembly = new SafeMethod( LocalResXResourceProviderType.GetMethod( "GetLocalResourceAssembly", BindingFlags.Instance | BindingFlags.NonPublic ) );
 
-        public LocalResourceManager(string virtualPath) : base()
+        /// <summary>
+        /// Avoid beforeFieldInit
+        /// </summary>
+        static LocalResourceManager()
+        { }
+
+        internal static ResourceManager GetLocalResourceManager( TemplateControl control )
         {
-            AssertUtils.ArgumentNotNull(virtualPath, "virtualPath");
-            _virtualPath = virtualPath;
-        }
-
-//        public LocalResourceManager(string baseName, Assembly assembly) : base(baseName, assembly)
-//        {}
-
-        ///<summary>
-        ///Returns the value of the specified <see cref="T:System.Object"></see> resource.
-        ///</summary>
-        ///<returns>
-        ///The value of the resource localized for the caller's current culture settings. If a match is not possible, null is returned. The resource value can be null.
-        ///</returns>
-        ///<param name="name">The name of the resource to get. </param>
-        ///<exception cref="T:System.ArgumentNullException">The name parameter is null. </exception>
-        public override object GetObject( string name )
-        {
-            return this.GetObject( name, null );
-        }
-
-        ///<summary>
-        ///Gets the value of the <see cref="T:System.Object"></see> resource localized for the specified culture.
-        ///</summary>
-        ///<returns>
-        ///The value of the resource, localized for the specified culture. If a "best match" is not possible, null is returned.
-        ///</returns>
-        ///<param name="culture">The <see cref="T:System.Globalization.CultureInfo"></see> object that represents the culture for which the resource is localized. Note that if the resource is not localized for this culture, the lookup will fall back using the culture's <see cref="P:System.Globalization.CultureInfo.Parent"></see> property, stopping after checking in the neutral culture.If this value is null, the <see cref="T:System.Globalization.CultureInfo"></see> is obtained using the culture's <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"></see> property. </param>
-        ///<param name="name">The name of the resource to get. </param>
-        ///<exception cref="T:System.ArgumentNullException">The name parameter is null. </exception>
-        public override object GetObject( string name, CultureInfo culture )
-        {
-            if (_isMissingManifest) return null;
-
-            try
+            IResourceProvider localResourceProvider = GetLocalResourceProvider( control );
+            if (localResourceProvider == null)
             {
-                return HttpContext.GetLocalResourceObject(_virtualPath, name, culture);
-                //return base.GetObject( name, culture );
+                return null;
             }
-            catch (MissingManifestResourceException)
-            {     
-                _isMissingManifest = true;
+
+            if (localResourceProvider.GetType() == LocalResXResourceProviderType)
+            {
+                Assembly localResourceAssembly = GetLocalResourceAssembly( control );
+                if (localResourceAssembly != null)
+                {
+                    return new LocalResXAssemblyResourceManager(control, localResourceAssembly);
+                }
+                else
+                {
+                    return null;
+                }
             }
-            return null;
+
+            return new ResourceProviderResourceManager(localResourceProvider);
         }
 
-        ///<summary>
-        ///Provides the implementation for finding a <see cref="T:System.Resources.ResourceSet"></see>.
-        ///</summary>
-        ///
-        ///<returns>
-        ///The specified <see cref="T:System.Resources.ResourceSet"></see>.
-        ///</returns>
-        ///
-        ///<param name="culture">The <see cref="T:System.Globalization.CultureInfo"></see> to look for. </param>
-        ///<param name="tryParents">If the <see cref="T:System.Resources.ResourceSet"></see> cannot be loaded, try parent <see cref="T:System.Globalization.CultureInfo"></see> objects to see if they exist. </param>
-        ///<param name="createIfNotExists">If true and if the <see cref="T:System.Resources.ResourceSet"></see> has not been loaded yet, load it. </param>
-        ///<exception cref="T:System.Resources.MissingManifestResourceException">The main assembly does not contain a .resources file and it is required to look up a resource. </exception>
-        protected override ResourceSet InternalGetResourceSet( CultureInfo culture, bool createIfNotExists, bool tryParents )
+        internal static IResourceProvider GetLocalResourceProvider( TemplateControl templateControl )
         {
-            //return base.InternalGetResourceSet( culture, createIfNotExists, tryParents );
-            return null;
+            IResourceProvider localResourceProvider = getLocalResourceProvider( templateControl );
+            return localResourceProvider;
         }
+
+        internal static Assembly GetLocalResourceAssembly( TemplateControl control )
+        {
+            object localResXResourceProvider = LocalResXResourceProviderFactory.CreateLocalResourceProvider( control.AppRelativeVirtualPath );
+            Assembly localResourceAssembly = (Assembly)fnGetLocalResourceAssembly.Invoke( localResXResourceProvider, null );
+            return localResourceAssembly;
+        }
+
+        #region ResourceProviderResourceManager
+
+        private class ResourceProviderResourceManager : ResourceManager
+        {
+            private bool _hasException;
+            private readonly IResourceProvider _resourceProvider;
+
+            public ResourceProviderResourceManager(IResourceProvider resourceProvider)
+            {
+                _resourceProvider = resourceProvider;
+            }
+
+            ///<summary>
+            ///Returns the value of the specified <see cref="T:System.Object"></see> resource.
+            ///</summary>
+            ///<returns>
+            ///The value of the resource localized for the caller's current culture settings. If a match is not possible, null is returned. The resource value can be null.
+            ///</returns>
+            ///<param name="name">The name of the resource to get. </param>
+            ///<exception cref="T:System.ArgumentNullException">The name parameter is null. </exception>
+            public override object GetObject( string name )
+            {
+                return this.GetObject( name, null );
+            }
+
+            ///<summary>
+            ///Gets the value of the <see cref="T:System.Object"></see> resource localized for the specified culture.
+            ///</summary>
+            ///<returns>
+            ///The value of the resource, localized for the specified culture. If a "best match" is not possible, null is returned.
+            ///</returns>
+            ///<param name="culture">The <see cref="T:System.Globalization.CultureInfo"></see> object that represents the culture for which the resource is localized. Note that if the resource is not localized for this culture, the lookup will fall back using the culture's <see cref="P:System.Globalization.CultureInfo.Parent"></see> property, stopping after checking in the neutral culture.If this value is null, the <see cref="T:System.Globalization.CultureInfo"></see> is obtained using the culture's <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"></see> property. </param>
+            ///<param name="name">The name of the resource to get. </param>
+            ///<exception cref="T:System.ArgumentNullException">The name parameter is null. </exception>
+            public override object GetObject( string name, CultureInfo culture )
+            {
+                if (_hasException)
+                    return null;
+
+                try
+                {
+                    return _resourceProvider.GetObject(name, culture);
+                }
+                catch (Exception)
+                {
+                    _hasException = true;
+                }
+                return null;
+            }
+
+            public override ResourceSet GetResourceSet( CultureInfo culture, bool createIfNotExists, bool tryParents )
+            {
+                ResourceSet resourceSet = null;
+                if (culture == CultureInfo.InvariantCulture)
+                {
+                    resourceSet = new ResourceSet(_resourceProvider.ResourceReader);                    
+                }
+                return resourceSet;
+            }
+        }
+
+        #endregion
+
+        #region LocalResXAssemblyResourceManager
+
+        private class LocalResXAssemblyResourceManager : ResourceManager
+        {
+            private bool _isMissingManifest = false;
+
+            public LocalResXAssemblyResourceManager( TemplateControl templateControl, Assembly localResourceAssembly )
+                : base(
+                    VirtualPathUtility.GetFileName( templateControl.AppRelativeVirtualPath ), localResourceAssembly )
+            {
+                AssertUtils.ArgumentNotNull( templateControl, "templateControl" );
+                AssertUtils.ArgumentNotNull( localResourceAssembly, "localResourceAssembly" );
+            }
+
+            ///<summary>
+            ///Returns the value of the specified <see cref="T:System.Object"></see> resource.
+            ///</summary>
+            ///<returns>
+            ///The value of the resource localized for the caller's current culture settings. If a match is not possible, null is returned. The resource value can be null.
+            ///</returns>
+            ///<param name="name">The name of the resource to get. </param>
+            ///<exception cref="T:System.ArgumentNullException">The name parameter is null. </exception>
+            public override object GetObject( string name )
+            {
+                return this.GetObject( name, null );
+            }
+
+            ///<summary>
+            ///Gets the value of the <see cref="T:System.Object"></see> resource localized for the specified culture.
+            ///</summary>
+            ///<returns>
+            ///The value of the resource, localized for the specified culture. If a "best match" is not possible, null is returned.
+            ///</returns>
+            ///<param name="culture">The <see cref="T:System.Globalization.CultureInfo"></see> object that represents the culture for which the resource is localized. Note that if the resource is not localized for this culture, the lookup will fall back using the culture's <see cref="P:System.Globalization.CultureInfo.Parent"></see> property, stopping after checking in the neutral culture.If this value is null, the <see cref="T:System.Globalization.CultureInfo"></see> is obtained using the culture's <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"></see> property. </param>
+            ///<param name="name">The name of the resource to get. </param>
+            ///<exception cref="T:System.ArgumentNullException">The name parameter is null. </exception>
+            public override object GetObject( string name, CultureInfo culture )
+            {
+                if (_isMissingManifest)
+                    return null;
+
+                try
+                {
+                    return base.GetObject( name, culture );
+                }
+                catch (MissingManifestResourceException)
+                {
+                    _isMissingManifest = true;
+                }
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
 
