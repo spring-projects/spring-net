@@ -179,6 +179,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\Spring\Remoting\saoSingleton-aop.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Spring\Remoting\saoSingleton-autowired.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

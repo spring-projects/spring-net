@@ -21,8 +21,12 @@
 #region Imports
 
 using System;
+using NUnit.Framework;
+using NUnitAspEx;
 
 #endregion
+
+#if NET_2_0
 
 namespace Spring.Web.Support
 {
@@ -30,8 +34,25 @@ namespace Spring.Web.Support
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
+    [AspTestFixture("/Test", "/Spring/Web/Support/LocalResourceManagerTests")]
     public class LocalResourceManagerTests
     {
+        [Test]
+        public void ReturnsWithResources()
+        {
+            AspTestClient client = new AspTestClient();
+            string result = client.GetPage("WithResources.aspx");
+            Assert.AreEqual("<span id=\"Result\"></span>", result);            
+        }
 
+        [Test]
+        public void ReturnsWithoutResources()
+        {
+            AspTestClient client = new AspTestClient();
+            string result = client.GetPage("WithoutResources.aspx");
+            Assert.AreEqual("OK", result);            
+        }
     }
 }
+
+#endif // NET_2_0

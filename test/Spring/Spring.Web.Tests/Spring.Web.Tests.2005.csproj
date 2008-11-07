@@ -127,6 +127,7 @@
     <Compile Include="Web\UI\SessionModelPersistenceMediumTests.cs" />
     <Compile Include="Web\UI\UserControlTests.cs" />
     <None Include="Data\Spring\Context\Support\WebApplicationContextTests\Web.Config" />
+    <None Include="Data\Spring\Web\Support\LocalResourceManagerTests\Web.Config" />
     <None Include="Data\Spring\Web\Support\PageHandlerFactoryTests\Web.Config.net-1.1" />
     <None Include="Data\Spring\Web\Support\PageHandlerFactoryTests\Web.Config.net-2.0" />
     <None Include="Spring.Web.Tests.build" />
@@ -135,12 +136,17 @@
     <EmbeddedResource Include="Context\Support\HttpApplicationConfigurerTests.xml" />
     <Content Include="Data\Spring\Context\Support\WebApplicationContextTests\Dummy.aspx" />
     <Content Include="Data\Spring\Objects\Factory\Support\TestForm.aspx" />
+    <Content Include="Data\Spring\Web\Support\LocalResourceManagerTests\WithoutResources.aspx" />
+    <Content Include="Data\Spring\Web\Support\LocalResourceManagerTests\WithResources.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\ReadOnlySession.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResult.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession1.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession2.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\DisablesSession.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResultSave.aspx" />
+    <EmbeddedResource Include="Data\Spring\Web\Support\LocalResourceManagerTests\App_LocalResources\WithResources.aspx.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Web\Support\ControlInterceptionTests.objects.xml" />
   </ItemGroup>
   <ItemGroup>
