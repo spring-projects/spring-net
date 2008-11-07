@@ -22,8 +22,6 @@
       <sources failonempty="true">
         <include name="**/*.cs" />
         <include name="../GenCommonAssemblyInfo.cs" />
-        <exclude name="ServiceModel/ServiceExporter.cs"/>
-        <exclude name="ServiceModel/ServiceHost.cs"/>
       </sources>
       <resources basedir="." prefix="Spring.Remoting.Config">
         <include name="Remoting/Config/spring-remoting-1.1.xsd" />
