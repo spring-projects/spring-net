@@ -7,7 +7,20 @@
       * current.build.defines.csc - framework-specific build defines for C# compiler
 -->
   <target name="build">
-    <echo message="current.bin.dir = ${current.bin.dir}"/>
+    <if test="${net-3.0.installed and net-3.0}">
+      <property name="bin.dir.to.use" value="${current.bin.dir}\..\..\2.0\${project.build.config}"/>
+      <copy todir="${current.bin.dir}">
+	<fileset basedir="${bin.dir.to.use}">
+	  <include name="*.dll"/>
+	  <include name="*.pdb"/>
+	  <include name="*.xml"/>
+	  <exclude name="Spring.Services.dll"/>
+	  <exclude name="Spring.Services.pdb"/>
+	  <exclude name="Spring.Services.xml"/>
+        </fileset>
+      </copy>
+    </if>
+
     <!-- build Spring.Services.Tests -->
     <csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
@@ -49,6 +62,7 @@
           tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>
   </target>
   <target name="test" depends="build">
+
     <nunit2outproc>
       <formatter type="Plain" />
       <formatter type="Xml" usefile="true" extension=".xml"

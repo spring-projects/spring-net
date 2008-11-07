@@ -755,15 +755,16 @@ on exception (#e is T(System.ArithmeticException)) retry 3x rate (1*#n + 0.5)</p
     <para>Spring provides a UI-agnostic <link linkend="validation">validation
     framework</link> in which you can declare validation rules, both
     progammatically and declaratively, and have those rules evaluated against
-    an arbitrary .NET object. Spring provides additional support for rendering
-    of validation errors within Spring's ASP.NET framework. (See the section
-    on <link linkend="validation-aspnet-usage" os="">ASP.NET usage tips</link>
-    for more information.) However, validation is not confined to the UI tier.
-    It is a common task that occurs across most, if not all, applications
-    layers. Validation that is performed in the UI layer is often repeated in
-    the service layer, in order to be proactive in case non UI-based clients
-    invoke the service layer. Validation rules completely different from those
-    used in the UI layer may be used on the server side.</para>
+    an arbitrary .NET object. Spring provides additional support for the
+    rendering of validation errors within Spring's ASP.NET framework. (See the
+    section on <link linkend="validation-aspnet-usage" os="">ASP.NET usage
+    tips</link> for more information.) However, validation is not confined to
+    the UI tier. It is a common task that occurs across most, if not all,
+    applications layers. Validation that is performed in the UI layer is often
+    repeated in the service layer, in order to be proactive in case non
+    UI-based clients invoke the service layer. Validation rules completely
+    different from those used in the UI layer may also be used on the server
+    side.</para>
 
     <para>To address some of the common needs for validation on the server
     side, Spring provides parameter validation advice so that applies Spring's

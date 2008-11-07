@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="validation" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="validation" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns2="http://www.w3.org/1999/xlink"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Validation Framework</title>
 
   <section>
@@ -350,6 +355,49 @@
               <entry>System.String</entry>
 
               <entry>not null or an empty string</entry>
+            </row>
+
+            <row>
+              <entry>system.DateTime</entry>
+
+              <entrytbl cols="1">
+                <tbody>
+                  <row>
+                    <entry>Not System.DateTime.MinValue and not
+                    system.DateTime.MaxValue</entry>
+                  </row>
+                </tbody>
+              </entrytbl>
+            </row>
+
+            <row>
+              <entry>One of the number types.</entry>
+
+              <entrytbl cols="1">
+                <tbody>
+                  <row>
+                    <entry>not zero</entry>
+                  </row>
+                </tbody>
+              </entrytbl>
+            </row>
+
+            <row>
+              <entry>System.Char</entry>
+
+              <entrytbl cols="1">
+                <tbody>
+                  <row>
+                    <entry>Not System.Char.MinValue or whitespace.</entry>
+                  </row>
+                </tbody>
+              </entrytbl>
+            </row>
+
+            <row>
+              <entry>Any reference type other than System.String</entry>
+
+              <entry>not null</entry>
             </row>
           </tbody>
         </tgroup>
