@@ -1,1 +1,1 @@
-<%@ ServiceHost Language="C#" Debug="true" Service="Spring.WcfQuickStart.CalculatorService" Factory="Spring.ServiceModel.Activation.ServiceHostFactory" %>
+<%@ ServiceHost Language="C#" Debug="true" Service="calculator" Factory="Spring.ServiceModel.Activation.ServiceHostFactory" %>

@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="wcf-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="wcf-quickstart"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>WCF QuickStart</title>
 
   <section>
@@ -27,12 +33,12 @@
     services. It is based on the same interfaces used in the <link
     linkend="remoting-quickstart">portable service abstractions
     quickstart</link> example that demonstrates similar features for .NET
-    Remoting, Enterprise Services, and ASMX web sevices. At the moment the
-    quickstart example is only available as a VS.NET 2008 solution.</para>
+    Remoting, Enterprise Services, and ASMX web sevices. The quickstart
+    example is only available as a VS.NET 2008 solution.</para>
 
     <para>There are two server applications in the solution, one is a web
     application where the WCF service will be hosted, and the other is a
-    self-hosting console application, (Spring.WcfQuickStart.Server.2008. The
+    self-hosting console application, Spring.WcfQuickStart.Server.2008. The
     client application is located in Sprng.WcfQuickStart.ClientApp.2008. To
     run the solution make sure that all three projects are set to
     startup.</para>
@@ -60,7 +66,7 @@
 
     <para>and the implementation is straightforward, only adding a property
     that controls how long each method should sleep. An abbreviated listing of
-    the implementation is shown below </para>
+    the implementation is shown below</para>
 
     <programlisting language="csharp">    public class CalculatorService : ICalculator
     {
@@ -84,7 +90,8 @@
     }</programlisting>
 
     <section>
-      <title>DI using dynamic proxies</title>
+      <title>WCF Dependency Injection and AOP in self-hosted
+      application</title>
 
       <para>The approach using dynamic proxies is used in the console
       application inside the Spring.WcfQuickStart.Server.2008 project. For
@@ -93,8 +100,8 @@
       configuration of your service is done as you would typically do with
       Spring, including applying of any AOP advice. The class is hosted inside
       the console application through the use of Spring's
-      <literal>ServiceHostFactoryObject</literal> exporter. The
-      configuration for the server console application is shown below. </para>
+      <literal>ServiceHostFactoryObject</literal> exporter. The configuration
+      for the server console application is shown below.</para>
 
       <programlisting language="myxml">    &lt;objects xmlns="http://www.springframework.net"
              xmlns:aop="http://www.springframework.net/aop"&gt;
@@ -131,32 +138,22 @@
     </section>
 
     <section>
-      <title>DI using WCF extension points</title>
-
-      <para>This approach uses Spring specific implementation of the WCF
-      interfaces
-      <literal>System.ServiceModel.Dispatcher.IInstanceProvider</literal>
-      and
-      <literal>System.ServiceModel.Description.IServiceBehavior</literal>
-      are used to integrate Spring directly into the instancing of WCF
-      services. For more information on this approach refer to this <link
-      linkend="wcf-di-extension-points">section</link> of the reference
-      documentation. The web application shows this approach in action.</para>
+      <title>WCF Dependency Injection and AOP in IIS web application</title>
 
       <para>Much of the configuration ob the objects is the same as before,
-      the .svc file though refers to the type of the service inside the Spring
+      the .svc file though refers to the name of the service inside the Spring
       container as well as using Spring's
       Spring.ServiceModel.Activation.ServiceHostFactory. The .svc file is
       shown below.</para>
 
-      <programlisting language="myxml">&lt;%@ ServiceHost Language="C#" Debug="true" Service="Spring.WcfQuickStart.CalculatorService" 
+      <programlisting language="myxml">&lt;%@ ServiceHost Language="C#" Debug="true" Service="calculator" 
                                            Factory="Spring.ServiceModel.Activation.ServiceHostFactory" %&gt;
 </programlisting>
     </section>
   </section>
 
   <section>
-    <title>Client access </title>
+    <title>Client access</title>
 
     <para>The project Spring.WcfQuickStart.ClientApp.2008 is a console
     application that calls the two WCF services. It creates a client side
