@@ -38,21 +38,6 @@ namespace Spring.ServiceModel
     /// <author>Bruno Baia</author>
     public class SpringServiceHost : System.ServiceModel.ServiceHost
     {
-        private bool useSpringServiceBehavior = false;
-
-        private IApplicationContext applicationContext;
-
-
-        /// <summary>
-        /// Gets or sets the application context.
-        /// </summary>
-        /// <value>The application context.</value>
-        public IApplicationContext ApplicationContext
-        {
-            get { return applicationContext; }
-            set { applicationContext = value; }
-        }
-
         #region Constructor(s) / Destructor
 
         /// <summary>
@@ -85,31 +70,6 @@ namespace Spring.ServiceModel
         public SpringServiceHost(string serviceName, IApplicationContext applicationContext, params Uri[] baseAddresses)
             : base(CreateServiceType(serviceName, applicationContext), baseAddresses)
         {
-            ApplicationContext = applicationContext;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SpringServiceHost"/> class.
-        /// </summary>
-        /// <remarks>Calls the contructor with an IApplicationContext argument.</remarks>
-        /// <param name="serviceType">Type of the service.</param>
-        /// <param name="baseAddresses">The base addresses.</param>
-        public SpringServiceHost(Type serviceType, params Uri[] baseAddresses)
-            : this(serviceType, GetApplicationContext(null), baseAddresses)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SpringServiceHost"/> class.
-        /// </summary>
-        /// <param name="serviceType">Type of the service.</param>
-        /// <param name="applicationContext">The application context.</param>
-        /// <param name="baseAddresses">The base addresses.</param>
-        public SpringServiceHost(Type serviceType, IApplicationContext applicationContext, params Uri[] baseAddresses)
-            : base(serviceType, baseAddresses)
-        {
-            useSpringServiceBehavior = true;
-            ApplicationContext = applicationContext;
         }
 
         private static IApplicationContext GetApplicationContext(string contextName)
@@ -137,20 +97,6 @@ namespace Spring.ServiceModel
         }
 
         #endregion
-
-        /// <summary>
-        /// Invoked during the transition of a communication object into the opening state.  
-        /// Adds the SpringServiceBehavior.
-        /// </summary>
-        protected override void OnOpening()
-        {
-            if (this.useSpringServiceBehavior && 
-                this.Description.Behaviors.Find<SpringServiceBehavior>() == null)
-            {
-                this.Description.Behaviors.Add(new SpringServiceBehavior(ApplicationContext));
-            }
-            base.OnOpening();
-        }
     }
 }
 #endif

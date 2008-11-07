@@ -121,7 +121,6 @@
     <Compile Include="Remoting\SimpleCounter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ServiceModel\ServiceExporterTests.cs" />
     <Compile Include="Web\Services\WebServiceProxyFactoryTests.cs" />
     <EmbeddedResource Include="Data\Spring\Web\Services\rpc-literal.wsdl" />
     <EmbeddedResource Include="Data\Spring\Web\Services\document-literal.wsdl" />
