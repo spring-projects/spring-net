@@ -3,7 +3,7 @@ SPRING.NET FRAMEWORK CHANGELOG
 http://www.springframework.net
 
 
-Release Version 1.2.0, November 7, 2008
+Release Version 1.2.0, November 10, 2008
 
 Release Notes - Spring.NET - Version 1.2.0
 
