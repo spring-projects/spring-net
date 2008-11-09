@@ -242,8 +242,7 @@
   &lt;/object&gt;</programlisting>
 
     <note>
-      <para>This will be shortened using a custom namespce in the 1.2 final
-      release</para>
+      <para>This will be shortened using a custom namespce in a future release</para>
     </note>
 
     <para>The value 'serverAppCalculatorEndpoint' refers to the name of an

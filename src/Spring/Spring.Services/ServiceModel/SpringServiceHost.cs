@@ -27,6 +27,7 @@ using Spring.Util;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.ServiceModel.Support;
+using Spring.Objects.Factory;
 
 #endregion
 
@@ -65,10 +66,10 @@ namespace Spring.ServiceModel
         /// Creates a new instance of the <see cref="Spring.ServiceModel.SpringServiceHost"/> class.
         /// </summary>
         /// <param name="serviceName">The name of the service within Spring's IoC container.</param>
-        /// <param name="applicationContext">The <see cref="IApplicationContext"/> to use.</param>
+        /// <param name="objectFactory">The <see cref="IObjectFactory"/> to use.</param>
         /// <param name="baseAddresses">The base addresses for the hosted service.</param>
-        public SpringServiceHost(string serviceName, IApplicationContext applicationContext, params Uri[] baseAddresses)
-            : base(CreateServiceType(serviceName, applicationContext), baseAddresses)
+        public SpringServiceHost(string serviceName, IObjectFactory objectFactory, params Uri[] baseAddresses)
+            : base(CreateServiceType(serviceName, objectFactory), baseAddresses)
         {
         }
 
@@ -84,16 +85,21 @@ namespace Spring.ServiceModel
             }
         }
 
-        private static Type CreateServiceType(string serviceName, IApplicationContext applicationContext)
+        private static Type CreateServiceType(string serviceName, IObjectFactory objectFactory)
         {
             if (StringUtils.IsNullOrEmpty(serviceName))
             {
                 throw new ArgumentException("The service name cannot be null or an empty string.", "serviceName");
             }
 
-            Type serviceType = applicationContext.GetType(serviceName);
-
-            return new ServiceProxyTypeBuilder(serviceName, applicationContext, serviceType).BuildProxyType();
+            if (objectFactory.IsTypeMatch(serviceName, typeof(Type)))
+            {
+                return objectFactory.GetObject(serviceName) as Type;
+            }
+            else
+            {
+                return new ServiceProxyTypeBuilder(serviceName, objectFactory).BuildProxyType();
+            }
         }
 
         #endregion

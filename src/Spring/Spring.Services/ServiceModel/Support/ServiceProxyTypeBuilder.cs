@@ -25,9 +25,8 @@ using System;
 using System.Reflection;
 using System.Reflection.Emit;
 
-using Spring.Proxy;
-using Spring.Context;
 using Spring.Objects.Factory;
+using Spring.Proxy;
 
 #endregion
 
@@ -44,13 +43,13 @@ namespace Spring.ServiceModel.Support
         private static readonly MethodInfo GetObject =
             typeof(IObjectFactory).GetMethod("GetObject", new Type[] { typeof(string) });
 
-        private IApplicationContext applicationContext;
-        private string serviceName;
+        private IObjectFactory objectFactory;
+        private string targetName;
 
         /// <summary>
         /// Target instance calls should be delegated to.
         /// </summary>
-        protected FieldBuilder applicationContextField;
+        protected FieldBuilder objectFactoryField;
 
         #endregion
 
@@ -60,16 +59,28 @@ namespace Spring.ServiceModel.Support
         /// Creates a new instance of the 
         /// <see cref="Spring.ServiceModel.Support.ServiceProxyTypeBuilder"/> class.
         /// </summary>
-        /// <param name="serviceName">The name of the service within Spring's IoC container.</param>
-        /// <param name="applicationContext">The <see cref="IApplicationContext"/> to use.</param>
-        /// <param name="serviceType">The type of the service.</param>
-        public ServiceProxyTypeBuilder(string serviceName, IApplicationContext applicationContext, Type serviceType)
+        /// <param name="targetName">The name of the service within Spring's IoC container.</param>
+        /// <param name="objectFactory">The <see cref="IObjectFactory"/> to use.</param>
+        public ServiceProxyTypeBuilder(string targetName, IObjectFactory objectFactory)
+            : this(targetName, targetName, objectFactory)
         {
-            this.serviceName = serviceName;
-            this.applicationContext = applicationContext;
+        }
 
-            this.Name = serviceName;
-            this.TargetType = serviceType;
+
+        /// <summary>
+        /// Creates a new instance of the 
+        /// <see cref="Spring.ServiceModel.Support.ServiceProxyTypeBuilder"/> class.
+        /// </summary>
+        /// <param name="targetName">The name of the service within Spring's IoC container.</param>
+        /// <param name="serviceTypeName">The name of the generated WCF service <see cref="System.Type"/>.</param>
+        /// <param name="objectFactory">The <see cref="IObjectFactory"/> to use.</param>
+        public ServiceProxyTypeBuilder(string targetName, string serviceTypeName, IObjectFactory objectFactory)
+        {
+            this.targetName = targetName;
+            this.objectFactory = objectFactory;
+
+            this.Name = serviceTypeName;
+            this.TargetType = objectFactory.GetType(targetName);
         }
 
         #endregion
@@ -77,8 +88,8 @@ namespace Spring.ServiceModel.Support
         #region Protected Methods
 
         /// <summary>
-        /// Creates a proxy that delegates calls to an instance of the
-        /// target object.  This overriden implementation also sets the field __applicationContext.
+        /// Creates a proxy that delegates calls to an instance of the target object. 
+        /// This overriden implementation also sets the field __objectFactory.
         /// </summary>
         /// <exception cref="System.ArgumentException">
         /// If the <see cref="IProxyTypeBuilder.TargetType"/>
@@ -88,8 +99,8 @@ namespace Spring.ServiceModel.Support
         {
             Type proxyType = base.BuildProxyType();
 
-            FieldInfo field = proxyType.GetField("__applicationContext", BindingFlags.NonPublic | BindingFlags.Static);
-            field.SetValue(proxyType, applicationContext);
+            FieldInfo field = proxyType.GetField("__objectFactory", BindingFlags.NonPublic | BindingFlags.Static);
+            field.SetValue(proxyType, objectFactory);
 
             return proxyType;
         }
@@ -117,8 +128,8 @@ namespace Spring.ServiceModel.Support
             ILGenerator il = cb.GetILGenerator();
 
             il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldsfld, applicationContextField);
-            il.Emit(OpCodes.Ldstr, serviceName);
+            il.Emit(OpCodes.Ldsfld, objectFactoryField);
+            il.Emit(OpCodes.Ldstr, targetName);
             il.EmitCall(OpCodes.Callvirt, GetObject, null);
             il.Emit(OpCodes.Stfld, targetInstance);
 
@@ -135,7 +146,7 @@ namespace Spring.ServiceModel.Support
         {
             TypeBuilder typeBuilder = DynamicProxyManager.CreateTypeBuilder(name, baseType);
 
-            applicationContextField = typeBuilder.DefineField("__applicationContext", typeof(IApplicationContext),
+            objectFactoryField = typeBuilder.DefineField("__objectFactory", typeof(IObjectFactory),
                 FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
 
             return typeBuilder;

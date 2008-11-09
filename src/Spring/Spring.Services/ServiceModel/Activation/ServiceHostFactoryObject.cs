@@ -23,7 +23,7 @@
 
 using System;
 using System.ServiceModel;
-using Spring.Context;
+
 using Spring.Objects.Factory;
 
 #endregion
@@ -35,8 +35,7 @@ namespace Spring.ServiceModel.Activation
     /// to host objects created with Spring's IoC container.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ServiceHostFactory.cs,v 1.2 2007/05/18 21:04:37 bbaia Exp $</version>
-    public class ServiceHostFactoryObject : IFactoryObject, IApplicationContextAware, IInitializingObject, IDisposable
+    public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IObjectFactoryAware, IDisposable
     {
         #region Logging
 
@@ -48,7 +47,11 @@ namespace Spring.ServiceModel.Activation
 
         private string _targetName;
         private Uri[] _baseAddresses = new Uri[] { };
-        private IApplicationContext _applicationContext;
+
+        /// <summary>
+        /// The owning factory.
+        /// </summary>
+        protected IObjectFactory objectFactory;
 
         /// <summary>
         /// The <see cref="Spring.ServiceModel.SpringServiceHost" /> instance managed by this factory.
@@ -97,38 +100,30 @@ namespace Spring.ServiceModel.Activation
 
         #endregion
 
-        #region IApplicationContextAware Members
+        #region IObjectFactoryAware Members
 
         /// <summary>
-        /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
-        /// object runs in.
+        /// Callback that supplies the owning factory to an object instance.
         /// </summary>
-        /// <value></value>
+        /// <value>
+        /// Owning <see cref="Spring.Objects.Factory.IObjectFactory"/>
+        /// (may not be <see langword="null"/>). The object can immediately
+        /// call methods on the factory.
+        /// </value>
         /// <remarks>
         /// <p>
-        /// Normally this call will be used to initialize the object.
-        /// </p>
-        /// <p>
-        /// Invoked after population of normal object properties but before an
-        /// init callback such as
-        /// <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
+        /// Invoked after population of normal object properties but before an init
+        /// callback like <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
         /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
-        /// or a custom init-method. Invoked after the setting of any
-        /// <see cref="Spring.Context.IResourceLoaderAware"/>'s
-        /// <see cref="Spring.Context.IResourceLoaderAware.ResourceLoader"/>
-        /// property.
+        /// method or a custom init-method.
         /// </p>
         /// </remarks>
-        /// <exception cref="Spring.Context.ApplicationContextException">
-        /// In the case of application context initialization errors.
-        /// </exception>
         /// <exception cref="Spring.Objects.ObjectsException">
-        /// If thrown by any application context methods.
+        /// In case of initialization errors.
         /// </exception>
-        /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
-        public IApplicationContext ApplicationContext
+        public virtual IObjectFactory ObjectFactory
         {
-            set { _applicationContext = value; }
+            set { this.objectFactory = value; }
         }
 
         #endregion
@@ -170,13 +165,13 @@ namespace Spring.ServiceModel.Activation
         #region IInitializingObject Members
 
         /// <summary>
-        /// Publish the object 
+        /// Publish the object.
         /// </summary>
-        public void AfterPropertiesSet()
+        public virtual void AfterPropertiesSet()
         {
             ValidateConfiguration();
 
-            springServiceHost = new SpringServiceHost(TargetName, _applicationContext, BaseAddresses);
+            springServiceHost = new SpringServiceHost(TargetName, objectFactory, BaseAddresses);
 
             springServiceHost.Open();
 
@@ -207,9 +202,12 @@ namespace Spring.ServiceModel.Activation
 
         #endregion
 
-        #region Private Methods
+        #region Protected Methods
 
-        private void ValidateConfiguration()
+        /// <summary>
+        /// Validates the configuration.
+        /// </summary>
+        protected virtual void ValidateConfiguration()
         {
             if (TargetName == null)
             {

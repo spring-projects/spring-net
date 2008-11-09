@@ -22,10 +22,17 @@
 #region Imports
 
 using System;
+using System.IO;
+using System.Text;
+using System.Reflection;
+using System.Net.Security;
 using System.ServiceModel;
 
 using NUnit.Framework;
 using Spring.ServiceModel;
+using Spring.Core.IO;
+using Spring.Objects.Factory;
+using Spring.Objects.Factory.Xml;
 
 #endregion
 
@@ -35,47 +42,10 @@ namespace Spring.ServiceModel
     /// Unit tests for the ServiceExporter class.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: ServiceExporterTests.cs,v 1.1 2007/09/21 14:27:35 bbaia Exp $</version>
     [TestFixture]
     public sealed class ServiceExporterTests
     {
-
-        #region Test classes
-
-        public interface IService
-        {
-            string SomeMethod(int param);
-        }
-
-        [ServiceContract(Namespace = "http://Spring.Services.Tests")]
-        public interface IDecoratedService
-        {
-            [OperationContract]
-            string SomeMethod(int param);
-        }
-
-        public class Service : IDecoratedService
-        {
-            public string SomeMethod(int param)
-            {
-                return param.ToString();
-            }
-        }
-
-        [ServiceContract(Namespace = "http://Spring.Services.Tests")]
-        public class DecoratedService : IService
-        {
-            [OperationContract]
-            public string SomeMethod(int param)
-            {
-                return param.ToString();
-            }
-        }
-
-        #endregion
-
-/*
-        WebServiceExporter wse = null;
+        ServiceExporter se = null;
 
         [SetUp]
         public void SetUp()
@@ -83,177 +53,185 @@ namespace Spring.ServiceModel
             const string xml =
     @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
-	<object id='noDecoratedService' type='Spring.Web.Services.WebServiceExporterTests+NoDecoratedService, Spring.Web.Tests'/>
-    <object id='decoratedService' type='Spring.Web.Services.WebServiceExporterTests+DecoratedService, Spring.Web.Tests'/>
+	<object id='service' type='Spring.ServiceModel.ServiceExporterTests+Service, Spring.Services.Tests'/>
+    <object id='decoratedService' type='Spring.ServiceModel.ServiceExporterTests+DecoratedService, Spring.Services.Tests'/>
 </objects>";
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml));
             IObjectFactory objectFactory = new XmlObjectFactory(new InputStreamResource(stream, string.Empty));
 
-            wse = new WebServiceExporter();
-            wse.ObjectFactory = objectFactory;
+            se = new ServiceExporter();
+            se.ObjectFactory = objectFactory;
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), "The TargetName property is required.")]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "The TargetName property is required.")]
         public void NullConfig()
         {
-            wse.ObjectName = "NullConfig";
-            wse.AfterPropertiesSet();
+            se.ObjectName = "NullConfig";
+            se.AfterPropertiesSet();
         }
 
         [Test]
-        public void ProxiesTargetInterfaces()
+        public void ProxiesContractInterface()
         {
-            wse.ObjectName = "ProxiesTargetInterfaces";
-            wse.TargetName = "noDecoratedService";
-            wse.AfterPropertiesSet();
+            se.ObjectName = "ProxiesContractInterface";
+            se.TargetName = "service";
+            se.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
-            Assert.IsTrue(typeof(IService).IsAssignableFrom(proxyType));
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
+            Assert.IsTrue(typeof(IContract).IsAssignableFrom(proxyType));
         }
 
         [Test]
-        public void CreatesWebServiceAttributeWithNoDecoratedClassAndMinimalConfig()
+        public void ProxyTypeEqualsObjectName()
         {
-            wse.ObjectName = "CreatesWebServiceAttributeWithNoDecoratedClassAndMinimalConfig";
-            wse.TargetName = "noDecoratedService";
-            wse.AfterPropertiesSet();
+            se.ObjectName = "ProxyTypeEqualsObjectName";
+            se.TargetName = "service";
+            se.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
-            object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
+            Assert.AreEqual("ProxyTypeEqualsObjectName", proxyType.FullName);
+        }
+
+        [Test]
+        public void CreatesServiceContractAttributeWithNoDecoratedClassAndMinimalConfig()
+        {
+            se.ObjectName = "CreatesServiceContractAttributeWithNoDecoratedClassAndMinimalConfig";
+            se.TargetName = "service";
+            se.AfterPropertiesSet();
+
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
+            object[] attrs = proxyType.GetCustomAttributes(typeof(ServiceContractAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
 
-            WebServiceAttribute wsa = attrs[0] as WebServiceAttribute;
-            Assert.AreEqual("CreatesWebServiceAttributeWithNoDecoratedClassAndMinimalConfig", wsa.Name);
-            Assert.AreEqual(string.Empty, wsa.Description);
-            Assert.AreEqual(WebServiceAttribute.DefaultNamespace, wsa.Namespace);
+            ServiceContractAttribute sca = attrs[0] as ServiceContractAttribute;
+            Assert.IsNull(sca.CallbackContract);
+            Assert.AreEqual(typeof(IContract).FullName, sca.ConfigurationName);
+            Assert.AreEqual(typeof(IContract).Name, sca.Name);
+            Assert.IsNull(sca.Namespace);
+            Assert.AreEqual(ProtectionLevel.None, sca.ProtectionLevel);
+            Assert.AreEqual(SessionMode.Allowed, sca.SessionMode);
         }
 
         [Test]
-        public void CreatesWebServiceAttributeWithNoDecoratedClassAndFullConfig()
+        public void CreatesServiceContractAttributeWithNoDecoratedClassAndFullConfig()
         {
-            wse.ObjectName = "CreatesWebServiceAttributeWithNoDecoratedClassAndFullConfig";
-            wse.TargetName = "noDecoratedService";
-            wse.Name = "My web service name";
-            wse.Description = "My web service description";
-            wse.Namespace = "http://www.springframework.net";
-            wse.AfterPropertiesSet();
+            se.ObjectName = "CreatesServiceContractAttributeWithNoDecoratedClassAndFullConfig";
+            se.TargetName = "service";
+            se.CallbackContract = typeof(IDisposable);
+            se.ConfigurationName = "CustomConfigName";
+            se.Name = "serviceName";
+            se.Namespace = "http://Spring.Services.Tests";
+            se.ProtectionLevel = ProtectionLevel.Sign;
+            se.SessionMode = SessionMode.Required;
+            
+            se.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
-            object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
+            object[] attrs = proxyType.GetCustomAttributes(typeof(ServiceContractAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
 
-            WebServiceAttribute wsa = attrs[0] as WebServiceAttribute;
-            Assert.AreEqual(wse.Name, wsa.Name);
-            Assert.AreEqual(wse.Description, wsa.Description);
-            Assert.AreEqual(wse.Namespace, wsa.Namespace);
+            ServiceContractAttribute sca = attrs[0] as ServiceContractAttribute;
+            Assert.AreEqual(se.CallbackContract, sca.CallbackContract);
+            Assert.AreEqual(se.ConfigurationName, sca.ConfigurationName);
+            Assert.AreEqual(se.Name, sca.Name);
+            Assert.AreEqual(se.Namespace, sca.Namespace);
+            Assert.AreEqual(se.ProtectionLevel, sca.ProtectionLevel);
+            Assert.AreEqual(se.SessionMode, sca.SessionMode);
         }
 
         [Test]
-        public void CreatesDefaultWebMethodAttributeWithNoDecoratedMethod()
+        public void CreatesDefaultOperationContractAttributeWithNoDecoratedMethod()
         {
-            wse.ObjectName = "CreatesDefaultWebMethodAttributeWithNoDecoratedMethod";
-            wse.TargetName = "noDecoratedService";
-            wse.AfterPropertiesSet();
+            se.ObjectName = "CreatesDefaultOperationContractAttributeWithNoDecoratedMethod";
+            se.TargetName = "service";
+            se.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
             MethodInfo method = proxyType.GetMethod("SomeMethod");
             Assert.IsNotNull(method);
 
-            object[] attrs = method.GetCustomAttributes(typeof(WebMethodAttribute), true);
+            object[] attrs = method.GetCustomAttributes(typeof(OperationContractAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
         }
 
         [Test]
-        public void CreatesCustomWebMethodAttributeWithNoDecoratedMethod()
+        public void CreatesCustomOperationContractAttributeWithNoDecoratedMethod()
         {
-            wse.ObjectName = "CreatesCustomWebMethodAttributeWithNoDecoratedMethod";
-            wse.TargetName = "noDecoratedService";
-            wse.MemberAttributes.Add("SomeMethod", new WebMethodAttribute(true)); // default value is false
-            wse.AfterPropertiesSet();
+            OperationContractAttribute oca1 = new OperationContractAttribute();
+            oca1.Name = "MySomeMethod";
 
-            Type proxyType = wse.ObjectType;
+            se.ObjectName = "CreatesCustomOperationContractAttributeWithNoDecoratedMethod";
+            se.TargetName = "service";
+            se.MemberAttributes.Add("SomeMethod", oca1);
+            se.AfterPropertiesSet();
+
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
             MethodInfo method = proxyType.GetMethod("SomeMethod");
             Assert.IsNotNull(method);
 
-            object[] attrs = method.GetCustomAttributes(typeof(WebMethodAttribute), true);
+            object[] attrs = method.GetCustomAttributes(typeof(OperationContractAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
 
-            WebMethodAttribute wma = attrs[0] as WebMethodAttribute;
-            Assert.AreEqual(true, wma.EnableSession);
+            OperationContractAttribute oca2 = attrs[0] as OperationContractAttribute;
+            Assert.AreEqual(oca1.Name, oca2.Name);
         }
 
         [Test]
-        public void OverridesExistingWebServiceAttributeWithDecoratedClass()
+        public void OverridesExistingServiceContractAttributeWithDecoratedClass()
         {
-            wse.ObjectName = "OverridesExistingWebServiceAttributeWithDecoratedClass";
-            wse.TargetName = "decoratedService";
-            wse.AfterPropertiesSet();
+            se.ObjectName = "OverridesExistingServiceContractAttributeWithDecoratedClass";
+            se.TargetName = "decoratedService";
+            se.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
-            object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
+            object[] attrs = proxyType.GetCustomAttributes(typeof(ServiceContractAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
 
-            WebServiceAttribute wsa = attrs[0] as WebServiceAttribute;
-            Assert.AreEqual("OverridesExistingWebServiceAttributeWithDecoratedClass", wsa.Name);
-            Assert.AreEqual(string.Empty, wsa.Description);
-            Assert.AreEqual(WebServiceAttribute.DefaultNamespace, wsa.Namespace);
+            ServiceContractAttribute sca = attrs[0] as ServiceContractAttribute;
+            Assert.IsNull(sca.Namespace);
         }
 
         [Test]
-        public void UsesExistingWebMethodAttributeWithDecoratedMethod()
+        public void UsesExistingOperationContractAttributeWithDecoratedMethod()
         {
-            wse.ObjectName = "UsesExistingWebMethodAttributeWithDecoratedMethod";
-            wse.TargetName = "decoratedService";
-            wse.AfterPropertiesSet();
+            se.ObjectName = "UsesExistingOperationContractAttributeWithDecoratedMethod";
+            se.TargetName = "decoratedService";
+            se.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
             MethodInfo method = proxyType.GetMethod("SomeMethod");
             Assert.IsNotNull(method);
 
-            object[] attrs = method.GetCustomAttributes(typeof(WebMethodAttribute), true);
+            object[] attrs = method.GetCustomAttributes(typeof(OperationContractAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
 
-            WebMethodAttribute wma = attrs[0] as WebMethodAttribute;
-            Assert.AreEqual("SomeMethod description", wma.Description);
-        }
-
-        // TODO : attributes override
-        [Test]
-        [Ignore("Attributes override not implemented.")]
-        public void OverridesExistingWebMethodAttributeWithDecoratedMethod()
-        {
-            wse.ObjectName = "OverridesExistingWebMethodAttributeWithDecoratedMethod";
-            wse.TargetName = "decoratedService";
-            wse.MemberAttributes.Add("SomeMethod", new WebMethodAttribute(true)); // default value is false
-            wse.AfterPropertiesSet();
-
-            Type proxyType = wse.ObjectType;
-            MethodInfo method = proxyType.GetMethod("SomeMethod");
-            Assert.IsNotNull(method);
-
-            object[] attrs = method.GetCustomAttributes(typeof(WebMethodAttribute), true);
-            Assert.IsNotEmpty(attrs);
-            Assert.AreEqual(1, attrs.Length);
-
-            WebMethodAttribute wma = attrs[0] as WebMethodAttribute;
-            Assert.AreEqual(true, wma.EnableSession);
+            OperationContractAttribute oca = attrs[0] as OperationContractAttribute;
+            Assert.AreEqual("MySomeMethod", oca.Name);
         }
 
         #region Test classes
 
-        public interface IService
+        public interface IContract
         {
             string SomeMethod(int param);
         }
 
-        public class NoDecoratedService : IService
+        public class Service : IContract
         {
             public string SomeMethod(int param)
             {
@@ -261,18 +239,33 @@ namespace Spring.ServiceModel
             }
         }
 
-        [WebService(Name = "Decorated service")]
-        public class DecoratedService : IService
+        [ServiceContract(Namespace = "http://Spring.Services.Tests")]
+        public class DecoratedService : IContract
         {
-            [WebMethod(Description="SomeMethod description")]
+            [OperationContract(Name = "MySomeMethod")]
             public string SomeMethod(int param)
             {
                 return param.ToString();
             }
         }
+
+        //[ServiceContract(Namespace = "http://Spring.Services.Tests")]
+        //public interface IDecoratedContract
+        //{
+        //    [OperationContract]
+        //    string SomeMethod(int param);
+        //}
+
+        //public class AnotherService : IDecoratedContract
+        //{
+        //    public string SomeMethod(int param)
+        //    {
+        //        return param.ToString();
+        //    }
+        //}
 
         #endregion
-*/
+
     }
 }
 #endif

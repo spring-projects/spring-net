@@ -2,13 +2,13 @@
 <objects xmlns="http://www.springframework.net">
 
   <!-- returns ChannelFactory<ICalculator>("calculatorEndpoint").CreateChannel() -->
-  <object id="webCalculator"
+  <object id="serverWebCalculator"
           type="Spring.WcfQuickStart.ICalculator, Spring.WcfQuickStart.ClientApp"
-          factory-object="webCalculatorChannelFactory"
+          factory-object="serverWebCalculatorChannelFactory"
           factory-method="CreateChannel" />
-  <object id="webCalculatorChannelFactory"
+  <object id="serverWebCalculatorChannelFactory"
           type="System.ServiceModel.ChannelFactory&lt;Spring.WcfQuickStart.ICalculator>, System.ServiceModel">
-    <constructor-arg name="endpointConfigurationName" value="webCalculatorEndpoint" />
+    <constructor-arg name="endpointConfigurationName" value="serverWebCalculatorEndpoint" />
   </object>
   
 </objects>
