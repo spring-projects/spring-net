@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Data.NHibernate20" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Data.NHibernate21" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
 <!--
     Required properties:
       * current.bin.dir           - (path) root level to build to
@@ -8,10 +8,10 @@
  -->
 	<target name="build">
 
-		<echo message="${nh20.lib.dir}" />
+		<echo message="${nh21.lib.dir}" />
 
-		<!-- build Spring.Data.NHibernate20 -->
-		<csc target="library" define="${current.build.defines.csc},NH_2_0"
+		<!-- build Spring.Data.NHibernate21 -->
+		<csc target="library" define="${current.build.defines.csc},NH_2_0,NH_2_1"
                      warnaserror="true"
 		     debug="${current.build.debug}"
                      output="${current.bin.dir}/${project::get-name()}.dll"
@@ -27,6 +27,7 @@
 				<include name="../Spring.Data.NHibernate/Support/**/*.cs" />
 				<include name="../Spring.Data.NHibernate12/Data/**/*.cs" />
 				<include name="../Spring.Data.NHibernate12/Support/**/*.cs" />
+				<include name="../Spring.Data.NHibernate20/Data/**/*.cs" />				
 				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateAccessor.cs" />
 				<exclude name="../Spring.Data.NHibernate/Data/**/SpringSessionSynchronization.cs" />
 				<exclude name="../Spring.Data.NHibernate/Data/**/LocalSessionFactoryObject.cs" />
@@ -39,7 +40,7 @@
 				<include name="../GenCommonAssemblyInfo.cs" />
 			</sources>
 			<references basedir="${current.bin.dir}">
-				<include name="${nh20.lib.dir}/NHibernate.dll"/>
+				<include name="${nh21.lib.dir}/NHibernate.dll"/>
 				<include name="System.Data.dll" />
 				<include name="System.Web.dll" />
 				<include name="System.EnterpriseServices.dll" />
@@ -48,6 +49,7 @@
 				<exclude name="${project::get-name()}.dll" />
 				<exclude name="Spring.Data.NHibernate.dll" />
 				<exclude name="Spring.Data.NHibernate12.dll" />
+				<exclude name="Spring.Data.NHibernate20.dll" />
 				<exclude name="CloverRuntime.dll" />
 			</references>
 		</csc>

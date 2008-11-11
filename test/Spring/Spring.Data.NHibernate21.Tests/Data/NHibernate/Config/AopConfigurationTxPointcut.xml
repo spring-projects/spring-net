@@ -13,11 +13,11 @@
 
 
 
-  <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate20">
+  <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
     <property name="DbProvider" ref="DbProvider"/>
     <property name="MappingResources">
       <list>
-        <value>assembly://Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate/TestObject.hbm.xml</value>
+        <value>assembly://Spring.Data.NHibernate21.Tests/Spring.Data.NHibernate/TestObject.hbm.xml</value>
       </list>
     </property>
     <property name="HibernateProperties">
@@ -26,7 +26,10 @@
                value="NHibernate.Dialect.MsSql2000Dialect"/>
              
         <entry key="hibernate.connection.driver_class"
-               value="NHibernate.Driver.SqlClientDriver"/>    
+               value="NHibernate.Driver.SqlClientDriver"/>
+
+        <entry key="proxyfactory.factory_class"
+               value="NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle" />
 
       </dictionary>
     </property>
@@ -34,11 +37,11 @@
   </object>
 
 
-  <object id="TestObjectDao" type="Spring.Data.NHibernate.TestObjectDao, Spring.Data.NHibernate20.Tests">
+  <object id="TestObjectDao" type="Spring.Data.NHibernate.TestObjectDao, Spring.Data.NHibernate21.Tests">
     <property name="SessionFactory" ref="SessionFactory"/>
   </object>
 
-  <object id="transactionManager" type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate20">
+  <object id="transactionManager" type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate21">
 
     <property name="DbProvider" ref="DbProvider"/>
     <property name="sessionFactory" ref="SessionFactory"/>
@@ -46,11 +49,11 @@
   </object>
 
 
-  <object name="SimpleService" type="Spring.Data.NHibernate.SimpleService, Spring.Data.NHibernate20.Tests">
+  <object name="SimpleService" type="Spring.Data.NHibernate.SimpleService, Spring.Data.NHibernate21.Tests">
     <property name="TestObjectDao" ref="TestObjectDao"/>
   </object>
 
-  <object name="hibernateTemplate" type="Spring.Data.NHibernate.HibernateTemplate, Spring.Data.NHibernate20">
+  <object name="hibernateTemplate" type="Spring.Data.NHibernate.HibernateTemplate, Spring.Data.NHibernate21">
     <property name="sessionFactory" ref="SessionFactory"/>
   </object>
   

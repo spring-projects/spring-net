@@ -26,6 +26,10 @@ using Common.Logging;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
+#if NH21
+using NHibernate.Engine;
+#endif
+
 using Spring.Core.IO;
 using Spring.Data.Common;
 using Spring.Objects.Factory;
@@ -346,7 +350,16 @@ namespace Spring.Data.NHibernate
         protected virtual ISessionFactory NewSessionFactory(Configuration config) 
         {
             ISessionFactory sf = config.BuildSessionFactory();
-            DbProviderWrapper dbProviderWrapper = sf.ConnectionProvider as DbProviderWrapper;
+            DbProviderWrapper dbProviderWrapper = null;
+#if NH21
+            ISessionFactoryImplementor sfImplementor = sf as ISessionFactoryImplementor;
+            if (sfImplementor != null)
+            {
+                dbProviderWrapper = sfImplementor.ConnectionProvider as DbProviderWrapper;
+            }
+#else
+            dbProviderWrapper = sf.ConnectionProvider as DbProviderWrapper;
+#endif
             if (dbProviderWrapper != null)
             {
                 dbProviderWrapper.DbProvider = dbProvider;

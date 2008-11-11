@@ -50,6 +50,9 @@ namespace Spring.Data.NHibernate
             properties.Add(Environment.Dialect, "NHibernate.Dialect.MsSql2000Dialect");
             properties.Add(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver");
             properties.Add(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider");
+#if NH_2_1
+            properties.Add(Environment.ProxyFactoryFactoryClass, "NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle");
+#endif
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();
 
@@ -58,6 +61,10 @@ namespace Spring.Data.NHibernate
                             "NHibernate.Connection.DriverConnectionProvider");
             Assert.AreEqual(sfo.Configuration.Properties[Environment.Dialect],
                             "NHibernate.Dialect.MsSql2000Dialect");
+
+#if NH_2_1
+            Assert.AreEqual(sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass], "NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle");
+#endif
         }
 
         [Test]

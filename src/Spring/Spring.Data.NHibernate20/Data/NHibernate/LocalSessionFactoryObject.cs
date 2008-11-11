@@ -355,10 +355,13 @@ namespace Spring.Data.NHibernate
             if (ExposeTransactionAwareSessionFactory)
             {
                 // Set ICurrentSessionContext implementation,
-                // providng the Spring-managed ISession s current Session.
+                // providing the Spring-managed ISession s current Session.
                 // Can be overridden by a custom value for the corresponding Hibernate property
-                config.SetProperty(Environment.CurrentSessionContextClass,
-                                   "Spring.Data.NHibernate.SpringSessionContext, Spring.Data.NHibernate20");
+#if NH_2_1
+                config.SetProperty(Environment.CurrentSessionContextClass, "Spring.Data.NHibernate.SpringSessionContext, Spring.Data.NHibernate21");
+#else
+                config.SetProperty(Environment.CurrentSessionContextClass, "Spring.Data.NHibernate.SpringSessionContext, Spring.Data.NHibernate20");
+#endif
             }
 
             if (this.filterDefinitions != null)
@@ -417,6 +420,15 @@ namespace Spring.Data.NHibernate
                     config.Configure(configFilename);
                 }
             }
+
+#if NH_2_1
+            // Tell Hibernate to eagerly compile the mappings that we registered,
+            // for availability of the mapping information in further processing.
+            PostProcessMappings(config);
+            config.BuildMappings();
+#endif
+
+            // TODO: entityCacheStrategies and collectionCacheStrategies 
 
             if (this.eventListeners != null) 
             {
@@ -498,6 +510,22 @@ namespace Spring.Data.NHibernate
         {
             return new Configuration();
         }
+
+#if NH_2_1
+        /// <summary>
+        /// To be implemented by subclasses that want to to register further mappings
+	    /// on the Configuration object after this FactoryObject registered its specified
+	    /// mappings.
+        /// </summary>
+        /// <remarks>
+	    /// Invoked <i>before</i> the <code>BuildMappings</code> call,
+	    /// so that it can still extend and modify the mapping information.
+        /// </remarks>
+        /// <param name="config">the current Configuration object</param>
+        protected virtual void PostProcessMappings(Configuration config)
+        {
+	    }
+#endif
 
         /// <summary>
         /// To be implemented by subclasses that want to to perform custom
@@ -686,10 +714,16 @@ namespace Spring.Data.NHibernate
         protected virtual ISessionFactory NewSessionFactory(Configuration config)
         {
             ISessionFactory sf = config.BuildSessionFactory();
-            DbProviderWrapper dbProviderWrapper = sf.ConnectionProvider as DbProviderWrapper;
-            if (dbProviderWrapper != null)
+            ISessionFactoryImplementor sfImplementor =  sf as ISessionFactoryImplementor;
+            
+            if (sfImplementor != null)
             {
-                dbProviderWrapper.DbProvider = dbProvider;
+                DbProviderWrapper dbProviderWrapper = sfImplementor.ConnectionProvider as DbProviderWrapper;
+
+                if (dbProviderWrapper != null)
+                {
+                    dbProviderWrapper.DbProvider = dbProvider;
+                }
             }
             return sf;
         }

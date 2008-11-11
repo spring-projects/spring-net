@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Data.NHibernate.Integration.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Data.NHibernate21.Integration.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 <!--
 	Required properties:
 	  * current.bin.dir           - (path) root level to build to
@@ -8,8 +8,8 @@
  -->
 	<target name="build">
 
-		<!-- build Spring.Data.NHibernate.Integration.Tests -->
-		<csc target="library" define="${current.build.defines.csc}"
+		<!-- build Spring.Data.NHibernate21.Integration.Tests -->
+		<csc target="library" define="${current.build.defines.csc},NH_2_0,NH_2_1"
 				warnaserror="true"
 				debug="${current.build.debug}"
 				output="${current.bin.dir}/${project::get-name()}.dll"
@@ -23,7 +23,7 @@
 			</sources>
 			<references basedir="${current.bin.dir}">
 				<lib>
-					<include name="${nh12.lib.dir}"/>
+					<include name="${nh21.lib.dir}"/>
 				</lib>
 				<include name="System.Data.dll" />
 				<include name="System.EnterpriseServices.dll" />
@@ -32,9 +32,9 @@
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
 				<exclude name="Spring.Data.NHibernate.Tests.dll" />
+				<exclude name="Spring.Data.NHibernate.dll" />
 				<exclude name="Spring.Data.NHibernate12.dll" />
 				<exclude name="Spring.Data.NHibernate20.dll" />
-				<exclude name="Spring.Data.NHibernate21.dll" />
 				<exclude name="CloverRuntime.dll" />
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
