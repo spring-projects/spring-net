@@ -270,6 +270,11 @@
         <para><literal>Odbc-2.0</literal> - ODBC provider V2.0.0.0 in
         framework .NET V2</para>
       </listitem>
+
+      <listitem>
+        <para>InterSystems.Data.CacheClient - Caché provider Version 2.0.0.1
+        in framework .NET V2</para>
+      </listitem>
     </itemizedlist>
 
     <note>
