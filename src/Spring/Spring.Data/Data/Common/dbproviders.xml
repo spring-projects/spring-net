@@ -1374,5 +1374,31 @@
 
   <alias name="Odbc-2.0" alias="System.Data.Odbc"/>
 
+  <object id="Cache-2.0.0.1" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="InterSystems CacheConnection Version 2.0.0.1 in framework .NET V2"/>
+        <constructor-arg name="assemblyName" value="InterSystems.Data.CacheClient, Version 2.0.0.1, Culture=neutral, PublicKeyToken=ad350a26c4a4447c" />
+        <constructor-arg name="connectionType" value="InterSystems.Data.CacheClient.CacheConnection, InterSystems.Data.CacheClient, Version=2.0.0.1, Culture=neutral, PublicKeyToken=ad350a26c4a4447c"/>
+        <constructor-arg name="commandType" value="InterSystems.Data.CacheClient.CacheCommand, InterSystems.Data.CacheClient, Version=2.0.0.1, Culture=neutral, PublicKeyToken=ad350a26c4a4447c" />
+        <constructor-arg name="parameterType" value="InterSystems.Data.CacheClient.CacheParameter, InterSystems.Data.CacheClient, Version=2.0.0.1, Culture=neutral, PublicKeyToken=ad350a26c4a4447c" />
+        <constructor-arg name="dataAdapterType" value="InterSystems.Data.CacheClient.CacheDataAdapter, InterSystems.Data.CacheClient, Version=2.0.0.1, Culture=neutral, PublicKeyToken=ad350a26c4a4447c" />
+        <constructor-arg name="commandBuilderType" value="InterSystems.Data.CacheClient.CacheCommandBuilder, InterSystems.Data.CacheClient, Version=2.0.0.1, Culture=neutral, PublicKeyToken=ad350a26c4a4447c" />
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="InterSystems.Data.CacheClient.CacheDbType, InterSystems.Data.CacheClient, Version=2.0.0.1, Culture=neutral, PublicKeyToken=ad350a26c4a4447c" />
+        <constructor-arg name="parameterDbTypeProperty" value="CacheDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="?"/>
+        <constructor-arg name="exceptionType" value="InterSystems.Data.CacheClient.CacheException, InterSystems.Data.CacheClient, Version=2.0.0.1, Culture=neutral, PublicKeyToken=ad350a26c4a4447c"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
+        <constructor-arg name="useParameterPrefixInSql" value="false"/>
+        <constructor-arg name="bindByName" value="false"/>
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError.ToString()"/>
+      </object>
+    </constructor-arg>
+  </object>
+
+  <alias name="Cache-2.0.0.1" alias="InterSystems.Data.CacheClient"/>
+
 </objects>
 
