@@ -34,13 +34,6 @@
   <section xml:id="pathmatcher">
     <title>PathMatcher</title>
 
-    <para><emphasis>Note, Spring.Util.PathMatcher is currently only available
-    in CVS, not the RC3 release. If you want to use these feature please get
-    the code from CVS <ulink
-    url="http://opensource.atlassian.com/confluence/spring/display/NET/Project+Structure">(instructions)</ulink>
-    or from the download section of the Spring.NET website that contains an
-    .zip with the full CVS tree. </emphasis></para>
-
     <para><literal>Spring.Util.PathMatcher</literal> provides
     <literal>Ant/NAnt</literal>-like path name matching features.</para>
 
