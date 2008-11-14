@@ -20,10 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
-using Common.Logging;
 using Spring.Calculator.Domain;
 using Spring.Calculator.Interfaces;
 
@@ -43,25 +39,25 @@ namespace Spring.Calculator.Services
         static Calculator()
         {
             instanceCount = 0;
-            ILog log = LogManager.GetLogger(MethodInfo.GetCurrentMethod().DeclaringType);
-            log.Debug(
-                string.Format("Initialized Type in AppDomain {0}, ConfigFile={1}, BaseDirectory={2}, CurrentDirectory={3}, ExecutingAssembly={4}, EntryAssembly={5}"
-                , AppDomain.CurrentDomain.GetHashCode()
-                , AppDomain.CurrentDomain.SetupInformation.ConfigurationFile
-                , AppDomain.CurrentDomain.BaseDirectory
-                , Environment.CurrentDirectory
-                , Assembly.GetExecutingAssembly().Location
-                , Assembly.GetEntryAssembly().Location
-                ));
+//            Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(MethodInfo.GetCurrentMethod().DeclaringType);
+//            log.Debug(
+//                string.Format("Initialized Type in AppDomain {0}, ConfigFile={1}, BaseDirectory={2}, CurrentDirectory={3}, ExecutingAssembly={4}, EntryAssembly={5}"
+//                , AppDomain.CurrentDomain.GetHashCode()
+//                , AppDomain.CurrentDomain.SetupInformation.ConfigurationFile
+//                , AppDomain.CurrentDomain.BaseDirectory
+//                , Environment.CurrentDirectory
+//                , Assembly.GetExecutingAssembly().Location
+//                , Assembly.GetEntryAssembly().Location
+//                ));
         }
 
 		#region ICalculator Members
 
-        protected readonly ILog Log = LogManager.GetLogger(MethodInfo.GetCurrentMethod().DeclaringType);
+//        protected readonly Common.Logging.ILog Log = Common.Logging.LogManager.GetLogger(MethodInfo.GetCurrentMethod().DeclaringType);
 
 	    public Calculator()
 	    {
-            Log.Debug(string.Format("Initialized Instance in AppDomain {0}, #{0} at {1}", AppDomain.CurrentDomain.GetHashCode(), instanceCount, new System.Diagnostics.StackTrace()));
+//            Common.Logging.Log.Debug(string.Format("Initialized Instance in AppDomain {0}, #{0} at {1}", AppDomain.CurrentDomain.GetHashCode(), instanceCount, new System.Diagnostics.StackTrace()));
             instanceCount++;
         }
 

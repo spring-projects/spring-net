@@ -20,9 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Reflection;
-using Common.Logging;
 using Spring.Calculator.Interfaces;
 
 #endregion
@@ -58,25 +55,22 @@ namespace Spring.Calculator.Services
 
         public int GetMemory()
         {            
-            Log.Debug(string.Format("GetMemory: IsInTransaction={0}, at {1}", System.EnterpriseServices.ContextUtil.IsInTransaction, new System.Diagnostics.StackTrace()));
+//            Log.Debug(string.Format("GetMemory: IsInTransaction={0}, at {1}", System.EnterpriseServices.ContextUtil.IsInTransaction, new System.Diagnostics.StackTrace()));
             return memoryStore;
         }
 
         public void SetMemory(int memoryValue)
         {
-            Log.Debug("SetMemory");
             memoryStore = memoryValue;
         }
 
         public void MemoryClear()
         {
-            Log.Debug("MemoryClear");
             memoryStore = 0;
         }
 
         public void MemoryAdd(int num)
         {
-            Log.Debug("MemoryAdd");
             memoryStore += num;
         }
 

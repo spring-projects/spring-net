@@ -49,6 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -81,9 +82,12 @@
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Config\enterpriseServices.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Spring.Aspects\Spring.Aspects.2005.csproj">
+      <Project>{6B34626E-8D2A-4387-BBB6-CB352D4DBDEC}</Project>
+      <Name>Spring.Aspects.2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spring.Calculator.Contract\Spring.Calculator.Contract.2005.csproj">
       <Project>{284C0873-BBB4-4399-B6F7-CB7EDBD001C7}</Project>
       <Name>Spring.Calculator.Contract.2005</Name>
@@ -102,6 +106,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Services.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\services.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Spring.Calculator.EnterpriseServices.dll.spring-context.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

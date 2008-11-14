@@ -2,7 +2,27 @@
 <objects xmlns="http://www.springframework.net">
     <description>Definitions of objects to be registered.</description>
 
-    <object id="calculatorService" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" />
+    <!-- Aspect -->
+    <object id="CommonLoggingAroundAdvice" type="Spring.Aspects.Logging.CommonLoggingAroundAdvice, Spring.Aspects">
+        <property name="Level" value="Debug"/>
+    </object>
+    
+    <object type="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator, Spring.Aop">
+        <property name="objectNames">
+            <list>
+                <idref local="simpleCalculatorService"/>
+                <idref local="calculatorService"/>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>CommonLoggingAroundAdvice</value>
+            </list>
+        </property>
+    </object>
+
+    <!-- Service -->
     <object id="simpleCalculatorService" type="Spring.Calculator.Services.Calculator, Spring.Calculator.Services" />
+    <object id="calculatorService" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" />
 
 </objects>

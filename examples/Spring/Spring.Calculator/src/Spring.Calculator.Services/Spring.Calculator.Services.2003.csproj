@@ -69,16 +69,6 @@
                     Project = "{284C0873-BBB4-4399-B6F7-CB7EDBD001C7}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
-                <Reference
-                    Name = "Common.Logging"
-                    AssemblyName = "Common.Logging"
-                    HintPath = "..\..\..\..\..\lib\Net\1.1\Common.Logging.dll"
-                />
-                <Reference
-                    Name = "System.EnterpriseServices"
-                    AssemblyName = "System.EnterpriseServices"
-                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.EnterpriseServices.dll"
-                />
             </References>
         </Build>
         <Files>

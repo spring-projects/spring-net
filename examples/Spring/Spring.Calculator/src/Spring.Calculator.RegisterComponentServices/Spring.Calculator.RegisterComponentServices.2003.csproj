@@ -84,6 +84,11 @@
                     AssemblyName = "Spring.Core"
                     HintPath = "..\..\..\..\..\bin\net\1.1\debug\Spring.Core.dll"
                 />
+                <Reference
+                    Name = "Spring.Aspects.2003"
+                    Project = "{6B34626E-8D2A-4387-BBB6-CB352D4DBDEC}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -105,10 +110,6 @@
                 <File
                     RelPath = "Spring.Calculator.EnterpriseServices.dll.spring-context.xml"
                     BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Config\enterpriseServices.xml"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Config\services.xml"

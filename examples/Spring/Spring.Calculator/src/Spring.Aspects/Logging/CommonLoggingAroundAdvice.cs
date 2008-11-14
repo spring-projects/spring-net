@@ -33,7 +33,6 @@ namespace Spring.Aspects.Logging
     /// Basic implementation of a logging aspect using Common.Logging library.
     /// </summary>
     /// <author>Bruno Baia</author>
-    /// <version>$Id: CommonLoggingAroundAdvice.cs,v 1.2 2007/06/27 16:00:42 bbaia Exp $</version>
 	public class CommonLoggingAroundAdvice : IMethodInterceptor
 	{
 		#region Logging
