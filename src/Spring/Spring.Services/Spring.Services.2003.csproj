@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{B58E34CF-6E70-481D-AC87-1BC2D13C21FB}"
     >
@@ -128,12 +128,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "EnterpriseServices\ServicedComponentContextHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "EnterpriseServices\ServicedComponentExporter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "EnterpriseServices\ServicedComponentFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "EnterpriseServices\ServicedComponentHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

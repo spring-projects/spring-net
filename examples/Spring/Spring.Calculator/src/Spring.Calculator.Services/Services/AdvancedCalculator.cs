@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2006 the original author or authors.
+ * Copyright © 2002-2008 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,59 +20,66 @@
 
 #region Imports
 
+using System;
+using System.Reflection;
+using Common.Logging;
 using Spring.Calculator.Interfaces;
 
 #endregion
 
 namespace Spring.Calculator.Services
 {
-	/// <summary>
-	/// An advanced calculator service.
-	/// </summary>
+    /// <summary>
+    /// An advanced calculator service.
+    /// </summary>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: AdvancedCalculator.cs,v 1.2 2006/12/04 01:38:42 bbaia Exp $</version>
     public class AdvancedCalculator : Calculator, IAdvancedCalculator
     {
-		#region Fields
+        #region Fields
 
-		private int memoryStore = 0;
+        private int memoryStore = 0;
 
-		#endregion
+        #endregion
 
-		#region Constructor(s) / Destructor
+        #region Constructor(s) / Destructor
 
-		public AdvancedCalculator()
-		{}
+        public AdvancedCalculator()
+            : this(0)
+        { }
 
-		public AdvancedCalculator(int initialMemory)
-		{
-			memoryStore = initialMemory;
-		}
+        public AdvancedCalculator(int initialMemory)
+        {
+            memoryStore = initialMemory;
+        }
 
-		#endregion
+        #endregion
 
-		#region IAdvancedCalculator Members
+        #region IAdvancedCalculator Members
 
-		public int GetMemory()
-		{
-			return memoryStore;
-		}
+        public int GetMemory()
+        {            
+            Log.Debug(string.Format("GetMemory: IsInTransaction={0}, at {1}", System.EnterpriseServices.ContextUtil.IsInTransaction, new System.Diagnostics.StackTrace()));
+            return memoryStore;
+        }
 
-		public void SetMemory(int memoryValue)
-		{
-			memoryStore = memoryValue;	
-		}
+        public void SetMemory(int memoryValue)
+        {
+            Log.Debug("SetMemory");
+            memoryStore = memoryValue;
+        }
 
-		public void MemoryClear()
-		{
-			memoryStore = 0;
-		}
+        public void MemoryClear()
+        {
+            Log.Debug("MemoryClear");
+            memoryStore = 0;
+        }
 
-		public void MemoryAdd(int num)
-		{
-			memoryStore += num;
-		}
+        public void MemoryAdd(int num)
+        {
+            Log.Debug("MemoryAdd");
+            memoryStore += num;
+        }
 
-		#endregion
+        #endregion
     }
 }

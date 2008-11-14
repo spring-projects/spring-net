@@ -32,7 +32,7 @@ using System.Reflection;
 #endif
 [assembly: AssemblyCompany("http://www.springframework.net")]
 [assembly: AssemblyProduct("Spring.NET Framework")]
-[assembly: AssemblyCopyright("Copyright 2002-2006 Spring.NET Framework Team.")]
+[assembly: AssemblyCopyright("Copyright 2002-2008 Spring.NET Framework Team.")]
 [assembly: AssemblyTrademark("Apache License, Version 2.0")]
 
 #if STRONG

@@ -17,9 +17,9 @@
                 DelaySign = "false"
                 OutputType = "Exe"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "xcopy $(ProjectDir)Spring.Calculator.EnterpriseServices.dll.spring-context.xml $(TargetDir) /Y /F&#xd;&#xa;xcopy $(ProjectDir)Config\*.* $(TargetDir)Config /S /Y /F /I"
                 RootNamespace = "Spring.Calculator.RegisterComponentServices"
-                RunPostBuildEvent = "OnBuildSuccess"
+                RunPostBuildEvent = "Always"
                 StartupObject = ""
             >
                 <Config
@@ -103,8 +103,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Spring.Calculator.EnterpriseServices.dll.spring-context.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Config\enterpriseServices.xml"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Config\services.xml"
+                    BuildAction = "Content"
                 />
             </Include>
         </Files>

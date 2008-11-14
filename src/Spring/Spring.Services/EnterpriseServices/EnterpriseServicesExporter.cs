@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.EnterpriseServices;
 using System.IO;
 using System.Reflection;
@@ -60,8 +61,8 @@ namespace Spring.EnterpriseServices
         private ApplicationAccessControlAttribute accessControl;
         private ApplicationQueuingAttribute applicationQueuing;
         private IList roles;
-
         private string assemblyName;
+        private bool useSpring;
 
         #endregion
 
@@ -159,6 +160,15 @@ namespace Spring.EnterpriseServices
             set { assemblyName = value; }
         }
 
+        ///<summary>
+        /// Use Spring context to configure the serviced components.
+        ///</summary>
+        public bool UseSpring
+        {
+            get { return useSpring; }
+            set { useSpring = value; }
+        }
+
         #endregion
 
         #region IInitializingObject Members
@@ -205,9 +215,15 @@ namespace Spring.EnterpriseServices
             ModuleBuilder module = proxyAssembly.DefineDynamicModule(assemblyName, assemblyName + ".dll", true);
             ApplyAssemblyAttributes(proxyAssembly);
 
+            Type baseType = typeof(ServicedComponent);
+            if (UseSpring)
+            {
+                baseType = CreateSpringServicedComponentType(module);
+            }
+
             foreach (ServicedComponentExporter definition in components)
             {
-                definition.CreateWrapperType(module, objectFactory);
+                definition.CreateWrapperType(module, baseType, objectFactory, UseSpring);
             }
 
             proxyAssembly.Save(assemblyName + ".dll");
@@ -215,12 +231,11 @@ namespace Spring.EnterpriseServices
             RegistrationConfig config = new RegistrationConfig();
             config.Application = applicationName;
             config.AssemblyFile = AppDomain.CurrentDomain.DynamicDirectory + assemblyName + ".dll";
-            config.InstallationFlags = InstallationFlags.FindOrCreateTargetApplication;
+            config.InstallationFlags = InstallationFlags.ReportWarningsToConsole | InstallationFlags.FindOrCreateTargetApplication | InstallationFlags.ReconfigureExistingApplication;
 
             RegistrationHelper regHelper = new RegistrationHelper();
             regHelper.InstallAssemblyFromConfig(ref config);
         }
-
         #endregion
 
         #region Private Methods
@@ -234,7 +249,7 @@ namespace Spring.EnterpriseServices
             using (Stream keys = GetType().Assembly.GetManifestResourceStream("Spring.EnterpriseServices.EnterpriseServices.keys"))
             {
                 byte[] bytes = new byte[keys.Length];
-                keys.Read(bytes, 0, (int) keys.Length);
+                keys.Read(bytes, 0, (int)keys.Length);
                 return bytes;
             }
         }
@@ -269,7 +284,7 @@ namespace Spring.EnterpriseServices
                 foreach (SecurityRoleAttribute role in roles)
                 {
                     assembly.SetCustomAttribute(ReflectionUtils.CreateCustomAttribute(typeof(SecurityRoleAttribute),
-                                                                                      new object[] {role.Role}, role));
+                                                                                      new object[] { role.Role }, role));
                 }
             }
         }
@@ -284,7 +299,7 @@ namespace Spring.EnterpriseServices
                 object role = roles[i];
                 if (role is string)
                 {
-                    roles[i] = ParseRole((string) role);
+                    roles[i] = ParseRole((string)role);
                 }
             }
         }
@@ -308,6 +323,131 @@ namespace Spring.EnterpriseServices
             }
 
             return role;
+        }
+
+        #endregion
+
+        #region SpringServicedComponent generation
+
+        /// <summary>
+        /// Creates the SpringServicedComponent base class to derive all <see cref="ServicedComponent"/>s from.
+        /// </summary>
+        /// <example>
+        /// <code>
+        ///         internal class SpringServicedComponent
+        ///         {
+        ///             protected delegate object GetObjectHandler(ServicedComponent servicedComponent, string targetName);
+        /// 
+        ///             protected static readonly GetObjectHandler getObjectRef;
+        ///         
+        ///             static SpringServicedComponent()
+        ///             {
+        ///                 // first look for a local copy
+        ///                 System.Reflection.Assembly servicesAssembly;
+        ///                 string servicesAssemblyPath = Path.Combine(
+        ///                                 new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).DirectoryName
+        ///                                 , &quot;Spring.Services.dll&quot; );
+        ///                 servicesAssembly = System.Reflection.Assembly.LoadFrom(servicesAssemblyPath);
+        ///                 if (servicesAssembly == null)
+        ///                 {
+        ///                     // then let the normal loader handle the typeload
+        ///                     servicesAssembly = System.Reflection.Assembly.Load(&quot;Spring.Services, culture=neutral, version=x.x.x.x, publicKey=xxxxxxxx&quot;);
+        ///                 }
+        ///                 Type componentHelperType = servicesAssembly.GetType(&quot;Spring.EnterpriseServices.ServicedComponentHelper&quot;);
+        ///                 getObjectRef = (GetObjectHandler) Delegate.CreateDelegate(typeof(GetObjectHandler)
+        ///                                                                         , componentHelperType.GetMethod(&quot;GetObject&quot;));
+        ///             }        
+        ///         }
+        /// 
+        /// </code>
+        /// </example>
+        private Type CreateSpringServicedComponentType(ModuleBuilder module)
+        {
+            Type delegateType = DefineDelegate(module);
+
+            TypeBuilder typeBuilder = module.DefineType("SpringServicedComponent", System.Reflection.TypeAttributes.Public, typeof(ServicedComponent));
+            ILGenerator il = null;
+            FieldBuilder getObjectRef = typeBuilder.DefineField("getObject", delegateType, FieldAttributes.Family | FieldAttributes.Static);
+
+            //            MethodBuilder assemblyResolveHandler = GenerateOnAssemblyResolve(typeBuilder);
+
+            // static SpringServicedComponent() {
+            // }
+            ConstructorBuilder typeCtor = typeBuilder.DefineTypeInitializer();
+            il = typeCtor.GetILGenerator();
+            Label methodEnd = il.DefineLabel();
+            Label loadType = il.DefineLabel();
+            Label tryBegin = il.BeginExceptionBlock();
+            LocalBuilder fldAssembly = il.DeclareLocal(typeof(Assembly));
+            LocalBuilder fldType = il.DeclareLocal(typeof(Type));
+
+            il.Emit(OpCodes.Call, typeof(Assembly).GetMethod("GetExecutingAssembly"));
+            il.Emit(OpCodes.Callvirt, typeof(Assembly).GetProperty("Location").GetGetMethod());
+            il.Emit(OpCodes.Newobj, typeof(FileInfo).GetConstructor(new Type[] {typeof(string)}));
+            il.Emit(OpCodes.Call, typeof(FileInfo).GetProperty("DirectoryName").GetGetMethod());
+            il.Emit(OpCodes.Ldstr, new FileInfo(typeof(ServicedComponentHelper).Assembly.Location).Name);
+
+            il.Emit(OpCodes.Call, typeof(Path).GetMethod("Combine", new Type[] { typeof(string), typeof(string) }));
+            il.Emit(OpCodes.Call, typeof(Assembly).GetMethod("LoadFrom", new Type[] { typeof(string)}));
+            il.Emit(OpCodes.Stloc, fldAssembly);
+            il.Emit(OpCodes.Ldloc, fldAssembly);
+            il.Emit(OpCodes.Ldnull);
+            il.Emit(OpCodes.Ceq);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.Emit(OpCodes.Ceq);
+            il.Emit(OpCodes.Brtrue_S, loadType);
+
+            il.Emit(OpCodes.Ldstr, typeof(ServicedComponentHelper).Assembly.FullName);
+            il.Emit(OpCodes.Call, typeof(Assembly).GetMethod("Load", new Type[] { typeof(string) }));
+            il.Emit(OpCodes.Stloc, fldAssembly);
+
+            il.MarkLabel(loadType);
+            il.Emit(OpCodes.Ldloc, fldAssembly);
+            il.Emit(OpCodes.Ldstr, typeof(ServicedComponentHelper).FullName);
+            il.Emit(OpCodes.Ldc_I4_1);
+            il.Emit(OpCodes.Call, typeof(Assembly).GetMethod("GetType", new Type[] { typeof(string), typeof(bool) }));
+            il.Emit(OpCodes.Stloc, fldType);
+
+            il.Emit(OpCodes.Ldtoken, delegateType);
+            il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
+            il.Emit(OpCodes.Ldloc, fldType);            
+            il.Emit(OpCodes.Ldstr, "GetObject");
+            il.Emit(OpCodes.Callvirt, typeof(Type).GetMethod("GetMethod", new Type[] { typeof(string) }));
+            il.Emit(OpCodes.Call, typeof(Delegate).GetMethod("CreateDelegate", new Type[] { typeof(Type), typeof(MethodInfo) }));
+            il.Emit(OpCodes.Castclass, delegateType);
+            il.Emit(OpCodes.Stsfld, getObjectRef);
+            il.Emit(OpCodes.Leave_S, methodEnd);
+
+            il.BeginCatchBlock(typeof(Exception));
+            il.Emit(OpCodes.Call, typeof(Trace).GetMethod("WriteLine", new Type[] { typeof(object) }));
+            il.EndExceptionBlock();
+            il.MarkLabel(methodEnd);
+            il.Emit(OpCodes.Ret);
+            return typeBuilder.CreateType();
+        }
+
+        private static readonly MethodAttributes ConstructorAttributes = MethodAttributes.Public |
+            MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName;
+
+
+        private Type DefineDelegate(ModuleBuilder module)
+        {
+            MethodAttributes methodAtts = MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual;
+
+            TypeBuilder typeBuilder = module.DefineType("GetObjectHandler", TypeAttributes.Public | TypeAttributes.Sealed, typeof(MulticastDelegate));
+            ConstructorBuilder cb = typeBuilder.DefineConstructor(ConstructorAttributes, CallingConventions.Standard, new Type[] { typeof(object), typeof(IntPtr) });
+            cb.SetImplementationFlags(MethodImplAttributes.Managed | MethodImplAttributes.Runtime);
+
+            MethodBuilder mb1 = typeBuilder.DefineMethod("BeginInvoke", methodAtts, CallingConventions.Standard, typeof(IAsyncResult)
+                                , new Type[] { typeof(ServicedComponent), typeof(string), typeof(AsyncCallback), typeof(object) });
+            mb1.SetImplementationFlags(MethodImplAttributes.Managed | MethodImplAttributes.Runtime);
+            MethodBuilder mb2 = typeBuilder.DefineMethod("EndInvoke", methodAtts, CallingConventions.Standard, typeof(object)
+                                , new Type[] { typeof(IAsyncResult) });
+            mb2.SetImplementationFlags(MethodImplAttributes.Managed | MethodImplAttributes.Runtime);
+            MethodBuilder mb3 = typeBuilder.DefineMethod("Invoke", methodAtts, CallingConventions.Standard, typeof(object)
+                                , new Type[] { typeof(ServicedComponent), typeof(string) });
+            mb3.SetImplementationFlags(MethodImplAttributes.Managed | MethodImplAttributes.Runtime);
+            return typeBuilder.CreateType();
         }
 
         #endregion

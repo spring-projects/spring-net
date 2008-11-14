@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{EB2687B7-8B26-4FBC-852A-4128D5CACAFC}"
     >
@@ -179,6 +179,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Data\Spring\Remoting\saoSingleton-autowired.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Data\Spring\Web\Services\configurableFactory.xml"
                     BuildAction = "EmbeddedResource"
                 />
@@ -201,6 +205,11 @@
                 <File
                     RelPath = "Data\Spring\Web\Services\Service.cs.fyi"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "EnterpriseServices\ExportedServicedComponentSample.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "EnterpriseServices\ServicedComponentExporterTests.cs"

@@ -71,11 +71,10 @@ namespace Spring.EnterpriseServices
 
         #region Private helpers classes
 
+//        private delegate Type CreateWrapperTypeHandler(ModuleBuilder module, Type baseType, IObjectFactory objectFactory, bool useSpring);
+
         private Type CreateWrapperType(ServicedComponentExporter exporter, Type type)
         {
-            MethodInfo createWrapperTypeMethodInfo = typeof(ServicedComponentExporter).GetMethod("CreateWrapperType", BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.IsNotNull(createWrapperTypeMethodInfo);
-
             AssemblyName an = new AssemblyName();
 			an.Name = "Spring.EnterpriseServices.Tests";
             AssemblyBuilder proxyAssembly = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.RunAndSave);
@@ -84,7 +83,7 @@ namespace Spring.EnterpriseServices
             IDynamicMock mockObjectFactory = new DynamicMock(typeof(IObjectFactory));
             mockObjectFactory.ExpectAndReturn("GetType", type, new object[]{ exporter.TargetName });
 
-            object result = createWrapperTypeMethodInfo.Invoke(exporter, new object[] { module, mockObjectFactory.Object });
+            object result = exporter.CreateWrapperType(module, typeof(ServicedComponent), (IObjectFactory) mockObjectFactory.Object, false); //createWrapperTypeMethodInfo.Invoke(exporter, new object[] { module, mockObjectFactory.Object });
             Assert.IsNotNull(result);
             Assert.IsTrue(result is Type);
 

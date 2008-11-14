@@ -11,8 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Spring.Services</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\..\Spring.Net.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -22,6 +21,7 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\build\VS.Net.2005\Spring.Services\Debug\</OutputPath>
@@ -80,6 +80,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -101,6 +102,8 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="EnterpriseServices\EnterpriseServicesExporter.cs" />
+    <Compile Include="EnterpriseServices\ServicedComponentHelper.cs" />
+    <Compile Include="EnterpriseServices\ServicedComponentContextHandler.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentExporter.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentFactory.cs" />
     <Compile Include="Remoting\CaoExporter.cs">
