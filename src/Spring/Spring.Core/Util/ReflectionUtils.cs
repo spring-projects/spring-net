@@ -87,7 +87,12 @@ namespace Spring.Util
         /// name and argument
         /// <see cref="System.Type"/>s.
         /// </summary>
-        /// <remarks>Searches with BindingFlags  </remarks>
+        /// <remarks>
+        /// <para>Searches with BindingFlags</para>
+        /// <para>When dealing with interface methods, you probable want to 'normalize' method references by calling 
+        /// <see cref="MapInterfaceMethodToImplementationIfNecessary"/>. 
+        /// </para>
+        /// </remarks>
         /// <param name="targetType">
         /// The target <see cref="System.Type"/> to find the method on.
         /// </param>
@@ -97,6 +102,7 @@ namespace Spring.Util
         /// <see langword="null"/> if the method has no arguments.
         /// </param>
         /// <returns>The target method.</returns>
+        /// <seealso cref="MapInterfaceMethodToImplementationIfNecessary"/>
         public static MethodInfo GetMethod(
             Type targetType, string method, Type[] argumentTypes)
         {
@@ -120,6 +126,33 @@ namespace Spring.Util
                 }
             }
             return retMethod;
+        }
+
+        /// <summary>
+        /// Resolves a given <paramref name="methodInfo"/> to the <see cref="MethodInfo"/> representing the actual implementation.
+        /// </summary>
+        /// <remarks>
+        /// see article <a href="http://weblog.ikvm.net/CommentView.aspx?guid=7356a87f-e5d7-4723-ae49-b263ab9e40ae">How To Get an Explicit Interface Implementation Method</a>.
+        /// </remarks>
+        /// <param name="methodInfo">a <see cref="MethodInfo"/></param>
+        /// <param name="implementingType">the type to lookup</param>
+        /// <returns>the <see cref="MethodInfo"/> representing the actual implementation method of the specified <paramref name="methodInfo"/></returns>
+        public static MethodInfo MapInterfaceMethodToImplementationIfNecessary( MethodInfo methodInfo, System.Type implementingType )
+        {
+            AssertUtils.ArgumentNotNull(methodInfo, "methodInfo");
+            AssertUtils.ArgumentNotNull(implementingType, "implementingType");
+            AssertUtils.IsTrue(methodInfo.DeclaringType.IsAssignableFrom(implementingType), "methodInfo and implementingType are unrelated");
+
+            MethodInfo concreteMethodInfo = methodInfo;
+
+            if (methodInfo.DeclaringType.IsInterface)
+            {
+                InterfaceMapping interfaceMapping = implementingType.GetInterfaceMap( methodInfo.DeclaringType );
+                int methodIndex = Array.IndexOf( interfaceMapping.InterfaceMethods, methodInfo );
+                concreteMethodInfo = interfaceMapping.TargetMethods[methodIndex];
+            }
+
+            return concreteMethodInfo;
         }
 
         /// <summary>
