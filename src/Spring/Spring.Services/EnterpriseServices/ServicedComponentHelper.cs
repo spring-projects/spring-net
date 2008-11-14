@@ -18,17 +18,16 @@
 
 #endregion
 
+#if (!NET_1_0 && !MONO)
+
 #region Imports
 
 using System;
-using System.Configuration;
 using System.EnterpriseServices;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using Spring.Context;
 using Spring.Context.Support;
-using Spring.Reflection.Dynamic;
 using ConfigXmlDocument = Spring.Util.ConfigXmlDocument;
 
 #endregion
@@ -36,7 +35,8 @@ using ConfigXmlDocument = Spring.Util.ConfigXmlDocument;
 namespace Spring.EnterpriseServices
 {
     /// <summary>
-    /// 
+    /// This class supports <see cref="ServicedComponent"/>s exported using <see cref="EnterpriseServicesExporter"/>.
+    /// and must never be used directly.
     /// </summary>
     /// <author>Erich Eichinger</author>
     public class ServicedComponentHelper
@@ -50,8 +50,9 @@ namespace Spring.EnterpriseServices
         }
 
         ///<summary>
+        /// Reads in the 'xxx.spring-context.xml' configuration file associated with the specified <paramref name="component"/>.
+        /// See <see cref="EnterpriseServicesExporter"/> for an in-depth description on how to export and configure COM+ components.
         ///</summary>
-        ///<param name="component"></param>
         private static void EnsureComponentContextRegistryInitialized(ServicedComponent component)
         {
             if (isInitialized) return;
@@ -61,10 +62,14 @@ namespace Spring.EnterpriseServices
                 if (isInitialized) return;
                 isInitialized = true;
 
+                // this is to ensure, that assemblies place next to the component assembly can be loaded
+                // even when they are not strong named.
                 AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
                 FileInfo componentAssemblyFile = new FileInfo(component.GetType().Assembly.Location);
                 componentDirectory = componentAssemblyFile.Directory.FullName;
+                // switch to component assembly's directory (affects resolving relative paths during context instantiation!)
                 Environment.CurrentDirectory = componentDirectory;
+                // read in config file
                 ConfigXmlDocument configDoc = new ConfigXmlDocument();
                 FileInfo configFile = new FileInfo(componentAssemblyFile.FullName + ".spring-context.xml");
                 if (configFile.Exists)
@@ -74,6 +79,10 @@ namespace Spring.EnterpriseServices
                     ServicedComponentContextHandler handler = new ServicedComponentContextHandler();
                     lock (ContextRegistry.SyncRoot)
                     {
+                        // it might accidentially have happend, that the contextregistry has already 
+                        // been initialized using the client application's app.config configuration.
+                        // Most of the time this doesn't make sense to read a configuration from a 
+                        // different AppDomain, thus we read in our own config file.
                         ContextRegistry.Clear();
                         handler.Create(null, null, configNode);
                     }
@@ -81,7 +90,7 @@ namespace Spring.EnterpriseServices
             }
         }
 
-        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             string name = args.Name.Split(',')[0];
             Assembly assembly = Assembly.LoadFrom(Path.Combine(componentDirectory, name + ".dll"));
@@ -89,16 +98,15 @@ namespace Spring.EnterpriseServices
         }
 
         ///<summary>
+        /// Called by a <see cref="ServicedComponent"/> exported by <see cref="EnterpriseServicesExporter"/> 
+        /// to obtain a reference to the service it proxies.
         ///</summary>
-        ///<param name="sender"></param>
-        ///<param name="targetName"></param>
-        ///<returns></returns>
         public static object GetObject(ServicedComponent sender, string targetName)
         {
             EnsureComponentContextRegistryInitialized(sender);
             return ContextRegistry.GetContext().GetObject(targetName);
-            //            return null;
         }
-
     }
 }
+
+#endif

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2007 the original author or authors.
+ * Copyright 2002-2008 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,13 +40,16 @@ namespace Spring.EnterpriseServices
     /// wrapper around target class.
     /// </summary>
     /// <remarks>
-    /// <p>
+    /// <para>
     /// Instances of this class should be used as elements in the Components
     /// list of the <see cref="EnterpriseServicesExporter"/> class, which will
-    /// register them with COM+ Services.
-    /// </p>
+    /// register them with COM+ Services. For a full description on how to export 
+    /// and use services with COM+, see the <see cref="EnterpriseServicesExporter"/> reference.
+    /// </para>
     /// </remarks>
+    /// <seealso cref="EnterpriseServicesExporter"/>
     /// <author>Aleksandar Seovic</author>
+    /// <author>Erich Eichinger</author>
     public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
     {
         #region Fields
