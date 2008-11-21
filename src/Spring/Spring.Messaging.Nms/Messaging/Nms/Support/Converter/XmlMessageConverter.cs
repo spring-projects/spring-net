@@ -89,7 +89,6 @@ namespace Spring.Messaging.Nms.Support.Converter
             } finally
             {
                 if (memoryStream != null) memoryStream.Close();
-                if (xmlTextWriter != null) xmlTextWriter.Close();
             }
             return xmlString;
         }
