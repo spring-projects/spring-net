@@ -101,6 +101,7 @@ namespace Spring.Reflection.Dynamic
         #endregion
 
         private readonly FunctionDelegate method;
+        private readonly object[] nullArguments;
 
         /// <summary>
         /// Creates a new instance of the safe method wrapper.
@@ -112,6 +113,7 @@ namespace Spring.Reflection.Dynamic
 
             this.methodInfo = methodInfo;
             this.method = GetOrCreateDynamicMethod(methodInfo);
+            this.nullArguments = new object[methodInfo.GetParameters().Length];
         }
 
         /// <summary>
@@ -126,8 +128,15 @@ namespace Spring.Reflection.Dynamic
         /// <returns>
         /// A method return value.
         /// </returns>
-        public object Invoke(object target, object[] arguments)
+        public object Invoke(object target, params object[] arguments)
         {
+            // special case - when calling Invoke(null,null) it is undecidible if the second null is an argument or the argument array
+            if (arguments==null && nullArguments.Length==1) arguments=nullArguments;
+            AssertUtils.IsTrue(
+                nullArguments.Length == (arguments==null?0:arguments.Length)
+                , string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arguments.Length)
+            );
+
             return this.method(target, arguments);
         }
 #else

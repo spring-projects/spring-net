@@ -108,6 +108,37 @@ namespace Spring.Reflection.Dynamic
             Assert.IsFalse((bool) isNullOrEmpty.Invoke(null, new object[] { "Ana Maria" }));
         }
 
+#if NET_2_0
+        [Test]
+        public void PassNullableArguments()
+        {
+            IDynamicMethod dm = DynamicMethod.Create(typeof(TestMethods).GetMethod("PassNullableArgumentStatic"));
+            DateTime dt = DateTime.Now;
+
+            Assert.AreEqual(dt, dm.Invoke(null, dt));
+        }
+#endif
+        [Test]
+        public void PassInvalidNumberOfArguments()
+        { 
+            IDynamicMethod dm = DynamicMethod.Create(typeof(TestMethods).GetMethod("PassNullableArgumentStatic"));
+            DateTime dt = DateTime.Now;
+
+            Assert.IsNull(dm.Invoke(null, null)); // this is ok
+            try
+            {
+                dm.Invoke( null ); // this is not ok 
+                Assert.Fail();
+            }
+            catch (ArgumentException) { }
+            try
+            {
+                dm.Invoke( null, null, null ); // this is not ok 
+                Assert.Fail();
+            }
+            catch (ArgumentException) { }
+        }
+
         [Test]
         public void TestArgumentTypeCasts()
         {
@@ -225,7 +256,29 @@ namespace Spring.Reflection.Dynamic
         }
 
         #endregion
-	    
+
+        #region Helper Classes
+
+#if NET_2_0
+        class TestMethods
+        {
+            public static object Invoke( object target, object[] args )
+            { 
+                return PassNullableArgumentStatic( (DateTime?)(args[0]) );
+            }
+
+            public DateTime? PassNullableArgument( DateTime? arg )
+            { 
+                return PassNullableArgumentStatic( arg );
+            }
+
+            public static DateTime? PassNullableArgumentStatic( DateTime? arg )
+            { 
+                return arg;
+            }
+        }
+#endif
+        #endregion
     }
 
     #region IL generation helper classes (they help if you look at them in Reflector ;-)

@@ -57,6 +57,18 @@ namespace Spring.Util
                                                                    | BindingFlags.IgnoreCase;
 
         /// <summary>
+        /// Checks, if the specified type is a nullable
+        /// </summary>
+        public static bool IsNullableType( Type type )
+        {
+#if NET_2_0
+            return (type.IsGenericType && type.GetGenericTypeDefinition()==typeof(Nullable<>));
+#else
+            return false;
+#endif
+        }
+
+        /// <summary>
         /// Returns signature for the specified <see cref="System.Type"/>, method name and argument
         /// <see cref="System.Type"/>s.
         /// </summary>

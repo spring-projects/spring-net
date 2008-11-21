@@ -698,14 +698,22 @@ namespace Spring.Reflection.Dynamic
         /// </remarks>
         public static object ConvertValueTypeArgumentIfNecessary( object value, Type targetType, int argIndex )
         {
-            // targetType is guaranteed to be a ValueType!
             if (value == null)
             {
+                if (ReflectionUtils.IsNullableType(targetType))
+                {
+                    return null;
+                }
                 throw new InvalidCastException( string.Format( "Cannot convert NULL at position {0} to argument type {1}", argIndex, targetType.FullName ) );
             }
 
             Type valueType = value.GetType();
-
+#if NET_2_0
+            if (ReflectionUtils.IsNullableType( targetType ))
+            {
+                targetType = Nullable.GetUnderlyingType(targetType);
+            }
+#endif
             // no conversion necessary?
             if (valueType == targetType)
             {
