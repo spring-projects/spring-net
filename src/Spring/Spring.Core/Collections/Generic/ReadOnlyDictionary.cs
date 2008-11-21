@@ -136,8 +136,8 @@ namespace Spring.Collections.Generic
         }
 
         /// <summary>
-        /// Gets the <see cref="TValue"/> with the specified key. Set
-        /// will throw an exception
+        /// Gets the value with the specified key. 
+        /// Set will throw an exception
         /// </summary>
         public TValue this[TKey key]
         {

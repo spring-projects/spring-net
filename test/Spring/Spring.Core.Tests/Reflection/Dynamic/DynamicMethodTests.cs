@@ -121,7 +121,7 @@ namespace Spring.Reflection.Dynamic
         [Test]
         public void PassInvalidNumberOfArguments()
         { 
-            IDynamicMethod dm = DynamicMethod.Create(typeof(TestMethods).GetMethod("PassNullableArgumentStatic"));
+            IDynamicMethod dm = DynamicMethod.Create(typeof(TestMethods).GetMethod("PassReferenceArgumentStatic"));
             DateTime dt = DateTime.Now;
 
             Assert.IsNull(dm.Invoke(null, null)); // this is ok
@@ -259,9 +259,13 @@ namespace Spring.Reflection.Dynamic
 
         #region Helper Classes
 
-#if NET_2_0
-        class TestMethods
+        public class TestMethods
         {
+            public static object PassReferenceArgumentStatic( object arg )
+            { 
+                return arg;
+            }
+#if NET_2_0
             public static object Invoke( object target, object[] args )
             { 
                 return PassNullableArgumentStatic( (DateTime?)(args[0]) );
@@ -276,8 +280,8 @@ namespace Spring.Reflection.Dynamic
             { 
                 return arg;
             }
-        }
 #endif
+        }
         #endregion
     }
 

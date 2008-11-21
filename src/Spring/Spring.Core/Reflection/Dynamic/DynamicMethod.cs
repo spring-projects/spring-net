@@ -132,9 +132,10 @@ namespace Spring.Reflection.Dynamic
         {
             // special case - when calling Invoke(null,null) it is undecidible if the second null is an argument or the argument array
             if (arguments==null && nullArguments.Length==1) arguments=nullArguments;
+            int arglen = (arguments==null?0:arguments.Length);
             AssertUtils.IsTrue(
-                nullArguments.Length == (arguments==null?0:arguments.Length)
-                , string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arguments.Length)
+                nullArguments.Length == arglen
+                , string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arglen)
             );
 
             return this.method(target, arguments);
@@ -233,6 +234,33 @@ namespace Spring.Reflection.Dynamic
     /// <author>Aleksandar Seovic</author>
     public class DynamicMethod : BaseDynamicMember
     {
+        private class DynamicMethodImpl : IDynamicMethod
+        {
+            private readonly object[] nullArguments;
+            private readonly MethodInfo methodInfo;
+            private readonly IDynamicMethod method;
+
+            public DynamicMethodImpl(MethodInfo methodInfo, IDynamicMethod generatedMethod)
+            {
+                this.nullArguments = new object[methodInfo.GetParameters().Length];
+                this.methodInfo = methodInfo;
+                this.method = generatedMethod;
+            }
+
+            public object Invoke(object target, params object[] arguments)
+            {
+                // special case - when calling Invoke(null,null) it is undecidible if the second null is an argument or the argument array
+                if (arguments==null && nullArguments.Length==1) arguments=nullArguments;
+                int arglen = (arguments==null?0:arguments.Length);
+                AssertUtils.IsTrue(
+                    nullArguments.Length == arglen
+                    , string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arglen)
+                );
+
+                return this.method.Invoke(target, arguments);                
+            }
+        }
+
         private static readonly CreateMethodCallback s_createMethodCallback = new CreateMethodCallback(CreateInternal);
 
         #region Create Method
@@ -247,7 +275,7 @@ namespace Spring.Reflection.Dynamic
             AssertUtils.ArgumentNotNull(method, "You cannot create a dynamic method for a null value.");
 
             IDynamicMethod dynamicMethod = DynamicReflectionManager.GetDynamicMethod(method, s_createMethodCallback);
-            return dynamicMethod;
+            return new DynamicMethodImpl(method, dynamicMethod);
         }
 
         private static IDynamicMethod CreateInternal(MethodInfo method)
