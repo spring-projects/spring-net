@@ -80,7 +80,8 @@ namespace Spring.Context.Support
         private static CacheItemRemovedCallback s_originalCallback;
 #if NET_2_0
         // required to enable accessing HttpContext.Request during IHttpModule.Init() in integrated mode
-        private static readonly SafeField ContextHideRequestResponse = new SafeField(typeof(HttpContext).GetField("HideRequestResponse", BindingFlags.Instance|BindingFlags.NonPublic));
+        private static readonly FieldInfo fiHideRequestResponse = typeof(HttpContext).GetField("HideRequestResponse", BindingFlags.Instance|BindingFlags.NonPublic);
+        private static readonly SafeField ContextHideRequestResponse = (fiHideRequestResponse!=null)?new SafeField(fiHideRequestResponse):null;
 #endif
 
         /// <summary>
@@ -152,15 +153,15 @@ namespace Spring.Context.Support
             // TODO: this is only a workaround to get us up & running in IIS7/integrated mode
             // We must review all code for relative virtual paths - they must be resolved to application-relative paths
             // during parsing of the object definitions
-            bool hideRequestResponse = (bool) ContextHideRequestResponse.GetValue(app.Context);
-            ContextHideRequestResponse.SetValue(app.Context, false);
+            bool hideRequestResponse = (ContextHideRequestResponse!=null)? (bool) ContextHideRequestResponse.GetValue(app.Context) : false;
+            if (ContextHideRequestResponse!=null) ContextHideRequestResponse.SetValue(app.Context, false);
             try
             {
                 HttpApplicationConfigurer.Configure(appContext, app);
             }
             finally
             {
-                ContextHideRequestResponse.SetValue(app.Context, hideRequestResponse);
+                if (ContextHideRequestResponse!=null) ContextHideRequestResponse.SetValue(app.Context, hideRequestResponse);
             }
 #else
             HttpApplicationConfigurer.Configure(appContext, app);
