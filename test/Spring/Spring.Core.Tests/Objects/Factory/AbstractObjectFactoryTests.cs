@@ -80,7 +80,13 @@ namespace Spring.Objects.Factory
 
 		protected internal abstract AbstractObjectFactory CreateObjectFactory(bool caseSensitive);
 
-        protected AbstractObjectFactory ObjectFactory { get { return CreateObjectFactory(true); } }
+	    private AbstractObjectFactory cachedFactory;
+
+	    protected AbstractObjectFactory ObjectFactory
+	    {
+	        get { return cachedFactory; }
+            set { cachedFactory = value; }
+	    }
         
         #endregion
 
@@ -447,6 +453,23 @@ namespace Spring.Objects.Factory
 			((AbstractObjectFactory) ObjectFactory)
 				.RegisterSingleton(null, DBNull.Value);
 		}
+
+        [Test]
+        public void GetSingletonNamesReflectsOrderOfRegistration()
+        {
+            AbstractObjectFactory of;
+            of = CreateObjectFactory(true);
+            of.RegisterSingleton("A", new object());
+            of.RegisterSingleton("C", new object());
+            of.RegisterSingleton("B", new object());
+            Assert.AreEqual(new string[] { "A", "C", "B"}, of.GetSingletonNames());
+
+            of = CreateObjectFactory(false);
+            of.RegisterSingleton("A", new object());
+            of.RegisterSingleton("C", new object());
+            of.RegisterSingleton("B", new object());
+            Assert.AreEqual(new string[] { "A", "C", "B"}, of.GetSingletonNames(typeof(object)));
+        }
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]

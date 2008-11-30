@@ -71,13 +71,11 @@ namespace Spring.Objects.Factory.Xml
 
 		protected internal override AbstractObjectFactory CreateObjectFactory(bool caseSensitive)
 		{
-			return (caseSensitive) 
-                ? factory 
-                : new DefaultListableObjectFactory(caseSensitive);
+            return new DefaultListableObjectFactory(caseSensitive);
 		}
 
 		private DefaultListableObjectFactory parent;
-		private XmlObjectFactory factory;
+//		private XmlObjectFactory factory;
 
 		#region Test SetUp
 
@@ -100,14 +98,16 @@ namespace Spring.Objects.Factory.Xml
 			UnsupportedObjectDefinitionImplementation unsupportedDefinition = new UnsupportedObjectDefinitionImplementation();
 			parent.RegisterObjectDefinition("unsupportedDefinition", unsupportedDefinition);
 
-			this.factory = new XmlObjectFactory(new ReadOnlyXmlTestResource("test.xml", GetType()), parent);
+		    XmlObjectFactory factory;
+			factory = new XmlObjectFactory(new ReadOnlyXmlTestResource("test.xml", GetType()), parent);
             
             // TODO: should this be allowed?
             //this.factory.RegisterObjectDefinition("typedfather", new RootObjectDefinition(typeof(object), false));
-			this.factory.AddObjectPostProcessor(new AnonymousClassObjectPostProcessor());
-			this.factory.AddObjectPostProcessor(new LifecycleObject.PostProcessor());
+			factory.AddObjectPostProcessor(new AnonymousClassObjectPostProcessor());
+			factory.AddObjectPostProcessor(new LifecycleObject.PostProcessor());
 
-			this.factory.PreInstantiateSingletons();
+			factory.PreInstantiateSingletons();
+		    base.ObjectFactory = factory;
 		}
 
 		#endregion
@@ -166,7 +166,7 @@ namespace Spring.Objects.Factory.Xml
 		[Test]
 		public virtual void CountSingletons()
 		{
-			Assert.AreEqual(10, factory.GetSingletonCount(), "Number of singletons incorrect");
+			Assert.AreEqual(10, ObjectFactory.GetSingletonCount(), "Number of singletons incorrect");
 		}
 	}
 }

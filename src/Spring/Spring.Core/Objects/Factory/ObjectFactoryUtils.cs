@@ -122,22 +122,19 @@ namespace Spring.Objects.Factory
 		/// <returns>The array of object names, or an empty array if none.</returns>
 		public static string[] ObjectNamesIncludingAncestors(IListableObjectFactory factory)
 		{
-			Set result = new HashedSet();
-			result.AddAll(factory.GetObjectDefinitionNames());
+            ArrayList result = new ArrayList();
+            result.AddRange(factory.GetObjectDefinitionNames());
 			IListableObjectFactory pof = GetParentFactoryIfAny(factory);
 			if (pof != null)
 			{
 				string[] parentsResult = ObjectNamesIncludingAncestors(pof);
-				result.AddAll(parentsResult);
+			    foreach (string s in parentsResult)
+			    {
+                    if (!result.Contains(s)) result.Add(s);
+			    }
 			}
-			return ToArrayOfObjectNames(result);
-		}
-
-		private static string[] ToArrayOfObjectNames(Set result)
-		{
-			Array resultArray = Array.CreateInstance(typeof (string), result.Count);
-			result.CopyTo(resultArray, 0);
-			return (string[]) resultArray;
+			//return ToArrayOfObjectNames(result);
+		    return (string[]) result.ToArray(typeof (string));
 		}
 
 		/// <summary>
@@ -179,15 +176,21 @@ namespace Spring.Objects.Factory
 			IListableObjectFactory factory, Type type,
             bool includePrototypes, bool includeFactoryObjects)
 		{
-			Set result = new HashedSet();
-			result.AddAll(factory.GetObjectNamesForType(type, includePrototypes, includeFactoryObjects));
+			ArrayList result = new ArrayList();
+			result.AddRange(factory.GetObjectNamesForType(type, includePrototypes, includeFactoryObjects));
 			IListableObjectFactory pof = GetParentFactoryIfAny(factory);
 			if (pof != null)
 			{
                 string[] parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type, includePrototypes, includeFactoryObjects);
-				result.AddAll(parentsResult);
+				foreach(string s in parentsResult)
+				{
+				    if (!result.Contains(s))
+				    {
+				        result.Add(s);
+				    }
+				}
 			}
-			return ToArrayOfObjectNames(result);
+		    return (string[]) result.ToArray(typeof (string));
 		}
 
         /// <summary>
@@ -221,15 +224,21 @@ namespace Spring.Objects.Factory
         public static string[] ObjectNamesForTypeIncludingAncestors(
             IListableObjectFactory factory, Type type)
         {
-            Set result = new HashedSet();
-            result.AddAll(factory.GetObjectNamesForType(type));
+            ArrayList result = new ArrayList();
+            result.AddRange(factory.GetObjectNamesForType(type));
             IListableObjectFactory pof = GetParentFactoryIfAny(factory);
             if (pof != null)
             {
                 string[] parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type);
-                result.AddAll(parentsResult);
+                foreach(string s in parentsResult)
+                {
+                    if (!result.Contains(s))
+                    {
+                        result.Add(s);
+                    }
+                }
             }
-            return ToArrayOfObjectNames(result);
+            return (string[]) result.ToArray(typeof (string));
         }
 
 		private static IListableObjectFactory GetParentFactoryIfAny(IListableObjectFactory factory)

@@ -23,6 +23,7 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
@@ -74,8 +75,28 @@ namespace Spring.Objects.Factory
 			Assert.AreEqual(6, names.Count);
 		}
 
+        [Test]
+        public void ObjectNamesIncludingAncestorsPreserveOrderOfRegistration()
+        {            
+            MockRepository mocks = new MockRepository();
+            IConfigurableListableObjectFactory of = (IConfigurableListableObjectFactory) mocks.DynamicMock(typeof (IConfigurableListableObjectFactory));
+            IConfigurableListableObjectFactory ofParent = (IConfigurableListableObjectFactory) mocks.DynamicMock(typeof (IConfigurableListableObjectFactory));
+            
+            using(mocks.Record())
+            {
+                Expect.Call(of.GetObjectDefinitionNames()).Return(new string[] { "objA", "objB", "objC" });
+                Expect.Call(((IHierarchicalObjectFactory)of).ParentObjectFactory).Return(ofParent);
+                Expect.Call(ofParent.GetObjectDefinitionNames()).Return(new string[] { "obj2A", "objB", "obj2C" });                
+            }
+          
+            string[] names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(of);
+            Assert.AreEqual(5, names.Length);
+            Assert.AreEqual(new string[] { "objA","objB","objC","obj2A","obj2C" }, names);
+            mocks.ReplayAll();
+        }
+
 		[Test]
-		public void ObjectNamesForType()
+        public void ObjectNamesForTypeIncludingAncestors()
 		{
 			IList names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, typeof (ITestObject));
 			// includes 2 TestObjects from IFactoryObjects (DummyFactory definitions)
@@ -85,6 +106,48 @@ namespace Spring.Objects.Factory
 			Assert.IsTrue(names.Contains("testFactory1"));
 			Assert.IsTrue(names.Contains("testFactory2"));
 		}
+
+        [Test]
+        public void ObjectNamesForTypeIncludingAncestorsPreserveOrderOfRegistration()
+        {
+            MockRepository mocks = new MockRepository();
+            IConfigurableListableObjectFactory of = (IConfigurableListableObjectFactory)mocks.DynamicMock(typeof(IConfigurableListableObjectFactory));
+            IConfigurableListableObjectFactory ofParent = (IConfigurableListableObjectFactory)mocks.DynamicMock(typeof(IConfigurableListableObjectFactory));
+            Type EXPECTEDTYPE = typeof (ITestObject);
+
+            using (mocks.Record())
+            {
+                Expect.Call(of.GetObjectNamesForType(EXPECTEDTYPE)).Return(new string[] { "objA", "objB", "objC" });
+                Expect.Call(((IHierarchicalObjectFactory)of).ParentObjectFactory).Return(ofParent);
+                Expect.Call(ofParent.GetObjectNamesForType(EXPECTEDTYPE)).Return(new string[] { "obj2A", "objB", "obj2C" });
+            }
+
+            string[] names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(of, EXPECTEDTYPE);
+            Assert.AreEqual(5, names.Length);
+            Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
+            mocks.ReplayAll();
+        }
+
+        [Test]
+        public void ObjectNamesForTypeIncludingAncestorsPrototypesAndFactoryObjectsPreserveOrderOfRegistration()
+        {
+            MockRepository mocks = new MockRepository();
+            IConfigurableListableObjectFactory of = (IConfigurableListableObjectFactory)mocks.DynamicMock(typeof(IConfigurableListableObjectFactory));
+            IConfigurableListableObjectFactory ofParent = (IConfigurableListableObjectFactory)mocks.DynamicMock(typeof(IConfigurableListableObjectFactory));
+            Type EXPECTEDTYPE = typeof(ITestObject);
+
+            using (mocks.Record())
+            {
+                Expect.Call(of.GetObjectNamesForType(EXPECTEDTYPE, false, false)).Return(new string[] { "objA", "objB", "objC" });
+                Expect.Call(((IHierarchicalObjectFactory)of).ParentObjectFactory).Return(ofParent);
+                Expect.Call(ofParent.GetObjectNamesForType(EXPECTEDTYPE, false, false)).Return(new string[] { "obj2A", "objB", "obj2C" });
+            }
+
+            string[] names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(of, EXPECTEDTYPE, false, false);
+            Assert.AreEqual(5, names.Length);
+            Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
+            mocks.ReplayAll();
+        }
 
 		[Test]
 		public void CountObjectsIncludingAncestorsWithNonHierarchicalFactory()

@@ -140,6 +140,7 @@ namespace Spring.Objects.Factory.Support
         {
             this.log = LogManager.GetLogger( this.GetType() );
             this.caseSensitive = caseSensitive;
+#if NET_1_0 || NET_1_1
             if (caseSensitive)
             {
                 this.aliasMap = new Hashtable();
@@ -152,6 +153,12 @@ namespace Spring.Objects.Factory.Support
                 this.singletonCache = new CaseInsensitiveHashtable();
                 this.singletonsInCreation = new CaseInsensitiveHashtable();
             }
+#else
+            IEqualityComparer comparer = (caseSensitive) ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
+            this.aliasMap = new OrderedDictionary(comparer);
+            this.singletonCache = new OrderedDictionary(comparer);
+            this.singletonsInCreation = new OrderedDictionary(comparer);
+#endif
         }
 
         /// <summary>
@@ -1253,7 +1260,8 @@ namespace Spring.Objects.Factory.Support
         {
             lock (singletonCache)
             {
-                return (string[])new ArrayList( singletonCache.Keys ).ToArray( typeof( string ) );
+                ICollection keys = singletonCache.Keys;
+                return (string[])new ArrayList( keys ).ToArray( typeof( string ) );
             }
         }
 
