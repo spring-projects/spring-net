@@ -13,6 +13,8 @@ namespace Spring.Testing.NUnit
 	{
         private class TestAbstractDependencyInjectionSpringContextTests :AbstractDependencyInjectionSpringContextTests
         {
+            public static readonly string[] CONFIGLOCATIONS = new string[] {"assembly://Spring.Testing.NUnit.Tests/Spring.Testing.NUnit/TestApplicationContext.xml"};
+
             public TestAbstractDependencyInjectionSpringContextTests()
             {}
 
@@ -28,8 +30,13 @@ namespace Spring.Testing.NUnit
 
             protected override string[] ConfigLocations
             {
-                get { return new string[] {"assembly://Spring.Testing.NUnit.Tests/Spring.Testing.NUnit/TestApplicationContext.xml"}; }
+                get { return CONFIGLOCATIONS; }
             }
+
+            public new bool HasContextCached(object key)
+            {
+                return base.HasCachedContext(key);
+            }            
         }
 
         private TestAbstractDependencyInjectionSpringContextTests fixtureInstance ;
@@ -41,14 +48,26 @@ namespace Spring.Testing.NUnit
         }
 
 	    [Test]
-        public void RegistersAndUnregistersWithContextRegistryByDefault()
+        public void RegistersWithContextRegistryByDefault()
+	    {
+	        fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
+            Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
+	    }
+
+	    [Test]
+        public void UnregistersFromContextRegistryWhenDirty()
 	    {
 	        fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
             Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
             fixtureInstance.SetUp();
             Assert.IsTrue( ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name) );
             fixtureInstance.TearDown();
-            Assert.IsFalse( ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name) );
+            Assert.IsTrue(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
+            fixtureInstance.SetUp();
+            Assert.IsTrue(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
+            fixtureInstance.SetDirty();
+            fixtureInstance.TearDown();
+            Assert.IsFalse(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
 	    }
 
 	    [Test]
@@ -63,7 +82,6 @@ namespace Spring.Testing.NUnit
             Assert.IsFalse( ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name) );
 	    }
 
-
         [Test]
         public void CachesApplicationContexts()
         {
@@ -71,6 +89,7 @@ namespace Spring.Testing.NUnit
             fixtureInstance.SetUp();            
             Assert.IsNotNull(fixtureInstance.ApplicationContext);
             Assert.AreEqual(1, fixtureInstance.LoadCount); // context has been loaded
+            Assert.IsTrue(fixtureInstance.HasContextCached(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
             fixtureInstance.TearDown();
             
             TestAbstractDependencyInjectionSpringContextTests otherFixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
@@ -78,9 +97,10 @@ namespace Spring.Testing.NUnit
             Assert.IsNotNull(otherFixtureInstance.ApplicationContext);
             Assert.AreEqual(0, otherFixtureInstance.LoadCount); // context was obtained from cache
             Assert.AreSame(fixtureInstance.ApplicationContext, otherFixtureInstance.ApplicationContext);
-            otherFixtureInstance.SetDirty(); // dispose
+            otherFixtureInstance.SetDirty(); // purge cache and dispose cached instances
+            Assert.IsFalse(fixtureInstance.HasContextCached(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
             otherFixtureInstance.TearDown();
-            
+           
             otherFixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
             otherFixtureInstance.SetUp();            
             Assert.IsNotNull(otherFixtureInstance.ApplicationContext);

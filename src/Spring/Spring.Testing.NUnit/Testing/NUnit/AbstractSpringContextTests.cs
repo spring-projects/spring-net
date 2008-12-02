@@ -66,6 +66,11 @@ namespace Spring.Testing.NUnit
         }
 
         /// <summary>
+        /// Indicates, whether context instances should be automatically registered with the global <see cref="ContextRegistry"/>.
+        /// </summary>
+        private bool registerContextWithContextRegistry = true;
+
+        /// <summary>
         /// Logger available to subclasses.
         /// </summary>
         protected readonly ILog logger;
@@ -76,6 +81,17 @@ namespace Spring.Testing.NUnit
 	    protected AbstractSpringContextTests()
         {
             logger = LogManager.GetLogger(GetType());
+        }
+
+        /// <summary>
+        /// Controls, whether application context instances will
+        /// be registered/unregistered with the global <see cref="ContextRegistry"/>.
+        /// Defaults to <c>true</c>.
+        /// </summary>
+        public bool RegisterContextWithContextRegistry
+        {
+            get { return registerContextWithContextRegistry; }
+            set { registerContextWithContextRegistry = value; }
         }
 
         /// <summary>
@@ -112,7 +128,8 @@ namespace Spring.Testing.NUnit
         /// </returns>
 	    protected bool HasCachedContext(object contextKey) 
         {
-		    return contextKeyToContextMap.Contains(contextKey);
+            string keyString = ContextKeyString(contextKey);
+            return contextKeyToContextMap.Contains(keyString);
 	    }
 
         /// <summary>
@@ -151,7 +168,14 @@ namespace Spring.Testing.NUnit
 	    public void AddContext(object key, IConfigurableApplicationContext context) 
         {
             AssertUtils.ArgumentNotNull(context, "context", "ApplicationContext must not be null");
-		    contextKeyToContextMap[ContextKeyString(key)] = context;
+            string keyString = ContextKeyString(key);
+            contextKeyToContextMap.Add(keyString, context);
+
+            if (RegisterContextWithContextRegistry
+                && !ContextRegistry.IsContextRegistered(context.Name))
+            {
+                ContextRegistry.RegisterContext(context);
+            }
 	    }
 
         /// <summary>
@@ -174,7 +198,7 @@ namespace Spring.Testing.NUnit
                 {
 				    ctx = LoadContext(key);
 			    }
-			    contextKeyToContextMap[keyString] = ctx;
+			    AddContext(key, ctx);
 		    }
 		    return ctx;
 	    }
