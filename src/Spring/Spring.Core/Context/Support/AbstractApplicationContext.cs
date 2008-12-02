@@ -227,6 +227,8 @@ namespace Spring.Context.Support
         /// </summary>
         public virtual void Dispose()
         {
+            GC.SuppressFinalize(this);
+
             #region Instrumentation
 
             if (log.IsDebugEnabled)
@@ -239,6 +241,7 @@ namespace Spring.Context.Support
 
             #endregion
 
+            // TODO: any reason, why Closed event is raised before destroying objectfactory?
             new DefensiveEventRaiser().Raise(
                 ContextEvent, this,
                 new ContextEventArgs(ContextEventArgs.ContextEvent.Closed));

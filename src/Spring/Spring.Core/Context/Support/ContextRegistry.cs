@@ -16,7 +16,7 @@
  * limitations under the License. 
  */
 
-#endregion 
+#endregion
 
 #region Imports
 
@@ -25,7 +25,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Configuration;
 using Common.Logging;
-
+using Spring.Context.Events;
 using Spring.Util;
 
 #endregion
@@ -77,21 +77,21 @@ namespace Spring.Context.Support
         /// </p>
         /// </remarks>
         static ContextRegistry()
-        {}
+        { }
 
         // CLOVER:ON
 
         #endregion
 
         /// <summary>
-		/// This event is fired, if ContextRegistry.Clear() is called.<br/>
-		/// Clients may register to get informed
-		/// </summary>
-		/// <remarks>
-		/// This event is fired while still holding a lock on the Registry.<br/>
-		/// 'sender' parameter is sent as typeof(ContextRegistry), EventArgs are not used
-		/// </remarks>
-		public static event EventHandler Cleared;
+        /// This event is fired, if ContextRegistry.Clear() is called.<br/>
+        /// Clients may register to get informed
+        /// </summary>
+        /// <remarks>
+        /// This event is fired while still holding a lock on the Registry.<br/>
+        /// 'sender' parameter is sent as typeof(ContextRegistry), EventArgs are not used
+        /// </remarks>
+        public static event EventHandler Cleared;
 
         /// <summary>
         /// Gets an object that should be used to synchronize access to ContextRegistry
@@ -129,6 +129,7 @@ namespace Spring.Context.Support
                                       ctx, context.Name));
                 }
                 instance.contextMap[context.Name] = context;
+                context.ContextEvent += new ApplicationEventHandler(OnContextEvent);
 
                 #region Instrumentation
 
@@ -143,6 +144,46 @@ namespace Spring.Context.Support
                 if (rootContextName == null)
                 {
                     rootContextName = context.Name;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles events raised by an application context.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void OnContextEvent(object sender, ApplicationEventArgs e)
+        {
+            ContextEventArgs cea = e as ContextEventArgs;
+            if (cea != null
+                && cea.Event == ContextEventArgs.ContextEvent.Closed
+                && sender is IApplicationContext)
+            {
+                // we know the context is registered!
+                UnregisterContext((IApplicationContext)sender);
+            }
+        }
+
+        /// <summary>
+        /// Removes the context from the registry 
+        /// </summary>
+        /// <remarks>
+        /// Has no effect if the context wasn't registered
+        /// </remarks>
+        /// <param name="context">´the context to remove from the registry</param>
+        private static void UnregisterContext(IApplicationContext context)
+        {
+            AssertUtils.ArgumentNotNull(context, "context");
+            lock (syncRoot)
+            {
+                if (IsContextRegistered(context.Name))
+                {
+                    instance.contextMap.Remove(context.Name);
+                    if (rootContextName == context.Name)
+                    {
+                        rootContextName = null;
+                    }
                 }
             }
         }
@@ -203,7 +244,7 @@ namespace Spring.Context.Support
                     if (ctx == null)
                     {
                         throw new ApplicationContextException(String.Format(
-                            "No context registered under name '{0}'. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.", 
+                            "No context registered under name '{0}'. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.",
                             name));
                     }
 
@@ -234,12 +275,32 @@ namespace Spring.Context.Support
         {
             lock (syncRoot)
             {
-                foreach (IApplicationContext ctx in instance.contextMap.Values)
+                ArrayList contexts = new ArrayList(instance.contextMap.Values);
+                foreach (IApplicationContext ctx in contexts)
                 {
                     ctx.Dispose();
                 }
+
+                #region Instrumentation
+
+                // contexts will be removed from contextMap during OnContextEvent handler 
+                // but someone might choose to override AbstractApplicationContext.Dispose() without 
+                // calling base.Dispose() ...
+                if (log.IsWarnEnabled)
+                {
+                    if (instance.contextMap.Count > 0)
+                    {
+                        log.Warn(
+                            String.Format(
+                                "Not all contexts were removed from registry during cleanup - did you forget to call base.Dispose() when overriding AbstractApplicationContext.Dispose()?"));
+                    }
+                }
+
+                #endregion
+
                 instance.contextMap.Clear();
                 rootContextName = null;
+                // mark section dirty - force re-read from disk next time
                 ConfigurationUtils.RefreshSection(AbstractApplicationContext.ContextSectionName);
                 DynamicCodeManager.Clear();
                 if (Cleared != null)
@@ -254,7 +315,7 @@ namespace Spring.Context.Support
         /// </summary>
         /// <param name="name">The context name.</param>
         /// <returns>true, if the context is already registered. false otherwise</returns>
-        public static bool IsContextRegistered( string name )
+        public static bool IsContextRegistered(string name)
         {
             lock (instance)
             {
@@ -270,7 +331,7 @@ namespace Spring.Context.Support
             {
                 if (rootContextCurrentlyInCreation)
                 {
-                    throw new InvalidOperationException("root context is currently in creation. You must not call ContextRegistry.GetContext() from e.g. constructors of your singleton objects");    
+                    throw new InvalidOperationException("root context is currently in creation. You must not call ContextRegistry.GetContext() from e.g. constructors of your singleton objects");
                 }
 
                 rootContextCurrentlyInCreation = true;
@@ -284,6 +345,6 @@ namespace Spring.Context.Support
                 }
             }
         }
-	}
+    }
 }
 

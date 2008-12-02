@@ -229,5 +229,16 @@ namespace Spring.Context.Support
             MockApplicationContext duplicate = new MockApplicationContext("original");
             ContextRegistry.RegisterContext(duplicate);
         }
+
+        [Test]
+        public void RemovesContextFromRegistryWhenContextCloses()
+        {
+            StaticApplicationContext appCtx = new StaticApplicationContext();
+            appCtx.Name = "myCtx";
+            ContextRegistry.RegisterContext(appCtx);
+            Assert.IsTrue(ContextRegistry.IsContextRegistered(appCtx.Name));
+            appCtx.Dispose();
+            Assert.IsFalse(ContextRegistry.IsContextRegistered(appCtx.Name));
+        }
     }
 }
