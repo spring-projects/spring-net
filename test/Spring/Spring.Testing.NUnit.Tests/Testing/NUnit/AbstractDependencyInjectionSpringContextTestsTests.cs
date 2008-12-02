@@ -33,7 +33,7 @@ namespace Spring.Testing.NUnit
                 get { return CONFIGLOCATIONS; }
             }
 
-            public new bool HasContextCached(object key)
+            public new bool HasCachedContext(object key)
             {
                 return base.HasCachedContext(key);
             }            
@@ -89,7 +89,7 @@ namespace Spring.Testing.NUnit
             fixtureInstance.SetUp();            
             Assert.IsNotNull(fixtureInstance.ApplicationContext);
             Assert.AreEqual(1, fixtureInstance.LoadCount); // context has been loaded
-            Assert.IsTrue(fixtureInstance.HasContextCached(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
+            Assert.IsTrue(fixtureInstance.HasCachedContext(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
             fixtureInstance.TearDown();
             
             TestAbstractDependencyInjectionSpringContextTests otherFixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
@@ -98,7 +98,7 @@ namespace Spring.Testing.NUnit
             Assert.AreEqual(0, otherFixtureInstance.LoadCount); // context was obtained from cache
             Assert.AreSame(fixtureInstance.ApplicationContext, otherFixtureInstance.ApplicationContext);
             otherFixtureInstance.SetDirty(); // purge cache and dispose cached instances
-            Assert.IsFalse(fixtureInstance.HasContextCached(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
+            Assert.IsFalse(fixtureInstance.HasCachedContext(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
             otherFixtureInstance.TearDown();
            
             otherFixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
