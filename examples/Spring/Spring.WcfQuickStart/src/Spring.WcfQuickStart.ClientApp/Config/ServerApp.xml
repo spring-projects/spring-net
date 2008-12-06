@@ -6,6 +6,7 @@
           type="Spring.WcfQuickStart.ICalculator, Spring.WcfQuickStart.ClientApp"
           factory-object="serverAppCalculatorChannelFactory"
           factory-method="CreateChannel" />
+  
   <object id="serverAppCalculatorChannelFactory"
           type="System.ServiceModel.ChannelFactory&lt;Spring.WcfQuickStart.ICalculator>, System.ServiceModel">
     <constructor-arg name="endpointConfigurationName" value="serverAppCalculatorEndpoint" />
