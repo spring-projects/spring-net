@@ -291,9 +291,9 @@ namespace Spring.Proxy
         /// <see cref="IProxyTypeBuilder.ProxyTargetAttributes"/>
         protected virtual void ApplyMethodReturnTypeAttributes(MethodBuilder methodBuilder, MethodInfo targetMethod)
         {
+            ParameterBuilder parameterBuilder = methodBuilder.DefineParameter(0, ParameterAttributes.Retval, null);
             foreach (object attr in GetMethodReturnTypeAttributes(targetMethod))
             {
-                ParameterBuilder parameterBuilder = methodBuilder.DefineParameter(0, ParameterAttributes.Retval, null);
                 if (attr is CustomAttributeBuilder)
                 {
                     parameterBuilder.SetCustomAttribute((CustomAttributeBuilder)attr);
@@ -322,10 +322,10 @@ namespace Spring.Proxy
         {
             foreach (ParameterInfo paramInfo in targetMethod.GetParameters())
             {
+                ParameterBuilder parameterBuilder = methodBuilder.DefineParameter(
+                    (paramInfo.Position + 1), paramInfo.Attributes, paramInfo.Name);
                 foreach (object attr in GetMethodParameterAttributes(targetMethod, paramInfo))
                 {
-                    ParameterBuilder parameterBuilder = methodBuilder.DefineParameter(
-                        (paramInfo.Position + 1), paramInfo.Attributes, paramInfo.Name);
                     if (attr is CustomAttributeBuilder)
                     {
                         parameterBuilder.SetCustomAttribute((CustomAttributeBuilder)attr);
