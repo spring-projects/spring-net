@@ -48,8 +48,8 @@ namespace Spring.Scheduling.Quartz
     /// <seealso cref="Trigger.JobName" />
     /// <seealso cref="Trigger.JobGroup" />
 	/// <seealso cref="JobDetail" />
-	/// <seealso cref="SchedulerFactoryObject.Triggers" />
-	/// <seealso cref="SchedulerFactoryObject.JobDetails" />
+	/// <seealso cref="SchedulerAccessor.Triggers" />
+	/// <seealso cref="SchedulerAccessor.JobDetails" />
 	public class CronTriggerObject : CronTrigger, IJobDetailAwareTrigger, IObjectNameAware, IInitializingObject
 	{
 		private JobDetail jobDetail;

@@ -61,6 +61,10 @@ namespace Spring.Scheduling.Quartz
             set { scheduler = value; }
         }
 
+        /// <summary>
+        /// Template method that determines the Scheduler to operate on.
+        /// </summary>
+        /// <returns></returns>
         protected override IScheduler GetScheduler()
         {
             return scheduler;
@@ -75,6 +79,32 @@ namespace Spring.Scheduling.Quartz
         }
 
 
+        /// <summary>
+        /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
+        /// after it has injected all of an object's dependencies.
+        /// </summary>
+        /// <remarks>
+        /// 	<p>
+        /// This method allows the object instance to perform the kind of
+        /// initialization only possible when all of it's dependencies have
+        /// been injected (set), and to throw an appropriate exception in the
+        /// event of misconfiguration.
+        /// </p>
+        /// 	<p>
+        /// Please do consult the class level documentation for the
+        /// <see cref="Spring.Objects.Factory.IObjectFactory"/> interface for a
+        /// description of exactly <i>when</i> this method is invoked. In
+        /// particular, it is worth noting that the
+        /// <see cref="Spring.Objects.Factory.IObjectFactoryAware"/>
+        /// and <see cref="Spring.Context.IApplicationContextAware"/>
+        /// callbacks will have been invoked <i>prior</i> to this method being
+        /// called.
+        /// </p>
+        /// </remarks>
+        /// <exception cref="System.Exception">
+        /// In the event of misconfiguration (such as the failure to set a
+        /// required property) or if initialization fails.
+        /// </exception>
         public void AfterPropertiesSet()
         {
             if (scheduler == null)
@@ -92,6 +122,11 @@ namespace Spring.Scheduling.Quartz
             RegisterJobsAndTriggers();
         }
 
+        /// <summary>
+        /// Finds the scheduler.
+        /// </summary>
+        /// <param name="schedulerName">Name of the scheduler.</param>
+        /// <returns></returns>
         protected virtual IScheduler FindScheduler(string schedulerName)
         {
             if (objectFactory is IListableObjectFactory)

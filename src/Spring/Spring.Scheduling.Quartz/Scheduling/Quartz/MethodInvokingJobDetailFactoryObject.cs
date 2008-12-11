@@ -78,7 +78,7 @@ namespace Spring.Scheduling.Quartz
 		/// Set the name of the job.
 		/// Default is the object name of this FactoryObject.
 		/// </summary>
-		/// <seealso cref="JobDetail.Name" />
+		/// <seealso cref="Name" />
 		public virtual string Name
 		{
 			set { name = value; }
@@ -88,7 +88,7 @@ namespace Spring.Scheduling.Quartz
 		/// Set the group of the job.
 		/// Default is the default group of the Scheduler.
 		/// </summary>
-		/// <seealso cref="JobDetail.Group" />
+		/// <seealso cref="Group" />
         /// <seealso cref="SchedulerConstants.DefaultGroup" />
 		public virtual string Group
 		{
@@ -128,7 +128,7 @@ namespace Spring.Scheduling.Quartz
 		/// A JobListener name always refers to the name returned
 		/// by the JobListener implementation.
 		/// </remarks>
-		/// <seealso cref="SchedulerFactoryObject.JobListeners" />
+		/// <seealso cref="SchedulerAccessor.JobListeners" />
 		/// <seealso cref="IJobListener.Name" />
 		public virtual string[] JobListenerNames
 		{
@@ -154,10 +154,10 @@ namespace Spring.Scheduling.Quartz
         /// Set the name of the target object in the Spring object factory.
         /// </summary>
 	    /// <remarks>
-	    /// This is an alternative to specifying <see cref="TargetObject" /> 
+	    /// This is an alternative to specifying TargetObject
 	    /// allowing for non-singleton objects to be invoked. Note that specified
-	    /// "TargetObject" and <see cref="TargetType" /> values will
-	    /// override the corresponding effect of this "targetObjectName" setting
+	    /// "TargetObject" and "TargetType" values will
+	    /// override the corresponding effect of this "TargetObjectName" setting
 	    ///(i.e. statically pre-define the object type or even the target object).
         /// </remarks>
 	    public string TargetObjectName

@@ -34,8 +34,8 @@ namespace Spring.Scheduling.Quartz
 	/// </p>
     /// </remarks>
 	/// <author>Juergen Hoeller</author>
-	/// <seealso cref="SchedulerFactoryObject.Triggers" />
-	/// <seealso cref="SchedulerFactoryObject.JobDetails" />
+	/// <seealso cref="SchedulerAccessor.Triggers" />
+	/// <seealso cref="SchedulerAccessor.JobDetails" />
 	/// <seealso cref="Trigger.JobName" />
 	/// <seealso cref="Trigger.JobGroup" />
 	public interface IJobDetailAwareTrigger

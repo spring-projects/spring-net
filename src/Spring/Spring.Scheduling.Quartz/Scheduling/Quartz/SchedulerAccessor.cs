@@ -36,13 +36,16 @@ namespace Spring.Scheduling.Quartz
     /// triggers and listeners on a <see cref="IScheduler" /> instance.
     /// </summary>
     /// <remarks>
-    /// <p>For concrete usage, check out the <see cref="SchedulerFactoryObject" /> and
+    /// For concrete usage, check out the <see cref="SchedulerFactoryObject" /> and
     /// <see cref="SchedulerAccessorObject" /> classes.
     ///</remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Marko Lahma (.NET)</author>
     public abstract class SchedulerAccessor : IResourceLoaderAware
     {
+        /// <summary>
+        /// Logger instance.
+        /// </summary>
         protected readonly ILog logger;
         private bool overwriteExistingJobs;
 
@@ -59,8 +62,14 @@ namespace Spring.Scheduling.Quartz
         private ITriggerListener[] triggerListeners;
 
         private IPlatformTransactionManager transactionManager;
+        /// <summary>
+        /// Resource loader instance for sub-classes
+        /// </summary>
         protected IResourceLoader resourceLoader;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SchedulerAccessor"/> class.
+        /// </summary>
         protected SchedulerAccessor()
         {
             logger = LogManager.GetLogger(GetType());
@@ -105,7 +114,7 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// Register a list of JobDetail objects with the Scheduler that
         /// this FactoryObject creates, to be referenced by Triggers.
-        /// <p>This is not necessary when a Trigger determines the JobDetail
+        /// This is not necessary when a Trigger determines the JobDetail
         /// itself: In this case, the JobDetail will be implicitly registered
         /// in combination with the Trigger.
         /// </summary>
@@ -137,7 +146,7 @@ namespace Spring.Scheduling.Quartz
         }
 
         /// <summary>
-        // Register a list of Trigger objects with the Scheduler that
+        /// Register a list of Trigger objects with the Scheduler that
         /// this FactoryObject creates.
         /// </summary>
         /// <remarks>
@@ -180,7 +189,7 @@ namespace Spring.Scheduling.Quartz
         /// </summary>
         /// <seealso cref="IJobListener.Name" />
         /// <seealso cref="JobDetail.AddJobListener" />
-        /// <seealso cref="JobDetailObject.JobListenerNames" />
+        /// <seealso cref="JobDetail.JobListenerNames" />
         public virtual IJobListener[] JobListeners
         {
             set { jobListeners = value; }
@@ -202,10 +211,9 @@ namespace Spring.Scheduling.Quartz
         /// Such TriggerListeners will only apply to Triggers that explicitly activate
         /// them via their name.
         /// </summary>
-        /// <seealso cref="ITriggerListener#getName" />
-        /// <seealso cref="Trigger#addTriggerListener" />
-        /// <seealso cref="CronTriggerObject#setTriggerListenerNames" />
-        /// <seealso cref="SimpleTriggerObject#setTriggerListenerNames" />    
+        /// <seealso cref="ITriggerListener.Name" />
+        /// <seealso cref="Trigger.AddTriggerListener" />
+        /// <seealso cref="Trigger.TriggerListenerNames" />
         public virtual ITriggerListener[] TriggerListeners
         {
             set { triggerListeners = value; }

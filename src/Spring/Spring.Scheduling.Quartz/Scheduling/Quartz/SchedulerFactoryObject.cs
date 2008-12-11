@@ -303,13 +303,16 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-        /// Set whether to expose the Spring-managed {@link Scheduler} instance in the
-        /// Quartz {@link SchedulerRepository}. Default is "false", since the Spring-managed
+        /// <summary>
+        /// Set whether to expose the Spring-managed <see cref="IScheduler" /> instance in the
+        /// Quartz <see cref="SchedulerRepository" />. Default is "false", since the Spring-managed
         /// Scheduler is usually exclusively intended for access within the Spring context.
-        /// <p>Switch this flag to "true" in order to expose the Scheduler globally.
+        /// </summary>
+        /// <remarks>
+        /// Switch this flag to "true" in order to expose the Scheduler globally.
         /// This is not recommended unless you have an existing Spring application that
-        /// relies on this behavior. Note that such global exposure was the accidental
-        /// default in earlier Spring versions; this has been fixed as of Spring 2.5.6.
+        /// relies on this behavior.
+        /// </remarks>
         public virtual bool ExposeSchedulerInRepository
         {
             set { exposeSchedulerInRepository = value; }

@@ -46,8 +46,8 @@ namespace Spring.Scheduling.Quartz
     /// <seealso cref="Trigger.JobName" />
     /// <seealso cref="Trigger.JobGroup" />
     /// <seealso cref="SimpleTriggerObject.JobDetail" />
-	/// <seealso cref="SchedulerFactoryObject.Triggers" />
-	/// <seealso cref="SchedulerFactoryObject.JobDetails" />
+	/// <seealso cref="SchedulerAccessor.Triggers" />
+	/// <seealso cref="SchedulerAccessor.JobDetails" />
 	/// <seealso cref="CronTriggerObject" />
 	public class SimpleTriggerObject : SimpleTrigger, IJobDetailAwareTrigger, IObjectNameAware, IInitializingObject
 	{

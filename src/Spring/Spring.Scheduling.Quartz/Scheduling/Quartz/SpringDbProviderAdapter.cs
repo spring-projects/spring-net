@@ -45,37 +45,64 @@ namespace Spring.Scheduling.Quartz
         }
 
 
+        /// <summary>
+        /// Creates the command.
+        /// </summary>
+        /// <returns></returns>
         public IDbCommand CreateCommand()
         {
             return dbProvider.CreateCommand();
         }
 
+        /// <summary>
+        /// Creates the command builder.
+        /// </summary>
+        /// <returns></returns>
         public object CreateCommandBuilder()
         {
             return dbProvider.CreateCommandBuilder();
         }
 
+        /// <summary>
+        /// Creates the connection.
+        /// </summary>
+        /// <returns></returns>
         public IDbConnection CreateConnection()
         {
             return dbProvider.CreateConnection();
         }
 
+        /// <summary>
+        /// Creates the parameter.
+        /// </summary>
+        /// <returns></returns>
         public IDbDataParameter CreateParameter()
         {
             return dbProvider.CreateParameter();
         }
 
+        /// <summary>
+        /// Shutdowns this instance.
+        /// </summary>
         public void Shutdown()
         {
             // no-op
         }
 
+        /// <summary>
+        /// Gets or sets the connection string.
+        /// </summary>
+        /// <value>The connection string.</value>
         public string ConnectionString
         {
             get { return dbProvider.ConnectionString; }
             set { dbProvider.ConnectionString = value; }
         }
 
+        /// <summary>
+        /// Gets the metadata.
+        /// </summary>
+        /// <value>The metadata.</value>
         public DbMetadata Metadata
         {
             get { return metadata; }
@@ -119,83 +146,141 @@ namespace Spring.Scheduling.Quartz
 
         }
 
+        /// <summary>
+        /// Gets or sets the name of the product.
+        /// </summary>
+        /// <value>The name of the product.</value>
         public override string ProductName
         {
             get { return metadata.ProductName; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the connection.
+        /// </summary>
+        /// <value>The type of the connection.</value>
         public override Type ConnectionType
         {
             get { return metadata.ConnectionType; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the command.
+        /// </summary>
+        /// <value>The type of the command.</value>
         public override Type CommandType
         {
             get { return metadata.CommandType; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the parameter.
+        /// </summary>
+        /// <value>The type of the parameter.</value>
         public override Type ParameterType
         {
             get { return metadata.ParameterType; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the command builder.
+        /// </summary>
+        /// <value>The type of the command builder.</value>
         public override Type CommandBuilderType
         {
             get { return metadata.CommandBuilderType; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the command builder derive parameters method.
+        /// </summary>
+        /// <value>The command builder derive parameters method.</value>
         public override MethodInfo CommandBuilderDeriveParametersMethod
         {
             get { return metadata.CommandBuilderDeriveParametersMethod; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the parameter name prefix.
+        /// </summary>
+        /// <value>The parameter name prefix.</value>
         public override string ParameterNamePrefix
         {
             get { return metadata.ParameterNamePrefix; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the exception.
+        /// </summary>
+        /// <value>The type of the exception.</value>
         public override Type ExceptionType
         {
             get { return metadata.ExceptionType; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [bind by name].
+        /// </summary>
+        /// <value><c>true</c> if [bind by name]; otherwise, <c>false</c>.</value>
         public override bool BindByName
         {
             get { return metadata.BindByName; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the parameter db.
+        /// </summary>
+        /// <value>The type of the parameter db.</value>
         public override Type ParameterDbType
         {
             get { return metadata.ParameterDbType; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the parameter db type property.
+        /// </summary>
+        /// <value>The parameter db type property.</value>
         public override PropertyInfo ParameterDbTypeProperty
         {
             get { return metadata.ParameterDbTypeProperty; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the parameter is nullable property.
+        /// </summary>
+        /// <value>The parameter is nullable property.</value>
         public override PropertyInfo ParameterIsNullableProperty
         {
             get { return metadata.ParameterIsNullableProperty; }
             set { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets the type of the db binary.
+        /// </summary>
+        /// <value>The type of the db binary.</value>
         public override Enum DbBinaryType
         {
             get { return dbTypeBinary; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [use parameter name prefix in parameter collection].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [use parameter name prefix in parameter collection]; otherwise, <c>false</c>.
+        /// </value>
         public override bool UseParameterNamePrefixInParameterCollection
         {
             get { return metadata.UseParameterNamePrefixInParameterCollection; }
