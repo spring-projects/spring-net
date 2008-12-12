@@ -301,7 +301,7 @@ namespace Spring.Messaging.Listener
         /// called.</param>
         protected virtual void ReceiveAndExecute(object state)
         {
-            bool messageRecieved = true;
+            bool messageReceived = true;
             bool listenerTimeOut = false;
 
             MessageQueue mq = state as MessageQueue;
@@ -328,10 +328,10 @@ namespace Spring.Messaging.Listener
                 #endregion
 
                 DateTime expirationTime = DateTime.Now.Add(ListenerTimeLimit);
-                while (!listenerTimeOut && messageRecieved)
+                while (!listenerTimeOut && messageReceived)
                 {
                     //Subclasses to perform receive operation
-                    messageRecieved = DoReceiveAndExecute(mq);
+                    messageReceived = DoReceiveAndExecute(mq);
 
                     if (ListenerTimeLimit == TimeSpan.Zero)
                     {
@@ -351,7 +351,7 @@ namespace Spring.Messaging.Listener
             }
             catch (Exception ex)
             {
-                messageRecieved = false;
+                messageReceived = false;
                 LOG.Error("Error receiving message from DefaultMessageQueue = [" + mq.QueueName + "]", ex);
             }
             finally
@@ -364,14 +364,14 @@ namespace Spring.Messaging.Listener
                 {
                     activeListenerCount--;
                     LOG.Debug("ActiveListenerCount = " + activeListenerCount);
-                    LOG.Trace("ListenerTimeout = " + listenerTimeOut + ", MessageRecieved = " + messageRecieved);
+                    LOG.Trace("ListenerTimeout = " + listenerTimeOut + ", MessageRecieved = " + messageReceived);
                     if (activeListenerCount == 0)
                     {
                         LOG.Debug("All processing threads ended - calling StartPeek again.");
                         //last active worker thread needs to restart the peeking process
                         StartPeeking();
                     }
-                    else if (listenerTimeOut && messageRecieved)
+                    else if (listenerTimeOut && messageReceived)
                     {
                         LOG.Debug(
                             "Processing thread ended due to timeout and last recieve operation was successfull, calling StartPeek again.");
