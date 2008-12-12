@@ -117,6 +117,17 @@ namespace Spring.Context.Support
             Assert.IsTrue(ctx.ContainsObject("GORAN"));
             Assert.AreEqual(ctx.GetObject("goran"), ctx.GetObject("GORAN"));
         }
+        
+        [Test]
+        [ExpectedException(typeof(NoSuchObjectDefinitionException))]
+        public void GetObjectOnUnknownIdThrowsNoSuchObjectDefinition()
+        {
+            XmlApplicationContext ctx =
+                new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml");
+            string DOES_NOT_EXIST = "does_not_exist";
+            Assert.IsFalse(ctx.ContainsObject(DOES_NOT_EXIST));
+            Assert.IsNull(ctx.GetObject(DOES_NOT_EXIST));
+        }
 
         [Test]
         public void FactoryObjectsAreNotInstantiatedBeforeObjectFactoryPostProcessorsAreApplied()
