@@ -69,10 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalculatorService.cs" />
-    <Compile Include="ICalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimplePerformanceInterceptor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -93,6 +91,16 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.WcfQuickStart.Aspects\Spring.WcfQuickStart.Aspects.csproj">
+      <Project>{B52BBAA3-1B30-4905-827C-1D81EBA56A15}</Project>
+      <Name>Spring.WcfQuickStart.Aspects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.WcfQuickStart.Contracts\Spring.WcfQuickStart.Contracts.csproj">
+      <Project>{53263837-0643-45FE-96A2-46D425E1A36F}</Project>
+      <Name>Spring.WcfQuickStart.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

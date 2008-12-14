@@ -1,6 +1,4 @@
 using System;
-using System.Reflection;
-
 using AopAlliance.Intercept;
 
 namespace Spring.WcfQuickStart

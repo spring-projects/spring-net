@@ -3,7 +3,7 @@
 
   <!-- returns ChannelFactory<ICalculator>("calculatorEndpoint").CreateChannel() -->
   <object id="serverAppCalculator"
-          type="Spring.WcfQuickStart.ICalculator, Spring.WcfQuickStart.ClientApp"
+          type="Spring.WcfQuickStart.ICalculator, Spring.WcfQuickStart.Contracts"
           factory-object="serverAppCalculatorChannelFactory"
           factory-method="CreateChannel" />
   

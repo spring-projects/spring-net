@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.Server
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.ServerWeb.2008", "src\Spring.WcfQuickStart.ServerWeb\Spring.WcfQuickStart.ServerWeb.2008.csproj", "{EEC5B531-104B-44E6-975B-44C0C8973405}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.Contracts", "src\Spring.WcfQuickStart.Contracts\Spring.WcfQuickStart.Contracts.csproj", "{53263837-0643-45FE-96A2-46D425E1A36F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.Aspects", "src\Spring.WcfQuickStart.Aspects\Spring.WcfQuickStart.Aspects.csproj", "{B52BBAA3-1B30-4905-827C-1D81EBA56A15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -50,6 +54,26 @@ Global
 		{EEC5B531-104B-44E6-975B-44C0C8973405}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EEC5B531-104B-44E6-975B-44C0C8973405}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{EEC5B531-104B-44E6-975B-44C0C8973405}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Release|.NET.ActiveCfg = Release|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{53263837-0643-45FE-96A2-46D425E1A36F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Release|.NET.ActiveCfg = Release|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B52BBAA3-1B30-4905-827C-1D81EBA56A15}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

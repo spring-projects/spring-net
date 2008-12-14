@@ -50,6 +50,7 @@ namespace Spring.WcfQuickStart.ClientApp
                         Console.WriteLine("Divide(11, 2) : " + calculator.Divide(11, 2));
                         Console.WriteLine("Multiply(2, 5) : " + calculator.Multiply(2, 5));
                         Console.WriteLine("Subtract(7, 4) : " + calculator.Subtract(7, 4));
+                        Console.WriteLine("Power(2, 8) : " + calculator.Power(new BinaryOperationArgs(2,8)).Result);
                         Console.WriteLine();
                     }
                     catch (Exception e)
