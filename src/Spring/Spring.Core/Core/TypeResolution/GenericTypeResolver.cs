@@ -76,6 +76,11 @@ namespace Spring.Core.TypeResolution
                         }
                         type = type.MakeGenericType(genericArgs);
                     }
+                    if (genericInfo.IsArrayDeclaration)
+                    {
+                        typeName = string.Format("{0}{1},{2}", type.FullName, genericInfo.GetArrayDeclaration(), type.Assembly.FullName);
+                        type = null;
+                    }
                 }
             }
             catch (Exception ex)

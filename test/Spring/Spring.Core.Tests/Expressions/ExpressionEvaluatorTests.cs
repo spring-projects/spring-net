@@ -703,12 +703,33 @@ namespace Spring.Expressions
         /// Tests type node
         /// </summary>
         [Test]
-        [Ignore("does not work yet due to parser expecting ID production within T(ID)")]
+//        [Ignore("does not work yet due to parser expecting ID production within T(ID)")]
         public void TestTypeNodeWithAssemblyQualifiedName()
         {
             Assert.AreEqual(typeof(ExpressionEvaluator), ExpressionEvaluator.GetValue(null, string.Format("T({0})", typeof(ExpressionEvaluator).AssemblyQualifiedName)));
         }
 
+#if NET_2_0
+        /// <summary>
+        /// Tests type node
+        /// </summary>
+        [Test]
+        public void TestTypeNodeWithGenericAssemblyQualifiedName()
+        {
+//            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[System.Int32], mscorlib)"));
+//            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]], mscorlib)"));
+            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[int]], mscorlib)"));
+        }
+
+        /// <summary>
+        /// Tests type node
+        /// </summary>
+        [Test]
+        public void TestTypeNodeWithGenericAssemblyQualifiedArrayName()
+        {
+            Assert.AreEqual(typeof(int?[,]), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]][,], mscorlib)"));
+        }
+#endif
         /// <summary>
         /// Tests constructor node
         /// </summary>
@@ -1519,6 +1540,10 @@ namespace Spring.Expressions
 
             Assert.AreEqual(typeof(TestObject),
                             ExpressionEvaluator.GetValue(null, "@(myContext:goran)").GetType());
+
+            // string literals allowed for contextname
+            Assert.AreEqual(typeof(TestObject),
+                            ExpressionEvaluator.GetValue(null, "@('myContext':goran)").GetType());
         }
 
         /// <summary>
@@ -1560,6 +1585,8 @@ namespace Spring.Expressions
             ctx.Name = "my.Context";
             ContextRegistry.RegisterContext(ctx);
 
+            Assert.AreEqual(typeof(TestObject),
+                            ExpressionEvaluator.GetValue(null, "@(my.Context:goran)").GetType());
             Assert.AreEqual(typeof(TestObject),
                             ExpressionEvaluator.GetValue(null, "@(my\\.Context:goran)").GetType());
         }

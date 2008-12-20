@@ -38,7 +38,8 @@ namespace Spring.Expressions
         /// <summary>
         /// Create a new instance
         /// </summary>
-        public TypeNode():base()
+        public TypeNode()
+            : base()
         {
         }
 
@@ -49,7 +50,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Returns node's value for the given context.
         /// </summary>
@@ -60,24 +61,40 @@ namespace Spring.Expressions
         {
             if (type == null)
             {
-                lock (this)
+                lock(this)
                 {
-                    if (type == null)
-                    {
-                        string typeName = this.getText();
-                        AST node = this.getFirstChild();
-                        while (node != null)
-                        {
-                            typeName += node.getText();
-                            node = node.getNextSibling();
-                        }
-
-                        type = TypeResolutionUtils.ResolveType(typeName);
-                    }
+                    type = TypeResolutionUtils.ResolveType(getText());
                 }
             }
 
             return type;
+        }
+
+        /// <summary>
+        /// Overrides getText to allow easy way to get fully 
+        /// qualified typename.
+        /// </summary>
+        /// <returns>
+        /// Fully qualified typename as a string.
+        /// </returns>
+        public override string getText()
+        {
+            string tmp = base.getText();
+//            if (tmp != null && TypeRegistry.ContainsAlias(tmp))
+//            {
+//                Type type = TypeRegistry.ResolveType(tmp);
+//                if (type != null)
+//                {
+//                    tmp = type.AssemblyQualifiedName;
+//                }                
+//            }
+            AST node = this.getFirstChild();
+            while (node != null)
+            {
+                tmp += node.getText();
+                node = node.getNextSibling();
+            }
+            return tmp;
         }
     }
 }

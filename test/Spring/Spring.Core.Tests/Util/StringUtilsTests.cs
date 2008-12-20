@@ -58,6 +58,31 @@ namespace Spring.Util
 			Assert.IsTrue(ArrayUtils.AreEqual(new string[] {"one"}, res = StringUtils.Split("one", delim, true, true)), "Received '" + String.Join(",", res) + "'");
 		}
 
+        [Test]
+        public void SplitWithQuotedStrings()
+        {
+            string[] expectedParts = new string[] { "a", "[test,<,>>[]]]", "asdf<,<,>,>aa" };
+            string testString = string.Join(",", expectedParts);
+            string[] result = StringUtils.Split(testString, ",", false, false, "[]<>");
+            Assert.AreEqual( expectedParts, result );
+        }
+
+        [Test]
+        public void SplitAddsEmptyStrings()
+        {
+            string testString = ",";
+            string[] result = StringUtils.Split(testString, ",", true, false, null);
+            Assert.AreEqual( new string[] { "", "" }, result );
+        }
+
+        [Test]
+        public void SplitAcceptsWhitespaceDelimiters()
+        {
+            string testString = "a\nb\tc d";
+            string[] result = StringUtils.Split(testString, "\n\t ", true, false, null);
+            Assert.AreEqual( new string[] { "a", "b", "c", "d" }, result );
+        }
+
 		[Test]
 		public void HasLengthTests()
 		{

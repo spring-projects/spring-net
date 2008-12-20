@@ -34,11 +34,12 @@ namespace Spring.Expressions
         private const string ESCAPE_CHAR = "\\";
 
         private string identifier;
-        
+
         /// <summary>
         /// Create a new instance
         /// </summary>
-        public QualifiedIdentifier():base()
+        public QualifiedIdentifier()
+            : base()
         {
         }
 
@@ -49,7 +50,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Returns the value of the named argument defined by this node.
         /// </summary>
@@ -64,17 +65,7 @@ namespace Spring.Expressions
                 {
                     if (identifier == null)
                     {
-                        identifier = base.getText();
-                        if (identifier != null) 
-                        {
-                            identifier = identifier.Replace(ESCAPE_CHAR,""); // remove all occurrences of escape char
-                        }
-                        AST node = this.getFirstChild();
-                        while (node != null)
-                        {
-                            identifier += node.getText();
-                            node = node.getNextSibling();
-                        }
+                        identifier = this.getText();
                     }
                 }
             }
@@ -91,7 +82,18 @@ namespace Spring.Expressions
         /// </returns>
         public override string getText()
         {
-            return (string) Get(null, null);
+            string tmp = base.getText();
+            if (tmp != null)
+            {
+                tmp = tmp.Replace(ESCAPE_CHAR, ""); // remove all occurrences of escape char
+            }
+            AST node = this.getFirstChild();
+            while (node != null)
+            {
+                tmp = string.Concat(tmp, node.getText());
+                node = node.getNextSibling();
+            }
+            return tmp;
         }
     }
 }

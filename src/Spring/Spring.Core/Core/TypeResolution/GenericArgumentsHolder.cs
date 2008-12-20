@@ -23,7 +23,7 @@
 #region Imports
 
 using System.Collections;
-
+using System.Text.RegularExpressions;
 using Spring.Util;
 
 #endregion
@@ -42,6 +42,46 @@ namespace Spring.Core.TypeResolution
     public class GenericArgumentsHolder
     {
         #region Constants
+
+        private static readonly Regex ClrPattern = new Regex(
+              "^"
+              + @"(?'name'\w[\w\d\.]+)"
+              + @"`\d+\s*\["
+              + @"(?'args'(?>[^\[\]]+|\[(?<DEPTH>)|\](?<-DEPTH>))*(?(DEPTH)(?!)))"
+              + @"\]"
+              + @"(?'remainder'.*)"
+              + @"$"
+              , RegexOptions.CultureInvariant | RegexOptions.Compiled
+            );
+
+        private static readonly Regex CSharpPattern = new Regex(
+              "^"
+              + @"(?'name'\w[\w\d\.]+)"
+              + @"<"
+              + @"(?'args'.*)"
+              + @">"
+              + @"(?'remainder'.*)"
+              + @"$"
+              , RegexOptions.CultureInvariant | RegexOptions.Compiled
+            );
+
+        private static Regex GenericArgumentListPattern = new Regex(
+            @",("
+            + @"(\[(?>[^\[\]]+|\[(?<DEPTH>)|\](?<-DEPTH>))*(?(DEPTH)(?!))\])" // capture anything between matching brackets
+            + @"|"
+            + @"([^,\[\]]*)" // alternatively capture any string that doesn't contain brackets and commas
+            + @")+"
+            );
+
+        /// <summary>
+        /// The generic arguments prefix.
+        /// </summary>
+        public const char GenericArgumentsQuotePrefix = '[';
+
+        /// <summary>
+        /// The generic arguments suffix.
+        /// </summary>
+        public const char GenericArgumentsQuoteSuffix = ']';
 
         /// <summary>
         /// The generic arguments prefix.
@@ -65,6 +105,7 @@ namespace Spring.Core.TypeResolution
         private string unresolvedGenericTypeName;
         private string unresolvedGenericMethodName;
         private string[] unresolvedGenericArguments;
+        private string arrayDeclaration;
 
         #endregion
 
@@ -79,7 +120,7 @@ namespace Spring.Core.TypeResolution
         /// </param>
         public GenericArgumentsHolder(string value)
         {
-            ParseGenericArguments(value);
+            ParseGenericTypeDeclaration(value);
         }
 
         #endregion
@@ -140,6 +181,23 @@ namespace Spring.Core.TypeResolution
             }
         }
 
+        /// <summary>
+        /// Returns the array declaration portion of the definition, e.g. "[,]"
+        /// </summary>
+        /// <returns></returns>
+        public string GetArrayDeclaration()
+        {
+            return arrayDeclaration;    
+        }
+
+        /// <summary>
+        /// Is this an array type definition?
+        /// </summary>
+        public bool IsArrayDeclaration
+        {
+            get { return arrayDeclaration != null; }
+        }
+
         #endregion
 
         #region Methods
@@ -165,57 +223,142 @@ namespace Spring.Core.TypeResolution
             return unresolvedGenericArguments;
         }
 
-        private void ParseGenericArguments(string originalString)
+        private void ParseGenericTypeDeclaration(string originalString)
         {
-            int argsStartIndex
-                = originalString.IndexOf(GenericArgumentsPrefix);
-            if (argsStartIndex < 0)
+            if (originalString.IndexOf('[') == -1 && originalString.IndexOf('<') == -1)
+            {
+                // nothing to do
+                unresolvedGenericTypeName = originalString;
+                unresolvedGenericMethodName = originalString;
+                return;
+            }
+
+            originalString = originalString.Trim();
+
+            bool isClrStyleNotation = originalString.IndexOf('`') > -1;
+
+            Match m = (isClrStyleNotation)
+                          ? ClrPattern.Match(originalString)
+                          : CSharpPattern.Match(originalString);
+
+            if (m == null || !m.Success)
             {
                 unresolvedGenericTypeName = originalString;
                 unresolvedGenericMethodName = originalString;
+                return;
             }
-            else
+
+            Group g = m.Groups["args"];
+            unresolvedGenericArguments = ParseGenericArgumentList(g.Value);
+
+            string name = m.Groups["name"].Value;
+            string remainder = m.Groups["remainder"].Value.Trim();
+
+            // check, if we're dealing with an array type declaration
+            if (remainder.Length > 0 && remainder.IndexOf('[') > -1)
             {
-                int argsEndIndex =
-                    originalString.LastIndexOf(GenericArgumentsSuffix);
-                if (argsEndIndex != -1)
+                string[] remainderParts = StringUtils.Split(remainder, ",", false, false, "[]");
+                string arrayPart = remainderParts[0].Trim();
+                if (arrayPart[0] == '[' && arrayPart[arrayPart.Length-1] == ']')
                 {
-                    unresolvedGenericMethodName = originalString.Remove(
-                        argsStartIndex, argsEndIndex - argsStartIndex + 1);
-
-                    SplitGenericArguments(originalString.Substring(
-                        argsStartIndex + 1, argsEndIndex - argsStartIndex - 1));
-
-                    unresolvedGenericTypeName = originalString.Replace(
-                        originalString.Substring(argsStartIndex, argsEndIndex - argsStartIndex + 1),
-                        "`" + unresolvedGenericArguments.Length);
-                }
+                    arrayDeclaration = arrayPart;
+                    remainder = ", " + string.Join(",", remainderParts, 1, remainderParts.Length - 1);
+                }               
             }
+            
+            unresolvedGenericMethodName = name + remainder;
+            unresolvedGenericTypeName = name + "`" + unresolvedGenericArguments.Length + remainder;
+
+
+
+            //            char lBoundary = isClrStyleNotation ? '[' : GenericArgumentsPrefix;
+            //            char rBoundary = isClrStyleNotation ? ']' : GenericArgumentsSuffix;
+            //
+            //            int argsStartIndex = originalString.IndexOf(lBoundary);
+            //            if (argsStartIndex < 0)
+            //            {
+            //                unresolvedGenericTypeName = originalString;
+            //                unresolvedGenericMethodName = originalString;
+            //            }
+            //            else
+            //            {
+            //                int argsEndIndex = originalString.LastIndexOf(rBoundary);
+            //                if (argsEndIndex != -1)
+            //                {
+            //                    unresolvedGenericMethodName = originalString.Remove(
+            //                        argsStartIndex, argsEndIndex - argsStartIndex + 1);
+            //
+            //                    unresolvedGenericArguments = ParseGenericArgumentList(originalString.Substring(
+            //                        argsStartIndex + 1, argsEndIndex - argsStartIndex - 1));
+            //
+            //                    unresolvedGenericTypeName = originalString.Replace(
+            //                        originalString.Substring(argsStartIndex, argsEndIndex - argsStartIndex + 1),
+            //                        "`" + unresolvedGenericArguments.Length);
+            //                }
+            //            }
         }
 
-        private void SplitGenericArguments(string originalArgs)
+        private static string[] ParseGenericArgumentList(string originalArgs)
         {
-            IList args = new ArrayList();
-
-            int index = 0;
-            int cursor = originalArgs.IndexOf(GenericArgumentsSeparator, index);
-            while (cursor != -1)
+            string[] args = StringUtils.Split(originalArgs, ",", true, false, "[]<>"     );
+            // remove quotes if necessary
+            for(int i=0;i<args.Length;i++)
             {
-                string arg = originalArgs.Substring(index, cursor - index);
-                if (arg.Split(GenericArgumentsPrefix).Length ==
-                    arg.Split(GenericArgumentsSuffix).Length)
+                string arg = args[i];
+                if (arg.Length > 1 && arg[0] == '[')
                 {
-                    args.Add(arg.Trim());
-                    index = cursor + 1;
+                    args[i] = arg.Substring(1, arg.Length - 2);
                 }
-                cursor = originalArgs.IndexOf(GenericArgumentsSeparator, cursor + 1);
             }
-            args.Add(originalArgs.Substring(index, originalArgs.Length - index).Trim());
+            return args;
+//            ArrayList args = new ArrayList();
+//            originalArgs = originalArgs.Trim();
+//            if (originalArgs.Length == 0)
+//            {
+//                return new string[0];
+//            }
+//
+//            if (originalArgs.IndexOf(',') == -1)
+//            {
+//                return new string[] { originalArgs };
+//            }
+//
+//            // pattern assumes "(,<argname>)+"
+//            originalArgs = "," + originalArgs;
+//
+//            foreach (Match match in GenericArgumentListPattern.Matches(originalArgs))
+//            {
+//                string arg = match.Groups["args"].Value.Trim(' ', '\t', '[', ']');
+//                args.Add(arg);
+//            }
 
-            unresolvedGenericArguments = new string[args.Count];
-            args.CopyTo(unresolvedGenericArguments, 0);
+            //            Match m = GenericArgumentListPattern.Match(originalArgs);
+            //            if (m != null && m.Success)
+            //            {
+            //                Group g = m.Groups[0];
+            //                foreach (Capture capture in g.Captures)
+            //                {
+            //                    string arg = capture.Value.Trim(' ', '\t', '[', ']');
+            //                    args.Add(arg);
+            //                }
+            //            }
+            //            int index = 0;
+            //            int cursor = originalArgs.IndexOf(GenericArgumentsSeparator, index);
+            //            while (cursor != -1)
+            //            {
+            //                string arg = originalArgs.Substring(index, cursor - index);
+            //                if (arg.Split(GenericArgumentsPrefix).Length ==
+            //                    arg.Split(GenericArgumentsSuffix).Length)
+            //                {
+            //                    args.Add(arg.Trim());
+            //                    index = cursor + 1;
+            //                }
+            //                cursor = originalArgs.IndexOf(GenericArgumentsSeparator, cursor + 1);
+            //            }
+            //            args.Add(originalArgs.Substring(index, originalArgs.Length - index).Trim());
+
+//            return (string[])args.ToArray(typeof(string));
         }
-
         #endregion
     }
 }

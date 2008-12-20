@@ -54,7 +54,8 @@ namespace Spring.Expressions
         /// <returns>Value of the last node in the expression.</returns>
         public static object GetValue(object root, string expression)
         {
-            return Expression.Parse(expression).GetValue(root, null);
+            IExpression exp = Expression.Parse(expression);
+            return exp.GetValue(root, null);
         }
 
         /// <summary>
@@ -66,7 +67,8 @@ namespace Spring.Expressions
         /// <returns>Value of the last node in the expression.</returns>
         public static object GetValue(object root, string expression, IDictionary variables)
         {
-            return Expression.Parse(expression).GetValue(root, variables);
+            IExpression exp = Expression.Parse(expression);
+            return exp.GetValue(root, variables);
         }
 
         /// <summary>
@@ -78,7 +80,8 @@ namespace Spring.Expressions
         /// <param name="newValue">Value to set last node to.</param>
         public static void SetValue(object root, string expression, object newValue)
         {
-            Expression.Parse(expression).SetValue(root, null, newValue);
+            IExpression exp = Expression.Parse(expression);
+            exp.SetValue(root, null, newValue);
         }
 
         /// <summary>
@@ -91,7 +94,8 @@ namespace Spring.Expressions
         /// <param name="newValue">Value to set last node to.</param>
         public static void SetValue(object root, string expression, IDictionary variables, object newValue)
         {
-            Expression.Parse(expression).SetValue(root, variables, newValue);
+            IExpression exp = Expression.Parse(expression);
+            exp.SetValue(root, variables, newValue);
         }
     }
 }

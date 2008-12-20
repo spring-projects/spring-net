@@ -48,7 +48,7 @@ namespace Spring.Core.TypeResolution
         public void ResolveLocalAssemblyGenericType()
         {
             Type t = GetTypeResolver().Resolve("Spring.Objects.TestGenericObject< int, string>");
-            Assert.AreEqual(typeof(TestGenericObject<int,string>), t);
+            Assert.AreEqual(typeof(TestGenericObject<int, string>), t);
         }
 
         [Test]
@@ -75,6 +75,26 @@ namespace Spring.Core.TypeResolution
         }
 
         [Test]
+        public void ResolveGenericArrayType()
+        {
+            Type t = GetTypeResolver().Resolve("System.Nullable<[System.Int32, mscorlib]>[,]");
+            Assert.AreEqual(typeof(int?[,]), t);
+            t = GetTypeResolver().Resolve("System.Nullable`1[int][,]");
+            Assert.AreEqual(typeof(int?[,]), t);
+        }
+
+        [Test]
+        public void ResolveGenericArrayTypeWithAssemblyName()
+        {
+            Type t = GetTypeResolver().Resolve("System.Nullable<[System.Int32, mscorlib]>[,], mscorlib");
+            Assert.AreEqual(typeof(int?[,]), t);
+            t = GetTypeResolver().Resolve("System.Nullable<[System.Int32, mscorlib]>[,], mscorlib");
+            Assert.AreEqual(typeof(int?[,]), t);
+            t = GetTypeResolver().Resolve("System.Nullable`1[[System.Int32, mscorlib]][,], mscorlib");
+            Assert.AreEqual(typeof(int?[,]), t);
+        }
+
+        [Test]
         [ExpectedException(typeof(TypeLoadException))]
         public void ResolveAmbiguousGenericTypeWithAssemblyName()
         {
@@ -86,6 +106,27 @@ namespace Spring.Core.TypeResolution
         public void ResolveMalformedGenericType()
         {
             Type t = GetTypeResolver().Resolve("Spring.Objects.TestGenericObject<int, <string>>");
+        }
+
+        [Test]
+        public void ResolveNestedGenericTypeWithAssemblyName()
+        {
+            Type t = GetTypeResolver().Resolve("System.Collections.Generic.Stack< Spring.Objects.TestGenericObject<int, string> >, System");
+            Assert.AreEqual(typeof(System.Collections.Generic.Stack<Spring.Objects.TestGenericObject<int, string>>), t);
+        }
+
+        [Test]
+        public void ResolveClrNotationStyleGenericTypeWithAssemblyName()
+        {
+            Type t = GetTypeResolver().Resolve("System.Collections.Generic.Stack`1[ [Spring.Objects.TestGenericObject`2[int, string], Spring.Core.Tests] ], System");
+            Assert.AreEqual(typeof(System.Collections.Generic.Stack<Spring.Objects.TestGenericObject<int, string>>), t);
+        }
+
+        [Test]
+        public void ResolveNestedQuotedGenericTypeWithAssemblyName()
+        {
+            Type t = GetTypeResolver().Resolve("System.Collections.Generic.Stack< [Spring.Objects.TestGenericObject<int, string>, Spring.Core.Tests] >, System");
+            Assert.AreEqual(typeof(System.Collections.Generic.Stack<Spring.Objects.TestGenericObject<int, string>>), t);
         }
     }
 }
