@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Data;
 using log4net;
 using log4net.Config;
 using NHibernate;
@@ -59,6 +60,9 @@ namespace Spring.Data.NHibernate
 		protected static readonly ILog log =
 			LogManager.GetLogger(typeof (TemplateTests));
 
+        // force Spring.Data.NHibernate to be preloaded by runtime
+	    private Type TLocalSessionFactoryObject = typeof (LocalSessionFactoryObject);
+
 		#endregion
 
 		#region Constructor (s)
@@ -86,8 +90,28 @@ namespace Spring.Data.NHibernate
 #endif
             dbProvider = ctx["DbProvider"] as IDbProvider;
             transactionManager = ctx["hibernateTransactionManager"] as IPlatformTransactionManager;
-            
+            CleanupDatabase(dbProvider.CreateConnection());
         }
+
+	    private static void CleanupDatabase(IDbConnection conn)
+	    {
+	        conn.Open();
+	        using(conn)
+	        {
+                ExecuteSql(conn, "delete credits");
+                ExecuteSql(conn, "delete debits");
+                ExecuteSql(conn, "delete TestObjects");
+                ExecuteSql(conn, "insert TestObjects(Age,Name) Values(5, 'Gabriel')");
+	        }
+	    }
+
+	    private static void ExecuteSql(IDbConnection conn, string sql)
+	    {
+	        IDbCommand cmd;
+	        cmd = conn.CreateCommand();
+	        cmd.CommandText = sql;
+	        cmd.ExecuteNonQuery();
+	    }
 
 	    [Test]
         public void ExceptionTranslator()
@@ -102,6 +126,7 @@ namespace Spring.Data.NHibernate
         }
 	    
 	    [Test]
+        [Ignore("what's the purpose of this test?")] // TODO: what's the purpose of this test?
 	    public void FallbackExceptionTranslator()
 	    {
             //ISessionFactory sessionFactory = ctx["SessionFactory"] as ISessionFactory;

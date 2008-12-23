@@ -25,7 +25,7 @@
 
 
 
-  <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate12">
+  <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject">
         <property name="DbProvider" ref="DbProvider"/>
         <property name="MappingResources">
           <list>
@@ -71,7 +71,7 @@
     -->
     
     <object id="hibernateTransactionManager" 
-            type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate12">
+            type="Spring.Data.NHibernate.HibernateTransactionManager">
             
         <property name="DbProvider" ref="DbProvider"/>
         <property name="sessionFactory" ref="SessionFactory"/>
@@ -85,7 +85,7 @@
             type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data">
         <property name="PlatformTransactionManager" ref="hibernateTransactionManager"/>
         <property name="Target">
-            <object type="Spring.Data.NHibernate.NHTestObjectDao, Spring.Data.NHibernate.Integration.Tests">
+            <object type="Spring.Data.NHibernate.NHTestObjectDao">
                 <property name="SessionFactory" ref="SessionFactory"/>
             </object>            
         </property>

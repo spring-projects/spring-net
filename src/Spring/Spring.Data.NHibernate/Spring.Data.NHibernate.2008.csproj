@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{130E1609-45A7-4F65-B112-105F2DD3E2CE}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -92,10 +92,6 @@
     <ProjectReference Include="..\Spring.Data\Spring.Data.2008.csproj">
       <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
       <Name>Spring.Data.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Spring.Web\Spring.Web.2008.csproj">
-      <Project>{BA4789EB-281A-48EA-8763-28B9F0596A18}</Project>
-      <Name>Spring.Web.2008</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

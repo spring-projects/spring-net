@@ -28,6 +28,7 @@ using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.Common;
+using Spring.Data.NHibernate.Support;
 using Spring.Data.Support;
 using Spring.Transaction;
 using Spring.Transaction.Support;
@@ -36,41 +37,41 @@ using Spring.Transaction.Support;
 
 namespace Spring.Data.NHibernate
 {
-	/// <summary>
-	/// Use of Hibernate Template against database.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	[TestFixture]
-	public class MultipleDbTests 
-	{
-		#region Fields
+    /// <summary>
+    /// Use of Hibernate Template against database.
+    /// </summary>
+    /// <author>Mark Pollack (.NET)</author>
+    [TestFixture]
+    public class MultipleDbTests
+    {
+        #region Fields
 
         private IApplicationContext ctx;
-	    
-		#endregion
-	    
 
-		#region Constants
+        #endregion
 
-		/// <summary>
-		/// The shared <see cref="log4net.ILog"/> instance for this class (and derived classes). 
-		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (TemplateTests));
 
-		#endregion
+        #region Constants
 
-		#region Constructor (s)
-	    
-		/// <summary>
+        /// <summary>
+        /// The shared <see cref="log4net.ILog"/> instance for this class (and derived classes). 
+        /// </summary>
+        protected static readonly ILog log =
+            LogManager.GetLogger(typeof(TemplateTests));
+
+        #endregion
+
+        #region Constructor (s)
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MultipleDbTests"/> class.
         /// </summary>
         public MultipleDbTests()
-		{
+        {
 
-		}
+        }
 
-		#endregion
+        #endregion
 
         [SetUp]
         public void SetUp()
@@ -83,7 +84,7 @@ namespace Spring.Data.NHibernate
 #else
             ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/MultipleDbTests.xml");
 #endif
-           
+
         }
 
         [Test]
@@ -92,15 +93,27 @@ namespace Spring.Data.NHibernate
             float transferAmount = 114;
             IAccountManager mgr = null;
 
-                Assert.IsNotNull(ctx, "Application Context is null");
-                mgr = ctx["accountManager"] as IAccountManager;
-                Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType().ToString());
-                mgr.DoTransfer(transferAmount, transferAmount);
+            Assert.IsNotNull(ctx, "Application Context is null");
+            mgr = ctx["accountManager"] as IAccountManager;
+            Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType().ToString());
+            mgr.DoTransfer(transferAmount, transferAmount);
+        }
 
-            
+        [Test]
+        public void MultipleDBAccessUsingMultipleSessionScopes()
+        {
+            SessionScope scope1 = new SessionScope( (ISessionFactory) ctx["SessionFactory1"], false );
+            SessionScope scope2 = new SessionScope( (ISessionFactory) ctx["SessionFactory2"], false );
 
-        }	    
+            scope1.Open();
+            scope2.Open();
 
+            // do something
+            MultipleDBAccess();
+
+            scope1.Close();
+            scope2.Close();
+        }
 
     }
 }

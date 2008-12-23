@@ -412,8 +412,8 @@ namespace Spring.Data.NHibernate.Support
                 {
                     // single session mode
                     if (isLogDebugEnabled) log.Debug("Closing single Hibernate Session in SessionScope");
-                    TransactionSynchronizationManager.UnbindResource(SessionFactory);
-                    LazySessionHolder.Current.Close();
+                    LazySessionHolder holder = (LazySessionHolder)TransactionSynchronizationManager.UnbindResource(SessionFactory);
+                    holder.Close();
                 }
                 else
                 {
@@ -448,8 +448,6 @@ namespace Spring.Data.NHibernate.Support
         /// </remarks>
         private class LazySessionHolder : SessionHolder
         {
-            private static readonly string ThreadDataSlotKey = UniqueKey.GetTypeScopedString(typeof(LazySessionHolder), "Current");
-
             private readonly ILog log = LogManager.GetLogger(typeof(LazySessionHolder));
             private SessionScope owner;
             private ISession session;
@@ -461,16 +459,6 @@ namespace Spring.Data.NHibernate.Support
             {
                 if (log.IsDebugEnabled) log.Debug("Created LazySessionHolder");
                 this.owner = owner;
-                Current = this;
-            }
-
-            /// <summary>
-            /// Gets or sets the LazySessionHolder instance for the current request
-            /// </summary>
-            public static LazySessionHolder Current
-            {
-                get { return (LazySessionHolder) LogicalThreadContext.GetData(ThreadDataSlotKey); }
-                set { LogicalThreadContext.SetData(ThreadDataSlotKey, value); }
             }
 
             /// <summary>
@@ -492,7 +480,6 @@ namespace Spring.Data.NHibernate.Support
             public void Close()
             {
                 owner = null;
-                Current = null;
                 if (session != null)
                 {
                     ISession tmpSession = session;

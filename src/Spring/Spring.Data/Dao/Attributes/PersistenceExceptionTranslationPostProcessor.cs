@@ -80,9 +80,9 @@ namespace Spring.Dao.Attributes
             }
         }
 
-
-
-
+        /// <summary>
+        /// Callback that supplies the owning factory to an object instance.
+        /// </summary>
         public IObjectFactory ObjectFactory
         {
             set

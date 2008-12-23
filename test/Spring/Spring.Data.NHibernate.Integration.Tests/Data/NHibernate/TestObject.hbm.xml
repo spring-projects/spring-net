@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?> 
-<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.0">
     <class name="Spring.Data.NHibernate.TestObject, Spring.Data.NHibernate.Integration.Tests" table="TestObjects">
         <id name="ObjectNumber" column="TestObjectNo" type="Int32"> 
           <generator class="identity" /> 
