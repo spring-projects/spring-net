@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,13 @@
 
 #region Imports
 
-using System;
 using log4net;
 using log4net.Config;
 using NHibernate;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Data.Common;
 using Spring.Data.NHibernate.Support;
-using Spring.Data.Support;
-using Spring.Transaction;
-using Spring.Transaction.Support;
 
 #endregion
 
@@ -87,6 +82,7 @@ namespace Spring.Data.NHibernate
 
         }
 
+        // TODO: this test fails - check out why
         [Test]
         public void MultipleDBAccess()
         {

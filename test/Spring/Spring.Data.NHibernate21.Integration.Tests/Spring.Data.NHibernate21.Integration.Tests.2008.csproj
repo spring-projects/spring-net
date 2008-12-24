@@ -146,14 +146,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\NHibernate\Credit.hbm.xml" />
-    <EmbeddedResource Include="Data\NHibernate\dbProviderTemplateTests.xml" />
     <EmbeddedResource Include="Data\NHibernate\Debit.hbm.xml" />
     <EmbeddedResource Include="Data\NHibernate\MultipleDbTests.xml" />
-    <EmbeddedResource Include="Data\NHibernate\templateTests.xml" />
     <EmbeddedResource Include="Data\NHibernate\TestObject.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\NHibernate\NHDAOTests.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\NHibernate\dbProviderTemplateTests.xml" />
+    <EmbeddedResource Include="Data\NHibernate\templateTests.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
