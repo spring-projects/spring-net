@@ -88,7 +88,7 @@ namespace Spring.Data.Config
         /// </remarks>
         public override IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
         {
-            string id = element.GetAttribute(ObjectDefinitionConstants.IdAttribute);
+            string id = GetAttributeValue(element, ObjectDefinitionConstants.IdAttribute);
             IConfigurableObjectDefinition databaseConfiguration = ParseDatabaseDefinition(element, id, parserContext);
             if (!StringUtils.HasText(id))
             {
@@ -123,8 +123,8 @@ namespace Spring.Data.Config
         private IConfigurableObjectDefinition ParseDatabaseConfigurer(XmlElement element, string name, ParserContext parserContext)
         {
             string typeName = GetTypeName(element);
-            string providerNameAttribute = element.GetAttribute(DbProviderFactoryObjectConstants.ProviderNameAttribute);
-            string connectionString = element.GetAttribute(DbProviderFactoryObjectConstants.ConnectionStringAttribute);
+            string providerNameAttribute = GetAttributeValue(element, DbProviderFactoryObjectConstants.ProviderNameAttribute);
+            string connectionString = GetAttributeValue(element, DbProviderFactoryObjectConstants.ConnectionStringAttribute);
 
             MutablePropertyValues properties = new MutablePropertyValues();
             if (StringUtils.HasText(providerNameAttribute))
@@ -151,7 +151,7 @@ namespace Spring.Data.Config
         /// <returns>The name of the object type.</returns>
         private string GetTypeName(XmlElement element)
         {
-            string typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
+            string typeName = GetAttributeValue(element, ObjectDefinitionConstants.TypeAttribute);
             if (StringUtils.IsNullOrEmpty(typeName))
             {
                 return DatabaseTypePrefix + element.LocalName;

@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.Serialization;
 using DotNetMock.Dynamic;
 using NUnit.Framework;
 using Spring.Core.IO;
@@ -1662,6 +1663,44 @@ namespace Spring.Objects.Factory
             child.RegisterObjectDefinition("child", new RootObjectDefinition(typeof (Child), AutoWiringMode.AutoDetect));
             Child c = (Child) child.GetObject("child");
             Assert.IsNotNull(c);
+        }
+
+        #region GetObjectNamesForTypeFindsFactoryObjects
+
+        private class A : IFactoryObject, ISerializable
+        {
+            public object GetObject()
+            {
+                throw new NotImplementedException();
+            }
+
+            public Type ObjectType
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public bool IsSingleton
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+
+        [Test]
+        public void GetObjectNamesForTypeFindsFactoryObjects()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            of.RegisterObjectDefinition("mod", new RootObjectDefinition(typeof(A)));
+
+            string[] names = of.GetObjectNamesForType(typeof (ISerializable), false, false);
+            Assert.IsNotEmpty(names);
+            Assert.AreEqual("&mod", names[0]);
         }
 
         #region Helper Classes

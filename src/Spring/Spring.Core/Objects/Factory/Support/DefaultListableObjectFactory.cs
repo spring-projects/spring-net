@@ -78,7 +78,8 @@ namespace Spring.Objects.Factory.Support
         /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.Support.DefaultListableObjectFactory"/> class.
         /// </summary>
-        public DefaultListableObjectFactory() : this(true, null)
+        public DefaultListableObjectFactory()
+            : this(true, null)
         {
         }
 
@@ -87,7 +88,8 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="Spring.Objects.Factory.Support.DefaultListableObjectFactory"/> class.
         /// </summary>
         /// <param name="caseSensitive">Flag specifying whether to make this object factory case sensitive or not.</param>
-        public DefaultListableObjectFactory(bool caseSensitive) : this(caseSensitive, null)
+        public DefaultListableObjectFactory(bool caseSensitive)
+            : this(caseSensitive, null)
         {
         }
 
@@ -164,7 +166,7 @@ namespace Spring.Objects.Factory.Support
             }
             set
             {
-                AssertUtils.ArgumentNotNull(value, "AutowireCandidateResolver"); 
+                AssertUtils.ArgumentNotNull(value, "AutowireCandidateResolver");
                 autowireCandidateResolver = value;
             }
         }
@@ -250,7 +252,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            return (string[]) dependingObjectNames.ToArray(typeof(string));
+            return (string[])dependingObjectNames.ToArray(typeof(string));
         }
 
         /// <summary>
@@ -283,22 +285,22 @@ namespace Spring.Objects.Factory.Support
             RootObjectDefinition rod = GetMergedObjectDefinition(name, false);
             return (rod.HasObjectType && checkedType.IsAssignableFrom(rod.ObjectType));
         }
-/*
-        /// <summary>
-        /// Merges the object definitions.
-        /// </summary>
-        /// <param name="name">Object definition name.</param>
-        /// <param name="parentDefinition">The parent definition.</param>
-        /// <param name="childDefinition">The child definition.</param>
-        /// <returns>Merged object definition.</returns>
-        protected override RootObjectDefinition MergeObjectDefinitions(string name, IObjectDefinition parentDefinition,
-                                                                       IObjectDefinition childDefinition)
-        {
-            RootObjectDefinition rootDefinition = base.MergeObjectDefinitions(name, parentDefinition, childDefinition);
-            RegisterObjectDefinition(name, rootDefinition);
-            return rootDefinition;
-        }
-*/
+        /*
+                /// <summary>
+                /// Merges the object definitions.
+                /// </summary>
+                /// <param name="name">Object definition name.</param>
+                /// <param name="parentDefinition">The parent definition.</param>
+                /// <param name="childDefinition">The child definition.</param>
+                /// <returns>Merged object definition.</returns>
+                protected override RootObjectDefinition MergeObjectDefinitions(string name, IObjectDefinition parentDefinition,
+                                                                               IObjectDefinition childDefinition)
+                {
+                    RootObjectDefinition rootDefinition = base.MergeObjectDefinitions(name, parentDefinition, childDefinition);
+                    RegisterObjectDefinition(name, rootDefinition);
+                    return rootDefinition;
+                }
+        */
         #endregion
 
         #region Fields
@@ -332,7 +334,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// IDictionary from dependency type to corresponding autowired value 
         /// </summary>
-	    private readonly IDictionary resolvableDependencies = new Hashtable();
+        private readonly IDictionary resolvableDependencies = new Hashtable();
 
         #endregion
 
@@ -387,7 +389,7 @@ namespace Spring.Objects.Factory.Support
             {
                 try
                 {
-                    ((AbstractObjectDefinition) objectDefinition).Validate();
+                    ((AbstractObjectDefinition)objectDefinition).Validate();
                 }
                 catch (ObjectDefinitionValidationException ex)
                 {
@@ -458,7 +460,7 @@ namespace Spring.Objects.Factory.Support
                 int definitionCount = objectDefinitionNames.Count;
                 for (int i = 0; i < definitionCount; i++)
                 {
-                    string name = (string) objectDefinitionNames[i];
+                    string name = (string)objectDefinitionNames[i];
                     if (!ContainsSingleton(name) && ContainsObjectDefinition(name))
                     {
                         RootObjectDefinition definition
@@ -471,7 +473,7 @@ namespace Spring.Objects.Factory.Support
                             if (objectType != null
                                 && typeof(IFactoryObject).IsAssignableFrom(definition.ObjectType))
                             {
-                                IFactoryObject factoryObject = (IFactoryObject) GetObject(
+                                IFactoryObject factoryObject = (IFactoryObject)GetObject(
                                                                                     ObjectFactoryUtils.
                                                                                         BuildFactoryObjectName(name));
                                 if (factoryObject.IsSingleton)
@@ -583,7 +585,7 @@ namespace Spring.Objects.Factory.Support
             }
 
             name = TransformedObjectName(name);
-            IObjectDefinition definition = (IObjectDefinition) objectDefinitionMap[name];
+            IObjectDefinition definition = (IObjectDefinition)objectDefinitionMap[name];
             if (definition == null)
             {
                 if (!includeAncestors || ParentObjectFactory == null)
@@ -593,10 +595,10 @@ namespace Spring.Objects.Factory.Support
                 else if (ParentObjectFactory is AbstractObjectFactory)
                 {
                     definition =
-                        ((AbstractObjectFactory) ParentObjectFactory).GetObjectDefinition(name, includeAncestors);
+                        ((AbstractObjectFactory)ParentObjectFactory).GetObjectDefinition(name, includeAncestors);
                 }
             }
-            return definition;            
+            return definition;
         }
 
         #endregion
@@ -613,7 +615,7 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
         public string[] GetObjectDefinitionNames()
         {
-            return (string[]) ((ArrayList) objectDefinitionNames).ToArray(typeof(string));
+            return (string[])((ArrayList)objectDefinitionNames).ToArray(typeof(string));
         }
 
         /// <summary>
@@ -639,7 +641,7 @@ namespace Spring.Objects.Factory.Support
                     matches.Add(name);
                 }
             }
-            return (string[]) matches.ToArray(typeof(string));
+            return (string[])matches.ToArray(typeof(string));
         }
 
         /// <summary>
@@ -685,7 +687,7 @@ namespace Spring.Objects.Factory.Support
             Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             IList objectNames = DoGetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
-            return (string[]) ArrayList.Adapter(objectNames).ToArray(typeof(string));
+            return (string[])ArrayList.Adapter(objectNames).ToArray(typeof(string));
         }
 
         /// <summary>
@@ -772,60 +774,102 @@ namespace Spring.Objects.Factory.Support
             return result;
         }
 
-        // TODO: (ee) What's this method for? It's never used.
-/*
-        protected IList DoGetObjectNamesForTypeNew(Type type, bool includePrototypes, bool includeFactoryObjects)
+        /// <summary>
+        /// Return the object instances that match the given object
+        /// <see cref="System.Type"/> (including subclasses).
+        /// </summary>
+        /// <param name="type">
+        /// The <see cref="System.Type"/> (class or interface) to match.
+        /// </param>
+        /// <param name="includeNonSingletons">
+        /// Whether to include prototype objects too or just singletons (also applies to
+        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
+        /// </param>
+        /// <param name="allowEagerInit">
+        /// Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
+        /// or just normal objects.
+        /// </param>
+        /// <returns>
+        /// An <see cref="System.Collections.IDictionary"/> of the matching objects,
+        /// containing the object names as keys and the corresponding object instances
+        /// as values.
+        /// </returns>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If any of the objects could not be created.
+        /// </exception>
+        /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectsOfType(Type, bool, bool)"/>
+        protected IList DoGetObjectNamesForType(Type type, bool includeNonSingletons, bool allowEagerInit)
         {
             IList result = new ArrayList();
             string[] objectNames = GetObjectDefinitionNames();
-            foreach (string objectNam in objectNames)
+            foreach (string s in objectNames)
             {
-                string objectName = objectNam;
+                string objectName = s;
                 if (!IsAlias(objectName))
                 {
-                    RootObjectDefinition mod = GetMergedObjectDefinition(objectName, false);
-                    // Only check object definition if it is complete
-                    if (!mod.IsAbstract &&
-                        (mod.HasObjectType || !mod.IsLazyInit))
-                    {
-                        // In case of FactoryObject, match object created by FactoryObject
-                    }
                     try
                     {
-                        bool isFactoryObject = IsObjectTypeMatch(objectName, mod, typeof(IFactoryObject));
-                        bool matchFound = (includePrototypes || mod.IsSingleton) && IsTypeMatch(objectName, type);
-                        if (!matchFound && isFactoryObject)
+                        RootObjectDefinition mod = GetMergedObjectDefinition(objectName, false);
+                        // Only check object definition if it is complete
+                        if (!mod.IsAbstract &&
+                                (allowEagerInit || (mod.HasObjectType || !mod.IsLazyInit /*|| this.AllowEagerTypeLoading*/ ) &&
+                                    !RequiresEagerInitForType(mod.FactoryObjectName) ))
                         {
-                            objectName = ObjectFactoryUtils.BuildFactoryObjectName(objectName);
-                            matchFound = (includePrototypes || mod.IsSingleton) && IsTypeMatch(objectName, type);
-                        }
-                        if (matchFound)
-                        {
-                            result.Add(objectName);
+                            bool isFactoryObject = IsFactoryObject(objectName, mod);
+                            bool matchFound = 
+                                   (allowEagerInit || !isFactoryObject || ContainsSingleton(objectName)) &&
+                                   (includeNonSingletons || IsSingleton(objectName)) && IsTypeMatch(objectName, type);
+                            if (!matchFound && isFactoryObject)
+                            {
+                                // in case of a FactoryObject, try to match FactoryObject instance itself next
+                                objectName = ObjectFactoryUtils.BuildFactoryObjectName(objectName);
+                                matchFound = (includeNonSingletons || mod.IsSingleton) && IsTypeMatch(objectName, type);
+                            }
+                            if (matchFound)
+                            {
+                                result.Add(objectName);
+                            }
                         }
                     }
                     catch (CannotLoadObjectTypeException ex)
                     {
+                        if (allowEagerInit)
+                        {
+                            throw;
+                        }
                         // Probably contains a placeholder; lets ignore it for type matching purposes.
                         if (log.IsDebugEnabled)
                         {
                             log.Debug("Ignoring object class loading failure for object '" + objectName + "'", ex);
                         }
                     }
+                    catch(ObjectDefinitionStoreException ex)
+                    {
+                        if (allowEagerInit)
+                        {
+                            throw;
+                        }
+                        // Probably contains a placeholder; lets ignore it for type matching purposes.
+                        if (log.IsDebugEnabled)
+                        {
+                            log.Debug("Ignoring unresolvable metadata in object definition '" + objectName + "'", ex);
+                        }
+                    }
                 }
             }
+
             // check singletons too, to catch manually registered singletons...
             string[] singletonNames = GetSingletonNames();
-            foreach (string objectNam in singletonNames)
+            foreach (string s in singletonNames)
             {
-                string objectName = objectNam;
+                string objectName = s;
                 // only check if manually registered...
                 if (!ContainsObjectDefinition(objectName))
                 {
                     // in the case of an IFactoryObject, match the object created by the IFactoryObject...
                     if (IsFactoryObject(objectName))
                     {
-                        if ((includePrototypes || IsSingleton(objectName)) && IsTypeMatch(objectName, type))
+                        if ((includeNonSingletons || IsSingleton(objectName)) && IsTypeMatch(objectName, type))
                         {
                             result.Add(objectName);
                             continue;
@@ -840,43 +884,42 @@ namespace Spring.Objects.Factory.Support
             }
             return result;
         }
-*/
 
         /// <summary>
-        /// Return the object instances that match the given object
-        /// <see cref="System.Type"/> (including subclasses).
+        /// Check whether the specified bean would need to be eagerly initialized
+        /// in order to determine its type.
         /// </summary>
-        /// <param name="type">
-        /// The <see cref="System.Type"/> (class or interface) to match.
-        /// </param>
-        /// <param name="includePrototypes">
-        /// Whether to include prototype objects too or just singletons (also applies to
-        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
-        /// </param>
-        /// <param name="includeFactoryObjects">
-        /// Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
-        /// or just normal objects.
-        /// </param>
-        /// <returns>
-        /// An <see cref="System.Collections.IDictionary"/> of the matching objects,
-        /// containing the object names as keys and the corresponding object instances
-        /// as values.
-        /// </returns>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// If any of the objects could not be created.
-        /// </exception>
-        /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectsOfType(Type, bool, bool)"/>
-        protected IList DoGetObjectNamesForType(
-            Type type, bool includePrototypes, bool includeFactoryObjects)
+        /// <param name="factoryObjectName">a factory-bean reference that the bean definition defines a factory method for</param>
+        /// <returns>whether eager initialization is necessary</returns>
+        private bool RequiresEagerInitForType(String factoryObjectName)
+        {
+            return (factoryObjectName != null && IsFactoryObject(factoryObjectName) && !ContainsSingleton(factoryObjectName));
+        }
+
+        /// <summary>
+        /// Check whether the given bean is defined as a <see cref="IFactoryObject"/>. 
+        /// </summary>
+        /// <param name="objectName">the name of the object</param>
+        /// <param name="rod">the corresponding object definition</param>
+        protected bool IsFactoryObject(String objectName, RootObjectDefinition rod)
+        {
+            Type objectType = PredictObjectType(objectName, rod);
+            return (objectType != null && typeof(IFactoryObject).IsAssignableFrom(objectType));
+        }
+
+        private IList DoGetObjectNamesForTypeOld(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             bool isFactoryType = (type != null && typeof(IFactoryObject).IsAssignableFrom(type));
             IList result = new ArrayList();
-            if (type != null)
+            //            if (type != null)
             {
                 string[] objectNames = GetObjectDefinitionNames();
                 foreach (string objectName in objectNames)
                 {
-                    RootObjectDefinition rod = GetMergedObjectDefinition(objectName, false);
+                    // only check object definition if it is not an alias for another object
+                    if (IsAlias(objectName)) continue;
+
+                    RootObjectDefinition rod = GetMergedObjectDefinition(objectName, false); // TODO: check merge ancestors w/ Java
                     // only check complete object definitions...
                     if (!rod.IsAbstract && rod.HasObjectType)
                     {
@@ -890,7 +933,7 @@ namespace Spring.Objects.Factory.Support
                                 result.Add(objectName);
                             }
                         }
-                            // in the case of an IFactoryObject, match the object created by the IFactoryObject...
+                        // in the case of an IFactoryObject, match the object created by the IFactoryObject...
                         else if (typeof(IFactoryObject).IsAssignableFrom(rod.ObjectType) && !isFactoryType)
                         {
                             if (includeFactoryObjects && (includePrototypes || IsSingleton(objectName)) &&
@@ -990,30 +1033,32 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
                 return TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects.Values, null);
-            } else if (typeof(ICollection).IsAssignableFrom(type) && type.IsInterface)
+            }
+            else if (typeof(ICollection).IsAssignableFrom(type) && type.IsInterface)
             {
                 //TODO - handle generic types.
                 return null;
 
-            } else
+            }
+            else
             {
                 IDictionary matchingObjects = FindAutowireCandidates(objectName, type, descriptor);
                 if (matchingObjects.Count == 0)
                 {
                     if (descriptor.Required)
                     {
-                       string methodType = (descriptor.MethodParameter.ConstructorInfo != null) ? "constructor" : "method";
-                       throw new NoSuchObjectDefinitionException(type,
-							"Unsatisfied dependency of type [" + type + "]: expected at least 1 matching object to wire the ["
-                            + descriptor.MethodParameter.ParameterName() + "] parameter on the " + methodType + " of object [" + objectName + "]"); 
+                        string methodType = (descriptor.MethodParameter.ConstructorInfo != null) ? "constructor" : "method";
+                        throw new NoSuchObjectDefinitionException(type,
+                             "Unsatisfied dependency of type [" + type + "]: expected at least 1 matching object to wire the ["
+                             + descriptor.MethodParameter.ParameterName() + "] parameter on the " + methodType + " of object [" + objectName + "]");
                     }
                     return null;
                 }
                 if (matchingObjects.Count > 1)
                 {
-    
-                   throw new NoSuchObjectDefinitionException(type,
-							"expected single matching object but found " + matchingObjects.Count + ": " + matchingObjects);
+
+                    throw new NoSuchObjectDefinitionException(type,
+                             "expected single matching object but found " + matchingObjects.Count + ": " + matchingObjects);
                 }
                 DictionaryEntry entry = (DictionaryEntry)ObjectUtils.EnumerateFirstElement(matchingObjects);
                 if (autowiredObjectNames != null)
@@ -1049,7 +1094,7 @@ namespace Spring.Objects.Factory.Support
 #endif
             foreach (DictionaryEntry entry in resolvableDependencies)
             {
-                Type autoWiringType = (Type) entry.Key;
+                Type autoWiringType = (Type)entry.Key;
                 if (autoWiringType.IsAssignableFrom(requiredType))
                 {
                     object autowiringValue = this.resolvableDependencies[autoWiringType];
@@ -1058,7 +1103,7 @@ namespace Spring.Objects.Factory.Support
                         result.Add(ObjectUtils.IdentityToString(autowiringValue), autowiringValue);
                         break;
                     }
-                }          
+                }
             }
             for (int i = 0; i < candidateNames.Length; i++)
             {
@@ -1086,7 +1131,7 @@ namespace Spring.Objects.Factory.Support
         {
             //Consider FactoryObjects as autowiring candidates.
             bool isFactoryObject = (descriptor != null && descriptor.DependencyType != null &&
-                                    typeof (IFactoryObject).IsAssignableFrom(descriptor.DependencyType));
+                                    typeof(IFactoryObject).IsAssignableFrom(descriptor.DependencyType));
             if (isFactoryObject)
             {
                 objectName = ObjectFactoryUtils.TransformedObjectName(objectName);
@@ -1102,7 +1147,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     // No object definition found in this factory -> delegate to parent
                     return
-                        ((IConfigurableListableObjectFactory) ParentObjectFactory).IsAutowireCandidate(objectName, descriptor);
+                        ((IConfigurableListableObjectFactory)ParentObjectFactory).IsAutowireCandidate(objectName, descriptor);
                 }
             }
             return IsAutowireCandidate(objectName, GetMergedObjectDefinition(objectName, true), descriptor);

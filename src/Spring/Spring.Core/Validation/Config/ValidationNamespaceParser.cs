@@ -137,12 +137,12 @@ namespace Spring.Validation.Config
         private IObjectDefinition ParseValidator(string id, XmlElement element, ParserContext parserContext)
         {
             string typeName = GetTypeName(element);
-            string parent = element.GetAttribute(ObjectDefinitionConstants.ParentAttribute);
-            string test = element.GetAttribute(ValidatorDefinitionConstants.TestAttribute);
-            string when = element.GetAttribute(ValidatorDefinitionConstants.WhenAttribute);
-            string validateAll = element.GetAttribute(ValidatorDefinitionConstants.CollectionValidateAllAttribute);
-            string context = element.GetAttribute(ValidatorDefinitionConstants.CollectionContextAttribute);
-            string includeElementsErrors = element.GetAttribute(ValidatorDefinitionConstants.CollectionIncludeElementsErrors);
+            string parent = GetAttributeValue(element, ObjectDefinitionConstants.ParentAttribute);
+            string test = GetAttributeValue(element, ValidatorDefinitionConstants.TestAttribute);
+            string when = GetAttributeValue(element, ValidatorDefinitionConstants.WhenAttribute);
+            string validateAll = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionValidateAllAttribute);
+            string context = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionContextAttribute);
+            string includeElementsErrors = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionIncludeElementsErrors);
             
             string name = "validator: " + (StringUtils.HasText(id) ? id : this.definitionCount.ToString());
             MutablePropertyValues properties = new MutablePropertyValues();
@@ -178,7 +178,7 @@ namespace Spring.Validation.Config
                     switch (child.LocalName)
                     {
                         case ValidatorDefinitionConstants.PropertyElement:
-                            string propertyName = child.GetAttribute(ValidatorDefinitionConstants.PropertyNameAttribute);
+                            string propertyName = GetAttributeValue(child, ValidatorDefinitionConstants.PropertyNameAttribute);
                             properties.Add(propertyName, base.ParsePropertyValue(child, name, parserContext));
                             break;
                         case ValidatorDefinitionConstants.MessageElement:
@@ -228,7 +228,7 @@ namespace Spring.Validation.Config
         /// <returns>Validator object definition.</returns>
         private IObjectDefinition ParseAndRegisterValidator(XmlElement element, ParserContext parserContext)
         {
-            string id = element.GetAttribute(ObjectDefinitionConstants.IdAttribute);
+            string id = GetAttributeValue(element, ObjectDefinitionConstants.IdAttribute);
             IObjectDefinition validator = ParseValidator(id, element, parserContext);
             if (StringUtils.HasText(id))
             {
@@ -245,7 +245,7 @@ namespace Spring.Validation.Config
         /// <returns>The name of the object type.</returns>
         private string GetTypeName(XmlElement element)
         {
-            string typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
+            string typeName = GetAttributeValue(element, ObjectDefinitionConstants.TypeAttribute);
             if (StringUtils.IsNullOrEmpty(typeName))
             {
                 return ValidatorTypePrefix + element.LocalName;
@@ -261,13 +261,13 @@ namespace Spring.Validation.Config
         /// <returns>The error message action definition.</returns>
         private static IObjectDefinition ParseErrorMessageAction(XmlElement message, ParserContext parserContext)
         {
-            string messageId = message.GetAttribute(MessageConstants.IdAttribute);                        
-            string[] providers = message.GetAttribute(MessageConstants.ProvidersAttribute).Split(',');
+            string messageId = GetAttributeValue(message, MessageConstants.IdAttribute);
+            string[] providers = GetAttributeValue(message, MessageConstants.ProvidersAttribute).Split(',');
             ArrayList parameters = new ArrayList();
 
             foreach (XmlElement param in message.ChildNodes)
             {
-                IExpression paramExpression = Expression.Parse(param.GetAttribute(MessageConstants.ParameterValueAttribute));
+                IExpression paramExpression = Expression.Parse(GetAttributeValue(param, MessageConstants.ParameterValueAttribute));
                 parameters.Add(paramExpression);
             }
 
@@ -276,7 +276,7 @@ namespace Spring.Validation.Config
             ctorArgs.AddGenericArgumentValue(messageId);
             ctorArgs.AddGenericArgumentValue(providers);
 
-            string when = message.GetAttribute(ValidatorDefinitionConstants.WhenAttribute);
+            string when = GetAttributeValue(message, ValidatorDefinitionConstants.WhenAttribute);
             MutablePropertyValues properties = new MutablePropertyValues();
             if (StringUtils.HasText(when))
             {
@@ -303,8 +303,8 @@ namespace Spring.Validation.Config
         /// <returns>Generic validation action definition.</returns>
         private IObjectDefinition ParseGenericAction(XmlElement element, ParserContext parserContext)
         {
-            string typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
-            string when = element.GetAttribute(ValidatorDefinitionConstants.WhenAttribute);
+            string typeName = GetAttributeValue(element, ObjectDefinitionConstants.TypeAttribute);
+            string when = GetAttributeValue(element, ValidatorDefinitionConstants.WhenAttribute);
             MutablePropertyValues properties = base.ParsePropertyElements("validator:action", element, parserContext);
             if (StringUtils.HasText(when))
             {
@@ -327,8 +327,8 @@ namespace Spring.Validation.Config
         private IObjectDefinition ParseValidatorReference(XmlElement element, ParserContext parserContext)
         {
             string typeName = "Spring.Validation.ValidatorReference, Spring.Core";
-            string name = element.GetAttribute(ValidatorDefinitionConstants.ReferenceNameAttribute);
-            string context = element.GetAttribute(ValidatorDefinitionConstants.ReferenceContextAttribute);
+            string name = GetAttributeValue(element, ValidatorDefinitionConstants.ReferenceNameAttribute);
+            string context = GetAttributeValue(element, ValidatorDefinitionConstants.ReferenceContextAttribute);
             
             MutablePropertyValues properties = new MutablePropertyValues();
             properties.Add("Name", name);

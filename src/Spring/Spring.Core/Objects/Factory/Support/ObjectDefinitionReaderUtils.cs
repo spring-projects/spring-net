@@ -152,11 +152,16 @@ namespace Spring.Objects.Factory.Support
             }
             if (StringUtils.IsNullOrEmpty(generatedObjectName))
             {
-                throw new ObjectDefinitionStoreException(
-                    objectDefinition.ResourceDescription, String.Empty,
-                    "Unnamed object definition specifies neither 'Type' nor 'Parent' " +
-                    "nor 'FactoryObject' property values so a unique name cannot be generated.");
+                if (!isInnerObject)
+                {
+                    throw new ObjectDefinitionStoreException(
+                        objectDefinition.ResourceDescription, String.Empty,
+                        "Unnamed object definition specifies neither 'Type' nor 'Parent' " +
+                        "nor 'FactoryObject' property values so a unique name cannot be generated.");                    
+                }
+                generatedObjectName = "$nested";
             }
+
             String id = generatedObjectName;
             if (isInnerObject)
             {

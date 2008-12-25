@@ -160,13 +160,10 @@ namespace Spring.Objects.Factory.Xml
 
         private void ParseAlias(XmlElement aliasElement, IObjectDefinitionRegistry registry)
         {
-            string name = aliasElement.GetAttribute(ObjectDefinitionConstants.NameAttribute);
-            string alias = aliasElement.GetAttribute(ObjectDefinitionConstants.AliasAttribute);            
+            string name = GetAttributeValue(aliasElement, ObjectDefinitionConstants.NameAttribute);
+            string alias = GetAttributeValue(aliasElement, ObjectDefinitionConstants.AliasAttribute);            
             registry.RegisterAlias(name, alias);
         }
-         
-
-        
 
         /// <summary>
         /// Loads external XML object definitions from the resource described by the supplied
@@ -179,7 +176,7 @@ namespace Spring.Objects.Factory.Xml
         /// </exception>
         protected virtual void ImportObjectDefinitionResource(XmlElement resource, ParserContext parserContext)
         {
-            string location = resource.GetAttribute(ObjectDefinitionConstants.ImportResourceAttribute);
+            string location = GetAttributeValue(resource, ObjectDefinitionConstants.ImportResourceAttribute);
             try
             {
                 #region Instrumentation
@@ -223,8 +220,8 @@ namespace Spring.Objects.Factory.Xml
             // get an appropriate IEventHandlerValue instance based upon the
             // attribute values of the listener element...
             IEventHandlerValue myHandler = ObjectDefinitionReaderUtils.CreateEventHandlerValue(
-                element.GetAttribute(ObjectDefinitionConstants.ListenerMethodAttribute),
-                element.GetAttribute(ObjectDefinitionConstants.ListenerEventAttribute));
+                GetAttributeValue(element, ObjectDefinitionConstants.ListenerMethodAttribute),
+                GetAttributeValue(element, ObjectDefinitionConstants.ListenerEventAttribute));
 
             // and then get the source of the event (another managed object instance
             // or a Type reference (i.e. a static event exposed on a class)...
@@ -333,8 +330,8 @@ namespace Spring.Objects.Factory.Xml
         /// </remarks>
         protected ObjectDefinitionHolder ParseObjectDefinitionElement(XmlElement element, ParserContext parserContext, bool nestedDefinition)
         {
-            string id = element.GetAttribute(ObjectDefinitionConstants.IdAttribute);
-            string nameAttr = element.GetAttribute(ObjectDefinitionConstants.NameAttribute);
+            string id = GetAttributeValue(element, ObjectDefinitionConstants.IdAttribute);
+            string nameAttr = GetAttributeValue(element, ObjectDefinitionConstants.NameAttribute);
             ArrayList aliases = new ArrayList();
             if (StringUtils.HasText(nameAttr))
             {
@@ -445,15 +442,17 @@ namespace Spring.Objects.Factory.Xml
             {
                 if (element.HasAttribute(ObjectDefinitionConstants.TypeAttribute))
                 {
-                    typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
+                    typeName = GetAttributeValue(element, ObjectDefinitionConstants.TypeAttribute);
                     if (StringUtils.IsNullOrEmpty(typeName))
                     {
                         throw new ObjectDefinitionStoreException(
                             parserContext.ReaderContext.Resource, id,
-                            "The 'type' attribute does not need to be present, but if it is it must not be empty: got '" + typeName + "'.");
+                            "The 'type' attribute does not need to be present, but if it is it must not be empty: got '" +
+                            typeName + "'.");
                     }
                 }
-                string parent = element.GetAttribute(ObjectDefinitionConstants.ParentAttribute);
+
+                string parent = GetAttributeValue(element, ObjectDefinitionConstants.ParentAttribute);
 
 
                 AbstractObjectDefinition od
@@ -478,38 +477,38 @@ namespace Spring.Objects.Factory.Xml
                 od.EventHandlerValues = events;
                 if (element.HasAttribute(ObjectDefinitionConstants.DependsOnAttribute))
                 {
-                    string dependsOn = element.GetAttribute(ObjectDefinitionConstants.DependsOnAttribute);
+                    string dependsOn = GetAttributeValue(element, ObjectDefinitionConstants.DependsOnAttribute);
                     od.DependsOn = GetObjectNames(dependsOn);
                 }
-                od.FactoryMethodName = element.GetAttribute(ObjectDefinitionConstants.FactoryMethodAttribute);
-                od.FactoryObjectName = element.GetAttribute(ObjectDefinitionConstants.FactoryObjectAttribute);
-                string dependencyCheck = element.GetAttribute(ObjectDefinitionConstants.DependencyCheckAttribute);
+                od.FactoryMethodName = GetAttributeValue(element, ObjectDefinitionConstants.FactoryMethodAttribute);
+                od.FactoryObjectName = GetAttributeValue(element, ObjectDefinitionConstants.FactoryObjectAttribute);
+                string dependencyCheck = GetAttributeValue(element, ObjectDefinitionConstants.DependencyCheckAttribute);
                 if (ObjectDefinitionConstants.DefaultValue.Equals(dependencyCheck))
                 {
                     dependencyCheck = parserContext.ParserHelper.Defaults.DependencyCheck;
                 }
                 od.DependencyCheck = GetDependencyCheck(dependencyCheck);
-                string autowire = element.GetAttribute(ObjectDefinitionConstants.AutowireAttribute);
+                string autowire = GetAttributeValue(element, ObjectDefinitionConstants.AutowireAttribute);
                 if (ObjectDefinitionConstants.DefaultValue.Equals(autowire))
                 {
                     autowire = parserContext.ParserHelper.Defaults.Autowire;
                 }
                 od.AutowireMode = GetAutowireMode(autowire);
-                string initMethodName = element.GetAttribute(ObjectDefinitionConstants.InitMethodAttribute);
+                string initMethodName = GetAttributeValue(element, ObjectDefinitionConstants.InitMethodAttribute);
                 if (StringUtils.HasText(initMethodName))
                 {
                     od.InitMethodName = initMethodName;
                 }
-                string destroyMethodName = element.GetAttribute(ObjectDefinitionConstants.DestroyMethodAttribute);
+                string destroyMethodName = GetAttributeValue(element, ObjectDefinitionConstants.DestroyMethodAttribute);
                 if (StringUtils.HasText(destroyMethodName))
                 {
                     od.DestroyMethodName = destroyMethodName;
                 }
                 if (element.HasAttribute(ObjectDefinitionConstants.SingletonAttribute))
                 {
-                    od.IsSingleton = IsTrueStringValue(element.GetAttribute(ObjectDefinitionConstants.SingletonAttribute).ToLower(CultureInfo.CurrentCulture));
+                    od.IsSingleton = IsTrueStringValue(GetAttributeValue(element, ObjectDefinitionConstants.SingletonAttribute, string.Empty).ToLower(CultureInfo.CurrentCulture));
                 }
-                string lazyInit = element.GetAttribute(ObjectDefinitionConstants.LazyInitAttribute);
+                string lazyInit = GetAttributeValue(element, ObjectDefinitionConstants.LazyInitAttribute);
                 if (ObjectDefinitionConstants.DefaultValue.Equals(lazyInit) && od.IsSingleton)
                 {
                     // just apply default to singletons, as lazy-init has no meaning for prototypes...
@@ -529,7 +528,7 @@ namespace Spring.Objects.Factory.Xml
                 }
                 od.ResourceDescription = resourceDescription;
 
-                string isAbstract = element.GetAttribute(ObjectDefinitionConstants.AbstractAttribute);
+                string isAbstract = GetAttributeValue(element, ObjectDefinitionConstants.AbstractAttribute);
                 if (StringUtils.HasText(isAbstract))
                 {
                     od.IsAbstract = IsTrueStringValue(isAbstract);
@@ -577,8 +576,8 @@ namespace Spring.Objects.Factory.Xml
         protected void ParseLookupMethodElement(
             string name, MethodOverrides overrides, XmlElement element, ParserContext parserContext)
         {
-            string methodName = element.GetAttribute(ObjectDefinitionConstants.LookupMethodNameAttribute);
-            string targetObjectName = element.GetAttribute(ObjectDefinitionConstants.LookupMethodObjectNameAttribute);
+            string methodName = GetAttributeValue(element, ObjectDefinitionConstants.LookupMethodNameAttribute);
+            string targetObjectName = GetAttributeValue(element, ObjectDefinitionConstants.LookupMethodObjectNameAttribute);
             if (StringUtils.IsNullOrEmpty(methodName))
             {
                 throw new ObjectDefinitionStoreException(
@@ -602,8 +601,8 @@ namespace Spring.Objects.Factory.Xml
         protected void ParseReplacedMethodElement(
             string name, MethodOverrides overrides, XmlElement element, ParserContext parserContext)
         {
-            string methodName = element.GetAttribute(ObjectDefinitionConstants.ReplacedMethodNameAttribute);
-            string targetReplacerObjectName = element.GetAttribute(ObjectDefinitionConstants.ReplacedMethodReplacerNameAttribute);
+            string methodName = GetAttributeValue(element, ObjectDefinitionConstants.ReplacedMethodNameAttribute);
+            string targetReplacerObjectName = GetAttributeValue(element, ObjectDefinitionConstants.ReplacedMethodReplacerNameAttribute);
             if (StringUtils.IsNullOrEmpty(methodName))
             {
                 throw new ObjectDefinitionStoreException(
@@ -622,7 +621,7 @@ namespace Spring.Objects.Factory.Xml
             foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.ReplacedMethodArgumentTypeElement))
             {
                 XmlElement argElement = (XmlElement) node;
-                string match = argElement.GetAttribute(ObjectDefinitionConstants.ReplacedMethodArgumentTypeMatchAttribute);
+                string match = GetAttributeValue(argElement, ObjectDefinitionConstants.ReplacedMethodArgumentTypeMatchAttribute);
                 if (StringUtils.IsNullOrEmpty(match))
                 {
                     throw new ObjectDefinitionStoreException(
@@ -708,9 +707,9 @@ namespace Spring.Objects.Factory.Xml
             string name, ConstructorArgumentValues arguments, XmlElement element, ParserContext parserContext)
         {
             object val = ParsePropertyValue(element, name, parserContext);
-            string indexAttr = element.GetAttribute(ObjectDefinitionConstants.IndexAttribute);
-            string typeAttr = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
-            string nameAttr = element.GetAttribute(ObjectDefinitionConstants.ArgumentNameAttribute);
+            string indexAttr = GetAttributeValue(element, ObjectDefinitionConstants.IndexAttribute);
+            string typeAttr = GetAttributeValue(element, ObjectDefinitionConstants.TypeAttribute);
+            string nameAttr = GetAttributeValue(element, ObjectDefinitionConstants.ArgumentNameAttribute);
 
             // only one of the 'index' or 'name' attributes can be present
             if (StringUtils.HasText(indexAttr)
@@ -789,7 +788,7 @@ namespace Spring.Objects.Factory.Xml
         protected void ParsePropertyElement(
             string name, MutablePropertyValues properties, XmlElement element, ParserContext parserContext)
         {
-            string propertyName = element.GetAttribute(ObjectDefinitionConstants.NameAttribute);
+            string propertyName = GetAttributeValue(element, ObjectDefinitionConstants.NameAttribute);
             if (StringUtils.IsNullOrEmpty(propertyName))
             {
                 throw new ObjectDefinitionStoreException(
@@ -955,11 +954,11 @@ namespace Spring.Objects.Factory.Xml
         private static object ParseIdReference(XmlElement element, ObjectDefinitionParserHelper parserHelper, string name)
         {
             // a generic reference to any name of any object
-            string objectRef = element.GetAttribute(ObjectDefinitionConstants.ObjectRefAttribute);
+            string objectRef = GetAttributeValue(element, ObjectDefinitionConstants.ObjectRefAttribute);
             if (StringUtils.IsNullOrEmpty(objectRef))
             {
                 // a reference to the id of another object in the same XML file
-                objectRef = element.GetAttribute(ObjectDefinitionConstants.LocalRefAttribute);
+                objectRef = GetAttributeValue(element, ObjectDefinitionConstants.LocalRefAttribute);
                 if (StringUtils.IsNullOrEmpty(objectRef))
                 {
                     throw new ObjectDefinitionStoreException(
@@ -974,15 +973,15 @@ namespace Spring.Objects.Factory.Xml
         private object ParseReference(XmlElement element, ObjectDefinitionParserHelper parserHelper, string name)
         {
             // is it a generic reference to any name of any object?
-            string objectRef = element.GetAttribute(ObjectDefinitionConstants.ObjectRefAttribute);
+            string objectRef = GetAttributeValue(element, ObjectDefinitionConstants.ObjectRefAttribute);
             if (StringUtils.IsNullOrEmpty(objectRef))
             {
                 // is it a reference to the id of another object in the same XML file?
-                objectRef = element.GetAttribute(ObjectDefinitionConstants.LocalRefAttribute);
+                objectRef = GetAttributeValue(element, ObjectDefinitionConstants.LocalRefAttribute);
                 if (StringUtils.IsNullOrEmpty(objectRef))
                 {
                     // is it a reference to the id of another object in a parent context?
-                    objectRef = element.GetAttribute(ObjectDefinitionConstants.ParentAttribute);
+                    objectRef = GetAttributeValue(element, ObjectDefinitionConstants.ParentAttribute);
                     if (StringUtils.IsNullOrEmpty(objectRef))
                     {
                         throw new ObjectDefinitionStoreException(
@@ -998,7 +997,7 @@ namespace Spring.Objects.Factory.Xml
 
         private object ParseValueElement(XmlElement element, string name)
         {
-            string valueType = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
+            string valueType = GetAttributeValue(element, ObjectDefinitionConstants.TypeAttribute);
             if (StringUtils.IsNullOrEmpty(valueType))
             {
                 return ParseTextValueElement(element, name);
@@ -1019,7 +1018,7 @@ namespace Spring.Objects.Factory.Xml
 
         private object ParseExpressionElement(XmlElement element, string name, ParserContext parserContext)
         {
-            string expression = element.GetAttribute(ObjectDefinitionConstants.ValueAttribute);
+            string expression = GetAttributeValue(element, ObjectDefinitionConstants.ValueAttribute);
             ExpressionHolder holder = new ExpressionHolder(expression);
             holder.Properties = ParsePropertyElements(name, element, parserContext);
             return holder;
@@ -1042,7 +1041,7 @@ namespace Spring.Objects.Factory.Xml
         {
             ManagedList list = new ManagedList();
 
-            string elementTypeName = element.GetAttribute("element-type");
+            string elementTypeName = GetAttributeValue(element, "element-type");
             if (StringUtils.HasText(elementTypeName))
             {
                 list.ElementTypeName = elementTypeName;
@@ -1075,7 +1074,7 @@ namespace Spring.Objects.Factory.Xml
         protected Set ParseSetElement(XmlElement element, string name, ParserContext parserContext)
         {
             ManagedSet theSet = new ManagedSet();
-            string elementTypeName = element.GetAttribute("element-type");
+            string elementTypeName = GetAttributeValue(element, "element-type");
             if (StringUtils.HasText(elementTypeName))
             {
                 theSet.ElementTypeName = elementTypeName;
@@ -1108,8 +1107,8 @@ namespace Spring.Objects.Factory.Xml
         protected IDictionary ParseDictionaryElement(XmlElement element, string name, ParserContext parserContext)
         {
             ManagedDictionary dictionary = new ManagedDictionary();
-            string keyTypeName = element.GetAttribute("key-type");
-            string valueTypeName = element.GetAttribute("value-type");
+            string keyTypeName = GetAttributeValue(element, "key-type");
+            string valueTypeName = GetAttributeValue(element, "value-type");
             if (StringUtils.HasText(keyTypeName))
             {
                 dictionary.KeyTypeName = keyTypeName;
@@ -1288,9 +1287,9 @@ namespace Spring.Objects.Factory.Xml
             XmlNodeList addElements = element.GetElementsByTagName(ObjectDefinitionConstants.AddElement);
             foreach (XmlElement addElement in addElements)
             {
-                string key = addElement.GetAttribute(ObjectDefinitionConstants.KeyAttribute);
-                string value = addElement.GetAttribute(ObjectDefinitionConstants.ValueAttribute);
-                string delimiters = addElement.GetAttribute(ObjectDefinitionConstants.DelimitersAttribute);
+                string key = GetAttributeValue(addElement, ObjectDefinitionConstants.KeyAttribute);
+                string value = GetAttributeValue(addElement, ObjectDefinitionConstants.ValueAttribute);
+                string delimiters = GetAttributeValue(addElement, ObjectDefinitionConstants.DelimitersAttribute);
 
                 if (StringUtils.HasText(delimiters))
                 {
@@ -1439,6 +1438,39 @@ namespace Spring.Objects.Factory.Xml
         private string GetNamespacePrefix(XmlElement element)
         {
             return StringUtils.HasText(element.Prefix) ? element.Prefix : "spring";
+        }
+
+        /// <summary>
+        /// Returns the value of the element's attribute or <c>null</c>, if the attribute is not specified.
+        /// </summary>
+        /// <remarks>
+        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/> 
+        /// to return <see cref="string.Empty"/> if the attribute does not exist.
+        /// </remarks>
+        protected static string GetAttributeValue(XmlElement element, string attributeName)
+        {
+            if (element.HasAttribute(attributeName))
+            {
+                return element.GetAttribute(attributeName);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the value of the element's attribute or <paramref name="defaultValue"/>, 
+        /// if the attribute is not specified.
+        /// </summary>
+        /// <remarks>
+        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/> 
+        /// to return <see cref="string.Empty"/> if the attribute does not exist.
+        /// </remarks>
+        protected static string GetAttributeValue(XmlElement element, string attributeName, string defaultValue)
+        {
+            if (element.HasAttribute(attributeName))
+            {
+                return element.GetAttribute(attributeName);
+            }
+            return defaultValue;
         }
     }
 }

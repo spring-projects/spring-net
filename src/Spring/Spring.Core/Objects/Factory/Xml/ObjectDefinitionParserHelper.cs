@@ -99,7 +99,7 @@ namespace Spring.Objects.Factory.Xml
 
             #endregion
 
-            ddd.LazyInit = root.GetAttribute(ObjectDefinitionConstants.DefaultLazyInitAttribute);
+            ddd.LazyInit = GetAttributeValue(root, ObjectDefinitionConstants.DefaultLazyInitAttribute);
 
             #region Instrumentation
 
@@ -113,7 +113,7 @@ namespace Spring.Objects.Factory.Xml
 
             #endregion
 
-            ddd.DependencyCheck = root.GetAttribute(ObjectDefinitionConstants.DefaultDependencyCheckAttribute);
+            ddd.DependencyCheck = GetAttributeValue(root, ObjectDefinitionConstants.DefaultDependencyCheckAttribute);
 
             #region Instrumentation
 
@@ -127,7 +127,7 @@ namespace Spring.Objects.Factory.Xml
 
             #endregion
 
-            ddd.Autowire = root.GetAttribute(ObjectDefinitionConstants.DefaultAutowireAttribute);
+            ddd.Autowire = GetAttributeValue(root, ObjectDefinitionConstants.DefaultAutowireAttribute);
 
             #region Instrumentation
 
@@ -205,6 +205,37 @@ namespace Spring.Objects.Factory.Xml
             return ObjectDefinitionBuilder.RootObjectDefinition(this.readerContext.ObjectDefinitionFactory, objectType);
         }
 
+        /// <summary>
+        /// Returns the value of the element's attribute or <c>null</c>, if the attribute is not specified.
+        /// </summary>
+        /// <remarks>
+        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/> 
+        /// to return <see cref="string.Empty"/> if the attribute does not exist.
+        /// </remarks>
+        public string GetAttributeValue(XmlElement element, string attributeName)
+        {
+            if (element.HasAttribute(attributeName))
+            {
+                return element.GetAttribute(attributeName);
+            }
+            return null;
+        }
 
+        /// <summary>
+        /// Returns the value of the element's attribute or <paramref name="defaultValue"/>, 
+        /// if the attribute is not specified.
+        /// </summary>
+        /// <remarks>
+        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/> 
+        /// to return <see cref="string.Empty"/> if the attribute does not exist.
+        /// </remarks>
+        public string GetAttributeValue(XmlElement element, string attributeName, string defaultValue)
+        {
+            if (element.HasAttribute(attributeName))
+            {
+                return element.GetAttribute(attributeName);
+            }
+            return defaultValue;
+        }
     }
 }

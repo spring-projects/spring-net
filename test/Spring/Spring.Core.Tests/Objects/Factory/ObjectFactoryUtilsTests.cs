@@ -83,9 +83,9 @@ namespace Spring.Objects.Factory
             IConfigurableListableObjectFactory of = (IConfigurableListableObjectFactory) mocks.DynamicMock(typeof (IConfigurableListableObjectFactory));
             IConfigurableListableObjectFactory ofParent = (IConfigurableListableObjectFactory) mocks.DynamicMock(typeof (IConfigurableListableObjectFactory));
             
-            Expect.Call(of.GetObjectDefinitionNames()).Return(new string[] { "objA", "objB", "objC" });
+            Expect.Call(of.GetObjectNamesForType(typeof(object))).Return(new string[] { "objA", "objB", "objC" });
             Expect.Call(((IHierarchicalObjectFactory)of).ParentObjectFactory).Return(ofParent);
-            Expect.Call(ofParent.GetObjectDefinitionNames()).Return(new string[] { "obj2A", "objB", "obj2C" });
+            Expect.Call(ofParent.GetObjectNamesForType(typeof(object))).Return(new string[] { "obj2A", "objB", "obj2C" });
 
             mocks.ReplayAll();
           
@@ -107,6 +107,23 @@ namespace Spring.Objects.Factory
 			Assert.IsTrue(names.Contains("test3"));
 			Assert.IsTrue(names.Contains("testFactory1"));
 			Assert.IsTrue(names.Contains("testFactory2"));
+		}
+
+		[Test]
+        public void ObjectNamesForTypeIncludingAncestorsExcludesObjectsFromParentWhenLocalObjectDefined()
+		{
+		    DefaultListableObjectFactory root = new DefaultListableObjectFactory();
+            root.RegisterObjectDefinition( "excludeLocalObject", new RootObjectDefinition(typeof(ArrayList)) );
+            DefaultListableObjectFactory child = new DefaultListableObjectFactory(root);
+            child.RegisterObjectDefinition("excludeLocalObject", new RootObjectDefinition(typeof(Hashtable)));
+
+			IList names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(child, typeof (ArrayList));
+			// "excludeLocalObject" matches on the parent, but not the local object definition
+			Assert.AreEqual(0, names.Count);
+
+			names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(child, typeof (ArrayList), true, true);
+			// "excludeLocalObject" matches on the parent, but not the local object definition
+			Assert.AreEqual(0, names.Count);
 		}
 
 #if NET_2_0
@@ -171,12 +188,14 @@ namespace Spring.Objects.Factory
 			object testFactory1 = _factory.GetObject("testFactory1");
 
 			IDictionary objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof (ITestObject), true, false);
-			Assert.AreEqual(2, objects.Count);
+			Assert.AreEqual(3, objects.Count);
 			Assert.AreEqual(test3, objects["test3"]);
 			Assert.AreEqual(test, objects["test"]);
+			Assert.AreEqual(testFactory1, objects["testFactory1"]);
 			objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof (ITestObject), false, false);
-			Assert.AreEqual(1, objects.Count);
+			Assert.AreEqual(2, objects.Count);
 			Assert.AreEqual(test, objects["test"]);
+			Assert.AreEqual(testFactory1, objects["testFactory1"]);
 			objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof (ITestObject), false, true);
 			Assert.AreEqual(2, objects.Count);
 			Assert.AreEqual(test, objects["test"]);
@@ -204,6 +223,19 @@ namespace Spring.Objects.Factory
 		{
 			ObjectFactoryUtils.ObjectOfTypeIncludingAncestors(_factory, typeof (ITestObject), true, true);
 		}
+
+        [Test]
+        public void ObjectOfTypeIncludingAncestorsExcludesObjectsFromParentWhenLocalObjectDefined()
+        {
+            DefaultListableObjectFactory root = new DefaultListableObjectFactory();
+            root.RegisterObjectDefinition("excludeLocalObject", new RootObjectDefinition(typeof(ArrayList)));
+            DefaultListableObjectFactory child = new DefaultListableObjectFactory(root);
+            child.RegisterObjectDefinition("excludeLocalObject", new RootObjectDefinition(typeof(Hashtable)));
+
+            IDictionary objectEntries = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(child, typeof(ArrayList), true, true);
+            // "excludeLocalObject" matches on the parent, but not the local object definition
+            Assert.AreEqual(0, objectEntries.Count);
+        }
 
 		[Test]
 		public void NoObjectsOfTypeIncludingAncestors()

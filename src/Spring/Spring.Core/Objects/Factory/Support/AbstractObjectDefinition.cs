@@ -384,7 +384,7 @@ namespace Spring.Objects.Factory.Support
                     return objectType as string;
                 }
             }
-            set { objectType = value; }
+            set { objectType = StringUtils.GetTextOrNull(value); }
         }
 
         /// <summary>
@@ -394,7 +394,7 @@ namespace Spring.Objects.Factory.Support
         public string ResourceDescription
         {
             get { return resourceDescription; }
-            set { resourceDescription = value; }
+            set { resourceDescription = StringUtils.GetTextOrNull(value); }
         }
 
         /// <summary>
@@ -515,7 +515,7 @@ namespace Spring.Objects.Factory.Support
         public string InitMethodName
         {
             get { return initMethodName; }
-            set { initMethodName = value; }
+            set { initMethodName = StringUtils.GetTextOrNull(value); }
         }
 
         /// <summary>
@@ -530,7 +530,7 @@ namespace Spring.Objects.Factory.Support
         public string DestroyMethodName
         {
             get { return destroyMethodName; }
-            set { destroyMethodName = value; }
+            set { destroyMethodName = StringUtils.GetTextOrNull(value); }
         }
 
         /// <summary>
@@ -547,7 +547,7 @@ namespace Spring.Objects.Factory.Support
         public string FactoryMethodName
         {
             get { return factoryMethodName; }
-            set { factoryMethodName = value; }
+            set { factoryMethodName = StringUtils.GetTextOrNull(value); }
         }
 
         /// <summary>
@@ -556,7 +556,7 @@ namespace Spring.Objects.Factory.Support
         public string FactoryObjectName
         {
             get { return factoryObjectName; }
-            set { factoryObjectName = value; }
+            set { factoryObjectName = StringUtils.GetTextOrNull(value); }
         }
 
         /// <summary>
@@ -759,7 +759,7 @@ namespace Spring.Objects.Factory.Support
         private MutablePropertyValues propertyValues = new MutablePropertyValues();
         private EventValues eventHandlerValues = new EventValues();
         private MethodOverrides methodOverrides = new MethodOverrides();
-        private string resourceDescription = string.Empty;
+        private string resourceDescription = null;
         private bool isSingleton = true;
         private bool isPrototype = false;
         private bool isLazyInit = false;
@@ -769,10 +769,10 @@ namespace Spring.Objects.Factory.Support
         private DependencyCheckingMode dependencyCheck = DependencyCheckingMode.None;
         private string[] dependsOn;
         private bool autowireCandidate = true;
-        private string initMethodName = string.Empty;
-        private string destroyMethodName = string.Empty;
-        private string factoryMethodName = string.Empty;
-        private string factoryObjectName = string.Empty;
+        private string initMethodName = null;
+        private string destroyMethodName = null;
+        private string factoryMethodName = null;
+        private string factoryObjectName = null;
 
         #endregion
     }

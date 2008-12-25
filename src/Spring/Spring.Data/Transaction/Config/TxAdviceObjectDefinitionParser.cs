@@ -63,7 +63,7 @@ namespace Spring.Transaction.Config
         {
 
             builder.AddPropertyReference(TxNamespaceUtils.TRANSACTION_MANAGER_PROPERTY,
-                element.GetAttribute(TxNamespaceUtils.TRANSACTION_MANAGER_ATTRIBUTE));
+                GetAttributeValue(element, TxNamespaceUtils.TRANSACTION_MANAGER_ATTRIBUTE));
             XmlNodeList txAttributes = element.SelectNodes("*[local-name()='attributes' and namespace-uri()='" + element.NamespaceURI + "']");
             if (txAttributes.Count > 1 )
             {
@@ -95,14 +95,14 @@ namespace Spring.Transaction.Config
             ManagedDictionary transactionAttributeMap = new ManagedDictionary();
             foreach (XmlElement methodElement in methods)
             {
-                string name = methodElement.GetAttribute("name");
+                string name = GetAttributeValue(methodElement, "name");
                 TypedStringValue nameHolder = new TypedStringValue(name);
                 
                 RuleBasedTransactionAttribute attribute = new RuleBasedTransactionAttribute();
-                string propagation = methodElement.GetAttribute(PROPAGATION);
-                string isolation = methodElement.GetAttribute(ISOLATION);
-                string timeout = methodElement.GetAttribute(TIMEOUT);
-                string readOnly = methodElement.GetAttribute(READ_ONLY);
+                string propagation = GetAttributeValue(methodElement, PROPAGATION);
+                string isolation = GetAttributeValue(methodElement, ISOLATION);
+                string timeout = GetAttributeValue(methodElement, TIMEOUT);
+                string readOnly = GetAttributeValue(methodElement, READ_ONLY);
                 if (StringUtils.HasText(propagation))
                 {
                     attribute.PropagationBehavior = (TransactionPropagation) Enum.Parse(typeof (TransactionPropagation), propagation, true);
@@ -125,29 +125,27 @@ namespace Spring.Transaction.Config
                 }
                 if (StringUtils.HasText(readOnly))
                 {
-                    attribute.ReadOnly = Boolean.Parse(methodElement.GetAttribute(READ_ONLY));
+                    attribute.ReadOnly = Boolean.Parse(GetAttributeValue(methodElement, READ_ONLY));
                 }
                 IList rollbackRules = new LinkedList();
                 if (methodElement.HasAttribute(ROLLBACK_FOR))
                 {
-                    string rollbackForValue = methodElement.GetAttribute(ROLLBACK_FOR);
+                    string rollbackForValue = GetAttributeValue(methodElement, ROLLBACK_FOR);
                     AddRollbackRuleAttributesTo(rollbackRules, rollbackForValue);
                 }
                 if (methodElement.HasAttribute(NO_ROLLBACK_FOR))
                 {
-                    string noRollbackForValue = methodElement.GetAttribute(NO_ROLLBACK_FOR);
+                    string noRollbackForValue = GetAttributeValue(methodElement, NO_ROLLBACK_FOR);
                     AddNoRollbackRuleAttributesTo(rollbackRules, noRollbackForValue);
                 }
                 attribute.RollbackRules = rollbackRules;
 
                 transactionAttributeMap[nameHolder] = attribute;
-
-
-
             }
 
-            ObjectDefinitionBuilder builder = 
-                parserContext.ParserHelper.CreateRootObjectDefinitionBuilder(typeof (NameMatchTransactionAttributeSource));
+            ObjectDefinitionBuilder builder = parserContext
+                                                .ParserHelper
+                                                .CreateRootObjectDefinitionBuilder(typeof (NameMatchTransactionAttributeSource));
             builder.AddPropertyValue(NAME_MAP, transactionAttributeMap);
             return builder.ObjectDefinition;
 

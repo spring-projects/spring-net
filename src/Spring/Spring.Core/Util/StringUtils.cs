@@ -494,6 +494,18 @@ namespace Spring.Util
         }
 
         /// <summary>
+        /// Returns <paramref name="value"/>, if it contains non-whitespaces. <c>null</c> otherwise.
+        /// </summary>
+        public static string GetTextOrNull(string value)
+        {
+            if (!HasText(value))
+            {
+                return null;
+            }
+            return value;
+        }
+
+        /// <summary>
         /// Strips first and last character off the string.
         /// </summary>
         /// <param name="text">The string to strip.</param>

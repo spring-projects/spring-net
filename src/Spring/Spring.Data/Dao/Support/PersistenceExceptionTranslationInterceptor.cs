@@ -118,7 +118,7 @@ namespace Spring.Dao.Support
                     IListableObjectFactory owningFactory = value as IListableObjectFactory; 
                     if (owningFactory == null)
                     {
-                        throw new ArgumentException("Cannot use IPersistenceExceptionTranslator autodetection without IListableBeanFactory");
+                        throw new ArgumentException("Cannot use IPersistenceExceptionTranslator autodetection without IListableObjectFactory");
                     }
                     this.persistenceExceptionTranslator = DetectPersistenceExceptionTranslators(owningFactory);
                 }

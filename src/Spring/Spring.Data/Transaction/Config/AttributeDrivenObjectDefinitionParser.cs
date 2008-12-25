@@ -66,7 +66,7 @@ namespace Spring.Transaction.Config
         {
             ConfigureAutoProxyCreator(parserContext, element);
 
-            string transactionManagerName = element.GetAttribute(TxNamespaceUtils.TRANSACTION_MANAGER_ATTRIBUTE);
+            string transactionManagerName = GetAttributeValue(element, TxNamespaceUtils.TRANSACTION_MANAGER_ATTRIBUTE);
             Type sourceType = typeof (AttributesTransactionAttributeSource);
 
             //Create the TransactionInterceptor definition.
@@ -81,7 +81,7 @@ namespace Spring.Transaction.Config
             advisorDefinition.PropertyValues.Add(TRANSACTION_INTERCEPTOR, interceptorDefinition);
             if (element.HasAttribute(ORDER))
             {
-                advisorDefinition.PropertyValues.Add(ORDER, element.GetAttribute(ORDER));
+                advisorDefinition.PropertyValues.Add(ORDER, GetAttributeValue(element, ORDER));
             }
 
             return advisorDefinition;
@@ -97,7 +97,7 @@ namespace Spring.Transaction.Config
             AopNamespaceUtils.RegisterAutoProxyCreatorIfNecessary(parserContext, element);
 
             bool proxyTargetClass =
-                parserContext.ParserHelper.IsTrueStringValue(element.GetAttribute(PROXY_TARGET_TYPE));
+                parserContext.ParserHelper.IsTrueStringValue(GetAttributeValue(element, PROXY_TARGET_TYPE));
             if (proxyTargetClass)
             {
                 AopNamespaceUtils.ForceAutoProxyCreatorToUseDecoratorProxy(parserContext.Registry);
