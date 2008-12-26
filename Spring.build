@@ -844,23 +844,21 @@
     <call target="set-package-configuration"/>
     <property name="filetoupload" value="${project.name}-${package.version}.zip"/>
     <property name="spring.ssh.server" value="spring02.managed.contegix.com" />
-    <property name="spring.ssh.user" value="markp"/>
-    <property name="spring.ssh.args" value=" -l ${spring.ssh.user} " />
     <property name="spring.web.path" value="/var/www/domains/springframework.net/www/htdocs" />
     <!-- setup property that holds partial path to be used by scp -->
-    <property name="serverpart" value="${spring.ssh.user + '@' + spring.ssh.server + ':' + spring.web.path}" />
+    <property name="serverpart" value="${spring.ssh.server + ':' + spring.web.path}" />
     <property name="nightly.builds.path" value="downloads/nightly"/>
 
     <echo message="uploading ${filetoupload} to spring02.managed.contegix.com"/>
-    <exec workingdir="${package.dir}" program="scp" verbose="true">
+    <exec workingdir="${package.dir}" program="scp_spring02.bat" verbose="true">
       <arg value="${filetoupload}" />
       <arg value="${serverpart}/${nightly.builds.path}/${filetoupload}" />
     </exec>
 
     <echo message="extracting ${filetoupload} to downloads/latest"/>
     <property name="extract.command" value="cd website/downloads/nightly/; ./update-latest.sh"/>
-    <exec workingdir="${package.dir}" program="ssh" verbose="true">
-      <arg value="${spring.ssh.user + '@' + spring.ssh.server}" />
+    <exec workingdir="${package.dir}" program="ssh_spring02.bat" verbose="true">
+      <arg value="${spring.ssh.server}" />
       <arg value="${extract.command}" />
     </exec>
 
