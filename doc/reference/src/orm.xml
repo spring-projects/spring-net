@@ -221,7 +221,7 @@
       XML fragment showing the declaration of
       <literal>HibernateTransactionManager</literal> is shown below.</para>
 
-      <programlisting language="myxml">  &lt;object id="HibernateTransactionManager"
+      <programlisting language="myxml">  &lt;object id="transactionManager"
         type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate"&gt;
 
     &lt;property name="DbProvider" ref="DbProvider"/&gt;
@@ -736,7 +736,7 @@ public class HibernateCustomerDao : ICustomerDao {
 
       <programlisting language="myxml">&lt;objects&gt;
 
-  &lt;object id="HibernateTransactionManager"
+  &lt;object id="TransactionManager"
         type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate"&gt;
 
     &lt;property name="DbProvider" ref="DbProvider"/&gt;
@@ -750,7 +750,7 @@ public class HibernateCustomerDao : ICustomerDao {
     &lt;property name="CustomerDao" ref="CustomerDao"/&gt;
     &lt;property name="OrderDao" ref="OrderDao"/&gt;
     &lt;property name="ShippingService" ref="ShippingService"/&gt;
-    &lt;property name="TransactionManager" ref="HibernateTransactionManager"/&gt;
+    &lt;property name="TransactionManager" ref="TransactionManager"/&gt;
   &lt;/object&gt;
 
 
@@ -817,7 +817,7 @@ public class HibernateCustomerDao : ICustomerDao {
 
       <programlisting language="myxml">&lt;objects&gt;
 
-  &lt;object id="HibernateTransactionManager"
+  &lt;object id="TransactionManager"
         type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate"&gt;
 
     &lt;property name="DbProvider" ref="DbProvider"/&gt;
@@ -845,13 +845,10 @@ public class HibernateCustomerDao : ICustomerDao {
       DeclarativeServicesAttributeDriven.xml.</para>
 
       <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-	       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns:tx="http://www.springframework.net/schema/tx"
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects.xsd
-         http://www.springframework.net/schema/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd"&gt;
+	        xmlns:tx="http://www.springframework.net/schema/tx"&gt;
 
 
-  &lt;object id="HibernateTransactionManager"
+  &lt;object id="transactionManager"
         type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate"&gt;
 
     &lt;property name="DbProvider" ref="DbProvider"/&gt;
@@ -1026,7 +1023,7 @@ public class HibernateCustomerDao : ICustomerDao {
       </important>
     </section>
 
-    <section>
+    <section xml:id="orm-hibernate-sessionscope">
       <title>Session Scope</title>
 
       <para>The class Spring.Data.NHibernate.Support.SessionScope allows for
@@ -1043,6 +1040,37 @@ public class HibernateCustomerDao : ICustomerDao {
       Spring's HibernateTemplate or using Spring's implementation of
       NHibernate 1.2's ICurrentSessionContext interface. See other sections in
       this chapter for further information on those usage scenarios.</para>
+    </section>
+
+    <section xml:id="orm-hibernate-integration-testing">
+      <title>Integration Testing</title>
+
+      <para>When using <link linkend="testing">Spring's Integration Testing
+      support</link>, you should make sure that the hibernate session is
+      flushed so that the database is updated, as compared to just updating
+      the hibernate session cache. You can implement a base class as shown
+      below to help with the integration testing</para>
+
+      <programlisting>public abstract class NHibernateIntegrationTests : AbstractTransactionalSpringContextTests
+{
+    private SessionFactory sessionFactory;
+
+    public ISessionFactory SessionFactory
+    {
+        get { return sessionFactory; }
+        set { sessionFactory = value; }
+    }
+
+    protected override void OnSetUpInTransaction()
+    {
+       base.OnSetUpInTransaction();
+       Assert.IsNotNull(SessionFactory);
+       SessionFactory.GetCurrentSession().FlushMode = FlushMode.Always;
+       SessionFactory.GetCurrentSession().CacheMode = CacheMode.Ignore;
+    }
+}</programlisting>
+
+      <para></para>
     </section>
   </section>
 </chapter>
