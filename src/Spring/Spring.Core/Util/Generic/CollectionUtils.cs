@@ -129,8 +129,31 @@ namespace Spring.Util.Generic
 			}
 			return contains;
 		}
+        /// <summary>
+		/// Removes all the elements from the target collection that are contained in the source collection.
+		/// </summary>
+		/// <param name="targetCollection">Collection where the elements will be removed.</param>
+		/// <param name="sourceCollection">Elements to remove from the target collection.</param>
+        public static void RemoveAll<T>(ICollection<T> targetCollection, ICollection<T> sourceCollection)
+        {
+            if (targetCollection == null)
+            {
+                throw new ArgumentNullException("targetCollection", "Collection cannot be null.");
+            }
 
-		#endregion
+            if (sourceCollection == null)
+            {
+                throw new ArgumentNullException("sourceCollection", "Collection cannot be null.");
+            }
+            foreach (T element in sourceCollection)
+            {
+                if (targetCollection.Contains(element))
+                {
+                    targetCollection.Remove(element); 
+                }
+            }
+        }
+	    #endregion
 	}
 }
 #endif
