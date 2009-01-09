@@ -116,7 +116,7 @@ namespace Spring.Messaging.Listener
             }
             catch (MessageQueueException ex)
             {
-                if (ex.MessageQueueErrorCode != MessageQueueErrorCode.IOTimeout)
+                if (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
                 {
                     //expected to occur occasionally
 

@@ -134,7 +134,6 @@ namespace Spring.Messaging.Listener
 
         /// <summary>
         /// Wait for all listener threads to exit and closes the DefaultMessageQueue.
-        /// <see cref="AbstractMessageListenerContainer.CloseQueueHandle"/>
         /// </summary>
         protected override void DoShutdown()
         {
