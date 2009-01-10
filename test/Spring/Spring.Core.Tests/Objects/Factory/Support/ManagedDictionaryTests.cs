@@ -19,8 +19,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
+#if NET_2_0
+using System.Collections.Generic;
+#endif
 
 namespace Spring.Objects.Factory.Support
 {
@@ -37,9 +39,9 @@ namespace Spring.Objects.Factory.Support
             ManagedDictionary dict = new ManagedDictionary();
             dict.Add("key", "value");
             dict.KeyTypeName = "string";
-            
+
             dict.ValueTypeName = "System.Collections.Generic.List<[string]>";
-            dict.Resolve("somename", new RootObjectDefinition(typeof (object)), "prop", 
+            dict.Resolve("somename", new RootObjectDefinition(typeof (object)), "prop",
                     delegate(string name, RootObjectDefinition definition, string argumentName, object element)
                             {
                                 return new List<string>();
