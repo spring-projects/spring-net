@@ -66,34 +66,34 @@ namespace Spring.Expressions
 		public const int DOLLAR = 33;
 		public const int COMMA = 34;
 		public const int AT = 35;
-		public const int STRING_LITERAL = 36;
-		public const int LBRACKET = 37;
-		public const int RBRACKET = 38;
-		public const int PROJECT = 39;
-		public const int RCURLY = 40;
-		public const int SELECT = 41;
-		public const int SELECT_FIRST = 42;
-		public const int SELECT_LAST = 43;
-		public const int TYPE = 44;
-		public const int LAMBDA = 45;
-		public const int PIPE = 46;
-		public const int LITERAL_new = 47;
-		public const int LCURLY = 48;
-		public const int INTEGER_LITERAL = 49;
-		public const int HEXADECIMAL_INTEGER_LITERAL = 50;
-		public const int REAL_LITERAL = 51;
-		public const int LITERAL_date = 52;
-		public const int EQUAL = 53;
-		public const int NOT_EQUAL = 54;
-		public const int LESS_THAN = 55;
-		public const int LESS_THAN_OR_EQUAL = 56;
-		public const int GREATER_THAN = 57;
-		public const int GREATER_THAN_OR_EQUAL = 58;
-		public const int WS = 59;
-		public const int BACKTICK = 60;
-		public const int BACKSLASH = 61;
-		public const int DOT_ESCAPED = 62;
-		public const int QUOTE = 63;
+		public const int LBRACKET = 36;
+		public const int RBRACKET = 37;
+		public const int PROJECT = 38;
+		public const int RCURLY = 39;
+		public const int SELECT = 40;
+		public const int SELECT_FIRST = 41;
+		public const int SELECT_LAST = 42;
+		public const int TYPE = 43;
+		public const int QUOTE = 44;
+		public const int STRING_LITERAL = 45;
+		public const int LAMBDA = 46;
+		public const int PIPE = 47;
+		public const int LITERAL_new = 48;
+		public const int LCURLY = 49;
+		public const int INTEGER_LITERAL = 50;
+		public const int HEXADECIMAL_INTEGER_LITERAL = 51;
+		public const int REAL_LITERAL = 52;
+		public const int LITERAL_date = 53;
+		public const int EQUAL = 54;
+		public const int NOT_EQUAL = 55;
+		public const int LESS_THAN = 56;
+		public const int LESS_THAN_OR_EQUAL = 57;
+		public const int GREATER_THAN = 58;
+		public const int GREATER_THAN_OR_EQUAL = 59;
+		public const int WS = 60;
+		public const int BACKTICK = 61;
+		public const int BACKSLASH = 62;
+		public const int DOT_ESCAPED = 63;
 		public const int APOS = 64;
 		public const int NUMERIC_LITERAL = 65;
 		public const int DECIMAL_DIGIT = 66;
@@ -135,8 +135,8 @@ namespace Spring.Expressions
 			literals.Add("or", 9);
 			literals.Add("is", 11);
 			literals.Add("like", 13);
-			literals.Add("new", 47);
-			literals.Add("date", 52);
+			literals.Add("new", 48);
+			literals.Add("date", 53);
 			literals.Add("false", 6);
 		}
 		
@@ -1121,11 +1121,6 @@ _loop160_breakloop:			;
 				case '8':  case '9':
 				{
 					matchRange('0','9');
-					break;
-				}
-				case '\\':
-				{
-					mDOT_ESCAPED(false);
 					break;
 				}
 				default:

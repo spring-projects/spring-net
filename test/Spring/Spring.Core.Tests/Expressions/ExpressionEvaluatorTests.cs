@@ -703,7 +703,6 @@ namespace Spring.Expressions
         /// Tests type node
         /// </summary>
         [Test]
-//        [Ignore("does not work yet due to parser expecting ID production within T(ID)")]
         public void TestTypeNodeWithAssemblyQualifiedName()
         {
             Assert.AreEqual(typeof(ExpressionEvaluator), ExpressionEvaluator.GetValue(null, string.Format("T({0})", typeof(ExpressionEvaluator).AssemblyQualifiedName)));
@@ -719,6 +718,16 @@ namespace Spring.Expressions
 //            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[System.Int32], mscorlib)"));
 //            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]], mscorlib)"));
             Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[int]], mscorlib)"));
+            Assert.AreEqual(typeof(System.Collections.Generic.Dictionary<string, bool>), ExpressionEvaluator.GetValue(null, "T(System.Collections.Generic.Dictionary`2[System.String,System.Boolean],mscorlib)"));
+        }
+
+        /// <summary>
+        /// Tests type node
+        /// </summary>
+        [Test]
+        public void TestTypeNodeWithAliasedGenericArguments()
+        {
+            Assert.AreEqual(typeof(System.Collections.Generic.Dictionary<string, bool>), ExpressionEvaluator.GetValue(null, "T(System.Collections.Generic.Dictionary`2[string,bool],mscorlib)"));
         }
 
         /// <summary>
@@ -1575,20 +1584,20 @@ namespace Spring.Expressions
         }
 
         /// <summary>
-        /// Ensure, e.g. context-names my contain a dot
+        /// Ensure context-names my contain dots and slashes
         /// </summary>
         [Test]
-        public void TestQualifiedNameMayContainDots()
+        public void TestQualifiedNameMayContainDotsAndSlashes()
         {
             IApplicationContext ctx =
                 new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml");
-            ctx.Name = "my.Context";
+            ctx.Name = @"my.Context/bla\";
             ContextRegistry.RegisterContext(ctx);
 
             Assert.AreEqual(typeof(TestObject),
-                            ExpressionEvaluator.GetValue(null, "@(my.Context:goran)").GetType());
-            Assert.AreEqual(typeof(TestObject),
-                            ExpressionEvaluator.GetValue(null, "@(my\\.Context:goran)").GetType());
+                            ExpressionEvaluator.GetValue(null, @"@(my.Context/bla\:goran)").GetType());
+//            Assert.AreEqual(typeof(TestObject),
+//                            ExpressionEvaluator.GetValue(null, "@(my\\.Context:goran)").GetType());
         }
 
         /// <summary>

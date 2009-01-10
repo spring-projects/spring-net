@@ -190,14 +190,13 @@ property
     ;
 
 reference
-	:  AT! LPAREN! (cn:contextName! COLON!)? id:qualifiedId! RPAREN!
-       { #reference = #([EXPR, "ref", "Spring.Context.Support.ReferenceNode"], #cn, #id); }
-	;
+	:  (AT! LPAREN! quotableName COLON) =>
+		AT! LPAREN! cn:quotableName! COLON! id:quotableName! RPAREN!
+		{ #reference = #([EXPR, "ref", "Spring.Context.Support.ReferenceNode"], #cn, #id); }
 
-contextName 
-	: STRING_LITERAL
-	| qualifiedId (DIV qualifiedId)*
-    ;
+	|  AT! LPAREN! localid:quotableName! RPAREN!
+       { #reference = #([EXPR, "ref", "Spring.Context.Support.ReferenceNode"], null, #localid); }
+	;
 
 indexer
 	:  LBRACKET^ <AST = Spring.Expressions.IndexerNode> argument (COMMA! argument)* RBRACKET!
@@ -224,14 +223,19 @@ lastSelection
 	;
 
 type
-    :   TYPE! tn:typename! RPAREN!
+    :   TYPE! tn:name! RPAREN!
 		{ #type = #([EXPR, tn_AST.getText(), "Spring.Expressions.TypeNode"], #type); } 
     ;
-       
-typename
-	:	ID^ <AST = Spring.Expressions.QualifiedIdentifier> (~RPAREN)*
+     
+name
+	:	ID^ <AST = Spring.Expressions.QualifiedIdentifier> (~(RPAREN|COLON|QUOTE))*
 	;
 	
+quotableName
+    :	STRING_LITERAL^ <AST = Spring.Expressions.QualifiedIdentifier>
+    |	name
+    ;
+    
 attribute
 	:	AT! LBRACKET! tn:qualifiedId! (ctorArgs)? RBRACKET!
 		   { #attribute = #([EXPR, tn_AST.getText(), "Spring.Expressions.AttributeNode"], #attribute); }
@@ -283,9 +287,10 @@ namedArgument
     |   argument 
     ;
 
-qualifiedId : ID^ <AST = Spring.Expressions.QualifiedIdentifier> (DOT ID)*
+qualifiedId 
+	: ID^ <AST = Spring.Expressions.QualifiedIdentifier> (DOT ID)*
     ;
-
+    
 literal
 	:	NULL_LITERAL <AST = Spring.Expressions.NullLiteralNode>
 	|   INTEGER_LITERAL <AST = Spring.Expressions.IntLiteralNode>
@@ -470,7 +475,7 @@ ID
 options {
 	testLiterals = true;
 }
-	:	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9'|DOT_ESCAPED)*
+	: ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*
 	;
 
 NUMERIC_LITERAL

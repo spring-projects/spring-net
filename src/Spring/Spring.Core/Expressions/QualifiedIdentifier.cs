@@ -31,8 +31,6 @@ namespace Spring.Expressions
     [Serializable]
     public class QualifiedIdentifier : BaseNode
     {
-        private const string ESCAPE_CHAR = "\\";
-
         private string identifier;
 
         /// <summary>
@@ -83,10 +81,10 @@ namespace Spring.Expressions
         public override string getText()
         {
             string tmp = base.getText();
-            if (tmp != null)
-            {
-                tmp = tmp.Replace(ESCAPE_CHAR, ""); // remove all occurrences of escape char
-            }
+//            if (tmp != null)
+//            {
+//                tmp = tmp.Replace(ESCAPE_CHAR, ""); // remove all occurrences of escape char
+//            }
             AST node = this.getFirstChild();
             while (node != null)
             {
