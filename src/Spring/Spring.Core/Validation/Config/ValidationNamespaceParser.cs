@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System;
 using System.Collections;
 using System.Xml;
 
@@ -52,23 +53,8 @@ namespace Spring.Validation.Config
     {
         private const string ValidatorTypePrefix = "validator: ";
 
-//        [ThreadStatic]
-//        private int definitionCount = 0;
-        private readonly string key_DefinitionCount;
-        private int definitionCount
-        {
-            get
-            {
-                object tmp = LogicalThreadContext.GetData(key_DefinitionCount);
-                if (tmp != null) return (int)tmp;
-                LogicalThreadContext.SetData(key_DefinitionCount, 0);
-                return 0;
-            }
-            set
-            {
-                LogicalThreadContext.SetData(key_DefinitionCount, value);
-            }
-        }
+        [ThreadStatic]
+        private int definitionCount = 0;
     	
         static ValidationNamespaceParser()
         {
@@ -90,7 +76,6 @@ namespace Spring.Validation.Config
         {
             // generate unique key for instance field to be stored in LogicalThreadContext
             string FIELDPREFIX = typeof(ValidationNamespaceParser).FullName + base.GetHashCode();
-            key_DefinitionCount = FIELDPREFIX + ".definitionCount";
         }
 
 
