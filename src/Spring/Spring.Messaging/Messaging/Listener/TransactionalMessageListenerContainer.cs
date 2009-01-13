@@ -219,7 +219,7 @@ namespace Spring.Messaging.Listener
                     + ".  It must implement IResourceTransactionManager or be a MessageQueueTransactionManager.");
             }
 
-            //Set useMessageQueueTransactionManager = true when using 
+            //Set useContainerManagedMessageQueueTransaction = true when using 
             // 1. non-DTC based transaction manager
             // 2. not the MessageQueueTransactionManager.
             if (!useMessageQueueTransactionManagerCalled && isRtm && !isQtm)

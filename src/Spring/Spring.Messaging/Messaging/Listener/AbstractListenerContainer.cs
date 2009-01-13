@@ -153,9 +153,10 @@ namespace Spring.Messaging.Listener
         #endregion
 
         /// <summary>
-        /// Initializes this container.  Calls the abstract method DoStart if the 
-        /// property <see cref="AutoStartup"/> is set to true, then calls 
-        /// <see cref="DoInitialize"/>
+        /// Initializes this container.  Calls the abstract method <see cref="DoInitialize"/> to
+        /// initialize the listening infrastructure (i.e. subclasses will typically
+        /// resolve a MessageQueue instance from a MessageQueueObjectName) and then calls
+        /// the abstract method DoStart if the property <see cref="AutoStartup"/> is set to true,  
         /// </summary>
         public virtual void Initialize()
         {
