@@ -164,11 +164,12 @@ namespace Spring.Messaging.Listener
                 active = true;
                 Monitor.PulseAll(lifecycleMonitor);
             }
+            DoInitialize();
             if (autoStartup)
             {
                 DoStart();
             }
-            DoInitialize();
+
         }
 
         /// <summary>
