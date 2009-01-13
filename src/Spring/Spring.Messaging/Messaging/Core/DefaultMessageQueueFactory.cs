@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Messaging;
+using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
@@ -37,6 +38,12 @@ namespace Spring.Messaging.Core
     /// <author>Mark Pollack</author>
     public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationContextAware
     {
+        /// <summary>
+        /// The <see cref="Common.Logging.ILog"/> instance for this class.
+        /// </summary>
+        private readonly ILog log = LogManager.GetLogger(typeof(DefaultMessageQueueFactory));
+
+
         private static readonly string QUEUE_DICTIONARY_SLOTNAME =
             UniqueKey.GetTypeScopedString(typeof (DefaultMessageQueueFactory), "Queue");
 
@@ -128,8 +135,18 @@ namespace Spring.Messaging.Core
             }
             if (!converters.Contains(messageConverterObjectName))
             {
-                IMessageConverter mc = applicationContext.GetObject(messageConverterObjectName) as IMessageConverter;
-                converters.Add(messageConverterObjectName, mc);
+                IMessageConverter mc =
+                    (IMessageConverter)
+                    applicationContext.GetObject(messageConverterObjectName, typeof (IMessageConverter));
+                if (applicationContext.ObjectFactory.GetObjectDefinition(messageConverterObjectName).IsSingleton)
+                {
+                    log.Warn("MessageConverter with name = [" + messageConverterObjectName + "] should be declared with singleton=false.  Using Clone() to create independent instance for thread local storage");
+                    converters.Add(messageConverterObjectName, mc.Clone());
+                }
+                else
+                {                              
+                    converters.Add(messageConverterObjectName, mc);
+                }
             }
             return converters[messageConverterObjectName] as IMessageConverter;
         }
