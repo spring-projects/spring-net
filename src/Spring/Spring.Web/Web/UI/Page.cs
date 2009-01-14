@@ -1208,6 +1208,25 @@ namespace Spring.Web.UI
 
         #region Validation support
 
+        ///<summary>
+        ///Instructs any validation controls included on the page to validate their assigned information.
+        ///</summary>
+        ///
+        public override void Validate()
+        {
+            base.Validate();
+        }
+
+        ///<summary>
+        ///Instructs the validation controls in the specified validation group to validate their assigned information.
+        ///</summary>
+        ///
+        ///<param name="validationGroup">The validation group name of the controls to validate.</param>
+        public override void Validate(string validationGroup)
+        {
+            base.Validate(validationGroup);
+        }
+
         /// <summary>
         /// Evaluates specified validators and returns <c>True</c> if all of them are valid.
         /// </summary>
