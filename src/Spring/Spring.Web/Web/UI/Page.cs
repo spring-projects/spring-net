@@ -1217,6 +1217,7 @@ namespace Spring.Web.UI
             base.Validate();
         }
 
+#if NET_2_0
         ///<summary>
         ///Instructs the validation controls in the specified validation group to validate their assigned information.
         ///</summary>
@@ -1226,6 +1227,7 @@ namespace Spring.Web.UI
         {
             base.Validate(validationGroup);
         }
+#endif
 
         /// <summary>
         /// Evaluates specified validators and returns <c>True</c> if all of them are valid.
