@@ -43,7 +43,7 @@ namespace Spring.Data
     /// This calss contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
-    [TestFixture]
+    [TestFixture, Explicit]
     public class AdoTemplatePerformanceTests
     {
         private AdoTemplate adoTemplate;
