@@ -1,27 +1,55 @@
 
 
 using System;
+using System.Collections;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using Common.Logging;
+using Common.Logging.Simple;
 
 namespace Spring.Aspects.Exceptions
 {
-    public class CaptureOutputLoggerFactoryAdapter : ILoggerFactoryAdapter
+    public class CaptureOutputLoggerFactoryAdapter : ILoggerFactoryAdapter, IDisposable
     {
-        private CaptureOutputLogger adviceLogger;
+        private class CapturingTraceListener : TraceListener
+        {
+            private readonly CaptureOutputLoggerFactoryAdapter adapter;
+
+            public CapturingTraceListener(CaptureOutputLoggerFactoryAdapter adapter)
+            {
+                this.adapter = adapter;
+            }
+
+            public override void Write(string message)
+            {
+                adapter.LogMessages.Add(message);
+            }
+
+            public override void WriteLine(string message)
+            {
+                this.Write(message);
+            }
+        }
+
+        private readonly CapturingTraceListener listener;
 
         public CaptureOutputLoggerFactoryAdapter()
         {
+            listener = new CapturingTraceListener(this);
+            System.Diagnostics.Trace.Listeners.Add(listener);            
         }
 
-        public CaptureOutputLoggerFactoryAdapter(NameValueCollection properties)
+        public void Dispose()
         {
+            System.Diagnostics.Trace.Listeners.Remove(listener);
         }
 
+        private IList logMessages = new ArrayList();
 
-        public CaptureOutputLogger AdviceLogger
+        public IList LogMessages
         {
-            get { return adviceLogger; }
+            get { return logMessages; }
+            set { logMessages = value; }
         }
 
         #region ILoggerFactoryAdapter Members
@@ -33,13 +61,13 @@ namespace Spring.Aspects.Exceptions
 
         public ILog GetLogger(string name)
         {
-            CaptureOutputLogger logger = new CaptureOutputLogger();
             if (name.Equals("adviceHandler") || name.IndexOf("LogExceptionHandler") >= 0)
             {
-                adviceLogger = logger;
+                CaptureOutputLogger logger = new CaptureOutputLogger();
+                return logger;
             }
-            
-            return logger;
+
+            return new NoOpLogger();
         }
 
         #endregion
