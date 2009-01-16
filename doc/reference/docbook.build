@@ -25,13 +25,13 @@
     <!-- docbook -> html -->
     <exec workingdir="${project.targetdir}" program="java" commandline='-cp "..\lib\saxon6-5-5\saxon.jar;..\lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet ../src/index.xml "..\lib\docbook-xsl-snapshot\html\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"' />
     <!-- copy css to html dir -->
-    <copy todir="${project.basedir}\html\styles">
+    <copy todir="${project.targetdir}\html\styles">
       <fileset basedir="${project.basedir}\src\styles">
         <include name="**"/>
       </fileset>
     </copy>
     <!-- copy images to html dir -->
-    <copy todir="${project.basedir}\html\images">
+    <copy todir="${project.targetdir}\html\images">
       <fileset basedir="${project.basedir}\src\images">
         <include name="*.gif"/>
         <include name="*.svg"/>
@@ -39,7 +39,7 @@
         <include name="*.png"/>
       </fileset>
     </copy>
-    <copy todir="${project.basedir}\html\images">
+    <copy todir="${project.targetdir}\html\images">
       <fileset basedir="${project.basedir}\lib\docbook-xsl-snapshot\images">
         <include name="**"/>
       </fileset>
