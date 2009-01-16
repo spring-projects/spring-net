@@ -137,6 +137,7 @@ namespace Spring.Messaging.Listener
         /// </summary>
         protected override void DoShutdown()
         {
+            stopEvent.Set();
             WaitForListenerThreadsToExit();
             CloseQueueHandle(MessageQueue);
             if (dispatcherThread != null)
