@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
  * Copyright 2002-2008 the original author or authors.
@@ -69,7 +69,7 @@
     an easy manner. When we are done, we will be able to define object
     definitions of type <literal>Regex</literal> like this:</para>
 
-    <programlisting language="myxml">&lt;myns:regex id="regex" 
+    <programlisting language="myxml">&lt;myns:regex id="regex"
             pattern="(^\d{5}$)|(^\d{5}-\d{4}$)"
             options="Compiled"/&gt;
 </programlisting>
@@ -89,11 +89,11 @@
            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
            xmlns:objects="http://www.springframework.net"
            xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
-           targetNamespace="http://www.mycompany.com/schema/myns"           
+           targetNamespace="http://www.mycompany.com/schema/myns"
            elementFormDefault="qualified"
            attributeFormDefault="unqualified"
-           vs:friendlyname="Spring Regex Configuration" vs:ishtmlschema="false" 
-           vs:iscasesensitive="true" vs:requireattributequotes="true" 
+           vs:friendlyname="Spring Regex Configuration" vs:ishtmlschema="false"
+           vs:iscasesensitive="true" vs:requireattributequotes="true"
            vs:defaultnamespacequalifier="" vs:defaultnsprefix=""
            &gt;
 
@@ -109,7 +109,7 @@
       &lt;/xsd:complexContent&gt;
     &lt;/xsd:complexType&gt;
   &lt;/xsd:element&gt;
-  
+
 &lt;/xsd:schema&gt;    </programlisting>
 
     <para>The emphasized line contains an extension base for all tags that
@@ -260,18 +260,17 @@ namespace CustomNamespace
 
    protected override Type GetObjectType(XmlElement element)
    {
-     return typeof (Regex); <co
-        id="extensible-xml-parser-simpledateformat-co-2" />
+     return typeof (Regex); <co id="extensible-xml-parser-simpledateformat-co-2" />
    }
 
    protected override void DoParse(XmlElement element, ObjectDefinitionBuilder builder)
    {
-<lineannotation>       // this will never be null since the schema explicitly requires that a value be supplied</lineannotation>
+       // this will never be null since the schema explicitly requires that a value be supplied
        string pattern = element.GetAttribute("pattern");
        builder.AddConstructorArg(pattern);
 
-<lineannotation>       // this however is an optional property</lineannotation>
-       string options = element.GetAttribute("options");            
+       // this however is an optional property
+       string options = element.GetAttribute("options");
        if (StringUtils.HasText(options))
        {
           RegexOptions regexOptions = (RegexOptions)Enum.Parse(typeof (RegexOptions), options);
@@ -339,8 +338,8 @@ namespace CustomNamespace
       <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
-    &lt;sectionGroup name="spring"&gt;       
-      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt; 
+    &lt;sectionGroup name="spring"&gt;
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;
      &lt;/sectionGroup&gt;
   &lt;/configSections&gt;
 

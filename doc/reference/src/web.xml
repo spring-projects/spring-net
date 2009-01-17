@@ -696,9 +696,9 @@
 
       <programlisting>&lt;system.web&gt;
   &lt;httpHandlers&gt;
-    &lt;!-- 
+    &lt;!--
       the lines below map *any* request ending with *.ashx or *.whatever
-      to the global(!) MappingHandlerFactory. Further "specialication" 
+      to the global(!) MappingHandlerFactory. Further "specialication"
       of which handler to map to is done within MappingHandlerFactory's configuration -
       use MappingHandlerFactoryConfigurer for this (see below)
     --&gt;
@@ -737,10 +737,10 @@
     &lt;object name="myCustomHandler" type="MyCustomHttpHandler, App_Code"&gt;
         &lt;property name="MessageText" value="This text is injected via Spring" /&gt;
     &lt;/object&gt;
-    
-    &lt;!-- 
+
+    &lt;!--
         used for configuring ~/DemoHandler.ashx custom handler
-        note, that this is an abstract definition because 'type' is not specified 
+        note, that this is an abstract definition because 'type' is not specified
     --&gt;
     &lt;object name="DemoHandler.ashx"&gt;
         &lt;property name="OutputText"&gt;
@@ -880,7 +880,7 @@ class MyControl : Control, ISupportsWebDependencyInjection
       is shown below</para>
 
       <programlisting language="myxml">&lt;spring:Panel runat="server"
-   suppressDependencyInjection="true"  
+   suppressDependencyInjection="true"
    renderContainerTag="false"&gt;
 
    .. put your heavy controls here - they won't be touched by DI
@@ -1398,12 +1398,12 @@ class MyControl : Control, ISupportsWebDependencyInjection
 {
     void BindSourceToTarget(object source, object target, ValidationErrors validationErrors);
 
-    void BindSourceToTarget(object source, object target, ValidationErrors validationErrors, 
+    void BindSourceToTarget(object source, object target, ValidationErrors validationErrors,
                             IDictionary variables);
 
     void BindTargetToSource(object source, object target, ValidationErrors validationErrors);
 
-    void BindTargetToSource(object source, object target, ValidationErrors validationErrors, 
+    void BindTargetToSource(object source, object target, ValidationErrors validationErrors,
                             IDictionary variables);
 
     void SetErrorMessage(string messageId, params string[] errorProviders);
@@ -1448,7 +1448,7 @@ class MyControl : Control, ISupportsWebDependencyInjection
   IBinding AddBinding(string sourceExpression, string targetExpression);
   IBinding AddBinding(string sourceExpression, string targetExpression, BindingDirection direction);
   IBinding AddBinding(string sourceExpression, string targetExpression, IFormatter formatter);
-  IBinding AddBinding(string sourceExpression, string targetExpression, BindingDirection direction, 
+  IBinding AddBinding(string sourceExpression, string targetExpression, BindingDirection direction,
                       IFormatter formatter);
 }</programlisting>As you can see, this interface has a number of overloaded
       <literal>AddBinding</literal> methods. The first one,
@@ -1712,7 +1712,7 @@ protected override void InitializeDataBindings()
 }</programlisting></para>
 
         <note>
-           Due to the fact, that browsers don't send the values of unchecked checkboxes, you can't use HttpRequestListBindingContainer with &lt;input type="checkbox" &gt; html controls. 
+           Due to the fact, that browsers don't send the values of unchecked checkboxes, you can't use HttpRequestListBindingContainer with &lt;input type="checkbox" &gt; html controls.
         </note>
       </sect3>
     </sect2>
@@ -1796,7 +1796,7 @@ protected override void InitializeDataBindings()
       </itemizedlist>
 
       <note>
-         The Visual Studio Web Form Editor will of course complain about binding attributes because it doesn't know them. You can safely ignore those warnings. 
+         The Visual Studio Web Form Editor will of course complain about binding attributes because it doesn't know them. You can safely ignore those warnings.
       </note>
     </sect2>
 
@@ -2481,7 +2481,7 @@ private void SetLanguage(object sender, CommandEventArgs e)
   &lt;property name="UserManager"&gt;
     &lt;ref object="userManager"/&gt;
   &lt;/property&gt;
-  
+
   &lt;property name="Results"&gt;
     &lt;dictionary&gt;
       &lt;entry key="userSaved" value="redirect:UserRegistered.aspx?status=Registration Successful,user=${UserInfo}"/&gt;
@@ -2572,15 +2572,15 @@ protected override void OnInit(EventArgs e)
       given resultmode string with an <literal>IResultFactory</literal>
       implementation. Here is an example</para>
 
-      <programlisting>class MySpecialResultLogic : IResult
+      <programlisting language="csharp">class MySpecialResultLogic : IResult
 {
   ...
 }
 
 class MySpecialResultLogicFactory : IResultFactory
 {
-   IResult Create( string mode, string expression ) { 
-     /* ... convert 'expression' into MySpecialResultLogic */ 
+   IResult Create( string mode, string expression ) {
+     /* ... convert 'expression' into MySpecialResultLogic */
    }
 }
 
@@ -2591,7 +2591,7 @@ ResultFactoryRegistry.RegisterResultFactory( "mySpecialMode", new MySpecialResul
       <para>You would then use the custom 'continue' mode in your page as
       shown below</para>
 
-      <programlisting>// configure your Results
+      <programlisting language="xml">&lt;-- configure your Results --&gt;
 &lt;object type="mypage.aspx"&gt;
    &lt;property name="Results"&gt;
       &lt;dictionary&gt;
