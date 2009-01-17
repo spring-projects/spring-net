@@ -37,8 +37,8 @@
 
   <xsl:variable name="link">
     <xsl:choose>
-      <xsl:when test="$xhref and 
-                      (not($node/@xlink:type) or 
+      <xsl:when test="$xhref and
+                      (not($node/@xlink:type) or
                            $node/@xlink:type='simple')">
 
         <!-- Is it a local idref or a uri? -->
@@ -155,7 +155,7 @@
 		  </xsl:otherwise>
 		</xsl:choose>
 	      </xsl:attribute>
-	      
+
               <xsl:copy-of select="$content"/>
             </a>
           </xsl:otherwise>
@@ -181,7 +181,7 @@
           <xsl:apply-templates select="$target" mode="html.title.attribute"/>
 
           <xsl:copy-of select="$content"/>
-          
+
         </a>
       </xsl:when>
       <xsl:otherwise>
@@ -630,7 +630,7 @@
 </xsl:template>
 
 <xsl:template match="package">
-  <xsl:call-template name="inline.charseq"/>
+  <xsl:call-template name="inline.monoseq"/>
 </xsl:template>
 
 <xsl:template match="parameter">
@@ -803,7 +803,7 @@
       <xsl:call-template name="language.attribute"/>
     </xsl:if>
     <!-- We don't want empty @class values, so do not propagate empty @roles -->
-    <xsl:if test="@role and 
+    <xsl:if test="@role and
                   normalize-space(@role) != '' and
                   $phrase.propagates.style != 0">
       <xsl:apply-templates select="." mode="class.attribute">

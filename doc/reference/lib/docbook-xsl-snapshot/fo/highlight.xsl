@@ -20,7 +20,7 @@
 </xsl:template>
 
 <xsl:template match='xslthl:string' mode="xslthl">
-  <fo:inline color="#A31515"><xsl:apply-templates mode="xslthl"/></fo:inline>
+  <fo:inline color="#000000"><xsl:apply-templates mode="xslthl"/></fo:inline>
 </xsl:template>
 
 <xsl:template match='xslthl:comment' mode="xslthl">
@@ -39,6 +39,13 @@
   <fo:inline color="#0000FF"><xsl:apply-templates mode="xslthl"/></fo:inline>
 </xsl:template>
 
+<xsl:template match='xslthl:html' mode="xslthl">
+  <fo:inline color="#A31515"><xsl:apply-templates mode="xslthl"/></fo:inline>
+</xsl:template>
+
+<xsl:template match='xslthl:xslt' mode="xslthl">
+  <fo:inline color="#0000FF"><xsl:apply-templates mode="xslthl"/></fo:inline>
+</xsl:template>
 <!--
 <xsl:template match='xslthl:html'>
   <span style='background:#AFF'><font color='blue'><xsl:apply-templates/></font></span>

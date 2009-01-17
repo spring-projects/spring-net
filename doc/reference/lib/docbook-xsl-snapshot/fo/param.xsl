@@ -187,7 +187,7 @@
   </xsl:attribute>
 </xsl:attribute-set>
 <xsl:param name="footer.rule" select="1"/>
-<xsl:param name="footer.column.widths">1 1 1</xsl:param>
+<xsl:param name="footer.column.widths">1 2 1</xsl:param>
 <xsl:param name="footer.table.height">14pt</xsl:param>
 <xsl:attribute-set name="footer.table.properties">
   <xsl:attribute name="table-layout">fixed</xsl:attribute>
@@ -352,7 +352,7 @@ set       toc,title
 <xsl:attribute-set name="itemizedlist.label.properties">
 </xsl:attribute-set>
     <xsl:param name="itemizedlist.label.width">1.0em</xsl:param>
-  
+
 
 <xsl:param name="keep.relative.image.uris" select="0"/>
 <xsl:param name="l10n.gentext.default.language">en</xsl:param>
@@ -416,7 +416,7 @@ set       toc,title
   <xsl:attribute name="space-before.minimum">0.8em</xsl:attribute>
   <xsl:attribute name="space-before.maximum">1.2em</xsl:attribute>
 </xsl:attribute-set>
-<xsl:param name="olink.doctitle">no</xsl:param> 
+<xsl:param name="olink.doctitle">no</xsl:param>
 <xsl:param name="olink.base.uri"/>
 <xsl:param name="olink.debug" select="0"/>
 <xsl:attribute-set name="olink.properties">
@@ -860,7 +860,7 @@ set       toc,title
 <xsl:param name="ulink.hyphenate.chars">/</xsl:param>
 <xsl:param name="ulink.show" select="1"/>
 <xsl:param name="use.extensions" select="0"/>
-<xsl:param name="use.local.olink.style" select="0"/> 
+<xsl:param name="use.local.olink.style" select="0"/>
 <xsl:param name="use.role.as.xrefstyle" select="1"/>
 <xsl:param name="use.role.for.mediaobject" select="1"/>
 <xsl:param name="use.svg" select="1"/>

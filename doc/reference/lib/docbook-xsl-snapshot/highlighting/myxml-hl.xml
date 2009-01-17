@@ -13,6 +13,7 @@
 <wholehighlighter type='xml'>
   <elementSet>
     <style>html</style>
+    <ignoreCase />
     <element>A</element>
     <element>ABBR</element>
     <element>ACRONYM</element>
@@ -68,11 +69,11 @@
     <element>LI</element>
     <element>LINK</element>
     <element>MAP</element>
-    <!--<element>MENU</element>-->
+    <element>MENU</element>
     <element>META</element>
     <element>NOFRAMES</element>
     <element>NOSCRIPT</element>
-    <!--<element>OBJECT</element>-->
+    <element>OBJECT</element>
     <element>OL</element>
     <element>OPTGROUP</element>
     <element>OPTION</element>

@@ -284,7 +284,7 @@
   <!-- Verbatim text formatting (programlistings) -->
   <xsl:attribute-set name="monospace.verbatim.properties">
     <xsl:attribute name="font-size">
-      <xsl:value-of select="$body.font.small * 1.0"/>
+      <xsl:value-of select="$body.font.small * 0.9"/>
       <xsl:text>pt</xsl:text>
     </xsl:attribute>
   </xsl:attribute-set>
@@ -313,7 +313,7 @@
     ################################################### -->
   <!-- Use images for callouts instead of (1) (2) (3) -->
   <xsl:param name="callout.graphics">1</xsl:param>
-  <xsl:param name="callout.graphics.path">../lib/docbook-xsl-snapshot/images/callouts/</xsl:param>
+  <xsl:param name="callout.graphics.path">../../lib/docbook-xsl-snapshot/images/callouts/</xsl:param>
   <!-- Place callout marks at this column in annotated areas -->
   <xsl:param name="callout.defaultcolumn">90</xsl:param>
 
@@ -322,7 +322,7 @@
     ################################################### -->
   <!-- Use nice graphics for admonitions -->
   <xsl:param name="admon.graphics">1</xsl:param>
-  <xsl:param name="admon.graphics.path">../lib/docbook-xsl-snapshot/images/admons/</xsl:param>
+  <xsl:param name="admon.graphics.path">../../lib/docbook-xsl-snapshot/images/admons/</xsl:param>
 
   <!--###################################################
                           Misc
