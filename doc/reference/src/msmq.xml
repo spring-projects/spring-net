@@ -810,7 +810,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     &lt;property name="MessageQueueObjectName" value="msmqTestQueue"/&gt;
     &lt;property name="PlatformTransactionManager" ref="messageQueueTransactionManager"/&gt;
     &lt;property name="MaxConcurrentListeners" value="5"/&gt;
-    &lt;property name="ListenerTimeLimitIn" value="20s"/&gt;
+    &lt;property name="ListenerTimeLimit" value="20s"/&gt;
     &lt;property name="MessageListener" ref="messageListenerAdapter"/&gt;
     &lt;property name="MessageTransactionExceptionHandler" ref="messageTransactionExceptionHandler"/&gt;
   &lt;/object&gt;
@@ -992,7 +992,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       <literal>TargetTypes</literal> or <literal>TargetTypeNames</literal>.
       Here is an example taken from the QuickStart application</para>
 
-      <programlisting language="myxml">  &lt;object id="xmlMessageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"&gt;
+      <programlisting language="myxml">  &lt;object id="xmlMessageConverter" singleton="false" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"&gt;
     &lt;property name="TargetTypes"&gt;
       &lt;list&gt;
         &lt;value&gt;Spring.MsmqQuickStart.Common.Data.TradeRequest, Spring.MsmqQuickStart.Common&lt;/value&gt;
@@ -1006,6 +1006,16 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
       implementations using the <literal>MessageConverterObjectName</literal>
       property on the <literal>MessageQueueTemplate</literal> and
       <literal>MessageListenerAdapter</literal>.</para>
+
+      <note>
+        <para>The scope of the object definition is set to singleton="false",
+        meaning that a new instance of the MessageConverter will be created
+        each time you ask the container for an object of the name
+        'xmlMessageConverter'. This is important to ensure that a new instance
+        will be used for each thread. If you forget, a warning will be logged
+        and IMessageConverter's Clone() method will be called to create an
+        indepentend instance.</para>
+      </note>
 
       <para>Other implementations provided are</para>
 
