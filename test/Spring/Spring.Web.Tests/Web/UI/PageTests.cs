@@ -72,17 +72,21 @@ namespace Spring.Web.UI
         [Test]
         public void CallsBaseValidateMethod()
         {
-            Page child = new Page();
-            MockValidator mockValidator = new MockValidator();
+            Page child;
+            MockValidator mockValidator;
+
+#if NET_2_0
+            child = new Page();
+            mockValidator = new MockValidator();
             mockValidator.ValidationGroup = "theValidationGroup";
             child.Validators.Add( mockValidator );
 
             child.Validate(mockValidator.ValidationGroup);
             Assert.IsTrue(mockValidator.WasCalled);
+#endif
 
             child = new Page();
             mockValidator = new MockValidator();
-            mockValidator.ValidationGroup = "theValidationGroup";
             child.Validators.Add( mockValidator );
 
             child.Validate();
