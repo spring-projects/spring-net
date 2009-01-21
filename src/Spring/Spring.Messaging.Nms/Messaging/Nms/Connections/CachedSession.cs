@@ -500,6 +500,16 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// Deletes the destination.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        public void DeleteDestination(IDestination destination)
+        {
+            this.transactionOpen = true;
+            target.DeleteDestination(destination);
+        }
+
+        /// <summary>
         /// Creates the message.
         /// </summary>
         /// <returns></returns>

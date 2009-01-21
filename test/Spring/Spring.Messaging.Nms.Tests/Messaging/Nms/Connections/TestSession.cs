@@ -139,6 +139,15 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        #region ISession Members
+
+        public void DeleteDestination(IDestination destination)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         public IMessage CreateMessage()
         {
             throw new NotImplementedException();
