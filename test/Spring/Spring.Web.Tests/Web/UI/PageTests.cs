@@ -46,11 +46,47 @@ namespace Spring.Web.UI
     [TestFixture]
     public class PageTests : TestWebContextTests
     {
+        class MockValidator : System.Web.UI.WebControls.BaseValidator
+        {
+            public bool WasCalled = false;
+
+            protected override bool ControlPropertiesValid()
+            {
+                return true;
+            }
+
+            protected override bool EvaluateIsValid()
+            {
+                WasCalled = true;
+                return true;
+            }
+        }
+
         [Test]
         public void NoSharedStateAtConstruction()
         {
             Page page = new Page();            
             Assert.IsNull(page.SharedState);
+        }
+
+        [Test]
+        public void CallsBaseValidateMethod()
+        {
+            Page child = new Page();
+            MockValidator mockValidator = new MockValidator();
+            mockValidator.ValidationGroup = "theValidationGroup";
+            child.Validators.Add( mockValidator );
+
+            child.Validate(mockValidator.ValidationGroup);
+            Assert.IsTrue(mockValidator.WasCalled);
+
+            child = new Page();
+            mockValidator = new MockValidator();
+            mockValidator.ValidationGroup = "theValidationGroup";
+            child.Validators.Add( mockValidator );
+
+            child.Validate();
+            Assert.IsTrue(mockValidator.WasCalled);
         }
 
         [Test]

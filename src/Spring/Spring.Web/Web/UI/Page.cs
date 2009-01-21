@@ -1212,7 +1212,7 @@ namespace Spring.Web.UI
         ///Instructs any validation controls included on the page to validate their assigned information.
         ///</summary>
         ///
-        public override void Validate()
+        public new virtual void Validate()
         {
             base.Validate();
         }
@@ -1223,7 +1223,7 @@ namespace Spring.Web.UI
         ///</summary>
         ///
         ///<param name="validationGroup">The validation group name of the controls to validate.</param>
-        public override void Validate(string validationGroup)
+        public new virtual void Validate(string validationGroup)
         {
             base.Validate(validationGroup);
         }
