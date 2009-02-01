@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2007 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Reflection;
-using System.Reflection.Emit;
+using Spring.Collections;
 using Spring.Util;
 
 #endregion
@@ -79,29 +80,23 @@ namespace Spring.Reflection.Dynamic
 #if NET_2_0
         #region Generated Function Cache
 
-        private static readonly IDictionary methodCache = new Hashtable();
-
-        /// <summary>
-        /// Obtains cached property info or creates a new entry, if none is found.
-        /// </summary>
-        private static FunctionDelegate GetOrCreateDynamicMethod(MethodInfo methodInfo)
+        private class SafeMethodState
         {
-            FunctionDelegate method = (FunctionDelegate)methodCache[methodInfo];
-            if (method == null)
+            public readonly FunctionDelegate method;
+            public readonly object[] nullArguments;
+
+            public SafeMethodState(FunctionDelegate method, object[] nullArguments)
             {
-                method = DynamicReflectionManager.CreateMethod(methodInfo);
-                lock (methodCache)
-                {
-                    methodCache[methodInfo] = method;
-                }
+                this.method = method;
+                this.nullArguments = nullArguments;
             }
-            return method;
         }
+
+        private static readonly IDictionary stateCache = new HybridDictionary();
 
         #endregion
 
-        private readonly FunctionDelegate method;
-        private readonly object[] nullArguments;
+        private readonly SafeMethodState state;
 
         /// <summary>
         /// Creates a new instance of the safe method wrapper.
@@ -111,9 +106,15 @@ namespace Spring.Reflection.Dynamic
         {
             AssertUtils.ArgumentNotNull(methodInfo, "You cannot create a dynamic method for a null value.");
 
+            state = (SafeMethodState)stateCache[methodInfo];
+            if (state == null)
+            {
+                state = new SafeMethodState(DynamicReflectionManager.CreateMethod(methodInfo),
+                                            new object[methodInfo.GetParameters().Length]
+                );
+                stateCache[methodInfo] = state;
+            }
             this.methodInfo = methodInfo;
-            this.method = GetOrCreateDynamicMethod(methodInfo);
-            this.nullArguments = new object[methodInfo.GetParameters().Length];
         }
 
         /// <summary>
@@ -131,14 +132,15 @@ namespace Spring.Reflection.Dynamic
         public object Invoke(object target, params object[] arguments)
         {
             // special case - when calling Invoke(null,null) it is undecidible if the second null is an argument or the argument array
-            if (arguments==null && nullArguments.Length==1) arguments=nullArguments;
-            int arglen = (arguments==null?0:arguments.Length);
-            AssertUtils.IsTrue(
-                nullArguments.Length == arglen
-                , string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arglen)
-            );
+            object[] nullArguments = state.nullArguments;
+            if (arguments == null && nullArguments.Length == 1) arguments = nullArguments;
+            int arglen = (arguments == null ? 0 : arguments.Length);
+            if (nullArguments.Length != arglen)
+            {
+                throw new ArgumentException(string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arglen));
+            }
 
-            return this.method(target, arguments);
+            return this.state.method(target, arguments);
         }
 #else
         private IDynamicMethod dynamicMethod;
@@ -206,7 +208,7 @@ namespace Spring.Reflection.Dynamic
     }
 
     #endregion
-    
+
 #if NET_2_0
     /// <summary>
     /// Factory class for dynamic methods.
@@ -263,7 +265,7 @@ namespace Spring.Reflection.Dynamic
 
         private static readonly CreateMethodCallback s_createMethodCallback = new CreateMethodCallback(CreateInternal);
 
-        #region Create Method
+    #region Create Method
 
         /// <summary>
         /// Creates dynamic method instance for the specified <see cref="MethodInfo"/>.

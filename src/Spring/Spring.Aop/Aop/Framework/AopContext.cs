@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System;
 using System.Collections;
 using Spring.Threading;
 
@@ -40,11 +41,17 @@ namespace Spring.Aop.Framework
 	/// advice can use this to make advised calls. They can also use it to find
 	/// advice configuration.
 	/// </p>
-	/// <note>
+    /// <p>
+    /// To expose the current proxy, set the <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> 
+    /// property on the controlling proxy to <see langword="true"/>.
+    /// The default value for the <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> property
+    /// is <see langword="false"/>, for performance reasons.
+    /// </p>
+    /// <note>
 	/// The AOP framework does not expose proxies by default, as there is a
 	/// performance cost in doing so.
 	/// </note>
-	/// <p>
+    /// <p>
 	/// The functionality in this class might be used by a target object that
 	/// needed access to resources on the invocation. However, this approach
 	/// should not be used when there is a reasonable alternative, as it makes
@@ -56,34 +63,21 @@ namespace Spring.Aop.Framework
 	/// <author>Aleksandar Seovic (.NET)</author>
 	public sealed class AopContext
 	{
-        private const string CURRENTPROXY_SLOTNAME = "AopContext.CurrentProxySlotName";
+        [ThreadStatic]
+	    private static Stack tls_ProxyStack;
 
 		/// <summary>
-		/// The AOP proxy associated with this thread.
+		/// The AOP proxy stack associated with this thread.
 		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Will be <cref lang="null"/> unless the
-		/// <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> property
-		/// on the controlling proxy has been set to <see langword="true"/>.
-		/// </p>
-		/// <p>
-		/// The default value for the 
-		/// <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> property
-		/// is <see langword="false"/>, for performance reasons.
-		/// </p>
-		/// </remarks>
 		private static Stack ProxyStack
         {
             get 
             {
-                Stack proxyStack = LogicalThreadContext.GetData(CURRENTPROXY_SLOTNAME) as Stack;
-                if (proxyStack == null)
+                if (tls_ProxyStack == null)
                 {
-                    proxyStack = new Stack();
-                    LogicalThreadContext.SetData(CURRENTPROXY_SLOTNAME, proxyStack);
+                    tls_ProxyStack = new Stack();
                 }
-                return proxyStack;
+                return tls_ProxyStack;
             }
         }
 
@@ -106,8 +100,7 @@ namespace Spring.Aop.Framework
 	    {
 	        get
 	        {
-                Stack proxyStack = LogicalThreadContext.GetData(CURRENTPROXY_SLOTNAME) as Stack;
-	            return (proxyStack != null && proxyStack.Count > 0);	            
+	            return (tls_ProxyStack != null && tls_ProxyStack.Count > 0);	            
 	        }
 	    }
 
@@ -121,13 +114,14 @@ namespace Spring.Aop.Framework
 		{
 			get
 			{
-                if (ProxyStack.Count == 0)
+			    Stack proxyStack = ProxyStack;
+                if (proxyStack.Count == 0)
 				{
 					throw new AopConfigException(
 						"Cannot find proxy: Set the 'ExposeProxy' property " +
 						"to 'true' on IAdvised to make it available.");
 				}
-                return ProxyStack.Peek();
+                return proxyStack.Peek();
 			}
 		}
 
@@ -163,12 +157,13 @@ namespace Spring.Aop.Framework
 		/// </exception>
 		public static void PopProxy()
 		{
-            if (ProxyStack.Count == 0)
+		    Stack proxyStack = ProxyStack;
+		    if (proxyStack.Count == 0)
 			{
 				throw new AopConfigException(
 					"Proxy stack empty. Always call 'PushProxy' before 'PopProxy'.");
 			}
-            ProxyStack.Pop();
+            proxyStack.Pop();
 		}
 
 		#region Constructor (s) / Destructor

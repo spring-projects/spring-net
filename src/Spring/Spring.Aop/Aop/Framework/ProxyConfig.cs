@@ -59,7 +59,7 @@ namespace Spring.Aop.Framework
 	    private IAopProxyFactory aopProxyFactory =
 	        ObjectUtils.InstantiateType( typeof(ProxyConfig).Assembly, "Spring.Aop.Framework.DynamicProxy.CachedAopProxyFactory") as IAopProxyFactory;
 		private bool exposeProxy;
-        private object syncRoot = new object();
+        private readonly object syncRoot = new object();
         #endregion
 
         #region Properites

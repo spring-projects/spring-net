@@ -22,7 +22,7 @@
 
 using System;
 using System.Threading;
-
+using AopAlliance.Aop;
 using NUnit.Framework;
 
 using Spring.Objects;
@@ -34,58 +34,58 @@ using Spring.Util;
 
 namespace Spring.Aop.Framework
 {
-	/// <summary>
-	/// Unit tests for the AopContext class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class AopContextTests
-	{
-		[SetUp]
-		public void SetUp()
-		{
-			// makes sure the context is always empty before any unit test...
-			try
-			{
-				do
-				{
-					AopContext.PopProxy();
-				} while (true);
-			}
-			catch (AopConfigException)
-			{
-			}
-		}
-
-		[Test]
-		[ExpectedException(typeof (AopConfigException))]
-		public void CurrentProxyChokesIfNoAopProxyIsOnTheStack()
-		{
-			AopContext.CurrentProxy.ToString();
-		}
-
-		[Test]
-		public void CurrentProxyStackJustPeeksItDoesntPop()
-		{
-			string foo = "Foo";
-			AopContext.PushProxy(foo);
-			object fooref = AopContext.CurrentProxy;
-			Assert.IsTrue(ReferenceEquals(foo, fooref),
-			              "Not the exact same instance (must be).");
-			// must not have been popped off the stack by looking at it...
-			object foorefref = AopContext.CurrentProxy;
-			Assert.IsTrue(ReferenceEquals(fooref, foorefref),
-			              "Not the exact same instance (must be).");
-		}
-
-		[Test]
-		[ExpectedException(typeof (AopConfigException))]
-		public void PopProxyWithNothingOnStack()
-		{
-			AopContext.PopProxy();
+    /// <summary>
+    /// Unit tests for the AopContext class.
+    /// </summary>
+    /// <author>Rick Evans</author>
+    [TestFixture]
+    public sealed class AopContextTests
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            // makes sure the context is always empty before any unit test...
+            try
+            {
+                do
+                {
+                    AopContext.PopProxy();
+                } while (true);
+            }
+            catch (AopConfigException)
+            {
+            }
         }
 
         [Test]
+        [ExpectedException(typeof(AopConfigException))]
+        public void CurrentProxyChokesIfNoAopProxyIsOnTheStack()
+        {
+            AopContext.CurrentProxy.ToString();
+        }
+
+        [Test]
+        public void CurrentProxyStackJustPeeksItDoesntPop()
+        {
+            string foo = "Foo";
+            AopContext.PushProxy(foo);
+            object fooref = AopContext.CurrentProxy;
+            Assert.IsTrue(ReferenceEquals(foo, fooref),
+                          "Not the exact same instance (must be).");
+            // must not have been popped off the stack by looking at it...
+            object foorefref = AopContext.CurrentProxy;
+            Assert.IsTrue(ReferenceEquals(fooref, foorefref),
+                          "Not the exact same instance (must be).");
+        }
+
+        [Test]
+        [ExpectedException(typeof(AopConfigException))]
+        public void PopProxyWithNothingOnStack()
+        {
+            AopContext.PopProxy();
+        }
+
+        [Test(Description = "SPRNET-1158")]
         public void IsActiveMatchesStackState()
         {
             Assert.IsFalse(AopContext.IsActive);
@@ -97,11 +97,72 @@ namespace Spring.Aop.Framework
 
         #region CurrentProxyIsThreadSafe
 
+        [Test, Explicit]
+        public void ProxyPerformanceTests()
+        {
+            int runs = 5000000;
+            StopWatch watch = new StopWatch();
+
+            ITestObject testObject = new ChainableTestObject(null);
+            using (watch.Start("Naked Duration: {0}"))
+            {
+                for (int i = 0; i < runs; i++)
+                {
+                    object result = testObject.DoSomething(this);
+                }
+            }
+
+            ITestObject hardcodedWrapper = new ChainableTestObject(testObject);
+            using (watch.Start("Hardcoded Wrapper Duration: {0}"))
+            {
+                for (int i = 0; i < runs; i++)
+                {
+                    object result = hardcodedWrapper.DoSomething(this);
+                }
+            }
+
+            PeformanceTestAopContextInterceptor interceptor = new PeformanceTestAopContextInterceptor();
+            ITestObject proxy = CreateProxy(testObject, interceptor, false);
+            using(watch.Start("Proxy Duration ('ExposeProxy'==false): {0}"))
+            {
+                for(int i=0;i<runs;i++)
+                {
+                    object result = proxy.DoSomething(this);
+                }
+            }
+            Assert.AreEqual(runs, interceptor.Calls);
+
+            interceptor = new PeformanceTestAopContextInterceptor();
+            proxy = CreateProxy(testObject, interceptor, true);
+            using(watch.Start("Proxy Duration ('ExposeProxy'==true): {0}"))
+            {
+                for(int i=0;i<runs;i++)
+                {
+                    object result = proxy.DoSomething(this);
+                }
+            }
+            Assert.AreEqual(runs, interceptor.Calls);
+        }
+
+        private class PeformanceTestAopContextInterceptor : IMethodInterceptor
+        {
+            public int Calls = 0;
+
+            public object Invoke(IMethodInvocation invocation)
+            {
+                Calls++;
+                Object ret = invocation.Proceed();
+                return ret;
+            }
+        }
+
         [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-341")]
         public void CurrentProxyIsThreadSafe()
         {
-            AsyncTestMethod t1 = new AsyncTestMethod(100, new ThreadStart(ProxyTestObjectAndExposeProxy));
-            AsyncTestMethod t2 = new AsyncTestMethod(100, new ThreadStart(ProxyTestObjectAndExposeProxy));
+            ProxyTestObjectAndExposeProxy();
+
+            AsyncTestMethod t1 = new AsyncTestMethod(1000, new ThreadStart(ProxyTestObjectAndExposeProxy));
+            AsyncTestMethod t2 = new AsyncTestMethod(1000, new ThreadStart(ProxyTestObjectAndExposeProxy));
             t1.Start();
             t2.Start();
 
@@ -109,32 +170,85 @@ namespace Spring.Aop.Framework
             t2.AssertNoException();
         }
 
+        public interface ITestObject
+        {
+            object DoSomething(object arg);
+        }
+
+        private class ChainableTestObject : ITestObject
+        {
+            private readonly ITestObject next;
+
+            public ChainableTestObject(ITestObject next)
+            {
+                this.next = next;
+            }
+
+            public virtual object DoSomething(object arg)
+            {
+                if (next != null)
+                {
+                    return next.DoSomething(arg);
+                }
+                // simulate some sensible work
+                string rep = string.Format("{0} {1}", this.GetType(), arg.GetHashCode());
+                return arg;
+            }
+        }
+
         private void ProxyTestObjectAndExposeProxy()
         {
-            TestObject target = new TestObject();
-            target.Age = 26;
+            TestAopContextInterceptor interceptor = new TestAopContextInterceptor();
 
+            ITestObject proxy = CreateProxyChain(interceptor, true);
+
+            Assert.IsFalse(AopContext.IsActive);
+            Assert.AreEqual(this, proxy.DoSomething(this), "Incorrect return value");
+            Assert.IsFalse(AopContext.IsActive);
+            Assert.AreEqual(2, interceptor.Calls); // 2 interceptions on the way
+        }
+
+        private ITestObject CreateProxyChain(IAdvice interceptor, bool exposeProxy)
+        {
+            ITestObject first = new ChainableTestObject(null);
+            ITestObject firstProxy = CreateProxy(first, interceptor, exposeProxy);
+            Assert.IsNotNull(firstProxy);
+
+            ITestObject second = new ChainableTestObject(firstProxy);
+            ITestObject secondProxy = CreateProxy(second, interceptor, exposeProxy);
+            Assert.IsNotNull(secondProxy);
+            return secondProxy;
+        }
+
+        private ITestObject CreateProxy(object target, IAdvice interceptor, bool exposeProxy)
+        {
             ProxyFactory pf = new ProxyFactory();
-            pf.ExposeProxy = true;
+            pf.ExposeProxy = exposeProxy;
             pf.Target = target;
-            pf.AddAdvice(new TestAopContextInterceptor());
+            pf.AddAdvice(interceptor);
 
-            ITestObject proxy = pf.GetProxy() as ITestObject;
-            Assert.IsNotNull(proxy);
-            Assert.AreEqual(target.Age, proxy.Age, "Incorrect age");
+            return pf.GetProxy() as ITestObject;
         }
 
         private class TestAopContextInterceptor : IMethodInterceptor
         {
+            public int Calls = 0;
+
             public object Invoke(IMethodInvocation invocation)
             {
+                Calls++;
+                Assert.IsTrue(AopContext.IsActive);
                 Assert.IsNotNull(AopContext.CurrentProxy);
+                Assert.AreSame(invocation.Proxy, AopContext.CurrentProxy);
+
                 Object ret = invocation.Proceed();
+
                 Assert.IsNotNull(AopContext.CurrentProxy);
+                Assert.IsTrue(AopContext.IsActive);
                 return ret;
             }
         }
 
         #endregion
-	}
+    }
 }

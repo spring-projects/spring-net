@@ -76,7 +76,7 @@ namespace Spring.Aop.Framework
         /// Array updated on changes to the advisors list, which is easier to
         /// manipulate internally
         /// </summary>
-        private IAdvisor[] _advisorsArray = new IAdvisor[] {};
+        private volatile IAdvisor[] _advisorsArray = new IAdvisor[] { };
 
         /// <summary> 
         /// List of introductions. 
@@ -88,7 +88,7 @@ namespace Spring.Aop.Framework
         /// manipulate internally
         /// </summary>
         private IIntroductionAdvisor[] _introductionsArray
-            = new IIntroductionAdvisor[] {};
+            = new IIntroductionAdvisor[] { };
 
         /// <summary>
         /// Interface map specifying which object should interface methods be
@@ -100,7 +100,7 @@ namespace Spring.Aop.Framework
         /// to the target object.
         /// </p>
         /// </remarks>
-        private IDictionary interfaceMap = new ListDictionary();
+        private readonly IDictionary interfaceMap = new ListDictionary();
 
         /// <summary>
         /// The <see cref="Spring.Aop.ITargetSource"/> for this instance.
@@ -120,7 +120,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// The list of <see cref="Spring.Aop.Framework.AdvisedSupport"/> event listeners.
         /// </summary>
-        private IList listeners = new ArrayList();
+        private readonly IList listeners = new ArrayList();
 
         /// <summary>
         /// The advisor chain factory.
@@ -149,7 +149,8 @@ namespace Spring.Aop.Framework
         /// <exception cref="Spring.Aop.Framework.AopConfigException">
         /// If this 
         /// </exception>
-        public AdvisedSupport(Type[] interfaces) : this()
+        public AdvisedSupport(Type[] interfaces)
+            : this()
         {
             if (interfaces != null)
             {
@@ -181,14 +182,14 @@ namespace Spring.Aop.Framework
         {
             get
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
                     return this.advisorChainFactory;
                 }
             }
             set
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
                     if (this.advisorChainFactory != null)
                     {
@@ -216,12 +217,12 @@ namespace Spring.Aop.Framework
             {
                 bool initialized = !(this.m_targetSource is EmptyTargetSource);
                 this.m_targetSource = value;
-                
+
                 if (this.m_targetSource != null && !initialized && interfaceMap.Count == 0)
                 {
                     Type[] interfaces = ReflectionUtils.GetInterfaces(this.m_targetSource.TargetType);
                     foreach (Type intf in interfaces)
-                    {    
+                    {
                         AddInterfaceInternal(intf);
                     }
                 }
@@ -240,23 +241,31 @@ namespace Spring.Aop.Framework
             get
             {
                 bool canBeSerialized = TargetSource.TargetType.IsSerializable;
-                if (canBeSerialized)
+                if (!canBeSerialized) return false;
+
+                lock (this.SyncRoot)
                 {
-                    for (int i = 0; canBeSerialized && i < _advisorsArray.Length; i++)
+                    IAdvisor[] advisorsArray = this._advisorsArray;
+                    IIntroductionAdvisor[] introductionsArray = this._introductionsArray;
+
+                    for (int i = 0; i < advisorsArray.Length; i++)
                     {
-                        IAdvisor advisor = _advisorsArray[i];
+                        IAdvisor advisor = advisorsArray[i];
                         canBeSerialized = advisor.GetType().IsSerializable
                                           && advisor.Advice.GetType().IsSerializable;
+                        if (!canBeSerialized) return false;
                     }
-                    for (int i = 0; canBeSerialized && i < _introductionsArray.Length; i++)
+
+                    for (int i = 0; i < introductionsArray.Length; i++)
                     {
-                        IIntroductionAdvisor advisor = _introductionsArray[i];
+                        IIntroductionAdvisor advisor = introductionsArray[i];
                         canBeSerialized = advisor.GetType().IsSerializable
                                           && advisor.Advice.GetType().IsSerializable;
+                        if (!canBeSerialized) return false;
                     }
                 }
 
-                return canBeSerialized;
+                return true;
             }
         }
 
@@ -273,7 +282,7 @@ namespace Spring.Aop.Framework
         {
             get
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
                     Type[] proxiedInterfaces = new Type[this.interfaceMap.Keys.Count];
                     this.interfaceMap.Keys.CopyTo(proxiedInterfaces, 0);
@@ -282,7 +291,7 @@ namespace Spring.Aop.Framework
             }
             set
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
                     this.interfaceMap.Clear();
                     for (int i = 0; i < value.Length; i++)
@@ -307,7 +316,7 @@ namespace Spring.Aop.Framework
         {
             get
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
                     return new Hashtable(this.interfaceMap);
                 }
@@ -332,7 +341,7 @@ namespace Spring.Aop.Framework
         {
             if (intf != null)
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
                     foreach (Type proxyInterface in this.interfaceMap.Keys)
                     {
@@ -359,9 +368,10 @@ namespace Spring.Aop.Framework
         {
             get
             {
-                lock(this.SyncRoot)
+                //                lock(this.SyncRoot)
                 {
-                    return (IAdvisor[]) this._advisorsArray.Clone();
+                    //                    return (IAdvisor[]) _advisorsArray.Clone();
+                    return _advisorsArray;
                 }
             }
         }
@@ -387,9 +397,9 @@ namespace Spring.Aop.Framework
         {
             get
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
-                    return (IIntroductionAdvisor[]) this._introductionsArray.Clone();
+                    return (IIntroductionAdvisor[])this._introductionsArray.Clone();
                 }
             }
         }
@@ -461,7 +471,7 @@ namespace Spring.Aop.Framework
         /// </returns>
         public virtual int IndexOf(IAdvisor advisor)
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 return IndexOfInternal(advisor);
             }
@@ -482,7 +492,7 @@ namespace Spring.Aop.Framework
         /// </returns>
         public virtual int IndexOf(IIntroductionAdvisor advisor)
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 return IndexOfInternal(advisor);
             }
@@ -509,7 +519,7 @@ namespace Spring.Aop.Framework
             bool wasRemoved = false;
             if (advisor != null)
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
                     int index = IndexOf(advisor);
                     if (index == -1)
@@ -545,7 +555,7 @@ namespace Spring.Aop.Framework
         public virtual void RemoveAdvisor(int index)
         {
             DieIfFrozen("Cannot remove advisor: config is frozen");
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 RemoveAdvisorInternal(index);
             }
@@ -569,7 +579,7 @@ namespace Spring.Aop.Framework
         /// </exception>
         public bool RemoveAdvice(IAdvice advice)
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 int index = IndexOf(advice);
                 if (index == -1)
@@ -606,7 +616,7 @@ namespace Spring.Aop.Framework
             bool wasRemoved = false;
             if (introduction != null)
             {
-                lock(this.SyncRoot)
+                lock (this.SyncRoot)
                 {
                     int index = IndexOf(introduction);
                     if (index == -1)
@@ -639,7 +649,7 @@ namespace Spring.Aop.Framework
         public virtual void RemoveIntroduction(int index)
         {
             DieIfFrozen("Cannot remove introduction: config is frozen");
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 if (index < 0 || index >= _introductions.Count)
                 {
@@ -647,7 +657,7 @@ namespace Spring.Aop.Framework
                         "Introduction index " + index + " is out of bounds: Only have " + _introductions.Count +
                         " introductions.");
                 }
-                IIntroductionAdvisor advisor = (IIntroductionAdvisor) _introductions[index];
+                IIntroductionAdvisor advisor = (IIntroductionAdvisor)_introductions[index];
                 // remove all interfaces introduced by the advisor...
                 foreach (Type intf in advisor.Interfaces)
                 {
@@ -658,33 +668,33 @@ namespace Spring.Aop.Framework
             }
         }
 
-//
-//        /// <summary>
-//        /// Removes the supplied <paramref name="interceptor"/> from the list of
-//        /// <see cref="Spring.Aop.Framework.AdvisedSupport.Advisors"/> for this
-//        /// proxy.
-//        /// </summary>
-//        /// <param name="interceptor">
-//        /// The <see cref="AopAlliance.Intercept.IInterceptor"/> to be removed.
-//        /// </param>
-//        /// <exception cref="AopConfigException">
-//        /// If this proxy configuration is frozen and the
-//        /// <paramref name="interceptor"/> cannot be added.
-//        /// </exception>
-//        public bool RemoveInterceptor(IInterceptor interceptor)
-//        {
-//            AssertFrozen("Cannot remove interceptor: config is frozen");
-//            int index = IndexOf(interceptor);
-//            if (index == -1)
-//            {
-//                return false;
-//            }
-//            else
-//            {
-//                RemoveAdvisor(index);
-//                return true;
-//            }
-//        }
+        //
+        //        /// <summary>
+        //        /// Removes the supplied <paramref name="interceptor"/> from the list of
+        //        /// <see cref="Spring.Aop.Framework.AdvisedSupport.Advisors"/> for this
+        //        /// proxy.
+        //        /// </summary>
+        //        /// <param name="interceptor">
+        //        /// The <see cref="AopAlliance.Intercept.IInterceptor"/> to be removed.
+        //        /// </param>
+        //        /// <exception cref="AopConfigException">
+        //        /// If this proxy configuration is frozen and the
+        //        /// <paramref name="interceptor"/> cannot be added.
+        //        /// </exception>
+        //        public bool RemoveInterceptor(IInterceptor interceptor)
+        //        {
+        //            AssertFrozen("Cannot remove interceptor: config is frozen");
+        //            int index = IndexOf(interceptor);
+        //            if (index == -1)
+        //            {
+        //                return false;
+        //            }
+        //            else
+        //            {
+        //                RemoveAdvisor(index);
+        //                return true;
+        //            }
+        //        }
 
         /// <summary>
         /// Adds the supplied <paramref name="advisor"/> to the list
@@ -705,12 +715,12 @@ namespace Spring.Aop.Framework
         public virtual void AddAdvisor(int index, IAdvisor advisor)
         {
             DieIfFrozen("Cannot add advisor: config is frozen");
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 // advisor already in list (SPRNET-846)
                 if (_advisors.Contains(advisor)) return;
 
-                if(index == -1)
+                if (index == -1)
                 {
                     this._advisors.Add(advisor);
                 }
@@ -756,7 +766,7 @@ namespace Spring.Aop.Framework
             {
                 if (advisor is IIntroductionAdvisor)
                 {
-                    AddIntroduction((IIntroductionAdvisor) advisor);
+                    AddIntroduction((IIntroductionAdvisor)advisor);
                 }
                 else
                 {
@@ -786,7 +796,7 @@ namespace Spring.Aop.Framework
             DieIfFrozen("Cannot add introduction: config is frozen");
             introductionAdvisor.ValidateInterfaces();
 
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 if (index < this._introductions.Count)
                 {
@@ -822,13 +832,13 @@ namespace Spring.Aop.Framework
         public virtual void AddIntroduction(IIntroductionAdvisor introductionAdvisor)
         {
             Type introductionType = introductionAdvisor.Advice.GetType();
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 int pos = this._introductions.Count;
                 for (int i = 0; i < pos; i++)
                 {
                     IIntroductionAdvisor introduction
-                        = (IIntroductionAdvisor) this._introductions[i];
+                        = (IIntroductionAdvisor)this._introductions[i];
                     if (introduction.Advice.GetType() == introductionType)
                     {
                         pos = i;
@@ -858,14 +868,14 @@ namespace Spring.Aop.Framework
         /// </exception>
         public virtual void ReplaceIntroduction(int index, IIntroductionAdvisor introduction)
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
-                if(index < 0 || index >= _introductions.Count)
+                if (index < 0 || index >= _introductions.Count)
                 {
                     throw new AopConfigException(
                         "Introduction index " + index + " is out of bounds:" +
                         " there are currently " + _introductions.Count +
-                        " introductions." );
+                        " introductions.");
                 }
 
                 _introductions[index] = introduction;
@@ -897,7 +907,7 @@ namespace Spring.Aop.Framework
         public bool ReplaceAdvisor(IAdvisor oldAdvisor, IAdvisor newAdvisor)
         {
             DieIfFrozen("Cannot replace advisor: config is frozen.");
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 int index = IndexOf(oldAdvisor);
                 if (index == -1 || newAdvisor == null)
@@ -920,7 +930,7 @@ namespace Spring.Aop.Framework
         /// </returns>
         public virtual string ToProxyConfigString()
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 return ToStringInternal();
             }
@@ -1016,7 +1026,7 @@ namespace Spring.Aop.Framework
         /// </param>
         public virtual void AddListener(IAdvisedSupportListener listener)
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 this.listeners.Add(listener);
             }
@@ -1031,7 +1041,7 @@ namespace Spring.Aop.Framework
         /// </param>
         public virtual void RemoveListener(IAdvisedSupportListener listener)
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 this.listeners.Remove(listener);
             }
@@ -1052,10 +1062,10 @@ namespace Spring.Aop.Framework
         /// </exception>
         public virtual void AddInterface(Type intf)
         {
-        	DieIfFrozen("Cannot add interface: configuration is frozen.");
+            DieIfFrozen("Cannot add interface: configuration is frozen.");
             AssertUtils.ArgumentNotNull(intf, "intf", "Cannot proxy a null interface.");
 
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 AddInterfaceInternal(intf);
                 InterfacesChanged();
@@ -1090,8 +1100,8 @@ namespace Spring.Aop.Framework
         /// <see langword="true"/> if the interface was removed.</returns>
         public virtual bool RemoveInterface(Type intf)
         {
-        	DieIfFrozen("Cannot remove interface: configuration is frozen.");
-            lock(this.SyncRoot)
+            DieIfFrozen("Cannot remove interface: configuration is frozen.");
+            lock (this.SyncRoot)
             {
                 if (intf != null && this.interfaceMap.Contains(intf))
                 {
@@ -1125,7 +1135,7 @@ namespace Spring.Aop.Framework
         /// </returns>
         public virtual int IndexOf(IAdvice advice)
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 return IndexOfInternal(advice);
             }
@@ -1158,7 +1168,7 @@ namespace Spring.Aop.Framework
             {
                 for (int i = 0; i < this._advisors.Count; ++i)
                 {
-                    IAdvisor advisor = (IAdvisor) this._advisors[i];
+                    IAdvisor advisor = (IAdvisor)this._advisors[i];
                     if (advisor.Advice == advice)
                     {
                         return i;
@@ -1275,7 +1285,7 @@ namespace Spring.Aop.Framework
         public int CountAdviceOfType(Type interceptorType)
         {
             int count = 0;
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 foreach (IAdvisor advisor in this._advisors)
                 {
@@ -1313,8 +1323,9 @@ namespace Spring.Aop.Framework
         /// </summary>
         private void UpdateAdvisorsArray()
         {
-            this._advisorsArray = new IAdvisor[this._advisors.Count];
-            this._advisors.CopyTo(this._advisorsArray, 0);
+            IAdvisor[] advisorsArray = new IAdvisor[this._advisors.Count];
+            this._advisors.CopyTo(advisorsArray, 0);
+            this._advisorsArray = advisorsArray;
         }
 
         /// <summary>
@@ -1322,8 +1333,9 @@ namespace Spring.Aop.Framework
         /// </summary>
         private void UpdateIntroductionsArray()
         {
-            this._introductionsArray = new IIntroductionAdvisor[this._introductions.Count];
-            this._introductions.CopyTo(this._introductionsArray, 0);
+            IIntroductionAdvisor[] introductionsArray = new IIntroductionAdvisor[this._introductions.Count];
+            this._introductions.CopyTo(introductionsArray, 0);
+            this._introductionsArray = introductionsArray;
         }
 
         /// <summary>
@@ -1454,7 +1466,7 @@ namespace Spring.Aop.Framework
         /// </returns>
         public override string ToString()
         {
-            lock(this.SyncRoot)
+            lock (this.SyncRoot)
             {
                 return ToStringInternal();
             }
