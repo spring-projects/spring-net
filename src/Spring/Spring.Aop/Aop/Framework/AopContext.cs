@@ -87,6 +87,30 @@ namespace Spring.Aop.Framework
             }
         }
 
+        /// <summary>
+        /// Indicates if the current call is executed under control of an AOP proxy.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Will be <cref lang="null"/> unless the
+        /// <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> property
+        /// on the controlling proxy has been set to <see langword="true"/>.
+        /// </p>
+        /// <p>
+        /// The default value for the 
+        /// <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> property
+        /// is <see langword="false"/>, for performance reasons.
+        /// </p>
+        /// </remarks>
+        public static bool IsActive
+	    {
+	        get
+	        {
+                Stack proxyStack = LogicalThreadContext.GetData(CURRENTPROXY_SLOTNAME) as Stack;
+	            return (proxyStack != null && proxyStack.Count > 0);	            
+	        }
+	    }
+
 		/// <summary>
 		/// Gets the current AOP proxy.
 		/// </summary>

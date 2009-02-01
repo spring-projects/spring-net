@@ -85,6 +85,16 @@ namespace Spring.Aop.Framework
 			AopContext.PopProxy();
         }
 
+        [Test]
+        public void IsActiveMatchesStackState()
+        {
+            Assert.IsFalse(AopContext.IsActive);
+            AopContext.PushProxy("Foo");
+            Assert.IsTrue(AopContext.IsActive);
+            AopContext.PopProxy();
+            Assert.IsFalse(AopContext.IsActive);
+        }
+
         #region CurrentProxyIsThreadSafe
 
         [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-341")]
