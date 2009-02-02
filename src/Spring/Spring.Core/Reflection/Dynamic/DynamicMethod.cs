@@ -18,16 +18,13 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
+using System.Reflection.Emit;
 using Spring.Collections;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Reflection.Dynamic
 {
