@@ -25,7 +25,6 @@
 #endregion
 
 using System;
-using Spring.Objects.Factory;
 
 namespace Spring.Objects.Factory.Config
 {
@@ -84,7 +83,30 @@ namespace Spring.Objects.Factory.Config
         /// </exception>
         IObjectDefinition GetObjectDefinition(string name, bool includeAncestors);
 
-
+        /// <summary>
+        /// Register a new object definition with this registry.
+        /// Must support
+        /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
+        /// and <see cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the object instance to register.
+        /// </param>
+        /// <param name="definition">
+        /// The definition of the object instance to register.
+        /// </param>
+        /// <remarks>
+        /// <p>
+        /// Must support
+        /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/> and
+        /// <see cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>.
+        /// </p>
+        /// </remarks>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object definition is invalid.
+        /// </exception>
+        void RegisterObjectDefinition(string name, IObjectDefinition definition);
+		
         /// <summary>
         /// Injects dependencies into the supplied <paramref name="target"/> instance
         /// using the supplied <paramref name="definition"/>.
