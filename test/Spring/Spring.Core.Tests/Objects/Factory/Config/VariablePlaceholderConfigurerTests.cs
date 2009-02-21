@@ -166,5 +166,27 @@ namespace Spring.Objects.Factory.Config
                 Assert.IsTrue( ex.Message.IndexOf("nickname") > -1 );
             }
         }
+
+        [Test]
+        public void IgnoresUnresolvableVariable()
+        {
+            StaticApplicationContext ac = new StaticApplicationContext();
+
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            pvs.Add("name", "${name}");
+            pvs.Add("nickname", "${nickname}");
+            ac.RegisterSingleton("tb1", typeof(TestObject), pvs);
+
+            VariablePlaceholderConfigurer vpc = new VariablePlaceholderConfigurer();
+            vpc.IgnoreUnresolvablePlaceholders = true;
+            vpc.VariableSource = new DictionaryVariableSource(new string[] {"name", "Erich"});
+            ac.AddObjectFactoryPostProcessor(vpc);
+
+            ac.Refresh();
+
+            TestObject tb1 = (TestObject) ac.GetObject("tb1");
+            Assert.AreEqual("Erich", tb1.Name);
+            Assert.AreEqual("${nickname}", tb1.Nickname);
+        }
     }
 }
