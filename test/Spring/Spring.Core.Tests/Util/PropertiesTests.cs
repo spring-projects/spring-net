@@ -101,7 +101,7 @@ namespace Spring.Util
         }
 
         [Test]
-        public void ListAndLoad ()
+        public void ListAndLoad()
         {
             Properties props = new Properties();
             props.Add ("foo", "this");
@@ -150,6 +150,21 @@ namespace Spring.Util
 			Assert.IsTrue("value2".Equals(props["key2"]));
 			Assert.IsTrue("true".Equals(props["leadingspace"]));
 		}
+
+        [Test]
+        public void WhitespaceProperties()
+        {
+            string input = "key1 =\t\nkey2:\nkey3";
+
+            Stream s = new MemoryStream(Encoding.ASCII.GetBytes(input));
+            Properties props = new Properties();
+            props.Load(s);
+
+            Assert.AreEqual(string.Empty, props["key1"], "key1 should have empty value");
+            Assert.AreEqual(string.Empty, props["key2"], "key2 should have empty value");
+            Assert.IsTrue(props.ContainsKey("key3"));
+            Assert.IsNull(props["key3"]);
+        }
 
 		[Test]
 		public void Continuation()

@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System;
 using System.Collections;
 using NUnit.Framework;
 using Spring.Context.Support;
@@ -115,6 +116,55 @@ namespace Spring.Objects.Factory.Config
             TestObject tb1 = (TestObject)ac.GetObject("tb1");
             Assert.AreEqual(35, tb1.Age);
             Assert.AreEqual("Erich", tb1.Name);            
-        }        
+        }  
+      
+        [Test]
+        [Ignore("Does not work yet because IVariableSource cannot differentiate between invalid key and key with a null value")]
+        public void WhitespaceHandling()
+        {
+            StaticApplicationContext ac = new StaticApplicationContext();
+
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            pvs.Add("name", "${name}");
+            pvs.Add("nickname", "${nickname}");
+            ac.RegisterSingleton("tb1", typeof(TestObject), pvs);
+
+            IList variableSources = new ArrayList();
+            variableSources.Add(new DictionaryVariableSource(new string[] { "name", string.Empty, "nickname", null }));
+            pvs = new MutablePropertyValues();
+            pvs.Add("VariableSources", variableSources);
+            ac.RegisterSingleton("configurer", typeof(VariablePlaceholderConfigurer), pvs);
+            ac.Refresh();
+
+            TestObject tb1 = (TestObject)ac.GetObject("tb1");
+            Assert.AreEqual(string.Empty, tb1.Name);
+            Assert.AreEqual(null, tb1.Nickname);
+        }
+
+        [Test]
+        public void BailsOnUnresolvableVariable()
+        {
+            StaticApplicationContext ac = new StaticApplicationContext();
+
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            pvs.Add("nickname", "${nickname}");
+            ac.RegisterSingleton("tb1", typeof(TestObject), pvs);
+
+            IList variableSources = new ArrayList();
+            variableSources.Add(new DictionaryVariableSource(new string[] { }));
+            pvs = new MutablePropertyValues();
+            pvs.Add("VariableSources", variableSources);
+            ac.RegisterSingleton("configurer", typeof(VariablePlaceholderConfigurer), pvs);
+
+            try
+            {
+                ac.Refresh();
+                Assert.Fail("something changed wrt VariablePlaceholder resolution");
+            }
+            catch (ObjectDefinitionStoreException ex)
+            {
+                Assert.IsTrue( ex.Message.IndexOf("nickname") > -1 );
+            }
+        }
     }
 }

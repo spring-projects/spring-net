@@ -672,6 +672,7 @@ namespace Spring.Util
         /// <returns>The converted string.</returns>
         public static string ConvertEscapedCharacters(string inputString)
         {
+            if (inputString == null) return null;
             StringBuilder sb = new StringBuilder(inputString.Length);
             for (int i = 0; i < inputString.Length; i++)
             {

@@ -31,6 +31,24 @@ namespace Spring.Util
 	/// <summary>
 	/// An implementation of the Java Properties class.
 	/// </summary>
+	/// <remarks>
+    /// For the complete syntax see <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Properties.html#load(java.io.InputStream)">java.util.Properties JavaDoc</a>.
+    /// This class supports an extended syntax. There may also be sole keys on a line, in that case values are treated as <c>null</c>.
+    /// <example>
+    /// <code>
+    /// key1 = value
+    /// key2:
+    /// key3
+    /// </code>
+    /// will result in the name/value pairs: 
+    /// <list>
+    /// <item>key1:="value"</item>
+    /// <item>key2:=string.Empty</item>
+    /// <item>key3:=&lt;null&gt;</item>
+    /// </list>
+    /// note, that to specify a <c>null</c> value, the key <b>must not</b> be followed by any character except newline. 
+    /// </example>
+	/// </remarks>
 	/// <author>Simon White</author>
     [Serializable]
     public class Properties : Hashtable
@@ -122,7 +140,7 @@ namespace Spring.Util
 						key = keyvalue[0];
 						value = keyvalue[1];
 
-						if (value.EndsWith("\\"))
+						if (value != null && value.EndsWith("\\"))
 						{
 							value = value.Substring(0, value.Length - 1);
 							isContinuation = true;
@@ -156,7 +174,9 @@ namespace Spring.Util
 		/// <returns>The string with all leading whitespace removed.</returns>
 		private static string RemoveLeadingWhitespace(string line)
 		{
-			string trimmed = null;
+            if (line == null) return null;
+
+			string trimmed = string.Empty;
 			for (int i = 0; i < line.Length; i++)
 			{
 				if (Whitespace.IndexOf(line[i]) == -1)
@@ -175,7 +195,7 @@ namespace Spring.Util
 		/// <returns>An array containing the key / value pair.</returns>
 		private static string[] SplitLine(string line)
 		{
-			string key = null;
+			string key = line;
 			string value = null;
 
 			int index = 0;
@@ -202,14 +222,23 @@ namespace Spring.Util
 			// first ignore leading whitespace and initial separator
 			// (if one's there)
 			index++;
-			if (index >= len)
+			if (index > len)
 			{
-				return null;
-			}
-			value = line.Substring(index);
-			value = RemoveLeadingWhitespace(value);
+                // this is an extension to support key-only lines and specifying null values
+			    value = null;
+			} 
+            else if (index == len)
+            {
+                value = string.Empty;
+            }
+            else
+            {
+                value = line.Substring(index);
+                value = RemoveLeadingWhitespace(value);
+            }
 
-			if (Separators.IndexOf(value[0]) != -1)
+		    if (value != null && value.Length > 0 
+                && Separators.IndexOf(value[0]) != -1)
 			{
 				value = value.Substring(1);
 				value = RemoveLeadingWhitespace(value);
