@@ -123,6 +123,7 @@
     <Compile Include="Aop\Framework\AopContextTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AdvisorAutoProxyCreatorCircularReferencesTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AdvisorAutoProxyCreatorTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AttributeAutoProxyCreatorTests.cs" />

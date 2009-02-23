@@ -78,7 +78,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// The logger for this class hierarchy.
         /// </summary>
-        protected readonly ILog logger = LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod().DeclaringType );
+        protected readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// Convenience constant for subclasses: Return value for "do not proxy".
@@ -128,11 +128,11 @@ namespace Spring.Aop.Framework.AutoProxy
         /// creator created a custom TargetSource for.  Used to detect own pre-built proxies
         /// (from "PostProcessBeforeInstantiation") in the "PostProcessAfterInitialization" method.
         /// </summary>
-        private ISet targetSourcedObjects = new SynchronizedSet( new HashedSet() );
+        private ISet targetSourcedObjects = new SynchronizedSet(new HashedSet());
 
-        private ISet advisedObjects = new SynchronizedSet( new HashedSet() );
+        private ISet advisedObjects = new SynchronizedSet(new HashedSet());
 
-        private ISet nonAdvisedObjects = new SynchronizedSet( new HashedSet() );
+        private ISet nonAdvisedObjects = new SynchronizedSet(new HashedSet());
 
         #endregion
 
@@ -224,69 +224,66 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Create a proxy with the configured interceptors if the object is
         /// identified as one to proxy by the subclass.
         /// </summary>
-        public virtual object PostProcessAfterInitialization( object obj, string objectName )
+        public virtual object PostProcessAfterInitialization(object obj, string objectName)
         {
-            if (targetSourcedObjects.Contains( objectName ))
+            if (targetSourcedObjects.Contains(objectName))
             {
                 return obj;
             }
 
-            object cacheKey = GetCacheKey( obj.GetType(), objectName );
-            if (nonAdvisedObjects.Contains( cacheKey ))
+            Type objectType = RemotingServices.IsTransparentProxy(obj)
+                ? ObjectFactory.GetType(objectName)
+                : obj.GetType();
+
+            object cacheKey = GetCacheKey(objectType, objectName);
+            if (nonAdvisedObjects.Contains(cacheKey))
             {
                 return obj;
             }
 
-            if (IsInfrastructureType( obj.GetType(), objectName ))
+            if (IsInfrastructureType(objectType, objectName))
             {
                 #region Instrumentation
 
                 if (logger.IsDebugEnabled)
                 {
-                    logger.Debug( string.Format( "Did not attempt to autoproxy infrastructure type [{0}]", obj.GetType() ) );
+                    logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
                 }
 
                 #endregion
 
-                nonAdvisedObjects.Add( cacheKey );
+                nonAdvisedObjects.Add(cacheKey);
                 return obj;
             }
 
-            if (ShouldSkip( obj.GetType(), objectName ))
+            if (ShouldSkip(objectType, objectName))
             {
                 #region Instrumentation
 
                 if (logger.IsDebugEnabled)
                 {
-                    logger.Debug( string.Format( "Skipping  type [{0}]", obj.GetType() ) );
+                    logger.Debug(string.Format("Skipping  type [{0}]", objectType));
                 }
 
                 #endregion
 
-                nonAdvisedObjects.Add( cacheKey );
+                nonAdvisedObjects.Add(cacheKey);
                 return obj;
             }
 
             //ITargetSource targetSource = GetCustomTargetSource(obj.GetType(), objectName);
             object[] specificInterceptors;
-            if (RemotingServices.IsTransparentProxy( obj ))
-            {
-                specificInterceptors = GetAdvicesAndAdvisorsForObject( ObjectFactory.GetType( objectName ), objectName, null );
-            }
-            else
-            {
-                specificInterceptors = GetAdvicesAndAdvisorsForObject( obj.GetType(), objectName, null );
-            }
+            specificInterceptors = GetAdvicesAndAdvisorsForObject(objectType, objectName, null);
 
 
             // proxy if we have advice or if a TargetSourceCreator wants to do some
             // fancy stuff such as pooling
             if (specificInterceptors != DO_NOT_PROXY)
             {
-                advisedObjects.Add( cacheKey );
-                return CreateProxy( obj.GetType(), objectName, specificInterceptors, new SingletonTargetSource( obj ) );
+                advisedObjects.Add(cacheKey);
+                return CreateProxy(objectType, objectName, specificInterceptors, new SingletonTargetSource(obj, objectType));
             }
-            nonAdvisedObjects.Add( cacheKey );
+            nonAdvisedObjects.Add(cacheKey);
             return obj;
         }
 
@@ -296,7 +293,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="obj">The obj.</param>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public virtual object PostProcessBeforeInitialization( object obj, string name )
+        public virtual object PostProcessBeforeInitialization(object obj, string name)
         {
             return obj;
         }
@@ -361,7 +358,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="objectType">the type of the object</param>
         /// <param name="objectName">the name of the object</param>
         /// <returns>if remarkable to skip</returns>
-        protected virtual bool ShouldSkip( Type objectType, string objectName )
+        protected virtual bool ShouldSkip(Type objectType, string objectName)
         {
             return false;
         }
@@ -373,7 +370,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="pf">
         /// ProxyFactory that will be used to create the proxy immediably after this method returns.
         /// </param>
-        protected virtual void CustomizeProxyFactory( ProxyFactory pf )
+        protected virtual void CustomizeProxyFactory(ProxyFactory pf)
         {
             // This implementation does nothing
         }
@@ -387,12 +384,12 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <returns>
         /// <c>true</c> if [is infrastructure type] [the specified obj]; otherwise, <c>false</c>.
         /// </returns>
-        protected virtual bool IsInfrastructureType( Type type, String name )
+        protected virtual bool IsInfrastructureType(Type type, String name)
         {
-            return typeof( IAdvisor ).IsAssignableFrom( type )
-                || typeof( IAdvice ).IsAssignableFrom( type )
-                || typeof( IAdvisors ).IsAssignableFrom( type )
-                || typeof( AbstractAutoProxyCreator ).IsAssignableFrom( type );
+            return typeof(IAdvisor).IsAssignableFrom(type)
+                || typeof(IAdvice).IsAssignableFrom(type)
+                || typeof(IAdvisors).IsAssignableFrom(type)
+                || typeof(AbstractAutoProxyCreator).IsAssignableFrom(type);
         }
 
 
@@ -406,22 +403,22 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="objectType">the type of the object to create a TargetSource for</param>
         /// <param name="name">the name of the object</param>
         /// <returns>a TargetSource for this object</returns>
-        protected virtual ITargetSource GetCustomTargetSource( Type objectType, string name )
+        protected virtual ITargetSource GetCustomTargetSource(Type objectType, string name)
         {
             // We can't create fancy target sources for directly registered singletons.
             if (customTargetSourceCreators != null &&
-                owningObjectFactory != null && owningObjectFactory.ContainsObject( name ))
+                owningObjectFactory != null && owningObjectFactory.ContainsObject(name))
             {
                 for (int i = 0; i < customTargetSourceCreators.Count; i++)
                 {
                     ITargetSourceCreator tsc = (ITargetSourceCreator)customTargetSourceCreators[i];
-                    ITargetSource ts = tsc.GetTargetSource( objectType, name, owningObjectFactory );
+                    ITargetSource ts = tsc.GetTargetSource(objectType, name, owningObjectFactory);
                     if (ts != null)
                     {
                         // found a match
                         if (logger.IsInfoEnabled)
                         {
-                            logger.Info( string.Format( "TargetSourceCreator [{0} found custom TargetSource for object with objectName '{1}'", tsc, name ) );
+                            logger.Info(string.Format("TargetSourceCreator [{0} found custom TargetSource for object with objectName '{1}'", tsc, name));
                         }
                         return ts;
                     }
@@ -451,7 +448,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <returns>an array of additional interceptors for the particular object;
         /// or an empty array if no additional interceptors but just the common ones;
         /// or null if no proxy at all, not even with the common interceptors.</returns>
-        protected abstract object[] GetAdvicesAndAdvisorsForObject( Type objType, string name, ITargetSource customTargetSource );
+        protected abstract object[] GetAdvicesAndAdvisorsForObject(Type objType, string name, ITargetSource customTargetSource);
 
         /// <summary>
         /// Create an AOP proxy for the given object.
@@ -462,11 +459,11 @@ namespace Spring.Aop.Framework.AutoProxy
         /// object (may be empty but not null)</param>
         /// <param name="targetSource">The target source for the proxy, already pre-configured to access the object.</param>
         /// <returns>The AOP Proxy for the object.</returns>
-        protected virtual object CreateProxy( Type objectType, string objectName, object[] specificInterceptors, ITargetSource targetSource )
+        protected virtual object CreateProxy(Type objectType, string objectName, object[] specificInterceptors, ITargetSource targetSource)
         {
             ProxyFactory proxyFactory = CreateProxyFactory();
             // copy our properties (proxyTargetClass) inherited from ProxyConfig
-            proxyFactory.CopyFrom( this );
+            proxyFactory.CopyFrom(this);
 
             object target = targetSource.GetTarget();
 
@@ -475,29 +472,29 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 // Must allow for introductions; can't just set interfaces to
                 // the target's interfaces only.
-                Type[] targetInterfaceTypes = AopUtils.GetAllInterfaces( target );
+                Type[] targetInterfaceTypes = AopUtils.GetAllInterfacesFromType(objectType);
                 foreach (Type interfaceType in targetInterfaceTypes)
                 {
-                    proxyFactory.AddInterface( interfaceType );
+                    proxyFactory.AddInterface(interfaceType);
                 }
             }
 
 
-            IAdvisor[] advisors = BuildAdvisors( objectName, specificInterceptors );
+            IAdvisor[] advisors = BuildAdvisors(objectName, specificInterceptors);
 
             foreach (IAdvisor advisor in advisors)
             {
                 if (advisor is IIntroductionAdvisor)
                 {
-                    proxyFactory.AddIntroduction( (IIntroductionAdvisor)advisor );
+                    proxyFactory.AddIntroduction((IIntroductionAdvisor)advisor);
                 }
                 else
                 {
-                    proxyFactory.AddAdvisor( advisor );
+                    proxyFactory.AddAdvisor(advisor);
                 }
             }
             proxyFactory.TargetSource = targetSource;
-            CustomizeProxyFactory( proxyFactory );
+            CustomizeProxyFactory(proxyFactory);
 
             proxyFactory.IsFrozen = freezeProxy;
             return proxyFactory.GetProxy();
@@ -520,7 +517,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="specificInterceptors">The set of interceptors that is specific to this
         /// object (may be empty, but not null)</param>
         /// <returns>The list of Advisors for the given object</returns>
-        protected virtual IAdvisor[] BuildAdvisors( string objectName, object[] specificInterceptors )
+        protected virtual IAdvisor[] BuildAdvisors(string objectName, object[] specificInterceptors)
         {
             // handle prototypes correctly
             IAdvisor[] commonInterceptors = ResolveInterceptorNames();
@@ -528,16 +525,16 @@ namespace Spring.Aop.Framework.AutoProxy
             ArrayList allInterceptors = new ArrayList();
             if (specificInterceptors != null)
             {
-                allInterceptors.AddRange( specificInterceptors );
+                allInterceptors.AddRange(specificInterceptors);
                 if (commonInterceptors != null)
                 {
                     if (applyCommonInterceptorsFirst)
                     {
-                        allInterceptors.InsertRange( 0, commonInterceptors );
+                        allInterceptors.InsertRange(0, commonInterceptors);
                     }
                     else
                     {
-                        allInterceptors.AddRange( commonInterceptors );
+                        allInterceptors.AddRange(commonInterceptors);
                     }
                 }
             }
@@ -545,14 +542,14 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 int nrOfCommonInterceptors = commonInterceptors != null ? commonInterceptors.Length : 0;
                 int nrOfSpecificInterceptors = specificInterceptors != null ? specificInterceptors.Length : 0;
-                logger.Info( string.Format( "Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", objectName, nrOfCommonInterceptors, nrOfSpecificInterceptors ) );
+                logger.Info(string.Format("Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", objectName, nrOfCommonInterceptors, nrOfSpecificInterceptors));
             }
 
 
             IAdvisor[] advisors = new IAdvisor[allInterceptors.Count];
             for (int i = 0; i < allInterceptors.Count; i++)
             {
-                advisors[i] = advisorAdapterRegistry.Wrap( allInterceptors[i] );
+                advisors[i] = advisorAdapterRegistry.Wrap(allInterceptors[i]);
             }
             return advisors;
         }
@@ -563,7 +560,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="objectType">The object type.</param>
         /// <param name="objectName">The object name.</param>
         /// <returns>The cache key for the given type and name</returns>
-        protected virtual object GetCacheKey( Type objectType, string objectName )
+        protected virtual object GetCacheKey(Type objectType, string objectName)
         {
             return objectType.FullName + "_" + objectName;
         }
@@ -578,17 +575,17 @@ namespace Spring.Aop.Framework.AutoProxy
             ArrayList advisors = new ArrayList();
             foreach (string name in interceptorNames)
             {
-                object next = owningObjectFactory.GetObject( name );
+                object next = owningObjectFactory.GetObject(name);
                 if (next is IAdvisors)
                 {
-                    advisors.AddRange( ((IAdvisors)next).Advisors );
+                    advisors.AddRange(((IAdvisors)next).Advisors);
                 }
                 else
                 {
-                    advisors.Add( advisorAdapterRegistry.Wrap( next ) );
+                    advisors.Add(advisorAdapterRegistry.Wrap(next));
                 }
             }
-            return (IAdvisor[])advisors.ToArray( typeof( IAdvisor ) );
+            return (IAdvisor[])advisors.ToArray(typeof(IAdvisor));
         }
 
         #endregion
@@ -601,55 +598,55 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="objectType">The object type</param>
         /// <param name="objectName">The object name</param>
         /// <returns>null if not creating a proxy, otherwise return the proxy.</returns>
-        public object PostProcessBeforeInstantiation( Type objectType, string objectName )
+        public object PostProcessBeforeInstantiation(Type objectType, string objectName)
         {
-            object cacheKey = GetCacheKey( objectType, objectName );
-            if (!targetSourcedObjects.Contains( cacheKey ))
+            object cacheKey = GetCacheKey(objectType, objectName);
+            if (!targetSourcedObjects.Contains(cacheKey))
             {
-                if (advisedObjects.Contains( cacheKey ) || nonAdvisedObjects.Contains( cacheKey ))
+                if (advisedObjects.Contains(cacheKey) || nonAdvisedObjects.Contains(cacheKey))
                 {
                     return null;
                 }
 
-                if (IsInfrastructureType( objectType, objectName ))
+                if (IsInfrastructureType(objectType, objectName))
                 {
                     #region Instrumentation
 
                     if (logger.IsDebugEnabled)
                     {
-                        logger.Debug( string.Format( "Did not attempt to autoproxy infrastructure type [{0}]", objectType ) );
+                        logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
                     }
 
                     #endregion
 
-                    nonAdvisedObjects.Add( cacheKey );
+                    nonAdvisedObjects.Add(cacheKey);
                     return null;
                 }
 
-                if (ShouldSkip( objectType, objectName ))
+                if (ShouldSkip(objectType, objectName))
                 {
                     #region Instrumentation
 
                     if (logger.IsDebugEnabled)
                     {
-                        logger.Debug( string.Format( "Skipping  type [{0}]", objectType ) );
+                        logger.Debug(string.Format("Skipping  type [{0}]", objectType));
                     }
 
                     #endregion
 
-                    nonAdvisedObjects.Add( cacheKey );
+                    nonAdvisedObjects.Add(cacheKey);
                     return null;
                 }
             }
             // Create proxy here if we have a custom TargetSource.
             // Suppresses unnecessary default instantiation of the target object:
             // The TargetSource will handle target instances in a custom fashion.
-            ITargetSource targetSource = GetCustomTargetSource( objectType, objectName );
+            ITargetSource targetSource = GetCustomTargetSource(objectType, objectName);
             if (targetSource != null)
             {
-                targetSourcedObjects.Add( objectName );
-                object[] specificInterceptors = GetAdvicesAndAdvisorsForObject( objectType, objectName, targetSource );
-                return CreateProxy( objectType, objectName, specificInterceptors, targetSource );
+                targetSourcedObjects.Add(objectName);
+                object[] specificInterceptors = GetAdvicesAndAdvisorsForObject(objectType, objectName, targetSource);
+                return CreateProxy(objectType, objectName, specificInterceptors, targetSource);
             }
             return null;
         }
@@ -661,7 +658,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="objectInstance">The object instance</param>
         /// <param name="objectName">The object name.</param>
         /// <returns>true</returns>
-        public bool PostProcessAfterInstantiation( object objectInstance, string objectName )
+        public bool PostProcessAfterInstantiation(object objectInstance, string objectName)
         {
             return true;
         }
@@ -676,8 +673,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// been set.</param>
         /// <param name="objectName">Name of the object.</param>
         /// <returns>The passed in PropertyValues</returns>
-        public IPropertyValues PostProcessPropertyValues( IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-                                                         string objectName )
+        public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
+                                                         string objectName)
         {
             return pvs;
         }

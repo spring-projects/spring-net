@@ -113,23 +113,44 @@ namespace Spring.Aop.Framework
         {
             if (instance != null)
             {
-                ISet interfaces = new HybridSet();
                 Type type = instance.GetType();
-                do
+                return GetAllInterfacesFromType(type);
+            }
+            return Type.EmptyTypes;
+        }
+
+        /// <summary>
+        /// Gets all of the interfaces that the 
+        /// supplied <see cref="System.Type"/> implements.
+        /// </summary>
+        /// <remarks>
+        /// This includes interfaces implemented by any superclasses.
+        /// </remarks>
+        /// <param name="type">
+        /// The type to analyse for interfaces.
+        /// </param>
+        /// <returns>
+        /// All of the interfaces that the supplied <see cref="System.Type"/> implements.
+        /// </returns>
+        public static Type[] GetAllInterfacesFromType(Type type)
+        {
+            AssertUtils.ArgumentNotNull(type, "type");
+            ISet interfaces = new HybridSet();
+            do
+            {
+                Type[] ifcs = type.GetInterfaces();
+                foreach (Type ifc in ifcs)
                 {
-                    Type[] ifcs = type.GetInterfaces();
-                    foreach (Type ifc in ifcs)
-                    {
-                        interfaces.Add(ifc);
-                    }
-                    type = type.BaseType;
-                } while (type != null);
-                if (interfaces.Count > 0)
-                {
-                    Type[] types = new Type[interfaces.Count];
-                    interfaces.CopyTo(types, 0);
-                    return types;
+                    interfaces.Add(ifc);
                 }
+                type = type.BaseType;
+            } while (type != null);
+
+            if (interfaces.Count > 0)
+            {
+                Type[] types = new Type[interfaces.Count];
+                interfaces.CopyTo(types, 0);
+                return types;
             }
             return Type.EmptyTypes;
         }
@@ -212,11 +233,11 @@ namespace Spring.Aop.Framework
         {
             if (advisor is IIntroductionAdvisor)
             {
-                return ((IIntroductionAdvisor) advisor).TypeFilter.Matches(targetType);
+                return ((IIntroductionAdvisor)advisor).TypeFilter.Matches(targetType);
             }
             else if (advisor is IPointcutAdvisor)
             {
-                IPointcutAdvisor pca = (IPointcutAdvisor) advisor;
+                IPointcutAdvisor pca = (IPointcutAdvisor)advisor;
                 return CanApply(pca.Pointcut, targetType, proxyInterfaces);
             }
             // no pointcut specified so assume it applies...
@@ -252,14 +273,14 @@ namespace Spring.Aop.Framework
         /// <returns></returns>
         public static Type GetTargetType(object candidate)
         {
-            AssertUtils.ArgumentNotNull(candidate,"candidate", "Candidate object must not be null");
+            AssertUtils.ArgumentNotNull(candidate, "candidate", "Candidate object must not be null");
             if (candidate is ITargetSource)
             {
-                return ((ITargetSource) candidate).TargetType;
+                return ((ITargetSource)candidate).TargetType;
             }
             if (candidate is IAdvised)
             {
-                return ((IAdvised) candidate).TargetSource.TargetType;
+                return ((IAdvised)candidate).TargetSource.TargetType;
             }
             if (IsDecoratorAopProxy(candidate))
             {

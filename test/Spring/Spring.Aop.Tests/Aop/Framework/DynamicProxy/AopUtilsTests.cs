@@ -44,16 +44,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     public sealed class AopUtilsTests
     {
         [Test]
-        public void GetAllInterfaces()
-        {
-            DerivedTestObject testObject = new DerivedTestObject();
-            IList interfaces = new ArrayList(testObject.GetType().GetInterfaces());
-            Assert.AreEqual(9, interfaces.Count, "Incorrect number of interfaces");
-            Assert.IsTrue(interfaces.Contains(typeof (ITestObject)), "Does not contain ITestObject");
-            Assert.IsTrue(interfaces.Contains(typeof (IOther)), "Does not contain IOther");
-        }
-
-        [Test]
         public void PointcutCanNeverApply()
         {
             IPointcut pointcut = new NeverMatchesPointcut();
@@ -103,6 +93,19 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.IsTrue(AopUtils.CanApply((IAdvisor) null, typeof (TestObject), null));
         }
 
+        /// <summary>
+        /// Test preconditions for all tests related to GetAllInterfaces
+        /// </summary>
+        [Test]
+        public void GetAllInterfacesTestsPreconditions()
+        {
+            DerivedTestObject testObject = new DerivedTestObject();
+            IList interfaces = new ArrayList(testObject.GetType().GetInterfaces());
+            Assert.AreEqual(9, interfaces.Count, "Incorrect number of interfaces");
+            Assert.IsTrue(interfaces.Contains(typeof(ITestObject)), "Does not contain ITestObject");
+            Assert.IsTrue(interfaces.Contains(typeof(IOther)), "Does not contain IOther");
+        }
+
         [Test]
         public void GetAllInterfacesWithNull()
         {
@@ -111,6 +114,13 @@ namespace Spring.Aop.Framework.DynamicProxy
                              "Must never return null, even if the argument is null.");
             Assert.AreEqual(0, interfaces.Length,
                             "Must return an empty array is the argument is null.");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetAllInterfacesFromTypeWithNull()
+        {
+            AopUtils.GetAllInterfacesFromType(null);
         }
 
         [Test]

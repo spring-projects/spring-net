@@ -45,6 +45,7 @@ namespace Spring.Aop.Target
     public sealed class SingletonTargetSource : ITargetSource
 	{
 		private object target;
+	    private Type targetType;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -57,9 +58,26 @@ namespace Spring.Aop.Target
 		/// <see langword="null"/>.
 		/// </exception>
 		public SingletonTargetSource(object target)
+            :this(target, target != null ? target.GetType() : null)
+		{}
+
+		/// <summary>
+		/// Creates a new instance of the
+		/// <see cref="Spring.Aop.Target.SingletonTargetSource"/>
+		/// for the specified target object.
+		/// </summary>
+		/// <param name="target">The target object to expose.</param>
+		/// <param name="targetType">The type of <paramref name="target"/> to expose.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// If the supplied <paramref name="target"/> is
+		/// <see langword="null"/>.
+		/// </exception>
+		public SingletonTargetSource(object target, Type targetType)
 		{
 			AssertUtils.ArgumentNotNull(target, "target");
+			AssertUtils.ArgumentNotNull(targetType, "targetType");
 			this.target = target;
+		    this.targetType = targetType;
 		}
 
 	    #region ITarget Source impl
@@ -69,7 +87,7 @@ namespace Spring.Aop.Target
 		/// </summary>
 		public Type TargetType
 		{
-			get { return target.GetType(); }
+			get { return targetType; }
 		}
 
 		/// <summary>
