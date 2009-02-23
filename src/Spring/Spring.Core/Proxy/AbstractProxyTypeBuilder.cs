@@ -851,8 +851,7 @@ namespace Spring.Proxy
             IDictionary methodMap = new Hashtable();
             IList finalMethods = new ArrayList();
 
-            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance;
-
+            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
             if (declaredMembersOnly)
             {
                 bindingFlags |= BindingFlags.DeclaredOnly;
@@ -862,7 +861,10 @@ namespace Spring.Proxy
             MethodInfo[] methods = type.GetMethods(bindingFlags);
             foreach (MethodInfo method in methods)
             {
-                if (method.IsVirtual && !method.IsFinal)
+                MethodAttributes memberAccess = method.Attributes & MethodAttributes.MemberAccessMask;
+
+                if (method.IsVirtual && !method.IsFinal && !method.Name.Equals("Finalize")
+                    && (memberAccess == MethodAttributes.Public || memberAccess == MethodAttributes.Family || memberAccess == MethodAttributes.FamORAssem))
                 {
                     MethodBuilder methodBuilder = proxyMethodBuilder.BuildProxyMethod(method, null);
                     ApplyMethodAttributes(methodBuilder, method);

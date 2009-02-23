@@ -201,7 +201,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             MemberInfo[] matchingMethods = targetType.FindMembers(
                 MemberTypes.Method,
-                BindingFlags.Instance | BindingFlags.Public,
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                 new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
                 searchCriteria);
 

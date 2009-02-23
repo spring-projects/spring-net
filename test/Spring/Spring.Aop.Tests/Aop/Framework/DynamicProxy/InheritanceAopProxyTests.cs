@@ -176,6 +176,24 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        public void DoesNotInterceptInternalMethod()
+        {
+            NopInterceptor ni = new NopInterceptor();
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Target = new InheritanceTestObject();
+            advised.AddAdvice(ni);
+
+            object proxy = CreateProxy(advised);
+            //DynamicProxyManager.SaveAssembly();
+
+            Assert.IsTrue(proxy is InheritanceTestObject);
+            InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
+            proxiedClass.InternalToDo();
+            Assert.AreEqual(0, ni.Count);
+        }
+
+        [Test]
         public void InterceptVirtualMethodThatBelongsToAnInterface()
         {
             NopInterceptor ni = new NopInterceptor();
@@ -241,23 +259,43 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(2, proxiedClass.Value);
         }
 
-        //[Test]
-        //public void InterceptProtectedMethod()
-        //{
-        //    NopInterceptor ni = new NopInterceptor();
+        [Test]
+        public void InterceptProtectedMethod()
+        {
+            NopInterceptor ni = new NopInterceptor();
 
-        //    AdvisedSupport advised = new AdvisedSupport();
-        //    advised.Target = new InheritanceTestObject();
-        //    advised.AddAdvice(ni);
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Target = new InheritanceTestObject();
+            advised.AddAdvice(ni);
 
-        //    object proxy = CreateProxy(advised);
-        //    //DynamicProxyManager.SaveAssembly();
+            object proxy = CreateProxy(advised);
+            //DynamicProxyManager.SaveAssembly();
 
-        //    Assert.IsTrue(proxy is InheritanceTestObject);
-        //    InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
-        //    proxiedClass.Todo();
-        //    Assert.AreEqual(1, ni.Count);
-        //}
+            Assert.IsTrue(proxy is InheritanceTestObject);
+            InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
+            proxiedClass.Todo();
+            Assert.AreEqual(1, ni.Count);
+        }
+
+        [Test]
+        public void InterceptInheritedMethods()
+        {
+            NopInterceptor ni = new NopInterceptor();
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Target = new InheritanceTestObject();
+            advised.AddAdvice(ni);
+
+            object proxy = CreateProxy(advised);
+            //DynamicProxyManager.SaveAssembly();
+
+            Assert.IsTrue(proxy is InheritanceTestObject);
+            InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
+            proxiedClass.Todo();
+            proxiedClass.Name = "Erich";
+            Assert.AreEqual("Erich", proxiedClass.Name);
+            Assert.AreEqual(3, ni.Count);
+        }
     }
 
     #region Helper Classes
@@ -336,7 +374,20 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
 
         }
+
+        internal virtual void InternalToDo()
+        {
+            
+        }
+
+        internal protected virtual void InternalProtectedToDo()
+        {
+            
+        }
     }
+
+    public class DerivedInheritanceTestObject : InheritanceTestObject
+    {}
 
     #endregion
 }

@@ -121,6 +121,54 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        public void InterceptProtectedVirtualMethod()
+        {
+            DoesNotImplementInterfaceTestObject target = new DoesNotImplementInterfaceTestObject();
+            target.Name = "Bruno";
+            mockTargetSource.SetTarget(target);
+
+            NopInterceptor ni = new NopInterceptor();
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.TargetSource = mockTargetSource;
+            advised.AddAdvice(ni);
+
+            DoesNotImplementInterfaceTestObject proxy = CreateProxy(advised) as DoesNotImplementInterfaceTestObject;
+            Assert.IsNotNull(proxy);
+
+            // GetName() calls underlying protected "GetNameInternal()" which calls get_Name
+            Assert.AreEqual(target.Name, proxy.GetName(), "Incorrect name");
+            target.Name = "Bruno Baia";
+            Assert.AreEqual("Bruno Baia", proxy.GetName(), "Incorrect name");
+
+            Assert.AreEqual(2, ni.Count);
+        }
+
+        [Test]
+        public void InterceptInheritedVirtualMethods()
+        {
+            DoesNotImplementInterfaceTestObject target = new DerivedDoesNotImplementInterfaceTestObject();
+            target.Name = "Bruno";
+            mockTargetSource.SetTarget(target);
+
+            NopInterceptor ni = new NopInterceptor();
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.TargetSource = mockTargetSource;
+            advised.AddAdvice(ni);
+
+            DoesNotImplementInterfaceTestObject proxy = CreateProxy(advised) as DoesNotImplementInterfaceTestObject;
+            Assert.IsNotNull(proxy);
+
+            // GetName() calls underlying protected "GetNameInternal()" which calls get_Name
+            Assert.AreEqual(target.Name, proxy.GetName(), "Incorrect name");
+            proxy.Name = "Bruno Baia";
+            Assert.AreEqual("Bruno Baia", proxy.Name, "Incorrect name");
+
+            Assert.AreEqual(3, ni.Count);
+        }
+
+        [Test]
         public void CannotInterceptFinalMethodThatDoesNotBelongToAnInterface()
         {
             DoesNotImplementInterfaceTestObject target = new DoesNotImplementInterfaceTestObject();
@@ -343,7 +391,22 @@ namespace Spring.Aop.Framework.DynamicProxy
                 get { return _location; }
                 set { _location = value; }
             }
+
+            // protected virtual method
+            protected virtual string GetNameInternal()
+            {
+                return this.Name;
+            }
+
+            // public final method calling protected
+            public string GetName()
+            {
+                return GetNameInternal();
+            }
         }
+
+        public class DerivedDoesNotImplementInterfaceTestObject : DoesNotImplementInterfaceTestObject
+        {}
 
         #endregion
     }

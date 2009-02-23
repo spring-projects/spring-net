@@ -128,7 +128,7 @@ namespace Spring.Util
 			while ((line = textReader.ReadLine()) != null)
 			{
 				line = RemoveLeadingWhitespace(line);
-				if (line != null && Comments.IndexOf(line[0]) == -1)
+				if (line != null && line.Length>0 && Comments.IndexOf(line[0]) == -1)
 				{
 					if (!isContinuation)
 					{
