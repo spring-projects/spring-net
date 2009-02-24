@@ -239,6 +239,7 @@
     <Compile Include="Core\IO\ResourceHandlerRegistryTests.cs" />
     <Compile Include="Core\IO\StringResourceTests.cs" />
     <Compile Include="Core\IO\UrlResourceTest.cs" />
+    <Compile Include="Core\MethodArgumentsCriteriaTests.cs" />
     <Compile Include="Core\MethodGenericArgumentsCountCriteriaTests.cs" />
     <Compile Include="Core\MethodParametersCountCriteriaTests.cs" />
     <Compile Include="Core\MethodParametersCriteriaTests.cs" />

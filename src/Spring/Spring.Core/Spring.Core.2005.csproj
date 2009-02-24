@@ -288,6 +288,7 @@
     <Compile Include="Core\IOrdered.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\MethodArgumentsCriteria.cs" />
     <Compile Include="Core\MethodInvocationException.cs" />
     <Compile Include="Core\MethodParameter.cs" />
     <Compile Include="Core\MethodParametersCountCriteria.cs" />

@@ -79,10 +79,12 @@ namespace Spring.Objects.Events.Support
 		public static MethodInfo GetMethodInfoMatchingSignature(
 			MethodInfo invoke, Type subscriberType)
 		{
+            ParameterInfo[] parameters = invoke.GetParameters();
+
 			ComposedCriteria criteria = new ComposedCriteria();
 			criteria.Add(new MethodReturnTypeCriteria(invoke.ReturnType));
-			criteria.Add(new MethodParametersCountCriteria(invoke.GetParameters().Length));
-			criteria.Add(new MethodParametersCriteria(ReflectionUtils.GetParameterTypes(invoke)));
+            criteria.Add(new MethodParametersCountCriteria(parameters.Length));
+			criteria.Add(new MethodParametersCriteria(ReflectionUtils.GetParameterTypes(parameters)));
 
 			MemberInfo[] methods = subscriberType.FindMembers(
 				MemberTypes.Method, ReflectionUtils.AllMembersCaseInsensitiveFlags,

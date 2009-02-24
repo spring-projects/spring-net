@@ -34,6 +34,7 @@ namespace Spring.Core
 	/// Unit tests for the MethodParametersCriteria class.
     /// </summary>
     /// <author>Rick Evans</author>
+    /// <author>Bruno Baia</author>
 	[TestFixture]
     public sealed class MethodParametersCriteriaTests
     {
@@ -64,38 +65,22 @@ namespace Spring.Core
         }
 
         [Test]
-        public void IsSatisfiedIsPolymorphic () 
+        public void IsNotSatisfiedIsPolymorphic () 
         {
             // i.e. derived types satisfy the criteria if a base type or interface is
             // specified as one of the parameter types
             MethodParametersCriteria criteria
                 = new MethodParametersCriteria (new Type [] {typeof (TestObject)});
             MethodInfo method = GetType ().GetMethod ("Diddly");
-            Assert.IsTrue (criteria.IsSatisfied (method), "Was not satisified with a method that takes a base class as a parameter.");
+            Assert.IsFalse(criteria.IsSatisfied (method), "Was not satisified with a method that takes a base class as a parameter.");
         }
 
         [Test]
         public void IsSatisfiedWithParamsParameters()
         {
-            MethodParametersCriteria criteria = new MethodParametersCriteria(new Type[] { typeof(int), typeof(string) });
+            MethodParametersCriteria criteria = new MethodParametersCriteria(new Type[] { typeof(int), typeof(string[]) });
             MethodInfo method = GetType().GetMethod("ParamsParameters");
             Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
-
-            criteria = new MethodParametersCriteria(new Type[] { typeof(int), typeof(string[]) });
-            method = GetType().GetMethod("ParamsParameters");
-            Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
-
-            criteria = new MethodParametersCriteria(new Type[] { typeof(int) });
-            method = GetType().GetMethod("ParamsParameters");
-            Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
-
-            criteria = new MethodParametersCriteria(new Type[] { typeof(int), typeof(string), typeof(string), typeof(string) });
-            method = GetType().GetMethod("ParamsParameters");
-            Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
-
-            criteria = new MethodParametersCriteria(new Type[] { typeof(int), typeof(string[]), typeof(string) });
-            method = GetType().GetMethod("ParamsParameters");
-            Assert.IsFalse(criteria.IsSatisfied(method), "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
         }
 
         // some methods for testing signatures...

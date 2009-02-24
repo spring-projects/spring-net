@@ -117,6 +117,36 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(2, ni.Count);
         }
 
+        [Test]
+        //SPRNET-1168
+        public void InterceptVirtualMethodAndAmbiguousMatches()
+        {
+            NopInterceptor ni = new NopInterceptor();
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Target = new AmbiguousMatchesTestObject();
+            advised.AddAdvice(ni);
+
+            object proxy = CreateProxy(advised);
+            //DynamicProxyManager.SaveAssembly();
+
+            Assert.IsTrue(proxy is AmbiguousMatchesTestObject);
+            AmbiguousMatchesTestObject proxiedClass = proxy as AmbiguousMatchesTestObject;
+            proxiedClass.DoIt(new TestObject());
+            Assert.AreEqual(1, ni.Count);
+        }
+
+        public class AmbiguousMatchesTestObject
+        {
+            public virtual void DoIt(object obj)
+            {
+            }
+
+            public virtual void DoIt(ITestObject obj)
+            {
+            }
+        }
+
 #if NET_2_0
         [Test]
         public void InterceptVirtualGenericMethod()

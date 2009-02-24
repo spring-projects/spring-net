@@ -413,7 +413,7 @@ namespace Spring.Objects.Support
                 searchCriteria.Add(new MethodNameMatchCriteria(TargetMethod));
                 searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));
 #endif
-                searchCriteria.Add(new MethodParametersCriteria(ReflectionUtils.GetTypes(Arguments)));
+                searchCriteria.Add(new MethodArgumentsCriteria(Arguments));
 
                 MemberInfo[] matchingMethods = targetType.FindMembers(
                     MemberTypes.Method,

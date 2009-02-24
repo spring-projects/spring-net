@@ -452,6 +452,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\MethodArgumentsCriteriaTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\MethodGenericArgumentsCountCriteriaTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

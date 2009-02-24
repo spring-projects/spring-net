@@ -44,6 +44,7 @@ namespace Spring.Core
     /// </p>
     /// </remarks>
     /// <author>Rick Evans</author>
+    /// <author>Bruno Baia</author>
     public class MethodParametersCriteria : ICriteria
     {
         #region Constructor (s) / Destructor
@@ -83,15 +84,6 @@ namespace Spring.Core
         /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
         /// this instance?
         /// </summary>
-        /// <remarks>
-        /// <p>
-        /// This implementation respects the inheritance chain of any parameter
-        /// <see cref="System.Type"/>s... i.e. methods that have a base type (or
-        /// interface) that is assignable to the <see cref="System.Type"/> in the
-        /// same corresponding index of the parameter types will satisfy this
-        /// criteria instance.
-        /// </p>
-        /// </remarks>
         /// <param name="datum">The datum to be checked by this criteria instance.</param>
         /// <returns>
         /// True if the supplied <paramref name="datum"/> satisfies the criteria encapsulated
@@ -103,64 +95,21 @@ namespace Spring.Core
             MethodInfo method = datum as MethodInfo;
             if (method != null)
             {
-                bool isParamArray = false;
-                Type paramArrayType = null;
-                ParameterInfo[] parametersBeingChecked = method.GetParameters();
-                if (parametersBeingChecked.Length > 0)
-                {
-                    ParameterInfo lastParameter = parametersBeingChecked[parametersBeingChecked.Length - 1];
-                    isParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
-                    if (isParamArray)
-                    {
-                        paramArrayType = lastParameter.ParameterType.GetElementType();
-                    }
-                }
-                if (parametersBeingChecked != null
-                    && parametersBeingChecked.Length == _parameters.Length)
+                ParameterInfo[] parameterInfosBeingChecked = method.GetParameters();
+                if (parameterInfosBeingChecked != null
+                    && parameterInfosBeingChecked.Length == _parameters.Length)
                 {
                     satisfied = true;
                     for (int i = 0; i < _parameters.Length; ++i)
                     {
-                        Type sourceType = _parameters[i];
-                        Type typeBeingChecked = parametersBeingChecked[i].ParameterType;
-                        if (!typeBeingChecked.IsAssignableFrom(sourceType))
+                        foreach (ParameterInfo paramInfo in parameterInfosBeingChecked)
                         {
-                            if (isParamArray && i == _parameters.Length - 1)
+                            if (paramInfo.ParameterType == _parameters[i])
                             {
-                                if (!paramArrayType.IsAssignableFrom(sourceType))
-                                {
-                                    satisfied = false;
-                                    break;
-                                }
+                                satisfied = true;
+                                continue;
                             }
-                            else
-                            {
-                                satisfied = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-                else if (isParamArray && (_parameters.Length >= parametersBeingChecked.Length - 1))
-                {
-                    satisfied = true;
-                    for (int i = 0; i < parametersBeingChecked.Length - 1; ++i)
-                    {
-                        Type sourceType = _parameters[i];
-                        Type typeBeingChecked = parametersBeingChecked[i].ParameterType;
-                        if (!typeBeingChecked.IsAssignableFrom(sourceType))
-                        {
                             satisfied = false;
-                            break;
-                        }
-                    }
-                    for (int i = parametersBeingChecked.Length - 1; i < _parameters.Length; ++i)
-                    {
-                        Type sourceType = _parameters[i];
-                        if (!paramArrayType.IsAssignableFrom(sourceType))
-                        {
-                            satisfied = false;
-                            break;
                         }
                     }
                 }
