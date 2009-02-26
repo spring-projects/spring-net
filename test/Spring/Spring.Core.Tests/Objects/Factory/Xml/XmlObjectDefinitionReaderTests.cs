@@ -246,5 +246,34 @@ namespace Spring.Objects.Factory.Xml
 </objects>
 "));                       
         }
+
+        [Test]
+        public void ParsesNonDefaultNamespace()
+        {
+            try
+            {
+                NamespaceParserRegistry.Reset();
+
+                DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+                XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+                reader.LoadObjectDefinitions(new StringResource(
+@"<?xml version='1.0' encoding='UTF-8' ?>
+<core:objects xmlns:core='http://www.springframework.net'>  
+	<core:object id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests'>
+        <core:property name='Sibling'>
+            <core:object type='Spring.Objects.TestObject, Spring.Core.Tests' />
+        </core:property>
+    </core:object>
+</core:objects>
+"));
+                TestObject test2 = (TestObject) of.GetObject("test2");
+                Assert.AreEqual(typeof(TestObject), test2.GetType());
+                Assert.IsNotNull(test2.Sibling);
+            }
+            finally
+            {
+                NamespaceParserRegistry.Reset();
+            }
+        }
     }
 }

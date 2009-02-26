@@ -98,6 +98,7 @@ namespace Spring.Validation.Config
         /// be used in a nested scenario.
         /// </para>
         /// </remarks>
+        [Obsolete("not used anymore - ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead", false)]
         public override IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
         {
             if (!element.HasAttribute("id"))

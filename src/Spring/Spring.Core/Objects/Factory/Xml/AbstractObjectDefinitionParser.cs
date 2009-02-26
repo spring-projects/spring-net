@@ -105,7 +105,7 @@ namespace Spring.Objects.Factory.Xml
         /// and was called to process the root node.
         /// </p>
         /// </remarks>
-        public IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
+        public virtual IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
         {
             AbstractObjectDefinition definition = ParseInternal(element, parserContext);
 

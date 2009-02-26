@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -30,20 +31,43 @@ namespace Spring.Objects.Factory.Xml
     /// </summary>
     public class ParserContext
     {
-        private XmlReaderContext readerContext;
+        private readonly XmlReaderContext readerContext;
 
-        private ObjectDefinitionParserHelper parserHelper;
+        private readonly ObjectDefinitionParserHelper parserHelper;
 
-        private IObjectDefinition containingObjectDefinition;
+        private readonly IObjectDefinition containingObjectDefinition;
 
-        private Stack containingComponents = new Stack();
+//        private Stack containingComponents = new Stack();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParserContext"/> class.
+        /// </summary>
+        /// <param name="parserHelper">The parser helper.</param>
+        public ParserContext(ObjectDefinitionParserHelper parserHelper)
+        {
+            this.readerContext = parserHelper.ReaderContext;
+            this.parserHelper = parserHelper;
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParserContext"/> class.
+        /// </summary>
+        /// <param name="parserHelper">The parser helper.</param>
+        /// <param name="containingObjectDefinition">The containing object definition.</param>
+        public ParserContext(ObjectDefinitionParserHelper parserHelper, IObjectDefinition containingObjectDefinition)
+        {
+            this.readerContext = parserHelper.ReaderContext;
+            this.parserHelper = parserHelper;
+            this.containingObjectDefinition = containingObjectDefinition;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParserContext"/> class.
         /// </summary>
         /// <param name="readerContext">The reader context.</param>
         /// <param name="parserHelper">The parser helper.</param>
+        [Obsolete("consider using ParserContext(ObjectDefinitionParserHelper) instead", false)]
         public ParserContext(XmlReaderContext readerContext, ObjectDefinitionParserHelper parserHelper)
         {
             this.readerContext = readerContext;
@@ -57,6 +81,7 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="readerContext">The reader context.</param>
         /// <param name="parserHelper">The parser helper.</param>
         /// <param name="containingObjectDefinition">The containing object definition.</param>
+        [Obsolete("consider using ParserContext(ObjectDefinitionParserHelper, IObjectDefinition) instead", false)]
         public ParserContext(XmlReaderContext readerContext, ObjectDefinitionParserHelper parserHelper, IObjectDefinition containingObjectDefinition)
         {
             this.readerContext = readerContext;

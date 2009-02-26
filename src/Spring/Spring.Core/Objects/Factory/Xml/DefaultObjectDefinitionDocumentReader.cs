@@ -154,18 +154,25 @@ namespace Spring.Objects.Factory.Xml
         /// </exception>
         protected virtual void ParseObjectDefinitions(XmlElement root, ObjectDefinitionParserHelper helper)
         {
-            foreach (XmlNode node in root.ChildNodes)
+            if (helper.IsDefaultNamespace(root.NamespaceURI))
             {
-                if (node.NodeType == XmlNodeType.Element)
+                foreach (XmlNode node in root.ChildNodes)
                 {
-                    XmlElement element = (XmlElement) node;
+                    if (node.NodeType != XmlNodeType.Element) continue;
+
                     try
                     {
-                        INamespaceParser parser = GetNamespaceParser(element, helper);
-                        ParserContext parserContext = new ParserContext(helper.ReaderContext, helper);
-                        parser.ParseElement(element, parserContext);
+                        XmlElement element = (XmlElement)node;
+                        if (helper.IsDefaultNamespace(element.NamespaceURI))
+                        {
+                            ParseDefaultElement(element, helper);
+                        }
+                        else
+                        {
+                            helper.ParseCustomElement(element);
+                        }
                     }
-                    catch( ObjectDefinitionStoreException )
+                    catch (ObjectDefinitionStoreException)
                     {
                         throw;
                     }
@@ -174,6 +181,73 @@ namespace Spring.Objects.Factory.Xml
                         helper.ReaderContext.ReportException(node, null, "Failed parsing element", ex);
                     }
                 }
+            }
+            else
+            {
+                helper.ParseCustomElement(root);
+            }
+        }
+
+        private void ParseDefaultElement(XmlElement element, ObjectDefinitionParserHelper helper)
+        {
+            if (element.LocalName == ObjectDefinitionConstants.ImportElement)
+            {
+                ImportObjectDefinitionResource(element);
+            }
+            else if (element.LocalName == ObjectDefinitionConstants.AliasElement)
+            {
+                 ParseAlias(element, helper.ReaderContext.Registry);
+            }
+            else if (element.LocalName == ObjectDefinitionConstants.ObjectElement)
+            {
+                ProcessObjectDefinition(element, helper);
+            }
+        }
+
+        /// <summary>
+        /// Process an alias element.
+        /// </summary>
+        protected virtual void ProcessAlias(XmlElement element)
+        {
+            this.ParseAlias(element, this.ReaderContext.Registry);    
+        }
+
+        /// <summary>
+        /// Process the object element
+        /// </summary>
+        protected virtual void ProcessObjectDefinition(XmlElement element, ObjectDefinitionParserHelper helper)
+        {
+            // TODO: add event handling
+            try
+            {
+                ObjectDefinitionHolder bdHolder = helper.ParseObjectDefinitionElement(element);
+                if (bdHolder == null)
+                {
+                    return;
+                }
+                bdHolder = helper.DecorateObjectDefinitionIfRequired(element, bdHolder);
+
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format(CultureInfo.InvariantCulture, "Registering object definition with id '{0}'.", bdHolder.ObjectName));
+                }
+
+                #endregion
+
+                ObjectDefinitionReaderUtils.RegisterObjectDefinition(bdHolder, ReaderContext.Registry);
+                // TODO: Send registration event.
+                // ReaderContext.FireComponentRegistered(new BeanComponentDefinition(bdHolder));
+            }
+            catch (ObjectDefinitionStoreException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ObjectDefinitionStoreException(
+                    string.Format("Failed parsing object definition '{0}'", element.OuterXml), ex);
             }
         }
 
@@ -233,37 +307,7 @@ namespace Spring.Objects.Factory.Xml
         /// <seealso cref="Spring.Objects.Factory.Support.ObjectDefinitionReaderUtils.RegisterObjectDefinition"/>
         protected virtual void RegisterObjectDefinition(XmlElement element, ObjectDefinitionParserHelper helper)
         {
-            ObjectDefinitionHolder holder = null;
-            try
-            {
-                INamespaceParser parser = GetNamespaceParser(element, helper);
-
-                //holder = ParseObjectDefinition(element, parserContext);
-                //holder = helper.ParseObjectDefinitionElement(element);
-                if (holder == null)
-                {
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ObjectDefinitionStoreException(
-                    string.Format("Failed parsing object definition '{0}'", element.OuterXml), ex);
-            }
-
-            #region Instrumentation
-
-            if (log.IsDebugEnabled)
-            {
-                log.Debug(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Registering object definition with id '{0}'.", holder.ObjectName));
-            }
-
-            #endregion
-
-            ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, ReaderContext.Registry);
+            ProcessObjectDefinition(element, helper);
         }
 
         /// <summary>
@@ -313,20 +357,20 @@ namespace Spring.Objects.Factory.Xml
             return helper;
         }
 
-        private INamespaceParser GetNamespaceParser(XmlElement element, ObjectDefinitionParserHelper helper)
-        {
-            INamespaceParser parser = NamespaceParserRegistry.GetParser(element.NamespaceURI);
-            if (parser == null)
-            {
-                helper.ReaderContext.ReportException(element, null, GetNoParserForNamespaceMessage(element.NamespaceURI));
-            }
-            return parser;
-        }
-
-        private string GetNoParserForNamespaceMessage(string namespaceURI)
-        {
-            return "There is no parser registered for namespace '" + namespaceURI + "'";
-        }
+//        private INamespaceParser GetNamespaceParser(XmlElement element, ObjectDefinitionParserHelper helper)
+//        {
+//            INamespaceParser parser = NamespaceParserRegistry.GetParser(element.NamespaceURI);
+//            if (parser == null)
+//            {
+//                helper.ReaderContext.ReportException(element, null, GetNoParserForNamespaceMessage(element.NamespaceURI));
+//            }
+//            return parser;
+//        }
+//
+//        private string GetNoParserForNamespaceMessage(string namespaceURI)
+//        {
+//            return "There is no parser registered for namespace '" + namespaceURI + "'";
+//        }
 
         #endregion
     }

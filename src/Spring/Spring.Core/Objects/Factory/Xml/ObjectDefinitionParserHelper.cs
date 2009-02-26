@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Xml;
 using Common.Logging;
@@ -172,6 +173,154 @@ namespace Spring.Objects.Factory.Xml
             return holder;
         }
 
+        /// <summary>
+        /// Parse a standard object definition into a
+        /// <see cref="Spring.Objects.Factory.Config.ObjectDefinitionHolder"/>,
+        /// including object name and aliases.
+        /// </summary>
+        /// <param name="element">The element containing the object definition.</param>
+        /// <returns>
+        /// The parsed object definition wrapped within an
+        /// <see cref="Spring.Objects.Factory.Config.ObjectDefinitionHolder"/>
+        /// instance.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// Object elements specify their canonical name via the "id" attribute
+        /// and their aliases as a delimited "name" attribute.
+        /// </para>
+        /// <para>
+        /// If no "id" is specified, uses the first name in the "name" attribute
+        /// as the canonical name, registering all others as aliases.
+        /// </para>
+        /// </remarks>
+        public ObjectDefinitionHolder ParseObjectDefinitionElement(XmlElement element)
+        {
+            return ParseObjectDefinitionElement(element, null);
+        }
+
+        /// <summary>
+        /// Parse a standard object definition into a
+        /// <see cref="Spring.Objects.Factory.Config.ObjectDefinitionHolder"/>,
+        /// including object name and aliases.
+        /// </summary>
+        /// <param name="element">The element containing the object definition.</param>
+        /// <param name="containingDefinition">The containing object definition if <paramref name="element"/> is a nested element.</param>
+        /// <returns>
+        /// The parsed object definition wrapped within an
+        /// <see cref="Spring.Objects.Factory.Config.ObjectDefinitionHolder"/>
+        /// instance.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// Object elements specify their canonical name via the "id" attribute
+        /// and their aliases as a delimited "name" attribute.
+        /// </para>
+        /// <para>
+        /// If no "id" is specified, uses the first name in the "name" attribute
+        /// as the canonical name, registering all others as aliases.
+        /// </para>
+        /// </remarks>
+        public ObjectDefinitionHolder ParseObjectDefinitionElement(XmlElement element, IObjectDefinition containingDefinition)
+        {
+            // TODO: move code from ObjectsNamespaceParser into this class to eliminate ONP
+            ObjectsNamespaceParser parser = (ObjectsNamespaceParser) NamespaceParserRegistry.GetParser(ObjectsNamespaceParser.Namespace);
+
+            string id = GetAttributeValue(element, ObjectDefinitionConstants.IdAttribute);
+            string nameAttr = GetAttributeValue(element, ObjectDefinitionConstants.NameAttribute);
+            ArrayList aliases = new ArrayList();
+            if (StringUtils.HasText(nameAttr))
+            {
+                aliases.AddRange(GetObjectNames(nameAttr));
+            }
+
+            // if we ain't got an id, check if object is page definition or assign any existing (first) alias...
+            string objectName = id;
+            if (StringUtils.IsNullOrEmpty(objectName))
+            {
+                // TODO (EE): pass parserContext to CalculateId as well (resolving relative Urls in WebApps is parserContext-dependent) (EE)
+                objectName = parser.CalculateId(element, aliases);
+            }
+
+
+            ParserContext parserContext = new ParserContext(this, containingDefinition);
+            IConfigurableObjectDefinition definition = parser.ParseObjectDefinitionElement(element, objectName, parserContext);
+            if (definition != null)
+            {
+                if (StringUtils.IsNullOrEmpty(objectName))
+                {
+                    if (containingDefinition != null)
+                    {
+                        objectName =
+                            ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry, true);
+                    }
+                    else
+                    {
+                        objectName = ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry);
+                    }
+
+                    #region Instrumentation
+
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug(string.Format(
+                                      "Neither XML '{0}' nor '{1}' specified - using object " +
+                                      "class name [{2}] as the id.",
+                                      id, ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute));
+                    }
+
+                    #endregion
+                }
+                string[] aliasesArray = (string[])aliases.ToArray(typeof(string));
+                return new ObjectDefinitionHolder(definition, objectName, aliasesArray);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Parses an element in a custom namespace.
+        /// </summary>
+        /// <param name="ele"></param>
+        /// <returns>the parsed object definition or null if not supported by the corresponding parser.</returns>
+        public IObjectDefinition ParseCustomElement(XmlElement ele)
+        {
+            return ParseCustomElement(ele, null);
+        }
+
+        /// <summary>
+        /// Parses an element in a custom namespace.
+        /// </summary>
+        /// <param name="ele"></param>
+        /// <param name="containingDefinition">if a nested element, the containing object definition</param>
+        /// <returns>the parsed object definition or null if not supported by the corresponding parser.</returns>
+        public IObjectDefinition ParseCustomElement(XmlElement ele, IObjectDefinition containingDefinition)
+        {
+            String namespaceUri = ele.NamespaceURI;
+            INamespaceParser handler = NamespaceParserRegistry.GetParser(namespaceUri);
+            if (handler == null)
+            {
+                Error("Unable to locate Spring NamespaceHandler for XML schema namespace [" + namespaceUri + "]", ele);
+                return null;
+            }
+            return handler.ParseElement(ele, new ParserContext(this, containingDefinition));
+        }
+
+        /// <summary>
+        /// Given a string containing delimited object names, returns
+        /// a string array split on the object name delimeter.
+        /// </summary>
+        /// <param name="value">
+        /// The string containing delimited object names.
+        /// </param>
+        /// <returns>
+        /// A string array split on the object name delimeter.
+        /// </returns>
+        /// <seealso cref="ObjectDefinitionConstants.ObjectNameDelimiters"/>
+        private string[] GetObjectNames(string value)
+        {
+            return StringUtils.Split(
+                value, ObjectDefinitionConstants.ObjectNameDelimiters, true, true);
+        }
 
         /// <summary>
         /// Determines whether the string represents a 'true' boolean value.
@@ -236,6 +385,14 @@ namespace Spring.Objects.Factory.Xml
                 return element.GetAttribute(attributeName);
             }
             return defaultValue;
+        }
+
+        /// <summary>
+        /// Report a parser error.
+        /// </summary>
+        protected virtual void Error(string message, XmlElement element)
+        {
+            this.ReaderContext.ReportFatalException(element, message);
         }
     }
 }
