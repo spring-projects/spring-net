@@ -30,7 +30,6 @@ namespace Spring.Calculator.Interfaces
 	/// A simple calculator service interface.
 	/// </summary>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: ICalculator.cs,v 1.1 2006/10/29 18:39:04 bbaia Exp $</version>
     public interface ICalculator
     {
         int Add(int n1, int n2);

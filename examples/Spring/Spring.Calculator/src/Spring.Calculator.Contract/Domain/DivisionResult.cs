@@ -26,6 +26,9 @@ using System;
 
 namespace Spring.Calculator.Domain
 {
+    /// <summary>
+    /// Encapsulates the result of an integer division
+    /// </summary>
     [Serializable]
 	public class DivisionResult
 	{

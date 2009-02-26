@@ -28,7 +28,6 @@ namespace Spring.Calculator.Interfaces
 	/// An advanced calculator service interface.
 	/// </summary>
     /// <author>Bruno Baia</author>
-	/// <version>$Id: IAdvancedCalculator.cs,v 1.1 2006/10/29 18:39:04 bbaia Exp $</version>
     public interface IAdvancedCalculator : ICalculator
     {
 		int GetMemory();
