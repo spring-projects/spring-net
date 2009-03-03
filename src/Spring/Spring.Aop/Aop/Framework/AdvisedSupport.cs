@@ -236,7 +236,7 @@ namespace Spring.Aop.Framework
         /// <value>
         /// <c>true</c> if this instance can be serialized, <c>false</c> otherwise.
         /// </value>
-        public bool IsSerializable
+        public virtual bool IsSerializable
         {
             get
             {

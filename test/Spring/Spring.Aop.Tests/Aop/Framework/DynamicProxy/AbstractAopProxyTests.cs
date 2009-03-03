@@ -21,6 +21,10 @@
 #region Imports
 
 using System;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Reflection;
 using System.Collections;
@@ -67,7 +71,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         [TestFixtureSetUp]
         public void FixtureSetUp()
         {
-            SystemUtils.RegisterLoadedAssemblyResolver();
+//            SystemUtils.RegisterLoadedAssemblyResolver();
         }
 
         [SetUp]
@@ -94,6 +98,134 @@ namespace Spring.Aop.Framework.DynamicProxy
             ExpressionEvaluator.GetValue(advisedSupport, "Activate()");
             return (IAopProxy)proxyCtorInfo.Invoke(new object[] { advisedSupport });
         }
+
+        #region Serialization Tests
+
+        private object SerializeAndDeserialize(object s)
+        {
+            // Serialize the session
+            using (Stream stream = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.AssemblyFormat = FormatterAssemblyStyle.Full;
+                formatter.TypeFormat = FormatterTypeStyle.TypesAlways;
+                formatter.Serialize(stream, s);
+
+                // Deserialize the session
+                stream.Position = 0;
+                object res = formatter.Deserialize(stream);
+                return res;
+            }
+        }
+
+        public interface ISerializableTestObject
+        {
+            string TestData { get; set; }
+        }
+
+        [Serializable]
+        public class SerializableTestObject : ISerializableTestObject, IDeserializationCallback
+        {
+            public static int InstanceCount;
+
+            public SerializableTestObject()
+            {
+                InstanceCount++;
+            }
+
+            public string TestData { get { return testData; } set { testData = value; } }
+
+            private string testData;
+
+            public void OnDeserialization(object sender)
+            {
+                // only count non-proxy type deserializations
+                if (!AopUtils.IsAopProxy(this))
+                {
+                    InstanceCount++;
+                }
+            }
+        }
+
+        [Serializable]
+        public class CustomSerializableTestObject : ISerializableTestObject, ISerializable, IDeserializationCallback
+        {
+            public static int InstanceCount;
+
+            public CustomSerializableTestObject()
+            {
+                InstanceCount++;
+            }
+
+            protected CustomSerializableTestObject(SerializationInfo info, StreamingContext context)
+            {
+                TestData = info.GetString("testData");
+            }
+
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                info.AddValue("testData", TestData);
+            }
+
+            public string TestData { get { return testData; } set { testData = value; } }
+
+            public void OnDeserialization(object sender)
+            {
+                if (!AopUtils.IsAopProxy(this))
+                {
+                    InstanceCount++;
+                }
+            }
+
+            [NonSerialized]
+            private string testData;
+        }
+
+        [Test]
+        public void CanSerializeDeserializeSerializable()
+        {
+            int instanceCount;
+            ISerializableTestObject target = new SerializableTestObject();
+            target.TestData = "testData";
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Target = target;
+            advised.Interfaces = new Type[] { typeof(ISerializableTestObject) };
+            //            advised.AddAdvisor(new DefaultPointcutAdvisor(new NopInterceptor()));
+
+            ISerializableTestObject to = (ISerializableTestObject)CreateAopProxy(advised);
+
+            instanceCount = SerializableTestObject.InstanceCount;
+            to = (ISerializableTestObject)SerializeAndDeserialize(to);
+
+            // new instance was created
+            Assert.AreEqual(instanceCount + 1, SerializableTestObject.InstanceCount);
+            // values were (de-)serialized
+            Assert.AreEqual(target.TestData, to.TestData);
+        }
+
+        [Test]
+        public void CanSerializeDeserializeISerializable()
+        {
+            int instanceCount;
+            ISerializableTestObject target = new CustomSerializableTestObject();
+            target.TestData = "testData";
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Target = target;
+            advised.Interfaces = new Type[] { typeof(ISerializableTestObject) };
+            //            advised.AddAdvisor(new DefaultPointcutAdvisor(new NopInterceptor()));
+
+            ISerializableTestObject to = (ISerializableTestObject)CreateAopProxy(advised);
+
+            instanceCount = CustomSerializableTestObject.InstanceCount;
+            to = (ISerializableTestObject)SerializeAndDeserialize(to);
+
+            // new instance was created
+            Assert.AreEqual(instanceCount + 1, CustomSerializableTestObject.InstanceCount);
+            // values were (de-)serialized
+            Assert.AreEqual(target.TestData, to.TestData);
+        }
+
+        #endregion
 
         [Test(Description = "Simple test that if we set values we can get them out again.")]
         public void ValuesStick()

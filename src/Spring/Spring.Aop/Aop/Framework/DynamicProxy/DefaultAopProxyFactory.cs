@@ -21,9 +21,10 @@
 #region Imports
 
 using System;
-
+using System.Reflection;
 using Spring.Proxy;
 using Spring.Aop.Target;
+using Spring.Util;
 
 #endregion
 
@@ -53,6 +54,13 @@ namespace Spring.Aop.Framework.DynamicProxy
     [Serializable]
     public class DefaultAopProxyFactory : IAopProxyFactory
     {
+        /// <summary>
+        /// Force transient assemblies to be resolvable by <see cref="Assembly.Load(string)"/>.
+        /// </summary>
+        static DefaultAopProxyFactory()
+        {
+            SystemUtils.RegisterLoadedAssemblyResolver();
+        }
 
         /// <summary>
         /// Creates an <see cref="Spring.Aop.Framework.IAopProxy"/> for the

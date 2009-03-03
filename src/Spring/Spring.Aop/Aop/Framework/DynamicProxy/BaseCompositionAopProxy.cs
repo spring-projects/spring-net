@@ -62,6 +62,14 @@ namespace Spring.Aop.Framework.DynamicProxy
         protected BaseCompositionAopProxy(SerializationInfo info, StreamingContext context) : base(info, context)
         {}
 
+	    ///<summary>
+	    ///Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"></see> with the data needed to serialize the target object.
+	    ///</summary>
+	    void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
+
         #endregion
 
 		#region IAopProxy Members

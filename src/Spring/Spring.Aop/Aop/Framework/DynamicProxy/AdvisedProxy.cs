@@ -142,7 +142,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <param name="info">Serialization data.</param>
         /// <param name="context">Serialization context.</param>
         [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("advised", m_advised);
             info.AddValue("introductions", m_introductions);

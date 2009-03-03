@@ -21,7 +21,15 @@
 #region Imports
 
 using System;
+using System.Collections;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
+using Spring.Aop.Interceptor;
+using Spring.Aop.Support;
 using Spring.Objects;
 
 #endregion
