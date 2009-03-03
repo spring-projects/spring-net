@@ -18,6 +18,8 @@
 
 #endregion
 
+using System;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using AopAlliance.Intercept;
 using Spring.Objects.Factory;
@@ -32,7 +34,8 @@ namespace Spring.Aspects
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public abstract class AbstractExceptionHandlerAdvice : IMethodInterceptor, IInitializingObject
+    [Serializable]
+    public abstract class AbstractExceptionHandlerAdvice : IMethodInterceptor, IInitializingObject, IDeserializationCallback
     {
         /// <summary>
         /// Gets or sets the Regex string used to parse advice expressions starting with 'on exception name' and subclass specific actions.
@@ -152,5 +155,21 @@ namespace Spring.Aspects
             Regex reg = new Regex(regexString, options);
             return reg.Match(adviceExpressionString);
         }
+
+        #region Serialization
+
+        void IDeserializationCallback.OnDeserialization(object sender)
+        {
+            OnDeserialization(sender);
+        }
+
+        /// <summary>
+        /// Override in case you need to initialized non-serialized fields on deserialization.
+        /// </summary>
+        protected virtual void OnDeserialization(object sender)
+        {
+        }
+
+        #endregion
     }
 }

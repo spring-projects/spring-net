@@ -330,9 +330,10 @@ namespace Spring.Aop.Framework.AutoProxy
 
         #region InheritanceBasedAopTargetSource inner class definition
 
+        [Serializable]
         private class InheritanceBasedAopTargetSource : ITargetSource
         {
-            private Type _targetType;
+            private readonly Type _targetType;
 
             public InheritanceBasedAopTargetSource(Type targetType)
             {

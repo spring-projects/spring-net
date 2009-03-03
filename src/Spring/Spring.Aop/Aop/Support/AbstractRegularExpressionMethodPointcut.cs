@@ -95,16 +95,28 @@ namespace Spring.Aop.Support
 			SerializationInfo info, StreamingContext context)
 		{
 			_patterns = (object[]) info.GetValue("Patterns", typeof(object[]));
-			try
-			{
-				InitPatternRepresentation(_patterns);
-			}
-			catch (Exception ex)
-			{
-				throw new AspectException(
-					"Failed to deserialize AOP regular expression pointcut: " + ex.Message);
-			}
-		}
+            if (_patterns == null)
+            {
+                _patterns = ObjectUtils.EmptyObjects;
+            }
+        }
+
+	    /// <summary>
+	    /// Overridden to ensure proper initialization
+	    /// </summary>
+	    protected override void OnDeserialization(object sender)
+        {
+            base.OnDeserialization(sender);
+            try
+            {
+                InitPatternRepresentation(_patterns);
+            }
+            catch (Exception ex)
+            {
+                throw new AspectException(
+                    "Failed to deserialize AOP regular expression pointcut: " + ex.Message);
+            }
+        }
 
 		#endregion
 

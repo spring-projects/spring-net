@@ -29,6 +29,7 @@ namespace Spring.Aop.Support
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
+    [Serializable]
     public class AttributeMatchingPointcut : IPointcut
     {
         private readonly ITypeFilter typeFilter;

@@ -38,14 +38,21 @@ namespace Spring.Aspects
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
+    [Serializable]
     public class RetryAdvice : AbstractExceptionHandlerAdvice
     {
+        private static readonly ILog log;
+        private static readonly TimeSpanConverter timeSpanConverter;
+
+        static RetryAdvice()
+        {
+            log = LogManager.GetLogger(typeof(RetryAdvice));
+            timeSpanConverter = new TimeSpanConverter();            
+        }
+
         #region Fields
 
-        private static readonly ILog log = LogManager.GetLogger(typeof (RetryAdvice));
-
-        private TimeSpanConverter timeSpanConverter = new TimeSpanConverter();
-
+        [NonSerialized]
         private RetryExceptionHandler retryExceptionHandler;
 
         private string retryExpression;
@@ -311,5 +318,16 @@ namespace Spring.Aspects
             return reg.Match(actionExpressionString);
         }
 
+        /// <summary>
+        /// Override in case you need to initialized non-serialized fields on deserialization.
+        /// </summary>
+        protected override void OnDeserialization(object sender)
+        {
+            base.OnDeserialization(sender);
+            if (retryExpression != null)
+            {
+                this.AfterPropertiesSet();
+            }
+        }
     }
 }

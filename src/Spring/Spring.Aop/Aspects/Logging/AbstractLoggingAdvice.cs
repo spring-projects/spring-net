@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.Serialization;
 using AopAlliance.Intercept;
 using Common.Logging;
 using Spring.Aop.Framework;
@@ -33,19 +34,38 @@ namespace Spring.Aspects.Logging
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public abstract class AbstractLoggingAdvice : IMethodInterceptor
+    [Serializable]
+    public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializationCallback
     {
         #region Fields
 
         /// <summary>
         /// The default <code>ILog</code> instance used to write logging messages.
         /// </summary>
-        protected ILog defaultLogger = LogManager.GetLogger(MethodInfo.GetCurrentMethod().DeclaringType);
+        [NonSerialized]
+        protected ILog defaultLogger;
+
+        /// <summary>
+        /// The name of the logger instance to use for obtaining from <see cref="LogManager.GetLogger(string)"/>.
+        /// </summary>
+        private string defaultLoggerName;
 
         /// <summary>
         /// Indicates whether or not proxy type names should be hidden when using dynamic loggers.
         /// </summary>
         private bool hideProxyTypeNames = false;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Creates a new advice instance using this advice type's name for logging by default.
+        /// </summary>
+        protected AbstractLoggingAdvice()
+        {
+            SetDefaultLogger(MethodBase.GetCurrentMethod().DeclaringType.FullName);
+        }
 
         #endregion
 
@@ -69,7 +89,7 @@ namespace Spring.Aspects.Logging
         {
             set
             {
-                defaultLogger = (value ? null : LogManager.GetLogger(GetType()));
+                SetDefaultLogger(value ? null : this.GetType().FullName);
             }
         }
 
@@ -92,7 +112,7 @@ namespace Spring.Aspects.Logging
         {
             set
             {
-                defaultLogger =  LogManager.GetLogger(value);
+                SetDefaultLogger(value);
             }
         }
 
@@ -235,5 +255,28 @@ namespace Spring.Aspects.Logging
         }
 
         #endregion
+
+        /// <summary>
+        /// Sets the default logger to the given name.
+        /// </summary>
+        /// <param name="name">if <c>null</c>, the default logger is removed.</param>
+        protected void SetDefaultLogger(string name)
+        {
+            defaultLogger = (name == null ? null : LogManager.GetLogger(name));
+            defaultLoggerName = name;
+        }
+
+        void IDeserializationCallback.OnDeserialization(object sender)
+        {
+            OnDeserialization(sender);
+        }
+
+        /// <summary>
+        /// Override in case you need to initialized non-serialized fields on deserialization.
+        /// </summary>
+        protected virtual void OnDeserialization(object sender)
+        {
+            SetDefaultLogger(this.defaultLoggerName); 
+        }
     }
 }

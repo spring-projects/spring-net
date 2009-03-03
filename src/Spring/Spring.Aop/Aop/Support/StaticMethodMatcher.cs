@@ -22,6 +22,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 #endregion
 
@@ -34,7 +35,7 @@ namespace Spring.Aop.Support
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
 	[Serializable]
-	public abstract class StaticMethodMatcher : IMethodMatcher
+	public abstract class StaticMethodMatcher : IMethodMatcher, IDeserializationCallback
 	{
 		/// <summary>
 		/// Is this <see cref="Spring.Aop.IMethodMatcher"/> dynamic?
@@ -98,5 +99,22 @@ namespace Spring.Aop.Support
 		/// <see langword="true"/> if this this method matches statically.
 		/// </returns>
 		public abstract bool Matches(MethodInfo method, Type targetType);
+
+
+	    #region Serialization Support
+
+	    void IDeserializationCallback.OnDeserialization(object sender)
+	    {
+	        OnDeserialization(sender);
+	    }
+
+	    /// <summary>
+	    /// Override in case you need to initialized non-serialized fields on deserialization.
+	    /// </summary>
+	    protected virtual void OnDeserialization(object sender)
+	    {
+	    }
+
+	    #endregion
 	}
 }

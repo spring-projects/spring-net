@@ -33,6 +33,7 @@ namespace Spring.Aspects.Logging
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
+    [Serializable]
     public class SimpleLoggingAdvice : AbstractLoggingAdvice
     {
         #region Fields

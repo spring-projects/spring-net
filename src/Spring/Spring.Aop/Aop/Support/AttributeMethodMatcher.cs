@@ -32,6 +32,7 @@ namespace Spring.Aop.Support
     /// <author>Juergen hoeller</author>
     /// <author>Mark Pollack</author>
     /// <seealso cref="AttributeMatchingPointcut"/>
+    [Serializable]
     public class AttributeMethodMatcher : StaticMethodMatcher
     {
         private readonly Type attributeType;

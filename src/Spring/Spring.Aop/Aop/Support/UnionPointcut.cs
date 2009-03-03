@@ -86,6 +86,7 @@ namespace Spring.Aop.Support
 		/// <summary>
 		/// Internal method matcher class for union pointcut.
 		/// </summary>
+		[Serializable]
 		private sealed class PointcutUnionMethodMatcher : IMethodMatcher
 		{
 			private UnionPointcut _enclosingInstance;

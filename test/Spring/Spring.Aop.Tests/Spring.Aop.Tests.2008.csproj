@@ -106,6 +106,7 @@
     <Compile Include="AopExceptionTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AopSerializationTests.cs" />
     <Compile Include="Aop\Advice\DebugAdvice.cs" />
     <Compile Include="Aop\Config\AopNamespaceParserTests.cs" />
     <Compile Include="Aop\Framework\Adapter\AdvisorAdapterRegistrationTests.cs">
