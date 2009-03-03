@@ -256,6 +256,29 @@ namespace Spring.Objects.Factory.Support
         #endregion
 
         /// <summary>
+        /// Is always <c>null</c> for a <see cref="RootObjectDefinition"/>.
+        /// </summary>
+        /// <remarks>
+        /// It is safe to request this property's value. Setting any other value than <c>null</c> will 
+        /// raise an <see cref="ArgumentException"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentException">Raised on any attempt to set a non-null value on this property.</exception>
+        public override string ParentName
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    throw new ArgumentException("Root Object cannot be changed into a child oject with parent reference");
+                }
+            }
+        }
+
+        /// <summary>
         /// Validate this object definition.
         /// </summary>
         /// <exception cref="Spring.Objects.Factory.Support.ObjectDefinitionValidationException">

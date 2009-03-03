@@ -186,16 +186,15 @@ namespace Spring.Objects.Factory.Support
         /// The name of the parent object definition.
         /// </summary>
         /// <remarks>
-        /// <p>
         /// This value is <b>required</b>.
-        /// </p>
         /// </remarks>
         /// <value>
         /// The name of the parent object definition.
         /// </value>
-        public string ParentName
+        public override string ParentName
         {
             get { return parentName; }
+            set { parentName = value; }
         }
 
         #endregion

@@ -46,6 +46,10 @@ namespace Spring.Objects.Factory.Support
     [Serializable]
     public abstract class AbstractObjectDefinition : IConfigurableObjectDefinition
     {
+        private static readonly string SCOPE_SINGLETON = "singleton";
+        private static readonly string SCOPE_PROTOTYPE = "prototype";
+
+
         #region Constructor (s) / Destructor
 
         /// <summary>
@@ -118,8 +122,10 @@ namespace Spring.Objects.Factory.Support
                 MethodOverrides = new MethodOverrides(aod.MethodOverrides);
                 DependencyCheck = aod.DependencyCheck;
             }
+            ParentName = other.ParentName;
             IsAbstract = other.IsAbstract;
-            IsSingleton = other.IsSingleton;
+//            IsSingleton = other.IsSingleton;
+            Scope = other.Scope;
             IsLazyInit = other.IsLazyInit;
             ConstructorArgumentValues
                 = new ConstructorArgumentValues(other.ConstructorArgumentValues);
@@ -140,6 +146,11 @@ namespace Spring.Objects.Factory.Support
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// The name of the parent definition of this object definition, if any.
+        /// </summary>
+        public abstract string ParentName { get; set; }
 
         /// <summary>
         /// The property values that are to be applied to the object
@@ -244,6 +255,23 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
+        /// The name of the target scope for the object.
+        /// Defaults to "singleton", ootb alternative is "prototype". Extended object factories
+        /// might support further scopes.
+        /// </summary>
+        public virtual string Scope
+        {
+            get { return scope; }
+            set
+            {
+                AssertUtils.ArgumentNotNull(value, "Scope");
+                this.scope = value;
+                this.isSingleton = 0==string.Compare(SCOPE_SINGLETON, value, true);
+                this.isPrototype = 0==string.Compare(SCOPE_PROTOTYPE, value, true);
+            }
+        }
+
+        /// <summary>
         /// Is this definition a <b>singleton</b>, with
         /// a single, shared instance returned on all calls to an enclosing
         /// container (typically an
@@ -265,6 +293,7 @@ namespace Spring.Objects.Factory.Support
             get { return isSingleton; }
             set
             {
+                scope = (value ? SCOPE_SINGLETON : SCOPE_PROTOTYPE);
                 isSingleton = value;
                 isPrototype = !value;
             }
@@ -386,6 +415,7 @@ namespace Spring.Objects.Factory.Support
             }
             set { objectType = StringUtils.GetTextOrNull(value); }
         }
+
 
         /// <summary>
         /// A description of the resource that this object definition
@@ -674,7 +704,7 @@ namespace Spring.Objects.Factory.Support
             AssertUtils.ArgumentNotNull(other, "other");
 
             IsAbstract = other.IsAbstract;
-            IsSingleton = other.IsSingleton;
+            Scope = other.Scope;
             IsLazyInit = other.IsLazyInit;
             ConstructorArgumentValues.AddAll(other.ConstructorArgumentValues);
             PropertyValues.AddAll(other.PropertyValues.PropertyValues);
@@ -734,8 +764,10 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         public override string ToString()
         {
-            StringBuilder buffer = new StringBuilder();
-            buffer.Append("Abstract = ").Append(IsAbstract);
+            StringBuilder buffer = new StringBuilder(string.Format("Class [{0}]", ObjectTypeName));
+            buffer.Append("; Abstract = ").Append(IsAbstract);
+            buffer.Append("; Parent = ").Append(ParentName);
+            buffer.Append("; Scope = ").Append(Scope);
             buffer.Append("; Singleton = ").Append(IsSingleton);
             buffer.Append("; LazyInit = ").Append(IsLazyInit);
             buffer.Append("; Autowire = ").Append(AutowireMode);
@@ -764,6 +796,7 @@ namespace Spring.Objects.Factory.Support
         private bool isPrototype = false;
         private bool isLazyInit = false;
         private bool isAbstract = false;
+        private string scope = SCOPE_SINGLETON;
         private object objectType;
         private AutoWiringMode autowireMode = AutoWiringMode.No;
         private DependencyCheckingMode dependencyCheck = DependencyCheckingMode.None;

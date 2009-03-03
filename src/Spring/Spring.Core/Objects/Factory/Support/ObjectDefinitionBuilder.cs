@@ -61,6 +61,39 @@ namespace Spring.Objects.Factory.Support
 
         #region Factory Methods
 
+        /// <summary>
+        /// Creates a new <see cref="ObjectDefinitionBuilder"/> used to construct a <see cref="Spring.Objects.Factory.Support.GenericObjectDefinition"/>.
+        /// </summary>
+        public static ObjectDefinitionBuilder GenericObjectDefinition()
+        {
+           ObjectDefinitionBuilder builder = new ObjectDefinitionBuilder();
+            builder.objectDefinition = new GenericObjectDefinition();
+            return builder;
+        }
+       
+        /// <summary>
+        /// Creates a new <see cref="ObjectDefinitionBuilder"/> used to construct a <see cref="Spring.Objects.Factory.Support.GenericObjectDefinition"/>.
+        /// </summary>
+        /// <param name="objectType">the <see cref="Type"/> of the object that the definition is being created for</param>
+        public static ObjectDefinitionBuilder GenericObjectDefinition(Type objectType)
+        {
+           ObjectDefinitionBuilder builder = new ObjectDefinitionBuilder();
+            builder.objectDefinition = new GenericObjectDefinition();
+            builder.objectDefinition.ObjectType = objectType;
+            return builder;
+        }
+       
+        /// <summary>
+        /// Creates a new <see cref="ObjectDefinitionBuilder"/> used to construct a <see cref="Spring.Objects.Factory.Support.GenericObjectDefinition"/>.
+        /// </summary>
+        /// <param name="objectTypeName">the name of the <see cref="Type"/> of the object that the definition is being created for</param>
+        public static ObjectDefinitionBuilder GenericObjectDefinition(string objectTypeName)
+        {
+           ObjectDefinitionBuilder builder = new ObjectDefinitionBuilder();
+            builder.objectDefinition = new GenericObjectDefinition();
+            builder.objectDefinition.ObjectTypeName = objectTypeName;
+            return builder;
+        }
        
         /// <summary>
         /// Create a new <code>ObjectDefinitionBuilder</code> used to construct a root object definition.

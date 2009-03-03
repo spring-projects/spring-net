@@ -50,15 +50,15 @@ namespace Spring.Objects.Factory.Support
             }
 
             rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
-            rwod.Scope = ObjectScope.Application;
+            rwod.Scope = ObjectScope.Application.ToString();
             wof.RegisterObjectDefinition("applicationScopedObject", rwod);
 
             rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
-            rwod.Scope = ObjectScope.Request;
+            rwod.Scope = ObjectScope.Request.ToString();
             wof.RegisterObjectDefinition("requestScopedObject", rwod);
 
             rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
-            rwod.Scope = ObjectScope.Session;
+            rwod.Scope = ObjectScope.Session.ToString();
             wof.RegisterObjectDefinition("sessionScopedObject", rwod);
 
             object o;

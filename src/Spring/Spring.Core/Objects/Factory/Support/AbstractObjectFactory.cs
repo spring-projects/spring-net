@@ -526,53 +526,54 @@ namespace Spring.Objects.Factory.Support
         /// A merged <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
         /// with overridden properties.
         /// </returns>
-        protected internal virtual RootObjectDefinition GetMergedObjectDefinition( string name, IObjectDefinition definition )
+        protected internal virtual RootObjectDefinition GetMergedObjectDefinition( string name, IObjectDefinition od )
         {
-            if (definition == null)
+            if (od == null)
             {
                 return null;
             }
-            else if (definition is RootObjectDefinition)
+
+            RootObjectDefinition mod;
+
+            if (od.ParentName == null)
             {
-                return (RootObjectDefinition)definition;
+                mod = CreateRootObjectDefinition(od);
             }
-            else if (definition is ChildObjectDefinition)
+            else
             {
-                ChildObjectDefinition childDefinition = (ChildObjectDefinition)definition;
-                RootObjectDefinition parentDefinition = null;
-                if (!name.Equals( childDefinition.ParentName ))
+//                IObjectDefinition childDefinition = definition;
+                IObjectDefinition pod = null;
+                if (!name.Equals( od.ParentName ))
                 {
-                    parentDefinition =
-                        GetMergedObjectDefinition( TransformedObjectName( childDefinition.ParentName ), true );
+                    pod = GetMergedObjectDefinition( TransformedObjectName( od.ParentName ), true );
                 }
                 else
                 {
                     if (ParentObjectFactory is AbstractObjectFactory)
                     {
-                        parentDefinition =
-                            ((AbstractObjectFactory)ParentObjectFactory).GetMergedObjectDefinition(
-                            childDefinition.ParentName, true );
+                        pod = ((AbstractObjectFactory)ParentObjectFactory).GetMergedObjectDefinition( od.ParentName, true );
                     }
                 }
-                if (parentDefinition == null)
+
+                if (pod == null)
                 {
-                    throw new NoSuchObjectDefinitionException( childDefinition.ParentName,
+                    throw new NoSuchObjectDefinitionException( od.ParentName,
                                                                 string.Format(
                                                                         "Parent name '{0}' is equal to object name '{1}' - "
                                                                         +
                                                                         "cannot be resolved without an AbstractObjectFactory parent.",
-                                                                        childDefinition.ParentName, name ) );
+                                                                        od.ParentName, name ) );
                 }
 
-                RootObjectDefinition rootDefinition = CreateRootObjectDefinition( parentDefinition );
-                rootDefinition.OverrideFrom( childDefinition );
-                return rootDefinition;
+                mod = CreateRootObjectDefinition( pod );
+                mod.OverrideFrom( od );
             }
-            else
-            {
-                throw new ObjectDefinitionStoreException( definition.ResourceDescription, name,
-                                                         "Definition is neither a RootObjectDefinition nor a ChildObjectDefinition." );
-            }
+//            else
+//            {
+//                throw new ObjectDefinitionStoreException( definition.ResourceDescription, name,
+//                                                         "Definition is neither a RootObjectDefinition nor a ChildObjectDefinition." );
+//            }
+            return mod;
         }
 
         /*
@@ -1485,6 +1486,8 @@ namespace Spring.Objects.Factory.Support
 
         #region IObjectFactory Members
 
+        #region New region
+
         /// <summary>
         /// Is this object a singleton?
         /// </summary>
@@ -1984,6 +1987,8 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.ConfigureObject(object, string)"/>
         public abstract object ConfigureObject( object target, string name, IObjectDefinition definition );
+
+        #endregion
 
         #endregion
 

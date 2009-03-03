@@ -45,7 +45,7 @@ namespace Spring.Validation.Config
     /// <author>Aleksandar Seovic</author>
     [
         NamespaceParser(
-            Namespace = "http://www.springframework.net/validation", 
+            Namespace = "http://www.springframework.net/validation",
             SchemaLocationAssemblyHint = typeof(ValidationNamespaceParser),
             SchemaLocation = "/Spring.Validation.Config/spring-validation-1.1.xsd")
     ]
@@ -55,15 +55,13 @@ namespace Spring.Validation.Config
 
         [ThreadStatic]
         private int definitionCount = 0;
-    	
+
         static ValidationNamespaceParser()
         {
             TypeRegistry.RegisterType(ValidatorTypePrefix + "group", typeof(ValidatorGroup));
             TypeRegistry.RegisterType(ValidatorTypePrefix + "any", typeof(AnyValidatorGroup));
             TypeRegistry.RegisterType(ValidatorTypePrefix + "exclusive", typeof(ExclusiveValidatorGroup));
-            
-            
-            TypeRegistry.RegisterType(ValidatorTypePrefix + "collection", typeof(CollectionValidator));            
+            TypeRegistry.RegisterType(ValidatorTypePrefix + "collection", typeof(CollectionValidator));
             TypeRegistry.RegisterType(ValidatorTypePrefix + "required", typeof(RequiredValidator));
             TypeRegistry.RegisterType(ValidatorTypePrefix + "condition", typeof(ConditionValidator));
             TypeRegistry.RegisterType(ValidatorTypePrefix + "regex", typeof(RegularExpressionValidator));
@@ -98,7 +96,6 @@ namespace Spring.Validation.Config
         /// be used in a nested scenario.
         /// </para>
         /// </remarks>
-        [Obsolete("not used anymore - ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead", false)]
         public override IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
         {
             if (!element.HasAttribute("id"))
@@ -129,7 +126,7 @@ namespace Spring.Validation.Config
             string validateAll = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionValidateAllAttribute);
             string context = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionContextAttribute);
             string includeElementsErrors = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionIncludeElementsErrors);
-            
+
             string name = "validator: " + (StringUtils.HasText(id) ? id : this.definitionCount.ToString());
             MutablePropertyValues properties = new MutablePropertyValues();
             if (StringUtils.HasText(test))
@@ -152,11 +149,11 @@ namespace Spring.Validation.Config
             {
                 properties.Add("IncludeElementErrors", includeElementsErrors);
             }
-            
+
 
             ManagedList nestedValidators = new ManagedList();
             ManagedList actions = new ManagedList();
-            foreach (XmlNode node in element.ChildNodes) 
+            foreach (XmlNode node in element.ChildNodes)
             {
                 XmlElement child = node as XmlElement;
                 if (child != null)
@@ -272,7 +269,7 @@ namespace Spring.Validation.Config
             {
                 properties.Add("Parameters", parameters.ToArray(typeof(IExpression)));
             }
-            
+
             IConfigurableObjectDefinition action =
                 parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null, parserContext.ReaderContext.Reader.Domain);
             action.ConstructorArgumentValues = ctorArgs;
@@ -315,7 +312,7 @@ namespace Spring.Validation.Config
             string typeName = "Spring.Validation.ValidatorReference, Spring.Core";
             string name = GetAttributeValue(element, ValidatorDefinitionConstants.ReferenceNameAttribute);
             string context = GetAttributeValue(element, ValidatorDefinitionConstants.ReferenceContextAttribute);
-            
+
             MutablePropertyValues properties = new MutablePropertyValues();
             properties.Add("Name", name);
             if (StringUtils.HasText(context))
@@ -328,7 +325,7 @@ namespace Spring.Validation.Config
             reference.PropertyValues = properties;
             return reference;
         }
-        
+
         #region Element & Attribute Name Constants
 
         private class ValidatorDefinitionConstants
@@ -350,7 +347,7 @@ namespace Spring.Validation.Config
 
             public const string CollectionValidateAllAttribute = "validate-all";
             public const string CollectionContextAttribute = "context";
-            public const string CollectionIncludeElementsErrors = "include-element-errors";            
+            public const string CollectionIncludeElementsErrors = "include-element-errors";
         }
 
         private class MessageConstants

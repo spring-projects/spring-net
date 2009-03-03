@@ -38,7 +38,7 @@ namespace Spring.Objects.Factory.Support
     /// <author>Aleksandar Seovic</author>
     public class ChildWebObjectDefinition : ChildObjectDefinition, IWebObjectDefinition
     {
-        private ObjectScope _scope = ObjectScope.Default;
+//        private ObjectScope _scope = ObjectScope.Default;
         private string _pageName;
 
         #region Constructors
@@ -101,10 +101,10 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Object scope.
         /// </summary>
-        public ObjectScope Scope
+        ObjectScope IWebObjectDefinition.Scope
         {
-            get { return _scope; }
-            set { _scope = value; }
+            get { return (ObjectScope)Enum.Parse(typeof(ObjectScope), this.Scope, true); }
+            set { this.Scope = value.ToString(); }
         }
 
         /// <summary>
@@ -134,12 +134,32 @@ namespace Spring.Objects.Factory.Support
                 {
                     return false;
                 }
+                else if (0 == string.Compare("application", this.Scope, true)
+                    || 0 == string.Compare("session", this.Scope, true)
+                    || 0 == string.Compare("request", this.Scope, true))
+                {
+                    return true;
+                }
                 else
                 {
                     return base.IsSingleton;
                 }
             }
             set { base.IsSingleton = value; }
+        }
+
+        /// <summary>
+        /// Overrides this object's values using values from <c>other</c> argument.
+        /// </summary>
+        /// <param name="other">The object to copy values from.</param>
+        public override void OverrideFrom(IObjectDefinition other)
+        {
+            base.OverrideFrom(other);
+            if (other is IWebObjectDefinition)
+            {
+                //                this._scope = ((IWebObjectDefinition) other).Scope;
+                this._pageName = ((IWebObjectDefinition)other).PageName;
+            }
         }
 
         /// <summary>

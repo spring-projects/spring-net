@@ -19,6 +19,8 @@
 #endregion
 
 #region Imports 
+
+using System;
 using System.Xml;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;

@@ -503,12 +503,12 @@ namespace Spring.Objects.Factory
 			((AbstractObjectFactory) ObjectFactory).RegisterAlias("rick", Environment.NewLine);
 		}
 
-		[Test]
-		[ExpectedException(typeof(ObjectDefinitionStoreException))]
-		public void ChokesIfNotGivenSupportedIObjectDefinitionImplementation() 
-		{
-			ObjectFactory.GetObject("unsupportedDefinition");
-		}
+//		[Test]
+//		[ExpectedException(typeof(ObjectDefinitionStoreException))]
+//		public void ChokesIfNotGivenSupportedIObjectDefinitionImplementation() 
+//		{
+//			ObjectFactory.GetObject("unsupportedDefinition");
+//		}
 
 		#endregion
 	}

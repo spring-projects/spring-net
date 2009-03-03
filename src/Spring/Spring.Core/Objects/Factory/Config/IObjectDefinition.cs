@@ -110,6 +110,16 @@ namespace Spring.Objects.Factory.Config
         /// </remarks>
         bool IsLazyInit { get; }
 
+        /// <summary>
+        /// The name of the parent definition of this object definition, if any.
+        /// </summary>
+        string ParentName { get; set; }
+
+        /// <summary>
+        /// The target scope for this object.
+        /// </summary>
+        string Scope { get; set; }
+
 		/// <summary>
 		/// Returns the <see cref="System.Type"/> of the object definition (if any).
 		/// </summary>

@@ -71,6 +71,18 @@ namespace Spring.Objects.Factory
 	        get { throw new NotImplementedException(); }
 	    }
 
+	    public string ParentName
+	    {
+	        get { return null; }
+	        set { throw new NotImplementedException(); }
+	    }
+
+	    public string Scope
+	    {
+	        get { throw new System.NotImplementedException(); }
+	        set { throw new System.NotImplementedException(); }
+	    }
+
 	    public Type ObjectType
 		{
 			get { throw new NotImplementedException(); }

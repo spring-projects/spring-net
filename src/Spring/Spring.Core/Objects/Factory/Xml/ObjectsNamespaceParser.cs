@@ -108,7 +108,7 @@ namespace Spring.Objects.Factory.Xml
         /// and was called to process the root node.
         /// </p>
         /// </remarks>
-        [Obsolete("not used anymore - ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead", false)]
+//        [Obsolete("not used anymore - ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead", false)]
         public override IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
         {
             // TODO (EE): overridden just to stay binary compatible between 1.2.0 and 1.2.1

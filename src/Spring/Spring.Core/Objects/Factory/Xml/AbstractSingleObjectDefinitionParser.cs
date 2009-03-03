@@ -57,18 +57,30 @@ namespace Spring.Objects.Factory.Xml
         /// </returns>
         protected override AbstractObjectDefinition ParseInternal(XmlElement element, ParserContext parserContext)
         {
-            ObjectDefinitionBuilder builder;
+            ObjectDefinitionBuilder builder = ObjectDefinitionBuilder.GenericObjectDefinition();
+            string parentName = GetParentName(element);
+            if (parentName != null)
+            {
+                builder.RawObjectDefinition.ParentName = parentName;
+            }
+
             Type objectType = GetObjectType(element);
             if (objectType != null)
             {
-                builder =
-                    ObjectDefinitionBuilder.RootObjectDefinition(parserContext.ReaderContext.ObjectDefinitionFactory,
-                                                                 objectType);
+                builder.RawObjectDefinition.ObjectType = objectType;
             }
             else
             {
-                throw new NotSupportedException("Need to refactor IObjectDefinitionFactory to not resolve object type names");
+                string objectTypeName = GetObjectTypeName(element);
+                if (objectTypeName != null)
+                {
+                    builder.RawObjectDefinition.ObjectTypeName = objectTypeName;
+                }
             }
+
+            // TODO (EE)
+//            builder.getRawBeanDefinition().setSource(parserContext.extractSource(element));
+
             if (parserContext.IsNested)
             {
                 // Inner object definition must receive same singleton status as containing object.
@@ -82,6 +94,19 @@ namespace Spring.Objects.Factory.Xml
             DoParse(element, parserContext, builder);
             return builder.ObjectDefinition;
 
+        }
+
+        /// <summary>
+        /// Determine the name for the parent of the currently parsed object,
+        /// in case of the current object being defined as a child object.
+        /// The default implementation returns <c>null</c>
+        /// indicating a root object definition.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>the name of the parent object for the currently parsed object.</returns>
+        protected virtual string GetParentName(XmlElement element)
+        {
+            return null;
         }
 
         /// <summary>

@@ -30,6 +30,7 @@ using Spring.Collections;
 using Spring.Core;
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
+using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Validation;
 
@@ -54,7 +55,7 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         private class XmlResourceUrlResolver : XmlUrlResolver
         {
-            public override object GetEntity( Uri absoluteUri, string role, Type ofObjectToReturn )
+            public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
             {
                 IResourceLoader resourceLoader = new ConfigurableResourceLoader();
                 IResource resource = resourceLoader.GetResource(absoluteUri.AbsoluteUri);
@@ -62,10 +63,10 @@ namespace Spring.Objects.Factory.Xml
                 //return base.GetEntity( absoluteUri, role, ofObjectToReturn );
             }
 
-            public override Uri ResolveUri( Uri baseUri, string relativeUri )
+            public override Uri ResolveUri(Uri baseUri, string relativeUri)
             {
                 // TODO: resolve Uri using IResource instance
-                return base.ResolveUri( baseUri, relativeUri );
+                return base.ResolveUri(baseUri, relativeUri);
             }
         }
 
@@ -133,7 +134,7 @@ namespace Spring.Objects.Factory.Xml
 
             if (wellknownNamespaceParserTypeNames.Contains(namespaceUri))
             {
-                string parserTypeName = (string) wellknownNamespaceParserTypeNames[namespaceUri];                
+                string parserTypeName = (string)wellknownNamespaceParserTypeNames[namespaceUri];
                 // assume, that all Spring.XXX assemblies have same version + public key
                 // get the ", Version=x.x.x.x, Culture=neutral, PublicKeyToken=65e474d141e25e07" part of Spring.Core and append it
                 string name = typeof(NamespaceParserRegistry).Assembly.GetName().Name;
@@ -152,13 +153,13 @@ namespace Spring.Objects.Factory.Xml
         /// Constructs a "assembly://..." qualified schemaLocation url using the given type
         /// to obtain the assembly name.
         /// </summary>
-        public static string GetAssemblySchemaLocation( Type schemaLocationAssemblyHint, string schemaLocation)
+        public static string GetAssemblySchemaLocation(Type schemaLocationAssemblyHint, string schemaLocation)
         {
             if (schemaLocationAssemblyHint != null)
             {
                 return "assembly://" + schemaLocationAssemblyHint.Assembly.FullName + schemaLocation;
             }
-            return schemaLocation;                        
+            return schemaLocation;
         }
 
         /// <summary>
@@ -173,13 +174,13 @@ namespace Spring.Objects.Factory.Xml
         /// </returns>
         public static INamespaceParser GetParser(string namespaceURI)
         {
-            INamespaceParser parser = (INamespaceParser) parsers[namespaceURI];
+            INamespaceParser parser = (INamespaceParser)parsers[namespaceURI];
             if (parser == null)
             {
                 bool ok = RegisterWellknownNamespaceParserType(namespaceURI);
                 if (ok)
                 {
-                    parser = (INamespaceParser) parsers[namespaceURI];
+                    parser = (INamespaceParser)parsers[namespaceURI];
                 }
             }
             return parser;
@@ -251,13 +252,49 @@ namespace Spring.Objects.Factory.Xml
         {
             AssertUtils.ArgumentNotNull(parserType, "parserType");
 
-            if (!(typeof(INamespaceParser)).IsAssignableFrom(parserType))
+            INamespaceParser np = null;
+
+            if ((typeof(INamespaceParser)).IsAssignableFrom(parserType))
             {
-                throw new ArgumentException(string.Format("The [{0}] Type must implement the IXmlObjectDefinitionParser interface.",
-                                                          parserType.Name), "parserType");
+                np = (INamespaceParser)ObjectUtils.InstantiateType(parserType);
+            }
+            // TODO (EE): workaround to enable smooth transition between 1.x and 2.0 style namespace handling
+            else if (typeof(IObjectDefinitionParser).IsAssignableFrom(parserType))
+            {
+                // determine and use defaults for the namespace and schema location, if necessary
+                if (StringUtils.IsNullOrEmpty(namespaceUri) || StringUtils.IsNullOrEmpty(schemaLocation))
+                {
+                    NamespaceParserAttribute defaults = GetDefaults(parserType);
+                    if (defaults == null)
+                    {
+                        throw new ArgumentNullException(
+                            "Either default or an explicit namespace value must be specified for a configuration parser.");
+                    }
+                    if (StringUtils.IsNullOrEmpty(namespaceUri))
+                    {
+                        namespaceUri = defaults.Namespace;
+                    }
+                    if (StringUtils.IsNullOrEmpty(schemaLocation))
+                    {
+                        schemaLocation = defaults.SchemaLocation;
+                        if (defaults.SchemaLocationAssemblyHint != null)
+                        {
+                            schemaLocation = GetAssemblySchemaLocation(defaults.SchemaLocationAssemblyHint, schemaLocation);
+                        }
+                    }
+                }
+
+                IObjectDefinitionParser odParser = (IObjectDefinitionParser)ObjectUtils.InstantiateType(parserType);
+                np = new ObjectDefinitionParserNamespaceParser(odParser);
+            }
+            else
+            {
+                throw new ArgumentException(
+                        string.Format("The [{0}] Type must implement the INamespaceParser interface.", parserType.Name)
+                        , "parserType");
             }
 
-            RegisterParser((INamespaceParser) ObjectUtils.InstantiateType(parserType), namespaceUri, schemaLocation);
+            RegisterParser(np, namespaceUri, schemaLocation);
         }
 
         /// <summary>
@@ -274,7 +311,7 @@ namespace Spring.Objects.Factory.Xml
         {
             RegisterParser(parser, null, null);
         }
-        
+
         /// <summary>
         /// Associates a parser with a namespace.
         /// </summary>
@@ -304,11 +341,11 @@ namespace Spring.Objects.Factory.Xml
         public static void RegisterParser(INamespaceParser parser, string namespaceUri, string schemaLocation)
         {
             AssertUtils.ArgumentNotNull(parser, "parser");
-            
+
             // determine and use defaults for the namespace and schema location, if necessary
             if (StringUtils.IsNullOrEmpty(namespaceUri) || StringUtils.IsNullOrEmpty(schemaLocation))
             {
-                NamespaceParserAttribute defaults = GetDefaults(parser);
+                NamespaceParserAttribute defaults = GetDefaults(parser.GetType());
                 if (defaults == null)
                 {
                     throw new ArgumentNullException(
@@ -333,14 +370,14 @@ namespace Spring.Objects.Factory.Xml
 
             // register parser
             lock (parsers.SyncRoot)
-            lock (schemas)
-            {
-                parsers[namespaceUri] = parser;
-                if (StringUtils.HasText(schemaLocation) && !schemas.Contains(namespaceUri))
+                lock (schemas)
                 {
-                    RegisterSchema(namespaceUri, schemaLocation);
+                    parsers[namespaceUri] = parser;
+                    if (StringUtils.HasText(schemaLocation) && !schemas.Contains(namespaceUri))
+                    {
+                        RegisterSchema(namespaceUri, schemaLocation);
+                    }
                 }
-            }
         }
 
         /// <summary>
@@ -375,21 +412,54 @@ namespace Spring.Objects.Factory.Xml
         /// Returns default values for the parser namespace and schema location as 
         /// defined by the <see cref="NamespaceParserAttribute"/>.
         /// </summary>
-        /// <param name="parser">
-        /// A parser instance.
+        /// <param name="parserType">
+        /// A type of the parser.
         /// </param>
         /// <returns>
         /// A <see cref="NamespaceParserAttribute"/> instance containing
         /// default values for the parser namsepace and schema location
         /// </returns>
-        private static NamespaceParserAttribute GetDefaults(INamespaceParser parser)
+        private static NamespaceParserAttribute GetDefaults(Type parserType)
         {
-            object[] attrs = parser.GetType().GetCustomAttributes(typeof(NamespaceParserAttribute), true);
+            object[] attrs = parserType.GetCustomAttributes(typeof(NamespaceParserAttribute), true);
             if (attrs.Length > 0)
             {
                 return (NamespaceParserAttribute)attrs[0];
             }
             return null;
         }
+
+        #region ObjectDefinitionParserNamespaceParser Utility class
+
+        /// <summary>
+        /// Adapts the <see cref="IObjectDefinitionParser"/> interface to <see cref="INamespaceParser"/>.
+        /// Only for smooth transition between 1.x and 2.0 style namespace handling, will be dropped for 2.0
+        /// </summary>
+        private class ObjectDefinitionParserNamespaceParser : INamespaceParser
+        {
+            private readonly IObjectDefinitionParser odParser;
+
+            public ObjectDefinitionParserNamespaceParser(IObjectDefinitionParser odParser)
+            {
+                this.odParser = odParser;
+            }
+
+            public void Init()
+            {
+                // noop
+            }
+
+            public IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
+            {
+                return odParser.ParseElement(element, parserContext);
+            }
+
+            public ObjectDefinitionHolder Decorate(XmlNode node, ObjectDefinitionHolder definition, ParserContext parserContext)
+            {
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
