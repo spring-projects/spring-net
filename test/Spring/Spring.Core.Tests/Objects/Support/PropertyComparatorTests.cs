@@ -140,7 +140,7 @@ namespace Spring.Objects.Support
         }
 
         [Test]
-        [Ignore("Sort ordering is not preserved (unstable) with equal elements (c.f. System.Array.Sort (Array, IComparer)))")]
+//        [Ignore("Sort ordering is not preserved (unstable) with equal elements (c.f. System.Array.Sort (Array, IComparer)))")]
         public void OrderingIsUnperturbedWithEqualProps()
         {
             ISortDefinition definition = new MutableSortDefinition("Age", false, true);

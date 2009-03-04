@@ -336,8 +336,13 @@ namespace Spring.Transaction.Support
 	                object root = syncs.SyncRoot;
 	                lock (root)
 	                {
-	                    syncs.Sort(syncComparer);
-	                }
+//	                    syncs.Sort(syncComparer);
+
+                        // StableSort
+	                    ICollection sorted = CollectionUtils.StableSort(syncs, syncComparer);
+                        syncs = new ArrayList( sorted );
+                    }
+
 	                // Return unmodifiable snapshot, to avoid exceptions
 	                // while iterating and invoking synchronization callbacks that in turn
 	                // might register further synchronizations.

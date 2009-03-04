@@ -191,7 +191,15 @@ namespace Spring.Objects.Support
         /// </exception>
         public static void Sort(IList source, ISortDefinition sortDefinition)
         {
-            ArrayList.Adapter(source).Sort(new PropertyComparator(sortDefinition));
+//            ArrayList.Adapter(source).Sort(new PropertyComparator(sortDefinition));
+            ICollection coll = CollectionUtils.StableSort(source, new PropertyComparator(sortDefinition));
+            int index = 0;
+            IEnumerator it = coll.GetEnumerator();
+            while(it.MoveNext())
+            {
+                source[index] = it.Current;
+                index++;
+            }
         }
     }
 }
