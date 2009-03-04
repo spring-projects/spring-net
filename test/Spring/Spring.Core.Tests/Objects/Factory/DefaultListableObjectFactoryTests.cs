@@ -1654,6 +1654,56 @@ namespace Spring.Objects.Factory
             Assert.AreSame(testObject, resultObject);
         }
 
+        #region TestObjectPostProcessor
+
+        private class TestObjectPostProcessor : IObjectPostProcessor
+        {
+            private object other;
+
+            public TestObjectPostProcessor(object other)
+            {
+                this.other = other;
+            }
+
+            public object PostProcessBeforeInitialization(object instance, string name)
+            {
+                return instance;
+            }
+
+            public object PostProcessAfterInitialization(object instance, string objectName)
+            {
+                return other;
+            }
+        }
+
+
+        #endregion
+
+        [Test]
+        public void ConfigureObjectAppliesObjectPostProcessorsUsingDefinition()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            object wrapperObject = "WrapperObject";
+            of.AddObjectPostProcessor( new TestObjectPostProcessor(wrapperObject));
+            of.RegisterObjectDefinition("myObjectDefinition", new RootObjectDefinition());
+
+            object testObject = "TestObject";
+            object resultObject = of.ConfigureObject(testObject, "myObjectDefinition");
+            Assert.AreSame(wrapperObject, resultObject);            
+        }
+
+        [Test]
+        public void ConfigureObjectDoesNotApplyObjectPostProcessorsIfNoDefinition()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            object wrapperObject = "WrapperObject";
+            of.AddObjectPostProcessor( new TestObjectPostProcessor(wrapperObject));
+ 
+            object testObject = "TestObject";
+            object resultObject = of.ConfigureObject(testObject, "non-existant definition");
+            Assert.AreSame(testObject, resultObject);            
+        }
+
         [Test]
         public void HierarchicalObjectFactoryChildParentResolution()
         {
