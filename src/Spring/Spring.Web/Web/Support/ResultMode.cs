@@ -68,6 +68,19 @@ namespace Spring.Web.Support
         /// </p>
         /// </remarks>
         /// <seealso cref="System.Web.HttpServerUtility.Transfer(string,bool)"/>
-        TransferNoPreserve = 2
+        TransferNoPreserve = 2,
+
+        /// <summary>
+        /// A redirect.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Issues a redirect (to the user-agent - typically a browser) using
+        /// the <see cref="System.Web.HttpResponse.Redirect(string, bool)"/> method.
+        /// </p>
+        /// </remarks>
+        /// <seealso cref="System.Web.HttpResponse.Redirect(string, bool)"/>
+        RedirectNoAbort = 3
+
     }
 }

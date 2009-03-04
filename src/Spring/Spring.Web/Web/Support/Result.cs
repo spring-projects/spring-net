@@ -227,11 +227,19 @@ namespace Spring.Web.Support
         }
 
         /// <summary>
-        /// Indicates, if <see cref="HttpServerUtility.Transfer(string,bool)"/> should be called with preserverForm='true' | 'false'. Only relevant for ResultMode.TransferXXXX modes.
+        /// Indicates, if <see cref="HttpServerUtility.Transfer(string,bool)"/> should be called with preserveForm='true' | 'false'. Only relevant for ResultMode.TransferXXXX modes.
         /// </summary>
         public bool PreserveForm
         {
             get { return (Mode == ResultMode.Transfer); }
+        }
+
+        /// <summary>
+        /// Indicates, if <see cref="HttpServerUtility.Redirect(string,bool)"/> should be called with endResponse='true' | 'false'. Only relevant for ResultMode.RedirectXXXX modes.
+        /// </summary>
+        public bool EndResponse
+        {
+            get { return (Mode == ResultMode.Redirect); }
         }
 
         #endregion
@@ -249,6 +257,7 @@ namespace Spring.Web.Support
             switch (Mode)
             {
                 case ResultMode.Redirect:
+                case ResultMode.RedirectNoAbort:                    
                     DoRedirect( context );
                     break;
                 case ResultMode.Transfer:
@@ -312,7 +321,7 @@ namespace Spring.Web.Support
         /// <seealso cref="System.Web.HttpResponse.Redirect(string)"/>
         protected virtual void DoRedirect( object context )
         {
-            HttpContext.Current.Response.Redirect( GetRedirectUri( context ) );
+            HttpContext.Current.Response.Redirect( GetRedirectUri( context ), EndResponse );
         }
 
         /// <summary>

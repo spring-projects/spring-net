@@ -140,6 +140,21 @@ namespace Spring.Web.Support
             Result result = new Result("redirect:" + ExpectedTargetPageName);
             Assert.AreEqual(ResultMode.Redirect, result.Mode, "Not extracting the correct ResultMode " +
                                                               "from the result string passed into the ctor.");
+            Assert.IsTrue(result.EndResponse);
+            Assert.IsNull(result.Parameters,
+                          "No parameters were passed but the Parameters property appears to be set to a non-null value anyway.");
+            Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+                            "The TargetPage property is not being correctly extracted " +
+                            "from the result string passed into the ctor.");
+        }
+
+        [Test]
+        public void WithRedirectNoAbortResultMode()
+        {
+            Result result = new Result("redirectnoabort:" + ExpectedTargetPageName);
+            Assert.AreEqual(ResultMode.RedirectNoAbort, result.Mode, "Not extracting the correct ResultMode " +
+                                                              "from the result string passed into the ctor.");
+            Assert.IsFalse(result.EndResponse);
             Assert.IsNull(result.Parameters,
                           "No parameters were passed but the Parameters property appears to be set to a non-null value anyway.");
             Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,

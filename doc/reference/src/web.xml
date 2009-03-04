@@ -2501,15 +2501,19 @@ private void SetLanguage(object sender, CommandEventArgs e)
 
     <itemizedlist>
       <listitem>
-        <para>redirect</para>
+        <para><literal>redirect</literal>: calls Response.Redirect(string)</para>
       </listitem>
 
       <listitem>
-        <para>transfer</para>
+        <para><literal>redirectNoAbort</literal>: calls Response.Redirect(string, false)</para>
       </listitem>
 
       <listitem>
-        <para>TransferNoPreserve</para>
+        <para><literal>transfer</literal>: calls Server.Transfer(string)</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>TransferNoPreserve</literal>: calls Server.Transfer(string, false)</para>
       </listitem>
     </itemizedlist>
 
