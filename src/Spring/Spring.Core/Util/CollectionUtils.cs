@@ -352,6 +352,20 @@ namespace Spring.Util
         /// Sorting is not(!) done in-place. Instead a sorted copy of the original input is returned.
         /// </remarks>
         /// <param name="input">input collection of items to sort</param>
+        /// <param name="comparer">the <see cref="IComparer"/> for comparing 2 items in <paramref name="input"/>.</param>
+        /// <returns>a new collection of stable sorted items.</returns>
+        public static void StableSortInPlace(IList input, IComparer comparer)
+        {
+            StableSortInPlace(input, new CompareCallback(comparer.Compare));
+        }
+
+        /// <summary>
+        /// A simple stable sorting routine - far from being efficient, only for small collections.
+        /// </summary>
+        /// <remarks>
+        /// Sorting is not(!) done in-place. Instead a sorted copy of the original input is returned.
+        /// </remarks>
+        /// <param name="input">input collection of items to sort</param>
         /// <param name="comparer">the <see cref="CompareCallback"/> for comparing 2 items in <paramref name="input"/>.</param>
         /// <returns>a new collection of stable sorted items.</returns>
         public static void StableSortInPlace(IList input, CompareCallback comparer)
@@ -370,35 +384,6 @@ namespace Spring.Util
             for (int i = 0; i < ehancedInput.Count; i++)
             {
                 input[i] = ((Entry)ehancedInput[i]).Value;
-            }
-        }
-
-        /// <summary>
-        /// A simple stable sorting routine - far from being efficient, only for small collections.
-        /// </summary>
-        /// <remarks>
-        /// Sorting is not(!) done in-place. Instead a sorted copy of the original input is returned.
-        /// </remarks>
-        /// <param name="input">input collection of items to sort</param>
-        /// <param name="comparer">the <see cref="CompareCallback"/> for comparing 2 items in <paramref name="input"/>.</param>
-        /// <returns>a new collection of stable sorted items.</returns>
-        public static void StableSortInPlace(Array input, CompareCallback comparer)
-        {
-            ArrayList ehancedInput = new ArrayList();
-            IEnumerator it = input.GetEnumerator();
-            int index = 0;
-            while (it.MoveNext())
-            {
-                ehancedInput.Add(new Entry(index, it.Current));
-                index++;
-            }
-
-            ehancedInput.Sort(Entry.GetComparer(comparer));
-
-            for (int i = 0; i < ehancedInput.Count; i++)
-            {
-                throw new NotImplementedException();
-//                input[i] = ((Entry)ehancedInput[i]).Value;
             }
         }
 

@@ -336,11 +336,8 @@ namespace Spring.Transaction.Support
 	                object root = syncs.SyncRoot;
 	                lock (root)
 	                {
-//	                    syncs.Sort(syncComparer);
-
-                        // StableSort
-	                    ICollection sorted = CollectionUtils.StableSort(syncs, syncComparer);
-                        syncs = new ArrayList( sorted );
+                        // #SPRNET-1160, tx Ben Rowlands 
+	                    CollectionUtils.StableSortInPlace(syncs, syncComparer);
                     }
 
 	                // Return unmodifiable snapshot, to avoid exceptions
