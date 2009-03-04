@@ -70,7 +70,6 @@ namespace Spring.Web.Support
         /// <seealso cref="System.Web.HttpServerUtility.Transfer(string,bool)"/>
         TransferNoPreserve = 2,
 
-#if !NET_1_0
     /// <summary>
     /// A redirect.
     /// </summary>
@@ -82,7 +81,5 @@ namespace Spring.Web.Support
     /// </remarks>
     /// <seealso cref="System.Web.HttpResponse.Redirect(string, bool)"/>
         RedirectNoAbort = 3
-#endif
-
     }
 }

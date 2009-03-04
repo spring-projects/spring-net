@@ -234,15 +234,13 @@ namespace Spring.Web.Support
             get { return (Mode == ResultMode.Transfer); }
         }
 
-#if !NET_1_0
-    /// <summary>
-    /// Indicates, if <see cref="HttpServerUtility.Redirect(string,bool)"/> should be called with endResponse='true' | 'false'. Only relevant for ResultMode.RedirectXXXX modes.
-    /// </summary>
+        /// <summary>
+        /// Indicates, if <see cref="HttpResponse.Redirect(string,bool)"/> should be called with endResponse='true' | 'false'. Only relevant for ResultMode.RedirectXXXX modes.
+        /// </summary>
         public bool EndResponse
         {
             get { return (Mode == ResultMode.Redirect); }
         }
-#endif
 
         #endregion
 
@@ -259,9 +257,7 @@ namespace Spring.Web.Support
             switch (Mode)
             {
                 case ResultMode.Redirect:
-#if !NET_1_0
                 case ResultMode.RedirectNoAbort:                    
-#endif
                     DoRedirect( context );
                     break;
                 case ResultMode.Transfer:
@@ -325,11 +321,7 @@ namespace Spring.Web.Support
         /// <seealso cref="System.Web.HttpResponse.Redirect(string)"/>
         protected virtual void DoRedirect( object context )
         {
-#if !NET_1_0
             HttpContext.Current.Response.Redirect( GetRedirectUri( context ), EndResponse );
-#else
-            HttpContext.Current.Response.Redirect( GetRedirectUri( context ) );
-#endif
         }
 
         /// <summary>
