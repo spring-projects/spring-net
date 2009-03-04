@@ -357,12 +357,20 @@ namespace Spring.ServiceModel
         {
             IProxyTypeBuilder builder = new ConfigurableServiceProxyTypeBuilder(TargetName, this.objectName, objectFactory, 
                 Name, Namespace, ConfigurationName, CallbackContract, ProtectionLevel, SessionMode);
+
             if (ContractInterface != null)
             {
                 builder.Interfaces = new Type[] { ContractInterface };
             }
             builder.TypeAttributes = TypeAttributes;
             builder.MemberAttributes = MemberAttributes;
+
+            if (builder.Interfaces.Length > 1)
+            {
+                throw new ArgumentException(String.Format(
+                    "ServiceExporter cannot export service type '{0}' as a WCF service because it implements multiple interfaces. Specify the contract interface to expose via the ContractInterface property.",
+                    builder.TargetType));
+            }
 
             proxyType = builder.BuildProxyType();
         }
@@ -382,6 +390,7 @@ namespace Spring.ServiceModel
                 string name, string ns, string configurationName, Type callbackContract, ProtectionLevel protectionLevel, SessionMode sessionMode)
                 : base(targetName, objectName, objectFactory)
             {
+
                 if (!StringUtils.HasText(configurationName))
                 {
                     name = this.Interfaces[0].Name;
@@ -475,13 +484,6 @@ namespace Spring.ServiceModel
             protected override Type[] GetProxiableInterfaces(Type[] interfaces)
             {
                 Type[] proxiableInterfaces = base.GetProxiableInterfaces(interfaces);
-
-                if (proxiableInterfaces.Length > 1)
-                {
-                    throw new ArgumentException(String.Format(
-                        "ServiceExporter cannot export service type '{0}' as a WCF service because it implements multiple interfaces. Specify the contract interface to expose via the ContractInterface property.", 
-                        this.TargetType));
-                }
 
                 return proxiableInterfaces;
             }

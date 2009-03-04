@@ -29,6 +29,7 @@ using System.Net.Security;
 using System.ServiceModel;
 
 using NUnit.Framework;
+using Spring.Objects.Factory.Config;
 using Spring.ServiceModel;
 using Spring.Core.IO;
 using Spring.Objects.Factory;
@@ -54,6 +55,7 @@ namespace Spring.ServiceModel
     @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='service' type='Spring.ServiceModel.ServiceExporterTests+Service, Spring.Services.Tests'/>
+	<object id='serviceWithMultipleInterfaces' type='Spring.ServiceModel.ServiceExporterTests+ServiceWithMultipleInterfaces, Spring.Services.Tests'/>
     <object id='decoratedService' type='Spring.ServiceModel.ServiceExporterTests+DecoratedService, Spring.Services.Tests'/>
 </objects>";
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml));
@@ -81,6 +83,29 @@ namespace Spring.ServiceModel
             Type proxyType = se.GetObject() as Type;
             Assert.IsNotNull(proxyType);
             Assert.IsTrue(typeof(IContract).IsAssignableFrom(proxyType));
+        }
+
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1179")]
+        public void ProxiesOnlyContractInterface()
+        {
+            se.ObjectName = "ProxiesOnlyContractInterface";
+            se.TargetName = "serviceWithMultipleInterfaces";
+            se.ContractInterface = typeof(IContract);
+            se.AfterPropertiesSet();
+
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
+            Assert.IsTrue(typeof(IContract).IsAssignableFrom(proxyType));
+        }
+
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1179")]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "ServiceExporter cannot export service type 'Spring.ServiceModel.ServiceExporterTests+ServiceWithMultipleInterfaces' as a WCF service because it implements multiple interfaces. Specify the contract interface to expose via the ContractInterface property.")]
+        public void ProxiesOnlyContractInterfaceFailsIfNoContractInterface()
+        {
+            se.ObjectName = "ProxiesOnlyContractInterface";
+            se.TargetName = "serviceWithMultipleInterfaces";
+            // se.ContractInterface = typeof (IContract);
+            se.AfterPropertiesSet();
         }
 
         [Test]
@@ -128,7 +153,7 @@ namespace Spring.ServiceModel
             se.Namespace = "http://Spring.Services.Tests";
             se.ProtectionLevel = ProtectionLevel.Sign;
             se.SessionMode = SessionMode.Required;
-            
+
             se.AfterPropertiesSet();
 
             Type proxyType = se.GetObject() as Type;
@@ -231,12 +256,19 @@ namespace Spring.ServiceModel
             string SomeMethod(int param);
         }
 
+        public interface IOtherContract
+        { }
+
         public class Service : IContract
         {
             public string SomeMethod(int param)
             {
                 return param.ToString();
             }
+        }
+
+        public class ServiceWithMultipleInterfaces : Service, IOtherContract
+        {
         }
 
         [ServiceContract(Namespace = "http://Spring.Services.Tests")]
