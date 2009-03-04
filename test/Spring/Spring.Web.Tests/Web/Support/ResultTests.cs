@@ -148,6 +148,7 @@ namespace Spring.Web.Support
                             "from the result string passed into the ctor.");
         }
 
+#if !NET_1_0
         [Test]
         public void WithRedirectNoAbortResultMode()
         {
@@ -161,6 +162,8 @@ namespace Spring.Web.Support
                             "The TargetPage property is not being correctly extracted " +
                             "from the result string passed into the ctor.");
         }
+
+#endif
 
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
