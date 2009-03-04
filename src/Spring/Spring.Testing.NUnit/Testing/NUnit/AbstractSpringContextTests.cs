@@ -105,7 +105,21 @@ namespace Spring.Testing.NUnit
         /// <param name="locations">Locations </param>
 	    protected void SetDirty(string[] locations) 
         {
-		    String keyString = ContextKeyString(locations);
+            SetDirty((object)locations);
+	    }
+
+        /// <summary>
+        /// Set context with <paramref name="contextKey"/> dirty. This will cause 
+        /// it to be reloaded from the cache before the next test case is executed.
+        /// </summary>
+        /// <remarks>
+        /// Call this method only if you change the state of a singleton
+        /// object, potentially affecting future tests.
+        /// </remarks>
+        /// <param name="contextKey">Locations </param>
+	    protected void SetDirty(object contextKey) 
+        {
+		    String keyString = ContextKeyString(contextKey);
 		    IConfigurableApplicationContext ctx =
 				    (IConfigurableApplicationContext) contextKeyToContextMap[keyString];
 	        contextKeyToContextMap.Remove(keyString);
