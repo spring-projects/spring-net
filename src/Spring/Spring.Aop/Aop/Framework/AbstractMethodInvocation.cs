@@ -130,7 +130,9 @@ namespace Spring.Aop.Framework
 		{
 			#region Sanity Check
 
-			AssertUtils.ArgumentNotNull(target, "target");
+            // EE: There is not necessarily always a target - e.g. for DynamicEntities
+            // moved this check to InvokeJoinpoint()
+//			AssertUtils.ArgumentNotNull(target, "target");
             AssertUtils.ArgumentNotNull(method, "method");
 
 			#endregion
@@ -253,6 +255,7 @@ namespace Spring.Aop.Framework
             if (this.interceptors == null ||
                 this.currentInterceptorIndex == this.interceptors.Count)
             {
+                AssertJoinpoint();
                 return InvokeJoinpoint();
             }
             object interceptor = this.interceptors[this.currentInterceptorIndex];
@@ -295,6 +298,27 @@ namespace Spring.Aop.Framework
         /// <see cref="Spring.Aop.Framework.ReflectiveMethodInvocation.PrepareMethodInvocationForProceed"/>
         protected abstract IMethodInvocation PrepareMethodInvocationForProceed(
             IMethodInvocation invocation);
+
+        /// <summary>
+        /// Performs sanity checks, whether the actual joinpoint may be invoked
+        /// </summary>
+        /// <remarks>
+        /// By default checks that the underlying target is not null and the called method is implemented
+        /// by the target's type.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">if <see cref="target"/> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">if the <see cref="target"/> 's type does not implement <see cref="method"/>.</exception>
+        protected virtual void AssertJoinpoint()
+        {
+            AssertUtils.ArgumentNotNull(target, "target");
+//            if (this.method != null 
+//                && !this.method.DeclaringType.IsAssignableFrom(target.GetType()))
+//            {
+//                // This means the target type doesn't implement the interface.
+//                // Since no interceptor has handled the call, we throw a sensible exception here.
+//                throw new NotSupportedException(string.Format("Interface method '{0}.{1}()' was not handled by any interceptor and the underlying target type '{2}' does not implement this method.", method.DeclaringType.FullName, method.Name, target.GetType().FullName));
+//            }
+        }
 
 		/// <summary>
 		/// Invokes the joinpoint.

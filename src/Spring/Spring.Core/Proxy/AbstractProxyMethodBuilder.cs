@@ -275,7 +275,14 @@ namespace Spring.Proxy
             // setup target object for call
             PushTarget(il);
 
-            // cast to type method is on
+            // TODO (EE): check for null and interface type and throw NotSupportedException
+            LocalBuilder targetRef = il.DeclareLocal(typeof(object));
+            il.Emit(OpCodes.Stloc, targetRef);
+
+            CallAssertUnderstands(il, interfaceMethod, targetRef, "target");
+
+            // setup target and cast to type method is on
+            il.Emit(OpCodes.Ldloc, targetRef);
             il.Emit(OpCodes.Castclass, interfaceMethod.DeclaringType);
 
             // setup parameters for call
@@ -289,6 +296,17 @@ namespace Spring.Proxy
             il.EmitCall(OpCodes.Callvirt, interfaceMethod, null);
         }
 
+        private void CallAssertUnderstands(ILGenerator il, MethodInfo method, LocalBuilder targetRef, string targetName)
+        {
+            // AssertArgumentType
+            il.Emit(OpCodes.Ldloc, targetRef);
+            il.Emit(OpCodes.Ldstr, targetName);
+            il.Emit(OpCodes.Ldtoken, method.DeclaringType);
+            il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle", new Type[] { typeof(RuntimeTypeHandle) }));
+//            il.Emit(OpCodes.Ldstr, string.Format("Interface method '{0}.{1}()' was not handled by any interceptor and the target does not implement this method.", method.DeclaringType.FullName, method.Name));
+            il.Emit(OpCodes.Call, typeof(AssertUtils).GetMethod("Understands", new Type[] { typeof(object), typeof(string), typeof(Type) }));
+        }
+
         /// <summary>
         /// Calls base method directly.
         /// </summary>
@@ -298,6 +316,16 @@ namespace Spring.Proxy
         {
             // setup proxy instance for call
             PushProxy(il);
+
+            // TODO (EE): check for null and interface type and throw NotSupportedException
+            LocalBuilder targetRef = il.DeclareLocal(typeof(object));
+            il.Emit(OpCodes.Stloc, targetRef);
+
+            CallAssertUnderstands(il, method, targetRef, "base");
+
+            // setup target and cast to type method is on
+            il.Emit(OpCodes.Ldloc, targetRef);
+            il.Emit(OpCodes.Castclass, method.DeclaringType);
 
             // setup parameters for call
             ParameterInfo[] paramArray = method.GetParameters();
@@ -341,6 +369,21 @@ namespace Spring.Proxy
             il.Emit(OpCodes.Stloc, returnValue);
 
             il.MarkLabel(jmpMethodReturn);
+        }
+
+        /// <summary>
+        /// Generates code that throws <see cref="InvalidOperationException"/>.
+        /// </summary>
+        /// <param name="il">IL generator to use.</param>
+        /// <param name="exceptionType">the type of the exception to throw</param>
+        /// <param name="message">Error message to use.</param>
+        protected static void EmitThrowException(ILGenerator il, Type exceptionType, string message)
+        {
+            ConstructorInfo NewException = exceptionType.GetConstructor(new Type[] { typeof(string) });
+
+            il.Emit(OpCodes.Ldstr, message);
+            il.Emit(OpCodes.Newobj, NewException);
+            il.Emit(OpCodes.Throw);
         }
 
         #endregion

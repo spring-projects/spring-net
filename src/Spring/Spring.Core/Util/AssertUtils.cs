@@ -23,6 +23,10 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.Reflection;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Proxies;
+using System.Runtime.Serialization;
 
 #endregion
 
@@ -37,9 +41,125 @@ namespace Spring.Util
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
+	/// <author>Erich Eichinger</author>
 	public sealed class AssertUtils
 	{
-		/// <summary>
+        ///<summary>
+        /// Checks, whether <paramref name="method"/> may be invoked on <paramref name="target"/>. 
+        /// Supports testing transparent proxies.
+        ///</summary>
+        ///<param name="target">the target instance or <c>null</c></param>
+        ///<param name="targetName">the name of the target to be used in error messages</param>
+        ///<param name="method">the method to test for</param>
+        /// <exception cref="ArgumentNullException">
+        /// if <paramref name="method"/> is <c>null</c>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// if it is not possible to invoke <paramref name="method"/> on <paramref name="target"/>
+        /// </exception>
+        public static void Understands(object target, string targetName, MethodBase method)
+        {
+            ArgumentNotNull(method, "method");
+                
+            if (target==null )
+            {
+                if (method.IsStatic)
+                {
+                    return;
+                }
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Target '{0}' is null and target method '{1}.{2}' is not static.", targetName, method.DeclaringType.FullName, method.Name));
+            }
+
+            Understands(target, targetName, method.DeclaringType);
+        }
+
+        ///<summary>
+        /// checks, whether <paramref name="target"/> supports the methods of <paramref name="requiredType"/>.
+        /// Supports testing transparent proxies.
+        ///</summary>
+        ///<param name="target">the target instance or <c>null</c></param>
+        ///<param name="targetName">the name of the target to be used in error messages</param>
+        ///<param name="requiredType">the type to test for</param>
+        /// <exception cref="ArgumentNullException">
+        /// if <paramref name="requiredType"/> is <c>null</c>
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// if it is not possible to invoke methods of 
+        /// type <paramref name="requiredType"/> on <paramref name="target"/>
+        /// </exception>
+        public static void Understands(object target, string targetName, Type requiredType)
+        {
+            ArgumentNotNull(requiredType, "requiredType");
+
+            if (target == null)
+            {
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Target '{0}' is null.", targetName));
+            }
+
+            Type targetType;
+            if (RemotingServices.IsTransparentProxy(target))
+            {
+                RealProxy rp = RemotingServices.GetRealProxy(target);
+                IRemotingTypeInfo rti = rp as IRemotingTypeInfo;
+                if (rti != null)
+                {
+                    if (rti.CanCastTo(requiredType, target))
+                    {
+                        return;
+                    }
+                    throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Target '{0}' is a transparent proxy that does not support methods of '{1}'.", targetName, requiredType.FullName));                                    
+                }
+                targetType = rp.GetProxiedType();
+            }
+            else
+            {
+                targetType = target.GetType();                
+            }
+
+            if (!requiredType.IsAssignableFrom(targetType))
+            {
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Target '{0}' of type '{1}' does not support methods of '{2}'.", targetName, targetType, requiredType.FullName));                
+            }
+        }
+
+        #region checking casts on transparent proxies (From BCL via Reflector)
+        //        private static bool CheckCast(RealProxy rp, Type castType)
+//        {
+//            bool flag = false;
+//            if (castType == typeof(object))
+//            {
+//                return true;
+//            }
+//            if (!castType.IsInterface && !castType.IsMarshalByRef)
+//            {
+//                return false;
+//            }
+//            if (castType != typeof(IObjectReference))
+//            {
+//                IRemotingTypeInfo typeInfo = rp as IRemotingTypeInfo;
+//                if (typeInfo != null)
+//                {
+//                    return typeInfo.CanCastTo(castType, rp.GetTransparentProxy());
+//                }
+//                Identity identityObject = rp.IdentityObject;
+//                if (identityObject != null)
+//                {
+//                    ObjRef objectRef = identityObject.ObjectRef;
+//                    if (objectRef != null)
+//                    {
+//                        typeInfo = objectRef.TypeInfo;
+//                        if (typeInfo != null)
+//                        {
+//                            flag = typeInfo.CanCastTo(castType, rp.GetTransparentProxy());
+//                        }
+//                    }
+//                }
+//            }
+//            return flag;
+        //        }
+        #endregion
+
+        /// <summary>
 		/// Checks the value of the supplied <paramref name="argument"/> and throws an
 		/// <see cref="System.ArgumentNullException"/> if it is <see langword="null"/>.
 		/// </summary>

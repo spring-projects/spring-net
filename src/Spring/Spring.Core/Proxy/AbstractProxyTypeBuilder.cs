@@ -27,6 +27,7 @@ using System.Reflection.Emit;
 using System.Runtime.Serialization;
 
 using Common.Logging;
+using Spring.Collections;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 
@@ -964,7 +965,7 @@ namespace Spring.Proxy
         /// </returns>
         protected virtual Type[] GetProxiableInterfaces(Type[] interfaces)
         {
-            ArrayList proxiableInterfaces = new ArrayList();
+            ArrayList  proxiableInterfaces = new ArrayList();
 
             foreach(Type intf in interfaces)
             {
@@ -972,7 +973,19 @@ namespace Spring.Proxy
                     !IsSpecialInterface(intf) &&
                     ReflectionUtils.IsTypeVisible(intf, DynamicProxyManager.ASSEMBLY_NAME))
                 {
-                    proxiableInterfaces.Add(intf);
+                    if (!proxiableInterfaces.Contains(intf))
+                    {
+                        proxiableInterfaces.Add(intf);
+                    }
+
+                    Type[] baseInterfaces = intf.GetInterfaces();
+                    foreach (Type baseInterface in baseInterfaces)
+                    {
+                        if (!proxiableInterfaces.Contains(baseInterface))
+                        {
+                            proxiableInterfaces.Add(baseInterface);
+                        }
+                    }
                 }
             }
 

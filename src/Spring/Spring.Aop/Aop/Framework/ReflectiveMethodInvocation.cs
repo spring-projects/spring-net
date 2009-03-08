@@ -92,14 +92,10 @@ namespace Spring.Aop.Framework
         {
             try
             {
-                if (proxyMethod == null)
-                {
-                    return method.Invoke(target, arguments);
-                }
-                else
-                {
-                    return proxyMethod.Invoke(target, arguments);
-                }
+                MethodInfo targetMethodInfo = ((this.proxyMethod == null)) ? method : this.proxyMethod;
+                
+                AssertUtils.Understands(target, "target", targetMethodInfo);
+                return targetMethodInfo.Invoke(target, arguments);
             }
             catch (TargetInvocationException ex)
             {

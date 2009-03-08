@@ -34,6 +34,7 @@ using System.Runtime.Remoting;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
+using Rhino.Mocks;
 using Spring.Aop.Target;
 using Spring.Aop.Framework;
 using Spring.Aop.Framework.Adapter;
@@ -71,7 +72,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         [TestFixtureSetUp]
         public void FixtureSetUp()
         {
-//            SystemUtils.RegisterLoadedAssemblyResolver();
+            //            SystemUtils.RegisterLoadedAssemblyResolver();
         }
 
         [SetUp]
@@ -249,8 +250,136 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(name, to.Name);
         }
 
+        #region ImplementsInterfaceHierarchy Types
+
+        public interface ITestPerson
+        {
+            long Id { get; set; }
+            string Name { get; set; }
+        }
+
+        public interface ITestCustomer : ITestPerson
+        {
+            string Company { get; set; }
+        }
+
+        #endregion
+
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1174")]
+        public void ImplementsInterfaceHierarchy()
+        {
+            MockRepository mocks = new MockRepository();
+
+            IMethodInterceptor mi = (IMethodInterceptor)mocks.DynamicMock(typeof(IMethodInterceptor));
+
+            Expect.Call(mi.Invoke(null)).IgnoreArguments().Return((long)5);
+            Expect.Call(mi.Invoke(null)).IgnoreArguments().Return("Customer Name");
+            Expect.Call(mi.Invoke(null)).IgnoreArguments().Return("Customer Company");
+            mocks.ReplayAll();
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.AddAdvice(mi);
+            advised.Interfaces = new Type[] { typeof(ITestCustomer) };
+
+            ITestCustomer to = CreateProxy(advised) as ITestCustomer;
+            Assert.IsNotNull(to);
+            Assert.AreEqual((long)5, to.Id, "Incorrect Id");
+            Assert.AreEqual("Customer Name", to.Name, "Incorrect Name");
+            Assert.AreEqual("Customer Company", to.Company, "Incorrect Company");
+
+            mocks.VerifyAll();
+        }
+
         [Test]
-        public void InterceptorInvokedWithNoTarget()
+        [ExpectedException(typeof(NotSupportedException)
+         , ExpectedMessage = "Target 'target' is null.")]
+        public void Does_proxy_interfacemethods_without_implementation_and_by_default_throws_NotSupportedException()
+        {
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.TargetSource = new DynamicTargetSource(typeof(object), null);
+            advised.Interfaces = new Type[] { typeof(ITestObject) };
+
+            ITestObject proxy = CreateProxy(advised) as ITestObject;
+            Assert.IsNotNull(proxy);
+
+            proxy.GetDescription();
+        }
+
+        [Test]
+        public void Does_proxy_interfacemethods_without_implementation_and_delegates_to_interceptors()
+        {
+            DynamicInvocationTestInterceptor invocationInterceptor = new DynamicInvocationTestInterceptor();
+            DynamicTargetSource targetSource = new DynamicTargetSource(typeof(object), null);
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.TargetSource = targetSource;
+            advised.Interfaces = new Type[] { typeof(ITestObject) };
+            advised.AddAdvice(invocationInterceptor);
+            ITestObject proxy = CreateProxy(advised) as ITestObject;
+            Assert.IsNotNull(proxy);
+
+            // target null, call handled by interceptor
+            targetSource.Target = null;
+            invocationInterceptor.CallProceed = false;
+            proxy.GetDescription();
+            Assert.AreEqual("GetDescription", invocationInterceptor.LastMethodInvocation.Method.Name);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException), MatchType=MessageMatch.Contains, UserMessage="'target'")]
+        public void Does_proxy_interfacemethods_without_implementation_and_throws_ArgumentNullException_On_NullTarget()
+        {
+            DynamicInvocationTestInterceptor invocationInterceptor = new DynamicInvocationTestInterceptor();
+            DynamicTargetSource targetSource = new DynamicTargetSource(typeof(object), null);
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.TargetSource = targetSource;
+            advised.Interfaces = new Type[] { typeof(ITestObject) };
+            advised.AddAdvice(invocationInterceptor);
+            ITestObject proxy = CreateProxy(advised) as ITestObject;
+            Assert.IsNotNull(proxy);
+
+            // target null, call not handled by interceptor
+            targetSource.Target = null;
+            invocationInterceptor.CallProceed = true;
+            proxy.GetDescription();
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotSupportedException)
+            , ExpectedMessage = "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.")]
+        public void Does_proxy_interfacemethods_without_implementation_and_throws_NotSupportedException_On_Incompatible_Target()
+        {
+            DynamicInvocationTestInterceptor invocationInterceptor = new DynamicInvocationTestInterceptor();
+            DynamicTargetSource targetSource = new DynamicTargetSource(typeof(object), null);
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.TargetSource = targetSource;
+            advised.Interfaces = new Type[] { typeof(ITestObject) };
+            advised.AddAdvice(invocationInterceptor);
+            ITestObject proxy = CreateProxy(advised) as ITestObject;
+            Assert.IsNotNull(proxy);
+
+            // target incompatible, call not handled by interceptor
+            targetSource.Target = new object();
+            invocationInterceptor.CallProceed = true;
+            proxy.GetDescription();
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotSupportedException)
+            , ExpectedMessage = "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.")]
+        public void NoInterceptorWithNoTarget()
+        {
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Interfaces = new Type[] { typeof(ITestObject) };
+
+            ITestObject to = CreateProxy(advised) as ITestObject;
+            to.GetDescription();
+        }
+
+        [Test]
+        public void InterceptorHandledCallWithNoTarget()
         {
             int age = 26;
             DynamicMock mock = new DynamicMock(typeof(IMethodInterceptor));
@@ -265,6 +394,20 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.IsNotNull(to);
             Assert.IsTrue(to.Age == age, "Incorrect age");
             mock.Verify();
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotSupportedException)
+            , ExpectedMessage = "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.")]
+        public void InterceptorUnhandledCallWithNoTarget()
+        {
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.AddAdvice(new NopInterceptor());
+            advised.Interfaces = new Type[] { typeof(ITestObject) };
+
+            ITestObject to = CreateProxy(advised) as ITestObject;
+            Assert.IsNotNull(to);
+            to.GetDescription();
         }
 
         [Test]
@@ -492,10 +635,10 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         public interface IRefOutTestObject
         {
-            int DoIt(int valueType, TestObject obj, EnumValue enumValue, 
+            int DoIt(int valueType, TestObject obj, EnumValue enumValue,
                 ref bool refValueType, out int outValueType,
                 ref String refObj, out TestObject outObj,
-                ref EnumValue refEnum, out EnumValue outEnum, 
+                ref EnumValue refEnum, out EnumValue outEnum,
                 ref Guid refGuid, out Guid outGuid);
         }
 
@@ -504,7 +647,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             public int DoIt(int valueType, TestObject obj, EnumValue enumValue,
                 ref bool refValueType, out int outValueType,
                 ref String refObj, out TestObject outObj,
-                ref EnumValue refEnum, out EnumValue outEnum, 
+                ref EnumValue refEnum, out EnumValue outEnum,
                 ref Guid refGuid, out Guid outGuid)
             {
                 valueType++;
@@ -652,7 +795,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void InterceptGenericMethod()
         {
-            AbstractProxyTypeBuilderTests.ClassWithGenericMethod target = 
+            AbstractProxyTypeBuilderTests.ClassWithGenericMethod target =
                 new AbstractProxyTypeBuilderTests.ClassWithGenericMethod();
             mockTargetSource.SetTarget(target);
 
@@ -692,7 +835,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void InterceptGenericInterface()
         {
-            AbstractProxyTypeBuilderTests.ClassThatImplementsGenericInterface<TestObject> target = 
+            AbstractProxyTypeBuilderTests.ClassThatImplementsGenericInterface<TestObject> target =
                 new AbstractProxyTypeBuilderTests.ClassThatImplementsGenericInterface<TestObject>();
             mockTargetSource.SetTarget(target);
 
@@ -702,7 +845,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             advised.TargetSource = mockTargetSource;
             advised.AddAdvice(ni);
 
-            AbstractProxyTypeBuilderTests.GenericInterface<TestObject> proxy = 
+            AbstractProxyTypeBuilderTests.GenericInterface<TestObject> proxy =
                 CreateProxy(advised) as AbstractProxyTypeBuilderTests.GenericInterface<TestObject>;
             Assert.IsNotNull(proxy);
 
@@ -1034,21 +1177,21 @@ namespace Spring.Aop.Framework.DynamicProxy
             pf.AddAdvice(new CountingBeforeAdvice());
             pf.AddAdvice(new CountingAfterReturningAdvice());
             pf.AddAdvice(cta);
-            IPerson p = (IPerson) CreateAopProxy(pf).GetProxy();
+            IPerson p = (IPerson)CreateAopProxy(pf).GetProxy();
 
             p.Echo(null);
             Assert.AreEqual(0, cta.GetCalls());
-            try 
+            try
             {
                 p.Echo(new Exception());
             }
-            catch (Exception) 
+            catch (Exception)
             {
             }
             Assert.AreEqual(1, cta.GetCalls());
 
             // Will throw exception if it fails
-            IPerson p2 = (IPerson) SerializationTestUtils.SerializeAndDeserialize(p);
+            IPerson p2 = (IPerson)SerializationTestUtils.SerializeAndDeserialize(p);
             Assert.AreNotSame(p, p2);
             Assert.AreEqual(p.GetName(), p2.GetName());
             Assert.AreEqual(p.GetAge(), p2.GetAge());
@@ -1070,10 +1213,10 @@ namespace Spring.Aop.Framework.DynamicProxy
             p2.GetAge();
             Assert.AreEqual(1, ni.Count);
 
-            cta = (CountingThrowsAdvice) a2.Advisors[3].Advice;
+            cta = (CountingThrowsAdvice)a2.Advisors[3].Advice;
             p2.Echo(null);
             Assert.AreEqual(1, cta.GetCalls());
-            try 
+            try
             {
                 p2.Echo(new Exception());
             }
@@ -1091,7 +1234,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// and don't conflict.
         /// </summary>
         [Test]
-        public void OneAdvisedObjectCallsAnother() 
+        public void OneAdvisedObjectCallsAnother()
         {
             int age1 = 33;
             int age2 = 37;
@@ -1104,7 +1247,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             pf1.AddAdvice(0, di1);
             pf1.AddAdvice(1, new ProxyMatcherInterceptor());
             pf1.AddAdvice(2, new MethodInvocationMatcherInterceptor());
-            ITestObject advised1 = (ITestObject) pf1.GetProxy();
+            ITestObject advised1 = (ITestObject)pf1.GetProxy();
             advised1.Age = age1; // = 1 invocation
 
             TestObject target2 = new TestObject();
@@ -1114,7 +1257,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             pf2.AddAdvice(0, di2);
             pf2.AddAdvice(1, new ProxyMatcherInterceptor());
             pf2.AddAdvice(2, new MethodInvocationMatcherInterceptor());
-            ITestObject advised2 = (ITestObject) CreateProxy(pf2);
+            ITestObject advised2 = (ITestObject)CreateProxy(pf2);
             advised2.Age = age2;
             advised1.Spouse = advised2; // = 2 invocations
 
@@ -1244,7 +1387,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             AdvisedSupport advised = new AdvisedSupport(new Type[] { typeof(ITestObject) });
             advised.Target = raw;
 
-            ITestObject to = (ITestObject) CreateProxy(advised);
+            ITestObject to = (ITestObject)CreateProxy(advised);
             Assert.IsTrue(to.Spouse == to, "this return is wrapped in proxy");
         }
 
@@ -1256,10 +1399,10 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion        
+        #endregion
 
         [Test]
-        public void TargetThrowsException() 
+        public void TargetThrowsException()
         {
             Exception expectedException = new ApplicationException();
 
@@ -1268,13 +1411,13 @@ namespace Spring.Aop.Framework.DynamicProxy
             advised.Target = new TestObject();
             IAopProxy aop = CreateAopProxy(advised);
 
-            try 
+            try
             {
-                ITestObject to = (ITestObject) aop.GetProxy();
+                ITestObject to = (ITestObject)aop.GetProxy();
                 to.Exceptional(expectedException);
                 Assert.Fail("Should have thrown exception raised by target");
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Assert.AreEqual(expectedException, ex, "exception matches");
             }
@@ -1324,60 +1467,60 @@ namespace Spring.Aop.Framework.DynamicProxy
         #endregion
 
         // TODO : Introduction tests
-/*
-        [Test(Description = "Test stateful interceptor")]
-        public void MixinWithIntroductionAdvisor()
-        {
-            TestObject to = new TestObject();
-            AdvisedSupport advised = new AdvisedSupport(new Type[] { typeof(ITestObject) });
-            advised.AddAdvisor(new LockMixinAdvisor());
-            advised.Target = to;
+        /*
+                [Test(Description = "Test stateful interceptor")]
+                public void MixinWithIntroductionAdvisor()
+                {
+                    TestObject to = new TestObject();
+                    AdvisedSupport advised = new AdvisedSupport(new Type[] { typeof(ITestObject) });
+                    advised.AddAdvisor(new LockMixinAdvisor());
+                    advised.Target = to;
 
-            CheckTestObjectIntroduction(advised);
-        }
+                    CheckTestObjectIntroduction(advised);
+                }
 
-        [Test]
-        public void MixinWithIntroductionInfo()
-        {
-            TestObject to = new TestObject();
-            AdvisedSupport advised = new AdvisedSupport(new Type[] { typeof(ITestObject) });
-            advised.AddAdvice(new LockMixin());
-            advised.Target = to;
+                [Test]
+                public void MixinWithIntroductionInfo()
+                {
+                    TestObject to = new TestObject();
+                    AdvisedSupport advised = new AdvisedSupport(new Type[] { typeof(ITestObject) });
+                    advised.AddAdvice(new LockMixin());
+                    advised.Target = to;
 
-            CheckTestObjectIntroduction(advised);
-        }
+                    CheckTestObjectIntroduction(advised);
+                }
 
-        private void CheckTestObjectIntroduction(AdvisedSupport advised) 
-        {
-            int newAge = 65;
+                private void CheckTestObjectIntroduction(AdvisedSupport advised) 
+                {
+                    int newAge = 65;
 
-            ITestObject ito = (ITestObject) CreateProxy(advised);
-            ito.Age = newAge;
-            Assert.IsTrue(ito.Age == newAge);
+                    ITestObject ito = (ITestObject) CreateProxy(advised);
+                    ito.Age = newAge;
+                    Assert.IsTrue(ito.Age == newAge);
 
-            ILockable lockable = (ILockable) ito;
-            Assert.IsFalse(lockable.Locked());
-            lockable.DoLock();
+                    ILockable lockable = (ILockable) ito;
+                    Assert.IsFalse(lockable.Locked());
+                    lockable.DoLock();
 
-            Assert.IsTrue(ito.Age == newAge);
-            try 
-            {
-                ito.Age = 1;
-                Assert.Fail("Setters should fail when locked");
-            }
-            catch (LockedException) 
-            {
-                // ok
-            }
-            Assert.IsTrue(ito.Age == newAge);
+                    Assert.IsTrue(ito.Age == newAge);
+                    try 
+                    {
+                        ito.Age = 1;
+                        Assert.Fail("Setters should fail when locked");
+                    }
+                    catch (LockedException) 
+                    {
+                        // ok
+                    }
+                    Assert.IsTrue(ito.Age == newAge);
 
-            // Unlock
-            Assert.IsTrue(lockable.Locked());
-            lockable.Unlock();
-            ito.Age = 1;
-            Assert.IsTrue(ito.Age == 1);
-        }
-*/
+                    // Unlock
+                    Assert.IsTrue(lockable.Locked());
+                    lockable.Unlock();
+                    ito.Age = 1;
+                    Assert.IsTrue(ito.Age == 1);
+                }
+        */
 
         #region MultipleProceedCalls
 
@@ -1668,33 +1811,33 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         // TODO : Opaque can be implemented if really usefull (To increase performance)
-/*
-        public void testCanPreventCastToAdvisedUsingOpaque() 
-        {
-            TestObject target = new TestObject();
-            ProxyFactory pf = new ProxyFactory(target);
-            pf.Interfaces = new Type[] { typeof(ITestObject) };
-            pf.AddAdvice(new NopInterceptor());
-            CountingBeforeAdvice mba = new CountingBeforeAdvice();
-            NameMatchMethodPointcut nmmp = new NameMatchMethodPointcut();
-            nmmp.MappedName = "set_Age";
-            IAdvisor advisor = new DefaultPointcutAdvisor(nmmp, mba);
-            pf.AddAdvisor(advisor);
-            Assert.IsFalse(pf.Opaque, "Opaque defaults to false");
-            pf.Opaque = true;
-            Assert.IsTrue(pf.Opaque, "Opaque now true for this config");
-            ITestObject proxied = (ITestObject) CreateProxy(pf);
-            proxied.Age = 10;
-            Assert.AreEqual(10, proxied.Age);
-            Assert.AreEqual(1, mba.GetCalls());
+        /*
+                public void testCanPreventCastToAdvisedUsingOpaque() 
+                {
+                    TestObject target = new TestObject();
+                    ProxyFactory pf = new ProxyFactory(target);
+                    pf.Interfaces = new Type[] { typeof(ITestObject) };
+                    pf.AddAdvice(new NopInterceptor());
+                    CountingBeforeAdvice mba = new CountingBeforeAdvice();
+                    NameMatchMethodPointcut nmmp = new NameMatchMethodPointcut();
+                    nmmp.MappedName = "set_Age";
+                    IAdvisor advisor = new DefaultPointcutAdvisor(nmmp, mba);
+                    pf.AddAdvisor(advisor);
+                    Assert.IsFalse(pf.Opaque, "Opaque defaults to false");
+                    pf.Opaque = true;
+                    Assert.IsTrue(pf.Opaque, "Opaque now true for this config");
+                    ITestObject proxied = (ITestObject) CreateProxy(pf);
+                    proxied.Age = 10;
+                    Assert.AreEqual(10, proxied.Age);
+                    Assert.AreEqual(1, mba.GetCalls());
 
-            Assert.IsFalse(proxied is IAdvised, "Cannot be cast to Advised", );
-        }
- */
+                    Assert.IsFalse(proxied is IAdvised, "Cannot be cast to Advised", );
+                }
+         */
 
         // TODO AdviceSupportListeners test
         #region AdviceSupportListeners
-/*
+        /*
         [Test]
         public void AdviceSupportListeners()
         {
@@ -1791,7 +1934,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             TestDynamicPointcutAdvisor dp = new TestDynamicPointcutAdvisor(new NopInterceptor(), "get_Age");
             pf.AddAdvisor(dp);
             pf.Target = to;
-            ITestObject it = (ITestObject) CreateProxy(pf);
+            ITestObject it = (ITestObject)CreateProxy(pf);
             Assert.AreEqual(dp.count, 0);
             int age = it.Age;
             Assert.IsNotNull(age);  // avoid mono mcs CS0218
@@ -1872,7 +2015,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             TestStaticPointcutAdvisor sp = new TestStaticPointcutAdvisor(ni, "get_Age");
             pf.AddAdvisor(sp);
             pf.Target = to;
-            ITestObject it = (ITestObject) CreateProxy(pf);
+            ITestObject it = (ITestObject)CreateProxy(pf);
             Assert.AreEqual(ni.Count, 0);
             int age = it.Age;
             Assert.IsNotNull(age); // avoid mono mcs error CS0219
@@ -1907,106 +2050,106 @@ namespace Spring.Aop.Framework.DynamicProxy
         #region CloneInvocationToProceedThreeTimes
 
         // TODO ? ReflectiveMethodInvocation is not Cloneable
-/*
-        [Test(Description="There are times when we want to call proceed() twice.")]
-        public void CloneInvocationToProceedThreeTimes() 
-        {
-            //We can do this if we clone the invocation.
+        /*
+                [Test(Description="There are times when we want to call proceed() twice.")]
+                public void CloneInvocationToProceedThreeTimes() 
+                {
+                    //We can do this if we clone the invocation.
 
-            TestObject to = new TestObject();
-            ProxyFactory pf = new ProxyFactory(to);
-            pf.AddInterface(typeof(ITestObject));
+                    TestObject to = new TestObject();
+                    ProxyFactory pf = new ProxyFactory(to);
+                    pf.AddInterface(typeof(ITestObject));
 
-            TwoBirthdayAdvice twoBirthdayAdvice = new TwoBirthdayAdvice();
+                    TwoBirthdayAdvice twoBirthdayAdvice = new TwoBirthdayAdvice();
 
-            TwoBirthdayPointcutAdvisor sp = new TwoBirthdayPointcutAdvisor(twoBirthdayAdvice);
-            pf.AddAdvisor(sp);
-            ITestObject ito = (ITestObject)CreateProxy(pf);
+                    TwoBirthdayPointcutAdvisor sp = new TwoBirthdayPointcutAdvisor(twoBirthdayAdvice);
+                    pf.AddAdvisor(sp);
+                    ITestObject ito = (ITestObject)CreateProxy(pf);
 
-            int age = 20;
-            ito.Age = age;
-            Assert.AreEqual(age, ito.Age);
-            // Should return the age before the third, AOP-induced birthday
-            Assert.AreEqual(age + 2, ito.haveBirthday());
-            // Return the final age produced by 3 birthdays
-            Assert.AreEqual(age + 3, ito.Age);
-        }
+                    int age = 20;
+                    ito.Age = age;
+                    Assert.AreEqual(age, ito.Age);
+                    // Should return the age before the third, AOP-induced birthday
+                    Assert.AreEqual(age + 2, ito.haveBirthday());
+                    // Return the final age produced by 3 birthdays
+                    Assert.AreEqual(age + 3, ito.Age);
+                }
 
-        private class TwoBirthdayPointcutAdvisor : StaticMethodMatcherPointcutAdvisor
-        {
-            public TwoBirthdayPointcutAdvisor(IAdvice advice)
-                : base(advice)
-            {
-            }
+                private class TwoBirthdayPointcutAdvisor : StaticMethodMatcherPointcutAdvisor
+                {
+                    public TwoBirthdayPointcutAdvisor(IAdvice advice)
+                        : base(advice)
+                    {
+                    }
 
-            public override bool Matches(MethodInfo method, Type targetType)
-            {
-                return "haveBirthday".Equals(method.Name);
-            }
-        }
+                    public override bool Matches(MethodInfo method, Type targetType)
+                    {
+                        return "haveBirthday".Equals(method.Name);
+                    }
+                }
 
-        private class TwoBirthdayAdvice : IMethodInterceptor
-        {
-            public object Invoke(IMethodInvocation invocation)
-            {
-                // Clone the invocation to proceed three times
-                // "The Moor's Last Sigh": this technology can cause premature aging
-                IMethodInvocation clone1 = ((ReflectiveMethodInvocation)invocation).InvocableClone();
-                IMethodInvocation clone2 = ((ReflectiveMethodInvocation)invocation).InvocableClone();
-                clone1.Proceed();
-                clone2.Proceed();
-                return invocation.Proceed();
-            }
-        }
+                private class TwoBirthdayAdvice : IMethodInterceptor
+                {
+                    public object Invoke(IMethodInvocation invocation)
+                    {
+                        // Clone the invocation to proceed three times
+                        // "The Moor's Last Sigh": this technology can cause premature aging
+                        IMethodInvocation clone1 = ((ReflectiveMethodInvocation)invocation).InvocableClone();
+                        IMethodInvocation clone2 = ((ReflectiveMethodInvocation)invocation).InvocableClone();
+                        clone1.Proceed();
+                        clone2.Proceed();
+                        return invocation.Proceed();
+                    }
+                }
 
-//    // We want to change the arguments on a clone: it shouldn't affect the original.
-//    public void testCanChangeArgumentsIndependentlyOnClonedInvocation() throws Throwable 
-//    {
-//        TestObject to = new TestObject();
-//        ProxyFactory pc = new ProxyFactory(to);
-//        pc.addInterface(typeof(ITestObject));
+        //    // We want to change the arguments on a clone: it shouldn't affect the original.
+        //    public void testCanChangeArgumentsIndependentlyOnClonedInvocation() throws Throwable 
+        //    {
+        //        TestObject to = new TestObject();
+        //        ProxyFactory pc = new ProxyFactory(to);
+        //        pc.addInterface(typeof(ITestObject));
 
-//        // Changes the name, then changes it back.
-//        MethodInterceptor nameReverter = new MethodInterceptor() {
-//            public Object invoke(MethodInvocation mi) throws Throwable {
-//                MethodInvocation clone = ((ReflectiveMethodInvocation) mi).invocableClone();
-//                String oldName = ((ITestObject) mi.getThis()).Name;
-//                clone.getArguments()[0] = oldName;
-//                // Original method invocation should be unaffected by changes to argument list of clone
-//                mi.proceed();
-//                return clone.proceed();
-//            }
-//        };
+        //        // Changes the name, then changes it back.
+        //        MethodInterceptor nameReverter = new MethodInterceptor() {
+        //            public Object invoke(MethodInvocation mi) throws Throwable {
+        //                MethodInvocation clone = ((ReflectiveMethodInvocation) mi).invocableClone();
+        //                String oldName = ((ITestObject) mi.getThis()).Name;
+        //                clone.getArguments()[0] = oldName;
+        //                // Original method invocation should be unaffected by changes to argument list of clone
+        //                mi.proceed();
+        //                return clone.proceed();
+        //            }
+        //        };
 
-//        class NameSaver implements MethodInterceptor {
-//            private List names = new LinkedList();
+        //        class NameSaver implements MethodInterceptor {
+        //            private List names = new LinkedList();
 
-//            public Object invoke(MethodInvocation mi) throws Throwable {
-//                names.add(mi.getArguments()[0]);
-//                return mi.proceed();
-//            }
-//        }
+        //            public Object invoke(MethodInvocation mi) throws Throwable {
+        //                names.add(mi.getArguments()[0]);
+        //                return mi.proceed();
+        //            }
+        //        }
 
-//        NameSaver saver = new NameSaver();
+        //        NameSaver saver = new NameSaver();
 
-//        pc.addAdvisor(new DefaultPointcutAdvisor(Pointcuts.SETTERS, nameReverter));
-//        pc.addAdvisor(new DefaultPointcutAdvisor(Pointcuts.SETTERS, saver));
-//        ITestObject it = (ITestObject) createProxy(pc);
+        //        pc.addAdvisor(new DefaultPointcutAdvisor(Pointcuts.SETTERS, nameReverter));
+        //        pc.addAdvisor(new DefaultPointcutAdvisor(Pointcuts.SETTERS, saver));
+        //        ITestObject it = (ITestObject) createProxy(pc);
 
-//        String name1 = "tony";
-//        String name2 = "gordon";
+        //        String name1 = "tony";
+        //        String name2 = "gordon";
 
-//        to.setName(name1);
-//        Assert.AreEqual(name1, to.Name);
+        //        to.setName(name1);
+        //        Assert.AreEqual(name1, to.Name);
 
-//        it.setName(name2);
-//        // NameReverter saved it back
-//        Assert.AreEqual(name1, it.Name);
-//        Assert.AreEqual(2, saver.names.size());
-//        Assert.AreEqual(name2, saver.names.get(0));
-//        Assert.AreEqual(name1, saver.names.get(1));
-//    }
-*/
+        //        it.setName(name2);
+        //        // NameReverter saved it back
+        //        Assert.AreEqual(name1, it.Name);
+        //        Assert.AreEqual(2, saver.names.size());
+        //        Assert.AreEqual(name2, saver.names.get(0));
+        //        Assert.AreEqual(name1, saver.names.get(1));
+        //    }
+        */
         #endregion
 
         #region OverloadedMethodsWithDifferentAdvice
@@ -2021,7 +2164,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             NopInterceptor overloadInt = new NopInterceptor();
             pf.AddAdvisor(new OverloadIntPointcutAdvisor(overloadInt));
 
-            IOverloads proxy = (IOverloads) CreateProxy(pf);
+            IOverloads proxy = (IOverloads)CreateProxy(pf);
 
             Assert.AreEqual(0, overloadInt.Count);
             Assert.AreEqual(0, overloadVoid.Count);
@@ -2036,7 +2179,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(1, overloadVoid.Count);
         }
 
-        public interface IOverloads 
+        public interface IOverloads
         {
             void Overload();
             int Overload(int i);
@@ -2044,23 +2187,23 @@ namespace Spring.Aop.Framework.DynamicProxy
             void NoAdvice();
         }
 
-        public class Overloads : IOverloads 
+        public class Overloads : IOverloads
         {
-            public void Overload() 
+            public void Overload()
             {
             }
 
-            public int Overload(int i) 
+            public int Overload(int i)
             {
                 return i;
             }
 
-            public string Overload(string foo) 
+            public string Overload(string foo)
             {
                 return foo;
             }
 
-            public void NoAdvice() 
+            public void NoAdvice()
             {
             }
         }
@@ -2095,88 +2238,88 @@ namespace Spring.Aop.Framework.DynamicProxy
         #endregion
 
         // TODO : IAdvised.TargetSource is read only (no setter)
-/*
-        [Test]
-        public void ExistingProxyChangesTarget()
-        {
-            TestObject to1 = new TestObject();
-            to1.Age = 33;
+        /*
+                [Test]
+                public void ExistingProxyChangesTarget()
+                {
+                    TestObject to1 = new TestObject();
+                    to1.Age = 33;
 
-            TestObject to2 = new TestObject();
-            to2.Age = 26;
-            to2.Name = "Juergen";
-            TestObject to3 = new TestObject();
-            to3.Age = 37;
-            ProxyFactory pf = new ProxyFactory(to1);
-            NopInterceptor nop = new NopInterceptor();
-            pf.AddAdvice(nop);
-            ITestObject proxy = (ITestObject)CreateProxy(pf);
-            Assert.AreEqual(nop.Count, 0);
-            Assert.AreEqual(to1.Age, proxy.Age);
-            Assert.AreEqual(nop.Count, 1);
-            // Change to a new static target
-            pf.Target = to2;
-            Assert.AreEqual(to2.Age, proxy.Age);
-            Assert.AreEqual(nop.Count, 2);
+                    TestObject to2 = new TestObject();
+                    to2.Age = 26;
+                    to2.Name = "Juergen";
+                    TestObject to3 = new TestObject();
+                    to3.Age = 37;
+                    ProxyFactory pf = new ProxyFactory(to1);
+                    NopInterceptor nop = new NopInterceptor();
+                    pf.AddAdvice(nop);
+                    ITestObject proxy = (ITestObject)CreateProxy(pf);
+                    Assert.AreEqual(nop.Count, 0);
+                    Assert.AreEqual(to1.Age, proxy.Age);
+                    Assert.AreEqual(nop.Count, 1);
+                    // Change to a new static target
+                    pf.Target = to2;
+                    Assert.AreEqual(to2.Age, proxy.Age);
+                    Assert.AreEqual(nop.Count, 2);
 
-            // Change to a new dynamic target
-            HotSwappableTargetSource hts = new HotSwappableTargetSource(to3);
-            pf.TargetSource = hts;
-            Assert.AreEqual(to3.Age, proxy.Age);
-            Assert.AreEqual(nop.Count, 3);
-            hts.Swap(to1);
-            Assert.AreEqual(to1.Age, proxy.Age);
-            to1.Name = "Colin";
-            Assert.AreEqual(to1.Name, proxy.Name);
-            Assert.AreEqual(nop.Count, 5);
+                    // Change to a new dynamic target
+                    HotSwappableTargetSource hts = new HotSwappableTargetSource(to3);
+                    pf.TargetSource = hts;
+                    Assert.AreEqual(to3.Age, proxy.Age);
+                    Assert.AreEqual(nop.Count, 3);
+                    hts.Swap(to1);
+                    Assert.AreEqual(to1.Age, proxy.Age);
+                    to1.Name = "Colin";
+                    Assert.AreEqual(to1.Name, proxy.Name);
+                    Assert.AreEqual(nop.Count, 5);
 
-            // Change back, relying on casting to Advised
-            IAdvised advised = (IAdvised)proxy;
-            Assert.AreSame(hts, advised.TargetSource);
-            SingletonTargetSource sts = new SingletonTargetSource(to2);
-            advised.TargetSource = sts;
-            Assert.AreEqual(to2.Name, proxy.Name);
-            Assert.AreSame(sts, advised.TargetSource);
-            Assert.AreEqual(to2.Age, proxy.Age);
-        }
-
-        [Test]
-        public void ProxyIsBoundBeforeTargetSourceInvoked() 
-        {
-            TestObject target = new TestObject();
-            ProxyFactory pf = new ProxyFactory(target);
-            pf.AddAdvice(new DebugInterceptor());
-            pf.ExposeProxy = true;
-            ITestObject proxy = (ITestObject) CreateProxy(pf);
-            IAdvised config = (IAdvised) proxy;
-            // This class just checks proxy is bound before getTarget() call
-            config.setTargetSource(new TargetSource() {
-                public Class getTargetClass() {
-                    return TestObject.class;
+                    // Change back, relying on casting to Advised
+                    IAdvised advised = (IAdvised)proxy;
+                    Assert.AreSame(hts, advised.TargetSource);
+                    SingletonTargetSource sts = new SingletonTargetSource(to2);
+                    advised.TargetSource = sts;
+                    Assert.AreEqual(to2.Name, proxy.Name);
+                    Assert.AreSame(sts, advised.TargetSource);
+                    Assert.AreEqual(to2.Age, proxy.Age);
                 }
 
-                public boolean isStatic() {
-                    return false;
-                }
+                [Test]
+                public void ProxyIsBoundBeforeTargetSourceInvoked() 
+                {
+                    TestObject target = new TestObject();
+                    ProxyFactory pf = new ProxyFactory(target);
+                    pf.AddAdvice(new DebugInterceptor());
+                    pf.ExposeProxy = true;
+                    ITestObject proxy = (ITestObject) CreateProxy(pf);
+                    IAdvised config = (IAdvised) proxy;
+                    // This class just checks proxy is bound before getTarget() call
+                    config.setTargetSource(new TargetSource() {
+                        public Class getTargetClass() {
+                            return TestObject.class;
+                        }
 
-                public Object getTarget() throws Exception {
-                    Assert.AreEqual(proxy, AopContext.currentProxy());
-                    return target;
-                }
+                        public boolean isStatic() {
+                            return false;
+                        }
 
-                public void releaseTarget(Object target) throws Exception {				
-                }			
-            });
+                        public Object getTarget() throws Exception {
+                            Assert.AreEqual(proxy, AopContext.currentProxy());
+                            return target;
+                        }
+
+                        public void releaseTarget(Object target) throws Exception {				
+                        }			
+                    });
 	
-            // Just test anything: it will fail if context wasn't found
-            Assert.AreEqual(0, proxy.Age);
-        }
-*/
+                    // Just test anything: it will fail if context wasn't found
+                    Assert.AreEqual(0, proxy.Age);
+                }
+        */
 
         #region BeforeAdvisorIsInvoked
 
         [Test]
-        public void BeforeAdvisorIsInvoked() 
+        public void BeforeAdvisorIsInvoked()
         {
             CountingBeforeAdvice cba = new CountingBeforeAdvice();
             IAdvisor matchesNoArgsAdvisor = new NoArgsMethodPointcutAdvisor(cba);
@@ -2272,7 +2415,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         #region BeforeAdviceThrowsException
 
         [Test]
-        public void BeforeAdviceThrowsException() 
+        public void BeforeAdviceThrowsException()
         {
             ApplicationException aex = new ApplicationException();
             CountingBeforeNonSetterAdvice ba = new CountingBeforeNonSetterAdvice(aex);
@@ -2293,12 +2436,12 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(1, nop1.Count);
             Assert.AreEqual(1, nop2.Count);
             // Will fail, after invoking Nop1
-            try 
+            try
             {
                 proxied.Age = 26;
                 Assert.Fail("before advice should have ended chain");
             }
-            catch (ApplicationException ex) 
+            catch (ApplicationException ex)
             {
                 Assert.AreEqual(aex, ex);
             }
@@ -2319,11 +2462,11 @@ namespace Spring.Aop.Framework.DynamicProxy
                 _exception = ex;
             }
 
-            public override void  Before(MethodInfo method, object[] args, object target)
+            public override void Before(MethodInfo method, object[] args, object target)
             {
- 	             base.Before(method, args, target);
+                base.Before(method, args, target);
 
-                 if (method.Name.StartsWith("set_"))
+                if (method.Name.StartsWith("set_"))
                     throw _exception;
             }
         }
@@ -2333,7 +2476,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         #region AfterReturningAdvisorIsInvoked
 
         [Test]
-        public void AfterReturningAdvisorIsInvoked() 
+        public void AfterReturningAdvisorIsInvoked()
         {
             SummingAfterAdvice aa = new SummingAfterAdvice();
             IAdvisor matchesIntAdvisor = new ReturnsIntPointcutAdvisor(aa);
@@ -2440,14 +2583,14 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 Assert.AreEqual(ex, caught);
             }
-            
+
             ex = new HttpException();
-            try 
+            try
             {
                 proxied.EchoException(1, ex);
                 Assert.Fail("Should have thrown HttpException");
             }
-            catch (HttpException caught) 
+            catch (HttpException caught)
             {
                 Assert.AreEqual(ex, caught);
             }
@@ -2486,19 +2629,19 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(0, th.GetCalls());
             Exception ex = new Exception();
             // Will be advised but doesn't match
-            try 
+            try
             {
                 proxied.EchoException(1, ex);
                 Assert.Fail("Should have thrown Exception");
             }
-            catch (Exception caught) 
+            catch (Exception caught)
             {
                 Assert.AreEqual(ex, caught);
             }
 
             // Subclass of RemoteException
             ex = new RemotingTimeoutException();
-            try 
+            try
             {
                 proxied.EchoException(1, ex);
                 Assert.Fail("Should have thrown RemotingTimeoutException");
@@ -2563,7 +2706,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             #endregion
         }
 
-#endregion
+        #endregion
 
 
         #region Helper classes definitions
@@ -2616,6 +2759,59 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 // TODO replace this check: no longer possible
                 //Assert.AreEqual(advised.getTarget(), this);
+            }
+        }
+
+        public class DynamicTargetSource : ITargetSource
+        {
+            private object target;
+            private Type targetType;
+
+            public DynamicTargetSource(Type targetType, object target)
+            {
+                this.targetType = targetType;
+                this.target = target;
+            }
+
+            public object Target
+            {
+                get { return target; }
+                set { target = value; }
+            }
+
+            public Type TargetType
+            {
+                get { return targetType; }
+                set { targetType = value; }
+            }
+
+            public bool IsStatic
+            {
+                get { return false; }
+            }
+
+            public virtual object GetTarget()
+            {
+                return target;
+            }
+
+            public void ReleaseTarget(object target)
+            { }
+        }
+
+        public class DynamicInvocationTestInterceptor : IMethodInterceptor
+        {
+            public bool CallProceed = false;
+            public IMethodInvocation LastMethodInvocation;
+
+            public object Invoke(IMethodInvocation invocation)
+            {
+                LastMethodInvocation = invocation;
+                if (CallProceed)
+                {
+                    return invocation.Proceed();
+                }
+                return null;
             }
         }
 
