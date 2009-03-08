@@ -265,19 +265,26 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         public class TestCustomer : ITestCustomer
         {
+            private long _id;
+            private string _name;
+            private string _company;
+
             public long Id
             {
-                get; set;
+                get { return _id; }
+                set { _id = value; }
             }
 
             public string Name
             {
-                get; set;
+                get { return _name; }
+                set { _name = value; }
             }
 
             public string Company
             {
-                get; set;
+                get { return _company; }
+                set { _company = value; }
             }
         }
 
@@ -308,8 +315,8 @@ namespace Spring.Aop.Framework.DynamicProxy
             mocks.VerifyAll();
         }
 
-        [Test]
-        public void Equality()
+        //[Test] - to be called from derived fixtures
+        public virtual void Equality()
         {
             TestCustomer customer = new TestCustomer();
 

@@ -62,6 +62,12 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        public override void Equality()
+        {
+            base.Equality();
+        }
+
+        [Test]
         public void ProxyIsJustInterface()
         {
             TestObject target = new TestObject();
