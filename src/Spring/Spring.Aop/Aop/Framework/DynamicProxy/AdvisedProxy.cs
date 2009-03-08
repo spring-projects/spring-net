@@ -23,12 +23,14 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
+using Spring.Aop.Target;
 using Spring.Util;
 
 #endregion
@@ -427,5 +429,61 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         #endregion
-	}
+
+        #region Equal, HashCode and ToString overrides
+
+        /// <summary>
+        /// Delegate to target object handling of equals method.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current target object</param>
+        /// <returns>true if the specified Object is equal to the current target object; otherwise, false</returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            AdvisedProxy otherProxy = obj as AdvisedProxy;
+            if (otherProxy != null)
+            {
+                using (m_targetSourceWrapper)
+                using (otherProxy.m_targetSourceWrapper)
+                {
+                    return m_targetSourceWrapper.GetTarget().Equals(otherProxy.m_targetSourceWrapper.GetTarget());
+                }
+            }
+
+            using (m_targetSourceWrapper)
+            {                
+                return m_targetSourceWrapper.GetTarget().Equals(obj);
+            }
+        }
+
+        /// <summary>
+        /// Delgate to the target object generation of the hash code.
+        /// </summary>
+        /// <returns>A hash code for the target object.</returns>
+        public override int GetHashCode()
+        {
+            using (m_targetSourceWrapper)
+            {
+                return m_targetSourceWrapper.GetTarget().GetHashCode();
+            }
+        }
+
+        /// <summary>
+        /// Returns a String the represents the target object.
+        /// </summary>
+        /// <returns>A String that represents the target object</returns>
+        public override string ToString()
+        {
+            using (m_targetSourceWrapper)
+            {
+                return m_targetSourceWrapper.GetTarget().ToString();
+            }
+        }
+
+        #endregion
+    }
 }

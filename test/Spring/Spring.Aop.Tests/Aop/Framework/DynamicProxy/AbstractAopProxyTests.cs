@@ -263,6 +263,24 @@ namespace Spring.Aop.Framework.DynamicProxy
             string Company { get; set; }
         }
 
+        public class TestCustomer : ITestCustomer
+        {
+            public long Id
+            {
+                get; set;
+            }
+
+            public string Name
+            {
+                get; set;
+            }
+
+            public string Company
+            {
+                get; set;
+            }
+        }
+
         #endregion
 
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1174")]
@@ -288,6 +306,22 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual("Customer Company", to.Company, "Incorrect Company");
 
             mocks.VerifyAll();
+        }
+
+        [Test]
+        public void Equality()
+        {
+            TestCustomer customer = new TestCustomer();
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Target = customer;
+            advised.Interfaces = new Type[] { typeof(ITestCustomer) };
+
+            ITestCustomer to = CreateProxy(advised) as ITestCustomer;
+            Assert.IsNotNull(to);
+            Assert.IsTrue( to.Equals(to), "identity must be equal" );
+            Assert.AreEqual(to, to);
+            Assert.AreEqual(to, ((IAdvised)to).TargetSource.GetTarget());
         }
 
         [Test]

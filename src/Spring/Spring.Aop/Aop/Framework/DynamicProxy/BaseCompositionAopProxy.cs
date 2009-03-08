@@ -84,46 +84,5 @@ namespace Spring.Aop.Framework.DynamicProxy
 		}
 
 		#endregion
-
-		#region Equal, HashCode and ToString overrides
-
-		/// <summary>
-		/// Delegate to target object handling of equals method.
-		/// </summary>
-		/// <param name="obj">The object to compare with the current target object</param>
-		/// <returns>true if the specified Object is equal to the current target object; otherwise, false</returns>
-		public override bool Equals(object obj)
-		{
-            using (m_targetSourceWrapper)
-			{
-                return m_targetSourceWrapper.GetTarget().Equals(obj);
-			}
-		}
-
-		/// <summary>
-		/// Delgate to the target object generation of the hash code.
-		/// </summary>
-		/// <returns>A hash code for the target object.</returns>
-		public override int GetHashCode()
-		{
-            using (m_targetSourceWrapper)
-			{
-                return m_targetSourceWrapper.GetTarget().GetHashCode();
-			}
-		}
-
-		/// <summary>
-		/// Returns a String the represents the target object.
-		/// </summary>
-		/// <returns>A String that represents the target object</returns>
-		public override string ToString()
-		{
-            using (m_targetSourceWrapper)
-			{
-                return m_targetSourceWrapper.GetTarget().ToString();
-			}
-		}
-
-		#endregion
     }
 }
