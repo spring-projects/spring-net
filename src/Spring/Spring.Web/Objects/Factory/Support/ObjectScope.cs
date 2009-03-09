@@ -26,10 +26,15 @@ namespace Spring.Objects.Factory.Support
     /// <author>Aleksandar Seovic</author>
     public enum ObjectScope
     {
+        ///<summary>
+        /// 
+        ///</summary>
+        Singleton = 0,
+
         /// <summary>
         /// Application scope.
         /// </summary>
-        Application = 0,
+        Application = Singleton,
 
         /// <summary>
         /// Session scope.
@@ -40,6 +45,11 @@ namespace Spring.Objects.Factory.Support
         /// Request scope.
         /// </summary>
         Request = 2,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        Prototype = -1,
 
         /// <summary>
         /// Default scope (currently

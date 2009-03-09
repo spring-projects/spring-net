@@ -100,6 +100,7 @@
     <Compile Include="Globalization\Resolvers\DefaultWebCultureResolverTests.cs" />
     <Compile Include="MyNUnitAddinHelper.cs" />
     <Compile Include="Objects\Factory\Support\WebObjectDefinitionFactoryTests.cs" />
+    <Compile Include="Objects\Factory\Support\WebObjectDefinitionTests.cs" />
     <Compile Include="Objects\Factory\Support\WebObjectFactoryTests.cs">
       <SubType>Code</SubType>
     </Compile>
