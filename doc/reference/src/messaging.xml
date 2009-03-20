@@ -875,12 +875,17 @@ namespace MyApp
       implementation, <literal>SimpleMessageListenerContainer</literal>.
       <literal>SimpleMessageListenerContainer</literal> creates a fixed number
       of JMS Sessions/MessageConsumer pairs as set by the property
-      <property>ConcurrentConsumers</property>. Here is a sample
-      configuration</para>
+      <property>ConcurrentConsumers</property>. The default value of
+      ConcurrentConsumers is one. Here is a sample configuration</para>
 
       <programlisting language="myxml">
-  &lt;object id="ConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ"&gt;
+  &lt;object id="ActiveMqConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ"&gt;
     &lt;constructor-arg index="0" value="tcp://localhost:61616"/&gt;
+  &lt;/object&gt;
+
+  &lt;object id="ConnectionFactory" type="Spring.Messaging.Nms.Connections.CachingConnectionFactory, Spring.Messaging.Nms"&gt;
+    &lt;constructor-arg index=0" ref="ActiveMqConnectionFactory"/&gt;
+    &lt;property name="SessionCacheSize" value="10"/&gt;
   &lt;/object&gt;
 
   &lt;object id="MyMessageListener" type="MyApp.SimpleMessageListener, MyApp"/&gt;

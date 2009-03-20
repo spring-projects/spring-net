@@ -405,6 +405,28 @@
       <literal>ConnectionUtils</literal> contains the static method
       <literal>ConnectionTxPair GetConnectionTxPair(IDbProvider provider)
       </literal>which serves this purpose.</para>
+
+      <programlisting>public class LowLevelIntegration
+{
+  // Spring's IDbProvider abstraction 
+  private IDbProvider dbProvider;
+
+  public IDbProvider dbProvider  
+  {
+    set { dbProvider = value; }
+  }
+  
+  public void DoWork() {
+    ConnectionTxPair connTxPair = ConnectionUtils.GetConnectionTxPair(dbProvider);
+    //Use some data access library that allows you to pass in the transaction
+
+    DbWrapper dbWrapper = new DbWrapper();
+    string cmdText = ... // some command text
+    dbWrapper.ExecuteNonQuery(cmdText, connTxPair.Transaction);
+  }
+}
+
+</programlisting>
     </sect2>
   </sect1>
 
