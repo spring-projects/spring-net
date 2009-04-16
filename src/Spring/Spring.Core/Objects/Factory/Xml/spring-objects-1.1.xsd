@@ -2,56 +2,49 @@
 <xsd:schema xmlns="http://www.springframework.net" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense" targetNamespace="http://www.springframework.net" elementFormDefault="qualified" attributeFormDefault="unqualified" vs:friendlyname="Spring.NET Configuration" vs:ishtmlschema="false" vs:iscasesensitive="true" vs:requireattributequotes="true" vs:defaultnamespacequalifier="" vs:defaultnsprefix="">
     <xsd:annotation>
         <xsd:documentation>
+            <![CDATA[
             Spring Objects XML Schema Definition
             Based on Spring Beans DTD, authored by Rod Johnson &amp; Juergen Hoeller
-            
+
             Author: Griffin Caprio
-            
+
             This defines a simple and consistent way of creating a namespace
             of managed objects configured by a Spring XmlObjectFactory.
             This document type is used by most Spring functionality, including
             web application contexts, which are based on object factories.
-            
+
             Each object element in this document defines an object.
             Typically the object type (System.Type is specified, along with plain vanilla
             object properties.
-            
+
             Object instances can be "singletons" (shared instances) or "prototypes"
             (independent instances).
-            
+
             References among objects are supported, i.e. setting an object property
             to refer to another object in the same factory or an ancestor factory.
-            
+
             As alternative to object references, "inner object definitions" can be used.
             Singleton flags and names of such "inner object" are always ignored:
             Inner object are anonymous prototypes.
-            
-            There is also support for lists, dictionaries, and sets.
-        </xsd:documentation>
-    </xsd:annotation>
-  
-  <!-- base types -->
-  <xsd:complexType name="identifiedType" abstract="true">
-    <xsd:annotation>
-      <xsd:documentation>
-        <![CDATA[
-	The unique identifier for a bean. The scope of the identifier
-	is the enclosing object factory.
-			]]>
-      </xsd:documentation>
-    </xsd:annotation>
-    <xsd:attribute name="id" type="xsd:ID">
-      <xsd:annotation>
-        <xsd:documentation>
-          <![CDATA[
-	The unique identifier for an object.
-				]]>
-        </xsd:documentation>
-      </xsd:annotation>
-    </xsd:attribute>
-  </xsd:complexType>
 
-  <xsd:annotation>
+            There is also support for lists, dictionaries, and sets.
+            ]]>
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <!-- base types -->
+    <xsd:complexType name="identifiedType" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[The unique identifier for a bean. The scope of the identifier is the enclosing object factory.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="id" type="xsd:ID">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[The unique identifier for an object.]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:annotation>
         <xsd:documentation>Defines a base type for any required string.  Defines a string with a minimum length of 0</xsd:documentation>
     </xsd:annotation>
     <xsd:simpleType name="nonNullString">
@@ -77,10 +70,10 @@
         </xsd:simpleContent>
     </xsd:complexType>
     <xsd:complexType name="expression">
-      <xsd:sequence>
-        <xsd:element name="property" type="property" minOccurs="0" maxOccurs="2"/>
-      </xsd:sequence>
-      <xsd:attribute name="value" type="nonNullString" use="required"/>
+        <xsd:sequence>
+            <xsd:element name="property" type="property" minOccurs="0" maxOccurs="2"/>
+        </xsd:sequence>
+        <xsd:attribute name="value" type="nonNullString" use="required"/>
     </xsd:complexType>
     <!--
          Defines a reference to another object in this factory or an external
@@ -179,14 +172,14 @@
                      will resolve to an empty String, which will not be resolved to a
                      null value unless a special TypeConverter does so.
                 -->
-        <xsd:element name="null" />
-        <xsd:any namespace="##other" processContents="strict" />
-      </xsd:choice>
-    </xsd:sequence>
-  </xsd:group>
-  <xsd:complexType name="objectNameValues">
-    <xsd:sequence>
-      <!--
+                <xsd:element name="null" />
+                <xsd:any namespace="##other" processContents="strict" />
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:group>
+    <xsd:complexType name="objectNameValues">
+        <xsd:sequence>
+            <!--
                  The "value" attribute is the string value of the property. The "key"
                  attribute is the name of the property.
             -->
@@ -247,7 +240,7 @@
               to avoid ambiguities, e.g. in case of 2 arguments of the same type.
         -->
         <xsd:attribute name="index" type="nonNullString" use="optional"/>
-       <!--
+        <!--
               The constructor-arg tag can have an optional type attribute,
               to specify the exact type of the constructor argument. Only needed
               to avoid ambiguities, e.g. in case of 2 single argument constructors
@@ -297,9 +290,9 @@
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="arg-type" minOccurs="0" maxOccurs="unbounded">
-                             <xsd:complexType>
-                                  <xsd:attribute name="match" type="nonNullString" use="required"/>
-                             </xsd:complexType>
+                            <xsd:complexType>
+                                <xsd:attribute name="match" type="nonNullString" use="required"/>
+                            </xsd:complexType>
                         </xsd:element>
                     </xsd:sequence>
                     <xsd:attribute name="name" type="nonNullString" use="required"/>
@@ -497,7 +490,7 @@
         <xsd:attribute name="factory-method" type="nonNullString" use="optional"/>
         <xsd:attribute name="factory-object" type="nonNullString" use="optional"/>
     </xsd:complexType>
-    
+
     <xsd:annotation>
         <xsd:documentation>The document root.  At least one object definition is required.</xsd:documentation>
     </xsd:annotation>
@@ -540,5 +533,5 @@
             </xsd:attribute>
         </xsd:complexType>
     </xsd:element>
-    
+
 </xsd:schema>
