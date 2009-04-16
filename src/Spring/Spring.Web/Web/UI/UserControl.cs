@@ -676,7 +676,7 @@ namespace Spring.Web.UI
                 {
                     throw new ArgumentException( "Validator is not defined." );
                 }
-                result = validator.Validate( validationContext, contextParams, this.validationErrors ) && result;
+                result = validator.Validate( validationContext, contextParams, this.ValidationErrors ) && result;
             }
 
             return result;
@@ -837,7 +837,7 @@ namespace Spring.Web.UI
         {
             if (BindingManager.HasBindings)
             {
-                BindingManager.BindTargetToSource( this, Controller, Page.ValidationErrors );
+                BindingManager.BindTargetToSource( this, Controller, this.ValidationErrors );
             }
             OnDataBound( EventArgs.Empty );
         }
@@ -849,7 +849,7 @@ namespace Spring.Web.UI
         {
             if (BindingManager.HasBindings)
             {
-                BindingManager.BindSourceToTarget( this, Controller, Page.ValidationErrors );
+                BindingManager.BindSourceToTarget( this, Controller, this.ValidationErrors );
             }
             OnDataUnbound( EventArgs.Empty );
         }

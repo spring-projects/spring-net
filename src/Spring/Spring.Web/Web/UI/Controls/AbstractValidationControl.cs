@@ -20,8 +20,11 @@
 
 #region Imports
 
+using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using Spring.Context;
 using Spring.Util;
 using Spring.Validation;
@@ -38,6 +41,7 @@ namespace Spring.Web.UI.Controls
     public abstract class AbstractValidationControl : Control
     {
         private string provider;
+        private string validationContainerName;
         private IValidationErrorsRenderer renderer;
 
 #if !NET_2_0
@@ -70,6 +74,18 @@ namespace Spring.Web.UI.Controls
             }
         }
 #endif
+        /// <summary>
+        /// If set, <see cref="ValidationContainer"/> will resolve to the named control specified
+        /// by this property. The behavior of name resolution is identical to 
+        /// <see cref="System.Web.UI.WebControls.BaseValidator.ControlToValidate"/>, except that if the name
+        /// starts with "::", the resolution will start at the page level instead of relative to this
+        /// control
+        /// </summary>
+        public virtual string ValidationContainerName
+        {
+            get { return validationContainerName; }
+            set { validationContainerName = value; }
+        }
 
         /// <summary>
         /// Gets or sets the provider.
@@ -146,15 +162,34 @@ namespace Spring.Web.UI.Controls
         {
             get
             {
+                // is an explicit container specified?
+                if (ValidationContainerName != null)
+                {
+                    Control start = this.NamingContainer;
+                    string containerName = this.ValidationContainerName;
+                    // shall we do a global search?
+                    if (containerName.StartsWith("::"))
+                    {
+                        containerName = containerName.Substring(2);
+                        start = this.Page;
+                    }
+                    IValidationContainer container = start.FindControl(containerName) as IValidationContainer;
+                    if (container == null)
+                    {
+                        throw new ArgumentException(string.Format("Validation Container Control specified by {0} does not exist or does not implement IValidationContainer", this.ValidationContainerName));
+                    }
+                    return container;
+                }
+
                 for (Control parent = this.Parent; parent != null; parent = parent.Parent)
                 {
                     IValidationContainer container = parent as IValidationContainer;
-                    if (container != null)
+                    if (container != null
+                        && container.ValidationErrors != null)
                     {
                         return container;
                     }
                 }
-                //                throw new NotSupportedException(string.Format("Controls of Type {0} must be placed on a container control implementing IValidationContainer", this.GetType().Name));
                 return null;
             }
         }
@@ -201,7 +236,7 @@ namespace Spring.Web.UI.Controls
 
             errorMessages = ResolveErrorMessages();
 
-            Renderer.RenderErrors(Page as Spring.Web.UI.Page, writer, errorMessages);
+            Renderer.RenderErrors(Page as Page, writer, errorMessages);
         }
     }
 }

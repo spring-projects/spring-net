@@ -179,6 +179,80 @@ namespace Spring.Web.UI.Controls
             Assert.AreEqual(messageSource, ctl.TheMessageSource);
         }
 
+        [Test]
+        public void ReadsErrorsFromClosestValidationContainerByDefault()
+        {
+            // indirect containment
+            Spring.Web.UI.Page page = new Spring.Web.UI.Page();
+            TestValidationControl vc = new TestValidationControl();
+            Spring.Web.UI.UserControl inBetweenControl = new Spring.Web.UI.UserControl();
+            inBetweenControl.Controls.Add(vc);
+            page.Controls.Add(inBetweenControl);
+            Assert.AreSame(inBetweenControl, vc.TheValidationContainer);
+        }
+
+        [Test]
+        public void DoesNotReadErrorsFromCrossValidationContainerByDefault()
+        {
+            // containment tree:
+            //
+            // Page : IValidationContainer
+            //   - outerVC
+            //   - inBetweenControl1 : IValidationContainer
+            //         - innerVC
+ 
+            Spring.Web.UI.Page page = new Spring.Web.UI.Page();
+            Spring.Web.UI.UserControl inBetweenControl1 = new Spring.Web.UI.UserControl();
+            inBetweenControl1.ID = "InBetweenControl1";
+            TestValidationControl innerVC = new TestValidationControl();
+            inBetweenControl1.Controls.Add(innerVC);
+            page.Controls.Add(inBetweenControl1);
+            TestValidationControl outerVC = new TestValidationControl();
+            page.Controls.Add(outerVC);
+
+            inBetweenControl1.ValidationErrors.AddError("provider", new ErrorMessage("msg"));
+
+            Assert.AreSame(inBetweenControl1, innerVC.TheValidationContainer);
+            Assert.AreSame(page, outerVC.TheValidationContainer);
+            Assert.AreEqual(1, innerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+            Assert.AreEqual(0, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+        }
+
+        [Test]
+        public void CanReadErrorsFromCrossValidationContainerByDefault()
+        {
+            // containment tree:
+            //
+            // Page : IValidationContainer
+            //   - outerVC
+            //   - inBetweenControl1 : IValidationContainer
+            //         - innerVC
+ 
+            Spring.Web.UI.Page page = new Spring.Web.UI.Page();
+            Spring.Web.UI.UserControl userControl = new Spring.Web.UI.UserControl();
+            userControl.ID = "userControl";
+            TestValidationControl innerVC = new TestValidationControl();
+            userControl.Controls.Add(innerVC);
+            page.Controls.Add(userControl);
+            TestValidationControl outerVC = new TestValidationControl();
+            page.Controls.Add(outerVC);
+
+            userControl.ValidationErrors.AddError("provider", new ErrorMessage("msg"));
+
+            Assert.AreSame(userControl, innerVC.TheValidationContainer);
+            Assert.AreSame(page, outerVC.TheValidationContainer);
+            Assert.AreEqual(1, innerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+            Assert.AreEqual(0, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+
+            // test local-relative name resolution
+            outerVC.ValidationContainerName = "userControl";
+            Assert.AreEqual(1, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+
+            // test global name resolution
+            outerVC.ValidationContainerName = "::userControl";
+            Assert.AreEqual(1, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+        }
+
         #region TestValidationControl
 
         private class TestValidationControl : AbstractValidationControl

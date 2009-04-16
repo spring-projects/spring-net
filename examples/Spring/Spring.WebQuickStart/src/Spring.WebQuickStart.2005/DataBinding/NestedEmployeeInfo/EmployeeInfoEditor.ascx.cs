@@ -1,12 +1,8 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using Spring.Globalization.Formatters;
 
-/// <summary>
-/// Notice that your web page has to extend Spring.Web.UI.Page class
-/// in order to enable data binding and many other features.
-/// </summary>
-public partial class DataBinding_RobustEmployeeInfo_Default : Spring.Web.UI.Page
+public partial class EmployeeInfoEditor : Spring.Web.UI.UserControl
 {
     private EmployeeInfo employee = new EmployeeInfo();
 
@@ -23,13 +19,13 @@ public partial class DataBinding_RobustEmployeeInfo_Default : Spring.Web.UI.Page
     protected override void InitializeDataBindings()
     {
         BindingManager.AddBinding("txtId.Text", "Employee.Id")
-            .SetErrorMessage("ID has to be an integer", "id.errors"); // send msg to "id.errors" provider
+            .SetErrorMessage("ID has to be an integer", "id.errors", "summary");
         BindingManager.AddBinding("txtFirstName.Text", "Employee.FirstName");
         BindingManager.AddBinding("txtLastName.Text", "Employee.LastName");
         BindingManager.AddBinding("txtDOB.Text", "Employee.DateOfBirth")
-            .SetErrorMessage("Invalid date value", "dob.errors");
+            .SetErrorMessage("Invalid date value", "dob.errors", "summary");
         BindingManager.AddBinding("txtSalary.Text", "Employee.Salary", new CurrencyFormatter())
-            .SetErrorMessage("Salary must be a valid currency value.", "salary.errors");
+            .SetErrorMessage("Salary must be a valid currency value.", "salary.errors", "summary");
         BindingManager.AddBinding("rbgGender.Value", "Employee.Gender");
         BindingManager.AddBinding("ddlAddressType.SelectedValue", "Employee.MailingAddress.AddressType");
         BindingManager.AddBinding("txtStreet1.Text", "Employee.MailingAddress.Street1");
@@ -39,17 +35,12 @@ public partial class DataBinding_RobustEmployeeInfo_Default : Spring.Web.UI.Page
         BindingManager.AddBinding("txtPostalCode.Text", "Employee.MailingAddress.PostalCode");
         BindingManager.AddBinding("txtCountry.Text", "Employee.MailingAddress.Country");
     }
-    
-    protected void Page_Load(object sender, EventArgs e)
-    {}
-
 
     protected void btnSave_Click(object sender, EventArgs e)
     {
         // do something with employee such as:
         // employeeDao.Save(Employee);
-        
+
         Debug.Write(Employee);
     }
 }
-

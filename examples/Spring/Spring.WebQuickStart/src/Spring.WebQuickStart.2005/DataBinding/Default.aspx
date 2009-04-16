@@ -35,6 +35,10 @@
     <p>
     Demonstrates basic model validation capabilities
     </p>
+    <h3><a href="NestedEmployeeInfo/Default.aspx">Nested Employee Info</a></h3>
+    <p>
+    Demonstrates basic model validation capabilities on controls
+    </p>
     <h3><a href="Lists/Default.aspx">Lists</a></h3>
     <p>
     Demonstrates bi-directional binding of multi-selection listboxes
