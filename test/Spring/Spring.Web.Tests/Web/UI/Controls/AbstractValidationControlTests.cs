@@ -21,10 +21,16 @@
 #region Imports
 
 using System;
+using System.Collections;
+using System.Globalization;
 using System.Web.UI;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Context;
+using Spring.Context.Support;
+using Spring.Util;
+using Spring.Validation;
+using Spring.Web.UI.Validation;
 
 #endregion
 
@@ -37,42 +43,89 @@ namespace Spring.Web.UI.Controls
     [TestFixture]
     public class AbstractValidationControlTests
     {
-        public class TestValidationControl : AbstractValidationControl
+        [Test]
+        public void DefaultsToControlIDOrStringEmptyAsProviderName()
         {
-            private IValidationContainer _vc;
+            TestValidationControl vc;
 
-            public TestValidationControl()
-            {
-            }
+            vc = new TestValidationControl(null);
+            Assert.AreEqual(string.Empty, vc.Provider);
 
-            public TestValidationControl(IValidationContainer testVc)
-            {
-                _vc = testVc;
-            }
+            vc = new TestValidationControl(null);
+            vc.ID = "TestControl";
+            Assert.AreEqual(vc.ID, vc.Provider);
 
-            protected override Spring.Web.UI.Validation.IValidationErrorsRenderer CreateValidationErrorsRenderer()
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
+            vc = new TestValidationControl(null);
+            vc.ID = "TestControl";
+            vc.Provider = "TestProvider";
 
-            protected override IValidationContainer ValidationContainer
-            {
-                get
-                {
-                    if (_vc != null) return _vc;
-                    return base.ValidationContainer;
-                }
-            }
+            Assert.AreEqual("TestProvider", vc.Provider);
+        }
 
-            public IMessageSource TheMessageSource
-            {
-                get { return base.MessageSource; }
-            }
+        [Test]
+        public void ResolvesAndRendersValidationErrors()
+        {
+            TestValidationControl vc = new TestValidationControl();
+            vc.ID = "TestControl";
 
-            public IValidationContainer TheValidationContainer
+            Page page = new Page();
+            page.Controls.Add(vc);
+            page.ValidationErrors.AddError(vc.Provider, new ErrorMessage("msgId"));
+            StaticMessageSource msgSrc = new StaticMessageSource();
+            msgSrc.AddMessage("msgId", CultureInfo.CurrentUICulture, "Resolved Message Text");
+            page.MessageSource = msgSrc;
+
+            vc.TestRender(null);
+            Assert.AreEqual("Resolved Message Text", vc.LastErrorsRendered[0]);
+        }
+
+        [Test]
+        public void ThrowsIfCreateValidationErrorsRendererReturnsNull()
+        {
+            TestValidationControl vc = new TestValidationControl(null);
+            vc.ID = "TestControl";
+
+            Page page = new Page();
+            page.Controls.Add(vc);
+            page.ValidationErrors.AddError(vc.Provider, new ErrorMessage("msgId"));
+
+            try
             {
-                get { return base.ValidationContainer; }
+                vc.TestRender(null);
+                Assert.Fail();
             }
+            catch (ArgumentNullException ane)
+            {
+                Assert.AreEqual("Renderer", ane.ParamName);
+            }
+        }
+
+        [Test]
+        public void NoExceptionWhenNoValidationContainer()
+        {
+            TestValidationControl vc = new TestValidationControl();
+            Assert.IsFalse(vc.TheDesignMode);
+            Assert.IsNull(vc.TheMessageSource);
+            Assert.IsNull(vc.TheValidationContainer);
+
+            vc.TestRender(null);
+        }
+
+        [Test]
+        public void NoExceptionWhenNoErrors()
+        {
+            Page page = new Page();
+            page.MessageSource = new StaticMessageSource();
+            TestValidationControl vc = new TestValidationControl();
+            page.Controls.Add(vc);
+
+            // assert assumptions
+            Assert.IsFalse(vc.TheDesignMode);
+            Assert.AreSame(page, vc.TheValidationContainer);
+            Assert.AreSame( page.MessageSource, vc.TheMessageSource );
+            Assert.AreEqual(0, page.ValidationErrors.GetResolvedErrors(vc.Provider, vc.TheMessageSource).Count);
+
+            vc.TestRender(null);
         }
 
         [Test]
@@ -116,13 +169,82 @@ namespace Spring.Web.UI.Controls
         {
             MockRepository mocks = new MockRepository();
             IMessageSource messageSource = (IMessageSource)mocks.DynamicMock(typeof(IMessageSource));
-            IValidationContainer container = (IValidationContainer)mocks.DynamicMock(typeof(IValidationContainer));
-            TestValidationControl ctl = new TestValidationControl(container);
+            //            IValidationContainer container = (IValidationContainer)mocks.DynamicMock(typeof(IValidationContainer));
 
-            Expect.Call(container.MessageSource).Return(messageSource);
-            mocks.ReplayAll();
+            Page page = new Page();
+            page.MessageSource = messageSource;
+            TestValidationControl ctl = new TestValidationControl();
+            page.Controls.Add(ctl);
 
             Assert.AreEqual(messageSource, ctl.TheMessageSource);
         }
+
+        #region TestValidationControl
+
+        private class TestValidationControl : AbstractValidationControl
+        {
+            public class CapturingRenderer : IValidationErrorsRenderer
+            {
+                public IList LastErrorsRendered;
+                private readonly IValidationErrorsRenderer _inner;
+
+                public CapturingRenderer(IValidationErrorsRenderer inner)
+                {
+                    _inner = inner;
+                }
+
+                public void RenderErrors(Page page, HtmlTextWriter writer, IList errors)
+                {
+                    LastErrorsRendered = errors;
+                    if (_inner != null)
+                    {
+                        _inner.RenderErrors(page, writer, errors);
+                    }
+                }
+            }
+
+            private readonly IValidationErrorsRenderer _ver;
+
+            public TestValidationControl()
+                : this(new CapturingRenderer(null))
+            { }
+
+            public TestValidationControl(IValidationErrorsRenderer renderer)
+            {
+                _ver =renderer;
+            }
+
+            public void TestRender(HtmlTextWriter writer)
+            {
+                base.Render(writer);
+            }
+
+            protected override IValidationErrorsRenderer CreateValidationErrorsRenderer()
+            {
+                return _ver;
+            }
+
+            public IList LastErrorsRendered
+            {
+                get { return ((CapturingRenderer)_ver).LastErrorsRendered; }
+            }
+
+            public IMessageSource TheMessageSource
+            {
+                get { return base.MessageSource; }
+            }
+
+            public IValidationContainer TheValidationContainer
+            {
+                get { return base.ValidationContainer; }
+            }
+
+            public bool TheDesignMode
+            {
+                get { return base.DesignMode; }
+            }
+        }
+
+        #endregion
     }
 }

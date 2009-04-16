@@ -20,9 +20,12 @@
 
 #region Imports
 
+using System;
 using System.Collections;
 using System.Web.UI;
 using Spring.Context;
+using Spring.Util;
+using Spring.Validation;
 using Spring.Web.UI.Validation;
 
 #endregion
@@ -42,17 +45,25 @@ namespace Spring.Web.UI.Controls
         /// Gets or sets the provider.
         /// </summary>
         /// <value>The provider.</value>
-        public string Provider
+        public virtual string Provider
         {
             get
             {
                 if (this.provider == null)
                 {
-                    return this.ID;
+                    this.provider = this.ID;
+                    if (this.provider == null)
+                    {
+                        this.provider = string.Empty;
+                    }
                 }
                 return this.provider;
             }
-            set { this.provider = value; }
+            set
+            {
+                AssertUtils.ArgumentNotNull(value, "Provider");
+                this.provider = value;
+            }
         }
 
         /// <summary>
@@ -69,10 +80,15 @@ namespace Spring.Web.UI.Controls
                 if (this.renderer == null)
                 {
                     this.renderer = CreateValidationErrorsRenderer();
+                    AssertUtils.ArgumentNotNull(this.renderer, "Renderer", "CreateValidationErrorsRenderer must not return null");
                 }
                 return this.renderer;
             }
-            set { this.renderer = value; }
+            set
+            {
+                AssertUtils.ArgumentNotNull(value, "Renderer");
+                this.renderer = value;
+            }
         }
 
         /// <summary>
@@ -83,7 +99,7 @@ namespace Spring.Web.UI.Controls
         /// </remarks>
         protected virtual IMessageSource MessageSource
         {
-            get { return ValidationContainer.MessageSource; }
+            get { return ValidationContainer==null ? null : ValidationContainer.MessageSource; }
         }
 
         /// <summary>
@@ -108,6 +124,7 @@ namespace Spring.Web.UI.Controls
                         return container;
                     }                    
                 }
+//                throw new NotSupportedException(string.Format("Controls of Type {0} must be placed on a container control implementing IValidationContainer", this.GetType().Name));
                 return null;
             }
         }
@@ -116,11 +133,31 @@ namespace Spring.Web.UI.Controls
         /// Resolves the <see cref="ValidationContainer"/>'s list of validation errors to a list
         /// of <see cref="string"/> elements containing the error messages to be rendered.
         /// </summary>
-        /// <returns>a list containing <see cref="string"/> elements</returns>
+        /// <returns>a list containing <see cref="string"/> elements. May return <c>null</c></returns>
         protected virtual IList ResolveErrorMessages()
         {
             IList errorMessages;
-            errorMessages = this.ValidationContainer.ValidationErrors.GetResolvedErrors(this.Provider, this.MessageSource);
+
+            // good catch - idea & patch from Roberto Paterlini
+            if (DesignMode)
+            {
+                errorMessages = new string[] { GetType().Name + ":" + ID };
+                return errorMessages;
+            }
+
+            IValidationContainer container = this.ValidationContainer;
+            if (container == null)
+            {
+                return null;
+            }
+
+            IValidationErrors validationErrors = container.ValidationErrors;
+            if (validationErrors == null)
+            {
+                return null;
+            }
+
+            errorMessages = validationErrors.GetResolvedErrors(this.Provider, this.MessageSource);
             return errorMessages;
         }
 
@@ -130,8 +167,11 @@ namespace Spring.Web.UI.Controls
         /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
-            IList errorMessages = ResolveErrorMessages();
-            Renderer.RenderErrors(Page as Spring.Web.UI.Page, writer, errorMessages);   
+            IList errorMessages;
+
+            errorMessages = ResolveErrorMessages();
+
+            Renderer.RenderErrors(Page as Spring.Web.UI.Page, writer, errorMessages);
         }
     }
 }

@@ -44,6 +44,14 @@ namespace Spring.Validation
 		private ErrorMessage ErrorMessageTwo = new ErrorMessage("This Is Eva Green", null);
 		private ErrorMessage ErrorMessageOne = new ErrorMessage("Kissing Leads To Brain Disease", null);
 
+        [Test]
+        public void ResolveErrorsWithoutMessageSource()
+        {
+            ValidationErrors errors = new ValidationErrors();
+            errors.AddError(string.Empty, ErrorMessageOne);
+            IList resolvedErrors = errors.GetResolvedErrors(string.Empty, null);
+            Assert.AreEqual(ErrorMessageOne.Id, (string)resolvedErrors[0]);
+        }
 		[Test]
 		public void ContainsNoErrorsDirectlyAfterInstantiation()
 		{

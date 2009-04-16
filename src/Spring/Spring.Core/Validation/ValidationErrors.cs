@@ -262,6 +262,8 @@ namespace Spring.Validation
         /// </returns>
         public IList GetResolvedErrors(string provider, IMessageSource messageSource)
         {
+            AssertUtils.ArgumentNotNull(provider, "provider");
+
             IList messages = new ArrayList();
             IList errors = (IList) errorMap[provider];
             

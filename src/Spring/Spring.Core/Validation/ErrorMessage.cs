@@ -167,6 +167,11 @@ namespace Spring.Validation
         /// <returns>Resolved error message.</returns>
         public string GetMessage(IMessageSource messageSource)
         {
+            if (messageSource == null)
+            {
+                return Id;
+            }
+
             if (Parameters == null)
             {
                 return messageSource.GetMessage(Id);
