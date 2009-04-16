@@ -17,9 +17,11 @@ namespace Spring.Aspects.Exceptions
             : base(NAME, LogLevel.All, false, false, null)
         {}
 #else
-		public CaptureOutputLogger()
-			: base(false, NAME, LogLevel.All, true, false, false, null)
-		{ }
+        public CaptureOutputLogger()
+            : base(NAME, LogLevel.All, false, false, null)
+// TODO: use this line when upgrading to Common.Logging 2.0:
+//          : base(false, NAME, LogLevel.All, true, false, false, null)
+        { }
 #endif
 
 //        private LogLevel _currentLogLevel = LogLevel.All;
