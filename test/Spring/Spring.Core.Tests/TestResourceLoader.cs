@@ -125,10 +125,8 @@ namespace Spring
                 XmlReader validatingReader = XmlReader.Create(stm, settings);
 #endif
                 XmlDocument xmlDoc = new XmlDocument();
-                using (validatingReader)
-                {
-                    xmlDoc.Load(validatingReader);
-                }
+                xmlDoc.Load(validatingReader);
+                validatingReader.Close();
                 return xmlDoc;
             }
         }
