@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Web.UI;
 using Spring.Context;
@@ -40,6 +39,34 @@ namespace Spring.Web.UI.Controls
     {
         private string provider;
         private IValidationErrorsRenderer renderer;
+
+#if !NET_2_0
+        private bool initialized;
+
+        protected override void OnInit(System.EventArgs e)
+        {
+            initialized = true;
+            base.OnInit(e);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is in design mode.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is in design mode; otherwise, <c>false</c>.
+        /// </value>
+        protected bool DesignMode
+        {
+            get
+            {
+                if (this.Site != null)
+                {
+                    return this.Site.DesignMode;
+                }
+                return (this.Context == null) && initialized;
+            }
+        }
+#endif
 
         /// <summary>
         /// Gets or sets the provider.
@@ -99,7 +126,7 @@ namespace Spring.Web.UI.Controls
         /// </remarks>
         protected virtual IMessageSource MessageSource
         {
-            get { return ValidationContainer==null ? null : ValidationContainer.MessageSource; }
+            get { return ValidationContainer == null ? null : ValidationContainer.MessageSource; }
         }
 
         /// <summary>
@@ -116,15 +143,15 @@ namespace Spring.Web.UI.Controls
         {
             get
             {
-                for(Control parent=this.Parent; parent!=null; parent=parent.Parent)
+                for (Control parent = this.Parent; parent != null; parent = parent.Parent)
                 {
                     IValidationContainer container = parent as IValidationContainer;
                     if (container != null)
                     {
                         return container;
-                    }                    
+                    }
                 }
-//                throw new NotSupportedException(string.Format("Controls of Type {0} must be placed on a container control implementing IValidationContainer", this.GetType().Name));
+                //                throw new NotSupportedException(string.Format("Controls of Type {0} must be placed on a container control implementing IValidationContainer", this.GetType().Name));
                 return null;
             }
         }
