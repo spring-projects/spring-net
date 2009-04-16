@@ -43,6 +43,9 @@ namespace Spring.Web.UI.Controls
 #if !NET_2_0
         private bool initialized;
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Web.UI.Control.Init"/> event.
+        /// </summary>
         protected override void OnInit(System.EventArgs e)
         {
             initialized = true;
