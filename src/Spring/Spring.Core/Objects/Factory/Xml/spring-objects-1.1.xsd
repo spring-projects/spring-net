@@ -44,22 +44,22 @@
         </xsd:attribute>
     </xsd:complexType>
 
-    <xsd:annotation>
-        <xsd:documentation>Defines a base type for any required string.  Defines a string with a minimum length of 0</xsd:documentation>
-    </xsd:annotation>
     <xsd:simpleType name="nonNullString">
+        <xsd:annotation>
+            <xsd:documentation>Defines a base type for any required string.  Defines a string with a minimum length of 0</xsd:documentation>
+        </xsd:annotation>
         <xsd:restriction base="xsd:string">
             <xsd:minLength value="0"/>
         </xsd:restriction>
     </xsd:simpleType>
-    <xsd:annotation>
-        <xsd:documentation>
-            Element containing informative text describing the purpose of the enclosing
-            element. Always optional.
-            Used primarily for user documentation of XML object definition documents.
-        </xsd:documentation>
-    </xsd:annotation>
     <xsd:simpleType name="description">
+        <xsd:annotation>
+            <xsd:documentation>
+                Element containing informative text describing the purpose of the enclosing
+                element. Always optional.
+                Used primarily for user documentation of XML object definition documents.
+            </xsd:documentation>
+        </xsd:annotation>
         <xsd:restriction base="nonNullString"/>
     </xsd:simpleType>
     <xsd:complexType name="valueObject">
@@ -193,9 +193,15 @@
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="importElement">
+        <xsd:annotation>
+            <xsd:documentation>Import an external file containing object definitions into this file.</xsd:documentation>
+        </xsd:annotation>
         <xsd:attribute name="resource" type="nonNullString" use="required"/>
     </xsd:complexType>
     <xsd:complexType name="aliasElement">
+        <xsd:annotation>
+            <xsd:documentation>Defines an additional alias name for an object definition.</xsd:documentation>
+        </xsd:annotation>
         <xsd:attribute name="name" type="nonNullString" use="required"/>
         <xsd:attribute name="alias" type="nonNullString" use="required"/>
     </xsd:complexType>
@@ -220,14 +226,14 @@
     <xsd:complexType name="mapKeyElement">
         <xsd:group ref="objectList" minOccurs="1"/>
     </xsd:complexType>
-    <xsd:annotation>
-        <xsd:documentation>Defines constructor argument.</xsd:documentation>
-    </xsd:annotation>
     <xsd:complexType name="lookupMethod">
         <xsd:attribute name="name" type="nonNullString" use="required"/>
         <xsd:attribute name="object" type="nonNullString" use="required"/>
     </xsd:complexType>
     <xsd:complexType name="constructorArgument">
+        <xsd:annotation>
+            <xsd:documentation>Defines constructor argument.</xsd:documentation>
+        </xsd:annotation>
         <xsd:group ref="objectList" minOccurs="0"/>
         <!--
               The constructor-arg tag can have an optional named parameter attribute,
@@ -251,10 +257,11 @@
         <xsd:attribute name="expression" type="nonNullString" use="optional"/>
         <xsd:attribute name="ref" type="nonNullString" use="optional"/>
     </xsd:complexType>
-    <xsd:annotation>
-        <xsd:documentation>Defines property.</xsd:documentation>
-    </xsd:annotation>
+
     <xsd:complexType name="property">
+        <xsd:annotation>
+            <xsd:documentation>Defines property.</xsd:documentation>
+        </xsd:annotation>
         <xsd:group ref="objectList" minOccurs="0"/>
         <!-- The property name attribute is the name of the objects property. -->
         <xsd:attribute name="name" type="nonNullString" use="required"/>
@@ -262,10 +269,11 @@
         <xsd:attribute name="expression" type="nonNullString" use="optional"/>
         <xsd:attribute name="ref" type="nonNullString" use="optional"/>
     </xsd:complexType>
-    <xsd:annotation>
-        <xsd:documentation>Defines a single named object.</xsd:documentation>
-    </xsd:annotation>
+
     <xsd:complexType name="vanillaObject">
+        <xsd:annotation>
+            <xsd:documentation>Defines a single named object.</xsd:documentation>
+        </xsd:annotation>
         <xsd:sequence>
             <xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
             <!--
@@ -491,10 +499,10 @@
         <xsd:attribute name="factory-object" type="nonNullString" use="optional"/>
     </xsd:complexType>
 
-    <xsd:annotation>
-        <xsd:documentation>The document root.  At least one object definition is required.</xsd:documentation>
-    </xsd:annotation>
     <xsd:element name="objects">
+        <xsd:annotation>
+            <xsd:documentation>The document root.  At least one object definition is required.</xsd:documentation>
+        </xsd:annotation>
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
