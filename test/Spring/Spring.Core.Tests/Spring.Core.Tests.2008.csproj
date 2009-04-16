@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -720,7 +720,7 @@
     <Compile Include="Validation\ExclusiveValidatorGroupTests.cs" />
     <Compile Include="Validation\HelperClasses.cs" />
     <Compile Include="Validation\ValidationExceptionTests.cs" />
-    <Compile Include="Validation\ValidationConfigParserTests.cs">
+    <Compile Include="Validation\ValidationNamespaceParserTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Validation\ValidationErrorsTests.cs">
@@ -841,6 +841,9 @@
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithAllRequiredPropertiesProvided.xml" />
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithCustomAttribute.xml" />
     <Content Include="Spring.Core.Tests.dll.config" />
+    <Content Include="Validation\dummy.xml" />
+    <EmbeddedResource Include="Validation\ValidationNamespaceParserTests_WhenConfigFileIsNotValid.xml" />
+    <EmbeddedResource Include="Validation\ValidationNamespaceParserTests_WhenConfigFileIsValid.xml" />
     <EmbeddedResource Include="Util\ConfigXmlDocumentTests_SampleConfig.xml" />
     <EmbeddedResource Include="Context\contextlifecycle.xml" />
     <EmbeddedResource Include="Context\Support\objects.xml" />

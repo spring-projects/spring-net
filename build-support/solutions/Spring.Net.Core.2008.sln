@@ -23,6 +23,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.2008", "..\..\s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.Tests.2008", "..\..\test\Spring\Spring.Data.Tests\Spring.Data.Tests.2008.csproj", "{ACD39D47-1811-40FA-9E7E-5DEA5B9CE6C0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D8C99188-BAC7-4308-B898-6409EA6933B2}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\BreakingChanges-1.2.txt = ..\..\BreakingChanges-1.2.txt
+		..\..\changelog.txt = ..\..\changelog.txt
+		..\..\readme.txt = ..\..\readme.txt
+		..\..\Spring.build = ..\..\Spring.build
+		..\..\Spring.include = ..\..\Spring.include
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET

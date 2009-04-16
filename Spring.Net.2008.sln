@@ -1,6 +1,13 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F04753EF-7A1B-4837-AB63-8C0821E8155D}"
+	ProjectSection(SolutionItems) = preProject
+		BreakingChanges-1.2.txt = BreakingChanges-1.2.txt
+		changelog.txt = changelog.txt
+		readme.txt = readme.txt
+		Spring.build = Spring.build
+		Spring.include = Spring.include
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.2008", "src\Spring\Spring.Core\Spring.Core.2008.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
 EndProject

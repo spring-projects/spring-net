@@ -1,3 +1,23 @@
+Changes (1.2.0 to 1.2.1)
+
+Spring.Core
+-----------
+
+1. within an ValidationGroup element (<v:group>,<v:exclusive>,..), nested validator elements now must occur after any 
+   <v:message>, <v:action> or <v:property> elements. The following was allowed previously, but now will raise a schema
+   validation error:
+   
+   <v:group ..>
+      <v:validator ...>
+      <v:action ...>
+   
+   change this to
+   
+   <v:group ..>
+      <v:action ...>
+      <v:validator ...>
+
+
 Changes (1.1.2 to 1.2 RC1 or greater)
 
 Spring.Core

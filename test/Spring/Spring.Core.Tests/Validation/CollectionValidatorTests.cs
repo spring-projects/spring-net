@@ -188,10 +188,10 @@ namespace Spring.Validation
            
               <v:group id='validator'>
                   <v:collection id='collectionValidator' validate-all='true' context='Members' include-element-errors='true'>
-                      <v:ref name='validatePerson'/>
                       <v:message id='coll1' providers='membersCollection' when='true'>
                           <v:param value='#this.ToString()'/> 
                       </v:message>
+                      <v:ref name='validatePerson'/>
                   </v:collection>     
               </v:group>  
            </objects>";

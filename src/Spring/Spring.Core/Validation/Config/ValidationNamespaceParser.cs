@@ -121,35 +121,23 @@ namespace Spring.Validation.Config
         {
             string typeName = GetTypeName(element);
             string parent = GetAttributeValue(element, ObjectDefinitionConstants.ParentAttribute);
-            string test = GetAttributeValue(element, ValidatorDefinitionConstants.TestAttribute);
-            string when = GetAttributeValue(element, ValidatorDefinitionConstants.WhenAttribute);
-            string validateAll = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionValidateAllAttribute);
-            string context = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionContextAttribute);
-            string includeElementsErrors = GetAttributeValue(element, ValidatorDefinitionConstants.CollectionIncludeElementsErrors);
 
             string name = "validator: " + (StringUtils.HasText(id) ? id : this.definitionCount.ToString());
             MutablePropertyValues properties = new MutablePropertyValues();
-            if (StringUtils.HasText(test))
-            {
-                properties.Add("Test", test);
-            }
-            if (StringUtils.HasText(when))
-            {
-                properties.Add("When", when);
-            }
-            if (StringUtils.HasText(validateAll))
-            {
-                properties.Add("ValidateAll", validateAll);
-            }
-            if (StringUtils.HasText(validateAll))
-            {
-                properties.Add("Context", context);
-            }
-            if (StringUtils.HasText(includeElementsErrors))
-            {
-                properties.Add("IncludeElementErrors", includeElementsErrors);
-            }
 
+            ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.TestAttribute, properties, "Test");
+            ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.WhenAttribute, properties, "When");
+            ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.GroupFastValidateAttribute, properties, "FastValidate");
+            ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.RegexExpressionAttribute, properties, "Expression");
+            ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.CollectionValidateAllAttribute, properties, "ValidateAll");
+            ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.CollectionContextAttribute, properties, "Context");
+            ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.CollectionIncludeElementsErrors, properties, "IncludeElementErrors");
+
+// TODO: (EE) - is this a mistake to check 'validateAll' but add 'context' then?
+//            if (StringUtils.HasText(validateAll))
+//            {
+//                properties.Add("Context", context);
+//            }
 
             ManagedList nestedValidators = new ManagedList();
             ManagedList actions = new ManagedList();
@@ -197,6 +185,19 @@ namespace Spring.Validation.Config
             od.IsLazyInit = true;
 
             return od;
+        }
+
+        /// <summary>
+        /// Parses the attribute of the given <paramref name="attName"/> from the XmlElement and, if available, adds a property of the given <paramref name="propName"/> with
+        /// the parsed value.
+        /// </summary>
+        private void ParseAttributeIntoProperty(XmlElement element, string attName, MutablePropertyValues properties, string propName)
+        {
+            string test = GetAttributeValue(element, attName);
+            if (StringUtils.HasText(test))
+            {
+                properties.Add(propName, test);
+            }
         }
 
         /// <summary>
@@ -344,6 +345,10 @@ namespace Spring.Validation.Config
 
             public const string ReferenceNameAttribute = "name";
             public const string ReferenceContextAttribute = "context";
+
+            public const string RegexExpressionAttribute = "fast-validate";
+
+            public const string GroupFastValidateAttribute = "fast-validate";
 
             public const string CollectionValidateAllAttribute = "validate-all";
             public const string CollectionContextAttribute = "context";

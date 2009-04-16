@@ -41,60 +41,13 @@ namespace Spring.Validation
     /// </summary>
     /// <author>Rick Evans</author>
     [TestFixture]
-    public sealed class ValidationConfigParserTests
+    public sealed class ValidationNamespaceParserTests
     {
         [Test]
         public void WhenConfigFileIsValid()
         {
-            const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
-<objects xmlns='http://www.springframework.net' xmlns:v='http://www.springframework.net/validation'>
-    <v:group id='destinationAirportValidator'>
-        <v:ref name='airportCodeValidator' context='ReturningFrom.AirportCode'/>
-        <v:ref name='airportCodeValidator'/>
-	    <v:condition test='ReturningFrom.AirportCode != StartingFrom.AirportCode'>
-            <v:message id='error.destinationAirport.sameAsDeparture' providers='summary'/>
-        </v:condition>
-	    <v:validator type='Spring.Validation.RegularExpressionValidator, Spring.Core' test='ReturningFrom.AirportCode' when='true'>
-            <v:property name='Expression' value='[A-Z]*'/>
-            <v:message id='error.destinationAirport.invalidFormat' providers='summary'/>
-        </v:validator>
-    </v:group>
+            XmlDocument doc = GetValidatedXmlResource("_WhenConfigFileIsValid.xml");
 
-    <v:required id='airportCodeValidator' test='#this'>
-        <v:message id='error.airportCode.dummy' providers='summary' when='false'/>
-        <v:message id='error.airportCode.required' providers='summary'>
-            <v:param value='#this.Abc'/>
-            <v:param value='#this.Xyz'/>
-        </v:message>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' when='true'>
-            <v:property name='Valid' value='#now = DateTime.Now'/>
-        </v:action>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
-    </v:required>
-
-    <object id='myObject' type='DateTime'/>
-
-</objects>
-";
-            XmlDocument doc = new XmlDocument();
-
-            AssemblyResource validationSchema = new AssemblyResource("assembly://Spring.Core/Spring.Validation.Config/spring-validation-1.1.xsd");
-            AssemblyResource objectsSchema = new AssemblyResource("assembly://Spring.Core/Spring.Objects.Factory.Xml/spring-objects-1.1.xsd");
-
-#if !NET_2_0
-            XmlValidatingReader validatingReader = new XmlValidatingReader(xml, XmlNodeType.Document, null);
-            validatingReader.ValidationType = ValidationType.Schema;
-            validatingReader.Schemas.Add("http://www.springframework.net", new XmlTextReader(objectsSchema.InputStream));
-            validatingReader.Schemas.Add("http://www.springframework.net/validation", new XmlTextReader(validationSchema.InputStream));
-#else
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.Schemas.Add("http://www.springframework.net", new XmlTextReader(objectsSchema.InputStream));
-            settings.Schemas.Add("http://www.springframework.net/validation", new XmlTextReader(validationSchema.InputStream));
-            settings.ValidationType = ValidationType.Schema;
-            XmlReader validatingReader = XmlReader.Create(new StringReader(xml), settings);
-#endif
-            doc.Load(validatingReader);
-            
             MockObjectDefinitionRegistry registry = new MockObjectDefinitionRegistry();
             IObjectDefinitionDocumentReader reader = new DefaultObjectDefinitionDocumentReader();
 
@@ -112,20 +65,25 @@ namespace Spring.Validation
                 }
             }
             IObjectDefinition[] defs = registry.GetObjectDefinitions();
-            Assert.AreEqual(2, defs.Length);
+            Assert.AreEqual(8, defs.Length);
 
             IObjectDefinition def = registry.GetObjectDefinition("destinationAirportValidator");
             Assert.IsTrue(def.IsSingleton);
             Assert.IsTrue(def.IsLazyInit);
             Assert.IsTrue(typeof(IValidator).IsAssignableFrom(def.ObjectType));
+            
+            PropertyValue fastValidateProperty = def.PropertyValues.GetPropertyValue("FastValidate");
+            Assert.IsNotNull(fastValidateProperty);
+            Assert.AreEqual("true", fastValidateProperty.Value);
+
             PropertyValue validatorsProperty = def.PropertyValues.GetPropertyValue("Validators");
             Assert.IsNotNull(validatorsProperty);
             object validatorsObject = validatorsProperty.Value;
             Assert.AreEqual(typeof(ManagedList), validatorsObject.GetType());
-            ManagedList validators = (ManagedList) validatorsObject;
+            ManagedList validators = (ManagedList)validatorsObject;
             Assert.AreEqual(4, validators.Count);
 
-            def = (IObjectDefinition) validators[3];
+            def = (IObjectDefinition)validators[3];
             Assert.IsTrue(def.IsSingleton);
             Assert.IsTrue(def.IsLazyInit);
             Assert.AreEqual(typeof(RegularExpressionValidator), def.ObjectType);
@@ -139,47 +97,38 @@ namespace Spring.Validation
             Assert.IsNotNull(actionsProperty);
             object actionsObject = actionsProperty.Value;
             Assert.AreEqual(typeof(ManagedList), actionsObject.GetType());
-            ManagedList actions = (ManagedList) actionsObject;
+            ManagedList actions = (ManagedList)actionsObject;
             Assert.AreEqual(4, actions.Count);
 
-            IObjectDefinition messageDefinition = (IObjectDefinition) actions[1];
+            IObjectDefinition messageDefinition = (IObjectDefinition)actions[1];
             Assert.AreEqual(typeof(ErrorMessageAction), messageDefinition.ObjectType);
 
-            IObjectDefinition actionDefinition = (IObjectDefinition) actions[2];
+            IObjectDefinition actionDefinition = (IObjectDefinition)actions[2];
             Assert.AreEqual(typeof(ExpressionAction), actionDefinition.ObjectType);
             Assert.AreEqual("#now = DateTime.Now", actionDefinition.PropertyValues.GetPropertyValue("Valid").Value);
+        }
+
+        private XmlDocument GetValidatedXmlResource(string resourceExtension)
+        {
+            AssemblyResource validationSchema = new AssemblyResource("assembly://Spring.Core/Spring.Validation.Config/spring-validation-1.1.xsd");
+            AssemblyResource objectsSchema = new AssemblyResource("assembly://Spring.Core/Spring.Objects.Factory.Xml/spring-objects-1.1.xsd");
+
+            return TestResourceLoader.GetXmlValidated(this, resourceExtension, objectsSchema, validationSchema);
         }
 
         [Test]
         [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void WhenConfigFileIsNotValid()
         {
-            const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
-<objects xmlns='http://www.springframework.net' xmlns:v='http://www.springframework.net/validation'>
-    <v:required test='#this'>
-        <v:message id='error.airportCode.required' providers='summary'/>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' when='true'/>
-    </v:required>
-</objects>
-";
-            XmlDocument doc = new XmlDocument();
-
-            AssemblyResource validationSchema = new AssemblyResource("assembly://Spring.Core/Spring.Validation.Config/spring-validation-1.1.xsd");
-            AssemblyResource objectsSchema = new AssemblyResource("assembly://Spring.Core/Spring.Objects.Factory.Xml/spring-objects-1.1.xsd");
-
-#if !NET_2_0
-            XmlValidatingReader validatingReader = new XmlValidatingReader(xml, XmlNodeType.Document, null);
-            validatingReader.ValidationType = ValidationType.Schema;
-            validatingReader.Schemas.Add("http://www.springframework.net", new XmlTextReader(objectsSchema.InputStream));
-            validatingReader.Schemas.Add("http://www.springframework.net/validation", new XmlTextReader(validationSchema.InputStream));
-#else
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.Schemas.Add("http://www.springframework.net", new XmlTextReader(objectsSchema.InputStream));
-            settings.Schemas.Add("http://www.springframework.net/validation", new XmlTextReader(validationSchema.InputStream));
-            settings.ValidationType = ValidationType.Schema;
-            XmlReader validatingReader = XmlReader.Create(new StringReader(xml), settings);
-#endif
-            doc.Load(validatingReader);
+//            const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+//<objects xmlns='http://www.springframework.net' xmlns:v='http://www.springframework.net/validation'>
+//    <v:required test='#this'>
+//        <v:message id='error.airportCode.required' providers='summary'/>
+//        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' when='true'/>
+//    </v:required>
+//</objects>
+//";
+            XmlDocument doc = GetValidatedXmlResource("_WhenConfigFileIsNotValid.xml");
 
             MockObjectDefinitionRegistry registry = new MockObjectDefinitionRegistry();
             IObjectDefinitionDocumentReader reader = new DefaultObjectDefinitionDocumentReader();
@@ -197,6 +146,6 @@ namespace Spring.Validation
                     parser.ParseElement(element, parserContext);
                 }
             }
-        }       
+        }
     }
 }

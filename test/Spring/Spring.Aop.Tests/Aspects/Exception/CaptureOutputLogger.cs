@@ -12,10 +12,15 @@ namespace Spring.Aspects.Exceptions
     public class CaptureOutputLogger : TraceLogger
     {
         public static readonly string NAME = "capturingLogger";
-
+#if NET_1_0 || NET_1_1
         public CaptureOutputLogger() 
             : base(NAME, LogLevel.All, false, false, null)
         {}
+#else
+		public CaptureOutputLogger()
+			: base(false, NAME, LogLevel.All, true, false, false, null)
+		{ }
+#endif
 
 //        private LogLevel _currentLogLevel = LogLevel.All;
 //
