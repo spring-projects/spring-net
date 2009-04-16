@@ -1256,7 +1256,7 @@ namespace Spring.Web.UI
                 {
                     throw new ArgumentException( "Validator is not defined." );
                 }
-                result = validator.Validate( validationContext, contextParams, this.validationErrors ) && result;
+                result = validator.Validate( validationContext, contextParams, this.ValidationErrors ) && result;
             }
 
             return result;
