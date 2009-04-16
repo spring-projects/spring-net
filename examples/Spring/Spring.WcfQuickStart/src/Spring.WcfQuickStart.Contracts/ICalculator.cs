@@ -42,20 +42,20 @@ namespace Spring.WcfQuickStart
         }
     }
 
-    [ServiceContract(Namespace = "http://Spring.WcfQuickStart")]
+//    [ServiceContract(Namespace = "http://Spring.WcfQuickStart")]
     public interface ICalculator
     {
-        [OperationContract]
+//        [OperationContract]
         double Add(double n1, double n2);
-        [OperationContract]
+//        [OperationContract]
         double Subtract(double n1, double n2);
-        [OperationContract]
+//        [OperationContract]
         double Multiply(double n1, double n2);
-        [OperationContract]
+//        [OperationContract]
         double Divide(double n1, double n2);
-        [OperationContract]
+//        [OperationContract]
         string GetName();
-        [OperationContract]
+//        [OperationContract]
         OperationResult Power(BinaryOperationArgs args);
     }
 }
