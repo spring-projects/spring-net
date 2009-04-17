@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+
 [assembly: ComVisible(false)]
 [assembly: AssemblyTitle("Spring.Net Core functionality")]
 [assembly: AssemblyDescription("Core functionality for Spring.Net IoC container")]

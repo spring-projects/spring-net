@@ -1,5 +1,28 @@
 <?xml version="1.0" ?>
 <project name="Spring.NET" default="test">
+<!--
+Main build targets:
+===================
+
+"test":
+        builds all projects for all available target platforms
+
+"compile-build-<framework id>":
+	builds all projects for a specific platform, e.g. compile-build-net-2.0 for net-2.0
+
+"docs":
+        builds the reference documentation
+
+"package":
+	builds all projects for all target platforms, builds docs and packages everything for distribution
+
+Build properties that may be set:
+=================================
+"project.build.sign":
+        signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
+"package.version:":
+        set the package version
+-->
 
   <!-- global project settings -->
   <property name="project.name" value="Spring.NET"/>
@@ -10,22 +33,23 @@
   <!-- debug or release -->
   <property name="project.build.config" value="debug"/>
   <property name="project.build.package" value="false"/>
-  <property name="project.build.sign" value="false"/>
+  <property name="project.build.sign" value="false" overwrite="false" />
+
   <!-- Include spring helpers -->
   <include buildfile="${spring.basedir}/Spring.include"/>
 
-  <property name="package.version" value="1.2.0" unless="${property::exists('project.version')}"/>
+  <property name="package.version" value="0.0.0" overwrite="false"/>
   <property name="using-clover" value="false"/>
   <!-- change this to sync the sdk doc version generated -->
-  <property name="package.version.docs" value="1.2.0" unless="${property::exists('project.version')}"/>
+  <property name="package.version.docs" value="${package.version}" />
   <!-- make system environment variables available as NAnt properties -->
   <sysinfo/>
 
   <property name="project.company" value="SpringSource"/>
-  <property name="project.copyright" value="Copyright 2002-2008 Spring.NET Framework Team."/>
+  <property name="project.copyright" value="Copyright 2002-2009 Spring.NET Framework Team."/>
 
   <property name="key.file" value="Spring.Net.snk"/>
-  <property name="project.year" value="2008"/>
+  <property name="project.year" value="2009"/>
 
   <!-- Targets that are always executed -->
   <call target="set-build-configuration"/>
@@ -197,7 +221,7 @@
     <call target="compile-build-1.0"/>
     <call target="compile-build-1.1"/>
     <call target="compile-build-2.0"/>
-	
+
 
     <!-- Ignore Compact Framework 1.0 for now -->
     <!-- call target="compile-build-netcf-1.0"/ -->
@@ -343,9 +367,9 @@
     <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate.Tests/Spring.Data.NHibernate.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate20.Tests.build" target="test" 
+    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate20.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate20.Integration.Tests.build" target="test" 
+    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate20.Integration.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate21.Tests/Spring.Data.NHibernate21.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
@@ -567,95 +591,95 @@
   </target>
 
   <target name="clean-obj">
-	<delete dir="src/Spring/Spring.Aop/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Aop/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Core/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Core/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Data/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Data/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Data.NHibernate/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Data.NHibernate/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Data.NHibernate12/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Data.NHibernate12/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Data.NHibernate20/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Data.NHibernate20/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Aop/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Aop/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Core/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Core/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data.NHibernate/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data.NHibernate/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data.NHibernate12/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data.NHibernate12/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data.NHibernate20/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data.NHibernate20/bin" failonerror="false"/>
   <delete dir="src/Spring/Spring.Data.NHibernate21/obj" failonerror="false"/>
   <delete dir="src/Spring/Spring.Data.NHibernate21/bin" failonerror="false"/>
   <delete dir="src/Spring/Spring.Services/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Services/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Messaging.Nms/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Messaging.Nms/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Messaging/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Messaging/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Scheduling.Quartz/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Scheduling.Quartz/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Testing.NUnit/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Testing.NUnit/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Web/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Web/bin" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Web.Extensions/obj" failonerror="false"/>
-	<delete dir="src/Spring/Spring.Web.Extensions/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Services/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Messaging.Nms/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Messaging.Nms/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Messaging/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Messaging/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Scheduling.Quartz/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Scheduling.Quartz/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Testing.NUnit/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Testing.NUnit/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Extensions/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Extensions/bin" failonerror="false"/>
 
-	<delete dir="test/Spring/Spring.Aop.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Aop.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Core.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Core.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.Integration.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.Integration.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.NHibernate.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.NHibernate.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.NHibernate.Integration.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.NHibernate.Integration.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.NHibernate20.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.NHibernate20.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.NHibernate20.Integration.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Data.NHibernate20.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Aop.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Aop.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Core.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Core.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate20.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate20.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate20.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate20.Integration.Tests/bin" failonerror="false"/>
   <delete dir="test/Spring/Spring.Data.NHibernate21.Tests/obj" failonerror="false"/>
   <delete dir="test/Spring/Spring.Data.NHibernate21.Tests/bin" failonerror="false"/>
   <delete dir="test/Spring/Spring.Data.NHibernate21.Integration.Tests/obj" failonerror="false"/>
   <delete dir="test/Spring/Spring.Data.NHibernate21.Integration.Tests/bin" failonerror="false"/>
   <delete dir="test/Spring/Spring.Services.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Messaging.Nms.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Messaging.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Messaging.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Web.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Web.Tests/bin" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Testing.NUnit.Tests/obj" failonerror="false"/>
-	<delete dir="test/Spring/Spring.Testing.NUnit.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Nms.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Testing.NUnit.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Testing.NUnit.Tests/bin" failonerror="false"/>
 
 
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Aspects/obj" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Aspects/bin" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.ClientApp/obj" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.ClientApp/bin" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Contract/obj" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Contract/bin" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RegisterComponentServices/obj" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RegisterComponentServices/bin" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RemoteApp/obj" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RemoteApp/bin" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Services/obj" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Services/bin" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2003/obj" failonerror="false"/>
-	<delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2003/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Aspects/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Aspects/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.ClientApp/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.ClientApp/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Contract/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Contract/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RegisterComponentServices/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RegisterComponentServices/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RemoteApp/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.RemoteApp/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Services/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Services/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2003/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2003/bin" failonerror="false"/>
 
-	<delete dir="examples/Spring/SpringAir/src/SpringAir.Core/obj" failonerror="false"/>
-	<delete dir="examples/Spring/SpringAir/src/SpringAir.Core/bin" failonerror="false"/>
-	<delete dir="examples/Spring/SpringAir/src/SpringAir.Data.Ado/obj" failonerror="false"/>
-	<delete dir="examples/Spring/SpringAir/src/SpringAir.Data.Ado/bin" failonerror="false"/>
-	<delete dir="examples/Spring/SpringAir/src/SpringAir.Data.IBatis/obj" failonerror="false"/>
-	<delete dir="examples/Spring/SpringAir/src/SpringAir.Data.IBatis/bin" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/src/SpringAir.Core/obj" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/src/SpringAir.Core/bin" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/src/SpringAir.Data.Ado/obj" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/src/SpringAir.Data.Ado/bin" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/src/SpringAir.Data.IBatis/obj" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/src/SpringAir.Data.IBatis/bin" failonerror="false"/>
 
-	<delete dir="examples/Spring/SpringAir/test/SpringAir.Core.Tests/obj" failonerror="false"/>
-	<delete dir="examples/Spring/SpringAir/test/SpringAir.Core.Tests/bin" failonerror="false"/>
-	<delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/obj" failonerror="false"/>
- 	<delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/bin" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/test/SpringAir.Core.Tests/obj" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/test/SpringAir.Core.Tests/bin" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/obj" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/bin" failonerror="false"/>
   </target>
 
 
@@ -717,7 +741,7 @@
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
 
-    <call target="${nant.target.root.name}-1.0" /> 
+    <call target="${nant.target.root.name}-1.0" />
     <call target="${nant.target.root.name}-1.1" />
     <call target="${nant.target.root.name}-2.0" />
     <call target="${nant.target.root.name}-3.0" />
@@ -876,7 +900,7 @@
         <include name="changelog.txt"/>
         <include name="license.txt"/>
         <include name="Spring.build"/>
-	<include name="Spring.include"/>
+        <include name="Spring.include"/>
         <include name="BreakingChanges-1.2.txt"/>
         <!-- exclude VS.Net stuff -->
         <exclude name="**/sdk-web/**"/>
@@ -950,9 +974,9 @@
           <include name="**/antlr.runtime.dll"/>
           <include name="**/Common.Logging.dll"/>
 
-	  <exclude name="**/3.0/**"/>
-	  <exclude name="**/release/Spring/**"/>
-	  <exclude name="**/debug/Spring/**"/>
+          <exclude name="**/3.0/**"/>
+          <exclude name="**/release/Spring/**"/>
+          <exclude name="**/debug/Spring/**"/>
           <exclude name="**/examples/**"/>
           <exclude name="**/results/**"/>
           <exclude name="mono/**"/>
@@ -1036,8 +1060,8 @@
           <include name="**/Apache.NMS.pdb"/>
           <include name="**/Apache.NMS.ActiveMQ.dll"/>
           <include name="**/Apache.NMS.ActiveMQ.pdb"/>
-          <include name="**/Quartz.dll"/>	
-          <include name="**/Nullables.dll"/>	
+          <include name="**/Quartz.dll"/>
+          <include name="**/Nullables.dll"/>
           <include name="**/EULA.rtf"/>
         </fileset>
       </copy>
@@ -1342,9 +1366,9 @@
       <include name="examples/SpringAir/src/SpringAir.Web.2005/bin/*.refresh"/>
       <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>
       <include name="examples/Spring/Spring.NmsQuickStart/**"/>
-      <include name="examples/Spring/Spring.MsmqQuickStart/**"/>      
-      <include name="examples/Spring/Spring.WcfQuickStart/**"/>      
-      <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>      
+      <include name="examples/Spring/Spring.MsmqQuickStart/**"/>
+      <include name="examples/Spring/Spring.WcfQuickStart/**"/>
+      <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>
 
 
       <!-- exclude VS.Net stuff -->
