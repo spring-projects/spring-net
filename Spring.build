@@ -705,7 +705,47 @@ Build properties that may be set:
   </target>
 
   <target name="docs">
+    <call target="doc-reference" cascade="false" />
+    <!-- call target="doc-sdk" cascade="false" / -->
+  </target>
+
+  <target name="doc-reference">
     <nant buildfile="./doc/reference/docbook.build" target="all"/>
+  </target>
+
+  <target name="doc-sdk">
+    <echo message="Creating SDK Documentation for Spring.NET" />
+
+    <!-- clean tmp dir -->
+    <delete dir="./doc/sdk/target" failonerror="false" />
+
+    <exec workingdir="." program="./build-support/tools/ndoc3/NDoc3Console.exe">
+      <!-- arg value="-verbose" /-->
+      <!-- arg value="-documenter=MSDN" /-->
+      <arg value="-project=./doc/sdk/Spring.NET-net-2.0.ndoc" />
+    </exec>
+
+    <!-- copy sdk docs -->
+    <copy todir="./doc/sdk/target/html">
+      <fileset basedir="./doc/sdk/target/tmp/">
+        <include name="**/*"/>
+        <exclude name="*.chw" />
+        <exclude name="*.hhc" />
+        <exclude name="*.hhk" />
+        <exclude name="*.hhp" />
+        <exclude name="*.chm" />
+        <exclude name="ndoc3_msdn_temp" />
+      </fileset>
+    </copy>
+    <copy todir="./doc/sdk/target/htmlhelp">
+      <fileset basedir="./doc/sdk/target/tmp/">
+        <include name="*.chm"/>
+      </fileset>
+    </copy>
+
+    <!-- clean tmp dir -->
+    <delete dir="./doc/sdk/target/tmp" failonerror="false" />
+
   </target>
 
   <target name="releasepkg">
