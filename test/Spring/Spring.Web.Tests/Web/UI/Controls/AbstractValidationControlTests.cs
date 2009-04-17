@@ -63,7 +63,7 @@ namespace Spring.Web.UI.Controls
         }
 
         [Test]
-        public void ResolvesAndRendersValidationErrors()
+        public void ResolvesAndRendersValidationErrorsUsingValidationContainer()
         {
             TestValidationControl vc = new TestValidationControl();
             vc.ID = "TestControl";
@@ -74,6 +74,27 @@ namespace Spring.Web.UI.Controls
             StaticMessageSource msgSrc = new StaticMessageSource();
             msgSrc.AddMessage("msgId", CultureInfo.CurrentUICulture, "Resolved Message Text");
             page.MessageSource = msgSrc;
+
+            vc.TestRender(null);
+            Assert.AreEqual("Resolved Message Text", vc.LastErrorsRendered[0]);
+        }
+
+        [Test]
+        public void ResolvesAndRendersValidationErrorsUsingExplicitlySpecifiedErrorsAndMessageSource()
+        {
+            TestValidationControl vc = new TestValidationControl();
+            vc.ID = "TestControl";
+
+            Page page = new Page();
+            page.Controls.Add(vc);
+
+            ValidationErrors errors = new ValidationErrors();
+            errors.AddError(vc.Provider, new ErrorMessage("msgId"));
+            vc.ValidationErrors = errors;
+
+            StaticMessageSource msgSrc = new StaticMessageSource();
+            msgSrc.AddMessage("msgId", CultureInfo.CurrentUICulture, "Resolved Message Text");
+            vc.MessageSource = msgSrc;
 
             vc.TestRender(null);
             Assert.AreEqual("Resolved Message Text", vc.LastErrorsRendered[0]);
@@ -305,12 +326,12 @@ namespace Spring.Web.UI.Controls
 
             public IMessageSource TheMessageSource
             {
-                get { return base.MessageSource; }
+                get { return base.ResolveMessageSource(); }
             }
 
             public IValidationContainer TheValidationContainer
             {
-                get { return base.ValidationContainer; }
+                get { return base.FindValidationContainer(); }
             }
 
             public bool TheDesignMode

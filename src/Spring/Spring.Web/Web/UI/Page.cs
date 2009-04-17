@@ -1263,12 +1263,17 @@ namespace Spring.Web.UI
         }
 
         /// <summary>
-        /// Gets the validation errors container.
+        /// Gets or sets the validation errors container.
         /// </summary>
         /// <value>The validation errors container.</value>
         public virtual IValidationErrors ValidationErrors
         {
             get { return validationErrors; }
+            set
+            {
+                AssertUtils.ArgumentNotNull(value, "ValidationErrors");
+                validationErrors = value;
+            }
         }
 
         /// <summary>

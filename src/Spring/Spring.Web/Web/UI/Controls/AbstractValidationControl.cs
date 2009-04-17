@@ -18,19 +18,13 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Spring.Context;
 using Spring.Util;
 using Spring.Validation;
 using Spring.Web.UI.Validation;
-
-#endregion
 
 namespace Spring.Web.UI.Controls
 {
@@ -40,9 +34,11 @@ namespace Spring.Web.UI.Controls
     /// <author>Erich Eichinger</author>
     public abstract class AbstractValidationControl : Control
     {
-        private string provider;
-        private string validationContainerName;
+        private string _provider;
+        private string _validationContainerName;
         private IValidationErrorsRenderer renderer;
+        private IValidationErrors _validationErrors;
+        private IMessageSource _messageSource;
 
 #if !NET_2_0
         private bool initialized;
@@ -70,21 +66,51 @@ namespace Spring.Web.UI.Controls
                 {
                     return this.Site.DesignMode;
                 }
-                return (this.Context == null) && initialized;
+                return initialized && (this.Context == null);
             }
         }
 #endif
         /// <summary>
-        /// If set, <see cref="ValidationContainer"/> will resolve to the named control specified
+        /// Set a particular message source to be used for
+        /// resolving error messages to display texts.
+        /// </summary>
+        /// <remarks>
+        /// If not set, the control will probe the control hierarchy
+        /// for containing controls implementing <see cref="IValidationContainer"/>
+        /// and use the container's <see cref="IValidationContainer.MessageSource"/>.
+        /// </remarks>
+        public IMessageSource MessageSource
+        {
+            get { return _messageSource; }
+            set { _messageSource = value; }
+        }
+
+        /// <summary>
+        /// Allows to set a particular instance of the validation errors
+        /// collection to render.
+        /// </summary>
+        /// <remarks>
+        /// If not set, the control will probe the control hierarchy for 
+        /// containing controls implementing <see cref="IValidationContainer"/>
+        /// and use the container's <see cref="IValidationContainer.ValidationErrors"/>
+        /// </remarks>
+        public IValidationErrors ValidationErrors
+        {
+            get { return _validationErrors; }
+            set { _validationErrors = value; }
+        }
+
+        /// <summary>
+        /// If set, <see cref="FindValidationContainer"/> will resolve to the named control specified
         /// by this property. The behavior of name resolution is identical to 
         /// <see cref="System.Web.UI.WebControls.BaseValidator.ControlToValidate"/>, except that if the name
         /// starts with "::", the resolution will start at the page level instead of relative to this
         /// control
         /// </summary>
-        public virtual string ValidationContainerName
+        public string ValidationContainerName
         {
-            get { return validationContainerName; }
-            set { validationContainerName = value; }
+            get { return _validationContainerName; }
+            set { _validationContainerName = value; }
         }
 
         /// <summary>
@@ -95,20 +121,20 @@ namespace Spring.Web.UI.Controls
         {
             get
             {
-                if (this.provider == null)
+                if (this._provider == null)
                 {
-                    this.provider = this.ID;
-                    if (this.provider == null)
+                    this._provider = this.ID;
+                    if (this._provider == null)
                     {
-                        this.provider = string.Empty;
+                        this._provider = string.Empty;
                     }
                 }
-                return this.provider;
+                return this._provider;
             }
             set
             {
                 AssertUtils.ArgumentNotNull(value, "Provider");
-                this.provider = value;
+                this._provider = value;
             }
         }
 
@@ -138,66 +164,115 @@ namespace Spring.Web.UI.Controls
         }
 
         /// <summary>
-        /// Gets the MessageSource to be used for resolve error messages
-        /// </summary>
-        /// <remarks>
-        /// By default, returns <see cref="ValidationContainer"/>'s MessageSource.
-        /// </remarks>
-        protected virtual IMessageSource MessageSource
-        {
-            get { return ValidationContainer == null ? null : ValidationContainer.MessageSource; }
-        }
-
-        /// <summary>
         /// Create the default <see cref="IValidationErrorsRenderer"/> 
         /// for this ValidationControl if none is configured.
         /// </summary>
         protected abstract IValidationErrorsRenderer CreateValidationErrorsRenderer();
 
         /// <summary>
-        /// Gets the <see cref="IValidationContainer"/>, who's <see cref="IValidationContainer.ValidationErrors"/> 
-        /// shall be rendered by this control.
+        /// Gets the MessageSource to be used for resolve error messages
         /// </summary>
-        protected virtual IValidationContainer ValidationContainer
+        /// <remarks>
+        /// By default, returns <see cref="FindValidationContainer"/>'s MessageSource.
+        /// </remarks>
+        /// <returns>the <see cref="IMessageSource"/> to resolve message texts. May be <c>null</c></returns>
+        protected virtual IMessageSource ResolveMessageSource()
         {
-            get
+            IMessageSource messageSource = this.MessageSource;
+            if (messageSource == null)
             {
-                // is an explicit container specified?
-                if (ValidationContainerName != null)
-                {
-                    Control start = this.NamingContainer;
-                    string containerName = this.ValidationContainerName;
-                    // shall we do a global search?
-                    if (containerName.StartsWith("::"))
-                    {
-                        containerName = containerName.Substring(2);
-                        start = this.Page;
-                    }
-                    IValidationContainer container = start.FindControl(containerName) as IValidationContainer;
-                    if (container == null)
-                    {
-                        throw new ArgumentException(string.Format("Validation Container Control specified by {0} does not exist or does not implement IValidationContainer", this.ValidationContainerName));
-                    }
-                    return container;
-                }
-
-                for (Control parent = this.Parent; parent != null; parent = parent.Parent)
-                {
-                    IValidationContainer container = parent as IValidationContainer;
-                    if (container != null
-                        && container.ValidationErrors != null)
-                    {
-                        return container;
-                    }
-                }
-                return null;
+                IValidationContainer validationContainer = FindValidationContainer();
+                messageSource = (validationContainer == null) 
+                                ? null 
+                                : validationContainer.MessageSource;
             }
+            return messageSource;
         }
 
         /// <summary>
-        /// Resolves the <see cref="ValidationContainer"/>'s list of validation errors to a list
+        /// Gets the list of validation errors to render
+        /// </summary>
+        /// <returns>the <see cref="IValidationErrors"/> to render. May be <c>null</c></returns>
+        protected virtual IValidationErrors ResolveValidationErrors()
+        {
+            IValidationErrors validationErrors = this.ValidationErrors;
+
+            if (validationErrors == null)
+            {
+                IValidationContainer container = this.FindValidationContainer();
+                if (container != null)
+                {
+                    validationErrors = container.ValidationErrors;
+                }
+            }
+            return validationErrors;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IValidationContainer"/>, who's <see cref="IValidationContainer.ValidationErrors"/> 
+        /// shall be rendered by this control.
+        /// </summary>
+        /// <remarks>
+        /// First, it tries to resolve the specified <see cref="ValidationContainerName"/>, if any. If no explicit name
+        /// is set, will probe the control hierarchy for controls implementing <see cref="IValidationContainer"/>.
+        /// </remarks>
+        protected virtual IValidationContainer FindValidationContainer()
+        {
+            // is an explicit container specified?
+            if (ValidationContainerName != null && ValidationContainerName.Length > 0)
+            {
+                Control start = this.NamingContainer;
+                string containerName = this.ValidationContainerName;
+                // shall we do a global search?
+                if (containerName.StartsWith("::"))
+                {
+                    containerName = containerName.Substring(2);
+                    start = this.Page;
+                }
+                IValidationContainer container = start as IValidationContainer;
+                if (containerName.Length > 0)
+                {
+                    container = start.FindControl(containerName) as IValidationContainer;
+                }
+                if (container == null)
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            "Validation Container Control specified by {0} does not exist or does not implement IValidationContainer",
+                            this.ValidationContainerName));
+                }
+                return container;
+            }
+
+            for (Control parent = this.Parent; parent != null; parent = parent.Parent)
+            {
+                IValidationContainer container = parent as IValidationContainer;
+                if (container != null
+                    && container.ValidationErrors != null)
+                {
+                    return container;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Resolves the list of validation errors either explicitely specified using
+        /// <see cref="ValidationErrors"/> or obtained from the containing <see cref="IValidationContainer"/> 
+        /// resolved by <see cref="FindValidationContainer"/> to a list
         /// of <see cref="string"/> elements containing the error messages to be rendered.
         /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The list of validation errors may either be explicitely specified using <see cref="ValidationErrors"/>
+        /// or will automatically be obtained from the containing <see cref="IValidationContainer"/> resolved by
+        /// <see cref="FindValidationContainer"/>.
+        /// </para>
+        /// <para>
+        /// Error Messages are resolved using either an explicitely specified <see cref="MessageSource"/> or the 
+        /// <see cref="IMessageSource"/> obtained from the validation container.
+        /// </para>
+        /// </remarks>
         /// <returns>a list containing <see cref="string"/> elements. May return <c>null</c></returns>
         protected virtual IList ResolveErrorMessages()
         {
@@ -210,19 +285,14 @@ namespace Spring.Web.UI.Controls
                 return errorMessages;
             }
 
-            IValidationContainer container = this.ValidationContainer;
-            if (container == null)
-            {
-                return null;
-            }
-
-            IValidationErrors validationErrors = container.ValidationErrors;
+            IValidationErrors validationErrors = ResolveValidationErrors();
             if (validationErrors == null)
             {
                 return null;
             }
+            IMessageSource messageSource = this.ResolveMessageSource();
 
-            errorMessages = validationErrors.GetResolvedErrors(this.Provider, this.MessageSource);
+            errorMessages = validationErrors.GetResolvedErrors(this.Provider, messageSource);
             return errorMessages;
         }
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE book  [
   <!ENTITY aop                  SYSTEM "aop.xml">
   <!ENTITY aop-aspect-library   SYSTEM "aop-aspect-library.xml">
@@ -53,16 +53,16 @@
   <!ENTITY xml-custom           SYSTEM "xml-custom.xml">
   <!ENTITY xsd	                SYSTEM "xsd.xml">
 ]>
-<book xmlns="http://docbook.org/ns/docbook" 
-      xmlns:xlink="http://www.w3.org/1999/xlink" 
-      xmlns:xi="http://docbook.org/ns/docbook/xi" 
-      version="5.0" 
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://docbook.org/ns/docbook/xi"
+      version="5.0"
       xml:lang="en">
   <info>
     <title>The Spring.NET Framework</title>
     <subtitle>Reference Documentation</subtitle>
-    <releaseinfo>Version 1.2.0</releaseinfo>
-    <pubdate>Last Updated Novermber 10, 2008 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
+    <releaseinfo>Version 1.2.1</releaseinfo>
+    <pubdate>Last Updated April xx, 2009 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
     <authorgroup>
       <author>
         <firstname>Mark</firstname>
@@ -79,6 +79,10 @@
       <author>
         <firstname>Bruno</firstname>
         <surname>Baia</surname>
+      </author>
+      <author>
+        <firstname>Erich</firstname>
+        <surname>Eichinger</surname>
       </author>
       <author>
         <firstname>Federico</firstname>

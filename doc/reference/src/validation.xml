@@ -692,7 +692,17 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
   &lt;/object&gt;
 
   &lt;v:group id="tripValidator"&gt;
-     // our validation rules
+     &lt;v:required id="departureAirportValidator" test="StartingFrom.AirportCode"&gt;
+        &lt;!-- write error message to 2 providers --&gt;       
+        &lt;v:message id="error.departureAirport.required" providers="departureAirportErrors, errorSummary"/&gt;
+     &lt;/v:required&gt;
+
+     &lt;v:group id="destinationAirportValidator"&gt;
+        &lt;v:required test="ReturningFrom.AirportCode"&gt;
+           &lt;!-- write error message to 2 providers --&gt;       
+           &lt;v:message id="error.destinationAirport.required" providers="destinationAirportErrors, errorSummary"/&gt;
+        &lt;/v:required&gt;
+     &lt;/v:group&gt;
   &lt;/v:group&gt;
 
 &lt;/objects&gt;</programlisting>
@@ -719,83 +729,30 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
     <literal>&lt;spring:validationSummary/&gt;</literal> controls to the
     ASP.NET form:</para>
 
-    <programlisting language="myxml">&lt;%@ Page Language="c#" MasterPageFile="~/Web/StandardTemplate.master" Inherits="TripForm" CodeFile="TripForm.aspx.cs" %&gt;
-&lt;%@ Register TagPrefix="spring" Namespace="Spring.Web.UI.Controls" Assembly="Spring.Web" %&gt;
-
-&lt;asp:Content ID="head" ContentPlaceHolderID="head" runat="server"&gt;
-
-    &lt;script language="javascript" type="text/javascript"&gt;
-      &lt;!--
-      function showReturnCalendar(isVisible)
-      {
-          document.getElementById('&lt;%= returningOnDate.ClientID %&gt;').style.visibility = isVisible? '': 'hidden';
-          document.getElementById('returningOnCalendar').style.visibility = isVisible? '': 'hidden';
-      }
-      --&gt;
-    &lt;/script&gt;
-
-&lt;/asp:Content&gt;
-
-&lt;asp:Content ID="body" ContentPlaceHolderID="body" runat="server"&gt;
-    &lt;div style="text-align: center"&gt;
-        &lt;h4&gt;&lt;asp:Label ID="caption" runat="server"&gt;&lt;/asp:Label&gt;&lt;/h4&gt;
-        &lt;spring:ValidationSummary ID="validationSummary" runat="server" /&gt;
+    <programlisting language="myxml">&lt;!-- code snippet taken from the SpringAir sample application --&gt;
+&lt;%@ Page Language="c#" MasterPageFile="~/Web/StandardTemplate.master" Inherits="TripForm" CodeFile="TripForm.aspx.cs" %&gt;
+        
+        &lt;!-- render all error messages sent to 'errorSummary' provider --&gt;
+        &lt;spring:ValidationSummary ID="summary" Provider="errorSummary" runat="server" /&gt;
         &lt;table&gt;
-            &lt;tr class="formLabel"&gt;
-                &lt;td&gt;&amp;nbsp;&lt;/td&gt;
-                &lt;td colspan="3"&gt;
-                    &lt;spring:RadioButtonGroup ID="tripMode" runat="server"&gt;
-                        &lt;asp:RadioButton ID="OneWay" onclick="showReturnCalendar(false);" runat="server" /&gt;
-                        &lt;asp:RadioButton ID="RoundTrip" onclick="showReturnCalendar(true);" runat="server" /&gt;
-                    &lt;/spring:RadioButtonGroup&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
             &lt;tr&gt;
-                &lt;td class="formLabel" align="right"&gt;
+                &lt;td&gt;
                     &lt;asp:Label ID="leavingFrom" runat="server" /&gt;&lt;/td&gt;
-                &lt;td nowrap="nowrap"&gt;
+                &lt;td&gt;
                     &lt;asp:DropDownList ID="leavingFromAirportCode" AutoCallBack="true" runat="server" /&gt;
-                    &lt;spring:ValidationError id="departureAirportErrors" runat="server" /&gt;
+                    &lt;!-- render error messages sent to 'departureAirportErrors' provider --&gt;
+                    &lt;spring:ValidationError ID="leavingFromError" Provider="departureAirportErrors" runat="server" /&gt;
                 &lt;/td&gt;
-                &lt;td class="formLabel" align="right"&gt;
+                &lt;td&gt;
                     &lt;asp:Label ID="goingTo" runat="server" /&gt;&lt;/td&gt;
-                &lt;td nowrap="nowrap"&gt;
+                &lt;td&gt;
                     &lt;asp:DropDownList ID="goingToAirportCode" AutoCallBack="true" runat="server" /&gt;
-                    &lt;spring:ValidationError id="destinationAirportErrors" runat="server" /&gt;
+                    &lt;!-- render error messages sent to 'destinationAirportErrors' provider --&gt;
+                    &lt;spring:ValidationError ID="goingToError" Provider="destinationAirportErrors" runat="server" /&gt;
                 &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td class="formLabel" align="right"&gt;
-                    &lt;asp:Label ID="leavingOn" runat="server" /&gt;&lt;/td&gt;
-                &lt;td nowrap="nowrap"&gt;
-                    &lt;spring:Calendar ID="leavingFromDate" runat="server" Width="75px" AllowEditing="true" Skin="system" /&gt;
-                    &lt;spring:ValidationError id="departureDateErrors" runat="server" /&gt;
-                &lt;/td&gt;
-                &lt;td class="formLabel" align="right"&gt;
-                    &lt;asp:Label ID="returningOn" runat="server" /&gt;&lt;/td&gt;
-                &lt;td nowrap="nowrap"&gt;
-                    &lt;div id="returningOnCalendar"&gt;
-                        &lt;spring:Calendar ID="returningOnDate" runat="server" Width="75px" AllowEditing="true" Skin="system" /&gt;
-                        &lt;spring:ValidationError id="returnDateErrors" runat="server" /&gt;
-                    &lt;/div&gt;
-                &lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td class="buttonBar" colspan="4"&gt;
-                    &lt;br/&gt;
-                    &lt;asp:Button ID="findFlights" runat="server"/&gt;&lt;/td&gt;
             &lt;/tr&gt;
         &lt;/table&gt;
-    &lt;/div&gt;
-
-    &lt;script language="javascript" type="text/javascript"&gt;
-          if (document.getElementById('&lt;%= tripMode.ClientID %&gt;').value == 'OneWay')
-              showReturnCalendar(false);
-          else
-              showReturnCalendar(true);
-    &lt;/script&gt;
-
-&lt;/asp:Content&gt;</programlisting>
+</programlisting>
 
     <section>
       <title>Rendering Validation Errors</title>
@@ -926,6 +883,51 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
 
         <para>It's as simple as that!</para>
       </section>
+    </section>
+
+    <section>
+      <title>How Validate() and Validation Controls play together</title>
+
+      <para> Validation Controls (ValidationSummary, ValidationError) need to
+      somehow get the list of errors collected during validation. Both,
+      Spring.Web.UI.Page and Spring.Web.UI.UserControl come with a
+      ValidationErrors property and implement IValidationContainer.
+      ValidationControls will automatically pick the IValidationContainer
+      control they are placed on:</para>
+
+      <para><programlisting language="myxml">// ASPX / ASCX Template Code
+&lt;%@ Control Language="c#"%&gt;
+        
+        &lt;!-- render all error messages sent to 'errorSummary' provider --&gt;
+        &lt;spring:ValidationSummary ID="summary" Provider="errorSummary" runat="server" /&gt;
+
+        &lt;asp:DropDownList ID="leavingFromAirportCode" AutoCallBack="true" runat="server" /&gt;
+        &lt;!-- render error messages sent to 'departureAirportErrors' provider --&gt;
+        &lt;spring:ValidationError ID="leavingFromError" Provider="departureAirportErrors" runat="server" /&gt;
+
+
+&lt;script language="C#" runat="server"&gt;
+public void SearchForFlights(object sender, EventArgs e)
+{
+    if (Validate(Controller.Trip, tripValidator))
+    {
+        Process.SetView(Controller.SearchForFlights());
+    }
+}
+&lt;/script&gt;
+
+</programlisting>If you need to render errors from a UserControl not in the
+      hierarchy of your Validation control, you can specify the name of the
+      target validation container control:</para>
+
+      <para><programlisting language="myxml">// ASPX / ASCX Template Code
+&lt;%@ Page Language="c#" %&gt;
+&lt;%@ Register TagPrefix="user" TagName="EmployeeInfoEditor" Src="EmployeeInfoEditor.ascx" %&gt;
+        
+    &lt;spring:ValidationSummary ID="summary" Provider="summary" ValidationContainerName="editor" runat="server" /&gt;
+    &lt;user:EmployeeInfoEditor ID="editor" runat="server" /&gt;
+
+</programlisting></para>
     </section>
   </section>
 </chapter>
