@@ -706,7 +706,7 @@ Build properties that may be set:
 
   <target name="docs">
     <call target="doc-reference" cascade="false" />
-    <!-- call target="doc-sdk" cascade="false" / -->
+    <call target="doc-sdk" cascade="false" />
   </target>
 
   <target name="doc-reference">
