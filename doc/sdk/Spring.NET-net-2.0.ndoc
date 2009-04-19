@@ -23,11 +23,11 @@
         <documenter name="MSDN">
             <property name="OutputDirectory" value=".\target\tmp" />
             <property name="HtmlHelpName" value="Spring.NET-1.2.1-SDK" />
-            <property name="Title" value="Spring.NET 1.2.1 API Reference" />
+            <property name="Title" value="Spring.NET 1.2.1 for NET 2.0 API Reference" />
             <property name="ShowVisualBasic" value="True" />
             <property name="MergeAssemblies" value="False" />
             <property name="RootPageTOCName" value="Introduction" />
-            <property name="RootPageFileName" value="./introduction.html" />
+            <property name="RootPageFileName" value="./default.html" />
             <property name="ShowMissingSummaries" value="True" />
             <property name="DocumentExplicitInterfaceImplementations" value="True" />
             <property name="DocumentSealedProtected" value="True" />
