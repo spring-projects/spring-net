@@ -350,10 +350,10 @@ namespace Spring.Messaging.Ems.Core
         /// Sets a value indicating the delivery mode QOS
         /// </summary>
         /// <remarks>
-        /// This will set the delivery to persistent or non-persistent
-        /// Default value is Message.DEFAULT_DELIVERY_MODE
+        /// This will set the delivery to persistent, non-persistent, or reliable delivery.
+        /// Default value is Message.DEFAULT_DELIVERY_MODE (aka TIBCO.EMS.DeliveryMode.PERSISTENT)
         /// </remarks>
-        /// <value><c>true</c> if [delivery persistent]; otherwise, <c>false</c>.</value>
+        /// <value>Integer value representing the delivery mode [delivery persistent]; otherwise, <c>false</c>.</value>
         virtual public int DeliveryMode
         {
 			get { return deliveryMode; }
