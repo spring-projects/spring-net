@@ -32,7 +32,7 @@ namespace Spring.Messaging.Ems.Listener
     /// a standard EMS MessageListener or a Spring-specific
     /// <see cref="ISessionAwareMessageListener"/>
     /// </summary>
-    public abstract class AbstractMessageListenerContainer : AbstractEmsListeningContainer
+    public abstract class AbstractMessageListenerContainer : AbstractListenerContainer
     {
         #region Logging
 

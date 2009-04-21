@@ -4,7 +4,8 @@
 		xmlns:nms="http://www.springframework.net/ems">
 
   <nms:listener-container connection-factory="testConnectionFactory" 
-			destination-resolver="testDestinationResolver" message-converter="testMessageConverter">
+			destination-resolver="testDestinationResolver" message-converter="testMessageConverter"
+      auto-startup="false" concurrency="${concurrency}">
     <nms:listener id="listener1" destination="testDestination" ref="testObject1" method="SetName"/>
     <nms:listener id="listener2" destination="testDestination" ref="testObject2" method="SetName" 
                   response-destination="responseDestination"/>
@@ -35,6 +36,16 @@
   <object id="testObject2"  type="Spring.Objects.TestObject, Spring.Core.Tests"/>
 
   <object id="testObject3"  type="Spring.Messaging.Ems.Connections.TestMessageListener, Spring.Messaging.Ems.Tests"/>
+
+  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+    <property name="VariableSources">
+      <list>
+        <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">
+          <property name="SectionNames" value="NmsConfiguration" />
+        </object>
+      </list>
+    </property>
+  </object>
 
 </objects>
 

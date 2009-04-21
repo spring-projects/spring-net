@@ -58,6 +58,8 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// </summary>
         public static string ORIGINAL_DEFAULT_HANDLER_METHOD = "HandleMessage";
 
+        #region Fields
+
         private object handlerObject;
 
         private string defaultHandlerMethod = ORIGINAL_DEFAULT_HANDLER_METHOD;
@@ -70,6 +72,10 @@ namespace Spring.Messaging.Ems.Listener.Adapter
 
         private IMessageConverter messageConverter;
 
+        #endregion
+
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageListenerAdapter"/> class with default settings.
         /// </summary>
@@ -77,7 +83,6 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         {
             InitDefaultStrategies();
             handlerObject = this;
-            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
         }
 
         /// <summary>
@@ -89,6 +94,10 @@ namespace Spring.Messaging.Ems.Listener.Adapter
             InitDefaultStrategies();
             this.handlerObject = handlerObject;
         }
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets or sets the handler object to delegate message listening to.
@@ -118,6 +127,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
             set
             {
                 defaultHandlerMethod = value;
+                processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
             }
         }
 
@@ -198,6 +208,8 @@ namespace Spring.Messaging.Ems.Listener.Adapter
             set { messageConverter = value; }
         }
 
+        #endregion
+
 
         /// <summary>
 	    /// Standard JMS {@link MessageListener} entry point.
@@ -267,11 +279,6 @@ namespace Spring.Messaging.Ems.Listener.Adapter
             IDictionary vars = new Hashtable();
             vars["convertedObject"] = convertedMessage;
 
-            //Need to parse each time since have overloaded methods and
-            //expression processor caches target of first invocation.
-            //TODO - check JIRA as I believe this has been fixed, otherwise, use regular reflection. -MLP
-            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
-
             //Invoke message handler method and get result.
             object result;
             try
@@ -317,6 +324,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         protected virtual void InitDefaultStrategies()
         {
             MessageConverter = new SimpleMessageConverter();
+            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
         }
 
         /// <summary>
@@ -442,7 +450,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
 	    /// <para>The default implementation first checks the JMS Reply-To
 	    /// Destination of the supplied request; if that is not <code>null</code>
 	    /// it is returned; if it is <code>null</code>, then the configured
-	    /// <see cref="ResolveDefaultResponseDestination"/> default response destination}
+	    /// <see cref="DefaultResponseDestination"/> default response destination}
 	    /// is returned; if this too is <code>null</code>, then an
 	    /// <see cref="InvalidDestinationException"/>is thrown.
 	    /// </para>

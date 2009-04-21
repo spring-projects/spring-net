@@ -45,11 +45,11 @@ namespace Spring.Messaging.Ems.Listener
     ///
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public abstract class AbstractEmsListeningContainer : EmsDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
+    public abstract class AbstractListenerContainer : EmsDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(AbstractEmsListeningContainer));
+        private readonly ILog logger = LogManager.GetLogger(typeof(AbstractListenerContainer));
 
         #endregion
 

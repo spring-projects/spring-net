@@ -44,7 +44,7 @@ namespace Spring.Messaging.Ems.Core
 
         #endregion
         
-        private EmsTemplate jmsTemplate;
+        private EmsTemplate emsTemplate;
 
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace Spring.Messaging.Ems.Core
         /// <value>The EMS template.</value>
         public EmsTemplate EmsTemplate
         {
-            get { return jmsTemplate; }
-            set { jmsTemplate = value; }
+            get { return emsTemplate; }
+            set { emsTemplate = value; }
         }
 
         /// <summary>
@@ -66,11 +66,11 @@ namespace Spring.Messaging.Ems.Core
         {
             get
             {
-                return (jmsTemplate != null ? this.jmsTemplate.ConnectionFactory : null);
+                return (emsTemplate != null ? this.emsTemplate.ConnectionFactory : null);
             }
             set
             {
-                this.jmsTemplate = CreateEmsTemplate(value);
+                this.emsTemplate = CreateEmsTemplate(value);
             }
         }
 
@@ -93,7 +93,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         public virtual void AfterPropertiesSet()
         {
-            if (jmsTemplate == null)
+            if (emsTemplate == null)
             {
                 throw new ArgumentException("connectionFactory or jmsTemplate is required");
             }

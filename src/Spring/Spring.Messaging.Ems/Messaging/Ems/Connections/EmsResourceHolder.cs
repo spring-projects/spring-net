@@ -273,6 +273,9 @@ namespace Spring.Messaging.Ems.Connections
             {
                 ConnectionFactoryUtils.ReleaseConnection(connection, connectionFactory, true);
             }
+            this.connections.Clear();
+            this.sessions.Clear();
+            this.sessionsPerConnection.Clear();      
         }
 
         /// <summary>

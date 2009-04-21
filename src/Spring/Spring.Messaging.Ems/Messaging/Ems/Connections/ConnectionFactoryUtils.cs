@@ -198,8 +198,8 @@ namespace Spring.Messaging.Ems.Connections
             if (resourceHolderToUse != resourceHolder)
             {
                 TransactionSynchronizationManager.RegisterSynchronization(
-                    new EmsResourceSynchronization(resourceKey, resourceHolderToUse,
-                                                   resourceFactory.SynchedLocalTransactionAllowed));
+                    new EmsResourceSynchronization(resourceHolderToUse,
+                                                   resourceKey, resourceFactory.SynchedLocalTransactionAllowed));
                 resourceHolderToUse.SynchronizedWithTransaction = true;
                 TransactionSynchronizationManager.BindResource(resourceKey, resourceHolderToUse);
             }
@@ -316,7 +316,7 @@ namespace Spring.Messaging.Ems.Connections
 
             private bool holderActive = true;
 
-            public EmsResourceSynchronization(object resourceKey, EmsResourceHolder resourceHolder, bool transacted)
+            public EmsResourceSynchronization(EmsResourceHolder resourceHolder, object resourceKey, bool transacted)
             {
                 this.resourceKey = resourceKey;
                 this.resourceHolder = resourceHolder;

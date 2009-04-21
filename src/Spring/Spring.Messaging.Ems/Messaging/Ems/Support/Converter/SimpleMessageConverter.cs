@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections;
-using System.Runtime.Serialization;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Converter
@@ -56,27 +55,23 @@ namespace Spring.Messaging.Ems.Support.Converter
             {
                 return (Message) objectToConvert;
             }
-            else if (objectToConvert is string)
+            if (objectToConvert is string)
             {
                 return CreateMessageForString((string) objectToConvert, session);
             }
-            else if (objectToConvert is sbyte[])
+            if (objectToConvert is sbyte[])
             {
                 return CreateMessageForByteArray((byte[]) objectToConvert, session);
             }
-            else if (objectToConvert is IDictionary)
+            if (objectToConvert is IDictionary)
             {
                 return CreateMessageForMap((IDictionary) objectToConvert, session);
             }
-            else if (objectToConvert is ISerializable)
+            if (objectToConvert != null && objectToConvert.GetType().IsSerializable)
             {
-                return
-                    CreateMessageForSerializable(((ISerializable) objectToConvert), session);
+                return CreateMessageForSerializable(objectToConvert, session);
             }
-            else
-            {
-                throw new MessageConversionException("Cannot convert object [" + objectToConvert + "] to EMS message");
-            }
+            throw new MessageConversionException("Cannot convert object [" + objectToConvert + "] to EMS message");
         }
 
         /// <summary> Convert from a EMS Message to a .NET object.</summary>
@@ -91,22 +86,19 @@ namespace Spring.Messaging.Ems.Support.Converter
             {
                 return ExtractStringFromMessage((TextMessage) messageToConvert);
             }
-            else if (messageToConvert is BytesMessage)
+            if (messageToConvert is BytesMessage)
             {
                 return ExtractByteArrayFromMessage((BytesMessage) messageToConvert);
             }
-            else if (messageToConvert is MapMessage)
+            if (messageToConvert is MapMessage)
             {
                 return ExtractMapFromMessage((MapMessage) messageToConvert);
             }
-            else if (messageToConvert is ObjectMessage)
+            if (messageToConvert is ObjectMessage)
             {
                 return ExtractSerializableFromMessage((ObjectMessage) messageToConvert);
             }
-            else
-            {
-                return messageToConvert;
-            }
+            return messageToConvert;
         }
 
         #region To Converter Methods
@@ -172,7 +164,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         /// </returns>
         /// <throws>  EMSException if thrown by EMS methods </throws>
         protected virtual ObjectMessage CreateMessageForSerializable(
-            ISerializable objectToSend, Session session)
+            object objectToSend, Session session)
         {
             return session.CreateObjectMessage(objectToSend);
         }
@@ -232,7 +224,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         protected virtual object ExtractSerializableFromMessage(
             ObjectMessage message)
         {
-            return message.TheObject as ISerializable;
+            return message.TheObject;
         }
 
         #endregion

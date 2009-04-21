@@ -34,6 +34,8 @@ namespace Spring.Messaging.Ems.Listener
     /// MessageConsumer.Listener method to create concurrent
     /// MessageConsumers for the specified listeners.
     /// </summary>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Mark Pollack (.NET)</author>
     public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, IExceptionListener
     {
         #region Logging
@@ -47,12 +49,12 @@ namespace Spring.Messaging.Ems.Listener
         /// <summary>
         /// The default recovery time interval between connection reconnection attempts
         /// </summary>
-        public static TimeSpan DEFAULT_RECOVERY_INTERVAL = new TimeSpan(0, 0, 0, 5, 0);
+        public static string DEFAULT_RECOVERY_INTERVAL = "5s";
 
         /// <summary>
         /// The total time connection recovery will be attempted.
         /// </summary>
-        public static TimeSpan DEFAULT_MAX_RECOVERY_TIME = new TimeSpan(0, 0, 10, 0, 0);
+        public static string DEFAULT_MAX_RECOVERY_TIME = "10m";
 
         private bool pubSubNoLocal = false;
 
@@ -64,9 +66,9 @@ namespace Spring.Messaging.Ems.Listener
 
         private object consumersMonitor = new object();
 
-        private TimeSpan recoveryInterval = DEFAULT_RECOVERY_INTERVAL;
+        private TimeSpan recoveryInterval = new TimeSpan(0, 0, 0, 5, 0);
 
-        private TimeSpan maxRecoveryTime = DEFAULT_MAX_RECOVERY_TIME;
+        private TimeSpan maxRecoveryTime = new TimeSpan(0, 0, 10, 0, 0);
 
         #endregion
 
@@ -318,18 +320,27 @@ namespace Spring.Messaging.Ems.Listener
         /// <throws>EMSException if destruction failed </throws>
         protected override void DoShutdown()
         {
-            logger.Debug("Closing EMS MessageConsumers");
-            foreach (MessageConsumer messageConsumer in consumers)
+            lock (consumersMonitor)
             {
-                EmsUtils.CloseMessageConsumer(messageConsumer);
+                if (consumers != null)
+                {
+                    logger.Debug("Closing NMS MessageConsumers");
+                    foreach (MessageConsumer messageConsumer in consumers)
+                    {
+                        EmsUtils.CloseMessageConsumer(messageConsumer);
+                    }
+                }
+                if (sessions != null)
+                {
+                    logger.Debug("Closing NMS Sessions");
+                    foreach (Session session in sessions)
+                    {
+                        EmsUtils.CloseSession(session);
+                    }
+                }
+                consumers = null;
+                sessions = null;
             }
-            logger.Debug("Closing EMS Sessions");
-            foreach (Session session in sessions)
-            {
-                EmsUtils.CloseSession(session);
-            }
-            consumers = null;
-            sessions = null;
         }
 
 
