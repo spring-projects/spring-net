@@ -18,21 +18,21 @@
 
 #endregion
 
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Spring.Context;
 using Spring.Context.Support;
 
-namespace Spring.Testing.NUnit
+namespace Spring.Testing.Microsoft
 {
 	/// <summary>
 	/// Summary description for AbstractDependencyInjectionSpringContextTestsTests.
 	/// </summary>
-	[TestFixture]
+	[TestClass]
 	public class AbstractDependencyInjectionSpringContextTestsTests
 	{
         private class TestAbstractDependencyInjectionSpringContextTests :AbstractDependencyInjectionSpringContextTests
         {
-            public static readonly string[] CONFIGLOCATIONS = new string[] {"assembly://Spring.Testing.NUnit.Tests/Spring.Testing.NUnit/TestApplicationContext.xml"};
+            public static readonly string[] CONFIGLOCATIONS = new string[] {"assembly://Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft/TestApplicationContext.xml"};
 
             public TestAbstractDependencyInjectionSpringContextTests()
             {}
@@ -60,72 +60,71 @@ namespace Spring.Testing.NUnit
 
         private TestAbstractDependencyInjectionSpringContextTests fixtureInstance ;
 
-        [TearDown]
+        [TestCleanup]
         public void TearDown()
         {
             AbstractSpringContextTests.ClearContextCache();            
         }
 
-	    [Test]
+	    [TestMethod]
         public void RegistersWithContextRegistryByDefault()
 	    {
 	        fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
             Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
 	    }
 
-	    [Test]
+	    [TestMethod]
         public void UnregistersFromContextRegistryWhenDirty()
 	    {
 	        fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
             Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
-            fixtureInstance.SetUp();
+            fixtureInstance.TestInitialize();
             Assert.IsTrue( ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name) );
-            fixtureInstance.TearDown();
+            fixtureInstance.TestCleanup();
             Assert.IsTrue(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
-            fixtureInstance.SetUp();
+            fixtureInstance.TestInitialize();
             Assert.IsTrue(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
             fixtureInstance.SetDirty();
-            fixtureInstance.TearDown();
+            fixtureInstance.TestCleanup();
             Assert.IsFalse(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
 	    }
 
-	    [Test]
+	    [TestMethod]
         public void DoesNotRegisterContextWithContextRegistry()
 	    {
 	        fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
             Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
             fixtureInstance.RegisterContextWithContextRegistry = false;
-            fixtureInstance.SetUp();
+            fixtureInstance.TestInitialize();
             Assert.IsFalse( ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name) );
-            fixtureInstance.TearDown();
+            fixtureInstance.TestCleanup();
             Assert.IsFalse( ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name) );
 	    }
 
-        [Test]
+        [TestMethod]
         public void CachesApplicationContexts()
         {
 	        fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
-            fixtureInstance.SetUp();            
+            fixtureInstance.TestInitialize();        
             Assert.IsNotNull(fixtureInstance.ApplicationContext);
             Assert.AreEqual(1, fixtureInstance.LoadCount); // context has been loaded
             Assert.IsTrue(fixtureInstance.HasCachedContext(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
-            fixtureInstance.TearDown();
+            fixtureInstance.TestCleanup();
             
             TestAbstractDependencyInjectionSpringContextTests otherFixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
-            otherFixtureInstance.SetUp();            
+            otherFixtureInstance.TestInitialize();            
             Assert.IsNotNull(otherFixtureInstance.ApplicationContext);
             Assert.AreEqual(0, otherFixtureInstance.LoadCount); // context was obtained from cache
             Assert.AreSame(fixtureInstance.ApplicationContext, otherFixtureInstance.ApplicationContext);
             otherFixtureInstance.SetDirty(); // purge cache and dispose cached instances
             Assert.IsFalse(fixtureInstance.HasCachedContext(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
-            otherFixtureInstance.TearDown();
-           
+            otherFixtureInstance.TestCleanup();
             otherFixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
-            otherFixtureInstance.SetUp();            
+            otherFixtureInstance.TestInitialize();          
             Assert.IsNotNull(otherFixtureInstance.ApplicationContext);
             Assert.AreEqual(1, otherFixtureInstance.LoadCount); // context was reloaded because of SetDirty() above
             Assert.AreNotSame(fixtureInstance.ApplicationContext, otherFixtureInstance.ApplicationContext);
-            otherFixtureInstance.TearDown();
+            otherFixtureInstance.TestCleanup();
         }
 	}
 }
