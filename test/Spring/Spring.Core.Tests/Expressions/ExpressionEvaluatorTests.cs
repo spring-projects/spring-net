@@ -36,6 +36,7 @@ using System.Web.Services;
 using antlr;
 using antlr.collections;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;
@@ -271,12 +272,27 @@ namespace Spring.Expressions
 
         #endregion Serialization Tests
 
+        [Test]
+        public void TestMixedAddition()
+        {
+            object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
+            Console.WriteLine(value);
+        }
         
         [Test(Description="SPRNET-944")]
         public void DateTests()
         {
             string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'"); 
             Assert.AreEqual("date", dateLiteral);
+        }
+
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1155")]
+        public void TestDateVariableExpression()
+        {
+            Hashtable vars = new Hashtable();
+            vars["Date"] = "2008-05-15";
+            object value = ExpressionEvaluator.GetValue(null, "#Date", vars);
+            Assert.That(value, Is.EqualTo("2008-05-15"));
         }
 
         [Test]
@@ -719,6 +735,13 @@ namespace Spring.Expressions
 //            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]], mscorlib)"));
             Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[int]], mscorlib)"));
             Assert.AreEqual(typeof(System.Collections.Generic.Dictionary<string, bool>), ExpressionEvaluator.GetValue(null, "T(System.Collections.Generic.Dictionary`2[System.String,System.Boolean],mscorlib)"));
+        }
+
+        [Test]
+        public void TestGenericDictionary()
+        {
+            ExpressionEvaluator.GetValue(null,
+                                         "T(System.Collections.Generic.Dictionary`2[System.String,System.Boolean],mscorlib)");
         }
 
         /// <summary>

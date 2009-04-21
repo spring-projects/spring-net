@@ -15,6 +15,13 @@ namespace Spring.Messaging.Listener
 
         private int messageCount;
 
+        private string stateVariable;
+
+        public SimpleHandler(string stateVariable)
+        {
+            this.stateVariable = stateVariable;
+        }
+
 
         public int MessageCount
         {
@@ -25,6 +32,7 @@ namespace Spring.Messaging.Listener
         public string HandleMessage(string msgTxt)
         {
             LOG.Debug("Received text = [" + msgTxt + "]");
+            LOG.Debug("constructor set state string  = " + stateVariable);
             if (msgTxt.Contains("Goodbye"))
             {
                 throw new ArgumentException("Don't like saying goodbye!");

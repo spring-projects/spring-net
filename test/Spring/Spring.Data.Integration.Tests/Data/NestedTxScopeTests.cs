@@ -141,8 +141,6 @@ namespace Spring.Data
         [Test]
         public void UnwantedPromotion()
         {
-            TransactionOptions transactionoptions = new TransactionOptions();
-            transactionoptions.IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
             using (TransactionScope ts = new TransactionScope())
             {
                 InnerMethod();
@@ -154,6 +152,7 @@ namespace Spring.Data
         private void InnerMethod()
         {
             string updateSql2 = "insert into Debits (DebitAmount) VALUES (222)";
+
             using (SqlConnection cn2005 = new SqlConnection())
             {
                 cn2005.ConnectionString = @"Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
