@@ -1851,6 +1851,8 @@ namespace Spring.Context.Support
 
         #endregion
 
+        #region IApplicationEventPublisher
+
         /// <summary>
         /// Publishes an application context event.
         /// </summary>
@@ -1887,6 +1889,8 @@ namespace Spring.Context.Support
                 ParentContext.PublishEvent(sender, e);
             }
         }
+
+        #endregion
 
         #region IPostProcessor implementation
 

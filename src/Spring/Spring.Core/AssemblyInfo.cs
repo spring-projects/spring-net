@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 using System.Security.Permissions;
 
 [assembly: ComVisible(false)]
-[assembly: AssemblyTitle("Spring.Net Core functionality")]
+[assembly: AssemblyTitle("Spring.Core")]
 [assembly: AssemblyDescription("Core functionality for Spring.Net IoC container")]
 
 //

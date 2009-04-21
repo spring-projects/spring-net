@@ -34,11 +34,11 @@ namespace Spring.Dao.Attributes
     /// Object post-processor that automatically applies persistence exception
     /// translation to any bean that carries the <see cref="RepositoryAttribute"/>
     /// attribute, adding a corresponding <see cref="PersistenceExceptionTranslationAdvisor"/>
-    /// to the xposed proxy (either an existing AOP proxy or a newly generated
+    /// to the exposed proxy (either an existing AOP proxy or a newly generated
     /// proxy that implements all of the target's interfaces).
     /// </summary>
     /// <remarks>
-    /// <para>Translates native resource exceptions to Spring's <see cref="DataAccessException"/>
+    /// <para>Translates native resource exceptions to Spring's <see cref="Spring.Dao.DataAccessException"/>
     /// hierarchy. Autodetects object that implement the <see cref="IPersistenceExceptionTranslator"/>
     /// interface, which are subsequently asked to translate candidate exceptions.
     /// </para>
