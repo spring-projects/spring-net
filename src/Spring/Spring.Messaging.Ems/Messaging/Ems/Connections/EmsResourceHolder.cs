@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using Common.Logging;
 using Spring.Collections;
+using Spring.Messaging.Ems.Common;
 using Spring.Transaction.Support;
 using Spring.Util;
 using TIBCO.EMS;
@@ -47,7 +48,7 @@ namespace Spring.Messaging.Ems.Connections
 
         #region Fields
 
-        private ConnectionFactory connectionFactory;
+        private IConnectionFactory connectionFactory;
 
         private bool frozen = false;
 
@@ -75,7 +76,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <param name="connectionFactory">The connection factory that this
         /// resource holder is associated with (may be <code>null</code>)
         /// </param>
-        public EmsResourceHolder(ConnectionFactory connectionFactory)
+        public EmsResourceHolder(IConnectionFactory connectionFactory)
         {
             this.connectionFactory = connectionFactory;
         }
@@ -85,7 +86,7 @@ namespace Spring.Messaging.Ems.Connections
         /// given Session.
         /// </summary>
         /// <param name="session">The session.</param>
-        public EmsResourceHolder(Session session)
+        public EmsResourceHolder(ISession session)
         {
             AddSession(session);
             frozen = true;
@@ -96,7 +97,7 @@ namespace Spring.Messaging.Ems.Connections
         /// </param>
         /// <param name="session">the EMS Session
         /// </param>
-        public EmsResourceHolder(Connection connection, Session session)
+        public EmsResourceHolder(IConnection connection, ISession session)
         {
             AddConnection(connection);
             AddSession(session, connection);
@@ -109,7 +110,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <param name="connectionFactory">The connection factory.</param>
         /// <param name="connection">The connection.</param>
         /// <param name="session">The session.</param>
-        public EmsResourceHolder(ConnectionFactory connectionFactory, Connection connection, Session session)
+        public EmsResourceHolder(IConnectionFactory connectionFactory, IConnection connection, ISession session)
         {
             this.connectionFactory = connectionFactory;
             AddConnection(connection);
@@ -142,7 +143,7 @@ namespace Spring.Messaging.Ems.Connections
         /// Adds the connection to the list of resources managed by this holder.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        public void AddConnection(Connection connection)
+        public void AddConnection(IConnection connection)
         {
             AssertUtils.IsTrue(!frozen, "Cannot add Connection because EmsResourceHolder is frozen");
             AssertUtils.ArgumentNotNull(connection, "Connection must not be null");
@@ -156,7 +157,7 @@ namespace Spring.Messaging.Ems.Connections
         /// Adds the session to the list of resources managed by this holder.
         /// </summary>
         /// <param name="session">The session.</param>
-        public void AddSession(Session session)
+        public void AddSession(ISession session)
         {
             AddSession(session, null);
         }
@@ -166,7 +167,7 @@ namespace Spring.Messaging.Ems.Connections
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="connection">The connection.</param>
-        public void AddSession(Session session, Connection connection)
+        public void AddSession(ISession session, IConnection connection)
         {
             AssertUtils.IsTrue(!frozen, "Cannot add Session because EmsResourceHolder is frozen");
             AssertUtils.ArgumentNotNull(session, "Session must not be null");
@@ -190,9 +191,9 @@ namespace Spring.Messaging.Ems.Connections
         /// Gets the connection managed by this resource holder
         /// </summary>
         /// <returns>A Connection, or null if no managed connection.</returns>
-        public virtual Connection GetConnection()
+        public virtual IConnection GetConnection()
         {
-            return (!(this.connections.Count == 0) ? (Connection)this.connections[0] : null);
+            return (!(this.connections.Count == 0) ? (IConnection)this.connections[0] : null);
         }
 
         /// <summary>
@@ -202,18 +203,18 @@ namespace Spring.Messaging.Ems.Connections
         /// </summary>
         /// <param name="connectionType">Type of the connection.</param>
         /// <returns>The connection, or null if not found.</returns>
-        public virtual Connection GetConnection(Type connectionType)
+        public virtual IConnection GetConnection(Type connectionType)
         {
-            return (Connection)CollectionUtils.FindValueOfType(this.connections, connectionType);
+            return (IConnection)CollectionUtils.FindValueOfType(this.connections, connectionType);
         }
 
         /// <summary>
         /// Gets the first session manged by this holder or null if not available.
         /// </summary>
         /// <returns>The session or null if not available.</returns>
-       public virtual Session GetSession()
+       public virtual ISession GetSession()
         {
-           return (!(this.sessions.Count == 0) ? (Session)this.sessions[0] : null);
+           return (!(this.sessions.Count == 0) ? (ISession)this.sessions[0] : null);
         }
 
         /// <summary>
@@ -221,7 +222,7 @@ namespace Spring.Messaging.Ems.Connections
         /// </summary>
         /// <param name="sessionType">Type of the session.</param>
         /// <returns>The session or null if not available.</returns>
-        public virtual Session GetSession(Type sessionType)
+        public virtual ISession GetSession(Type sessionType)
         {
             return GetSession(sessionType, null);
         }
@@ -232,14 +233,14 @@ namespace Spring.Messaging.Ems.Connections
         /// <param name="sessionType">Type of the session.</param>
         /// <param name="connection">The connection.</param>
         /// <returns>The sessin or null if not available.</returns>
-        public virtual Session GetSession(Type sessionType, Connection connection)
+        public virtual ISession GetSession(Type sessionType, IConnection connection)
         {
             IList sessions = this.sessions;
             if (connection != null)
             {
                 sessions = (IList)sessionsPerConnection[connection];
             }
-            return (Session)CollectionUtils.FindValueOfType(sessions, sessionType);
+            return (ISession)CollectionUtils.FindValueOfType(sessions, sessionType);
         }
 
         /// <summary>
@@ -247,7 +248,7 @@ namespace Spring.Messaging.Ems.Connections
         /// </summary>
         public virtual void CommitAll()
         {
-            foreach (Session session in sessions)
+            foreach (ISession session in sessions)
             {
 				session.Commit();
             }
@@ -258,7 +259,7 @@ namespace Spring.Messaging.Ems.Connections
         /// </summary>
         public virtual void CloseAll()
         {
-            foreach (Session session in sessions)
+            foreach (ISession session in sessions)
             {
                 try
                 {
@@ -269,7 +270,7 @@ namespace Spring.Messaging.Ems.Connections
                     logger.Debug("Could not close EMS Session after transaction", ex);
                 }
             }
-            foreach (Connection connection in connections)
+            foreach (IConnection connection in connections)
             {
                 ConnectionFactoryUtils.ReleaseConnection(connection, connectionFactory, true);
             }
@@ -285,7 +286,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <returns>
         /// 	<c>true</c> if the holder contains the specified session; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsSession(Session session)
+        public bool ContainsSession(ISession session)
         {
             return this.sessions.Contains(session);
         }

@@ -18,6 +18,7 @@
 
 #endregion
 
+using Spring.Messaging.Ems.Common;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Converter
@@ -42,7 +43,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         /// </returns>
         /// <throws>EMSException if thrown by EMS API methods </throws>
         /// <throws>MessageConversionException in case of conversion failure </throws>
-        Message ToMessage(object objectToConvert, Session session);
+        Message ToMessage(object objectToConvert, ISession session);
 
         /// <summary> Convert from a EMS Message to a .NET object.</summary>
         /// <param name="messageToConvert">the message to convert

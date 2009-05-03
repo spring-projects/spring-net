@@ -23,9 +23,11 @@
 using System;
 using System.Threading;
 using NUnit.Framework;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Core;
 using Spring.Messaging.Ems.Listener;
 using Spring.Testing.NUnit;
+using TIBCO.EMS.ADMIN;
 
 #endregion
 
@@ -49,7 +51,9 @@ namespace Spring.Messaging.Ems.Integration
             SimpleMessageListener listener = applicationContext["SimpleMessageListener"] as SimpleMessageListener;           
             Assert.IsNotNull(container);
             Assert.IsNotNull(listener);
-            
+
+            Admin admin = new Admin("tcp://localhost:7222", "admin", null);
+            admin.PurgeQueue("test.queue");
 
             EmsTemplate emsTemplate = (EmsTemplate) applicationContext["MessageTemplate"] as EmsTemplate;
             Assert.IsNotNull(emsTemplate);

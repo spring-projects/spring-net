@@ -2,7 +2,10 @@
 <objects xmlns="http://www.springframework.net">
 
 
-  <object id="ConnectionFactory" type="TIBCO.EMS.ConnectionFactory, TIBCO.EMS">
+  <object id="ConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+    <constructor-arg ref="NativeConnectionFactory"/>
+  </object>
+  <object id="NativeConnectionFactory" type="TIBCO.EMS.ConnectionFactory, TIBCO.EMS">
     <constructor-arg index="0" value="tcp://localhost:7222"/>
   </object>
 

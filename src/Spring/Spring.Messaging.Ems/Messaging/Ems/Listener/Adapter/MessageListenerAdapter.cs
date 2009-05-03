@@ -3,6 +3,7 @@ using System.Collections;
 using System.Reflection;
 using Common.Logging;
 using Spring.Expressions;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
 using Spring.Messaging.Ems.Support.Converter;
 using Spring.Messaging.Ems.Support.Destinations;
@@ -248,7 +249,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// </summary>
         /// <param name="message">The incoming message.</param>
         /// <param name="session">The session to operate on.</param>
-        public void OnMessage(Message message, Session session)
+        public void OnMessage(Message message, ISession session)
         {
             if (handlerObject != this)
             {
@@ -380,7 +381,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// <param name="result">The result object to handle (never <code>null</code>).</param>
         /// <param name="request">The original request message.</param>
         /// <param name="session">The session to operate on (may be <code>null</code>).</param>
-        protected virtual void HandleResult(object result, Message request, Session session)
+        protected virtual void HandleResult(object result, Message request, ISession session)
         {
             if (session != null)
             {
@@ -412,7 +413,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// <returns>the JMS <code>Message</code> (never <code>null</code>)</returns>
         /// <exception cref="MessageConversionException">If there was an error in message conversion</exception>
         /// <exception cref="EMSException">if thrown by EMS API methods</exception>
-        protected virtual Message BuildMessage(Session session, Object result)
+        protected virtual Message BuildMessage(ISession session, Object result)
         {
             IMessageConverter converter = MessageConverter;
             if (converter != null)
@@ -461,7 +462,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// <returns>the response destination (never <code>null</code>)</returns>
         /// <exception cref="EMSException">if thrown by EMS API methods</exception>
         /// <exception cref="InvalidDestinationException">if no destination can be determined.</exception>
-        protected virtual Destination GetResponseDestination(Message request, Message response, Session session)
+        protected virtual Destination GetResponseDestination(Message request, Message response, ISession session)
         {
             Destination replyTo = request.ReplyTo;
             if (replyTo == null)
@@ -482,7 +483,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// </summary>
         /// <param name="session">The session to operate on.</param>
         /// <returns>The located destination</returns>
-        protected virtual Destination ResolveDefaultResponseDestination(Session session)
+        protected virtual Destination ResolveDefaultResponseDestination(ISession session)
         {
             Destination dest = defaultResponseDestination as Destination;
             if (dest != null)
@@ -505,9 +506,9 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// <param name="session">The session to operate on.</param>
         /// <param name="destination">The destination to send to.</param>
         /// <param name="response">The outgoing message about to be sent.</param>
-        protected virtual void SendResponse(Session session, Destination destination, Message response)
+        protected virtual void SendResponse(ISession session, Destination destination, Message response)
         {
-            MessageProducer producer = session.CreateProducer(destination);
+            IMessageProducer producer = session.CreateProducer(destination);
             try
             {
                 PostProcessProducer(producer, response);
@@ -525,7 +526,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// </summary>
         /// <param name="producer">The producer that will be used to send the message.</param>
         /// <param name="response">The outgoing message about to be sent.</param>
-        protected virtual void 	PostProcessProducer(MessageProducer producer, Message response)
+        protected virtual void PostProcessProducer(IMessageProducer producer, Message response)
         {
             
         }

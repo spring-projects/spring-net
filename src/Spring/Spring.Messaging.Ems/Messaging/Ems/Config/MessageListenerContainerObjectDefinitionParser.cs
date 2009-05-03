@@ -21,8 +21,7 @@
 using System;
 using System.Xml;
 using Spring.Core.TypeResolution;
-using TIBCO.EMS;
-using Spring.Core.TypeConversion;
+//using TIBCO.EMS;
 using Spring.Messaging.Ems.Listener;
 using Spring.Messaging.Ems.Listener.Adapter;
 using Spring.Objects.Factory.Config;
@@ -373,15 +372,15 @@ namespace Spring.Messaging.Ems.Config
             string acknowledge = element.GetAttribute(ACKNOWLEDGE_ATTRIBUTE);
             if (acknowledge.Equals(ACKNOWLEDGE_TRANSACTED))
             {
-                return Session.SESSION_TRANSACTED;
+                return TIBCO.EMS.Session.SESSION_TRANSACTED;
             }
             else if (acknowledge.Equals(ACKNOWLEDGE_DUPS_OK))
             {
-                return Session.DUPS_OK_ACKNOWLEDGE;
+                return TIBCO.EMS.Session.DUPS_OK_ACKNOWLEDGE;
             }
             else if (acknowledge.Equals(ACKNOWLEDGE_CLIENT))
             {
-                return Session.CLIENT_ACKNOWLEDGE;
+                return TIBCO.EMS.Session.CLIENT_ACKNOWLEDGE;
             }
             //TODO other ack modes.
             else if (!acknowledge.Equals(ACKNOWLEDGE_AUTO))
@@ -391,7 +390,7 @@ namespace Spring.Messaging.Ems.Config
                                                             acknowledge +
                                                             "]: only \"auto\", \"client\", \"dups-ok\" and \"transacted\" supported.");
             }
-            return Session.AUTO_ACKNOWLEDGE;
+            return TIBCO.EMS.Session.AUTO_ACKNOWLEDGE;
         }
 
         private string ParseConcurrency(XmlElement ele, ParserContext parserContext)

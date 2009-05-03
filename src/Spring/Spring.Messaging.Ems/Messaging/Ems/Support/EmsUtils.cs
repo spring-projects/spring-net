@@ -20,6 +20,7 @@
 
 using System;
 using Common.Logging;
+using Spring.Messaging.Ems.Common;
 using Spring.Util;
 using TIBCO.EMS;
 
@@ -42,7 +43,7 @@ namespace Spring.Messaging.Ems.Support
         /// </summary>
         /// <param name="con">the EMS Connection to close (may be <code>null</code>)
         /// </param>
-        public static void CloseConnection(Connection con)
+        public static void CloseConnection(IConnection con)
         {
             CloseConnection(con, false);
         }
@@ -54,7 +55,7 @@ namespace Spring.Messaging.Ems.Support
         /// </param>
         /// <param name="stop">whether to call <code>stop()</code> before closing
         /// </param>
-        public static void CloseConnection(Connection con, bool stop)
+        public static void CloseConnection(IConnection con, bool stop)
         {
             if (con != null)
             {
@@ -93,7 +94,7 @@ namespace Spring.Messaging.Ems.Support
 		/// </summary>
 		/// <param name="session">the EMS Session to close (may be <code>null</code>)
 		/// </param>
-		public static void CloseSession(Session session)
+		public static void CloseSession(ISession session)
         {
             if (session != null)
             {
@@ -118,7 +119,7 @@ namespace Spring.Messaging.Ems.Support
 		/// </summary>
 		/// <param name="producer">the EMS MessageProducer to close (may be <code>null</code>)
 		/// </param>
-        public static void CloseMessageProducer(MessageProducer producer)
+        public static void CloseMessageProducer(IMessageProducer producer)
         {
             if (producer != null)
             {
@@ -143,7 +144,7 @@ namespace Spring.Messaging.Ems.Support
         /// </summary>
         /// <param name="consumer">the EMS MessageConsumer to close (may be <code>null</code>)
         /// </param>
-        public static void CloseMessageConsumer(MessageConsumer consumer)
+        public static void CloseMessageConsumer(IMessageConsumer consumer)
         {
             if (consumer != null)
             {
@@ -195,7 +196,7 @@ namespace Spring.Messaging.Ems.Support
         /// <param name="session">the EMS Session to commit
         /// </param>
         /// <throws>EMSException if committing failed </throws>
-        public static void CommitIfNecessary(Session session)
+        public static void CommitIfNecessary(ISession session)
         {
 		    AssertUtils.ArgumentNotNull(session, "Session must not be null");
 			
@@ -221,7 +222,7 @@ namespace Spring.Messaging.Ems.Support
         /// <param name="session">the EMS Session to rollback
         /// </param>
         /// <throws>  EMSException if committing failed </throws>
-	    public static void RollbackIfNecessary(Session session)
+	    public static void RollbackIfNecessary(ISession session)
         {
 		    AssertUtils.ArgumentNotNull(session, "Session must not be null");
 			session.Rollback();
@@ -258,6 +259,36 @@ namespace Spring.Messaging.Ems.Support
                 {
                     logger.Debug("Unexpected exception on closing EMS QueueBrowser", ex);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Converts the acknowledgement mode from an integer to an enumeration.  If the integer
+        /// does not match a valid enumeration, the returned enumeration is SessionMode.AutoAcknowledge
+        /// </summary>
+        /// <param name="ackMode">The ack mode.</param>
+        /// <returns>The corresponding SessionMode enumeration</returns>
+        public static SessionMode ConvertAcknowledgementMode(int ackMode)
+        {
+            switch (ackMode)
+            {
+                case Session.AUTO_ACKNOWLEDGE:
+                    return SessionMode.AutoAcknowledge;
+                case Session.CLIENT_ACKNOWLEDGE:
+                    return SessionMode.ClientAcknowledge;
+                case Session.DUPS_OK_ACKNOWLEDGE:
+                    return SessionMode.DupsOkAcknowledge;
+                case Session.EXPLICIT_CLIENT_ACKNOWLEDGE:
+                    return SessionMode.ExplicitClientAcknowledge;
+                case Session.EXPLICIT_CLIENT_DUPS_OK_ACKNOWLEDGE:
+                    return SessionMode.ExplicitClientDupsOkAcknowledge;
+                case Session.NO_ACKNOWLEDGE:
+                    return SessionMode.NoAcknowledge;
+                case Session.SESSION_TRANSACTED:
+                    return SessionMode.SessionTransacted;
+                default:
+                    logger.Warn("Integer acknowledgement mode [" + ackMode + "] not valid. Defaulting to SessionMode.AutoAcknowledge");
+                    return SessionMode.AutoAcknowledge;
             }
         }
     }

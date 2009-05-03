@@ -21,6 +21,7 @@
 using System;
 using System.Data;
 using Common.Logging;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Core;
 using Spring.Objects.Factory;
 using Spring.Transaction;
@@ -60,7 +61,7 @@ namespace Spring.Messaging.Ems.Connections
 
         #endregion 
 
-        private ConnectionFactory connectionFactory;
+        private IConnectionFactory connectionFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmsTransactionManager"/> class.
@@ -86,7 +87,7 @@ namespace Spring.Messaging.Ems.Connections
         /// given a ConnectionFactory.
         /// </summary>
         /// <param name="connectionFactory">The connection factory to obtain connections from.</param>
-        public EmsTransactionManager(ConnectionFactory connectionFactory) : this()
+        public EmsTransactionManager(IConnectionFactory connectionFactory) : this()
         {
             ConnectionFactory = connectionFactory;
             AfterPropertiesSet();
@@ -98,7 +99,7 @@ namespace Spring.Messaging.Ems.Connections
         /// for.
         /// </summary>
         /// <value>The connection factory.</value>
-        public ConnectionFactory ConnectionFactory
+        public IConnectionFactory ConnectionFactory
         {
             get { return connectionFactory; }
             set
@@ -173,8 +174,8 @@ namespace Spring.Messaging.Ems.Connections
                 throw new InvalidIsolationLevelException("EMS does not support an isoliation level concept");
             }
             EmsTransactionObject txObject = (EmsTransactionObject) transaction;
-            Connection con = null;
-            Session session = null;
+            IConnection con = null;
+            ISession session = null;
             try
             {
                 con = CreateConnection();
@@ -266,7 +267,7 @@ namespace Spring.Messaging.Ems.Connections
         protected override void DoCommit(DefaultTransactionStatus status)
         {
             EmsTransactionObject txObject = (EmsTransactionObject)status.Transaction;
-            Session session = txObject.ResourceHolder.GetSession();
+            ISession session = txObject.ResourceHolder.GetSession();
             try
             {
                 if (status.Debug)
@@ -295,7 +296,7 @@ namespace Spring.Messaging.Ems.Connections
         protected override void DoRollback(DefaultTransactionStatus status)
         {
             EmsTransactionObject txObject = (EmsTransactionObject)status.Transaction;
-            Session session = txObject.ResourceHolder.GetSession();
+            ISession session = txObject.ResourceHolder.GetSession();
             try
             {
                 if (status.Debug)
@@ -373,7 +374,7 @@ namespace Spring.Messaging.Ems.Connections
         /// </summary>
         /// <returns>The new Connection</returns>
         /// <exception cref="EMSException">If thrown by underlying messaging APIs</exception>
-        protected virtual Connection CreateConnection()
+        protected virtual IConnection CreateConnection()
         {
             return ConnectionFactory.CreateConnection();
         }
@@ -384,7 +385,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <param name="connection">The connection to create a Session for.</param>
         /// <returns>the new Session</returns>
         /// <exception cref="EMSException">If thrown by underlying messaging APIs</exception>
-        protected virtual Session CreateSession(Connection connection)
+        protected virtual ISession CreateSession(IConnection connection)
         {
             return connection.CreateSession(true, Session.SESSION_TRANSACTED);
         }

@@ -18,7 +18,7 @@
 
 #endregion
 
-using TIBCO.EMS;
+using Spring.Messaging.Ems.Common;
 
 namespace Spring.Messaging.Ems.Core
 {
@@ -35,5 +35,5 @@ namespace Spring.Messaging.Ems.Core
     /// </returns>
     /// <throws>EMSException if there is any problem </throws>
     /// <author>Mark Pollack</author>
-    public delegate object SessionDelegate(Session session);
+    public delegate object SessionDelegate(ISession session);
 }

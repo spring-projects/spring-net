@@ -20,6 +20,7 @@
 
 using System;
 using Common.Logging;
+using Spring.Messaging.Ems.Common;
 using Spring.Objects.Factory;
 using TIBCO.EMS;
 
@@ -44,7 +45,7 @@ namespace Spring.Messaging.Ems.Support
         
         #region Fields
         
-        private ConnectionFactory connectionFactory;
+        private IConnectionFactory connectionFactory;
 
         private bool sessionTransacted = false;
 
@@ -59,7 +60,7 @@ namespace Spring.Messaging.Ems.Support
         /// Gets or sets the connection factory to use for obtaining EMS Connections.
         /// </summary>
         /// <value>The connection factory.</value>
-        virtual public ConnectionFactory ConnectionFactory
+        virtual public IConnectionFactory ConnectionFactory
         {
             get
             {
@@ -142,7 +143,7 @@ namespace Spring.Messaging.Ems.Support
         /// Creates the connection via the ConnectionFactory.
         /// </summary>
         /// <returns></returns>
-        protected virtual Connection CreateConnection()
+        protected virtual IConnection CreateConnection()
         {
             return ConnectionFactory.CreateConnection();
         }
@@ -152,7 +153,7 @@ namespace Spring.Messaging.Ems.Support
         /// </summary>
         /// <param name="con">The connection to create a session for.</param>
         /// <returns>The new session</returns>
-        protected virtual Session CreateSession(Connection con)
+        protected virtual ISession CreateSession(IConnection con)
         {
             return con.CreateSession(sessionTransacted, SessionAcknowledgeMode);
         }
@@ -162,7 +163,7 @@ namespace Spring.Messaging.Ems.Support
         /// </summary>
         /// <param name="session">The session to check.</param>
         /// <returns>true if in client ack mode, false otherwise</returns>
-        protected virtual bool IsClientAcknowledge(Session session)
+        protected virtual bool IsClientAcknowledge(ISession session)
         {
             return (session.AcknowledgeMode == Session.CLIENT_ACKNOWLEDGE);
         }

@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using Common.Logging;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Connections;
 using Spring.Messaging.Ems.Support;
 using Spring.Messaging.Ems.Support.Converter;
@@ -88,9 +89,12 @@ namespace Spring.Messaging.Ems.Core
 
         private long timeToLive = Message.DEFAULT_TIME_TO_LIVE;
 		
+        //TODO make optimizations later based on TIBCO EMS having thread safe sessions 
+        /*
         private EmsResources emsResources = new EmsResources();
 
         private bool cacheEmsResources = true;
+        */
 
        
         #endregion
@@ -113,7 +117,7 @@ namespace Spring.Messaging.Ems.Core
         /// <summary> Create a new EmsTemplate, given a ConnectionFactory.</summary>
         /// <param name="connectionFactory">the ConnectionFactory to obtain Connections from
         /// </param>
-        public EmsTemplate(ConnectionFactory connectionFactory)
+        public EmsTemplate(IConnectionFactory connectionFactory)
             : this()
         {
             ConnectionFactory = connectionFactory;
@@ -192,27 +196,27 @@ namespace Spring.Messaging.Ems.Core
         {
             AssertUtils.ArgumentNotNull(action, "Callback object must not be null");
 
-            Connection con = null;
-            Session session = null;
-            bool sessionInTLS = true;
+            IConnection conToClose = null;
+            ISession sessionToClose = null;
+            // bool sessionInTLS = true;
 
             //NOTE: Not closing session or connection unless session is not returned from 
             //      ConnectionFactoryUtils.DoGetTransactionalSession and CacheEmsResources is set to false
             try
             {
-                Session sessionToUse =
+                ISession sessionToUse =
                     ConnectionFactoryUtils.DoGetTransactionalSession(ConnectionFactory, transactionalResourceFactory,
                                                                      startConnection);
                 if (sessionToUse == null)
                 {
-                    sessionInTLS = false;
-                    con = CreateConnection();
-                    session = CreateSession(con);
+                    //sessionInTLS = false;
+                    conToClose = CreateConnection();
+                    sessionToClose = CreateSession(conToClose);
                     if (startConnection)
                     {
-                        con.Start();
+                        conToClose.Start();
                     }
-                    sessionToUse = session;
+                    sessionToUse = sessionToClose;
                 }
                 if (logger.IsDebugEnabled)
                 {
@@ -222,11 +226,14 @@ namespace Spring.Messaging.Ems.Core
             }
             finally
             {
+                EmsUtils.CloseSession(sessionToClose);
+                ConnectionFactoryUtils.ReleaseConnection(conToClose, ConnectionFactory, startConnection);
+                /*
                 if (!sessionInTLS && !CacheEmsResources)
                 {
                     EmsUtils.CloseSession(session);
                     ConnectionFactoryUtils.ReleaseConnection(con, ConnectionFactory, startConnection);
-                }
+                }*/
             }
         }
 
@@ -387,6 +394,7 @@ namespace Spring.Messaging.Ems.Core
             set { timeToLive = value; }
         }
 
+        
         /// <summary>
         /// Gets or sets a value indicating whether the EmsTemplate should itself
         /// be responsible for caching EMS Connection/Session/MessageProducer as compared to
@@ -396,11 +404,11 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <remarks>Connection/Session/MessageProducer are thread-safe classes in TIBCO EMS.</remarks>
         /// <value><c>true</c> to locally cache ems resources; otherwise, <c>false</c>.</value>
-        virtual public bool CacheEmsResources
+/*        virtual public bool CacheEmsResources
         {
             get { return cacheEmsResources; }
             set { cacheEmsResources = value; }
-        }
+        }*/
 
 
         #endregion
@@ -428,7 +436,7 @@ namespace Spring.Messaging.Ems.Core
         /// <returns> an appropriate Connection fetched from the holder,
         /// or <code>null</code> if none found
         /// </returns>
-        protected virtual Connection GetConnection(EmsResourceHolder holder)
+        protected virtual IConnection GetConnection(EmsResourceHolder holder)
         {
             return holder.GetConnection();
         }
@@ -440,7 +448,7 @@ namespace Spring.Messaging.Ems.Core
         /// <returns> an appropriate Session fetched from the holder,
         /// or <code>null</code> if none found
         /// </returns>
-        protected virtual Session GetSession(EmsResourceHolder holder)
+        protected virtual ISession GetSession(EmsResourceHolder holder)
         {
             return holder.GetSession();
         }
@@ -463,9 +471,9 @@ namespace Spring.Messaging.Ems.Core
         /// </seealso>
         /// <seealso cref="MessageTimestampEnabled">
         /// </seealso>
-        protected virtual MessageProducer CreateProducer(Session session, Destination destination)
+        protected virtual IMessageProducer CreateProducer(ISession session, Destination destination)
         {
-            MessageProducer producer = DoCreateProducer(session, destination);
+            IMessageProducer producer = DoCreateProducer(session, destination);
             if (!MessageIdEnabled)
             {
                 producer.DisableMessageID = true;
@@ -492,7 +500,7 @@ namespace Spring.Messaging.Ems.Core
         /// <returns>
         /// 	<c>true</c> if the session is locally transacted; otherwise, <c>false</c>.
         /// </returns>
-        protected virtual bool IsSessionLocallyTransacted(Session session)
+        protected virtual bool IsSessionLocallyTransacted(ISession session)
         {
             return SessionTransacted &&
                 !ConnectionFactoryUtils.IsSessionTransactional(session, ConnectionFactory);
@@ -511,8 +519,10 @@ namespace Spring.Messaging.Ems.Core
         /// <returns> the new EMS MessageProducer
         /// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
-        protected virtual MessageProducer DoCreateProducer(Session session, Destination destination)
+        protected virtual IMessageProducer DoCreateProducer(ISession session, Destination destination)
         {
+            return session.CreateProducer(destination);
+            /*
             if (CacheEmsResources)
             {
                 if (destination == null)
@@ -523,7 +533,7 @@ namespace Spring.Messaging.Ems.Core
                     }
                     return emsResources.UnspecifiedDestinationMessageProducer;
                 }
-                MessageProducer producer = (MessageProducer)emsResources.Producers[destination];
+                IMessageProducer producer = (IMessageProducer)emsResources.Producers[destination];
                 if (producer != null)
                 {
                     #region Logging
@@ -553,7 +563,7 @@ namespace Spring.Messaging.Ems.Core
             else
             {
                 return session.CreateProducer(destination);
-            }        
+            }*/      
         }
 
         /// <summary> Create a EMS MessageConsumer for the given Session and Destination.
@@ -567,8 +577,8 @@ namespace Spring.Messaging.Ems.Core
         /// <returns> the new EMS MessageConsumer
         /// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
-        protected virtual MessageConsumer CreateConsumer(Session session, Destination destination,
-                                                         string messageSelector)
+        protected virtual IMessageConsumer CreateConsumer(ISession session, Destination destination,
+                                                          string messageSelector)
         {
             // Only pass in the NoLocal flag in case of a Topic:
             // Some EMS providers, such as WebSphere MQ 6.0, throw IllegalStateException
@@ -592,7 +602,7 @@ namespace Spring.Messaging.Ems.Core
         /// <returns>A EMS Connection
         /// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
-        protected override Connection CreateConnection()
+/*        protected override IConnection CreateConnection()
         {
             if (CacheEmsResources)
             {
@@ -607,7 +617,7 @@ namespace Spring.Messaging.Ems.Core
             {
                 return ConnectionFactory.CreateConnection();
             }
-        }
+        }*/
 
         /// <summary> Create a EMS Session for the given Connection.
         /// </summary>
@@ -620,7 +630,7 @@ namespace Spring.Messaging.Ems.Core
         /// <returns> the new EMS Session
         /// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
-        protected override Session CreateSession(Connection con)
+/*        protected override ISession CreateSession(IConnection con)
         {
             if (CacheEmsResources)
             {
@@ -634,7 +644,7 @@ namespace Spring.Messaging.Ems.Core
             {
                 return con.CreateSession(SessionTransacted, SessionAcknowledgeMode);
             }
-        }
+        }*/
 
         /// <summary>
         /// Send the given message.
@@ -642,7 +652,7 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="session">The session to operate on.</param>
         /// <param name="destination">The destination to send to.</param>
         /// <param name="messageCreatorDelegate">The message creator delegate callback to create a Message.</param>
-        protected internal virtual void DoSend(Session session, Destination destination, MessageCreatorDelegate messageCreatorDelegate)
+        protected internal virtual void DoSend(ISession session, Destination destination, MessageCreatorDelegate messageCreatorDelegate)
         {
             AssertUtils.ArgumentNotNull(messageCreatorDelegate, "IMessageCreatorDelegate must not be null");
             DoSend(session, destination, null, messageCreatorDelegate);
@@ -654,7 +664,7 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="session">The session to operate on.</param>
         /// <param name="destination">The destination to send to.</param>
         /// <param name="messageCreator">The message creator callback to create a Message.</param>
-        protected internal virtual void DoSend(Session session, Destination destination, IMessageCreator messageCreator)
+        protected internal virtual void DoSend(ISession session, Destination destination, IMessageCreator messageCreator)
         {
             AssertUtils.ArgumentNotNull(messageCreator, "IMessageCreator must not be null");
             DoSend(session, destination, messageCreator, null);
@@ -670,12 +680,12 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="messageCreatorDelegate">delegate callback to create a EMS Message
         /// </param>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
-        protected internal virtual void DoSend(Session session, Destination destination, IMessageCreator messageCreator,
+        protected internal virtual void DoSend(ISession session, Destination destination, IMessageCreator messageCreator,
                                                MessageCreatorDelegate messageCreatorDelegate)
         {
 
 
-            MessageProducer producer = CreateProducer(session, destination);            
+            IMessageProducer producer = CreateProducer(session, destination);            
             try
             {
                 
@@ -713,7 +723,7 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="message">the EMS Message to send
         /// </param>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
-        protected virtual void DoSend(MessageProducer producer, Message message)
+        protected virtual void DoSend(IMessageProducer producer, Message message)
         {
             if (ExplicitQosEnabled)
             {
@@ -1171,7 +1181,7 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="destination">The destination to receive from.</param>
         /// <param name="messageSelector">The message selector for this consumer (can be <code>null</code></param>
         /// <returns>The Message received, or <code>null</code> if none.</returns>
-        protected virtual Message DoReceive(Session session, Destination destination, string messageSelector)
+        protected virtual Message DoReceive(ISession session, Destination destination, string messageSelector)
         {
             return DoReceive(session, CreateConsumer(session, destination, messageSelector));
         }
@@ -1182,7 +1192,7 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="session">The session to operate on.</param>
         /// <param name="consumer">The consumer to receive with.</param>
         /// <returns>The Message received, or <code>null</code> if none</returns>
-        protected virtual Message DoReceive(Session session, MessageConsumer consumer)
+        protected virtual Message DoReceive(ISession session, IMessageConsumer consumer)
         {
             try
             {
@@ -1507,7 +1517,7 @@ namespace Spring.Messaging.Ems.Core
         public object BrowseSelectedWithDelegate(Queue queue, string messageSelector, BrowserDelegate action)
         {
             AssertUtils.ArgumentNotNull(action, "action");
-            return Execute(delegate(Session session)
+            return Execute(delegate(ISession session)
                                {
                                    QueueBrowser browser = CreateBrowser(session, queue, messageSelector);
                                    try
@@ -1534,7 +1544,7 @@ namespace Spring.Messaging.Ems.Core
         public object BrowseSelectedWithDelegate(string queueName, string messageSelector, BrowserDelegate action)
         {
             AssertUtils.ArgumentNotNull(action, "action");
-            return Execute(delegate(Session session)
+            return Execute(delegate(ISession session)
                                {
                                    Queue queue = (Queue)DestinationResolver.ResolveDestinationName(session, queueName, false);
                                    QueueBrowser browser = CreateBrowser(session, queue, messageSelector);
@@ -1558,7 +1568,7 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="queue">The queue.</param>
         /// <param name="selector">The selector.</param>
         /// <returns>A new queue browser</returns>
-        protected virtual QueueBrowser CreateBrowser(Session session, Queue queue, string selector)
+        protected virtual QueueBrowser CreateBrowser(ISession session, Queue queue, string selector)
         {
             return session.CreateBrowser(queue, selector);
         }
@@ -1588,22 +1598,22 @@ namespace Spring.Messaging.Ems.Core
                 get { return enclosingTemplateInstance; }
             }
 
-            public virtual Connection GetConnection(EmsResourceHolder holder)
+            public virtual IConnection GetConnection(EmsResourceHolder holder)
             {
                 return EnclosingInstance.GetConnection(holder);
             }
 
-            public virtual Session GetSession(EmsResourceHolder holder)
+            public virtual ISession GetSession(EmsResourceHolder holder)
             {
                 return EnclosingInstance.GetSession(holder);
             }
 
-            public virtual Connection CreateConnection()
+            public virtual IConnection CreateConnection()
             {
                 return EnclosingInstance.CreateConnection();
             }
 
-            public virtual Session CreateSession(Connection con)
+            public virtual ISession CreateSession(IConnection con)
             {
                 return EnclosingInstance.CreateSession(con);
             }
@@ -1633,9 +1643,9 @@ namespace Spring.Messaging.Ems.Core
             }
 
 
-            public object DoInEms(Session session)
+            public object DoInEms(ISession session)
             {
-                MessageProducer producer = jmsTemplate.CreateProducer(session, null);
+                IMessageProducer producer = jmsTemplate.CreateProducer(session, null);
                 try
                 {
                     if (producerCallback != null)
@@ -1674,7 +1684,7 @@ namespace Spring.Messaging.Ems.Core
                 this.destination = destination;
             }
 
-            public object DoInEms(Session session)
+            public object DoInEms(ISession session)
             {
                 if (destination != null)
                 {
@@ -1711,7 +1721,7 @@ namespace Spring.Messaging.Ems.Core
                 this.messagePostProcessorDelegate = messagePostProcessorDelegate;
             }
 
-            public Message CreateMessage(Session session)
+            public Message CreateMessage(ISession session)
             {
                 Message msg = jmsTemplate.MessageConverter.ToMessage(objectToConvert, session);
                 if (messagePostProcessor != null)
@@ -1749,7 +1759,7 @@ namespace Spring.Messaging.Ems.Core
                 this.messageSelector = messageSelector;
             }
 
-            public object DoInEms(Session session)
+            public object DoInEms(ISession session)
             {
                 if (destination != null)
                 {
@@ -1774,7 +1784,7 @@ namespace Spring.Messaging.Ems.Core
                 this.del = del;
             }
 
-            public object DoInEms(Session session)
+            public object DoInEms(ISession session)
             {
                 return del(session);
             }
@@ -1787,27 +1797,27 @@ namespace Spring.Messaging.Ems.Core
     /// This is a TIBCO specific class so that we can reuse connections, session, and
     /// message producers instead of creating/destroying them on each operation.
     /// </summary>
-    internal class EmsResources
+/*    internal class EmsResources
     {
-        private Connection connection;
-        private Session session;
+        private IConnection connection;
+        private ISession session;
 
         private IDictionary cachedProducers = new Hashtable();
-        private MessageProducer cachedUnspecifiedDestinationMessageProducer;
+        private IMessageProducer cachedUnspecifiedDestinationMessageProducer;
 
-        public Connection Connection
+        public IConnection Connection
         {
             get { return connection; }
             set { connection = value; }
         }
 
-        public Session Session
+        public ISession Session
         {
             get { return session; }
             set { session = value; }
         }
 
-        public MessageProducer UnspecifiedDestinationMessageProducer
+        public IMessageProducer UnspecifiedDestinationMessageProducer
         {
             get { return cachedUnspecifiedDestinationMessageProducer; }
             set { cachedUnspecifiedDestinationMessageProducer = value; }
@@ -1819,7 +1829,7 @@ namespace Spring.Messaging.Ems.Core
             get { return cachedProducers; }
             set { cachedProducers = value; }
         }
-    }
+    }*/
 
 
     internal class SimpleMessageCreator : IMessageCreator
@@ -1833,7 +1843,7 @@ namespace Spring.Messaging.Ems.Core
             this.objectToConvert = objectToConvert;
         }
 
-        public Message CreateMessage(Session session)
+        public Message CreateMessage(ISession session)
         {
             return jmsTemplate.MessageConverter.ToMessage(objectToConvert, session);
         }
@@ -1880,7 +1890,7 @@ namespace Spring.Messaging.Ems.Core
         }
 
 
-        public object DoInEms(Session session)
+        public object DoInEms(ISession session)
         {
             if (destination == null)
             {

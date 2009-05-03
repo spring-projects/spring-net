@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using Spring.Messaging.Ems.Common;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Converter
@@ -49,7 +50,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         /// </returns>
         /// <throws>EMSException if thrown by EMS API methods </throws>
         /// <throws>MessageConversionException in case of conversion failure </throws>
-        public Message ToMessage(object objectToConvert, Session session)
+        public Message ToMessage(object objectToConvert, ISession session)
         {
             if (objectToConvert is Message)
             {
@@ -111,7 +112,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         /// <returns> the resulting message
         /// </returns>
         /// <throws>  EMSException if thrown by EMS methods </throws>
-        protected virtual TextMessage CreateMessageForString(string text, Session session)
+        protected virtual TextMessage CreateMessageForString(string text, ISession session)
         {
             return session.CreateTextMessage((text));
         }
@@ -124,7 +125,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         /// <returns> the resulting message
         /// </returns>
         /// <throws>  EMSException if thrown by EMS methods </throws>
-        protected virtual BytesMessage CreateMessageForByteArray(byte[] bytes, Session session)
+        protected virtual BytesMessage CreateMessageForByteArray(byte[] bytes, ISession session)
         {
             BytesMessage message = session.CreateBytesMessage();
             message.WriteBytes(bytes);
@@ -139,7 +140,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         /// <returns> the resulting message
         /// </returns>
         /// <throws>  EMSException if thrown by EMS methods </throws>
-        protected virtual MapMessage CreateMessageForMap(IDictionary map, Session session)
+        protected virtual MapMessage CreateMessageForMap(IDictionary map, ISession session)
         {
             MapMessage mapMessage = session.CreateMapMessage();
             foreach (DictionaryEntry entry in map)
@@ -164,7 +165,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         /// </returns>
         /// <throws>  EMSException if thrown by EMS methods </throws>
         protected virtual ObjectMessage CreateMessageForSerializable(
-            object objectToSend, Session session)
+            object objectToSend, ISession session)
         {
             return session.CreateObjectMessage(objectToSend);
         }

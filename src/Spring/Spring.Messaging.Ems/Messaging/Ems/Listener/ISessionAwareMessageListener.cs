@@ -18,6 +18,7 @@
 
 #endregion
 
+using Spring.Messaging.Ems.Common;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Listener
@@ -46,6 +47,6 @@ namespace Spring.Messaging.Ems.Listener
         /// <param name="session">the underlying EMS Session
         /// </param>
         /// <throws>  EMSException if thrown by EMS methods </throws>
-        void OnMessage(Message message, Session session);
+        void OnMessage(Message message, ISession session);
     }
 }

@@ -18,6 +18,7 @@
 
 #endregion
 
+using Spring.Messaging.Ems.Common;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Destinations
@@ -52,7 +53,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
         /// <returns> the EMS destination (either a topic or a queue)
         /// </returns>
         /// <throws>EMSException if resolution failed </throws>
-        Destination ResolveDestinationName(Session session, string destinationName, bool pubSubDomain);
+        Destination ResolveDestinationName(ISession session, string destinationName, bool pubSubDomain);
 	
     }
 }

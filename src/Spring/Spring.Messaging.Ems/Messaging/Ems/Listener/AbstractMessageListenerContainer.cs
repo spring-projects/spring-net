@@ -20,6 +20,7 @@
 
 using System;
 using Common.Logging;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Core;
 using Spring.Messaging.Ems.Support;
 using Spring.Util;
@@ -296,7 +297,7 @@ namespace Spring.Messaging.Ems.Listener
         /// <see cref="CommitIfNecessary"/>
         /// <see cref="RollbackOnExceptionIfNecessary"/>
         /// <see cref="HandleListenerException"/>
-        public virtual void ExecuteListener(Session session, Message message)
+        public virtual void ExecuteListener(ISession session, Message message)
         {
             try
             {
@@ -318,7 +319,7 @@ namespace Spring.Messaging.Ems.Listener
         /// <see cref="InvokeListener"/>
         /// <see cref="CommitIfNecessary"/>
         /// <see cref="RollbackOnExceptionIfNecessary"/>
-        protected virtual void DoExecuteListener(Session session, Message message)
+        protected virtual void DoExecuteListener(ISession session, Message message)
         {
             if (!AcceptMessagesWhileStopping && !IsRunning)
             {
@@ -353,7 +354,7 @@ namespace Spring.Messaging.Ems.Listener
         /// <param name="message">The received message.</param>
         /// <exception cref="EMSException">If thrown by EMS API methods.</exception>
         /// <see cref="MessageListener"/>
-        protected virtual void InvokeListener(Session session, Message message)
+        protected virtual void InvokeListener(ISession session, Message message)
         {
             object listener = MessageListener;
             if (listener is ISessionAwareMessageListener)
@@ -386,13 +387,13 @@ namespace Spring.Messaging.Ems.Listener
         /// <exception cref="EMSException">If thrown by EMS API methods.</exception>
         /// <see cref="ISessionAwareMessageListener"/>
         /// <see cref="ExposeListenerSession"/>
-        protected virtual void DoInvokeListener(ISessionAwareMessageListener listener, Session session, Message message)
+        protected virtual void DoInvokeListener(ISessionAwareMessageListener listener, ISession session, Message message)
         {
-            Connection conToClose = null;
-            Session sessionToClose = null;
+            IConnection conToClose = null;
+            ISession sessionToClose = null;
             try
             {
-                Session sessionToUse = session;
+                ISession sessionToUse = session;
                 if (!ExposeListenerSession)
                 {
                     //We need to expose a separate Session.
@@ -442,7 +443,7 @@ namespace Spring.Messaging.Ems.Listener
         /// <param name="session">The session to commit.</param>
         /// <param name="message">The message to acknowledge.</param>
         /// <exception cref="EMSException">In case of commit failure</exception>
-        protected virtual void CommitIfNecessary(Session session, Message message)
+        protected virtual void CommitIfNecessary(ISession session, Message message)
         {
             // Commit session or acknowledge message
             if (session.Transacted)
@@ -474,7 +475,7 @@ namespace Spring.Messaging.Ems.Listener
         /// 	<c>true</c> if the is session locally transacted; otherwise, <c>false</c>.
         /// </returns>
         /// <see cref="EmsAccessor.SessionTransacted"/>
-        protected virtual bool IsSessionLocallyTransacted(Session session)
+        protected virtual bool IsSessionLocallyTransacted(ISession session)
         {
             return SessionTransacted;     
         }
@@ -485,7 +486,7 @@ namespace Spring.Messaging.Ems.Listener
         /// </summary>
         /// <param name="session">The session to rollback.</param>
         /// <exception cref="EMSException">In case of a rollback error</exception>
-        protected virtual void RollbackIfNecessary(Session session)
+        protected virtual void RollbackIfNecessary(ISession session)
         {
             if (session.Transacted && IsSessionLocallyTransacted(session))
             {
@@ -499,7 +500,7 @@ namespace Spring.Messaging.Ems.Listener
         /// <param name="session">The session to rollback.</param>
         /// <param name="ex">The thrown application exception.</param>
         /// <exception cref="EMSException">in case of a rollback error.</exception>
-        protected virtual void RollbackOnExceptionIfNecessary(Session session, Exception ex)
+        protected virtual void RollbackOnExceptionIfNecessary(ISession session, Exception ex)
         {
             try
             {

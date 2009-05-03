@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Spring.Messaging.Ems.Common;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Converter
@@ -38,7 +39,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         /// <returns>the NMS Message</returns>
         /// <throws>NMSException if thrown by NMS API methods </throws>
         /// <throws>MessageConversionException in case of conversion failure </throws>
-        public Message ToMessage(object objectToConvert, Session session)
+        public Message ToMessage(object objectToConvert, ISession session)
         {
             if (objectToConvert == null)
             {

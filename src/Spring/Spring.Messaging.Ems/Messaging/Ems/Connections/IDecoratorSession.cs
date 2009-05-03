@@ -19,25 +19,24 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
-using Spring.Messaging.Ems.Connections;
 
-namespace Spring.Messaging.Ems.Listener
+namespace Spring.Messaging.Ems.Connections
 {
     /// <summary>
-    /// EmsResourceHolder marker subclass that indicates local exposure,
-    /// i.e. that does not indicate an externally managed transaction.
+    /// Subinterface of Session to be implemented by
+    /// implementations that wrap an Session to provide added 
+    /// functionality. Allows access to the the underlying target Session.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public class LocallyExposedEmsResourceHolder : EmsResourceHolder
+    /// <author>Mark Pollack</author>
+    /// <see cref="ConnectionFactoryUtils.GetTargetSession(ISession)"/>
+    /// <see cref="CachingConnectionFactory"/>
+    public interface IDecoratorSession : ISession
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocallyExposedEmsResourceHolder"/> class.
+        /// Gets the target session of the decorator.
+        /// This will typically be the native provider Session or a wrapper from a session pool.
         /// </summary>
-        /// <param name="session">The session.</param>
-        public LocallyExposedEmsResourceHolder(ISession session) : base(session)
-        {
-            
-        }
+        /// <value>The underlying session, never null</value>
+        ISession TargetSession { get; }
     }
 }

@@ -21,18 +21,23 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
+using TIBCO.EMS;
 
-namespace Spring.Messaging.Ems.Core
+namespace Spring.Messaging.Ems.Connections
 {
-    /// <summary> Perform operations on the given Session and MessageProducer.
-    /// The message producer is not associated with any destination.
+    /// <summary>
+    /// Extension of the <code>IConnectionFactory</code> interface, 
+    /// indicating how to release Connections obtained from it.
     /// </summary>
-    /// <param name="session">the EMS <code>Session</code> object to use
-    /// </param>
-    /// <param name="producer">the EMS <code>MessageProducer</code> object to use
-    /// </param>
-    /// <returns> a result object from working with the <code>Session</code>, if any (can be <code>null</code>) 
-    /// </returns>
-    public delegate object ProducerDelegate(ISession session, IMessageProducer producer);
-
+    /// <author>Juergen Hoeller</author>
+    /// <author>Mark Pollack (.NET)</author>
+    public interface ISmartConnectionFactory
+    {
+        /// <summary>
+        /// Shoulds we stop the connection, obtained from this ConnectionFactory?
+        /// </summary>
+        /// <param name="con">The connection to check.</param>
+        /// <returns>wheter a stop call is necessary</returns>
+        bool ShouldStop(IConnection con);
+    }
 }

@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\TIBCO.EMS.dll</HintPath>
     </Reference>
+    <Reference Include="TIBCO.EMS.ADMIN, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5b83db8ff05c64ba, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\TIBCO.EMS.ADMIN.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2005.csproj">

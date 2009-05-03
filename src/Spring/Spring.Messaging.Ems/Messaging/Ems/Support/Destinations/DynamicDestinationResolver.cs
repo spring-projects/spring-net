@@ -18,6 +18,7 @@
 
 #endregion
 
+using Spring.Messaging.Ems.Common;
 using Spring.Util;
 using TIBCO.EMS;
 
@@ -42,7 +43,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
         /// <returns> the EMS destination (either a topic or a queue)
         /// </returns>
         /// <throws>EMSException if resolution failed </throws>
-        public Destination ResolveDestinationName(Session session, string destinationName, bool pubSubDomain)
+        public Destination ResolveDestinationName(ISession session, string destinationName, bool pubSubDomain)
         {
             AssertUtils.ArgumentNotNull(session, "Session must not be null");
             AssertUtils.ArgumentNotNull(destinationName, "Destination name must not be null");
@@ -50,10 +51,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
             {
                 return ResolveTopic(session, destinationName);
             }
-            else
-            {
-                return ResolveQueue(session, destinationName);
-            }
+            return ResolveQueue(session, destinationName);            
         }
 
 
@@ -65,7 +63,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
         /// <returns> the EMS Topic name
         /// </returns>
         /// <throws>EMSException if resolution failed </throws>
-        protected internal virtual Destination ResolveTopic(Session session, System.String topicName)
+        protected internal virtual Destination ResolveTopic(ISession session, string topicName)
         {
             return session.CreateTopic(topicName);
         }
@@ -78,7 +76,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
         /// <returns> the EMS Queue name
         /// </returns>
         /// <throws>EMSException if resolution failed </throws>
-        protected internal virtual Destination ResolveQueue(Session session, string queueName)
+        protected internal virtual Destination ResolveQueue(ISession session, string queueName)
         {
             return session.CreateQueue(queueName);
         }

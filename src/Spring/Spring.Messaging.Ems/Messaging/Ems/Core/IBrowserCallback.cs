@@ -20,6 +20,7 @@
 
 #endregion
 
+using Spring.Messaging.Ems.Common;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Core
@@ -42,6 +43,6 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="browser">The browser.</param>
         /// <returns>The object from working with the Session and QueueBrowser, may be null</returns>
         /// <exception cref="EMSException">If there is any problem when accessing EMS API</exception>
-        object DoInEms(Session session, QueueBrowser browser);
+        object DoInEms(ISession session, QueueBrowser browser);
     }
 }

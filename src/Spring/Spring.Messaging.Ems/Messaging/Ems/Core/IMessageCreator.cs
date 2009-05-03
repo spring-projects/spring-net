@@ -18,6 +18,7 @@
 
 #endregion
 
+using Spring.Messaging.Ems.Common;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Core
@@ -37,6 +38,6 @@ namespace Spring.Messaging.Ems.Core
         /// <returns> the <code>Message</code> to be sent
         /// </returns>
         /// <throws>EMSException if thrown by EMS API methods </throws>
-        Message CreateMessage(Session session);
+        Message CreateMessage(ISession session);
     }
 }

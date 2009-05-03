@@ -21,6 +21,7 @@
 using System;
 using Common.Logging;
 using Spring.Context;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Connections;
 using Spring.Messaging.Ems.Support;
 using Spring.Messaging.Ems.Support.Destinations;
@@ -61,7 +62,7 @@ namespace Spring.Messaging.Ems.Listener
         
         private string objectName;
         
-        private Connection sharedConnection;
+        private IConnection sharedConnection;
 
         private bool sharedConnectionStarted = false;
 
@@ -193,7 +194,7 @@ namespace Spring.Messaging.Ems.Listener
         /// shared Connection, or if the Connection hasn't been initialized yet.
         /// </exception>
         /// <see cref="SharedConnectionEnabled"/>
-        protected Connection SharedConnection
+        protected IConnection SharedConnection
         {
             get
             {
@@ -446,9 +447,9 @@ namespace Spring.Messaging.Ems.Listener
         /// </remarks>
         /// <returns>the prepared Connection</returns>
         /// <exception cref="EMSException">if the creation failed.</exception>
-        protected virtual Connection CreateSharedConnection()
+        protected virtual IConnection CreateSharedConnection()
         {
-            Connection con = CreateConnection();
+            IConnection con = CreateConnection();
             try
             {
                 PrepareSharedConnection(con);
@@ -470,7 +471,7 @@ namespace Spring.Messaging.Ems.Listener
         /// </remarks>
         /// <param name="connection">The connection to prepare.</param>
         /// <exception cref="EMSException">If the preparation efforts failed.</exception>
-        protected virtual void PrepareSharedConnection(Connection connection)
+        protected virtual void PrepareSharedConnection(IConnection connection)
         {
             if (ClientId != null)
             {

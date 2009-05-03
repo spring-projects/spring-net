@@ -18,7 +18,7 @@
 
 #endregion
 
-using TIBCO.EMS;
+using Spring.Messaging.Ems.Common;
 
 namespace Spring.Messaging.Ems.Core
 {
@@ -42,6 +42,6 @@ namespace Spring.Messaging.Ems.Core
         /// <returns> a result object from working with the <code>Session</code>, if any (so can be <code>null</code>) 
         /// </returns>
         /// <throws>EMSException if there is any problem </throws>
-        object DoInEms(Session session);
+        object DoInEms(ISession session);
     }
 }

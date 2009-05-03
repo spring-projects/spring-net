@@ -20,6 +20,7 @@
 
 using System;
 using Common.Logging;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
 using Spring.Transaction.Support;
 using Spring.Util;
@@ -41,25 +42,59 @@ namespace Spring.Messaging.Ems.Connections
         #endregion
 
         /// <summary>
-        /// Releases the given connection.
+        /// Releases the given connection, stopping it (if necessary) and eventually closing it.
         /// </summary>
+        /// <remarks>Checks <see cref="ISmartConnectionFactory.ShouldStop"/>, if available.
+        /// This is essentially a more sophisticated version of 
+        /// <see cref="EmsUtils.CloseConnection(IConnection, bool)"/>
+        /// </remarks>
         /// <param name="connection">The connection to release. (if this is <code>null</code>, the call will be ignored)</param>
         /// <param name="cf">The ConnectionFactory that the Connection was obtained from. (may be <code>null</code>)</param>
         /// <param name="started">whether the Connection might have been started by the application.</param>
-        public static void ReleaseConnection(Connection connection, ConnectionFactory cf, bool started)
+        public static void ReleaseConnection(IConnection connection, IConnectionFactory cf, bool started)
         {
             if (connection == null)
             {
                 return;
             }
 
+            if (started && cf is ISmartConnectionFactory && ((ISmartConnectionFactory)cf).ShouldStop(connection))
+            {
+                try
+                {
+                    connection.Stop();
+                }
+                catch (Exception ex)
+                {
+                    LOG.Debug("Could not stop EMS Connection before closing it", ex);
+
+                }
+            }
             try
             {
                 connection.Close();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 LOG.Debug("Could not close EMS Connection", ex);
-            }           
+            }
+        }
+
+        /// <summary>
+        /// Return the innermost target Session of the given Session. If the given
+        /// Session is a decorated session, it will be unwrapped until a non-decorated
+        /// Session is found. Otherwise, the passed-in Session will be returned as-is.
+        /// </summary>
+        /// <param name="session">The session to unwrap</param>
+        /// <returns>The innermost target Session, or the passed-in one if no decorator</returns>
+        public static ISession GetTargetSession(ISession session)
+        {
+            ISession sessionToUse = session;
+            while (sessionToUse is IDecoratorSession)
+            {
+                sessionToUse = ((IDecoratorSession)sessionToUse).TargetSession;
+            }
+            return sessionToUse;
         }
 
         /// <summary>
@@ -71,7 +106,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <returns>
         /// 	<c>true</c> if is session transactional, bound to current thread; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsSessionTransactional(Session session, ConnectionFactory cf)
+        public static bool IsSessionTransactional(ISession session, IConnectionFactory cf)
         {
             if (session == null || cf == null)
             {
@@ -96,7 +131,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <returns> the transactional Session, or <code>null</code> if none found
         /// </returns>
         /// <throws>  EMSException in case of EMS failure </throws>
-        public static Session GetTransactionalSession(ConnectionFactory cf, Connection existingCon,
+        public static ISession GetTransactionalSession(IConnectionFactory cf, IConnection existingCon,
                                                        bool synchedLocalTransactionAllowed)
         {
             return
@@ -119,7 +154,7 @@ namespace Spring.Messaging.Ems.Connections
         /// the transactional Session, or <code>null</code> if none found
         /// </returns>
         /// <throws>EMSException in case of EMS failure </throws>
-        public static Session DoGetTransactionalSession(Object resourceKey, ResourceFactory resourceFactory, bool startConnection)
+        public static ISession DoGetTransactionalSession(Object resourceKey, ResourceFactory resourceFactory, bool startConnection)
         {
             AssertUtils.ArgumentNotNull(resourceKey, "Resource key must not be null");
             AssertUtils.ArgumentNotNull(resourceKey, "ResourceFactory must not be null");
@@ -128,12 +163,12 @@ namespace Spring.Messaging.Ems.Connections
                 (EmsResourceHolder)TransactionSynchronizationManager.GetResource(resourceKey);
             if (resourceHolder != null)
             {
-                Session rhSession = resourceFactory.GetSession(resourceHolder);
+                ISession rhSession = resourceFactory.GetSession(resourceHolder);
                 if (rhSession != null)
                 {
                     if (startConnection)
                     {
-                        Connection conn = resourceFactory.GetConnection(resourceHolder);
+                        IConnection conn = resourceFactory.GetConnection(resourceHolder);
                         if (conn != null)
                         {
                             conn.Start();
@@ -152,8 +187,8 @@ namespace Spring.Messaging.Ems.Connections
                 resourceHolderToUse = new EmsResourceHolder();
             }
 
-            Connection con = resourceFactory.GetConnection(resourceHolderToUse);
-            Session session = null;
+            IConnection con = resourceFactory.GetConnection(resourceHolderToUse);
+            ISession session = null;
             try
             {
                 bool isExistingCon = (con != null);
@@ -210,39 +245,39 @@ namespace Spring.Messaging.Ems.Connections
 
         private class AnonymousClassResourceFactory : ResourceFactory
         {
-            private Connection existingCon;
-            private ConnectionFactory cf;
+            private IConnection existingCon;
+            private IConnectionFactory cf;
             private bool synchedLocalTransactionAllowed;
 
-            public AnonymousClassResourceFactory(Connection existingCon, ConnectionFactory cf,
+            public AnonymousClassResourceFactory(IConnection existingCon, IConnectionFactory cf,
                                                  bool synchedLocalTransactionAllowed)
             {
                 InitBlock(existingCon, cf, synchedLocalTransactionAllowed);
             }
 
-            private void InitBlock(Connection existingCon, ConnectionFactory cf, bool synchedLocalTransactionAllowed)
+            private void InitBlock(IConnection existingCon, IConnectionFactory cf, bool synchedLocalTransactionAllowed)
             {
                 this.existingCon = existingCon;
                 this.cf = cf;
                 this.synchedLocalTransactionAllowed = synchedLocalTransactionAllowed;
             }
 
-            public virtual Session GetSession(EmsResourceHolder holder)
+            public virtual ISession GetSession(EmsResourceHolder holder)
             {
-                return holder.GetSession(typeof(Session), existingCon);
+                return holder.GetSession(typeof(ISession), existingCon);
             }
 
-            public virtual Connection GetConnection(EmsResourceHolder holder)
+            public virtual IConnection GetConnection(EmsResourceHolder holder)
             {
                 return (existingCon != null ? existingCon : holder.GetConnection());
             }
 
-            public virtual Connection CreateConnection()
+            public virtual IConnection CreateConnection()
             {
                 return cf.CreateConnection();
             }
 
-            public virtual Session CreateSession(Connection con)
+            public virtual ISession CreateSession(IConnection con)
             {
                 return con.CreateSession(synchedLocalTransactionAllowed, Session.SESSION_TRANSACTED);                
             }
@@ -268,7 +303,7 @@ namespace Spring.Messaging.Ems.Connections
             /// <returns> an appropriate Session fetched from the holder,
             /// or <code>null</code> if none found
             /// </returns>
-            Session GetSession(EmsResourceHolder holder);
+            ISession GetSession(EmsResourceHolder holder);
 
             /// <summary> Fetch an appropriate Connection from the given EmsResourceHolder.</summary>
             /// <param name="holder">the EmsResourceHolder
@@ -276,13 +311,13 @@ namespace Spring.Messaging.Ems.Connections
             /// <returns> an appropriate Connection fetched from the holder,
             /// or <code>null</code> if none found
             /// </returns>
-            Connection GetConnection(EmsResourceHolder holder);
+            IConnection GetConnection(EmsResourceHolder holder);
 
             /// <summary> Create a new EMS Connection for registration with a EmsResourceHolder.</summary>
             /// <returns> the new EMS Connection
             /// </returns>
             /// <throws>EMSException if thrown by EMS API methods </throws>
-            Connection CreateConnection();
+            IConnection CreateConnection();
 
             /// <summary> Create a new EMS Session for registration with a EmsResourceHolder.</summary>
             /// <param name="con">the EMS Connection to create a Session for
@@ -290,7 +325,7 @@ namespace Spring.Messaging.Ems.Connections
             /// <returns> the new EMS Session
             /// </returns>
             /// <throws>EMSException if thrown by EMS API methods </throws>
-            Session CreateSession(Connection con);
+            ISession CreateSession(IConnection con);
 
 
             /// <summary>

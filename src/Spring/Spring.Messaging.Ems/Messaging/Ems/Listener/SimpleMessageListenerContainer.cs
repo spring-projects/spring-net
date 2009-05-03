@@ -22,6 +22,7 @@ using System;
 using System.Threading;
 using Common.Logging;
 using Spring.Collections;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
 using Spring.Transaction.Support;
 using Spring.Util;
@@ -175,7 +176,7 @@ namespace Spring.Messaging.Ems.Listener
         /// Registers this listener container as EMS ExceptionListener on the shared connection.
         /// </summary>
         /// <param name="connection"></param>
-        protected override void PrepareSharedConnection(Connection connection)
+        protected override void PrepareSharedConnection(IConnection connection)
         {
             base.PrepareSharedConnection(connection);
             connection.ExceptionListener = this;
@@ -282,11 +283,11 @@ namespace Spring.Messaging.Ems.Listener
                 {
                     this.sessions = new HashedSet();
                     this.consumers = new HashedSet();
-                    Connection con = SharedConnection;
+                    IConnection con = SharedConnection;
                     for (int i = 0; i < this.concurrentConsumers; i++)
                     {
-                        Session session = CreateSession(SharedConnection);
-                        MessageConsumer consumer = CreateListenerConsumer(session);
+                        ISession session = CreateSession(SharedConnection);
+                        IMessageConsumer consumer = CreateListenerConsumer(session);
                         this.sessions.Add(session);
                         this.consumers.Add(consumer);
                     }
@@ -301,14 +302,14 @@ namespace Spring.Messaging.Ems.Listener
         /// <param name="session">The session to work on.</param>
         /// <returns>the MessageConsumer"/></returns>
         /// <exception cref="EMSException">if thrown by EMS methods</exception>
-        private MessageConsumer CreateListenerConsumer(Session session)
+        private IMessageConsumer CreateListenerConsumer(ISession session)
         {
             Destination destination = Destination;
             if (destination == null)
             {
                 destination = ResolveDestinationName(session, DestinationName);
             }
-            MessageConsumer consumer = CreateConsumer(session, destination);
+            IMessageConsumer consumer = CreateConsumer(session, destination);
             
 			consumer.MessageListener = new SimpleMessageListener(this, session);
             return consumer;
@@ -325,7 +326,7 @@ namespace Spring.Messaging.Ems.Listener
                 if (consumers != null)
                 {
                     logger.Debug("Closing NMS MessageConsumers");
-                    foreach (MessageConsumer messageConsumer in consumers)
+                    foreach (IMessageConsumer messageConsumer in consumers)
                     {
                         EmsUtils.CloseMessageConsumer(messageConsumer);
                     }
@@ -333,7 +334,7 @@ namespace Spring.Messaging.Ems.Listener
                 if (sessions != null)
                 {
                     logger.Debug("Closing NMS Sessions");
-                    foreach (Session session in sessions)
+                    foreach (ISession session in sessions)
                     {
                         EmsUtils.CloseSession(session);
                     }
@@ -350,7 +351,7 @@ namespace Spring.Messaging.Ems.Listener
         /// <param name="session">The session to create a MessageConsumer for.</param>
         /// <param name="destination">The destination to create a MessageConsumer for.</param>
         /// <returns>The new MessageConsumer</returns>
-        protected MessageConsumer CreateConsumer(Session session, Destination destination)
+        protected IMessageConsumer CreateConsumer(ISession session, Destination destination)
         {
             // Only pass in the NoLocal flag in case of a Topic:
             // Some EMS providers, such as WebSphere MQ 6.0, throw IllegalStateException
@@ -377,9 +378,9 @@ namespace Spring.Messaging.Ems.Listener
     internal class SimpleMessageListener : IMessageListener
     {
         private SimpleMessageListenerContainer container;
-        private Session session;
+        private ISession session;
 
-        public SimpleMessageListener(SimpleMessageListenerContainer container, Session session)
+        public SimpleMessageListener(SimpleMessageListenerContainer container, ISession session)
         {
             this.container = container;
             this.session = session;

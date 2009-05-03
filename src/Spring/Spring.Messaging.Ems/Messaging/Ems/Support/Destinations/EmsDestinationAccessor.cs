@@ -18,6 +18,7 @@
 
 #endregion
 
+using Spring.Messaging.Ems.Common;
 using Spring.Util;
 using TIBCO.EMS;
 
@@ -102,7 +103,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
         /// <param name="destinationName">Name of the destination.</param>
         /// <returns>The located Destination</returns>
         /// <exception cref="EMSException">If resolution failed.</exception>
-        public virtual Destination ResolveDestinationName(Session session, System.String destinationName)
+        public virtual Destination ResolveDestinationName(ISession session, System.String destinationName)
         {
             return DestinationResolver.ResolveDestinationName(session, destinationName, PubSubDomain);
         }

@@ -20,6 +20,7 @@
 
 using System;
 using Common.Logging;
+using Spring.Messaging.Ems.Common;
 using Spring.Objects.Factory;
 using TIBCO.EMS;
 
@@ -62,7 +63,7 @@ namespace Spring.Messaging.Ems.Core
 	    /// Will automatically create a EmsTemplate for the given ConnectionFactory.
         /// </summary>
         /// <value>The connection factory.</value>
-        public ConnectionFactory ConnectionFactory
+        public IConnectionFactory ConnectionFactory
         {
             get
             {
@@ -83,7 +84,7 @@ namespace Spring.Messaging.Ems.Core
 	    ///
 	    /// <param name="connectionFactory">The connection factory.</param>
         /// <returns></returns>
-        protected virtual EmsTemplate CreateEmsTemplate(ConnectionFactory connectionFactory)
+        protected virtual EmsTemplate CreateEmsTemplate(IConnectionFactory connectionFactory)
         {
             return new EmsTemplate(connectionFactory);
         }
