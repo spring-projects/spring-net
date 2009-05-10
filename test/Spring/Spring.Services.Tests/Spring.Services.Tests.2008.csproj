@@ -189,6 +189,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\Spring\Remoting\saoSingleton-autowired.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ServiceComponentExporterTests.TestServicedComponents.exe.spring-context.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ServiceComponentExporterTests.TestServicedComponents.Services.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

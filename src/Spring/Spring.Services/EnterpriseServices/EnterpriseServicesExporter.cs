@@ -279,7 +279,9 @@ namespace Spring.EnterpriseServices
         /// </summary>
         public virtual void Export()
         {
-            string assemblyFileName = AppDomain.CurrentDomain.DynamicDirectory.Trim('\\', '/') + "\\" + assemblyName + ".dll";
+            string ext = (ActivationMode == ActivationOption.Library) ? ".dll" : ".exe";
+            string moduleName = assemblyName + ext;
+            string assemblyFileName = AppDomain.CurrentDomain.DynamicDirectory.Trim('\\', '/') + "\\" + moduleName;
             FileInfo assemblyFile = new FileInfo(assemblyFileName);
 
             GenerateComponentAssembly(assemblyFile);
@@ -292,12 +294,13 @@ namespace Spring.EnterpriseServices
         public Assembly GenerateComponentAssembly(FileInfo assemblyFile)
         {
             AssemblyName an = new AssemblyName();
-            an.Name = assemblyName;
+            an.Name = Path.GetFileNameWithoutExtension(assemblyFile.Name);
             an.Version = new Version("1.0.0.0");
             an.KeyPair = new StrongNameKeyPair(GetKeyPair());
 
             AssemblyBuilder proxyAssembly = DefineProxyAssembly(an, assemblyFile);
-            GenerateComponentTypes(proxyAssembly, objectFactory, components, UseSpring);
+            ModuleBuilder module = proxyAssembly.DefineDynamicModule(an.Name, assemblyFile.Name, true);
+            GenerateComponentTypes(module, objectFactory, components, UseSpring);
 
             // Assembly.Save() does not allow paths...
             string dynamicFileName = assemblyFile.Name;
@@ -310,14 +313,12 @@ namespace Spring.EnterpriseServices
         /// Generates service types from the <paramref name="components"/> list of <see cref="ServicedComponentExporter"/> instances 
         /// into the given assembly.
         /// </summary>
-        /// <param name="proxyAssembly">the assembly to export types to</param>
+        /// <param name="module">the module to export types to</param>
         /// <param name="objectFactory">the object factory to resolve target types</param>
         /// <param name="components">the list of <see cref="ServicedComponentExporter"/> instances.</param>
         /// <param name="springManaged">whether to generate context lookups, <see cref="ServicedComponentExporter.CreateWrapperType"/></param>
-        private static AssemblyBuilder GenerateComponentTypes(AssemblyBuilder proxyAssembly, IObjectFactory objectFactory, IList components, bool springManaged)
+        private static void GenerateComponentTypes(ModuleBuilder module, IObjectFactory objectFactory, IList components, bool springManaged)
         {
-            string moduleName = proxyAssembly.GetName().Name;
-            ModuleBuilder module = proxyAssembly.DefineDynamicModule(moduleName, moduleName + ".dll", true);
             Type baseType = typeof(ServicedComponent);
             if (springManaged)
             {
@@ -328,7 +329,6 @@ namespace Spring.EnterpriseServices
             {
                 definition.CreateWrapperType(module, baseType, objectFactory.GetType(definition.TargetName), springManaged);
             }
-            return proxyAssembly;
         }
 
         private AssemblyBuilder DefineProxyAssembly(AssemblyName an, FileInfo assemblyFile)

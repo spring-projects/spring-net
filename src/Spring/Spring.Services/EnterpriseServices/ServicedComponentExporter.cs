@@ -258,19 +258,6 @@ namespace Spring.EnterpriseServices
                 il.Emit(OpCodes.Ret);
             }
 
-// TODO:remove
-//            protected void ImplementFactoryMethod(TypeBuilder builder, ConstructorBuilder cb)
-//            {
-//                base.ImplementCustom(builder);
-//                TypeBuilder factory = builder.DefineNestedType("Factory", System.Reflection.TypeAttributes.NestedPublic);
-//                MethodBuilder newMethod = factory.DefineMethod("New", MethodAttributes.Public | MethodAttributes.Static|MethodAttributes.HideBySig,
-//                                     CallingConventions.Standard, builder, new Type[0]);
-//                ILGenerator il = newMethod.GetILGenerator();
-//                il.Emit(OpCodes.Newobj, cb);
-//                il.Emit(OpCodes.Ret);
-//                factory.CreateType();
-//            }
-
             protected override IProxyMethodBuilder CreateTargetProxyMethodBuilder(TypeBuilder typeBuilder)
             {
                 return new ServicedComponentTargetProxyMethodBuilder(typeBuilder, this,
