@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2004 the original author or authors.
+ * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,6 +173,15 @@ namespace Spring.Objects.Factory
 			Assert.IsFalse(lb.Destroyed, "Was destroyed");
 		}
 
+        [Test(Description = "SPRNET-1208")]
+        public void AddObjectFactoryOnObjectFactoryAwareObjectPostProcessors()
+        {
+            AbstractObjectFactory aof = ObjectFactory;
+            LifecycleObject.PostProcessor lb = new LifecycleObject.PostProcessor();
+            aof.AddObjectPostProcessor(lb);
+            Assert.AreSame( aof, lb.ObjectFactory );
+        }
+
 		[Test]
 		public void FindsValidInstance()
 		{
@@ -287,11 +296,7 @@ namespace Spring.Objects.Factory
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RegisterNullCustomTypeConverter()
 		{
-			AbstractObjectFactory fac = ObjectFactory as AbstractObjectFactory;
-			if(fac != null) 
-			{
-				fac.RegisterCustomConverter(null, null);
-			}
+            ObjectFactory.RegisterCustomConverter(null, null);
 		}
 
 		[Test]
@@ -431,11 +436,11 @@ namespace Spring.Objects.Factory
 			}
 
 			// Create alias
-			((AbstractObjectFactory) ObjectFactory).RegisterAlias("rod", alias);
+			ObjectFactory.RegisterAlias("rod", alias);
 			object rod = ObjectFactory.GetObject("rod");
 			object aliasRod = ObjectFactory.GetObject(alias);
 			Assert.IsTrue(rod == aliasRod);
-			((AbstractObjectFactory) ObjectFactory).RegisterAlias("father", alias);
+			ObjectFactory.RegisterAlias("father", alias);
 		}
 
 		[Test]

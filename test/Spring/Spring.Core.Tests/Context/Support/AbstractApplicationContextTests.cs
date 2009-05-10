@@ -212,10 +212,17 @@ namespace Spring.Context.Support
 				}
 			}
 
+		    private bool objectFactorySet = false;
 			public IObjectFactory ObjectFactory
 			{
 				set
 				{
+                    // ignore multiple calls (due to OF also set during AbstractObjectFactory.AddObjectPostProcessor())
+                    if (objectFactorySet)
+                    {
+                        return;
+                    }
+				    objectFactorySet = true;
 					Assert.AreEqual(ObjectProcessingState.SetObjectFactory, this.CurrentState);
 					this.CurrentState++;
 				}

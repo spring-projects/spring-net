@@ -161,7 +161,7 @@ namespace Spring.Objects.Factory {
         #endregion
 
         #region Inner Class : PostProcessor
-        public class PostProcessor : IObjectPostProcessor
+        public class PostProcessor : IObjectPostProcessor, IObjectFactoryAware
         {
 			
             public object PostProcessBeforeInitialization (object obj, string name)
@@ -180,6 +180,14 @@ namespace Spring.Objects.Factory {
                     ((LifecycleObject) obj).PostProcessAfterInit ();
                 }
                 return obj;
+            }
+
+            private IObjectFactory objectFactory;
+
+            public IObjectFactory ObjectFactory
+            {
+                set { objectFactory=value; }
+                get { return objectFactory; }
             }
         }
         #endregion
