@@ -725,8 +725,13 @@ Build properties that may be set:
       <arg value="-project=./doc/sdk/Spring.NET-net-2.0.ndoc" />
     </exec>
 
-    <!-- copy sdk docs -->
-    <copy todir="./doc/sdk/target/html">
+    <!-- copy sdk docs to final destination -->
+    <move todir="./doc/sdk/target/htmlhelp" overwrite="true">
+      <fileset basedir="./doc/sdk/target/tmp/">
+        <include name="*.chm"/>
+      </fileset>
+    </move>
+    <move todir="./doc/sdk/target/html" overwrite="true">
       <fileset basedir="./doc/sdk/target/tmp/">
         <include name="**/*"/>
         <exclude name="*.chw" />
@@ -736,15 +741,10 @@ Build properties that may be set:
         <exclude name="*.chm" />
         <exclude name="ndoc3_msdn_temp" />
       </fileset>
-    </copy>
-    <copy todir="./doc/sdk/target/htmlhelp">
-      <fileset basedir="./doc/sdk/target/tmp/">
-        <include name="*.chm"/>
-      </fileset>
-    </copy>
+    </move>
 
     <!-- clean tmp dir -->
-    <delete dir="./doc/sdk/target/tmp" failonerror="false" />
+    <!-- delete dir="./doc/sdk/target/tmp" failonerror="false" / -->
 
   </target>
 
