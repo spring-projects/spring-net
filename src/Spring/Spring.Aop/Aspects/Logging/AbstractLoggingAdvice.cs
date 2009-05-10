@@ -67,6 +67,14 @@ namespace Spring.Aspects.Logging
             SetDefaultLogger(MethodBase.GetCurrentMethod().DeclaringType.FullName);
         }
 
+        /// <summary>
+        /// Creates a new advice instance using the given logger by default.
+        /// </summary>
+        protected AbstractLoggingAdvice(ILog defaultLogger)
+        {
+            this.defaultLogger = defaultLogger;
+        }
+
         #endregion
 
         #region Properties

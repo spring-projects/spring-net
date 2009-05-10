@@ -27,6 +27,7 @@ using AopAlliance.Intercept;
 using Common.Logging;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Spring.Aop.Framework;
 
 #endregion
 
@@ -39,12 +40,45 @@ namespace Spring.Aspects.Logging
     [TestFixture]
     public class SimpleLoggingAdviceTests
     {
+        public interface ITestTarget
+        {
+            void DoSomething();
+        }
+
+        private class TestTarget : ITestTarget
+        {
+            public void DoSomething()
+            { }
+        }
+
         private MockRepository mocks;
 
         [SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
+        }
+
+        [Test]
+        public void IntegrationTest()
+        {
+            ProxyFactory pf = new ProxyFactory(new TestTarget());
+
+            ILog log = (ILog)mocks.CreateMock(typeof(ILog));
+            SimpleLoggingAdvice loggingAdvice = new SimpleLoggingAdvice(log);
+            pf.AddAdvice(loggingAdvice);
+
+            Expect.Call(log.IsTraceEnabled).Return(true).Repeat.Any();
+            log.Trace("Entering DoSomething");
+            log.Trace("Exiting DoSomething");
+
+            mocks.ReplayAll();
+
+            object proxy = pf.GetProxy();
+            ITestTarget ptt = (ITestTarget)proxy;
+            ptt.DoSomething();
+
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -59,11 +93,11 @@ namespace Spring.Aspects.Logging
 
             Expect.Call(log.IsTraceEnabled).Return(true).Repeat.Any();
             log.Trace("Entering ToString");
-            
+
             Expect.Call(methodInvocation.Proceed()).Return(null);
 
             log.Trace("Exiting ToString");
-            
+
             mocks.ReplayAll();
 
             TestableSimpleLoggingAdvice loggingAdvice = new TestableSimpleLoggingAdvice(true);
@@ -86,7 +120,7 @@ namespace Spring.Aspects.Logging
             Expect.Call(log.IsTraceEnabled).Return(false).Repeat.Any();
             Expect.Call(log.IsDebugEnabled).Return(true).Repeat.Any();
             log.Debug("Entering ToString");
-            
+
             Expect.Call(methodInvocation.Proceed()).Return(null);
 
             log.Debug("Exiting ToString");
@@ -151,8 +185,8 @@ namespace Spring.Aspects.Logging
             MethodInfo mi = typeof(Dog).GetMethod("Bark");
             //two additional calls the method are to retrieve the method name on entry/exit...
             Expect.Call(methodInvocation.Method).Return(mi).Repeat.Any();
-            int[] luckyNumbers = new int[]{1, 2, 3};
-            object[] args = new object[] {"hello", luckyNumbers};
+            int[] luckyNumbers = new int[] { 1, 2, 3 };
+            object[] args = new object[] { "hello", luckyNumbers };
 
 
             Expect.Call(methodInvocation.Arguments).Return(args);
@@ -177,9 +211,9 @@ namespace Spring.Aspects.Logging
 
             mocks.VerifyAll();
         }
-    }  
-  
-    public class Dog 
+    }
+
+    public class Dog
     {
         public int Bark(string message, int[] luckyNumbers)
         {

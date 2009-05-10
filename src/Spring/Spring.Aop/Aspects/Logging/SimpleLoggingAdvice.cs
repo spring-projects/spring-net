@@ -91,6 +91,14 @@ namespace Spring.Aspects.Logging
             UseDynamicLogger = useDynamicLogger;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SimpleLoggingAdvice"/> class.
+        /// </summary>
+        /// <param name="defaultLogger">the default logger to use</param>
+        public SimpleLoggingAdvice(ILog defaultLogger)
+            : base(defaultLogger)
+        {}
+
         #endregion
 
         #region Properties

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,32 +18,25 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
-using Spring.Aop.Target;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
-	/// <summary>
-	/// Represents the AOP configuration data built-in with the proxy.
-	/// </summary>
-	/// <author>Bruno Baia</author>
+    /// <summary>
+    /// Represents the AOP configuration data built-in with the proxy.
+    /// </summary>
+    /// <author>Bruno Baia</author>
     [Serializable]
-	public class AdvisedProxy : IAdvised //, ISerializable
-	{
+    public class AdvisedProxy : IAdvised //, ISerializable
+    {
         #region Fields
 
         /// <summary>
@@ -57,23 +50,23 @@ namespace Spring.Aop.Framework.DynamicProxy
         private static IList EmptyList = ArrayList.ReadOnly(new ArrayList());
 
         /// <summary>
-		/// IAdvised delegate
-		/// </summary>
-		public IAdvised m_advised;
+        /// IAdvised delegate
+        /// </summary>
+        public IAdvised m_advised;
 
-		/// <summary>
-		/// Array of introduction delegates
-		/// </summary>
+        /// <summary>
+        /// Array of introduction delegates
+        /// </summary>
         public IAdvice[] m_introductions;
 
-		/// <summary>
-		/// Target source wrapper
-		/// </summary>
+        /// <summary>
+        /// Target source wrapper
+        /// </summary>
         public ITargetSourceWrapper m_targetSourceWrapper;
 
-		/// <summary>
-		/// Type of target object.
-		/// </summary>
+        /// <summary>
+        /// Type of target object.
+        /// </summary>
         public Type m_targetType;
 
         #endregion
@@ -103,7 +96,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// Creates a new instance of the <see cref="AdvisedProxy"/> class.
         /// </summary>
         public AdvisedProxy()
-        {}
+        { }
 
         /// <summary>
         /// Creates a new instance of the <see cref="AdvisedProxy"/> class.
@@ -118,10 +111,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// Creates a new instance of the
         /// <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/> class.
         /// </summary>
-		/// <param name="advised">The proxy configuration.</param>
+        /// <param name="advised">The proxy configuration.</param>
         /// <param name="proxy">The proxy.</param>
         public AdvisedProxy(IAdvised advised, IAopProxy proxy)
-		{
+        {
             Initialize(advised, proxy);
         }
 
@@ -132,10 +125,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <param name="context">Serialization context.</param>
         protected AdvisedProxy(SerializationInfo info, StreamingContext context)
         {
-            m_advised = (IAdvised) info.GetValue("advised", typeof(IAdvised));
-            m_introductions = (IAdvice[]) info.GetValue("introductions", typeof(IAdvice[]));
-            m_targetSourceWrapper = (ITargetSourceWrapper) info.GetValue("tsWrapper", typeof(ITargetSourceWrapper));
-            m_targetType = (Type) info.GetValue("targetType", typeof(Type));
+            m_advised = (IAdvised)info.GetValue("advised", typeof(IAdvised));
+            m_introductions = (IAdvice[])info.GetValue("introductions", typeof(IAdvice[]));
+            m_targetSourceWrapper = (ITargetSourceWrapper)info.GetValue("tsWrapper", typeof(ITargetSourceWrapper));
+            m_targetType = (Type)info.GetValue("targetType", typeof(Type));
         }
 
         /// <summary>
@@ -165,31 +158,31 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// </param>
         protected void Initialize(IAdvised advised, IAopProxy proxy)
         {
-			this.m_advised = advised;
-			this.m_targetType = advised.TargetSource.TargetType;
+            this.m_advised = advised;
+            this.m_targetType = advised.TargetSource.TargetType;
 
-			// initialize target
-			if (advised.TargetSource.IsStatic)
-			{
+            // initialize target
+            if (advised.TargetSource.IsStatic)
+            {
                 this.m_targetSourceWrapper = new StaticTargetSourceWrapper(advised.TargetSource);
-			}
-			else
-			{
+            }
+            else
+            {
                 this.m_targetSourceWrapper = new DynamicTargetSourceWrapper(advised.TargetSource);
-			}
+            }
 
-			// initialize introduction advice
-			this.m_introductions = new IAdvice[advised.Introductions.Length];
-			for (int i = 0; i < advised.Introductions.Length; i++)
-			{
-				this.m_introductions[i] = advised.Introductions[i].Advice;
+            // initialize introduction advice
+            this.m_introductions = new IAdvice[advised.Introductions.Length];
+            for (int i = 0; i < advised.Introductions.Length; i++)
+            {
+                this.m_introductions[i] = advised.Introductions[i].Advice;
 
-				// set target proxy on introduction instance if it implements ITargetAware
-				if (this.m_introductions[i] is ITargetAware)
-				{
-					((ITargetAware) this.m_introductions[i]).TargetProxy = proxy;
-				}
-			}
+                // set target proxy on introduction instance if it implements ITargetAware
+                if (this.m_introductions[i] is ITargetAware)
+                {
+                    ((ITargetAware)this.m_introductions[i]).TargetProxy = proxy;
+                }
+            }
         }
 
         #endregion
@@ -247,174 +240,174 @@ namespace Spring.Aop.Framework.DynamicProxy
         #region IAdvised Members
 
         bool IAdvised.ExposeProxy
-		{
-			get { return m_advised.ExposeProxy; }
-		}
+        {
+            get { return m_advised.ExposeProxy; }
+        }
 
-		IAdvisorChainFactory IAdvised.AdvisorChainFactory
-		{
-			get { return m_advised.AdvisorChainFactory; }
-		}
+        IAdvisorChainFactory IAdvised.AdvisorChainFactory
+        {
+            get { return m_advised.AdvisorChainFactory; }
+        }
 
-		bool IAdvised.ProxyTargetType
-		{
-			get { return m_advised.ProxyTargetType; }
-		}
+        bool IAdvised.ProxyTargetType
+        {
+            get { return m_advised.ProxyTargetType; }
+        }
 
         bool IAdvised.ProxyTargetAttributes
         {
             get { return m_advised.ProxyTargetAttributes; }
         }
 
-		IAdvisor[] IAdvised.Advisors
-		{
-			get { return m_advised.Advisors; }
-		}
+        IAdvisor[] IAdvised.Advisors
+        {
+            get { return m_advised.Advisors; }
+        }
 
-		IIntroductionAdvisor[] IAdvised.Introductions
-		{
-			get { return m_advised.Introductions; }
-		}
+        IIntroductionAdvisor[] IAdvised.Introductions
+        {
+            get { return m_advised.Introductions; }
+        }
 
-		Type[] IAdvised.Interfaces
-		{
-			get { return m_advised.Interfaces; }
-		}
+        Type[] IAdvised.Interfaces
+        {
+            get { return m_advised.Interfaces; }
+        }
 
-		IDictionary IAdvised.InterfaceMap
-		{
-			get { return m_advised.InterfaceMap; }
-		}
+        IDictionary IAdvised.InterfaceMap
+        {
+            get { return m_advised.InterfaceMap; }
+        }
 
-		bool IAdvised.IsFrozen
-		{
-			get { return m_advised.IsFrozen; }
-		}
+        bool IAdvised.IsFrozen
+        {
+            get { return m_advised.IsFrozen; }
+        }
 
-		ITargetSource IAdvised.TargetSource
-		{
-			get { return m_advised.TargetSource; }
-		}
+        ITargetSource IAdvised.TargetSource
+        {
+            get { return m_advised.TargetSource; }
+        }
 
-	    bool IAdvised.IsSerializable
-	    {
+        bool IAdvised.IsSerializable
+        {
             get { return m_advised.IsSerializable; }
-	    }
+        }
 
-	    /// <summary>
-		/// Adds the supplied <paramref name="advice"/> to the end (or tail)
-		/// of the advice (interceptor) chain.
-		/// </summary>
-		/// <param name="advice">
-		/// The <see cref="AopAlliance.Aop.IAdvice"/> to be added.
-		/// </param>
-		/// <seealso cref="Spring.Aop.Support.DefaultPointcutAdvisor"/>
-		/// <seealso cref="Spring.Aop.Framework.IAdvised.AddAdvice(int,IAdvice)"/>
-		public void AddAdvice(IAdvice advice)
-		{
-			this.m_advised.AddAdvice(advice);
-		}
+        /// <summary>
+        /// Adds the supplied <paramref name="advice"/> to the end (or tail)
+        /// of the advice (interceptor) chain.
+        /// </summary>
+        /// <param name="advice">
+        /// The <see cref="AopAlliance.Aop.IAdvice"/> to be added.
+        /// </param>
+        /// <seealso cref="Spring.Aop.Support.DefaultPointcutAdvisor"/>
+        /// <seealso cref="Spring.Aop.Framework.IAdvised.AddAdvice(int,IAdvice)"/>
+        public void AddAdvice(IAdvice advice)
+        {
+            this.m_advised.AddAdvice(advice);
+        }
 
-		/// <summary>
-		/// Adds the supplied <paramref name="advice"/> to the supplied
-		/// <paramref name="position"/> in the advice (interceptor) chain.
-		/// </summary>
-		/// <param name="position">
-		/// The zero (0) indexed position (from the head) at which the
-		/// supplied <paramref name="advice"/> is to be inserted into the
-		/// advice (interceptor) chain.
-		/// </param>
-		/// <param name="advice">
-		/// The <see cref="AopAlliance.Aop.IAdvice"/> to be added.
-		/// </param>
-		/// <seealso cref="Spring.Aop.Support.DefaultPointcutAdvisor"/>
-		/// <seealso cref="Spring.Aop.Framework.IAdvised.AddAdvice(IAdvice)"/>
-		public void AddAdvice(int position, IAdvice advice)
-		{
-			this.m_advised.AddAdvice(position, advice);
-		}
+        /// <summary>
+        /// Adds the supplied <paramref name="advice"/> to the supplied
+        /// <paramref name="position"/> in the advice (interceptor) chain.
+        /// </summary>
+        /// <param name="position">
+        /// The zero (0) indexed position (from the head) at which the
+        /// supplied <paramref name="advice"/> is to be inserted into the
+        /// advice (interceptor) chain.
+        /// </param>
+        /// <param name="advice">
+        /// The <see cref="AopAlliance.Aop.IAdvice"/> to be added.
+        /// </param>
+        /// <seealso cref="Spring.Aop.Support.DefaultPointcutAdvisor"/>
+        /// <seealso cref="Spring.Aop.Framework.IAdvised.AddAdvice(IAdvice)"/>
+        public void AddAdvice(int position, IAdvice advice)
+        {
+            this.m_advised.AddAdvice(position, advice);
+        }
 
-		bool IAdvised.IsInterfaceProxied(Type intf)
-		{
-			return m_advised.IsInterfaceProxied(intf);
-		}
+        bool IAdvised.IsInterfaceProxied(Type intf)
+        {
+            return m_advised.IsInterfaceProxied(intf);
+        }
 
         void IAdvised.AddAdvisors(IAdvisors advisors)
-	    {
-	        m_advised.AddAdvisors(advisors);
-	    }
+        {
+            m_advised.AddAdvisors(advisors);
+        }
 
-	    void IAdvised.AddAdvisor(IAdvisor advisor)
-		{
-			m_advised.AddAdvisor(advisor);
-		}
+        void IAdvised.AddAdvisor(IAdvisor advisor)
+        {
+            m_advised.AddAdvisor(advisor);
+        }
 
-		void IAdvised.AddAdvisor(int pos, IAdvisor advisor)
-		{
-			m_advised.AddAdvisor(pos, advisor);
-		}
+        void IAdvised.AddAdvisor(int pos, IAdvisor advisor)
+        {
+            m_advised.AddAdvisor(pos, advisor);
+        }
 
-		void IAdvised.AddIntroduction(IIntroductionAdvisor advisor)
-		{
-			m_advised.AddIntroduction(advisor);
-		}
+        void IAdvised.AddIntroduction(IIntroductionAdvisor advisor)
+        {
+            m_advised.AddIntroduction(advisor);
+        }
 
-		void IAdvised.AddIntroduction(int pos, IIntroductionAdvisor advisor)
-		{
-			m_advised.AddIntroduction(pos, advisor);
-		}
+        void IAdvised.AddIntroduction(int pos, IIntroductionAdvisor advisor)
+        {
+            m_advised.AddIntroduction(pos, advisor);
+        }
 
-		int IAdvised.IndexOf(IAdvisor advisor)
-		{
-			return m_advised.IndexOf(advisor);
-		}
+        int IAdvised.IndexOf(IAdvisor advisor)
+        {
+            return m_advised.IndexOf(advisor);
+        }
 
-		int IAdvised.IndexOf(IIntroductionAdvisor advisor)
-		{
-			return m_advised.IndexOf(advisor);
-		}
+        int IAdvised.IndexOf(IIntroductionAdvisor advisor)
+        {
+            return m_advised.IndexOf(advisor);
+        }
 
-		bool IAdvised.RemoveAdvisor(IAdvisor advisor)
-		{
-			return m_advised.RemoveAdvisor(advisor);
-		}
+        bool IAdvised.RemoveAdvisor(IAdvisor advisor)
+        {
+            return m_advised.RemoveAdvisor(advisor);
+        }
 
-		void IAdvised.RemoveAdvisor(int index)
-		{
-			m_advised.RemoveAdvisor(index);
-		}
+        void IAdvised.RemoveAdvisor(int index)
+        {
+            m_advised.RemoveAdvisor(index);
+        }
 
-		bool IAdvised.RemoveAdvice(IAdvice advice)
-		{
-			return m_advised.RemoveAdvice(advice);
-		}
+        bool IAdvised.RemoveAdvice(IAdvice advice)
+        {
+            return m_advised.RemoveAdvice(advice);
+        }
 
-		bool IAdvised.RemoveIntroduction(IIntroductionAdvisor advisor)
-		{
-			return m_advised.RemoveIntroduction(advisor);
-		}
+        bool IAdvised.RemoveIntroduction(IIntroductionAdvisor advisor)
+        {
+            return m_advised.RemoveIntroduction(advisor);
+        }
 
-		void IAdvised.RemoveIntroduction(int index)
-		{
-			m_advised.RemoveIntroduction(index);
-		}
+        void IAdvised.RemoveIntroduction(int index)
+        {
+            m_advised.RemoveIntroduction(index);
+        }
 
-		void IAdvised.ReplaceIntroduction(int index, IIntroductionAdvisor advisor)
-		{
-			m_advised.ReplaceIntroduction(index, advisor);
-		}
+        void IAdvised.ReplaceIntroduction(int index, IIntroductionAdvisor advisor)
+        {
+            m_advised.ReplaceIntroduction(index, advisor);
+        }
 
-		bool IAdvised.ReplaceAdvisor(IAdvisor a, IAdvisor b)
-		{
-			return m_advised.ReplaceAdvisor(a, b);
-		}
+        bool IAdvised.ReplaceAdvisor(IAdvisor a, IAdvisor b)
+        {
+            return m_advised.ReplaceAdvisor(a, b);
+        }
 
-		string IAdvised.ToProxyConfigString()
-		{
-			return m_advised.ToProxyConfigString();
-		}
+        string IAdvised.ToProxyConfigString()
+        {
+            return m_advised.ToProxyConfigString();
+        }
 
-		#endregion
+        #endregion
 
         #region ITargetTypeAware implementation
 
