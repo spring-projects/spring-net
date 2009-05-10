@@ -50,10 +50,10 @@ namespace Spring.EnterpriseServices
         }
 
         ///<summary>
-        /// Reads in the 'xxx.spring-context.xml' configuration file associated with the specified <paramref name="component"/>.
+        /// Reads in the 'xxx.spring-context.xml' configuration file associated with the specified <paramref name="componentType"/>.
         /// See <see cref="EnterpriseServicesExporter"/> for an in-depth description on how to export and configure COM+ components.
         ///</summary>
-        private static void EnsureComponentContextRegistryInitialized(ServicedComponent component)
+        public static void EnsureComponentContextRegistryInitialized(Type componentType)
         {
             if (isInitialized) return;
 
@@ -65,15 +65,15 @@ namespace Spring.EnterpriseServices
                 // this is to ensure, that assemblies place next to the component assembly can be loaded
                 // even when they are not strong named.
                 AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-                FileInfo componentAssemblyFile = new FileInfo(component.GetType().Assembly.Location);
+                FileInfo componentAssemblyFile = new FileInfo(componentType.Assembly.Location);
                 componentDirectory = componentAssemblyFile.Directory.FullName;
                 // switch to component assembly's directory (affects resolving relative paths during context instantiation!)
                 Environment.CurrentDirectory = componentDirectory;
-                // read in config file
-                ConfigXmlDocument configDoc = new ConfigXmlDocument();
+                // read in config file if any
                 FileInfo configFile = new FileInfo(componentAssemblyFile.FullName + ".spring-context.xml");
                 if (configFile.Exists)
                 {
+                    ConfigXmlDocument configDoc = new ConfigXmlDocument();
                     configDoc.Load(configFile.FullName);
                     XmlNode configNode = configDoc.SelectSingleNode("//context");
                     ServicedComponentContextHandler handler = new ServicedComponentContextHandler();
@@ -103,7 +103,7 @@ namespace Spring.EnterpriseServices
         ///</summary>
         public static object GetObject(ServicedComponent sender, string targetName)
         {
-            EnsureComponentContextRegistryInitialized(sender);
+            EnsureComponentContextRegistryInitialized(sender.GetType());
             return ContextRegistry.GetContext().GetObject(targetName);
         }
     }

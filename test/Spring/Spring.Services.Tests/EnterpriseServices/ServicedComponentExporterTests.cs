@@ -25,13 +25,19 @@
 using System;
 using System.Collections;
 using System.EnterpriseServices;
+using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
-
+using System.Runtime.Remoting;
+using AopAlliance.Intercept;
 using NUnit.Framework;
 using DotNetMock.Dynamic;
+using Rhino.Mocks;
+using Spring.Aop.Framework;
+using Spring.Context.Support;
 using Spring.Objects.Factory;
 using Spring.Objects;
+using Spring.Objects.Factory.Support;
 
 #endregion
 
@@ -44,6 +50,12 @@ namespace Spring.EnterpriseServices
 	[TestFixture]
     public class ServicedComponentExporterTests
 	{
+        [TearDown]
+        public void TearDown()
+        {
+            ContextRegistry.Clear();
+        }
+
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void BailsWhenNotConfigured ()
@@ -62,28 +74,127 @@ namespace Spring.EnterpriseServices
             exp.TypeAttributes.Add(new TransactionAttribute(TransactionOption.RequiresNew));
             exp.AfterPropertiesSet();
 
-            Type type = CreateWrapperType(exp, typeof(TestObject));
+            Type type = CreateWrapperType(exp, typeof(TestObject), false);
 
             TransactionAttribute[] attrs =  (TransactionAttribute[])type.GetCustomAttributes(typeof(TransactionAttribute), false);
             Assert.AreEqual(1, attrs.Length);
             Assert.AreEqual(TransactionOption.RequiresNew, attrs[0].Value);
         }
 
-        #region Private helpers classes
+        [Test]
+        public void RegistersManagedObjectWithNonDefaultTransactionOption()
+        {
+            ServicedComponentExporter exp = new ServicedComponentExporter();
+            exp.TargetName = "objectTest";
+            exp.ObjectName = "objectTestProxy";
+            exp.TypeAttributes = new ArrayList();
+            exp.TypeAttributes.Add(new TransactionAttribute(TransactionOption.RequiresNew));
+            exp.AfterPropertiesSet();
 
-//        private delegate Type CreateWrapperTypeHandler(ModuleBuilder module, Type baseType, IObjectFactory objectFactory, bool useSpring);
+            Type type = CreateWrapperType(exp, typeof(TestObject), true);
 
-        private Type CreateWrapperType(ServicedComponentExporter exporter, Type type)
+            TransactionAttribute[] attrs =  (TransactionAttribute[])type.GetCustomAttributes(typeof(TransactionAttribute), false);
+            Assert.AreEqual(1, attrs.Length);
+            Assert.AreEqual(TransactionOption.RequiresNew, attrs[0].Value);
+        }
+
+        [Test]
+        public void CanExportAopProxy()
+        {
+            // create an advised proxy and add to objectFactory
+            // note, that we need to implement a signed interface here
+            ProxyFactory aopProxyFactory = new ProxyFactory(new Type[] { typeof(IComparable) });
+            MockMethodInterceptor methodInterceptor = new MockMethodInterceptor();
+            aopProxyFactory.AddAdvice(methodInterceptor);
+            IComparable aopProxy = (IComparable) aopProxyFactory.GetProxy();
+//            ((AssemblyBuilder)aopProxy.GetType().Assembly).Save("Spring.Proxy.dll");
+
+            // sanity check
+            methodInterceptor.NextResult = 2;
+            Assert.AreEqual(methodInterceptor.NextResult, aopProxy.CompareTo(this));
+            Assert.AreEqual(1, methodInterceptor.Calls);
+
+            StaticApplicationContext appCtx = new StaticApplicationContext(AbstractApplicationContext.DefaultRootContextName, null);
+            appCtx.ObjectFactory.RegisterSingleton("objectTest", aopProxy);
+
+            FileInfo assemblyFile = new FileInfo("ServiceComponentExporterTests.TestServicedComponents.dll");
+            EnterpriseServicesExporter exporter = new EnterpriseServicesExporter();
+            Type serviceType = ExportObject(exporter, assemblyFile, appCtx, "objectTest");
+            try
+            {
+                // ServiceComponent will obtain its target from root context
+                ContextRegistry.RegisterContext(appCtx);
+                methodInterceptor.Calls = 0;
+
+                IComparable testObject;
+                testObject = (IComparable)Activator.CreateInstance(serviceType);
+                methodInterceptor.NextResult = 3;
+                Assert.AreEqual(methodInterceptor.NextResult, testObject.CompareTo(null));
+                testObject = (IComparable)Activator.CreateInstance(serviceType);
+                methodInterceptor.NextResult = 4;
+                Assert.AreEqual(methodInterceptor.NextResult, testObject.CompareTo(null));
+                
+                Assert.AreEqual(2, methodInterceptor.Calls);
+            }
+            finally
+            {
+                exporter.UnregisterServicedComponents(assemblyFile);
+                ContextRegistry.Clear();
+            }
+        }
+
+	    private Type ExportObject(EnterpriseServicesExporter exporter, FileInfo assemblyFile, StaticApplicationContext appCtx, string objectName)
+	    {
+	        exporter.ObjectFactory = appCtx.ObjectFactory;
+	        exporter.Assembly = Path.GetFileNameWithoutExtension(assemblyFile.Name);
+	        exporter.ApplicationName = exporter.Assembly;
+	        exporter.ActivationMode = ActivationOption.Library;
+	        exporter.UseSpring = true;
+
+	        ServicedComponentExporter exp = new ServicedComponentExporter();
+	        exp.TargetName = objectName;
+	        exp.ObjectName = objectName + "Service";
+	        exp.TypeAttributes = new ArrayList();
+	        exp.TypeAttributes.Add(new TransactionAttribute(TransactionOption.RequiresNew));
+	        exp.AfterPropertiesSet();
+
+	        exporter.Components.Add(exp);
+
+	        Assembly assembly = exporter.GenerateComponentAssembly(assemblyFile);
+            exporter.RegisterServicedComponents(assemblyFile);
+            return assembly.GetType(objectName + "Service");
+	    }
+
+	    #region Private helpers & classes
+
+        private class MockMethodInterceptor : IMethodInterceptor
+        {
+            public object NextResult = null;
+            public int Calls = 0;
+            public IMethodInvocation LastInvocation;
+
+            public object Invoke(IMethodInvocation invocation)
+            {
+                Calls++;
+                LastInvocation = invocation;
+                return NextResult;
+            }
+        }
+
+        private Type CreateWrapperType(ServicedComponentExporter exporter, Type targetType, bool useSpring)
         {
             AssemblyName an = new AssemblyName();
-			an.Name = "Spring.EnterpriseServices.Tests";
+            an.Name = "Spring.EnterpriseServices.Tests";
             AssemblyBuilder proxyAssembly = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.RunAndSave);
             ModuleBuilder module = proxyAssembly.DefineDynamicModule(an.Name, an.Name + ".dll", true);
 
-            IDynamicMock mockObjectFactory = new DynamicMock(typeof(IObjectFactory));
-            mockObjectFactory.ExpectAndReturn("GetType", type, new object[]{ exporter.TargetName });
+            Type baseType = typeof (ServicedComponent);
+            if (useSpring)
+            {
+                baseType = EnterpriseServicesExporter.CreateSpringServicedComponentType(module, baseType);
+            }
 
-            object result = exporter.CreateWrapperType(module, typeof(ServicedComponent), (IObjectFactory) mockObjectFactory.Object, false); //createWrapperTypeMethodInfo.Invoke(exporter, new object[] { module, mockObjectFactory.Object });
+            object result = exporter.CreateWrapperType(module, baseType, targetType, useSpring);
             Assert.IsNotNull(result);
             Assert.IsTrue(result is Type);
 

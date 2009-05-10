@@ -164,25 +164,49 @@ namespace Spring.EnterpriseServices
         /// </summary>
         /// <param name="module">Dynamic module builder to use</param>
         /// <param name="baseType"></param>
-        /// <param name="objectFactory">Object factory to get target from.</param>
-        /// <param name="useSpring">whether to generated ApplicationContext lookups or use static target instances</param>
-        public Type CreateWrapperType(ModuleBuilder module, Type baseType, IObjectFactory objectFactory, bool useSpring)
+        /// <param name="targetType">Type of the exported object.</param>
+        /// <param name="springManagedLifecycle">whether to generate lookups in ContextRegistry for each service method call or use a 'new'ed target instance</param>
+        /// <remarks>
+        /// if <paramref name="springManagedLifecycle"/> is <c>true</c>, each ServicedComponent method call will look similar to
+        /// <code>
+        /// class MyServicedComponent {
+        ///   void MethodX() {
+        ///     ContextRegistry.GetContext().GetObject("TargetName").MethodX();
+        ///   }
+        /// }
+        /// </code>
+        /// <br/>
+        /// if <paramref name="springManagedLifecycle"/> is <c>false</c>, the instance will be simply created at component activation using 'new':
+        /// <code>
+        /// class MyServicedComponent {
+        ///   TargetType target = new TargetType();
+        /// 
+        ///   void MethodX() {
+        ///     target.MethodX();
+        ///   }
+        /// }
+        /// </code>
+        /// <br/>
+        /// The differences are of course that in the former case, the target lifecycle is entirely managed by Spring, thus avoiding
+        /// issues with ServiceComponent activation/deactivation as well as removing the need for default constructors. 
+        /// </remarks>
+        public Type CreateWrapperType(ModuleBuilder module, Type baseType, Type targetType, bool springManagedLifecycle)
         {
             ValidateConfiguration();
 
             // create wrapper using appropriate proxy builder
             IProxyTypeBuilder proxyBuilder;
-            if (useSpring)
+            if (springManagedLifecycle)
             {
                 proxyBuilder = new SpringManagedServicedComponentProxyTypeBuilder(module, baseType, this);                
             }
             else
             {
-                proxyBuilder = new SimpleServicedComponentProxyTypeBuilder(module);
+                proxyBuilder = new SimpleServicedComponentProxyTypeBuilder(module, baseType);
             }
 
             proxyBuilder.Name = _objectName;
-            proxyBuilder.TargetType = objectFactory.GetType(TargetName);
+            proxyBuilder.TargetType = targetType;
             if (_interfaces != null && _interfaces.Length > 0)
             {
                 proxyBuilder.Interfaces = TypeResolutionUtils.ResolveInterfaceArray(_interfaces);
@@ -201,16 +225,70 @@ namespace Spring.EnterpriseServices
 
         #region ServicedComponentProxyTypeBuilder inner class definition
 
-        private sealed class SimpleServicedComponentProxyTypeBuilder : CompositionProxyTypeBuilder
+        private class ServicedComponentTargetProxyMethodBuilder : TargetProxyMethodBuilder
+        {
+            public ServicedComponentTargetProxyMethodBuilder(TypeBuilder typeBuilder, IProxyTypeGenerator proxyGenerator, bool explicitImplementation) : base(typeBuilder, proxyGenerator, explicitImplementation)
+            {}
+
+            /// <summary>
+            /// Suppress output to avoid Spring.Core dependency
+            /// </summary>
+            protected override void CallAssertUnderstands(ILGenerator il, MethodInfo method, LocalBuilder targetRef, string targetName)
+            {
+//                base.CallAssertUnderstands(il, method, targetRef, targetName);
+            }
+        }
+
+        private class ServicedComponentProxyTypeBuilder : CompositionProxyTypeBuilder
+        {
+            /// <summary>
+            /// Implements default constructor for the proxy class.
+            /// </summary>
+            protected override void ImplementConstructors(TypeBuilder builder)
+            {
+                MethodAttributes attributes = MethodAttributes.Public |
+                    MethodAttributes.HideBySig | MethodAttributes.SpecialName |
+                    MethodAttributes.RTSpecialName;
+                ConstructorBuilder cb = builder.DefineConstructor(attributes,
+                  CallingConventions.Standard, Type.EmptyTypes);
+
+                ILGenerator il = cb.GetILGenerator();
+                il.Emit(OpCodes.Ldarg_0);
+                il.Emit(OpCodes.Call, builder.BaseType.GetConstructor(Type.EmptyTypes));
+                il.Emit(OpCodes.Ret);
+
+                ImplementFactoryMethod(builder, cb);
+            }
+
+            protected void ImplementFactoryMethod(TypeBuilder builder, ConstructorBuilder cb)
+            {
+                base.ImplementCustom(builder);
+                TypeBuilder factory = builder.DefineNestedType("Factory", System.Reflection.TypeAttributes.NestedPublic);
+                MethodBuilder newMethod = factory.DefineMethod("New", MethodAttributes.Public | MethodAttributes.Static|MethodAttributes.HideBySig,
+                                     CallingConventions.Standard, builder, new Type[0]);
+                ILGenerator il = newMethod.GetILGenerator();
+                il.Emit(OpCodes.Newobj, cb);
+                il.Emit(OpCodes.Ret);
+                factory.CreateType();
+            }
+
+            protected override IProxyMethodBuilder CreateTargetProxyMethodBuilder(TypeBuilder typeBuilder)
+            {
+                return new ServicedComponentTargetProxyMethodBuilder(typeBuilder, this,
+                                                                     this.ExplicitInterfaceImplementation);
+            }
+        }
+
+        private sealed class SimpleServicedComponentProxyTypeBuilder : ServicedComponentProxyTypeBuilder
         {
             private readonly ModuleBuilder module;
 
             #region Constructor(s) / Destructor
 
-            public SimpleServicedComponentProxyTypeBuilder(ModuleBuilder module)
+            public SimpleServicedComponentProxyTypeBuilder(ModuleBuilder module, Type baseType)
             {
                 this.module = module;
-                BaseType = typeof(ServicedComponent);
+                BaseType = baseType;
             }
 
             #endregion
@@ -225,7 +303,7 @@ namespace Spring.EnterpriseServices
             #endregion
         }
 
-        private sealed class SpringManagedServicedComponentProxyTypeBuilder : CompositionProxyTypeBuilder
+        private sealed class SpringManagedServicedComponentProxyTypeBuilder : ServicedComponentProxyTypeBuilder
         {
             #region Fields
 
@@ -269,26 +347,6 @@ namespace Spring.EnterpriseServices
             #region IProxyTypeGenerator Members
 
             /// <summary>
-            /// Implements constructors for the proxy class.
-            /// </summary>
-            /// <param name="builder">
-            /// The <see cref="System.Reflection.Emit.TypeBuilder"/> to use.
-            /// </param>
-            protected override void ImplementConstructors( TypeBuilder builder )
-            {
-                MethodAttributes attributes = MethodAttributes.Public |
-                    MethodAttributes.HideBySig | MethodAttributes.SpecialName |
-                    MethodAttributes.RTSpecialName;
-                ConstructorBuilder cb = builder.DefineConstructor( attributes,
-                  CallingConventions.Standard, Type.EmptyTypes );
-
-                ILGenerator il = cb.GetILGenerator();
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Call, builder.BaseType.GetConstructor(Type.EmptyTypes));
-                il.Emit( OpCodes.Ret );
-            }
-
-            /// <summary>
             /// Generates the IL instructions that pushes 
             /// the target instance on which calls should be delegated to.
             /// </summary>
@@ -301,7 +359,6 @@ namespace Spring.EnterpriseServices
                 il.Emit( OpCodes.Ldstr, this.exporter.TargetName );
                 il.Emit( OpCodes.Callvirt,  getObjectRef.FieldType.GetMethod("Invoke"));
             }
-
             #endregion
 
         }

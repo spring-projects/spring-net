@@ -58,6 +58,17 @@ namespace Spring.Context.Support
 		}
 
 		/// <summary>
+		/// Creates a new, named instance of the StaticApplicationContext class.
+		/// </summary>
+		/// <param name="name">the context name</param>
+		/// <param name="parentContext">The parent application context.</param>
+		public StaticApplicationContext( string name, IApplicationContext parentContext )
+			: base( name, true, parentContext ) 
+		{			
+			RegisterSingleton( MessageSourceObjectName, typeof( StaticMessageSource ), null );
+		}
+
+		/// <summary>
 		/// Do nothing: we rely on callers to update our public methods.
 		/// </summary>
 		protected override void RefreshObjectFactory() {}

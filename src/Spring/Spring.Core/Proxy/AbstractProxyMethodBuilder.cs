@@ -296,7 +296,10 @@ namespace Spring.Proxy
             il.EmitCall(OpCodes.Callvirt, interfaceMethod, null);
         }
 
-        private void CallAssertUnderstands(ILGenerator il, MethodInfo method, LocalBuilder targetRef, string targetName)
+        /// <summary>
+        /// Emits code to ensure that target understands the method and throw a sensible exception otherwise.
+        /// </summary>
+        protected virtual void CallAssertUnderstands(ILGenerator il, MethodInfo method, LocalBuilder targetRef, string targetName)
         {
             // AssertArgumentType
             il.Emit(OpCodes.Ldloc, targetRef);

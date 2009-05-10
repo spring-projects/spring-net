@@ -279,35 +279,95 @@ namespace Spring.EnterpriseServices
         /// </summary>
         public virtual void Export()
         {
+            string assemblyFileName = AppDomain.CurrentDomain.DynamicDirectory.Trim('\\', '/') + "\\" + assemblyName + ".dll";
+            FileInfo assemblyFile = new FileInfo(assemblyFileName);
+
+            GenerateComponentAssembly(assemblyFile);
+            RegisterServicedComponents(assemblyFile);
+        }
+
+        /// <summary>
+        /// Generates all configured <see cref="Components"/> to the given assembly.
+        /// </summary>
+        public Assembly GenerateComponentAssembly(FileInfo assemblyFile)
+        {
             AssemblyName an = new AssemblyName();
             an.Name = assemblyName;
             an.Version = new Version("1.0.0.0");
             an.KeyPair = new StrongNameKeyPair(GetKeyPair());
-            AssemblyBuilder proxyAssembly = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.RunAndSave);
-            ModuleBuilder module = proxyAssembly.DefineDynamicModule(assemblyName, assemblyName + ".dll", true);
-            ApplyAssemblyAttributes(proxyAssembly);
 
+            AssemblyBuilder proxyAssembly = DefineProxyAssembly(an, assemblyFile);
+            GenerateComponentTypes(proxyAssembly, objectFactory, components, UseSpring);
+
+            // Assembly.Save() does not allow paths...
+            string dynamicFileName = assemblyFile.Name;
+            proxyAssembly.Save(dynamicFileName);
+            Assembly resultAssembly = System.Reflection.Assembly.LoadFrom(assemblyFile.FullName);
+            return resultAssembly;
+        }
+
+        /// <summary>
+        /// Generates service types from the <paramref name="components"/> list of <see cref="ServicedComponentExporter"/> instances 
+        /// into the given assembly.
+        /// </summary>
+        /// <param name="proxyAssembly">the assembly to export types to</param>
+        /// <param name="objectFactory">the object factory to resolve target types</param>
+        /// <param name="components">the list of <see cref="ServicedComponentExporter"/> instances.</param>
+        /// <param name="springManaged">whether to generate context lookups, <see cref="ServicedComponentExporter.CreateWrapperType"/></param>
+        private static AssemblyBuilder GenerateComponentTypes(AssemblyBuilder proxyAssembly, IObjectFactory objectFactory, IList components, bool springManaged)
+        {
+            string moduleName = proxyAssembly.GetName().Name;
+            ModuleBuilder module = proxyAssembly.DefineDynamicModule(moduleName, moduleName + ".dll", true);
             Type baseType = typeof(ServicedComponent);
-            if (UseSpring)
+            if (springManaged)
             {
-                baseType = CreateSpringServicedComponentType(module);
+                baseType = CreateSpringServicedComponentType(module, baseType);
             }
 
             foreach (ServicedComponentExporter definition in components)
             {
-                definition.CreateWrapperType(module, baseType, objectFactory, UseSpring);
+                definition.CreateWrapperType(module, baseType, objectFactory.GetType(definition.TargetName), springManaged);
             }
+            return proxyAssembly;
+        }
 
-            proxyAssembly.Save(assemblyName + ".dll");
+        private AssemblyBuilder DefineProxyAssembly(AssemblyName an, FileInfo assemblyFile)
+        {
+            AssemblyBuilder proxyAssembly = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.RunAndSave, assemblyFile.DirectoryName);
+            ApplyAssemblyAttributes(proxyAssembly);
+            return proxyAssembly;
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assemblyFile"></param>
+        public void RegisterServicedComponents(FileInfo assemblyFile)
+        {
             RegistrationConfig config = new RegistrationConfig();
             config.Application = applicationName;
-            config.AssemblyFile = AppDomain.CurrentDomain.DynamicDirectory + assemblyName + ".dll";
+            config.AssemblyFile = assemblyFile.FullName;
             config.InstallationFlags = InstallationFlags.ReportWarningsToConsole | InstallationFlags.FindOrCreateTargetApplication | InstallationFlags.ReconfigureExistingApplication;
 
             RegistrationHelper regHelper = new RegistrationHelper();
             regHelper.InstallAssemblyFromConfig(ref config);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assemblyFile"></param>
+        public void UnregisterServicedComponents(FileInfo assemblyFile)
+        {
+            RegistrationConfig config = new RegistrationConfig();
+            config.Application = applicationName;
+            config.AssemblyFile = assemblyFile.FullName;
+            config.InstallationFlags = InstallationFlags.ReportWarningsToConsole | InstallationFlags.FindOrCreateTargetApplication | InstallationFlags.ReconfigureExistingApplication;
+
+            RegistrationHelper regHelper = new RegistrationHelper();
+            regHelper.UninstallAssemblyFromConfig(ref config);
+        }
+
         #endregion
 
         #region Private Methods
@@ -406,7 +466,7 @@ namespace Spring.EnterpriseServices
         /// </summary>
         /// <example>
         /// <code>
-        /// internal class SpringServicedComponent
+        /// internal class SpringServicedComponent: BaseType
         /// {
         ///    protected delegate object GetObjectHandler(ServicedComponent servicedComponent, string targetName);
         /// 
@@ -433,11 +493,16 @@ namespace Spring.EnterpriseServices
         /// }
         /// </code>
         /// </example>
-        private Type CreateSpringServicedComponentType(ModuleBuilder module)
+        public static Type CreateSpringServicedComponentType(ModuleBuilder module, Type baseType)
         {
+            if (!typeof(ServicedComponent).IsAssignableFrom(baseType))
+            {
+                throw new ArgumentException(string.Format("baseType must derive from {0}, was {1}", typeof(ServicedComponent).FullName, baseType), "baseType");
+            }
+
             Type delegateType = DefineDelegate(module);
 
-            TypeBuilder typeBuilder = module.DefineType("SpringServicedComponent", System.Reflection.TypeAttributes.Public, typeof(ServicedComponent));
+            TypeBuilder typeBuilder = module.DefineType("SpringServicedComponent", System.Reflection.TypeAttributes.Public, baseType);
             ILGenerator il = null;
             FieldBuilder getObjectRef = typeBuilder.DefineField("getObject", delegateType, FieldAttributes.Family | FieldAttributes.Static);
 
@@ -448,6 +513,8 @@ namespace Spring.EnterpriseServices
             Label tryBegin = il.BeginExceptionBlock();
             LocalBuilder fldAssembly = il.DeclareLocal(typeof(Assembly));
             LocalBuilder fldType = il.DeclareLocal(typeof(Type));
+            LocalBuilder fldArgs = il.DeclareLocal(typeof (object[]));
+            LocalBuilder fldMethod = il.DeclareLocal(typeof (MethodBase));
 
             il.Emit(OpCodes.Call, typeof(Assembly).GetMethod("GetExecutingAssembly"));
             il.Emit(OpCodes.Callvirt, typeof(Assembly).GetProperty("Location").GetGetMethod());
@@ -484,6 +551,24 @@ namespace Spring.EnterpriseServices
             il.Emit(OpCodes.Call, typeof(Delegate).GetMethod("CreateDelegate", new Type[] { typeof(Type), typeof(MethodInfo) }));
             il.Emit(OpCodes.Castclass, delegateType);
             il.Emit(OpCodes.Stsfld, getObjectRef);
+
+            il.Emit(OpCodes.Ldc_I4_1);
+            il.Emit(OpCodes.Newarr, typeof(object));
+            il.Emit(OpCodes.Stloc, fldArgs);
+
+            il.Emit(OpCodes.Ldloc, fldArgs);
+            il.Emit(OpCodes.Ldc_I4_0);
+            il.Emit(OpCodes.Ldtoken, typeBuilder);
+            il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
+            il.Emit(OpCodes.Stelem_Ref);
+            il.Emit(OpCodes.Ldloc, fldType);
+            il.Emit(OpCodes.Ldstr, "EnsureComponentContextRegistryInitialized");
+            il.Emit(OpCodes.Callvirt, typeof(Type).GetMethod("GetMethod", new Type[] { typeof(string) }));
+            il.Emit(OpCodes.Ldnull);
+            il.Emit(OpCodes.Ldloc, fldArgs);
+            il.Emit(OpCodes.Call, typeof(MethodBase).GetMethod("Invoke", new Type[] { typeof(object), typeof(object[]) }));
+            il.Emit(OpCodes.Pop);
+
             il.Emit(OpCodes.Leave_S, methodEnd);
 
             il.BeginCatchBlock(typeof(Exception));
@@ -497,8 +582,14 @@ namespace Spring.EnterpriseServices
         private static readonly MethodAttributes ConstructorAttributes = MethodAttributes.Public |
             MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName;
 
+        private void InvokeBal()
+        {
+            Type type = typeof (Assembly);
+            object[] args = new object[] { typeof(EnterpriseServicesExporter) };
+            type.GetMethod("MethodName").Invoke(null, args);
+        }
 
-        private Type DefineDelegate(ModuleBuilder module)
+        private static Type DefineDelegate(ModuleBuilder module)
         {
             MethodAttributes methodAtts = MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual;
 

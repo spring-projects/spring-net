@@ -30,15 +30,15 @@ using Spring.Util;
 
 namespace Spring.Proxy
 {
-	/// <summary>
-	/// Builds a proxy type using composition.
-	/// </summary>
-	/// <remarks>
-	/// <note>
-	/// In order for this builder to work, the target <b>must</b> implement
-	/// one or more interfaces.
-	/// </note>
-	/// </remarks>
+    /// <summary>
+    /// Builds a proxy type using composition.
+    /// </summary>
+    /// <remarks>
+    /// <note>
+    /// In order for this builder to work, the target <b>must</b> implement
+    /// one or more interfaces.
+    /// </note>
+    /// </remarks>
     /// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
     public class CompositionProxyTypeBuilder : AbstractProxyTypeBuilder
@@ -56,17 +56,17 @@ namespace Spring.Proxy
 
         #region Properties
 
-	    /// <summary>
+        /// <summary>
         /// Gets or sets a value indicating whether interfaces should be implemented explicitly.
         /// </summary>
         /// <value>
         /// <see langword="true"/> if they should be; otherwise, <see langword="false"/>.
         /// </value>
-	    public bool ExplicitInterfaceImplementation
-	    {
-	        get { return explicitInterfaceImplementation; }
-	        set { explicitInterfaceImplementation = value; }
-	    }
+        public bool ExplicitInterfaceImplementation
+        {
+            get { return explicitInterfaceImplementation; }
+            set { explicitInterfaceImplementation = value; }
+        }
 
         #endregion
 
@@ -84,32 +84,32 @@ namespace Spring.Proxy
         #endregion
 
         #region IProxyTypeBuilder Members
-        
+
         /// <summary>
-		/// Creates a proxy that delegates calls to an instance of the
-		/// target object.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Only interfaces can be proxied using composition, so the target
-		/// <b>must</b> implement one or more interfaces.
-		/// </p>
-		/// </remarks>
+        /// Creates a proxy that delegates calls to an instance of the
+        /// target object.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Only interfaces can be proxied using composition, so the target
+        /// <b>must</b> implement one or more interfaces.
+        /// </p>
+        /// </remarks>
         /// <returns>The generated proxy class.</returns>
-		/// <exception cref="System.ArgumentException">
-		/// If the <see cref="IProxyTypeBuilder.TargetType"/>
-		/// does not implement any interfaces.
-		/// </exception>
+        /// <exception cref="System.ArgumentException">
+        /// If the <see cref="IProxyTypeBuilder.TargetType"/>
+        /// does not implement any interfaces.
+        /// </exception>
         public override Type BuildProxyType()
         {
             if (Interfaces == null || Interfaces.Length == 0)
             {
                 throw new ArgumentException(
-					"Composition proxy target must implement at least one interface.");
+                    "Composition proxy target must implement at least one interface.");
             }
 
             TypeBuilder typeBuilder = CreateTypeBuilder(Name, BaseType);
-            
+
             // apply custom attributes to the proxy type.
             ApplyTypeAttributes(typeBuilder, TargetType);
 
@@ -123,14 +123,30 @@ namespace Spring.Proxy
             foreach (Type intf in Interfaces)
             {
                 ImplementInterface(typeBuilder,
-                    new TargetProxyMethodBuilder(typeBuilder, this, explicitInterfaceImplementation), 
+                    CreateTargetProxyMethodBuilder(typeBuilder),
                     intf, TargetType);
             }
+
+            ImplementCustom(typeBuilder);
 
             return typeBuilder.CreateType();
         }
 
+        /// <summary>
+        /// Create an <see cref="IProxyMethodBuilder"/> to create interface implementations
+        /// </summary>
+        protected virtual IProxyMethodBuilder CreateTargetProxyMethodBuilder(TypeBuilder typeBuilder)
+        {
+            return new TargetProxyMethodBuilder(typeBuilder, this, explicitInterfaceImplementation);
+        }
+
         #endregion
+
+        /// <summary>
+        /// Allows subclasses to generate additional code
+        /// </summary>
+        protected virtual void ImplementCustom(TypeBuilder builder)
+        { }
 
         #region IProxyTypeGenerator Members
 
