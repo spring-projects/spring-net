@@ -256,21 +256,20 @@ namespace Spring.EnterpriseServices
                 il.Emit(OpCodes.Ldarg_0);
                 il.Emit(OpCodes.Call, builder.BaseType.GetConstructor(Type.EmptyTypes));
                 il.Emit(OpCodes.Ret);
-
-                ImplementFactoryMethod(builder, cb);
             }
 
-            protected void ImplementFactoryMethod(TypeBuilder builder, ConstructorBuilder cb)
-            {
-                base.ImplementCustom(builder);
-                TypeBuilder factory = builder.DefineNestedType("Factory", System.Reflection.TypeAttributes.NestedPublic);
-                MethodBuilder newMethod = factory.DefineMethod("New", MethodAttributes.Public | MethodAttributes.Static|MethodAttributes.HideBySig,
-                                     CallingConventions.Standard, builder, new Type[0]);
-                ILGenerator il = newMethod.GetILGenerator();
-                il.Emit(OpCodes.Newobj, cb);
-                il.Emit(OpCodes.Ret);
-                factory.CreateType();
-            }
+// TODO:remove
+//            protected void ImplementFactoryMethod(TypeBuilder builder, ConstructorBuilder cb)
+//            {
+//                base.ImplementCustom(builder);
+//                TypeBuilder factory = builder.DefineNestedType("Factory", System.Reflection.TypeAttributes.NestedPublic);
+//                MethodBuilder newMethod = factory.DefineMethod("New", MethodAttributes.Public | MethodAttributes.Static|MethodAttributes.HideBySig,
+//                                     CallingConventions.Standard, builder, new Type[0]);
+//                ILGenerator il = newMethod.GetILGenerator();
+//                il.Emit(OpCodes.Newobj, cb);
+//                il.Emit(OpCodes.Ret);
+//                factory.CreateType();
+//            }
 
             protected override IProxyMethodBuilder CreateTargetProxyMethodBuilder(TypeBuilder typeBuilder)
             {
