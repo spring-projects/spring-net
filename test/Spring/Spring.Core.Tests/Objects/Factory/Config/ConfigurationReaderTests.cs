@@ -53,7 +53,7 @@ namespace Spring.Objects.Factory.Config
     </foo>
 </configuration>";
 
-#if !NET_0 && !NET_1_1
+#if NET_2_0
         /// <summary>
         /// Unfortunately ConfigurationManager doesn't accept uri's.
         /// </summary>
@@ -93,7 +93,8 @@ namespace Spring.Objects.Factory.Config
             string machineConfig = RuntimeEnvironment.SystemConfigurationFile;
         }
 
-#if !NET_1_0 && !NET_1_1
+#if NET_2_0
+
         [Test]
         public void GetSectionLocalSectionHandler()
         {

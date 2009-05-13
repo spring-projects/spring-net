@@ -38,6 +38,7 @@
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />
         <include name="**/*.wsdl" />
+        <include name="**/*.config" />
       </resources>
       <references basedir="${current.bin.dir}">
         <include name="*.dll" />
