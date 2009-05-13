@@ -38,7 +38,7 @@ using Spring.Util;
 namespace Spring.EnterpriseServices
 {
     /// <summary>
-    /// Exports specified components as ServicedComponents.
+    /// Exports components as ServicedComponents using the specified <see cref="ServicedComponentExporter"/>s.
     /// </summary>
     /// <remarks>
     /// <para>

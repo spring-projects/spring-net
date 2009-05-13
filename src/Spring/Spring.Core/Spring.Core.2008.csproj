@@ -1008,6 +1008,7 @@
     <Compile Include="Util\ConfigXmlDocument.cs" />
     <Compile Include="Util\ConfigXmlElement.cs" />
     <Compile Include="Util\FatalReflectionException.cs" />
+    <Compile Include="Util\IChainableConfigSystem.cs" />
     <Compile Include="Util\IoUtils.cs" />
     <Compile Include="Util\ITextPosition.cs" />
     <Compile Include="Util\ObjectUtils.cs" />

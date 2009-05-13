@@ -22,6 +22,7 @@
 
 using System;
 using System.Configuration;
+using System.Reflection;
 using System.Xml;
 
 #endregion
@@ -34,6 +35,12 @@ namespace Spring.Util
     /// <author>Aleksandar Seovic</author>
     public class ConfigurationUtils
     {
+        /// <summary>
+        /// Avoid BeforeFieldInit pitfall
+        /// </summary>
+        static ConfigurationUtils()
+        {}
+
         /// <summary>
         /// Parses the configuration section.
         /// </summary>
@@ -161,7 +168,7 @@ namespace Spring.Util
         /// <returns>Configuration exception.</returns>
         public static Exception CreateConfigurationException(string message)
         {
-            return CreateConfigurationException(message, (Exception) null);
+            return CreateConfigurationException(message, (Exception)null);
         }
 
         /// <summary>
@@ -170,7 +177,7 @@ namespace Spring.Util
         /// <returns>Configuration exception.</returns>
         public static Exception CreateConfigurationException()
         {
-            return CreateConfigurationException(null, (Exception) null);
+            return CreateConfigurationException(null, (Exception)null);
         }
 
         /// <summary>
@@ -224,6 +231,56 @@ namespace Spring.Util
             return ConfigurationErrorsException.GetFilename(node);
 #endif
         }
+
+
+#if NET_2_0
+        /// <summary>
+        /// Sets the current <see cref="System.Configuration.Internal.IInternalConfigSystem"/> to be used by <see cref="ConfigurationManager"/>.
+        /// </summary>
+        /// <remarks>
+        /// íf <paramref name="configSystem"/> implements <see cref="IChainableConfigSystem"/>, this method invokes
+        /// <see cref="IChainableConfigSystem.SetInnerConfigurationSystem"/> on the new configSystem to chain them.<br/>
+        /// <b> Note, that this method requires reflection on internals of <see cref="ConfigurationManager"/></b>
+        /// </remarks>
+        /// <param name="configSystem">the configuration system to set</param>
+        /// <param name="enforce">bypasses the check if the current system has already been initialized</param>
+        /// <returns>the previous config system, if any</returns>
+        public static System.Configuration.Internal.IInternalConfigSystem SetConfigurationSystem(System.Configuration.Internal.IInternalConfigSystem configSystem, bool enforce)
+        {
+            FieldInfo s_configSystem = typeof(ConfigurationManager).GetField("s_configSystem", BindingFlags.Static | BindingFlags.NonPublic);
+            System.Configuration.Internal.IInternalConfigSystem innerConfigSystem = (System.Configuration.Internal.IInternalConfigSystem)s_configSystem.GetValue(null);
+            if (configSystem is IChainableConfigSystem)
+            {
+                ((IChainableConfigSystem)configSystem).SetInnerConfigurationSystem(innerConfigSystem);
+            }
+
+            try
+            {
+                setConfigurationSystem(configSystem, true);
+            }
+            catch (InvalidOperationException)
+            {
+                if (!enforce)
+                {
+                    throw;
+                }
+                s_configSystem.SetValue(null, configSystem);
+            }
+
+            return innerConfigSystem;
+        }
+
+        private static T CreateDelegate<T>(MethodInfo method)
+        {
+            return (T)(object)Delegate.CreateDelegate(typeof(T), method);
+        }
+
+        private delegate void SetConfigurationSystemHandler(System.Configuration.Internal.IInternalConfigSystem configSystem, bool setComplete);
+
+        private static SetConfigurationSystemHandler setConfigurationSystem =
+            CreateDelegate<SetConfigurationSystemHandler>(typeof(ConfigurationManager).GetMethod("SetConfigurationSystem"
+                                                         , BindingFlags.Static | BindingFlags.NonPublic));
+#endif
 
     }
 }

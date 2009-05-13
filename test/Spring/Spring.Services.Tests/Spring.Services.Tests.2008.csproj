@@ -72,6 +72,14 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\antlr.runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetMock, Version=0.7.4.0, Culture=neutral, PublicKeyToken=805ea88df19095f6">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\DotNetMock.dll</HintPath>
@@ -87,6 +95,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -103,6 +112,8 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EnterpriseServices\ExeConfigurationSystemTests.cs" />
+    <Compile Include="EnterpriseServices\ExportedServicedComponentSample.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentExporterTests.cs" />
     <Compile Include="Remoting\BaseRemotingTestFixture.cs" />
     <Compile Include="Remoting\CaoExporterTests.cs">
@@ -138,6 +149,7 @@
       </SubType>
     </None>
     <None Include="Data\Spring\Web\Services\Service.cs.fyi" />
+    <EmbeddedResource Include="EnterpriseServices\ExeConfigurationSystemTests.config" />
     <None Include="Spring.Services.Tests.build" />
     <None Include="Spring.Services.Tests.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -190,9 +202,12 @@
     <EmbeddedResource Include="Data\Spring\Remoting\saoSingleton-autowired.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ServiceComponentExporterTests.TestServicedComponents.exe.spring-context.xml">
+    <None Include="ServiceComponentExporterTests.TestServicedComponents.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
+    <None Include="ServiceComponentExporterTests.TestServicedComponents.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="ServiceComponentExporterTests.TestServicedComponents.Services.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

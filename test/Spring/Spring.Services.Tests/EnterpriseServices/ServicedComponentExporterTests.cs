@@ -111,7 +111,7 @@ namespace Spring.EnterpriseServices
             try
             {
                 // ServiceComponent will obtain its target from root context
-                ContextRegistry.RegisterContext(appCtx);
+//                ContextRegistry.RegisterContext(appCtx);
 
                 IComparable testObject;
                 testObject = (IComparable)Activator.CreateInstance(serviceType);
@@ -126,6 +126,7 @@ namespace Spring.EnterpriseServices
             }
         }
 
+#if NET_2_0
         [Test]
         public void CanExportAopProxyToServer()
         {
@@ -146,9 +147,9 @@ namespace Spring.EnterpriseServices
             finally
             {
                 exporter.UnregisterServicedComponents(assemblyFile);
-                ContextRegistry.Clear();
             }
         }
+#endif
 
         private Type ExportObject(EnterpriseServicesExporter exporter, FileInfo assemblyFile, IConfigurableApplicationContext appCtx, string objectName)
         {

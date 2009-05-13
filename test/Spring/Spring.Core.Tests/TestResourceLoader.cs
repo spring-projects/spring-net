@@ -14,7 +14,13 @@ namespace Spring
     /// Supports obtaining embedded resources from assembly.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The first <c>context</c> argument is always the namespace scope to be used for resolving resource names.
+    /// </para>
+    /// <para>
+    /// Upon first usage, TestResourceLoader registers the "testres://" protocol prefix for loading embedded resources.
+    /// A testres:// Url must be of the form "testres://./&lt;context-typename&gt;#&lt;ext" - <see cref="GetStream"/>.
+    /// </para>
     /// </remarks>
     public class TestResourceLoader
     {
@@ -73,6 +79,12 @@ namespace Spring
         private TestResourceLoader()
         { }
 
+        /// <summary>
+        /// Returns an Uri of the form "testres://./resourcname" that may be passed into <see cref="WebRequest.Create(string)"/> etc.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="ext"></param>
+        /// <returns></returns>
         public static Uri GetUri(object context, string ext)
         {
             string resname = context.GetType().AssemblyQualifiedName + "#" + ext;
@@ -131,6 +143,10 @@ namespace Spring
             }
         }
 
+        /// <summary>
+        /// Returns an embedded assembly resource, who's name is constructed from the given parameters as
+        /// <c>context.GetType().FullName + ext</c>
+        /// </summary>
         public static Stream GetStream(object context, string ext)
         {
             Type contextType = (context is Type) ? (Type)context : context.GetType();
@@ -138,6 +154,32 @@ namespace Spring
             Stream stm = contextType.Assembly.GetManifestResourceStream(resname);
             Assert.IsNotNull(stm, "Resource '{0}' in assembly '{1}' not found", resname, contextType.Assembly.FullName);
             return stm;
+        }
+
+        /// <summary>
+        /// Exports a resource obtained via <see cref="GetStream"/> to the specified destination.
+        /// </summary>
+        public static FileInfo ExportResource(object context, string ext, FileInfo destination)
+        {
+            Stream istm = GetStream(context, ext);
+            using(istm)
+            {
+                FileStream ostm = destination.OpenWrite();
+                using (ostm)
+                {
+                    byte[] buffer = new byte[2048];
+                    int bytesRead = istm.Read(buffer, 0, buffer.Length);
+                    while (bytesRead > 0)
+                    {
+                        ostm.Write(buffer, 0, bytesRead);
+                        bytesRead = istm.Read(buffer, 0, buffer.Length);
+                    }
+                    ostm.Flush();
+                    ostm.Close();
+                }
+                istm.Close();
+            }
+            return destination;
         }
 
         /// <summary>

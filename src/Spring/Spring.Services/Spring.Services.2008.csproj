@@ -78,6 +78,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -98,6 +99,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="EnterpriseServices\ExeConfigurationSystem.cs" />
     <Compile Include="EnterpriseServices\EnterpriseServicesExporter.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentContextHandler.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentExporter.cs" />

@@ -23,11 +23,17 @@
 #region Imports
 
 using System;
+using System.Configuration;
+using System.Diagnostics;
 using System.EnterpriseServices;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using Spring.Context;
 using Spring.Context.Support;
+using Spring.Core.IO;
+using Spring.Objects.Factory.Config;
+using Spring.Util;
 using ConfigXmlDocument = Spring.Util.ConfigXmlDocument;
 
 #endregion
@@ -43,6 +49,7 @@ namespace Spring.EnterpriseServices
     {
         private static bool isInitialized;
         private static string componentDirectory;
+        private static IApplicationContext _appContext;
 
         static ServicedComponentHelper()
         {
@@ -60,6 +67,7 @@ namespace Spring.EnterpriseServices
             lock (typeof(ServicedComponentHelper))
             {
                 if (isInitialized) return;
+
                 isInitialized = true;
 
                 // this is to ensure, that assemblies placed next to the component assembly can be loaded
@@ -70,26 +78,56 @@ namespace Spring.EnterpriseServices
                 // switch to component assembly's directory (affects resolving relative paths during context instantiation!)
                 Environment.CurrentDirectory = componentDirectory;
                 // read in config file if any
-                FileInfo configFile = new FileInfo(componentAssemblyFile.FullName + ".spring-context.xml");
+                FileInfo configFile = new FileInfo(componentAssemblyFile.FullName);
                 if (configFile.Exists)
                 {
-                    ConfigXmlDocument configDoc = new ConfigXmlDocument();
-                    configDoc.Load(configFile.FullName);
-                    XmlNode configNode = configDoc.SelectSingleNode("//context");
-                    ServicedComponentContextHandler handler = new ServicedComponentContextHandler();
-                    lock (ContextRegistry.SyncRoot)
+                    bool isRunningOutOfProcess = IsRunningOutOfProcess();
+
+#if NET_2_0
+                    ExeConfigurationSystem comConfig = new ExeConfigurationSystem(configFile.FullName);
+
+                    if (isRunningOutOfProcess)
                     {
-                        // it might accidentially have happend, that the contextregistry has already 
-                        // been initialized using the client application's app.config configuration.
-                        // Most of the time this doesn't make sense to read a configuration from a 
-                        // different AppDomain, thus we read in our own config file.
-                        ContextRegistry.Clear();
-                        handler.Create(null, null, configNode);
+                        Trace.WriteLine(string.Format("configuring COM OutProc Server '{0}' using '{1}'", componentAssemblyFile.FullName, componentAssemblyFile.FullName + ".config"));
+
+                        // make the config "global"
+                        ConfigurationUtils.SetConfigurationSystem(comConfig, true);
+                        _appContext = ContextRegistry.GetContext();
+                        if (_appContext == null)
+                        {
+                            throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section");
+                        }
+
                     }
+                    else
+                    {
+                        Trace.WriteLine(string.Format("configuring COM InProc Server '{0}' using section <spring/context> from file '{1}'", componentAssemblyFile.FullName, componentAssemblyFile.FullName + ".config"));
+                        _appContext = (IApplicationContext)comConfig.GetSection("spring/context");
+                        if (_appContext == null)
+                        {
+                            throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section in configuration file");
+                        }
+                    }
+#else
+                    _appContext = (IApplicationContext) ConfigurationReader.GetSection(new FileSystemResource(configFile.FullName + ".config"),"spring/context");
+                    if (_appContext == null)
+                    {
+                        throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section in configuration file");
+                    }
+#endif
+                }
+                else
+                {
+                    Trace.WriteLine(string.Format("No configuration file '{0}' for COM component '{1}' found - bypassing configuration", componentAssemblyFile.FullName + ".config", componentAssemblyFile.FullName));
                 }
             }
         }
 
+        private static bool IsRunningOutOfProcess()
+        {
+            // TODO: checkout a prob. better way to find out, whether we are executing as a com server or library
+            return AppDomain.CurrentDomain.SetupInformation.ApplicationName == "dllhost.exe";
+        }
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             string name = args.Name.Split(',')[0];
@@ -104,7 +142,11 @@ namespace Spring.EnterpriseServices
         public static object GetObject(ServicedComponent sender, string targetName)
         {
             EnsureComponentContextRegistryInitialized(sender.GetType());
-            return ContextRegistry.GetContext().GetObject(targetName);
+            if (_appContext == null)
+            {
+                throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section in configuration file");
+            }
+            return _appContext.GetObject(targetName);
         }
     }
 }
