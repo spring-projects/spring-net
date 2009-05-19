@@ -133,14 +133,13 @@ namespace Spring.Web.Support
                     factoryMethod = (CreateControlCollectionDelegate)s_collectionFactoryCache[ownerType];
                     if (factoryMethod == null)
                     {
-                        Type interceptedCollectionType =
-                            GetInterceptedCollectionType(collectionType, WebDependencyInjectionUtils.InjectDependenciesRecursive);
+                        Type interceptedCollectionType = GetInterceptedCollectionType(
+                                                              collectionType
+                                                            , WebDependencyInjectionUtils.InjectDependenciesRecursive
+                                                         );
 
-                        ConstructorInfo ctor =
-                            interceptedCollectionType.GetConstructor(new Type[] { typeof(Control) });
-                        DynamicMethod dm =
-                            new System.Reflection.Emit.DynamicMethod(string.Empty, typeof(ControlCollection),
-                                                                     new Type[] { typeof(Control) });
+                        ConstructorInfo ctor = interceptedCollectionType.GetConstructor(new Type[] { typeof(Control) });
+                        DynamicMethod dm = new DynamicMethod(string.Empty, typeof(ControlCollection), new Type[] { typeof(Control) });
                         ILGenerator il = dm.GetILGenerator();
                         il.Emit(OpCodes.Ldarg_0);
                         il.Emit(OpCodes.Newobj, ctor);

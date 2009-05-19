@@ -18,9 +18,10 @@
 
 #endregion
 
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
+using System.Security;
 
 [assembly: ComVisible(false)]
 [assembly: AssemblyTitle("Spring.Core")]
@@ -30,6 +31,23 @@ using System.Security.Permissions;
 // Security Permissions
 //
 // we need full, unrestricted access to reflection metadata...
-[assembly: ReflectionPermission(SecurityAction.RequestMinimum, Unrestricted=true)]
+//[assembly: ReflectionPermission(SecurityAction.RequestMinimum, Unrestricted = true)]
 //[assembly: AssemblyKeyFile(@"C:\users\aseovic\projects\OpenSource\Spring.Net\Spring.Net.PrivateKey.keys")]
 //[assembly: AssemblyKeyFile(@"C:\projects\Spring.Net\Spring.Net.snk")]
+[assembly: AllowPartiallyTrustedCallers]
+
+[assembly: SecurityCritical]
+
+#if NET_1_0 || NET_1_1
+namespace System.Security
+{
+    ///<summary>
+    ///</summary>
+    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method)]
+    internal class SecurityCriticalAttribute : Attribute
+    { }
+    [AttributeUsage(AttributeTargets.Method)]
+    internal class SecurityTreatAsSafeAttribute : Attribute
+    { }
+}
+#endif

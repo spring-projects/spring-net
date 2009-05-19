@@ -20,8 +20,11 @@
 
 using System;
 using System.Reflection;
+using System.Security;
+using System.Security.Permissions;
 using System.Web.UI;
 using Spring.Reflection.Dynamic;
+using Spring.Util;
 
 #endregion
 
@@ -33,12 +36,25 @@ namespace Spring.Web.Support
     /// <author>Erich Eichinger</author>
     internal class ControlCollectionAccessor
     {
-#if MONO_2_0
- 		private static readonly IDynamicField _owner = new SafeField(typeof (ControlCollection).GetField("owner", BindingFlags.Instance | BindingFlags.NonPublic));
-#else
-        private static readonly IDynamicField _owner = new SafeField(typeof (ControlCollection).GetField("_owner", BindingFlags.Instance | BindingFlags.NonPublic));
+        private static readonly IDynamicField _owner;
+        static ControlCollectionAccessor()
+        {
+            IDynamicField owner = null;
+#if NET_2_0
+            SecurityCritical.ExecutePrivileged( new PermissionSet(PermissionState.Unrestricted), delegate 
+            {
 #endif
-		
+#if MONO_2_0
+                owner = new SafeField(typeof (ControlCollection).GetField("owner", BindingFlags.Instance | BindingFlags.NonPublic));
+#else
+                owner = new SafeField(typeof (ControlCollection).GetField("_owner", BindingFlags.Instance | BindingFlags.NonPublic));
+#endif
+#if NET_2_0
+            });
+#endif
+            _owner = owner;
+        }
+
         private readonly ControlCollection _controls;
         private readonly Type _controlsType;
 

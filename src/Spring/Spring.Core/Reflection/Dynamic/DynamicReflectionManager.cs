@@ -25,6 +25,9 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using System.Security;
+using System.Security.Permissions;
 using Spring.Util;
 
 #if NET_2_0
@@ -40,14 +43,14 @@ namespace Spring.Reflection.Dynamic
     /// </summary>
     /// <param name="target">the target instance when calling an instance method</param>
     /// <returns>the value return by the Get method</returns>
-    public delegate object FieldGetterDelegate( object target );
+    public delegate object FieldGetterDelegate(object target);
 
     /// <summary>
     /// Represents a Set method
     /// </summary>
     /// <param name="target">the target instance when calling an instance method</param>
     /// <param name="value">the value to be set</param>
-    public delegate void FieldSetterDelegate( object target, object value );
+    public delegate void FieldSetterDelegate(object target, object value);
 
     /// <summary>
     /// Represents an Indexer Get method
@@ -55,7 +58,7 @@ namespace Spring.Reflection.Dynamic
     /// <param name="target">the target instance when calling an instance method</param>
     /// <param name="index"></param>
     /// <returns>the value return by the Get method</returns>
-    public delegate object PropertyGetterDelegate( object target, params object[] index );
+    public delegate object PropertyGetterDelegate(object target, params object[] index);
 
     /// <summary>
     /// Represents a Set method
@@ -63,7 +66,7 @@ namespace Spring.Reflection.Dynamic
     /// <param name="target">the target instance when calling an instance method</param>
     /// <param name="value">the value to be set</param>
     /// <param name="index"></param>
-    public delegate void PropertySetterDelegate( object target, object value, params object[] index );
+    public delegate void PropertySetterDelegate(object target, object value, params object[] index);
 
     /// <summary>
     /// Represents a method
@@ -71,35 +74,35 @@ namespace Spring.Reflection.Dynamic
     /// <param name="target">the target instance when calling an instance method</param>
     /// <param name="args">arguments to be passed to the method</param>
     /// <returns>the value return by the method. <value>null</value> when calling a void method</returns>
-    public delegate object FunctionDelegate( object target, params object[] args );
+    public delegate object FunctionDelegate(object target, params object[] args);
 
     /// <summary>
     /// Represents a constructor
     /// </summary>
     /// <param name="args">arguments to be passed to the method</param>
     /// <returns>the new object instance</returns>
-    public delegate object ConstructorDelegate( params object[] args );
+    public delegate object ConstructorDelegate(params object[] args);
 
     /// <summary>
     /// Represents a callback method used to create an <see cref="IDynamicProperty"/> from a <see cref="PropertyInfo"/> instance.
     /// </summary>
-    internal delegate IDynamicProperty CreatePropertyCallback( PropertyInfo property );
+    internal delegate IDynamicProperty CreatePropertyCallback(PropertyInfo property);
     /// <summary>
     /// Represents a callback method used to create an <see cref="IDynamicField"/> from a <see cref="FieldInfo"/> instance.
     /// </summary>
-    internal delegate IDynamicField CreateFieldCallback( FieldInfo property );
+    internal delegate IDynamicField CreateFieldCallback(FieldInfo property);
     /// <summary>
     /// Represents a callback method used to create an <see cref="IDynamicMethod"/> from a <see cref="MethodInfo"/> instance.
     /// </summary>
-    internal delegate IDynamicMethod CreateMethodCallback( MethodInfo method );
+    internal delegate IDynamicMethod CreateMethodCallback(MethodInfo method);
     /// <summary>
     /// Represents a callback method used to create an <see cref="IDynamicConstructor"/> from a <see cref="ConstructorInfo"/> instance.
     /// </summary>
-    internal delegate IDynamicConstructor CreateConstructorCallback( ConstructorInfo constructor );
+    internal delegate IDynamicConstructor CreateConstructorCallback(ConstructorInfo constructor);
     /// <summary>
     /// Represents a callback method used to create an <see cref="IDynamicIndexer"/> from a <see cref="PropertyInfo"/> instance.
     /// </summary>
-    internal delegate IDynamicIndexer CreateIndexerCallback( PropertyInfo indexer );
+    internal delegate IDynamicIndexer CreateIndexerCallback(PropertyInfo indexer);
 
     /// <summary>
     /// Allows easy access to existing and creation of new dynamic relection members.
@@ -156,14 +159,14 @@ namespace Spring.Reflection.Dynamic
         /// The base name to use for the reflection type name.
         /// </param>
         /// <returns>The type builder to use.</returns>
-        internal static TypeBuilder CreateTypeBuilder( string name )
+        internal static TypeBuilder CreateTypeBuilder(string name)
         {
             // Generates type name
-            string typeName = String.Format( "{0}.{1}_{2}",
-                ASSEMBLY_NAME, name, Guid.NewGuid().ToString( "N" ) );
+            string typeName = String.Format("{0}.{1}_{2}",
+                ASSEMBLY_NAME, name, Guid.NewGuid().ToString("N"));
 
-            ModuleBuilder module = DynamicCodeManager.GetModuleBuilder( ASSEMBLY_NAME );
-            return module.DefineType( typeName, TYPE_ATTRIBUTES );
+            ModuleBuilder module = DynamicCodeManager.GetModuleBuilder(ASSEMBLY_NAME);
+            return module.DefineType(typeName, TYPE_ATTRIBUTES);
         }
 
         /// <summary>
@@ -172,14 +175,14 @@ namespace Spring.Reflection.Dynamic
         /// <param name="property">Property to look up.</param>
         /// <param name="createCallback">callback function that will be called to create the dynamic property</param>
         /// <returns>An <see cref="IDynamicProperty"/> for the given property info.</returns>
-        internal static IDynamicProperty GetDynamicProperty( PropertyInfo property, CreatePropertyCallback createCallback )
+        internal static IDynamicProperty GetDynamicProperty(PropertyInfo property, CreatePropertyCallback createCallback)
         {
             lock (propertyCache.SyncRoot)
             {
                 IDynamicProperty dynamicProperty = (IDynamicProperty)propertyCache[property];
                 if (dynamicProperty == null)
                 {
-                    dynamicProperty = createCallback( property );
+                    dynamicProperty = createCallback(property);
                     propertyCache[property] = dynamicProperty;
                 }
                 return dynamicProperty;
@@ -192,14 +195,14 @@ namespace Spring.Reflection.Dynamic
         /// <param name="field">Field to look up.</param>
         /// <param name="createCallback">callback function that will be called to create the dynamic field</param>
         /// <returns>An <see cref="IDynamicField"/> for the given field info.</returns>
-        internal static IDynamicField GetDynamicField( FieldInfo field, CreateFieldCallback createCallback )
+        internal static IDynamicField GetDynamicField(FieldInfo field, CreateFieldCallback createCallback)
         {
             lock (fieldCache.SyncRoot)
             {
                 IDynamicField dynamicField = (IDynamicField)fieldCache[field];
                 if (dynamicField == null)
                 {
-                    dynamicField = createCallback( field );
+                    dynamicField = createCallback(field);
                     fieldCache[field] = dynamicField;
                 }
                 return dynamicField;
@@ -212,14 +215,14 @@ namespace Spring.Reflection.Dynamic
         /// <param name="indexer">Indexer to look up.</param>
         /// <param name="createCallback">callback function that will be called to create the dynamic indexer</param>
         /// <returns>An <see cref="IDynamicIndexer"/> for the given indexer.</returns>
-        internal static IDynamicIndexer GetDynamicIndexer( PropertyInfo indexer, CreateIndexerCallback createCallback )
+        internal static IDynamicIndexer GetDynamicIndexer(PropertyInfo indexer, CreateIndexerCallback createCallback)
         {
             lock (indexerCache.SyncRoot)
             {
                 IDynamicIndexer dynamicIndexer = (IDynamicIndexer)indexerCache[indexer];
                 if (dynamicIndexer == null)
                 {
-                    dynamicIndexer = createCallback( indexer );
+                    dynamicIndexer = createCallback(indexer);
                     indexerCache[indexer] = dynamicIndexer;
                 }
                 return dynamicIndexer;
@@ -232,14 +235,14 @@ namespace Spring.Reflection.Dynamic
         /// <param name="method">Method to look up.</param>
         /// <param name="createCallback">callback function that will be called to create the dynamic method</param>
         /// <returns>An <see cref="IDynamicMethod"/> for the given method.</returns>
-        internal static IDynamicMethod GetDynamicMethod( MethodInfo method, CreateMethodCallback createCallback )
+        internal static IDynamicMethod GetDynamicMethod(MethodInfo method, CreateMethodCallback createCallback)
         {
             lock (methodCache.SyncRoot)
             {
                 IDynamicMethod dynamicMethod = (IDynamicMethod)methodCache[method];
                 if (dynamicMethod == null)
                 {
-                    dynamicMethod = createCallback( method );
+                    dynamicMethod = createCallback(method);
                     methodCache[method] = dynamicMethod;
                 }
                 return dynamicMethod;
@@ -252,14 +255,14 @@ namespace Spring.Reflection.Dynamic
         /// <param name="constructor">Constructor to look up.</param>
         /// <param name="createCallback">callback function that will be called to create the dynamic constructor</param>
         /// <returns>An <see cref="IDynamicConstructor"/> for the given constructor.</returns>
-        internal static IDynamicConstructor GetDynamicConstructor( ConstructorInfo constructor, CreateConstructorCallback createCallback )
+        internal static IDynamicConstructor GetDynamicConstructor(ConstructorInfo constructor, CreateConstructorCallback createCallback)
         {
             lock (constructorCache.SyncRoot)
             {
                 IDynamicConstructor dynamicConstructor = (IDynamicConstructor)constructorCache[constructor];
                 if (dynamicConstructor == null)
                 {
-                    dynamicConstructor = createCallback( constructor );
+                    dynamicConstructor = createCallback(constructor);
                     constructorCache[constructor] = dynamicConstructor;
                 }
                 return dynamicConstructor;
@@ -270,10 +273,10 @@ namespace Spring.Reflection.Dynamic
         /// Saves dynamically generated assembly to disk.
         /// Can only be called in DEBUG mode, per ConditionalAttribute rules.
         /// </summary>
-        [Conditional( "DEBUG_DYNAMIC" )]
+        [Conditional("DEBUG_DYNAMIC")]
         public static void SaveAssembly()
         {
-            DynamicCodeManager.SaveAssembly( ASSEMBLY_NAME );
+            DynamicCodeManager.SaveAssembly(ASSEMBLY_NAME);
         }
 
         #endregion
@@ -284,14 +287,16 @@ namespace Spring.Reflection.Dynamic
         /// </summary>
         /// <param name="fieldInfo">the field to create the delegate for</param>
         /// <returns>a delegate that can be used to read the field</returns>
-        public static FieldGetterDelegate CreateFieldGetter( FieldInfo fieldInfo )
+        public static FieldGetterDelegate CreateFieldGetter(FieldInfo fieldInfo)
         {
-            AssertUtils.ArgumentNotNull( fieldInfo, "You cannot create a delegate for a null value." );
+            AssertUtils.ArgumentNotNull(fieldInfo, "You cannot create a delegate for a null value.");
 
-            System.Reflection.Emit.DynamicMethod dmGetter = new System.Reflection.Emit.DynamicMethod( "getter", typeof( object ), new Type[] { typeof( object ) }, fieldInfo.DeclaringType.Module, true );
+            bool skipVisibility = !IsPublic(fieldInfo);
+            Type[] argumentTypes = new Type[] { typeof(object) };
+            System.Reflection.Emit.DynamicMethod dmGetter = CreateDynamicMethod("get_" + fieldInfo.Name, typeof(object), argumentTypes, fieldInfo, skipVisibility);
             ILGenerator il = dmGetter.GetILGenerator();
-            EmitFieldGetter( il, fieldInfo, false );
-            return (FieldGetterDelegate)dmGetter.CreateDelegate( typeof( FieldGetterDelegate ) );
+            EmitFieldGetter(il, fieldInfo, false);
+            return (FieldGetterDelegate)dmGetter.CreateDelegate(typeof(FieldGetterDelegate));
         }
 
         /// <summary>
@@ -303,14 +308,15 @@ namespace Spring.Reflection.Dynamic
         /// If the field's <see cref="FieldInfo.IsLiteral"/> returns true, the returned method 
         /// will throw an <see cref="InvalidOperationException"/> when called.
         /// </remarks>
-        public static FieldSetterDelegate CreateFieldSetter( FieldInfo fieldInfo )
+        public static FieldSetterDelegate CreateFieldSetter(FieldInfo fieldInfo)
         {
-            AssertUtils.ArgumentNotNull( fieldInfo, "You cannot create a delegate for a null value." );
+            AssertUtils.ArgumentNotNull(fieldInfo, "You cannot create a delegate for a null value.");
 
-            System.Reflection.Emit.DynamicMethod dmSetter = new System.Reflection.Emit.DynamicMethod( "setter", null, new Type[] { typeof( object ), typeof( object ) }, fieldInfo.DeclaringType.Module, true );
+            bool skipVisibility = !IsPublic(fieldInfo);
+            System.Reflection.Emit.DynamicMethod dmSetter = CreateDynamicMethod("set_" + fieldInfo.Name, null, new Type[] { typeof(object), typeof(object) }, fieldInfo, skipVisibility);
             ILGenerator il = dmSetter.GetILGenerator();
-            EmitFieldSetter( il, fieldInfo, false );
-            return (FieldSetterDelegate)dmSetter.CreateDelegate( typeof( FieldSetterDelegate ) );
+            EmitFieldSetter(il, fieldInfo, false);
+            return (FieldSetterDelegate)dmSetter.CreateDelegate(typeof(FieldSetterDelegate));
         }
 
         /// <summary>
@@ -322,14 +328,16 @@ namespace Spring.Reflection.Dynamic
         /// If the property's <see cref="PropertyInfo.CanRead"/> returns false, the returned method 
         /// will throw an <see cref="InvalidOperationException"/> when called.
         /// </remarks>
-        public static PropertyGetterDelegate CreatePropertyGetter( PropertyInfo propertyInfo )
+        public static PropertyGetterDelegate CreatePropertyGetter(PropertyInfo propertyInfo)
         {
-            AssertUtils.ArgumentNotNull( propertyInfo, "You cannot create a delegate for a null value." );
+            AssertUtils.ArgumentNotNull(propertyInfo, "You cannot create a delegate for a null value.");
 
-            NetDynamicMethod dm = new NetDynamicMethod( string.Empty, typeof( object ), new Type[] { typeof( object ), typeof( object[] ) }, propertyInfo.DeclaringType.Module, true );
+            MethodInfo getMethod = propertyInfo.GetGetMethod();
+            bool skipVisibility = (null == getMethod || !IsPublic(getMethod)); // getter is public
+            NetDynamicMethod dm = CreateDynamicMethod("get_" + propertyInfo.Name, typeof(object), new Type[] { typeof(object), typeof(object[]) }, propertyInfo, skipVisibility);
             ILGenerator il = dm.GetILGenerator();
-            EmitPropertyGetter( il, propertyInfo, false );
-            return (PropertyGetterDelegate)dm.CreateDelegate( typeof( PropertyGetterDelegate ) );
+            EmitPropertyGetter(il, propertyInfo, false);
+            return (PropertyGetterDelegate)dm.CreateDelegate(typeof(PropertyGetterDelegate));
         }
 
         /// <summary>
@@ -341,14 +349,17 @@ namespace Spring.Reflection.Dynamic
         /// If the property's <see cref="PropertyInfo.CanWrite"/> returns false, the returned method 
         /// will throw an <see cref="InvalidOperationException"/> when called.
         /// </remarks>
-        public static PropertySetterDelegate CreatePropertySetter( PropertyInfo propertyInfo )
+        public static PropertySetterDelegate CreatePropertySetter(PropertyInfo propertyInfo)
         {
-            AssertUtils.ArgumentNotNull( propertyInfo, "You cannot create a delegate for a null value." );
+            AssertUtils.ArgumentNotNull(propertyInfo, "You cannot create a delegate for a null value.");
 
-            NetDynamicMethod dm = new NetDynamicMethod( string.Empty, null, new Type[] { typeof( object ), typeof( object ), typeof( object[] ) }, propertyInfo.DeclaringType.Module, true );
+            MethodInfo setMethod = propertyInfo.GetSetMethod();
+            bool skipVisibility = (null == setMethod || !IsPublic(setMethod)); // setter is public
+            Type[] argumentTypes = new Type[] { typeof(object), typeof(object), typeof(object[]) };
+            NetDynamicMethod dm = CreateDynamicMethod("set_" + propertyInfo.Name, null, argumentTypes, propertyInfo, skipVisibility);
             ILGenerator il = dm.GetILGenerator();
-            EmitPropertySetter( il, propertyInfo, false );
-            return (PropertySetterDelegate)dm.CreateDelegate( typeof( PropertySetterDelegate ) );
+            EmitPropertySetter(il, propertyInfo, false);
+            return (PropertySetterDelegate)dm.CreateDelegate(typeof(PropertySetterDelegate));
         }
 
         /// <summary>
@@ -356,14 +367,15 @@ namespace Spring.Reflection.Dynamic
         /// </summary>
         /// <param name="methodInfo">the method to create the delegate for</param>
         /// <returns>a delegate that can be used to invoke the method.</returns>
-        public static FunctionDelegate CreateMethod( MethodInfo methodInfo )
+        public static FunctionDelegate CreateMethod(MethodInfo methodInfo)
         {
-            AssertUtils.ArgumentNotNull( methodInfo, "You cannot create a delegate for a null value." );
+            AssertUtils.ArgumentNotNull(methodInfo, "You cannot create a delegate for a null value.");
 
-            NetDynamicMethod dm = new NetDynamicMethod( string.Empty, typeof( object ), new Type[] { typeof( object ), typeof( object[] ) }, methodInfo.DeclaringType.Module, true );
+            bool skipVisibility = !IsPublic(methodInfo);
+            NetDynamicMethod dm = CreateDynamicMethod(methodInfo.Name, typeof(object), new Type[] { typeof(object), typeof(object[]) }, methodInfo, skipVisibility);
             ILGenerator il = dm.GetILGenerator();
-            EmitInvokeMethod( il, methodInfo, false );
-            return (FunctionDelegate)dm.CreateDelegate( typeof( FunctionDelegate ) );
+            EmitInvokeMethod(il, methodInfo, false);
+            return (FunctionDelegate)dm.CreateDelegate(typeof(FunctionDelegate));
         }
 
         ///<summary>
@@ -375,41 +387,136 @@ namespace Spring.Reflection.Dynamic
         {
             AssertUtils.ArgumentNotNull(constructorInfo, "You cannot create a dynamic constructor for a null value.");
 
-            System.Reflection.Emit.DynamicMethod dmGetter = new System.Reflection.Emit.DynamicMethod( string.Empty, typeof( object ), new Type[] { typeof( object[] ) }, constructorInfo.DeclaringType.Module, true );
+            bool skipVisibility = !IsPublic(constructorInfo);
+            System.Reflection.Emit.DynamicMethod dmGetter;
+            Type[] argumentTypes = new Type[] { typeof(object[]) };
+            dmGetter = CreateDynamicMethod(constructorInfo.Name, typeof(object), argumentTypes, constructorInfo, skipVisibility);
             ILGenerator il = dmGetter.GetILGenerator();
-            EmitInvokeConstructor( il, constructorInfo, false );
-            ConstructorDelegate ctor = (ConstructorDelegate)dmGetter.CreateDelegate( typeof( ConstructorDelegate ) );
+            EmitInvokeConstructor(il, constructorInfo, false);
+            ConstructorDelegate ctor = (ConstructorDelegate)dmGetter.CreateDelegate(typeof(ConstructorDelegate));
             return ctor;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="System.Reflection.Emit.DynamicMethod"/> instance with the highest possible code access security.
+        /// </summary>
+        /// <remarks>
+        /// If allowed by security policy, associates the method with the <paramref name="member"/>s declaring type. 
+        /// Otherwise associates the dynamic method with <see cref="DynamicReflectionManager"/>.
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static NetDynamicMethod CreateDynamicMethod(string methodName, Type returnType, Type[] argumentTypes, MemberInfo member, bool skipVisibility)
+        {
+            NetDynamicMethod dmGetter = null;
+            methodName = "_dynamic_" + member.DeclaringType.Name + "." + methodName;
+            try
+            {
+                new PermissionSet(PermissionState.Unrestricted).Demand();
+                dmGetter = CreateDynamicMethodInternal(methodName, returnType, argumentTypes, member, skipVisibility);
+            }
+            catch(SecurityException)
+            {
+                dmGetter = CreateDynamicMethodInternal(methodName, returnType, argumentTypes, MethodBase.GetCurrentMethod(), false);
+            }
+            return dmGetter;
+        }
+
+        private static NetDynamicMethod CreateDynamicMethodInternal(string methodName, Type returnType, Type[] argumentTypes, MemberInfo member, bool skipVisibility)
+        {
+            NetDynamicMethod dm;
+            dm = new NetDynamicMethod(methodName, returnType, argumentTypes, member.Module, skipVisibility);
+//            if (member is FieldInfo)
+//            {
+//                // workaround for DynamicMethod bug not invoking type initializer before accessing static field
+//                // it seems all works correct if the DM is created with limited accessibility
+//                bool isStatic = (((FieldInfo) member).IsStatic);
+//                if (isStatic)
+//                {
+//                    new ReflectionPermission(ReflectionPermissionFlag.MemberAccess).PermitOnly();
+//                }
+//                dm = new NetDynamicMethod(methodName, returnType, argumentTypes, member.DeclaringType, true);
+//                if (isStatic)
+//                {
+//                    CodeAccessPermission.RevertPermitOnly();
+//                }
+//            }
+//            else
+//            {
+//                dm = new NetDynamicMethod(methodName, returnType, argumentTypes, member.DeclaringType, true);
+//            }
+            return dm;
+        }
+
+        private static bool IsPublic(MemberInfo member)
+        {
+            if (member == null) return true;
+
+            switch(member.MemberType)
+            {
+                case MemberTypes.Event:
+                    {
+                        bool isPublic = ((EventInfo) member).GetAddMethod() != null;
+                        return isPublic && IsPublic(member.DeclaringType);
+                    }
+                case MemberTypes.Field:
+                    {
+                        bool isPublic = ((FieldInfo)member).IsPublic;
+                        return isPublic && IsPublic(member.DeclaringType);
+                    }
+                case MemberTypes.Property:
+                    {
+                        throw new NotSupportedException();
+                    }
+                case MemberTypes.Constructor:
+                case MemberTypes.Method:
+                    {
+                        bool isPublic = ((MethodBase)member).IsPublic;
+                        return isPublic && IsPublic(member.DeclaringType);
+                    }
+                case MemberTypes.NestedType:
+                    {
+                        bool isPublic = ((Type)member).IsPublic;
+                        return isPublic && IsPublic(member.DeclaringType);
+                    }
+                case MemberTypes.TypeInfo:
+                    {
+                        bool isPublic = ((Type)member).IsPublic;
+                        return isPublic;
+                    }
+                default:
+                    throw new NotSupportedException();
+            }
         }
 #endif
 
         #region Shared Code Generation
 
-        private static void EmitFieldGetter( ILGenerator il, FieldInfo fieldInfo, bool isInstanceMethod )
+        private static void EmitFieldGetter(ILGenerator il, FieldInfo fieldInfo, bool isInstanceMethod)
         {
             if (fieldInfo.IsLiteral)
             {
-                object value = fieldInfo.GetValue( null );
-                EmitConstant( il, value );
+                object value = fieldInfo.GetValue(null);
+                EmitConstant(il, value);
             }
             else if (fieldInfo.IsStatic)
             {
-                il.Emit( OpCodes.Ldsfld, fieldInfo );
+//                object v = fieldInfo.GetValue(null); // ensure type is initialized...
+                il.Emit(OpCodes.Ldsfld, fieldInfo);
             }
             else
             {
-                EmitTarget( il, fieldInfo.DeclaringType, isInstanceMethod );
-                il.Emit( OpCodes.Ldfld, fieldInfo );
+                EmitTarget(il, fieldInfo.DeclaringType, isInstanceMethod);
+                il.Emit(OpCodes.Ldfld, fieldInfo);
             }
 
             if (fieldInfo.FieldType.IsValueType)
             {
-                il.Emit( OpCodes.Box, fieldInfo.FieldType );
+                il.Emit(OpCodes.Box, fieldInfo.FieldType);
             }
-            il.Emit( OpCodes.Ret );
+            il.Emit(OpCodes.Ret);
         }
 
-        internal static void EmitFieldSetter( ILGenerator il, FieldInfo fieldInfo, bool isInstanceMethod )
+        internal static void EmitFieldSetter(ILGenerator il, FieldInfo fieldInfo, bool isInstanceMethod)
         {
             if (!fieldInfo.IsLiteral
                 && !fieldInfo.IsInitOnly
@@ -417,51 +524,51 @@ namespace Spring.Reflection.Dynamic
             {
                 if (!fieldInfo.IsStatic)
                 {
-                    EmitTarget( il, fieldInfo.DeclaringType, isInstanceMethod );
+                    EmitTarget(il, fieldInfo.DeclaringType, isInstanceMethod);
                 }
 
-                il.Emit( OpCodes.Ldarg_1 );
+                il.Emit(OpCodes.Ldarg_1);
                 if (fieldInfo.FieldType.IsValueType)
                 {
-                    EmitUnbox( il, fieldInfo.FieldType );
+                    EmitUnbox(il, fieldInfo.FieldType);
                 }
                 else
                 {
-                    il.Emit( OpCodes.Castclass, fieldInfo.FieldType );
+                    il.Emit(OpCodes.Castclass, fieldInfo.FieldType);
                 }
 
                 if (fieldInfo.IsStatic)
                 {
-                    il.Emit( OpCodes.Stsfld, fieldInfo );
+                    il.Emit(OpCodes.Stsfld, fieldInfo);
                 }
                 else
                 {
-                    il.Emit( OpCodes.Stfld, fieldInfo );
+                    il.Emit(OpCodes.Stfld, fieldInfo);
                 }
-                il.Emit( OpCodes.Ret );
+                il.Emit(OpCodes.Ret);
             }
             else
             {
-                EmitThrowInvalidOperationException( il, string.Format( "Cannot write to read-only field '{0}.{1}'", fieldInfo.DeclaringType.FullName, fieldInfo.Name ) );
+                EmitThrowInvalidOperationException(il, string.Format("Cannot write to read-only field '{0}.{1}'", fieldInfo.DeclaringType.FullName, fieldInfo.Name));
             }
         }
 
-        internal static void EmitPropertyGetter( ILGenerator il, PropertyInfo propertyInfo, bool isInstanceMethod )
+        internal static void EmitPropertyGetter(ILGenerator il, PropertyInfo propertyInfo, bool isInstanceMethod)
         {
             if (propertyInfo.CanRead)
             {
-                MethodInfo getMethod = propertyInfo.GetGetMethod( true );
-                EmitInvokeMethod( il, getMethod, isInstanceMethod );
+                MethodInfo getMethod = propertyInfo.GetGetMethod(true);
+                EmitInvokeMethod(il, getMethod, isInstanceMethod);
             }
             else
             {
-                EmitThrowInvalidOperationException( il, string.Format( "Cannot read from write-only property '{0}.{1}'", propertyInfo.DeclaringType.FullName, propertyInfo.Name ) );
+                EmitThrowInvalidOperationException(il, string.Format("Cannot read from write-only property '{0}.{1}'", propertyInfo.DeclaringType.FullName, propertyInfo.Name));
             }
         }
 
-        internal static void EmitPropertySetter( ILGenerator il, PropertyInfo propertyInfo, bool isInstanceMethod )
+        internal static void EmitPropertySetter(ILGenerator il, PropertyInfo propertyInfo, bool isInstanceMethod)
         {
-            MethodInfo method = propertyInfo.GetSetMethod( true );
+            MethodInfo method = propertyInfo.GetSetMethod(true);
 
             if (propertyInfo.CanWrite
                 && !(propertyInfo.DeclaringType.IsValueType && !method.IsStatic))
@@ -475,78 +582,78 @@ namespace Spring.Reflection.Dynamic
                 ParameterInfo[] args = propertyInfo.GetIndexParameters(); // get indexParameters here!
                 for (int i = 0; i < args.Length; i++)
                 {
-                    SetupOutputArgument( il, paramsArrayPosition, args[i], outArgs );
+                    SetupOutputArgument(il, paramsArrayPosition, args[i], outArgs);
                 }
 
                 // load target
                 if (!method.IsStatic)
                 {
-                    EmitTarget( il, method.DeclaringType, isInstanceMethod );
+                    EmitTarget(il, method.DeclaringType, isInstanceMethod);
                 }
 
                 // load indexer arguments
                 for (int i = 0; i < args.Length; i++)
                 {
-                    SetupMethodArgument( il, paramsArrayPosition, args[i], outArgs );
+                    SetupMethodArgument(il, paramsArrayPosition, args[i], outArgs);
                 }
 
                 // load value
-                il.Emit( OpCodes.Ldarg_1 );
+                il.Emit(OpCodes.Ldarg_1);
                 if (propertyInfo.PropertyType.IsValueType)
                 {
-                    EmitUnbox( il, propertyInfo.PropertyType );
+                    EmitUnbox(il, propertyInfo.PropertyType);
                 }
                 else
                 {
-                    il.Emit( OpCodes.Castclass, propertyInfo.PropertyType );
+                    il.Emit(OpCodes.Castclass, propertyInfo.PropertyType);
                 }
 
                 // call setter
-                EmitCall( il, method );
+                EmitCall(il, method);
 
                 for (int i = 0; i < args.Length; i++)
                 {
-                    ProcessOutputArgument( il, paramsArrayPosition, args[i], outArgs );
+                    ProcessOutputArgument(il, paramsArrayPosition, args[i], outArgs);
                 }
-                il.Emit( OpCodes.Ret );
+                il.Emit(OpCodes.Ret);
             }
             else
             {
-                EmitThrowInvalidOperationException( il, string.Format( "Cannot write to read-only property '{0}.{1}'", propertyInfo.DeclaringType.FullName, propertyInfo.Name ) );
+                EmitThrowInvalidOperationException(il, string.Format("Cannot write to read-only property '{0}.{1}'", propertyInfo.DeclaringType.FullName, propertyInfo.Name));
             }
         }
 
         /// <summary>
         /// Delegates a Method(object target, params object[] args) call to the actual underlying method.
         /// </summary>
-        internal static void EmitInvokeMethod( ILGenerator il, MethodInfo method, bool isInstanceMethod )
+        internal static void EmitInvokeMethod(ILGenerator il, MethodInfo method, bool isInstanceMethod)
         {
             int paramsArrayPosition = (isInstanceMethod) ? 2 : 1;
             ParameterInfo[] args = method.GetParameters();
             IDictionary outArgs = new Hashtable();
             for (int i = 0; i < args.Length; i++)
             {
-                SetupOutputArgument( il, paramsArrayPosition, args[i], outArgs );
+                SetupOutputArgument(il, paramsArrayPosition, args[i], outArgs);
             }
 
             if (!method.IsStatic)
             {
-                EmitTarget( il, method.DeclaringType, isInstanceMethod );
+                EmitTarget(il, method.DeclaringType, isInstanceMethod);
             }
 
             for (int i = 0; i < args.Length; i++)
             {
-                SetupMethodArgument( il, paramsArrayPosition, args[i], outArgs );
+                SetupMethodArgument(il, paramsArrayPosition, args[i], outArgs);
             }
 
-            EmitCall( il, method );
+            EmitCall(il, method);
 
             for (int i = 0; i < args.Length; i++)
             {
-                ProcessOutputArgument( il, paramsArrayPosition, args[i], outArgs );
+                ProcessOutputArgument(il, paramsArrayPosition, args[i], outArgs);
             }
 
-            EmitMethodReturn( il, method.ReturnType );
+            EmitMethodReturn(il, method.ReturnType);
         }
 
         internal static void EmitInvokeConstructor(ILGenerator il, ConstructorInfo constructor, bool isInstanceMethod)
@@ -557,102 +664,102 @@ namespace Spring.Reflection.Dynamic
             IDictionary outArgs = new Hashtable();
             for (int i = 0; i < args.Length; i++)
             {
-                SetupOutputArgument( il, paramsArrayPosition, args[i], outArgs );
+                SetupOutputArgument(il, paramsArrayPosition, args[i], outArgs);
             }
 
             for (int i = 0; i < args.Length; i++)
             {
                 SetupMethodArgument(il, paramsArrayPosition, args[i], null);
             }
-            
+
             il.Emit(OpCodes.Newobj, constructor);
 
             for (int i = 0; i < args.Length; i++)
             {
-                ProcessOutputArgument( il, paramsArrayPosition, args[i], outArgs );
+                ProcessOutputArgument(il, paramsArrayPosition, args[i], outArgs);
             }
 
             EmitMethodReturn(il, constructor.DeclaringType);
         }
-        
+
         #endregion
 
         private static OpCode[] LdArgOpCodes = { OpCodes.Ldarg_0, OpCodes.Ldarg_1, OpCodes.Ldarg_2 };
 
-        private static void SetupOutputArgument( ILGenerator il, int paramsArrayPosition, ParameterInfo argInfo, IDictionary outArgs )
+        private static void SetupOutputArgument(ILGenerator il, int paramsArrayPosition, ParameterInfo argInfo, IDictionary outArgs)
         {
-            if (!IsOutputOrRefArgument( argInfo ))
+            if (!IsOutputOrRefArgument(argInfo))
                 return;
 
             Type argType = argInfo.ParameterType.GetElementType();
 
-            LocalBuilder lb = il.DeclareLocal( argType );
+            LocalBuilder lb = il.DeclareLocal(argType);
             if (!argInfo.IsOut)
             {
-                PushParamsArgumentValue( il, paramsArrayPosition, argType, argInfo.Position );
-                il.Emit( OpCodes.Stloc, lb );
+                PushParamsArgumentValue(il, paramsArrayPosition, argType, argInfo.Position);
+                il.Emit(OpCodes.Stloc, lb);
             }
             outArgs[argInfo.Position] = lb;
         }
 
-        private static bool IsOutputOrRefArgument( ParameterInfo argInfo )
+        private static bool IsOutputOrRefArgument(ParameterInfo argInfo)
         {
-            return argInfo.IsOut || argInfo.ParameterType.Name.EndsWith( "&" );
+            return argInfo.IsOut || argInfo.ParameterType.Name.EndsWith("&");
         }
 
-        private static void ProcessOutputArgument( ILGenerator il, int paramsArrayPosition, ParameterInfo argInfo, IDictionary outArgs )
+        private static void ProcessOutputArgument(ILGenerator il, int paramsArrayPosition, ParameterInfo argInfo, IDictionary outArgs)
         {
-            if (!IsOutputOrRefArgument( argInfo ))
+            if (!IsOutputOrRefArgument(argInfo))
                 return;
 
             Type argType = argInfo.ParameterType.GetElementType();
 
-            il.Emit( LdArgOpCodes[paramsArrayPosition] );
-            il.Emit( OpCodes.Ldc_I4, argInfo.Position );
-            il.Emit( OpCodes.Ldloc, (LocalBuilder)outArgs[argInfo.Position] );
+            il.Emit(LdArgOpCodes[paramsArrayPosition]);
+            il.Emit(OpCodes.Ldc_I4, argInfo.Position);
+            il.Emit(OpCodes.Ldloc, (LocalBuilder)outArgs[argInfo.Position]);
             if (argType.IsValueType)
             {
-                il.Emit( OpCodes.Box, argType );
+                il.Emit(OpCodes.Box, argType);
             }
-            il.Emit( OpCodes.Stelem_Ref );
+            il.Emit(OpCodes.Stelem_Ref);
         }
 
-        private static void SetupMethodArgument( ILGenerator il, int paramsArrayPosition, ParameterInfo argInfo, IDictionary outArgs )
+        private static void SetupMethodArgument(ILGenerator il, int paramsArrayPosition, ParameterInfo argInfo, IDictionary outArgs)
         {
-            if ( IsOutputOrRefArgument( argInfo ))
+            if (IsOutputOrRefArgument(argInfo))
             {
-                il.Emit( OpCodes.Ldloca_S, (LocalBuilder)outArgs[argInfo.Position] );
+                il.Emit(OpCodes.Ldloca_S, (LocalBuilder)outArgs[argInfo.Position]);
             }
             else
             {
-                PushParamsArgumentValue( il, paramsArrayPosition, argInfo.ParameterType, argInfo.Position );
+                PushParamsArgumentValue(il, paramsArrayPosition, argInfo.ParameterType, argInfo.Position);
             }
         }
 
-        private static void PushParamsArgumentValue( ILGenerator il, int paramsArrayPosition, Type argumentType, int argumentPosition )
+        private static void PushParamsArgumentValue(ILGenerator il, int paramsArrayPosition, Type argumentType, int argumentPosition)
         {
-            il.Emit( LdArgOpCodes[paramsArrayPosition] );
-            il.Emit( OpCodes.Ldc_I4, argumentPosition );
-            il.Emit( OpCodes.Ldelem_Ref );
+            il.Emit(LdArgOpCodes[paramsArrayPosition]);
+            il.Emit(OpCodes.Ldc_I4, argumentPosition);
+            il.Emit(OpCodes.Ldelem_Ref);
             if (argumentType.IsValueType)
             {
                 // call ConvertArgumentIfNecessary() to convert e.g. int32 to double if necessary
-                il.Emit( OpCodes.Ldtoken, argumentType );
-                EmitCall( il, FnGetTypeFromHandle );
-                il.Emit( OpCodes.Ldc_I4, argumentPosition );
-                EmitCall( il, FnConvertArgumentIfNecessary );
-                EmitUnbox( il, argumentType );
+                il.Emit(OpCodes.Ldtoken, argumentType);
+                EmitCall(il, FnGetTypeFromHandle);
+                il.Emit(OpCodes.Ldc_I4, argumentPosition);
+                EmitCall(il, FnConvertArgumentIfNecessary);
+                EmitUnbox(il, argumentType);
             }
             else
             {
-                il.Emit( OpCodes.Castclass, argumentType );
+                il.Emit(OpCodes.Castclass, argumentType);
             }
         }
 
-        private static void EmitUnbox( ILGenerator il, Type argumentType )
+        private static void EmitUnbox(ILGenerator il, Type argumentType)
         {
 #if NET_2_0
-            il.Emit( OpCodes.Unbox_Any, argumentType );
+            il.Emit(OpCodes.Unbox_Any, argumentType);
 #else
                 il.Emit(OpCodes.Unbox, argumentType);
                 il.Emit(OpCodes.Ldobj, argumentType);
@@ -664,23 +771,23 @@ namespace Spring.Reflection.Dynamic
         /// </summary>
         /// <param name="il">IL generator to use.</param>
         /// <param name="returnValueType">Type of the return value.</param>
-        private static void EmitMethodReturn( ILGenerator il, Type returnValueType )
+        private static void EmitMethodReturn(ILGenerator il, Type returnValueType)
         {
-            if (returnValueType == typeof( void ))
+            if (returnValueType == typeof(void))
             {
-                il.Emit( OpCodes.Ldnull );
+                il.Emit(OpCodes.Ldnull);
             }
             else if (returnValueType.IsValueType)
             {
-                il.Emit( OpCodes.Box, returnValueType );
+                il.Emit(OpCodes.Box, returnValueType);
             }
-            il.Emit( OpCodes.Ret );
+            il.Emit(OpCodes.Ret);
         }
 
-        private delegate Type GetTypeFromHandleDelegate( RuntimeTypeHandle handle );
-        private static readonly MethodInfo FnGetTypeFromHandle = new GetTypeFromHandleDelegate( Type.GetTypeFromHandle ).Method;
-        private delegate object ChangeTypeDelegate( object value, Type targetType, int argIndex );
-        private static readonly MethodInfo FnConvertArgumentIfNecessary = new ChangeTypeDelegate( ConvertValueTypeArgumentIfNecessary ).Method;
+        private delegate Type GetTypeFromHandleDelegate(RuntimeTypeHandle handle);
+        private static readonly MethodInfo FnGetTypeFromHandle = new GetTypeFromHandleDelegate(Type.GetTypeFromHandle).Method;
+        private delegate object ChangeTypeDelegate(object value, Type targetType, int argIndex);
+        private static readonly MethodInfo FnConvertArgumentIfNecessary = new ChangeTypeDelegate(ConvertValueTypeArgumentIfNecessary).Method;
 
         /// <summary>
         /// Converts <paramref name="value"/> to an instance of <paramref name="targetType"/> if necessary to 
@@ -696,7 +803,7 @@ namespace Spring.Reflection.Dynamic
         /// Note: <paramref name="targetType"/> is expected to be a value type! 
         /// </para>
         /// </remarks>
-        public static object ConvertValueTypeArgumentIfNecessary( object value, Type targetType, int argIndex )
+        public static object ConvertValueTypeArgumentIfNecessary(object value, Type targetType, int argIndex)
         {
             if (value == null)
             {
@@ -704,12 +811,12 @@ namespace Spring.Reflection.Dynamic
                 {
                     return null;
                 }
-                throw new InvalidCastException( string.Format( "Cannot convert NULL at position {0} to argument type {1}", argIndex, targetType.FullName ) );
+                throw new InvalidCastException(string.Format("Cannot convert NULL at position {0} to argument type {1}", argIndex, targetType.FullName));
             }
 
             Type valueType = value.GetType();
 #if NET_2_0
-            if (ReflectionUtils.IsNullableType( targetType ))
+            if (ReflectionUtils.IsNullableType(targetType))
             {
                 targetType = Nullable.GetUnderlyingType(targetType);
             }
@@ -723,47 +830,47 @@ namespace Spring.Reflection.Dynamic
             if (!valueType.IsValueType)
             {
                 // we're facing a reftype/valuetype mix that never can convert
-                throw new InvalidCastException( string.Format( "Cannot convert value '{0}' of type {1} at position {2} to argument type {3}", value, valueType.FullName, argIndex, targetType.FullName ) );
+                throw new InvalidCastException(string.Format("Cannot convert value '{0}' of type {1} at position {2} to argument type {3}", value, valueType.FullName, argIndex, targetType.FullName));
             }
 
             // we're dealing only with ValueType's now - try to convert them
             try
             {
                 // TODO: allow widening conversions only
-                return Convert.ChangeType( value, targetType );
+                return Convert.ChangeType(value, targetType);
             }
             catch (Exception ex)
             {
-                throw new InvalidCastException( string.Format( "Cannot convert value '{0}' of type {1} at position {2} to argument type {3}", value, valueType.FullName, argIndex, targetType.FullName ), ex );
+                throw new InvalidCastException(string.Format("Cannot convert value '{0}' of type {1} at position {2} to argument type {3}", value, valueType.FullName, argIndex, targetType.FullName), ex);
             }
         }
 
-        private static void EmitTarget( ILGenerator il, Type targetType, bool isInstanceMethod )
+        private static void EmitTarget(ILGenerator il, Type targetType, bool isInstanceMethod)
         {
-            il.Emit( (isInstanceMethod) ? OpCodes.Ldarg_1 : OpCodes.Ldarg_0 );
+            il.Emit((isInstanceMethod) ? OpCodes.Ldarg_1 : OpCodes.Ldarg_0);
             if (targetType.IsValueType)
             {
-                LocalBuilder local = il.DeclareLocal( targetType );
-                EmitUnbox( il, targetType );
-                il.Emit( OpCodes.Stloc_0 );
-                il.Emit( OpCodes.Ldloca_S, 0 );
+                LocalBuilder local = il.DeclareLocal(targetType);
+                EmitUnbox(il, targetType);
+                il.Emit(OpCodes.Stloc_0);
+                il.Emit(OpCodes.Ldloca_S, 0);
             }
             else
             {
-                il.Emit( OpCodes.Castclass, targetType );
+                il.Emit(OpCodes.Castclass, targetType);
             }
         }
 
-        private static void EmitCall( ILGenerator il, MethodInfo method )
+        private static void EmitCall(ILGenerator il, MethodInfo method)
         {
-            il.EmitCall( (method.IsVirtual) ? OpCodes.Callvirt : OpCodes.Call, method, null );
+            il.EmitCall((method.IsVirtual) ? OpCodes.Callvirt : OpCodes.Call, method, null);
         }
 
-        private static void EmitConstant( ILGenerator il, object value )
+        private static void EmitConstant(ILGenerator il, object value)
         {
             if (value is String)
             {
-                il.Emit( OpCodes.Ldstr, (string)value );
+                il.Emit(OpCodes.Ldstr, (string)value);
                 return;
             }
 
@@ -771,78 +878,78 @@ namespace Spring.Reflection.Dynamic
             {
                 if ((bool)value)
                 {
-                    il.Emit( OpCodes.Ldc_I4_1 );
+                    il.Emit(OpCodes.Ldc_I4_1);
                 }
                 else
                 {
-                    il.Emit( OpCodes.Ldc_I4_0 );
+                    il.Emit(OpCodes.Ldc_I4_0);
                 }
                 return;
             }
 
             if (value is Char)
             {
-                il.Emit( OpCodes.Ldc_I4, (Char)value );
-                il.Emit( OpCodes.Conv_I2 );
+                il.Emit(OpCodes.Ldc_I4, (Char)value);
+                il.Emit(OpCodes.Conv_I2);
                 return;
             }
 
             if (value is byte)
             {
-                il.Emit( OpCodes.Ldc_I4, (byte)value );
-                il.Emit( OpCodes.Conv_I1 );
+                il.Emit(OpCodes.Ldc_I4, (byte)value);
+                il.Emit(OpCodes.Conv_I1);
             }
             else if (value is Int16)
             {
-                il.Emit( OpCodes.Ldc_I4, (Int16)value );
-                il.Emit( OpCodes.Conv_I2 );
+                il.Emit(OpCodes.Ldc_I4, (Int16)value);
+                il.Emit(OpCodes.Conv_I2);
             }
             else if (value is Int32)
             {
-                il.Emit( OpCodes.Ldc_I4, (Int32)value );
+                il.Emit(OpCodes.Ldc_I4, (Int32)value);
             }
             else if (value is Int64)
             {
-                il.Emit( OpCodes.Ldc_I8, (Int64)value );
+                il.Emit(OpCodes.Ldc_I8, (Int64)value);
             }
             else if (value is UInt16)
             {
-                il.Emit( OpCodes.Ldc_I4, (UInt16)value );
-                il.Emit( OpCodes.Conv_U2 );
+                il.Emit(OpCodes.Ldc_I4, (UInt16)value);
+                il.Emit(OpCodes.Conv_U2);
             }
             else if (value is UInt32)
             {
-                il.Emit( OpCodes.Ldc_I4, (UInt32)value );
-                il.Emit( OpCodes.Conv_U4 );
+                il.Emit(OpCodes.Ldc_I4, (UInt32)value);
+                il.Emit(OpCodes.Conv_U4);
             }
             else if (value is UInt64)
             {
-                il.Emit( OpCodes.Ldc_I8, (UInt64)value );
-                il.Emit( OpCodes.Conv_U8 );
+                il.Emit(OpCodes.Ldc_I8, (UInt64)value);
+                il.Emit(OpCodes.Conv_U8);
             }
             else if (value is Single)
             {
-                il.Emit( OpCodes.Ldc_R4, (Single)value );
+                il.Emit(OpCodes.Ldc_R4, (Single)value);
             }
             else if (value is Double)
             {
-                il.Emit( OpCodes.Ldc_R8, (Double)value );
+                il.Emit(OpCodes.Ldc_R8, (Double)value);
             }
         }
 
         private static readonly ConstructorInfo NewInvalidOperationException =
-            typeof( InvalidOperationException ).GetConstructor( new Type[] { typeof( string ) } );
+            typeof(InvalidOperationException).GetConstructor(new Type[] { typeof(string) });
 
         /// <summary>
         /// Generates code that throws <see cref="InvalidOperationException"/>.
         /// </summary>
         /// <param name="il">IL generator to use.</param>
         /// <param name="message">Error message to use.</param>
-        private static void EmitThrowInvalidOperationException( ILGenerator il, string message )
+        private static void EmitThrowInvalidOperationException(ILGenerator il, string message)
         {
-            il.Emit( OpCodes.Ldstr, message );
-            il.Emit( OpCodes.Newobj, NewInvalidOperationException );
-            il.Emit( OpCodes.Throw );
+            il.Emit(OpCodes.Ldstr, message);
+            il.Emit(OpCodes.Newobj, NewInvalidOperationException);
+            il.Emit(OpCodes.Throw);
         }
     }
 }

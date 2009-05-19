@@ -23,6 +23,8 @@
 using System;
 using System.Globalization;
 using System.Reflection;
+using System.Security;
+using System.Security.Permissions;
 using System.Web;
 using System.Web.Caching;
 using System.Web.SessionState;
@@ -80,8 +82,8 @@ namespace Spring.Context.Support
         private static CacheItemRemovedCallback s_originalCallback;
 #if NET_2_0
         // required to enable accessing HttpContext.Request during IHttpModule.Init() in integrated mode
-        private static readonly FieldInfo fiHideRequestResponse = typeof(HttpContext).GetField("HideRequestResponse", BindingFlags.Instance|BindingFlags.NonPublic);
-        private static readonly SafeField ContextHideRequestResponse = (fiHideRequestResponse!=null)?new SafeField(fiHideRequestResponse):null;
+        private static readonly FieldInfo fiHideRequestResponse;
+        private static readonly SafeField ContextHideRequestResponse;
 #endif
 
         /// <summary>
@@ -95,6 +97,20 @@ namespace Spring.Context.Support
         static WebSupportModule()
         {
             s_log = LogManager.GetLogger(typeof(WebSupportModule));
+#if NET_2_0
+            // required to enable accessing HttpContext.Request during IHttpModule.Init() in integrated mode
+            ContextHideRequestResponse = null;
+            try
+            {
+                fiHideRequestResponse = typeof(HttpContext).GetField("HideRequestResponse", BindingFlags.Instance|BindingFlags.NonPublic);
+//                fiHideRequestResponse.SetValue(HttpContext.Current, false);
+                ContextHideRequestResponse = (fiHideRequestResponse!=null)?new SafeField(fiHideRequestResponse):null;
+            }
+            catch(SecurityException sec)
+            {
+                s_log.Warn(string.Format("failed reflecting field HttpContext.HideRequestResponse due to security restrictions {0}", sec));
+            }
+#endif
 
             // register additional resource handler
             ResourceHandlerRegistry.RegisterResourceHandler(WebUtils.DEFAULT_RESOURCE_PROTOCOL, typeof(WebResource));

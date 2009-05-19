@@ -19,10 +19,13 @@
 #region Imports
 
 using System.Reflection;
+using System.Security;
+using System.Security.Permissions;
 using System.Web.UI;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Reflection.Dynamic;
+using Spring.Util;
 using Spring.Web.Support;
 
 #endregion
@@ -90,7 +93,17 @@ namespace Spring.Web.Support
         , INamingContainer
     {
 #if NET_2_0
-        private static readonly SafeField refOccasionalFields = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance|BindingFlags.NonPublic));
+        private static readonly SafeField refOccasionalFields;
+
+        static NamingContainerSupportsWebDependencyInjectionOwnerProxy()
+        {
+            SafeField fld = null;
+            SecurityCritical.ExecutePrivileged( new PermissionSet(PermissionState.Unrestricted), delegate 
+            {
+                fld = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance | BindingFlags.NonPublic));
+            });
+            refOccasionalFields = fld;
+        }
 #endif
 
         public NamingContainerSupportsWebDependencyInjectionOwnerProxy(IApplicationContext defaultApplicationContext, Control targetControl) : base(defaultApplicationContext, targetControl)

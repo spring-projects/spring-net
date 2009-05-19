@@ -74,8 +74,6 @@ namespace Spring.Web.Support
         /// <returns>Instance of the IHttpHandler object that should be used to process request.</returns>
         public override IHttpHandler GetHandler(HttpContext context, string requestType, string url, string physicalPath)
         {
-            new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
-
             return base.GetHandler(context, requestType, url, physicalPath);
         }
 

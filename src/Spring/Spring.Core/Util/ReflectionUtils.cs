@@ -23,12 +23,13 @@
 using System;
 using System.Collections;
 #if NET_2_0
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 #endif
 using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Security;
+using System.Security.Permissions;
 using System.Text;
 using System.Runtime.CompilerServices;
 
@@ -57,12 +58,18 @@ namespace Spring.Util
                                                                    | BindingFlags.IgnoreCase;
 
         /// <summary>
+        /// Avoid BeforeFieldInit problem
+        /// </summary>
+        static ReflectionUtils()
+        {}
+
+        /// <summary>
         /// Checks, if the specified type is a nullable
         /// </summary>
-        public static bool IsNullableType( Type type )
+        public static bool IsNullableType(Type type)
         {
 #if NET_2_0
-            return (type.IsGenericType && type.GetGenericTypeDefinition()==typeof(Nullable<>));
+            return (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
 #else
             return false;
 #endif
@@ -149,7 +156,7 @@ namespace Spring.Util
         /// <param name="methodInfo">a <see cref="MethodInfo"/></param>
         /// <param name="implementingType">the type to lookup</param>
         /// <returns>the <see cref="MethodInfo"/> representing the actual implementation method of the specified <paramref name="methodInfo"/></returns>
-        public static MethodInfo MapInterfaceMethodToImplementationIfNecessary( MethodInfo methodInfo, System.Type implementingType )
+        public static MethodInfo MapInterfaceMethodToImplementationIfNecessary(MethodInfo methodInfo, System.Type implementingType)
         {
             AssertUtils.ArgumentNotNull(methodInfo, "methodInfo");
             AssertUtils.ArgumentNotNull(implementingType, "implementingType");
@@ -159,8 +166,8 @@ namespace Spring.Util
 
             if (methodInfo.DeclaringType.IsInterface)
             {
-                InterfaceMapping interfaceMapping = implementingType.GetInterfaceMap( methodInfo.DeclaringType );
-                int methodIndex = Array.IndexOf( interfaceMapping.InterfaceMethods, methodInfo );
+                InterfaceMapping interfaceMapping = implementingType.GetInterfaceMap(methodInfo.DeclaringType);
+                int methodIndex = Array.IndexOf(interfaceMapping.InterfaceMethods, methodInfo);
                 concreteMethodInfo = interfaceMapping.TargetMethods[methodIndex];
             }
 
@@ -276,7 +283,7 @@ namespace Spring.Util
                 ParameterInfo[] parameters = m.GetParameters();
                 bool isMatch = true;
                 bool isExactMatch = true;
-                object[] paramValues = (argValues==null)?new object[0] : argValues;
+                object[] paramValues = (argValues == null) ? new object[0] : argValues;
 
                 try
                 {
@@ -1038,13 +1045,15 @@ namespace Spring.Util
 
         private static object ConvertValueIfNecessary(object value)
         {
-            if (value == null) return value;
+            if (value == null)
+                return value;
 
             // We are only hunting for the case of the ReadOnlyCollection<T> here.
             ReadOnlyCollection<CustomAttributeTypedArgument> sourceArray =
                 value as ReadOnlyCollection<CustomAttributeTypedArgument>;
 
-            if (sourceArray == null) return value;
+            if (sourceArray == null)
+                return value;
 
             Type underlyingType = null; // type to be used for arguments
             Array returnArray = null;
@@ -1326,35 +1335,41 @@ namespace Spring.Util
         private static MemberwiseCopyHandler GetImpl(Type type)
         {
             MemberwiseCopyHandler handler = s_handlerCache[type] as MemberwiseCopyHandler;
-            if (handler != null) return handler;
+            if (handler != null)
+                return handler;
 
             lock (s_handlerCache)
             {
                 handler = s_handlerCache[type] as MemberwiseCopyHandler;
-                if (handler != null) return handler;
+                if (handler != null)
+                    return handler;
 
                 FieldInfo[] fields = GetFields(type);
-                DynamicMethod dm = new DynamicMethod(type.FullName + ".ShallowCopy", null, new Type[] { typeof(object), typeof(object) }, type.Module, true);
-                ILGenerator ilGen = dm.GetILGenerator();
-                ilGen.DeclareLocal(type);
-                ilGen.DeclareLocal(type);
-                ilGen.Emit(OpCodes.Ldarg_0);
-                ilGen.Emit(OpCodes.Castclass, type);
-                ilGen.Emit(OpCodes.Stloc_0);
-                ilGen.Emit(OpCodes.Ldarg_1);
-                ilGen.Emit(OpCodes.Castclass, type);
-                ilGen.Emit(OpCodes.Stloc_1);
-
-                foreach (FieldInfo field in fields)
+                SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
                 {
-                    ilGen.Emit(OpCodes.Ldloc_1);
-                    ilGen.Emit(OpCodes.Ldloc_0);
-                    ilGen.Emit(OpCodes.Ldfld, field);
-                    ilGen.Emit(OpCodes.Stfld, field);
-                }
-                ilGen.Emit(OpCodes.Ret);
+                    DynamicMethod dm = new DynamicMethod(type.FullName + ".ShallowCopy", null, new Type[] { typeof(object), typeof(object) }, type.Module, true);
+                    ILGenerator ilGen = dm.GetILGenerator();
+                    ilGen.DeclareLocal(type);
+                    ilGen.DeclareLocal(type);
+                    ilGen.Emit(OpCodes.Ldarg_0);
+                    ilGen.Emit(OpCodes.Castclass, type);
+                    ilGen.Emit(OpCodes.Stloc_0);
+                    ilGen.Emit(OpCodes.Ldarg_1);
+                    ilGen.Emit(OpCodes.Castclass, type);
+                    ilGen.Emit(OpCodes.Stloc_1);
 
-                handler = (MemberwiseCopyHandler)dm.CreateDelegate(typeof(MemberwiseCopyHandler));
+                    foreach (FieldInfo field in fields)
+                    {
+                        ilGen.Emit(OpCodes.Ldloc_1);
+                        ilGen.Emit(OpCodes.Ldloc_0);
+                        ilGen.Emit(OpCodes.Ldfld, field);
+                        ilGen.Emit(OpCodes.Stfld, field);
+                    }
+                    ilGen.Emit(OpCodes.Ret);
+
+                    handler = (MemberwiseCopyHandler)dm.CreateDelegate(typeof(MemberwiseCopyHandler));
+                });
+
                 s_handlerCache[type] = handler;
             }
             return handler;
@@ -1396,7 +1411,8 @@ namespace Spring.Util
 
         private static void CollectFieldsRecursive(Type type, ArrayList fieldList)
         {
-            if (type == typeof(object)) return;
+            if (type == typeof(object))
+                return;
 
             FieldInfo[] fields = type.GetFields(FIELDBINDINGS);
             fieldList.AddRange(fields);

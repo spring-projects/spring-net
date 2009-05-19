@@ -247,8 +247,7 @@ namespace Spring.Util
 #endif
             try
             {
-                // replaced with SafeConstructor() to avoid nasty "TargetInvocationException"s
-                //return constructor.Invoke(arguments);
+                // replaced with SafeConstructor() to avoid nasty "TargetInvocationException"s in NET >= 2.0
                 return (new SafeConstructor(constructor)).Invoke(arguments);
             }
             catch (Exception ex)

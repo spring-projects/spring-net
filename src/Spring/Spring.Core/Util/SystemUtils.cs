@@ -21,10 +21,8 @@
 #region Imports
 
 using System;
-using System.Configuration;
 using System.Reflection;
 using System.Threading;
-using System.Xml;
 
 #endregion
 

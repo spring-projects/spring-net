@@ -34,7 +34,7 @@
     so you can see how Employee object was populated by the framework.
     </p>
     <!-- this summary control captures validation errors on this page -->
-    <spring:ValidationSummary ID="summary" Provider="summary" ValidationContainerName="Editor" runat="server" />    
+    <spring:ValidationSummary ID="summary" Provider="summary" runat="server" />    
     <table cellpadding="3" cellspacing="3" border="0">
         <tr>
             <td>Employee ID:</td>

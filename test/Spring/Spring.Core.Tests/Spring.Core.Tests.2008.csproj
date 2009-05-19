@@ -656,6 +656,7 @@
     <Compile Include="Reflection\Dynamic\DynamicPropertyTests.cs" />
     <Compile Include="Reflection\Dynamic\SafeFieldTests.cs" />
     <Compile Include="Reflection\Dynamic\SafePropertyTests.cs" />
+    <Compile Include="SecurityTemplate.cs" />
     <Compile Include="StandardsComplianceTest.cs">
       <SubType>Code</SubType>
     </Compile>

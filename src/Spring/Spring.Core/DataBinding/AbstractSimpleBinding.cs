@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Reflection;
+using Common.Logging;
 using Spring.Globalization;
 using Spring.Validation;
 
@@ -13,6 +15,7 @@ namespace Spring.DataBinding
     {
         #region Fields
 
+        private readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private IFormatter formatter;
 
         #endregion
@@ -132,8 +135,9 @@ namespace Spring.DataBinding
                 {
                     DoBindTargetToSource(source, target, variables);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    log.Warn(string.Format("Failed binding[{0}]:{1}", this.Id, ex));
                     if (!SetInvalid(validationErrors)) throw;
                 }
             }

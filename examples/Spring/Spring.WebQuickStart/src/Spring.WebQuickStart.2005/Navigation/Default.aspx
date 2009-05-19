@@ -7,7 +7,7 @@
     Spring.Web allows for "symbolic" names for navigation targets and navigate to such a target by
     calling SetResult( symbolicName ) on the page object.
     </p>
-<spring:DataBindingPanel runat="server">
+<spring:DataBindingPanel ID="ctlDataBindingPanel" runat="server">
     <table cellpadding="3" cellspacing="3" border="0">
 <spring:Panel VisibleIf="Context.Request['fromInvalidInput'] != null" runat="server">
         <tr>

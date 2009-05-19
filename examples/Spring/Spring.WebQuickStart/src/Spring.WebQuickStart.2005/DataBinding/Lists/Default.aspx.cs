@@ -26,19 +26,19 @@ public partial class DataBinding_Lists_Default : Page
     /// </summary>
     protected override void InitializeDataBindings()
     {
-        BindingManager.AddBinding("txtId.Text", "Employee.Id");
-        BindingManager.AddBinding("txtFirstName.Text", "Employee.FirstName");
+        BindingManager.AddBinding("FindControl('txtId').Text", "Employee.Id");
+        BindingManager.AddBinding("FindControl('txtFirstName').Text", "Employee.FirstName");
 
         // this is rather verbose to show how it works
 
         // the formatter must convert between ListControl values and domain objects identified by these values (e.g. a key)
         IFormatter dsFormatter = new DataSourceItemFormatter("DataSource", "DataValueField");
         // bind the lstHobbies control to Employee.Hobbies IList
-        MultipleSelectionListControlBinding listBinding = new MultipleSelectionListControlBinding("lstHobbies", "Employee.Hobbies", BindingDirection.Bidirectional, dsFormatter);
+        MultipleSelectionListControlBinding listBinding = new MultipleSelectionListControlBinding("FindControl('lstHobbies')", "Employee.Hobbies", BindingDirection.Bidirectional, dsFormatter);
         BindingManager.AddBinding(listBinding);
 
         // use simple name=value binding
-        BindingManager.AddBinding(new MultipleSelectionListControlBinding("lstFavoriteFood", "Employee.FavoriteFood", BindingDirection.Bidirectional, new NullFormatter()));
+        BindingManager.AddBinding(new MultipleSelectionListControlBinding("FindControl('lstFavoriteFood')", "Employee.FavoriteFood", BindingDirection.Bidirectional, new NullFormatter()));
     }
 
     protected override void OnInitializeControls(EventArgs e)

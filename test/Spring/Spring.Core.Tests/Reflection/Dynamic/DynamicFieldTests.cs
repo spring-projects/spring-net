@@ -23,6 +23,8 @@
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Security;
+using System.Security.Permissions;
 using NUnit.Framework;
 using Spring.Context.Support;
 
@@ -125,10 +127,54 @@ namespace Spring.Reflection.Dynamic
             catch (InvalidOperationException) { }
 
             IDynamicField myReadonlyField = Create( typeof( MyStaticClass ).GetField( "myReadonlyField" ) );
-            Assert.AreEqual( "hohoho", myReadonlyField.GetValue( null ) );
+            string s2 = (string) myReadonlyField.GetValue(null);
+            string s1 = MyStaticClass.myReadonlyField;
+            Assert.AreEqual(s1, s2);
+        }
+
+
+#if NET_2_0
+
+        [Test]
+        public void CanReadPrivateReadOnlyField()
+        {
+            IDynamicField myPrivateReadonlyField2 = null;
+            FieldInfo fieldInfo = typeof(MyStaticClass).GetField("myPrivateReadonlyField", BindingFlags.Static | BindingFlags.NonPublic);
+
+            myPrivateReadonlyField2 = Create(fieldInfo);
+
+            string u2 = (string)myPrivateReadonlyField2.GetValue(null);
+            string u1 = "hahaha";
+            Assert.AreEqual(u1, u2);
+        }
+
+        [Test, Ignore("TODO: this works as expected when run using TD.NET & R# (in VS2k8), but fails with nant/NET 2.0 ?!?")]
+        public void CannotReadPrivateReadOnlyFieldIfNoReflectionPermission()
+        {
+            FieldInfo fieldInfo = typeof(MyStaticClass).GetField("myPrivateReadonlyField", BindingFlags.Static | BindingFlags.NonPublic);
             try
             {
-                myReadonlyField.SetValue( null, "some other string" );
+                SecurityTemplate.MediumTrustInvoke( delegate
+                {
+                    IDynamicField myPrivateReadonlyField2 = Create(fieldInfo);
+                });
+                Assert.Fail("private field must not be accessible in medium trust: " + fieldInfo);
+            }
+            catch (SecurityException sex)
+            {
+                Assert.IsTrue( sex.Message.IndexOf("ReflectionPermission") > -1 );
+            }
+        }
+#endif
+
+        [Test]
+        public void CannotSetStaticReadOnlyField()
+        {
+            IDynamicField myReadonlyField = Create(typeof(MyStaticClass).GetField("myReadonlyField"));
+            try
+            {
+                myReadonlyField.SetValue(null, "some other string");
+                Assert.Fail();
             }
             catch (InvalidOperationException) { }
         }

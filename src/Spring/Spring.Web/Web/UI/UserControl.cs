@@ -1110,6 +1110,19 @@ namespace Spring.Web.UI
             get { return (Page)base.Page; }
         }
 
+        ///<summary>
+        /// Publish <see cref="HttpContext"/> associated with this page for convenient usage in Binding Expressions
+        ///</summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new virtual HttpContext Context
+        {
+            get
+            {
+                return base.Context;
+            }
+        }
+
         #endregion
 
         #region Helper Methods

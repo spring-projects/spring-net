@@ -11,8 +11,6 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Spring.Core</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -38,6 +36,8 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\Spring.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\build\VS.Net.2008\Spring.Core\Debug\</OutputPath>
@@ -1013,6 +1013,7 @@
     <Compile Include="Util\ITextPosition.cs" />
     <Compile Include="Util\ObjectUtils.cs" />
     <Compile Include="Util\ReflectionException.cs" />
+    <Compile Include="Util\SecurityCritical.cs" />
     <Compile Include="Util\SystemUtils.cs" />
     <Compile Include="Util\DynamicCodeManager.cs" />
     <Compile Include="Util\Generic\CollectionUtils.cs" />

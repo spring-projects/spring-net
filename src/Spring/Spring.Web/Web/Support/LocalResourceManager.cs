@@ -24,6 +24,8 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using System.Security;
+using System.Security.Permissions;
 using System.Web;
 using System.Web.Compilation;
 using System.Web.UI;
@@ -46,17 +48,33 @@ namespace Spring.Web.Support
     internal abstract class LocalResourceManager : ResourceManager
     {
         private delegate IResourceProvider GetResourceProviderDelegate( TemplateControl control );
-        private static readonly GetResourceProviderDelegate getLocalResourceProvider = (GetResourceProviderDelegate)Delegate.CreateDelegate( typeof( GetResourceProviderDelegate ), typeof( ResourceExpressionBuilder ).GetMethod( "GetLocalResourceProvider", BindingFlags.Static | BindingFlags.NonPublic, null, new Type[] { typeof( TemplateControl ) }, null ) );
-        private static readonly Type LocalResXResourceProviderFactoryType = typeof( IResourceProvider ).Assembly.GetType( "System.Web.Compilation.ResXResourceProviderFactory", true );
-        private static readonly Type LocalResXResourceProviderType = typeof( IResourceProvider ).Assembly.GetType( "System.Web.Compilation.LocalResXResourceProvider", true );
-        private static readonly ResourceProviderFactory LocalResXResourceProviderFactory = (ResourceProviderFactory)Activator.CreateInstance( LocalResXResourceProviderFactoryType, true );
-        private static readonly SafeMethod fnGetLocalResourceAssembly = new SafeMethod( LocalResXResourceProviderType.GetMethod( "GetLocalResourceAssembly", BindingFlags.Instance | BindingFlags.NonPublic ) );
+        private static readonly GetResourceProviderDelegate getLocalResourceProvider;
+        private static readonly Type LocalResXResourceProviderFactoryType;
+        private static readonly Type LocalResXResourceProviderType;
+        private static readonly ResourceProviderFactory LocalResXResourceProviderFactory;
+        private static readonly SafeMethod fnGetLocalResourceAssembly;
 
         /// <summary>
         /// Avoid beforeFieldInit
         /// </summary>
         static LocalResourceManager()
-        { }
+        {
+            LocalResXResourceProviderFactoryType = typeof(IResourceProvider).Assembly.GetType("System.Web.Compilation.ResXResourceProviderFactory", true);
+            LocalResXResourceProviderType = typeof(IResourceProvider).Assembly.GetType("System.Web.Compilation.LocalResXResourceProvider", true);
+
+            GetResourceProviderDelegate fnGetResourceProvider = null;
+            ResourceProviderFactory rpf = null;
+            SafeMethod glra = null;
+            SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
+            {
+                fnGetResourceProvider = (GetResourceProviderDelegate)Delegate.CreateDelegate(typeof(GetResourceProviderDelegate), typeof(ResourceExpressionBuilder).GetMethod("GetLocalResourceProvider", BindingFlags.Static | BindingFlags.NonPublic, null, new Type[] { typeof(TemplateControl) }, null));
+                rpf = (ResourceProviderFactory)Activator.CreateInstance( LocalResXResourceProviderFactoryType, true );
+                glra = new SafeMethod(LocalResXResourceProviderType.GetMethod("GetLocalResourceAssembly", BindingFlags.Instance | BindingFlags.NonPublic));
+            });
+            getLocalResourceProvider = fnGetResourceProvider;
+            LocalResXResourceProviderFactory = rpf;
+            fnGetLocalResourceAssembly = glra;
+        }
 
         internal static ResourceManager GetLocalResourceManager( TemplateControl control )
         {

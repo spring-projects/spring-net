@@ -21,7 +21,8 @@
 using System;
 using System.Collections;
 using System.Reflection;
-
+using System.Security;
+using System.Security.Permissions;
 using Spring.Context.Support;
 using Spring.Core.TypeResolution;
 using Spring.Util;
@@ -140,7 +141,7 @@ namespace Spring.Core.IO
         public static IDynamicConstructor GetResourceHandler(string protocolName)
         {
             AssertUtils.ArgumentNotNull(protocolName, "protocolName");
-            return (IDynamicConstructor) resourceHandlers[protocolName];
+            return (IDynamicConstructor)resourceHandlers[protocolName];
         }
 
         /// <summary>
@@ -196,7 +197,7 @@ namespace Spring.Core.IO
             Type handlerType = TypeResolutionUtils.ResolveType(handlerTypeName);
             RegisterResourceHandler(protocolName, handlerType);
         }
-    
+
         /// <summary>
         /// Registers resource handler and maps it to the specified protocol name.
         /// </summary>
@@ -245,11 +246,14 @@ namespace Spring.Core.IO
             lock (resourceHandlers.SyncRoot)
             {
 #if NET_2_0
-                // register generic uri parser for this scheme
-                if (!UriParser.IsKnownScheme(protocolName))
+                SecurityCritical.ExecutePrivileged( new SecurityPermission(SecurityPermissionFlag.Infrastructure), delegate
                 {
-                    UriParser.Register(new TolerantUriParser(), protocolName, 0);
-                }
+                    // register generic uri parser for this scheme
+                    if (!UriParser.IsKnownScheme(protocolName))
+                    {
+                        UriParser.Register(new TolerantUriParser(), protocolName, 0);
+                    }
+                });
 #endif
                 IDynamicConstructor ctor = GetResourceConstructor(handlerType);
                 resourceHandlers[protocolName] = ctor;
@@ -263,24 +267,24 @@ namespace Spring.Core.IO
         private class TolerantUriParser : GenericUriParser
         {
             private const GenericUriParserOptions DefaultOptions = GenericUriParserOptions.Default
-                                                                |GenericUriParserOptions.GenericAuthority
-                                                                |GenericUriParserOptions.AllowEmptyAuthority;
+                                                                | GenericUriParserOptions.GenericAuthority
+                                                                | GenericUriParserOptions.AllowEmptyAuthority;
 
-            public TolerantUriParser() 
+            public TolerantUriParser()
                 : base(DefaultOptions)
-            {}
+            { }
         }
 #endif
 
         private static IDynamicConstructor GetResourceConstructor(Type handlerType)
         {
-            ConstructorInfo ctor = handlerType.GetConstructor(new Type[] {typeof(string)});
+            ConstructorInfo ctor = handlerType.GetConstructor(new Type[] { typeof(string) });
             if (ctor == null)
             {
                 throw new ArgumentException(
                         string.Format("[{0}] does not have a constructor that takes a single string as an argument (it must).", handlerType.FullName));
             }
-            return DynamicConstructor.Create(ctor);
+            return new SafeConstructor(ctor);
         }
     }
 }

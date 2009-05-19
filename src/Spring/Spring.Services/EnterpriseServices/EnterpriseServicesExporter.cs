@@ -233,7 +233,7 @@ namespace Spring.EnterpriseServices
         }
 
         ///<summary>
-        /// Use Spring context to configure the serviced components.
+        /// Use Spring context to configure the serviced components within COM.
         ///</summary>
         public bool UseSpring
         {

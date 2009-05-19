@@ -1,4 +1,5 @@
 using System;
+using System.Web.UI.WebControls;
 using Spring.DataBinding;
 
 /// <summary>
@@ -22,8 +23,8 @@ public partial class DataBinding_EventHandling_Default : Spring.Web.UI.Page
     /// </summary>
     protected override void InitializeDataBindings()
     {
-        BindingManager.AddBinding("txtName.Text", "Name");
-        BindingManager.AddBinding("lblName.Text", "Name", BindingDirection.TargetToSource);
+        BindingManager.AddBinding("FindControl('txtName').Text", "Name");
+        BindingManager.AddBinding("FindControl('lblName').Text", "Name", BindingDirection.TargetToSource);
     }
     
     protected void Page_Load(object sender, EventArgs e)

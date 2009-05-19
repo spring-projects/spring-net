@@ -740,6 +740,8 @@ namespace Spring.Web.UI
             set { this.sharedState = value; }
         }
 
+        #endregion
+
 #if NET_2_0
         /// <summary>
         /// Overrides the default PreviousPage property to return an instance of <see cref="Spring.Web.UI.Page"/>,
@@ -750,8 +752,16 @@ namespace Spring.Web.UI
             get { return this.Context.PreviousHandler as Page; }
         }
 #endif
-
-        #endregion
+        ///<summary>
+        /// Publish <see cref="HttpContext"/> associated with this page for convenient usage in Binding Expressions
+        ///</summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new virtual HttpContext Context
+        {
+            get {
+                return base.Context; }
+        }
 
         #region Master Page support
 

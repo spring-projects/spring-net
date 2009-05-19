@@ -23,6 +23,8 @@
     <StartupObject>
     </StartupObject>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\Spring.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\build\VS.Net.2008\Spring.Web\Debug\</OutputPath>
@@ -124,6 +126,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\ISessionState.cs" />
+    <Compile Include="Util\SecurityCritical.cs" />
     <Compile Include="Web\Support\DefaultHandlerFactory.cs" />
     <Compile Include="Web\Support\DefaultResultFactory.cs" />
     <Compile Include="Web\Support\HandlerMap.cs" />

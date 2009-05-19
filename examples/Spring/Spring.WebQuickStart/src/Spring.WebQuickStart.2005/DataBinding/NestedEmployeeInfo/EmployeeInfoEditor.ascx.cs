@@ -18,22 +18,22 @@ public partial class EmployeeInfoEditor : Spring.Web.UI.UserControl
     /// </summary>
     protected override void InitializeDataBindings()
     {
-        BindingManager.AddBinding("txtId.Text", "Employee.Id")
+        BindingManager.AddBinding("FindControl('txtId').Text", "Employee.Id")
             .SetErrorMessage("ID has to be an integer", "id.errors", "summary");
-        BindingManager.AddBinding("txtFirstName.Text", "Employee.FirstName");
-        BindingManager.AddBinding("txtLastName.Text", "Employee.LastName");
-        BindingManager.AddBinding("txtDOB.Text", "Employee.DateOfBirth")
+        BindingManager.AddBinding("FindControl('txtFirstName').Text", "Employee.FirstName");
+        BindingManager.AddBinding("FindControl('txtLastName').Text", "Employee.LastName");
+        BindingManager.AddBinding("FindControl('txtDOB').Text", "Employee.DateOfBirth")
             .SetErrorMessage("Invalid date value", "dob.errors", "summary");
-        BindingManager.AddBinding("txtSalary.Text", "Employee.Salary", new CurrencyFormatter())
+        BindingManager.AddBinding("FindControl('txtSalary').Text", "Employee.Salary", new CurrencyFormatter())
             .SetErrorMessage("Salary must be a valid currency value.", "salary.errors", "summary");
-        BindingManager.AddBinding("rbgGender.Value", "Employee.Gender");
-        BindingManager.AddBinding("ddlAddressType.SelectedValue", "Employee.MailingAddress.AddressType");
-        BindingManager.AddBinding("txtStreet1.Text", "Employee.MailingAddress.Street1");
-        BindingManager.AddBinding("txtStreet2.Text", "Employee.MailingAddress.Street2");
-        BindingManager.AddBinding("txtCity.Text", "Employee.MailingAddress.City");
-        BindingManager.AddBinding("txtState.Text", "Employee.MailingAddress.State");
-        BindingManager.AddBinding("txtPostalCode.Text", "Employee.MailingAddress.PostalCode");
-        BindingManager.AddBinding("txtCountry.Text", "Employee.MailingAddress.Country");
+        BindingManager.AddBinding("FindControl('rbgGender').Value", "Employee.Gender");
+        BindingManager.AddBinding("FindControl('ddlAddressType').SelectedValue", "Employee.MailingAddress.AddressType");
+        BindingManager.AddBinding("FindControl('txtStreet1').Text", "Employee.MailingAddress.Street1");
+        BindingManager.AddBinding("FindControl('txtStreet2').Text", "Employee.MailingAddress.Street2");
+        BindingManager.AddBinding("FindControl('txtCity').Text", "Employee.MailingAddress.City");
+        BindingManager.AddBinding("FindControl('txtState').Text", "Employee.MailingAddress.State");
+        BindingManager.AddBinding("FindControl('txtPostalCode').Text", "Employee.MailingAddress.PostalCode");
+        BindingManager.AddBinding("FindControl('txtCountry').Text", "Employee.MailingAddress.Country");
     }
 
     protected void btnSave_Click(object sender, EventArgs e)

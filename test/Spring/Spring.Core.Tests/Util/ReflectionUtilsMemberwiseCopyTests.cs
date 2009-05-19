@@ -1,4 +1,8 @@
 using System;
+using System.Security;
+using System.Security.Permissions;
+using System.Threading;
+using System.Web;
 using NUnit.Framework;
 
 namespace Spring.Util
@@ -46,9 +50,50 @@ namespace Spring.Util
 
 			ReflectionUtils.MemberwiseCopy(i2, i1);
 
-			Assert.AreEqual(i2, i1);
+			Assert.AreEqual(i1, i2);
 		}
-	}
+
+#if NET_2_0
+		[Test]
+		public void MediumTrustAllowsCopyingBetweenTypesFromSameModule()
+		{
+			SampleBaseClass i1 = new SampleDerivedClass("1st config val");
+			SampleBaseClass i2 = new SampleFurtherDerivedClass("2nd config val");
+
+            SecurityTemplate.MediumTrustInvoke(new ThreadStart(new CopyCommand(i2, i1).Execute));
+			Assert.AreEqual(i1, i2);
+		}
+
+		[Test]
+		public void MediumTrustThrowsSecurityExceptionWhenCopyingBetweenTypesFromDifferentModules()
+		{
+			Exception e1 = new Exception("my name is e1");
+            HttpException e2 = new HttpException("my name is e2");
+            // I know, I am a bit paranoid about that basic assumption
+            Assert.AreNotEqual( e1.GetType().Assembly, e2.GetType().Assembly );
+
+            SecurityTemplate.MediumTrustInvoke(new ThreadStart(new CopyCommand(e2, e1).Execute));
+			Assert.AreEqual(e1.Message, e2.Message);
+		}
+
+        class CopyCommand
+        {
+            private object a;
+            private object b;
+
+            public CopyCommand(object a, object b)
+            {
+                this.a = a;
+                this.b = b;
+            }
+
+            public void Execute()
+            {
+                ReflectionUtils.MemberwiseCopy(a, b);
+            }
+        }
+#endif
+    }
 	
 	#region Test Support Classes
 	
@@ -57,7 +102,7 @@ namespace Spring.Util
 		private const string MyConstant = "SampleBaseClass.MyConstant";
 		private readonly string _someReadOnlyVal = "SampleBaseClass.SomeReadOnlyVal";
 		protected readonly string _someProtectedReadOnlyVal = "SampleBaseClass.SomeProtectedReadOnlyVal";
-		private string _someConfigVal = "SampleBaseClass.SomeConfigVal";
+		private string _someConfigVal;
 
 		public SampleBaseClass(string someConfigVal)
 		{
@@ -76,9 +121,12 @@ namespace Spring.Util
 
 		public override bool Equals(object obj)
 		{
-			if (this == obj) return true;
-			SampleBaseClass sampleBaseClass = obj as SampleBaseClass;
-			if (sampleBaseClass == null) return false;
+            if (ReferenceEquals(obj, null) || (!this.GetType().IsAssignableFrom(obj.GetType())))
+                return false;
+            if (ReferenceEquals(this , obj))
+                return true;
+			
+            SampleBaseClass sampleBaseClass = (SampleBaseClass) obj;
 			if (!Equals(_someReadOnlyVal, sampleBaseClass._someReadOnlyVal)) return false;
 			if (!Equals(_someProtectedReadOnlyVal, sampleBaseClass._someProtectedReadOnlyVal)) return false;
 			if (!Equals(_someConfigVal, sampleBaseClass._someConfigVal)) return false;
@@ -102,11 +150,12 @@ namespace Spring.Util
 
 		public override bool Equals(object obj)
 		{
-			if (this == obj) return true;
-			SampleDerivedClass sampleDerivedClass = obj as SampleDerivedClass;
-			if (sampleDerivedClass == null) return false;
-			if (!base.Equals(obj)) return false;
-			if (!Equals(_someConfigVal, sampleDerivedClass._someConfigVal)) return false;
+			if (!base.Equals(obj)) 
+                return false;
+            
+            SampleDerivedClass sampleDerivedClass = (SampleDerivedClass)obj;
+            if (!Equals(_someConfigVal, sampleDerivedClass._someConfigVal))
+                return false;
 			return true;
 		}
 	}

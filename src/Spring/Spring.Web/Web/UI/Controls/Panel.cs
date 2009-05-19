@@ -174,6 +174,13 @@ namespace Spring.Web.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Expose the context of this panel for medium trust safe access in e.g. <see cref="VisibleIf"/>.
+        /// </summary>
+        public new virtual HttpContext Context
+        {
+            get { return base.Context; }
+        }
         #region Dependency Injection Support
 
         private IApplicationContext _defaultApplicationContext;

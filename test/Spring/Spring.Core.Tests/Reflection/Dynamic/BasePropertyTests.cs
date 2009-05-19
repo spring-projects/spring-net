@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using NUnit.Framework;
 using Spring.Context.Support;
@@ -264,13 +265,25 @@ namespace Spring.Reflection.Dynamic
     public class MyStaticClass
     {
         public const Int64 MyConst = 3456;
-        public static readonly string myReadonlyField = "hohoho";
+        public static readonly string myReadonlyField;
+        private static readonly string myPrivateReadonlyField;
         public static string myField;
+
+        static MyStaticClass()
+        {
+            myReadonlyField = "hohoho";
+            myPrivateReadonlyField = "hahaha";
+        }
 
         public static string MyProperty
         {
             get { return myField; }
             set { myField = value; }
+        }
+
+        public static string MyPrivateReadOnylFieldAccessor
+        {
+            get { return myPrivateReadonlyField; }
         }
     }
 

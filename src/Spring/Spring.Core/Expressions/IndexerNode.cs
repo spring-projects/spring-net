@@ -273,16 +273,21 @@ namespace Spring.Expressions
                 {
                     if (indexer == null)
                     {
+                        Type contextType = context.GetType();
                         Type[] argTypes = ReflectionUtils.GetTypes(indices);
-                        PropertyInfo indexerProperty = context.GetType().GetProperty("Item", BINDING_FLAGS, null, null, argTypes, null);
+                        string defaultMember = "Item";
+                        object[] atts = contextType.GetCustomAttributes(typeof(DefaultMemberAttribute), true);
+                        if (atts != null && atts.Length > 0)
+                        {
+                            defaultMember = ((DefaultMemberAttribute) atts[0]).MemberName;
+                        }
+                        PropertyInfo indexerProperty = contextType.GetProperty(defaultMember, BINDING_FLAGS, null, null, argTypes, null);
                         if (indexerProperty == null)
                         {
                             throw new ArgumentException("Indexer property with specified number and types of arguments does not exist.");
                         }
-                        else
-                        {
-                            indexer = new SafeProperty(indexerProperty);
-                        }
+
+                        indexer = new SafeProperty(indexerProperty);
                     }
                 }
             }
