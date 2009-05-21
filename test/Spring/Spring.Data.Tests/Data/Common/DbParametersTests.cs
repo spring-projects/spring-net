@@ -50,9 +50,9 @@ namespace Spring.Data.Common
             IDataParameter parameter = dbParameters[0];
             Assert.AreEqual("p1", parameter.ParameterName);
             dbParameters.SetValue("p1", "foo");
-            IDbDataParameter springParameter = dbParameters.GetValue("p1") as IDbDataParameter;
+            object springParameter = dbParameters.GetValue("p1");
             Assert.IsNotNull(springParameter);
-            Assert.AreEqual("foo", springParameter.Value);
+            Assert.AreEqual("foo", springParameter);
         }
 
         [Test]
@@ -64,9 +64,9 @@ namespace Spring.Data.Common
             IDataParameter parameter = dbParameters[0];
             Assert.AreEqual("@p1", parameter.ParameterName);
             dbParameters.SetValue("p1", "foo");
-            IDbDataParameter springParameter = dbParameters.GetValue("p1") as IDbDataParameter;
+            object springParameter = dbParameters.GetValue("p1");
             Assert.IsNotNull(springParameter);
-            Assert.AreEqual("foo", springParameter.Value);
+            Assert.AreEqual("foo", springParameter);
         }
 
 

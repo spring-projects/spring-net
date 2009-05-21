@@ -248,7 +248,14 @@ namespace Spring.Data.Common
 
         public object GetValue(string name)
         {
-            return dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)];
+            IDataParameter parameter = dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)] as IDataParameter;
+            if (parameter != null)
+            {
+                return parameter.Value;
+            }
+            throw new UncategorizedAdoException(
+                "object in IDataParameterCollection is not of the type IDataParameter, it is type [" +
+                dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)].GetType() + "].");
         }
 
         public void SetValue(string name, object parameterValue)
