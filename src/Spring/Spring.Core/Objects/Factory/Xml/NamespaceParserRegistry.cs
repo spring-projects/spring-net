@@ -78,13 +78,13 @@ namespace Spring.Objects.Factory.Xml
 
         #region Fields
 
-        private readonly static IDictionary parsers;
+        private static IDictionary parsers;
         private readonly static IDictionary wellknownNamespaceParserTypeNames;
 
 #if !NET_2_0
-        private readonly static XmlSchemaCollection schemas;
+        private static XmlSchemaCollection schemas;
 #else
-        private readonly static XmlSchemaSet schemas;
+        private static XmlSchemaSet schemas;
 #endif
 
         #endregion
@@ -94,13 +94,6 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         static NamespaceParserRegistry()
         {
-            parsers = new HybridDictionary();
-#if !NET_2_0
-            schemas = new XmlSchemaCollection();
-#else
-            schemas = new XmlSchemaSet();
-            schemas.XmlResolver = new XmlResourceUrlResolver();
-#endif
             wellknownNamespaceParserTypeNames = new CaseInsensitiveHashtable();
             wellknownNamespaceParserTypeNames["http://www.springframework.net/tx"] = "Spring.Transaction.Config.TxNamespaceParser, Spring.Data";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/aop"] = "Spring.Aop.Config.AopNamespaceParser, Spring.Aop";
@@ -118,6 +111,14 @@ namespace Spring.Objects.Factory.Xml
         /// <remarks>use for unit tests only</remarks>
         public static void Reset()
         {
+            parsers = new HybridDictionary();
+#if !NET_2_0
+            schemas = new XmlSchemaCollection();
+#else
+            schemas = new XmlSchemaSet();
+            schemas.XmlResolver = new XmlResourceUrlResolver();
+#endif
+
             //TODO - externalize default list of parsers.
             RegisterParser(new ObjectsNamespaceParser());
             // register custom config parsers

@@ -57,6 +57,18 @@ namespace Spring.Objects.Factory.Xml
             }
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            NamespaceParserRegistry.Reset();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            NamespaceParserRegistry.Reset();
+        }
+
 #if !NET_1_0
         /// <summary>
         /// This test doesn't work on .NET 1.0 because there are no XmlResolvers for schema loading...
