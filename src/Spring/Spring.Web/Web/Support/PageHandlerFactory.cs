@@ -111,7 +111,7 @@ namespace Spring.Web.Support
             }
             else
             {
-                handler = WebObjectUtils.CreateHandler(context, rawUrl);
+                handler = WebObjectUtils.CreateHandler(rawUrl);
                 // let WebSupportModule handle configuration
                 handler = WebSupportModule.ConfigureHandler(context, handler, appContext, rawUrl, false);
             }

@@ -58,7 +58,8 @@ namespace Spring.Objects.Factory.Support
         /// The <see cref="Spring.Objects.MutablePropertyValues"/> to be applied to
         /// a new instance of the object.
         /// </param>
-        public ChildWebObjectDefinition(string parentName, Type type, ConstructorArgumentValues arguments, MutablePropertyValues properties) : base(parentName, type, arguments, properties)
+        public ChildWebObjectDefinition(string parentName, Type type, ConstructorArgumentValues arguments, MutablePropertyValues properties) 
+            : base(parentName, type, arguments, properties)
         {}
 
         /// <summary>
@@ -76,7 +77,8 @@ namespace Spring.Objects.Factory.Support
         /// The <see cref="Spring.Objects.MutablePropertyValues"/> to be applied to
         /// a new instance of the object.
         /// </param>
-        public ChildWebObjectDefinition(string parentName, string typeName, ConstructorArgumentValues arguments, MutablePropertyValues properties) : base(parentName, typeName, arguments, properties)
+        public ChildWebObjectDefinition(string parentName, string typeName, ConstructorArgumentValues arguments, MutablePropertyValues properties) 
+            : base(parentName, typeName, arguments, properties)
         {}
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace Spring.Objects.Factory.Support
         public ChildWebObjectDefinition(string parentName, string pageName, MutablePropertyValues properties)
             : base(parentName, WebObjectUtils.GetPageType(pageName), null, properties)
         {
-			_pageName = WebUtils.CombineVirtualPaths(HttpContext.Current.Request.CurrentExecutionFilePath, pageName);
+			_pageName = WebUtils.CombineVirtualPaths(VirtualEnvironment.CurrentExecutionFilePath, pageName);
 		}
 
         #endregion

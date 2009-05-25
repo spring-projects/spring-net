@@ -29,18 +29,14 @@ using Spring.Util;
 namespace Spring.Objects.Factory.Xml
 {
     /// <summary>
-    /// Extension of <see cref="ReaderContext"/> specific to use with an 
-    /// XmlObjectDefinitionReader.
+    /// Extension of <see cref="ReaderContext"/> specific to use with an XmlObjectDefinitionReader.
+    /// Provides access to <see cref="NamespaceParserResolver"/> configured in <see cref="XmlObjectDefinitionReader"/>
     /// </summary>
-    /// <remarks>In future will contain access to IXmlParserRegistry</remarks>
     public class XmlReaderContext : ReaderContext
     {
-
-        //TODO: Should have a ref to NamespaceParserRegistry, i.e. NamespaceHandlerResolver here....
-
-        private IObjectDefinitionReader reader;
-
-        private IObjectDefinitionFactory objectDefinitionFactory = new DefaultObjectDefinitionFactory();
+        private readonly IObjectDefinitionReader reader;
+        private readonly IObjectDefinitionFactory objectDefinitionFactory;
+        private INamespaceParserResolver namespaceParserResolver;
 
         /// <summary>
         /// The maximum length of any XML fragment displayed in the error message
@@ -59,12 +55,26 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <param name="reader">The reader.</param>
-        public XmlReaderContext(IResource resource, IObjectDefinitionReader reader) : base(resource)
+        public XmlReaderContext(IResource resource, IObjectDefinitionReader reader) 
+            : this(resource, reader, new DefaultObjectDefinitionFactory())
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlReaderContext"/> class.
+        /// </summary>
+        /// <param name="resource">The resource.</param>
+        /// <param name="reader">The reader.</param>
+        /// <param name="objectDefinitionFactory">The factory to use for creating new <see cref="IObjectDefinition"/> instances.</param>
+        internal XmlReaderContext(IResource resource, IObjectDefinitionReader reader, IObjectDefinitionFactory objectDefinitionFactory) 
+            : base(resource)
         {
             this.reader = reader;
-           
+            if (reader is XmlObjectDefinitionReader)
+            {
+                this.namespaceParserResolver = ((XmlObjectDefinitionReader) reader).NamespaceParserResolver;
+            }
+            this.objectDefinitionFactory = objectDefinitionFactory;
         }
-
 
         /// <summary>
         /// Gets the reader.
@@ -96,7 +106,6 @@ namespace Spring.Objects.Factory.Xml
             }
         }
 
-
         /// <summary>
         /// Gets or sets the object definition factory.
         /// </summary>
@@ -104,10 +113,16 @@ namespace Spring.Objects.Factory.Xml
         public IObjectDefinitionFactory ObjectDefinitionFactory
         {
             get { return objectDefinitionFactory; }
-            set { objectDefinitionFactory = value; }
         }
 
-
+        /// <summary>
+        /// Get the <see cref="INamespaceParserResolver"/> instance to lookup parsers for custom namespaces.
+        /// </summary>
+        internal INamespaceParserResolver NamespaceParserResolver
+        {
+            get { return namespaceParserResolver; }
+            set { namespaceParserResolver = value; }
+        }
 
         /// <summary>
         /// Generates the name of the object.

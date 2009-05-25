@@ -30,7 +30,7 @@ namespace Spring.Objects.Factory.Xml
 {
 
 	/// <summary>
-	/// Strategy interface for parsing XML object definitions.
+	/// Strategy interface for parsing XML object definitions. Equivalent to Spring/Java's <c>NamespaceHandler</c> interface.
 	/// </summary>
 	/// <remarks>
 	/// <p>

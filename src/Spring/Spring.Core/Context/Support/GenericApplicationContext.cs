@@ -253,6 +253,16 @@ namespace Spring.Context.Support
             objectFactory.RegisterAlias(name, theAlias);
         }
 
+        /// <summary>
+        /// Determines whether the given object name is already in use within this factory,
+        /// i.e. whether there is a local object or alias registered under this name or
+        /// an inner object created with this name.
+        /// </summary>
+        public bool IsObjectNameInUse(string objectName)
+        {
+            return objectFactory.IsObjectNameInUse(objectName);
+        }
+
         #endregion
     }
 }

@@ -27,9 +27,11 @@ using System.Web.UI;
 #endif
 using System;
 using System.IO;
-using System.Web;
+//using System.Web;
 using Common.Logging;
 using Spring.Util;
+using IHttpHandler = System.Web.IHttpHandler;
+using HttpException = System.Web.HttpException;
 
 namespace Spring.Objects.Factory.Support
 {
@@ -91,16 +93,16 @@ namespace Spring.Objects.Factory.Support
                 s_log.Debug( "creating page instance '" + pageUrl + "'" );
             }
 
-            HttpContext ctx = HttpContext.Current;
-            if (ctx == null)
-            {
-                throw new ObjectCreationException(
-                    "Unable to instantiate page. HttpContext is not defined." );
-            }
-            IHttpHandler page = null;
+//            HttpContext ctx = HttpContext.Current;
+//            if (ctx == null)
+//            {
+//                throw new ObjectCreationException(
+//                    "Unable to instantiate page. HttpContext is not defined." );
+//            }
+            IHttpHandler page;
             try
             {
-                page = CreateHandler( ctx, pageUrl );
+                page = CreateHandler( pageUrl );
             }
             catch (HttpException httpEx)
             {
@@ -132,25 +134,26 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Creates the raw handler instance without any exception handling
         /// </summary>
-        /// <param name="ctx"></param>
         /// <param name="pageUrl"></param>
         /// <returns></returns>
-        internal static IHttpHandler CreateHandler( HttpContext ctx, string pageUrl )
+        internal static IHttpHandler CreateHandler( string pageUrl )
         {
             IHttpHandler page;
-#if NET_1_1
-                string physicalPath = ctx.Server.MapPath(pageUrl);
-				s_log.Debug(string.Format("constructing page virtual path '{0}' from physical file '{1}'", pageUrl, physicalPath));
-            	page = PageParser.GetCompiledPageInstance(pageUrl, physicalPath, ctx);
-#else
-            string rootedVPath = WebUtils.CombineVirtualPaths( ctx.Request.CurrentExecutionFilePath, pageUrl );
-            if (s_log.IsDebugEnabled)
-            {
-                s_log.Debug( "page vpath is " + rootedVPath );
-            }
-
-            page = BuildManager.CreateInstanceFromVirtualPath( rootedVPath, typeof( IHttpHandler ) ) as IHttpHandler;
-#endif
+//            HttpContext ctx = HttpContext.Current;
+//#if NET_1_1
+//                string physicalPath = ctx.Server.MapPath(pageUrl);
+//				s_log.Debug(string.Format("constructing page virtual path '{0}' from physical file '{1}'", pageUrl, physicalPath));
+//            	page = PageParser.GetCompiledPageInstance(pageUrl, physicalPath, ctx);
+//#else
+//            string rootedVPath = WebUtils.CombineVirtualPaths( ctx.Request.CurrentExecutionFilePath, pageUrl );
+//            if (s_log.IsDebugEnabled)
+//            {
+//                s_log.Debug( "page vpath is " + rootedVPath );
+//            }
+//
+//            page = BuildManager.CreateInstanceFromVirtualPath( rootedVPath, typeof( IHttpHandler ) ) as IHttpHandler;
+//#endif
+            page = VirtualEnvironment.CreateInstanceFromVirtualPath(pageUrl, typeof (IHttpHandler)) as IHttpHandler;
             return page;
         }
 
@@ -188,11 +191,11 @@ namespace Spring.Objects.Factory.Support
         {
             AssertUtils.ArgumentHasText( pageUrl, "pageUrl" );
 
-            HttpContext ctx = HttpContext.Current;
-            if (ctx == null)
-            {
-                throw new ObjectCreationException( "Unable to get page type. HttpContext is not defined." );
-            }
+//            HttpContext ctx = HttpContext.Current;
+//            if (ctx == null)
+//            {
+//                throw new ObjectCreationException( "Unable to get page type. HttpContext is not defined." );
+//            }
 
             try
             {
@@ -209,10 +212,10 @@ namespace Spring.Objects.Factory.Support
 
         /// <summary>
         /// Calls the underlying ASP.NET infrastructure to obtain the compiled page type 
-        /// relative to the current <see cref="HttpRequest.CurrentExecutionFilePath"/>.
+        /// relative to the current <see cref="System.Web.HttpRequest.CurrentExecutionFilePath"/>.
         /// </summary>
         /// <param name="pageUrl">
-        /// The filename of the ASPX page relative to the current <see cref="HttpRequest.CurrentExecutionFilePath"/>
+        /// The filename of the ASPX page relative to the current <see cref="System.Web.HttpRequest.CurrentExecutionFilePath"/>
         /// </param>
         /// <returns>
         /// The <see cref="System.Type"/> of the ASPX page
@@ -225,18 +228,18 @@ namespace Spring.Objects.Factory.Support
                 s_log.Debug( "getting page type for " + pageUrl );
             }
 
-            string rootedVPath = WebUtils.CombineVirtualPaths( HttpContext.Current.Request.CurrentExecutionFilePath, pageUrl );
+            string rootedVPath = WebUtils.CombineVirtualPaths( VirtualEnvironment.CurrentExecutionFilePath, pageUrl );
             if (s_log.IsDebugEnabled)
             {
                 s_log.Debug( "page vpath is " + rootedVPath );
             }
 
-            Type pageType = null;
-#if NET_2_0
-            pageType = BuildManager.GetCompiledType( rootedVPath ); // requires rooted virtual path!
-#else
-            pageType = CreatePageInstance(pageUrl).GetType();
-#endif
+            Type pageType = VirtualEnvironment.GetCompiledType(rootedVPath);
+//#if NET_2_0
+//            pageType = BuildManager.GetCompiledType( rootedVPath ); // requires rooted virtual path!
+//#else
+//            pageType = CreatePageInstance(pageUrl).GetType();
+//#endif
 
             if (s_log.IsDebugEnabled)
             {
@@ -257,27 +260,28 @@ namespace Spring.Objects.Factory.Support
                 s_log.Debug( "getting control type for " + controlName );
             }
 
-            HttpContext ctx = HttpContext.Current;
-            if (ctx == null)
-            {
-                throw new ObjectCreationException( "Unable to get control type. HttpContext is not defined." );
-            }
+//            HttpContext ctx = HttpContext.Current;
+//            if (ctx == null)
+//            {
+//                throw new ObjectCreationException( "Unable to get control type. HttpContext is not defined." );
+//            }
 
-            string rootedVPath = WebUtils.CombineVirtualPaths( ctx.Request.CurrentExecutionFilePath, controlName );
+            string rootedVPath = WebUtils.CombineVirtualPaths( VirtualEnvironment.CurrentExecutionFilePath, controlName );
 
             if (s_log.IsDebugEnabled)
             {
                 s_log.Debug( "control vpath is " + rootedVPath );
             }
 
-            Type controlType = null;
+            Type controlType;
             try
             {
-#if NET_2_0
-                controlType = BuildManager.GetCompiledType( rootedVPath ); // requires rooted virtual path!
-#else
-              controlType = (Type) miGetCompiledUserControlType.Invoke(null, new object[] { rootedVPath, null, ctx });
-#endif
+//#if NET_2_0
+//                controlType = BuildManager.GetCompiledType( rootedVPath ); // requires rooted virtual path!
+//#else
+//              controlType = (Type) miGetCompiledUserControlType.Invoke(null, new object[] { rootedVPath, null, ctx });
+//#endif
+                controlType = VirtualEnvironment.GetCompiledType(rootedVPath);
             }
             catch (HttpException httpEx)
             {

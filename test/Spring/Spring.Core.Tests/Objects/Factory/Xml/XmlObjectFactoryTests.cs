@@ -1784,7 +1784,8 @@ namespace Spring.Objects.Factory.Xml
 </objects>";
             stream = new MemoryStream(Encoding.UTF8.GetBytes(xml));
             IObjectFactory factory = new XmlObjectFactory(new InputStreamResource(stream, string.Empty));
-            factory.GetObject("foo");
+            ITestObject to = (ITestObject) factory.GetObject("foo");
+            Assert.IsNotNull( to.Spouse );
         }
 
         [Test(Description="SPR-1313")]

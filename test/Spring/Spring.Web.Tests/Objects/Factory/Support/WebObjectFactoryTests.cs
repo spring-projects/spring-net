@@ -44,7 +44,7 @@ namespace Spring.Objects.Factory.Support
 
             // we need to create WOF within a valid HttpContext environment 'cause we will 
             // make use of 'request' and 'session' scope.
-            using (new VirtualEnvironmentMock("/somedir/some.file", null, "/", true))
+            using (new VirtualEnvironmentMock("/somedir/some.file", null, null, "/", true))
             {
                 wof = new WebObjectFactory("/somedir/", false);
             }

@@ -226,7 +226,7 @@ namespace Spring.Context.Support
         protected virtual void LoadObjectDefinitions(DefaultListableObjectFactory objectFactory)
         {
             //Create a new XmlObjectDefinitionReader for the given ObjectFactory
-            XmlObjectDefinitionReader objectDefinitionReader = new XmlObjectDefinitionReader(objectFactory);
+            XmlObjectDefinitionReader objectDefinitionReader = CreateXmlObjectDefinitionReader(objectFactory);
 
             // Configure the bean definition reader with this context's
             // resource loading environment.
@@ -236,6 +236,16 @@ namespace Spring.Context.Support
             // then proceed with actually loading the object definitions.
             InitObjectDefinitionReader(objectDefinitionReader);
             LoadObjectDefinitions(objectDefinitionReader);
+        }
+
+        /// <summary>
+        /// Create a new reader instance for importing object definitions into the specified <paramref name="objectFactory"/>.
+        /// </summary>
+        /// <param name="objectFactory">the <see cref="DefaultListableObjectFactory"/> to be associated with the reader</param>
+        /// <returns>a new <see cref="XmlObjectDefinitionReader"/> instance.</returns>
+        protected virtual XmlObjectDefinitionReader CreateXmlObjectDefinitionReader(DefaultListableObjectFactory objectFactory)
+        {
+            return new XmlObjectDefinitionReader(objectFactory);
         }
 
         /// <summary>

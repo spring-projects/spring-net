@@ -21,8 +21,10 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.Reflection;
 using System.Xml;
 using Common.Logging;
+using Spring.Collections;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
@@ -40,17 +42,20 @@ namespace Spring.Objects.Factory.Xml
     /// <author>Mark Pollack (.NET)</author>
     public class ObjectDefinitionParserHelper
     {
-
         #region Fields
+
         /// <summary>
         /// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
         /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof(ObjectDefinitionParserHelper));
+        protected readonly ILog log;
 
         private DocumentDefaultsDefinition defaults;
 
-        private XmlReaderContext readerContext;
+        private readonly XmlReaderContext readerContext;
+
+        private readonly ObjectsNamespaceParser objectsNamespaceParser;
+
+        private readonly ISet usedNames = new HashedSet();
 
         #endregion
 
@@ -59,9 +64,23 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         /// <param name="readerContext">The reader context.</param>
         public ObjectDefinitionParserHelper(XmlReaderContext readerContext)
+            :this(readerContext, null)
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObjectDefinitionParserHelper"/> class.
+        /// </summary>
+        /// <param name="readerContext">The reader context.</param>
+        /// <param name="root">The root element of the definition document to parse</param>
+        public ObjectDefinitionParserHelper(XmlReaderContext readerContext, XmlElement root)
         {
-            AssertUtils.ArgumentNotNull(readerContext, "readerContext");
+            log = LogManager.GetLogger(this.GetType());
             this.readerContext = readerContext;
+            this.objectsNamespaceParser = (ObjectsNamespaceParser) readerContext.NamespaceParserResolver.Resolve(ObjectsNamespaceParser.Namespace);
+            if (root != null)
+            {
+                InitDefaults(root);
+            }
         }
 
         /// <summary>
@@ -223,9 +242,6 @@ namespace Spring.Objects.Factory.Xml
         /// </remarks>
         public ObjectDefinitionHolder ParseObjectDefinitionElement(XmlElement element, IObjectDefinition containingDefinition)
         {
-            // TODO: move code from ObjectsNamespaceParser into this class to eliminate ONP
-            ObjectsNamespaceParser parser = (ObjectsNamespaceParser) NamespaceParserRegistry.GetParser(ObjectsNamespaceParser.Namespace);
-
             string id = GetAttributeValue(element, ObjectDefinitionConstants.IdAttribute);
             string nameAttr = GetAttributeValue(element, ObjectDefinitionConstants.NameAttribute);
             ArrayList aliases = new ArrayList();
@@ -238,13 +254,26 @@ namespace Spring.Objects.Factory.Xml
             string objectName = id;
             if (StringUtils.IsNullOrEmpty(objectName))
             {
-                // TODO (EE): pass parserContext to CalculateId as well (resolving relative Urls in WebApps is parserContext-dependent) (EE)
-                objectName = parser.CalculateId(element, aliases);
+                if (aliases.Count > 0)
+                {
+                    objectName = (string) aliases[0];
+                    aliases.RemoveAt(0);
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug(string.Format("No XML 'id' specified using '{0}' as object name and '{1}' as aliases", objectName, string.Join(",", (string[]) aliases.ToArray(typeof(string)))));
+                    }
+                }
             }
 
+            objectName = PostProcessObjectNameAndAliases(objectName, aliases, element, containingDefinition);
+
+            if (containingDefinition == null)
+            {
+                CheckNameUniqueness(objectName, aliases, element);
+            }
 
             ParserContext parserContext = new ParserContext(this, containingDefinition);
-            IConfigurableObjectDefinition definition = parser.ParseObjectDefinitionElement(element, objectName, parserContext);
+            IConfigurableObjectDefinition definition = objectsNamespaceParser.ParseObjectDefinitionElement(element, objectName, parserContext);
             if (definition != null)
             {
                 if (StringUtils.IsNullOrEmpty(objectName))
@@ -252,11 +281,20 @@ namespace Spring.Objects.Factory.Xml
                     if (containingDefinition != null)
                     {
                         objectName =
-                            ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry, true);
+                            ObjectDefinitionReaderUtils.GenerateObjectName(definition, readerContext.Registry, true);
                     }
                     else
                     {
-                        objectName = ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry);
+                        objectName = readerContext.GenerateObjectName(definition);
+                        // Register an alias for the plain object type name, if possible.
+                        string objectTypeName = definition.ObjectTypeName;
+                        if (objectTypeName != null 
+                            && objectName.StartsWith(objectTypeName) 
+                            && objectName.Length>objectTypeName.Length 
+                            && !readerContext.Registry.IsObjectNameInUse(objectTypeName))
+                        {
+                            aliases.Add(objectTypeName);
+                        }
                     }
 
                     #region Instrumentation
@@ -264,17 +302,76 @@ namespace Spring.Objects.Factory.Xml
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(string.Format(
-                                      "Neither XML '{0}' nor '{1}' specified - using object " +
-                                      "class name [{2}] as the id.",
-                                      id, ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute));
+                                      "Neither XML '{0}' nor '{1}' specified - using generated object name [{2}]",
+                                      ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute, objectName));
                     }
 
                     #endregion
                 }
                 string[] aliasesArray = (string[])aliases.ToArray(typeof(string));
-                return new ObjectDefinitionHolder(definition, objectName, aliasesArray);
+                return CreateObjectDefinitionHolder(element, definition, objectName, aliasesArray);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Create an <see cref="ObjectDefinitionHolder"/> instance from the given <paramref name="definition"/> and <paramref name="objectName"/>.
+        /// </summary>
+        /// <remarks>
+        /// This method may be used as a last resort to post-process an object definition before it gets added to the registry.
+        /// </remarks>
+        protected virtual ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, string[] aliasesArray)
+        {
+            return new ObjectDefinitionHolder(definition, objectName, aliasesArray);
+        }
+
+        /// <summary>
+        /// Allows deriving classes to post process the name and aliases for the current element. By default
+        /// does nothing and returns the unmodified <paramref name="objectName"/>.
+        /// </summary>
+        /// <remarks>
+        /// The <paramref name="aliases"/> list passed in may be modified by an implementation of this method to reflect special needs.
+        /// </remarks>
+        /// <param name="objectName">the object name obtained by the default algorithm from 'id' and 'name' attributes so far.</param>
+        /// <param name="aliases">the object aliases obtained by the default algorithm from 'name' attribute so far.</param>
+        /// <param name="element">the currently processed element.</param>
+        /// <param name="containingDefinition">the containing object definition, may be <c>null</c></param>
+        /// <returns>the new object name to be used.</returns>
+        protected virtual string PostProcessObjectNameAndAliases(string objectName, ArrayList aliases, XmlElement element, IObjectDefinition containingDefinition)
+        {
+            if (!StringUtils.HasText(objectName) && aliases.Count == 0)
+            {
+                string result = this.objectsNamespaceParser.CalculateId(element, aliases);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return objectName;
+        }
+
+        /// <summary>
+        /// Validate that the specified object name and aliases have not been used already.
+        /// </summary>
+        protected virtual void CheckNameUniqueness(string objectName, ArrayList aliases, XmlElement element)
+        {
+            string foundName = null;
+
+            if (StringUtils.HasText(objectName) && this.usedNames.Contains(objectName))
+            {
+                foundName = objectName;
+            }
+            if (foundName == null)
+            {
+                foundName = (string) CollectionUtils.FindFirstMatch(this.usedNames, aliases);
+            }
+            if(foundName != null)
+            {
+                Error("Object name '" + foundName + "' is already used in this file", element);
+            }
+
+            this.usedNames.Add(objectName);
+            this.usedNames.AddAll(aliases);
         }
 
         /// <summary>

@@ -232,7 +232,7 @@ namespace Spring.Objects.Factory.Support
 
             if (log.IsDebugEnabled)
             {
-                log.Debug("Loaded " + loadCount + " bean definitions from location [" + location + "]");
+                log.Debug("Loaded " + loadCount + " object definitions from location [" + location + "]");
             }
             return loadCount;
 	    }

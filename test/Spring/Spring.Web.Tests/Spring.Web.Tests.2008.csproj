@@ -104,6 +104,8 @@
     <Compile Include="Objects\Factory\Support\WebObjectFactoryTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\Factory\Support\WebObjectUtilsTests.cs" />
+    <Compile Include="Objects\Factory\Xml\WebObjectDefinitionReaderTests.cs" />
     <Compile Include="TestSupport\NUnitAdapter.cs" />
     <Compile Include="TestSupport\SessionMock.cs" />
     <Compile Include="TestSupport\TestPage.cs">

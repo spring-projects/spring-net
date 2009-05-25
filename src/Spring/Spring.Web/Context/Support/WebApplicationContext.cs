@@ -27,6 +27,7 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Hosting;
+using System.Xml;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Objects;
@@ -106,10 +107,7 @@ namespace Spring.Context.Support
 
             // remember creation info for debug output
             this._constructionTimeStamp = DateTime.Now;
-            if (HttpContext.Current != null)
-            {
-                this._constructionUrl = HttpContext.Current.Request.RawUrl;
-            }
+            this._constructionUrl = VirtualEnvironment.CurrentVirtualPathAndQuery;
             if (log.IsDebugEnabled)
             {
                 log.Debug("created instance " + this.ToString());
@@ -217,7 +215,7 @@ namespace Spring.Context.Support
         {
             get
             {
-                string requestUrl = HttpContext.Current.Request.FilePath;
+                string requestUrl = VirtualEnvironment.CurrentVirtualFilePath;
                 return GetContextInternal(requestUrl);
             }
         }
@@ -351,7 +349,7 @@ namespace Spring.Context.Support
         /// <param name="objectDefinitionReader">Reader to initialize.</param>
         protected override void InitObjectDefinitionReader(XmlObjectDefinitionReader objectDefinitionReader)
         {
-            NamespaceParserRegistry.RegisterParser(typeof(WebObjectsNamespaceParser));
+//            NamespaceParserRegistry.RegisterParser(typeof(WebObjectsNamespaceParser));
         }
 
         /// <summary>
@@ -370,6 +368,16 @@ namespace Spring.Context.Support
         /// <returns>Web object factory to use.</returns>
         protected override DefaultListableObjectFactory CreateObjectFactory()
         {
+            string contextPath = GetContextPathWithTrailingSlash();
+            return new WebObjectFactory(contextPath, this.CaseSensitive, GetInternalParentObjectFactory());
+        }
+
+        /// <summary>
+        /// Returns the application-relative virtual path of this context (without leading '~'!).
+        /// </summary>
+        /// <returns></returns>
+        private string GetContextPathWithTrailingSlash()
+        {
             string contextPath = this.Name;
             if (contextPath == DefaultRootContextName)
             {
@@ -379,7 +387,16 @@ namespace Spring.Context.Support
             {
                 contextPath = contextPath + "/";
             }
-            return new WebObjectFactory(contextPath, this.CaseSensitive, GetInternalParentObjectFactory());
+            return contextPath;
+        }
+
+        /// <summary>
+        /// Create a reader instance capable of handling web objects (Pages,Controls) for importing o
+        /// bject definitions into the specified <paramref name="objectFactory"/>.
+        /// </summary>
+        protected override XmlObjectDefinitionReader CreateXmlObjectDefinitionReader(DefaultListableObjectFactory objectFactory)
+        {
+            return new WebObjectDefinitionReader(GetContextPathWithTrailingSlash(), objectFactory, new XmlUrlResolver());
         }
     }
 }

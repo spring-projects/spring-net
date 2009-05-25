@@ -384,54 +384,7 @@ namespace Spring.Objects.Factory.Xml
         [Obsolete("not used anymore - ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead", false)]
         protected ObjectDefinitionHolder ParseObjectDefinitionElement(XmlElement element, ParserContext parserContext, bool nestedDefinition)
         {
-            string id = GetAttributeValue(element, ObjectDefinitionConstants.IdAttribute);
-            string nameAttr = GetAttributeValue(element, ObjectDefinitionConstants.NameAttribute);
-            ArrayList aliases = new ArrayList();
-            if (StringUtils.HasText(nameAttr))
-            {
-                aliases.AddRange(GetObjectNames(nameAttr));
-            }
-
-            // if we ain't got an id, check if object is page definition or assign any existing (first) alias...
-            string objectName = id;
-            if (StringUtils.IsNullOrEmpty(objectName))
-            {
-                // TODO (EE): pass parserContext to CalculateId as well (resolving relative Urls in WebApps is parserContext-dependent) (EE)
-                objectName = CalculateId(element, aliases);
-            }
-
-
-            IConfigurableObjectDefinition definition = ParseObjectDefinitionElement(element, objectName, parserContext);
-            if (definition != null)
-            {
-                if (StringUtils.IsNullOrEmpty(objectName))
-                {
-                    if (nestedDefinition)
-                    {
-                        objectName =
-                            ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry, true);
-                    }
-                    else
-                    {
-                        objectName = ObjectDefinitionReaderUtils.GenerateObjectName(definition, parserContext.Registry);
-                    }
-
-                    #region Instrumentation
-
-                    if (log.IsDebugEnabled)
-                    {
-                        log.Debug(string.Format(
-                                      "Neither XML '{0}' nor '{1}' specified - using object " +
-                                      "class name [{2}] as the id.",
-                                      id, ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute));
-                    }
-
-                    #endregion
-                }
-                string[] aliasesArray = (string[])aliases.ToArray(typeof(string));
-                return new ObjectDefinitionHolder(definition, objectName, aliasesArray);
-            }
-            return null;
+            return parserContext.ParserHelper.ParseObjectDefinitionElement(element, parserContext.ContainingObjectDefinition);
         }
 
         /// <summary>
@@ -453,32 +406,10 @@ namespace Spring.Objects.Factory.Xml
         /// <returns>
         /// A calculated object definition id.
         /// </returns>
+        [Obsolete("This method will be dropped, override ObjectDefinitionParserHelper.PostProcessObjectNameAndAliases instead", false)]
         protected internal virtual string CalculateId(XmlElement element, ArrayList aliases)
         {
-            string id = null;
-            if (aliases.Count > 0)
-            {
-                string firstAlias = aliases[0] as string;
-                aliases.RemoveAt(0);
-                id = firstAlias;
-            }
-
-            #region Instrumentation
-
-            if (log.IsDebugEnabled)
-            {
-                StringBuilder buffer = new StringBuilder();
-                foreach (string alias in aliases)
-                {
-                    buffer.Append(alias).Append(",");
-                }
-                log.Debug(string.Format("No XML 'id' specified - using '{0}' as the id and '{1}' as aliases.",
-                                        id, buffer.ToString()));
-            }
-
-            #endregion
-
-            return id;
+            return null;
         }
 
         /// <summary>
@@ -514,12 +445,12 @@ namespace Spring.Objects.Factory.Xml
                     = parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(
                         typeName, parent, parserContext.ReaderContext.Reader.Domain);
 
+                ParserContext childParserContext = new ParserContext(parserContext.ParserHelper, od);
 
-                MutablePropertyValues pvs = ParsePropertyElements(id, element, parserContext);
-                ConstructorArgumentValues arguments
-                    = ParseConstructorArgSubElements(id, element, parserContext);
-                EventValues events = ParseEventHandlerSubElements(id, element, parserContext);
-                MethodOverrides methodOverrides = ParseMethodOverrideSubElements(id, element, parserContext);
+                MutablePropertyValues pvs = ParsePropertyElements(id, element, childParserContext);
+                ConstructorArgumentValues arguments = ParseConstructorArgSubElements(id, element, childParserContext);
+                EventValues events = ParseEventHandlerSubElements(id, element, childParserContext);
+                MethodOverrides methodOverrides = ParseMethodOverrideSubElements(id, element, childParserContext);
 
                 bool isPage = StringUtils.HasText(typeName) && typeName != null && typeName.ToLower().EndsWith(".aspx");
                 if (!isPage)
@@ -540,13 +471,13 @@ namespace Spring.Objects.Factory.Xml
                 string dependencyCheck = GetAttributeValue(element, ObjectDefinitionConstants.DependencyCheckAttribute);
                 if (ObjectDefinitionConstants.DefaultValue.Equals(dependencyCheck))
                 {
-                    dependencyCheck = parserContext.ParserHelper.Defaults.DependencyCheck;
+                    dependencyCheck = childParserContext.ParserHelper.Defaults.DependencyCheck;
                 }
                 od.DependencyCheck = GetDependencyCheck(dependencyCheck);
                 string autowire = GetAttributeValue(element, ObjectDefinitionConstants.AutowireAttribute);
                 if (ObjectDefinitionConstants.DefaultValue.Equals(autowire))
                 {
-                    autowire = parserContext.ParserHelper.Defaults.Autowire;
+                    autowire = childParserContext.ParserHelper.Defaults.Autowire;
                 }
                 od.AutowireMode = GetAutowireMode(autowire);
                 string initMethodName = GetAttributeValue(element, ObjectDefinitionConstants.InitMethodAttribute);
@@ -567,12 +498,12 @@ namespace Spring.Objects.Factory.Xml
                 if (ObjectDefinitionConstants.DefaultValue.Equals(lazyInit) && od.IsSingleton)
                 {
                     // just apply default to singletons, as lazy-init has no meaning for prototypes...
-                    lazyInit = parserContext.ParserHelper.Defaults.LazyInit;
+                    lazyInit = childParserContext.ParserHelper.Defaults.LazyInit;
                 }
                 od.IsLazyInit = IsTrueStringValue(lazyInit);
 
                 // try to get the line info
-                string resourceDescription = parserContext.ParserHelper.ReaderContext.Resource.Description;
+                string resourceDescription = childParserContext.ParserHelper.ReaderContext.Resource.Description;
                 if (StringUtils.HasText(resourceDescription))
                 {
                     int line = ConfigurationUtils.GetLineNumber(element);
@@ -940,7 +871,7 @@ namespace Spring.Objects.Factory.Xml
                 {
                     case ObjectDefinitionConstants.ObjectElement:
                         {
-                            return ParseObjectDefinitionElement(element, parserContext, true);
+                            return parserContext.ParserHelper.ParseObjectDefinitionElement(element, parserContext.ContainingObjectDefinition);
                         }
                     case ObjectDefinitionConstants.RefElement:
                         {
@@ -986,35 +917,38 @@ namespace Spring.Objects.Factory.Xml
                             "Unknown subelement of <property>: <" + element.Name + ">");
                 }
             }
-            
-            // it may match another Parser
-            INamespaceParser otherParser = GetParser(element.NamespaceURI);
-            if (otherParser != null)
-            {
-                // The other parser uses nestings tags and thus returns the definition
-                // of the parsed object.
-                return otherParser.ParseElement(element, new ParserContext(parserContext.ParserHelper));
-            }
 
-            throw new ObjectDefinitionStoreException(
-                parserContext.ReaderContext.Resource,
-                name,
-                "Unknown subelement of <property>: <" + element.Name + ">");
+            return parserContext.ParserHelper.ParseCustomElement(element, parserContext.ContainingObjectDefinition);
+
+//            parserContext.ParserHelper.parse
+//            // it may match another Parser
+//            INamespaceParser otherParser = parserContext. (element.NamespaceURI);
+//            if (otherParser != null)
+//            {
+//                // The other parser uses nestings tags and thus returns the definition
+//                // of the parsed object.
+//                return otherParser.ParseElement(element, new ParserContext(parserContext.ParserHelper));
+//            }
+//
+//            throw new ObjectDefinitionStoreException(
+//                parserContext.ReaderContext.Resource,
+//                name,
+//                "Unknown subelement of <property>: <" + element.Name + ">");
         }
 
-        private static INamespaceParser GetParser(string nspace)
-        {
-            // finds the configuration parser for the given namespace
-            try
-            {
-                return NamespaceParserRegistry.GetParser(nspace);
-            }
-            catch (Exception)
-            {
-                // The parser for the given namespace is not found
-                return null;
-            }
-        }
+//        private static INamespaceParser GetParser(string nspace)
+//        {
+//            // finds the configuration parser for the given namespace
+//            try
+//            {
+//                return NamespaceParserRegistry.GetParser(nspace);
+//            }
+//            catch (Exception)
+//            {
+//                // The parser for the given namespace is not found
+//                return null;
+//            }
+//        }
 
         private static object ParseIdReference(XmlElement element, ObjectDefinitionParserHelper parserHelper, string name)
         {

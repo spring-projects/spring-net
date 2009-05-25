@@ -22,10 +22,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.Caching;
+using System.Web.Compilation;
 using System.Web.SessionState;
+using System.Web.UI;
+using Common.Logging;
 
 #endregion
 
@@ -229,6 +234,75 @@ namespace Spring.Util
 
             #endregion //HttpSessionState Adapter
 
+            private static readonly ILog log = LogManager.GetLogger(typeof (HttpRuntimeEnvironment));
+
+#if NET_1_1   
+            // Required method for resolving control types
+    	    private static MethodInfo miGetCompiledUserControlType = null;
+        	
+    	    static HttpRuntimeEnvironment()
+    	    {
+			    Type tUserControlParser = typeof(System.Web.UI.UserControl).Assembly.GetType("System.Web.UI.UserControlParser");    		
+			    miGetCompiledUserControlType = tUserControlParser.GetMethod("GetCompiledUserControlType", BindingFlags.Static | BindingFlags.NonPublic);					
+    	    }
+#endif
+            private class RewriteContext : IDisposable
+            {
+                private string originalPath;
+                private bool rebaseClientPath;
+                private HttpContext ctx;
+
+                public RewriteContext(string virtualDirectory, bool rebaseClientPath)
+                {
+                    ctx = HttpContext.Current;
+                    if (ctx == null)
+                    {
+                        return;
+                    }
+
+                    this.rebaseClientPath = rebaseClientPath;
+
+                    string newVirtualPath = WebUtils.GetVirtualDirectory(virtualDirectory);
+                    string currentFileDirectory = WebUtils.GetVirtualDirectory(ctx.Request.FilePath);
+                    // only switch path if necessary
+                    if (string.Compare(newVirtualPath, currentFileDirectory, true) != 0)
+                    {
+                        originalPath = ctx.Request.Url.PathAndQuery;
+                        string newPath = newVirtualPath + "currentcontext.dummy";
+#if NET_1_1
+                        ctx.RewritePath(newPath);
+#else
+                        ctx.RewritePath(newPath, rebaseClientPath);
+#endif
+
+                        #region Instrumentation
+
+                        if (log.IsDebugEnabled)
+                        {
+                            log.Debug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
+                        }
+
+                        #endregion
+                    }
+                }
+
+                public void Dispose()
+                {
+                    if (originalPath != null)
+                    {
+                        if (log.IsDebugEnabled)
+                        {
+                            log.Debug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
+                        }
+#if NET_1_1
+                        ctx.RewritePath(originalPath);
+#else
+                        ctx.RewritePath(originalPath, rebaseClientPath);
+#endif
+                    }
+                }
+            }
+
             public string ApplicationVirtualPath
             {
                 get
@@ -254,6 +328,11 @@ namespace Spring.Util
                 get { return HttpContext.Current.Request.CurrentExecutionFilePath; }
             }
 
+            public NameValueCollection QueryString
+            {
+                get { return HttpContext.Current.Request.QueryString; }
+            }
+
             public string MapPath(string virtualPath)
             {
                 HttpContext ctx = HttpContext.Current;
@@ -261,8 +340,9 @@ namespace Spring.Util
                 {
                     return ctx.Request.MapPath(virtualPath);
                 }
-#if NET_2_0
-
+#if NET_1_1
+                throw new ArgumentException("can't map context relative path outside a context");
+#else
                 if (VirtualPathUtility.IsAbsolute(virtualPath) && virtualPath.StartsWith(HttpRuntime.AppDomainAppVirtualPath))
                 {
                     virtualPath = VirtualPathUtility.ToAppRelative(virtualPath);
@@ -273,8 +353,13 @@ namespace Spring.Util
                     string physicalPath = Path.Combine(HttpRuntime.AppDomainAppPath, virtualPath);
                     return physicalPath;
                 }
+                return virtualPath;
 #endif
-                throw new ArgumentException("can't map context relative path outside a context");
+            }
+
+            public IDisposable RewritePath(string virtualDirectory, bool rebaseClientPath)
+            {
+                return new RewriteContext(virtualDirectory, rebaseClientPath);
             }
 
             public ISessionState Session
@@ -285,6 +370,49 @@ namespace Spring.Util
             public IDictionary RequestVariables
             {
                 get { return HttpContext.Current.Items; }
+            }
+
+            public NameValueCollection RequestParams
+            {
+                get { return HttpContext.Current.Request.Params; }
+            }
+
+            public Type GetCompiledType(string virtualPath)
+            {
+                string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
+
+                Type type = null;
+#if NET_1_1
+                if (virtualPath.EndsWith(".aspx"))
+                {
+                    type = CreateInstanceFromVirtualPath(virtualPath, typeof(Page)).GetType();
+                }
+                else if (virtualPath.EndsWith(".ascx"))
+                {
+                    type = (Type)miGetCompiledUserControlType.Invoke(null, new object[] { rootedVPath, null, HttpContext.Current });
+                }
+#else
+                type = BuildManager.GetCompiledType(rootedVPath); // requires rooted virtual path!
+#endif
+                return type;
+            }
+
+            public object CreateInstanceFromVirtualPath(string virtualPath, Type requiredBaseType)
+            {
+                string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
+                object result;
+#if NET_1_1
+                HttpContext ctx = HttpContext.Current;
+                string physicalPath = ctx.Server.MapPath(rootedVPath);
+                result = PageParser.GetCompiledPageInstance(virtualPath, physicalPath, ctx);
+#else
+                result = BuildManager.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
+#endif
+                if (!requiredBaseType.IsAssignableFrom(result.GetType()))
+                {
+                    throw new HttpException(string.Format("Type '{0}' from virtual path '{1}' does not inherit from '{2}'", result.GetType(), rootedVPath, requiredBaseType));
+                }
+                return result;
             }
         }
 
@@ -307,6 +435,22 @@ namespace Spring.Util
         }
 
         /// <summary>
+        /// The virtual (rooted) path of the current Request including <see cref="HttpRequest.PathInfo"/>
+        /// </summary>
+        public static string CurrentVirtualPathAndQuery
+        {
+            get 
+            { 
+                string result = CurrentVirtualPath;
+                if (QueryString.Count > 0)
+                {
+                    result = result + "?" + QueryString.ToString();
+                }
+                return result;
+            }
+        }
+
+        /// <summary>
         /// The virtual (rooted) path of the current Request without trailing <see cref="HttpRequest.PathInfo"/>
         /// </summary>
         public static string CurrentVirtualFilePath
@@ -323,11 +467,61 @@ namespace Spring.Util
         }
 
         /// <summary>
+        /// The query parameters
+        /// </summary>
+        public static NameValueCollection QueryString
+        {
+            get { return instance.QueryString; }
+        }
+
+        /// <summary>
+        /// Returns the current Request's variable dictionary (<see cref="HttpContext.Items"/>)
+        /// </summary>
+        public static IDictionary RequestVariables
+        {
+            get { return instance.RequestVariables; }
+        }
+
+        /// <summary>
+        /// Returns the current Request's parameter dictionary (<see cref="HttpRequest.Params"/>)
+        /// </summary>
+        public static NameValueCollection RequestParams
+        {
+            get { return instance.RequestParams; }
+        }
+
+        /// <summary>
         /// Maps a virtual path to it's physical location
         /// </summary>
         public static string MapPath(string virtualPath)
         {
             return instance.MapPath(virtualPath);
+        }
+
+        /// <summary>
+        /// Rewrites the <see cref="CurrentVirtualPath"/>, thus also affecting <see cref="MapPath"/>
+        /// </summary>
+        public static IDisposable RewritePath(string newVirtualPath, bool rebaseClientPath)
+        {
+            return instance.RewritePath(newVirtualPath, rebaseClientPath);
+        }
+
+        /// <summary>
+        /// Returns an instance of the specified file.
+        /// </summary>
+        public static object CreateInstanceFromVirtualPath(string virtualPath, Type requiredBaseType)
+        {
+            string rootedVPath = WebUtils.CombineVirtualPaths(instance.CurrentExecutionFilePath, virtualPath);
+            return instance.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
+        }
+
+        /// <summary>
+        /// Returns an the compiled type of the specified file.
+        /// </summary>
+        public static Type GetCompiledType(string virtualPath)
+        {
+            string rootedVPath = WebUtils.CombineVirtualPaths(instance.CurrentExecutionFilePath, virtualPath);
+            return instance.GetCompiledType(rootedVPath);
         }
 
         /// <summary>

@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Reflection;
 using System.Web;
@@ -64,17 +65,40 @@ namespace Spring.Util
         /// </remarks>
         string CurrentExecutionFilePath { get; }
         /// <summary>
+        /// The query parameters
+        /// </summary>
+        NameValueCollection QueryString { get; }
+        /// <summary>
         /// Maps a virtual path to it's physical location
         /// </summary>
         string MapPath( string virtualPath );
+        /// <summary>
+        /// Rewrites the <see cref="CurrentVirtualPath"/>, thus also affecting <see cref="MapPath"/>
+        /// </summary>
+        IDisposable RewritePath(string newVirtualPath, bool rebaseClientPath);
         /// <summary>
         /// Returns the current Session's variable dictionary
         /// </summary>
         ISessionState Session { get; }
         /// <summary>
-        /// Returns the current Request's variable dictionary
+        /// Returns the current Request's variable dictionary <see cref="HttpContext.Items"/>
         /// </summary>
         IDictionary RequestVariables { get; }
-
+        /// <summary>
+        /// Returns the current Request's parameter dictionary <see cref="HttpRequest.Params"/>
+        /// </summary>
+        NameValueCollection RequestParams { get; }
+        /// <summary>
+        /// Get the compiled type for the given virtual path
+        /// </summary>
+        /// <param name="absoluteVirtualPath">the absolute (=rooted) virtual path</param>
+        /// <returns></returns>
+        Type GetCompiledType(string absoluteVirtualPath);
+        /// <summary>
+        /// Creates an instance from the given virtual path
+        /// </summary>
+        /// <param name="absoluteVirtualPath">the absolute (=rooted) virtual path</param>
+        /// <param name="requiredBaseType">the required base type </param>
+        object CreateInstanceFromVirtualPath(string absoluteVirtualPath, Type requiredBaseType);
     }
 }

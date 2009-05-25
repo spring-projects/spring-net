@@ -127,6 +127,14 @@ namespace Spring.Objects.Factory.Support
 
         #endregion
 
+        /// <summary>
+        /// Returns the virtual path this object factory is associated with.
+        /// </summary>
+        public string ContextPath
+        {
+            get { return contextPath; }
+        }
+
         #region Convenience accessors for Http* objects
 
         /// <summary>

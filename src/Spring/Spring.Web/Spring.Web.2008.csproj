@@ -125,6 +125,10 @@
     <Compile Include="Globalization\AspNetResourceCache.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\Factory\Support\IWebObjectNameGenerator.cs" />
+    <Compile Include="Objects\Factory\Xml\WebObjectDefinitionDocumentReader.cs" />
+    <Compile Include="Objects\Factory\Xml\WebObjectDefinitionParserHelper.cs" />
+    <Compile Include="Objects\Factory\Xml\WebObjectDefinitionReader.cs" />
     <Compile Include="Util\ISessionState.cs" />
     <Compile Include="Util\SecurityCritical.cs" />
     <Compile Include="Web\Support\DefaultHandlerFactory.cs" />

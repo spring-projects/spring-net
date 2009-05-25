@@ -318,7 +318,7 @@ namespace Spring.Web.Support
             return handler;
         }
 #else
-	    private static readonly IDynamicField fControls = SafeField.CreateFrom(GetField("_controls"));
+	    private static readonly IDynamicField fControls = new SafeField(GetField("_controls"));
 
 		private ControlCollection GetChildControlCollection()
 		{

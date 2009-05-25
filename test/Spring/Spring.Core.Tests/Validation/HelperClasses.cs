@@ -126,6 +126,11 @@ namespace Spring.Validation
         {
             throw new NotImplementedException();
         }
+
+        public bool IsObjectNameInUse(string objectName)
+        {
+            return this.objects[objectName] != null;
+        }
     }
 
 }

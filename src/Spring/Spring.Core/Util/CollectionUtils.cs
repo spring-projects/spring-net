@@ -72,9 +72,10 @@ namespace Spring.Util
         /// <returns><see lang="true"/> if the element is in the collection, <see lang="false"/> otherwise.</returns>
         public static bool Contains(ICollection collection, Object element)
         {
+            // TODO (EE): does not match Spring/J behavior. Change to IEnumerable and enumerable may be null
             if (collection == null)
             {
-                throw new ArgumentNullException("Collection cannot be null.");
+                throw new ArgumentNullException("collection", "Collection cannot be null.");
             }
             MethodInfo method;
             method = collection.GetType().GetMethod("contains", BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
@@ -92,17 +93,32 @@ namespace Spring.Util
         /// <param name="element">The object to add to the collection.</param>
         public static void Add(ICollection collection, object element)
         {
-            if (collection == null)
+            Add((IEnumerable)collection, element);
+        }
+
+        /// <summary>
+        /// Adds the specified <paramref name="element"/> to the specified <paramref name="enumerable"/> .
+        /// </summary>
+        /// <param name="enumerable">The enumerable to add the element to.</param>
+        /// <param name="element">The object to add to the collection.</param>
+        public static void Add(IEnumerable enumerable, object element)
+        {
+            if (enumerable == null)
             {
-                throw new ArgumentNullException("Collection cannot be null.");
+                throw new ArgumentNullException("enumerable", "Collection cannot be null.");
+            }
+            if (enumerable is IList)
+            {
+                ((IList)enumerable).Add(element);
+                return;
             }
             MethodInfo method;
-            method = collection.GetType().GetMethod("add", BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+            method = enumerable.GetType().GetMethod("add", BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
             if (null == method)
             {
-                throw new InvalidOperationException("Collection type " + collection.GetType() + " does not implement a Add() method.");
+                throw new InvalidOperationException("Enumerable type " + enumerable.GetType() + " does not implement a Add() method.");
             }
-            method.Invoke(collection, new Object[] { element });
+            method.Invoke(enumerable, new Object[] { element });
         }
 
         /// <summary>
@@ -113,9 +129,13 @@ namespace Spring.Util
         /// <returns>true if the target collection contains all the elements of the specified collection.</returns>
         public static bool ContainsAll(ICollection targetCollection, ICollection sourceCollection)
         {
-            if (targetCollection == null || sourceCollection == null)
+            if (targetCollection == null)
             {
-                throw new ArgumentNullException("Collection cannot be null.");
+                throw new ArgumentNullException("targetCollection", "Collection cannot be null.");
+            }
+            if (sourceCollection == null)
+            {
+                throw new ArgumentNullException("sourceCollection", "Collection cannot be null.");
             }
             if (sourceCollection.Count == 0 && targetCollection.Count > 1)
                 return true;
@@ -214,6 +234,47 @@ namespace Spring.Util
         }
 
         /// <summary>
+        /// Returns the first element contained in both, <paramref name="source"/> and <paramref name="candidates"/>.
+        /// </summary>
+        /// <remarks>The implementation assumes that <paramref name="candidates"/> &lt;&lt;&lt; <paramref name="source"/></remarks>
+        /// <param name="source">the source enumerable. may be <c>null</c></param>
+        /// <param name="candidates">the list of candidates to match against <paramref name="source"/> elements. may be <c>null</c></param>
+        /// <returns>the first element found in both enumerables or <c>null</c></returns>
+        public static object FindFirstMatch(IEnumerable source, IEnumerable candidates)
+        {
+            if (IsEmpty(source) || IsEmpty(candidates))
+            {
+                return null;
+            }
+
+            IList candidateList = candidates as IList;
+            if (candidateList == null)
+            {
+                if (candidates is ICollection)
+                {
+                    candidateList = new ArrayList((ICollection)candidates);
+                }
+                else
+                {
+                    candidateList = new ArrayList();
+                    foreach (object el in candidates)
+                    {
+                        candidateList.Add(el);
+                    }
+                }
+            }
+
+            foreach (object sourceElement in source)
+            {
+                if (candidateList.Contains(sourceElement))
+                {
+                    return sourceElement;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Finds a value of the given type in the given collection.
         /// </summary>
         /// <param name="collection">The collection to search.</param>
@@ -266,6 +327,31 @@ namespace Spring.Util
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Determines whether the specified collection is null or empty.
+        /// </summary>
+        /// <param name="enumerable">The collection to check.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified collection is empty or null; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsEmpty(IEnumerable enumerable)
+        {
+            if (enumerable == null)
+                return true;
+
+            if (enumerable is ICollection)
+            {
+                return (0 == ((ICollection)enumerable).Count);
+            }
+
+            IEnumerator it = enumerable.GetEnumerator();
+            if (!it.MoveNext())
+            {
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -337,11 +423,11 @@ namespace Spring.Util
 
             ehancedInput.Sort(Entry.GetComparer(comparer));
 
-            for (int i = 0; i < ehancedInput.Count; i++ )
+            for (int i = 0; i < ehancedInput.Count; i++)
             {
-                ehancedInput[i] = ((Entry) ehancedInput[i]).Value;
+                ehancedInput[i] = ((Entry)ehancedInput[i]).Value;
             }
-            
+
             return ehancedInput;
         }
 

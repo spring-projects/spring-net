@@ -41,34 +41,6 @@ namespace Spring.Util
 
         [Test]
         [ExpectedException(typeof (ArgumentNullException))]
-        public void GetPageTypeWithNullPageName()
-        {
-            WebObjectUtils.GetPageType(null);
-        }
-
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void GetPageTypeWithEmptyStringPageName()
-        {
-            WebObjectUtils.GetPageType(string.Empty);
-        }
-
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void GetPageTypeWithWhitespacedPageName()
-        {
-            WebObjectUtils.GetPageType("   ");
-        }
-
-        [Test]
-        [ExpectedException(typeof (ObjectCreationException))]
-        public void CreatePageInstanceWhenNotRunningInServerContext()
-        {
-            WebObjectUtils.CreatePageInstance("foo.aspx");
-        }
-
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void GetPageNameWithNullUrl()
         {
             WebUtils.GetPageName(null);
@@ -180,7 +152,7 @@ namespace Spring.Util
         public void CombineVirtualPathsInRootWeb()
         {
             // emulate root website context
-            using( new VirtualEnvironmentMock("/somedir/some.file", null, "/", true) )
+            using( new VirtualEnvironmentMock("/somedir/some.file", null, null, "/", true) )
             {
                 CombineVirtualPathsSuite( "/" );
             }            
@@ -190,7 +162,7 @@ namespace Spring.Util
         public void CombineVirtualPathsInChildWeb()
         {
             // emulate child website context
-            using( new VirtualEnvironmentMock("/somedir/some.file", null, "/myapp", true) )
+            using( new VirtualEnvironmentMock("/somedir/some.file", null, null, "/myapp", true) )
             {
                 CombineVirtualPathsSuite( "/myapp/" );
             }            

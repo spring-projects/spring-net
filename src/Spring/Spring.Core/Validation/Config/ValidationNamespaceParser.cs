@@ -123,7 +123,15 @@ namespace Spring.Validation.Config
             string parent = GetAttributeValue(element, ObjectDefinitionConstants.ParentAttribute);
 
             string name = "validator: " + (StringUtils.HasText(id) ? id : this.definitionCount.ToString());
+
             MutablePropertyValues properties = new MutablePropertyValues();
+            IConfigurableObjectDefinition od
+                = parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(
+                    typeName, parent, parserContext.ReaderContext.Reader.Domain);
+
+            od.PropertyValues = properties;
+            od.IsSingleton = true;
+            od.IsLazyInit = true;
 
             ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.TestAttribute, properties, "Test");
             ParseAttributeIntoProperty(element, ValidatorDefinitionConstants.WhenAttribute, properties, "When");
@@ -141,6 +149,7 @@ namespace Spring.Validation.Config
 
             ManagedList nestedValidators = new ManagedList();
             ManagedList actions = new ManagedList();
+            ParserContext childParserContext = new ParserContext(parserContext.ParserHelper, od);
             foreach (XmlNode node in element.ChildNodes)
             {
                 XmlElement child = node as XmlElement;
@@ -150,19 +159,19 @@ namespace Spring.Validation.Config
                     {
                         case ValidatorDefinitionConstants.PropertyElement:
                             string propertyName = GetAttributeValue(child, ValidatorDefinitionConstants.PropertyNameAttribute);
-                            properties.Add(propertyName, base.ParsePropertyValue(child, name, parserContext));
+                            properties.Add(propertyName, base.ParsePropertyValue(child, name, childParserContext));
                             break;
                         case ValidatorDefinitionConstants.MessageElement:
-                            actions.Add(ParseErrorMessageAction(child, parserContext));
+                            actions.Add(ParseErrorMessageAction(child, childParserContext));
                             break;
                         case ValidatorDefinitionConstants.ActionElement:
-                            actions.Add(ParseGenericAction(child, parserContext));
+                            actions.Add(ParseGenericAction(child, childParserContext));
                             break;
                         case ValidatorDefinitionConstants.ReferenceElement:
-                            nestedValidators.Add(ParseValidatorReference(child, parserContext));
+                            nestedValidators.Add(ParseValidatorReference(child, childParserContext));
                             break;
                         default:
-                            nestedValidators.Add(ParseAndRegisterValidator(child, parserContext));
+                            nestedValidators.Add(ParseAndRegisterValidator(child, childParserContext));
                             break;
                     }
                 }
@@ -175,14 +184,6 @@ namespace Spring.Validation.Config
             {
                 properties.Add("Actions", actions);
             }
-
-            IConfigurableObjectDefinition od
-                = parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(
-                    typeName, parent, parserContext.ReaderContext.Reader.Domain);
-
-            od.PropertyValues = properties;
-            od.IsSingleton = true;
-            od.IsLazyInit = true;
 
             return od;
         }

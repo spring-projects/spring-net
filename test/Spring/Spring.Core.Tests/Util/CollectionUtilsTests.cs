@@ -404,5 +404,23 @@ namespace Spring.Util
 
             return ((int)dex.Key).CompareTo(dey.Key);
         }
+
+        [Test]
+        public void FindFirstMatchReturnsNullIfAnyInputIsEmpty()
+        {
+            Assert.IsNull( CollectionUtils.FindFirstMatch(null, null) );
+            Assert.IsNull( CollectionUtils.FindFirstMatch(new string[0], new string[0]));
+            Assert.IsNull( CollectionUtils.FindFirstMatch(null, new string[] { "x" }));
+            Assert.IsNull( CollectionUtils.FindFirstMatch(new string[] { "x" }, null));
+        }
+
+        [Test]
+        public void FindFirstMatchReturnsFirstMatch()
+        {
+            ArrayList source = new ArrayList();
+            string[] candidates = new string[] { "G", "B", "H" };
+            source.AddRange( new string[] { "A", "B", "C" } );
+            Assert.AreEqual( "B" , CollectionUtils.FindFirstMatch(source, candidates));
+        }
     }
 }

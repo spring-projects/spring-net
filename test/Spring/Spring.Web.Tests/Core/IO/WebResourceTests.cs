@@ -39,7 +39,7 @@ namespace Spring.Core.IO
         [TestFixtureSetUp]
         public void SetUpFixture()
         {
-            testVirtualEnvironment = new VirtualEnvironmentMock("/some.request", "somepathinfo", "/", true);
+            testVirtualEnvironment = new VirtualEnvironmentMock("/some.request", "somepathinfo", null, "/", true);
         }
 
         [TestFixtureTearDown]

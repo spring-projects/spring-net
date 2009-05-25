@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Web;
 using Spring.Core;
@@ -97,27 +98,22 @@ namespace Spring.DataBinding
         /// </param>
         public override void BindSourceToTarget(object source, object target, IValidationErrors validationErrors, IDictionary variables)
         {
-            HttpRequest request;
-            if (HttpContext.Current == null || (HttpContext.Current.Request) == null)
-            {
-                throw new InvalidOperationException("Cannot perform Request data binding without a valid HTTP request.");
-            }
-            request = HttpContext.Current.Request;
+            NameValueCollection parameters = VirtualEnvironment.RequestParams;
             IList targetList = targetExpression.GetValue(target) as IList;
             if (targetList == null)
             {
                 throw new ArgumentException("Target property has to be initialized to an instance of IList interface.");
             }
 
-            if (request.Params.GetValues(requestParams[0]) != null)
+            if (parameters.GetValues(requestParams[0]) != null)
             {
-                int valueCount = request.Params.GetValues(requestParams[0]).Length;
+                int valueCount = parameters.GetValues(requestParams[0]).Length;
                 for (int i = 0; i < valueCount; i++)
                 {
                     IDictionary vars = new Hashtable();
                     foreach (string paramName in requestParams)
                     {
-                        vars[paramName] = request.Params.GetValues(paramName)[i];
+                        vars[paramName] = parameters.GetValues(paramName)[i];
                     }
                     
                     object targetItem;

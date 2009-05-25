@@ -46,6 +46,12 @@ namespace Spring.Objects.Factory.Support
 	public interface IObjectDefinitionRegistry 
     {
         /// <summary>
+        /// Determine whether the given object name is already in use within this registry, 
+        /// i.e. whether there is a local object or alias registered under this name.
+        /// </summary>
+	    bool IsObjectNameInUse(string objectName);
+
+        /// <summary>
         /// Return the number of objects defined in the registry.
         /// </summary>
         /// <value>

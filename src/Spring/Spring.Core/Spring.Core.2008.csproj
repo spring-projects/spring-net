@@ -600,6 +600,8 @@
     <Compile Include="Objects\Factory\Xml\AbstractObjectDefinitionParser.cs" />
     <Compile Include="Objects\Factory\Xml\AbstractSimpleObjectDefinitionParser.cs" />
     <Compile Include="Objects\Factory\Xml\AbstractSingleObjectDefinitionParser.cs" />
+    <Compile Include="Objects\Factory\Xml\DefaultNamespaceHandlerResolver.cs" />
+    <Compile Include="Objects\Factory\Xml\INamespaceParserResolver.cs" />
     <Compile Include="Objects\Factory\Xml\NamespaceParserAttribute.cs" />
     <Compile Include="Objects\Factory\Xml\ObjectFactorySectionHandler.cs" />
     <Compile Include="Objects\Factory\Xml\DocumentDefaultsDefinition.cs" />

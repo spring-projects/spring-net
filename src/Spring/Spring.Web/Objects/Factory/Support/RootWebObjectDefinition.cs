@@ -116,7 +116,7 @@ namespace Spring.Objects.Factory.Support
             MutablePropertyValues properties)
             : base(WebObjectUtils.GetPageType(pageName), null, properties)
         {
-            _pageName = WebUtils.CombineVirtualPaths(HttpContext.Current.Request.CurrentExecutionFilePath, pageName);
+            _pageName = WebUtils.CombineVirtualPaths(VirtualEnvironment.CurrentExecutionFilePath, pageName);
         }
 
         /// <summary>

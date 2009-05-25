@@ -352,8 +352,7 @@ namespace Spring.Objects.Factory.Xml
         /// <returns>a new <see cref="ObjectDefinitionParserHelper"/> instance</returns>
         protected virtual ObjectDefinitionParserHelper CreateHelper(XmlReaderContext readerContext, XmlElement root)
         {
-            ObjectDefinitionParserHelper helper = new ObjectDefinitionParserHelper(readerContext);
-            helper.InitDefaults(root);
+            ObjectDefinitionParserHelper helper = new ObjectDefinitionParserHelper(readerContext, root);
             return helper;
         }
 
