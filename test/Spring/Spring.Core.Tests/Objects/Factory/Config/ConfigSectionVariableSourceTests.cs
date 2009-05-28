@@ -65,5 +65,17 @@ namespace Spring.Objects.Factory.Config
             // non-existant variable
             Assert.IsNull(vs.ResolveVariable("dummy"));
         }
+#if NET_2_0
+        [Test]
+        public void TestVariableResolutionFromApplicationSettingsSchema()
+        {
+            ConfigSectionVariableSource vs = new ConfigSectionVariableSource();
+            vs.SectionName = "applicationSettings/MyApp.Properties.Settings";
+            Assert.AreEqual("1000", vs.ResolveVariable("maxResults"));
+            Assert.AreEqual(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;",
+                vs.ResolveVariable("connection.string"));
+        }
+#endif
     }
+
 }

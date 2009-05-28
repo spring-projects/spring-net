@@ -124,6 +124,16 @@ namespace Spring.Objects.Factory.Config
                 {
                     variables.Add((NameValueCollection) section);
                 }
+#if NET_2_0
+                else if (section is System.Configuration.ClientSettingsSection)
+                {
+                    System.Configuration.ClientSettingsSection clientSettingsSection = (System.Configuration.ClientSettingsSection)section;
+                    foreach (SettingElement setting in clientSettingsSection.Settings)
+                    {
+                        variables.Add(setting.Name, setting.Value.ValueXml.InnerText);
+                    }
+                }
+#endif
                 else
                 {
                     throw new ArgumentException("Section [" + sectionName +
