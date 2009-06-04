@@ -39,7 +39,7 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
@@ -147,6 +147,7 @@
     <Compile Include="Data\Common\MultiDelegatingDbProvider.cs" />
     <Compile Include="Data\Common\UserCredentialsDbProvider.cs" />
     <Compile Include="Data\Config\DatabaseNamespaceParser.cs" />
+    <Compile Include="Data\DuplicateKeyException.cs" />
     <Compile Include="Data\Core\AdoAccessor.cs" />
     <Compile Include="Data\Core\AdoDaoSupport.cs" />
     <Compile Include="Data\Core\AdoPlatformTransactionManager.cs" />

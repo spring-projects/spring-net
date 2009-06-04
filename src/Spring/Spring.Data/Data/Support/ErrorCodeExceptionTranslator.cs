@@ -141,7 +141,8 @@ namespace Spring.Data.Support
 
 		#endregion
 
-	    /// <summary>
+
+        /// <summary>
 	    /// Translate the given <see cref="System.SystemException"/> into a generic data access exception.
 	    /// </summary>
 	    /// <param name="task">A readable string describing the task being attempted.</param>
@@ -153,18 +154,60 @@ namespace Spring.Data.Support
 	    /// A <see cref="Spring.Dao.DataAccessException"/> appropriate for the supplied
 	    /// <paramref name="exception"/>.
 	    /// </returns>
-	    public virtual DataAccessException Translate(string task, string sql, Exception exception)
-	    {
-	        if (task == null)
-	        {
-	            task = "";
-	        }
-	        if (sql == null)
-	        {
-	            sql = "";
-	        }
-	        string errorCode = ExtractErrorCode(exception);
+        public virtual DataAccessException Translate(string task, string sql, Exception exception)
+        {
+            if (task == null)
+            {
+                task = "";
+            }
+            if (sql == null)
+            {
+                sql = "";
+            }
+            string errorCode = ExtractErrorCode(exception);
 
+            // First, try custom translation from overridden method.
+            DataAccessException dex = DoTranslate(task, sql, errorCode, exception);
+            if (dex != null)
+            {
+                // Specific exception match found.
+                return dex;
+            }
+            // Looking for a fallback...
+            if (log.IsDebugEnabled)
+            {
+                log.Debug("Unable to translate exception eith errorCode '" + errorCode + "', will use the fallback translator");
+            }
+            IAdoExceptionTranslator fallback = FallbackTranslator;
+            if (fallback != null)
+            {
+                return FallbackTranslator.Translate(task, sql, exception);
+            }
+            // We couldn't identify it more precisely.
+            return new UncategorizedAdoException(task, sql, errorCode, exception);
+            
+            
+        }
+
+        /// <summary>
+        /// Template method for actually translating the given exception.
+        /// given <see cref="System.SystemException"/> into a generic data access exception.
+        /// </summary>
+        /// <param name="task">A readable string describing the task being attempted.</param>
+        /// <param name="sql">The SQL query or update that caused the problem. May be null.</param>
+        /// <param name="errorCode">The error code.</param>
+        /// <param name="exception">The <see cref="System.Exception"/> encountered by the ADO.NET implementation.</param>
+        /// <returns>
+        /// A <see cref="Spring.Dao.DataAccessException"/> appropriate for the supplied
+        /// <paramref name="exception"/>.
+        /// </returns>
+        /// <remarks>
+        /// The passed-in arguments will have been pre-checked.  furthermore, this method is allowed to
+        /// return <code>null</code> to indicate that no exception match has been found and that
+        /// fallback translation should kick in.
+        /// </remarks>
+	    protected virtual DataAccessException DoTranslate(string task, string sql, string errorCode, Exception exception)
+	    {
             // First, try custom translation from overridden method.
             DataAccessException dex = TranslateException(task, sql, errorCode, exception);
             if (dex != null)
@@ -187,6 +230,11 @@ namespace Spring.Data.Support
                     {
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new InvalidResultSetAccessException(task, sql, exception);
+                    }
+                    else if (Array.IndexOf(errorCodes.DuplicateKeyCodes, errorCode) >= 0)
+                    {
+                        LogTranslation(task, sql, errorCode, exception, false);
+                        return new DuplicateKeyException(task, sql, exception);
                     }
                     else if (Array.IndexOf(errorCodes.DataAccessResourceFailureCodes, errorCode) >= 0) 
                     {
@@ -220,11 +268,7 @@ namespace Spring.Data.Support
                     }
 	            }
 	        }
-	        if (log.IsDebugEnabled)
-	        {
-	            log.Debug("Unable to translate exception eith errorCode '" + errorCode + "', will use the fallback translator");	            
-	        }
-	        return fallbackTranslator.Translate(task, sql, exception);
+	        return null;
 	    }
 
         /// <summary>

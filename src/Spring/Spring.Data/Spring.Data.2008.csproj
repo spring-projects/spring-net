@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -155,6 +155,7 @@
     <Compile Include="Data\Core\RowMapperResultSetExtractor.cs" />
     <Compile Include="Data\Core\ServiceDomainPlatformTransactionManager.cs" />
     <Compile Include="Data\Core\TxScopeTransactionManager.cs" />
+    <Compile Include="Data\DuplicateKeyException.cs" />
     <Compile Include="Data\Generic\AdoDaoSupport.cs" />
     <Compile Include="Data\Generic\IDataAdapterCallback.cs" />
     <Compile Include="Data\Generic\DataAdapterDelegate.cs" />

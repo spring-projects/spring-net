@@ -39,23 +39,25 @@ namespace Spring.Data.Common
     public class ErrorCodes 
     {
         #region Fields
-        private String[] databaseProductNames;
+        private string[] databaseProductNames;
 
-        private String[] badSqlGrammarCodes = new String[0];
+        private string[] badSqlGrammarCodes = new String[0];
 
-        private String[] invalidResultSetAccessCodes = new String[0];
+        private string[] invalidResultSetAccessCodes = new String[0];
 
-        private String[] dataAccessResourceFailureCodes = new String[0];
+        private string[] dataAccessResourceFailureCodes = new String[0];
 
-        private String[] permissionDeniedCodes = new String[0];
+        private string[] permissionDeniedCodes = new String[0];
 
-        private String[] dataIntegrityViolationCodes = new String[0];
+        private string[] dataIntegrityViolationCodes = new String[0];
 	
-        private String[] cannotAcquireLockCodes = new String[0];
+        private string[] cannotAcquireLockCodes = new String[0];
 
-        private String[] deadlockLoserCodes = new String[0];
+        private string[] deadlockLoserCodes = new String[0];
 
-        private String[] cannotSerializeTransactionCodes = new String[0];
+        private string[] cannotSerializeTransactionCodes = new String[0];
+
+        private string[] duplicateKeyCodes = new string[0];
 
         // CustomErrorCodesTranslation[] customTranslations;
         #endregion
@@ -144,13 +146,14 @@ namespace Spring.Data.Common
             get { return cannotSerializeTransactionCodes; }
             set { cannotSerializeTransactionCodes = value; }
         }
-	    
-        #endregion
 
-        #region Methods
+        public string[] DuplicateKeyCodes
+        {
+            get { return duplicateKeyCodes; }
+            set { duplicateKeyCodes = value; }
+        }
 
         #endregion
-	    
 
     }
 }
