@@ -354,6 +354,8 @@ Build properties that may be set:
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity and not net-3.0}"/>
+
 
 
     <!-- build examples -->
@@ -381,6 +383,7 @@ Build properties that may be set:
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq-tests and not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
   </target>
 
   <target name="compile-net-1.0" description="Builds .NET Framework 1.0 version"
@@ -394,6 +397,7 @@ Build properties that may be set:
     <property name="build-quartz" value="false" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
+    <property name="build-velocity" value="false" />
     <call target="compile-test" />
   </target>
 
@@ -405,6 +409,7 @@ Build properties that may be set:
     <property name="build-quartz" value="true" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
+    <property name="build-velocity" value="false" />
     <call target="compile-test" />
   </target>
 
@@ -416,6 +421,7 @@ Build properties that may be set:
     <property name="build-quartz" value="true" />
     <property name="build-msmq" value="true" />
     <property name="build-msmq-tests" value="false" />
+    <property name="build-velocity" value="true" />
     <call target="compile-test" />
   </target>
 
@@ -427,6 +433,7 @@ Build properties that may be set:
     <property name="build-quartz" value="false" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
+    <property name="build-velocity" value="false" />
     <call target="compile-test" />
   </target>
 
@@ -438,6 +445,7 @@ Build properties that may be set:
     <property name="build-quartz" value="true" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
+    <property name="build-velocity" value="true" />
     <call target="compile-test" />
   </target>
 
@@ -613,6 +621,8 @@ Build properties that may be set:
         <delete dir="src/Spring/Spring.Messaging/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Scheduling.Quartz/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Scheduling.Quartz/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Template.Velocity/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Template.Velocity/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Testing.NUnit/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Testing.NUnit/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web/obj" failonerror="false"/>
@@ -648,6 +658,8 @@ Build properties that may be set:
         <delete dir="test/Spring/Spring.Messaging.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Template.Velocity.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Template.Velocity.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Testing.NUnit.Tests/obj" failonerror="false"/>
@@ -1011,6 +1023,10 @@ Build properties that may be set:
           <include name="**/Spring.Scheduling.Quartz.xml"/>
           <include name="**/Spring.Scheduling.Quartz.pdb"/>
 
+          <include name="**/Spring.Template.Velocity.dll"/>
+          <include name="**/Spring.Template.Velocity.xml"/>
+          <include name="**/Spring.Template.Velocity.pdb"/>
+
           <include name="**/antlr.runtime.dll"/>
           <include name="**/Common.Logging.dll"/>
 
@@ -1369,6 +1385,7 @@ Build properties that may be set:
       <include name="src/Spring/Spring.Messaging/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
       <include name="src/Spring/Spring.Scheduling.Quartz/**"/>
+      <include name="src/Spring/Spring.Template.Velocity/**"/>
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/CommonAssemblyInfo.cs"/>
 
@@ -1385,6 +1402,7 @@ Build properties that may be set:
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Scheduling.Quartz.Tests/**"/>
+      <include name="test/Spring/Spring.Template.Velocity.Tests/**"/>
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/CommonAssemblyInfo.cs"/>
 
