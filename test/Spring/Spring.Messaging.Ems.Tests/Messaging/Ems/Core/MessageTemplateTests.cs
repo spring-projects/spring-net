@@ -22,21 +22,23 @@
 
 using System;
 using System.Collections;
-using Apache.NMS;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Messaging.Nms.Connections;
-using Spring.Messaging.Nms.Support.Destinations;
+using Spring.Messaging.Ems.Common;
+using Spring.Messaging.Ems.Connections;
+using Spring.Messaging.Ems.Support.Destinations;
 using Spring.Transaction.Support;
+using TIBCO.EMS;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Ems.Core
 {
     /// <summary>
-    /// This class contains tests for NmsTemplate
+    /// This class contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
+    /// <version>$Id:$</version>
     [TestFixture]
     public class MessageTemplateTests
     {
@@ -54,9 +56,9 @@ namespace Spring.Messaging.Nms.Core
             CreateMocks();
         }
 
-        private NmsTemplate CreateTemplate()
+        private EmsTemplate CreateTemplate()
         {
-            NmsTemplate template = new NmsTemplate();
+            EmsTemplate template = new EmsTemplate();
             template.DestinationResolver = mockDestinationResolver;
             template.SessionTransacted = UseTransactedTemplate;
             return template;
@@ -79,17 +81,17 @@ namespace Spring.Messaging.Nms.Core
             mockConnection = (IConnection) mocks.CreateMock(typeof (IConnection));
             mockSession = (ISession) mocks.CreateMock(typeof (ISession));
 
-            IQueue queue = (IQueue) mocks.CreateMock(typeof (IQueue));
+            TIBCO.EMS.Queue queue = new TIBCO.EMS.Queue("test"); //(Queue) mocks.CreateMock(typeof (Queue));
 
             Expect.Call(mockConnectionFactory.CreateConnection()).Return(mockConnection).Repeat.Once();
             if (UseTransactedTemplate)
             {
-                Expect.Call(mockConnection.CreateSession(AcknowledgementMode.Transactional)).Return(mockSession).Repeat.
+                Expect.Call(mockConnection.CreateSession(true, Session.SESSION_TRANSACTED)).Return(mockSession).Repeat.
                     Once();
             }
             else
             {
-                Expect.Call(mockConnection.CreateSession(AcknowledgementMode.AutoAcknowledge)).Return(mockSession).
+                Expect.Call(mockConnection.CreateSession(false, Session.AUTO_ACKNOWLEDGE)).Return(mockSession).
                     Repeat.
                     Once();
             }
@@ -104,7 +106,7 @@ namespace Spring.Messaging.Nms.Core
         [Test]
         public void SessionCallback()
         {
-            NmsTemplate template = CreateTemplate();
+            EmsTemplate template = CreateTemplate();
             template.ConnectionFactory = mockConnectionFactory;
             mockSession.Close();
             LastCall.On(mockSession).Repeat.Once();
@@ -125,7 +127,7 @@ namespace Spring.Messaging.Nms.Core
         public void SessionCallbackWithinSynchronizedTransaction()
         {
             SingleConnectionFactory scf = new SingleConnectionFactory(mockConnectionFactory);
-            NmsTemplate template = CreateTemplate();
+            EmsTemplate template = CreateTemplate();
             template.ConnectionFactory = scf;
 
             mockConnection.Start();

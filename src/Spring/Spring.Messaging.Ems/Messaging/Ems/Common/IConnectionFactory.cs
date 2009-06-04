@@ -31,33 +31,40 @@ namespace Spring.Messaging.Ems.Common
 
         IConnection CreateConnection();
         IConnection CreateConnection(string userName, string password);
-        object GetCertificateStore();
-        string GetSSLProxyHost();
-        string GetSSLProxyPassword();
-        int GetSSLProxyPort();
-        string GetSSLProxyUser();
+        object CertificateStore { get; }
+        string SSLProxyHost { get; }
+        string SSLProxyPassword { get; }
+        int SSLProxyPort { get; }
+        string SSLProxyUser { get; }
 
         void SetCertificateStoreType(EMSSSLStoreType type, object storeInfo);
-        void SetClientID(string clientID);
-        void SetClientTracer(StreamWriter tracer);
-        void SetConnAttemptCount(int attempts);
-        void SetConnAttemptDelay(int delay);
-        void SetConnAttemptTimeout(int timeout);
-        void SetHostNameVerifier(EMSSSLHostNameVerifier verifier);
-        void SetMetric(int metric);
-        void SetMulticastDaemon(string port);
-        void SetMulticastEnabled(bool enabled);
-        void SetReconnAttemptCount(int attempts);
-        void SetReconnAttemptDelay(int delay);
-        void SetReconnAttemptTimeout(int timeout);
-        void SetServerUrl(string serverUrl);
-        void SetSSLAuthOnly(bool authOnly);
+
+        string ClientID { set; }
+        StreamWriter ClientTracer { set; }
+        int ConnAttemptCount { set; }
+        int ConnAttemptDelay { set; }
+        int ConnAttemptTimeout { set; }
+        EMSSSLHostNameVerifier HostNameVerifier { set; }
+
+        int MetricAsInt { set; }
+
+
+        string MulticastDaemon { set; }
+        bool MulticastEnabled { set; }
+        int ReconnAttemptCount { set; }
+        int ReconnAttemptDelay { set; }
+        int ReconnAttemptTimeout { set; }
+        string ServerUrl { set; }
+        bool SSLAuthOnly { set; }
+        
         void SetSSLProxy(string host, int port);
-        void SetSSLProxyAuth(string username, string password);
-        void SetSSLTrace(bool trace);
-        void SetTargetHostName(string targetHostName);
-        void SetUserName(string username);
-        void SetUserPassword(string password);
+
+        string[] SSLProxyAuth { set; }
+
+        bool SSLTrace { set; }
+        string TargetHostName { set; }
+        string UserName { set; }
+        string UserPassword { set; }
 
         string ToString();
         FactoryLoadBalanceMetric Metric { get; set; }

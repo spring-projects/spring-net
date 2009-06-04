@@ -71,29 +71,29 @@ namespace Spring.Messaging.Ems.Common
             return new EmsConnection(nativeConnection);
         }
 
-        public object GetCertificateStore()
+        public object CertificateStore
         {
-            return nativeConnectionFactory.GetCertificateStore();
+            get { return nativeConnectionFactory.GetCertificateStore(); }
         }
 
-        public string GetSSLProxyHost()
+        public string SSLProxyHost
         {
-            return nativeConnectionFactory.GetSSLProxyHost();
+            get { return nativeConnectionFactory.GetSSLProxyHost(); }
         }
 
-        public string GetSSLProxyPassword()
+        public string SSLProxyPassword
         {
-            return nativeConnectionFactory.GetSSLProxyPassword();
+            get { return nativeConnectionFactory.GetSSLProxyPassword(); }
         }
 
-        public int GetSSLProxyPort()
+        public int SSLProxyPort
         {
-            return nativeConnectionFactory.GetSSLProxyPort();
+            get { return nativeConnectionFactory.GetSSLProxyPort(); }
         }
 
-        public string GetSSLProxyUser()
+        public string SSLProxyUser
         {
-            return nativeConnectionFactory.GetSSLProxyUser();
+            get { return nativeConnectionFactory.GetSSLProxyUser(); }
         }
 
         public void SetCertificateStoreType(EMSSSLStoreType type, object storeInfo)
@@ -101,74 +101,74 @@ namespace Spring.Messaging.Ems.Common
             nativeConnectionFactory.SetCertificateStoreType(type, storeInfo);
         }
 
-        public void SetClientID(string clientID)
+        public string ClientID
         {
-            nativeConnectionFactory.SetClientID(clientID);
+            set { nativeConnectionFactory.SetClientID(value); }
         }
 
-        public void SetClientTracer(StreamWriter tracer)
+        public StreamWriter ClientTracer
         {
-            nativeConnectionFactory.SetClientTracer(tracer);
+            set { nativeConnectionFactory.SetClientTracer(value); }
         }
 
-        public void SetConnAttemptCount(int attempts)
+        public int ConnAttemptCount
         {
-            nativeConnectionFactory.SetConnAttemptCount(attempts);
+            set { nativeConnectionFactory.SetConnAttemptCount(value); }
         }
 
-        public void SetConnAttemptDelay(int delay)
+        public int ConnAttemptDelay
         {
-            nativeConnectionFactory.SetConnAttemptDelay(delay);
+            set { nativeConnectionFactory.SetConnAttemptDelay(value); }
         }
 
-        public void SetConnAttemptTimeout(int timeout)
+        public int ConnAttemptTimeout
         {
-            nativeConnectionFactory.SetConnAttemptTimeout(timeout);
+            set { nativeConnectionFactory.SetConnAttemptTimeout(value); }
         }
 
-        public void SetHostNameVerifier(EMSSSLHostNameVerifier verifier)
+        public EMSSSLHostNameVerifier HostNameVerifier
         {
-            nativeConnectionFactory.SetHostNameVerifier(verifier);
+            set { nativeConnectionFactory.SetHostNameVerifier(value); }
         }
 
-        public void SetMetric(int metric)
+        public int MetricAsInt
         {
-            nativeConnectionFactory.SetMetric(metric);
+            set { nativeConnectionFactory.SetMetric(value); }
         }
 
-        public void SetMulticastDaemon(string port)
+        public string MulticastDaemon
         {
-            nativeConnectionFactory.SetMulticastDaemon(port);
+            set { nativeConnectionFactory.SetMulticastDaemon(value); }
         }
 
-        public void SetMulticastEnabled(bool enabled)
+        public bool MulticastEnabled
         {
-            nativeConnectionFactory.SetMulticastEnabled(enabled);
+            set { nativeConnectionFactory.SetMulticastEnabled(value); }
         }
 
-        public void SetReconnAttemptCount(int attempts)
+        public int ReconnAttemptCount
         {
-            nativeConnectionFactory.SetReconnAttemptCount(attempts);
+            set { nativeConnectionFactory.SetReconnAttemptCount(value); }
         }
 
-        public void SetReconnAttemptDelay(int delay)
+        public int ReconnAttemptDelay
         {
-            nativeConnectionFactory.SetReconnAttemptDelay(delay);
+            set { nativeConnectionFactory.SetReconnAttemptDelay(value); }
         }
 
-        public void SetReconnAttemptTimeout(int timeout)
+        public int ReconnAttemptTimeout
         {
-            nativeConnectionFactory.SetReconnAttemptTimeout(timeout);
+            set { nativeConnectionFactory.SetReconnAttemptTimeout(value); }
         }
 
-        public void SetServerUrl(string serverUrl)
+        public string ServerUrl
         {
-            nativeConnectionFactory.SetServerUrl(serverUrl);
+            set { nativeConnectionFactory.SetServerUrl(value); }
         }
 
-        public void SetSSLAuthOnly(bool authOnly)
+        public bool SSLAuthOnly
         {
-            nativeConnectionFactory.SetSSLAuthOnly(authOnly);
+            set { nativeConnectionFactory.SetSSLAuthOnly(value); }
         }
 
         public void SetSSLProxy(string host, int port)
@@ -176,29 +176,29 @@ namespace Spring.Messaging.Ems.Common
             nativeConnectionFactory.SetSSLProxy(host, port);
         }
 
-        public void SetSSLProxyAuth(string username, string password)
+        public string[] SSLProxyAuth
         {
-            nativeConnectionFactory.SetSSLProxyAuth(username, password);
+            set { nativeConnectionFactory.SetSSLProxyAuth(value[0], value[1]); }
         }
 
-        public void SetSSLTrace(bool trace)
+        public bool SSLTrace
         {
-            nativeConnectionFactory.SetSSLTrace(trace);
+            set { nativeConnectionFactory.SetSSLTrace(value); }
         }
 
-        public void SetTargetHostName(string targetHostName)
+        public string TargetHostName
         {
-            nativeConnectionFactory.SetTargetHostName(targetHostName);
+            set { nativeConnectionFactory.SetTargetHostName(value); }
         }
 
-        public void SetUserName(string username)
+        public string UserName
         {
-            nativeConnectionFactory.SetUserName(username);
+            set { nativeConnectionFactory.SetUserName(value); }
         }
 
-        public void SetUserPassword(string password)
+        public string UserPassword
         {
-            nativeConnectionFactory.SetUserPassword(password);
+            set { nativeConnectionFactory.SetUserPassword(value); } 
         }
 
         public FactoryLoadBalanceMetric Metric

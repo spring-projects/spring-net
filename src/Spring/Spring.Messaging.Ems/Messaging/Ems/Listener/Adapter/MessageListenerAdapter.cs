@@ -69,7 +69,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
 
         private object defaultResponseDestination;
 
-        private DestinationResolver destinationResolver = new DynamicDestinationResolver();
+        private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
 
         private IMessageConverter messageConverter;
 
@@ -182,7 +182,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
 	    /// Specify another implementation, for other strategies, perhaps from a directory service.</para>
         /// </summary>
         /// <value>The destination resolver.</value>
-        public DestinationResolver DestinationResolver
+        public IDestinationResolver DestinationResolver
         {
             get { return destinationResolver; }
             set

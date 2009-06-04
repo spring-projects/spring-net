@@ -38,7 +38,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
     {
         #region Fields
         
-        private DestinationResolver destinationResolver = new DynamicDestinationResolver();
+        private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
 
         private bool pubSubDomain = false;
 
@@ -54,7 +54,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
         /// JndDestinationResolver for resolving destination names as JNDI locations.
         /// </remarks>
         /// <value>The destination resolver.</value>
-        virtual public DestinationResolver DestinationResolver
+        virtual public IDestinationResolver DestinationResolver
         {
             get
             {

@@ -21,25 +21,28 @@
 #region Imports
 
 using System;
-using Apache.NMS;
+
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Messaging.Nms.Listener;
+using Spring.Messaging.Ems.Common;
+using Spring.Messaging.Ems.Listener;
+using TIBCO.EMS;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Ems.Core
 {
     /// <summary>
-    /// This class contains tests for SimpleMessageListenerContainer
+    /// This class contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
+    /// <version>$Id:$</version>
     [TestFixture]
     public class SimpleMessageListenerContainerTests
     {
         private static string DESTINATION_NAME = "foo";
 
-        private static StubQueue QUEUE_DESTINATION = new StubQueue();
+        private static Queue QUEUE_DESTINATION = new Queue("banjo");
 
         private static string EXCEPTION_MESSAGE = "This.Is.It";
 
@@ -63,26 +66,27 @@ namespace Spring.Messaging.Nms.Core
             SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
 
             ISession session = (ISession) mocks.CreateMock(typeof (ISession));
-            Expect.Call(session.GetQueue(DESTINATION_NAME)).Return(QUEUE_DESTINATION);
+            Expect.Call(session.CreateQueue(DESTINATION_NAME)).Return(QUEUE_DESTINATION);
             Expect.Call(session.CreateConsumer(QUEUE_DESTINATION, null)).Return(messageConsumer);
             // an exception is thrown, so the rollback logic is being applied here...
             Expect.Call(session.Transacted).Return(false);
 
             IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
-            connection.ExceptionListener += container.OnException;
-            Expect.Call(connection.CreateSession(container.SessionAcknowledgeMode)).Return(session);
+            //connection.ExceptionListener += container.OnException;
+            connection.ExceptionListener = container;
+            Expect.Call(connection.CreateSession(false, container.SessionAcknowledgeMode)).Return(session);
             connection.Start();
             
             IConnectionFactory connectionFactory = (IConnectionFactory) mocks.CreateMock(typeof (IConnectionFactory));
             Expect.Call(connectionFactory.CreateConnection()).Return(connection);
 
-            NMSException theException = new NMSException(EXCEPTION_MESSAGE);
+            EMSException theException = new EMSException(EXCEPTION_MESSAGE);
 
             IExceptionListener exceptionListener = (IExceptionListener) mocks.CreateMock(typeof (IExceptionListener));
             exceptionListener.OnException(theException);
 
-            IMessage message = (IMessage) mocks.CreateMock(typeof (IMessage));
-
+            //IMessage message = (IMessage) mocks.CreateMock(typeof (IMessage));
+            TextMessage message = new TextMessage(null, "hello");
             mocks.ReplayAll();
 
 
@@ -108,13 +112,13 @@ namespace Spring.Messaging.Nms.Core
 
     internal class BadSessionAwareMessageListener : ISessionAwareMessageListener
     {
-        private NMSException exception;
-        public BadSessionAwareMessageListener(NMSException exception)
+        private EMSException exception;
+        public BadSessionAwareMessageListener(EMSException exception)
         {
             this.exception = exception;
         }
 
-        public void OnMessage(IMessage message, ISession session)
+        public void OnMessage(Message message, ISession session)
         {
             throw exception;
         }
@@ -122,25 +126,44 @@ namespace Spring.Messaging.Nms.Core
 
     internal class SimpleMessageConsumer : IMessageConsumer
     {
-        public event MessageListener Listener;
+        private IMessageListener messageListener;
 
-        public void SendMessage(IMessage message)
+        public void SendMessage(Message message)
         {
-            Listener(message);
+            messageListener.OnMessage(message);
         }
-        public IMessage Receive()
+
+        public Message Receive()
         {
             throw new NotImplementedException();
         }
 
-        public IMessage Receive(TimeSpan timeout)
+        public Message Receive(long timeout)
         {
             throw new NotImplementedException();
         }
 
-        public IMessage ReceiveNoWait()
+        public Message ReceiveNoWait()
         {
             throw new NotImplementedException();
+        }
+
+        public MessageConsumer NativeMessageConsumer
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public event EMSMessageHandler MessageHandler;
+
+        public IMessageListener MessageListener
+        {
+            get { return messageListener; }
+            set { messageListener = value; }
+        }
+
+        public string MessageSelector
+        {
+            get { throw new NotImplementedException(); }
         }
 
         public void Close()
@@ -148,10 +171,6 @@ namespace Spring.Messaging.Nms.Core
             throw new NotImplementedException();
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
 
 
     }

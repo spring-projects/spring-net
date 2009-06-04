@@ -158,6 +158,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <value>The exception listener.</value>
         public IExceptionListener ExceptionListener
         {
+            get { return exceptionListener; }
             set { exceptionListener = value; }
         }
 
@@ -253,29 +254,29 @@ namespace Spring.Messaging.Ems.Connections
             get { return targetConnectionFactory.NativeConnectionFactory; }
         }
 
-        public object GetCertificateStore()
+        public object CertificateStore
         {
-            return TargetConnectionFactory.GetCertificateStore();
+            get { return TargetConnectionFactory.CertificateStore; }
         }
 
-        public string GetSSLProxyHost()
+        public string SSLProxyHost
         {
-            return TargetConnectionFactory.GetSSLProxyHost();
+            get { return TargetConnectionFactory.SSLProxyHost; }
         }
 
-        public string GetSSLProxyPassword()
+        public string SSLProxyPassword
         {
-            return TargetConnectionFactory.GetSSLProxyPassword();
+            get { return TargetConnectionFactory.SSLProxyPassword; }
         }
 
-        public int GetSSLProxyPort()
+        public int SSLProxyPort
         {
-            return TargetConnectionFactory.GetSSLProxyPort();
+            get { return TargetConnectionFactory.SSLProxyPort; }
         }
 
-        public string GetSSLProxyUser()
+        public string SSLProxyUser
         {
-            return TargetConnectionFactory.GetSSLProxyUser();
+            get { return TargetConnectionFactory.SSLProxyUser; }
         }
 
         public void SetCertificateStoreType(EMSSSLStoreType type, object storeInfo)
@@ -283,75 +284,78 @@ namespace Spring.Messaging.Ems.Connections
             TargetConnectionFactory.SetCertificateStoreType(type, storeInfo);
         }
 
-        public void SetClientID(string clientID)
+        public string ClientID
         {
-            this.clientId = clientID;
-            TargetConnectionFactory.SetClientID(clientID);
+            set
+            {
+                this.clientId = value;
+                TargetConnectionFactory.ClientID = value;
+            }
         }
 
-        public void SetClientTracer(StreamWriter tracer)
+        public StreamWriter ClientTracer
         {
-            TargetConnectionFactory.SetClientTracer(tracer);
+            set { TargetConnectionFactory.ClientTracer = value; }
         }
 
-        public void SetConnAttemptCount(int attempts)
+        public int ConnAttemptCount
         {
-            TargetConnectionFactory.SetConnAttemptCount(attempts);
+            set { TargetConnectionFactory.ConnAttemptCount = value; }
         }
 
-        public void SetConnAttemptDelay(int delay)
+        public int ConnAttemptDelay
         {
-            TargetConnectionFactory.SetConnAttemptDelay(delay);
+            set { TargetConnectionFactory.ConnAttemptDelay = value; }
         }
 
-        public void SetConnAttemptTimeout(int timeout)
+        public int ConnAttemptTimeout
         {
-            TargetConnectionFactory.SetConnAttemptTimeout(timeout);
+            set { TargetConnectionFactory.ConnAttemptTimeout = value; }
         }
 
-        public void SetHostNameVerifier(EMSSSLHostNameVerifier verifier)
+        public EMSSSLHostNameVerifier HostNameVerifier
         {
-            TargetConnectionFactory.SetHostNameVerifier(verifier);
+            set { TargetConnectionFactory.HostNameVerifier = value; }
         }
 
-        public void SetMetric(int metric)
+        public int MetricAsInt
         {
-            TargetConnectionFactory.SetMetric(metric);
+            set { TargetConnectionFactory.MetricAsInt = value; }
         }
 
-        public void SetMulticastDaemon(string port)
+        public string MulticastDaemon
         {
-            TargetConnectionFactory.SetMulticastDaemon(port);
+            set { TargetConnectionFactory.MulticastDaemon = value; }
         }
 
-        public void SetMulticastEnabled(bool enabled)
+        public bool MulticastEnabled
         {
-            TargetConnectionFactory.SetMulticastEnabled(enabled);
+            set { TargetConnectionFactory.MulticastEnabled = value; }
         }
 
-        public void SetReconnAttemptCount(int attempts)
+        public int ReconnAttemptCount
         {
-            TargetConnectionFactory.SetReconnAttemptCount(attempts);
+            set { TargetConnectionFactory.ReconnAttemptCount = value; }
         }
 
-        public void SetReconnAttemptDelay(int delay)
+        public int ReconnAttemptDelay
         {
-            TargetConnectionFactory.SetReconnAttemptDelay(delay);
+            set { TargetConnectionFactory.ReconnAttemptDelay = value; }
         }
 
-        public void SetReconnAttemptTimeout(int timeout)
+        public int ReconnAttemptTimeout
         {
-            TargetConnectionFactory.SetReconnAttemptTimeout(timeout);
+            set { TargetConnectionFactory.ReconnAttemptTimeout = value; }
         }
 
-        public void SetServerUrl(string serverUrl)
+        public string ServerUrl
         {
-            TargetConnectionFactory.SetServerUrl(serverUrl);
+            set { TargetConnectionFactory.ServerUrl = value; }
         }
 
-        public void SetSSLAuthOnly(bool authOnly)
+        public bool SSLAuthOnly
         {
-            TargetConnectionFactory.SetSSLAuthOnly(authOnly);
+            set { TargetConnectionFactory.SSLAuthOnly = value; }
         }
 
         public void SetSSLProxy(string host, int port)
@@ -359,29 +363,29 @@ namespace Spring.Messaging.Ems.Connections
             TargetConnectionFactory.SetSSLProxy(host, port);
         }
 
-        public void SetSSLProxyAuth(string username, string password)
+        public string[] SSLProxyAuth
         {
-            TargetConnectionFactory.SetSSLProxyAuth(username, password);
+            set { TargetConnectionFactory.SSLProxyAuth = value; }
         }
 
-        public void SetSSLTrace(bool trace)
+        public bool SSLTrace
         {
-            TargetConnectionFactory.SetSSLTrace(trace);
+            set { TargetConnectionFactory.SSLTrace = value; }
         }
 
-        public void SetTargetHostName(string targetHostName)
+        public string TargetHostName
         {
-            TargetConnectionFactory.SetTargetHostName(targetHostName);
+            set { TargetConnectionFactory.TargetHostName = value; }
         }
 
-        public void SetUserName(string username)
+        public string UserName
         {
-            TargetConnectionFactory.SetUserName(username);
+            set { TargetConnectionFactory.UserName = value; }
         }
 
-        public void SetUserPassword(string password)
+        public string UserPassword
         {
-            TargetConnectionFactory.SetUserPassword(password);
+            set { TargetConnectionFactory.UserPassword = value; }
         }
 
         public FactoryLoadBalanceMetric Metric
@@ -461,20 +465,13 @@ namespace Spring.Messaging.Ems.Connections
             }
             if (this.exceptionListener != null || this.reconnectOnException)
             {
-                IExceptionListener listenertoUse = this.exceptionListener;
-
+                IExceptionListener listenerToUse = this.exceptionListener;
+                if (reconnectOnException)
+                {
+                    listenerToUse = new InternalChainedExceptionListener(this, listenerToUse);
+                }
+                con.ExceptionListener = listenerToUse;
             }
-            /*
-            if (reconnectOnException)
-            {
-                //add reconnect exception handler first to exception chain.
-                
-                con.ExceptionListener += new ExceptionHandler(this.OnException);
-            }
-            if (ExceptionListener != null)
-            {
-                con.ExceptionListener += new ExceptionListener(ExceptionListener.OnException);                
-            }*/
         }
 
         /// <summary>

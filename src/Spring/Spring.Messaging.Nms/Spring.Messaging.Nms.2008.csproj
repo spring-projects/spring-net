@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AEB1578C-9018-4D49-B440-789F38DD2F29}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -48,6 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Messaging\Nms\Config\MessageListenerContainerObjectDefinitionParser.cs" />
     <Compile Include="Messaging\Nms\Config\NmsNamespaceParser.cs" />
     <Compile Include="Messaging\Nms\Connections\CachedMessageConsumer .cs" />

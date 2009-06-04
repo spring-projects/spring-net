@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2008 the original author or authors.
+ * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,28 +19,48 @@
 #endregion
 
 using System;
-using Apache.NMS;
+using Spring.Messaging.Ems.Common;
+using TIBCO.EMS;
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Ems.Connections
 {
     public class TestMessageConsumer : IMessageConsumer
     {
 
-        public event MessageListener Listener;
+        private IMessageListener messageListener;
 
-        public IMessage Receive()
+        public Message Receive()
         {
             throw new NotImplementedException();
         }
 
-        public IMessage Receive(TimeSpan timeout)
+        public Message Receive(long timeout)
         {
             throw new NotImplementedException();
         }
 
-        public IMessage ReceiveNoWait()
+
+        public Message ReceiveNoWait()
         {
             throw new NotImplementedException();
+        }
+
+        public MessageConsumer NativeMessageConsumer
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public event EMSMessageHandler MessageHandler;
+
+        public IMessageListener MessageListener
+        {
+            get { return messageListener; }
+            set { messageListener = value; }
+        }
+
+        public string MessageSelector
+        {
+            get { throw new NotImplementedException(); }
         }
 
         public void Close()
@@ -48,9 +68,5 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

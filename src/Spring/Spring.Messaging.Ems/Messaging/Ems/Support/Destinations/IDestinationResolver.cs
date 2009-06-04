@@ -39,7 +39,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public interface DestinationResolver
+    public interface IDestinationResolver
     {
         /// <summary> Resolve the given destination name, either as located resource
         /// or as dynamic destination.
