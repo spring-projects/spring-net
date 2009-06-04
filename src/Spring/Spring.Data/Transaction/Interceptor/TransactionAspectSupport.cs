@@ -366,8 +366,8 @@ namespace Spring.Transaction.Interceptor
 	            // the ThreadLocal stack maintained in this class.
 	            if (log.IsDebugEnabled)
 	            {
-                    log.Debug("Don't need to create transaction for [" + joinpointIdentification +
-	                          "]: this method isn't transactional");
+                    log.Debug("Skipping transactional joinpoint [" + joinpointIdentification +
+                              "] because no transaction manager has been configured");
 	            }
 	        }
 
@@ -409,7 +409,7 @@ namespace Spring.Transaction.Interceptor
 
 			    if (log.IsDebugEnabled) 
 			    {
-			        log.Debug("Invoking commit for transaction on " + transactionInfo.JoinpointIdentification);
+                    log.Debug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "]");
 			    }
 
 			    #endregion
