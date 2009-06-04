@@ -341,7 +341,7 @@
                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/&gt;
 
     &lt;object id="TransactionManager" 
-            type="Spring.Data.AdoPlatformTransactionManager, Spring.Data"&gt;            
+            type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data"&gt;            
         &lt;property name="DbProvider" ref="DbProvider"/&gt;
     &lt;/object&gt;
 
@@ -354,7 +354,7 @@
     just as easily, as shown in the following example</para>
 
     <programlisting language="myxml">    &lt;object id="TransactionManager"
-            type="Spring.Data.TxScopeTransactionManager, Spring.Data"&gt;
+            type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data"&gt;
     &lt;/object&gt;</programlisting>
 
     <para>Similarly for the HibernateTransactionManager as shown in the
@@ -758,7 +758,7 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
                   connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/&gt;
 
     &lt;object id="transactionManager" 
-            type="Spring.Data.AdoPlatformTransactionManager, Spring.Data"&gt;
+            type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data"&gt;
             
         &lt;property name="DbProvider" ref="DbProvider"/&gt;
     &lt;/object&gt;
@@ -976,7 +976,7 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
                   connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/&gt;
 
     &lt;object id="transactionManager" 
-            type="Spring.Data.AdoPlatformTransactionManager, Spring.Data"&gt;
+            type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data"&gt;
             
         &lt;property name="DbProvider" ref="DbProvider"/&gt;
     &lt;/object&gt;

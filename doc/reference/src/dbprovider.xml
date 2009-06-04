@@ -358,7 +358,7 @@
       provider="System.Data.SqlClient" 
       connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/&gt;
   
-  &lt;object id="adoTemplate" type="Spring.Data.AdoTemplate, Spring.Data"&gt;  
+  &lt;object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data"&gt;  
     &lt;property name="DbProvider" ref="DbProvider"/&gt;                
   &lt;/object&gt;
 
@@ -441,7 +441,7 @@
       provider="System.Data.SqlClient" 
       connectionString="${db.datasource};Database=${db.database};User ID=${db.user};Password=${db.password};Trusted_Connection=False"/&gt;
   
-  &lt;object id="adoTemplate" type="Spring.Data.AdoTemplate, Spring.Data"&gt;  
+  &lt;object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data"&gt;  
     &lt;property name="DbProvider" ref="DbProvider"/&gt;                
   &lt;/object&gt;
 
