@@ -50,9 +50,6 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity
                                                                              typeof (VelocityEngineFactoryObjectTests)));
             VelocityEngine velocityEngine = appContext.GetObject("velocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine);
-
-
-                 
         }
     }
 }

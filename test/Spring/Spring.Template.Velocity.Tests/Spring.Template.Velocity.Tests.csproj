@@ -64,7 +64,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Template\Velocity\VelocityEngineFactoryObjectTests.xml" />
+    <EmbeddedResource Include="Template\Velocity\VelocityEngineFactoryObjectTests.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
