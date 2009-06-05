@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Template.Velocity.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Template.Velocity.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 	<!--
         Required properties:
             * current.bin.dir           - (path) root level to build to
@@ -22,8 +22,12 @@
 			</sources>
 			<references basedir="${current.bin.dir}">
 				<include name="*.dll" />
+				<include name="Nvelocity.dll" />
 				<exclude name="${project::get-name()}.dll" />
-			</references>
+			</references>			
+			<resources basedir="." prefix="Spring.Template.Velocity.Tests" dynamicprefix="true" failonempty="true">
+				<include name="**/*.xml" />		
+			</resources>
 		</csc>
 		<copy todir="${current.bin.dir}">
 			<fileset basedir="${project::get-name()}/Data">
