@@ -26,34 +26,55 @@ using NVelocity.Runtime.Resource;
 using NVelocity.Runtime.Resource.Loader;
 using Spring.Core.IO;
 
-namespace Spring.Template.Velocity
-{
+namespace Spring.Template.Velocity {
     /// <summary>
-    /// Velocity ResourceLoader adapter that loads via a Spring IResourceLoader.
-    /// Used by VelocityEngineFactory for any resource loader path that cannot
-    /// be resolved to a File
-    ///
-    /// <p>Take notoce that this loader does not allow for modification detection:
-    /// Use Velocity's default FileResourceLoader for File resources.
-    ///
-    /// <p>Expects "spring.resource.loader" and "spring.resource.loader.path"
-    /// application attributes in the Velocity runtime: the former of type
-    /// <code>IResourceLoader</code>, the latter a String.
+    /// NVelocity's abstract ResourceLoader extension which serves
+    ///  as an adapter that loads templates  via a Spring IResourceLoader. 
+    /// 
+    /// <br/>
+    /// Used by VelocityEngineFactory for any resource loader path that 
+    /// cannot be resolved to a File or an Assembly or for 
+    /// implementations which rely on spring's IResourceLoader 
+    /// mechanism.
+    /// 
+    /// <br/>
+    /// <b>Important</b>: this loader does not allow for modification detection.
+    ///<br/>
+    /// Expects "spring.resource.loader" (IResourceLoader implementations) 
+    /// and "spring.resource.loader.path" application attributes in the 
+    /// NVelocity runtime.
     /// </summary>
     /// <see cref="VelocityEngineFactory.ResourceLoaderPath"/>
     /// <see cref="IResourceLoader"/>
     /// <see cref="FileResourceLoader"/>
+    /// <see cref="ResourceLoader"/>
+    /// <see cref="AssemblyResourceLoader"/>
     /// <author>Erez Mazor (.NET) </author>
     public class SpringResourceLoader : ResourceLoader {
-        public static readonly string NAME = "spring";
+        ///<summary>
+        /// Prefix used for the NVelocity Configuration
+        ///</summary>
+        public const string NAME = "spring";
 
-        public static readonly string SPRING_RESOURCE_LOADER_CLASS = "spring.resource.loader.class";
+        /// <summary>
+        /// The IResourceLoader implementation type
+        /// </summary>
+        public const string SPRING_RESOURCE_LOADER_CLASS = "spring.resource.loader.class";
 
-        public static readonly string SPRING_RESOURCE_LOADER_CACHE = "spring.resource.loader.cache";
+        /// <summary>
+        /// A flag indicating weather a template cache is used 
+        /// </summary>
+        public const string SPRING_RESOURCE_LOADER_CACHE = "spring.resource.loader.cache";
 
-        public static readonly string SPRING_RESOURCE_LOADER = "spring.resource.loader";
+        ///<summary>
+        /// Fully qualified name of the IResourceLoader implementation class
+        ///</summary>
+        public const string SPRING_RESOURCE_LOADER = "spring.resource.loader";
 
-        public static readonly string SPRING_RESOURCE_LOADER_PATH = "spring.resource.loader.path";
+        /// <summary>
+        /// A comma delimited list of paths used by the spring IResourceLoader implementation
+        /// </summary>
+        public const string SPRING_RESOURCE_LOADER_PATH = "spring.resource.loader.path";
 
         protected static readonly ILog log = LogManager.GetLogger(typeof(SpringResourceLoader));
 
@@ -65,14 +86,14 @@ namespace Spring.Template.Velocity
         /// <summary>
         /// Initialize the template loader with a resources class.
         /// </summary>
-        /// <param name="configuration">The configuration.</param>
+        /// <param name="configuration">The ExtendedProperties representing the Velocity configuration.</param>
         public override void Init(ExtendedProperties configuration) {
             resourceLoader = (IResourceLoader)rsvc.GetApplicationAttribute(SPRING_RESOURCE_LOADER);
             string resourceLoaderPath = (string)rsvc.GetApplicationAttribute(SPRING_RESOURCE_LOADER_PATH);
             if (resourceLoader == null) {
                 throw new ArgumentException("'resourceLoader' application attribute must be present for SpringResourceLoader");
             }
-            if (resourceLoaderPath == null) {
+            if (null == resourceLoaderPath) {
                 throw new ArgumentException("'resourceLoaderPath' application attribute must be present for SpringResourceLoader");
             }
             resourceLoaderPaths = resourceLoaderPath.Split(',');
@@ -88,17 +109,17 @@ namespace Spring.Template.Velocity
         }
 
         /// <summary>
-        /// Get the InputStream that the Runtime will parse to create a template.
+        /// Get the <code>System.IO.Stream</code> that the Runtime will parse to create a template.
         /// </summary>
-        /// <param name="source">The source.</param>
-        /// <returns></returns>
+        /// <param name="source">the source template name</param>
+        /// <returns>a System.IO.Stream representation of the resource</returns>
         public override Stream GetResourceStream(string source) {
             if (log.IsDebugEnabled) {
                 log.Debug(string.Format("Looking for Velocity resource with name [{0}]", source));
             }
-            for (int i = 0; i < resourceLoaderPaths.Length; i++) {
-                IResource resource =
-                    resourceLoader.GetResource(resourceLoaderPaths[i] + source);
+
+            foreach (string resourceLoaderPath in resourceLoaderPaths){
+                IResource resource = resourceLoader.GetResource(resourceLoaderPath + source);
                 try {
                     return resource.InputStream;
                 } catch (IOException ex) {

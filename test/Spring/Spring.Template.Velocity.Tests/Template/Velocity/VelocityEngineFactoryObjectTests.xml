@@ -1,15 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <objects xmlns="http://www.springframework.net">
-    <object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity">
+
+    <!-- Does file system access with hot tracking  with NVelocity assembly resource loader -->
+    <object id="assemblyBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity">
         <property name="VelocityProperties">
             <dictionary key-type="string" value-type="object">
                 <entry key="resource.loader" value="assembly"/>
                 <entry key="assembly.resource.loader.class" value="NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader"/>
-                <entry key="assembly.resource.loader.assembly" value="MyAssembly"/>
-                <entry key="resource.manager.class" value="NVelocity.Runtime.Resource.ResourceManagerImpl"/>
-                <entry key="directive.manager" value="NVelocity.Runtime.Directive.DirectiveManager"/>
-                <entry key="runtime.introspector.uberspect" value="NVelocity.Util.Introspection.UberspectImpl"/>
+                <entry key="assembly.resource.loader.assembly" value="Spring.Template.Velocity.Tests"/>
             </dictionary>
         </property>
     </object>
+
+    <!-- Simple no arg file based configuration use's NVeclocity default file resource loader  -->
+    <object id="fileBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" />
+
+    <!-- File based NVelocity resource loader, directory based configuration-->
+    <object id="pathBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" >
+        <property name="ResourceLoaderPath " value="Template/Velocity/" />
+        <!--
+        <property name="ResourceLoaderPaths" >
+            <list>
+                <value>Path1</value>
+                <value>Path2</value>
+            </list>
+        </property>
+        -->
+    </object>
+
+    <!-- Configuration comes from a properties file -->
+    <object id="propertiesFileBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" >
+        <property name="ConfigLocation " value="file://Template/Velocity/config.properties" />
+    </object>
+
+    <!-- Use (ConfigurableResourceLoader) spring resource abstraction for templates that are not file or assembly based  -->
+    <object id="springResourceLoaderBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" >
+        <!--<property name="ResourceLoaderPath " value="http://somesite/template.vm" />-->
+        <property name="ResourceLoaderPath " value="Template/Velocity/" />
+        <property name="PreferFileSystemAccess " value="false" />
+    </object>
+
 </objects>

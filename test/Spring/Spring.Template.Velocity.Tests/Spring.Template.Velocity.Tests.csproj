@@ -67,6 +67,16 @@
     <EmbeddedResource Include="Template\Velocity\VelocityEngineFactoryObjectTests.xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Template\Velocity\SimpleTemplate.vm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Template\Velocity\config.properties">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

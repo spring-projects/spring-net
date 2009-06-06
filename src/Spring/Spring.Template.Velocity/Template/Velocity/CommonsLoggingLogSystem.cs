@@ -27,24 +27,24 @@ using LogManager=Common.Logging.LogManager;
 namespace Spring.Template.Velocity
 {
     /// <summary>
-    /// Velocity LogSystem implementation for Jakarta Commons Logging. 
+    /// NVelocity LogSystem implementation for Commons Logging. 
     /// </summary>
     /// <author>Erez Mazor</author>
     public class CommonsLoggingLogSystem : ILogSystem {
         protected static readonly ILog log = LogManager.GetLogger(typeof(CommonsLoggingLogSystem));
 
         /// <summary>
-        /// Inits the specified runtime services.  No-op in current implementatin
+        /// Initializes the specified runtime services.  No-op in current implementatin
         /// </summary>
-        /// <param name="runtimeServices">The runtime services.</param>
+        /// <param name="runtimeServices">the runtime services.</param>
         public void Init(IRuntimeServices runtimeServices) {
         }
 
         /// <summary>
-        /// Log a velocity message using the commons logging system
+        /// Log a NVelocity message using the commons logging system
         /// </summary>
         /// <param name="level">LogLevel to match</param>
-        /// <param name="message">Message to log</param>
+        /// <param name="message">message to log</param>
         public void LogVelocityMessage(LogLevel level, string message) {
             switch (level) {
                 case LogLevel.Error:

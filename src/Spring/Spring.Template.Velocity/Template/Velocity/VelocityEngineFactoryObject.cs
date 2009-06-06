@@ -26,14 +26,14 @@ using Spring.Objects.Factory;
 namespace Spring.Template.Velocity
 {
     /// <summary>
-    /// FactoryObject implementation that configures a VelocityEngine and provides it as an object
-    /// reference. This object is intended for any kind of usage of Velocity in
+    /// FactoryObject implementation that configures a VelocityEngine and provides it 
+    /// as an object reference. This object is intended for any kind of usage of Velocity in
     /// application code, e.g. for generating email content. 
     ///
     /// See the base class VelocityEngineFactory for configuration details.
     /// </summary>
     /// <see cref="VelocityEngineFactory"/>
-    /// <author>Erez Mazor (.NET) </author>
+    /// <author>Erez Mazor</author>
     public class VelocityEngineFactoryObject : VelocityEngineFactory, IFactoryObject, IInitializingObject, IResourceLoaderAware {
         private VelocityEngine velocityEngine;
         /// <summary>
@@ -53,7 +53,7 @@ namespace Spring.Template.Velocity
         }
 
         /// <summary>
-        /// Returns true
+        /// Singleton
         /// </summary>
         public bool IsSingleton {
             get { return true; }
