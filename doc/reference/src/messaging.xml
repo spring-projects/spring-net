@@ -529,7 +529,7 @@
                               IMapMessage message = session.CreateMapMessage();
                               message.Body.SetString("TICKER", ticker);
                               message.Body.SetDouble("PRICE", price);
-                              message.NMSPriority = 2;
+                              message.NMSPriority = MsgPriority.Low;
                               return message;
                           });
         }
@@ -653,7 +653,7 @@
   template.ConvertAndSendWithDelegate("APP.STOCK.MARKETDATA", marketData, 
            delegate(IMessage message)
            { 
-             message.NMSPriority = 2;
+             message.NMSPriority = MsgPriority.Low;
              message.NMSCorrelationID = new Guid().ToString();
              return message;
            });
