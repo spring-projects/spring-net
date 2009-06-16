@@ -20,6 +20,16 @@ Spring.Core
 2. XmlReaderContext constructor now requires an IObjectDefinitionFactory to be specified. Thus XmlReaderContext.ObjectDefinitionFactory
    is read only now.
 
+3. Changes to the Apache NMS API, which was not yet a public release when included in Spring 1.2.0 made breaking API changes.  
+   On NmsTemlate,
+
+   1) The property 'byte Priority' was changed to 'MsgPriority Priority'
+   2) The property 'bool Persistent' is no longer part of the NMS API but is still supported in a backward compatible
+      manner by Spring by translation to standard MsgDeliveryMode enumeration values of Persistent and NonPersistent.
+      A new property MsgDelivery has been added.  The class, CachedMessageProducer, which is unlikely to be use by 
+      end users, was directly upgraded to the latest API without any backwards compatibility support.
+
+
 Changes (1.1.2 to 1.2 RC1 or greater)
 
 Spring.Core
