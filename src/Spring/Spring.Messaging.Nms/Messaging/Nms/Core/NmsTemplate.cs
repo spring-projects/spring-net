@@ -80,12 +80,12 @@ namespace Spring.Messaging.Nms.Core
 
         private bool explicitQosEnabled = false;
 
-        private byte priority = NMSConstants.defaultPriority;
-		
-		private bool persistent = NMSConstants.defaultPersistence;
-		
-		private TimeSpan timeToLive;
-		        
+        private MsgPriority priority = NMSConstants.defaultPriority;	
+
+        private TimeSpan timeToLive;
+
+        private MsgDeliveryMode deliveryMode = NMSConstants.defaultDeliveryMode;
+
         #endregion
 
         #region Constructor (s)
@@ -319,9 +319,27 @@ namespace Spring.Messaging.Nms.Core
         /// <value><c>true</c> if [delivery persistent]; otherwise, <c>false</c>.</value>
         virtual public bool Persistent
         {
-			get { return persistent; }
+			get { return (deliveryMode == MsgDeliveryMode.Persistent); }
 			
-            set { persistent = value; }
+            set
+            {
+                if (value) {
+                    deliveryMode = MsgDeliveryMode.Persistent;
+                } else {
+                    deliveryMode = MsgDeliveryMode.NonPersistent;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating what DeliveryMode this <see cref="CachedMessageProducer"/> 
+        /// should use, for example a persistent QOS
+        /// </summary>
+        /// <value><see cref="MsgDeliveryMode"/></value>
+        virtual public MsgDeliveryMode DeliveryMode
+        {
+            get { return deliveryMode;  }
+            set { deliveryMode = value; }
         }
 
         /// <summary>
@@ -330,7 +348,7 @@ namespace Spring.Messaging.Nms.Core
         /// <remarks>Since a default value may be defined administratively,
         /// this is only used when "isExplicitQosEnabled" equals "true".</remarks>
         /// <value>The priority.</value>
-        virtual public byte Priority
+        virtual public MsgPriority Priority
         {
             get { return priority; }
 
@@ -568,7 +586,7 @@ namespace Spring.Messaging.Nms.Core
         {
             if (ExplicitQosEnabled)
             {
-                producer.Send(message, Persistent, Priority, TimeToLive);
+                producer.Send(message, DeliveryMode, Priority, TimeToLive);
             }
             else
             {

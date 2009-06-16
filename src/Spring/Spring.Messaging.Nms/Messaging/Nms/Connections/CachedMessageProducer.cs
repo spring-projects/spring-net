@@ -37,9 +37,9 @@ namespace Spring.Messaging.Nms.Connections
 
         private object originalDisableMessageTimestamp = null;
 
-        private bool persistent;
+        private MsgDeliveryMode msgDeliveryMode;
 
-        private byte priority;
+        private MsgPriority priority;
 
         private TimeSpan timeToLive;
 
@@ -53,7 +53,7 @@ namespace Spring.Messaging.Nms.Connections
         public CachedMessageProducer(IMessageProducer target)
         {
             this.target = target;
-            this.persistent = target.Persistent;
+            this.msgDeliveryMode = target.DeliveryMode;
             this.priority = target.Priority;
             this.timeToLive = target.TimeToLive;
         }
@@ -81,12 +81,12 @@ namespace Spring.Messaging.Nms.Connections
         /// Sends a message to the specified message.
         /// </summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="persistent">if set to <c>true</c> use persistent QOS.</param>
+        /// <param name="deliveryMode">The QOS to use for sending <see cref="msgDeliveryMode"/>.</param>
         /// <param name="priority">The message priority.</param>
         /// <param name="timeToLive">The time to live.</param>
-        public void Send(IMessage message, bool persistent, byte priority, TimeSpan timeToLive)
+        public void Send(IMessage message, MsgDeliveryMode deliveryMode, MsgPriority priority, TimeSpan timeToLive)
         {
-           target.Send(message, persistent, priority, timeToLive);
+           target.Send(message, deliveryMode, priority, timeToLive);
         }
 
         /// <summary>
@@ -104,12 +104,12 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="message">The message to send.</param>
-        /// <param name="persistent">if set to <c>true</c> use persistent QOS.</param>
+        /// <param name="deliveryMode">The QOS to use for sending <see cref="msgDeliveryMode"/>.</param>
         /// <param name="priority">The priority.</param>
         /// <param name="timeToLive">The time to live.</param>
-        public void Send(IDestination destination, IMessage message, bool persistent, byte priority, TimeSpan timeToLive)
+        public void Send(IDestination destination, IMessage message, MsgDeliveryMode deliveryMode, MsgPriority priority, TimeSpan timeToLive)
         {
-            target.Send(destination, message, persistent, priority, timeToLive);
+            target.Send(destination, message, deliveryMode, priority, timeToLive);
         }
 
         #region Odd Message Creationg Methods on IMessageProducer - not in-line with JMS APIs.
@@ -181,13 +181,14 @@ namespace Spring.Messaging.Nms.Connections
         #endregion
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="CachedMessageProducer"/> uses a persistent QOS
+        /// Gets or sets a value indicating what DeliveryMode this <see cref="CachedMessageProducer"/> 
+        /// should use, for example a persistent QOS
         /// </summary>
-        /// <value><c>true</c> if persistent; otherwise, <c>false</c>.</value>
-        public bool Persistent
+        /// <value><see cref="MsgDeliveryMode"/></value>
+        public MsgDeliveryMode DeliveryMode
         {
-            get { return persistent; }
-            set { persistent = value; }
+            get { return msgDeliveryMode; }
+            set { msgDeliveryMode = value; }
         }
 
         /// <summary>
@@ -215,7 +216,7 @@ namespace Spring.Messaging.Nms.Connections
         /// Gets or sets the priority of messages sent with this producer.
         /// </summary>
         /// <value>The priority.</value>
-        public byte Priority
+        public MsgPriority Priority
         {
             get { return priority; }
             set { priority = value;}
