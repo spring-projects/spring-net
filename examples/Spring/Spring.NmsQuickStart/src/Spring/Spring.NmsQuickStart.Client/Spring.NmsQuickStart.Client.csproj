@@ -49,7 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gateways\IStockService.cs" />
-    <Compile Include="Gateways\NmsStockServiceGateway.cs" />
+    <Compile Include="Gateways\NmsStockServiceGateway.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Gateways\RequestReplyNmsTemplate.cs" />
     <Compile Include="Handlers\StockAppHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
