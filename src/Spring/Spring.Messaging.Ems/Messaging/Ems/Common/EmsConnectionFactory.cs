@@ -18,15 +18,24 @@
 
 #endregion
 
+using System;
 using System.IO;
 using System.Runtime.Serialization;
+using Spring.Objects.Factory;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Common
 {
-    public class EmsConnectionFactory : IConnectionFactory
+    public class EmsConnectionFactory : IConnectionFactory, IInitializingObject
     {
         private ConnectionFactory nativeConnectionFactory;
+        private string sslProxyAuthUsername;
+        private string sslProxyAuthPassword;
+
+        private string sslProxyHost; 
+        private int sslProxyPort;
+
+
 
         public EmsConnectionFactory(ConnectionFactory nativeConnectionFactory)
         {
@@ -78,7 +87,8 @@ namespace Spring.Messaging.Ems.Common
 
         public string SSLProxyHost
         {
-            get { return nativeConnectionFactory.GetSSLProxyHost(); }
+            get { return this.sslProxyHost; }
+            set { this.sslProxyHost = value; }
         }
 
         public string SSLProxyPassword
@@ -88,7 +98,8 @@ namespace Spring.Messaging.Ems.Common
 
         public int SSLProxyPort
         {
-            get { return nativeConnectionFactory.GetSSLProxyPort(); }
+            get { return this.sslProxyPort; }
+            set { this.sslProxyPort = value; }
         }
 
         public string SSLProxyUser
@@ -96,9 +107,23 @@ namespace Spring.Messaging.Ems.Common
             get { return nativeConnectionFactory.GetSSLProxyUser(); }
         }
 
-        public void SetCertificateStoreType(EMSSSLStoreType type, object storeInfo)
+        public IEmsSSLStoreType CertificateStoreType
         {
-            nativeConnectionFactory.SetCertificateStoreType(type, storeInfo);
+            set
+            {
+                if (value is EmsSSLFileStoreInfo)
+                {
+                    EmsSSLFileStoreInfo emsSslFileStoreInfo = (EmsSSLFileStoreInfo) value;
+                    nativeConnectionFactory.SetCertificateStoreType(EMSSSLStoreType.EMSSSL_STORE_TYPE_FILE, emsSslFileStoreInfo.NativeEmsSslFileStoreInfo);
+                } else if (value is EmsSSLSystemStoreInfo)
+                {
+                    EmsSSLSystemStoreInfo info = (EmsSSLSystemStoreInfo) value;
+                    nativeConnectionFactory.SetCertificateStoreType(EMSSSLStoreType.EMSSSL_STORE_TYPE_SYSTEM, info.NativeEmssslSystemStoreInfo);
+                } else
+                {
+                    throw new ArgumentException("IEmsSSLStoreType of type [" + value.GetType() + "], not supported.");
+                }
+            }
         }
 
         public string ClientID
@@ -176,9 +201,16 @@ namespace Spring.Messaging.Ems.Common
             nativeConnectionFactory.SetSSLProxy(host, port);
         }
 
-        public string[] SSLProxyAuth
+        public string SSLProxyAuthUsername
         {
-            set { nativeConnectionFactory.SetSSLProxyAuth(value[0], value[1]); }
+            set { this.sslProxyAuthUsername = value;  }
+            get { return this.sslProxyAuthUsername;   }
+        }
+
+        public string SSLProxyAuthPassword
+        {
+            set { this.sslProxyAuthPassword = value; }
+            get { return this.sslProxyAuthPassword;  }
         }
 
         public bool SSLTrace
@@ -210,6 +242,16 @@ namespace Spring.Messaging.Ems.Common
             set {
                 nativeConnectionFactory.Metric = value;
             }
+        }
+
+        #endregion
+
+        #region Implementation of IInitializingObject
+
+        public void AfterPropertiesSet()
+        {
+            nativeConnectionFactory.SetSSLProxyAuth(this.sslProxyAuthUsername, this.sslProxyAuthPassword);
+            nativeConnectionFactory.SetSSLProxy(this.sslProxyHost, this.sslProxyPort);
         }
 
         #endregion

@@ -32,13 +32,12 @@ namespace Spring.Messaging.Ems.Common
         IConnection CreateConnection();
         IConnection CreateConnection(string userName, string password);
         object CertificateStore { get; }
-        string SSLProxyHost { get; }
+        string SSLProxyHost { set;  get; }
+        int SSLProxyPort { set; get; }
         string SSLProxyPassword { get; }
-        int SSLProxyPort { get; }
         string SSLProxyUser { get; }
 
-        void SetCertificateStoreType(EMSSSLStoreType type, object storeInfo);
-
+        IEmsSSLStoreType CertificateStoreType { set;  }
         string ClientID { set; }
         StreamWriter ClientTracer { set; }
         int ConnAttemptCount { set; }
@@ -56,10 +55,10 @@ namespace Spring.Messaging.Ems.Common
         int ReconnAttemptTimeout { set; }
         string ServerUrl { set; }
         bool SSLAuthOnly { set; }
-        
-        void SetSSLProxy(string host, int port);
 
-        string[] SSLProxyAuth { set; }
+
+        string SSLProxyAuthUsername { set; get; }
+        string SSLProxyAuthPassword { set; get; }
 
         bool SSLTrace { set; }
         string TargetHostName { set; }

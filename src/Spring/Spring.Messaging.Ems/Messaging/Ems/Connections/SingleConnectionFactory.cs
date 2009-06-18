@@ -98,7 +98,6 @@ namespace Spring.Messaging.Ems.Connections
         /// </summary>
         private object connectionMonitor = new object();
 
-
         #endregion
 
         #region Constructors
@@ -259,19 +258,10 @@ namespace Spring.Messaging.Ems.Connections
             get { return TargetConnectionFactory.CertificateStore; }
         }
 
-        public string SSLProxyHost
-        {
-            get { return TargetConnectionFactory.SSLProxyHost; }
-        }
 
         public string SSLProxyPassword
         {
             get { return TargetConnectionFactory.SSLProxyPassword; }
-        }
-
-        public int SSLProxyPort
-        {
-            get { return TargetConnectionFactory.SSLProxyPort; }
         }
 
         public string SSLProxyUser
@@ -279,9 +269,9 @@ namespace Spring.Messaging.Ems.Connections
             get { return TargetConnectionFactory.SSLProxyUser; }
         }
 
-        public void SetCertificateStoreType(EMSSSLStoreType type, object storeInfo)
+        public IEmsSSLStoreType CertificateStoreType
         {
-            TargetConnectionFactory.SetCertificateStoreType(type, storeInfo);
+            set { TargetConnectionFactory.CertificateStoreType = value; }
         }
 
         public string ClientID
@@ -358,14 +348,28 @@ namespace Spring.Messaging.Ems.Connections
             set { TargetConnectionFactory.SSLAuthOnly = value; }
         }
 
-        public void SetSSLProxy(string host, int port)
+        public string SSLProxyHost
         {
-            TargetConnectionFactory.SetSSLProxy(host, port);
+            get { return TargetConnectionFactory.SSLProxyHost; }
+            set { TargetConnectionFactory.SSLProxyHost = value; }
+        }
+        
+        public int SSLProxyPort
+        {
+            get { return TargetConnectionFactory.SSLProxyPort;}
+            set { TargetConnectionFactory.SSLProxyPort = value; }
         }
 
-        public string[] SSLProxyAuth
+        public string SSLProxyAuthUsername
         {
-            set { TargetConnectionFactory.SSLProxyAuth = value; }
+            set { TargetConnectionFactory.SSLProxyAuthUsername = value; }
+            get { return TargetConnectionFactory.SSLProxyAuthUsername;  }
+        }
+
+        public string SSLProxyAuthPassword
+        {
+            set { TargetConnectionFactory.SSLProxyAuthPassword = value; }
+            get { return TargetConnectionFactory.SSLProxyAuthPassword;  }
         }
 
         public bool SSLTrace
@@ -395,6 +399,8 @@ namespace Spring.Messaging.Ems.Connections
         }
 
         #endregion
+
+
 
         #region Implementation of ISerializable
 
@@ -537,6 +543,10 @@ namespace Spring.Messaging.Ems.Connections
             {
                 throw new ArgumentException("Connection or 'TargetConnectionFactory' is required.");
             }
+            // Note this is repeated in EmsConnectionFactory as this class only referes to IConnectionFactory and 
+            // IConnectionFactory does not implement the spring specific lifecycle interface IInitializingObject
+            TargetConnectionFactory.NativeConnectionFactory.SetSSLProxyAuth(SSLProxyAuthUsername, SSLProxyAuthPassword);
+            TargetConnectionFactory.NativeConnectionFactory.SetSSLProxy(SSLProxyHost, SSLProxyPort);
         }
 
         #endregion
