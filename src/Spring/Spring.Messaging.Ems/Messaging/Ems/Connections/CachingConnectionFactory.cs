@@ -42,7 +42,7 @@ namespace Spring.Messaging.Ems.Connections
     /// <para>
     /// NOTE: This ConnectionFactory requires explicit closing of all Sessions
     /// obtained from its shared Connection. This is the usual recommendation for
-    /// native NMS access code anyway. However, with this ConnectionFactory, its use
+    /// native EMS access code anyway. However, with this ConnectionFactory, its use
     /// is mandatory in order to actually allow for Session reuse.
     /// </para>
     /// <para>
@@ -143,7 +143,7 @@ namespace Spring.Messaging.Ems.Connections
 
         /// <summary>
         /// Gets or sets a value indicating whether o cache JMS MessageConsumers per 
-        /// NMS Session instance. 
+        /// EMS Session instance. 
         /// </summary>
         /// <remarks>
         /// Mmore specifically: one MessageConsumer per Destination, selector String
@@ -192,7 +192,7 @@ namespace Spring.Messaging.Ems.Connections
                             }
                             catch (Exception ex)
                             {
-                                LOG.Trace("Could not close cached NMS Session", ex);
+                                LOG.Trace("Could not close cached EMS Session", ex);
                             }
                         }
                     }

@@ -164,7 +164,7 @@ namespace Spring.Messaging.Ems.Connections
 
         /// <summary>
         /// Gets or sets a value indicating whether the single Connection
-        /// should be reset (to be subsequently renewed) when a NMSException
+        /// should be reset (to be subsequently renewed) when a EMSException
         /// is reported by the underlying Connection.
         /// </summary>
         /// <remarks>
@@ -441,7 +441,7 @@ namespace Spring.Messaging.Ems.Connections
                 PrepareConnection(this.target);
                 if (LOG.IsDebugEnabled)
                 {
-                    LOG.Info("Established shared NMS Connection: " + this.target);
+                    LOG.Info("Established shared EMS Connection: " + this.target);
                 }
                 this.connection = GetSharedConnection(target);
             }
@@ -462,7 +462,7 @@ namespace Spring.Messaging.Ems.Connections
 	    /// Can be overridden in subclasses.
         /// </summary>
         /// <param name="con">The Connection to prepare.</param>
-        /// <exception cref="EMSException">if thrown by any NMS API methods.</exception>
+        /// <exception cref="EMSException">if thrown by any EMS API methods.</exception>
         protected virtual void PrepareConnection(IConnection con)
         {
             if (ClientId != null)
@@ -511,7 +511,7 @@ namespace Spring.Messaging.Ems.Connections
         {
             if (LOG.IsDebugEnabled)
             {
-                LOG.Debug("Closing shared NMS Connection: " + this.target);
+                LOG.Debug("Closing shared EMS Connection: " + this.target);
             }
             try
             {
@@ -528,7 +528,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
             } catch (Exception ex)
             {
-                LOG.Warn("Could not close shared NMS connection.", ex);
+                LOG.Warn("Could not close shared EMS connection.", ex);
             }
         }
 
@@ -630,7 +630,7 @@ namespace Spring.Messaging.Ems.Connections
         }
 
         /// <summary>
-        /// Add information to show this is a shared NMS connection
+        /// Add information to show this is a shared EMS connection
         /// </summary>
         /// <returns>Description of connection wrapper</returns>
         public override string ToString()

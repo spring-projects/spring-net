@@ -24,7 +24,7 @@ using Spring.Objects.Factory.Xml;
 namespace Spring.Messaging.Ems.Config
 {
     /// <summary>
-    /// Namespace parser for the nms namespace.
+    /// Namespace parser for the EMS namespace.
     /// </summary>
     /// <author>Mark Fisher</author>
     /// <author>Juergen Hoeller</author>

@@ -25,7 +25,7 @@ using TIBCO.EMS;
 namespace Spring.Messaging.Ems.Connections
 {
     /// <summary>
-    /// NMS MessageConsumer decorator that adapts all calls
+    /// EMS MessageConsumer decorator that adapts all calls
     /// to a shared MessageConsumer instance underneath.
     /// </summary>
     /// <author>Juergen Hoeller</author>

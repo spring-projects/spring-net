@@ -325,7 +325,7 @@ namespace Spring.Messaging.Ems.Listener
             {
                 if (consumers != null)
                 {
-                    logger.Debug("Closing NMS MessageConsumers");
+                    logger.Debug("Closing EMS MessageConsumers");
                     foreach (IMessageConsumer messageConsumer in consumers)
                     {
                         EmsUtils.CloseMessageConsumer(messageConsumer);
@@ -333,7 +333,7 @@ namespace Spring.Messaging.Ems.Listener
                 }
                 if (sessions != null)
                 {
-                    logger.Debug("Closing NMS Sessions");
+                    logger.Debug("Closing EMS Sessions");
                     foreach (ISession session in sessions)
                     {
                         EmsUtils.CloseSession(session);

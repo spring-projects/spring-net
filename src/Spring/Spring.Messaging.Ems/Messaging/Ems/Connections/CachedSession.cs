@@ -351,7 +351,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
                 if (LOG.IsDebugEnabled)
                 {
-                    LOG.Debug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                    LOG.Debug("Creating cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }
                 cachedConsumers[cacheKey] = consumer;
             }

@@ -31,13 +31,13 @@ namespace Spring.Messaging.Ems.Support.Converter
         }
 
         /// <summary>
-        /// Convert a .NET object to a NMS Message using the supplied session
+        /// Convert a .NET object to a EMS Message using the supplied session
         /// to create the message object.
         /// </summary>
         /// <param name="objectToConvert">the object to convert</param>
-        /// <param name="session">the Session to use for creating a NMS Message</param>
-        /// <returns>the NMS Message</returns>
-        /// <throws>NMSException if thrown by NMS API methods </throws>
+        /// <param name="session">the Session to use for creating a EMS Message</param>
+        /// <returns>the EMS Message</returns>
+        /// <throws>EMSException if thrown by EMS API methods </throws>
         /// <throws>MessageConversionException in case of conversion failure </throws>
         public Message ToMessage(object objectToConvert, ISession session)
         {
@@ -97,7 +97,7 @@ namespace Spring.Messaging.Ems.Support.Converter
         }
 
         /// <summary>
-        /// Convert from a NMS Message to a .NET object.
+        /// Convert from a EMS Message to a .NET object.
         /// </summary>
         /// <param name="messageToConvert">the message to convert</param>
         /// <returns>the converted .NET object</returns>

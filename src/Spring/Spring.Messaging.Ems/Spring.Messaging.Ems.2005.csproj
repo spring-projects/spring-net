@@ -60,14 +60,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\Ems\Common\CertificateStoreConfig.cs" />
     <Compile Include="Messaging\Ems\Common\EmsConnection.cs" />
     <Compile Include="Messaging\Ems\Common\EmsConnectionFactory.cs" />
     <Compile Include="Messaging\Ems\Common\EmsMessageConsumer.cs" />
     <Compile Include="Messaging\Ems\Common\EmsMessageProducer.cs" />
     <Compile Include="Messaging\Ems\Common\EmsSession.cs" />
+    <Compile Include="Messaging\Ems\Common\EmsSSLFileStoreInfo.cs" />
+    <Compile Include="Messaging\Ems\Common\EmsSSLSystemStoreInfo.cs" />
     <Compile Include="Messaging\Ems\Common\EmsTopicSubscriber.cs" />
     <Compile Include="Messaging\Ems\Common\IConnection.cs" />
     <Compile Include="Messaging\Ems\Common\IConnectionFactory.cs" />
+    <Compile Include="Messaging\Ems\Common\IEmsSSLStoreType.cs" />
     <Compile Include="Messaging\Ems\Common\IMessageConsumer.cs" />
     <Compile Include="Messaging\Ems\Common\IMessageProducer.cs" />
     <Compile Include="Messaging\Ems\Common\ISession.cs" />

@@ -1450,7 +1450,7 @@ namespace Spring.Messaging.Ems.Core
                 Destination destination = DefaultDestination;
                 if (!(destination is Queue))
                 {
-                    throw new InvalidOperationException("defaultDestination does not correspond to a Queue. Check configuration of NmsTemplate.");
+                    throw new InvalidOperationException("defaultDestination does not correspond to a Queue. Check configuration of EmsTemplate.");
                 }
                 return BrowseWithDelegate((Queue)destination, action);
             }
@@ -1499,7 +1499,7 @@ namespace Spring.Messaging.Ems.Core
                 Destination destination = DefaultDestination;
                 if (!(destination is Queue))
                 {
-                    throw new InvalidOperationException("defaultDestination does not correspond to a Queue. Check configuration of NmsTemplate.");
+                    throw new InvalidOperationException("defaultDestination does not correspond to a Queue. Check configuration of EmsTemplate.");
                 }
                 return BrowseSelectedWithDelegate((Queue)destination, messageSelector, action);
             }

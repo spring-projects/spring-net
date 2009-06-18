@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.IO;
 using System.Runtime.Serialization;
 using Spring.Objects.Factory;
@@ -35,7 +36,23 @@ namespace Spring.Messaging.Ems.Common
         private string sslProxyHost; 
         private int sslProxyPort;
 
+        public EmsConnectionFactory()
+        {
+            this.nativeConnectionFactory = new ConnectionFactory();
+        }
 
+        public EmsConnectionFactory(string serverUrl) : this(serverUrl, null, null)
+        {            
+        }
+
+        public EmsConnectionFactory(string serverUrl, string clientId) : this(serverUrl, clientId, null)
+        {
+        }
+
+        public EmsConnectionFactory(string serverUrl, string clientId, Hashtable properties)
+        {
+            this.nativeConnectionFactory = new ConnectionFactory(serverUrl, clientId, properties);
+        }
 
         public EmsConnectionFactory(ConnectionFactory nativeConnectionFactory)
         {
@@ -196,11 +213,6 @@ namespace Spring.Messaging.Ems.Common
             set { nativeConnectionFactory.SetSSLAuthOnly(value); }
         }
 
-        public void SetSSLProxy(string host, int port)
-        {
-            nativeConnectionFactory.SetSSLProxy(host, port);
-        }
-
         public string SSLProxyAuthUsername
         {
             set { this.sslProxyAuthUsername = value;  }
@@ -248,10 +260,17 @@ namespace Spring.Messaging.Ems.Common
 
         #region Implementation of IInitializingObject
 
-        public void AfterPropertiesSet()
-        {
-            nativeConnectionFactory.SetSSLProxyAuth(this.sslProxyAuthUsername, this.sslProxyAuthPassword);
-            nativeConnectionFactory.SetSSLProxy(this.sslProxyHost, this.sslProxyPort);
+        public void AfterPropertiesSet() {
+        
+            if (this.sslProxyAuthUsername != null && sslProxyAuthPassword != null)
+            {
+                nativeConnectionFactory.SetSSLProxyAuth(this.sslProxyAuthUsername, this.sslProxyAuthPassword);
+            }
+            if (sslProxyHost != null && sslProxyPort != null)
+            {
+                nativeConnectionFactory.SetSSLProxy(this.sslProxyHost, this.sslProxyPort);
+            }
+
         }
 
         #endregion
