@@ -568,6 +568,7 @@
     <Compile Include="Objects\Factory\Config\VariableAccessor.cs" />
     <Compile Include="Objects\Factory\Config\VariablePlaceholderConfigurer.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
+    <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
     <Compile Include="Objects\Factory\Support\ConstructorResolver.cs" />
     <Compile Include="Objects\Factory\Support\DefaultObjectNameGenerator.cs" />
@@ -579,6 +580,8 @@
     <Compile Include="Objects\Factory\Xml\AbstractObjectDefinitionParser.cs" />
     <Compile Include="Objects\Factory\Xml\AbstractSimpleObjectDefinitionParser.cs" />
     <Compile Include="Objects\Factory\Xml\AbstractSingleObjectDefinitionParser.cs" />
+    <Compile Include="Objects\Factory\Xml\DefaultNamespaceHandlerResolver.cs" />
+    <Compile Include="Objects\Factory\Xml\INamespaceParserResolver.cs" />
     <Compile Include="Objects\Factory\Xml\NamespaceParserAttribute.cs" />
     <Compile Include="Objects\Factory\Xml\ObjectFactorySectionHandler.cs" />
     <Compile Include="Objects\Factory\Xml\DocumentDefaultsDefinition.cs" />
@@ -987,10 +990,12 @@
     <Compile Include="Util\ConfigXmlDocument.cs" />
     <Compile Include="Util\ConfigXmlElement.cs" />
     <Compile Include="Util\FatalReflectionException.cs" />
+    <Compile Include="Util\IChainableConfigSystem.cs" />
     <Compile Include="Util\IoUtils.cs" />
     <Compile Include="Util\ITextPosition.cs" />
     <Compile Include="Util\ObjectUtils.cs" />
     <Compile Include="Util\ReflectionException.cs" />
+    <Compile Include="Util\SecurityCritical.cs" />
     <Compile Include="Util\SystemUtils.cs" />
     <Compile Include="Util\DynamicCodeManager.cs" />
     <Compile Include="Util\Generic\CollectionUtils.cs" />

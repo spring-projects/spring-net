@@ -20,7 +20,7 @@
 
 namespace Spring.EnterpriseServices
 {
-#if NET_2_0
+#if (NET_2_0 && !MONO)
     using System;
     using System.Configuration;
     using System.Reflection;

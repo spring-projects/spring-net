@@ -135,7 +135,8 @@ namespace Spring.Data.Common
         /// For providers that allow you to choose between binding parameters
         /// to a command by name (true) or by position (false).
         /// </summary>
-        bool BindByName { get;
+        bool BindByName { 
+            get;
             //TODO will go away when make all of this fully configuration driven.
             set; 
         }

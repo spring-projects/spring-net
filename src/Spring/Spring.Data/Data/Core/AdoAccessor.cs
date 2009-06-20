@@ -109,7 +109,7 @@ namespace Spring.Data.Core
         /// Prepare the command setting the transaction timeout.
         /// </summary>
         /// <param name="command"></param>
-        protected void ApplyCommandSettings(IDbCommand command)
+        protected virtual void ApplyCommandSettings(IDbCommand command)
         {
             ConnectionUtils.ApplyTransactionTimeout(command, DbProvider, CommandTimeout );
         }

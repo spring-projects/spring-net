@@ -134,7 +134,6 @@ namespace Spring.Data.Common
             this.dataAdapterType = dataAdapterType;
             this.commandBuilderType = commandBuilderType;
 
-            //TODO consider support for derive parameters via a stored procedure.
             if (commandBuilderDeriveParametersMethod.ToLower().Trim().Equals("not supported"))
             {
                 supportsDeriveParametersMethod = false;

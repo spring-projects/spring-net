@@ -26,7 +26,6 @@ using System.Data.SqlClient;
 using System.Drawing.Printing;
 using System.IO;
 using System.Net;
-//using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Permissions;
@@ -260,6 +259,7 @@ namespace Spring
             return null;
         }
 
+#if !MONO
         /// <summary>
         /// Loads the policy configuration from app.config configuration section
         /// </summary>
@@ -311,7 +311,7 @@ namespace Spring
             PolicyLevel domainPolicy = LoadDomainPolicyFromUri(new Uri(policyFileExpanded), appDirectory, trustSection.OriginUrl);
             return domainPolicy;
         }
-
+#endif
         /// <summary>
         /// Loads a policy from a file (<see cref="SecurityManager.LoadPolicyLevelFromFile"/>), 
         /// replacing placeholders  
@@ -398,7 +398,7 @@ namespace Spring
             }
             return SecurityManager.LoadPolicyLevelFromString(strXmlPolicy, PolicyLevelType.AppDomain);
         }
-
+#if !MONO
         private static string GetPolicyFilenameExpanded(TrustLevel trustLevel)
         {
             bool isRelative = true;
@@ -424,7 +424,7 @@ namespace Spring
             }
             return trustLevel.PolicyFile;
         }
-
+#endif
         [DllImport("mscorwks.dll", CharSet = CharSet.Unicode)]
         private static extern int GetCachePath(int dwCacheFlags, StringBuilder pwzCachePath, ref int pcchPath);
 

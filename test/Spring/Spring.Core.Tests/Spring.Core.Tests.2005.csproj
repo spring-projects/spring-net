@@ -648,6 +648,7 @@
     <Compile Include="Reflection\Dynamic\DynamicPropertyTests.cs" />
     <Compile Include="Reflection\Dynamic\SafeFieldTests.cs" />
     <Compile Include="Reflection\Dynamic\SafePropertyTests.cs" />
+    <Compile Include="SecurityTemplate.cs" />
     <Compile Include="StandardsComplianceTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -655,6 +656,7 @@
     <Compile Include="StreamHelperDecorator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestResourceLoader.cs" />
     <Compile Include="Threading\AsyncTestMethod.cs" />
     <Compile Include="Threading\AsyncTestTask.cs" />
     <Compile Include="Threading\CallContextStorageTests.cs" />
@@ -671,6 +673,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\CollectionUtilsTests.cs" />
+    <Compile Include="Util\ConfigXmlDocumentTests.cs" />
     <Compile Include="Util\ObjectUtilsTests.cs" />
     <Compile Include="Util\PatternMatchUtilsTests.cs" />
     <Compile Include="Util\DefensiveEventRaiserTests.cs">
@@ -710,9 +713,6 @@
     <Compile Include="Validation\ExclusiveValidatorGroupTests.cs" />
     <Compile Include="Validation\HelperClasses.cs" />
     <Compile Include="Validation\ValidationExceptionTests.cs" />
-    <Compile Include="Validation\ValidationConfigParserTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Validation\ValidationErrorsTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -827,6 +827,7 @@
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithAllRequiredPropertiesProvided.xml" />
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithCustomAttribute.xml" />
     <Content Include="Spring.Core.Tests.dll.config" />
+    <Content Include="Util\ConfigXmlDocumentTests_SampleConfig.xml" />
     <EmbeddedResource Include="Context\contextlifecycle.xml" />
     <EmbeddedResource Include="Context\Support\objects.xml" />
     <EmbeddedResource Include="Objects\Factory\TestResource.txt" />

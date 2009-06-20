@@ -171,7 +171,6 @@ namespace Spring.Data.Common
         public int Add(object parameterValue)
         {
             IDbDataParameter parameter = dbCommand.CreateParameter();
-            //TODO investigate default behavior of values.
             parameter.Value = (parameterValue == null) ? DBNull.Value : parameterValue;
             dataParameterCollection.Add(parameter);
             return dataParameterCollection.Count - 1;
@@ -297,7 +296,6 @@ namespace Spring.Data.Common
             {
                 propertyInfo.SetValue(parameter, isNullable, null);
             }
-            //TODO investigate default behavior.
             if (parameter.Value == null)
             {
                 parameter.Value = DBNull.Value;

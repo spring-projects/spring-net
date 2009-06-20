@@ -19,6 +19,7 @@
 			doc="${current.bin.dir}/${project::get-name()}.xml">
 			<nowarn>
 				<warning number="${nowarn.numbers.test},0219,0169,0612" /> <!-- add 0414 for mono 2.0 -->
+				<warning number="${nowarn.numbers},1574" if="${nant.settings.currentframework=='mono-2.0'}"/>
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />
@@ -48,6 +49,7 @@
 				<include name="System.Data.dll" />
 				<include name="System.Configuration.dll" />
 				<include name="System.Web.Services.dll" />
+				<include name="System.Web.dll" />
 				<include name="System.Runtime.Serialization.Formatters.Soap.dll" />
 				<include name="System.Windows.Forms.dll" />
 				<include name="Rhino.Mocks.dll" />
