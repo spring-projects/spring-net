@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="tx-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="tx-quickstart"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Transactions QuickStart</title>
 
   <section>
@@ -38,6 +44,12 @@
     within your IDE. Some excellent tools that let you do this are <ulink
     url="http://www.testdriven.net/">TestDriven.NET</ulink> and <ulink
     url="http://www.jetbrains.com/resharper/">ReSharper</ulink>.</para>
+
+    <note>
+      <para>To follow this Quarts QuickStart load the solution file found in
+      the directory
+      <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.TxQuickStart</literal></para>
+    </note>
   </section>
 
   <section>
@@ -52,17 +64,16 @@
     is blatantly taken from the book <ulink
     url="http://www.apress.com/book/bookDisplay.html?bID=10002">Pro
     ADO.NET</ulink> by Sahil Malik. The transfer service is defined by the
-    interface <literal>IAccountManager</literal> with the
-    implementation <literal>AccountManager</literal> located in the
-    namespace <literal>Spring.TxQuickStart.Services</literal>. The money
-    is recorded in a credit and debit table in the database. The SQL Server
-    schema for the tables is located in the file CreditsDebitsSchema.sql.
-    Transferring the money requires an ACID operation on these two tables. The
-    credit operation is defined via a
-    <literal>IAccountCreditDao</literal> interface and the debit
-    operation via an <literal>IAccountDebitDao</literal>
-    interface. Implementations of these interfaces using
-    <literal>AdoTemplate</literal> are in the namespace
+    interface <literal>IAccountManager</literal> with the implementation
+    <literal>AccountManager</literal> located in the namespace
+    <literal>Spring.TxQuickStart.Services</literal>. The money is recorded in
+    a credit and debit table in the database. The SQL Server schema for the
+    tables is located in the file CreditsDebitsSchema.sql. Transferring the
+    money requires an ACID operation on these two tables. The credit operation
+    is defined via a <literal>IAccountCreditDao</literal> interface and the
+    debit operation via an <literal>IAccountDebitDao</literal> interface.
+    Implementations of these interfaces using <literal>AdoTemplate</literal>
+    are in the namespace
     <package>Spring.TxQuickStart.Dao.Ado</package>.</para>
 
     <section>
@@ -116,12 +127,12 @@
     }</programlisting>
 
     <para>Both of these DAO implementations inherit from Spring's
-    <literal>AdoDaoSupport</literal> class that provides convenient access
-    to an <literal>AdoTemplate</literal> for performing data access
-    operations. With no other properties that can be configured in these
-    implementations, the only configuration required is setting of
-    AdoDaoSupport's <literal>DbProvider</literal> property representing
-    the connection to the database.</para>
+    <literal>AdoDaoSupport</literal> class that provides convenient access to
+    an <literal>AdoTemplate</literal> for performing data access operations.
+    With no other properties that can be configured in these implementations,
+    the only configuration required is setting of AdoDaoSupport's
+    <literal>DbProvider</literal> property representing the connection to the
+    database.</para>
 
     <para>The implementation of the service layer interface,
     <literal>IAccountManager</literal>, is shown below.</para>
@@ -298,14 +309,14 @@
 
     <para>The essential element is to create an instance of Spring's
     application context where the relevant layers of the application are
-    'wired' together. The <literal>IAccountManager</literal>
-    implementation is retrieved from the IoC container and stored as a field
-    of the test class. The basic logic of the test is the same as in the unit
-    test but in addition there is the verification of actions performed in the
-    database. The set up method puts the database tables into a known state
-    before running the tests. Other techniques for performing integration
-    testing that can alleviate the need to do extensive database state
-    management for integration tests is described in the <link
+    'wired' together. The <literal>IAccountManager</literal> implementation is
+    retrieved from the IoC container and stored as a field of the test class.
+    The basic logic of the test is the same as in the unit test but in
+    addition there is the verification of actions performed in the database.
+    The set up method puts the database tables into a known state before
+    running the tests. Other techniques for performing integration testing
+    that can alleviate the need to do extensive database state management for
+    integration tests is described in the <link
     linkend="testing">testing</link> section.</para>
   </section>
 
@@ -531,8 +542,7 @@
     value of "10", which will place it after the execution of the exception
     aspect, which is configured to use an order value of 1. The behavior for
     logging the exception is specified by creating and configuring an instance
-    of
-    <literal>Spring.Aspects.Exceptions.ExceptionHandlerAdvice</literal>.
+    of <literal>Spring.Aspects.Exceptions.ExceptionHandlerAdvice</literal>.
     The location where that behavior is applied, the pointcut, is the
     Transaction attribute. The logging of method arguments and execution time
     is specified by configuring an instance of

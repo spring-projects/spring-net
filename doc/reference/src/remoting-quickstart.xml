@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="remoting-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="remoting-quickstart"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Portable Service Abstraction Quick Start</title>
 
   <sect1 xml:id="qs-remoting-introduction">
@@ -27,6 +33,12 @@
     use of .NET Remoting, Section 6 shows the use of the
     ServicedComponentExporter for .NET Enterprise Services, and Section 7
     shows the use of the WebServiceExporter.</para>
+
+    <note>
+      <para>To follow this Quarts QuickStart load the solution file found in
+      the directory
+      <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.Calculator</literal></para>
+    </note>
   </sect1>
 
   <sect1 xml:id="qs-remoting-projectstructure">
@@ -37,8 +49,8 @@
     <literal>Spring.Services.Remoting</literal> namespace. The overall
     strategy is to export .NET objects on the server side as either CAO or SAO
     objects using <literal>CaoExporter</literal> or
-    <literal>SaoExporter</literal> and obtain references to these objects
-    on the client side using <literal>CaoFactoryObject</literal> and
+    <literal>SaoExporter</literal> and obtain references to these objects on
+    the client side using <literal>CaoFactoryObject</literal> and
     <literal>SaoFactoryObject</literal>. This quickstart does assume
     familiarity with .NET Remoting on the part of the reader. If you are new
     to .NET remoting you may find the links to introductory remoting material
@@ -58,7 +70,7 @@
 
     <para><mediaobject>
         <imageobject>
-          <imagedata fileref="images/remoting-solution.gif" format="GIF" />
+          <imagedata fileref="images/remoting-solution.gif" format="GIF"></imagedata>
         </imageobject>
       </mediaobject></para>
 
@@ -70,15 +82,15 @@
     interfaces are shown below. The
     <literal>Spring.Calculator.Services</literal> project contains an
     implementation of the these interfaces, namely the classes
-    <literal>Calculator</literal> and
-    <literal>AdvancedCalculator</literal>. The purpose of the
-    <literal>AdvancedCalculator</literal> implementation is to demonstrate
-    the configuration of object state for SAO-singleton objects. Note that the
-    calculator implementations <emphasis>do not</emphasis> inherit from the
-    <literal>MarshalByRefObject</literal> class. The
-    <literal>Spring.Calculator.ClientApp</literal> project contains the client
-    application and the <literal>Spring.Calculator.RemoteApp</literal> project
-    contains a console application that will host a Remoted instance of the
+    <literal>Calculator</literal> and <literal>AdvancedCalculator</literal>.
+    The purpose of the <literal>AdvancedCalculator</literal> implementation is
+    to demonstrate the configuration of object state for SAO-singleton
+    objects. Note that the calculator implementations <emphasis>do
+    not</emphasis> inherit from the <literal>MarshalByRefObject</literal>
+    class. The <literal>Spring.Calculator.ClientApp</literal> project contains
+    the client application and the
+    <literal>Spring.Calculator.RemoteApp</literal> project contains a console
+    application that will host a Remoted instance of the
     <literal>AdvancedCalculator</literal> class. The
     <literal>Spring.Aspects</literal> project contains some logging advice
     that will be used to demonstrate the application of aspects to remoted
@@ -214,8 +226,8 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
 
 }</programlisting>
 
-    <para>The <literal>Spring.Calculator.RemotedApp</literal> project
-    hosts remoted objects inside a console application. The code is also quite
+    <para>The <literal>Spring.Calculator.RemotedApp</literal> project hosts
+    remoted objects inside a console application. The code is also quite
     simple and shown below</para>
 
     <programlisting language="csharp">public static void Main(string[] args)
@@ -327,17 +339,17 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
     property values and / or object references is done as you would normally
     do for any object declared in the Spring.NET configuration file. To expose
     the calculator objects as .NET remoted objects the exporter
-    <literal>Spring.Remoting.CaoExporter</literal> is used for CAO objects
-    and <literal>Spring.Remoting.SaoExporter</literal> is used for SAO
-    objects. Both exporters require the setting of a
-    <literal>TargetName</literal> property that refers to the name of the
-    object in Spring's IoC container that will be remoted. The semantics of
-    SAO-SingleCall and CAO behavior are achieved by exporting a target object
-    that is declared as a "prototype" (i.e. singleton=false). For SAO objects,
-    the <literal>ServiceName</literal> property defines the name of the
-    service as it will appear in the URL that clients use to locate the remote
-    object. To set the remoting lifetime of the objects to be infinite, the
-    property <literal>Infinite</literal> is set to true.</para>
+    <literal>Spring.Remoting.CaoExporter</literal> is used for CAO objects and
+    <literal>Spring.Remoting.SaoExporter</literal> is used for SAO objects.
+    Both exporters require the setting of a <literal>TargetName</literal>
+    property that refers to the name of the object in Spring's IoC container
+    that will be remoted. The semantics of SAO-SingleCall and CAO behavior are
+    achieved by exporting a target object that is declared as a "prototype"
+    (i.e. singleton=false). For SAO objects, the
+    <literal>ServiceName</literal> property defines the name of the service as
+    it will appear in the URL that clients use to locate the remote object. To
+    set the remoting lifetime of the objects to be infinite, the property
+    <literal>Infinite</literal> is set to true.</para>
 
     <para>The configuration for the exporting a SAO-Singleton is shown
     below.<programlisting language="myxml">&lt;objects	
@@ -357,10 +369,9 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
 &lt;/object&gt;</programlisting> This will result in the remote object being
     identified by the URL
     <literal>tcp://localhost:8005/RemotedSaoSingletonCalculator</literal>. The
-    use of <literal>SaoExporter</literal> and
-    <literal>CaoExporter</literal> for other configuration are similar,
-    look at the configuration files in the
-    <literal>Spring.Calculator.RemotedApp</literal> project files for more
+    use of <literal>SaoExporter</literal> and <literal>CaoExporter</literal>
+    for other configuration are similar, look at the configuration files in
+    the <literal>Spring.Calculator.RemotedApp</literal> project files for more
     information.</para>
 
     <para>On the client side, the client application will connect a specific
@@ -480,9 +491,9 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
     <para>Factory classes are used to create a client side reference to the
     .NET remoting implementations. For SAO objects use the
     <literal>SaoFactoryObject</literal> class and for CAO objects use the
-    <literal>CaoFactoryObject</literal> class. The configuration for
-    obtaining a reference to the previously exported SAO singleton
-    implementation is shown below <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+    <literal>CaoFactoryObject</literal> class. The configuration for obtaining
+    a reference to the previously exported SAO singleton implementation is
+    shown below <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
 	
 	&lt;description&gt;saoSingleton&lt;/description&gt;
 	
@@ -513,7 +524,8 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
     making a simple change to the configuration file.</para>
 
     <para>The configuration for obtaining a reference to the previously
-    exported CAO implementation is shown below <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+    exported CAO implementation is shown below <programlisting
+    language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
 	
 	&lt;description&gt;cao&lt;/description&gt;
 	
@@ -536,7 +548,7 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
 
     <para><mediaobject>
         <imageobject>
-          <imagedata fileref="images/remoting-startup.gif" format="GIF" />
+          <imagedata fileref="images/remoting-startup.gif" format="GIF"></imagedata>
         </imageobject>
       </mediaobject></para>
 
@@ -763,13 +775,13 @@ Memory = 2
     <para><mediaobject>
         <imageobject>
           <imagedata fileref="images/web-exporter-calc-svc-main.jpg"
-                     format="JPG" />
+                     format="JPG"></imagedata>
         </imageobject>
       </mediaobject>Selecting the CalculatorService and
     CalculatorServiceWeaved links will bring you to the standard user
     interface generated for browsing a web service, as shown below<mediaobject>
         <imageobject>
-          <imagedata fileref="images/web-exporter-calc-svc.jpg" />
+          <imagedata fileref="images/web-exporter-calc-svc.jpg"></imagedata>
         </imageobject>
       </mediaobject></para>
 
@@ -777,7 +789,7 @@ Memory = 2
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="images/web-exporter-calc-svc-aop.jpg" />
+        <imagedata fileref="images/web-exporter-calc-svc-aop.jpg"></imagedata>
       </imageobject>
     </mediaobject>
 
@@ -786,7 +798,7 @@ Memory = 2
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="images/web-exporter-calc-svc-aop-add.jpg" />
+        <imagedata fileref="images/web-exporter-calc-svc-aop-add.jpg"></imagedata>
       </imageobject>
     </mediaobject>
 

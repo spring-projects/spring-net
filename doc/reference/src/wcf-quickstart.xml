@@ -42,6 +42,12 @@
     client application is located in Sprng.WcfQuickStart.ClientApp.2008. To
     run the solution make sure that all three projects are set to
     startup.</para>
+
+    <note>
+      <para>To follow this Quarts QuickStart load the solution file found in
+      the directory
+      <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.WcfQuickStart</literal></para>
+    </note>
   </section>
 
   <section>

@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="nms-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="nms-quickstart"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>NMS QuickStart</title>
 
   <section>
@@ -39,12 +45,15 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="images/nms-quickstart.jpg" scale="75" />
+        <imagedata fileref="images/nms-quickstart.jpg" scale="75"></imagedata>
       </imageobject>
     </mediaobject>
 
-    <para>This example was developed with ActiveMQ 5.1 and the ActiveMQ NMS
-    library with subversion repository number 685750.</para>
+    <note>
+      <para>To follow this NMS QuickStart load the solution file found in the
+      directory
+      <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.NmsQuickStart</literal></para>
+    </note>
   </section>
 
   <section>
@@ -68,7 +77,7 @@
     <mediaobject>
       <imageobject>
         <imagedata fileref="images/nms-quickstart-msg-destinations.jpg"
-                   role="" scale="75" />
+                   role="" scale="75"></imagedata>
       </imageobject>
     </mediaobject>
 
@@ -104,16 +113,16 @@
 
     <para>The use of interfaces allows for multiple implementations to be
     created. Implementations that use messaging to communicate will be based
-    on the Spring's <literal>NmsGateway</literal> class and will be
-    discussed later. stub or mock implementations can be used for testing
+    on the Spring's <literal>NmsGateway</literal> class and will be discussed
+    later. stub or mock implementations can be used for testing
     purposes.</para>
   </section>
 
   <section xml:id="nms-messagedata">
     <title>Message Data</title>
 
-    <para>The <literal>TradeRequest</literal> object shown above contains
-    all the information required to process a stock order. To promote the
+    <para>The <literal>TradeRequest</literal> object shown above contains all
+    the information required to process a stock order. To promote the
     interoperability of this data across different platforms the
     <literal>TradeRequest</literal> class is generated from an XML Schema
     using Microsoft's Schema Definition Tool (xsd.exe). The schema for trade
@@ -169,9 +178,9 @@
 
     }</programlisting>
 
-    <para>The schema and the <literal>TradeRequest</literal> class are
-    located in the project <literal>Spring.NmsQuickStart.Common</literal>.
-    This common project will be shared between the server and client for
+    <para>The schema and the <literal>TradeRequest</literal> class are located
+    in the project <literal>Spring.NmsQuickStart.Common</literal>. This common
+    project will be shared between the server and client for
     convenience.</para>
 
     <para>When sending a response back to the client the type
@@ -232,8 +241,8 @@
   <section xml:id="nms-handlers">
     <title>Message Handlers</title>
 
-    <para>When the <literal>TradeRequest</literal> message is received by
-    the server, it will be handled by the class
+    <para>When the <literal>TradeRequest</literal> message is received by the
+    server, it will be handled by the class
     <literal>Spring.NmsQuickStart.Server.Handlers.StockAppHandler
     </literal>shown below</para>
 
@@ -312,15 +321,14 @@
     <literal>Spring.NmsQuickStart.Common.Converters.XmlMessageConverter</literal>.
     This converter adds the ability to marshal and unmarshal objects to and
     from XML strings. It also uses Spring's
-    <literal>SimpleMessageConverter</literal> to convert Hashtables,
-    strings, and byte arrays. In order to pass information about the
-    serialized type, type information is put in the message properties. The
-    type information can be either the class name or an integer value
-    identifying the type. In systems where the client and server are deployed
-    together and are tightly coupled, sharing the class name is a convenient
-    shortcut. The alternative is to register a type for a given integer value.
-    The XML configuration used to configure these objects is shown
-    below</para>
+    <literal>SimpleMessageConverter</literal> to convert Hashtables, strings,
+    and byte arrays. In order to pass information about the serialized type,
+    type information is put in the message properties. The type information
+    can be either the class name or an integer value identifying the type. In
+    systems where the client and server are deployed together and are tightly
+    coupled, sharing the class name is a convenient shortcut. The alternative
+    is to register a type for a given integer value. The XML configuration
+    used to configure these objects is shown below</para>
 
     <programlisting language="myxml">  &lt;object name="XmlMessageConverter" type="Spring.NmsQuickStart.Common.Converters.XmlMessageConverter, Spring.NmsQuickStart.Common"&gt;
     &lt;property name="TypeMapper" ref="TypeMapper"/&gt;
@@ -374,12 +382,11 @@
     logic to the converted message.</para>
 
     <para>The object definition for the
-    <literal>NmsStockServiceGateway</literal> is shown below along with
-    its dependent object definitions of NmsTemplate and the
+    <literal>NmsStockServiceGateway</literal> is shown below along with its
+    dependent object definitions of NmsTemplate and the
     ConnectionFactory.</para>
 
-    <para>
-      <programlisting language="myxml">  &lt;object name="StockServiceGateway" type="Spring.NmsQuickStart.Client.Gateways.NmsStockServiceGateway, Spring.NmsQuickStart.Client"&gt;
+    <para><programlisting language="myxml">  &lt;object name="StockServiceGateway" type="Spring.NmsQuickStart.Client.Gateways.NmsStockServiceGateway, Spring.NmsQuickStart.Client"&gt;
     &lt;property name="NmsTemplate"  ref="NmsTemplate"/&gt;
     &lt;property name="DefaultReplyToQueue"&gt;
       &lt;object type="Apache.NMS.ActiveMQ.Commands.ActiveMQQueue, Apache.NMS.ActiveMQ"&gt;
@@ -447,7 +454,7 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="images/nms-quickstart-gui.png" />
+        <imagedata fileref="images/nms-quickstart-gui.png"></imagedata>
       </imageobject>
     </mediaobject>
 

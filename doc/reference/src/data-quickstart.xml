@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="data-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="data-quickstart"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Data Access QuickStart</title>
 
   <section>
@@ -71,6 +77,12 @@
     <para>The are simple domain objects in the Spring.DataQuickStart.Domain
     namespace, collections of which are generally returned from the DAO
     methods.</para>
+
+    <note>
+      <para>To follow this Data Access QuickStart load the solution file found
+      in the directory
+      <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.DataQuickStart</literal></para>
+    </note>
 
     <section>
       <title>Database configuration</title>

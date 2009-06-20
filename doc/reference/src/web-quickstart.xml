@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="web-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="web-quickstart"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Web Quickstarts</title>
 
   <section>
@@ -25,6 +31,13 @@
     <para>The Web Quickstart solution provides basic 'Hello World' examples
     for using Spring.Web features. You can use this solution as a starting
     point and then move on to the SpringAir application that uses a wider
-    range of Spring.Web features. </para>
+    range of Spring.Web features. The documention inside the solution and web
+    application itself can help guide you through the functionality.</para>
+
+    <note>
+      <para>To follow this Quarts QuickStart load the solution file found in
+      the directory
+      <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.WebQuickStart</literal></para>
+    </note>
   </section>
 </chapter>

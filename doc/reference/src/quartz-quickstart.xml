@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="quartz-quickstart" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="quartz-quickstart"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Quartz QuickStart</title>
 
   <section>
@@ -38,16 +44,16 @@
     <para>The full details of Quartz are outside the scope of this quickstart
     but here is 'quick tour for the impatient' of the main classes and
     interfaces used in Quartz so you can get your sea legs. A Quartz
-    <literal>IJob</literal> interface represents the task you would like
-    to execute. You either directly implement Quartz's
-    <literal>IJob</literal> interface or a convenience base class. The
-    Quartz <literal>Trigger</literal> controls when a job is executed, for
-    example in the wee hours of the morning every weekday . This would be done
-    using Quartz's <literal>CronTrigger</literal> implementation.
-    Instances of your job are created every time the trigger fires. As such,
-    in order to pass information between different job instances you stash
-    data away in a hashtable that gets passed to the each Job instance upon
-    its creation. Quartz's <literal>JobDetail</literal> class combines the
+    <literal>IJob</literal> interface represents the task you would like to
+    execute. You either directly implement Quartz's <literal>IJob</literal>
+    interface or a convenience base class. The Quartz
+    <literal>Trigger</literal> controls when a job is executed, for example in
+    the wee hours of the morning every weekday . This would be done using
+    Quartz's <literal>CronTrigger</literal> implementation. Instances of your
+    job are created every time the trigger fires. As such, in order to pass
+    information between different job instances you stash data away in a
+    hashtable that gets passed to the each Job instance upon its creation.
+    Quartz's <literal>JobDetail</literal> class combines the
     <literal>IJob</literal> and this hashtable of data. Instead of the
     standard <literal>System.Collections.Hashtable</literal> the class
     <literal>JobDataMap</literal> is used. Triggers are registered with a
@@ -55,6 +61,12 @@
     overall execution of the triggers and jobs. The
     <literal>StdSchedulerFactory</literal> implementation is generally
     used.</para>
+
+    <note>
+      <para>To follow this Quarts QuickStart load the solution file found in
+      the directory
+      <literal>&lt;spring-install-dir&gt;\</literal><literal>examples\Spring\Spring.Scheduling.Quartz.Example</literal></para>
+    </note>
   </section>
 
   <section>
@@ -72,11 +84,11 @@
   <section>
     <title>Standard job scheduling</title>
 
-    <para>The Spring base class <literal>QuartzJobObject</literal>
-    implements <literal>IJob</literal> and allows for your object's
-    properties to be set via values that are stored inside Quartz's
-    <literal>JobDataMap</literal> that is passed along each time your job
-    is instantiated due a trigger firing. This class is shown below</para>
+    <para>The Spring base class <literal>QuartzJobObject</literal> implements
+    <literal>IJob</literal> and allows for your object's properties to be set
+    via values that are stored inside Quartz's <literal>JobDataMap</literal>
+    that is passed along each time your job is instantiated due a trigger
+    firing. This class is shown below</para>
 
     <programlisting language="csharp">    public class ExampleJob : QuartzJobObject
     {
@@ -98,12 +110,12 @@
 
     <para>The method <literal>ExecuteInternal</literal> is called when the
     trigger fires and is where you would put your business logic. The
-    <literal>JobExecutionContext</literal> passed in lets you access
-    various pieces of information about the current job execution, such as the
+    <literal>JobExecutionContext</literal> passed in lets you access various
+    pieces of information about the current job execution, such as the
     JobDataMap or information on when the next time the trigger will fire. The
     <literal>ExampleJob</literal> is configured by creating a
-    <literal>JobDetail</literal> object as shown below in the following
-    XML snippet taken from spring-objects.xml</para>
+    <literal>JobDetail</literal> object as shown below in the following XML
+    snippet taken from spring-objects.xml</para>
 
     <programlisting language="myxml">  &lt;object name="exampleJob" type="Spring.Scheduling.Quartz.JobDetailObject, Spring.Scheduling.Quartz"&gt;
     &lt;property name="JobType" value="Spring.Scheduling.Quartz.Example.ExampleJob, Spring.Scheduling.Quartz.Example" /&gt;
@@ -115,8 +127,7 @@
     &lt;/property&gt;
   &lt;/object&gt;</programlisting>
 
-    <para>The dictionary property of the
-    <literal>JobDetailObject</literal>,
+    <para>The dictionary property of the <literal>JobDetailObject</literal>,
     <literal>JobDataAsMap</literal>, is used to set the values of the
     ExampleJob's properties. This will result in the ExampleJob being
     instantiated with it's UserName property value set to 'Alexandre' the
@@ -174,8 +185,8 @@
     }</programlisting>
 
     <para>Note that it does not inherit from any base class. To instruct
-    Spring to create a <literal>JobDetail</literal> object for this method
-    we use Spring's factory object class
+    Spring to create a <literal>JobDetail</literal> object for this method we
+    use Spring's factory object class
     <literal>MethodInvokingJobDetailFactoryObject</literal> as shown
     below</para>
 
@@ -191,10 +202,10 @@
   &lt;/object&gt;
 </programlisting>
 
-    <para>Note that <literal>AdminService</literal> object is configured
-    using Spring as you would do normally, without consideration for Quartz.
-    The trigger associated with the jobDetail object is listed below. Also
-    note that when using MethodInvokingJobDetailFactoryObject you can't use
+    <para>Note that <literal>AdminService</literal> object is configured using
+    Spring as you would do normally, without consideration for Quartz. The
+    trigger associated with the jobDetail object is listed below. Also note
+    that when using MethodInvokingJobDetailFactoryObject you can't use
     database persistence for Jobs. See the class documentation for additional
     details.</para>
 
