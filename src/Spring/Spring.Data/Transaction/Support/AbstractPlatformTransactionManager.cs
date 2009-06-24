@@ -129,9 +129,14 @@ namespace Spring.Transaction.Support
 
         #region Logging Definition
 
-        [NonSerialized()] protected ILog log = LogManager.GetLogger(typeof (AbstractPlatformTransactionManager));
+        [NonSerialized()] protected readonly ILog log;
 
         #endregion
+
+        protected AbstractPlatformTransactionManager()
+        {
+            log = LogManager.GetLogger(this.GetType());
+        }
 
         #endregion
 

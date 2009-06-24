@@ -35,15 +35,16 @@ namespace Spring.Data.Core
     /// <author>Mark Pollack (.NET)</author>
     public class TxScopeTransactionManager : AbstractPlatformTransactionManager, IInitializingObject
     {
-        private ITransactionScopeAdapter txAdapter;
+        private readonly ITransactionScopeAdapter txAdapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TxScopeTransactionManager"/> class.
         /// </summary>
         public TxScopeTransactionManager()
         {
-            
+            // noop
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TxScopeTransactionManager"/> class.
         /// </summary>
