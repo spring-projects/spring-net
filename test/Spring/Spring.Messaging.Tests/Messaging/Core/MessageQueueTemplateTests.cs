@@ -40,10 +40,40 @@ namespace Spring.Messaging.Core
     /// This class contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
     [TestFixture]
     public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContextTests
     {
+        [SetUp]
+        public override void SetUp()
+        {
+            RecreateMessageQueue(@".\Private$\testqueue", false);
+            RecreateMessageQueue(@".\Private$\testtxqueue", true);
+            base.SetUp();
+        }
+
+        private void RecreateMessageQueue(string path, bool transactional)
+        {
+            bool defaultCacheEnabled = MessageQueue.EnableConnectionCache;
+            MessageQueue.ClearConnectionCache();
+            MessageQueue.EnableConnectionCache = false;
+            if (MessageQueue.Exists(path))
+            {
+                MessageQueue queue;
+// TODO (EE): delete/create doesn't work for some reason
+//                MessageQueue.Delete(path);
+//                queue = MessageQueue.Create(path, transactional);
+                queue = new MessageQueue(path);
+                queue.Purge();
+                queue.Dispose();
+            }
+            else
+            {
+                MessageQueue.Create(path, transactional).Dispose();
+            }
+            MessageQueue.ClearConnectionCache();
+            MessageQueue.EnableConnectionCache = defaultCacheEnabled; // set to default
+        }
+
 #if NET_2_0 || NET_3_0
         [Test]
         public void MessageCreator()
@@ -91,7 +121,7 @@ namespace Spring.Messaging.Core
             mqt.AfterPropertiesSet();
         }
 
-        [Test]
+        [Test, Ignore("obsolete test, defaultMessageQueueName is used to obtain a queue from MessageQueueFactory")]
         [ExpectedException(typeof (ArgumentException),
             ExpectedMessage = "No object named noqueuename is defined in the Spring container")]
         public void MessageQueueNameNotInContext()
@@ -109,7 +139,7 @@ namespace Spring.Messaging.Core
             Assert.AreEqual(q.DefaultMessageQueue, q.MessageQueueFactory.CreateMessageQueue(q.DefaultMessageQueueObjectName));        
         }
 
-        [Test]
+        [Test, Ignore("obsolete test. If necessary, registers a default message converter on first use")]
         [ExpectedException(typeof (InvalidOperationException),
             ExpectedMessage = "No MessageConverter registered. Check configuration of MessageQueueTemplate.")]
         public void MessageConverterNotRegistered()
@@ -126,6 +156,7 @@ namespace Spring.Messaging.Core
         {
             MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
+            q.ConvertAndSend("Hello World 1");
             ReceiveHelloWorld(null,q,1);
         }
 
@@ -224,7 +255,7 @@ namespace Spring.Messaging.Core
 
         #endregion
 
-        [Test]
+        [Test, Ignore("What's the purpose of this test?")]
         public void GetAllFromQueue()
         {
             MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;

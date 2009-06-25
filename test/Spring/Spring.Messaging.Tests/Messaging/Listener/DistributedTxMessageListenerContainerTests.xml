@@ -42,12 +42,12 @@
   </object>
 
   <object id="queueTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="MessageQueueObjectName" value="msmqtxqueue"/>
+    <property name="DefaultMessageQueueObjectName" value="msmqtxqueue"/>
     <property name="MessageConverterObjectName" value="messageConverter"/>
   </object>
 
   <object id="retryQueueTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="MessageQueueObjectName" value="msmqtxretryqueue"/>
+    <property name="DefaultMessageQueueObjectName" value="msmqtxretryqueue"/>
     <property name="MessageConverterObjectName" value="messageConverter"/>
   </object>
   
@@ -57,7 +57,7 @@
   </object>
 
   <object id="transactionalMessageListenerContainer" type="Spring.Messaging.Listener.DistributedTxMessageListenerContainer, Spring.Messaging">
-    <property name="MessageQueueObjectName" value="msmqtxqueue"/>
+    <property name="DefaultMessageQueueObjectName" value="msmqtxqueue"/>
     <property name="PlatformTransactionManager" ref="txScopeTransactionManager"/>
     <property name="MaxConcurrentListeners" value="1"/>
     <property name="ListenerTimeLimitInMillis" value="20000"/>
@@ -77,8 +77,8 @@
   </object>
 
   <object id="distributedTransactionExceptionHandler" type="Spring.Messaging.Listener.SendToQueueDistributedTransactionExceptionHandler, Spring.Messaging">
+    <property name="DefaultMessageQueueObjectName" value="msmqtxretryqueue"/>
     <property name="MaxRetry" value="2"/>
-    <property name="MessageQueueObjectName" value="msmqtxretryqueue"/>
   </object>
   
   <object id="simpleMessageListener" type="Spring.Messaging.Listener.SimpleMessageListener, Spring.Messaging.Tests"/>
