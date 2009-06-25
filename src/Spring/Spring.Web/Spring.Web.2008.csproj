@@ -23,7 +23,7 @@
     <StartupObject>
     </StartupObject>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\Spring.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
