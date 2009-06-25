@@ -66,10 +66,10 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         [Test]
-        public void ProxyWithDoubleProxying()
+        public void ProxyWithDoubleProxyingInvokesInterceptorsOnceOnly()
         {
             ITestObject testObject = (ITestObject)ctx.GetObject("doubleProxy");
-            ProxyAssertions(testObject, 2);
+            ProxyAssertions(testObject, 1);
             Assert.AreEqual("doubleProxy", testObject.Name);
         }
 
@@ -138,7 +138,7 @@ namespace Spring.Aop.Framework.AutoProxy
             int age = 5;
             testObject.Age = age;
             Assert.AreEqual(age, testObject.Age);
-            Assert.AreEqual(2 * nopInterceptorCount, nop.Count);
+            Assert.AreEqual(2*nopInterceptorCount, nop.Count);
         }
 
         private void DecoratorProxyAssertions(ITestObject testObject)

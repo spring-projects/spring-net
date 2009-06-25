@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2007 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,13 @@
 
 #endregion
 
-#region Imports
-
 using System;
+using System.Collections;
 using System.Reflection;
+using Spring.Aop.Support;
 using Spring.Proxy;
 using Spring.Aop.Target;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
@@ -50,6 +48,7 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
     /// <author>Bruno Baia (.NET)</author>
+    /// <author>Erich Eichinger (.NET)</author>
     /// <seealso cref="Spring.Aop.Framework.IAopProxyFactory"/>
     [Serializable]
     public class DefaultAopProxyFactory : IAopProxyFactory
@@ -97,6 +96,31 @@ namespace Spring.Aop.Framework.DynamicProxy
                 }
                 advisedSupport.ProxyType = BuildProxyType(typeBuilder);
                 advisedSupport.ProxyConstructor = advisedSupport.ProxyType.GetConstructor(new Type[] { typeof(IAdvised) });
+            }
+
+            if (advisedSupport.TargetSource is SingletonTargetSource
+                && AopUtils.IsAopProxyType(advisedSupport.TargetSource.TargetType))
+            {
+                IAdvised innerProxy = (IAdvised)advisedSupport.TargetSource.GetTarget();
+                // eliminate duplicate advisors
+                ArrayList thisAdvisors = new ArrayList(advisedSupport.Advisors);
+                foreach (IAdvisor innerAdvisor in innerProxy.Advisors)
+                {
+                    foreach (IAdvisor thisAdvisor in thisAdvisors)
+                    {
+                        if (ReferenceEquals(thisAdvisor, innerAdvisor)
+                            || (thisAdvisor.GetType() == typeof(DefaultPointcutAdvisor)
+                                  && ((DefaultPointcutAdvisor)thisAdvisor).Equals(innerAdvisor)
+                               )
+                            )
+                        {
+                            advisedSupport.RemoveAdvisor(thisAdvisor);
+                        }
+                    }
+                }
+
+                // elimination of duplicate introductions is not necessary 
+                // since they do not propagate to nested proxy anyway
             }
 
             return (IAopProxy)advisedSupport.ProxyConstructor.Invoke(new object[] { advisedSupport });

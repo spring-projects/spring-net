@@ -211,27 +211,27 @@ namespace Spring.Aop.Framework
             pf.AddAdvice(nopInterceptor);
             pf.AddAdvisor(new DefaultPointcutAdvisor(countingBeforeAdvice));
             object proxy = pf.GetProxy();
-            ITestObject to = (ITestObject) proxy;
+            ITestObject to = (ITestObject)proxy;
             Assert.AreEqual("Adam", to.Name);
             Assert.AreEqual(1, countingBeforeAdvice.GetCalls());
         }
 
         [Test]
-        [ExpectedException(typeof (AopConfigException))]
+        [ExpectedException(typeof(AopConfigException))]
         public void InstantiateWithNullTarget()
         {
-            new ProxyFactory((object) null);
+            new ProxyFactory((object)null);
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void AddNullInterface()
         {
             new ProxyFactory().AddInterface(null);
         }
 
         [Test]
-        [ExpectedException(typeof (AopConfigException))]
+        [ExpectedException(typeof(AopConfigException))]
         public void AddInterfaceWhenConfigurationIsFrozen()
         {
             ProxyFactory factory = new ProxyFactory();
@@ -246,16 +246,16 @@ namespace Spring.Aop.Framework
             ProxyFactory pf = new ProxyFactory(target);
             NopInterceptor nop = new NopInterceptor();
             IAdvisor advisor = new DefaultPointcutAdvisor(new CountingBeforeAdvice());
-            IAdvised advised = (IAdvised) pf.GetProxy();
+            IAdvised advised = (IAdvised)pf.GetProxy();
             // Can use advised and ProxyFactory interchangeably
             advised.AddAdvice(nop);
             pf.AddAdvisor(advisor);
-            Assert.AreEqual(- 1, pf.IndexOf((IInterceptor) null));
-            Assert.AreEqual(- 1, pf.IndexOf(new NopInterceptor()));
+            Assert.AreEqual(-1, pf.IndexOf((IInterceptor)null));
+            Assert.AreEqual(-1, pf.IndexOf(new NopInterceptor()));
             Assert.AreEqual(0, pf.IndexOf(nop));
-            Assert.AreEqual(- 1, advised.IndexOf((IAdvisor) null));
+            Assert.AreEqual(-1, advised.IndexOf((IAdvisor)null));
             Assert.AreEqual(1, pf.IndexOf(advisor));
-            Assert.AreEqual(- 1, advised.IndexOf(new DefaultPointcutAdvisor(null)));
+            Assert.AreEqual(-1, advised.IndexOf(new DefaultPointcutAdvisor(null)));
         }
 
         [Test]
@@ -268,7 +268,7 @@ namespace Spring.Aop.Framework
             IAdvisor advisor = new DefaultPointcutAdvisor(cba);
             pf.AddAdvice(nop);
             pf.AddAdvisor(advisor);
-            ITestObject proxied = (ITestObject) pf.GetProxy();
+            ITestObject proxied = (ITestObject)pf.GetProxy();
             proxied.Age = 5;
             Assert.AreEqual(1, cba.GetCalls());
             Assert.AreEqual(1, nop.Count);
@@ -292,7 +292,7 @@ namespace Spring.Aop.Framework
             pf.AddAdvisor(advisor);
             NopInterceptor nop2 = new NopInterceptor(2); // make instance unique (see SPRNET-847)
             pf.AddAdvice(nop2);
-            ITestObject proxied = (ITestObject) pf.GetProxy();
+            ITestObject proxied = (ITestObject)pf.GetProxy();
             proxied.Age = 5;
             Assert.AreEqual(1, cba.GetCalls());
             Assert.AreEqual(1, nop.Count);
@@ -313,7 +313,7 @@ namespace Spring.Aop.Framework
             // Check out of bounds
             try
             {
-                pf.RemoveAdvisor(- 1);
+                pf.RemoveAdvisor(-1);
                 Assert.Fail("Supposed to throw exception");
             }
             catch (AopConfigException)
@@ -338,14 +338,14 @@ namespace Spring.Aop.Framework
         [Test]
         public void TryRemoveNonProxiedInterface()
         {
-            ProxyFactory factory = new ProxyFactory(new TestObject ());
+            ProxyFactory factory = new ProxyFactory(new TestObject());
             Assert.IsFalse(factory.RemoveInterface(typeof(IServiceProvider)));
         }
 
         [Test]
         public void RemoveProxiedInterface()
         {
-            ProxyFactory factory = new ProxyFactory(new TestObject ());
+            ProxyFactory factory = new ProxyFactory(new TestObject());
             Assert.IsTrue(factory.RemoveInterface(typeof(ITestObject)));
         }
 
@@ -361,10 +361,10 @@ namespace Spring.Aop.Framework
             IAdvisor advisor2 = new DefaultPointcutAdvisor(cba2);
             pf.AddAdvisor(advisor1);
             pf.AddAdvice(nop);
-            ITestObject proxied = (ITestObject) pf.GetProxy();
+            ITestObject proxied = (ITestObject)pf.GetProxy();
             // Use the type cast feature
             // Replace etc methods on advised should be same as on ProxyFactory
-            IAdvised advised = (IAdvised) proxied;
+            IAdvised advised = (IAdvised)proxied;
             proxied.Age = 5;
             Assert.AreEqual(1, cba1.GetCalls());
             Assert.AreEqual(0, cba2.GetCalls());
@@ -427,9 +427,9 @@ namespace Spring.Aop.Framework
             ProxyFactory pf = new ProxyFactory(tst);
             // We've already implicitly added this interface.
             // This call should be ignored without error
-            pf.AddInterface(typeof (ITimeStamped));
+            pf.AddInterface(typeof(ITimeStamped));
             // All cool
-            ITimeStamped ts = (ITimeStamped) pf.GetProxy();
+            ITimeStamped ts = (ITimeStamped)pf.GetProxy();
         }
 
         internal class TestObjectSubclass : TestObject, IComparable
@@ -448,7 +448,7 @@ namespace Spring.Aop.Framework
             ProxyFactory factory = new ProxyFactory(raw);
             Assert.AreEqual(8, factory.Interfaces.Length, "Found correct number of interfaces");
             //System.out.println("Proxied interfaces are " + StringUtils.arrayToDelimitedString(factory.getProxiedInterfaces(), ","));
-            ITestObject tb = (ITestObject) factory.GetProxy();
+            ITestObject tb = (ITestObject)factory.GetProxy();
             Assert.IsTrue(tb is IOther, "Picked up secondary interface");
 
             raw.Age = 25;
@@ -461,15 +461,15 @@ namespace Spring.Aop.Framework
 
             //factory.addAdvisor(0, new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped)));
             factory.AddIntroduction(
-                new DefaultIntroductionAdvisor(ti, typeof (ITimeStamped))
+                new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped))
                 );
 
             Console.WriteLine(StringUtils.ArrayToDelimitedString(factory.Interfaces, "/"));
 
-            ITimeStamped ts = (ITimeStamped) factory.GetProxy();
+            ITimeStamped ts = (ITimeStamped)factory.GetProxy();
             Assert.IsTrue(ts.TimeStamp == t);
             // Shouldn't fail;
-            ((IOther) ts).Absquatulate();
+            ((IOther)ts).Absquatulate();
         }
 
         private class AnonymousClassInterceptor : IInterceptor
@@ -491,7 +491,7 @@ namespace Spring.Aop.Framework
             }
 
             // Check we can still use it
-            IOther other = (IOther) factory.GetProxy();
+            IOther other = (IOther)factory.GetProxy();
             other.Absquatulate();
         }
 
@@ -502,21 +502,21 @@ namespace Spring.Aop.Framework
             NopInterceptor diUnused = new NopInterceptor(1); // // make instance unique (see SPRNET-847)
             ProxyFactory factory = new ProxyFactory(new TestObject());
             factory.AddAdvice(0, di);
-            ITestObject tb = (ITestObject) factory.GetProxy();
+            ITestObject tb = (ITestObject)factory.GetProxy();
             Assert.IsTrue(factory.AdviceIncluded(di));
             Assert.IsTrue(!factory.AdviceIncluded(diUnused));
-            Assert.IsTrue(factory.CountAdviceOfType(typeof (NopInterceptor)) == 1);
+            Assert.IsTrue(factory.CountAdviceOfType(typeof(NopInterceptor)) == 1);
 
             factory.AddAdvice(0, diUnused);
             Assert.IsTrue(factory.AdviceIncluded(diUnused));
-            Assert.IsTrue(factory.CountAdviceOfType(typeof (NopInterceptor)) == 2);
+            Assert.IsTrue(factory.CountAdviceOfType(typeof(NopInterceptor)) == 2);
         }
 
         [Test]
         public void AddAdvisedSupportListener()
         {
             IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
-            IAdvisedSupportListener listener = (IAdvisedSupportListener) mock.Object;
+            IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
 
             mock.Expect("Activated");
             ProxyFactory factory = new ProxyFactory(new TestObject());
@@ -529,7 +529,7 @@ namespace Spring.Aop.Framework
         public void AdvisedSupportListenerMethodsAreCalledAppropriately()
         {
             IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
-            IAdvisedSupportListener listener = (IAdvisedSupportListener) mock.Object;
+            IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
 
             mock.Expect("Activated");
             mock.Expect("AdviceChanged");
@@ -552,7 +552,7 @@ namespace Spring.Aop.Framework
         public void AdvisedSupportListenerMethodsAre_NOT_CalledIfProxyHasNotBeenCreated()
         {
             IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
-            IAdvisedSupportListener listener = (IAdvisedSupportListener) mock.Object;
+            IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
 
             ProxyFactory factory = new ProxyFactory(new TestObject());
             factory.AddListener(listener);
@@ -583,7 +583,7 @@ namespace Spring.Aop.Framework
         public void RemoveAdvisedSupportListener()
         {
             IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
-            IAdvisedSupportListener listener = (IAdvisedSupportListener) mock.Object;
+            IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
 
             ProxyFactory factory = new ProxyFactory(new TestObject());
             factory.AddListener(listener);
@@ -602,6 +602,74 @@ namespace Spring.Aop.Framework
             ProxyFactory factory = new ProxyFactory();
             factory.IsFrozen = true;
             factory.RemoveAdvisor(null);
+        }
+
+        public interface IMultiProxyingTestInterface
+        {
+            string TestMethod(string arg);
+        }
+
+        public interface IMultiProxyingTestInterface2 : IMultiProxyingTestInterface { }
+
+        public class MultiProxyingTestClass : IMultiProxyingTestInterface2
+        {
+            public int InvocationCounter;
+
+            public string TestMethod(string arg)
+            {
+                InvocationCounter++;
+                return arg + "|" + arg;
+            }
+        }
+
+        public interface ICountingIntroduction
+        {
+            void Inc();
+        }
+
+        public class TestCountingIntroduction : ICountingIntroduction, IAdvice
+        {
+            public int Counter;
+
+            public void Inc()
+            {
+                Counter++;
+            }
+        }
+
+        [Test]
+        public void NestedProxiesDontInvokeSameAdviceOrIntroductionTwice()
+        {
+            MultiProxyingTestClass testObj = new MultiProxyingTestClass();
+            ProxyFactory pf1 = new ProxyFactory();
+            pf1.Target = testObj;
+
+            NopInterceptor di = new NopInterceptor();
+            NopInterceptor diUnused = new NopInterceptor(1); // // make instance unique (see SPRNET-847)
+            TestCountingIntroduction countingMixin = new TestCountingIntroduction();
+
+            pf1.AddAdvice(diUnused);                                                      
+            pf1.AddAdvisor(new DefaultPointcutAdvisor(di));
+            pf1.AddIntroduction(new DefaultIntroductionAdvisor(countingMixin));
+
+            object innerProxy = pf1.GetProxy();
+            ProxyFactory pf2 = new ProxyFactory();
+            pf2.Target = innerProxy;
+            pf2.AddAdvice(diUnused);
+            pf2.AddAdvisor(new DefaultPointcutAdvisor(di));
+            pf2.AddIntroduction(new DefaultIntroductionAdvisor(countingMixin));
+
+            object outerProxy = pf2.GetProxy();
+
+            // any advice instance is invoked once only
+            string result = ((IMultiProxyingTestInterface)outerProxy).TestMethod("arg");
+            Assert.AreEqual(1, testObj.InvocationCounter);
+            Assert.AreEqual("arg|arg", result);
+            Assert.AreEqual(1, di.Count);
+
+            // any introduction instance is invoked once only
+            ((ICountingIntroduction)outerProxy).Inc();
+            Assert.AreEqual(1, countingMixin.Counter);
         }
     }
 }

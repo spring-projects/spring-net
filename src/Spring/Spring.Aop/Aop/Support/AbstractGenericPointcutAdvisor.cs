@@ -33,7 +33,6 @@ namespace Spring.Aop.Support
     {
         private IAdvice advice;
 
-
         /// <summary>
         /// Return the advice part of this advisor.
         /// </summary>
@@ -47,6 +46,23 @@ namespace Spring.Aop.Support
             set { this.advice = value; }
         }
 
+        ///<summary>
+        /// 2 <see cref="AbstractGenericPointcutAdvisor"/>s are considered equals, if 
+        /// a) their pointcuts are equal
+        /// b) their advices are equal
+        ///</summary>
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as AbstractGenericPointcutAdvisor);
+        }
+
+        /// <summary>
+        /// Calculates a unique hashcode based on advice + pointcut
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents the current

@@ -37,8 +37,8 @@ namespace Spring.Aop.Support
 	[Serializable]
     public class DefaultIntroductionAdvisor : IIntroductionAdvisor, ITypeFilter
 	{
-		private IAdvice _introduction;
-		private ISet _interfaces = new HybridSet();
+		private readonly IAdvice _introduction;
+		private readonly ISet _interfaces = new HybridSet();
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -236,5 +236,45 @@ namespace Spring.Aop.Support
 				throw new ArgumentException("Type [" + intf.FullName + "] is not an interface; cannot be used in an introduction.");
 			}
 		}
+
+        /// <summary>
+        /// 2 IntroductionAdvisors are considered equal if
+        /// a) they are of the same type
+        /// b) their introduction advices are equal
+        /// c) they introduce the same interfaces
+        /// </summary>
+	    public bool Equals(DefaultIntroductionAdvisor other)
+	    {
+	        if (ReferenceEquals(null, other)) return false;
+	        if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != this.GetType())
+                return false;
+            return Equals(other._introduction, _introduction) && Equals(other._interfaces, _interfaces);
+	    }
+
+        /// <summary>
+        /// 2 IntroductionAdvisors are considered equal if
+        /// a) they are of the same type
+        /// b) their introduction advices are equal
+        /// c) they introduce the same interfaces
+        /// </summary>
+        public override bool Equals(object obj)
+	    {
+	        return Equals(obj as DefaultIntroductionAdvisor);
+	    }
+
+        /// <summary>
+        /// 2 IntroductionAdvisors are considered equal if
+        /// a) they are of the same type
+        /// b) their introduction advices are equal
+        /// c) they introduce the same interfaces
+        /// </summary>
+        public override int GetHashCode()
+	    {
+	        unchecked
+	        {
+	            return ((_introduction != null ? _introduction.GetHashCode() : 0)*397) ^ (_interfaces != null ? _interfaces.GetHashCode() : 0);
+	        }
+	    }
 	}
 }

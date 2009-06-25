@@ -41,7 +41,6 @@ namespace Spring.Aop.Support
 	[Serializable]
     public class DefaultPointcutAdvisor : AbstractGenericPointcutAdvisor
 	{
-
 		private IPointcut pointcut = TruePointcut.True;
 
 		/// <summary>
@@ -93,9 +92,25 @@ namespace Spring.Aop.Support
 		}
 
 
+        ///<summary>
+        /// 2 <see cref="DefaultPointcutAdvisor"/>s are considered equal, if 
+        /// a) their pointcuts are equal
+        /// b) their advices are equal
+        ///</summary>
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as DefaultPointcutAdvisor);
+        }
 
+        /// <summary>
+        /// Calculates a unique hashcode based on advice + pointcut
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
-		/// <summary>
+	    /// <summary>
 		/// Returns a <see cref="System.String"/> that represents the current
 		/// <see cref="System.Object"/>.
 		/// </summary>

@@ -210,6 +210,7 @@
     <Compile Include="Aop\Support\ControlFlowPointcutTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Aop\Support\DefaultIntroductionAdvisorTests.cs" />
     <Compile Include="Aop\Support\DelegatingIntroductionInterceptorTests.cs">
       <SubType>Code</SubType>
     </Compile>

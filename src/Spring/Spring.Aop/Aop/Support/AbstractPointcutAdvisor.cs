@@ -127,7 +127,17 @@ namespace Spring.Aop.Support
             {
                 return false;
             }
-            IPointcutAdvisor otherAdvisor = (IPointcutAdvisor)o;
+
+            if (ReferenceEquals(this, o))
+            {
+                return true;
+            }
+
+            AbstractPointcutAdvisor otherAdvisor = (AbstractPointcutAdvisor)o;
+            if (this.Order != otherAdvisor.Order)
+            {
+                return false;
+            }
             if (otherAdvisor.Advice == null && otherAdvisor.Pointcut == null)
             {
                 return (this.Advice == null && this.Pointcut == null);
@@ -157,7 +167,8 @@ namespace Spring.Aop.Support
         {
             return 0 // (SPRNET-847) base.GetHashCode()
                 + 13 * (Pointcut == null ? 0 : Pointcut.GetHashCode())
-                + 27 * (Advice == null ? 0 : Advice.GetHashCode());
+                + 27 * (Advice == null ? 0 : Advice.GetHashCode())
+                + 31 * Order.GetHashCode();
         }
 
         #endregion

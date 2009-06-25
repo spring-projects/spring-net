@@ -42,11 +42,23 @@ namespace Spring.Aop.Framework
     /// <author>Aleksandar Seovic (.NET)</author>
     public sealed class AopUtils
     {
-
         // This is a leaky abstraction as we have hardcoded known IAopProxyFactory implementations.
         private const string COMPOSITION_PROXY_TYPE_NAME = "CompositionAopProxy";
 
         private const string DECORATOR_PROXY_TYPE_NAME = "DecoratorAopProxy";
+
+        /// <summary>
+        /// Is the supplied <paramref name="objectType"/> an AOP proxy?
+        /// </summary>
+        /// <remarks>
+        /// Return whether the given type is either a composition-based or a decorator-based proxy type.
+        /// </remarks>
+        /// <param name="objectType">The type to be checked.</param>
+        /// <returns><see langword="true"/> if the supplied <paramref name="objectType"/> is an AOP proxy type.</returns>
+        public static bool IsAopProxyType(Type objectType)
+        {
+            return IsCompositionAopProxyType(objectType) || IsDecoratorAopProxyType(objectType);
+        }
 
         /// <summary>
         /// Is the supplied <paramref name="instance"/> an AOP proxy?
@@ -75,7 +87,20 @@ namespace Spring.Aop.Framework
         /// </returns>
         public static bool IsCompositionAopProxy(Object instance)
         {
-            return ((instance != null) && instance.GetType().FullName.StartsWith(COMPOSITION_PROXY_TYPE_NAME));
+            return ((instance != null) && IsCompositionAopProxyType(instance.GetType()));
+        }
+
+        /// <summary>
+        /// Is the supplied <paramref name="objectType"/> a composition based AOP proxy type?
+        /// </summary>
+        /// <remarks>
+        /// Return whether the given type is a composition-based proxy type.
+        /// </remarks>
+        /// <param name="objectType">The type to be checked.</param>
+        /// <returns><see langword="true"/> if the supplied <paramref name="objectType"/> is a composition based AOP proxy type.</returns>
+        public static bool IsCompositionAopProxyType(Type objectType)
+        {
+            return ((objectType != null) && objectType.FullName.StartsWith(COMPOSITION_PROXY_TYPE_NAME));
         }
 
         /// <summary>
@@ -88,7 +113,20 @@ namespace Spring.Aop.Framework
         /// </returns>
         public static bool IsDecoratorAopProxy(Object instance)
         {
-            return ((instance != null) && instance.GetType().FullName.StartsWith(DECORATOR_PROXY_TYPE_NAME));
+            return ((instance != null) && IsDecoratorAopProxyType(instance.GetType()));
+        }
+
+        /// <summary>
+        /// Is the supplied <paramref name="objectType"/> a composition based AOP proxy type?
+        /// </summary>
+        /// <remarks>
+        /// Return whether the given type is a composition-based proxy type.
+        /// </remarks>
+        /// <param name="objectType">The type to be checked.</param>
+        /// <returns><see langword="true"/> if the supplied <paramref name="objectType"/> is a composition based AOP proxy type.</returns>
+        public static bool IsDecoratorAopProxyType(Type objectType)
+        {
+            return ((objectType != null) && objectType.FullName.StartsWith(DECORATOR_PROXY_TYPE_NAME));
         }
 
         /// <summary>
