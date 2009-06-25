@@ -1,18 +1,19 @@
-Changes (1.2.0 to 1.2.1)
+Changes (1.2.0 to 1.2.1 or greater)
+========================
 
 Spring.Core
 -----------
 
-1. within an ValidationGroup element (<v:group>,<v:exclusive>,..), nested validator elements now must occur after any 
+1. within an ValidationGroup element (<v:group>,<v:exclusive>,..), nested validator elements now must occur after any
    <v:message>, <v:action> or <v:property> elements. The following was allowed previously, but now will raise a schema
    validation error:
-   
+
    <v:group ..>
       <v:validator ...>
       <v:action ...>
-   
+
    change this to
-   
+
    <v:group ..>
       <v:action ...>
       <v:validator ...>
@@ -20,17 +21,31 @@ Spring.Core
 2. XmlReaderContext constructor now requires an IObjectDefinitionFactory to be specified. Thus XmlReaderContext.ObjectDefinitionFactory
    is read only now.
 
-3. Changes to the Apache NMS API, which was not yet a public release when included in Spring 1.2.0 made breaking API changes.  
+3. Changes to the Apache NMS API, which was not yet a public release when included in Spring 1.2.0 made breaking API changes.
    On NmsTemlate,
 
    1) The property 'byte Priority' was changed to 'MsgPriority Priority'
    2) The property 'bool Persistent' is no longer part of the NMS API but is still supported in a backward compatible
       manner by Spring by translation to standard MsgDeliveryMode enumeration values of Persistent and NonPersistent.
-      A new property MsgDelivery has been added.  The class, CachedMessageProducer, which is unlikely to be use by 
+      A new property MsgDelivery has been added.  The class, CachedMessageProducer, which is unlikely to be use by
       end users, was directly upgraded to the latest API without any backwards compatibility support.
+
+Spring.Aop
+----------
+
+1. AbstractAutoProxyCreator.FindEligibleAdvisors(Type) changed to
+   AbstractAutoProxyCreator.FindEligibleAdvisors(Type, Name)
+
+
+Changes (1.2 RC1 to 1.2.0 or greater)
+=====================================
+
+none
+
 
 
 Changes (1.1.2 to 1.2 RC1 or greater)
+=====================================
 
 Spring.Core
 -----------

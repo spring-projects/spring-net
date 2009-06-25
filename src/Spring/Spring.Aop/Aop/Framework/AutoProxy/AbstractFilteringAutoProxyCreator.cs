@@ -39,12 +39,12 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         ///Overridden to call <see cref="IsEligibleForProxying"/>.
         /// </summary>
-        /// <param name="objectType">the type of the object</param>
-        /// <param name="objectName">the name of the object</param>
+        /// <param name="targetType">the type of the object</param>
+        /// <param name="targetName">the name of the object</param>
         /// <returns>if remarkable to skip</returns>
-        protected override bool ShouldSkip( Type objectType, string objectName )
+        protected override bool ShouldSkip( Type targetType, string targetName )
         {
-            bool shouldSkip = !IsEligibleForProxying( objectType, objectName );
+            bool shouldSkip = !IsEligibleForProxying( targetType, targetName );
             return shouldSkip;
         }
 
@@ -54,14 +54,14 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <remarks>
         /// Whether an object shall be proxied or not is determined by the result of <see cref="IsEligibleForProxying"/>.
         /// </remarks>
-        /// <param name="objType">ingored</param>
-        /// <param name="name">ignored</param>
+        /// <param name="targetType">ingored</param>
+        /// <param name="targetName">ignored</param>
         /// <param name="customTargetSource">ignored</param>
         /// <returns>
         /// Always <see cref="AbstractAutoProxyCreator.PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS"/> to indicate, that the object shall be proxied.
         /// </returns>
         /// <seealso cref="AbstractAutoProxyCreator.PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS"/>
-        protected override object[] GetAdvicesAndAdvisorsForObject( Type objType, string name, ITargetSource customTargetSource )
+        protected override object[] GetAdvicesAndAdvisorsForObject( Type targetType, string targetName, ITargetSource customTargetSource )
         {
             return PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS;
         }
@@ -72,10 +72,10 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <remarks>
         /// Override this method to allow or reject proxying for the given object.
         /// </remarks>
-        /// <param name="objType">the object's type</param>
-        /// <param name="name">the name of the object</param>
+        /// <param name="targetType">the object's type</param>
+        /// <param name="targetName">the name of the object</param>
         /// <seealso cref="AbstractAutoProxyCreator.ShouldSkip"/>        
         /// <returns>whether the given object shall be proxied.</returns>
-        protected abstract bool IsEligibleForProxying( Type objType, string name );
+        protected abstract bool IsEligibleForProxying( Type targetType, string targetName );
     }
 }

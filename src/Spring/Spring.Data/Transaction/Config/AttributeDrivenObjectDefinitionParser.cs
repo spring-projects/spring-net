@@ -67,17 +67,17 @@ namespace Spring.Transaction.Config
             ConfigureAutoProxyCreator(parserContext, element);
 
             string transactionManagerName = GetAttributeValue(element, TxNamespaceUtils.TRANSACTION_MANAGER_ATTRIBUTE);
-            Type sourceType = typeof (AttributesTransactionAttributeSource);
+            Type sourceType = typeof(AttributesTransactionAttributeSource);
 
             //Create the TransactionInterceptor definition.
-            RootObjectDefinition interceptorDefinition = new RootObjectDefinition(typeof (TransactionInterceptor));
+            RootObjectDefinition interceptorDefinition = new RootObjectDefinition(typeof(TransactionInterceptor));
             interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_MANAGER_PROPERTY,
                                                      new RuntimeObjectReference(transactionManagerName));
             interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_ATTRIBUTE_SOURCE,
                                                      new RootObjectDefinition(sourceType));
 
             //Create the TransactionAttributeSourceAdvisor definition.
-            RootObjectDefinition advisorDefinition = new RootObjectDefinition(typeof (TransactionAttributeSourceAdvisor));
+            RootObjectDefinition advisorDefinition = new RootObjectDefinition(typeof(TransactionAttributeSourceAdvisor));
             advisorDefinition.PropertyValues.Add(TRANSACTION_INTERCEPTOR, interceptorDefinition);
             if (element.HasAttribute(ORDER))
             {
@@ -96,8 +96,7 @@ namespace Spring.Transaction.Config
         {
             AopNamespaceUtils.RegisterAutoProxyCreatorIfNecessary(parserContext, element);
 
-            bool proxyTargetClass =
-                parserContext.ParserHelper.IsTrueStringValue(GetAttributeValue(element, PROXY_TARGET_TYPE));
+            bool proxyTargetClass = parserContext.ParserHelper.IsTrueStringValue(GetAttributeValue(element, PROXY_TARGET_TYPE));
             if (proxyTargetClass)
             {
                 AopNamespaceUtils.ForceAutoProxyCreatorToUseDecoratorProxy(parserContext.Registry);

@@ -83,6 +83,11 @@ namespace Spring.Objects.Factory
 	        set { throw new System.NotImplementedException(); }
 	    }
 
+	    public ObjectRole Role
+	    {
+	        get { throw new NotImplementedException(); }
+	    }
+
 	    public Type ObjectType
 		{
 			get { throw new NotImplementedException(); }

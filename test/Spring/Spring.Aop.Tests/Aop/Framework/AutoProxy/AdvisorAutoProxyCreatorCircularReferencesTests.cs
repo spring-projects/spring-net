@@ -55,7 +55,7 @@ namespace Spring.Aop.Framework.AutoProxy
             Assert.IsTrue(AopUtils.IsAopProxy(context.GetObject("independentObject")));
 
             // products of the factory created at runtime should be proxied
-            Assert.IsTrue(AopUtils.IsAopProxy(context.GetObject("testObjectFactory")));
+            Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("testObjectFactory")));
         }
     }
 

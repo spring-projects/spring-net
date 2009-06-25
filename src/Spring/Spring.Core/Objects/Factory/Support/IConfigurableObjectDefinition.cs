@@ -61,6 +61,11 @@ namespace Spring.Objects.Factory.Support
         new EventValues EventHandlerValues { get; set; }
 
         /// <summary>
+        /// Get or set the role hint for this object definition
+        /// </summary>
+        new ObjectRole Role { get; set; }
+
+        /// <summary>
         /// Return a description of the resource that this object definition
         /// came from (for the purpose of showing context in case of errors).
         /// </summary>

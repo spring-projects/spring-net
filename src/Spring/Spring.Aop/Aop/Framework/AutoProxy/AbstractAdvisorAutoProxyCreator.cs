@@ -22,17 +22,19 @@
 
 using System;
 using System.Collections;
+using Common.Logging;
 using Spring.Aop.Framework.DynamicProxy;
 using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
+using Spring.Util;
 
 #endregion
 
 namespace Spring.Aop.Framework.AutoProxy
 {
     /// <summary>
-    /// Abstract IOBjectPostProcessor implementation that creates AOP proxies.
+    /// Abstract IObjectPostProcessor implementation that creates AOP proxies.
     /// This class is completely generic; it contains no special code to handle
     /// any particular aspects, such as pooling aspects.
     /// </summary>
@@ -51,8 +53,20 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <seealso cref="Spring.Aop.Framework.AutoProxy.AbstractAdvisorAutoProxyCreator.FindCandidateAdvisors"/>
     /// <author>Rod Johnson</author>
     /// <author>Adhari C Mahendra (.NET)</author>
+    /// <author>Erich Eichinger</author>
     public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
     {
+        private readonly ILog Log;
+        private ObjectFactoryAdvisorRetrievalHelper _advisorRetrievalHelper;
+
+        /// <summary>
+        /// Initialize 
+        /// </summary>
+        protected AbstractAdvisorAutoProxyCreator()
+        {
+            Log = LogManager.GetLogger(this.GetType());
+        }
+
         /// <summary>
         /// We override this method to ensure that all candidate advisors are materialized
         /// under a stack trace including this object. Otherwise, the dependencies won't
@@ -60,25 +74,41 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         public override IObjectFactory ObjectFactory
         {
-            //TODO investigate override...
             set
             {
                 base.ObjectFactory = value;
                 if (!(value is IConfigurableListableObjectFactory))
                 {
-                    throw new InvalidOperationException(
-                        "Can not use AdvisorAutoProxyCreator without a ConfigurableListableObjectFactory");
+                    throw new InvalidOperationException("Can not use AdvisorAutoProxyCreator without a ConfigurableListableObjectFactory");
                 }
+                InitObjectFactory((IConfigurableListableObjectFactory) value);
             }
-            get { return base.ObjectFactory; }
+        }
+
+        /// <summary>
+        /// An new <see cref="IConfigurableListableObjectFactory"/> was set. Initialize this creator instance
+        /// according to the specified object factory.
+        /// </summary>
+        /// <param name="objectFactory"></param>
+        protected virtual void InitObjectFactory(IConfigurableListableObjectFactory objectFactory)
+        {
+            _advisorRetrievalHelper = new ObjectFactoryAdvisorRetrievalHelperAdapter(this, objectFactory);
         }
 
         /// <summary>
         /// Return whether the given object is to be proxied, what additional
         /// advices (e.g. AOP Alliance interceptors) and advisors to apply.
         /// </summary>
-        /// <param name="objType">the new object instance</param>
-        /// <param name="name">the name of the object</param>
+        /// <remarks>
+        /// 	<p>The previous targetName of this method was "GetInterceptorAndAdvisorForObject".
+        /// It has been renamed in the course of general terminology clarification
+        /// in Spring 1.1. An AOP Alliance Interceptor is just a special form of
+        /// Advice, so the generic Advice term is preferred now.</p>
+        /// 	<p>The third parameter, customTargetSource, is new in Spring 1.1;
+        /// add it to existing implementations of this method.</p>
+        /// </remarks>
+        /// <param name="targetType">the type of the target object</param>
+        /// <param name="targetName">the name of the target object</param>
         /// <param name="customTargetSource">targetSource returned by TargetSource property:
         /// may be ignored. Will be null unless a custom target source is in use.</param>
         /// <returns>
@@ -86,55 +116,93 @@ namespace Spring.Aop.Framework.AutoProxy
         /// or an empty array if no additional interceptors but just the common ones;
         /// or null if no proxy at all, not even with the common interceptors.
         /// </returns>
-        /// <remarks>
-        /// 	<p>The previous name of this method was "GetInterceptorAndAdvisorForObject".
-        /// It has been renamed in the course of general terminology clarification
-        /// in Spring 1.1. An AOP Alliance Interceptor is just a special form of
-        /// Advice, so the generic Advice term is preferred now.</p>
-        /// 	<p>The third parameter, customTargetSource, is new in Spring 1.1;
-        /// add it to existing implementations of this method.</p>
-        /// </remarks>
-        protected override object[] GetAdvicesAndAdvisorsForObject(Type objType, string name, ITargetSource customTargetSource)
+        protected override object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
         {
-            IList advisors = FindEligibleAdvisors(objType);
+            IList advisors = FindEligibleAdvisors(targetType, targetName);
             if (advisors.Count == 0)
             {
                 return DO_NOT_PROXY;
             }
-            advisors = SortAdvisors(advisors);
-            if (advisors is ArrayList)
-                return ((ArrayList) advisors).ToArray();
-            else
-            {
-                return advisors as object[];
-            }
+            return (object[]) CollectionUtils.ToArray(advisors, typeof (object));
         }
 
         /// <summary>
         /// Find all eligible advices and for autoproxying this class.
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns>the empty list, not null, if there are no pointcuts or interceptors</returns>
-        protected IList FindEligibleAdvisors(Type type)
+        /// <param name="targetType">the type of the object to be advised</param>
+        /// <param name="targetName">the name of the object to be advised</param>
+        /// <returns>
+        /// the empty list, not null, if there are no pointcuts or interceptors. 
+        /// The by-order sorted list of advisors otherwise
+        /// </returns>
+        protected IList FindEligibleAdvisors(Type targetType, string targetName)
         {
-            IList candidateAdvisors = FindCandidateAdvisors();
-            IList eligibleAdvisors = new ArrayList();
-            for (int i = 0; i < candidateAdvisors.Count; i++)
+            IList candidateAdvisors = FindCandidateAdvisors(targetType, targetName);
+            IList eligibleAdvisors =  FindAdvisorsThatCanApply(candidateAdvisors, targetType, targetName);
+
+            ExtendAdvisors(eligibleAdvisors, targetType, targetName);
+            eligibleAdvisors = SortAdvisors(eligibleAdvisors);
+
+            return eligibleAdvisors;
+        }
+
+        /// <summary>
+        /// Find all possible advisor candidates to use in auto-proxying
+        /// </summary>
+        /// <param name="targetType">the type of the object to be advised</param>
+        /// <param name="targetName">the name of the object to be advised</param>
+        /// <returns>the list of candidate advisors</returns>
+        protected virtual IList FindCandidateAdvisors(Type targetType, string targetName)
+        {
+            return _advisorRetrievalHelper.FindAdvisorObjects(targetType, targetName);
+        }
+
+        /// <summary>
+        /// From the given list of candidate advisors, select the ones that are applicable 
+        /// to the given target specified by targetType and name.
+        /// </summary>
+        /// <param name="candidateAdvisors">the list of candidate advisors to date</param>
+        /// <param name="targetType">the target object's type</param>
+        /// <param name="targetName">the target object's name</param>
+        /// <returns>the list of applicable advisors</returns>
+        protected virtual IList FindAdvisorsThatCanApply(IList candidateAdvisors, Type targetType, string targetName)
+        {
+            if (candidateAdvisors.Count==0)
             {
-                IAdvisor candidate = (IAdvisor) candidateAdvisors[i];
-                if (AopUtils.CanApply(candidate, type, null))
+                return candidateAdvisors;
+            }
+
+            ArrayList eligibleAdvisors = new ArrayList();
+            foreach(IAdvisor candidate in candidateAdvisors)
+            {
+                if (candidate is IIntroductionAdvisor && AopUtils.CanApply(candidate, targetType, null))
                 {
-                    eligibleAdvisors.Add(candidate);
                     if (logger.IsInfoEnabled)
                     {
-                        logger.Info(string.Format("Candidate advisor [{0}] accepted for type [{1}]", candidate, type.ToString()));
+                        logger.Info(string.Format("Candidate advisor [{0}] accepted for targetType [{1}]", candidate, targetType));
                     }
+                    eligibleAdvisors.Add(candidate);
+                }
+            }
+
+            bool hasIntroductions = eligibleAdvisors.Count > 0;
+            foreach(IAdvisor candidate in candidateAdvisors)
+            {
+                if (candidate is IIntroductionAdvisor) continue;
+
+                if (AopUtils.CanApply(candidate, targetType, null, hasIntroductions))
+                {
+                    if (logger.IsInfoEnabled)
+                    {
+                        logger.Info(string.Format("Candidate advisor [{0}] accepted for targetType [{1}]", candidate, targetType));
+                    }
+                    eligibleAdvisors.Add(candidate);
                 }
                 else
                 {
                     if (logger.IsInfoEnabled)
                     {
-                        logger.Info(string.Format("Candidate advisor [{0}] rejected for type [{1}]", candidate, type.ToString()));
+                        logger.Info(string.Format("Candidate advisor [{0}] rejected for targetType [{1}]", candidate, targetType));
                     }
                 }
             }
@@ -147,8 +215,13 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         /// <param name="advisors">The advisors.</param>
         /// <returns></returns>
-        protected IList SortAdvisors(IList advisors)
+        protected virtual IList SortAdvisors(IList advisors)
         {
+            if (advisors.Count==0)
+            {
+                return advisors;
+            } 
+
             if (advisors is ArrayList)
                 ((ArrayList) advisors).Sort(new OrderComparator());
             else if (advisors is Array)
@@ -157,9 +230,42 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         /// <summary>
-        /// Find all candidate advisors to use in auto-proxying.
+        /// Extension hook that subclasses can override to register additional advisors,
+        /// given the sorted advisors obtained to date.<br/>
+        /// The default implementation does nothing.<br/>
+        /// Typically used to add advisors that expose contextual information required by some of the later advisors.
         /// </summary>
-        /// <returns>list of Advisors</returns>
-        protected abstract IList FindCandidateAdvisors();
+        /// <param name="advisors">Advisors that have already been identified as applying to a given object</param>
+        /// <param name="objectType">the type of the object to be advised</param>
+        /// <param name="objectName">the name of the object to be advised</param>
+        protected virtual void ExtendAdvisors(IList advisors, Type objectType, string objectName)
+        {}
+
+        /// <summary>
+        /// Whether the given advisor is eligible for the specified target. The default implementation
+        /// always returns true.
+        /// </summary>
+        /// <param name="advisorName">the advisor name</param>
+        /// <param name="targetType">the target object's type</param>
+        /// <param name="targetName">the target object's name</param>
+        protected virtual bool IsEligibleAdvisorObject(string advisorName, Type targetType, string targetName)
+        {
+            return true;
+        }
+
+        private class ObjectFactoryAdvisorRetrievalHelperAdapter : ObjectFactoryAdvisorRetrievalHelper
+        {
+            private readonly AbstractAdvisorAutoProxyCreator _owner;
+
+            public ObjectFactoryAdvisorRetrievalHelperAdapter(AbstractAdvisorAutoProxyCreator owner, IConfigurableListableObjectFactory owningFactory) : base(owningFactory)
+            {
+                _owner = owner;
+            }
+
+            protected override bool IsEligibleObject(string advisorName, Type objectType, string objectName)
+            {
+                return _owner.IsEligibleAdvisorObject(advisorName, objectType, objectName);
+            }
+        }
     }
 }

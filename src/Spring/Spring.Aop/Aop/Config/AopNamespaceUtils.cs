@@ -35,21 +35,18 @@ namespace Spring.Aop.Config
 {
     /// <summary>
     /// Utility class for handling registration of auto-proxy creators used internally by the
-    /// <code>aop</code> namespace tags.
+    /// <code>aop</code> and <code>tx</code> namespace tags.
     /// </summary>
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
+    /// <author>Erich Eichinger (.NET)</author>
     public class AopNamespaceUtils
     {
-
         /// <summary>
         ///  The object name of the internally managed auto-proxy creator.
         /// </summary>
-        public const string AUTO_PROXY_CREATOR_OBJECT_NAME =
-                    "Spring.Aop.Config.InternalAutoProxyCreator";
-
-
+        public static readonly string AUTO_PROXY_CREATOR_OBJECT_NAME = "Spring.Aop.Config.InternalAutoProxyCreator";
 
         /// <summary>
         /// Registers the auto proxy creator if necessary.

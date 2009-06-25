@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Reflection;
 using Spring.Collections;
 using Spring.Util;
@@ -217,8 +218,36 @@ namespace Spring.Aop.Framework
         /// <returns>
         /// <see langword="true"/> if the pointcut can apply on any method.
         /// </returns>
-        public static bool CanApply(
-            IPointcut pointcut, Type targetType, Type[] proxyInterfaces)
+        public static bool CanApply(IPointcut pointcut, Type targetType, Type[] proxyInterfaces)
+        {
+            return CanApply(pointcut, targetType, proxyInterfaces, false);
+        }
+        /// <summary> 
+        /// Can the supplied <paramref name="pointcut"/> apply at all on the
+        /// supplied <paramref name="targetType"/>?
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// This is an important test as it can be used to optimize out a
+        /// pointcut for a class.
+        /// </p>
+        /// <p>
+        /// Invoking this method with a <paramref name="targetType"/> that is
+        /// an interface type will always yield a <see langword="false"/>
+        /// return value.
+        /// </p>
+        /// </remarks>
+        /// <param name="pointcut">The pointcut being tested.</param>
+        /// <param name="targetType">The class being tested.</param>
+        /// <param name="proxyInterfaces">
+        /// The interfaces being proxied. If <see langword="null"/>, all
+        /// methods on a class may be proxied.
+        /// </param>
+        /// <param name="hasIntroductions">whether or not the advisor chain for the target object includes any introductions.</param>
+        /// <returns>
+        /// <see langword="true"/> if the pointcut can apply on any method.
+        /// </returns>
+        public static bool CanApply(IPointcut pointcut, Type targetType, Type[] proxyInterfaces, bool hasIntroductions)
         {
             if (!pointcut.TypeFilter.Matches(targetType))
             {
@@ -266,8 +295,32 @@ namespace Spring.Aop.Framework
         /// <returns>
         /// <see langword="true"/> if the advisor can apply on any method.
         /// </returns>
-        public static bool CanApply(
-            IAdvisor advisor, Type targetType, Type[] proxyInterfaces)
+        public static bool CanApply(IAdvisor advisor, Type targetType, Type[] proxyInterfaces)
+        {
+            return CanApply(advisor, targetType, proxyInterfaces, false);
+        }
+
+        /// <summary> 
+        /// Can the supplied <paramref name="advisor"/> apply at all on the
+        /// supplied <paramref name="targetType"/>?
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// This is an important test as it can be used to optimize out an
+        /// advisor for a class.
+        /// </p>
+        /// </remarks>
+        /// <param name="advisor">The advisor to check.</param>
+        /// <param name="targetType">The class being tested.</param>
+        /// <param name="proxyInterfaces">
+        /// The interfaces being proxied. If <see langword="null"/>, all
+        /// methods on a class may be proxied.
+        /// </param>
+        /// <param name="hasIntroductions">whether or not the advisor chain for the target object includes any introductions.</param>
+        /// <returns>
+        /// <see langword="true"/> if the advisor can apply on any method.
+        /// </returns>
+        public static bool CanApply(IAdvisor advisor, Type targetType, Type[] proxyInterfaces, bool hasIntroductions)
         {
             if (advisor is IIntroductionAdvisor)
             {
@@ -276,7 +329,7 @@ namespace Spring.Aop.Framework
             else if (advisor is IPointcutAdvisor)
             {
                 IPointcutAdvisor pca = (IPointcutAdvisor)advisor;
-                return CanApply(pca.Pointcut, targetType, proxyInterfaces);
+                return CanApply(pca.Pointcut, targetType, proxyInterfaces, hasIntroductions);
             }
             // no pointcut specified so assume it applies...
             return true;

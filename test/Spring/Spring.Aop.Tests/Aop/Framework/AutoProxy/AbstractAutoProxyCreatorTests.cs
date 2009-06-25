@@ -121,9 +121,9 @@ namespace Spring.Aop.Framework.AutoProxy
                 this.ObjectFactory = objectFactory;
             }
 
-            protected override object[] GetAdvicesAndAdvisorsForObject(Type objType, string name, ITargetSource customTargetSource)
+            protected override object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
             {
-                if (typeof(IFactoryObject).IsAssignableFrom(objType))
+                if (typeof(IFactoryObject).IsAssignableFrom(targetType))
                 {
                     return DO_NOT_PROXY;
                 }

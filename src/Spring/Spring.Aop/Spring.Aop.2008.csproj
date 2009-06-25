@@ -138,7 +138,9 @@
     <Compile Include="Aop\Framework\AopUtils.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AbstractFilteringAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AttributeAutoProxyCreator.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\InfrastructureAdvisorAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\AutoProxy\InheritanceBasedAopConfigurer.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\ObjectFactoryAdvisorRetrievalHelper.cs" />
     <Compile Include="Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\AutoProxy\TypeNameAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\DynamicMethodInvocation.cs" />

@@ -120,6 +120,11 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         string Scope { get; set; }
 
+        /// <summary>
+        /// Get the role hint for this object definition
+        /// </summary>
+        ObjectRole Role { get; }
+
 		/// <summary>
 		/// Returns the <see cref="System.Type"/> of the object definition (if any).
 		/// </summary>

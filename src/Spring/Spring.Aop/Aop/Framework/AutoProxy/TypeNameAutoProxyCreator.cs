@@ -55,15 +55,15 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <remarks>
         /// Override this method to allow or reject proxying for the given object.
         /// </remarks>
-        /// <param name="objType">the object's type</param>
-        /// <param name="name">the name of the object</param>
+        /// <param name="targetType">the object's type</param>
+        /// <param name="targetName">the name of the object</param>
         /// <seealso cref="AbstractAutoProxyCreator.ShouldSkip"/>        
         /// <returns>whether the given object shall be proxied.</returns>
-        protected override bool IsEligibleForProxying(Type objType, string name)
+        protected override bool IsEligibleForProxying(Type targetType, string targetName)
         {
             AssertUtils.ArgumentNotNull(_typeNameFilter, "TypeNames");
 
-            bool shallProxy = _typeNameFilter.Matches(objType);
+            bool shallProxy = _typeNameFilter.Matches(targetType);
             return shallProxy;
         }
     }

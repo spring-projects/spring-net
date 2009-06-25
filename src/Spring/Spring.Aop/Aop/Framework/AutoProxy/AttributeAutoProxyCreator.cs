@@ -61,15 +61,15 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         /// <summary>
-        /// Determines, whether the given object shall be proxied by matching <paramref name="objType"/> against <see cref="AttributeTypes"/>.
+        /// Determines, whether the given object shall be proxied by matching <paramref name="targetType"/> against <see cref="AttributeTypes"/>.
         /// </summary>
-        /// <param name="objType">the object's type</param>
-        /// <param name="name">the name of the object</param>
-        protected override bool IsEligibleForProxying( Type objType, string name )
+        /// <param name="targetType">the object's type</param>
+        /// <param name="targetName">the name of the object</param>
+        protected override bool IsEligibleForProxying( Type targetType, string targetName )
         {
             AssertUtils.ArgumentNotNull(this.AttributeTypes, "AttributeTypes");
 
-            bool shallProxy = IsAnnotatedWithAnyOfAttribute( objType, this.AttributeTypes, this.CheckInherited );
+            bool shallProxy = IsAnnotatedWithAnyOfAttribute( targetType, this.AttributeTypes, this.CheckInherited );
             return shallProxy;
         }
 

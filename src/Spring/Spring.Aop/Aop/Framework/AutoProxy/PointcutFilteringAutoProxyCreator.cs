@@ -49,11 +49,11 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// Determines, whether the given object shall be proxied.
         /// </summary>
-        protected override bool IsEligibleForProxying( Type objType, string name )
+        protected override bool IsEligibleForProxying( Type targetType, string targetName )
         {
             AssertUtils.ArgumentNotNull(_pointcut, "Pointcut");
 
-            bool shallProxy = AopUtils.CanApply( _pointcut, objType, null );
+            bool shallProxy = AopUtils.CanApply( _pointcut, targetType, null );
             return shallProxy;
         }
     }

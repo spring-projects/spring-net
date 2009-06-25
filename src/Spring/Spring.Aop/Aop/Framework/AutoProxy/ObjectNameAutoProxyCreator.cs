@@ -71,11 +71,11 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// Identify as object to proxy if the object name is in the configured list of names.
         /// </summary>
-        protected override bool IsEligibleForProxying( Type objType, string name )
+        protected override bool IsEligibleForProxying( Type targetType, string targetName )
         {
             AssertUtils.ArgumentNotNull(this.ObjectNames, "ObjectNames");
             
-            bool shallProxy = PatternMatchUtils.IsObjectNameMatch(objType, name, this.ObjectNames, new PatternMatchUtils.ObjectNameMatchPredicate(IsMatch), ObjectFactoryUtils.FactoryObjectPrefix);
+            bool shallProxy = PatternMatchUtils.IsObjectNameMatch(targetType, targetName, this.ObjectNames, new PatternMatchUtils.ObjectNameMatchPredicate(IsMatch), ObjectFactoryUtils.FactoryObjectPrefix);
             return shallProxy;
         }
 

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ACD39D47-1811-40FA-9E7E-5DEA5B9CE6C0}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -166,6 +166,7 @@
     <EmbeddedResource Include="Data\AutoDeclarativeTxTests.xml" />
     <EmbeddedResource Include="Data\Common\AdditionalProviders.xml" />
     <Content Include="Spring.Data.Tests.dll.config" />
+    <Content Include="Transaction\Config\TxNamespaceParserTests_TxAttributeDriven.xml" />
     <EmbeddedResource Include="Transaction\Interceptor\MatchAlwaysTransactionAttributeSourceTests.xml" />
     <EmbeddedResource Include="Transaction\Config\TxNamespaceParserTests.xml" />
   </ItemGroup>

@@ -21,9 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Config;
 
 #endregion
 
@@ -36,16 +34,15 @@ namespace Spring.Aop.Framework.AutoProxy
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Adhari C Mahendra (.NET)</author>
-    public class DefaultAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator, IObjectNameAware, IInitializingObject
+    /// <author>Erich Eichinger (.NET)</author>
+    public class DefaultAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator, IObjectNameAware
     {
-
         /// <summary>
         /// Separator between prefix and remainder of object name
         /// </summary>
         public static readonly string SEPARATOR = ".";
         private bool usePrefix;
         private string advisorObjectNamePrefix;
-        private IList advisors;
 
         #region Properties
 
@@ -73,98 +70,6 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         #endregion
-        /// <summary>
-        /// Find all candidate advices to use in auto proxying.
-        /// </summary>
-        /// <returns>list of Advice</returns>
-        protected override IList FindCandidateAdvisors()
-        {
-            if (advisors == null)
-            {
-                throw new InvalidOperationException("Must not be called before AfterPropertiesSet()");
-            }
-            if (logger.IsDebugEnabled)
-            {
-                logger.Debug(string.Format("returning available advisors"));
-            }
-            return advisors;
-        }
-
-        private IList InstantiateCandidateAdvisors()
-        {
-            if (logger.IsDebugEnabled)
-            {
-                logger.Debug(string.Format("instantiating available advisors"));
-            }
-
-            //This is ensured in AbstractAdvisorAutoProxyCreator.  Will be more type safe once sync with Spring Java 2.x
-            IConfigurableListableObjectFactory owningFactory = ObjectFactory as IConfigurableListableObjectFactory;
-            if (owningFactory == null)
-            {
-                throw new InvalidOperationException("Cannot use DefaultAdvisorAutoProxyCreator without a IListableObjectFactory");
-            }
-
-            ArrayList candidateAdvisors = new ArrayList();
-
-            string[] advisorNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(
-                owningFactory, typeof(IAdvisor), true, false);
-            for (int i = 0; i < advisorNames.Length; i++)
-            {
-                string name = advisorNames[i];
-                if ( (!usePrefix || name.StartsWith(advisorObjectNamePrefix)) && !owningFactory.IsCurrentlyInCreation(name))
-                {
-                    try
-                    {
-                        IAdvisor advisor = (IAdvisor) owningFactory.GetObject(name);
-                        candidateAdvisors.Add(advisor);
-                    } catch (ObjectCreationException ex)
-                    {
-                        Exception rootEx = ex.GetBaseException();
-
-                        
-                        if (rootEx is ObjectCurrentlyInCreationException)
-                        {
-                            ObjectCurrentlyInCreationException oce = (ObjectCurrentlyInCreationException) rootEx;
-                            if (owningFactory.IsCurrentlyInCreation(oce.ObjectName))
-                            {
-                                if (logger.IsDebugEnabled)
-                                {
-                                    logger.Debug(string.Format("Ignoring currently created advisor '{0}': exception message = {1}",
-                                        name, ex.Message));
-                                }
-                                continue;
-                            }                                                      
-                        }
-                        throw;
-                    }
-                }
-            }
-
-            string[] aspectNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(
-                owningFactory, typeof(IAdvisors), true, false);
-            for (int i = 0; i < aspectNames.Length; i++)
-            {
-                string name = aspectNames[i];
-                if (!usePrefix || name.StartsWith(advisorObjectNamePrefix))
-                {
-                    IAdvisors advisors = (IAdvisors)owningFactory.GetObject(name);
-                    candidateAdvisors.AddRange(advisors.Advisors);
-                }
-            }
-
-            return candidateAdvisors;
-        }
-
-
-
-        /// <summary>
-        /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
-        /// after it has injected all of an object's dependencies.
-        /// </summary>
-        public void AfterPropertiesSet()
-        {
-            advisors = InstantiateCandidateAdvisors();
-        }
 
         #region IObjectNameAware Members
 
@@ -193,5 +98,16 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         #endregion
+
+        /// <summary>
+        /// Whether the given advisor is eligible for the specified target.
+        /// </summary>
+        /// <param name="advisorName">the advisor name</param>
+        /// <param name="targetType">the target object's type</param>
+        /// <param name="targetName">the target object's name</param>
+        protected override bool IsEligibleAdvisorObject(string advisorName, Type targetType, string targetName)
+        {
+            return (!usePrefix || advisorName.StartsWith(advisorObjectNamePrefix));
+        }
     }
 }

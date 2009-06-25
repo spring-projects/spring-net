@@ -49,7 +49,6 @@ namespace Spring.Objects.Factory.Support
         private static readonly string SCOPE_SINGLETON = "singleton";
         private static readonly string SCOPE_PROTOTYPE = "prototype";
 
-
         #region Constructor (s) / Destructor
 
         /// <summary>
@@ -126,6 +125,7 @@ namespace Spring.Objects.Factory.Support
             IsAbstract = other.IsAbstract;
 //            IsSingleton = other.IsSingleton;
             Scope = other.Scope;
+            Role = other.Role;
             IsLazyInit = other.IsLazyInit;
             ConstructorArgumentValues
                 = new ConstructorArgumentValues(other.ConstructorArgumentValues);
@@ -269,6 +269,15 @@ namespace Spring.Objects.Factory.Support
                 this.isSingleton = 0==string.Compare(SCOPE_SINGLETON, value, true);
                 this.isPrototype = 0==string.Compare(SCOPE_PROTOTYPE, value, true);
             }
+        }
+
+        /// <summary>
+        /// Get or set the role hint for this object definition
+        /// </summary>
+        public virtual ObjectRole Role
+        {
+            get { return role; }
+            set { role = value; }
         }
 
         /// <summary>
@@ -797,6 +806,7 @@ namespace Spring.Objects.Factory.Support
         private bool isLazyInit = false;
         private bool isAbstract = false;
         private string scope = SCOPE_SINGLETON;
+        private ObjectRole role = ObjectRole.ROLE_APPLICATION;
         private object objectType;
         private AutoWiringMode autowireMode = AutoWiringMode.No;
         private DependencyCheckingMode dependencyCheck = DependencyCheckingMode.None;

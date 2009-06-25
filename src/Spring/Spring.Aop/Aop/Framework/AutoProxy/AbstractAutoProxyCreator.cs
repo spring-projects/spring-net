@@ -355,10 +355,10 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Sometimes we need to be able to avoid this happening if it will lead to
         /// a circular reference. This implementation returns false.
         /// </summary>
-        /// <param name="objectType">the type of the object</param>
-        /// <param name="objectName">the name of the object</param>
+        /// <param name="targetType">the type of the object</param>
+        /// <param name="targetName">the name of the object</param>
         /// <returns>if remarkable to skip</returns>
-        protected virtual bool ShouldSkip(Type objectType, string objectName)
+        protected virtual bool ShouldSkip(Type targetType, string targetName)
         {
             return false;
         }
@@ -434,32 +434,32 @@ namespace Spring.Aop.Framework.AutoProxy
         /// advices (e.g. AOP Alliance interceptors) and advisors to apply.
         /// </summary>
         /// <remarks>
-        /// <p>The previous name of this method was "GetInterceptorAndAdvisorForObject".
+        /// <p>The previous targetName of this method was "GetInterceptorAndAdvisorForObject".
         /// It has been renamed in the course of general terminology clarification
         /// in Spring 1.1. An AOP Alliance Interceptor is just a special form of
         /// Advice, so the generic Advice term is preferred now.</p>
         /// <p>The third parameter, customTargetSource, is new in Spring 1.1;
         /// add it to existing implementations of this method.</p>
         /// </remarks>
-        /// <param name="objType">the new object instance</param>
-        /// <param name="name">the name of the object</param>
+        /// <param name="targetType">the new object instance</param>
+        /// <param name="targetName">the name of the object</param>
         /// <param name="customTargetSource">targetSource returned by TargetSource property:
         /// may be ignored. Will be null unless a custom target source is in use.</param>
         /// <returns>an array of additional interceptors for the particular object;
         /// or an empty array if no additional interceptors but just the common ones;
         /// or null if no proxy at all, not even with the common interceptors.</returns>
-        protected abstract object[] GetAdvicesAndAdvisorsForObject(Type objType, string name, ITargetSource customTargetSource);
+        protected abstract object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource);
 
         /// <summary>
         /// Create an AOP proxy for the given object.
         /// </summary>
-        /// <param name="objectType">Type of the object.</param>
-        /// <param name="objectName">The name of the object.</param>
+        /// <param name="targetType">Type of the object.</param>
+        /// <param name="targetName">The name of the object.</param>
         /// <param name="specificInterceptors">The set of interceptors that is specific to this
         /// object (may be empty but not null)</param>
         /// <param name="targetSource">The target source for the proxy, already pre-configured to access the object.</param>
         /// <returns>The AOP Proxy for the object.</returns>
-        protected virtual object CreateProxy(Type objectType, string objectName, object[] specificInterceptors, ITargetSource targetSource)
+        protected virtual object CreateProxy(Type targetType, string targetName, object[] specificInterceptors, ITargetSource targetSource)
         {
             ProxyFactory proxyFactory = CreateProxyFactory();
             // copy our properties (proxyTargetClass) inherited from ProxyConfig
@@ -472,7 +472,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 // Must allow for introductions; can't just set interfaces to
                 // the target's interfaces only.
-                Type[] targetInterfaceTypes = AopUtils.GetAllInterfacesFromType(objectType);
+                Type[] targetInterfaceTypes = AopUtils.GetAllInterfacesFromType(targetType);
                 foreach (Type interfaceType in targetInterfaceTypes)
                 {
                     proxyFactory.AddInterface(interfaceType);
@@ -480,7 +480,7 @@ namespace Spring.Aop.Framework.AutoProxy
             }
 
 
-            IAdvisor[] advisors = BuildAdvisors(objectName, specificInterceptors);
+            IAdvisor[] advisors = BuildAdvisors(targetName, specificInterceptors);
 
             foreach (IAdvisor advisor in advisors)
             {
@@ -513,11 +513,11 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Determines the advisors for the given object, including the specific interceptors
         /// as well as the common interceptor, all adapted to the Advisor interface.
         /// </summary>
-        /// <param name="objectName">The name of the object.</param>
+        /// <param name="targetName">The name of the object.</param>
         /// <param name="specificInterceptors">The set of interceptors that is specific to this
         /// object (may be empty, but not null)</param>
         /// <returns>The list of Advisors for the given object</returns>
-        protected virtual IAdvisor[] BuildAdvisors(string objectName, object[] specificInterceptors)
+        protected virtual IAdvisor[] BuildAdvisors(string targetName, object[] specificInterceptors)
         {
             // handle prototypes correctly
             IAdvisor[] commonInterceptors = ResolveInterceptorNames();
@@ -542,7 +542,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 int nrOfCommonInterceptors = commonInterceptors != null ? commonInterceptors.Length : 0;
                 int nrOfSpecificInterceptors = specificInterceptors != null ? specificInterceptors.Length : 0;
-                logger.Info(string.Format("Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", objectName, nrOfCommonInterceptors, nrOfSpecificInterceptors));
+                logger.Info(string.Format("Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", targetName, nrOfCommonInterceptors, nrOfSpecificInterceptors));
             }
 
 
