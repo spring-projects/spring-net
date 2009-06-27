@@ -116,12 +116,11 @@ namespace Spring.Context.Support
         protected override void RefreshObjectFactory()
         {
             // Shut down previous object factory, if any.
-            IConfigurableListableObjectFactory oldObjectFactory = null;
-            oldObjectFactory = Interlocked.Exchange(ref _objectFactory, null);
+            IConfigurableListableObjectFactory oldObjectFactory = _objectFactory;
+            _objectFactory = null;
 
             if (oldObjectFactory != null)
             {
-                //                _objectFactory = null;
                 oldObjectFactory.Dispose();
             }
 
