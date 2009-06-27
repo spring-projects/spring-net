@@ -44,10 +44,9 @@ namespace Spring.Objects.Factory.Support
 		#region Constants
 
 		/// <summary>
-		/// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
+		/// The <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
 		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (AbstractObjectDefinitionReader));
+		protected readonly ILog log;
 
 		#endregion
 
@@ -94,6 +93,8 @@ namespace Spring.Objects.Factory.Support
 			IObjectDefinitionRegistry registry,
 			AppDomain domain)
 		{
+		    log = LogManager.GetLogger(this.GetType());
+
 		    AssertUtils.ArgumentNotNull(registry, "registry", "IObjectDefinitionRegistry must not be null");
 			_registry = registry;
 			_domain = domain;

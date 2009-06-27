@@ -21,6 +21,8 @@
 #region Imports
 
 using System;
+using System.Collections;
+using Spring.Context;
 using Spring.Objects.Factory;
 
 #endregion
@@ -35,7 +37,7 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <author>Rod Johnson</author>
     /// <author>Adhari C Mahendra (.NET)</author>
     /// <author>Erich Eichinger (.NET)</author>
-    public class DefaultAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator, IObjectNameAware
+    public class DefaultAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator, IObjectNameAware, IInitializingObject
     {
         /// <summary>
         /// Separator between prefix and remainder of object name
@@ -43,6 +45,7 @@ namespace Spring.Aop.Framework.AutoProxy
         public static readonly string SEPARATOR = ".";
         private bool usePrefix;
         private string advisorObjectNamePrefix;
+        private IList cachedAdvisors;
 
         #region Properties
 
@@ -100,6 +103,20 @@ namespace Spring.Aop.Framework.AutoProxy
         #endregion
 
         /// <summary>
+        /// Find all possible advisor candidates to use in auto-proxying
+        /// </summary>
+        /// <param name="targetType">the type of the object to be advised</param>
+        /// <param name="targetName">the name of the object to be advised</param>
+        /// <returns>the list of candidate advisors</returns>
+        protected override IList FindCandidateAdvisors(Type targetType, string targetName)
+        {
+            if (cachedAdvisors == null) {
+                cachedAdvisors = base.FindCandidateAdvisors(targetType, targetName);
+            }
+            return cachedAdvisors;
+        }
+
+        /// <summary>
         /// Whether the given advisor is eligible for the specified target.
         /// </summary>
         /// <param name="advisorName">the advisor name</param>
@@ -109,5 +126,14 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             return (!usePrefix || advisorName.StartsWith(advisorObjectNamePrefix));
         }
-    }
+
+        /// <summary>
+        /// Validate configuration
+        /// </summary>
+        public virtual void AfterPropertiesSet()
+        {
+            // eagerly resolve advisors at this stage already to prevent circular dep problems.
+            // TODO (EE): fix instantiation process to make test "AdvisorAutoProxyCreatorCircularReferencesTests" work.
+            cachedAdvisors = base.FindCandidateAdvisors(null, null);
+        }    }
 }

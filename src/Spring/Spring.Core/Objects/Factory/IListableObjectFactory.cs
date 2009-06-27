@@ -58,7 +58,7 @@ namespace Spring.Objects.Factory
 	/// <author>Rick Evans (.NET)</author>
 	public interface IListableObjectFactory : IObjectFactory
 	{
-		/// <summary>
+        /// <summary>
 		/// Check if this object factory contains an object definition with the given name.
 		/// </summary>
 		/// <remarks>

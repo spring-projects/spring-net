@@ -2,22 +2,23 @@
 <objects xmlns="http://www.springframework.net"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"
-    default-autowire="byType"
+    default-autowire="no"
 >
     <description>
         Reproduces a problem with AutoProxyCreators, IFactoryObjects,
         circular dependencies and a certain order of object definitions
     </description>
 
-    <!-- start instantiating a factoryobject -->
+  <!-- start instantiating a factoryobject -->
     <object id="testObjectFactory" type="Spring.Aop.Framework.AutoProxy.TestObjectFactoryObject, Spring.Aop.Tests">
         <property name="SomeOtherObject" ref="someOtherObject" />
     </object>
 
-    <!-- note that testAdvisor is defined *after* 'testObjectFactory'! -->
-    <object id="testAdvisor" type="Spring.Aop.Framework.AutoProxy.TestAdvisor, Spring.Aop.Tests">
-        <property name="testObject" ref="testObjectFactory" />  <!-- ref on testObjectFactory closes the dep circle -->
-    </object>
+  <!-- note that testAdvisor is defined *after* 'testObjectFactory'! -->
+  <object id="testAdvisor" type="Spring.Aop.Framework.AutoProxy.CountingAfterReturningAdvisor, Spring.Aop.Tests">
+    <property name="testObject" ref="testObjectFactory" />
+    <!-- ref on testObjectFactory closes the dep circle -->
+  </object>
 
 <!--
   This object can be instantiated without any additional deps 
@@ -30,6 +31,6 @@
 
   
     <!-- match everything -->
-    <object id="aapc" type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop"/>
+    <object id="aapc" type="Spring.Aop.Framework.AutoProxy.TestDefaultAdvisorAutoProxyCreator, Spring.Aop.Tests" />
 
 </objects>

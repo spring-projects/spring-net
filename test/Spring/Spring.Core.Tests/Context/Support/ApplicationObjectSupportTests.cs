@@ -158,7 +158,12 @@ namespace Spring.Context.Support
 
 			#region IObjectFactory Members
 
-			public object this[string name]
+		    public bool IsCaseSensitive
+		    {
+		        get { return true; }
+		    }
+
+		    public object this[string name]
 			{
 				get { return null; }
 			}

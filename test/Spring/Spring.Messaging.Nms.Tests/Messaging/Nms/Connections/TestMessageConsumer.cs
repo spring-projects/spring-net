@@ -25,8 +25,13 @@ namespace Spring.Messaging.Nms.Connections
 {
     public class TestMessageConsumer : IMessageConsumer
     {
-
         public event MessageListener Listener;
+
+        private void InvokeListener(IMessage message)
+        {
+            MessageListener listener = Listener;
+            if (listener != null) listener(message);
+        }
 
         public IMessage Receive()
         {

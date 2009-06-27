@@ -150,7 +150,12 @@ namespace Spring.Objects.Factory
 	/// <author>Rick Evans (.NET)</author>
 	public interface IObjectFactory : IDisposable
 	{
-		/// <summary>
+        /// <summary>
+        /// Determine whether this object factory treats object names case-sensitive or not.
+        /// </summary>
+        bool IsCaseSensitive { get; }
+
+        /// <summary>
 		/// Is this object a singleton?
 		/// </summary>
 		/// <remarks>
@@ -196,8 +201,8 @@ namespace Spring.Objects.Factory
 		/// </summary>
 		/// <remarks>
 		/// <para>
-		/// Will ask the parent factory if the object cannot be found in this factory
-		/// instance.
+		/// The concrete lookup strategy depends on the implementation. E.g. <see cref="IHierarchicalObjectFactory"/>s
+		/// will also search their parent factory if a name isn't found .
 		/// </para>
 		/// </remarks>
 		/// <param name="name">The name of the object to query.</param>

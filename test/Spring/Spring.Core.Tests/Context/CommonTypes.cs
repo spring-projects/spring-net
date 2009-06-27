@@ -263,6 +263,11 @@ namespace Spring.Context
 //			factory.AddObjectPostProcessor(new ApplicationContextAwareProcessor(this));
 		}
 
+        public override bool IsObjectNameInUse(string objectName)
+        {
+            return factory.IsObjectNameInUse(objectName);
+        }
+
 		public override IConfigurableListableObjectFactory ObjectFactory
 		{
 			get { return factory; }
@@ -416,7 +421,12 @@ namespace Spring.Context
 
 		#region IObjectFactory Members
 
-		public object this[string name]
+	    public bool IsCaseSensitive
+	    {
+	        get { return true; }
+	    }
+
+	    public object this[string name]
 		{
 			get { return null; }
 		}

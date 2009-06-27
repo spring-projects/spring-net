@@ -51,7 +51,7 @@ namespace Spring.Objects.Factory.Config
 	/// <author>Rick Evans (.NET)</author>
 	public interface IConfigurableObjectFactory : IHierarchicalObjectFactory, ISingletonObjectRegistry
 	{
-		/// <summary>
+        /// <summary>
 		/// Set the parent of this object factory.
 		/// </summary>
 		/// <remarks>

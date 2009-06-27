@@ -22,6 +22,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using Common.Logging;
 using Spring.Objects;
 using Spring.Objects.Factory.Config;
@@ -45,11 +46,6 @@ namespace Spring.Context.Support
     /// <author>Griffin Caprio (.NET)</author>
     public abstract class AbstractXmlApplicationContext : AbstractApplicationContext
     {
-		/// <summary>
-		/// The <see cref="Common.Logging.ILog"/> instance for this class.
-		/// </summary>
-		private static readonly ILog log = LogManager.GetLogger(typeof(AbstractXmlApplicationContext));
-
         private DefaultListableObjectFactory _objectFactory;
 
         /// <summary>
@@ -63,8 +59,9 @@ namespace Spring.Context.Support
         /// no public constructors.
         /// </p>
         /// </remarks>
-        protected AbstractXmlApplicationContext() : this(null, true, null)
-        {}
+        protected AbstractXmlApplicationContext()
+            : this(null, true, null)
+        { }
 
         /// <summary>
         /// Creates a new instance of the
@@ -80,9 +77,10 @@ namespace Spring.Context.Support
         /// <param name="name">The application context name.</param>
         /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
         /// <param name="parentContext">The parent context.</param>
-        protected AbstractXmlApplicationContext(string name, bool caseSensitive, 
-			IApplicationContext parentContext) : base(name, caseSensitive, parentContext)
-        {}
+        protected AbstractXmlApplicationContext(string name, bool caseSensitive,
+            IApplicationContext parentContext)
+            : base(name, caseSensitive, parentContext)
+        { }
 
         /// <summary>
         /// An array of resource locations, referring to the XML object
@@ -119,11 +117,11 @@ namespace Spring.Context.Support
         {
             // Shut down previous object factory, if any.
             IConfigurableListableObjectFactory oldObjectFactory = null;
-            oldObjectFactory = _objectFactory;
+            oldObjectFactory = Interlocked.Exchange(ref _objectFactory, null);
 
             if (oldObjectFactory != null)
             {
-                _objectFactory = null;
+                //                _objectFactory = null;
                 oldObjectFactory.Dispose();
             }
 
@@ -182,7 +180,7 @@ namespace Spring.Context.Support
         /// </param>
         protected virtual void InitObjectDefinitionReader(
             XmlObjectDefinitionReader objectDefinitionReader)
-        {}
+        { }
 
         /// <summary>
         /// Load the object definitions with the given 
@@ -259,7 +257,7 @@ namespace Spring.Context.Support
         /// <param name="objectFactory">The newly created object factory for this context</param>
         protected virtual void CustomizeObjectFactory(DefaultListableObjectFactory objectFactory)
         {
-            
+            // noop
         }
 
         /// <summary>
@@ -278,7 +276,7 @@ namespace Spring.Context.Support
         /// <returns>The object factory for this context.</returns>
         protected virtual DefaultListableObjectFactory CreateObjectFactory()
         {
-            return new DefaultListableObjectFactory(CaseSensitive, GetInternalParentObjectFactory());
+            return new DefaultListableObjectFactory(IsCaseSensitive, GetInternalParentObjectFactory());
         }
 
         /// <summary>
@@ -290,13 +288,16 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Context.Support.AbstractApplicationContext.ObjectFactory"/>
         public override IConfigurableListableObjectFactory ObjectFactory
         {
-            get
-            {
-				lock(SyncRoot)
-				{
-					return _objectFactory;
-				}
-            }
+            get { return _objectFactory; }
+        }
+
+        /// <summary>
+        /// Determine whether the given object name is already in use within this context's object factory, 
+        /// i.e. whether there is a local object or alias registered under this name. 
+        /// </summary>
+        public override bool IsObjectNameInUse(string objectName)
+        {
+            return _objectFactory.IsObjectNameInUse(objectName);
         }
     }
 }

@@ -128,7 +128,12 @@ namespace Spring
 
 		#region IObjectFactory Members
 
-		public object this[string name]
+	    public bool IsCaseSensitive
+	    {
+	        get { return true; }
+	    }
+
+	    public object this[string name]
 		{
 			get { return null; }
 		}
@@ -216,7 +221,13 @@ namespace Spring
 
 		#region IObjectFactory Members
 
-		public object this[string name]
+	    public bool IsCaseSensitive
+	    {
+	        get { innerExecute();
+	            return true; }
+	    }
+
+	    public object this[string name]
 		{
 			get
 			{

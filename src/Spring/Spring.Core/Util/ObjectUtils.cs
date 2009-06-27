@@ -25,6 +25,7 @@ using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Remoting;
+using System.Runtime.Remoting.Proxies;
 using Common.Logging;
 using Spring.Objects;
 using Spring.Reflection.Dynamic;
@@ -311,8 +312,32 @@ namespace Spring.Util
         /// <returns>True if the type is assignable from the value.</returns>
         public static bool IsAssignable(Type type, object obj)
         {
+            AssertUtils.ArgumentNotNull(type, "type");
+            if (!type.IsPrimitive && obj == null)
+            {
+                return true;
+            }
+
+            if (RemotingServices.IsTransparentProxy(obj))
+            {
+                RealProxy rp = RemotingServices.GetRealProxy(obj);
+                if (rp is IRemotingTypeInfo)
+                {
+                    return ((IRemotingTypeInfo) rp).CanCastTo(type, obj);
+                }
+                else if (rp != null)
+                {
+                    type = rp.GetProxiedType();
+                }
+
+                if (type == null)
+                {
+                    // cannot decide
+                    return false;
+                }
+            }
+
             return (type.IsInstanceOfType(obj) ||
-                    (!type.IsPrimitive && obj == null) ||
                     (type.Equals(typeof(bool)) && obj is Boolean) ||
                     (type.Equals(typeof(byte)) && obj is Byte) ||
                     (type.Equals(typeof(char)) && obj is Char) ||

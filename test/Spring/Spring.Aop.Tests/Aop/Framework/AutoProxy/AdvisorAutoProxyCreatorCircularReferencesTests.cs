@@ -22,6 +22,7 @@
 
 using System;
 using System.Reflection;
+using Common.Logging;
 using NUnit.Framework;
 using Spring.Aop.Framework.DynamicProxy;
 using Spring.Aop.Support;
@@ -45,23 +46,67 @@ namespace Spring.Aop.Framework.AutoProxy
         public void TestAutoProxyCreation()
         {
             XmlApplicationContext context = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("advisorAutoProxyCreatorCircularReferencesTests.xml", typeof(AdvisorAutoProxyCreatorCircularReferencesTests)));
+            CountingAfterReturningAdvisor countingAdvisor = (CountingAfterReturningAdvisor)context.GetObject("testAdvisor");
+
             // direct deps of AutoProxyCreator are not eligable for proxying
             Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("aapc")));
-            Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("testAdvisor")));
-            Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("&testObjectFactory")));
+            Assert.IsFalse(AopUtils.IsAopProxy(countingAdvisor));
+
+            TestObjectFactoryObject testObjectFactory = (TestObjectFactoryObject) context.GetObject("&testObjectFactory");
+            Assert.IsFalse(AopUtils.IsAopProxy(testObjectFactory));
+
             Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("someOtherObject")));
 
             // this one is completely independent
             Assert.IsTrue(AopUtils.IsAopProxy(context.GetObject("independentObject")));
 
-            // products of the factory created at runtime should be proxied
-            Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("testObjectFactory")));
+
+            // Asserts SPRNET-1225 - advisor dependencies most not be auto-proxied
+            object testObject = context.GetObject("testObjectFactory");
+            Assert.IsFalse(AopUtils.IsAopProxy(testObject));
+
+            // Asserts SPRNET-1224 - factory product most be cached
+            context.GetObject("testObjectFactory");
+            testObjectFactory.GetObjectCounter = 0;
+            context.GetObject("testObjectFactory");
+            Assert.AreEqual(0, testObjectFactory.GetObjectCounter);
+
+            ICloneable someOtherObject = (ICloneable) context.GetObject("someOtherObject");
+            someOtherObject.Clone();
+            ICloneable independentObject = (ICloneable) context.GetObject("independentObject");
+            independentObject.Clone();
+            Assert.AreEqual(1, countingAdvisor.GetCalls());
         }
     }
 
     #region Support Classes
 
-    public class TestAdvisor : StaticMethodMatcherPointcutAdvisor
+    public class TestDefaultAdvisorAutoProxyCreator : DefaultAdvisorAutoProxyCreator, IInitializingObject
+    {
+        private readonly ILog _logger;
+
+        public TestDefaultAdvisorAutoProxyCreator()
+        {
+            _logger = LogManager.GetLogger(this.GetType().Name + "#" + GetHashCode());
+            _logger.Trace("Created instance");
+        }
+
+        protected override object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
+        {
+            _logger.Trace("GetAdvicesAndAdvisorsForObject begin");
+            object[] advices = base.GetAdvicesAndAdvisorsForObject(targetType, targetName, customTargetSource);
+            _logger.Trace("GetAdvicesAndAdvisorsForObject end");
+            return advices;
+        }
+
+        public override void AfterPropertiesSet()
+        {
+            _logger.Trace("AfterPropertiesSet");
+            base.AfterPropertiesSet();
+        }
+    }
+
+    public class CountingAfterReturningAdvisor : StaticMethodMatcherPointcutAdvisor
     {
         private ITestObject testObject;
 
@@ -71,26 +116,62 @@ namespace Spring.Aop.Framework.AutoProxy
             set { this.testObject = value; }
         }
 
+        public int GetCalls()
+        {
+            return ((CountingAfterReturningAdvice) base.Advice).GetCalls();
+        }
+
+        public CountingAfterReturningAdvisor()
+        {
+            LogManager.GetLogger(this.GetType()).Trace("Created instance #" + this.GetHashCode());
+            base.Advice = new CountingAfterReturningAdvice();
+        }
+
         public override bool Matches(MethodInfo method, Type targetType)
         {
             return true;
         }
     }
 
-    public class SomeOtherObject
-    {}
+    public class SomeOtherObject : ICloneable
+    {
+        public SomeOtherObject()
+        {
+            LogManager.GetLogger(this.GetType()).Trace("Created instance #" + this.GetHashCode());
+        }
 
-    public class IndependentObject
-    { }
+        public object Clone()
+        {
+            return this;
+        }
+    }
+
+    public class IndependentObject : ICloneable
+    {
+        public IndependentObject()
+        {
+            LogManager.GetLogger(this.GetType()).Trace("Created instance #" + this.GetHashCode());
+        }
+
+        public object Clone()
+        {
+            return this;
+        }
+    }
     
     public class TestObjectFactoryObject : IFactoryObject, IInitializingObject
     {
         private bool initialized = false;
         private ITestObject testObject;
         private SomeOtherObject someOtherObject;
+        private readonly ILog _logger;
+
+        public int GetObjectCounter = 0;
 
         public TestObjectFactoryObject()
         {
+            _logger = LogManager.GetLogger(this.GetType().Name + "#" + this.GetHashCode());
+            _logger.Trace("Created instance");
         }
 
         public SomeOtherObject SomeOtherObject
@@ -101,15 +182,15 @@ namespace Spring.Aop.Framework.AutoProxy
 
         public object GetObject()
         {
+            GetObjectCounter++;
             // return product only, if factory has been fully initialized!
             if (!initialized)
             {
+                _logger.Trace("GetObject(): not initialized, returning null");
                 return null;
             }
-            else
-            {
-                return testObject;
-            }
+            _logger.Trace("GetObject(): initialized, returning testObject");
+            return testObject;
         }
 
         public Type ObjectType
@@ -119,12 +200,11 @@ namespace Spring.Aop.Framework.AutoProxy
                 // return type only if we are ready to deliver our product!
                 if (!initialized)
                 {
+                    _logger.Trace("get_ObjectType(): not initialized, returning null");
                     return null;
                 }
-                else
-                {
-                    return typeof(ITestObject);
-                }
+                _logger.Trace("get_ObjectType(): initialized, returning typeof(ITestObject)");
+                return typeof(ITestObject);
             }
         }
 
@@ -135,6 +215,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
         public void AfterPropertiesSet()
         {
+            _logger.Trace("AfterPropertiesSet");
             Assert.IsNotNull(someOtherObject);
             testObject = new TestObject();
             initialized = true;

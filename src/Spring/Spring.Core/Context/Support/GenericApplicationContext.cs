@@ -19,7 +19,6 @@
 #endregion
 
 using System;
-using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
@@ -48,14 +47,15 @@ namespace Spring.Context.Support
     /// <para>Usage examples</para>
     /// <example>
     /// GenericApplicationContext ctx = new GenericApplicationContext();
-    /// 
+    /// // register your objects and object definitions
+    /// ctx.RegisterObjectDefinition(...)
+    /// ctx.Refresh();
     /// </example>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public class GenericApplicationContext : AbstractApplicationContext, IObjectDefinitionRegistry
+    public class GenericApplicationContext : AbstractApplicationContext
     {
-        private DefaultListableObjectFactory objectFactory;
-
+        private readonly DefaultListableObjectFactory objectFactory;
         private bool refreshed = false;
 
 
@@ -63,8 +63,9 @@ namespace Spring.Context.Support
         /// Initializes a new instance of the <see cref="GenericApplicationContext"/> class.
         /// </summary>
         public GenericApplicationContext()
+            : this(null, true, null, new DefaultListableObjectFactory())
         {
-            objectFactory = new DefaultListableObjectFactory();
+            // noop
         }
 
         /// <summary>
@@ -72,32 +73,30 @@ namespace Spring.Context.Support
         /// </summary>
         /// <param name="caseSensitive">if set to <c>true</c> names in the context are case sensitive.</param>
         public GenericApplicationContext(bool caseSensitive)
+            : this(null, caseSensitive, null, new DefaultListableObjectFactory())
         {
-            objectFactory = new DefaultListableObjectFactory(caseSensitive);
+            // noop
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericApplicationContext"/> class.
         /// </summary>
         /// <param name="objectFactory">The object factory instance to use for this context.</param>
         public GenericApplicationContext(DefaultListableObjectFactory objectFactory)
+            : this(null, true, null, objectFactory)
         {
-            AssertUtils.ArgumentNotNull(objectFactory, "objectFactory", "ObjectFactory must not be null");
-            this.objectFactory = objectFactory; 
+            // noop
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericApplicationContext"/> class.
         /// </summary>
         /// <param name="parent">The parent application context.</param>
         public GenericApplicationContext(IApplicationContext parent)
+            : this(null, true, parent, new DefaultListableObjectFactory())
         {
-            objectFactory = new DefaultListableObjectFactory();
-            ParentContext = parent;
+            // noop
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericApplicationContext"/> class.
@@ -105,48 +104,37 @@ namespace Spring.Context.Support
         /// <param name="name">The name of the application context.</param>
         /// <param name="caseSensitive">if set to <c>true</c> names in the context are case sensitive.</param>
         /// <param name="parent">The parent application context.</param>
-        public GenericApplicationContext(string name, bool caseSensitive, IApplicationContext parent) : this(caseSensitive)
+        public GenericApplicationContext(string name, bool caseSensitive, IApplicationContext parent)
+            : this(name, caseSensitive, parent, new DefaultListableObjectFactory())
         {
-            Name = name;
-            ParentContext = parent;
+            // noop
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericApplicationContext"/> class.
         /// </summary>
         /// <param name="objectFactory">The object factory to use for this context</param>
         /// <param name="parent">The parent applicaiton context.</param>
-        public GenericApplicationContext(DefaultListableObjectFactory objectFactory, IApplicationContext parent) : this(objectFactory)
+        public GenericApplicationContext(DefaultListableObjectFactory objectFactory, IApplicationContext parent)
+            : this(null, true, parent, objectFactory)
         {
-            ParentContext = parent;
+            // noop
         }
-
-
 
         /// <summary>
-        /// Gets the parent context, or <see langword="null"/> if there is no
-        /// parent context.  Set the parent of this application context also setting
-        /// the parent of the interanl ObjectFactory accordingly.
+        /// Initializes a new instance of the <see cref="GenericApplicationContext"/> class.
         /// </summary>
-        /// <value>The parent context</value>
-        /// <returns>
-        /// The parent context, or <see langword="null"/>  if there is no
-        /// parent.
-        /// </returns>
-        /// <seealso cref="Spring.Context.IApplicationContext.ParentContext"/>
-        public override IApplicationContext ParentContext
+        /// <param name="name">The name of the application context.</param>
+        /// <param name="caseSensitive">if set to <c>true</c> names in the context are case sensitive.</param>
+        /// <param name="parent">The parent application context.</param>
+        /// <param name="objectFactory">The object factory to use for this context</param>
+        public GenericApplicationContext(string name, bool caseSensitive, IApplicationContext parent, DefaultListableObjectFactory objectFactory)
+            : base(name, caseSensitive, parent)
         {
-            get
-            {
-                return base.ParentContext;
-            }
-            set { 
-                base.ParentContext = value;
-                objectFactory.ParentObjectFactory = GetInternalParentObjectFactory();
-            }
+            AssertUtils.ArgumentNotNull(objectFactory, "objectFactory", "ObjectFactory must not be null");
+            this.objectFactory = objectFactory;
+            this.objectFactory.ParentObjectFactory = base.GetInternalParentObjectFactory();
         }
-
 
         /// <summary>
         /// Do nothing operation.  We hold a single internal ObjectFactory and rely on callers
@@ -162,7 +150,7 @@ namespace Spring.Context.Support
                 throw new InvalidOperationException(
                     "GenericApplicationContext does not support multiple refresh attempts: just call 'refresh' once");
             }
-            
+
             refreshed = true;
         }
 
@@ -188,81 +176,14 @@ namespace Spring.Context.Support
             get { return objectFactory; }
         }
 
-
-
-        #region IObjectDefinitionRegistry Members
-
-        /// <summary>
-        /// Returns the
-        /// <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>
-        /// for the given object name.
-        /// </summary>
-        /// <param name="name">The name of the object to find a definition for.</param>
-        /// <returns>
-        /// The <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/> for
-        /// the given name (never null).
-        /// </returns>
-        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
-        /// If the object definition cannot be resolved.
-        /// </exception>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In case of errors.
-        /// </exception>
-        public override IObjectDefinition GetObjectDefinition(string name)
-        {
-            return objectFactory.GetObjectDefinition(name);
-        }
-
-        /// <summary>
-        /// Register a new object definition with this registry.
-        /// Must support
-        /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
-        /// and <see cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>.
-        /// </summary>
-        /// <param name="name">The name of the object instance to register.</param>
-        /// <param name="definition">The definition of the object instance to register.</param>
-        /// <remarks>
-        /// 	<p>
-        /// Must support
-        /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/> and
-        /// <see cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>.
-        /// </p>
-        /// </remarks>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// If the object definition is invalid.
-        /// </exception>
-        public void RegisterObjectDefinition(string name, IObjectDefinition definition)
-        {
-            objectFactory.RegisterObjectDefinition(name, definition);
-        }
-
-        /// <summary>
-        /// Given a object name, create an alias. We typically use this method to
-        /// support names that are illegal within XML ids (used for object names).
-        /// </summary>
-        /// <param name="name">The name of the object.</param>
-        /// <param name="theAlias">The alias that will behave the same as the object name.</param>
-        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
-        /// If there is no object with the given name.
-        /// </exception>
-        /// <exception cref="Spring.Objects.Factory.ObjectDefinitionStoreException">
-        /// If the alias is already in use.
-        /// </exception>
-        public void RegisterAlias(string name, string theAlias)
-        {
-            objectFactory.RegisterAlias(name, theAlias);
-        }
-
         /// <summary>
         /// Determines whether the given object name is already in use within this factory,
         /// i.e. whether there is a local object or alias registered under this name or
         /// an inner object created with this name.
         /// </summary>
-        public bool IsObjectNameInUse(string objectName)
+        public override bool IsObjectNameInUse(string objectName)
         {
             return objectFactory.IsObjectNameInUse(objectName);
         }
-
-        #endregion
     }
 }

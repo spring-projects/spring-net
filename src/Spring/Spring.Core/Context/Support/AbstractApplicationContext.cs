@@ -33,6 +33,7 @@ using Spring.Objects.Events;
 using Spring.Objects.Events.Support;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
+using Spring.Objects.Factory.Support;
 using Spring.Objects.Support;
 using Spring.Util;
 
@@ -75,7 +76,7 @@ namespace Spring.Context.Support
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
     public abstract class AbstractApplicationContext
-        : ConfigurableResourceLoader, IConfigurableApplicationContext
+        : ConfigurableResourceLoader, IConfigurableApplicationContext, IObjectDefinitionRegistry
     {
         #region Constants
 
@@ -124,7 +125,7 @@ namespace Spring.Context.Support
         /// <summary>
         /// The <see cref="Common.Logging.ILog"/> instance for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(typeof(AbstractApplicationContext));
+        protected readonly ILog log;
 
         /// <summary>
         /// The <see cref="Spring.Context.IMessageSource"/> instance we delegate
@@ -140,10 +141,10 @@ namespace Spring.Context.Support
 
         private IApplicationContext _parentApplicationContext;
         private readonly IList _objectFactoryPostProcessors;
-        private IList _defaultObjectPostProcessors;
+        private readonly IList _defaultObjectPostProcessors;
         private string _name;
         private DateTime _startupDate;
-        private readonly bool _caseSensitive;
+        private readonly bool _isCaseSensitive;
 
         #endregion
 
@@ -196,8 +197,10 @@ namespace Spring.Context.Support
         protected AbstractApplicationContext(string name, bool caseSensitive,
                                              IApplicationContext parentApplicationContext)
         {
+            log = LogManager.GetLogger(this.GetType());
+
             _name = (StringUtils.IsNullOrEmpty(name)) ? DefaultRootContextName : name;
-            _caseSensitive = caseSensitive;
+            _isCaseSensitive = caseSensitive;
             _parentApplicationContext = parentApplicationContext;
             _objectFactoryPostProcessors = new ArrayList();
             _defaultObjectPostProcessors = new ArrayList();
@@ -294,9 +297,9 @@ namespace Spring.Context.Support
         /// Gets a flag indicating whether context should be case sensitive.
         /// </summary>
         /// <value><c>true</c> if object lookups are case sensitive; otherwise, <c>false</c>.</value>
-        protected bool CaseSensitive
+        public bool IsCaseSensitive
         {
-            get { return _caseSensitive; }
+            get { return _isCaseSensitive; }
         }
 
         /// <summary>
@@ -1517,6 +1520,9 @@ namespace Spring.Context.Support
         /// This is an alternative to <code>ContainsObject</code>, ignoring an object
         /// of the given name from an ancestor object factory.
         /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
         /// <param name="name">The name of the object to query.</param>
         /// <returns>
         /// 	<c>true</c> if objects with the specified name is defined in the local factory; otherwise, <c>false</c>.
@@ -1524,6 +1530,60 @@ namespace Spring.Context.Support
         public bool ContainsLocalObject(string name)
         {
             return ObjectFactory.ContainsLocalObject(name);
+        }
+
+        #endregion
+
+        #region IObjectDefinitionRegistry Members
+
+        /// <summary>
+        /// Determine whether the given object name is already in use within this context, 
+        /// i.e. whether there is a local object. May be override by subclasses, the default 
+        /// implementation simply returns <see cref="ContainsLocalObject"/>
+        /// </summary>
+        public virtual bool IsObjectNameInUse(string objectName)
+        {
+            return ContainsLocalObject(objectName);
+        }
+
+        /// <summary>
+        /// Register a new object definition with this registry.
+        /// Must support
+        /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
+        /// and <see cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>.
+        /// </summary>
+        /// <param name="name">The name of the object instance to register.</param>
+        /// <param name="definition">The definition of the object instance to register.</param>
+        /// <remarks>
+        /// 	<p>
+        /// Must support
+        /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/> and
+        /// <see cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>.
+        /// </p>
+        /// </remarks>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object definition is invalid.
+        /// </exception>
+        public virtual void RegisterObjectDefinition(string name, IObjectDefinition definition)
+        {
+            ObjectFactory.RegisterObjectDefinition(name, definition);
+        }
+
+        /// <summary>
+        /// Given a object name, create an alias. We typically use this method to
+        /// support names that are illegal within XML ids (used for object names).
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <param name="theAlias">The alias that will behave the same as the object name.</param>
+        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+        /// If there is no object with the given name.
+        /// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectDefinitionStoreException">
+        /// If the alias is already in use.
+        /// </exception>
+        public virtual void RegisterAlias(string name, string theAlias)
+        {
+            ObjectFactory.RegisterAlias(name, theAlias);
         }
 
         #endregion
@@ -1896,12 +1956,14 @@ namespace Spring.Context.Support
 
         private sealed class ObjectPostProcessorChecker : IObjectPostProcessor, IOrdered
         {
+            private readonly ILog log;
             private int _objectPostProcessorTargetCount;
             private IConfigurableListableObjectFactory _objectFactory;
 
 
             public ObjectPostProcessorChecker()
             {
+                log = LogManager.GetLogger(this.GetType());
             }
 
             public void Reset(IConfigurableListableObjectFactory objectFactory, int objectPostProcessorTargetCount)

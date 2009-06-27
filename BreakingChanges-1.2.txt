@@ -30,11 +30,18 @@ Spring.Core
       A new property MsgDelivery has been added.  The class, CachedMessageProducer, which is unlikely to be use by
       end users, was directly upgraded to the latest API without any backwards compatibility support.
 
+4. AbstractApplicationContext.CaseSensitive renamed to AbstractApplicationContext.IsCaseSensitive
+
+
 Spring.Aop
 ----------
 
 1. AbstractAutoProxyCreator.FindEligibleAdvisors(Type) changed to
    AbstractAutoProxyCreator.FindEligibleAdvisors(Type, Name)
+
+2. It is not possible to change a ProxyFactoryObject's product configuration at runtime
+   if IsSingleton==true since factory object singleton products get cached now.
+
 
 
 Changes (1.2 RC1 to 1.2.0 or greater)

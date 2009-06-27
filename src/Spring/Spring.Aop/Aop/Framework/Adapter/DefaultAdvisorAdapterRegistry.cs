@@ -42,7 +42,7 @@ namespace Spring.Aop.Framework.Adapter
 	/// <author>Aleksandar Seovic (.NET)</author>
 	public class DefaultAdvisorAdapterRegistry : IAdvisorAdapterRegistry
 	{
-	    private IList adapters = new ArrayList();
+	    private readonly IList adapters = new ArrayList();
 		
         /// <summary>
         /// Creates a new instance of the

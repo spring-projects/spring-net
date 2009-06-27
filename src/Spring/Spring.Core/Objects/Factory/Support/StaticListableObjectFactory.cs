@@ -59,6 +59,14 @@ namespace Spring.Objects.Factory.Support
 	    private Hashtable objects = new Hashtable();
 
 	    /// <summary>
+	    /// Determine whether this object factory treats object names case-sensitive or not.
+	    /// </summary>
+	    public bool IsCaseSensitive
+	    {
+	        get { return true; }
+	    }
+
+	    /// <summary>
 	    /// Return the number of objects defined in the factory.
 	    /// </summary>
 	    /// <value>

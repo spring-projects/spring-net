@@ -90,18 +90,21 @@ namespace Spring.Objects.Factory.Support
         private static readonly object CURRENTLY_IN_CREATION = new Object();
 
         /// <summary>
-        /// The <see cref="Common.Logging.ILog"/> instance for this class.
-        /// </summary>
-        private readonly ILog log = LogManager.GetLogger(typeof(AbstractObjectFactory));
-
-        /// <summary>
         /// Used as value in hashtable that keeps track of singleton names currently in the
         /// process of being created.  Would not be necessary if we created a case insensitive implementation of
         /// ISet.
         /// </summary>
-        private static object emptyObject = new object();
+        private static readonly object emptyObject = new object();
 
+        /// <summary>
+        /// The <see cref="Common.Logging.ILog"/> instance for this class.
+        /// </summary>
+        private readonly ILog log;
 
+        /// <summary>
+        /// Cache of singleton objects created by <see cref="IFactoryObject"/>s: FactoryObject name -> product
+        /// </summary>
+        private readonly Hashtable factoryObjectProductCache = new Hashtable();
 
         #region Constructor (s) / Destructor
 
@@ -730,63 +733,128 @@ namespace Spring.Objects.Factory.Support
         /// <returns>
         /// The singleton instance of the object.
         /// </returns>
+        [Obsolete("")]
         protected internal virtual object GetObjectForInstance(string name, object instance)
         {
-            //string objectName = TransformedObjectName(name);
+            return GetObjectForInstance(instance, name, TransformedObjectName(name), null);
+        }
 
+        /// <summary>
+        /// Get the object for the given object instance, either the object
+        /// instance itself or its created object in case of an
+        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>.
+        /// </summary>
+        /// <param name="instance">The object instance.</param>
+        /// <param name="name">
+        /// The name that may include the factory dereference prefix (=the requested name).
+        /// </param>
+        /// <param name="canonicalName">
+        /// The canonical object name
+        /// </param>
+        /// <param name="rod">the merged object definition</param>
+        /// <returns>
+        /// The singleton instance of the object.
+        /// </returns>
+        protected internal virtual object GetObjectForInstance(object instance, string name, string canonicalName, RootObjectDefinition rod)
+        {
             // don't let calling code try to dereference the
             // object factory if the object isn't a factory
-            if (IsFactoryDereference(name) && !(instance is IFactoryObject))
+            if (IsFactoryDereference(name) && !(ObjectUtils.IsAssignable(typeof (IFactoryObject), instance)))
             {
-                throw new ObjectIsNotAFactoryException(TransformedObjectName(name), instance);
+                throw new ObjectIsNotAFactoryException(canonicalName, instance);
             }
 
             // now we have the object instance, which may be a normal object
-            // or an IFactoryObject. If it's an IFactoryObject, we use it to
-            // create an object instance, unless the caller actually wants
-            // a reference to the factory.
-            if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IFactoryObject), instance))
+            // or an IFactoryObject. If it's an IFactoryObject and the caller wants
+            // a reference to the factory there's nothing more to do
+
+
+            // it's a normal object ?
+            if (!ObjectUtils.IsAssignable(typeof (IFactoryObject), instance))
             {
-                if (!IsFactoryDereference(name))
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
                 {
+                    log.Debug(string.Format("Calling code asked for normal instance for name '{0}'.", canonicalName));
+                }
 
-                    // return object instance from factory...
-                    IFactoryObject factory = (IFactoryObject)instance;
-                    string objectName = TransformedObjectName(name);
+                #endregion
 
-                    #region Instrumentation
+                return instance;
+            }
 
-                    if (log.IsDebugEnabled)
+            // the user wants the factory itself ?
+            if (!ObjectUtils.IsAssignable(typeof (IFactoryObject), instance) || IsFactoryDereference(name))
+            {
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(
+                        string.Format("Calling code asked for IFactoryObject instance for name '{0}'.",
+                                      TransformedObjectName(name)));
+                }
+
+                #endregion
+
+                return instance;
+            }
+
+            #region Instrumentation
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug(string.Format("Object with name '{0}' is a factory object.", canonicalName));
+            }
+
+            #endregion
+
+            object resultInstance = null;
+
+            if (rod == null)
+            {
+                resultInstance = factoryObjectProductCache[canonicalName];
+            }
+
+            if (resultInstance == null)
+            {
+                // return object instance from factory...
+                IFactoryObject factory = (IFactoryObject) instance;
+
+                if (rod == null && ContainsObjectDefinition(canonicalName))
+                {
+                    rod = GetMergedObjectDefinition(canonicalName, true);
+                }
+
+                if (factory.IsSingleton && ContainsSingleton(canonicalName))
+                {
+                    lock (factoryObjectProductCache)
                     {
-                        log.Debug(string.Format("Object with name '{0}' is a factory object.", objectName));
-                    }
-
-                    #endregion
-
-                    RootObjectDefinition rod =
-                        (ContainsObjectDefinition(objectName) ? GetMergedObjectDefinition(objectName, true) : null);
-                    instance = GetObjectFromFactoryObject(factory, objectName, rod);
-
-                    if (instance == null)
-                    {
-                        throw new FactoryObjectNotInitializedException(TransformedObjectName(name),
-                                                                       "Factory object returned null object - "
-                                                                       + "possible cause: not fully initialized due to "
-                                                                       + "circular object reference.");
+                        resultInstance = factoryObjectProductCache[canonicalName];
+                        if (resultInstance == null)
+                        {
+                            resultInstance = GetObjectFromFactoryObject(factory, canonicalName, rod);
+                            if (resultInstance != null)
+                            {
+                                factoryObjectProductCache.Add(canonicalName, resultInstance);
+                            }
+                            return resultInstance;
+                        }
                     }
                 }
-                else
+
+                resultInstance = GetObjectFromFactoryObject(factory, canonicalName, rod);
+
+                if (resultInstance == null)
                 {
-                    // the user wants the factory itself...
-                    if (log.IsDebugEnabled)
-                    {
-                        log.Debug(
-                                string.Format("Calling code asked for IFactoryObject instance for name '{0}'.",
-                                              TransformedObjectName(name)));
-                    }
+                    throw new FactoryObjectNotInitializedException(canonicalName,
+                                                                   "Factory object returned null object - "
+                                                                   + "possible cause: not fully initialized due to "
+                                                                   + "circular object reference.");
                 }
             }
-            return instance;
+            return resultInstance;
         }
 
         /// <summary>
@@ -1836,7 +1904,7 @@ namespace Spring.Objects.Factory.Support
 
                     #endregion
 
-                    instance = GetObjectForInstance(name, sharedInstance);
+                    instance = GetObjectForInstance(sharedInstance, name, objectName, null);
                     return EnsureObjectIsOfRequiredType(name, instance, requiredType);
                 }
             }
@@ -1877,7 +1945,7 @@ namespace Spring.Objects.Factory.Support
             {
                 // create object instance...
                 object sharedInstance = CreateAndCacheSingletonInstance(objectName, mergedObjectDefinition, arguments);
-                instance = GetObjectForInstance(name, sharedInstance);
+                instance = GetObjectForInstance(sharedInstance, name, objectName, mergedObjectDefinition);
             }
             else
             {

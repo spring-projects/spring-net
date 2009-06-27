@@ -269,7 +269,7 @@ namespace Spring.Objects.Factory.Support
             {
                 //SPRNET-986 ObjectUtils.EmptyObjects -> null
                 instance = objectFactory.InstantiateObject(actualInnerObjectName, mod, null, false, false);
-                result = objectFactory.GetObjectForInstance(actualInnerObjectName, instance);
+                result = objectFactory.GetObjectForInstance(instance, actualInnerObjectName, actualInnerObjectName, mod);
             }
             catch (ObjectsException ex)
             {

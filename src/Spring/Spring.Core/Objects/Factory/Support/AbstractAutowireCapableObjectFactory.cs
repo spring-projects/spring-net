@@ -79,7 +79,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// The <see cref="Common.Logging.ILog"/> instance for this class.
         /// </summary>
-        private readonly ILog log = LogManager.GetLogger(typeof(AbstractAutowireCapableObjectFactory));
+        private readonly ILog log;
 
         #region Constructor (s) / Destructor
 
@@ -113,6 +113,8 @@ namespace Spring.Objects.Factory.Support
         protected AbstractAutowireCapableObjectFactory(bool caseSensitive, IObjectFactory parentFactory)
             : base(caseSensitive, parentFactory)
         {
+            log = LogManager.GetLogger(this.GetType());
+
             this.IgnoreDependencyInterface(typeof(IObjectFactoryAware));
             this.IgnoreDependencyInterface(typeof(IObjectNameAware));
         }

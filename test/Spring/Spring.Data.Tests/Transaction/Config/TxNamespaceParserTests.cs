@@ -26,8 +26,10 @@ using System.Reflection;
 using NUnit.Framework;
 
 using Spring.Aop.Config;
+using Spring.Aop.Framework.AutoProxy;
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.Core.IO;
 using Spring.Objects;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
@@ -40,6 +42,31 @@ namespace Spring.Transaction.Config
     [TestFixture]
     public class TxNamespaceParserTests
     {
+        private class ResourceXmlApplicationContext : AbstractXmlApplicationContext
+        {
+            private readonly IResource[] configurationResources;
+            public ResourceXmlApplicationContext(params IResource[] configurationResources) 
+                : base()
+            {
+                this.configurationResources = configurationResources;
+            }
+
+            protected override void  LoadObjectDefinitions(XmlObjectDefinitionReader objectDefinitionReader)
+            {
+                 base.LoadObjectDefinitions(objectDefinitionReader);
+                objectDefinitionReader.LoadObjectDefinitions(configurationResources);
+            }
+
+            protected override string[] ConfigurationLocations
+            {
+                get { return null; }
+            }
+        }
+
+        private const string APPCTXCFG_PROLOG = @"<?xml version='1.0' encoding='utf-8' ?>";
+        private const string APPCTXCFG_START = APPCTXCFG_PROLOG + @"<objects xmlns='http://www.springframework.net' xmlns:tx='http://www.springframework.net/tx'>";
+        private const string APPCTXCFG_END = @"</objects>";
+
         private IApplicationContext ctx;
 
         [SetUp]
@@ -48,6 +75,19 @@ namespace Spring.Transaction.Config
             //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
             //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
             ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Transaction.Config/TxNamespaceParserTests.xml");
+        }
+
+        [Test]
+        public void AppliesTxAttributeDrivenAttributes()
+        {
+            StringResource appCtxCfg = new StringResource(
+                APPCTXCFG_START 
+                + "<tx:attribute-driven transaction-manager='otherTxManager' proxy-target-type='true' order='2' />" 
+                + APPCTXCFG_END);
+
+            IApplicationContext appCtx = new ResourceXmlApplicationContext(appCtxCfg);
+//            DefaultAdvisorAutoProxyCreator daapc = (DefaultAdvisorAutoProxyCreator) appCtx.GetObject(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME);
+//            Assert.AreEqual(2, daapc.Order);
         }
 
         [Test]
