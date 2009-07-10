@@ -27,42 +27,31 @@
   <sect1 xml:id="objects-introduction">
     <title>Introduction</title>
 
-    <para>This chapter covers the Spring Framework's implementation of the
+    <para>This chapter covers the Spring Framework implementation of the
     Inversion of Control (IoC) <footnote>
         <para>See the section entitled <xref
         linkend="background-ioc" /></para>
       </footnote> principle</para>
 
-    <para>The <literal>Spring.Core</literal> assembly provides the basis for
-    the Spring.NET Inversion of Control container. The <literal><link
+    <para>The <literal>Spring.Core</literal> assembly is the basis for
+    Spring.NET's IoC container. The <literal><link
     ns6:href="http://www.springframework.net/doc/api/html/Spring.Objects.Factory.IObjectFactory.html">IObjectFactory</link></literal>
     interface provides an advanced configuration mechanism capable of managing
-    objects of any nature. The <literal><link
+    objects of any nature. <literal><link
     ns6:href="http://www.springframework.net/doc/api/html/Spring.Context.IApplicationContext.html">IApplicationContext</link></literal>
-    interface builds on top of the <literal>IObjectFactory</literal> (it is a
-    sub-interface) and adds other functionality such as easier integration
-    with Spring.NET's Aspect Oriented Programming (AOP) features, message
-    resource handling (for use in internationalization), event propagation and
-    application layer-specific context such as
+    is a sub-interface of <literal>IObjectFactory</literal>. It adds easier
+    integration with Spring.NET's Aspect Oriented Programming (AOP) features,
+    message resource handling (for use in internationalization), event
+    propagation and application layer-specific context such as
     <literal>WebApplicationContext</literal> for use in web
     applications.</para>
 
     <para>In short, the <literal>IObjectFactory</literal> provides the
-    configuration framework and basic functionality, while the
-    <literal>IApplicationContext</literal> adds more enterprise-centric
-    functionality to it. The <literal>IApplicationContext</literal> is a
-    complete superset of the <literal>IObjectFactory</literal>, and any
-    description of <literal>IObjectFactory</literal> capabilities and behavior
-    should be considered to apply to <literal>IApplicationContext</literal>s
-    as well.</para>
-
-    <para>This chapter is divided into two parts, with the <link
-    linkend="objects-basics">first part</link> covering the basic principles
-    that apply to both the <literal>IObjectFactory</literal> and
-    <literal>IApplicationContext</literal>, with the <link
-    linkend="context-introduction">second part</link> covering those features
-    that apply only to the <literal>IApplicationContext</literal>
-    interface.</para>
+    configuration framework and basic functionality, and the
+    <literal>IApplicationContext</literal> adds more enterprise-specific
+    functionality. The <literal>IApplicationContext</literal> is a complete
+    superset of the <literal>IObjectFactory</literal> and is used exclusively
+    in this chapter when describing Spring's IoC container.</para>
 
     <para>If you are new to Spring.NET or IoC containers in general, you may
     want to consider starting with <xref linkend="quickstarts" />, which
@@ -75,84 +64,84 @@
   </sect1>
 
   <sect1 xml:id="objects-basics">
-    <title>Basics - containers and objects</title>
+    <title>The Spring IoC container</title>
 
-    <sect2 xml:id="objects-factory">
-      <title>The container</title>
+    <para>The interface <classname>IApplicationContext</classname> represents
+    the Spring IoC container and is responsible for instantiating,
+    configuring, and assembling many of the objects in your application. The
+    container gets its instructions on what objects to instantiate, configure,
+    and assemble by reading configuration metadata. The configuration metadata
+    is represented in XML. The configuration metadata allows you to express
+    the objects that compose your application and the rich interdependencies
+    between such objects.</para>
 
-      <para>The <literal>IObjectFactory</literal> is the actual representation
-      of the Spring IoC container that is responsible for instantiating,
-      configuring, and managing a number of objects.</para>
+    <note>
+      <para>Note that other ways to specify the metadata, such as attributes
+      and .NET code, are planned for future releases, the core IoC container
+      does not assume any specific metadata format. The Java version of Spring
+      already supports such functionality.</para>
+    </note>
 
-      <para>The <literal>IObjectFactory</literal> interface is the central IoC
-      container interface in Spring. Its responsibilities include
-      instantiating or sourcing application objects, configuring such objects,
-      and assembling the dependencies between these objects.</para>
+    <para>Spring provides implementations of the
+    <classname>IApplicationContext</classname> interface for use in standalone
+    and web applications. In standalone applications it is common to create an
+    instance of an <classname>XmlApplicationContext</classname> either
+    programmatically or declaratively in your applications App.config file. In
+    web applications Spring provides a WebApplicationContext implementation
+    which is configured by adding a custom HTTP module and HTTP handler to
+    your Web.config file. See the section on <link
+    linkend="web-configuration">Web Configuration</link> for more
+    details.</para>
 
-      <para>There are a number of implementations of the
-      <literal>IObjectFactory</literal> interface that come supplied straight
-      out-of-the-box with Spring. The most commonly used
-      <literal>IObjectFactory</literal> implementation is the
-      <literal>XmlObjectFactory</literal> class. This implementation allows
-      you to express the objects that compose your application, and the
-      doubtless rich interdependencies between such objects, in terms of XML.
-      The <literal>XmlObjectFactory</literal> takes this XML configuration
-      metadata and uses it to create a fully configured system or application.
-      Interaction with the <literal>IObjectFactory</literal> interface is
-      discussed in <xref linkend="objects-factory-client" />. Additional
-      features offered by another implementation of
-      <literal>IObjectFactory</literal>, the
-      <literal>IApplicationContext</literal>, are discussed in section <xref
-      linkend="context-introduction" />.</para>
+    <para>The following diagram is a high-level view of how Spring works. Your
+    application classes are combined with configuration metadata so that after
+    the ApplicationContext is created and initialized, you have a fully
+    configured and executable system or application.</para>
 
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/container-in-action.gif" format="GIF"></imagedata>
-        </imageobject>
-      </mediaobject>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/container-in-action.gif" format="GIF"></imagedata>
+      </imageobject>
+    </mediaobject>
 
-      <sect3 xml:id="objects-configuration-metadata">
-        <title>Configuration metadata</title>
+    <sect2 xml:id="objects-configuration-metadata">
+      <title>Configuration metadata</title>
 
-        <para>As can be seen in the above image, the Spring IoC container
-        consumes some form of configuration metadata; this configuration
-        metadata is nothing more than how you (as an application developer)
-        inform the Spring container as to how to “instantiate, configure, and
-        assemble [the objects in your application]”. This configuration
-        metadata is typically supplied in a simple and intuitive XML format.
-        When using XML-based configuration metadata, you write object
-        definitions for those object that you want the Spring IoC container to
-        manage, and then let the container do it's stuff.</para>
+      <para>As the preceding diagram shows, the Spring IoC container consumes
+      a form of <emphasis>configuration metadata</emphasis>; this
+      configuration metadata represents how you as an application developer
+      tell the Spring container to instantiate, configure, and assemble the
+      objects in your application. Configuration metadata is supplied in a
+      simple and intuitive XML format</para>
 
-        <note>
-          <para>XML-based metadata is by far the most commonly used form of
-          configuration metadata. It is not however the only form of
-          configuration metadata that is allowed. The Spring IoC container
-          itself is totally decoupled from the format in which this
-          configuration metadata is actually written. Attribute based metadata
-          will be part of an upcoming release and it is already part of the
-          Spring Java framework.</para>
-        </note>
+      <note>
+        <para>XML-based metadata is by far the most commonly used form of
+        configuration metadata. It is not however the only form of
+        configuration metadata that is allowed. The Spring IoC container
+        itself is totally decoupled from the format in which this
+        configuration metadata is actually written. Attribute based and code
+        based metadata will be part of an upcoming release and it is already
+        part of the Spring Java framework.</para>
+      </note>
 
-        <para>Spring configuration consists of at least one object definition
-        that the container must manage, but typically there will be more than
-        one object definition. When using XML-based configuration metadata,
-        these object are configured as &lt;object/&gt; elements inside a
-        top-level &lt;objects/&gt; element.</para>
+      <para>Spring configuration consists of at least one and typically more
+      than one object definition that the container must manage. XML- based
+      configuration represents beans as &lt;object/&gt; elements inside a
+      top-level &lt;objects/&gt; element.</para>
 
-        <para>These object definitions correspond to the actual objects that
-        make up your application. Typically you will have object definitions
-        for your service layer objects, your data access objects (DAOs),
-        presentation objects such as ASP.NET page instances, infrastructure
-        objects such as NHibernate SessionFactories, and so forth. Typically
-        one does not configure fine-grained domain objects in the container,
-        because it is usually the responsibility of DAOs and business logic to
-        create/load domain objects.</para>
+      <para>These object definitions correspond to the actual objects that
+      make up your application. Typically you define service layer objects,
+      data access objects (DAOs), presentation objects such as ASP.NET page
+      instances, infrastructure objects such as NHibernate
+      <literal>SessionFactories</literal>, and so forth. Typically one does
+      not configure fine-grained domain objects in the container, because it
+      is usually the responsibility of DAOs and business logic to create/load
+      domain objects.</para>
 
-        <para>Find below an example of the basic structure of XML-based
-        configuration metadata.</para>
+      <para>The following example shows the basic structure of XML-based
+      configuration metadata:</para>
 
-        <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
 
   &lt;object id="..." type="..."&gt;
     &lt;!-- collaborators and configuration for this object go here --&gt;
@@ -165,119 +154,15 @@
   &lt;!-- more object definitions go here --&gt;
 
 &lt;/objects&gt;</programlisting>
-      </sect3>
-    </sect2>
 
-    <sect2 xml:id="objects-factory-instantiation">
-      <title>Instantiating a container</title>
-
-      <para>Instantiating a Spring IoC container is straightforward.</para>
-
-      <programlisting language="csharp">IApplicationContext context = new XmlApplicationContext(
-                 "file://services.xml",
-                 "assembly://MyAssembly/MyDataAccess/data-access.xml");
-
-// an IApplicationContext is also an IObjectFactory (via inheritance)
-IObjectFactory factory = context;</programlisting>
-
-      <para>You can also create an container by using a custom configuration
-      section in the standard .NET application (or web) configuration file.
-      Once the container has been created you may never need to explicitly
-      interact with it again in your code, for example when configuring
-      ASP.NET pages.</para>
-
-      <para>You may be wondering what the assembly URL is all about. The above
-      example uses Spring.NET's <classname><link
-      ns6:href="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</link></classname>
-      abstraction. The <literal>IResource</literal> interface provides a
-      simple and uniform interface to a wide array of IO resources that can
-      represent themselves as <literal>System.IO.Stream</literal>. An example
-      for a file based resource, not using the URL syntax but an
-      implementation of the IResource interface for file is shown
-      below.<programlisting language="csharp">[C#]
-IResource input = new FileSystemResource ("objects.xml");
-IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
-
-      <para>These resources are most frequently files or URLs but can also be
-      resources that have been embedded inside a .NET assembly. A simple URI
-      syntax is used to describe the location of the resource, which follows
-      the standard conventions for files, i.e.
-      <literal>file://object.xml</literal> and other well known protocols such
-      as http.</para>
-
-      <para>The following snippet shows the use of the URI syntax for
-      referring to a resource that has been embedded inside a .NET assembly,
-      <literal>assembly://&lt;AssemblyName&gt;/&lt;NameSpace&gt;/&lt;ResourceName&gt;</literal>.
-      The <literal>IResource</literal> abstraction is explained further in
-      <xref linkend="objects-iresource" />.</para>
-
-      <note>
-        <para>To create an embedded resource using Visual Studio you must set
-        the Build Action of the .xml configuration file to Embedded Resource
-        in the file property editor. Also, you will need to explicitly rebuild
-        the project containing the configuration file if it is the only change
-        you make between successive builds. If using NAnt to build, add a
-        &lt;resources&gt; section to the csc task. For example usage, look at
-        the Spring.Core.Tests.build file included the distribution.</para>
-      </note>
-
-      <para>The preferred way to create an
-      <literal>IApplicationContext</literal> or
-      <literal>IObjectFactory</literal> is to use a custom configuration
-      section in the standard .NET application configuration file (one of
-      <literal>App.config</literal> or <literal>Web.config</literal>). A
-      custom configuration section that creates the same
-      <literal>IApplicationContext</literal> as the previous example is
-      <programlisting language="myxml">&lt;spring&gt;
-  &lt;context type="Spring.Context.Support.XmlApplicationContext, Spring.Core"&gt;
-    &lt;resource uri="file://services.xml"/&gt;
-    &lt;resource uri="assembly://MyAssembly/MyDataAccess/data-access.xml"/&gt;
-  &lt;/context&gt;
-&lt;/spring&gt;</programlisting> The context type (specified as the value of
-      the <literal>type</literal> attribute of the <literal>context</literal>
-      element) is wholly optional, and defaults to the
-      <literal>Spring.Context.Support.XmlApplicationContext</literal> class,
-      so the following XML snippet is functionally equivalent to the first.
-      <programlisting language="myxml">&lt;spring&gt;
-  &lt;context&gt;
-    &lt;resource uri="file://services.xml"/&gt;
-    &lt;resource uri="assembly://MyAssembly/MyDataAccess/data-access.xml"/&gt;
-  &lt;/context&gt;
-&lt;/spring&gt; </programlisting></para>
-
-      <para>To acquire a reference to an
-      <literal>IApplicationContext</literal> using a custom configuration
-      section, one simply uses the following code; <programlisting
-      language="csharp">IApplicationContext ctx = ContextRegistry.GetContext();</programlisting>
-      The <literal>ContextRegistry</literal> is used to both instantiate the
-      application context and to perform service locator style access to other
-      objects. (See <xref linkend="objects-servicelocator" /> for more
-      information). The glue that makes this possible is an implementation of
-      the Base Class Library (BCL) provided
-      <literal>IConfigurationSectionHandler</literal> interface, namely the
-      <literal>Spring.Context.Support.ContextHandler</literal> class. The
-      handler class needs to be registered in the
-      <literal>configSections</literal> section of the .NET configuration file
-      as shown below. <programlisting language="myxml">&lt;configSections&gt;
-  &lt;sectionGroup name="spring"&gt;
-    &lt;section name="context" type="Spring.Context.Support.ContextHandler, Spring.Core"/&gt;
-  &lt;/sectionGroup&gt;
-&lt;/configSections&gt; </programlisting> This declaration now enables the use
-      of a custom context section starting at the <literal>spring</literal>
-      root element.</para>
-
-      <para>In some usage scenarios, user code will not have to explicitly
-      instantiate an appropriate implementation of the
-      <literal>IObjectFactory</literal> interface, since Spring.NET code will
-      do it. For example, the ASP.NET web layer provides support code to load
-      a Spring.NET <literal>IApplicationContext</literal> automatically as
-      part of the normal startup process of an ASP.NET web application.
-      Similar support for WinForms applications is being investigated.</para>
-
-      <para>While programmatic manipulation of
-      <literal>IObjectFactory</literal> instances will be described later, the
-      following sections will concentrate on describing the configuration of
-      objects managed by <literal>IObjectFactory</literal> instances.</para>
+      <para>The <literal>id</literal> attribute is a string that you use to
+      identify the individual object definition. The type attribute defines
+      the type of the object and uses the fully qualified type name, including
+      the assembly name. The value of the <literal>id</literal> attribute
+      refers to collaborating objects. The XML for referring to collaborating
+      objects is not shown in this example; <link
+      linkend="objects-dependencies">Dependencies</link> for more information.
+      </para>
 
       <para>Spring.NET comes with an XSD schema to make the validation of the
       XML object definitions a whole lot easier. The XSD document is
@@ -289,15 +174,196 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
       providing validation (and Intellisense support in the case of Visual
       Studio). You may wish to refer to <xref linkend="vsnet" /> for more
       information regarding such integration.</para>
+    </sect2>
 
-      <para>Your XML object definitions can also be defined within the
-      standard .NET application configuration file by registering the
-      <literal>Spring.Context.Support.DefaultSectionHandler</literal> class as
-      the configuration section handler for inline object definitions. This
-      allows you to completely configure one or more
-      <literal>IApplicationContext</literal> instances within a single
-      standard .NET application configuration file as shown in the following
-      example. <programlisting language="myxml">&lt;configuration&gt;
+    <sect2 xml:id="objects-factory-instantiation">
+      <title>Instantiating a container</title>
+
+      <para>Instantiating a Spring IoC container is straightforward. The
+      location path or paths suppied to an IApplicationContext constructor are
+      actually resource strings that allow the container to load configuration
+      metadata from a variety of external resources such as the local file
+      system, embedded assembly resources, and so on.</para>
+
+      <programlisting language="csharp">IApplicationContext context = new XmlApplicationContext("services.xml", "data-access.xml");
+</programlisting>
+
+      <para>The following example shows the service layer objects
+      <literal>(services.xml)</literal> configuration file.</para>
+
+      <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt; 
+
+  &lt;object id="PetStore" type="PetStore.Services.PetStoreService, PetStore"&gt;
+    &lt;property name="AccountDao" ref="AccountDao"/&gt;
+    &lt;property name="ItemDao" ref="ItemDao"/&gt;
+    &lt;!-- additional collaborators and configuration for this object go here --&gt;
+  &lt;/object&gt;
+
+  &lt;!-- more bean definitions for services go here --&gt;
+
+&lt;/objects&gt;</programlisting>The following example shows the data access
+      objects <literal>(daos.xml)</literal> configuration file:</para>
+
+      <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt; 
+
+  &lt;object id="AccountDao" type="Petstore.Dao.HibernateAccountDao, PetStore"&gt;
+    &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+  &lt;/object&gt;
+
+  &lt;object id="ItemDao" type="Petstore.Dao.HibernateItemDao, PetStore"&gt;
+    &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+  &lt;/object&gt;
+  
+  &lt;!-- more bean definitions for data access objects go here --&gt;
+&lt;/objects&gt;</programlisting>
+
+      <para>In this example, the service layer consists of the class
+      <classname>PetStoreService</classname>, and two data access objects of
+      the type <classname>HibernateAccountDao</classname> and
+      <classname>HibernateItemDao</classname> are based on the NHibernate
+      Object/Relational mapping framework. The property name element refers to
+      the name of the class's property, and the ref element refers to the name
+      of another object definition. This linkage between id and ref elements
+      expresses the dependency between collaborating objects. For details of
+      configuring an object's dependencies, see <link
+      linkend="objects-dependencies">Dependencies</link>.</para>
+
+      <sect3>
+        <title>Loading configuration metadata from non-default resource
+        locations</title>
+
+        <para>In the previous example the configuration resources are assumed
+        to be located in the bin\Debug directory. You can use Spring's
+        <classname><link
+        ns6:href="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</link></classname>
+        abstraction to load resources from other locations.</para>
+
+        <para>The following example shows how to create an IoC container
+        referring to resources located in the root directory of the filesystem
+        an as an embedded assembly resource.</para>
+
+        <para><programlisting language="csharp">IApplicationContext context = new XmlApplicationContext(
+                 "file:///services.xml",
+                 "assembly://MyAssembly/MyDataAccess/data-access.xml");
+</programlisting>The above example uses Spring.NET's <classname><link
+        ns6:href="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</link></classname>
+        abstraction. The <literal>IResource</literal> interface provides a
+        simple and uniform interface to a wide array of IO resources that can
+        represent themselves as <literal>System.IO.Stream</literal>.</para>
+
+        <note>
+          <para>After you learn about Spring's IoC container, you may want to
+          know more about Spring's <classname><link
+          ns6:href="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</link></classname>
+          abstraction to load metadata from other locations as desribed below
+          and alsoin the chapter <xref linkend="resources" /></para>
+        </note>
+
+        <para>These resources are most frequently files or URLs but can also
+        be resources that have been embedded inside a .NET assembly. A simple
+        URI syntax is used to describe the location of the resource, which
+        follows the standard conventions for files, i.e.
+        <literal>file:///services.xml</literal> and other well known protocols
+        such as http.</para>
+
+        <para>The following snippet shows the use of the URI syntax for
+        referring to a resource that has been embedded inside a .NET assembly,
+        <literal>assembly://&lt;AssemblyName&gt;/&lt;NameSpace&gt;/&lt;ResourceName&gt;</literal>.
+        The <literal>IResource</literal> abstraction is explained further in
+        <xref linkend="objects-iresource" />.</para>
+
+        <note>
+          <para>To create an embedded resource using Visual Studio you must
+          set the Build Action of the .xml configuration file to Embedded
+          Resource in the file property editor. Also, you will need to
+          explicitly rebuild the project containing the configuration file if
+          it is the only change you make between successive builds. If using
+          NAnt to build, add a &lt;resources&gt; section to the csc task. For
+          example usage, look at the Spring.Core.Tests.build file included the
+          distribution.</para>
+        </note>
+      </sect3>
+
+      <sect3>
+        <title>Declarative configuration of the container in
+        App.config/Web.config</title>
+
+        <para>You can also create a container by using a custom configuration
+        section in the standard .NET application configuration file (one of
+        <literal>App.config</literal> or <literal>Web.config</literal>). A
+        custom configuration section that creates the same
+        <literal>IApplicationContext</literal> as the previous example is
+        <programlisting language="myxml">&lt;spring&gt;
+  &lt;context&gt;
+    &lt;resource uri="file://services.xml"/&gt;
+    &lt;resource uri="assembly://MyAssembly/MyDataAccess/data-access.xml"/&gt;
+  &lt;/context&gt;
+&lt;/spring&gt; </programlisting>The context type (specified as the value of
+        the <literal>type</literal> attribute of the
+        <literal>context</literal> element) is optional. In a standalone
+        application the context type defaults to the
+        <literal>Spring.Context.Support.XmlApplicationContext</literal> class
+        and in a Web application defaults to WebApplicationContext. An example
+        of explicitly configuring the context type The following example shows
+        explicit use of the context type attribute: <programlisting
+        language="myxml">&lt;spring&gt;
+  &lt;context type="Spring.Context.Support.XmlApplicationContext, Spring.Core"&gt;
+    &lt;resource uri="file:///services.xml"/&gt;
+    &lt;resource uri="assembly://MyAssembly/MyDataAccess/data-access.xml"/&gt;
+  &lt;/context&gt;
+&lt;/spring&gt;</programlisting></para>
+
+        <para>To acquire a reference to an
+        <literal>IApplicationContext</literal> using a custom configuration
+        section, one simply uses the following code; <programlisting
+        language="csharp">IApplicationContext ctx = ContextRegistry.GetContext();</programlisting>
+        The <literal>ContextRegistry</literal> is used to both instantiate the
+        application context and to perform service locator style access to
+        other objects. (See <xref linkend="objects-servicelocator" /> for more
+        information). The glue that makes this possible is an implementation
+        of the Base Class Library (BCL) provided
+        <literal>IConfigurationSectionHandler</literal> interface, namely the
+        <literal>Spring.Context.Support.ContextHandler</literal> class. The
+        handler class needs to be registered in the
+        <literal>configSections</literal> section of the .NET configuration
+        file as shown below. <programlisting language="myxml">&lt;configSections&gt;
+  &lt;sectionGroup name="spring"&gt;
+    &lt;section name="context" type="Spring.Context.Support.ContextHandler, Spring.Core"/&gt;
+  &lt;/sectionGroup&gt;
+&lt;/configSections&gt; </programlisting>This declaration now enables the use
+        of a custom context section starting at the <literal>spring</literal>
+        root element.</para>
+
+        <para>In some usage scenarios, user code will not have to explicitly
+        instantiate an appropriate implementation
+        <literal>IApplicationContext</literal> interface, since Spring.NET
+        code will do it for you. For example, the ASP.NET web layer provides
+        support code to load a Spring.NET
+        <literal>WebApplicationContext</literal> automatically as part of the
+        normal startup process of an ASP.NET web application. As such, once
+        the container has been created for you, it is often the case that you
+        will never need to explicitly interact with it again in your code, for
+        example when configuring ASP.NET pages.</para>
+
+        <para>Spring.NET comes with an XSD schema to make the validation of
+        the XML object definitions a whole lot easier. The XSD document is
+        thoroughly documented so feel free to take a peek inside (see <xref
+        linkend="springobjectsxsd" />). The XSD is currently used in the
+        implementation code to validate the XML document. The XSD schema
+        serves a dual purpose in that it also facilitates the editing of XML
+        object definitions inside an XSD aware editor (typically Visual
+        Studio) by providing validation (and Intellisense support in the case
+        of Visual Studio). You may wish to refer to <xref linkend="vsnet" />
+        for more information regarding such integration.</para>
+
+        <para>Your XML object definitions can also be defined within the
+        standard .NET application configuration file by registering the
+        <literal>Spring.Context.Support.DefaultSectionHandler</literal> class
+        as the configuration section handler for inline object definitions.
+        This allows you to completely configure one or more
+        <literal>IApplicationContext</literal> instances within a single
+        standard .NET application configuration file as shown in the following
+        example. <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -320,35 +386,31 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
 &lt;/configuration&gt;</programlisting></para>
 
-      <para>Other options available to structure the configuration files are
-      described in <xref linkend="context-functionality-hierarchy" /> and
-      <xref linkend="objects-factory-xml-import" />.</para>
+        <para>Other options available to structure the configuration files are
+        described in <xref linkend="context-functionality-hierarchy" /> and
+        <xref linkend="objects-factory-xml-import" />.</para>
 
-      <para>The <literal>IApplicationContext</literal> can be configured to
-      register other resource handlers, custom parsers to integrate
-      user-contributed XML schema into the object definitions section, type
-      converters, and define type aliases. These features are discussed in
-      section <xref linkend="context-configuration" /></para>
+        <para>The <literal>IApplicationContext</literal> can be configured to
+        register other resource handlers, custom parsers to integrate
+        user-contributed XML schema into the object definitions section, type
+        converters, and define type aliases. These features are discussed in
+        section <xref linkend="context-configuration" /></para>
+      </sect3>
 
       <sect3 xml:id="objects-factory-xml-import">
         <title>Composing XML-based configuration metadata</title>
 
-        <para>It is often useful to split up container definitions into
-        multiple XML files. One way to then load an application context which
-        is configured from all these XML fragments is to use the application
-        context constructor which takes multiple resource locations. With an
-        object factory, an object definition reader can be used multiple times
-        to read definitions from each file in turn.</para>
+        <para>It can be useful to split up object definitions into multiple
+        XML files. Often each individual XML configuration file represents a
+        logical layer or module in your architecture. One way to then load an
+        application context that is configured from all these XML fragments is
+        to use the application context constructor. This constructor takes
+        multiple <classname>IResource</classname> locations, as was shown in
+        the previous section.</para>
 
-        <para>Generally, the Spring.NET team prefers the above approach,
-        assembling individual files because it keeps container configuration
-        files unaware of the fact that they are being combined with others.
-        However, an alternate approach is to compose one XML object definition
-        file using one or more occurrences of the <literal>import</literal>
-        element to load definitions from other files. Any
-        <literal>import</literal> elements must be placed before
-        <literal>object</literal> elements in the file doing the importing.
-        Let's look at a sample:</para>
+        <para>An alternate approach is to use one or more occurrences of the
+        &lt;import/&gt; element to load object definitions from another file
+        (or files). Let's look at a sample:</para>
 
         <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
 
@@ -362,7 +424,7 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 &lt;/objects&gt;</programlisting></para>
 
         <para>In this example, external object definitions are being loaded
-        from 3 files, <literal>services.xml</literal>,
+        from three files, <literal>services.xml</literal>,
         <literal>messageSource.xml</literal>, and
         <literal>themeSource.xml</literal>. All location paths are considered
         relative to the definition file doing the importing, so
@@ -374,53 +436,93 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
         importing file. As you can see, a leading slash is actually ignored,
         but given that these are considered relative paths, it is probably
         better form not to use the slash at all. The contents of the files
-        being imported must be fully valid XML object definition files
-        according to the XSD, including the top level
-        <literal>objects</literal> element.</para>
+        being imported, including the top level
+        <literal>&lt;objects/&gt;</literal> element, must be valid XML bean
+        definitions according to the Spring Schema.</para>
       </sect3>
+    </sect2>
+
+    <sect2 xml:id="objects-factory-client">
+      <title>Using the container</title>
+
+      <para>An <literal>IApplicationContext</literal> is the interface for an
+      advanced factory capable of maintaining a registry of different objects
+      and their dependencies. Using the method
+      <literal>GetObject(string)</literal> or the indexer
+      <literal>[string]</literal> you can retrieve instances of your
+      objects.</para>
+
+      <para> The <literal>IApplicationContext</literal> enables you to read
+      object definitions and access them as follows:</para>
+
+      <programlisting language="csharp">// create and configure beans
+IApplicationContext context = new XmlApplicationContext("services.xml", "daos.xml");
+
+// retrieve configured instance
+PetStoreService service = (PetStoreService) context.GetObject("PetStoreService");
+
+// use configured instance
+IList userList = service.GetUserNames();
+</programlisting>
+
+      <para>You use the method <literal>GetObject</literal> to retrieve
+      instances of your objects. The IApplicationContext interface has a few
+      other methods for retrieving objects, but ideally your application code
+      should never use them. Indeed, your application code should have no
+      calls to the GetObject method at all, and thus no dependency on Spring
+      APIs at all. For example, Spring's integration with web frameworks
+      provides for dependency injection for various web framework classes such
+      as ASP.NET pages and user controls.</para>
+
+      <note>
+        <para>The syntactical inconvenience of the cast will be addressed in a
+        future release of Spring.NET that is based on a generic API. Note,
+        that even when using a generic API, looking up an object by name in no
+        way guarantees that the return type will be that of the generic
+        type.</para>
+      </note>
     </sect2>
 
     <sect2 xml:id="objects-definition">
       <title>The Objects</title>
 
-      <para>A Spring IoC container manages one or more objects. these objects
-      are created using the configuration metadata that has been supplied to
-      the container (typically in the form of XML &lt;object/&gt;
-      definitions).</para>
+      <para>A Spring IoC container manages one or more objects. These objects
+      are created using the configuration metadata that you supply to the
+      container.</para>
 
       <para>Within the container itself, these object definitions are
-      represented as IObjectDefinition objects, which contain (among other
-      information) the following metadata: <itemizedlist spacing="compact">
+      represented as <classname>IObjectDefinition</classname> objects, which
+      contain (among other information) the following metadata: <itemizedlist
+          spacing="compact">
           <listitem>
-            <para><emphasis>A type name</emphasis>: typically this is the
-            actual implementation class of the object being defined..</para>
+            <para><emphasis>A type name</emphasis>: typically the actual
+            implementation class of the object being defined..</para>
           </listitem>
 
           <listitem>
             <para>Object behavioral configuration elements, which state how
-            the object should behave in the Spring.NET IoC container (i.e.
-            prototype or singleton, lifecycle callbacks, and so forth)</para>
+            the object should behave in the container (i.e. prototype or
+            singleton, lifecycle callbacks, and so forth)</para>
           </listitem>
 
           <listitem>
-            <para>references to other objects which are needed for the object
+            <para>References to other objects which are needed for the object
             to do its work: these references are also called
             <emphasis>collaborators</emphasis> or
             <emphasis>dependencies</emphasis>.</para>
           </listitem>
 
           <listitem>
-            <para>other configuration settings to set in the newly created
+            <para>Other configuration settings to set in the newly created
             object. An example would be the number of threads to use in an
             object that manages a worker thread pool, or the size limit of the
             pool.</para>
           </listitem>
         </itemizedlist></para>
 
-      <para>The concepts listed above directly translate to a set of elements
-      the object definition consists of. These elements are listed below,
-      along with a link to further documentation about each of them. <table
-          frame="all">
+      <para>The preceeding concepts translate directly to a set of properties
+      that eacdh object definition consists of. The following table lists some
+      of these properties, with links to documentation <table frame="all">
           <title>Object definition explanation</title>
 
           <tgroup cols="2">
@@ -508,84 +610,88 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
       <sect3 xml:id="objects-objectname">
         <title>Naming objects</title>
 
-        <para>Every object has one or more <literal>id</literal>s (also called
-        identifiers, or names; these terms refer to the same thing). These
-        <literal>id</literal>s must be unique within the container the object
-        is hosted in. An object will almost always have only one id, but if an
-        object has more than one id, the extra ones can essentially be
-        considered aliases.</para>
+        <para>Every object has one or more identifiers. These identifiers must
+        be unique within the container that hosts the objects. An object
+        usually has only one identifier, but if it requires more than one, the
+        extra ones can be considered aliases.</para>
+
+        <sidebar>
+          <para>A convention that has evolved is to use the standard C#
+          convention for Property names when naming objects. That is, object
+          names start with a uppercase letter, and are camel-cased from then
+          on. Examples of such names would be (without quotes)
+          'AccountManager', 'AccountService', 'UserDao', 'LoginController',
+          and so forth.</para>
+
+          <para>Naming object consistently makes your configuration easier to
+          read and understand, and if you are using Spring AOP it helps a lot
+          when applying advice to a set of objects related by name.</para>
+        </sidebar>
 
         <para>When using XML-based configuration metadata, you use the
-        <literal>'id'</literal> or <literal>'name'</literal>attributes to
+        <literal>'id'</literal> and/or <literal>'name'</literal>attributes to
         specify the object identifier(s). The <literal>'id'</literal>
-        attribute allows you to specify exactly one id, and as it is a real
-        XML element ID attribute, the XML parser is able to do some extra
-        validation when other elements reference the id; as such, it is the
+        attribute allows you to specify exactly one id, and because it is a
+        real XML element ID attribute, the XML parser is able to do some extra
+        validation when other elements reference the id. As such, it is the
         preferred way to specify an object id. However, the XML specification
         does limit the characters which are legal in XML IDs. This is usually
         not a constraint, but if you have a need to use one of these special
         XML characters, or want to introduce other aliases to the object, you
-        may also or instead specify one or more object <literal>id</literal>s,
+        can specify them in the <literal>'name'</literal> attribute ,
         separated by a comma (<literal>,</literal>), semicolon
-        (<literal>;</literal>), or whitespace in the <literal>'name'</literal>
-        attribute.</para>
+        (<literal>;</literal>), or whitespace.</para>
 
-        <para>Please note that you are not required to supply a name for a
-        object. If no name is supplied explicitly, the container will generate
-        a unique name for that object. The motivations for not supplying a
-        name for a object will be discussed later (one use case is inner
-        objects).</para>
+        <note>
+          <para>You are not required to supply a name for a object. If no name
+          is supplied explicitly, the container will generate a unique name
+          for that object. The motivations for not supplying a name for a
+          object are to use <link
+          linkend="objects-factory-autowire">autowiring</link> and <link
+          linkend="objects-inline-object">inline-objects</link> which will be
+          discussed later.</para>
+        </note>
 
         <sect4>
-          <title>Aliasing objects</title>
+          <title>Aliasing an object outside the object definition</title>
 
           <para>In an object definition itself, you may supply more than one
-          name for the object, by using a combination of the id and name
-          attributes as discussed in <xref linkend="objects-objectname" />.
-          This approach to aliasing objects has some limitations when you
-          would like to assemble the main application configuration file from
-          multiple files. This usage pattern is common when each configuration
-          file represents a logical layer or component within the application.
-          In this case you may want to refer to a common object dependency
-          using a name that is specific to each file. If the common object
-          dependency is defined in the main application configuration file
-          itself, then one can use the name element as an alias mechanism.
-          However, if the main application configuration file should not be
-          responsible for defining the common object dependency, since it
-          logically 'belongs' to one of the other layers or components, you
-          can not use the name attribute to achieve this goal.</para>
+          name for the object, by using a combination of up to one name
+          specified by the <literal>id</literal> attribute, and any number of
+          other names in the <literal>name</literal> attribute. These names
+          are equivalent aliases to the same object, and are useful for some
+          situations, such as allowing each component in an application to
+          refer to a common dependency by using a object name that is specific
+          to that component itself.</para>
 
-          <para>In this case, you can define an alias using an explicit
-          <literal>alias</literal> element contained in the main application
-          configuration file.</para>
+          <para>Specifying all aliases where the object is actually defined is
+          not always adequate, however. It is sometimes desirable to introduce
+          an alias for an object that is defined elsewhere. This is commonly
+          the case in large systems where configuration is split amongst each
+          subsystem, each subsystem having its own set of object defintions.
+          In XML-based configuration metadata, you can use of the
+          &lt;alias/&gt; element to accomplish this.</para>
 
-          <para><literal> &lt;alias name="fromName"
-          alias="toName"/&gt;</literal></para>
+          <programlisting language="myxml"> &lt;alias name="fromName" alias="toName"/&gt;</programlisting>
 
-          <para>This allows an object named <literal>fromName</literal> to be
-          referred to as <literal>toName</literal> across all application
-          configuration files.</para>
+          <para>In this case, an object in the same container which is named
+          <literal>'fromName'</literal>, may also after the use of this alias
+          definition, be referred to as <literal>'toName'</literal>.</para>
 
-          <para>As a concrete example, consider the case where the
-          configuration file 'a.xml' (representing component A) defines a
-          connection object called componentA-connection. In another file,
-          'b.xml' (representing component B) would like to refer to the
-          connection as componentB-connection. And the main application,
-          MyApp, defines its own XML fragment to assembles the final
-          application configuration from all three fragments and would like to
-          refer to the connection as myApp-connection. This scenario can be
-          easily handled by adding to the MyApp XML fragment the following
-          standalone aliases:</para>
+          <para>For example, the configuration metadata for subsystem A may
+          refer to a DbProvider via the name 'SubsystemA-DbProvider. The
+          configuration metadata for subsystem B may refer to a DbProvider via
+          the name 'SubsystemB-DbProvider'. When composing the main
+          application that uses both these subsystems the main application
+          refers to the DbProvider via the name 'MyApp-DbProvider'. To have
+          all three names refer to the same object you add to the MyApp
+          configuration metadata the following aliases definitions:</para>
 
-          <para><literal> </literal><literal>&lt;alias
-          name="componentA-connection"
-          alias="componentB-connection"/&gt;</literal></para>
-
-          <para><literal> &lt;alias name="componentA-connection"
-          alias="myApp-connection"/&gt;</literal></para>
+          <programlisting>&lt;alias name="SubsystemA-DbProvider" alias="SubsystemB-DbProvider"/&gt;
+&lt;alias name="SubsystemA-DbProvider" alias="MyApp-DbProvider"/&gt;</programlisting>
 
           <para>Now each component and the main app can refer to the
-          connection via a name that is unique and guaranteed not to clash
+          connection through a name that is unique and guaranteed not to clash
           with any other definition (effectively there is a namespace), yet
           they refer to the same object.</para>
         </sect4>
@@ -593,7 +699,7 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
     </sect2>
 
     <sect2 xml:id="objects-factory-class">
-      <title>Object creation</title>
+      <title>Instantiating objects</title>
 
       <para>An object definition essentially is a recipe for creating one or
       more objects. The container looks at the recipe for a named object when
@@ -604,43 +710,52 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
       the type of object that is to be instantiated using the
       <literal>'type'</literal> attribute of the
       <literal>&lt;object/&gt;</literal> element. This
-      <literal>'type'</literal> attribute (which internally eventually boils
-      down to being a <literal>Type</literal> property on a
-      <literal>IObjectDefinition</literal> instance) is normally mandatory
-      (see XXX “Instantiation using an instance factory method” and XXX
-      “Object definition inheritance” for the two exceptions) and is used for
-      one of two purposes. The type property specifies the type of of the
-      object to be constructed in the common case where the container itself
-      directly creates the object by calling its constructor reflectively
-      (somewhat equivalent to C# code using the <emphasis>'new'
-      </emphasis>operator). In the less common case where the container
-      invokes a <literal>static</literal>, <emphasis>factory</emphasis> method
-      on a class to create the object, the type property specifies the actual
-      class containing the <literal>static</literal> factory method that is to
-      be invoked to create the object (the type of the object returned from
-      the invocation of the <literal>static</literal> factory method may be
-      the same type or another type entirely, it doesn't matter).</para>
+      <literal>'type'</literal> attribute (which internally is a
+      <literal>Type</literal> property on a
+      <literal>IObjectDefinition</literal> instance) is normally mandatory.
+      (For exceptions see the section called <link
+      linkend="objects-factory-class-instance-factory-method">Instantiation
+      using an instance factory method </link>and <link
+      linkend="objects-childobjects">Object definition inheritance</link>.)
+      You use the Type property in one of two ways:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>To specify the type of of the object to be constructed in the
+          common case where the container itself directly creates the object
+          by calling its constructor reflectively, somewhat equivalent to C#
+          code using the <emphasis>'new'</emphasis> operator.</para>
+        </listitem>
+
+        <listitem>
+          <para>In the less common case where the container invokes a
+          <literal>static</literal>, <emphasis>factory</emphasis> method on a
+          class to create the object, specify the actual class containing the
+          <literal>static</literal> factory method that is to be invoked to
+          create the object. The type of the object returned from the
+          invocation of the <literal>static</literal> factory method may be
+          the same type or another type entirely.</para>
+        </listitem>
+      </itemizedlist>
 
       <sect3 xml:id="objects-factory-class-ctor">
-        <title>Object creation via constructor invocation</title>
+        <title>Instantiatoin using a constructor</title>
 
-        <para>When creating an object using the constructor approach, all
+        <para>When you createn an object using the constructor approach, all
         normal classes are usable by and compatible with Spring. That is, the
         type being created does not need to implement any specific interfaces
         or be coded in a specific fashion. Just specifying the object type
         should be enough. However, depending on what type of IoC you are going
         to use for that specific object, you may need to create a default
-        constructor (i.e. a constructor that has no parameters) in the source
-        code definition of your class.</para>
+        constructor.</para>
 
-        <para>The <literal>XmlObjectFactory</literal> implementation of the
-        <literal>IObjectFactory</literal> interface can consume object
-        definitions that have been defined in XML, for example...
-        <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"/&gt;</programlisting></para>
+        <para>With XML-based configuration metadata you can specify your
+        object class as follows: <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"/&gt;</programlisting></para>
 
         <para>The mechanism for supplying arguments to the constructor (if
         required), or setting properties of the object instance after it has
-        been constructed, is described shortly.</para>
+        been constructed, is described in <xref
+        linkend="objects-factory-collaborators" /></para>
 
         <para>This XML fragment describes an object definition that will be
         identified by the <emphasis>exampleObject</emphasis> name, instances
@@ -693,19 +808,19 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
         <title>Object creation via a static factory method</title>
 
         <para>When defining an object which is to be created using a static
-        factory method, along with the type attribute which specifies the type
-        containing the static factory method, another attribute named
-        factory-method is needed to specify the name of the factory method
-        itself. Spring.NET expects to be able to call this method (with an
-        optional list of arguments as described later) and get back a live
-        object, which from that point on is treated as if it had been created
-        normally via a constructor. One use for such an object definition is
-        to call static factories in legacy code.</para>
+        factory method, you use the type attribute to specify the type
+        containing the static factory method and an attribute named
+        factory-method to specify the name of the factory method itself. You
+        should be able to call this method (with an optional list of arguments
+        as described later) and return a live object, which from that point on
+        is treated as if it had been created normally via a constructor. One
+        use for such an object definition is to call static factories in
+        legacy code.</para>
 
-        <para>Following is an example of an object definition which specifies
-        that the object is to be created by calling a factory-method. Note
-        that the definition does not specify the type (class) of the returned
-        object, only the type containing the factory method. In this example,
+        <para>The following example shows an object definition that specifies
+        the object is to be created by calling a factory-method. The
+        definition does not specify the type of the returned object, only the
+        type containing the factory method. In this example,
         <literal>CreateInstance</literal> must be a static method.
         <programlisting language="myxml">&lt;object id="exampleObject"
       type="Examples.ExampleObjectFactory, ExamplesLibrary"
@@ -713,21 +828,23 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
 
         <para>The mechanism for supplying (optional) arguments to the factory
         method, or setting properties of the object instance after it has been
-        returned from the factory, will be described shortly.</para>
+        returned from the factory, is described in <xref
+        linkend="object-factory-properties-detailed" /></para>
       </sect3>
 
       <sect3 xml:id="objects-factory-class-instance-factory-method">
         <title>Object creation via an instance factory method</title>
 
-        <para>In a fashion similar to instantiation using a static factory
-        method, instantiation using an instance factory method is where a
-        non-static method of an existing object from the container is invoked
-        to create the new object. To use this mechanism, the
-        <literal>'type'</literal> attribute must be left empty, and the
-        <literal>'factory-object'</literal> attribute must specify the name of
-        an object in the current (or parent/ancestor) container that contains
-        the instance method that is to be invoked to create the object. The
-        name of the factory method itself should still be set via the
+        <para>Similar to instantiation through a <link
+        linkend="objects-factory-class-static-factory-method">static factory
+        method</link>, instantiation with an instance factory method involves
+        the invocation of a non-static method on an existing object from the
+        container to create a new object. To use this mechanism, leave the
+        <literal>'type'</literal> attribute empty, and in the
+        <literal>'factory-object'</literal> attribute specify the name of an
+        object in the current (or parent/ancestor) container that contains the
+        instance method that is to be invoked to create the object. Set the
+        name of the factory method itself with the
         <literal>'factory-method'</literal> attribute.<programlisting
         language="myxml">&lt;!-- the factory object, which contains an instance method called 'CreateInstance' --&gt;
 &lt;object id="exampleFactory" type="..."&gt;
@@ -739,16 +856,19 @@ IObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
       factory-method="CreateInstance"
       factory-object="exampleFactory"/&gt;</programlisting></para>
 
-        <para>Although the mechanisms for setting object properties are still
-        to be discussed, one implication of this approach is that the factory
-        object itself can be managed and configured via Dependency Injection,
-        by the container.<note>
-            <para>When the Spring documentation makes mention of a 'factory
-            object', this will be a reference to an object that is configured
-            in the Spring container that will create objects via an instance
-            or static factory method. When the documentation mentions a
-            <literal>IFactoryObject</literal> (notice the capitalization) this
-            is a reference to a Spring-specific
+        <para>Although the mechanisms for <link
+        linkend="object-factory-properties-detailed">setting object
+        properties</link> are still to be discussed, one implication of this
+        approach is that the factory object itself can be managed and
+        configured through Dependency Injection (DI).<note>
+            <para>In Spring documentation, '<emphasis>factory
+            object</emphasis>', refers to an object that is configured in the
+            Spring container that will create objects via an <link
+            linkend="objects-factory-class-instance-factory-method">instance</link>
+            or <link
+            linkend="objects-factory-class-static-factory-method">static</link>
+            factory method. By contrast, <literal>IFactoryObject</literal>
+            (notice the capitalization) refers to a Spring-specific
             <literal>IFactoryObject</literal> .</para>
           </note></para>
       </sect3>
@@ -890,78 +1010,65 @@ public class TestGenericObjectFactory
         <literal>TestGenericObject&lt;List&lt;int&gt;,int&gt;</literal></para>
       </sect3>
     </sect2>
-
-    <sect2 xml:id="objects-factory-client">
-      <title>Using the container</title>
-
-      <para>An <literal>IApplicationContext</literal> is essentially nothing
-      more than the interface for an advanced factory capable of maintaining a
-      registry of different objects and their dependencies. The
-      <literal>IApplicationContext</literal> enables you to read object
-      definitions and access them. You create one and read in some object
-      definition in the XML format as follows:</para>
-
-      <programlisting language="csharp">IApplicationContext context = new XmlApplicationContext("file://objects.xml");
-</programlisting>
-
-      <para>Basically that is all there is to it. Using
-      <literal>GetObject(string)</literal> or the indexer
-      <literal>[string]</literal>, you can retrieve instances of your object;
-      the client-side view of the <literal>IApplicationContext</literal> is
-      simple. The <literal>IApplicationContext</literal> interface has just a
-      few other methods related to finding objects in the contianer, but
-      ideally your application code should never use them... indeed, your
-      application code should have no calls to the
-      <literal>GetObject(string)</literal> method at all, and thus no
-      dependency on Spring APIs at all.</para>
-    </sect2>
   </sect1>
 
   <sect1 xml:id="objects-dependencies">
     <title>Dependencies</title>
 
-    <para>Your typical enterprise application is not made up of a single
-    object. Even the simplest of applications will no doubt have at least a
-    handful of objects that work together to present what the end-user sees as
-    a coherent application. This next section explains how you go from
-    defining a number of object definitions that stand-alone, each to
-    themselves, to a fully realized application where objects work (or
-    collaborate) together to achieve some goal (usually an application that
-    does what the end-user wants).</para>
+    <para>A typical enterprise application does not consist of a single
+    object. Even the simplest application has a few objects that work together
+    to present what the end-user sees as a coherent application. This next
+    section explains how you go from defining a number of object definitions
+    that stand-alone to a fully realized application where objects collaborate
+    to achieve a goal.</para>
 
     <sect2 xml:id="objects-factory-collaborators">
       <title>Injecting dependencies</title>
 
-      <para>The basic principle behind Dependency Injection (DI) is that
-      objects define their dependencies (that is to say the other objects they
-      work with) only through constructor arguments, arguments to a factory
-      method, or properties which are set on the object instance after it has
-      been constructed or returned from a factory method. Then, it is the job
-      of the container to actually inject those dependencies when it creates
-      the object. This is fundamentally the inverse, hence the name Inversion
-      of Control (IoC), of the object itself being in control of instantiating
-      or locating its dependencies on its own using direct construction of
-      classes, or something like the Service Locator pattern.</para>
+      <para>Dependency injection (DI) is a process whereby objects define
+      their dependencies, that is, the other objects they work with, only
+      through constructor arguments and properties that are set on the object
+      instance after it is constructed. (Factory methods may be considered a
+      special case of providing constructor arguments for the purposes of this
+      description). The container injects these dependencies when it creates
+      the bean. This process is fundamentally the inverse to the case when the
+      bean itself is controlling the instantiation of its dependencies on its
+      own by using direct construction of classes, or the Service Locator
+      pattern. The inverting of this responsibility is why the name Inversion
+      of Control (IoC) is used to describe the container's actions. </para>
 
-      <para>It becomes evident upon usage that code gets much cleaner when the
-      DI principle is applied, and reaching a higher grade of decoupling is
-      much easier when objects do not look up their dependencies, but are
-      provided with them (and additionally do not even know where the
-      dependencies are located and of what concrete class they are). DI exists
-      in two major variants, namely Constructor Injection and Setter
-      Injection.</para>
+      <para>Code is cleaner when using DI and decoupling is more effective
+      when objects are provided with their dependencies. The object does not
+      look up its dependencies, and does not know the location or class of the
+      dependencies. Long sections of initialization code that you used to hide
+      in a #region tag simply go away, and are placed by container
+      configuration metadata. One can also consider this clean up an
+      application of the principal of Separation of Concerns. Before using DI,
+      you class was responsible for business logic AND its configuration, it
+      was concerns with doing more than one thing. DI removes the
+      responsibility of configuration from the class, leaving it only with a
+      single purpose, as the location of business logic. Furthermore, since
+      you class does not know the location of its dependencies these classes
+      also become easier to test, in particular when the dependencies are
+      interfaces or abstract base classes allowing for stub or mock
+      implementation to be used in unit tests. </para>
+
+      <para>Dependency injection exists in two major variants,
+      Constructor-based dependency injection and Setter-based dependency
+      injection.</para>
 
       <sect3 xml:id="objects-ctor-injection">
-        <title>Constructor Injection</title>
+        <title>Constructor-based dependency injection</title>
 
-        <para>Constructor-based DI is effected by invoking a constructor with
-        a number of arguments, each representing a dependency. Additionally,
-        calling a static factory method with specific arguments to construct
-        the object, can be considered almost equivalent, and the rest of this
-        text will consider arguments to a constructor and arguments to a
-        static factory method similarly. Find below an example of a class that
-        could only be dependency injected using constructor injection. Notice
-        that there is nothing special about this class.</para>
+        <para>Constructor-based DI is accomplished by the container invoking a
+        constructor with a number of arguments, each representing a
+        dependency. Calling a static factory method with specific arguments to
+        construct the object is nearly equivalent, and this discussion treats
+        arguments to a constructor and to a static factory method similarly.
+        The following example shows a class that can only be
+        dependency-injected by using constructor injection. Notice that there
+        is nothing special about this class (no container specific interfaces,
+        base classes or attributes)</para>
 
         <programlisting language="csharp">public class SimpleMovieLister
 {
@@ -979,15 +1086,14 @@ public class TestGenericObjectFactory
 }</programlisting>
 
         <sect4 xml:id="objects-ctor-arg-resolution">
-          <title>Constructor Argument Resolution</title>
+          <title>Constructor argument resolution</title>
 
           <para>Constructor argument resolution matching occurs using the
-          argument's type. If there is no potential for ambiguity in the
-          constructor arguments of a object definition, then the order in
-          which the constructor arguments are defined in a object definition
-          is the order in which those arguments will be supplied to the
-          appropriate constructor when it is being instantiated. Consider the
-          following class:</para>
+          argument's type. If ambiguity exists in the constructor arguments of
+          a object definition, then the order in which the constructor
+          arguments are defined in a object definition is the order in which
+          those arguments will be supplied to the appropriate constructor when
+          it is being instantiated. Consider the following class:</para>
 
           <programlisting language="csharp">namespace X.Y
 {
@@ -1000,11 +1106,11 @@ public class TestGenericObjectFactory
     }
 }</programlisting>
 
-          <para>There is no potential for ambiguity here (assuming of course
-          that Bar and Baz classes are not related in an inheritance
-          hierarchy). Thus the following configuration will work just fine,
-          and you do not need to specify the constructor argument indexes and
-          / or types explicitly.</para>
+          <para>No ambiguity exists, assuming of course that Bar and Baz
+          classes are not related by inheritance. Thus the following
+          configuration will work just fine, and you do not need to specify
+          the constructor argument indexes and / or types explicitly in the
+          contructor-arg element.</para>
 
           <programlisting language="myxml">&lt;object name="Foo" type="X.Y.Foo, Example"&gt;
         &lt;constructor-arg&gt;
@@ -1017,7 +1123,9 @@ public class TestGenericObjectFactory
 
           <para>When another object is referenced, the type is known, and
           matching can occur (as was the case with the preceding example).
-          When a simple type is used, such as
+          </para>
+
+          <para>When a simple type is used, such as
           <literal>&lt;value&gt;true&lt;value&gt;</literal>, Spring cannot
           determine the type of the value, and so cannot match by type without
           help. Consider the following class:</para>
@@ -1041,12 +1149,13 @@ namespace SimpleApp
 }</programlisting>
 
           <sect5 xml:id="objects-ctor-arg-type-matching">
-            <title>Constructor Argument Type Matching</title>
+            <title>Constructor argument type matching</title>
 
-            <para>The above scenario <emphasis>can</emphasis> use type
-            matching with simple types by explicitly specifying the type of
-            the constructor argument using the <literal>type</literal>
-            attribute. For example: <programlisting language="myxml">&lt;object name="exampleObject" type="SimpleApp.ExampleObject, SimpleApp"&gt;
+            <para>In the preceding scenario, the container
+            <emphasis>can</emphasis> use type matching with simple types by
+            explicitly specifying the type of the constructor argument using
+            the <literal>'type'</literal> attribute. For example:
+            <programlisting language="myxml">&lt;object name="exampleObject" type="SimpleApp.ExampleObject, SimpleApp"&gt;
   &lt;constructor-arg type="int" value="7500000"/&gt;
   &lt;constructor-arg type="string" value="42"/&gt;
 &lt;/object&gt;</programlisting></para>
@@ -1185,25 +1294,24 @@ namespace SimpleApp
           </sect5>
 
           <sect5 xml:id="objects-ctor-arg-index">
-            <title>Constructor Argument Index</title>
+            <title>Constructor argument Index</title>
 
-            <para>Constructor arguments can have their index specified
-            explicitly by use of the <literal>index</literal> attribute. For
+            <para>You can specify explicitly the index of constructor
+            arguments by using the <literal>index</literal> attribute. For
             example: <programlisting language="myxml">&lt;object name="exampleObject" type="SimpleApp.ExampleObject, SimpleApp"&gt;
   &lt;constructor-arg index="0" value="7500000"/&gt;
   &lt;constructor-arg index="1" value="42"/&gt;
-&lt;/object&gt;</programlisting>As well as solving the ambiguity problem of
-            multiple simple values, specifying an index also solves the
-            problem of ambiguity where a constructor may have two arguments of
-            the same type. Note that the <emphasis>index is 0
-            based</emphasis>.</para>
+&lt;/object&gt;</programlisting>In addition to resolving the ambiguity of
+            multiple simple values, specifying an index also resolves
+            ambiguity where a constructor has two arguments of the same type.
+            Note that the <emphasis>index is 0 based</emphasis>.</para>
           </sect5>
 
           <sect5 xml:id="objects-ctor-arg-by-name">
-            <title>Constructor Arguments by Name</title>
+            <title>Constructor arguments by name</title>
 
-            <para>Constructor arguments can also be specified by name by using
-            the <literal>name</literal> attribute of the
+            <para>You can specify constructor argumetn by name using
+            <literal>name</literal> attribute of the
             <literal>&lt;constructor-arg&gt;</literal> element.</para>
 
             <programlisting language="myxml">&lt;object name="exampleObject" type="SimpleApp.ExampleObject, SimpleApp"&gt;
@@ -1215,13 +1323,13 @@ namespace SimpleApp
       </sect3>
 
       <sect3 xml:id="objects-setter-injection">
-        <title>Setter Injection</title>
+        <title>Setter-based dependency injection</title>
 
-        <para>Setter-based DI is realized by calling setter methods on your
-        objects after invoking a no-argument constructor or no-argument static
-        factory method to instantiate your object.</para>
+        <para>Setter-based DI is accomplished by the container invoking setter
+        properties on your objects after invoking a no-argument constructor or
+        no-argument static factory method to instantiate your object.</para>
 
-        <para>Find below an example of a class that can only be dependency
+        <para>The following eample shows a class that can only be dependency
         injected using pure setter injection.</para>
 
         <programlisting language="csharp">public class MovieLister
@@ -1240,63 +1348,64 @@ namespace SimpleApp
 }</programlisting>
 
         <sidebar>
-          <title>Constructor- or Setter-based DI?</title>
+          <title>Constructor-based or setter-based DI?</title>
 
           <para>The Spring team generally advocates the usage of setter
           injection, since a large number of constructor arguments can get
           unwieldy, especially when some properties are optional. The presence
-          of setter methods also makes objects of that class amenable to being
-          re-configured (or re-injected) at some later time (for management
-          purposes).</para>
+          of setter properties also makes objects of that class amenable to
+          reconfigured or reinjection later. Managment through WMI is a
+          compelling use case.</para>
 
-          <para>Constructor-injection is favored by some purists though and
-          with good reason. Supplying all of an object's dependencies means
-          that that object is never returned to client (calling) code in a
-          less than totally initialized state. The flip side is that the
-          object becomes less amenable to re-configuration (or
-          re-injection).</para>
+          <para>Some purists favor constructor-based injection. Supplying all
+          object dependencies means that the object is always returned to
+          client (calling) code in a totally initialized state. The
+          disadvantage is that the object becomes less amenable to
+          reconfiguration and re-injection.</para>
 
-          <para>There is no hard and fast rule here. Use whatever type of DI
-          makes the most sense for a particular class; sometimes, when dealing
-          with third party classes to which you do not have the source, the
-          choice will already have been made for you - a legacy class may not
-          expose any setter methods, and so constructor injection will be the
-          only type of DI available to you.</para>
+          <para>Use the DI that makes the most sense for a particular class.
+          Sometimes, when dealing with third-party classes to which you do not
+          have the source, the choice is made for you. A legacy class may not
+          expose any setter methods, and so constructor injection is the only
+          available DI.</para>
 
           <para>Since you can mix both, Constructor- and Setter-based DI, it
           is a good rule of thumb to use constructor arguments for mandatory
           dependencies and setters for optional dependencies.</para>
         </sidebar>
 
-        <para>The <literal>IObjectFactory</literal> supports both of these
-        variants for injecting dependencies into objects it manages. (It in
-        fact also supports injecting setter-based dependencies after some
-        dependencies have already been supplied via the constructor approach.)
-        The configuration for the dependencies comes in the form of the
+        <para>The <literal>IAppliationContext</literal> supports constructor-
+        and setter-based DI for the objects it manages. It also supports
+        setter-based DI after some dependencies have already been supplied via
+        the constructor approach.. </para>
+
+        <para>The configuration for the dependencies comes in the form of the
         <literal>IObjectDefinition</literal> class, which is used together
         with <literal>TypeConverters</literal> to know how to convert
         properties from one format to another. However, most users of
         Spring.NET will not be dealing with these classes directly (that is
         programatically), but rather with an XML definition file which will be
         converted internally into instances of these classes, and used to load
-        an entire Spring IoC container instance.</para>
+        an entire Spring IoC container instance. Refer to <xref
+        linkend="objects-objects-conversion" /> for more information regarding
+        type conversion, and how you can design your classes to be convertible
+        by Spring.NET.</para>
 
-        <para>Object dependency resolution generally happens as follows:
-        <orderedlist spacing="compact">
+        <para>The container resolves object dependeices as: <orderedlist
+            spacing="compact">
             <listitem>
-              <para>The <literal>IObjectFactory</literal> is created and
-              initialized with a configuration which describes all the
-              objects. Most Spring.NET users use an
-              <literal>IObjectFactory</literal> or
-              <literal>IApplicationContext</literal> variant that supports XML
-              format configuration files.</para>
+              <para>The <literal>IApplicationContext</literal> is created and
+              initialized with a configuration that describes all the objects.
+              Most Spring.NET users use an <literal>IObjectFactory</literal>
+              or <literal>IApplicationContext</literal> variant that supports
+              XML format configuration files.</para>
             </listitem>
 
             <listitem>
               <para>Each object has dependencies expressed in the form of
               properties, constructor arguments, or arguments to the
-              static-factory method when that is used instead of a normal
-              constructor. These dependencies will be provided to the object,
+              static-factory method if you are using that instead of a normal
+              constructor. These dependencies apre provided to the object,
               <emphasis>when the object is actually created</emphasis>.</para>
             </listitem>
 
@@ -1313,49 +1422,40 @@ namespace SimpleApp
               that property or constructor argument. By default Spring.NET can
               convert a value supplied in string format to all built-in types,
               such as <literal>int</literal>, <literal>long</literal>,
-              <literal>string</literal>, <literal>bool</literal>, etc.
-              Spring.NET uses <literal>TypeConverter</literal> definitions to
-              be able to convert string values to other, arbitrary types.
-              Refer to <xref linkend="objects-objects-conversion" /> for more
-              information regarding type conversion, and how you can design
-              your classes to be convertible by Spring.NET.</para>
+              <literal>string</literal>, <literal>bool</literal>, etc.</para>
             </listitem>
           </orderedlist></para>
 
         <para>The Spring container validates the configuration of each object
-        as the container is created, including the validation that properties
-        which are object references are actually referring to valid object.
-        However, the object properties themselves are not set until the object
-        is actually created. For those object that defined as singletons and
-        set to be pre-instantiated (such as singleton object in an
-        <literal>IApplicationContext</literal>), creation happens at the time
-        that the container is created, but otherwise this is only when the
-        object is requested. When an object actually has to be created, this
-        will potentially cause a graph of other objects to be created, as its
-        dependencies and its dependencies' dependencies (and so on) are
-        created and assigned.</para>
+        as the container is created, including the validation of whether
+        object reference properties refer to valid object. However, the object
+        properties themselves are not set until the object is actually
+        created. Objects that are defined as singletons and set to be
+        pre-instantiated, are created when the container is created.
+        Otherwise, the object is created only when it is requested. Creation
+        of an object potentially causes a graph of objects to be created as
+        the objects dependencies and its dependencies' dependencies (and so
+        on) are created and assigned.</para>
 
         <sidebar>
           <title>Circular Dependencies</title>
 
           <para>If you are using predominantly constructor injection it is
-          possible to write and configure your classes and objects such that
-          an unresolvable circular dependency scenario is created.</para>
+          possible to create unresolvable circular dependency scenario.</para>
 
-          <para>Consider the scenario where you have class A, which requires
-          an instance of class B to be provided via constructor injection, and
-          class B, which requires an instance of class A to be provided via
-          constructor injection. If you configure object for classes A and B
-          to be injected into each other, the Spring IoC container will detect
-          this circular reference at runtime, and throw a
+          <para>For example: Class A, which requires an instance of class B to
+          be provided via constructor injection, and class B, which requires
+          an instance of class A to be provided via constructor injection. If
+          you configure objects for classes A and B to be injected into each
+          other, the Spring IoC container detects this circular reference at
+          runtime, and throw a
           <literal>ObjectCurrentlyInCreationException</literal>.</para>
 
           <para>One possible solution to this issue is to edit the source code
           of some of your classes to be configured via setters instead of via
-          constructors. Another solution is not to use constructor injection
-          and stick to setter injection only. In other words, while it should
-          generally be avoided in all but the rarest of circumstances, it is
-          possible to configure circular dependencies with setter
+          constructors. Alternatively, avoid constructor injection and stick
+          to setter injection only. In other words, although it is not
+          recommended, you can configure circular dependencies with setter
           injection.</para>
 
           <para>Unlike the typical case (with no circular dependencies), a
@@ -1365,45 +1465,42 @@ namespace SimpleApp
         </sidebar>
 
         <para>You can generally trust Spring.NET to do the right thing. It
-        will detect configuration issues, such as references to non-existent
+        detects configuration problems, such as references to non-existent
         object definitions and circular dependencies, at container load-time.
-        It will actually set properties and resolve dependencies as late as
-        possible, which is when the object is actually created. This means
-        that a Spring container which has loaded correctly can later generate
-        an exception when you request an object if there is a problem creating
-        that object or one of its dependencies. This could happen if the
-        object throws an exception as a result of a missing or invalid
-        property, for example. This potentially delayed visibility of some
-        configuration issues is why <literal>IApplicationContext</literal> by
-        default pre-instantiates singleton objects. At the cost of some
-        upfront time and memory to create these objects before they are
-        actually needed, you find out about configuration issues when the
-        <literal>IApplicationContext</literal> is created, not later. If you
-        wish, you can still override this default behavior and set any of
-        these singleton objects to lazy-load (not be preinstantiated)</para>
+        Spring sets properties and resolves dependencies as late as possible,
+        which is when the object is actually created. This means that a Spring
+        container which has loaded correctly can later generate an exception
+        when you request an object if there is a problem creating that object
+        or one of its dependencies. For example, the object throws an
+        exception as a result of a missing or invalid property. This
+        potentially delayed visibility of some configuration issues is why
+        <literal>IApplicationContext</literal> by default pre-instantiate
+        singleton objects. At the cost of some upfront time and memory to
+        create these objects before they are actually needed, you discover
+        configuration issues when the <literal>IApplicationContext</literal>
+        is created, not later. If you wish, you can still override this
+        default behavior and set any of these singleton objects will
+        lazy-initialize, rather than be pre-instantiated.</para>
 
-        <para>If no circular dependencies are involved (see sidebar for a
-        discussion of circular dependencies), when one or more collaborating
-        objects are being injected into a dependent object, each collaborating
-        object is totally configured prior to being passed (via one of the DI
-        flavors) to the dependent object. This means that if object A has a
-        dependency on object B, the Spring IoC container will
-        <emphasis>totally</emphasis> configure object B prior to invoking the
-        setter method on object A; you can read<emphasis> 'totally
-        configure'</emphasis> to mean that the object will be instantiated (if
-        not a pre-instantiated singleton), all of its dependencies will be
-        set, and the relevant lifecycle methods (such as a configured init
-        method or the <literal>IIntializingObject</literal> callback method)
-        will all be invoked.</para>
+        <para>If no circular dependencies exist, when one or more
+        collaborating objects are being injected into a dependent object, each
+        collaborating object is <emphasis>totally</emphasis> configured prior
+        to being passed into the dependent object. This means that if object A
+        has a dependency on object B, the Spring IoC container completely
+        configures object B prior to invoking the setter method on object A.
+        In other words, the object is instantiated (if not a pre-instantiated
+        singleton), its dependencies are set, and the relevant lifecycle
+        methods (such as a configured init method or the
+        <literal>IIntializingObject</literal> callback method) will all be
+        invoked.</para>
       </sect3>
 
       <sect3 xml:id="objects-di-examples">
-        <title>Some examples</title>
+        <title>Examples of Dependency Injection</title>
 
         <para>First, an example of using XML-based configuration metadata for
-        setter-based DI. Find below a smallpart of a Spring XML configuration
-        file specifying some object definitions. <programlisting
-        language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"&gt;
+        setter-based DI. A small part of a Spring XML configuration file
+        specifying some object definitions:<programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"&gt;
 
     &lt;!-- setter injection using the ref attribute --&gt;
     &lt;property name="objectOne" ref="anotherExampleObject"/&gt;    
@@ -1436,9 +1533,10 @@ public class ExampleObject
   }  
 }</programlisting></para>
 
-        <para>As you can see, setters have been declared to match against the
-        properties specified in the XML file. Find below an example of using
-        constructor-based DI.<programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"&gt;
+        <para>In the preceding example, setters have been declared to match
+        against the properties specified in the XML file. Find below an
+        example of using constructor-based DI.<programlisting
+        language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"&gt;
     &lt;constructor-arg name="objectOne" ref="anotherExampleObject"/&gt;
     &lt;constructor-arg name="objectTwo" ref="yetAnotherObject"/&gt;
     &lt;constructor-arg name="IntegerProperty" value="1"/&gt;
@@ -1462,9 +1560,9 @@ Public Class ExampleObject
         myObjectTwo = yetAnotherObject
         Me.i = i
     End Sub
-End Class</programlisting>As you can see, the constructor arguments specified
-        in the object definition will be used to pass in as arguments to the
-        constructor of the <literal>ExampleObject</literal>.</para>
+End Class</programlisting>Ghe constructor arguments specified in the object
+        definition will be used to pass in as arguments to the constructor of
+        the <literal>ExampleObject</literal>.</para>
 
         <para>Now consider a variant of this where instead of using a
         constructor, Spring is told to call a static factory method to return
@@ -1502,16 +1600,16 @@ public class ExampleFactoryMethodObject
 
   // Property definitions
 
-}</programlisting> Note that arguments to the static factory method are
-        supplied via constructor-arg elements, exactly the same as if a
-        constructor had actually been used. These arguments are optional.
-        Also, it is important to realize that the type of the class being
-        returned by the factory method does not have to be of the same type as
-        the class which contains the static factory method, although in this
-        example it is. An instance (non-static) factory method, mentioned
-        previously, would be used in an essentially identical fashion (aside
-        from the use of the factory-object attribute instead of the type
-        attribute), so will not be detailed here.</para>
+}</programlisting>Arguments to the static factory method are supplied via
+        <literal>&lt;constructor-arg/&gt;</literal> elements, exactly the same
+        as if a constructor had actually been used. The type of the class
+        being returned by the factory method does not have to be of the same
+        type as the class which contains the static factory method, although
+        in this example it is. An instance (non-static) factory method would
+        be used in an essentially identical fashion (aside from the use of the
+        <literal>factory-object</literal> attribute instead of the
+        <literal>type</literal> attribute), so will not be detailed
+        here.</para>
 
         <para>Note that Setter Injection and Constructor Injectionare not
         mutually exclusive. It is perfectly reasonable to use both for a
@@ -1555,33 +1653,29 @@ public class MixedIocObject
       <para>As mentioned in the previous section, object properties and
       constructor arguments can be defined as either references to other
       managed objects (collaborators), or values defined inline. Spring's
-      XML-based configuration metadata supports a number of sub-element types
-      within its <literal>&lt;property/&gt;</literal> and
+      XML-based configuration metadata supports sub-element types within its
+      <literal>&lt;property/&gt;</literal> and
       &lt;<literal>constructor-arg/&gt;</literal> elements for this
-      purpose.a</para>
+      purpose.</para>
 
       <sect3 xml:id="objects-simple-values">
-        <title>Straight values (primitives, <literal>strings</literal>,
-        etc.)</title>
+        <title>Straight values (primitives, <literal>strings</literal>, and so
+        on)</title>
 
-        <para>The <literal>&lt;value/&gt;</literal> element specifies a
-        property or constructor argument as a human-readable string
-        representation. As mentioned previously,
-        <literal>TypeConverter</literal> instances are used to convert these
-        string values from a <literal>System.String</literal> to the actual
-        property or argument type. Custom <literal>TypeConverter</literal>
-        implementations in the
-        <literal>Spring.Objects.TypeConverters</literal> namespace are used to
-        augment the functionality offered by the .NET BCL's default
-        <literal>TypeConverter</literal> implementations.</para>
+        <para>The <literal>value</literal> attribute of the
+        <literal>&lt;property/&gt;</literal> element specifies a property or
+        constructor argument as a human-readable string representation. As
+        mentioned previously, <literal>TypeConverter</literal> instances are
+        used to convert these string values from a
+        <literal>System.String</literal> to the actual property or argument
+        type. </para>
 
         <para>In the following example, we use a
         <literal>SqlConnection</literal> from the
-        <literal>System.Data.SqlClient</literal> namespace of the BCL. This
-        class (like many other existing classes) can easily be used in a
-        Spring.NET object factory, as it offers a convenient public property
-        for configuration of its <literal>ConnectionString</literal>
-        property.</para>
+        <literal>System.Data.SqlClient</literal> namespace. This class (like
+        many other existing classes) can easily configured by Spring as it
+        offers a convenient public property for configuration of its
+        <literal>ConnectionString</literal> property.</para>
 
         <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
   &lt;object id="myConnection" type="System.Data.SqlClient.SqlConnection"&gt;
@@ -1595,10 +1689,11 @@ public class MixedIocObject
         <sect4>
           <title>The idref element</title>
 
-          <para>An idref element is simply a shorthand and error-proof way to
-          set a property to the String <emphasis>id</emphasis> or
-          <emphasis>name</emphasis> of another object in the
-          container.<programlisting language="myxml">&lt;object id="theTargetObject" type="..."&gt; 
+          <para>An idref element is simply an error-proof way to pass the
+          <emphasis>id</emphasis> of another object in the container to a
+          <literal>&lt;constructor-arg/&gt;</literal> or
+          <literal>&lt;property/&gt;</literal> element.<programlisting
+          language="myxml">&lt;object id="theTargetObject" type="..."&gt; 
    . . .
 &lt;/object&gt;
 
@@ -1606,28 +1701,30 @@ public class MixedIocObject
   &lt;property name="targetName"&gt; 
     &lt;idref object="theTargetObject"/&gt; 
   &lt;/property&gt;
-&lt;/object&gt;</programlisting>This is exactly equivalent at runtime to the
-          following fragment:<programlisting language="myxml">&lt;object id="theTargetObject" type="..."&gt; 
+&lt;/object&gt;</programlisting>This above object definition snipped is
+          <emphasis>exactly</emphasis> equivalent (at runtime) to the
+          following snippit:<programlisting language="myxml">&lt;object id="theTargetObject" type="..."&gt; 
   . . .
 &lt;/object&gt;
 
 &lt;object id="theClientObject" type="..."&gt;
   &lt;property name="targetName" value="theTargetObject"/&gt; 
-&lt;/object&gt;</programlisting>The main reason the first form is preferable
-          to the second is that using the <literal>idref</literal> tag will
-          allow Spring.NET to validate at deployment time that the other
-          object actually exists. In the second variation, the class that is
-          having its <emphasis>targetName</emphasis> property injected is
-          forced to do its own validation, and that will only happen when that
-          class is actually instantiated by the container, possibly long after
-          the container is actually up and running.</para>
+&lt;/object&gt;</programlisting>The first form is preferable to the second is
+          that using the <literal>idref</literal> tag allows the container to
+          validate <emphasis>at deployment time</emphasis> that the
+          referenced, named object actually exists. In the second variation,
+          no validation is performed on the value that is passed to the
+          <literal>targetName</literal> property of the client object. Typos
+          are only discovered (with ost mikely fatal results) when the
+          'client' object is actually instantiated. If the 'client' bean is a
+          prototype bean, this typo and the resulting exception may only be
+          discovered long after the container is deployed. </para>
 
-          <para>Additionally, if the object being referred to is in the same
-          actual XML file, and the object name is the object
-          <emphasis>id</emphasis>, the <literal>local</literal> attribute may
-          be used, which will allow the XML parser itself to validate the
-          object name even earlier, at parse time. <programlisting
-          language="myxml">&lt;property name="targetName"&gt;
+          <para>Additionally, if the reference object is in the same XML unit,
+          and the object name is the object <emphasis>id</emphasis>, the
+          <literal>local</literal> attribute may be used, which will allow the
+          XML parser itself to validate the object name even earlier, at XML
+          document parse time. <programlisting language="myxml">&lt;property name="targetName"&gt;
   &lt;idref local="theTargetObject"/&gt; 
 &lt;/property&gt;</programlisting></para>
         </sect4>
@@ -1655,31 +1752,25 @@ public class MixedIocObject
         <title>Referring to collaborating objects</title>
 
         <para>The <literal>ref</literal> element is the final element allowed
-        inside a <literal>property</literal> definition element. It is used to
-        set the value of the specified property to be a reference to another
-        object managed by the container, a collaborator, so to speak. As you
-        saw in the previous example to set collection properties, we used the
-        <literal>SqlConnection</literal> instance from the initial example as
-        a collaborator and specified it using a &lt;ref object/&gt; element.
-        As mentioned in a previous section, the referred-to object is
-        considered to be a dependency of the object who's property is being
-        set, and will be initialized on demand as needed (if it is a singleton
-        object it may have already been initialized by the container) before
-        the property is set. All references are ultimately just a reference to
-        another object, but there are 3 variations on how the id/name of the
-        other object may be specified, which determines how scoping and
-        validation is handled.</para>
+        inside a <literal>&lt;constructor-arg/&gt; or
+        &lt;property/&gt;</literal> definition element. You use it to set the
+        value of the specified property to be a reference to another object
+        managed by the container (a collaborator). The referenced object is a
+        dependency of the object whose property will be set, and it is
+        initialzed on demand as needed before the property is set. (if it is a
+        singleton object it may bye initialized already by the container) All
+        references are ultimately just a reference to another object, but you
+        can specify the id/name of the other object in three different ways
+        which determines how scoping and validation is handled.</para>
 
         <para>Specifying the target object by using the
         <literal>object</literal> attribute of the <literal>ref</literal> tag
-        is the most general form, and will allow creating a reference to any
-        object in the same <literal>IObjectFactory</literal> /
-        <literal>IApplicationContext</literal> (whether or not in the same XML
-        file), or parent <literal>IObjectFactory</literal> /
-        <literal>IApplicationContext</literal>. The value of the
-        <literal>object</literal> attribute may be the same as either the
-        <literal>id</literal> attribute of the target object, or one of the
-        values in the <literal>name</literal> attribute of the target
+        is the most general form, and will allows creation of a reference to
+        any object in the same container (whether or not in the same XML
+        file), or parent container. The value of the
+        <literal>'object'</literal> attribute may be the same as the
+        <literal>'id'</literal> attribute of the target object, or as one of
+        the values in the <literal>'name'</literal> attribute of the target
         object.<programlisting language="myxml">&lt;ref object="someObject"/&gt;</programlisting></para>
 
         <para>Specifying the target object by using the
@@ -1693,34 +1784,39 @@ public class MixedIocObject
         same XML file.<programlisting language="myxml">&lt;ref local="someObject"/&gt;</programlisting></para>
 
         <para>Specifying the target object by using the
-        <literal>parent</literal> attribute allows a reference to be created
-        to an object that is in a parent <literal>IObjectFactory</literal>
-        (or<literal>IApplicationContext</literal>) of the current
-        <literal>IObjectFactory</literal> (or
-        <literal>IApplicationContext</literal>). The value of the
-        <literal>parent</literal> attribute may be the same as either the
-        <literal>id</literal> attribute of the target object, or one of the
-        values in the <literal>name</literal> attribute of the target object,
-        and the target object <emphasis role="bold">must</emphasis> be in a
-        parent <literal>IObjectFactory</literal> or
-        <literal>IApplicationContext</literal> of the current one. The main
-        use of this object reference variant is when there is a need to wrap
-        an existing object in a parent context with some sort of proxy (which
-        may have the same name as the parent), and needs the original object
-        so it may wrap it.</para>
-
-        <para><programlisting language="myxml">&lt;ref parent="someObject"/&gt;</programlisting></para>
+        <literal>'parent'</literal> attribute creates a reference to an object
+        that is in a parent container of the current container. The value of
+        the '<literal>parent'</literal> attribute may be the same as either
+        the '<literal>id'</literal> attribute of the target object, or one of
+        the values in the '<literal>name'</literal> attribute of the target
+        object, and the target object must be in a parent container to the
+        current one. You us ethis object reference variant mainly when you
+        have a hierarchy of containers and you want to wrap an existing bean
+        in a parent container with some sort of proxy which will have the same
+        name as the parent bean.<programlisting language="myxml">&lt;!-- in the parent context --&gt;
+&lt;object id="AccountService" type="MyApp.SimpleAccountService, MyApp"&gt;
+&lt;!-- insert dependencies as required as here --&gt;
+&lt;/object&gt;</programlisting><programlisting>&lt;!-- in the child (descendant) context --&gt;
+&lt;object id="AccountService" &lt;-- notice that the name of this bean is the same as the name of the 'parent' bean
+        type="Spring.Aop.Framework.ProxyFactoryBean, Spring.Aop"&gt;
+  &lt;property name="target"&gt;
+    &lt;ref parent="AccountService"/&gt; &lt;-- notice how we refer to the parent bean
+  &lt;/property&gt;
+  &lt;!-- insert other configuration and dependencies as required as here --&gt;
+&lt;/object&gt;</programlisting></para>
       </sect3>
 
       <sect3 xml:id="objects-inline-object">
-        <title>Inline objects</title>
+        <title>Inner objects</title>
 
-        <para>An <literal>object</literal> element inside the
-        <literal>property</literal> element is used to define an object value
-        inline, instead of referring to an object defined elsewhere in the
-        container. The inline object definition does not need to have any id
-        or name defined (indeed, if any are defined, they will be ignored).
-        <programlisting language="myxml">&lt;object id="outer" type="..."&gt;
+        <para>An <literal>&lt;object/&gt;</literal> element inside the
+        &lt;<literal>constructor-arg/&gt; or &lt;property/&gt;</literal>
+        element defines so called inner object. An inner object definition
+        does not need to have any id or name defined, and it is best not to
+        even specify any id or name value because the id or name value simply
+        will be ignored by the container.</para>
+
+        <para><programlisting language="myxml">&lt;object id="outer" type="..."&gt;
 
   &lt;!-- Instead of using a reference to target, just use an inner object --&gt; 
 
@@ -1731,6 +1827,12 @@ public class MixedIocObject
     &lt;/object&gt;
   &lt;/property&gt;
 &lt;/object&gt;</programlisting></para>
+
+        <para>In the specific case of inner objects, the 'singleton' flag and
+        any 'id' or 'name' attribute are effectively ignored. Inner objects
+        are always anonymous and they are always scoped as prototypes. It is
+        not possible to inject inner objects into collaborating beans other
+        than into the enclosing object.</para>
       </sect3>
 
       <sect3 xml:id="objects-collections-values">
@@ -1791,8 +1893,8 @@ public class MixedIocObject
         additive behavior for collection properties that are exposed in this
         manner.</para>
 
-        <para><emphasis>Note that the value of a Dictionary entry, or a set
-        value, can also again be any of the elements:</emphasis>
+        <para><emphasis>The value of a Dictionary entry, or a set value, can
+        also again be any of the following elements:</emphasis>
         <programlisting>(object | ref | idref | expression | list | set | dictionary |
       name-values | value | null)</programlisting></para>
 
