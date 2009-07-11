@@ -27,6 +27,7 @@
 			</references>			
 			<resources basedir="." prefix="Spring.Template.Velocity.Tests" dynamicprefix="true" failonempty="true">
 				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
 			        <include name="**/*.test" />
 			        <include name="**/*.vm" />
 			        <include name="**/*.properties" />
@@ -36,6 +37,7 @@
 		<copy todir="${current.bin.dir}" failonerror="true">
 			<fileset basedir="${project::get-base-directory()}">
 				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
 			        <include name="**/*.test" />
 			        <include name="**/*.vm" />
 			        <include name="**/*.properties" />

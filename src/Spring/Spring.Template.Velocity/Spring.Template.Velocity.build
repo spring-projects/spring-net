@@ -21,6 +21,9 @@
                 <include name="**/*.cs" />
                 <include name="../GenCommonAssemblyInfo.cs" />
             </sources>
+            <resources basedir="." prefix="Spring.Template.Config">
+	            <include name="Template/Config/spring-template-1.2.xsd" />
+      	    </resources>
 	    <references basedir="${current.bin.dir}">
 		<include name="*.dll" />
 		<exclude name="${project::get-name()}.dll" />
