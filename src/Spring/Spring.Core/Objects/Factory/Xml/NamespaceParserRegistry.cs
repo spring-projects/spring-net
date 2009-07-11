@@ -102,6 +102,7 @@ namespace Spring.Objects.Factory.Xml
             wellknownNamespaceParserTypeNames["http://www.springframework.net/nms"] = "Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/ems"] = "Spring.Messaging.Ems.Config.EmsNamespaceParser, Spring.Messaging.Ems";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/validation"] = "Spring.Validation.Config.ValidationNamespaceParser, Spring.Core";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/template"] = "Spring.Template.Config.TemplateNamespaceParser, Spring.Template.Velocity";
 
             Reset();
         }

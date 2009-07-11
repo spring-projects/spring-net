@@ -81,6 +81,19 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
         }
 
         /// <summary>
+        /// Test the fileBasedVelocityEngine bean configuration from VelocityEngineFactoryObjectTests.xml
+        /// </summary>
+        [Test]
+        public void TestMergeUsingCustomNamespaceDefinition() {
+            VelocityEngine velocityEngine =
+                appContext.GetObject("customNamespaceVelocityTemplate") as VelocityEngine;
+            Assert.IsNotNull(velocityEngine, "velocityEngine is null");
+            string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngine, "SimpleTemplate.vm",
+                                                                                Encoding.UTF8.WebName, model);
+            Assert.AreEqual(string.Format("value={0}", "TEST_VALUE"), mergedTemplate);
+        }
+
+        /// <summary>
         /// Test using definition of ResourceLoaderPath (file-based configuration) referencing just the template name
         /// </summary>
         [Test]

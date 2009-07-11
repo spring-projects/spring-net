@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net">
+<objects xmlns="http://www.springframework.net" xmlns:template="http://www.springframework.net/template">
+
+    <template:nvelocity id="customNamespaceVelocityTemplate" >
+        <template:resource-loader>
+            <template:file path="Template/Velocity/" />
+        </template:resource-loader>
+    </template:nvelocity>
+
 
     <!-- Does file system access with hot tracking  with NVelocity assembly resource loader -->
     <object id="assemblyBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity">
@@ -39,5 +46,4 @@
         <property name="ResourceLoaderPath " value="Template/Velocity/" />
         <property name="PreferFileSystemAccess " value="false" />
     </object>
-
 </objects>

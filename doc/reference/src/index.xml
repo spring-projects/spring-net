@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE book  [
   <!ENTITY aop                  SYSTEM "aop.xml">
   <!ENTITY aop-aspect-library   SYSTEM "aop-aspect-library.xml">
@@ -17,6 +17,7 @@
   <!ENTITY messaging            SYSTEM "messaging.xml">
   <!ENTITY msmq	                SYSTEM "msmq.xml">
   <!ENTITY scheduling           SYSTEM "scheduling.xml">
+  <!ENTITY templating           SYSTEM "templating.xml">
   <!ENTITY web                  SYSTEM "web.xml">
   <!ENTITY ajax                 SYSTEM "ajax.xml">
   <!ENTITY services             SYSTEM "services.xml">
@@ -62,7 +63,7 @@
     <title>The Spring.NET Framework</title>
     <subtitle>Reference Documentation</subtitle>
     <releaseinfo>Version 1.2.1</releaseinfo>
-    <pubdate>Last Updated April xx, 2009 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
+    <pubdate>Last Updated July xx, 2009 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
     <authorgroup>
       <author>
         <firstname>Mark</firstname>
@@ -103,6 +104,10 @@
       <author>
         <firstname>Choy</firstname>
         <surname>Rim</surname>
+      </author>
+      <author>
+        <firstname>Erez</firstname>
+        <surname>Mazor</surname>
       </author>
       <author>
         <firstname>The Spring</firstname>
@@ -328,11 +333,17 @@
             <xref linkend="scheduling"/>
           </para>
         </listitem>
+        <listitem>
+          <para>
+            <xref linkend="templating"/>
+          </para>
+        </listitem>
       </itemizedlist>
     </partintro>
     &messaging;
     &msmq;
     &scheduling;
+    &templating;
   </part>
   <part xml:id="spring-vsnet">
     <title>VS.NET Integration</title>
