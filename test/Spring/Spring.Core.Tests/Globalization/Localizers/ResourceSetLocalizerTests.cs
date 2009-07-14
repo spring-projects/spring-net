@@ -31,13 +31,14 @@ using Spring.Context.Support;
 
 #endregion
 
+#if ! NET_1_0
+
 namespace Spring.Globalization.Localizers
 {
     /// <summary>
     /// Unit tests for the ResourceSetLocalizer class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-#if ! NET_1_0
     [TestFixture]
     public sealed class ResourceSetLocalizerTests : AbstractLocalizerTests
     {
@@ -62,5 +63,6 @@ namespace Spring.Globalization.Localizers
             localizer.ApplyResources(new Inventor(), messageSource, CultureInfo.InvariantCulture);
         }
     }
-#endif
 }
+
+#endif
