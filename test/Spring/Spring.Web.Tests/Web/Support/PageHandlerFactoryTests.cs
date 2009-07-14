@@ -26,6 +26,7 @@ using System.IO;
 using NUnit.Extensions.Asp.AspTester;
 using NUnit.Framework;
 using NUnitAspEx;
+using NUnitAspEx.Client;
 using Spring.TestSupport;
 
 #endregion
@@ -36,13 +37,17 @@ namespace Spring.Web.Support
     ///
     /// </summary>
     /// <author>Erich Eichinger</author>
-    [AspTestFixture("/Test", "/Spring/Web/Support/PageHandlerFactoryTests")]
+    [TestFixture]
     public class PageHandlerFactoryTests : WebFormTestCase
     {
+        public PageHandlerFactoryTests()
+            : base("/Test", "/Spring/Web/Support/PageHandlerFactoryTests")
+        {}
+
         [Test]
         public void DisablesSessions()
         {
-            AspTestClient client = new AspTestClient();
+            HttpWebClient client = Host.CreateWebClient();
             // a session-less page - checks, if session is correctly disabled
             string result = client.GetPage("DisablesSession.aspx");
             Assert.AreEqual("OK", result);
@@ -51,7 +56,7 @@ namespace Spring.Web.Support
         [Test, Explicit]
         public void UsesReadonlySession()
         {
-            AspTestClient client = new AspTestClient();
+            HttpWebClient client = Host.CreateWebClient();
             string result = client.GetPage("ReadOnlySession.aspx");
             Assert.AreEqual("OK", result);
         }
@@ -59,18 +64,26 @@ namespace Spring.Web.Support
         [Test]
         public void MaintainsSession()
         {
-            AspTestClient client = new AspTestClient();
+            HttpWebClient client = Host.CreateWebClient();
             string result = client.GetPage("MaintainsSession1.aspx");
             Assert.AreEqual("OK", result);
-            Assert.AreEqual("somevalue", AspTestContext.HttpContext.Session["maintainsSession"]);
+//            Assert.AreEqual("somevalue", AspTestContext.HttpContext.Session["maintainsSession"]);
 
             // checks previously set session variable
             result = client.GetPage("MaintainsSession2.aspx");
             Assert.AreEqual("OK", result);
         }
         
+        /// <summary>
+        /// Tests the behavior of the System.Web.PageHandlerFactory class
+        /// </summary>
         [Test]
         public void BCLPageHandlerFactoryBehavior()
+        {
+            Host.Execute(new TestAction(BCLPageHandlerFactoryBehaviorImpl));
+        }
+
+        public static void BCLPageHandlerFactoryBehaviorImpl()
         {
             using (TestWebContext ctx = new TestWebContext("/Test", "DoesNotExist.oaspx"))
             {
@@ -93,8 +106,16 @@ namespace Spring.Web.Support
             }
         }
 
+        /// <summary>
+        /// Tests the behavior of our PageHandlerFactory class
+        /// </summary>
         [Test]
         public void PageHandlerFactoryBehavesLikeSystemPageHandlerFactory()
+        {
+            Host.Execute(new TestAction(PageHandlerFactoryBehavesLikeSystemPageHandlerFactoryImpl));
+        }
+
+        public static void PageHandlerFactoryBehavesLikeSystemPageHandlerFactoryImpl()
         {
             using (TestWebContext ctx = new TestWebContext("/Test", "DoesNotExist.aspx"))
             {

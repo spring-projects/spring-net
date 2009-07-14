@@ -23,6 +23,7 @@
 using System;
 using NUnit.Framework;
 using NUnitAspEx;
+using NUnitAspEx.Core;
 using Spring.TestSupport;
 
 #endregion
@@ -33,9 +34,13 @@ namespace Spring.Objects.Factory.Support
     /// Unit tests for the WebObjectDefinitionFactory class.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    [AspTestFixture("/Test", "/Spring/Objects/Factory/Support")]
-    public class WebObjectDefinitionFactoryTests
+    [TestFixture]
+    public class WebObjectDefinitionFactoryTests : WebApplicationTests
     {
+        public WebObjectDefinitionFactoryTests()
+            : base("/Test", "/Spring/Objects/Factory/Support")
+        {}
+
         [Test]
         public void CreateRootDefinition()
         {
@@ -84,6 +89,11 @@ namespace Spring.Objects.Factory.Support
         [Test]
         public void ResolvesToPageRootDefinitionIfEndsWithASPX()
         {
+            Host.Execute(new TestAction(ResolvesToPageRootDefinitionIfEndsWithASPXImpl));
+        }
+
+        public static void ResolvesToPageRootDefinitionIfEndsWithASPXImpl()
+        {
             using (TestWebContext ctx = new TestWebContext("/Test", "testform.aspx"))
             {
                 WebObjectDefinitionFactory factory = new WebObjectDefinitionFactory();
@@ -97,6 +107,11 @@ namespace Spring.Objects.Factory.Support
 
         [Test]
         public void ResolvesToPageChildDefinitionIfEndsWithASPX()
+        {
+            Host.Execute(new TestAction(ResolvesToPageChildDefinitionIfEndsWithASPXImpl));
+        }
+
+        public static void ResolvesToPageChildDefinitionIfEndsWithASPXImpl()
         {
             using (TestWebContext ctx = new TestWebContext("/Test", "testform.aspx"))
             {
@@ -112,6 +127,11 @@ namespace Spring.Objects.Factory.Support
         [Test]
         [ExpectedException(typeof(ObjectCreationException))]
         public void ThrowsArgumentExceptionOnNonExistingPath()
+        {
+            Host.Execute(new TestAction(ThrowsArgumentExceptionOnNonExistingPathImpl));
+        }
+
+        public static void ThrowsArgumentExceptionOnNonExistingPathImpl()
         {
             using (TestWebContext ctx = new TestWebContext("/Test", "testform.aspx"))
             {

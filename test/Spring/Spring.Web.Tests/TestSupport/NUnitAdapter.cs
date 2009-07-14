@@ -41,11 +41,14 @@ namespace Spring.TestSupport
 	/// Base class for NUnitAsp test fixtures.  Extend this class to use NUnitAsp.
 	/// </summary>
 	[TestFixture]
-	public abstract class WebFormTestCase : CompatibilityAdapter
+	public abstract class WebFormTestCase : WebApplicationTests
 	{
 		private bool setupCalled = false;
 
-		/// <summary>
+	    protected WebFormTestCase(string virtualPath, string relativePhysicalPath) : base(virtualPath, relativePhysicalPath)
+	    {}
+
+	    /// <summary>
 		/// Do not call.  For use by NUnit only.
 		/// </summary>
 		[SetUp]
@@ -111,7 +114,7 @@ namespace Spring.TestSupport
 		{
 			if (!setupCalled) 
 			{
-				Fail("A required setup method in WebFormTestCase was not called.  This is probably because you used the [SetUp] attribute in a subclass of WebFormTestCase.  That is not supported.  Override the SetUp() method instead.");
+				Assert.Fail("A required setup method in WebFormTestCase was not called.  This is probably because you used the [SetUp] attribute in a subclass of WebFormTestCase.  That is not supported.  Override the SetUp() method instead.");
 			}
 		}
 	}

@@ -98,7 +98,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Globalization\Resolvers\DefaultWebCultureResolverTests.cs" />
-    <Compile Include="MyNUnitAddinHelper.cs" />
     <Compile Include="Objects\Factory\Support\WebObjectDefinitionFactoryTests.cs" />
     <Compile Include="Objects\Factory\Support\WebObjectDefinitionTests.cs" />
     <Compile Include="Objects\Factory\Support\WebObjectFactoryTests.cs">
@@ -115,6 +114,7 @@
     <Compile Include="TestSupport\TestWebContextTests.cs" />
     <Compile Include="TestSupport\VirtualEnvironmentMock.cs" />
     <Compile Include="TestSupport\VoidDelegate.cs" />
+    <Compile Include="TestSupport\WebApplicationTests.cs" />
     <Compile Include="Threading\HttpContextStorageTests.cs" />
     <Compile Include="Threading\HybridContextStorageTests.cs" />
     <Compile Include="Util\WebDIPerformanceTests.cs" />
@@ -161,7 +161,9 @@
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\ReadOnlySession.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResult.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession1.aspx" />
-    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession2.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession2.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\DisablesSession.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResultSave.aspx" />
     <EmbeddedResource Include="Data\Spring\Web\Support\LocalResourceManagerTests\App_LocalResources\WithResources.aspx.resx" />

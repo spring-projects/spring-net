@@ -18,14 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Diagnostics;
 using NUnit.Framework;
-using NUnitAspEx;
-
-#endregion
+using NUnitAspEx.Client;
+using Spring.TestSupport;
 
 #if NET_2_0
 
@@ -35,13 +31,17 @@ namespace Spring.Web.Support
     /// 
     /// </summary>
     /// <author>Erich Eichinger</author>
-    [AspTestFixture("/Test", "/Spring/Web/Support/LocalResourceManagerTests")]
-    public class LocalResourceManagerTests
+    [TestFixture]
+    public class LocalResourceManagerTests : WebApplicationTests
     {
+        public LocalResourceManagerTests()
+            : base("/Test", "/Spring/Web/Support/LocalResourceManagerTests")
+        {}
+
         [Test]
         public void ReturnsWithResources()
         {
-            AspTestClient client = new AspTestClient();
+            HttpWebClient client = Host.CreateWebClient();
             string result = client.GetPage("WithResources.aspx");
             Trace.Write(result);
             Assert.AreEqual("<span id=\"Result\">FromResource</span>", result);            
@@ -50,7 +50,7 @@ namespace Spring.Web.Support
         [Test]
         public void ReturnsWithoutResources()
         {
-            AspTestClient client = new AspTestClient();
+            HttpWebClient client = Host.CreateWebClient();
             string result = client.GetPage("WithoutResources.aspx");
             Assert.AreEqual("OK", result);            
         }

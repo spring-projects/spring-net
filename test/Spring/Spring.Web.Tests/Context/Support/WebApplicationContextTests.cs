@@ -20,10 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Threading;
-using System.Web;
-using NUnit.Extensions.Asp.AspTester;
 using NUnit.Framework;
 using NUnitAspEx;
 using Spring.Objects.Factory;
@@ -38,18 +34,24 @@ namespace Spring.Context.Support
     ///
     /// </summary>
     /// <author>Erich Eichinger</author>
-    [AspTestFixture("/Test", "/Spring/Context/Support/WebApplicationContextTests")]
+    [TestFixture]
     public class WebApplicationContextTests : WebFormTestCase
     {
+        public WebApplicationContextTests()
+            : base("/Test", "/Spring/Context/Support/WebApplicationContextTests/")
+        {}
+
         [Test]
         public void CanAccessContextFromNonWebThread()
         {
+            Host.Execute(new TestAction(CanAccessContextFromNonWebThreadImpl));
+        }
+
+        public static void CanAccessContextFromNonWebThreadImpl()
+        {
             IApplicationContext ctx;
 
-            using (TestWebContext requestContext = new TestWebContext("/Test", "/DoesNotExist.oaspx"))
-            {
-                ctx = WebApplicationContext.Current;
-            }
+            ctx = WebApplicationContext.GetRootContext();
 
             AsyncTestMethod testMethod = new AsyncTestMethod(1, new AsyncTestMethod.TestMethod(DoBackgroundWork), ctx);
             testMethod.Start();
