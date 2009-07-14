@@ -77,7 +77,7 @@ namespace Spring
         public static readonly string PERMISSIONSET_ASPNET = "ASP.Net";
 
         private readonly PolicyLevel _domainPolicy;
-        //        private readonly Dictionary<string, SecurityContext> securityContextCache = new Dictionary<string, SecurityContext>();
+//        private readonly Dictionary<string, SecurityContext> securityContextCache = new Dictionary<string, SecurityContext>();
         private bool throwOnUnknownPermissionSet = true;
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Spring
         /// </summary>
         public static void MediumTrustInvoke( ThreadStart callback )
         {
-            SecurityTemplate template = new SecurityTemplate(false);
+            SecurityTemplate template = new SecurityTemplate(true);
             template.PartialTrustInvoke(PERMISSIONSET_MEDIUMTRUST, callback);
         }
 
@@ -114,7 +114,7 @@ namespace Spring
             set
             {
                 throwOnUnknownPermissionSet = value;
-                //                securityContextCache.Clear(); // clear cache
+//                securityContextCache.Clear(); // clear cache
             }
         }
 
@@ -122,17 +122,17 @@ namespace Spring
         /// Creates a new instance providing default "FullTrust", "Nothing", "MediumTrust" and "LowTrust" permissionsets
         /// </summary>
         /// <param name="allowUnmanagedCode">NCover requires unmangaged code permissions, set this flag <c>true</c> in this case.</param>
-        private SecurityTemplate(bool allowUnmanagedCode)
+        public SecurityTemplate(bool allowUnmanagedCode)
         {
             PolicyLevel pLevel = PolicyLevel.CreateAppDomainLevel();
 
             // NOTHING permissionset
-            if (null == pLevel.GetNamedPermissionSet(PERMISSIONSET_NOTHING))
+            if (null == pLevel.GetNamedPermissionSet(PERMISSIONSET_NOTHING) )
             {
                 NamedPermissionSet noPermissionSet = new NamedPermissionSet(PERMISSIONSET_NOTHING, PermissionState.None);
                 noPermissionSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.NoFlags));
                 pLevel.AddNamedPermissionSet(noPermissionSet);
-            }
+            }            
 
             // FULLTRUST permissionset
             if (null == pLevel.GetNamedPermissionSet(PERMISSIONSET_FULLTRUST))
@@ -171,7 +171,7 @@ namespace Spring
             // LOWTRUST permissionset (corresponds to ASP.Net permission set in web_mediumtrust.config)
             NamedPermissionSet lowTrustPermissionSet = new NamedPermissionSet(PERMISSIONSET_LOWTRUST, PermissionState.None);
             lowTrustPermissionSet.AddPermission(new AspNetHostingPermission(AspNetHostingPermissionLevel.Low));
-            lowTrustPermissionSet.AddPermission(new FileIOPermission(FileIOPermissionAccess.Read | FileIOPermissionAccess.PathDiscovery,
+            lowTrustPermissionSet.AddPermission(new FileIOPermission(FileIOPermissionAccess.Read|FileIOPermissionAccess.PathDiscovery,
                                                                         AppDomain.CurrentDomain.BaseDirectory));
             IsolatedStorageFilePermission isolatedStorageFilePermissionLow = new IsolatedStorageFilePermission(PermissionState.None);
             isolatedStorageFilePermissionLow.UsageAllowed = IsolatedStorageContainment.AssemblyIsolationByUser;
@@ -185,8 +185,8 @@ namespace Spring
             lowTrustPermissionSet.AddPermission(new SecurityPermission(securityPermissionFlagLow));
             pLevel.AddNamedPermissionSet(lowTrustPermissionSet);
 
-            //            UnionCodeGroup rootCodeGroup = new UnionCodeGroup(new AllMembershipCondition(), new PolicyStatement(noPermissionSet, PolicyStatementAttribute.Nothing));
-            //            pLevel.RootCodeGroup = rootCodeGroup;
+//            UnionCodeGroup rootCodeGroup = new UnionCodeGroup(new AllMembershipCondition(), new PolicyStatement(noPermissionSet, PolicyStatementAttribute.Nothing));
+//            pLevel.RootCodeGroup = rootCodeGroup;
             _domainPolicy = pLevel;
         }
 
@@ -212,6 +212,7 @@ namespace Spring
         /// Invokes the given callback using the policy's default
         /// partial trust permissionset ("ASP.Net" <see cref="PERMISSIONSET_ASPNET"/>).
         /// </summary>
+//        [SecurityTreatAsSafe, SecurityCritical]
         public void PartialTrustInvoke(ThreadStart callback)
         {
             string defaultPermissionSetName = PERMISSIONSET_MEDIUMTRUST;
@@ -289,8 +290,7 @@ namespace Spring
 
             if ((trustSection == null) || string.IsNullOrEmpty(trustSection.Level))
             {
-                if (!throwOnError)
-                    return null;
+                if (!throwOnError) return null;
                 throw new ConfigurationErrorsException("Configuration section <system.web/trust> not found ");
             }
 
@@ -301,8 +301,7 @@ namespace Spring
 
             if ((securityPolicySection == null) || (securityPolicySection.TrustLevels[trustSection.Level] == null))
             {
-                if (!throwOnError)
-                    return null;
+                if (!throwOnError) return null;
                 throw new ConfigurationErrorsException(string.Format("configuration <system.web/securityPolicy/trustLevel@name='{0}'> not found", trustSection.Level));
             }
 
@@ -508,18 +507,18 @@ namespace Spring
         //        }
 
 
-        //        [SecurityCritical]
-        //        private static SecurityContext CaptureSecurityContextNoIdentityFlow()
-        //        {
-        //            if (SecurityContext.IsWindowsIdentityFlowSuppressed())
-        //            {
-        //                return SecurityContext.Capture();
-        //            }
-        //            using (SecurityContext.SuppressFlowWindowsIdentity())
-        //            {
-        //                return SecurityContext.Capture();
-        //            }
-        //        }
+//        [SecurityCritical]
+//        private static SecurityContext CaptureSecurityContextNoIdentityFlow()
+//        {
+//            if (SecurityContext.IsWindowsIdentityFlowSuppressed())
+//            {
+//                return SecurityContext.Capture();
+//            }
+//            using (SecurityContext.SuppressFlowWindowsIdentity())
+//            {
+//                return SecurityContext.Capture();
+//            }
+//        }
     }
 }
 

@@ -1,0 +1,302 @@
+<?xml version="1.0" ?>
+<project xmlns="http://nant.sf.net/schemas/nant.xsd">
+
+    <description>
+        <![CDATA[
+Credits for this shared build script go to the NHibernate Team
+
+This file contains common tasks tailored specifically for the NDoc3
+build process. The goal was to define all the actions in this file, so
+that actual project build files only have to configure a few variables
+and call tasks in this file.
+
+Usage
+
+<property name="root.dir" value="../.." />;
+<include buildfile="${root.dir}/build-common/common-project.xml" />;
+
+These lines should be placed at the top level under the <project>
+element. Property root.dir defines a relative path to the root of the
+distribution, that is, NHibernate directory.
+
+After including the file, a target should be defined to initialize
+configuration variables according to the project being built.
+The standard name of this target is init (but any other name can be chosen).
+The init target should depend on (or call) target common.init defined
+in this file.
+
+Other predefined targets are:
+
+    - common.compile-dll
+        compile a DLL, generating the documentation file (.xml) and using Clover
+        if enabled.
+
+    - common.run-tests
+        run compiled NUnit tests.
+
+All compile/run targets put the output in ${current.bin.dir}.
+common.compile* targets use source fileset with id="project.sources",
+assembly fileset
+with id="project.references" and resource fileset with id="project.resources"
+to compile the project. The source and resource filesets are optional and
+default to **/*.cs files and no files respectively.
+]]>
+    </description>
+
+    <echo message="global common-project.xml" />
+
+    <!--
+*******************************************************************************
+Arguments:
+${root.dir}: root dir
+${current.bin.dir}: the binary directory to output the assembly + app.config to
+    -->
+    <target name="common.init" description="Initializes build properties">
+
+        <property name="assembly.is-cls-compliant" value="false" />
+        <property name="assembly.version" value="1.0.0.0" />
+        <property name="assembly.version.informational" value="1.0" />
+
+        <patternset id="project.references.default">
+            <include name="System.dll" />
+            <include name="System.Xml.dll" />
+            <include name="System.Drawing.dll" />
+            <include name="System.Windows.Forms.dll" />
+            <include name="System.Drawing.Design.dll" />
+            <include name="System.Design.dll" />
+            <include name="System.Data.dll" />
+            <include name="*.dll" />
+        </patternset>
+
+        <patternset id="project.references.test" />
+
+        <patternset id="project.references.additional" />
+
+        <fileset id="project.sources" failonempty="true">
+            <include name="**/*.cs" />
+        </fileset>
+
+        <resourcefileset id="project.resources" />
+
+        <patternset id="project.content" />
+    </target>
+
+    <!--
+*******************************************************************************
+Arguments:
+${root.dir}: root dir
+${current.bin.dir}: the binary directory to output the assembly + app.config to
+    -->
+    <target name="common.init-test" description="Initializes build properties" depends="common.init">
+    </target>
+
+    <!--
+*******************************************************************************
+Arguments:
+${current.bin.dir}: the binary directory to output the assembly + app.config to
+${current.build.nowarn}: list of disabled warnings
+${current.build.debug}
+${current.build.optimize}
+${current.build.defines}
+    -->
+    <target name="common.compile-dll" description="compiles sources">
+
+        <property name="compile.bin.dir" value="${current.bin.dir}" if="${not property::exists('compile.bin.dir')}" />
+
+        <echo message="copying libs from ${lib.dir} to ${compile.bin.dir}" />
+
+        <property name="compile.lib.dir.tmp" value="${lib.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+        <echo message="copying libs from ${compile.lib.dir.tmp}" />
+        <copy todir="${compile.bin.dir}">
+            <fileset>
+                <include name="${compile.lib.dir.tmp}/*.dll" />
+            </fileset>
+        </copy>
+        <property name="compile.lib.dir.tmp" value="${lib.dir}/${framework::get-family(framework::get-target-framework())}" dynamic="true" />
+        <echo message="copying libs from ${compile.lib.dir.tmp}" />
+        <copy todir="${compile.bin.dir}">
+            <fileset>
+                <include name="${compile.lib.dir.tmp}/*.dll" />
+            </fileset>
+        </copy>
+        <property name="compile.lib.dir.tmp" value="${lib.dir}" dynamic="true" />
+        <echo message="copying libs from ${compile.lib.dir.tmp}" />
+        <copy todir="${compile.bin.dir}">
+            <fileset>
+                <include name="${compile.lib.dir.tmp}/*.dll" />
+            </fileset>
+        </copy>
+        <property name="compile.lib.dir.tmp" value="${current.bin.dir}" dynamic="true" />
+        <echo message="copying libs from ${compile.lib.dir.tmp}" />
+        <copy todir="${compile.bin.dir}">
+            <fileset>
+                <!-- exclude name="${current.lib.dir}/*.Tests.dll" / -->
+                <include name="${compile.lib.dir.tmp}/*.dll" />
+            </fileset>
+        </copy>
+
+        <csc target="library"
+             verbose="true"
+             warnaserror="false"
+             output="${compile.bin.dir}/${project::get-name()}.dll"
+             debug="${current.build.debug}"
+             optimize="${current.build.optimize}"
+             unsafe="true"
+             checked="false"
+             define="${current.build.defines.csc}"
+             doc="${current.bin.dir}/${project::get-name()}.xml"
+        >
+            <nowarn>
+                <warning number="${current.build.nowarn}" />
+            </nowarn>
+            <sources refid="project.sources" />
+            <references basedir="${compile.bin.dir}">
+                <patternset refid="project.references.default" />
+                <patternset refid="project.references.test" />
+                <patternset refid="project.references.additional" />
+            </references>
+            <resources refid="project.resources" />
+        </csc>
+
+<!--
+        <if test="${file::exists(project::get-base-directory() + '/app.config')}">
+            <copy file="${project::get-base-directory()}/app.config" tofile="${current.bin.dir}/${project::get-name()}.dll.config" />
+                </if>
+-->
+        <!-- copy app.config -->
+        <copy file="${project::get-base-directory()}/app.config"
+              tofile="${current.bin.dir}/${project::get-name()}.dll.config" failonerror="false"/>
+
+        <!-- copy 'TestData' directory -->
+        <copy todir="${current.bin.dir}/TestData" failonerror="false">
+          <fileset basedir="${project::get-base-directory()}/TestData">
+            <include name="**/*.*"/>
+          </fileset>
+        </copy>
+
+    </target>
+
+    <!--
+*******************************************************************************
+Runs standard unit test configuration of the current ${project::get-name()}.dll
+
+Arguments:
+${current.bin.dir}: the binary directory to pick the assembly + app.config from
+${project.name}   : (optional), the name of the assembly
+${tool.dir}       : dir for tools
+    -->
+    <target name="common.run-tests">
+
+      <call target="common.run-tests.ncover" />
+
+    </target>
+
+  <!--
+*******************************************************************************
+Runs standard unit test configuration of the current ${project::get-name()}.dll
+
+Arguments:
+${current.bin.dir}: the binary directory to pick the assembly + app.config from
+${project.name}   : (optional), the name of the assembly
+${tool.dir}       : dir for tools
+    -->
+  <target name="common.run-tests.nunit">
+
+    <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
+    <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
+
+    <echo message="Unit Testing ${project.name} in ${test.bin.dir}" />
+
+
+    <!-- nunit workaround, they never fixed it :-( -->
+    <copy file="${test.bin.dir}/${test.assemblyname}.dll.config" tofile="${test.bin.dir}/${test.assemblyname}.config" failonerror="false" />
+
+    <exec program="${tool.dir}\nunit\net-2.0\nunit-console-x86.exe" workingdir="${test.bin.dir}" verbose="true">
+      <arg path="${test.bin.dir}/${test.assemblyname}.dll" />
+      <arg value="/xml:${test.assemblyname}.dll-testresults.xml" />
+      <arg value="/framework:${nant.settings.currentframework}" />
+      <arg value="/nologo" />
+      <arg value="/noshadow" />
+      <arg value="/nothread" />
+    </exec>
+
+  </target>
+
+  <!--
+*******************************************************************************
+Runs coverage unit test configuration of the current ${project::get-name()}.dll
+
+Arguments:
+${current.bin.dir}: the binary directory to pick the assembly + app.config from
+${project.name}   : (optional), the name of the assembly
+${tool.dir}       : dir for tools
+    -->
+    <target name="common.run-tests.ncover" description="Run NUnit tests">
+
+        <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
+        <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
+
+        <echo message="Coverage Testing ${test.assemblyname} in ${test.bin.dir}" />
+
+        <!-- nunit workaround, they never fixed it :-( -->
+        <copy file="${test.bin.dir}/${test.assemblyname}.dll.config" tofile="${test.bin.dir}/${test.assemblyname}.config" failonerror="false" />
+
+		<exec program="${tool.dir}/ncover/ncover.console.exe" workingdir="${test.bin.dir}" verbose="true">
+			<arg value="//q" />
+			<arg value="//reg" />
+			<arg value="//w" />
+			<arg path="${test.bin.dir}" />
+			<arg value="//x" />
+			<arg path="${test.bin.dir}/${test.assemblyname}.dll-TestCoverage.xml" />
+			<arg value="//a" />
+			<arg value="${string::substring(test.assemblyname,0,string::last-index-of(test.assemblyname, '.Tests') )}" />
+            <arg value="//ea" />
+            <arg value="CoverageExcludeAttribute" />
+			<arg value="//q" />
+			<arg path="${tool.dir}/nunit/net-2.0/nunit-console-x86.exe" />
+			<arg path="${test.bin.dir}/${test.assemblyname}.dll" />
+			<arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
+			<arg value="/nologo" />
+            <arg value="/noshadow" />
+            <arg value="/nothread" />
+            <arg value="/framework:${nant.settings.currentframework}" />
+		</exec>
+
+<!--
+		<loadtasks assembly="${tool.dir}/ncoverexplorer/NCoverExplorer.NAntTasks.dll" />
+
+		<ncoverexplorer program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe"
+			projectName="CCNet"
+			configName="${tool.dir}/ncoverexplorer/ncoverexplorer.console.config"
+			outputDir="${current.bin.dir}"
+			satisfactoryCoverage="80" reportType="4"
+			xmlReportName="${current.bin.dir}/${project.name}.dll-CoverageSummary.xml">
+			<fileset>
+				<include name="${current.bin.dir}/${project.name}.dll-Coverage.xml" />
+			</fileset>
+		</ncoverexplorer>
+-->
+    </target>
+
+    <target name="common.run-tests.partcover" description="Run NUnit tests">
+
+        <exec program="${tool.dir}\partcover\partcover.exe"
+              workingdir="${current.bin.dir}"
+              verbose="true"
+              append="true"
+				>
+            <arg value="--target" /><arg path="${tool.dir}\nunit\nunit-console-x86.exe" />
+            <arg value="--target-work-dir" /><arg path="${current.bin.dir}" />
+            <arg value="--exclude" /><arg value="[nunit*]*" />
+            <arg value="--exclude" /><arg value="[NAnt*]*" />
+            <arg value="--include" /><arg value="[NDoc3*]*" />
+            <arg value="--exclude" /><arg value="[${project::get-name()}*]*" /><!-- exclude the test-assembly itself -->
+            <arg value="--log" /><arg value="251" />
+            <arg value="--output" /><arg path="${current.bin.dir}/${project::get-name()}.dll-coverage.xml" />
+            <arg value="--target-args" /><arg value="${project::get-name()}.dll /process=Single /domain=None /xml=${project::get-name()}.dll-testresults.xml" />
+
+        </exec>
+
+    </target>
+
+</project>

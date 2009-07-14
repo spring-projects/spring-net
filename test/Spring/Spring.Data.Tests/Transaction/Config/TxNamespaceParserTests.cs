@@ -77,6 +77,7 @@ namespace Spring.Transaction.Config
             ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Transaction.Config/TxNamespaceParserTests.xml");
         }
 
+        // TODO (EE)
         [Test]
         public void AppliesTxAttributeDrivenAttributes()
         {

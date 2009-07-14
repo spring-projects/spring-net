@@ -1,5 +1,8 @@
 <?xml version="1.0" ?>
 <project name="Spring.Scheduling.Quartz.Integration.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+
+    <include buildfile="${spring.basedir}/common-project.include" />
+
 	<!--
         Required properties:
             * current.bin.dir           - (path) root level to build to
@@ -8,10 +11,10 @@
     -->
 	<target name="build">
 
-		<csc target="library" define="${current.build.defines.csc}" 
+		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
-		     debug="${current.build.debug}" 
-      		     output="${current.bin.dir}/${project::get-name()}.dll" 
+		     debug="${current.build.debug}"
+      		     output="${current.bin.dir}/${project::get-name()}.dll"
 		     doc="${current.bin.dir}/${project::get-name()}.xml">
 			<nowarn>
 				<warning number="${nowarn.numbers.test}" />
@@ -37,24 +40,33 @@
 			</fileset>
 		</copy>
 	</target>
+
+    <target name="test" depends="build">
+        <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
+        <call target="common.run-tests" />
+    </target>
+
+<!--
 	<target name="test" depends="build">
 		<nunit2>
 			<formatter type="Plain" />
-			<formatter type="Xml" usefile="true" extension=".xml" 
+			<formatter type="Xml" usefile="true" extension=".xml"
 			           outputdir="${current.bin.dir}/results" />
-			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll" 
+			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll"
 			      appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
 		</nunit2>
 	</target>
+-->
 
+<!--
 	<target name="test-mono-1.0" >
 		<nunit2>
 			<formatter type="Plain" />
-			<formatter type="Xml" usefile="true" extension=".xml" 
+			<formatter type="Xml" usefile="true" extension=".xml"
 			           outputdir="${current.bin.dir}/results" />
-			<test assemblyname="${bin.dir}/net/1.1/${current.build.config}/${project::get-name()}.dll" 
+			<test assemblyname="${bin.dir}/net/1.1/${current.build.config}/${project::get-name()}.dll"
 			      appconfig="${bin.dir}/net/1.1/${current.build.config}/${project::get-name()}.dll.config" />
 		</nunit2>
 	</target>
-
+-->
 </project>

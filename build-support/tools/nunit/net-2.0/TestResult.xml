@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="nunit.framework.dll" total="0" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2009-07-13" time="16:14:09">
+  <environment nunit-version="2.5.1.9189" clr-version="2.0.50727.4016" os-version="Microsoft Windows NT 6.0.6002 Service Pack 2" platform="Win32NT" cwd="C:\projects\svn_google\testingaspnet\nunit\NUnit-2.5.1.9189\bin\net-2.0" machine-name="EETHINKPAD" user="erich" user-domain="eethinkpad" />
+  <culture-info current-culture="en-US" current-uiculture="de-DE" />
+  <test-suite name="nunit.framework.dll" executed="False">
+    <reason>
+      <message><![CDATA[Has no TestFixtures]]></message>
+    </reason>
+  </test-suite>
+</test-results>

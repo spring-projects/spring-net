@@ -1,11 +1,15 @@
 <?xml version="1.0" ?>
 <project name="Spring.Core.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+
+    <include buildfile="${spring.basedir}/common-project.include" />
+
 	<!--
         Required properties:
             * current.bin.dir           - (path) root level to build to
             * build.debug               - (true|false) debug build?
             * current.build.defines.csc - framework-specific build defines
     -->
+
 	<target name="build">
 		<!--
 	        <copy file="../../../src/Spring/Spring.Core/Pool/Support/ISync.cs" todir="../../../CloverBuild/Pool/Support" verbose="true"/>
@@ -35,13 +39,13 @@
 				<include name="**/*.vb" />
 				<include name="**/*.properties" />
 				<include name="**/*.xml" />
-<!--				
+<!--
 				<include name="**/SimpleAppContext.xml" />
 				<include name="**/Factory/Attributes/*.xml" />
 				<include name="**/Context/Support/*.xml" />
 				<include name="**/aliasedObjects.xml" />
 				<include name="**/contextlifecycle.xml" />
--->				
+-->
 			</resources>
 			<references basedir="${current.bin.dir}">
 				<include name="System.EnterpriseServices.dll" />
@@ -93,13 +97,19 @@
                 <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
                       tofile="${current.bin.dir}/${project::get-name()}.dll.config"
                       if="${framework::get-target-framework() == 'net-2.0'}"/>
-                      
+
                 <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
                       tofile="${current.bin.dir}/${project::get-name()}.dll.config"
                       if="${framework::get-target-framework() == 'mono-2.0'}"/>
 
         </target>
-	<target name="test" depends="build">
+
+    <target name="test" depends="build">
+        <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
+        <call target="common.run-tests" />
+    </target>
+<!--
+	<target name="test2" depends="build">
 	  <if test="${nant.settings.currentframework!='mono-2.0'}">
 		<nunit2outproc>
 			<formatter type="Plain" />
@@ -119,6 +129,8 @@
 	    </nunit2>
 	  </if>
 	</target>
+-->
+
 <!--
 	<target name="test-mono-1.0" >
 		<nunit2outproc>

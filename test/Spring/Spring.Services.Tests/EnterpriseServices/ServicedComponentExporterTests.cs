@@ -100,6 +100,7 @@ namespace Spring.EnterpriseServices
         }
 
         [Test]
+        [Explicit("causes troubles due to registry pollution by COM registration")]
         public void CanExportAopProxyToLibrary()
         {
             // NOTE: the method interceptor will return the number of method calls intercepted
@@ -127,7 +128,7 @@ namespace Spring.EnterpriseServices
         }
 
 #if NET_2_0
-        [Test]
+        [Test, Explicit("causes troubles due to registry pollution by COM registration")]
         public void CanExportAopProxyToServer()
         {
             FileInfo assemblyFile = new FileInfo("ServiceComponentExporterTests.TestServicedComponents.exe");

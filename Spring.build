@@ -28,7 +28,7 @@ Build properties that may be set:
   <property name="project.name" value="Spring.NET"/>
   <property name="project.name.full" value="Spring.NET Framework"/>
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
-  <property name="nant.nunit2outproc.nunitpath" value="${project::get-base-directory()}/build-support/tools/nunit/" />
+  <property name="tool.dir" value="${project::get-base-directory()}/build-support/tools"/>
 
   <!-- debug or release -->
   <property name="project.build.config" value="debug"/>
@@ -356,12 +356,6 @@ Build properties that may be set:
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity and not net-3.0}"/>
 
-
-
-    <!-- build examples -->
-
-    <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples and not using-clover and not net-3.0}"/>
-
     <!-- test assemblies -->
     <nant buildfile="test/Spring/Spring.Core.Tests/Spring.Core.Tests.build" target="test" if="${not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.build" target="test" if="${build-aop and not net-3.0}"/>
@@ -384,6 +378,10 @@ Build properties that may be set:
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq-tests and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity and not net-3.0}"/>
+
+    <!-- build examples -->
+    <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples and not using-clover and not net-3.0}"/>
+
   </target>
 
   <target name="compile-net-1.0" description="Builds .NET Framework 1.0 version"
@@ -1444,7 +1442,7 @@ Build properties that may be set:
   <!-- Set up test environment -->
   <target name="TestInit">
       <!-- custom task for testing under different runtimes -->
-    <loadtasks assembly="${spring.basedir}/build-support/tools/NAnt.NUnit2OutProc.Task/NAnt.NUnit2OutProcTasks.dll" />
+    <!-- loadtasks assembly="${spring.basedir}/build-support/tools/NAnt.NUnit2OutProc.Task/NAnt.NUnit2OutProcTasks.dll" / -->
   </target>
 
   <!-- Clover.NET code coverage targets... -->

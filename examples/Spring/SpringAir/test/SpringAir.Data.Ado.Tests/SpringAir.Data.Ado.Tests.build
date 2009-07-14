@@ -1,5 +1,8 @@
 <?xml version="1.0" ?>
 <project name="SpringAir.Data.Ado.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+
+    <include buildfile="${spring.basedir}/common-project.include" />
+
 	<!--
         Required properties:
             * current.bin.dir           - (path) root level to build to
@@ -21,6 +24,13 @@
 			</references>
 		</csc>
 	</target>
+
+    <target name="test" depends="build">
+        <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
+        <call target="common.run-tests" />
+    </target>
+
+<!--
 	<target name="test" depends="build">
 		<nunit2outproc>
 			<formatter type="Plain" />
@@ -30,4 +40,5 @@
 			      appconfig="${project::get-name()}.dll.config" />
 		</nunit2outproc>
 	</target>
+-->
 </project>
