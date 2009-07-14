@@ -39,7 +39,6 @@ namespace Spring.Globalization.Localizers
     /// <author>Aleksandar Seovic</author>
 #if ! NET_1_0
     [TestFixture]
-#endif
     public sealed class ResourceSetLocalizerTests : AbstractLocalizerTests
     {
         protected override ILocalizer CreateLocalizer()
@@ -63,4 +62,5 @@ namespace Spring.Globalization.Localizers
             localizer.ApplyResources(new Inventor(), messageSource, CultureInfo.InvariantCulture);
         }
     }
+#endif
 }
