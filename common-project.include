@@ -208,17 +208,11 @@ ${tool.dir}       : dir for tools
 
     <echo message="Unit Testing ${project.name} in ${test.bin.dir}" />
 
-
-    <!-- nunit workaround, they never fixed it :-( -->
-    <copy file="${test.bin.dir}/${test.assemblyname}.dll.config" tofile="${test.bin.dir}/${test.assemblyname}.config" failonerror="false" />
-
-    <exec program="${tool.dir}\nunit\net-2.0\nunit-console-x86.exe" workingdir="${test.bin.dir}" verbose="true">
+    <exec program="${tool.dir}\nunit\net-2.0\nunit-console-x86.exe" workingdir="${test.bin.dir}" verbose="false">
       <arg path="${test.bin.dir}/${test.assemblyname}.dll" />
-      <arg value="/xml:${test.assemblyname}.dll-testresults.xml" />
+      <arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
       <arg value="/framework:${nant.settings.currentframework}" />
       <arg value="/nologo" />
-      <arg value="/noshadow" />
-      <arg value="/nothread" />
     </exec>
 
   </target>
@@ -239,10 +233,7 @@ ${tool.dir}       : dir for tools
 
         <echo message="Coverage Testing ${test.assemblyname} in ${test.bin.dir}" />
 
-        <!-- nunit workaround, they never fixed it :-( -->
-        <copy file="${test.bin.dir}/${test.assemblyname}.dll.config" tofile="${test.bin.dir}/${test.assemblyname}.config" failonerror="false" />
-
-		<exec program="${tool.dir}/ncover/ncover.console.exe" workingdir="${test.bin.dir}" verbose="true">
+		<exec program="${tool.dir}/ncover/ncover.console.exe" workingdir="${test.bin.dir}" verbose="false">
 			<arg value="//q" />
 			<arg value="//reg" />
 			<arg value="//w" />
@@ -258,8 +249,6 @@ ${tool.dir}       : dir for tools
 			<arg path="${test.bin.dir}/${test.assemblyname}.dll" />
 			<arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
 			<arg value="/nologo" />
-            <arg value="/noshadow" />
-            <arg value="/nothread" />
             <arg value="/framework:${nant.settings.currentframework}" />
 		</exec>
 
