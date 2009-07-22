@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA7A6931-7DBE-4A32-A312-51FAD2E80332}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -110,6 +110,7 @@
     <Compile Include="Messaging\Nms\Listener\Adapter\MessageContentsHandler.cs" />
     <Compile Include="Messaging\Nms\Listener\Adapter\MessageListenerAdapterTests.cs" />
     <Compile Include="Messaging\Nms\StubQueue.cs" />
+    <Compile Include="Messaging\Nms\Support\Converter\TypeMapperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.xml" />

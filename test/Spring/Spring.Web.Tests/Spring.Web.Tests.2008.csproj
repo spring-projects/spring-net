@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C67E47AA-1ACD-41B4-A465-4D336A2319CA}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -166,7 +166,9 @@
     </Content>
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\DisablesSession.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResultSave.aspx" />
-    <EmbeddedResource Include="Data\Spring\Web\Support\LocalResourceManagerTests\App_LocalResources\WithResources.aspx.resx" />
+    <EmbeddedResource Include="Data\Spring\Web\Support\LocalResourceManagerTests\App_LocalResources\WithResources.aspx.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Web\Support\ControlInterceptionTests.objects.xml" />
   </ItemGroup>
   <ItemGroup>

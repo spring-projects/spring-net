@@ -40,6 +40,7 @@ namespace Spring.Messaging.Nms.Support.Converter
         private string defaultHashtableTypeId = "Hashtable";
 
         private Type defaultHashtableClass = typeof(Hashtable);
+        private bool useAssemblyQualifiedName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeMapper"/> [ERROR: invalid expression DeclaringTypeKind].
@@ -98,15 +99,46 @@ namespace Spring.Messaging.Nms.Support.Converter
                 {
                     return defaultHashtableTypeId;
                 }
-                return typeOfObjectToConvert.Name;
+                if (UseAssemblyQualifiedName)
+                {
+                    return typeOfObjectToConvert.AssemblyQualifiedName;
+                }
+                else
+                {
+                    return typeOfObjectToConvert.Name;
+                }
             }
         }
 
         /// <summary>
-        /// Convert from a string to a type
+        /// Gets or sets a value indicating whether use the assembly qualified name when creating a string from a type reference.
+        /// </summary>
+        /// <remarks>
+        /// By setting this property to true you will be able to easily share types that are available on both the publisher and
+        /// consumer with minimal configuration.  However, this means that the publishers and subscribers would be tightly coupled
+        /// despite the use of loosely coupled messaging middleware.
+        /// </remarks>
+        /// <value>
+        /// 	<c>true</c> if to the assembly qualified name; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseAssemblyQualifiedName
+        {
+            get {
+                return useAssemblyQualifiedName;
+            }
+            set {
+                useAssemblyQualifiedName = value;
+            }
+        }
+
+        /// <summary>
+        /// Convert from a string to a type.  Will look into the IdTypeMapping dictionary first to resolve the 
+        /// type, then check if it is the well known typeId of 'Hashtable' followed by a strategy to resolve a fully qualfied
+        /// name from a simple type name.  This strategy requires that 
         /// </summary>
         /// <param name="typeId">The type id.</param>
-        /// <returns></returns>
+        /// <returns>The type associated with the string.</returns>
+        /// <exception cref="TypeLoadException">If the type can not be resolved.</exception>
         public Type ToType(string typeId)
         {
             if (idTypeMapping.Contains(typeId))
@@ -118,11 +150,16 @@ namespace Spring.Messaging.Nms.Support.Converter
                 if (typeId.Equals(defaultHashtableTypeId))
                 {
                     return defaultHashtableClass;
+                }                
+                if (defaultNamespace != null)
+                {
+                    string fullyQualifiedTypeName = defaultNamespace + "." +
+                                                    typeId + ", " +
+                                                    DefaultAssemblyName;
+                    return TypeResolutionUtils.ResolveType(fullyQualifiedTypeName); 
                 }
-                string fullyQualifiedTypeName = defaultNamespace + "." +
-                                 typeId + ", " +
-                                 DefaultAssemblyName;
-                return TypeResolutionUtils.ResolveType(fullyQualifiedTypeName); 
+
+                return TypeResolutionUtils.ResolveType(typeId); 
             }
 
         }

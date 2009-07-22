@@ -18,7 +18,7 @@ namespace Spring.Messaging.Nms.Support.Converter
         private IMessageConverter defaultMessageConverter = new SimpleMessageConverter();
 
 
-        private ITypeMapper typeMapper;
+        private ITypeMapper typeMapper = new TypeMapper();
 
 
         /// <summary>
