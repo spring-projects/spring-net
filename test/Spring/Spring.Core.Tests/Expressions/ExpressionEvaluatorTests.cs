@@ -36,7 +36,7 @@ using System.Web.Services;
 using antlr;
 using antlr.collections;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
+//using NUnit.Framework.SyntaxHelpers;
 using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;

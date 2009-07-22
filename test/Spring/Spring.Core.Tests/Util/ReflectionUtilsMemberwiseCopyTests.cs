@@ -25,7 +25,7 @@ namespace Spring.Util
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "object types are not related")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="object types are not related")]
 		public void DifferentTypesForbidden()
 		{
 			ReflectionUtils.MemberwiseCopy("test", 2);

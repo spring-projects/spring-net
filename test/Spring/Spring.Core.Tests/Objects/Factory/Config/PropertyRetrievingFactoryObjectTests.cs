@@ -233,7 +233,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "One of the TargetType or TargetObject properties must be set.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="One of the TargetType or TargetObject properties must be set.")]
 		public void BailsWhenNotConfigured()
 		{
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
@@ -259,7 +259,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The TargetProperty property is required.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The TargetProperty property is required.")]
 		public void BailsWhenJustTargetObjectIsSet()
 		{
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();

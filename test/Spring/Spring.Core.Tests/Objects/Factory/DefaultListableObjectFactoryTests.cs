@@ -1534,8 +1534,7 @@ namespace Spring.Objects.Factory
         /// to the ctor, it should (must) choke.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException),
-            "Error creating object with name 'foo' : Unsatisfied dependency " +
+        [ExpectedException(typeof(UnsatisfiedDependencyException), ExpectedMessage="Error creating object with name 'foo' : Unsatisfied dependency " +
                 "expressed through constructor argument with index 1 of type [System.Boolean] : " +
                 "No unique object of type [System.Boolean] is defined : Unsatisfied dependency of type [System.Boolean]: expected at least 1 matching object to wire the [b2] parameter on the constructor of object [foo]")]
         public void DoubleBooleanAutowire()

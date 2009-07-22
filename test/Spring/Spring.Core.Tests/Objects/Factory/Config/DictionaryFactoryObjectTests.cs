@@ -36,7 +36,7 @@ namespace Spring.Objects.Factory.Config
 	public sealed class DictionaryFactoryObjectTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The Type passed to the TargetDictionaryType property must implement the 'System.Collections.IDictionary' interface.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetDictionaryType property must implement the 'System.Collections.IDictionary' interface.")]
 		public void SetTargetDictionaryTypeToNonDictionaryType()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
@@ -44,7 +44,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The Type passed to the TargetDictionaryType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IDictionary' interface.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetDictionaryType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IDictionary' interface.")]
 		public void SetTargetDictionaryTypeToDerivedIDictionaryInterfaceType()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
@@ -52,7 +52,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The Type passed to the TargetDictionaryType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IDictionary' interface.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetDictionaryType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IDictionary' interface.")]
 		public void SetTargetDictionaryTypeToAbstractIDictionaryInterfaceType()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
@@ -76,7 +76,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The 'SourceDictionary' property cannot be null (Nothing in Visual Basic.NET).")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'SourceDictionary' property cannot be null (Nothing in Visual Basic.NET).")]
 		public void GetObjectWithoutSupplyingASourceDictionary()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();

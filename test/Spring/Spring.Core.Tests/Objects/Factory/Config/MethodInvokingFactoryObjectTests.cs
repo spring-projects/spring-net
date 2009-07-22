@@ -138,7 +138,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "Unable to determine which exact method to call; found '2' matches.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="Unable to determine which exact method to call; found '2' matches.")]
 		public void GetSupertypesTooManyArgs()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
@@ -200,7 +200,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The 'TargetMethod' property is required.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'TargetMethod' property is required.")]
 		public void BailsIfTheTargetMethodPropertyAintSet()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();

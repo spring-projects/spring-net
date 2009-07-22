@@ -223,7 +223,7 @@ namespace Spring.Objects.Factory.Config
 
 		[Test]
 		[ExpectedException(typeof (ObjectDefinitionStoreException),
-			 "Error registering object with name 'to' defined in '' : Could not resolve placeholder 'PROCESSOR_ARCHITECTURE'.")]
+             ExpectedMessage = "Error registering object with name 'to' defined in '' : Could not resolve placeholder 'PROCESSOR_ARCHITECTURE'.")]
 		public void WithUnresolvableEnvironmentProperty()
 		{
 			StaticApplicationContext ac = new StaticApplicationContext();

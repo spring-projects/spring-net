@@ -43,7 +43,7 @@ namespace Spring.Transaction.Support
 			Assert.IsTrue(_mockTxnMgr.RollbackOnCommitFailure);
 		}
 		[Test]
-		[ExpectedException(typeof(InvalidTimeoutException), "Invalid transaction timeout")]
+		[ExpectedException(typeof(InvalidTimeoutException), ExpectedMessage="Invalid transaction timeout")]
 		public void DefinitionInvalidTimeoutException()
 		{
 			MockTxnDefinition def = new MockTxnDefinition();	
@@ -51,7 +51,7 @@ namespace Spring.Transaction.Support
 			_mockTxnMgr.GetTransaction( def );
 		}
 		[Test]
-		[ExpectedException(typeof(IllegalTransactionStateException), "Transaction propagation 'mandatory' but no existing transaction found")]
+		[ExpectedException(typeof(IllegalTransactionStateException), ExpectedMessage="Transaction propagation 'mandatory' but no existing transaction found")]
 		public void DefinitionInvalidPropagationState()
 		{
 			MockTxnDefinition def = new MockTxnDefinition();	
@@ -60,7 +60,7 @@ namespace Spring.Transaction.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(IllegalTransactionStateException), "Transaction propagation 'never' but existing transaction found.")]
+		[ExpectedException(typeof(IllegalTransactionStateException), ExpectedMessage="Transaction propagation 'never' but existing transaction found.")]
 		public void NeverPropagateState()
 		{
 			MockTxnDefinition def = new MockTxnDefinition();
@@ -69,7 +69,7 @@ namespace Spring.Transaction.Support
 			_mockTxnMgr.GetTransaction(def);
 		}
 		[Test]
-		[ExpectedException(typeof(NestedTransactionNotSupportedException), "Transaction manager does not allow nested transactions by default - specify 'NestedTransactionsAllowed' property with value 'true'")]
+		[ExpectedException(typeof(NestedTransactionNotSupportedException), ExpectedMessage="Transaction manager does not allow nested transactions by default - specify 'NestedTransactionsAllowed' property with value 'true'")]
 		public void NoNestedTransactionsAllowed()
 		{
 			MockTxnDefinition def = new MockTxnDefinition();

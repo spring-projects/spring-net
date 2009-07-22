@@ -91,7 +91,7 @@ namespace Spring.Objects.Factory.Config
 
 		[Test]
 		[ExpectedException(typeof (ArgumentException),
-			"The 'TargetObjectName' property must have a value.")]
+            ExpectedMessage = "The 'TargetObjectName' property must have a value.")]
 		public void WithMissingObjectName()
 		{
 			ObjectFactoryCreatingFactoryObject factory

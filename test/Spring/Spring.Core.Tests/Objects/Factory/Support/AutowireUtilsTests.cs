@@ -131,8 +131,7 @@ namespace Spring.Objects.Factory.Support
 			return pickedCtor;
 		}
 
-        [ExpectedException(typeof (ArgumentException),
-			"Cannot calculate the type difference weight for argument types and arguments with differing lengths.")]
+        [ExpectedException(typeof (ArgumentException), ExpectedMessage="Cannot calculate the type difference weight for argument types and arguments with differing lengths.")]
 		[Test]
         [Ignore("Investigate details of new type weight algorithm")]
 		public void GetTypeDifferenceWeightWithMismatchedLengths()

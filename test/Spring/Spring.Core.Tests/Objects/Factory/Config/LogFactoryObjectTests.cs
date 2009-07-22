@@ -102,7 +102,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The 'LogName' property has not been set.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'LogName' property has not been set.")]
 		public void CheckAfterPropertiesSetBlowsUpIfNotCorrectlyConfigured()
 		{
 			LogFactoryObject fac = new LogFactoryObject();

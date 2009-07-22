@@ -65,7 +65,7 @@ namespace Spring.Util
             Assert.AreEqual (string.Empty, dude.Soda);
         }
 
-        [Test][ExpectedException (typeof (FormatException), "Iron Brew")]
+        [Test][ExpectedException (typeof (FormatException), ExpectedMessage="Iron Brew")]
         public void RaiseWithAnEventHandlerThatThrowsAnException () 
         {
             OneThirstyDude dude = new OneThirstyDude ();

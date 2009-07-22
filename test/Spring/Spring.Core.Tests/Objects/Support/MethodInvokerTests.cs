@@ -54,7 +54,7 @@ namespace Spring.Objects.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "One of either the 'TargetType' or 'TargetObject' properties is required.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="One of either the 'TargetType' or 'TargetObject' properties is required.")]
 		public void PrepareWithOnlyTargetMethodSet()
 		{
 			MethodInvoker vkr = new MethodInvoker();
@@ -181,7 +181,7 @@ namespace Spring.Objects.Support
 		[Test]
 		[ExpectedException(
 			typeof (ArgumentException),
-			"The named argument 'southpaw' could not be found on the 'GrowOlder' method of class [Spring.Objects.Support.MethodInvokerTests+Foo].")]
+            ExpectedMessage = "The named argument 'southpaw' could not be found on the 'GrowOlder' method of class [Spring.Objects.Support.MethodInvokerTests+Foo].")]
 		public void InvokeWithNamedArgumentThatDoesNotExist()
 		{
 			Foo foo = new Foo();
@@ -213,7 +213,7 @@ namespace Spring.Objects.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (MethodInvocationException), "At least one of the arguments passed to this MethodInvoker was incompatible with the signature of the invoked method.")]
+		[ExpectedException(typeof (MethodInvocationException), ExpectedMessage="At least one of the arguments passed to this MethodInvoker was incompatible with the signature of the invoked method.")]
 		public void InvokeWithArgumentOfWrongType()
 		{
 			Foo foo = new Foo();

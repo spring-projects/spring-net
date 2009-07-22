@@ -252,7 +252,7 @@ namespace Spring.Scheduling.Quartz
         }
 
         [Test]
-        [ExpectedException(ExceptionType = typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestSchedulerFactoryType_InvalidType()
         {
             TestSchedulerFactory.Mockery.ReplayAll(); 

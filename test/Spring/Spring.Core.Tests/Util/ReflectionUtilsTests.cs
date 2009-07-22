@@ -437,7 +437,7 @@ namespace Spring.Util
 
         [Test]
         [ExpectedException( typeof( ArgumentException ),
-            "[Spring.Util.ReflectionUtilsTests] does not derive from the [System.Attribute] class." )]
+            ExpectedMessage = "[Spring.Util.ReflectionUtilsTests] does not derive from the [System.Attribute] class." )]
         public void CreateCustomAttributeForNonAttributeType()
         {
             ReflectionUtils.CreateCustomAttribute( GetType() );

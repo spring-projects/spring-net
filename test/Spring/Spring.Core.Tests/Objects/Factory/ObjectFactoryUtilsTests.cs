@@ -218,7 +218,7 @@ namespace Spring.Objects.Factory
 
 		[Test]
 		[ExpectedException(typeof (NoSuchObjectDefinitionException),
-			"No unique object of type [Spring.Objects.ITestObject] is defined : Expected single object but found 4")]
+            ExpectedMessage = "No unique object of type [Spring.Objects.ITestObject] is defined : Expected single object but found 4")]
 		public void ObjectOfTypeIncludingAncestorsWithMoreThanOneObjectOfType()
 		{
 			ObjectFactoryUtils.ObjectOfTypeIncludingAncestors(_factory, typeof (ITestObject), true, true);

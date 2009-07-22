@@ -36,7 +36,7 @@ namespace Spring.Objects.Factory.Config
 	public sealed class ListFactoryObjectTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The Type passed to the TargetListType property must implement the 'System.Collections.IList' interface.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetListType property must implement the 'System.Collections.IList' interface.")]
 		public void SetTargetListTypeToNonListType()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();
@@ -44,7 +44,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The Type passed to the TargetListType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IList' interface.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetListType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IList' interface.")]
 		public void SetTargetListTypeToDerivedIListInterfaceType()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();
@@ -52,7 +52,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The Type passed to the TargetListType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IList' interface.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetListType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IList' interface.")]
 		public void SetTargetListTypeToAbstractIListInterfaceType()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();
@@ -76,7 +76,7 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), "The 'SourceList' property cannot be null (Nothing in Visual Basic.NET).")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'SourceList' property cannot be null (Nothing in Visual Basic.NET).")]
 		public void GetObjectWithoutSupplyingASourceList()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();

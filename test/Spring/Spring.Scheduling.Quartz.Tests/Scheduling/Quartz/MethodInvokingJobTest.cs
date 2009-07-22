@@ -45,14 +45,14 @@ namespace Spring.Scheduling.Quartz
         }
 
         [Test]
-        [ExpectedException(ExceptionType = typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestMethodInvoker_SetWithNull()
         {
             methodInvokingJob.MethodInvoker = null;
         }
 
         [Test]
-        [ExpectedException(ExceptionType = typeof(JobExecutionException))]
+        [ExpectedException(typeof(JobExecutionException))]
         public void TestMethodInvocation_NullMethodInvokder()
         {
             methodInvokingJob.Execute(CreateMinimalJobExecutionContext());

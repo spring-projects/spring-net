@@ -42,7 +42,7 @@ namespace Spring.Scheduling.Quartz
         }
 
         [Test]
-        [ExpectedException(ExceptionType = typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestJobType_Null()
         {
             jobDetail.JobType = null;            
@@ -65,7 +65,7 @@ namespace Spring.Scheduling.Quartz
 
 
         [Test]
-        [ExpectedException(ExceptionType = typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestJobDataAsMap_Null()
         {
             jobDetail.JobDataAsMap = null;
@@ -123,7 +123,7 @@ namespace Spring.Scheduling.Quartz
         }
 
         [Test]
-        [ExpectedException(ExceptionType =  typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestAfterPropertiesSet_ApplicationContextJobDataKeySetWithoutApplicationContext()
         {
             const string objectName = "springJobDetailObject";

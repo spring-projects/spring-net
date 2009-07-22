@@ -71,7 +71,7 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), @"Registry key [HKEY_CURRENT_USER\sdgsdfgsdfgxadas] does not exist.")]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = @"Registry key [HKEY_CURRENT_USER\sdgsdfgsdfgxadas] does not exist.")]
         public void ConvertFromBadKeyString()
         {
             RegistryKeyConverter rkc = new RegistryKeyConverter();
@@ -79,7 +79,7 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), "Invalid root hive name [HKEY_ERROR].")]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage="Invalid root hive name [HKEY_ERROR].")]
         public void ConvertFromBadHiveString()
         {
             RegistryKeyConverter rkc = new RegistryKeyConverter();

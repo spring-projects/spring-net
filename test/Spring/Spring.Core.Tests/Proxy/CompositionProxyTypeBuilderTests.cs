@@ -35,8 +35,7 @@ namespace Spring.Proxy
 	public class CompositionProxyTypeBuilderTests : AbstractProxyTypeBuilderTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException),
-			"Composition proxy target must implement at least one interface.")]
+		[ExpectedException(typeof (ArgumentException), ExpectedMessage="Composition proxy target must implement at least one interface.")]
 		public void OnClassThatDoesntImplementAnyInterfaces()
 		{
 			IProxyTypeBuilder builder = GetProxyBuilder();
