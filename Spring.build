@@ -790,8 +790,9 @@ Build properties that may be set:
   </target>
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
-
+<!--
     <call target="${nant.target.root.name}-1.0" />
+-->
     <call target="${nant.target.root.name}-1.1" />
     <call target="${nant.target.root.name}-2.0" />
     <call target="${nant.target.root.name}-3.0" />
