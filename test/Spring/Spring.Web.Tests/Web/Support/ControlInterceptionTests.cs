@@ -54,7 +54,7 @@ namespace Spring.Web.Support
             IApplicationContext appContext =
                 new XmlApplicationContext(AbstractApplicationContext.DefaultRootContextName, false, RES_OBJECTS);
             ContextRegistry.RegisterContext(appContext);
-            appContext = new XmlApplicationContext("/controls/", false, appContext);
+            appContext = new GenericApplicationContext("/controls/", false, appContext);
             ContextRegistry.RegisterContext(appContext);
         }
 

@@ -40,13 +40,13 @@ namespace Spring.Aspects.Cache
     [TestFixture]
     public sealed class CacheAspectIntegrationTests
     {
-        private IApplicationContext context;
+        private GenericApplicationContext context;
         private CacheAspect cacheAspect;
 
         [SetUp]
         public void SetUp()
         {
-            context = new XmlApplicationContext();
+            context = new GenericApplicationContext();
 
             cacheAspect = new CacheAspect();
             cacheAspect.ApplicationContext = context;
@@ -56,7 +56,7 @@ namespace Spring.Aspects.Cache
         public void TestCaching()
         {
             ICache cache = new NonExpiringCache();
-            ((IConfigurableApplicationContext)context).ObjectFactory.RegisterSingleton("inventors", cache);
+            context.ObjectFactory.RegisterSingleton("inventors", cache);
 
             ProxyFactory pf = new ProxyFactory(new InventorStore());
             pf.AddAdvisors(cacheAspect);
@@ -87,7 +87,7 @@ namespace Spring.Aspects.Cache
         public void UseMethodInfoForKeyGeneration()
         {
             ICache cache = new NonExpiringCache();
-            ((IConfigurableApplicationContext)context).ObjectFactory.RegisterSingleton("defaultCache", cache);
+            context.ObjectFactory.RegisterSingleton("defaultCache", cache);
 
             ProxyFactory pf = new ProxyFactory(new GenericDao<string, int>());
             pf.AddAdvisors(cacheAspect);

@@ -275,5 +275,39 @@ namespace Spring.Objects.Factory.Xml
                 NamespaceParserRegistry.Reset();
             }
         }
+
+        [Test]
+        public void ParsesObjectAttributes()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+@"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net'>  
+	<object id='test1' type='Spring.Objects.TestObject, Spring.Core.Tests' singleton='false' abstract='true' />
+	<object id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' singleton='true' abstract='false' lazy-init='true' 
+        autowire='no' dependency-check='simple'
+        depends-on='test1' 
+        init-method='init'
+        destroy-method='destroy'
+    />
+</objects>
+"));
+            AbstractObjectDefinition od1 = (AbstractObjectDefinition) of.GetObjectDefinition("test1");
+            Assert.IsFalse(od1.IsSingleton);
+            Assert.IsTrue(od1.IsAbstract);
+            Assert.IsFalse(od1.IsLazyInit);
+
+            AbstractObjectDefinition od2 = (AbstractObjectDefinition) of.GetObjectDefinition("test2");
+            Assert.IsTrue(od2.IsSingleton);
+            Assert.IsFalse(od2.IsAbstract);
+            Assert.IsTrue(od2.IsLazyInit);
+            Assert.AreEqual(AutoWiringMode.No, od2.AutowireMode);
+            Assert.AreEqual("init", od2.InitMethodName);
+            Assert.AreEqual("destroy", od2.DestroyMethodName);
+            Assert.AreEqual(1, od2.DependsOn.Length);
+            Assert.AreEqual("test1", od2.DependsOn[0]);
+            Assert.AreEqual(DependencyCheckingMode.Simple, od2.DependencyCheck);
+        }
     }
 }

@@ -85,16 +85,23 @@ namespace Spring.Objects.Factory.Xml
 
             if (webDefinition != null)
             {
-                webDefinition.Scope = GetScope(element.GetAttribute(ObjectDefinitionConstants.ScopeAttribute));
+                if (definition.IsSingleton 
+                    && element.HasAttribute(ObjectDefinitionConstants.ScopeAttribute))
+                {
+                    webDefinition.Scope = GetScope(element.GetAttribute(ObjectDefinitionConstants.ScopeAttribute));
+                }
 
                 // force request and session scoped objects to be lazily initialized...
-                if (webDefinition.Scope != ObjectScope.Application)
+                if (webDefinition.Scope == ObjectScope.Request
+                    || webDefinition.Scope == ObjectScope.Session)
                 {
                     definition.IsLazyInit = true;
                 }
 
-                string typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
-                if (typeName.EndsWith(".ascx") || typeName.EndsWith(".master"))
+//                string typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
+                string typeName = definition.ObjectTypeName;
+                if (typeName != null 
+                    && (typeName.EndsWith(".ascx") || typeName.EndsWith(".master")))
                 {
                     definition.IsAbstract = true;
                 }

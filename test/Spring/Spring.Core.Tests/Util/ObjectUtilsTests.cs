@@ -141,6 +141,12 @@ namespace Spring.Util
         {
             ObjectUtils.InstantiateType(typeof(Dictionary<,>));
         }
+
+        [Test]
+        public void InstantiateGenericTypeWithArguments()
+        {
+//            ObjectUtils.InstantiateType(typeof(Dictionary<string, int>), new object[] { new object() } );
+        }
 #endif
 
         [Test]

@@ -266,8 +266,8 @@ namespace Spring.Objects.Factory.Support
             {
                 AssertUtils.ArgumentNotNull(value, "Scope");
                 this.scope = value;
-                this.isSingleton = 0==string.Compare(SCOPE_SINGLETON, value, true);
-                this.isPrototype = 0==string.Compare(SCOPE_PROTOTYPE, value, true);
+                this.isPrototype = 0 == string.Compare(SCOPE_PROTOTYPE, value, true);
+                this.isSingleton = !isPrototype; // 0 == string.Compare(SCOPE_SINGLETON, value, true);
             }
         }
 

@@ -82,6 +82,13 @@ namespace Spring.Context.Support
         }
 
         [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void NoConfigLocation()
+        {
+            new XmlApplicationContext();
+        }
+
+        [Test]
         public void SingleConfigLocation()
         {
             XmlApplicationContext ctx =

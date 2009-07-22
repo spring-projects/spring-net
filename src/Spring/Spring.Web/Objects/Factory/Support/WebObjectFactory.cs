@@ -361,8 +361,7 @@ namespace Spring.Objects.Factory.Support
         /// </remarks>
         protected override void AddEagerlyCachedSingleton(string objectName, IObjectDefinition objectDefinition, object rawSingletonInstance)
         {
-            if (objectDefinition is IWebObjectDefinition
-                && ((IWebObjectDefinition)objectDefinition).Scope != ObjectScope.Application)
+            if (IsWebScopedSingleton(objectDefinition))
             {
                 ObjectScope scope = ((IWebObjectDefinition) objectDefinition).Scope;
                 if (scope == ObjectScope.Request)
@@ -395,8 +394,7 @@ namespace Spring.Objects.Factory.Support
         /// </remarks>
         protected override void RemoveEagerlyCachedSingleton(string objectName, IObjectDefinition objectDefinition)
         {
-            if (objectDefinition is IWebObjectDefinition
-                && ((IWebObjectDefinition)objectDefinition).Scope != ObjectScope.Application)
+            if (IsWebScopedSingleton(objectDefinition))
             {
                 ObjectScope scope = ((IWebObjectDefinition) objectDefinition).Scope;
                 if (scope == ObjectScope.Request)
@@ -409,13 +407,24 @@ namespace Spring.Objects.Factory.Support
                 }
                 else
                 {
-                    throw new ObjectDefinitionException("Web singleton objects must be either request, session or application scoped.");                    
+                    throw new ObjectDefinitionException("Web singleton objects must be either 'request' or 'session' scoped.");                    
                 }
             }
             else
             {
                 base.RemoveEagerlyCachedSingleton(objectName, objectDefinition);
             }
+        }
+
+        private bool IsWebScopedSingleton(IObjectDefinition objectDefinition)
+        {
+            if (objectDefinition.IsSingleton 
+                && objectDefinition is IWebObjectDefinition)
+            {
+                ObjectScope scope = ((IWebObjectDefinition) objectDefinition).Scope;
+                return (scope == ObjectScope.Request) || (scope == ObjectScope.Session);
+            }
+            return false;
         }
 
         /// <summary>

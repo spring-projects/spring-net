@@ -143,22 +143,31 @@ namespace Spring.Objects.Factory.Config
 		/// <summary>
 		/// The default placeholder prefix.
 		/// </summary>
-		public const string DefaultPlaceholderPrefix = "${";
+		public static readonly string DefaultPlaceholderPrefix = "${";
 
 		/// <summary>
 		/// The default placeholder suffix.
 		/// </summary>
-		public const string DefaultPlaceholderSuffix = "}";
+		public static readonly string DefaultPlaceholderSuffix = "}";
 
-		private ILog logger = LogManager.GetLogger(typeof (PropertyPlaceholderConfigurer));
+
+		private readonly ILog logger;
+
+
 		private bool ignoreUnresolvablePlaceholders = false;
 		private string placeholderPrefix = DefaultPlaceholderPrefix;
 		private string placeholderSuffix = DefaultPlaceholderSuffix;
-
 		private EnvironmentVariableMode environmentVariableMode = EnvironmentVariableMode.Fallback;
 
+        /// <summary>
+        /// Initializes the new instance
+        /// </summary>
+	    public PropertyPlaceholderConfigurer()
+	    {
+            logger = LogManager.GetLogger(this.GetType());
+	    }
 
-        #region Properties 
+	    #region Properties 
         /// <summary>
 		/// The placeholder prefix (the default is <c>${</c>).
 		/// </summary>

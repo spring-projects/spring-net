@@ -295,7 +295,7 @@ namespace Spring
             }
 
             if (trustSection.Level == "Full")
-            {
+            {   
                 return null;
             }
 

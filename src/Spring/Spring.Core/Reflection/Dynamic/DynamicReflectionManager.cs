@@ -291,7 +291,7 @@ namespace Spring.Reflection.Dynamic
         {
             AssertUtils.ArgumentNotNull(fieldInfo, "You cannot create a delegate for a null value.");
 
-            bool skipVisibility = !IsPublic(fieldInfo);
+            bool skipVisibility = true; //!IsPublic(fieldInfo);
             Type[] argumentTypes = new Type[] { typeof(object) };
             System.Reflection.Emit.DynamicMethod dmGetter = CreateDynamicMethod("get_" + fieldInfo.Name, typeof(object), argumentTypes, fieldInfo, skipVisibility);
             ILGenerator il = dmGetter.GetILGenerator();
@@ -312,7 +312,7 @@ namespace Spring.Reflection.Dynamic
         {
             AssertUtils.ArgumentNotNull(fieldInfo, "You cannot create a delegate for a null value.");
 
-            bool skipVisibility = !IsPublic(fieldInfo);
+            bool skipVisibility = true; // !IsPublic(fieldInfo);
             System.Reflection.Emit.DynamicMethod dmSetter = CreateDynamicMethod("set_" + fieldInfo.Name, null, new Type[] { typeof(object), typeof(object) }, fieldInfo, skipVisibility);
             ILGenerator il = dmSetter.GetILGenerator();
             EmitFieldSetter(il, fieldInfo, false);
@@ -333,7 +333,7 @@ namespace Spring.Reflection.Dynamic
             AssertUtils.ArgumentNotNull(propertyInfo, "You cannot create a delegate for a null value.");
 
             MethodInfo getMethod = propertyInfo.GetGetMethod();
-            bool skipVisibility = (null == getMethod || !IsPublic(getMethod)); // getter is public
+            bool skipVisibility = true; // (null == getMethod || !IsPublic(getMethod)); // getter is public
             NetDynamicMethod dm = CreateDynamicMethod("get_" + propertyInfo.Name, typeof(object), new Type[] { typeof(object), typeof(object[]) }, propertyInfo, skipVisibility);
             ILGenerator il = dm.GetILGenerator();
             EmitPropertyGetter(il, propertyInfo, false);
@@ -354,7 +354,7 @@ namespace Spring.Reflection.Dynamic
             AssertUtils.ArgumentNotNull(propertyInfo, "You cannot create a delegate for a null value.");
 
             MethodInfo setMethod = propertyInfo.GetSetMethod();
-            bool skipVisibility = (null == setMethod || !IsPublic(setMethod)); // setter is public
+            bool skipVisibility = true; // (null == setMethod || !IsPublic(setMethod)); // setter is public
             Type[] argumentTypes = new Type[] { typeof(object), typeof(object), typeof(object[]) };
             NetDynamicMethod dm = CreateDynamicMethod("set_" + propertyInfo.Name, null, argumentTypes, propertyInfo, skipVisibility);
             ILGenerator il = dm.GetILGenerator();
@@ -371,7 +371,7 @@ namespace Spring.Reflection.Dynamic
         {
             AssertUtils.ArgumentNotNull(methodInfo, "You cannot create a delegate for a null value.");
 
-            bool skipVisibility = !IsPublic(methodInfo);
+            bool skipVisibility = true; // !IsPublic(methodInfo);
             NetDynamicMethod dm = CreateDynamicMethod(methodInfo.Name, typeof(object), new Type[] { typeof(object), typeof(object[]) }, methodInfo, skipVisibility);
             ILGenerator il = dm.GetILGenerator();
             EmitInvokeMethod(il, methodInfo, false);
@@ -387,7 +387,7 @@ namespace Spring.Reflection.Dynamic
         {
             AssertUtils.ArgumentNotNull(constructorInfo, "You cannot create a dynamic constructor for a null value.");
 
-            bool skipVisibility = !IsPublic(constructorInfo);
+            bool skipVisibility = true; //!IsPublic(constructorInfo);
             System.Reflection.Emit.DynamicMethod dmGetter;
             Type[] argumentTypes = new Type[] { typeof(object[]) };
             dmGetter = CreateDynamicMethod(constructorInfo.Name, typeof(object), argumentTypes, constructorInfo, skipVisibility);
@@ -408,7 +408,7 @@ namespace Spring.Reflection.Dynamic
         private static NetDynamicMethod CreateDynamicMethod(string methodName, Type returnType, Type[] argumentTypes, MemberInfo member, bool skipVisibility)
         {
             NetDynamicMethod dmGetter = null;
-            methodName = "_dynamic_" + member.DeclaringType.Name + "." + methodName;
+            methodName = "_dynamic_" + member.DeclaringType.FullName + "." + methodName;
             try
             {
                 new PermissionSet(PermissionState.Unrestricted).Demand();
@@ -425,68 +425,84 @@ namespace Spring.Reflection.Dynamic
         {
             NetDynamicMethod dm;
             dm = new NetDynamicMethod(methodName, returnType, argumentTypes, member.Module, skipVisibility);
-//            if (member is FieldInfo)
-//            {
-//                // workaround for DynamicMethod bug not invoking type initializer before accessing static field
-//                // it seems all works correct if the DM is created with limited accessibility
-//                bool isStatic = (((FieldInfo) member).IsStatic);
-//                if (isStatic)
-//                {
-//                    new ReflectionPermission(ReflectionPermissionFlag.MemberAccess).PermitOnly();
-//                }
-//                dm = new NetDynamicMethod(methodName, returnType, argumentTypes, member.DeclaringType, true);
-//                if (isStatic)
-//                {
-//                    CodeAccessPermission.RevertPermitOnly();
-//                }
-//            }
-//            else
-//            {
-//                dm = new NetDynamicMethod(methodName, returnType, argumentTypes, member.DeclaringType, true);
-//            }
             return dm;
         }
 
-        private static bool IsPublic(MemberInfo member)
-        {
-            if (member == null) return true;
+        /* TODO (EE): I am not sure, if "skipVisibility" in "CreateDynamicMethodInternal" may be true all the time or if visibility needs to be calculated like below
+         * 
+                private static bool IsPublic(MemberInfo member)
+                {
+                    if (member == null) return true;
 
-            switch(member.MemberType)
-            {
-                case MemberTypes.Event:
+                    switch(member.MemberType)
                     {
-                        bool isPublic = ((EventInfo) member).GetAddMethod() != null;
-                        return isPublic && IsPublic(member.DeclaringType);
+                        case MemberTypes.Event:
+                            {
+                                bool isPublic = ((EventInfo) member).GetAddMethod() != null;
+                                return isPublic && IsPublic(member.DeclaringType);
+                            }
+                        case MemberTypes.Field:
+                            {
+                                bool isPublic = ((FieldInfo)member).IsPublic;
+                                return isPublic && IsPublic(member.DeclaringType);
+                            }
+                        case MemberTypes.Property:
+                            {
+                                throw new NotSupportedException();
+                            }
+                        case MemberTypes.Constructor:
+                        case MemberTypes.Method:
+                            {
+                                MethodBase methodBase = ((MethodBase)member);
+                                bool isPublic = methodBase.IsPublic;
+                                if (!isPublic)
+                                {
+                                    return false;
+                                }
+                                if (!IsPublic(methodBase.DeclaringType))
+                                {
+                                    return false;
+                                }
+                                if (member.MemberType == MemberTypes.Method 
+                                    && !IsPublic(((MethodInfo)methodBase).ReturnType))
+                                {
+                                    return false;
+                                }
+                                foreach(ParameterInfo arg in methodBase.GetParameters())
+                                {
+                                    if (!IsPublic(arg.ParameterType)) return false;
+                                }
+                        
+                                return true;
+                            }
+                        case MemberTypes.NestedType:
+                        case MemberTypes.TypeInfo:
+                            {
+                                Type type = (Type)member;
+                                bool isPublic = type.IsPublic;
+                                if (type.IsNested && !IsPublic(type.DeclaringType))
+                                {
+                                    return false;
+                                }
+        #if NET_2_0
+                                if (type.IsGenericType)
+                                {
+                                    foreach(Type genericTypeArg in type.GetGenericArguments())
+                                    {
+                                        if (!IsPublic(genericTypeArg))
+                                        {
+                                            return false;
+                                        }
+                                    }
+                                }
+        #endif
+                                return true;
+                            }
+                        default:
+                            throw new NotSupportedException();
                     }
-                case MemberTypes.Field:
-                    {
-                        bool isPublic = ((FieldInfo)member).IsPublic;
-                        return isPublic && IsPublic(member.DeclaringType);
-                    }
-                case MemberTypes.Property:
-                    {
-                        throw new NotSupportedException();
-                    }
-                case MemberTypes.Constructor:
-                case MemberTypes.Method:
-                    {
-                        bool isPublic = ((MethodBase)member).IsPublic;
-                        return isPublic && IsPublic(member.DeclaringType);
-                    }
-                case MemberTypes.NestedType:
-                    {
-                        bool isPublic = ((Type)member).IsPublic;
-                        return isPublic && IsPublic(member.DeclaringType);
-                    }
-                case MemberTypes.TypeInfo:
-                    {
-                        bool isPublic = ((Type)member).IsPublic;
-                        return isPublic;
-                    }
-                default:
-                    throw new NotSupportedException();
-            }
-        }
+                }
+        */
 #endif
 
         #region Shared Code Generation

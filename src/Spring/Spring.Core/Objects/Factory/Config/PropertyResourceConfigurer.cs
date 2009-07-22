@@ -77,11 +77,11 @@ namespace Spring.Objects.Factory.Config
         /// The default configuration section name to use if none is explictly supplied. 
         /// </summary>
         /// <seealso cref="Spring.Objects.Factory.Config.PropertyResourceConfigurer.ConfigSections"/>
-        public const string DefaultConfigSectionName = "spring-config";
+        public static readonly string DefaultConfigSectionName = "spring-config";
 
         #region Fields
 
-        private static readonly ILog _log = LogManager.GetLogger(typeof(PropertyResourceConfigurer));
+        private readonly ILog _log;
 
         private int _order = Int32.MaxValue; // default: same as non-Ordered
         private NameValueCollection _defaultProperties;
@@ -107,6 +107,7 @@ namespace Spring.Objects.Factory.Config
         /// </remarks>
         protected PropertyResourceConfigurer()
         {
+            _log = LogManager.GetLogger(this.GetType());
         }
 
         #endregion
