@@ -770,6 +770,7 @@
     <EmbeddedResource Include="Core\IO\TestResource.txt" />
     <EmbeddedResource Include="Context\Support\innerObjectsWithPostProcessor.xml" />
     <EmbeddedResource Include="Core\IO\ConfigSectionResourceTests_config1.xml" />
+    <EmbeddedResource Include="Context\Support\XmlApplicationContextTests-SPRNET1231.xml" />
     <Content Include="Data\PathMatcher\EmptyPattern.test" />
     <Content Include="Data\PathMatcher\Examples.test" />
     <Content Include="Data\PathMatcher\InBetween.test" />

@@ -1,0 +1,10 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<objects xmlns='http://www.springframework.net'>
+
+  <object id='testOFPP' type='Spring.Context.Support.XmlApplicationContextTests+SPRNET1231ObjectFactoryPostProcessor' />
+
+  <object id='testFactory' type='Spring.Context.Support.XmlApplicationContextTests+SPRNET1231FactoryObject' />
+  
+  <object id='testFactoryProduct' factory-object='testFactory' factory-method='GetProduct' />
+  
+</objects>

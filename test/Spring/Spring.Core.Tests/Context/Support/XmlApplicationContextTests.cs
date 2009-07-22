@@ -35,6 +35,35 @@ namespace Spring.Context.Support
     [TestFixture]
     public sealed class XmlApplicationContextTests
     {
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1231")]
+        public void SPRNET1231_DoesNotInvokeFactoryMethodDuringObjectFactoryPostProcessing()
+        {
+            string configLocation = TestResourceLoader.GetAssemblyResourceUri(this.GetType(), "XmlApplicationContextTests-SPRNET1231.xml");
+            XmlApplicationContext ctx = new XmlApplicationContext(configLocation);
+
+        }
+
+        private class SPRNET1231ObjectFactoryPostProcessor : IObjectFactoryPostProcessor
+        {
+            public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
+            {
+                SPRNET1231FactoryObject testFactory = (SPRNET1231FactoryObject)factory.GetObject("testFactory");
+                Assert.AreEqual(0, testFactory.count);
+            }
+        }
+
+        private class SPRNET1231FactoryObject
+        {
+            public int count;
+
+            public ITestObject GetProduct()
+            {
+                count++;
+                return new TestObject("test" + count, count);
+            }
+        }
+
+
         [Test]
         public void InnerObjectWithPostProcessing()
         {

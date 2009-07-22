@@ -116,7 +116,7 @@ namespace Spring.Context.Support
         protected override void RefreshObjectFactory()
         {
             // Shut down previous object factory, if any.
-            IConfigurableListableObjectFactory oldObjectFactory = _objectFactory;
+            DefaultListableObjectFactory oldObjectFactory = _objectFactory;
             _objectFactory = null;
 
             if (oldObjectFactory != null)

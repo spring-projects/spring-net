@@ -178,11 +178,6 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         protected override Type GetTypeForFactoryMethod(string objectName, RootObjectDefinition definition)
         {
-            if (StringUtils.HasText(definition.FactoryObjectName) && definition.IsSingleton && !definition.IsLazyInit)
-            {
-                return GetObject(objectName).GetType();
-            }
-
             Type factoryType = null;
             bool isStatic = true;
 

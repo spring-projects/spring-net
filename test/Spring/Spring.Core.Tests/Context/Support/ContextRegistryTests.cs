@@ -185,20 +185,23 @@ namespace Spring.Context.Support
             typeBuilder.TargetType = typeof(TestObject);
             Type proxyType = typeBuilder.BuildProxyType();
 
-            XmlApplicationContext ctx1 = new XmlApplicationContext();
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
             RootObjectDefinition od1 = new RootObjectDefinition(proxyType, false);
             od1.PropertyValues.Add("Name", "Bruno");
-            ((DefaultListableObjectFactory)ctx1.ObjectFactory).RegisterObjectDefinition("testObject", od1);
+            of.RegisterObjectDefinition("testObject", od1);
+
+            GenericApplicationContext ctx1 = new GenericApplicationContext(of);
             ContextRegistry.RegisterContext(ctx1);
 
             ITestObject to1 = ContextRegistry.GetContext().GetObject("testObject") as ITestObject;
             Assert.IsNotNull(to1);
             Assert.AreEqual("Bruno", to1.Name);
 
-            XmlApplicationContext ctx2 = new XmlApplicationContext();
+            DefaultListableObjectFactory of2 = new DefaultListableObjectFactory();
             RootObjectDefinition od2 = new RootObjectDefinition(proxyType, false);
             od2.PropertyValues.Add("Name", "Baia");
-            ((DefaultListableObjectFactory)ctx2.ObjectFactory).RegisterObjectDefinition("testObject", od2);
+            of2.RegisterObjectDefinition("testObject", od2);
+            GenericApplicationContext ctx2 = new GenericApplicationContext(of2);
 
             ContextRegistry.Clear();
 

@@ -18,6 +18,8 @@
 
 #endregion
 
+using Spring.Util;
+
 namespace Spring.Context.Support
 {
 	/// <summary>
@@ -80,7 +82,7 @@ namespace Spring.Context.Support
 	/// <seealso cref="Spring.Core.IO.ConfigurableResourceLoader"/>
 	public class XmlApplicationContext : AbstractXmlApplicationContext
 	{
-		private string[] _configurationLocations;
+		private readonly string[] _configurationLocations;
 
         /// <summary>
         /// Creates a new instance of the
@@ -214,6 +216,7 @@ namespace Spring.Context.Support
             _configurationLocations = configurationLocations;
             if (refresh)
             {
+                AssertUtils.ArgumentHasElements(configurationLocations, "configurationLocations");
                 Refresh();
             }
         }
