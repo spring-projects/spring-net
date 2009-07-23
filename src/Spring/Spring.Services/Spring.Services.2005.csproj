@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="EnterpriseServices\EnterpriseServicesExporter.cs" />
+    <Compile Include="EnterpriseServices\ExeConfigurationSystem.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentHelper.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentContextHandler.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentExporter.cs" />

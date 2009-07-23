@@ -754,6 +754,7 @@
     <EmbeddedResource Include="Context\Support\invalidType.xml" />
     <EmbeddedResource Include="Core\TypeResolution\aliasedObjects.xml" />
     <EmbeddedResource Include="Core\IO\TestResource.txt" />
+    <EmbeddedResource Include="Context\Support\innerObjectsWithPostProcessor.xml" />
     <Content Include="Data\PathMatcher\EmptyPattern.test" />
     <Content Include="Data\PathMatcher\Examples.test" />
     <Content Include="Data\PathMatcher\InBetween.test" />
@@ -827,7 +828,7 @@
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithAllRequiredPropertiesProvided.xml" />
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithCustomAttribute.xml" />
     <Content Include="Spring.Core.Tests.dll.config" />
-    <Content Include="Util\ConfigXmlDocumentTests_SampleConfig.xml" />
+    <EmbeddedResource Include="Util\ConfigXmlDocumentTests_SampleConfig.xml" />
     <EmbeddedResource Include="Context\contextlifecycle.xml" />
     <EmbeddedResource Include="Context\Support\objects.xml" />
     <EmbeddedResource Include="Objects\Factory\TestResource.txt" />

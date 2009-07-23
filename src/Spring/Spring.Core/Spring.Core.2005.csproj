@@ -555,6 +555,7 @@
     <Compile Include="Objects\Factory\Config\ISingletonObjectRegistry.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionHolder.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionVisitor.cs" />
+    <Compile Include="Objects\Factory\Config\ObjectRole.cs" />
     <Compile Include="Objects\Factory\Config\ResourceHandlerConfigurer.cs" />
     <Compile Include="Objects\Factory\Config\SharedStateAwareProcessor.cs" />
     <Compile Include="Objects\Factory\Config\SmartInstantiationAwareObjectPostProcessor.cs" />

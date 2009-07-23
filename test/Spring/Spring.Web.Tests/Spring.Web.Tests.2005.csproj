@@ -82,7 +82,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Globalization\Resolvers\DefaultWebCultureResolverTests.cs" />
-    <Compile Include="MyNUnitAddinHelper.cs" />
     <Compile Include="Objects\Factory\Support\WebObjectDefinitionFactoryTests.cs" />
     <Compile Include="Objects\Factory\Support\WebObjectFactoryTests.cs">
       <SubType>Code</SubType>
@@ -100,6 +99,7 @@
     <Compile Include="TestSupport\TestWebContextTests.cs" />
     <Compile Include="TestSupport\VirtualEnvironmentMock.cs" />
     <Compile Include="TestSupport\VoidDelegate.cs" />
+    <Compile Include="TestSupport\WebApplicationTests.cs" />
     <Compile Include="Threading\HttpContextStorageTests.cs" />
     <Compile Include="Threading\HybridContextStorageTests.cs" />
     <Compile Include="Util\WebDIPerformanceTests.cs" />
