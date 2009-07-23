@@ -22,9 +22,8 @@
 
 using System;
 using System.Reflection;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
-using Spring.Objects.Factory.Config;
+using Rhino.Mocks;
 
 #endregion
 
@@ -37,45 +36,55 @@ namespace Spring.Objects.Factory.Support
 	[TestFixture]
 	public sealed class DelegatingMethodReplacerTests
 	{
+        private MockRepository mocks;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+        }
+
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullDefinition()
 		{
-			IDynamicMock mock = new DynamicMock(typeof (IObjectFactory));
-			new DelegatingMethodReplacer(null, (IObjectFactory) mock.Object);
+		    IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof (IObjectFactory));
+		    new DelegatingMethodReplacer(null, factory);
 		}
 
-		[Test]
+	    [Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullFactory()
 		{
-            IDynamicMock mock = new DynamicMock(typeof(IConfigurableObjectDefinition));
-            new DelegatingMethodReplacer((IConfigurableObjectDefinition)mock.Object, null);
+            IConfigurableObjectDefinition mock = (IConfigurableObjectDefinition) 
+                mocks.CreateMock(typeof(IConfigurableObjectDefinition));
+            new DelegatingMethodReplacer(mock, null);
 		}
 
 		[Test]
 		public void SunnyDayPath()
 		{
-			IDynamicMock mockFactory = new DynamicMock(typeof (IObjectFactory));
-			IDynamicMock mockDefinition = new DynamicMock(typeof (IConfigurableObjectDefinition));
-			IDynamicMock mockReplacer = new DynamicMock(typeof (IMethodReplacer));
+            IObjectFactory mockFactory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
+            IConfigurableObjectDefinition mockDefinition = (IConfigurableObjectDefinition) mocks.CreateMock(typeof(IConfigurableObjectDefinition));
+            IMethodReplacer mockReplacer = (IMethodReplacer) mocks.CreateMock(typeof(IMethodReplacer));
 
+            
 			const string ReplacerObjectName = "replacer";
-			mockFactory.ExpectAndReturn("GetObject", mockReplacer.Object, ReplacerObjectName);
+            Expect.Call(mockFactory.GetObject(ReplacerObjectName)).Return(mockReplacer);
 
 			ReplacedMethodOverride ovr = new ReplacedMethodOverride("SunnyDayPath", ReplacerObjectName);
 			MethodOverrides overrides = new MethodOverrides();
 			overrides.Add(ovr);
-			mockDefinition.ExpectAndReturn("MethodOverrides", overrides);
+			Expect.Call(mockDefinition.MethodOverrides).Return(overrides);
 
-			mockReplacer.ExpectAndReturn("Implement", null);
-            DelegatingMethodReplacer replacer = new DelegatingMethodReplacer((IConfigurableObjectDefinition)mockDefinition.Object, (IObjectFactory)mockFactory.Object);
+			Expect.Call(mockReplacer.Implement(null, null, null)).IgnoreArguments().Return(null);
+            mocks.ReplayAll();
+            
+            DelegatingMethodReplacer replacer = new DelegatingMethodReplacer(mockDefinition, mockFactory);
 			MethodInfo method = (MethodInfo) MethodBase.GetCurrentMethod();
 			replacer.Implement(this, method, new object[] {});
 
-			mockFactory.Verify();
-			mockDefinition.Verify();
-			mockReplacer.Verify();
+			mocks.VerifyAll();
 		}
 	}
 }

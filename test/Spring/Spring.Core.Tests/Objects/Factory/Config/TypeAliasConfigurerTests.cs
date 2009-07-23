@@ -20,13 +20,12 @@
 
 using System;
 using System.Collections;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Collections;
 using Spring.Context.Support;
 using Spring.Core.TypeResolution;
 using Spring.Util;
-using Spring.Objects.Factory.Support;
 using Spring.Context;
 
 namespace Spring.Objects.Factory.Config
@@ -38,6 +37,17 @@ namespace Spring.Objects.Factory.Config
     [TestFixture]
     public class TypeAliasConfigurerTests
     {
+        private MockRepository mocks;
+        private IConfigurableListableObjectFactory factory;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+            factory = (IConfigurableListableObjectFactory)
+                      mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
+        }
+
         [Test]
         public void Serialization()
         {
@@ -62,7 +72,7 @@ namespace Spring.Objects.Factory.Config
             TypeAliasConfigurer typeAliasConfigurer = new TypeAliasConfigurer();
             typeAliasConfigurer.TypeAliases = typeAliases;
 
-            typeAliasConfigurer.PostProcessObjectFactory((IConfigurableListableObjectFactory)new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
+            typeAliasConfigurer.PostProcessObjectFactory(factory);
         }
 
         [Test]
@@ -75,7 +85,7 @@ namespace Spring.Objects.Factory.Config
             TypeAliasConfigurer typeAliasConfigurer = new TypeAliasConfigurer();
             typeAliasConfigurer.TypeAliases = typeAliases;
 
-            typeAliasConfigurer.PostProcessObjectFactory((IConfigurableListableObjectFactory)new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
+            typeAliasConfigurer.PostProcessObjectFactory(factory);
         }
 
         [Test]
@@ -116,15 +126,15 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual(26, ((TestObject)obj3).Age);
         }
 
-        private static void CreateConfigurerAndTestLinkedList(IDictionary typeAliases)
+        private void CreateConfigurerAndTestLinkedList(IDictionary typeAliases)
         {
             TypeAliasConfigurer typeAliasConfigurer = new TypeAliasConfigurer();
             typeAliasConfigurer.TypeAliases = typeAliases;
 
             typeAliasConfigurer.Order = 1;
-            
 
-            typeAliasConfigurer.PostProcessObjectFactory((IConfigurableListableObjectFactory)new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
+
+            typeAliasConfigurer.PostProcessObjectFactory(factory);
 
             //todo investigate mocking the typeregistry, for now ask the actual one for information.
             Assert.IsTrue(TypeRegistry.ContainsAlias("LinkedList"),

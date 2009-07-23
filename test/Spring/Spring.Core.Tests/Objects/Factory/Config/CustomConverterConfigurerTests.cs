@@ -24,8 +24,8 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 #endregion
 
@@ -38,6 +38,18 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
     public sealed class CustomConverterConfigurerTests
     {
+	    private MockRepository mocks;
+	    private IConfigurableListableObjectFactory factory;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+            factory = (IConfigurableListableObjectFactory) 
+                mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
+
+        }
+
 		[Test]
 		[ExpectedException(typeof(ObjectInitializationException))]
         public void UseInvalidKeyForConverterMapKey()
@@ -45,13 +57,11 @@ namespace Spring.Objects.Factory.Config
         	IDictionary converters = new Hashtable();
 			converters.Add(12, typeof(DateTimeConverter));
 
-        	DynamicMock mock = new DynamicMock(typeof(IConfigurableListableObjectFactory));
-			IConfigurableListableObjectFactory factory
-				= (IConfigurableListableObjectFactory) mock.Object;
-
-			CustomConverterConfigurer config = new CustomConverterConfigurer();
+            CustomConverterConfigurer config = new CustomConverterConfigurer();
 			config.CustomConverters = converters;
 			config.PostProcessObjectFactory(factory);
+
+            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -61,14 +71,12 @@ namespace Spring.Objects.Factory.Config
 			IDictionary converters = new Hashtable();
 			converters.Add( typeof(DateTime), null);
 
-			DynamicMock mock = new DynamicMock(typeof(IConfigurableListableObjectFactory));
-			IConfigurableListableObjectFactory factory
-				= (IConfigurableListableObjectFactory) mock.Object;
-
 			CustomConverterConfigurer config = new CustomConverterConfigurer();
 			config.CustomConverters = converters;
 			config.PostProcessObjectFactory(factory);
-		}
+        
+            mocks.VerifyAll();
+        }
 
 		[Test]
 		[ExpectedException(typeof(ObjectInitializationException))]
@@ -78,14 +86,12 @@ namespace Spring.Objects.Factory.Config
 			// purposely misspelled... :D
 			converters.Add("Systemm.Date", typeof(DateTimeConverter));
 
-			DynamicMock mock = new DynamicMock(typeof(IConfigurableListableObjectFactory));
-			IConfigurableListableObjectFactory factory
-				= (IConfigurableListableObjectFactory) mock.Object;
-
 			CustomConverterConfigurer config = new CustomConverterConfigurer();
 			config.CustomConverters = converters;
 			config.PostProcessObjectFactory(factory);
-		}
+        
+            mocks.VerifyAll();
+        }
 
 		/// <summary>
 		/// Just tests that the configurer doesn't blow up and
@@ -94,32 +100,37 @@ namespace Spring.Objects.Factory.Config
 		[Test]
 		public void DontSupplyAnyCustomConverters()
 		{
-			DynamicMock mock = new DynamicMock(typeof(IConfigurableListableObjectFactory));
-			IConfigurableListableObjectFactory factory
-				= (IConfigurableListableObjectFactory) mock.Object;
 			CustomConverterConfigurer config = new CustomConverterConfigurer();
 			config.CustomConverters = null;
 			config.PostProcessObjectFactory(factory);
-			mock.Verify();
+			mocks.ReplayAll();
+
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void SunnyDayScenario()
 		{
 			IDictionary converters = new Hashtable();
-			converters.Add( typeof(DateTime), new DateTimeConverter());
-			converters.Add( typeof(Color), new ColorConverter());
+		    Type dateTimeType = typeof(DateTime);
+            DateTimeConverter dateTimeConverter = new DateTimeConverter();
+            Type colorType = typeof(Color);
+            ColorConverter colorConverter = new ColorConverter();
+		    
+            converters.Add(dateTimeType, dateTimeConverter);
+		    converters.Add(colorType, colorConverter);
 
-			DynamicMock mock = new DynamicMock(typeof(IConfigurableListableObjectFactory));
-			mock.Expect("RegisterCustomConverter");
-			mock.Expect("RegisterCustomConverter");
-			IConfigurableListableObjectFactory mockFactory
-				= (IConfigurableListableObjectFactory) mock.Object;
+            factory.RegisterCustomConverter(dateTimeType, dateTimeConverter);
+            factory.RegisterCustomConverter(colorType, colorConverter);
+
+            mocks.ReplayAll();
 
 			CustomConverterConfigurer config = new CustomConverterConfigurer();
 			config.CustomConverters = converters;
-			config.PostProcessObjectFactory(mockFactory);
-			mock.Verify();
+			config.PostProcessObjectFactory(factory);
+
+            mocks.VerifyAll();
+
 		}
     }
 }

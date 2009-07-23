@@ -21,8 +21,8 @@
 #region Imports
 
 using System;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Objects.Factory.Config;
 
 #endregion
@@ -36,49 +36,53 @@ namespace Spring.Objects.Factory.Support
     [TestFixture]
     public sealed class ObjectDefinitionReaderUtilsTests
     {
+        private MockRepository mocks;
+        private IObjectDefinitionRegistry registry;
+        private IObjectDefinition definition;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+            registry = (IObjectDefinitionRegistry) 
+                mocks.CreateMock(typeof(IObjectDefinitionRegistry));
+
+            definition = (IObjectDefinition) 
+                mocks.CreateMock(typeof (IObjectDefinition));
+        }
+
         [Test]
         public void RegisterObjectDefinitionSunnyDay()
         {
-            IDynamicMock mockRegistry = new DynamicMock(typeof (IObjectDefinitionRegistry));
-            mockRegistry.Expect("RegisterObjectDefinition");
+            registry.RegisterObjectDefinition(null, null);
+            LastCall.IgnoreArguments();
+            mocks.ReplayAll();
 
-            IDynamicMock mockDefinition = new DynamicMock(typeof (IObjectDefinition));
-            IObjectDefinition definition = (IObjectDefinition) mockDefinition.Object;
-
-            IObjectDefinitionRegistry registry = (IObjectDefinitionRegistry) mockRegistry.Object;
             ObjectDefinitionHolder holder = new ObjectDefinitionHolder(definition, "foo");
 
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, registry);
-            mockRegistry.Verify();
-            mockDefinition.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
         public void RegisterObjectDefinitionSunnyDayWithAliases()
         {
-            IDynamicMock mockRegistry = new DynamicMock(typeof (IObjectDefinitionRegistry));
-            mockRegistry.Expect("RegisterObjectDefinition");
-            mockRegistry.Expect("RegisterAlias");
-            mockRegistry.Expect("RegisterAlias");
+            registry.RegisterObjectDefinition("foo", definition);
+            registry.RegisterAlias("foo", "bar");
+            registry.RegisterAlias("foo", "baz");
+            mocks.ReplayAll();
 
-            IDynamicMock mockDefinition = new DynamicMock(typeof (IObjectDefinition));
-            IObjectDefinition definition = (IObjectDefinition) mockDefinition.Object;
-
-            IObjectDefinitionRegistry registry = (IObjectDefinitionRegistry) mockRegistry.Object;
-            ObjectDefinitionHolder holder
-                = new ObjectDefinitionHolder(definition, "foo", new string[] {"bar", "baz"});
+            ObjectDefinitionHolder holder = new ObjectDefinitionHolder(definition, "foo", new string[] {"bar", "baz"});
 
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, registry);
-            mockRegistry.Verify();
-            mockDefinition.Verify();
+            
+            mocks.VerifyAll();
         }
 
         [Test]
         [ExpectedException(typeof (ArgumentNullException))]
         public void RegisterObjectDefinitionWithNullDefinition()
         {
-            IDynamicMock mockRegistry = new DynamicMock(typeof (IObjectDefinitionRegistry));
-            IObjectDefinitionRegistry registry = (IObjectDefinitionRegistry) mockRegistry.Object;
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(null, registry);
         }
 
@@ -86,8 +90,6 @@ namespace Spring.Objects.Factory.Support
         [ExpectedException(typeof (ArgumentNullException))]
         public void RegisterObjectDefinitionWithNullRegistry()
         {
-            IDynamicMock mockDefinition = new DynamicMock(typeof (IObjectDefinition));
-            IObjectDefinition definition = (IObjectDefinition) mockDefinition.Object;
             ObjectDefinitionHolder holder = new ObjectDefinitionHolder(definition, "foo");
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, null);
         }
@@ -102,15 +104,13 @@ namespace Spring.Objects.Factory.Support
         [Test]
         public void RegisterObjectDefinitionWithDuplicateAlias()
         {
-            IDynamicMock mockRegistry = new DynamicMock(typeof (IObjectDefinitionRegistry));
-            mockRegistry.Expect("RegisterObjectDefinition");
+            registry.RegisterObjectDefinition("foo", definition);
 
             // we assume that some other object defition has already been associated with this alias...
-            mockRegistry.ExpectAndThrow("RegisterAlias", new ObjectDefinitionStoreException());
-            IDynamicMock mockDefinition = new DynamicMock(typeof (IObjectDefinition));
-            IObjectDefinition definition = (IObjectDefinition) mockDefinition.Object;
+            registry.RegisterAlias(null, null);
+            LastCall.IgnoreArguments().Throw(new ObjectDefinitionStoreException());
+            mocks.ReplayAll();
 
-            IObjectDefinitionRegistry registry = (IObjectDefinitionRegistry) mockRegistry.Object;
             ObjectDefinitionHolder holder
                 = new ObjectDefinitionHolder(definition, "foo", new string[] { "bing" });
 
@@ -123,16 +123,14 @@ namespace Spring.Objects.Factory.Support
             {
                 // expected...
             }
-            mockRegistry.Verify();
-            mockDefinition.Verify();
+
+            mocks.VerifyAll();
         }
 
         [Test]
         [ExpectedException(typeof (ArgumentNullException))]
         public void GenerateObjectNameWithNullDefinition()
         {
-            IDynamicMock mockRegistry = new DynamicMock(typeof (IObjectDefinitionRegistry));
-            IObjectDefinitionRegistry registry = (IObjectDefinitionRegistry) mockRegistry.Object;
             ObjectDefinitionReaderUtils.GenerateObjectName(null, registry);
         }
 
@@ -140,8 +138,9 @@ namespace Spring.Objects.Factory.Support
         [ExpectedException(typeof (ArgumentNullException))]
         public void GenerateObjectNameWithNullRegistry()
         {
-            IDynamicMock mockDefinition = new DynamicMock(typeof (IConfigurableObjectDefinition));
-            ObjectDefinitionReaderUtils.GenerateObjectName((IConfigurableObjectDefinition) mockDefinition.Object, null);
+            ObjectDefinitionReaderUtils.GenerateObjectName(
+                (IConfigurableObjectDefinition) mocks.CreateMock(typeof(IConfigurableObjectDefinition)),
+                null);
         }
     }
 }

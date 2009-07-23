@@ -24,8 +24,8 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;
@@ -44,17 +44,24 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
     public sealed class PropertyPlaceholderConfigurerTests
 	{
+	    private MockRepository mocks;
 	    private static string testConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;";
         private static string testConnectionStringTwo = @"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=Ernie;";
 		
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+        }
+
 		[Test]
 		[ExpectedException(typeof(ObjectInitializationException))]
 		public void MismatchBetweenNumberOfConfigNamesAndNumberOfLocations()
 		{
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
-			cfg.Locations = new IResource [] {(IResource) new DynamicMock(typeof(IResource)).Object}; // will never get to the point where we check the validity
+            cfg.Locations = new IResource[] { (IResource) mocks.CreateMock(typeof(IResource)) }; // will never get to the point where we check the validity
 			cfg.ConfigSections = new string[] { "", "" };
-			cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
+            cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
 		}
 
 		[Test]
@@ -62,13 +69,15 @@ namespace Spring.Objects.Factory.Config
 		public void OneConfigNameIsOKForLotsOfLocations()
 		{
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
-			DynamicMock mock = new DynamicMock(typeof(IResource));
-			mock.ExpectAndReturn("Exists", true);
-			mock.ExpectAndThrow("InputStream", new FileNotFoundException());
-			cfg.Locations = new IResource [] {(IResource) mock.Object};
+            IResource mock = (IResource) mocks.CreateMock(typeof(IResource));
+			Expect.Call(mock.Exists).Return(true);
+			Expect.Call(mock.InputStream).Throw(new FileNotFoundException());
+            mocks.ReplayAll();
+
+			cfg.Locations = new IResource [] {mock};
 			cfg.ConfigSections = new string[] { "" };
-			cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
-		}
+            cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
+        }
 
 		[Test]
 		[ExpectedException(typeof(ObjectInitializationException))]
@@ -76,27 +85,31 @@ namespace Spring.Objects.Factory.Config
 		{
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			cfg.IgnoreResourceNotFound = false;
-			DynamicMock mock = new DynamicMock(typeof(IResource));
-			mock.ExpectAndReturn("Exists", false);
-			cfg.Locations = new IResource [] {(IResource) mock.Object};
+			IResource mock = (IResource) mocks.CreateMock(typeof(IResource));
+			Expect.Call(mock.Exists).Return(false);
+            mocks.ReplayAll();
+
+			cfg.Locations = new IResource [] { mock};
 			cfg.ConfigSections = new string[] { "" };
-			cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
-		}
+            cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
+        }
 
 		[Test]
 		public void DoesNotChokeOnBadResourceLocationIfIgnoreBadResourcesFlagSetToTrue()
 		{
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			cfg.IgnoreResourceNotFound = true;
-			DynamicMock mockResource = new DynamicMock(typeof(IResource));
-			mockResource.ExpectAndReturn("Exists", false);
-			cfg.Location = (IResource) mockResource.Object;
+            IResource mockResource = (IResource) mocks.CreateMock(typeof(IResource));
+		    Expect.Call(mockResource.Exists).Return(false);
+			cfg.Location = mockResource;
 			cfg.ConfigSections = new string[] { "" };
-			DynamicMock mockFactory = new DynamicMock(typeof(IConfigurableListableObjectFactory));
-			mockFactory.ExpectAndReturn("GetObjectDefinitionNames", new string[] {});
-			cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mockFactory.Object);
-			mockResource.Verify();
-			mockFactory.Verify();
+            IConfigurableListableObjectFactory mockFactory = (IConfigurableListableObjectFactory)mocks.DynamicMock(typeof(IConfigurableListableObjectFactory));
+			Expect.Call(mockFactory.GetObjectDefinitionNames()).Return(new string[] {});
+            mocks.ReplayAll();
+
+			cfg.PostProcessObjectFactory(mockFactory);
+			
+            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -134,21 +147,21 @@ namespace Spring.Objects.Factory.Config
 			pvs.Add(theProperty, placeholder);
 			RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject), pvs);
 
-			IDynamicMock mock = new DynamicMock(typeof(IConfigurableListableObjectFactory));
-			mock.ExpectAndReturn("GetObjectDefinitionNames", new string [] {defName});
-			mock.ExpectAndReturn("GetObjectDefinition", def, defName);
-			IConfigurableListableObjectFactory fac = (IConfigurableListableObjectFactory) mock.Object;
+            IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
+			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string [] {defName});
+			Expect.Call(mock.GetObjectDefinition(defName)).Return(def);
+            mocks.ReplayAll();
 
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			NameValueCollection defaultProperties = new NameValueCollection();
 			const string expectedName = "Rick Evans";
 			defaultProperties.Add(theProperty, expectedName);
 			cfg.Properties = defaultProperties;
-			cfg.PostProcessObjectFactory(fac);
+			cfg.PostProcessObjectFactory(mock);
 			Assert.AreEqual(expectedName, def.PropertyValues.GetPropertyValue(theProperty).Value,
 				"Property placeholder value was not replaced with the resolved value.");
 
-			mock.Verify();
+			mocks.VerifyAll();
 		}
 
 		/// <summary>
@@ -375,22 +388,22 @@ namespace Spring.Objects.Factory.Config
 			const string expectedName = "ba${foo}r";
 			properties.Add("foo", expectedName);
 			
-			DynamicMock mock = new DynamicMock(typeof (IConfigurableListableObjectFactory));
-			mock.ExpectAndReturn("GetObjectDefinitionNames", new string[] {"foo"});
-			mock.ExpectAndReturn("GetObjectDefinition", def);
-			IConfigurableListableObjectFactory fac
-				= (IConfigurableListableObjectFactory) mock.Object;
+			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
+			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string[] {"foo"});
+			Expect.Call(mock.GetObjectDefinition(null)).IgnoreArguments().Return(def);
+            mocks.ReplayAll();
+
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			cfg.Properties = properties;
 			try
 			{
-				cfg.PostProcessObjectFactory(fac);
+				cfg.PostProcessObjectFactory(mock);
 				Assert.Fail("Should have raised an ObjectDefinitionStoreException by this point.");
 			}
 			catch (ObjectDefinitionStoreException)
 			{
 			}
-			mock.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -406,16 +419,16 @@ namespace Spring.Objects.Factory.Config
 			const string expectedName = "Rick";
 			properties.Add("hope.floats", expectedName);
 
-			DynamicMock mock = new DynamicMock(typeof (IConfigurableListableObjectFactory));
-			mock.ExpectAndReturn("GetObjectDefinitionNames", new string[] {"foo"});
-			mock.ExpectAndReturn("GetObjectDefinition", def);
-			IConfigurableListableObjectFactory fac
-				= (IConfigurableListableObjectFactory) mock.Object;
-			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
+			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
+			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string[] {"foo"});
+			Expect.Call(mock.GetObjectDefinition(null)).IgnoreArguments().Return(def);
+			mocks.ReplayAll();
+            
+            PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			cfg.Properties = properties;
-			cfg.PostProcessObjectFactory(fac);
+			cfg.PostProcessObjectFactory(mock);
 
-			mock.Verify();
+			mocks.VerifyAll();
 
 			Assert.AreEqual(expectedName,
 				def.ConstructorArgumentValues.GetNamedArgumentValue("name").Value,
@@ -435,17 +448,17 @@ namespace Spring.Objects.Factory.Config
 			const string expectedName = "Rick";
 			properties.Add("hope.floats", expectedName);
 
-			DynamicMock mock = new DynamicMock(typeof (IConfigurableListableObjectFactory));
-			mock.ExpectAndReturn("GetObjectDefinitionNames", new string[] {"foo"});
-			mock.ExpectAndReturn("GetObjectDefinition", def);
-			IConfigurableListableObjectFactory fac
-				= (IConfigurableListableObjectFactory) mock.Object;
+			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
+			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string[] {"foo"});
+			Expect.Call(mock.GetObjectDefinition(null)).IgnoreArguments().Return(def);
+            mocks.ReplayAll();
+
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			cfg.PlaceholderPrefix = cfg.PlaceholderSuffix = "#";
 			cfg.Properties = properties;
-			cfg.PostProcessObjectFactory(fac);
+			cfg.PostProcessObjectFactory(mock);
 
-			mock.Verify();
+			mocks.VerifyAll();
 
 			Assert.AreEqual(expectedName,
 				def.ConstructorArgumentValues.GetNamedArgumentValue("name").Value,
@@ -532,17 +545,17 @@ namespace Spring.Objects.Factory.Config
 			pvs.Add("name", placeholder);
 			RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject), pvs);
 
-			IDynamicMock mock = new DynamicMock(typeof(IConfigurableListableObjectFactory));
-			mock.ExpectAndReturn("GetObjectDefinitionNames", new string [] {defName});
-			mock.ExpectAndReturn("GetObjectDefinition", def, defName);
-			IConfigurableListableObjectFactory fac = (IConfigurableListableObjectFactory) mock.Object;
+			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
+			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string [] {defName});
+			Expect.Call(mock.GetObjectDefinition(defName)).Return(def);
+            mocks.ReplayAll();
 
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			cfg.IgnoreUnresolvablePlaceholders = true;
-			cfg.PostProcessObjectFactory(fac);
+			cfg.PostProcessObjectFactory(mock);
 			Assert.AreEqual(placeholder, foo.Name);
 
-			mock.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]

@@ -1,26 +1,26 @@
 using System.Threading;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Spring.Threading
 {
     [TestFixture]
 	public class SyncHolderTest
 	{
-        DynamicMock mock;
+        private MockRepository mocks;
         ISync sync;
 
         [SetUp]
         public void SetUp ()
         {
-            mock = new DynamicMock(typeof(ISync));
-            sync = (ISync) mock.Object;            
+            mocks = new MockRepository();
+            sync = (ISync) mocks.CreateMock(typeof(ISync));            
         }
 
         [TearDown]
         public void TearDown ()
         {
-            mock.Verify();            
+            mocks.VerifyAll();
         }
 
         class MySemaphore : Semaphore
@@ -32,6 +32,9 @@ namespace Spring.Threading
         [Test]
         public void CanBeUsedWithTheUsingCSharpIdiomToAttemptOnAnISync ()
         {
+            // no expectations
+            mocks.ReplayAll();
+
             MySemaphore sync = new MySemaphore(1);
             using (new SyncHolder(sync, 100))
             {
@@ -57,8 +60,10 @@ namespace Spring.Threading
         [ExpectedException(typeof(ThreadStateException))]
 		public void CanBeUsedWithTheUsingCSharpIdiomToAcquireAnIsync()
 		{
-            mock.Expect("Acquire");
-            mock.Expect("Release");
+            sync.Acquire();
+            sync.Release();
+            mocks.ReplayAll();
+
             using (new SyncHolder(sync))
             {
                 throw new ThreadStateException();
