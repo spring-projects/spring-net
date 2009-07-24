@@ -54,7 +54,7 @@ public partial class CustomerList : Spring.Web.UI.Page
   private void Page_InitializeControls(object sender, EventArgs e)
   {
     // create/initialize controls here
-    customerList.DataSource = customerDao.FindAll();
+    customerList.DataSource = customerDao.GetAll();
     customerList.ItemCommand+=new DataGridCommandEventHandler(CustomerList_ItemCommand);
     customerList.PageIndexChanged+=new DataGridPageChangedEventHandler(CustomerList_PageIndexChanged);
     if (!IsPostBack)

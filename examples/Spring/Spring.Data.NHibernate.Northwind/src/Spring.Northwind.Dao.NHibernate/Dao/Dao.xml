@@ -15,9 +15,9 @@
   <!-- Database and NHibernate Configuration -->
   <db:provider id="DbProvider"
                    provider="SqlServer-2.0"
-                   connectionString="Data Source=.\SQLExpress;Integrated Security=true;User Instance=true;AttachDBFilename=|DataDirectory|\Northwnd.mdf"/>
+                   connectionString="Data Source=(local);Integrated Security=true;User Instance=true;AttachDBFilename=|DataDirectory|\Northwnd.mdf"/>
 
-  <object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate12">
+  <object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
     <property name="DbProvider" ref="DbProvider"/>
     <property name="MappingAssemblies">
       <list>
@@ -26,16 +26,10 @@
     </property>
     <property name="HibernateProperties">
       <dictionary>
-
-        <entry key="hibernate.connection.provider"
-               value="NHibernate.Connection.DriverConnectionProvider"/>
-
-        <entry key="hibernate.dialect"
-               value="NHibernate.Dialect.MsSql2000Dialect"/>
-
-        <entry key="hibernate.connection.driver_class"
-               value="NHibernate.Driver.SqlClientDriver"/>
-              
+        <entry key="hibernate.connection.provider" value="NHibernate.Connection.DriverConnectionProvider"/>
+        <entry key="dialect" value="NHibernate.Dialect.MsSql2000Dialect"/>
+        <entry key="connection.driver_class" value="NHibernate.Driver.SqlClientDriver"/>
+        <entry key="proxyfactory.factory_class" value="NHibernate.ByteCode.LinFu.ProxyFactoryFactory, NHibernate.ByteCode.LinFu" />
       </dictionary>
     </property>
 
@@ -46,26 +40,20 @@
 
 
   <object id="transactionManager"
-        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate12">
+        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate21">
 
     <property name="DbProvider" ref="DbProvider"/>
     <property name="SessionFactory" ref="NHibernateSessionFactory"/>
 
   </object>
 
-  <object id="HibernateTemplate" type="Spring.Data.NHibernate.HibernateTemplate">
-    <property name="SessionFactory" ref="NHibernateSessionFactory" />
-    <property name="TemplateFlushMode" value="Auto" />
-    <property name="CacheQueries" value="true" />
-  </object>
-
   <!-- Data Access Objects -->
   <object id="CustomerDao" type="Spring.Northwind.Dao.NHibernate.HibernateCustomerDao, Spring.Northwind.Dao.NHibernate">
-    <property name="HibernateTemplate" ref="HibernateTemplate"/>
+    <property name="SessionFactory" ref="NHibernateSessionFactory"/>
   </object>
 
   <object id="OrderDao" type="Spring.Northwind.Dao.NHibernate.HibernateOrderDao, Spring.Northwind.Dao.NHibernate">
-    <property name="HibernateTemplate" ref="HibernateTemplate"/>
+    <property name="SessionFactory" ref="NHibernateSessionFactory"/>
   </object>
 
 

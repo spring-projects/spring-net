@@ -28,12 +28,10 @@ using Spring.Northwind.Domain;
 
 namespace Spring.Northwind.Dao
 {
-    public interface IOrderDao
+    public interface IOrderDao : IDao<Order, int>, ISupportsDeleteDao<Order>
     {
-        Order FindById(int orderId);
-        IList FindAll();
-        Order Save(Order order);
-        Order SaveOrUpdate(Order order);
-        void Delete(Order order);  
+        int Save(Order order);
+
+        void SaveOrUpdate(Order order);
     }
 }

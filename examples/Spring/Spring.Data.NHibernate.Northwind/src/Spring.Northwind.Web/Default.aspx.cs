@@ -29,7 +29,7 @@ public partial class _Default : Spring.Web.UI.Page
         string customerId = "ERNSH";
 
         // check, if exists
-        Customer customer = customerDao.FindById(customerId);
+        Customer customer = customerDao.Get(customerId);
 
         //Find all orders for customer and ship them
         this.fulfillmentService.ProcessCustomer(customer.Id);

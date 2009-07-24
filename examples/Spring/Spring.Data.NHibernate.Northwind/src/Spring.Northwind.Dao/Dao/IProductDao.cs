@@ -28,12 +28,8 @@ using Spring.Northwind.Domain;
 
 namespace Spring.Northwind.Dao
 {
-    public interface IProductDao
+    public interface IProductDao : IDao<Product, int>, ISupportsDeleteDao<Product>, ISupportsSave<Product, int>
     {
-        Product FindById(int productId);
-        IList FindAll();
-        Product Save(Product product);
-        Product SaveOrUpdate(Product product);
-        void Delete(Product product);  
+
     }
 }

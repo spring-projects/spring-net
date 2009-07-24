@@ -21,7 +21,8 @@
 #region Imports
 
 using System.Collections;
-
+using System.Collections.Generic;
+using Spring.Data.NHibernate.Generic;
 using Spring.Data.NHibernate.Support;
 
 using Spring.Northwind.Domain;
@@ -30,34 +31,32 @@ using Spring.Northwind.Domain;
 
 namespace Spring.Northwind.Dao.NHibernate
 {
-    public class HibernateOrderDao : HibernateDaoSupport, IOrderDao
+    public class HibernateOrderDao : HibernateDao, IOrderDao
     {
-        public Order FindById(int orderId)
+        public Order Get(int orderId)
         {
-            return HibernateTemplate.Load(typeof(Order), orderId) as Order;
+            return Session.Get<Order>(orderId);
    
         }
 
-        public IList FindAll()
+        public IList<Order> GetAll()
         {
-            return HibernateTemplate.LoadAll(typeof(Order));
+            return GetAll<Order>();
         }
 
-        public Order Save(Order order)
+        public int Save(Order order)
         {
-            HibernateTemplate.Save(order);
-            return order;
+            return (int) Session.Save(order);
         }
 
-        public Order SaveOrUpdate(Order order)
+        public void SaveOrUpdate(Order order)
         {
-            HibernateTemplate.SaveOrUpdate(order);
-            return order;
+            Session.SaveOrUpdate(order);
         }
 
         public void Delete(Order order)
         {
-            HibernateTemplate.Delete(order);
+            Session.Delete(order);
         }
     }
 }

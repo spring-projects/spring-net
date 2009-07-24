@@ -20,10 +20,8 @@
 
 #region Imports
 
-
-using System.Collections;
-
-using Spring.Data.NHibernate.Support;
+using System.Collections.Generic;
+using Spring.Stereotype;
 using Spring.Transaction.Interceptor;
 
 using Spring.Northwind.Domain;
@@ -32,16 +30,19 @@ using Spring.Northwind.Domain;
 
 namespace Spring.Northwind.Dao.NHibernate
 {
-    public class HibernateCustomerDao : HibernateDaoSupport, ICustomerDao
+    [Repository]
+    public class HibernateCustomerDao : HibernateDao, ICustomerDao
     {
-        public Customer FindById(string customerId)
+        [Transaction(ReadOnly = true)]
+        public Customer Get(string customerId)
         {
-            return HibernateTemplate.Load(typeof (Customer), customerId) as Customer;
+            return Session.Get<Customer>(customerId);
         }
 
-        public IList FindAll()
+        [Transaction(ReadOnly = true)]
+        public IList<Customer> GetAll()
         {
-            return HibernateTemplate.LoadAll(typeof (Customer));
+            return GetAll<Customer>();
         }
 
         // Note that the transaction demaraction is here only for the case when
@@ -57,23 +58,21 @@ namespace Spring.Northwind.Dao.NHibernate
         // same settings as started from the transactional layer.
 
         [Transaction(ReadOnly = false)]
-        public Customer Save(Customer customer)
+        public string Save(Customer customer)
         {
-            HibernateTemplate.Save(customer);
-            return customer;
+            return (string) Session.Save(customer);
         }
 
         [Transaction(ReadOnly = false)]
-        public Customer SaveOrUpdate(Customer customer)
+        public void SaveOrUpdate(Customer customer)
         {
-            HibernateTemplate.SaveOrUpdate(customer);
-            return customer;
+            Session.SaveOrUpdate(customer);
         }
 
         [Transaction(ReadOnly = false)]
         public void Delete(Customer customer)
         {
-            HibernateTemplate.Delete(customer);
+            Session.Delete(customer);
         }
     }
 }

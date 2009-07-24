@@ -1,0 +1,59 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="Shared_MasterPage" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Spring.NET NHibernate Northwind Example</title>
+    <link type="text/css" rel="Stylesheet" href="../CSS/style.css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td background="img/header-spring.png" height="150" width="719">
+                            <div class="logo">
+                                <a href="~/Default.aspx" runat="server">
+                                    <img src="img/logo.png" border="0" height="84" width="271"></a></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-image: url(img/bg-spring.png);" align="left" valign="top">
+                            <table border="0" cellpadding="0" cellspacing="0" width="700">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2">
+                                            <br>
+                                            <br>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 4721px" valign="top" width="210">
+                                            <!-- Navigation: Start -->
+                                                  </td>
+                                        <td style="height: 4721px" valign="top">
+                                            <!-- Inhalt: Start -->
+                                            <asp:ContentPlaceHolder ID="content" runat="server">
+                                            </asp:ContentPlaceHolder>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <br>
+                                            <br>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-image: url(img/footern.gif);" align="center" height="29">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

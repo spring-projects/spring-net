@@ -74,13 +74,13 @@ namespace Spring.Northwind.IntegrationTests
         [Test]
         public void CustomerDaoTests()
         {
-            Assert.AreEqual(91, customerDao.FindAll().Count);
+            Assert.AreEqual(91, customerDao.GetAll().Count);
 
             Customer c = new Customer();
             c.Id = "MPOLL";           
             c.CompanyName = "Interface21";
             customerDao.Save(c);
-            c = customerDao.FindById("MPOLL");
+            c = customerDao.Get("MPOLL");
             Assert.AreEqual(c.Id, "MPOLL");
             Assert.AreEqual(c.CompanyName, "Interface21");
 
@@ -95,13 +95,13 @@ namespace Spring.Northwind.IntegrationTests
             customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");
             Assert.AreEqual(92, customerCount);
             
-            Assert.AreEqual(92, customerDao.FindAll().Count);
+            Assert.AreEqual(92, customerDao.GetAll().Count);
 
             c.CompanyName = "SpringSource";
 
             customerDao.SaveOrUpdate(c);
 
-            c = customerDao.FindById("MPOLL");
+            c = customerDao.Get("MPOLL");
             Assert.AreEqual(c.Id, "MPOLL");
             Assert.AreEqual(c.CompanyName, "SpringSource");
 
@@ -114,7 +114,7 @@ namespace Spring.Northwind.IntegrationTests
 
             try
             {
-                c = customerDao.FindById("MPOLL");
+                c = customerDao.Get("MPOLL");
                 Assert.Fail("Should have thrown HibernateObjectRetrievalFailureException when finding customer with Id = MPOLL");
             }
             catch (HibernateObjectRetrievalFailureException e)
@@ -127,16 +127,16 @@ namespace Spring.Northwind.IntegrationTests
         [Test]
         public void ProductDaoTests()
         {
-            Assert.AreEqual(830, orderDao.FindAll().Count);
+            Assert.AreEqual(830, orderDao.GetAll().Count);
 
             Order order = new Order();
-            Customer customer = customerDao.FindById("PICCO");
+            Customer customer = customerDao.Get("PICCO");
             order.Customer = customer;
             order.ShipCity = "New York";
             
             orderDao.Save(order);
             int orderId = order.Id;
-            order = orderDao.FindById(orderId);
+            order = orderDao.Get(orderId);
             Assert.AreEqual("PICCO", order.Customer.Id);
             Assert.AreEqual("New York", order.ShipCity);
 
@@ -146,12 +146,12 @@ namespace Spring.Northwind.IntegrationTests
             int ordersCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Orders");
             Assert.AreEqual(831, ordersCount);
 
-            Assert.AreEqual(831, orderDao.FindAll().Count);
+            Assert.AreEqual(831, orderDao.GetAll().Count);
 
             order.ShipCity = "Sao Paulo";
             orderDao.SaveOrUpdate(order);
 
-            order = orderDao.FindById(orderId);
+            order = orderDao.Get(orderId);
             Assert.AreEqual("PICCO", order.Customer.Id);
             Assert.AreEqual("Sao Paulo", order.ShipCity);
 
@@ -166,7 +166,7 @@ namespace Spring.Northwind.IntegrationTests
 
             try
             {
-                order = orderDao.FindById(orderId);
+                order = orderDao.Get(orderId);
                 Assert.Fail("Should have thrown HibernateObjectRetrievalFailureException when finding order with Id = " + orderId);
             }
             catch (HibernateObjectRetrievalFailureException e)

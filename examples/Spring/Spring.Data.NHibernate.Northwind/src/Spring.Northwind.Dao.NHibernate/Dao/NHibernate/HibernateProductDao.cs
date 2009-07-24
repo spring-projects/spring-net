@@ -21,7 +21,7 @@
 #region Imports
 
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Data.NHibernate.Support;
 
 using Spring.Northwind.Domain;
@@ -30,34 +30,32 @@ using Spring.Northwind.Domain;
 
 namespace Spring.Northwind.Dao.NHibernate
 {
-    public class HibernateProductDao : HibernateDaoSupport, IProductDao
+    public class HibernateProductDao : HibernateDao, IProductDao
     {
-        public Product FindById(int productId)
+        public Product Get(int productId)
         {
-            return HibernateTemplate.Load(typeof(Product), productId) as Product;
+            return Session.Get<Product>(productId);
      
         }
 
-        public IList FindAll()
+        public IList<Product> GetAll()
         {
-            return HibernateTemplate.LoadAll(typeof(Product));
+            return GetAll<Product>();
         }
 
-        public Product Save(Product product)
+        public int Save(Product product)
         {
-            HibernateTemplate.Save(product);
-            return product;
+            return (int) Session.Save(product);
         }
 
-        public Product SaveOrUpdate(Product product)
+        public void SaveOrUpdate(Product product)
         {
-            HibernateTemplate.SaveOrUpdate(product);
-            return product;
+            Session.SaveOrUpdate(product);
         }
 
         public void Delete(Product product)
         {
-            HibernateTemplate.Delete(product);
+            Session.Delete(product);
         }
     }
 }

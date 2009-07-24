@@ -32,8 +32,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dao\ICustomerDao.cs" />
+    <Compile Include="Dao\IDao.cs" />
     <Compile Include="Dao\IOrderDao.cs" />
     <Compile Include="Dao\IProductDao.cs" />
+    <Compile Include="Dao\ISupportsDeleteDao.cs" />
+    <Compile Include="Dao\ISupportsSave.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\Order.cs" />
     <Compile Include="Domain\OrderDetail.cs" />

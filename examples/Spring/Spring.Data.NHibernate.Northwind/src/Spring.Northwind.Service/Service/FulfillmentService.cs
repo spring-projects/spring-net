@@ -82,7 +82,7 @@ namespace Spring.Northwind.Service
         public void ProcessCustomer(string customerId)
         {
             //Find all orders for customer
-            Customer customer = CustomerDao.FindById(customerId);
+            Customer customer = CustomerDao.Get(customerId);
                  
             foreach (Order order in customer.Orders)
             {

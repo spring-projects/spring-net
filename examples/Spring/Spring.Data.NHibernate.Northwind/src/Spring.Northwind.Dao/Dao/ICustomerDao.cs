@@ -21,19 +21,14 @@
 #region Imports
 
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Northwind.Domain;
 
 #endregion
 
 namespace Spring.Northwind.Dao
 {
-    public interface ICustomerDao
+    public interface ICustomerDao : IDao<Customer, string>, ISupportsDeleteDao<Customer>, ISupportsSave<Customer, string>
     {
-        Customer FindById(string customerId);
-        IList FindAll();
-        Customer Save(Customer customer);
-        Customer SaveOrUpdate(Customer customer);
-        void Delete(Customer customer);                
     }
 }
