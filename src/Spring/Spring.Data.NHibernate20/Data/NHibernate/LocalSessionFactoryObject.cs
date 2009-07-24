@@ -253,7 +253,6 @@ namespace Spring.Data.NHibernate
         /// </summary>
         /// <seealso cref="HibernateTemplate.EntityInterceptor"/>
         /// <seealso cref="HibernateTransactionManager.EntityInterceptor" />
-        /// <seealso cref="Configuration.Interceptor" />
         public IInterceptor EntityInterceptor
         {
             set { this.entityInterceptor = value; }
@@ -263,7 +262,6 @@ namespace Spring.Data.NHibernate
         /// Set a Hibernate NamingStrategy for the SessionFactory, determining the
         /// physical column and table names given the info in the mapping document.
         /// </summary>
-        /// <seealso cref="Configuration.NamingStrategy" />
         public INamingStrategy NamingStrategy
         {
             set { this.namingStrategy = value; }
@@ -313,10 +311,7 @@ namespace Spring.Data.NHibernate
         ///   &lt;/props&gt;
         /// &lt;/property&gt;</pre>
         /// </p>
-        /// Note that appending a cache region name (with a comma separator) is only
-        /// supported on Hibernate 3.1, where this functionality is publically available.
         /// </summary>
-        /// <seealso cref="Configuration.SetCacheConcurrencyStrategy(string, string)" />
         public Properties EntityCacheStrategies
         {
             set { this.entityCacheStrategies = value; }
@@ -335,9 +330,6 @@ namespace Spring.Data.NHibernate
         ///   &lt;/props&gt;
         /// &lt;/property&gt;</pre>
         /// </p>
-        /// Note that appending a cache region name (with a comma separator) is only
-        /// supported on Hibernate 3.1, where this functionality is publically available.
-        /// <seealso cref="Configuration.SetCollectionCacheConcurrencyStrategy(string, string)"/>
         /// </summary>
         public Properties CollectionCacheStrategies
         {
@@ -997,7 +989,7 @@ namespace Spring.Data.NHibernate
         protected virtual DataAccessException ConvertAdoAccessException(ADOException ex)
         {
 
-            string sqlString = (ex.SqlString != null) ? ex.SqlString : string.Empty;
+            string sqlString = (ex.SqlString != null) ? ex.SqlString.ToString() : string.Empty;
             return AdoExceptionTranslator.Translate(
                 "Hibernate operation: " + ex.Message, sqlString, ex.InnerException);
 
