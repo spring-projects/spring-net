@@ -18,9 +18,12 @@
 
 #endregion
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.Objects;
+using Spring.Transaction;
 
 namespace Spring.Testing.Microsoft
 {
@@ -30,7 +33,13 @@ namespace Spring.Testing.Microsoft
 	[TestClass]
 	public class AbstractDependencyInjectionSpringContextTestsTests
 	{
-        private class TestAbstractDependencyInjectionSpringContextTests :AbstractDependencyInjectionSpringContextTests
+        //Force loading of this assembly since MsTest runner doesn't run in the 'working' directory and find
+        //dynamically loaded assemblies... (you have *got* to be kidding!!!)
+        //Investigate use of [DeploymentItem(...)] 
+	    private Type t = typeof (CallCountingTransactionManager);
+	    private Type t2 = typeof (TestObject);
+
+        private class TestAbstractDependencyInjectionSpringContextTests : AbstractDependencyInjectionSpringContextTests
         {
             public static readonly string[] CONFIGLOCATIONS = new string[] {"assembly://Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft/TestApplicationContext.xml"};
 
@@ -71,6 +80,9 @@ namespace Spring.Testing.Microsoft
 	    {
 	        fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
             Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
+            Assert.AreEqual(typeof(CallCountingTransactionManager), t);
+            Assert.AreEqual(typeof(TestObject), t2);
+
 	    }
 
 	    [TestMethod]

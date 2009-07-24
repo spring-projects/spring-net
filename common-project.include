@@ -194,7 +194,32 @@ ${tool.dir}       : dir for tools
 
   <!--
 *******************************************************************************
-Runs standard unit test configuration of the current ${project::get-name()}.dll
+Runs Microsoft unit test configuration of the current ${project::get-name()}.dll
+Currently assumes you have installed VS.NET on the machine
+
+Arguments:
+${current.bin.dir}: the binary directory to pick the assembly + app.config from
+${project.name}   : (optional), the name of the assembly
+${tool.dir}       : dir for tools
+    -->
+  <target name="common.run-tests.mstest">
+
+    <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
+    <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
+
+    <echo message="Unit Testing ${project.name} in ${test.bin.dir}" />
+
+    <exec program="${vs-net.mstest.bin.dir}\MSTest.exe" workingdir="${test.bin.dir}" verbose="false">
+      <arg value="/testcontainer:${test.bin.dir}/${test.assemblyname}.dll"/>
+      <arg value="/resultsfile:${test.assemblyname}.dll-MsTestResults.trx"/>
+      <arg value="/nologo" />
+    </exec>
+
+  </target>
+
+  <!--
+*******************************************************************************
+Runs NUnit unit test configuration of the current ${project::get-name()}.dll
 
 Arguments:
 ${current.bin.dir}: the binary directory to pick the assembly + app.config from

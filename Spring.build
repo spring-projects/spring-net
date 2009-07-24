@@ -30,6 +30,11 @@ Build properties that may be set:
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
   <property name="tool.dir" value="${project::get-base-directory()}/build-support/tools"/>
 
+
+  <!-- default location of mstest executable -->
+  <!-- See target set-user-overrides for how to change this to your machine values --> 
+  <property name="vs-net.mstest.bin.dir" value="K:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE"/>
+
   <!-- debug or release -->
   <property name="project.build.config" value="debug"/>
   <property name="project.build.package" value="false"/>
@@ -351,6 +356,7 @@ Build properties that may be set:
     <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0') and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-mstest  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq and not net-3.0}"/>
@@ -374,13 +380,16 @@ Build properties that may be set:
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq-tests and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity and not net-3.0}"/>
 
     <!-- build examples -->
+
     <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples and not using-clover and not net-3.0}"/>
+
 
   </target>
 
@@ -1332,6 +1341,7 @@ Build properties that may be set:
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>
     <property name="build-testing" value="true"/>
+    <property name="build-testing-mstest" value="false"/>
     <property name="build-winservices" value="true"/>
     <property name="build-web" value="true"/>
     <property name="solution.file" value="Spring.Net.sln"/>
@@ -1364,6 +1374,7 @@ Build properties that may be set:
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>
     <property name="build-testing" value="true"/>
+    <property name="build-testing-mstest" value="false"/>
     <property name="build-winservices" value="true"/>
     <property name="build-web" value="true"/>
     <property name="build-examples" value="true"/>
