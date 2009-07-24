@@ -67,7 +67,7 @@ namespace Spring.Objects.Factory.Config
             }
             catch (ConfigurationErrorsException cfgex)
             {
-                Assert.IsInstanceOfType(typeof (ArgumentException), cfgex.InnerException);
+                Assert.IsInstanceOf(typeof(ArgumentException), cfgex.InnerException);
             }
         }
 #endif

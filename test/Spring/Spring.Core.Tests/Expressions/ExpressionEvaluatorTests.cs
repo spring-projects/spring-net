@@ -1632,11 +1632,11 @@ namespace Spring.Expressions
             TypeRegistry.RegisterType("WebMethod", typeof(WebMethodAttribute));
             TypeRegistry.RegisterType("TransactionOption", typeof(TransactionOption));
 
-            Assert.IsInstanceOfType(typeof(SerializableAttribute),
+            Assert.IsInstanceOf(typeof(SerializableAttribute),
                                     ExpressionEvaluator.GetValue(null, "@[System.Serializable]"));
-            Assert.IsInstanceOfType(typeof(SerializableAttribute),
+            Assert.IsInstanceOf(typeof(SerializableAttribute),
                                     ExpressionEvaluator.GetValue(null, "@[System.Serializable()]"));
-            Assert.IsInstanceOfType(typeof(WebMethodAttribute), ExpressionEvaluator.GetValue(null, "@[WebMethod]"));
+            Assert.IsInstanceOf(typeof(WebMethodAttribute), ExpressionEvaluator.GetValue(null, "@[WebMethod]"));
 
             WebMethodAttribute webMethod = (WebMethodAttribute)ExpressionEvaluator.GetValue(null, "@[WebMethod(true)]");
             Assert.IsTrue(webMethod.EnableSession);
@@ -1788,7 +1788,7 @@ namespace Spring.Expressions
 
             object[] arr2 = new object[] { 5, 5.8, 12.2, 1 };
             object result = ExpressionEvaluator.GetValue(arr2, "sum()");
-            Assert.IsInstanceOfType(typeof(double), result);
+            Assert.IsInstanceOf(typeof(double), result);
             Assert.AreEqual(24, result);
         }
 
@@ -1810,7 +1810,7 @@ namespace Spring.Expressions
 
             object[] arr2 = new object[] { 5, 5.8, 12.2, 1 };
             object result = ExpressionEvaluator.GetValue(arr2, "average()");
-            Assert.IsInstanceOfType(typeof(double), result);
+            Assert.IsInstanceOf(typeof(double), result);
             Assert.AreEqual(6, result);
         }
 
@@ -1831,7 +1831,7 @@ namespace Spring.Expressions
 
             object[] arr2 = new object[] { 5, 5.8, 12.2, 1 };
             object result = ExpressionEvaluator.GetValue(arr2, "min()");
-            Assert.IsInstanceOfType(typeof(int), result);
+            Assert.IsInstanceOf(typeof(int), result);
             Assert.AreEqual(1, result);
 
             Assert.IsNull(ExpressionEvaluator.GetValue(ObjectUtils.EmptyObjects, "min()"));
@@ -1862,7 +1862,7 @@ namespace Spring.Expressions
 
             object[] arr2 = new object[] { 5, 5.8, 12.2, 1 };
             object result = ExpressionEvaluator.GetValue(arr2, "max()");
-            Assert.IsInstanceOfType(typeof(double), result);
+            Assert.IsInstanceOf(typeof(double), result);
             Assert.AreEqual(12.2, result);
 
             Assert.IsNull(ExpressionEvaluator.GetValue(ObjectUtils.EmptyObjects, "max()"));
@@ -2045,14 +2045,14 @@ namespace Spring.Expressions
             ExpressionEvaluator.SetValue(foo, "NullableInt", "5");
             ExpressionEvaluator.SetValue(foo, "NullableInt", 1);
 
-            Assert.IsInstanceOfType(typeof(DateTime?), ExpressionEvaluator.GetValue(foo, "NullableDate"));
-            Assert.IsInstanceOfType(typeof(Int32?), ExpressionEvaluator.GetValue(foo, "NullableInt"));
+            Assert.IsInstanceOf(typeof(DateTime?), ExpressionEvaluator.GetValue(foo, "NullableDate"));
+            Assert.IsInstanceOf(typeof(Int32?), ExpressionEvaluator.GetValue(foo, "NullableInt"));
 
             Assert.AreEqual(DateTime.Today, ExpressionEvaluator.GetValue(foo, "NullableDate"));
             Assert.AreEqual(1, ExpressionEvaluator.GetValue(foo, "NullableInt"));
 
             int? test = 1;
-            Assert.IsInstanceOfType(typeof(Int32?), ExpressionEvaluator.GetValue(test, "#root"));
+            Assert.IsInstanceOf(typeof(Int32?), ExpressionEvaluator.GetValue(test, "#root"));
             Assert.IsTrue((bool)ExpressionEvaluator.GetValue(test, "#root != null"));
             Assert.AreEqual(1, ExpressionEvaluator.GetValue(test, "#root"));
 
@@ -2431,7 +2431,7 @@ namespace Spring.Expressions
         {
             object obj = ExpressionEvaluator.GetValue(null, "new int[] {3, 4, 5, 6}");
             Assert.IsNotNull(obj);
-            Assert.IsInstanceOfType(typeof(int[]), obj);
+            Assert.IsInstanceOf(typeof(int[]), obj);
             int[] intarray = (int[])obj;
             Assert.AreEqual(4, intarray.Length);
             for (int i = 0; i < intarray.Length; i++)
@@ -2441,7 +2441,7 @@ namespace Spring.Expressions
 
             obj = ExpressionEvaluator.GetValue(null, "new long[5]");
             Assert.IsNotNull(obj);
-            Assert.IsInstanceOfType(typeof(long[]), obj);
+            Assert.IsInstanceOf(typeof(long[]), obj);
             long[] longarray = obj as long[];
             Assert.AreEqual(5, longarray.Length);
             for (int i = 0; i < longarray.Length; i++)
@@ -2451,7 +2451,7 @@ namespace Spring.Expressions
 
             obj = ExpressionEvaluator.GetValue(null, "new double[4, 5]");
             Assert.IsNotNull(obj);
-            Assert.IsInstanceOfType(typeof(double[,]), obj);
+            Assert.IsInstanceOf(typeof(double[,]), obj);
             double[,] twodimarray = obj as double[,];
             Assert.AreEqual(4 * 5, twodimarray.Length);
             for (int i = 0; i < 4; i++)
@@ -2464,7 +2464,7 @@ namespace Spring.Expressions
 
             obj = ExpressionEvaluator.GetValue(null, "new int[Int32.Parse('11')]");
             Assert.IsNotNull(obj);
-            Assert.IsInstanceOfType(typeof(int[]), obj);
+            Assert.IsInstanceOf(typeof(int[]), obj);
             intarray = obj as int[];
             Assert.AreEqual(11, intarray.Length);
         }
@@ -2576,7 +2576,7 @@ namespace Spring.Expressions
         public void TestUnionOperator()
         {
             object o = ExpressionEvaluator.GetValue(null, "{1,2,3} + {3,4,5}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             ISet union = (ISet)o;
             Assert.AreEqual(5, union.Count);
             Assert.IsTrue(union.Contains(1));
@@ -2584,7 +2584,7 @@ namespace Spring.Expressions
             Assert.IsTrue(union.Contains(5));
 
             o = ExpressionEvaluator.GetValue(null, "{1,2,3} + {3,4,5} + {'ivan', 'gox', 'damjao', 5}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             union = (ISet)o;
             Assert.AreEqual(8, union.Count);
             Assert.IsTrue(union.Contains(1));
@@ -2593,14 +2593,14 @@ namespace Spring.Expressions
             ISet testset = new ListSet();
             testset.AddAll(new int[] { 1, 2, 3, 5, 8 });
             o = ExpressionEvaluator.GetValue(testset, "#this + {1, 2, 13, 15}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             union = (ISet)o;
             Assert.AreEqual(7, union.Count);
             Assert.IsTrue(union.Contains(1));
             Assert.IsTrue(union.Contains(15));
 
             o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} + #{1:'ivan', 5:'five'}");
-            Assert.IsInstanceOfType(typeof(IDictionary), o);
+            Assert.IsInstanceOf(typeof(IDictionary), o);
             IDictionary result = (IDictionary)o;
             Assert.AreEqual(4, result.Count);
             Assert.AreEqual("one", result[1]);
@@ -2612,21 +2612,21 @@ namespace Spring.Expressions
         public void TestUnionOperatorBad()
         {
             object o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} + {1, 5}");
-            Assert.IsInstanceOfType(typeof(IDictionary), o);
+            Assert.IsInstanceOf(typeof(IDictionary), o);
         }
 
         [Test]
         public void TestIntersectionOperator()
         {
             object o = ExpressionEvaluator.GetValue(null, "{111, 'ivan', 23, 24} * {111, 11, 'ivan'}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             ISet intersection = (ISet)o;
             Assert.AreEqual(2, intersection.Count);
             Assert.IsTrue(intersection.Contains(111));
             Assert.IsTrue(intersection.Contains("ivan"));
 
             o = ExpressionEvaluator.GetValue(null, "{24, 25, 'aaa' + 'bb'} * {date('2007/2/5').day * 5, 24 - 1}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             intersection = (ISet)o;
             Assert.AreEqual(1, intersection.Count);
             Assert.IsTrue(intersection.Contains(25));
@@ -2634,19 +2634,19 @@ namespace Spring.Expressions
             ISet testset = new ListSet();
             testset.AddAll(new int[] { 1, 2, 3, 5, 8 });
             o = ExpressionEvaluator.GetValue(testset, "#this * #{1:'one', 10:'ten'}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             intersection = (ISet)o;
             Assert.AreEqual(1, intersection.Count);
             Assert.IsTrue(intersection.Contains(1));
 
             o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} * #{1:'ivan', 5:'five'}");
-            Assert.IsInstanceOfType(typeof(IDictionary), o);
+            Assert.IsInstanceOf(typeof(IDictionary), o);
             IDictionary result = (IDictionary)o;
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual("one", result[1]);
 
             o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} * {1, 2, 5, 7}");
-            Assert.IsInstanceOfType(typeof(IDictionary), o);
+            Assert.IsInstanceOf(typeof(IDictionary), o);
             result = (IDictionary)o;
             Assert.AreEqual(2, result.Count);
             Assert.AreEqual("one", result[1]);
@@ -2658,40 +2658,40 @@ namespace Spring.Expressions
         public void TestIntersectionOperatorBad()
         {
             object o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} * 'something'");
-            Assert.IsInstanceOfType(typeof(IDictionary), o);
+            Assert.IsInstanceOf(typeof(IDictionary), o);
         }
 
         [Test]
         public void TestDifferenceOperator()
         {
             object o = ExpressionEvaluator.GetValue(null, "{111, 11} - {14, 12, 11}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             ISet diff = (ISet)o;
             Assert.AreEqual(1, diff.Count);
             Assert.IsTrue(diff.Contains(111));
 
             o = ExpressionEvaluator.GetValue(null, "{111, 11} - {14, 12, 11} - {111}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             diff = (ISet)o;
             Assert.AreEqual(0, diff.Count);
 
             ISet testset = new ListSet();
             testset.AddAll(new int[] { 1, 2, 3, 5, 8 });
             o = ExpressionEvaluator.GetValue(testset, "#this - #{1:'one', 10:'ten'}");
-            Assert.IsInstanceOfType(typeof(ISet), o);
+            Assert.IsInstanceOf(typeof(ISet), o);
             diff = (ISet)o;
             Assert.AreEqual(4, diff.Count);
             Assert.IsFalse(diff.Contains(1));
 
             o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} - #{1:'ivan', 5:'five'}");
-            Assert.IsInstanceOfType(typeof(IDictionary), o);
+            Assert.IsInstanceOf(typeof(IDictionary), o);
             IDictionary result = (IDictionary)o;
             Assert.AreEqual(2, result.Count);
             Assert.IsNull(result[1]);
             Assert.AreEqual("three", result[3]);
 
             o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} - {1, 2, 3, 5, 7}");
-            Assert.IsInstanceOfType(typeof(IDictionary), o);
+            Assert.IsInstanceOf(typeof(IDictionary), o);
             result = (IDictionary)o;
             Assert.AreEqual(0, result.Count);
         }
@@ -2701,7 +2701,7 @@ namespace Spring.Expressions
         public void TestDifferenceOperatorBad()
         {
             object o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} - 'something'");
-            Assert.IsInstanceOfType(typeof(IDictionary), o);
+            Assert.IsInstanceOf(typeof(IDictionary), o);
         }
 
         #endregion

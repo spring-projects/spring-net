@@ -82,7 +82,7 @@ namespace Spring.Context.Support
             }
             catch(ConfigurationException cfgex)
             {
-                Assert.IsInstanceOfType( typeof(ObjectDefinitionStoreException), cfgex.InnerException );
+                Assert.IsInstanceOf(typeof(ObjectDefinitionStoreException), cfgex.InnerException);
             }
         }
 
@@ -103,7 +103,7 @@ namespace Spring.Context.Support
             }
             catch(ConfigurationException cfgex)
             {
-                Assert.IsInstanceOfType( typeof(ObjectDefinitionStoreException), cfgex.InnerException );
+                Assert.IsInstanceOf(typeof(ObjectDefinitionStoreException), cfgex.InnerException);
             }
         }
 

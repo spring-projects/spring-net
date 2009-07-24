@@ -1824,12 +1824,12 @@ namespace Spring.Objects.Factory.Xml
             ExpressionTestObject eto = (ExpressionTestObject) xof.GetObject("to1");
             Assert.AreEqual(new DateTime(1974, 8, 24).ToString("m"), eto.SomeString);
             Assert.AreEqual(new DateTime(2004, 8, 14), eto.SomeDate);
-            Assert.IsInstanceOfType(typeof(IExpression), eto.ExpressionOne);
-            Assert.IsInstanceOfType(typeof(IExpression), eto.ExpressionTwo);
+            Assert.IsInstanceOf(typeof(IExpression), eto.ExpressionOne);
+            Assert.IsInstanceOf(typeof(IExpression), eto.ExpressionTwo);
             Assert.AreEqual(DateTime.Today, eto.ExpressionOne.GetValue());
             Assert.AreEqual(String.Empty, eto.ExpressionTwo.GetValue());
-            Assert.IsInstanceOfType(typeof(WebMethodAttribute), eto.SomeDictionary["method1"]);
-            Assert.IsInstanceOfType(typeof(WebMethodAttribute), eto.SomeDictionary["method2"]);
+            Assert.IsInstanceOf(typeof(WebMethodAttribute), eto.SomeDictionary["method1"]);
+            Assert.IsInstanceOf(typeof(WebMethodAttribute), eto.SomeDictionary["method2"]);
             Assert.AreEqual("My First Web Method", ((WebMethodAttribute) eto.SomeDictionary["method1"]).Description);
             Assert.AreEqual("My Second Web Method", ((WebMethodAttribute) eto.SomeDictionary["method2"]).Description);
         }
@@ -1845,12 +1845,12 @@ namespace Spring.Objects.Factory.Xml
             ExpressionTestObject eto = (ExpressionTestObject)xof.GetObject("to2");
             Assert.AreEqual(new DateTime(1974, 8, 24).ToString("m"), eto.SomeString);
             Assert.AreEqual(new DateTime(2004, 8, 14), eto.SomeDate);
-            Assert.IsInstanceOfType(typeof(IExpression), eto.ExpressionOne);
-            Assert.IsInstanceOfType(typeof(IExpression), eto.ExpressionTwo);
+            Assert.IsInstanceOf(typeof(IExpression), eto.ExpressionOne);
+            Assert.IsInstanceOf(typeof(IExpression), eto.ExpressionTwo);
             Assert.AreEqual(DateTime.Today, eto.ExpressionOne.GetValue());
             Assert.AreEqual(String.Empty, eto.ExpressionTwo.GetValue());
-            Assert.IsInstanceOfType(typeof(WebMethodAttribute), eto.SomeDictionary["method1"]);
-            Assert.IsInstanceOfType(typeof(WebMethodAttribute), eto.SomeDictionary["method2"]);
+            Assert.IsInstanceOf(typeof(WebMethodAttribute), eto.SomeDictionary["method1"]);
+            Assert.IsInstanceOf(typeof(WebMethodAttribute), eto.SomeDictionary["method2"]);
             Assert.AreEqual("My First Web Method", ((WebMethodAttribute)eto.SomeDictionary["method1"]).Description);
             Assert.AreEqual("My Second Web Method", ((WebMethodAttribute)eto.SomeDictionary["method2"]).Description);
         }
