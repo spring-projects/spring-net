@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Messaging;
 using Common.Logging;
@@ -28,7 +27,6 @@ using Spring.Messaging.Core;
 using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Support;
 using Spring.Reflection.Dynamic;
 
 namespace Spring.Messaging.Listener
@@ -451,6 +449,9 @@ namespace Spring.Messaging.Listener
             IMessageConverter converter = MessageConverter;
             if (converter != null)
             {
+                // This is the default Message converter registered in QueueUtils.RegisterDefaultMessageConverter
+                // and used by MessageQueueTemplate and the MessageListenerAdapter if no other Message converage is 
+                // set via the property MessageConverteryObjectName.
                 if (messageConverterObjectName.Equals("__XmlMessageConverter__"))
                 {
                     return converter.ToMessage(result.ToString());

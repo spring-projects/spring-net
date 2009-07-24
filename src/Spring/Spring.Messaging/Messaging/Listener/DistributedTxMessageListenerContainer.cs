@@ -151,7 +151,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsTraceEnabled)
                 {
-                    LOG.Trace("Message recieved is null from Queue = [" + mq.QueueName + "]");
+                    LOG.Trace("Message recieved is null from Queue = [" + mq.Path + "]");
                 }
 
                 #endregion
@@ -167,7 +167,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsDebugEnabled)
                 {
-                    LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.QueueName + "]");
+                    LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
                 }
 
                 #endregion

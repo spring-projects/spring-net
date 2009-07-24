@@ -37,7 +37,7 @@ using Spring.Util;
 namespace Spring.Messaging.Core
 {
     /// <summary>
-    /// This class contains tests for 
+    /// This class contains tests for MessageQueueTemplate
     /// </summary>
     /// <author>Mark Pollack</author>
     [TestFixture]
@@ -102,6 +102,8 @@ namespace Spring.Messaging.Core
             mqt.MessageQueueFactory.RegisterMessageQueue("fooQueueDefinition", sc.CreateQueue );
 
         }
+
+
 #endif
         public class SimpleCreator
         {
@@ -139,16 +141,6 @@ namespace Spring.Messaging.Core
             Assert.AreEqual(q.DefaultMessageQueue, q.MessageQueueFactory.CreateMessageQueue(q.DefaultMessageQueueObjectName));        
         }
 
-        [Test, Ignore("obsolete test. If necessary, registers a default message converter on first use")]
-        [ExpectedException(typeof (InvalidOperationException),
-            ExpectedMessage = "No MessageConverter registered. Check configuration of MessageQueueTemplate.")]
-        public void MessageConverterNotRegistered()
-        {
-            MessageQueueTemplate q = applicationContext["queue-noconverter"] as MessageQueueTemplate;
-            Assert.IsNotNull(q);
-            IMessageConverter c = q.MessageConverter;
-        }
-
         #region Integration Tests - to be moved to another test assembly
 
         [Test]
@@ -158,6 +150,15 @@ namespace Spring.Messaging.Core
             Assert.IsNotNull(q);
             q.ConvertAndSend("Hello World 1");
             ReceiveHelloWorld(null,q,1);
+        }
+
+        [Test]
+        public void SendAndReceiveNonTransactionalRemotePrivateQueue()
+        {
+            MessageQueueTemplate q = applicationContext["queueTemplate-remote"] as MessageQueueTemplate;
+            Assert.IsNotNull(q);
+            q.ConvertAndSend("Hello World 1");
+            //ReceiveHelloWorld(null, q, 1);
         }
 
         private static void ReceiveHelloWorld(string messageQueueObjectName, MessageQueueTemplate q, int index)
@@ -200,6 +201,7 @@ namespace Spring.Messaging.Core
             SendUsingMessageTxScope(q);
             Receive(null,q);
         }
+
 
         private static void SendAndReceive(MessageQueueTemplate q)
         {
@@ -255,7 +257,31 @@ namespace Spring.Messaging.Core
 
         #endregion
 
-        [Test, Ignore("What's the purpose of this test?")]
+        protected override string[] ConfigLocations
+        {
+            get { return new string[] { "assembly://Spring.Messaging.Tests/Spring.Messaging.Core/MessageQueueTemplateTests.xml" }; }
+        }
+
+
+        #region Some simple driver code for debugging
+        public void SimpleRemoteConsumption()
+        {
+            string connectionWorking = @"FormatName:Direct=OS:MARKT60\Private$\testqueue";
+
+            //TCP:IP doesn't work...
+            MessageQueue rmQ = new MessageQueue(@"FormatName:Direct=TCP:192.168.1.105\Private$\testqueue");
+
+            rmQ.Send("Hello Simple");
+
+            rmQ.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
+
+            Message msg = rmQ.Receive();
+
+            Assert.IsNotNull(msg);
+
+
+        }
+
         public void GetAllFromQueue()
         {
             MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;
@@ -265,9 +291,7 @@ namespace Spring.Messaging.Core
                 Console.WriteLine(q.ReceiveAndConvert());
             }
         }
-        protected override string[] ConfigLocations
-        {
-            get { return new string[] {"assembly://Spring.Messaging.Tests/Spring.Messaging.Core/MessageQueueTemplateTests.xml"}; }
-        }
+        #endregion
+
     }
 }

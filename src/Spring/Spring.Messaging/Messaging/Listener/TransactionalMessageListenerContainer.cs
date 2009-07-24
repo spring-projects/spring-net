@@ -327,7 +327,7 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsErrorEnabled)
                     {
-                        LOG.Error("Error receiving message from DefaultMessageQueue [" + mq.QueueName +
+                        LOG.Error("Error receiving message from DefaultMessageQueue [" + mq.Path +
                                   "], closing queue and clearing connection cache.");
                     }
 
@@ -350,7 +350,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsTraceEnabled)
                 {
-                    LOG.Trace("Message recieved is null from Queue = [" + mq.QueueName + "]");
+                    LOG.Trace("Message recieved is null from Queue = [" + mq.Path + "]");
                 }
 
                 #endregion
@@ -365,7 +365,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsDebugEnabled)
                 {
-                    LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.QueueName + "]");
+                    LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
                 }
 
                 #endregion
@@ -396,7 +396,7 @@ namespace Spring.Messaging.Listener
                     {
                         LOG.Debug(
                             "Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
-                            mq.QueueName + "]");
+                            mq.Path + "]");
                     }
 
                     #endregion
@@ -442,7 +442,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsTraceEnabled)
                 {
-                    LOG.Trace("Started MessageQueueTransaction for queue = [" + mq.QueueName + "]");
+                    LOG.Trace("Started MessageQueueTransaction for queue = [" + mq.Path + "]");
                 }
 
                 #endregion
@@ -457,7 +457,7 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsTraceEnabled)
                     {
-                        LOG.Trace("Receiving message with zero timeout for queue = [" + mq.QueueName + "]");
+                        LOG.Trace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
                     }
 
                     #endregion
@@ -491,7 +491,7 @@ namespace Spring.Messaging.Listener
 
                         if (LOG.IsErrorEnabled)
                         {
-                            LOG.Error("Error receiving message from DefaultMessageQueue [" + mq.QueueName +
+                            LOG.Error("Error receiving message from DefaultMessageQueue [" + mq.Path +
                                       "], closing queue and clearing connection cache.");
                         }
 
@@ -514,7 +514,7 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsTraceEnabled)
                     {
-                        LOG.Trace("Message recieved is null from Queue = [" + mq.QueueName + "]");
+                        LOG.Trace("Message recieved is null from Queue = [" + mq.Path + "]");
                     }
 
                     #endregion
@@ -529,7 +529,7 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsDebugEnabled)
                     {
-                        LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.QueueName + "]");
+                        LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
                     }
 
                     #endregion
@@ -560,7 +560,7 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsTraceEnabled)
                     {
-                        LOG.Trace("Committed MessageQueueTransaction for queue [" + mq.QueueName + "]");
+                        LOG.Trace("Committed MessageQueueTransaction for queue [" + mq.Path + "]");
                     }
 
                     #endregion
@@ -579,7 +579,7 @@ namespace Spring.Messaging.Listener
                         {
                             LOG.Debug(
                                 "Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
-                                mq.QueueName + "]");
+                                mq.Path + "]");
                         }
 
                         #endregion
@@ -595,7 +595,7 @@ namespace Spring.Messaging.Listener
                         {
                             LOG.Debug(
                                 "Exception handler's TransactionAction has committed MessageQueueTransaction for queue [" +
-                                mq.QueueName + "]");
+                                mq.Path + "]");
                         }
 
                         #endregion

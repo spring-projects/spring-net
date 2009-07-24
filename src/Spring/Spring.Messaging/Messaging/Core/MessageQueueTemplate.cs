@@ -19,12 +19,14 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Messaging;
 using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
+using Spring.Objects.Factory.Config;
 
 namespace Spring.Messaging.Core
 {
@@ -80,9 +82,11 @@ namespace Spring.Messaging.Core
         private string messageConverterObjectName;
 
         private IMessageQueueFactory messageQueueFactory;
-        private IApplicationContext applicationContext;
+        protected IApplicationContext applicationContext;
 
         private TimeSpan timeout = MessageQueue.InfiniteTimeout;
+
+        private MessageQueueMetadataCache metadataCache;
 
         #endregion
 
@@ -194,6 +198,16 @@ namespace Spring.Messaging.Core
             set { timeout = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the metadata cache.
+        /// </summary>
+        /// <value>The metadata cache.</value>
+        public MessageQueueMetadataCache MetadataCache
+        {
+            get { return metadataCache; }
+            set { metadataCache = value; }
+        }
+
         #endregion
 
         #region IApplicationContextAware Members
@@ -262,6 +276,14 @@ namespace Spring.Messaging.Core
             if (messageConverterObjectName == null)
             {
                 messageConverterObjectName = QueueUtils.RegisterDefaultMessageConverter(applicationContext);
+            }
+            //If it has not been set by the user explicitly, then initialize.
+            if (metadataCache == null)
+            {
+                metadataCache = new MessageQueueMetadataCache();
+                metadataCache.ApplicationContext = ApplicationContext;
+                metadataCache.AfterPropertiesSet();
+                metadataCache.Initialize();
             }
         }
 
@@ -432,14 +454,14 @@ namespace Spring.Messaging.Core
         /// Sends the message to the given message queue.
         /// </summary>
         /// <remarks>If System.Transactions.Transaction.Current is null, then send based on
-        /// the transaction semantics of the queue definition.  See <see cref="DoSendMessageQueueTransactional"/> </remarks>
+        /// the transaction semantics of the queue definition.  See <see cref="DoSendMessageQueue"/> </remarks>
         /// <param name="messageQueue">The message queue.</param>
         /// <param name="message">The message.</param>
         protected virtual void DoSend(MessageQueue messageQueue, Message message)
         {
             if (System.Transactions.Transaction.Current == null)
             {
-                DoSendMessageQueueTransactional(messageQueue, message);
+                DoSendMessageQueue(messageQueue, message);
             }
             else
             {
@@ -475,52 +497,89 @@ namespace Spring.Messaging.Core
         /// </remarks>
         /// <param name="mq">The mq.</param>
         /// <param name="msg">The MSG.</param>
-        protected virtual void DoSendMessageQueueTransactional(MessageQueue mq, Message msg)
+        protected virtual void DoSendMessageQueue(MessageQueue mq, Message msg)
         {
             MessageQueueTransaction transactionToUse = QueueUtils.GetMessageQueueTransaction(null);
+            MessageQueueMetadata mqMetadata = metadataCache.Get(mq.Path);
+            if (mqMetadata != null)
+            {
+                if (mqMetadata.RemoteQueue)
+                {
+                    if (mqMetadata.RemoteQueueIsTransactional)
+                    {
+                        // DefaultMessageQueue transaction is externally managed.
+                        DoSendMessageTransaction(mq, transactionToUse, msg);
+                        return;
+                    }
+                    DoSendMessageQueueNonTransactional(mq, transactionToUse, msg);
+                    return;
+                }
+            }
+            // Handle assuming these are local queues.
+
             if (mq.Transactional)
             {
                 // DefaultMessageQueue transaction is externally managed.
-                if (transactionToUse != null)
+                DoSendMessageTransaction(mq, transactionToUse, msg);
+            }
+            else
+            {
+                DoSendMessageQueueNonTransactional(mq, transactionToUse, msg);
+            }
+        }
+
+        /// <summary>
+        /// Does the send message transaction.
+        /// </summary>
+        /// <param name="mq">The mq.</param>
+        /// <param name="transactionToUse">The transaction to use.</param>
+        /// <param name="msg">The MSG.</param>
+        protected virtual void DoSendMessageTransaction(MessageQueue mq, MessageQueueTransaction transactionToUse, Message msg)
+        {
+            if (transactionToUse != null)
+            {
+                if (LOG.IsDebugEnabled)
                 {
-                    if (LOG.IsDebugEnabled)
-                    {
-                        LOG.Debug(
-                            "Sending messsage using externally managed MessageQueueTransction to transactional queue [" +
-                            mq.QueueName + "].");
-                    }
-                    mq.Send(msg, transactionToUse);
+                    LOG.Debug(
+                        "Sending messsage using externally managed MessageQueueTransction to transactional queue with path [" + mq.Path + "].");
                 }
-                else
-                {
-                    /* From MSDN documentation
+                mq.Send(msg, transactionToUse);
+            }
+            else
+            {
+                /* From MSDN documentation
                          * If a non-transactional message is sent to a transactional queue, 
                          * this component creates a single-message transaction for it, 
                          * except in the case of referencing a queue on a remote computer 
                          * using a direct format name. In this situation, if you do not specify a 
                          * transaction context when sending a message, one is not created for you 
                          * and the message will be sent to the dead-letter queue.*/
-                    LOG.Warn("Sending message using implicit single-message transaction to transactional queue [" +
-                             mq.QueueName + "].");
-                    mq.Send(msg, MessageQueueTransactionType.Single);
-                }
+                LOG.Warn("Sending message using implicit single-message transaction to transactional queue queue with path [" + mq.Path + "].");
+                mq.Send(msg, MessageQueueTransactionType.Single);
+            }
+        }
+
+        /// <summary>
+        /// Does the send message queue non transactional.
+        /// </summary>
+        /// <param name="mq">The mq.</param>
+        /// <param name="transactionToUse">The transaction to use.</param>
+        /// <param name="msg">The MSG.</param>
+        protected virtual void DoSendMessageQueueNonTransactional(MessageQueue mq, MessageQueueTransaction transactionToUse, Message msg)
+        {
+            if (transactionToUse != null)
+            {
+                LOG.Warn("Thread local message transaction ignored for sending to non-transactional queue with path [" + mq.Path + "].");
+                mq.Send(msg);
             }
             else
             {
-                if (transactionToUse != null)
-                {
-                    LOG.Warn("Thread local message transaction ignored for sending to non-transactional queue.");
-                    mq.Send(msg);
+                if (LOG.IsDebugEnabled)
+                {                   
+                    LOG.Debug("Sending messsage without MSMQ transaction to non-transactional queue with path [" + mq.Path + "].");
                 }
-                else
-                {
-                    if (LOG.IsDebugEnabled)
-                    {
-                        LOG.Debug("Sending messsage without MSMQ transaction to non-TX-QUEUE.");
-                    }
-                    //Typical case, non TLS transaction, non-tx queue.
-                    mq.Send(msg);
-                }
+                //Typical case, non TLS transaction, non-tx queue.
+                mq.Send(msg);
             }
         }
 

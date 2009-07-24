@@ -20,6 +20,7 @@
 
 using System;
 using System.Messaging;
+using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Messaging.Support
@@ -33,7 +34,7 @@ namespace Spring.Messaging.Support
     /// configuration of the MessageQueue.
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public class MessageQueueFactoryObject : IConfigurableFactoryObject
+    public class MessageQueueFactoryObject : IConfigurableFactoryObject, IObjectNameAware
     {
         // fields used in constructor
         private string path = string.Empty;
@@ -51,6 +52,11 @@ namespace Spring.Messaging.Support
         private bool messageReadPropertyFilterSetDefaults = false;
 
         private MessageQueueCreatorDelegate messageCreatorDelegate;
+
+        private bool remoteQueue = false;
+
+        private bool remoteQueueIsTransactional = false;
+        private string objectName;
 
 
         /// <summary>
@@ -71,9 +77,9 @@ namespace Spring.Messaging.Support
         }
 
         /// <summary>
-        /// Gets or sets the path used to creat DefaultMessageQueue instance.
+        /// Gets or sets the path used to create a MessageQueue instance.
         /// </summary>
-        /// <value>The location of the queue referenced by the DefaultMessageQueue.</value>
+        /// <value>The location of the queue.</value>
         public string Path
         {
             get { return path; }
@@ -82,7 +88,7 @@ namespace Spring.Messaging.Support
 
 
         /// <summary>
-        /// Gets or sets a value indicating whether to create the DefaultMessageQueue instance with 
+        /// Gets or sets a value indicating whether to create the MessageQueue instance with 
         /// exclusive read access to the first application that accesses the queue
         /// </summary>
         /// <value>
@@ -119,7 +125,7 @@ namespace Spring.Messaging.Support
 
         /// <summary>
         /// Sets a value indicating whether to enable connection cache.  The default is false, which
-        /// is different than the default value when creating a DefaultMessageQueue object.
+        /// is different than the default value when creating a System.Messaging.MessageQueue object.
         /// </summary>
         /// <value>
         /// 	<c>true</c> if enable connection cache; otherwise, <c>false</c>.
@@ -152,6 +158,34 @@ namespace Spring.Messaging.Support
         public bool MessageReadPropertyFilterSetDefaults
         {
             set { messageReadPropertyFilterSetDefaults = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the queue is a remote queue. 
+        /// </summary>
+        /// <remarks>
+        /// The operations that one can perform on the MessageQueue depend on if it is local or remote, for 
+        /// example checking if it is transactional.  This is very difficult to determine programmatically.
+        /// The property was made virtual so it can be overridden to take into account custom heuristics you
+        /// may want to use to determine this programmatically.
+        /// </remarks>
+        /// <value><c>true</c> if remote queue; otherwise, <c>false</c>.</value>
+        public virtual bool RemoteQueue
+        {
+            get { return remoteQueue; }
+            set { remoteQueue = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the remote queue is transactional.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if the remote queue is transactional; otherwise, <c>false</c>.
+        /// </value>
+        public virtual bool RemoteQueueIsTransactional
+        {
+            get { return remoteQueueIsTransactional; }
+            set { remoteQueueIsTransactional = value; }
         }
 
         #region IFactoryObject Members
@@ -188,7 +222,7 @@ namespace Spring.Messaging.Support
         /// <see cref="Spring.Objects.Factory.IFactoryObject"/> creates, or
         /// <see langword="null"/> if not known in advance.
         /// </summary>
-        /// <value>The type DefaultMessageQueue</value>
+        /// <value>The type System.Messaging.MessageQueue</value>
         public Type ObjectType
         {
             get { return typeof (MessageQueue); }
@@ -219,5 +253,23 @@ namespace Spring.Messaging.Support
         #endregion
 
         #endregion
+
+        /// <summary>
+        /// Set the name of the object in the object factory that created this object.
+        /// </summary>
+        /// <value>The name of the object in the factory.</value>
+        /// <remarks>
+        /// 	<p>
+        /// Invoked after population of normal object properties but before an init
+        /// callback like <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
+        /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+        /// method or a custom init-method.
+        /// </p>
+        /// </remarks>
+        public string ObjectName
+        {
+            set { objectName = value; }
+            get { return ObjectName; }
+        }
     }
 }

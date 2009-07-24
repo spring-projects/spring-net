@@ -80,11 +80,13 @@
     <EmbeddedResource Include="Messaging\queue-context.xml" />
     <EmbeddedResource Include="Messaging\Core\MessageQueueTemplateTests.xml" />
     <EmbeddedResource Include="Messaging\Listener\DistributedTxMessageListenerContainerTests.xml" />
+    <EmbeddedResource Include="Messaging\Core\MessageQueueMetadataCacheTests.xml" />
     <Content Include="Spring.Messaging.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\Core\MessageQueueMetadataCacheTests.cs" />
     <Compile Include="Messaging\Core\ThreadingTests.cs" />
     <Compile Include="Messaging\Listener\DistributedTxMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Listener\LoggingExceptionHandler.cs" />

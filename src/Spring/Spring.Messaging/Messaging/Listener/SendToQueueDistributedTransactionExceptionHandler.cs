@@ -126,7 +126,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsInfoEnabled)
                 {
-                    LOG.Info("Sending message with id = [" + message.Id + "] to queue [" + mq.QueueName + "].");
+                    LOG.Info("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
                 }
 
                 #endregion
@@ -139,7 +139,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsErrorEnabled)
                 {
-                    LOG.Error("Could not send message with id = [" + message.Id + "] to queue [" + mq.QueueName + "].", e);
+                    LOG.Error("Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].", e);
                     LOG.Error("Message will not be processed.  Message Body = " + message.Body);
                 }
 

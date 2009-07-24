@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Messaging;
 using Spring.Context;
 using Spring.Messaging.Core;
@@ -78,6 +79,7 @@ namespace Spring.Messaging.Support
                 return null;
             }                
         }
+
     }
 
     internal class MessageQueueResourceSynchronization : ITransactionSynchronization

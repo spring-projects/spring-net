@@ -352,7 +352,7 @@ namespace Spring.Messaging.Listener
             catch (Exception ex)
             {
                 messageReceived = false;
-                LOG.Error("Error receiving message from DefaultMessageQueue = [" + mq.QueueName + "]", ex);
+                LOG.Error("Error receiving message from DefaultMessageQueue = [" + mq.Path + "]", ex);
             }
             finally
             {
@@ -438,6 +438,18 @@ namespace Spring.Messaging.Listener
         /// <param name="message">The message.</param>
         protected virtual void MessageReceived(Message message)
         {
+        }
+
+        /// <summary>
+        /// Template method that gets called right before a new message is received, i.e.
+        /// messageQueue.Receive().  
+        /// </summary>
+        /// <remarks>It allows subclasses to modify the state of the MessageQueue 
+        /// before receiving which maybe required when using remote queues, for example
+        /// to set a MessageFormatter.</remarks>
+        /// <param name="messageQueue"></param>
+        protected virtual void BeforeMessageReceived(MessageQueue messageQueue)
+        {            
         }
 
         #endregion

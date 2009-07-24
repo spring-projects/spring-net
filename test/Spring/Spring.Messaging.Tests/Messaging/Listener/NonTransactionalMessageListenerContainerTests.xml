@@ -33,8 +33,18 @@
     </property>
   </object>
 
+  <object id='testremotequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+    <property name='Path' value='FormatName:Direct=OS:MARKT60\Private$\testqueue'/>
+    <property name='RemoteQueue' value="true"/>
+  </object>
+
+  <object id="testRemoteTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+    <property name="DefaultMessageQueueObjectName" value="testremotequeue"/>
+    <property name="MessageConverterObjectName" value="messageConverter"/>
+  </object>
+
   <object id="testQueueTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="MessageQueueObjectName" value="msmqTestQueue"/>
+    <property name="DefaultMessageQueueObjectName" value="msmqTestQueue"/>
     <property name="MessageConverterObjectName" value="messageConverter"/>
   </object>
   
@@ -44,7 +54,7 @@
   </object>
 
   <object id="nonTransactionalMessageListenerContainer" type="Spring.Messaging.Listener.NonTransactionalMessageListenerContainer, Spring.Messaging">
-    <property name="MessageQueueObjectName" value="msmqTestQueue"/>
+    <property name="MessageQueueObjectName" value="testremotequeue"/>
     <property name="MaxConcurrentListeners" value="2"/>
     <property name="ListenerTimeLimit" value="20s"/>
     <property name="MessageListener" ref="messageListenerAdapter"/>

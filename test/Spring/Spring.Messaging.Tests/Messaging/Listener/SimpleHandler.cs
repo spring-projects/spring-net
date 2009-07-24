@@ -17,6 +17,10 @@ namespace Spring.Messaging.Listener
 
         private string stateVariable;
 
+        public SimpleHandler()
+        {
+            this.stateVariable = "hello";
+        }
         public SimpleHandler(string stateVariable)
         {
             this.stateVariable = stateVariable;
