@@ -48,7 +48,7 @@ Build properties that may be set:
   <!-- change this to sync the sdk doc version generated -->
   <property name="package.version.docs" value="${package.version}" />
   <!-- make system environment variables available as NAnt properties -->
-  <sysinfo/>
+  <sysinfo failonerror="false" />
 
   <property name="project.company" value="SpringSource"/>
   <property name="project.copyright" value="Copyright 2002-2009 Spring.NET Framework Team."/>

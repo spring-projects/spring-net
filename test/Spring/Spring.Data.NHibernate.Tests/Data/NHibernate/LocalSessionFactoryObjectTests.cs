@@ -23,7 +23,9 @@
 using System.Collections;
 using System.IO;
 using NHibernate;
+#if NH_2_1
 using NHibernate.ByteCode.LinFu;
+#endif
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
