@@ -40,6 +40,7 @@ namespace Spring.Aop.Framework.Adapter
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
+	[Serializable]
 	public class DefaultAdvisorAdapterRegistry : IAdvisorAdapterRegistry
 	{
 	    private readonly IList adapters = new ArrayList();

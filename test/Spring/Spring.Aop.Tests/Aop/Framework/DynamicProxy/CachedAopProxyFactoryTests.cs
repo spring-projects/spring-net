@@ -39,8 +39,9 @@ namespace Spring.Aop.Framework.DynamicProxy
 	[TestFixture]
     public sealed class CachedAopProxyFactoryTests : DefaultAopProxyFactoryTests
 	{
-        protected override IAopProxy CreateAopProxy(AdvisedSupport advisedSupport)
+        protected override IAopProxy CreateAopProxy(ProxyFactory advisedSupport)
         {
+            //            return (IAopProxy) advisedSupport.GetProxy();
             IAopProxyFactory apf = new CachedAopProxyFactory();
             return apf.CreateAopProxy(advisedSupport);
         }
@@ -48,24 +49,20 @@ namespace Spring.Aop.Framework.DynamicProxy
         [SetUp]
         public void SetUp()
         {
-            // Clear Aop proxy type cache
-            Assert.IsNotNull(TypeCacheField);
-            TypeCacheField.SetValue(null, new Hashtable());
+            CachedAopProxyFactory.ClearCache();
         }
 
         [Test]
         public void DoesNotCacheWithDifferentBaseType()
         {
             // Decorated-based proxy (BaseType == TargetType)
-            AdvisedSupport advisedSupport = new AdvisedSupport();
+            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
             advisedSupport.ProxyTargetType = true;
-            advisedSupport.Target = new TestObject();
             CreateAopProxy(advisedSupport);
 
             // Composition-based proxy (BaseType = BaseCompositionAopProxy)
-            advisedSupport = new AdvisedSupport();
+            advisedSupport = new ProxyFactory(new TestObject());
             advisedSupport.ProxyTargetType = false;
-            advisedSupport.Target = new TestObject();
             CreateAopProxy(advisedSupport);
 
             AssertAopProxyTypeCacheCount(2);
@@ -74,12 +71,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void DoesNotCacheWithDifferentTargetType()
         {
-            AdvisedSupport advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = new BadCommand();
+            ProxyFactory advisedSupport = new ProxyFactory(new BadCommand());
             CreateAopProxy(advisedSupport);
 
-            advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = new GoodCommand();
+            advisedSupport = new ProxyFactory(new GoodCommand());
             CreateAopProxy(advisedSupport);
 
             AssertAopProxyTypeCacheCount(2);
@@ -88,20 +83,17 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void DoesNotCacheWithDifferentInterfaces()
         {
-            AdvisedSupport advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = new TestObject();
+            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
             CreateAopProxy(advisedSupport);
 
-            advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = new TestObject();
+            advisedSupport = new ProxyFactory(new TestObject());
             advisedSupport.AddInterface(typeof(IPerson));
             CreateAopProxy(advisedSupport);
 
             AssertAopProxyTypeCacheCount(2);
 
             // Same with Introductions
-            advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = new TestObject();
+            advisedSupport = new ProxyFactory(new TestObject());
             TimestampIntroductionInterceptor ti = new TimestampIntroductionInterceptor();
             ti.TimeStamp = new DateTime(666L);
             IIntroductionAdvisor introduction = new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped));
@@ -114,14 +106,12 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void DoesCacheWithTwoDecoratorBasedProxy()
         {
-            AdvisedSupport advisedSupport = new AdvisedSupport();
+            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
             advisedSupport.ProxyTargetType = true;
-            advisedSupport.Target = new TestObject();
             CreateAopProxy(advisedSupport);
 
-            advisedSupport = new AdvisedSupport();
+            advisedSupport = new ProxyFactory(new TestObject());
             advisedSupport.ProxyTargetType = true;
-            advisedSupport.Target = new TestObject();
             CreateAopProxy(advisedSupport);
 
             AssertAopProxyTypeCacheCount(1);
@@ -130,27 +120,18 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void DoesCacheWithTwoCompositionBasedProxy()
         {
-            AdvisedSupport advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = new TestObject();
+            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
             CreateAopProxy(advisedSupport);
 
-            advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = new TestObject();
+            advisedSupport = new ProxyFactory(new TestObject());
             CreateAopProxy(advisedSupport);
 
             AssertAopProxyTypeCacheCount(1);
         }
 
-
-        private static readonly FieldInfo TypeCacheField =
-            typeof(CachedAopProxyFactory).GetField("typeCache", BindingFlags.Static | BindingFlags.NonPublic);
-
         private void AssertAopProxyTypeCacheCount(int count)
         {
-            Assert.IsNotNull(TypeCacheField);
-            Hashtable cache = TypeCacheField.GetValue(null) as Hashtable;
-            Assert.IsNotNull(cache);
-            Assert.AreEqual(count, cache.Count);
+            Assert.AreEqual(count, CachedAopProxyFactory.CountCachedTypes);
         }
 
         #region Helper classes definitions

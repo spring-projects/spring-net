@@ -36,8 +36,9 @@ namespace Spring.Aop.Framework.DynamicProxy
 	[TestFixture]
     public class DefaultAopProxyFactoryTests
 	{
-        protected virtual IAopProxy CreateAopProxy(AdvisedSupport advisedSupport)
+        protected virtual IAopProxy CreateAopProxy(ProxyFactory advisedSupport)
         {
+//            return (IAopProxy) advisedSupport.GetProxy();
             IAopProxyFactory apf = new DefaultAopProxyFactory();
             return apf.CreateAopProxy(advisedSupport);
         }
@@ -46,21 +47,23 @@ namespace Spring.Aop.Framework.DynamicProxy
         [ExpectedException(typeof(AopConfigException), ExpectedMessage="Cannot create IAopProxy with null ProxyConfig")]
         public void NullConfig()
         {
-            CreateAopProxy(null);
+            IAopProxyFactory apf = new DefaultAopProxyFactory();
+            apf.CreateAopProxy(null);
         }
 
         [Test]
         [ExpectedException(typeof(AopConfigException), ExpectedMessage="Cannot create IAopProxy with no advisors and no target source")]
         public void NoInterceptorsAndNoTarget()
         {
-            AdvisedSupport advisedSupport = new AdvisedSupport(new Type[] { typeof(ITestObject) });
+            ProxyFactory advisedSupport = new ProxyFactory(new Type[] { typeof(ITestObject) });
             CreateAopProxy(advisedSupport);
         }
 
         [Test]
         public void TargetDoesNotImplementAnyInterfaces()
         {
-            AdvisedSupport advisedSupport = new AdvisedSupport();
+            ProxyFactory advisedSupport = new ProxyFactory();
+            advisedSupport.AopProxyFactory = new DefaultAopProxyFactory();
             advisedSupport.ProxyTargetType = false;
             advisedSupport.Target = new DoesNotImplementAnyInterfacesTestObject();
             
@@ -72,9 +75,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void TargetImplementsAnInterface()
         {
-            AdvisedSupport advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = new TestObject();
-
+            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
             IAopProxy aopProxy = CreateAopProxy(advisedSupport);
             Assert.IsNotNull(aopProxy);
 
@@ -84,7 +85,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void TargetImplementsAnInterfaceWithProxyTargetTypeSetToTrue()
         {
-            AdvisedSupport advisedSupport = new AdvisedSupport();
+            ProxyFactory advisedSupport = new ProxyFactory();
             advisedSupport.ProxyTargetType = true;
             advisedSupport.Target = new TestObject();
 

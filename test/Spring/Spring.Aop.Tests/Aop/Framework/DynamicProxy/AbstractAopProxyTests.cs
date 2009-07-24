@@ -459,15 +459,13 @@ namespace Spring.Aop.Framework.DynamicProxy
             ITestObject target = new TestObject();
             target.Age = 26;
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.Target = target;
+            AdvisedSupport advised = new AdvisedSupport(target);
             advised.AddAdvice(new NopInterceptor());
             IAopProxy aop = CreateAopProxy(advised);
             ITestObject proxy1 = (ITestObject)aop.GetProxy();
             Assert.AreEqual(target.Age, proxy1.Age, "Incorrect age");
 
-            advised = new AdvisedSupport();
-            advised.Target = proxy1;
+            advised = new AdvisedSupport(proxy1);
             advised.AddAdvice(new NopInterceptor());
             aop = CreateAopProxy(advised);
             ITestObject proxy2 = (ITestObject)aop.GetProxy();
@@ -483,14 +481,12 @@ namespace Spring.Aop.Framework.DynamicProxy
             TheCommand target = new TheCommand();
 
             // proxy
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.Target = target;
+            AdvisedSupport advised = new AdvisedSupport(target);
             advised.AddAdvice(new NopInterceptor());
             object proxy = CreateProxy(advised);
 
             // proxy again
-            advised = new AdvisedSupport();
-            advised.Target = proxy;
+            advised = new AdvisedSupport(proxy);
             advised.AddAdvice(new NopInterceptor());
             proxy = CreateAopProxy(advised);
 
@@ -844,8 +840,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             NopInterceptor ni = new NopInterceptor();
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.TargetSource = mockTargetSource;
+            AdvisedSupport advised = new AdvisedSupport(mockTargetSource);
             advised.AddAdvice(ni);
 
             AbstractProxyTypeBuilderTests.InterfaceWithGenericMethod proxy =
@@ -884,8 +879,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             NopInterceptor ni = new NopInterceptor();
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.TargetSource = mockTargetSource;
+            AdvisedSupport advised = new AdvisedSupport(mockTargetSource);
             advised.AddAdvice(ni);
 
             AbstractProxyTypeBuilderTests.GenericInterface<TestObject> proxy =
@@ -927,8 +921,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             TestObject target = new TestObject();
             target.Age = 26;
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.Target = target;
+            AdvisedSupport advised = new AdvisedSupport(target);
             advised.AddAdvice(new NopInterceptor());
 
             ITestObject proxy = CreateProxy(advised) as ITestObject;
@@ -1716,8 +1709,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         public void CanCastProxyToIAdvised()
         {
             TestObject to = new TestObject();
-            AdvisedSupport advisedSupport = new AdvisedSupport();
-            advisedSupport.Target = to;
+            AdvisedSupport advisedSupport = new AdvisedSupport(to);
             NopInterceptor ni = new NopInterceptor();
             advisedSupport.AddAdvice(0, ni);
 

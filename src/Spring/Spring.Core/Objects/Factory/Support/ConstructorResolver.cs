@@ -147,16 +147,16 @@ namespace Spring.Objects.Factory.Support
 
                 if (resolvedValues != null)
                 {
-                    UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;    
+                    UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;
                     // Try to resolve arguments for current constructor
-                    
+
                     //need to check for null as indicator of no ctor arg match instead of using exceptions for flow
                     //control as in the Java implementation
                     args = CreateArgumentArray(objectName, rod, resolvedValues, wrapper, paramTypes, candidate,
                                                 autowiring, out unsatisfiedDependencyExceptionData);
                     if (args == null)
                     {
-                        if (i == candidates.Length -1 && constructorToUse == null)
+                        if (i == candidates.Length - 1 && constructorToUse == null)
                         {
                             throw new UnsatisfiedDependencyException(rod.ResourceDescription,
                                             objectName,
@@ -167,7 +167,8 @@ namespace Spring.Objects.Factory.Support
                         // try next constructor...
                         continue;
                     }
-                } else
+                }
+                else
                 {
                     // Explicit arguments given -> arguments length must match exactly
                     if (paramTypes.Length != explicitArgs.Length)
@@ -243,7 +244,7 @@ namespace Spring.Objects.Factory.Support
         public virtual IObjectWrapper InstantiateUsingFactoryMethod(string name, RootObjectDefinition definition, object[] arguments)
         {
             ObjectWrapper wrapper = new ObjectWrapper();
-            Type factoryClass = null; 
+            Type factoryClass = null;
             bool isStatic = true;
 
 
@@ -263,7 +264,7 @@ namespace Spring.Objects.Factory.Support
                 // if we have constructor args, don't need to resolve them...
                 expectedArgCount = arguments.Length;
             }
-            
+
 
             if (StringUtils.HasText(definition.FactoryObjectName))
             {
@@ -277,73 +278,69 @@ namespace Spring.Objects.Factory.Support
                 factoryClass = definition.ObjectType;
             }
 
-            bool autowiring = (definition.AutowireMode == AutoWiringMode.Constructor);
 #if NET_2_0
             GenericArgumentsHolder genericArgsInfo = new GenericArgumentsHolder(definition.FactoryMethodName);
+            MethodInfo[] factoryMethodCandidates = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
+#else
+            MethodInfo[] factoryMethodCandidates = FindMethods(definition.FactoryMethodName, expectedArgCount, isStatic, factoryClass);
+#endif
 
-            MethodInfo[] factoryMethods = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
-            UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;
+            bool autowiring = (definition.AutowireMode == AutoWiringMode.Constructor);
+
             // try all matching methods to see if they match the constructor arguments...
-            for (int i = 0; i < factoryMethods.Length; i++)
+            for (int i = 0; i < factoryMethodCandidates.Length; i++)
             {
-                unsatisfiedDependencyExceptionData = null;
-                MethodInfo factoryMethod = factoryMethods[i];
-                Type[] paramTypes = new Type[] { };
+                MethodInfo factoryMethodCandidate = factoryMethodCandidates[i];
+#if NET_2_0
                 if (genericArgsInfo.ContainsGenericArguments)
                 {
                     string[] unresolvedGenericArgs = genericArgsInfo.GetGenericArguments();
-                    if (factoryMethod.GetGenericArguments().Length != unresolvedGenericArgs.Length)
+                    if (factoryMethodCandidate.GetGenericArguments().Length != unresolvedGenericArgs.Length)
                         continue;
 
-                    paramTypes = new Type[unresolvedGenericArgs.Length];
+                    Type[] paramTypes = new Type[unresolvedGenericArgs.Length];
                     for (int j = 0; j < unresolvedGenericArgs.Length; j++)
                     {
                         paramTypes[j] = TypeResolutionUtils.ResolveType(unresolvedGenericArgs[j]);
                     }
-                    factoryMethod = factoryMethod.MakeGenericMethod(paramTypes);
+                    factoryMethodCandidate = factoryMethodCandidate.MakeGenericMethod(paramTypes);
                 }
-#else
-            MethodInfo[] factoryMethods = FindMethods(definition.FactoryMethodName, expectedArgCount, isStatic, factoryClass);
-            UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;            
-            // try all matching methods to see if they match the constructor arguments...
-            foreach(MethodInfo factoryMethod in factoryMethods)
-            {
-                Type[] paramTypes = new Type[] { };
 #endif
                 if (arguments == null || arguments.Length == 0)
                 {
-                    paramTypes = ReflectionUtils.GetParameterTypes(factoryMethod.GetParameters());
+                    Type[] paramTypes = ReflectionUtils.GetParameterTypes(factoryMethodCandidate.GetParameters());
                     // try to create the required arguments...
-                    ArgumentsHolder args = CreateArgumentArray(name, definition, resolvedValues, wrapper,
-                        paramTypes, factoryMethod, autowiring, out unsatisfiedDependencyExceptionData);
+                    UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;
+                    ArgumentsHolder args = CreateArgumentArray(name, definition, resolvedValues, wrapper, paramTypes,
+                                                               factoryMethodCandidate, autowiring, out unsatisfiedDependencyExceptionData);
                     if (args == null)
                     {
                         arguments = null;
                         // if we failed to match this method, keep
                         // trying new overloaded factory methods...
                         continue;
-                    }     
+                    }
                     else
                     {
                         arguments = args.arguments;
                     }
                 }
-                // if we get here, we found a factory method...
+
+                // if we get here, we found a usable candidate factory method - check, if arguments match
                 //arguments = (arguments.Length == 0 ? null : arguments);
-                if (ReflectionUtils.GetMethodByArgumentValues(new MethodInfo[] { factoryMethod }, arguments) == null)
+                if (ReflectionUtils.GetMethodByArgumentValues(new MethodInfo[] { factoryMethodCandidate }, arguments) == null)
                 {
                     continue;
                 }
 
-
-                object objectInstance = instantiationStrategy.Instantiate(definition, name, objectFactory, factoryMethod, arguments);
+                object objectInstance = instantiationStrategy.Instantiate(definition, name, objectFactory, factoryMethodCandidate, arguments);
                 wrapper.WrappedInstance = objectInstance;
 
                 #region Instrumentation
 
                 if (log.IsDebugEnabled)
                 {
-                    log.Debug(string.Format(CultureInfo.InvariantCulture, "Object '{0}' instantiated via factory method [{1}].", name, factoryMethod));
+                    log.Debug(string.Format(CultureInfo.InvariantCulture, "Object '{0}' instantiated via factory method [{1}].", name, factoryMethodCandidate));
                 }
 
                 #endregion
@@ -412,10 +409,11 @@ namespace Spring.Objects.Factory.Support
                         object originalValue = valueHolder.Value;
                         object convertedValue = TypeConversionUtils.ConvertValueIfNecessary(paramType, originalValue, null);
                         args.arguments[paramIndex] = convertedValue;
-                        
+
                         //?
                         args.preparedArguments[paramIndex] = convertedValue;
-                    } catch (TypeMismatchException ex)
+                    }
+                    catch (TypeMismatchException ex)
                     {
                         //To avoid using exceptions for flow control, this is not a cost in Java as stack trace is lazily created.
                         string errorMessage = String.Format(CultureInfo.InvariantCulture,
@@ -425,7 +423,8 @@ namespace Spring.Objects.Factory.Support
                         unsatisfiedDependencyExceptionData = new UnsatisfiedDependencyExceptionData(paramIndex, paramType, errorMessage);
                         return null;
                     }
-                } else
+                }
+                else
                 {
                     // No explicit match found: we're either supposed to autowire or
                     // have to fail creating an argument array for the given constructor.
@@ -447,25 +446,26 @@ namespace Spring.Objects.Factory.Support
                         args.arguments[paramIndex] = autowiredArgument;
                         args.preparedArguments[paramIndex] = new AutowiredArgumentMarker();
                         resolveNecessary = true;
-                    } catch (ObjectsException ex)
+                    }
+                    catch (ObjectsException ex)
                     {
                         unsatisfiedDependencyExceptionData = new UnsatisfiedDependencyExceptionData(paramIndex, paramType, ex.Message);
 
                         return null;
                     }
-                    
+
                 }
             }
             foreach (string autowiredObjectName in autowiredObjectNames)
             {
-               if (log.IsDebugEnabled)
-               {
-                   log.Debug("Autowiring by type from object name '" + objectName +
-						"' via " + methodType + " to object named '" + autowiredObjectName + "'");
-               }
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug("Autowiring by type from object name '" + objectName +
+                         "' via " + methodType + " to object named '" + autowiredObjectName + "'");
+                }
             }
 
-            
+
             return args;
 
         }
@@ -533,7 +533,7 @@ namespace Spring.Objects.Factory.Support
                     minNrOfArgs = index + 1;
                 }
                 ConstructorArgumentValues.ValueHolder valueHolder =
-                    (ConstructorArgumentValues.ValueHolder) entry.Value;
+                    (ConstructorArgumentValues.ValueHolder)entry.Value;
                 string argName = "constructor argument with index " + index;
                 object resolvedValue =
                     valueResolver.ResolveValueIfNecessary(objectName, definition, argName, valueHolder.Value);
@@ -557,10 +557,10 @@ namespace Spring.Objects.Factory.Support
             }
             foreach (DictionaryEntry namedArgumentEntry in definition.ConstructorArgumentValues.NamedArgumentValues)
             {
-                string argumentName = (string) namedArgumentEntry.Key;
+                string argumentName = (string)namedArgumentEntry.Key;
                 string syntheticArgumentName = "constructor argument with name " + argumentName;
                 ConstructorArgumentValues.ValueHolder valueHolder =
-                    (ConstructorArgumentValues.ValueHolder) namedArgumentEntry.Value;
+                    (ConstructorArgumentValues.ValueHolder)namedArgumentEntry.Value;
                 object resolvedValue =
                     valueResolver.ResolveValueIfNecessary(objectName, definition, syntheticArgumentName, valueHolder.Value);
                 resolvedValues.AddNamedArgumentValue(argumentName, resolvedValue);
@@ -625,9 +625,9 @@ namespace Spring.Objects.Factory.Support
             public int GetTypeDifferenceWeight(Type[] paramTypes)
             {
                 // If valid arguments found, determine type difference weight.
-			    // Try type difference weight on both the converted arguments and
-			    // the raw arguments. If the raw weight is better, use it.
-			    // Decrease raw weight by 1024 to prefer it over equal converted weight.
+                // Try type difference weight on both the converted arguments and
+                // the raw arguments. If the raw weight is better, use it.
+                // Decrease raw weight by 1024 to prefer it over equal converted weight.
                 int typeDiffWeight = AutowireUtils.GetTypeDifferenceWeight(paramTypes, this.arguments);
                 int rawTypeDiffWeight = AutowireUtils.GetTypeDifferenceWeight(paramTypes, this.rawArguments) - 1024;
                 return (rawTypeDiffWeight < typeDiffWeight ? rawTypeDiffWeight : typeDiffWeight);

@@ -25,7 +25,6 @@ using AopAlliance.Intercept;
 using Spring.Aop.Framework.Adapter;
 #endregion
 
-
 namespace Spring.Aop
 {
 	/// <summary>
@@ -33,6 +32,7 @@ namespace Spring.Aop
 	/// </summary>
 	/// <author>Dmitriy Kopylenko</author>
 	/// <author>Simon White (.NET)</author>
+	[Serializable]
 	public class SimpleBeforeAdviceAdapter : IAdvisorAdapter
 	{
 		#region IAdvisorAdapter Members

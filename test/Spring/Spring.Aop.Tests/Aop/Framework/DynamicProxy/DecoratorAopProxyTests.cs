@@ -209,8 +209,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             NopInterceptor ni = new NopInterceptor();
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.TargetSource = mockTargetSource;
+            AdvisedSupport advised = new AdvisedSupport(mockTargetSource);
             advised.AddAdvice(ni);
 
             // Cast to the interface that method belongs to

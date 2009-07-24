@@ -223,6 +223,23 @@ namespace Spring.Aop.Target
 
 		#region Fields
 
+        /// <summary>
+        /// Returns a textual representation of this target source instance.
+        /// This implementation returns <see cref="GetDescription"/>
+        /// </summary>
+        public override string ToString()
+        {
+            return GetDescription();
+        }
+
+        /// <summary>
+        /// Returns a textual representation of this target source instance
+        /// </summary>
+        protected virtual string GetDescription()
+        {
+            return string.Format("[{0}:{1}]", this.GetType().Name, this.TargetObjectName);
+        }
+
 		/// <summary>
 		/// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
 		/// </summary>

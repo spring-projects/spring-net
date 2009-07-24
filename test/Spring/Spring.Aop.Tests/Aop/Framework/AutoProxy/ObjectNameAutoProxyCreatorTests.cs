@@ -97,14 +97,6 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         [Test]
-        public void DecoratorProxyWithWildcardMatch()
-        {
-            ITestObject testObject = (ITestObject)ctx.GetObject("decoratorProxy");
-            DecoratorProxyAssertions(testObject);
-            Assert.AreEqual("decoratorProxy", testObject.Name);
-        }
-
-        [Test]
         public void FrozenProxy()
         {
             ITestObject testObject = (ITestObject)ctx.GetObject("frozen");
@@ -139,6 +131,14 @@ namespace Spring.Aop.Framework.AutoProxy
             testObject.Age = age;
             Assert.AreEqual(age, testObject.Age);
             Assert.AreEqual(2*nopInterceptorCount, nop.Count);
+        }
+
+        [Test]
+        public void DecoratorProxyWithWildcardMatch()
+        {
+            ITestObject testObject = (ITestObject)ctx.GetObject("decoratorProxy");
+            DecoratorProxyAssertions(testObject);
+            Assert.AreEqual("decoratorProxy", testObject.Name);
         }
 
         private void DecoratorProxyAssertions(ITestObject testObject)

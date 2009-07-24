@@ -169,7 +169,7 @@ namespace Spring.Aop.Framework
 		/// </remarks>
 		public virtual bool IsFrozen
 		{
-			get { return frozen; }
+			get { return this.frozen; }
 			set { this.frozen = value; }
         }
 

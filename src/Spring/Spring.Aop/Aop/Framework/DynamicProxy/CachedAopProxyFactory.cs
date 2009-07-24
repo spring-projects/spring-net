@@ -55,7 +55,29 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// </summary>
         private static readonly ILog logger = LogManager.GetLogger(typeof(CachedAopProxyFactory));
 
-        private static Hashtable typeCache = new Hashtable();
+        private static readonly Hashtable typeCache = new Hashtable();
+
+        /// <summary>
+        /// Returns the number of proxy types in the cache
+        /// </summary>
+        public static int CountCachedTypes
+        {
+            get { return typeCache.Count; }
+        }
+
+        /// <summary>
+        /// Clears the type cache
+        /// </summary>
+        public static void ClearCache()
+        {
+            typeCache.Clear();
+        }
+
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        public CachedAopProxyFactory()
+        {}
 
         /// <summary>
         /// Generates the proxy type and caches the <see cref="System.Type"/>

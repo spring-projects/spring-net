@@ -42,7 +42,7 @@ namespace Spring.Aop.Framework
 	[Serializable]
     public class ProxyFactory : AdvisedSupport
 	{
-		/// <summary>
+	    /// <summary>
 		/// Creates a new instance of the <see cref="Spring.Aop.Framework.ProxyFactory"/>
 		/// class.
 		/// </summary>
@@ -59,9 +59,8 @@ namespace Spring.Aop.Framework
 		/// <exception cref="AopConfigException">
 		/// If the <paramref name="target"/> is <cref lang="null"/>.
 		/// </exception>
-		public ProxyFactory(object target) : base(GetInterfaces(target))
+		public ProxyFactory(object target) : base(target)
 		{
-		    Target = target;
 		}
 
 	    /// <summary>
@@ -74,7 +73,9 @@ namespace Spring.Aop.Framework
 	    /// </p>
 	    /// </remarks>
 	    /// <param name="interfaces">The interfaces to implement.</param>
-	    public ProxyFactory(Type[] interfaces) : base(interfaces) {}
+	    public ProxyFactory(Type[] interfaces) : base(interfaces)
+	    {
+	    }
 
 	    /// <summary>
 	    /// Creates a new proxy according to the settings in this factory.

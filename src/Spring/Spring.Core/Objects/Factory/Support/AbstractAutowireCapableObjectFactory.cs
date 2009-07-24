@@ -1810,7 +1810,7 @@ namespace Spring.Objects.Factory.Support
 
             if (log.IsDebugEnabled)
             {
-                log.Debug(string.Format("configuring object '{0}' using definition '{1}'", instance, name));
+                log.Debug(string.Format("Configuring object using definition '{1}'", instance, name));
             }
 
             #endregion

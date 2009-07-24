@@ -222,9 +222,9 @@ namespace Spring.Aop.Framework
 
         private ITestObject CreateProxy(object target, IAdvice interceptor, bool exposeProxy)
         {
-            ProxyFactory pf = new ProxyFactory();
+            ProxyFactory pf = new ProxyFactory(target);
             pf.ExposeProxy = exposeProxy;
-            pf.Target = target;
+//            pf.Target = target;
             pf.AddAdvice(interceptor);
 
             return pf.GetProxy() as ITestObject;

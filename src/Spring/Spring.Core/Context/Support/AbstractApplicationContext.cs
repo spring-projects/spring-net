@@ -417,6 +417,14 @@ namespace Spring.Context.Support
 
         /// <summary>
         /// Template method which can be overridden to add context-specific
+        /// work before the underlying object factory gets refreshed.
+        /// </summary>
+        protected virtual void OnPreRefresh()
+        {
+        }
+
+        /// <summary>
+        /// Template method which can be overridden to add context-specific
         /// refresh work.
         /// </summary>
         /// <remarks>
@@ -426,6 +434,15 @@ namespace Spring.Context.Support
         /// </p>
         /// </remarks>
         protected virtual void OnRefresh()
+        {
+        }
+
+        /// <summary>
+        /// Template method which can be overridden to add context-specific
+        /// work after the context was refreshed but before the <see cref="ContextEventArgs.ContextEvent.Refreshed"/>
+        /// event gets raised.
+        /// </summary>
+        protected virtual void OnPostRefresh()
         {
         }
 
@@ -761,20 +778,58 @@ namespace Spring.Context.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the object factory could not be initialized.
         /// </exception>
-        public virtual void Refresh()
+        public void Refresh()
         {
             lock (SyncRoot)
             {
-
-
                 _startupDate = DateTime.Now;
 
+                OnPreRefresh();
+
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("ApplicationContext Refresh: Refreshing object factory "));
+                }
+
+                #endregion
+
                 RefreshObjectFactory();
+
                 IConfigurableListableObjectFactory objectFactory = ObjectFactory;
+
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("ApplicationContext Refresh: Registering well-known processors and objects"));
+                }
+
+                #endregion
 
                 PrepareObjectFactory(objectFactory);
 
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("ApplicationContext Refresh: Custom post processing object factory"));
+                }
+
+                #endregion
+
                 PostProcessObjectFactory(objectFactory);
+
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("ApplicationContext Refresh: Post processing object factory using pre-registered processors"));
+                }
+
+                #endregion
+
                 foreach (IObjectFactoryPostProcessor factoryProcessor in ObjectFactoryPostProcessors)
                 {
                     factoryProcessor.PostProcessObjectFactory(objectFactory);
@@ -793,21 +848,57 @@ namespace Spring.Context.Support
 
                 #endregion
 
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("ApplicationContext Refresh: Post processing object factory using defined processors"));
+                }
+
+                #endregion
+
                 InvokeObjectFactoryPostProcessors();
+
                 RegisterObjectPostProcessors(objectFactory);
                 InitEventRegistry();
                 InitMessageSource();
                 OnRefresh();
+
                 RefreshApplicationEventListeners();
 
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("ApplicationContext Refresh: Preinstantiating singletons"));
+                }
+
+                #endregion
+
                 objectFactory.PreInstantiateSingletons();
+
+                OnPostRefresh();
 
                 new DefensiveEventRaiser().Raise(
                     ContextEvent, this,
                     new ContextEventArgs(ContextEventArgs.ContextEvent.Refreshed));
+
+                #region Instrumentation
+
+                if (log.IsInfoEnabled)
+                {
+                    log.Info(string.Format("ApplicationContext Refresh: Completed"));
+                }
+
+                #endregion
             }
         }
 
+        /// <summary>
+        /// Registers well-known <see cref="IObjectPostProcessor"/>s and 
+        /// preregisters well-known dependencies using <see cref="IConfigurableListableObjectFactory.RegisterResolvableDependency"/>
+        /// </summary>
+        /// <param name="objectFactory">the raw object factory as returned from <see cref="RefreshObjectFactory"/></param>
         private void PrepareObjectFactory(IConfigurableListableObjectFactory objectFactory)
         {
             EnsureKnownObjectPostProcessors(objectFactory);
@@ -819,7 +910,6 @@ namespace Spring.Context.Support
             objectFactory.RegisterResolvableDependency(typeof(IApplicationEventPublisher), this);
             objectFactory.RegisterResolvableDependency(typeof(IApplicationContext), this);
             objectFactory.RegisterResolvableDependency(typeof(IEventRegistry), this);
-
         }
 
         /// <summary>

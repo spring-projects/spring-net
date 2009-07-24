@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Text;
-
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
 using Spring.Aop;
@@ -33,8 +30,6 @@ using Spring.Aop.Support;
 using Spring.Aop.Target;
 using Spring.Util;
 using Spring.Proxy;
-
-#endregion
 
 namespace Spring.Aop.Framework
 {
@@ -81,14 +76,7 @@ namespace Spring.Aop.Framework
         /// <summary> 
         /// List of introductions. 
         /// </summary>
-        private IList _introductions = new ArrayList();
-
-        /// <summary> 
-        /// Array updated on changes to the advisors list, which is easier to
-        /// manipulate internally
-        /// </summary>
-        private IIntroductionAdvisor[] _introductionsArray
-            = new IIntroductionAdvisor[] { };
+        private ArrayList _introductions = new ArrayList();
 
         /// <summary>
         /// Interface map specifying which object should interface methods be
@@ -114,8 +102,8 @@ namespace Spring.Aop.Framework
         /// </summary>
         private bool isActive;
 
-        private Type proxyType;
-        private ConstructorInfo proxyConstructor;
+        private Type cachedProxyType;
+        private ConstructorInfo cachedProxyConstructor;
 
         /// <summary>
         /// The list of <see cref="Spring.Aop.Framework.AdvisedSupport"/> event listeners.
@@ -126,6 +114,12 @@ namespace Spring.Aop.Framework
         /// The advisor chain factory.
         /// </summary>
         private IAdvisorChainFactory advisorChainFactory;
+
+        /// <summary>
+        /// If no explicit interfaces are specified, interfaces will be automatically determined 
+        /// from the target type
+        /// </summary>
+        private bool autoDetectInterfaces;
 
         #endregion
 
@@ -138,7 +132,9 @@ namespace Spring.Aop.Framework
         /// </summary>
         public AdvisedSupport()
         {
-            AdvisorChainFactory = new HashtableCachingAdvisorChainFactory();
+            this.advisorChainFactory = new HashtableCachingAdvisorChainFactory();
+            this.AddListener(this.advisorChainFactory);
+            this.autoDetectInterfaces = true;
         }
 
         /// <summary>
@@ -159,6 +155,36 @@ namespace Spring.Aop.Framework
                     AddInterfaceInternal(intf);
                 }
             }
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="Spring.Aop.Framework.ProxyFactory"/>
+        /// class that proxys all of the interfaces exposed by the supplied
+        /// <paramref name="target"/>.
+        /// </summary>
+        /// <param name="target">The object to proxy.</param>
+        /// <exception cref="AopConfigException">
+        /// If the <paramref name="target"/> is <cref lang="null"/>.
+        /// </exception>
+        public AdvisedSupport(object target)
+            : this(GetInterfaces(target))
+        {
+            Target = target;
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="Spring.Aop.Framework.ProxyFactory"/>
+        /// class that proxys all of the interfaces exposed by the supplied
+        /// <paramref name="targetSource"/>'s target.
+        /// </summary>
+        /// <param name="targetSource">The <see cref="ITargetSource"/> providing access to the object to proxy.</param>
+        /// <exception cref="AopConfigException">
+        /// If the <paramref name="targetSource"/> is <cref lang="null"/>.
+        /// </exception>
+        public AdvisedSupport(ITargetSource targetSource)
+            : this(GetInterfaces(targetSource != null ? targetSource.TargetType : null))
+        {
+            TargetSource = targetSource;
         }
 
         #endregion
@@ -189,6 +215,7 @@ namespace Spring.Aop.Framework
             }
             set
             {
+                AssertUtils.ArgumentNotNull(value, "AdvisorChainFactory");
                 lock (this.SyncRoot)
                 {
                     if (this.advisorChainFactory != null)
@@ -215,17 +242,19 @@ namespace Spring.Aop.Framework
             get { return this.m_targetSource; }
             set
             {
-                bool initialized = !(this.m_targetSource is EmptyTargetSource);
-                this.m_targetSource = value;
-
-                if (this.m_targetSource != null && !initialized && interfaceMap.Count == 0)
-                {
-                    Type[] interfaces = ReflectionUtils.GetInterfaces(this.m_targetSource.TargetType);
-                    foreach (Type intf in interfaces)
-                    {
-                        AddInterfaceInternal(intf);
-                    }
-                }
+                m_targetSource= (value != null) ? value : EmptyTargetSource.Empty;
+// TODO (EE):remove
+//                bool initialized = !(this.m_targetSource is EmptyTargetSource);
+//                this.m_targetSource = value;
+//
+//                if (this.m_targetSource != null && !initialized && interfaceMap.Count == 0)
+//                {
+//                    Type[] interfaces = ReflectionUtils.GetInterfaces(this.m_targetSource.TargetType);
+//                    foreach (Type intf in interfaces)
+//                    {
+//                        AddInterfaceInternal(intf);
+//                    }
+//                }
             }
         }
 
@@ -246,7 +275,6 @@ namespace Spring.Aop.Framework
                 lock (this.SyncRoot)
                 {
                     IAdvisor[] advisorsArray = this._advisorsArray;
-                    IIntroductionAdvisor[] introductionsArray = this._introductionsArray;
 
                     for (int i = 0; i < advisorsArray.Length; i++)
                     {
@@ -256,9 +284,9 @@ namespace Spring.Aop.Framework
                         if (!canBeSerialized) return false;
                     }
 
-                    for (int i = 0; i < introductionsArray.Length; i++)
+                    for (int i = 0; i < this._introductions.Count; i++)
                     {
-                        IIntroductionAdvisor advisor = introductionsArray[i];
+                        IIntroductionAdvisor advisor = (IIntroductionAdvisor) this._introductions[i];
                         canBeSerialized = advisor.GetType().IsSerializable
                                           && advisor.Advice.GetType().IsSerializable;
                         if (!canBeSerialized) return false;
@@ -293,14 +321,26 @@ namespace Spring.Aop.Framework
             {
                 lock (this.SyncRoot)
                 {
-                    this.interfaceMap.Clear();
-                    for (int i = 0; i < value.Length; i++)
-                    {
-                        AddInterfaceInternal(value[i]);
-                    }
-                    InterfacesChanged();
+                    DieIfFrozen("Cannot change interface list if frozen");
+                    SetInterfacesInternal(value);
                 }
             }
+        }
+
+        /// <summary>
+        /// Set interfaces to be proxied, bypassing locking and <see cref="ProxyConfig.IsFrozen"/>
+        /// </summary>
+        protected void SetInterfacesInternal(Type[] value)
+        {
+            this.interfaceMap.Clear();
+            if (value != null)
+            {
+                for (int i = 0; i < value.Length; i++)
+                {
+                    AddInterfaceInternal(value[i]);
+                }
+            }
+            InterfacesChanged();
         }
 
         /// <summary>
@@ -368,9 +408,7 @@ namespace Spring.Aop.Framework
         {
             get
             {
-                //                lock(this.SyncRoot)
                 {
-                    //                    return (IAdvisor[]) _advisorsArray.Clone();
                     return _advisorsArray;
                 }
             }
@@ -399,7 +437,7 @@ namespace Spring.Aop.Framework
             {
                 lock (this.SyncRoot)
                 {
-                    return (IIntroductionAdvisor[])this._introductionsArray.Clone();
+                    return (IIntroductionAdvisor[])this._introductions.ToArray(typeof(IIntroductionAdvisor));
                 }
             }
         }
@@ -586,11 +624,8 @@ namespace Spring.Aop.Framework
                 {
                     return false;
                 }
-                else
-                {
-                    RemoveAdvisorInternal(index);
-                    return true;
-                }
+                RemoveAdvisorInternal(index);
+                return true;
             }
         }
 
@@ -664,37 +699,8 @@ namespace Spring.Aop.Framework
                     RemoveInterface(intf);
                 }
                 this._introductions.RemoveAt(index);
-                UpdateIntroductionsArray();
             }
         }
-
-        //
-        //        /// <summary>
-        //        /// Removes the supplied <paramref name="interceptor"/> from the list of
-        //        /// <see cref="Spring.Aop.Framework.AdvisedSupport.Advisors"/> for this
-        //        /// proxy.
-        //        /// </summary>
-        //        /// <param name="interceptor">
-        //        /// The <see cref="AopAlliance.Intercept.IInterceptor"/> to be removed.
-        //        /// </param>
-        //        /// <exception cref="AopConfigException">
-        //        /// If this proxy configuration is frozen and the
-        //        /// <paramref name="interceptor"/> cannot be added.
-        //        /// </exception>
-        //        public bool RemoveInterceptor(IInterceptor interceptor)
-        //        {
-        //            AssertFrozen("Cannot remove interceptor: config is frozen");
-        //            int index = IndexOf(interceptor);
-        //            if (index == -1)
-        //            {
-        //                return false;
-        //            }
-        //            else
-        //            {
-        //                RemoveAdvisor(index);
-        //                return true;
-        //            }
-        //        }
 
         /// <summary>
         /// Adds the supplied <paramref name="advisor"/> to the list
@@ -729,7 +735,7 @@ namespace Spring.Aop.Framework
                     this._advisors.Insert(index, advisor);
                 }
                 UpdateAdvisorsArray();
-                InterceptorsChanged();
+                AdviceChanged();
             }
         }
 
@@ -810,7 +816,6 @@ namespace Spring.Aop.Framework
                 {
                     this.interfaceMap[intf] = introductionAdvisor;
                 }
-                UpdateIntroductionsArray();
                 if (this.interfaceMap.Count != intfCount)
                 {
                     InterfacesChanged();
@@ -925,15 +930,35 @@ namespace Spring.Aop.Framework
         /// to the advised target, this method returns the <see cref="System.Object.ToString()"/>
         /// equivalent for the AOP proxy itself.
         /// </summary>
+        /// <remarks>To override this format, override <see cref="ToProxyConfigStringInternal"/></remarks>
         /// <returns>
         /// A <see cref="System.String"/> description of the proxy configuration.
         /// </returns>
-        public virtual string ToProxyConfigString()
+        public string ToProxyConfigString()
         {
             lock (this.SyncRoot)
             {
-                return ToStringInternal();
+                return ToProxyConfigStringInternal();
             }
+        }
+
+        /// <summary>
+        /// Returns textual information about this configuration object
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string ToProxyConfigStringInternal()
+        {
+            StringBuilder buffer = new StringBuilder(this.GetType().FullName + ":\n");
+            buffer.Append(this.interfaceMap.Count + " interfaces=[");
+            this.InterfacesToString(buffer);
+            buffer.Append("];\n");
+            buffer.Append(this._advisors.Count + " pointcuts=[");
+            this.AdvisorsToString(buffer);
+            buffer.Append("];\n");
+            buffer.Append("targetSource=[" + this.m_targetSource + "];\n");
+            buffer.Append("advisorChainFactory=" + this.advisorChainFactory + ";\n");
+            buffer.Append(base.ToString());
+            return buffer.ToString();            
         }
 
         #endregion
@@ -953,6 +978,17 @@ namespace Spring.Aop.Framework
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// If no explicit interfaces are specified, interfaces will be automatically determined 
+        /// from the target type on proxy creation. Defaults to true
+        /// </summary>
+        public bool AutoDetectInterfaces
+        {
+            get { return autoDetectInterfaces; }
+            set { autoDetectInterfaces = value; }
+        }
+
         /// <summary>
         /// Sets the target object that is to be advised.
         /// </summary>
@@ -1003,8 +1039,8 @@ namespace Spring.Aop.Framework
         /// </value>
         internal Type ProxyType
         {
-            get { return this.proxyType; }
-            set { this.proxyType = value; }
+            get { return this.cachedProxyType; }
+            set { this.cachedProxyType = value; }
         }
 
         /// <summary>
@@ -1012,8 +1048,8 @@ namespace Spring.Aop.Framework
         /// </summary>
         internal ConstructorInfo ProxyConstructor
         {
-            get { return this.proxyConstructor; }
-            set { this.proxyConstructor = value; }
+            get { return this.cachedProxyConstructor; }
+            set { this.cachedProxyConstructor = value; }
         }
 
         /// <summary>
@@ -1249,7 +1285,7 @@ namespace Spring.Aop.Framework
             }
             this._advisors.RemoveAt(index);
             this.UpdateAdvisorsArray();
-            this.InterceptorsChanged();
+            this.AdviceChanged();
         }
 
         /// <summary>
@@ -1328,15 +1364,7 @@ namespace Spring.Aop.Framework
             this._advisorsArray = advisorsArray;
         }
 
-        /// <summary>
-        /// Bring the introductions array up to date with the list.
-        /// </summary>
-        private void UpdateIntroductionsArray()
-        {
-            IIntroductionAdvisor[] introductionsArray = new IIntroductionAdvisor[this._introductions.Count];
-            this._introductions.CopyTo(introductionsArray, 0);
-            this._introductionsArray = introductionsArray;
-        }
+        #region IAdvisedSupportListener support
 
         /// <summary>
         /// Callback method that is invoked when the list of proxied interfaces
@@ -1351,9 +1379,10 @@ namespace Spring.Aop.Framework
         /// to be generated on the next call to get a proxy.
         /// </p>
         /// </remarks>
-        private void InterfacesChanged()
+        protected virtual void InterfacesChanged()
         {
-            ProxyType = null;
+            this.cachedProxyType = null;
+            this.cachedProxyConstructor = null;
             if (this.isActive)
             {
                 foreach (IAdvisedSupportListener listener in this.listeners)
@@ -1366,7 +1395,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// Callback method that is invoked when the interceptor list has changed.
         /// </summary>
-        private void InterceptorsChanged()
+        protected virtual void AdviceChanged()
         {
             if (this.isActive)
             {
@@ -1392,6 +1421,8 @@ namespace Spring.Aop.Framework
             }
         }
 
+        #endregion
+
         /// <summary> 
         /// Creates an AOP proxy using this instance's configuration data.
         /// </summary>
@@ -1408,12 +1439,54 @@ namespace Spring.Aop.Framework
         {
             lock (this.SyncRoot)
             {
+                if (this.autoDetectInterfaces && CountNonIntroductionInterfaces() == 0 
+//                    && !this.ProxyTargetType
+                    )
+                {
+                    this.interfaceMap.Clear();
+                    // add all target interfaces
+                    Type[] targetInterfaces = ReflectionUtils.GetInterfaces(this.TargetType);
+                    foreach(Type targetInterface in targetInterfaces )
+                    {
+                        this.interfaceMap[targetInterface] = null;
+                    }
+                    // add introduced interfaces
+                    foreach(IIntroductionAdvisor introduction in this._introductions)
+                    {
+                        foreach(Type introducedInterface in introduction.Interfaces)
+                        {
+                            this.interfaceMap[introducedInterface] = introduction;
+                        }
+                    }
+
+                    if (targetInterfaces.Length > 0)
+                    {
+                        InterfacesChanged();
+                    }
+                }
+
                 if (!this.isActive)
                 {
                     Activate();
                 }
                 return AopProxyFactory.CreateAopProxy(this);
             }
+        }
+
+        /// <summary>
+        /// Calculates the number of <see cref="Interfaces"/> not delegating to one of the <see cref="Introductions"/>.
+        /// </summary>
+        private int CountNonIntroductionInterfaces()
+        {
+            int c = 0;
+            foreach(Type interfaceType in this.interfaceMap.Keys)
+            {
+                if (this.interfaceMap[interfaceType] == null)
+                {
+                    c++;
+                }
+            }
+            return c;
         }
 
         /// <summary>
@@ -1435,25 +1508,57 @@ namespace Spring.Aop.Framework
         /// </param>
         protected internal virtual void CopyConfigurationFrom(AdvisedSupport other)
         {
-            CopyFrom(other);
-            this.m_targetSource = other.m_targetSource;
-            this.proxyType = other.proxyType;
-            this.proxyConstructor = other.proxyConstructor;
+            CopyConfigurationFrom(other, other.TargetSource, new ArrayList(other.Advisors), new ArrayList(other.Introductions));
+        }
 
+        /// <summary>
+        /// Copies the configuration from the supplied other
+        /// <see cref="Spring.Aop.Framework.AdvisedSupport"/> into this instance.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Useful when this instance has been created using the no-argument
+        /// constructor, and needs to get all of its confiuration data from
+        /// another <see cref="Spring.Aop.Framework.AdvisedSupport"/> (most
+        /// usually to have an independant copy of said configuration data).
+        /// </p>
+        /// </remarks>
+        /// <param name="other">
+        /// The <see cref="Spring.Aop.Framework.AdvisedSupport"/> instance
+        /// containing the configiration data that is to be copied into this
+        /// instance.
+        /// </param>
+        /// <param name="targetSource">the new target source</param>
+        /// <param name="advisors">the advisors for the chain</param>
+        /// <param name="introductions">the introductions for the chain</param>
+        protected internal virtual void CopyConfigurationFrom(AdvisedSupport other, ITargetSource targetSource, IList advisors, IList introductions)
+        {
+            CopyFrom(other);
+            this.AdvisorChainFactory = other.advisorChainFactory;
+            this.m_targetSource = targetSource;
+//            this.cachedProxyType = other.cachedProxyType;
+//            this.cachedProxyConstructor = other.cachedProxyConstructor;
+            this.Interfaces = (Type[]) CollectionUtils.ToArray(other.Interfaces, typeof(Type));
             foreach (Type intf in other.interfaceMap.Keys)
             {
                 this.interfaceMap[intf] = other.interfaceMap[intf];
             }
             this._advisors = new ArrayList();
-            foreach (IAdvisor advisor in other._advisors)
+            foreach (IAdvisor advisor in advisors)
             {
+			    AssertUtils.ArgumentNotNull(advisor, "Advisor must not be null");
                 AddAdvisor(advisor);
             }
             this._introductions = new ArrayList();
-            foreach (IIntroductionAdvisor advisor in other._introductions)
+            foreach (IIntroductionAdvisor advisor in introductions)
             {
+                // TODO (EE): implement
+//			        ValidateIntroductionAdvisor((IIntroductionAdvisor) advisor);
+                AssertUtils.ArgumentNotNull(advisor, "IntroductionAdvisor must not be null");
                 AddIntroduction(advisor);
             }
+            UpdateAdvisorsArray();
+            AdviceChanged();
         }
 
         /// <summary>
@@ -1468,31 +1573,8 @@ namespace Spring.Aop.Framework
         {
             lock (this.SyncRoot)
             {
-                return ToStringInternal();
+                return ToProxyConfigString();
             }
-        }
-
-        /// <summary>
-        /// A <see cref="System.String"/> that represents the current
-        /// <see cref="Spring.Aop.Framework.ProxyConfig"/> configuration.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="System.String"/> that represents the current
-        /// <see cref="Spring.Aop.Framework.ProxyConfig"/> configuration.
-        /// </returns>
-        private string ToStringInternal()
-        {
-            StringBuilder buffer = new StringBuilder(this.GetType().FullName + ":\n");
-            buffer.Append(this.interfaceMap.Count + " interfaces=[");
-            this.InterfacesToString(buffer);
-            buffer.Append("];\n");
-            buffer.Append(this._advisors.Count + " pointcuts=[");
-            this.AdvisorsToString(buffer);
-            buffer.Append("];\n");
-            buffer.Append("targetSource=[" + this.m_targetSource + "];\n");
-            buffer.Append("advisorChainFactory=" + this.advisorChainFactory + ";\n");
-            buffer.Append(base.ToString());
-            return buffer.ToString();
         }
 
         /// <summary>
@@ -1568,7 +1650,7 @@ namespace Spring.Aop.Framework
             {
                 throw new AopConfigException("Can't proxy null object");
             }
-            return ReflectionUtils.GetInterfaces(target.GetType());
+            return ReflectionUtils.GetInterfaces(target is Type ? (Type)target : target.GetType());
         }
     }
 }

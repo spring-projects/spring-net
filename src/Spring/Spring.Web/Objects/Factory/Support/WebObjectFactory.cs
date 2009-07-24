@@ -266,8 +266,8 @@ namespace Spring.Objects.Factory.Support
         protected override object CreateAndCacheSingletonInstance(
             string objectName, RootObjectDefinition objectDefinition, object[] arguments)
         {
-            if (objectDefinition is IWebObjectDefinition
-                && ((IWebObjectDefinition)objectDefinition).Scope != ObjectScope.Application)
+            if (IsWebScopedSingleton(objectDefinition)
+                )
             {
                 ObjectScope scope = ((IWebObjectDefinition)objectDefinition).Scope;
 

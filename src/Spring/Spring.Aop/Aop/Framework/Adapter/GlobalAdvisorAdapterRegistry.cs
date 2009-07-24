@@ -28,6 +28,7 @@ namespace Spring.Aop.Framework.Adapter
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
+    [Serializable]
     public sealed class GlobalAdvisorAdapterRegistry : DefaultAdvisorAdapterRegistry
     {
         private static readonly GlobalAdvisorAdapterRegistry instance

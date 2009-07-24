@@ -230,8 +230,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             NopInterceptor ni = new NopInterceptor();
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.Target = new InheritanceTestObject();
+            AdvisedSupport advised = new AdvisedSupport(new InheritanceTestObject());
             advised.AddAdvice(ni);
 
             object proxy = CreateProxy(advised);
@@ -253,8 +252,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             NopInterceptor ni = new NopInterceptor();
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.Target = new InheritanceTestObject();
+            AdvisedSupport advised = new AdvisedSupport(new InheritanceTestObject());
             advised.AddAdvice(ni);
 
             object proxy = CreateProxy(advised);
@@ -277,8 +275,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             NopInterceptor ni = new NopInterceptor();
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.Target = new InheritanceTestObject();
+            AdvisedSupport advised = new AdvisedSupport(new InheritanceTestObject());
             advised.AddAdvice(ni);
 
             object proxy = CreateProxy(advised);
@@ -296,8 +293,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             NopInterceptor ni = new NopInterceptor();
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.Target = new InheritanceTestObject();
+            AdvisedSupport advised = new AdvisedSupport(new InheritanceTestObject());
             advised.AddAdvice(ni);
 
             object proxy = CreateProxy(advised);
@@ -314,8 +310,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             NopInterceptor ni = new NopInterceptor();
 
-            AdvisedSupport advised = new AdvisedSupport();
-            advised.Target = new InheritanceTestObject();
+            AdvisedSupport advised = new AdvisedSupport(new InheritanceTestObject());
             advised.AddAdvice(ni);
 
             object proxy = CreateProxy(advised);

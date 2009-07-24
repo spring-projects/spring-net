@@ -32,9 +32,7 @@ using System.Web;
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
 using NUnit.Framework;
-
 using Rhino.Mocks;
-
 using Spring.Aop.Advice;
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Interceptor;
@@ -164,7 +162,7 @@ namespace Spring.Aop.Framework
             Assert.AreEqual(di.Count, 0);
             test1.Age = (5);
             Assert.AreEqual(test1_1.Age, test1.Age);
-            Assert.AreEqual(di.Count, 3);
+            Assert.AreEqual(3, di.Count);
         }
 
         [Test]
@@ -180,7 +178,7 @@ namespace Spring.Aop.Framework
         public void PrototypeInstancesAreIndependent()
         {
             IObjectFactory objectFactory = new XmlObjectFactory(new ReadOnlyXmlTestResource("prototypeTests.xml", GetType()));
-            // Initial count value set in object factory XML 
+            // Initial count value set in object factory XML
             int INITIAL_COUNT = 10;
 
 
@@ -222,7 +220,7 @@ namespace Spring.Aop.Framework
         public void CanGetFactoryReferenceAndManipulate()
         {
             ITestObject to = (ITestObject)factory.GetObject("test1");
-            // no exception 
+            // no exception
             string dummy = to.Name;
 
             IAdvised config = (IAdvised)to;
@@ -246,7 +244,7 @@ namespace Spring.Aop.Framework
         }
 
         /// <summary>
-        /// Must see effect immediately on behaviour. 
+        /// Must see effect immediately on behaviour.
         /// TODO (EE): Note that we can't add or remove interfaces without reconfiguring the singleton.
         /// </summary>
         [Test, Ignore("change according to ProxyFactoryBeanTests.canAddAndRemoveAdvicesOnSingleton")]
@@ -376,7 +374,7 @@ namespace Spring.Aop.Framework
 
         /// <summary>
         /// Note that we can't add or remove interfaces without reconfiguring the
-        /// singleton. 
+        /// singleton.
         /// </summary>
         [Test]
         public void CanAddAndRemoveAspectInterfacesOnSingletonByCasting()
@@ -463,6 +461,7 @@ namespace Spring.Aop.Framework
             Assert.IsTrue(agi.GlobalsAdded == -1);
 
             ProxyFactoryObject pfb = (ProxyFactoryObject)factory.GetObject("&validGlobals");
+            pfb.GetObject(); // for creation
             Assert.AreEqual(2, pfb.Advisors.Length, "Proxy should have 1 global and 1 explicit advisor");
             Assert.AreEqual(1, pfb.Introductions.Length, "Proxy should have 1 global introduction");
 
@@ -519,20 +518,34 @@ namespace Spring.Aop.Framework
             mocks.VerifyAll();
         }
 
-        [Test]
-        [ExpectedException(typeof(AopConfigException))]
-        public void AddAdvisorWhenConfigIsFrozen()
+        private ProxyFactoryObject CreateFrozenProxyFactory()
         {
             ProxyFactoryObject fac = new ProxyFactoryObject();
+            fac.AddInterface(typeof(ITestObject));
             fac.IsFrozen = true;
-            fac.AddAdvisor(new PointcutForVoid());
+            fac.AddAdvisor(new PointcutForVoid()); // this is ok, no proxy created yet
+            fac.GetObject();
+            return fac;
+        }
+
+        [Test]
+        public void AddAdvisorWhenConfigIsFrozen()
+        {
+            ProxyFactoryObject fac = CreateFrozenProxyFactory();
+            try
+            {
+                fac.AddAdvisor(new PointcutForVoid()); // not ok
+                Assert.Fail("changing a frozen config must throw AopConfigException");
+            }
+            catch (AopConfigException)
+            {}
         }
 
         [Test]
         [ExpectedException(typeof(AopConfigException))]
         public void RemoveAdvisorWhenConfigIsFrozen()
         {
-            ProxyFactoryObject fac = new ProxyFactoryObject();
+            ProxyFactoryObject fac = CreateFrozenProxyFactory();
             fac.IsFrozen = true;
             fac.RemoveAdvisor(new PointcutForVoid());
         }
@@ -541,7 +554,7 @@ namespace Spring.Aop.Framework
         [ExpectedException(typeof(AopConfigException))]
         public void ReplaceAdvisorWhenConfigIsFrozen()
         {
-            ProxyFactoryObject fac = new ProxyFactoryObject();
+            ProxyFactoryObject fac = CreateFrozenProxyFactory();
             fac.IsFrozen = true;
             fac.ReplaceAdvisor(new PointcutForVoid(), new PointcutForVoid());
         }
@@ -581,22 +594,31 @@ namespace Spring.Aop.Framework
             GoodCommand target = new GoodCommand();
             NopInterceptor advice = new NopInterceptor();
 
-            IObjectFactory mock = (IObjectFactory)mocks.CreateMock(typeof(IObjectFactory));
-            Expect.Call(mock.IsSingleton("advice")).Return(true); // advice is a singleton...
-            Expect.Call(mock.GetObject("advice")).Return(advice);
-            Expect.Call(mock.GetType("prototype")).Return(typeof(GoodCommand));
-
-            Expect.Call(mock.GetObject("advice")).Return(advice);
-            Expect.Call(mock.GetObject("prototype")).Return(target);
-            mocks.ReplayAll();
+            MockRepository mocks = new MockRepository();
+            IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
             fac.IsSingleton = false;
             fac.InterceptorNames = new string[] { "advice", "prototype" };
-            fac.ObjectFactory = mock;
+            fac.ObjectFactory = factory;
 
-            fac.GetObject();
+//            using (mocks.Record())
+            {
+                using (mocks.Unordered())
+                {
+                    Expect.Call(factory.IsSingleton("advice")).Return(true);
+                    Expect.Call(factory.GetObject("advice")).Return(advice);
+                    Expect.Call(factory.GetType("prototype")).Return(target.GetType());
+                    Expect.Call(factory.GetObject("prototype")).Return(target);
+                }
+            }
+            mocks.ReplayAll();
+
+//            using(mocks.Playback())
+            {
+                fac.GetObject();
+            }
             mocks.VerifyAll();
         }
 
@@ -633,7 +655,7 @@ namespace Spring.Aop.Framework
         }
 
         [Test]
-        public void SingletonProxyWithPrototypeTarget()
+        public void SingletonProxyWithPrototypeTargetCreatesTargetOnlyOnce()
         {
             try
             {
@@ -651,7 +673,7 @@ namespace Spring.Aop.Framework
                 fac.InterceptorNames = new string[] { "advice", "prototype" };
                 fac.ObjectFactory = ctx;
 
-                Assert.AreEqual(1, InstantiationCountingCommand.NumberOfInstantiations, "First Call");
+                Assert.AreEqual(0, InstantiationCountingCommand.NumberOfInstantiations, "First Call");
                 fac.GetObject();
                 Assert.AreEqual(1, InstantiationCountingCommand.NumberOfInstantiations, "Second Call");
                 fac.GetObject();
@@ -685,8 +707,7 @@ namespace Spring.Aop.Framework
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
-        public void NullNameInInterceptorNamesArray()
+        public void NullNameInInterceptorNamesArrayThrowAopConfigException()
         {
             IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
 
@@ -695,6 +716,13 @@ namespace Spring.Aop.Framework
             fac.IsSingleton = false;
             fac.InterceptorNames = new string[] { null, null };
             fac.ObjectFactory = factory;
+            try
+            {
+                fac.GetObject();
+                Assert.Fail();
+            }
+            catch (AopConfigException)
+            {}
         }
 
         [Test]
@@ -843,7 +871,7 @@ namespace Spring.Aop.Framework
                 XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
 
                 HelperInterface2 hc = (HelperInterface2)objectFactory.GetObject("MyProxy");
-                Console.WriteLine(hc.SecondDoSomething());                                
+                Console.WriteLine(hc.SecondDoSomething());
         }
 
         [Test]
@@ -899,7 +927,7 @@ namespace Spring.Aop.Framework
         {
             ProxyFactoryObject factoryObject = (ProxyFactoryObject) this.factory.GetObject( "&concurrentPrototype" );
             Type testObjectType1 = factoryObject.GetObject().GetType();
-            
+
             factoryObject.Interfaces = new Type[] {};
             Type testObjectType2 = factoryObject.GetObject().GetType();
 
@@ -1032,7 +1060,7 @@ namespace Spring.Aop.Framework
             int GlobalsAdded { get; set; }
         }
 
-        /// <summary> Use as a global interceptor. Checks that 
+        /// <summary> Use as a global interceptor. Checks that
         /// global interceptors can add aspect interfaces.
         /// NB: Add only via global interceptors in XML file.
         /// </summary>

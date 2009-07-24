@@ -759,7 +759,7 @@ namespace Spring.Objects.Factory.Support
         {
             // don't let calling code try to dereference the
             // object factory if the object isn't a factory
-            if (IsFactoryDereference(name) && !(ObjectUtils.IsAssignable(typeof (IFactoryObject), instance)))
+            if (IsFactoryDereference(name) && !(ObjectUtils.IsAssignable(typeof(IFactoryObject), instance)))
             {
                 throw new ObjectIsNotAFactoryException(canonicalName, instance);
             }
@@ -770,7 +770,7 @@ namespace Spring.Objects.Factory.Support
 
 
             // it's a normal object ?
-            if (!ObjectUtils.IsAssignable(typeof (IFactoryObject), instance))
+            if (!ObjectUtils.IsAssignable(typeof(IFactoryObject), instance))
             {
                 #region Instrumentation
 
@@ -785,7 +785,7 @@ namespace Spring.Objects.Factory.Support
             }
 
             // the user wants the factory itself ?
-            if (!ObjectUtils.IsAssignable(typeof (IFactoryObject), instance) || IsFactoryDereference(name))
+            if (!ObjectUtils.IsAssignable(typeof(IFactoryObject), instance) || IsFactoryDereference(name))
             {
                 #region Instrumentation
 
@@ -819,8 +819,15 @@ namespace Spring.Objects.Factory.Support
 
             if (resultInstance == null)
             {
+                #region Instrumentation
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("Dereferencing Object with name '{0}'", canonicalName));
+                }
+                #endregion
+
                 // return object instance from factory...
-                IFactoryObject factory = (IFactoryObject) instance;
+                IFactoryObject factory = (IFactoryObject)instance;
 
                 if (rod == null && ContainsObjectDefinition(canonicalName))
                 {
@@ -853,6 +860,15 @@ namespace Spring.Objects.Factory.Support
                                                                    + "possible cause: not fully initialized due to "
                                                                    + "circular object reference.");
                 }
+            }
+            else
+            {
+                #region Instrumentation
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("Returning factory product from cache for Object with name '{0}'", canonicalName));
+                }
+                #endregion
             }
             return resultInstance;
         }
@@ -1873,88 +1889,121 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type, object[])"/>
         protected object GetObjectInternal(string name, Type requiredType, object[] arguments, bool suppressConfigure)
         {
-            string objectName = TransformedObjectName(name);
-            object instance = null;
-
-            // those are cases, where singleton cache can be used
-            if (arguments == null && !suppressConfigure)
+            const int INDENT = 3;
+            bool hasErrors = false;
+            try
             {
-                // eagerly check singleton cache for manually registered singletons...                       
-                object sharedInstance = GetSingleton(objectName);
+                string objectName = TransformedObjectName(name);
 
-                if (sharedInstance != null)
+                #region Instrumentation
+                if (log.IsDebugEnabled)
                 {
-                    #region Instrumentation
+                    log.Debug(string.Format("{2}GetObjectInternal: obtaining instance for name {0} => canonical name {1}", name, objectName, new String(' ', nestingCount * INDENT)));
+                    nestingCount++;
+                }
+                #endregion
 
-                    if (IsSingletonCurrentlyInCreation(objectName))
+                object instance = null;
+
+                // those are cases, where singleton cache can be used
+                if (arguments == null && !suppressConfigure)
+                {
+                    // eagerly check singleton cache for manually registered singletons...                       
+                    object sharedInstance = GetSingleton(objectName);
+                    if (sharedInstance != null)
                     {
+                        #region Instrumentation
                         if (log.IsDebugEnabled)
                         {
-                            log.Debug("Returning eagerly cached instance of singleton object '" + objectName +
-                                      "' that is not fully initialized yet - a consequence of a circular reference");
+                            if (IsSingletonCurrentlyInCreation(objectName))
+                            {
+                                log.Debug("Returning eagerly cached instance of singleton object '" + objectName +
+                                          "' that is not fully initialized yet - a consequence of a circular reference");
+                            }
+                            else
+                            {
+                                log.Debug(string.Format("Returning cached instance of singleton object '{0}'.", objectName));
+                            }
                         }
+                        #endregion
+
+                        instance = GetObjectForInstance(sharedInstance, name, objectName, null);
+                        return EnsureObjectIsOfRequiredType(name, instance, requiredType);
                     }
-                    else
+                }
+
+                // check if object definition exists
+                RootObjectDefinition mergedObjectDefinition = null;
+                mergedObjectDefinition = GetMergedObjectDefinition(objectName, false);
+                if (mergedObjectDefinition == null)
+                {
+                    if (ParentObjectFactory != null)
                     {
-                        if (log.IsDebugEnabled)
-                        {
-                            log.Debug(string.Format("Returning cached instance of singleton object '{0}'.", objectName));
-                        }
+                        return ParentObjectFactory.GetObject(name, requiredType, arguments);
                     }
-
-                    #endregion
-
-                    instance = GetObjectForInstance(sharedInstance, name, objectName, null);
-                    return EnsureObjectIsOfRequiredType(name, instance, requiredType);
+                    throw new NoSuchObjectDefinitionException(name, "Cannot find definition for object [" + name + "]");
                 }
-            }
 
-            // check if object definition exists
-            RootObjectDefinition mergedObjectDefinition = null;
-            mergedObjectDefinition = GetMergedObjectDefinition(objectName, false);
-            if (mergedObjectDefinition == null)
-            {
-                if (ParentObjectFactory != null)
+                if (arguments != null
+                    || suppressConfigure)
                 {
-                    return ParentObjectFactory.GetObject(name, requiredType, arguments);
+                    // Clone ObjectDefinition
+                    mergedObjectDefinition = CreateRootObjectDefinition(mergedObjectDefinition);
+                    mergedObjectDefinition.IsSingleton = false;
+                    if (arguments != null)
+                    {
+                        // Override constructor values and configure as a prototype if arguments are specified
+                        mergedObjectDefinition.ConstructorArgumentValues = null;
+                    }
                 }
-                throw new NoSuchObjectDefinitionException(name, "Cannot find definition for object [" + name + "]");
-            }
 
-            if (arguments != null
-                || suppressConfigure)
-            {
-                // Clone ObjectDefinition
-                mergedObjectDefinition = CreateRootObjectDefinition(mergedObjectDefinition);
-                mergedObjectDefinition.IsSingleton = false;
-                if (arguments != null)
+                CheckMergedObjectDefinition(mergedObjectDefinition, objectName, requiredType, arguments);
+
+                // return IObjectDefinition instance itself for an abstract object-definition
+                if (mergedObjectDefinition.IsAbstract)
                 {
-                    // Override constructor values and configure as a prototype if arguments are specified
-                    mergedObjectDefinition.ConstructorArgumentValues = null;
+                    instance = mergedObjectDefinition;
                 }
-            }
+                else if (mergedObjectDefinition.IsSingleton)
+                {
+                    // create object instance...
+                    object sharedInstance = CreateAndCacheSingletonInstance(objectName, mergedObjectDefinition, arguments);
+                    instance = GetObjectForInstance(sharedInstance, name, objectName, mergedObjectDefinition);
+                }
+                else
+                {
+                    // it's a prototype, so create a new instance...
+                    instance = InstantiateObject(name, mergedObjectDefinition, arguments, true, suppressConfigure);
+                }
 
-            CheckMergedObjectDefinition(mergedObjectDefinition, objectName, requiredType, arguments);
-
-            // return IObjectDefinition instance itself for an abstract object-definition
-            if (mergedObjectDefinition.IsAbstract)
-            {
-                instance = mergedObjectDefinition;
+                return EnsureObjectIsOfRequiredType(name, instance, requiredType);
             }
-            else if (mergedObjectDefinition.IsSingleton)
+            catch
             {
-                // create object instance...
-                object sharedInstance = CreateAndCacheSingletonInstance(objectName, mergedObjectDefinition, arguments);
-                instance = GetObjectForInstance(sharedInstance, name, objectName, mergedObjectDefinition);
+                #region Instrumentation
+                if (log.IsErrorEnabled)
+                {
+                    hasErrors = true;
+                    nestingCount--;
+                    log.Error(string.Format("{1}GetObjectInternal: error obtaining object {0}", name, new String(' ', nestingCount * INDENT)));
+                }
+                #endregion
+                throw;
             }
-            else
+            finally
             {
-                // it's a prototype, so create a new instance...
-                instance = InstantiateObject(name, mergedObjectDefinition, arguments, true, suppressConfigure);
+                #region Instrumentation
+                if (log.IsDebugEnabled && !hasErrors)
+                {
+                    nestingCount--;
+                    log.Debug(string.Format("{1}GetObjectInternal: returning instance for objectname {0}", name, new String(' ', nestingCount * INDENT)));
+                }
+                #endregion
             }
-
-            return EnsureObjectIsOfRequiredType(name, instance, requiredType);
         }
+
+        [ThreadStatic]
+        private int nestingCount;
 
         /// <summary>
         /// Checks, if the passed instance is of the required type.
@@ -2001,12 +2050,10 @@ namespace Spring.Objects.Factory.Support
                 if (sharedInstance == null)
                 {
                     #region Instrumentation
-
                     if (log.IsDebugEnabled)
                     {
-                        log.Debug("Creating shared instance of singleton object '" + objectName + "'");
+                        log.Debug(string.Format("Creating shared instance of singleton object '{0}'", objectName));
                     }
-
                     #endregion
 
                     BeforeSingletonCreation(objectName);
@@ -2019,6 +2066,13 @@ namespace Spring.Objects.Factory.Support
                         AfterSingletonCreation(objectName);
                     }
                     AddSingleton(objectName, sharedInstance);
+
+                    #region Instrumentation
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug(string.Format("Cached shared instance of singleton object '{0}'", objectName));
+                    }
+                    #endregion
                 }
                 return sharedInstance;
             }
@@ -2138,19 +2192,19 @@ namespace Spring.Objects.Factory.Support
         {
             if (objectPostProcessor is IObjectFactoryAware)
             {
-                ((IObjectFactoryAware) objectPostProcessor).ObjectFactory = this;
+                ((IObjectFactoryAware)objectPostProcessor).ObjectFactory = this;
             }
 
             // ensure the same instance doesn't get registered twice
-            if (!ObjectPostProcessors.Contains( objectPostProcessor ))
+            if (!ObjectPostProcessors.Contains(objectPostProcessor))
             {
-                ObjectPostProcessors.Add( objectPostProcessor );
+                ObjectPostProcessors.Add(objectPostProcessor);
             }
-            if (typeof( IInstantiationAwareObjectPostProcessor ).IsInstanceOfType( objectPostProcessor ))
+            if (typeof(IInstantiationAwareObjectPostProcessor).IsInstanceOfType(objectPostProcessor))
             {
                 hasInstantiationAwareBeanPostProcessors = true;
             }
-            if (typeof( IDestructionAwareObjectPostProcessor ).IsInstanceOfType( objectPostProcessor ))
+            if (typeof(IDestructionAwareObjectPostProcessor).IsInstanceOfType(objectPostProcessor))
             {
                 hasDestructionAwareBeanPostProcessors = true;
             }
@@ -2207,6 +2261,19 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
+        /// Register the given custom <see cref="System.ComponentModel.TypeConverter"/>
+        /// for all properties of the given <see cref="System.Type"/>.
+        /// </summary>
+        /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableObjectFactory.RegisterCustomConverter"/>.
+        public void RegisterCustomConverter(Type requiredType, TypeConverter converter)
+        {
+            AssertUtils.ArgumentNotNull(requiredType, "requiredType");
+            TypeConverterRegistry.RegisterConverter(requiredType, converter);
+        }
+
+        #region ISingletonObjectRegistry Members
+
+        /// <summary>
         /// Register the given existing object as singleton in the object factory,
         /// under the given object name.
         /// </summary>
@@ -2229,17 +2296,6 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Register the given custom <see cref="System.ComponentModel.TypeConverter"/>
-        /// for all properties of the given <see cref="System.Type"/>.
-        /// </summary>
-        /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableObjectFactory.RegisterCustomConverter"/>.
-        public void RegisterCustomConverter(Type requiredType, TypeConverter converter)
-        {
-            AssertUtils.ArgumentNotNull(requiredType, "requiredType");
-            TypeConverterRegistry.RegisterConverter(requiredType, converter);
-        }
-
-        /// <summary>
         /// Does this object factory contains a singleton instance with the
         /// supplied <paramref name="name"/>?
         /// </summary>
@@ -2252,9 +2308,6 @@ namespace Spring.Objects.Factory.Support
                 return singletonCache.Contains(name);
             }
         }
-
-        #region ISingletonObjectRegistry Members
-
 
         /// <summary>
         /// Gets the names of singleton objects registered in this registry.
