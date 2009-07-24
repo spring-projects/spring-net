@@ -121,8 +121,7 @@ namespace Spring.Data.NHibernate
             IAdoExceptionTranslator translator = template.AdoExceptionTranslator;
 	        Assert.IsNotNull(translator, "ADO.NET exception translator should not be null");
 	        
-	        
-	        Assert.IsInstanceOfType(typeof(ErrorCodeExceptionTranslator), translator);
+	        Assert.That(translator, Is.InstanceOf(typeof(ErrorCodeExceptionTranslator)));
         }
 	    
 	    [Test]

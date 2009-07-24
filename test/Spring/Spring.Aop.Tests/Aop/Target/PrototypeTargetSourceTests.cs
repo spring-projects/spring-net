@@ -81,8 +81,8 @@ namespace Spring.Aop.Target
 		{
 			SideEffectObject target = new SideEffectObject();
 			IDynamicMock mock = new DynamicMock(typeof (IObjectFactory));
-			mock.ExpectAndReturn("IsPrototype", true);
-			mock.ExpectAndReturn("GetType", typeof(SideEffectObject));
+			mock.ExpectAndReturn("IsPrototype", true, null);
+			mock.ExpectAndReturn("GetType", typeof(SideEffectObject), null);
 			PrototypeTargetSource source = new PrototypeTargetSource();
 			source.ObjectFactory = (IObjectFactory) mock.Object;
 			Assert.AreEqual(target.GetType(), source.TargetType, "Wrong TargetType being returned.");
@@ -119,10 +119,12 @@ namespace Spring.Aop.Target
 		public void GetTarget()
 		{
 			SideEffectObject target = new SideEffectObject();
-			IDynamicMock mock = new DynamicMock(typeof (IObjectFactory));
-			mock.ExpectAndReturn("IsPrototype", true);
-			mock.ExpectAndReturn("GetObject", target);
+			IDynamicMock mock = new DynamicMock(typeof (IObjectFactory));;
+			mock.ExpectAndReturn("IsPrototype", true, "foo");
+			mock.ExpectAndReturn("GetObject", target, "foo");
+		    mock.ExpectAndReturn("GetType", typeof (string), "foo");
 			PrototypeTargetSource source = new PrototypeTargetSource();
+            source.TargetObjectName = "foo";
 			source.ObjectFactory = (IObjectFactory) mock.Object;
 			Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), target),
 			              "Initial target source reference not being returned by GetTarget().");

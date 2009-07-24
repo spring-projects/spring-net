@@ -271,12 +271,12 @@ namespace Spring.Aspects.Exceptions
             }
             catch (InvalidOperationException e)
             {
-                Assert.IsInstanceOfType(typeof(ArithmeticException), e.InnerException, "Inner exception.");
+                Assert.That(e.InnerException, Is.InstanceOf(typeof(ArithmeticException)), "Inner exception.");
                 Assert.AreEqual("My Message, Method Name Exceptional", e.Message);
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOfType(typeof(InvalidOperationException), e, "wrong exception type thrown.");
+                Assert.That(e, Is.InstanceOf(typeof (InvalidOperationException)), "wrong exception type thrown.");
             }
         }
 
@@ -294,12 +294,12 @@ namespace Spring.Aspects.Exceptions
             }
             catch (InvalidOperationException e)
             {
-                Assert.IsInstanceOfType(typeof(ArithmeticException), e.InnerException);
+                Assert.That(e.InnerException, Is.InstanceOf(typeof(ArithmeticException)));
                 Assert.AreEqual("My Message", e.Message);
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOfType(typeof(InvalidOperationException), e);
+                Assert.That(e, Is.InstanceOf(typeof(InvalidOperationException)));
             }
         }
 
@@ -317,12 +317,11 @@ namespace Spring.Aspects.Exceptions
             }
             catch (InvalidOperationException e)
             {
-                Assert.IsInstanceOfType(typeof(ArithmeticException), e.InnerException);
                 Assert.AreEqual("Wrapped ArithmeticException", e.Message);
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOfType(typeof(InvalidOperationException), e);
+                Assert.That(e, Is.InstanceOf(typeof(InvalidOperationException)));
             }
         }
 
@@ -346,7 +345,7 @@ namespace Spring.Aspects.Exceptions
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOfType(typeof(InvalidOperationException), e);
+                Assert.That(e, Is.InstanceOf(typeof(InvalidOperationException)));
             }
         }
 
@@ -369,7 +368,7 @@ namespace Spring.Aspects.Exceptions
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOfType(typeof(InvalidOperationException), e);
+                Assert.That(e, Is.InstanceOf(typeof(InvalidOperationException)));
             }
         }
 
@@ -445,7 +444,7 @@ namespace Spring.Aspects.Exceptions
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOfType(typeof(InvalidOperationException), e);
+                Assert.That(e, Is.InstanceOf(typeof(InvalidOperationException)));
             }
 
 

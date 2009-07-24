@@ -580,7 +580,7 @@ namespace Spring.Aop.Framework
             NopInterceptor advice = new NopInterceptor();
 
             IDynamicMock mock = new DynamicMock(typeof(IObjectFactory));
-            mock.ExpectAndReturn("IsSingleton", true); // advice is a singleton...
+            mock.ExpectAndReturn("IsSingleton", true, "advice"); // advice is a singleton...
             mock.ExpectAndReturn("GetObject", advice, "advice");
             mock.ExpectAndReturn("GetType", typeof(GoodCommand), "prototype");
 

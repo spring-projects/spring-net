@@ -27,6 +27,8 @@ using System.Web;
 using AopAlliance.Intercept;
 using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Spring.Util;
 
 #endregion
 
@@ -57,65 +59,79 @@ namespace Spring.Aop.Framework.Adapter
 		[Test]
 		public void NotInvoked()
 		{
-			MyThrowsHandler th = new MyThrowsHandler();
-			ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
-			object ret = new object();
+            MockRepository repository = new MockRepository();
+		    IMethodInvocation mi = (IMethodInvocation) repository.CreateMock(typeof (IMethodInvocation));
+            
+            MyThrowsHandler th = new MyThrowsHandler();
+            ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
+            object ret = new object();
 
-			IDynamicMock mc = new DynamicMock(typeof (IMethodInvocation));
-			IMethodInvocation mi = (IMethodInvocation) mc.Object;
-			mi.Proceed();
-			mc.SetValue("Proceed", ret);
-			Assert.AreEqual(ret, ti.Invoke(mi));
-			Assert.AreEqual(0, th.GetCalls());
-			mc.Verify();
+		    Expect.Call(mi.Proceed()).Return(ret);
+            repository.ReplayAll();
+            Assert.AreEqual(ret, ti.Invoke(mi));
+            Assert.AreEqual(0, th.GetCalls());
+            repository.VerifyAll();
+
+            
+
 		}
 
 		[Test]
 		public void NoHandlerMethodForThrowable()
-		{
-			MyThrowsHandler th = new MyThrowsHandler();
-			ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
-			Assert.AreEqual(2, ti.HandlerMethodCount);
-			Exception ex = new Exception();
-			IDynamicMock mc = new DynamicMock(typeof (IMethodInvocation));
-			IMethodInvocation mi = (IMethodInvocation) mc.Object;
-			mi.Proceed();
-			mc.ExpectAndThrow("Proceed", ex, null);
-			try
-			{
-				ti.Invoke(mi);
-				Assert.Fail();
-			}
-			catch (Exception caught)
-			{
-				Assert.AreEqual(ex, caught);
-			}
-			Assert.AreEqual(0, th.GetCalls());
-			mc.Verify();
+		{   
+            MyThrowsHandler th = new MyThrowsHandler();
+            ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
+            Assert.AreEqual(2, ti.HandlerMethodCount);
+            Exception ex = new Exception();
+
+            MockRepository repository = new MockRepository();
+            IMethodInvocation mi = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
+		    Expect.Call(mi.Proceed()).Throw(ex);
+            repository.ReplayAll();
+            try
+            {
+                ti.Invoke(mi);
+                Assert.Fail();
+            }
+            catch (Exception caught)
+            {
+                Assert.AreEqual(ex, caught);
+            }
+            Assert.AreEqual(0, th.GetCalls());
+            repository.VerifyAll();
+
 		}
 
 		[Test]
 		public void CorrectHandlerUsed()
 		{
-			MyThrowsHandler th = new MyThrowsHandler();
-			ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
-			HttpException ex = new HttpException();
-			IDynamicMock mc = new DynamicMock(typeof (IMethodInvocation));
-			IMethodInvocation mi = (IMethodInvocation) mc.Object;
-			mi.Proceed();
-			mc.ExpectAndThrow("Proceed", ex, null);
-			try
-			{
-				ti.Invoke(mi);
-				Assert.Fail();
-			}
-			catch (Exception caught)
-			{
-				Assert.AreEqual(ex, caught);
-			}
-			Assert.AreEqual(1, th.GetCalls());
-			Assert.AreEqual(1, th.GetCalls("HttpException"));
-			mc.Verify();
+ 
+            MyThrowsHandler th = new MyThrowsHandler();
+            ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
+            HttpException ex = new HttpException();
+
+            MockRepository repository = new MockRepository();
+            IMethodInvocation mi = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
+
+		    Expect.Call(mi.Method).Return(ReflectionUtils.GetMethod(typeof (object), "HashCode", new Type[] {}));
+		    Expect.Call(mi.Arguments).Return(null);
+		    Expect.Call(mi.This).Return(new object());
+            Expect.Call(mi.Proceed()).Throw(ex);
+            repository.ReplayAll();
+            try
+            {
+                ti.Invoke(mi);
+                Assert.Fail();
+            }
+            catch (Exception caught)
+            {
+                Assert.AreEqual(ex, caught);
+            }
+            Assert.AreEqual(1, th.GetCalls());
+            Assert.AreEqual(1, th.GetCalls("HttpException"));
+
+            repository.VerifyAll();
+
         }
 
         [Test]
@@ -125,10 +141,10 @@ namespace Spring.Aop.Framework.Adapter
             ThrowsAdviceInterceptor throwsInterceptor = new ThrowsAdviceInterceptor(throwsHandler);
             // nest the exceptions; make sure the advice gets applied because of the inner exception...
             Exception exception = new FormatException("Parent", new HttpException("Inner"));
-            IDynamicMock mockInvocation = new DynamicMock(typeof (IMethodInvocation));
-            IMethodInvocation invocation = (IMethodInvocation) mockInvocation.Object;
-            invocation.Proceed();
-            mockInvocation.ExpectAndThrow("Proceed", exception, null);
+            MockRepository repository = new MockRepository();
+            IMethodInvocation invocation = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
+            Expect.Call(invocation.Proceed()).Throw(exception);
+            repository.ReplayAll();
             try
             {
                 throwsInterceptor.Invoke(invocation);
@@ -144,7 +160,7 @@ namespace Spring.Aop.Framework.Adapter
             Assert.AreEqual(0, throwsHandler.GetCalls("HttpException"),
                 "Similarly, must NOT have been handled, 'cos the HttpException was wrapped by " +
                 "another Exception that did not have a handler.");
-            mockInvocation.Verify();
+            repository.VerifyAll();
         }
 
 	    [Test]
@@ -158,52 +174,56 @@ namespace Spring.Aop.Framework.Adapter
 		[Test]
 		public void CorrectHandlerUsedForSubclass()
 		{
-			MyThrowsHandler th = new MyThrowsHandler();
-			ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
-			// Extends RemotingException
-			RemotingTimeoutException ex = new RemotingTimeoutException();
-			IDynamicMock mc = new DynamicMock(typeof (IMethodInvocation));
-			IMethodInvocation mi = (IMethodInvocation) mc.Object;
-			mi.Proceed();
-			mc.ExpectAndThrow("Proceed", ex, null);
-			try
-			{
-				ti.Invoke(mi);
-				Assert.Fail();
-			}
-			catch (Exception caught)
-			{
-				Assert.AreEqual(ex, caught);
-			}
-			Assert.AreEqual(1, th.GetCalls());
-			Assert.AreEqual(1, th.GetCalls("RemotingException"));
-			mc.Verify();
+            MyThrowsHandler th = new MyThrowsHandler();
+            ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
+            // Extends RemotingException
+            RemotingTimeoutException ex = new RemotingTimeoutException();
+
+            MockRepository repository = new MockRepository();
+            IMethodInvocation mi = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
+		    Expect.Call(mi.Proceed()).Throw(ex);
+            repository.ReplayAll();
+            try
+            {
+                ti.Invoke(mi);
+                Assert.Fail();
+            }
+            catch (Exception caught)
+            {
+                Assert.AreEqual(ex, caught);
+            }
+            Assert.AreEqual(1, th.GetCalls());
+            Assert.AreEqual(1, th.GetCalls("RemotingException"));
+
+            repository.VerifyAll();
 		}
 
 		[Test]
 		public void HandlerMethodThrowsException()
-		{
-			Exception exception = new Exception();
-			MyThrowsHandler handler = new ThrowingMyHandler(exception);
-			ThrowsAdviceInterceptor interceptor = new ThrowsAdviceInterceptor(handler);
-			// extends RemotingException...
-			RemotingTimeoutException ex = new RemotingTimeoutException();
-			IDynamicMock mc = new DynamicMock(typeof (IMethodInvocation));
-			IMethodInvocation invocation = (IMethodInvocation) mc.Object;
-			invocation.Proceed();
-			mc.ExpectAndThrow("Proceed", ex, null);
-			try
-			{
-				interceptor.Invoke(invocation);
-				Assert.Fail("Should not have reached this point, should have thrown an exception.");
-			}
-			catch (Exception caught)
-			{
-				Assert.AreEqual(exception, caught);
-			}
-			Assert.AreEqual(1, handler.GetCalls());
-			Assert.AreEqual(1, handler.GetCalls("RemotingException"));
-			mc.Verify();
+		{   
+            Exception exception = new Exception();
+            MyThrowsHandler handler = new ThrowingMyHandler(exception);
+            ThrowsAdviceInterceptor interceptor = new ThrowsAdviceInterceptor(handler);
+            // extends RemotingException...
+            RemotingTimeoutException ex = new RemotingTimeoutException();
+
+            MockRepository repository = new MockRepository();
+            IMethodInvocation mi = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
+		    Expect.Call(mi.Proceed()).Throw(ex);
+            repository.ReplayAll();
+            try
+            {
+                interceptor.Invoke(mi);
+                Assert.Fail("Should not have reached this point, should have thrown an exception.");
+            }
+            catch (Exception caught)
+            {
+                Assert.AreEqual(exception, caught);
+            }
+            Assert.AreEqual(1, handler.GetCalls());
+            Assert.AreEqual(1, handler.GetCalls("RemotingException"));
+            repository.VerifyAll();
+
 		}
 
         #region Helper Classes

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ACD39D47-1811-40FA-9E7E-5DEA5B9CE6C0}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -73,7 +73,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetMock, Version=0.7.4.0, Culture=neutral, PublicKeyToken=805ea88df19095f6">
+    <Reference Include="DotNetMock, Version=0.7.5.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\DotNetMock.dll</HintPath>
     </Reference>

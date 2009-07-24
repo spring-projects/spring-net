@@ -23,6 +23,7 @@
 using System;
 using System.Globalization;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 #endregion
 
@@ -31,9 +32,11 @@ namespace Spring.Context.Support
     [TestFixture]
 	public sealed class AbstractMessageSourceTests : AbstractMessageSource
 	{
+        private MockRepository mocks;
 		[SetUp]
 		public void Init()
 		{
+            mocks = new MockRepository();
 			resetMe();
 		}
 

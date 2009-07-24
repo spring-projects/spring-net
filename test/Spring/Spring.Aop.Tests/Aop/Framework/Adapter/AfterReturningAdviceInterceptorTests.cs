@@ -22,8 +22,9 @@
 
 using System;
 using AopAlliance.Intercept;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Spring.Util;
 
 #endregion
 
@@ -47,50 +48,67 @@ namespace Spring.Aop.Framework.Adapter
 		[Test]
 		public void IsNotInvokedIfServiceObjectThrowsException()
 		{
-			IDynamicMock mockAdvice = new DynamicMock(typeof (IAfterReturningAdvice));
-			IAfterReturningAdvice afterAdvice = (IAfterReturningAdvice) mockAdvice.Object;
+            MockRepository repository = new MockRepository();
+            IMethodInvocation mockInvocation = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
+            IAfterReturningAdvice mockAdvice = (IAfterReturningAdvice)repository.CreateMock(typeof(IAfterReturningAdvice));
+            mockAdvice.AfterReturning(null, null, null, null);
+            LastCall.IgnoreArguments();
+            LastCall.Throw(new FormatException());
 
-			IDynamicMock mockInvocation = new DynamicMock(typeof (IMethodInvocation));
-			IMethodInvocation invocation = (IMethodInvocation) mockInvocation.Object;
-			mockInvocation.ExpectAndThrow("Proceed", new FormatException(), null);
+            Expect.Call(mockInvocation.Method).Return(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
+            Expect.Call(mockInvocation.Arguments).Return(null);
+            Expect.Call(mockInvocation.This).Return(new object());
+            Expect.Call(mockInvocation.Proceed()).Return(null);
 
-			try
-			{
-				AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(afterAdvice);
-				interceptor.Invoke(invocation);
-				Assert.Fail("Must have thrown a FormatException by this point.");
-			}
-			catch (FormatException)
-			{
-			}
+            repository.ReplayAll();
 
-			mockAdvice.Verify(); // must not have been called...
-			mockInvocation.Verify();
+            try
+            {
+                AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(mockAdvice);
+                interceptor.Invoke(mockInvocation);
+                Assert.Fail("Must have thrown a FormatException by this point.");
+            }
+            catch (FormatException)
+            {
+            }
+
+            repository.VerifyAll();
+
 		}
 
 		[Test]
 		public void JustPassesAfterReturningAdviceExceptionUpWithoutAnyWrapping()
 		{
-			IDynamicMock mockAdvice = new DynamicMock(typeof (IAfterReturningAdvice));
-			IAfterReturningAdvice afterAdvice = (IAfterReturningAdvice) mockAdvice.Object;
-			mockAdvice.ExpectAndThrow("AfterReturning", new FormatException(), new object[] { null, null, null, null});
 
-			IDynamicMock mockInvocation = new DynamicMock(typeof (IMethodInvocation));
-			IMethodInvocation invocation = (IMethodInvocation) mockInvocation.Object;
-			mockInvocation.ExpectAndReturn("Proceed", null);
+            MockRepository repository = new MockRepository();
+            IMethodInvocation mockInvocation = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
+		    IAfterReturningAdvice mockAdvice = (IAfterReturningAdvice) repository.CreateMock(typeof (IAfterReturningAdvice));
+		    mockAdvice.AfterReturning(null,null,null,null);
+		    LastCall.IgnoreArguments();
+		    LastCall.Throw(new FormatException());
 
-			try
-			{
-				AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(afterAdvice);
-				interceptor.Invoke(invocation);
-				Assert.Fail("Must have thrown a FormatException by this point.");
-			}
-			catch (FormatException)
-			{
-			}
+            Expect.Call(mockInvocation.Method).Return(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
+            Expect.Call(mockInvocation.Arguments).Return(null);
+            Expect.Call(mockInvocation.This).Return(new object());           
+		    Expect.Call(mockInvocation.Proceed()).Return(null);
 
-			mockAdvice.Verify();
-			mockInvocation.Verify();
+            repository.ReplayAll();
+
+            try
+            {
+                AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(mockAdvice);
+                interceptor.Invoke(mockInvocation);
+                Assert.Fail("Must have thrown a FormatException by this point.");
+            }
+            catch (FormatException)
+            {
+            }
+            repository.VerifyAll();
+
+
+
+
+
 		}
 	}
 }

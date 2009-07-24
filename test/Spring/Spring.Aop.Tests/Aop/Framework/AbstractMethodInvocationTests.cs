@@ -28,6 +28,7 @@ using System.Reflection;
 using AopAlliance.Intercept;
 using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 #endregion
 
@@ -166,16 +167,29 @@ namespace Spring.Aop.Framework
 
 		[Test]
 		public void ValidInvocation()
-		{
+		{/*
 			Target target = new Target();
+            MockRepository repository = new MockRepository();
+		    IMethodInterceptor interceptor = (IMethodInterceptor) repository.CreateMock(typeof (IMethodInterceptor));
+            AbstractMethodInvocation join = CreateMethodInvocation(
+               null, target, target.GetTargetMethodNoArgs(), null, null, target.GetType(), new object[] { interceptor });
+		    Expect.Call(interceptor.Invoke(join)).Return(target.BullseyeMethod().ToLower(CultureInfo.InvariantCulture));
+            repository.ReplayAll();
+		    string score = (string) join.Proceed();
+            Assert.AreEqual(target.BullseyeMethod().ToLower(CultureInfo.InvariantCulture) + Target.Suffix, score);
+            repository.VerifyAll();
+            */
+
+            Target target = new Target();
 			IDynamicMock mock = new DynamicMock(typeof (IMethodInterceptor));
             AbstractMethodInvocation join = CreateMethodInvocation(
                 null, target, target.GetTargetMethodNoArgs(), null, null, target.GetType(), new object[] { mock.Object });
-			mock.ExpectAndReturn("Invoke", target.BullseyeMethod().ToLower(CultureInfo.InvariantCulture));
+			mock.ExpectAndReturn("Invoke", target.BullseyeMethod().ToLower(CultureInfo.InvariantCulture), null);
 
 			string score = (string) join.Proceed();
 			Assert.AreEqual(Target.DefaultScore.ToLower(CultureInfo.InvariantCulture) + Target.Suffix, score);
 			mock.Verify();
+            
 		}
 
 		[Test]
@@ -205,7 +219,7 @@ namespace Spring.Aop.Framework
 			IDynamicMock mock = new DynamicMock(typeof (IMethodInterceptor));
             AbstractMethodInvocation join = CreateMethodInvocation(
                 null, target, target.GetTargetMethod(), null, null, target.GetType(), new object[] { mock.Object });
-			mock.ExpectAndReturn("Invoke", null);
+			mock.ExpectAndReturn("Invoke", null, null);
 			try
 			{
 				join.Proceed();
@@ -228,7 +242,7 @@ namespace Spring.Aop.Framework
 			IDynamicMock mock = new DynamicMock(typeof (IMethodInterceptor));
             AbstractMethodInvocation join = CreateMethodInvocation(
                 null, target, target.GetTargetMethod(), null, null, target.GetType(), new object[] { mock.Object });
-			mock.ExpectAndThrow("Invoke", new NotImplementedException());
+			mock.ExpectAndThrow("Invoke", new NotImplementedException(), null);
 			try
 			{
 				join.Proceed();
