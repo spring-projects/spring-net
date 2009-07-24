@@ -31,8 +31,10 @@ using System.Threading;
 using System.Web.Services;
 using Common.Logging;
 using Common.Logging.Simple;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+
+using Rhino.Mocks;
+
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core.IO;
@@ -59,6 +61,8 @@ namespace Spring.Objects.Factory.Xml
     [TestFixture]
     public sealed class XmlObjectFactoryTests
     {
+        private MockRepository mocks;
+
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
@@ -68,6 +72,12 @@ namespace Spring.Objects.Factory.Xml
             // enable (null appender) logging, to ensure that the logging code is exercised...
             //XmlConfigurator.Configure();
             LogManager.Adapter = new NoOpLoggerFactoryAdapter();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
         }
 
         [Test]
@@ -1499,8 +1509,7 @@ namespace Spring.Objects.Factory.Xml
             //FactoryMethods fm = (FactoryMethods) factory.GetObject("instanceFactoryMethodOverloads", new object[] {row});
             // Assert.AreEqual("DataRowCtor", fm.Name);
 
-            DynamicMock mock = new DynamicMock(typeof(IDataRecord));
-            IDataRecord dataRecord = (IDataRecord) mock.Object;
+            IDataRecord dataRecord = (IDataRecord) mocks.DynamicMock(typeof(IDataRecord));
             FactoryMethods fm = (FactoryMethods)factory.GetObject("instanceFactoryMethodOverloads", new object[] { dataRecord });
             Assert.AreEqual("DataRecordCtor", fm.Name);
 

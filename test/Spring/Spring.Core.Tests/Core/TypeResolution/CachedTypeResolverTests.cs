@@ -21,8 +21,9 @@
 #region Imports
 
 using System;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+
+using Rhino.Mocks;
 
 #endregion
 
@@ -35,12 +36,19 @@ namespace Spring.Core.TypeResolution
 	[TestFixture]
     public sealed class CachedTypeResolverTests
     {
+	    private MockRepository mocks;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+        }
+
         [Test]
         [ExpectedException(typeof(TypeLoadException))]
         public void ResolveWithNullTypeName() {
 
-        	IDynamicMock mock = new DynamicMock(typeof(ITypeResolver));
-			ITypeResolver mockResolver = (ITypeResolver) mock.Object;
+            ITypeResolver mockResolver = (ITypeResolver) mocks.DynamicMock(typeof(ITypeResolver));
 
             CachedTypeResolver resolver = new CachedTypeResolver(mockResolver);
             resolver.Resolve(null);

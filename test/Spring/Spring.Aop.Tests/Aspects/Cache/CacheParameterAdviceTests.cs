@@ -22,8 +22,8 @@
 
 using System;
 using System.Reflection;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Caching;
 using Spring.Context;
 
@@ -38,17 +38,19 @@ namespace Spring.Aspects.Cache
     [TestFixture]
     public sealed class CacheParameterAdviceTests
     {
-        private IDynamicMock mockContext;
+        private MockRepository mocks;
+        private IApplicationContext mockContext;
         private CacheParameterAdvice advice;
         private ICache cache;
 
         [SetUp]
         public void SetUp()
         {
-            mockContext = new DynamicMock(typeof (IApplicationContext));
+            mocks = new MockRepository();
+            mockContext = (IApplicationContext) mocks.CreateMock(typeof (IApplicationContext));
 
             advice = new CacheParameterAdvice();
-            advice.ApplicationContext = (IApplicationContext) mockContext.Object;
+            advice.ApplicationContext = mockContext;
 
             cache = new NonExpiringCache();
         }
@@ -60,13 +62,14 @@ namespace Spring.Aspects.Cache
             object[] args = new object[] {new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian")};
 
             ExpectCacheInstanceRetrieval("cache", cache);
+            mocks.ReplayAll();
 
             // parameter value should be added to cache
             advice.AfterReturning(null, method, args, null);
             Assert.AreEqual(1, cache.Count);
             Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
 
-            mockContext.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -76,7 +79,8 @@ namespace Spring.Aspects.Cache
             object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
 
             ExpectCacheInstanceRetrieval("cache", cache);
-            ExpectCacheInstanceRetrieval("cache", cache);      
+            ExpectCacheInstanceRetrieval("cache", cache);  
+            mocks.ReplayAll();
 
             // parameter value should be added to both cache
             advice.AfterReturning(null, method, args, null);
@@ -84,7 +88,7 @@ namespace Spring.Aspects.Cache
             Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
             Assert.AreEqual(args[0], cache.Get("Serbian"));
 
-            mockContext.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -96,15 +100,13 @@ namespace Spring.Aspects.Cache
             // parameter value should not be added to cache
             advice.AfterReturning(null, method, args, null);
             Assert.AreEqual(0, cache.Count);
-
-            mockContext.Verify();
         }
 
         #region Helper methods
 
-        private void ExpectCacheInstanceRetrieval(string cacheName, ICache cache)
+        private void ExpectCacheInstanceRetrieval(string cacheName, ICache cacheToReturn)
         {
-            mockContext.ExpectAndReturn("GetObject", cache, cacheName);
+            Expect.Call(mockContext.GetObject(cacheName)).Return(cacheToReturn);
         }
 
         #endregion

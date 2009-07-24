@@ -28,17 +28,13 @@ using System.EnterpriseServices;
 using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.Remoting;
+
 using AopAlliance.Intercept;
 using NUnit.Framework;
-using DotNetMock.Dynamic;
-using Rhino.Mocks;
-using Spring.Aop.Framework;
+
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Objects.Factory;
 using Spring.Objects;
-using Spring.Objects.Factory.Support;
 
 #endregion
 

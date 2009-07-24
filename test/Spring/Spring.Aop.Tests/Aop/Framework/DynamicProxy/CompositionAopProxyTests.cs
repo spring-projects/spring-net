@@ -21,18 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
-using System.IO;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
-using System.Runtime.Serialization.Formatters.Binary;
-using AopAlliance.Intercept;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Spring.Aop.Interceptor;
-using Spring.Aop.Support;
 using Spring.Objects;
 
 #endregion

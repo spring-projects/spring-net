@@ -25,7 +25,6 @@ using System.Reflection;
 using System.Runtime.Remoting;
 using System.Web;
 using AopAlliance.Intercept;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Util;

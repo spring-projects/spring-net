@@ -31,11 +31,12 @@ using System.Web;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+
+using Rhino.Mocks;
+
 using Spring.Aop.Advice;
 using Spring.Aop.Framework.Adapter;
-using Spring.Aop.Framework.DynamicProxy;
 using Spring.Aop.Interceptor;
 using Spring.Aop.Support;
 using Spring.Aop.Target;
@@ -62,12 +63,14 @@ namespace Spring.Aop.Framework
     [TestFixture]
     public sealed class ProxyFactoryObjectTests
     {
+        private MockRepository mocks;
         private IObjectFactory factory;
 
         [SetUp]
         public void SetUp()
         {
-            this.factory = new XmlObjectFactory(new ReadOnlyXmlTestResource("proxyFactoryTests.xml", GetType()));
+            mocks = new MockRepository();
+            factory = new XmlObjectFactory(new ReadOnlyXmlTestResource("proxyFactoryTests.xml", GetType()));
         }
 
 
@@ -475,46 +478,45 @@ namespace Spring.Aop.Framework
         [Test]
         public void IsSingletonFalseReturnsNew_ProxyInstance_NotNewProxyTargetSource()
         {
-            IDynamicMock mock = new DynamicMock(typeof(IObjectFactory));
             GoodCommand target = new GoodCommand();
-            mock.ExpectAndReturn("GetObject", target, "singleton");
-            mock.ExpectAndReturn("GetObject", target, "singleton");
-            IObjectFactory factory = (IObjectFactory)mock.Object;
+            IObjectFactory mock = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
+            Expect.Call(mock.GetObject("singleton")).Return(target).Repeat.Twice();
+            mocks.ReplayAll();
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
             fac.IsSingleton = false;
             fac.TargetName = "singleton";
-            fac.ObjectFactory = factory;
+            fac.ObjectFactory = mock;
             fac.AddAdvice(new NopInterceptor());
 
             ICommand one = (ICommand)fac.GetObject();
             ICommand two = (ICommand)fac.GetObject();
             Assert.IsFalse(ReferenceEquals(one, two));
 
-            mock.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
         public void IsSingletonTrueReturnsNew_ProxyInstance_NotNewProxyTargetSource()
         {
-            IDynamicMock mock = new DynamicMock(typeof(IObjectFactory));
             GoodCommand target = new GoodCommand();
-            mock.ExpectAndReturn("GetObject", target, "singleton");
-            IObjectFactory factory = (IObjectFactory)mock.Object;
+            IObjectFactory mock = (IObjectFactory)mocks.CreateMock(typeof(IObjectFactory));
+            Expect.Call(mock.GetObject("singleton")).Return(target);
+            mocks.ReplayAll();
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
             fac.IsSingleton = true; // default, just being explicit...
             fac.TargetName = "singleton";
-            fac.ObjectFactory = factory;
+            fac.ObjectFactory = mock;
             fac.AddAdvice(new NopInterceptor());
 
             ICommand one = (ICommand)fac.GetObject();
             ICommand two = (ICommand)fac.GetObject();
             Assert.IsTrue(ReferenceEquals(one, two));
 
-            mock.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -550,17 +552,17 @@ namespace Spring.Aop.Framework
             GoodCommand target = new GoodCommand();
             NopInterceptor advice = new NopInterceptor();
 
-            IDynamicMock mock = new DynamicMock(typeof(IObjectFactory));
-            mock.ExpectAndReturn("GetObject", advice, "advice");
-            mock.ExpectAndReturn("GetObject", target, "singleton");
-            mock.ExpectAndReturn("GetType", typeof(GoodCommand), "singleton");
-            IObjectFactory factory = (IObjectFactory)mock.Object;
+            IObjectFactory mock = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
+            Expect.Call(mock.GetObject("advice")).Return(advice);
+            Expect.Call(mock.GetObject("singleton")).Return(target);
+            Expect.Call(mock.GetType("singleton")).Return(typeof(GoodCommand));
+            mocks.ReplayAll();
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
             fac.IsSingleton = true; // default, just being explicit...
             fac.InterceptorNames = new string[] { "advice", "singleton" };
-            fac.ObjectFactory = factory;
+            fac.ObjectFactory = mock;
 
             ICommand one = (ICommand)fac.GetObject();
             ICommand two = (ICommand)fac.GetObject();
@@ -570,7 +572,7 @@ namespace Spring.Aop.Framework
             two.Execute();
             Assert.AreEqual(2, advice.Count);
 
-            mock.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -579,24 +581,23 @@ namespace Spring.Aop.Framework
             GoodCommand target = new GoodCommand();
             NopInterceptor advice = new NopInterceptor();
 
-            IDynamicMock mock = new DynamicMock(typeof(IObjectFactory));
-            mock.ExpectAndReturn("IsSingleton", true, "advice"); // advice is a singleton...
-            mock.ExpectAndReturn("GetObject", advice, "advice");
-            mock.ExpectAndReturn("GetType", typeof(GoodCommand), "prototype");
+            IObjectFactory mock = (IObjectFactory)mocks.CreateMock(typeof(IObjectFactory));
+            Expect.Call(mock.IsSingleton("advice")).Return(true); // advice is a singleton...
+            Expect.Call(mock.GetObject("advice")).Return(advice);
+            Expect.Call(mock.GetType("prototype")).Return(typeof(GoodCommand));
 
-            mock.ExpectAndReturn("GetObject", advice, "advice");
-            mock.ExpectAndReturn("GetObject", target, "prototype");
-
-            IObjectFactory factory = (IObjectFactory)mock.Object;
+            Expect.Call(mock.GetObject("advice")).Return(advice);
+            Expect.Call(mock.GetObject("prototype")).Return(target);
+            mocks.ReplayAll();
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
             fac.IsSingleton = false;
             fac.InterceptorNames = new string[] { "advice", "prototype" };
-            fac.ObjectFactory = factory;
+            fac.ObjectFactory = mock;
 
             fac.GetObject();
-            mock.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -687,7 +688,7 @@ namespace Spring.Aop.Framework
         [ExpectedException(typeof(AopConfigException))]
         public void NullNameInInterceptorNamesArray()
         {
-            IObjectFactory factory = (IObjectFactory)new DynamicMock(typeof(IObjectFactory)).Object;
+            IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
@@ -699,7 +700,7 @@ namespace Spring.Aop.Framework
         [Test]
         public void PassEmptyInterceptorNamesArray_WithTargetThatImplementsAnInterfaceCanBeCastToSaidInterface()
         {
-            IObjectFactory factory = (IObjectFactory)new DynamicMock(typeof(IObjectFactory)).Object;
+            IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { };

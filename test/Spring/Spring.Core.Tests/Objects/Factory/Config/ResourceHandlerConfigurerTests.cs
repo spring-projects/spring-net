@@ -19,8 +19,10 @@
 #endregion
 
 using System.Collections;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+
+using Rhino.Mocks;
+
 using Spring.Core.IO;
 using Spring.Util;
 
@@ -34,6 +36,14 @@ namespace Spring.Objects.Factory.Config
     [TestFixture]
     public class ResourceHandlerConfigurerTests
     {
+        private MockRepository mocks;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+        }
+
         [Test]
         public void Serialization()
         {
@@ -60,7 +70,7 @@ namespace Spring.Objects.Factory.Config
             resourceHandlerConfiguer.ResourceHandlers = resourceHandlers;
 
 
-            resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory)new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
+            resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
     
         }
 
@@ -75,7 +85,7 @@ namespace Spring.Objects.Factory.Config
             resourceHandlerConfiguer.ResourceHandlers = resourceHandlers;
 
 
-            resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory)new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
+            resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
     
         }
 
@@ -99,7 +109,7 @@ namespace Spring.Objects.Factory.Config
 
         }
 
-        private static void CreateConfigurerAndTestNewProtcol(IDictionary resourceHandlers)
+        private void CreateConfigurerAndTestNewProtcol(IDictionary resourceHandlers)
         {
             ResourceHandlerConfigurer resourceHandlerConfiguer = new ResourceHandlerConfigurer();
             resourceHandlerConfiguer.ResourceHandlers = resourceHandlers;
@@ -107,7 +117,7 @@ namespace Spring.Objects.Factory.Config
             resourceHandlerConfiguer.Order = 1;
 
 
-            resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory)new DynamicMock(typeof(IConfigurableListableObjectFactory)).Object);
+            resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
 
             //todo investigate mocking the typeregistry, for now ask the actual one for information.
             Assert.IsTrue(ResourceHandlerRegistry.IsHandlerRegistered("httpsss"),

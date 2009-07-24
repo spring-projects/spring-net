@@ -23,9 +23,8 @@
 using System;
 using System.Collections;
 using System.Reflection;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
-using Spring.Aop.Framework;
+using Rhino.Mocks;
 using Spring.Aop.Interceptor;
 using Spring.Aop.Support;
 using Spring.Collections;
@@ -43,6 +42,14 @@ namespace Spring.Aop.Framework.DynamicProxy
     [TestFixture]
     public sealed class AopUtilsTests
     {
+        private MockRepository mocks;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+        }
+
         [Test]
         public void PointcutCanNeverApply()
         {
@@ -83,7 +90,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void CanApplyWithAdvisorYieldsTrueIfAdvisorIsNotKnownAdvisorType()
         {
-            IAdvisor advisor = (IAdvisor) new DynamicMock(typeof (IAdvisor)).Object;
+            IAdvisor advisor = (IAdvisor) mocks.CreateMock(typeof (IAdvisor));
             Assert.IsTrue(AopUtils.CanApply(advisor, typeof (TestObject), null));
         }
 
@@ -165,11 +172,12 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void CanApplyWithTrueIntroductionAdvisor()
         {
-            DynamicMock mockIntroAdvisor = new DynamicMock(typeof (IIntroductionAdvisor));
-            mockIntroAdvisor.ExpectAndReturn("TypeFilter", TrueTypeFilter.True);
-            IAdvisor advisor = (IAdvisor) mockIntroAdvisor.Object;
-            Assert.IsTrue(AopUtils.CanApply(advisor, typeof (TestObject), null));
-            mockIntroAdvisor.Verify();
+            IIntroductionAdvisor mockIntroAdvisor = (IIntroductionAdvisor) mocks.CreateMock(typeof(IIntroductionAdvisor));
+            Expect.Call(mockIntroAdvisor.TypeFilter).Return(TrueTypeFilter.True);
+            mocks.ReplayAll();
+
+            Assert.IsTrue(AopUtils.CanApply(mockIntroAdvisor, typeof (TestObject), null));
+            mocks.VerifyAll();
         }
 
         #region Helper Classes

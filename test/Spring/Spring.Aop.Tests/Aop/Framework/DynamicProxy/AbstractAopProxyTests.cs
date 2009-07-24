@@ -46,7 +46,6 @@ using Spring.Proxy;
 using Spring.Threading;
 using Spring.Util;
 
-using DotNetMock.Dynamic;
 using NUnit.Framework;
 
 #endregion
@@ -62,6 +61,7 @@ namespace Spring.Aop.Framework.DynamicProxy
     public abstract class AbstractAopProxyTests
     {
         protected MockTargetSource mockTargetSource = new MockTargetSource();
+        private MockRepository mocks;
 
         /*
          * Make a clean target source available if code wants to use it.
@@ -78,6 +78,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         [SetUp]
         protected void SetUp()
         {
+            mocks = new MockRepository();
             mockTargetSource.Reset();
         }
 
@@ -423,18 +424,19 @@ namespace Spring.Aop.Framework.DynamicProxy
         public void InterceptorHandledCallWithNoTarget()
         {
             int age = 26;
-            DynamicMock mock = new DynamicMock(typeof(IMethodInterceptor));
-            mock.SetValue("Invoke", age);
-            IMethodInterceptor mi = (IMethodInterceptor)mock.Object;
+            IMethodInterceptor mock = (IMethodInterceptor) mocks.CreateMock(typeof(IMethodInterceptor));
+            Expect.Call(mock.Invoke(null)).IgnoreArguments().Return(age);
+            mocks.ReplayAll();
 
             AdvisedSupport advised = new AdvisedSupport();
-            advised.AddAdvice(mi);
+            advised.AddAdvice(mock);
             advised.Interfaces = new Type[] { typeof(ITestObject) };
 
             ITestObject to = CreateProxy(advised) as ITestObject;
             Assert.IsNotNull(to);
             Assert.IsTrue(to.Age == age, "Incorrect age");
-            mock.Verify();
+        
+            mocks.VerifyAll();
         }
 
         [Test]
