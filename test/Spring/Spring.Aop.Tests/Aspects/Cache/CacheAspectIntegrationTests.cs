@@ -80,8 +80,6 @@ namespace Spring.Aspects.Cache
 
             store.DeleteAll();
             Assert.AreEqual(0, cache.Count);
-
-            store.GetAllNoCacheKey();
         }
 
 #if NET_2_0
@@ -113,7 +111,6 @@ namespace Spring.Aspects.Cache
     public interface IInventorStore
     {
         IList GetAll();
-        IList GetAllNoCacheKey();
         Inventor Load(string name);
         void Save(Inventor inventor);
         void Delete(Inventor inventor);
@@ -134,13 +131,6 @@ namespace Spring.Aspects.Cache
 
         [CacheResultItems("inventors", "Name")]
         public IList GetAll()
-        {
-            return new ArrayList(inventors.Values);
-        }
-
-
-        [CacheResultItems(CacheName = "inventors")]
-        public IList GetAllNoCacheKey()
         {
             return new ArrayList(inventors.Values);
         }
