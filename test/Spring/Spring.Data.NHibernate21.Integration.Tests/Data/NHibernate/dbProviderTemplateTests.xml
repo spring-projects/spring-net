@@ -10,18 +10,18 @@
 
   <object id="DbProvider" type="Spring.Data.Common.UserCredentialsDbProvider, Spring.Data">
     <property name="TargetDbProvider" ref="targetDbProvider"/>
-    <property name="Username" value="User ID=defaultName"/>
-    <property name="Password" value="Password=defaultPass"/>
+    <property name="Username" value="User ID=springqa"/>
+    <property name="Password" value="Password=springqa"/>
   </object>
 
   <db:provider id="targetDbProvider" 
                provider="SqlServer-2.0"
-               connectionString="Data Source=MARKT60\SQL2005;Trusted_Connection=False"/>
+               connectionString="Data Source=(local);Database=Spring;Trusted_Connection=False"/>
 
 
   <db:provider id="standardDbProvider"
              provider="SqlServer-2.0"
-             connectionString="Data Source=MARKT60\SQL2005;Trusted_Connection=False;User ID=springqa;Password=springqa"/>
+             connectionString="Data Source=(local);Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa"/>
 
 
 
@@ -57,7 +57,7 @@
              -->
 
              <entry key="proxyfactory.factory_class"
-                    value="NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle"/>
+                    value="NHibernate.ByteCode.LinFu.ProxyFactoryFactory, NHibernate.ByteCode.LinFu"/>
             </dictionary>
         </property>
                       

@@ -4,11 +4,11 @@
 
   <db:provider id="DbProvider1" 
                  provider="SqlServer-1.1" 
-                 connectionString="Data Source=MARKT60\SQL2005;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
 
   <db:provider id="DbProvider2" 
                  provider="SqlServer-1.1" 
-                 connectionString="Data Source=MARKT60\SQL2005;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
 
   <object id="SessionFactory1" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
 
@@ -31,7 +31,7 @@
                value="NHibernate.Driver.SqlClientDriver"/>
 
           <entry key="proxyfactory.factory_class"
-               value="NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle"/>
+               value="NHibernate.ByteCode.LinFu.ProxyFactoryFactory, NHibernate.ByteCode.LinFu"/>
       </dictionary>
     </property>
 
@@ -58,7 +58,7 @@
                value="NHibernate.Driver.SqlClientDriver"/>
         
         <entry key="proxyfactory.factory_class"
-               value="NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle"/>
+               value="NHibernate.ByteCode.LinFu.ProxyFactoryFactory, NHibernate.ByteCode.LinFu"/>
 
       </dictionary>
     </property>

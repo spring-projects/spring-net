@@ -91,7 +91,7 @@ namespace Spring.Data.NHibernate
 
             Assert.IsNotNull(ctx, "Application Context is null");
             mgr = ctx["accountManager"] as IAccountManager;
-            Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType().ToString());
+            Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType());
             mgr.DoTransfer(transferAmount, transferAmount);
         }
 

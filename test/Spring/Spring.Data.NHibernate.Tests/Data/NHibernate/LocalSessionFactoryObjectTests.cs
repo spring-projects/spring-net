@@ -23,7 +23,12 @@
 using System.Collections;
 using System.IO;
 using NHibernate;
+using NHibernate.ByteCode.LinFu;
 using NHibernate.Cfg;
+using NHibernate.Connection;
+using NHibernate.Dialect;
+using NHibernate.Driver;
+
 using NUnit.Framework;
 using Spring.Data.Common;
 
@@ -43,27 +48,26 @@ namespace Spring.Data.NHibernate
         public void LocalSessionFactoryObjectWithDbProviderAndProperties()
         {
             IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
-            dbProvider.ConnectionString = "badConnectionString";
+            dbProvider.ConnectionString = "Data Source=(local);Database=Spring;Trusted_Connection=false";
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
             sfo.DbProvider = dbProvider;
             IDictionary properties = new Hashtable();
-            properties.Add(Environment.Dialect, "NHibernate.Dialect.MsSql2000Dialect");
-            properties.Add(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver");
-            properties.Add(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider");
+            properties.Add(Environment.Dialect, typeof(MsSql2000Dialect).AssemblyQualifiedName);
+            properties.Add(Environment.ConnectionDriver, typeof(SqlClientDriver).AssemblyQualifiedName);
+            properties.Add(Environment.ConnectionProvider, typeof(DriverConnectionProvider).AssemblyQualifiedName);
 #if NH_2_1
-            properties.Add(Environment.ProxyFactoryFactoryClass, "NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle");
+            properties.Add(Environment.ProxyFactoryFactoryClass, typeof(ProxyFactoryFactory).AssemblyQualifiedName);
 #endif
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();
 
             Assert.IsNotNull(sfo.Configuration);
-            Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionProvider],
-                            "NHibernate.Connection.DriverConnectionProvider");
-            Assert.AreEqual(sfo.Configuration.Properties[Environment.Dialect],
-                            "NHibernate.Dialect.MsSql2000Dialect");
+            Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionProvider], typeof(DriverConnectionProvider).AssemblyQualifiedName);
+            Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionDriver], typeof(SqlClientDriver).AssemblyQualifiedName);
+            Assert.AreEqual(sfo.Configuration.Properties[Environment.Dialect], typeof(MsSql2000Dialect).AssemblyQualifiedName);
 
 #if NH_2_1
-            Assert.AreEqual(sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass], "NHibernate.ByteCode.Castle.ProxyFactoryFactory, NHibernate.ByteCode.Castle");
+            Assert.AreEqual(sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass], typeof(ProxyFactoryFactory).AssemblyQualifiedName);
 #endif
         }
 
@@ -83,7 +87,7 @@ namespace Spring.Data.NHibernate
         {
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
             IDictionary properties = new Hashtable();
-            properties.Add(Environment.Dialect, "NHibernate.Dialect.MsSql2000Dialect");
+            properties.Add(Environment.Dialect, typeof(MsSql2000Dialect).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionProvider, "myClass");
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();

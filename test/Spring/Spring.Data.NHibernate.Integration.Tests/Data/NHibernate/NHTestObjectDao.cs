@@ -67,7 +67,7 @@ namespace Spring.Data.NHibernate
 	    public TestObject FindByName(string name)
         {
 	        IList result = HibernateTemplate.Find(
-                "select from TestObject as to where to.Name=?",
+                "from TestObject to where to.Name=?",
                 name,
                 TypeFactory.GetStringType(50)
                 );

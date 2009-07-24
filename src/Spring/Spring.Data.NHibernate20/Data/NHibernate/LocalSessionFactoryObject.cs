@@ -42,8 +42,11 @@ using Spring.Dao.Support;
 using Spring.Data.Common;
 using Spring.Data.Support;
 using Spring.Objects.Factory;
+using Spring.Objects.Factory.Config;
+using Spring.Util;
 
 using Environment = NHibernate.Cfg.Environment;
+using Configuration = NHibernate.Cfg.Configuration;
 
 #endregion
 
@@ -71,7 +74,7 @@ namespace Spring.Data.NHibernate
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
 	/// <version>$Id: LocalSessionFactoryObject.cs,v 1.2 2008/05/01 12:50:34 lahma Exp $</version>
-    public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IPersistenceExceptionTranslator, System.IDisposable
+    public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IPersistenceExceptionTranslator, IDisposable
 	{
 		#region Fields
 
@@ -95,13 +98,27 @@ namespace Spring.Data.NHibernate
 
 	    private bool exposeTransactionAwareSessionFactory = false;
 
+        private IInterceptor entityInterceptor;
+
+        private INamingStrategy namingStrategy;
+
+        private IObjectDefinition[] typeDefinitions;
+
         private FilterDefinition[] filterDefinitions;
+
+        private Properties entityCacheStrategies;
+
+        private Properties collectionCacheStrategies;
 
         private IDictionary eventListeners;
 
         private bool schemaUpdate = false;
 
         private IAdoExceptionTranslator adoExceptionTranslator;
+
+        // Configuration time DB provider. 
+        // This will not be available after configuration has been done.
+        private static IDbProvider configTimeDbProvider;
 
 		#endregion
 
@@ -112,8 +129,6 @@ namespace Spring.Data.NHibernate
 		/// </summary>
 		protected static readonly ILog log =
 			LogManager.GetLogger(typeof (LocalSessionFactoryObject));
-
-
 
 	    #endregion
 
@@ -224,8 +239,52 @@ namespace Spring.Data.NHibernate
 	        set { exposeTransactionAwareSessionFactory = value; }
             get { return exposeTransactionAwareSessionFactory; }
 	    }
-               
+
+
         /// <summary>
+        /// Set a NHibernate entity interceptor that allows to inspect and change
+        /// property values before writing to and reading from the database.
+        /// Will get applied to any new Session created by this factory.
+        /// <p>Such an interceptor can either be set at the SessionFactory level, i.e. on
+        /// LocalSessionFactoryObject, or at the Session level, i.e. on HibernateTemplate,
+        /// HibernateInterceptor, and HibernateTransactionManager. It's preferable to set
+        /// it on LocalSessionFactoryObject or HibernateTransactionManager to avoid repeated
+        /// configuration and guarantee consistent behavior in transactions.</p>
+        /// </summary>
+        /// <seealso cref="HibernateTemplate.EntityInterceptor"/>
+        /// <seealso cref="HibernateTransactionManager.EntityInterceptor" />
+        /// <seealso cref="Configuration.Interceptor" />
+        public IInterceptor EntityInterceptor
+        {
+            set { this.entityInterceptor = value; }
+        }
+
+        /// <summary>
+        /// Set a Hibernate NamingStrategy for the SessionFactory, determining the
+        /// physical column and table names given the info in the mapping document.
+        /// </summary>
+        /// <seealso cref="Configuration.NamingStrategy" />
+        public INamingStrategy NamingStrategy
+        {
+            set { this.namingStrategy = value; }
+        }
+
+	    /// <summary>
+	    /// Specify the Hibernate type definitions to register with the SessionFactory,
+	    /// as Spring IObjectDefinition instances. This is an alternative to specifying
+	    /// &lt;typedef&gt; elements in Hibernate mapping files.
+	    /// <p>Unfortunately, Hibernate itself does not define a complete object that
+	    /// represents a type definition, hence the need for Spring's TypeDefinitionBean.</p>
+	    /// @see TypeDefinitionBean
+	    /// @see org.hibernate.cfg.Mappings#addTypeDef(String, String, java.util.Properties)
+	    /// </summary>
+	    public IObjectDefinition[] TypeDefinitions
+	    {
+	        set { this.typeDefinitions = value; }
+	    }
+
+
+	    /// <summary>
         /// Specify the NHibernate FilterDefinitions to register with the SessionFactory.
         /// This is an alternative to specifying &lt;filter-def&gt; elements in
         /// Hibernate mapping files.
@@ -240,6 +299,51 @@ namespace Spring.Data.NHibernate
         {
             set { this.filterDefinitions = value; }
         }
+
+        /// <summary>
+        /// Specify the cache strategies for entities (persistent classes or named entities).
+        /// This configuration setting corresponds to the &lt;class-cache&gt; entry
+        /// in the "hibernate.cfg.xml" configuration format.
+        /// <p>For example:
+        /// <pre>
+        /// &lt;property name="entityCacheStrategies"&gt;
+        ///   &lt;props&gt;
+        ///     &lt;prop key="MyCompany.Customer"&gt;read-write&lt;/prop&gt;
+        ///     &lt;prop key="MyCompany.Product"&gt;read-only,myRegion&lt;/prop&gt;
+        ///   &lt;/props&gt;
+        /// &lt;/property&gt;</pre>
+        /// </p>
+        /// Note that appending a cache region name (with a comma separator) is only
+        /// supported on Hibernate 3.1, where this functionality is publically available.
+        /// </summary>
+        /// <seealso cref="Configuration.SetCacheConcurrencyStrategy(string, string)" />
+        public Properties EntityCacheStrategies
+        {
+            set { this.entityCacheStrategies = value; }
+        }
+
+        /// <summary>
+        /// Specify the cache strategies for persistent collections (with specific roles).
+        /// This configuration setting corresponds to the &lt;collection-cache&gt; entry
+        /// in the "hibernate.cfg.xml" configuration format.
+        /// <p>For example:
+        /// <pre>
+        /// &lt;property name="CollectionCacheStrategies"&gt;
+        ///   &lt;props&gt;
+        ///     &lt;prop key="MyCompany.Order.Items">read-write&lt;/prop&gt;
+        ///     &lt;prop key="MyCompany.Product.Categories"&gt;read-only,myRegion&lt;/prop&gt;
+        ///   &lt;/props&gt;
+        /// &lt;/property&gt;</pre>
+        /// </p>
+        /// Note that appending a cache region name (with a comma separator) is only
+        /// supported on Hibernate 3.1, where this functionality is publically available.
+        /// <seealso cref="Configuration.SetCollectionCacheConcurrencyStrategy(string, string)"/>
+        /// </summary>
+        public Properties CollectionCacheStrategies
+        {
+            set { this.collectionCacheStrategies = value; }
+        }
+
 
         /// <summary>
         /// Specify the NHibernate event listeners to register, with listener types
@@ -314,7 +418,7 @@ namespace Spring.Data.NHibernate
         /// Return the type <see cref="ISessionFactory"/> or subclass.
         /// </summary>
         /// <value>The type created by this factory</value>
-	    public System.Type ObjectType
+	    public Type ObjectType
 	    {
 	        get
 	        {
@@ -328,10 +432,7 @@ namespace Spring.Data.NHibernate
         /// <value>true</value>
 	    public bool IsSingleton
 	    {
-            get
-            {
-                return true;
-            }
+            get { return true; }
 	    }
 
         /// <summary>
@@ -343,13 +444,11 @@ namespace Spring.Data.NHibernate
             // Create Configuration instance.
             Configuration config = NewConfiguration();
 
-
             if (this.dbProvider != null)
             {
-                config.SetProperty(Environment.ConnectionString,
-                                   dbProvider.ConnectionString);
+                config.SetProperty(Environment.ConnectionString, dbProvider.ConnectionString);
                 config.SetProperty(Environment.ConnectionProvider, typeof(DbProviderWrapper).AssemblyQualifiedName);
-
+                configTimeDbProvider = this.dbProvider;
             }
 
             if (ExposeTransactionAwareSessionFactory)
@@ -357,12 +456,45 @@ namespace Spring.Data.NHibernate
                 // Set ICurrentSessionContext implementation,
                 // providing the Spring-managed ISession s current Session.
                 // Can be overridden by a custom value for the corresponding Hibernate property
-#if NH_2_1
-                config.SetProperty(Environment.CurrentSessionContextClass, "Spring.Data.NHibernate.SpringSessionContext, Spring.Data.NHibernate21");
-#else
-                config.SetProperty(Environment.CurrentSessionContextClass, "Spring.Data.NHibernate.SpringSessionContext, Spring.Data.NHibernate20");
-#endif
+                config.SetProperty(Environment.CurrentSessionContextClass, typeof(SpringSessionContext).AssemblyQualifiedName);
             }
+
+            if (this.entityInterceptor != null)
+            {
+                // Set given entity interceptor at SessionFactory level.
+                config.SetInterceptor(this.entityInterceptor);
+            }
+
+            if (this.namingStrategy != null)
+            {
+                // Pass given naming strategy to Hibernate Configuration.
+                config.SetNamingStrategy(this.namingStrategy);
+            }
+
+#if NH_2_1
+            if (this.typeDefinitions != null)
+            {
+                // Register specified Hibernate type definitions.
+                IDictionary<string, string> typedProperties = new  Dictionary<string, string>();
+                foreach (DictionaryEntry entry in hibernateProperties)
+                {
+                    typedProperties.Add((string) entry.Key, (string) entry.Value);
+                }
+
+                Dialect dialect = Dialect.GetDialect(typedProperties);
+                Mappings mappings = config.CreateMappings(dialect);
+                for (int i = 0; i < this.typeDefinitions.Length; i++)
+                {
+                    IObjectDefinition typeDef = this.typeDefinitions[i];
+                    Dictionary<string, string> typedParamMap = new Dictionary<string, string>();
+                    foreach (DictionaryEntry entry in typeDef.PropertyValues)
+                    {
+                        typedParamMap.Add((string) entry.Key, (string) entry.Value);
+                    }
+                    mappings.AddTypeDef(typeDef.ObjectTypeName, typeDef.ObjectTypeName, typedParamMap);
+                }
+            }
+#endif
 
             if (this.filterDefinitions != null)
             {
@@ -426,9 +558,43 @@ namespace Spring.Data.NHibernate
             // for availability of the mapping information in further processing.
             PostProcessMappings(config);
             config.BuildMappings();
-#endif
 
-            // TODO: entityCacheStrategies and collectionCacheStrategies 
+            if (this.entityCacheStrategies != null)
+            {
+                // Register cache strategies for mapped entities.
+                foreach (string className in this.entityCacheStrategies.Keys)
+                {
+                    String[] strategyAndRegion = StringUtils.CommaDelimitedListToStringArray(this.entityCacheStrategies.GetProperty(className));
+                    if (strategyAndRegion.Length > 1)
+                    {
+                        config.SetCacheConcurrencyStrategy(className, strategyAndRegion[0], strategyAndRegion[1]);
+                    }
+                    else if (strategyAndRegion.Length > 0)
+                    {
+                        config.SetCacheConcurrencyStrategy(className, strategyAndRegion[0]);
+                    }
+                }
+            }
+
+            if (this.collectionCacheStrategies != null)
+            {
+                // Register cache strategies for mapped collections.
+                foreach (string collRole in collectionCacheStrategies.Keys)
+                {
+                    string[] strategyAndRegion = StringUtils.CommaDelimitedListToStringArray(this.collectionCacheStrategies.GetProperty(collRole));
+                    if (strategyAndRegion.Length > 1)
+                    {
+                        throw new Exception("Collection cache concurrency strategy region definition not supported yet");
+                        //config.SetCollectionCacheConcurrencyStrategy(collRole, strategyAndRegion[0], strategyAndRegion[1]);
+                    }
+                    else if (strategyAndRegion.Length > 0)
+                    {
+                        config.SetCollectionCacheConcurrencyStrategy(collRole, strategyAndRegion[0]);
+                    }
+                }
+            }
+
+#endif
 
             if (this.eventListeners != null) 
             {
@@ -463,7 +629,8 @@ namespace Spring.Data.NHibernate
 				}
 			}
 
-
+#if NH_2_1
+#endif
             // Perform custom post-processing in subclasses.
             PostProcessConfiguration(config);
 
@@ -473,6 +640,9 @@ namespace Spring.Data.NHibernate
             this.sessionFactory = NewSessionFactory(config);
 
             AfterSessionFactoryCreation();
+
+            // set config time DB provider back to null
+            configTimeDbProvider = null;
 	    }
 
 	    /// <summary>
@@ -714,7 +884,7 @@ namespace Spring.Data.NHibernate
         protected virtual ISessionFactory NewSessionFactory(Configuration config)
         {
             ISessionFactory sf = config.BuildSessionFactory();
-            ISessionFactoryImplementor sfImplementor =  sf as ISessionFactoryImplementor;
+            ISessionFactoryImplementor sfImplementor = sf as ISessionFactoryImplementor;
             
             if (sfImplementor != null)
             {
@@ -752,7 +922,20 @@ namespace Spring.Data.NHibernate
 
             public override IDbConnection GetConnection()
             {
-                IDbConnection dbCon = _dbProvider.CreateConnection();
+                IDbProvider provider = _dbProvider;
+                if (provider == null && configTimeDbProvider != null)
+                {
+                    // NH 2.1 has a need to access db provider before
+                    // it has been set "the natural way" (it gets the DB's reserved words)
+                    // allow it via configuration time db provider reference
+                    provider = configTimeDbProvider;
+                }
+
+                if (provider == null)
+                {
+                    throw new Exception("There was no DB provider available, unable to create connection");
+                }
+                IDbConnection dbCon = provider.CreateConnection();
                 dbCon.Open();
                 return dbCon;
             }
@@ -814,9 +997,7 @@ namespace Spring.Data.NHibernate
         protected virtual DataAccessException ConvertAdoAccessException(ADOException ex)
         {
 
-            string sqlString = (ex.SqlString != null)
-                ? ex.SqlString.ToString()
-                : string.Empty;
+            string sqlString = (ex.SqlString != null) ? ex.SqlString : string.Empty;
             return AdoExceptionTranslator.Translate(
                 "Hibernate operation: " + ex.Message, sqlString, ex.InnerException);
 
