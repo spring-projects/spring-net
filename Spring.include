@@ -40,7 +40,15 @@
 			  if="${net-3.0.installed}" />
 	</if>
 
+  <property name="net-3.5" value="false"/>
+  <property name="registry.net-3.5.installed" value="0" overwrite="false"/>
 
+  <readregistry property="registry.net-3.5.installed"
+		      key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\Install"
+		      hive="LocalMachine"
+		      failonerror="false" />
+
+  <property name="net-3.5.installed" value="${registry.net-3.5.installed == '1'}" />
 
     <target name="check-bin-dir">
         <if test="${not property::exists('bin.dir')}">
@@ -392,6 +400,25 @@
         <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
         <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default},1701"/>
     </target>
+    <target name="set-net-3.5-runtime-configuration"
+            depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+      <property name="nant.settings.currentframework" value="net-2.0"/>
+      <property name="nant.settings.currentframework.number" value="2.0"/>
+      <!-- revision number used when generating assembly info -->
+      <property name="nant.settings.currentframework.revisionnumber" value="35"/>
+      <property name="net-2.0" value="true"/>
+      <property name="net-3.0" value="true"/>
+      <property name="net-3.5" value="true"/>
+      <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
+      <property name="current.build.defines.csc" value="${build.defines.csc},NET,NET_2_0,NET_3_0,NET_3_5" dynamic="true"/>
+      <property name="current.build.defines.cl" value="${build.defines.cl} /D NET /D NET_2_0 /D NET_3_0 /D NET_3_5" dynamic="true"/>
+      <property name="current.bin.dir"
+                value="${bin.dir}/${framework::get-family(framework::get-target-framework())}/3.5/${current.build.config}"/>
+      <property name="current.sdkdoc.dir"
+                value="${sdkdoc.dir}/${framework::get-family(framework::get-target-framework())}/3.5"/>
+      <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
+      <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default},1701"/>
+    </target>  
     <target name="set-netcf-1.0-runtime-configuration"
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="nant.settings.currentframework" value="netcf-1.0"/>

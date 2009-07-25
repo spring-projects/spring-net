@@ -44,16 +44,11 @@ namespace Spring.Data.NHibernate
         public void SetUp()
         {
             BasicConfigurator.Configure();
-#if NH_2_1
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate/dbProviderTemplateTests.xml");
-#elif NH_2_0
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate/dbProviderTemplateTests.xml");
-#else
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/dbProviderTemplateTests.xml");
-#endif
+            string assemblyName = GetType().Assembly.GetName().Name;
+            ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/dbProviderTemplateTests.xml");
+
             userCredentialsDbProvider = ctx["DbProvider"] as UserCredentialsDbProvider;
             Assert.IsNotNull(userCredentialsDbProvider);
-
         }
 
         [Test]

@@ -72,14 +72,8 @@ namespace Spring.Data.NHibernate
         public void SetUp()
         {
             BasicConfigurator.Configure();
-#if NH_2_1
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate/MultipleDbTests.xml");
-#elif NH_2_0
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate/MultipleDbTests.xml");
-#else
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/MultipleDbTests.xml");
-#endif
-
+            string assemblyName = GetType().Assembly.GetName().Name;
+            ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/MultipleDbTests.xml");
         }
 
         // TODO: this test fails - check out why

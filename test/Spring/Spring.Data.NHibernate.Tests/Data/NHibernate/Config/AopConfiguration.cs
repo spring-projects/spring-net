@@ -47,14 +47,6 @@ namespace Spring.Data.NHibernate.Config
                     "assembly://{0}/Spring.Data.NHibernate.Config/AopConfiguration.xml"
                     , this.GetType().Assembly.GetName().Name);
             ctx = new XmlApplicationContext(aopConfigPath);
-//#if NH_2_1
-//            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate21.Tests/Spring.Data.NHibernate.Config/AopConfiguration.xml");
-//#elif NH_2_0
-//            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate.Config/AopConfiguration.xml");
-//#else
-//            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Tests/Spring.Data.NHibernate.Config/AopConfiguration.xml");
-//#endif
-           
         }
 
         [Test]

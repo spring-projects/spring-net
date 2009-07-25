@@ -81,13 +81,9 @@ namespace Spring.Data.NHibernate
         {
             //NamespaceParserRegistry.RegisterParser(typeof(DatabaseNamespaceParser));
             BasicConfigurator.Configure();
-#if NH_2_1
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
-#elif NH_2_0
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
-#else
-            ctx = new XmlApplicationContext("assembly://Spring.Data.NHibernate.Integration.Tests/Spring.Data.NHibernate/templateTests.xml");
-#endif
+            string assemblyName = GetType().Assembly.GetName().Name;
+            ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/templateTests.xml");
+
             dbProvider = ctx["DbProvider"] as IDbProvider;
             transactionManager = ctx["hibernateTransactionManager"] as IPlatformTransactionManager;
             CleanupDatabase(dbProvider.CreateConnection());
