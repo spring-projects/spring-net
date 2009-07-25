@@ -445,11 +445,10 @@ namespace Spring.Messaging.Listener
         /// messageQueue.Receive().  
         /// </summary>
         /// <remarks>It allows subclasses to modify the state of the MessageQueue 
-        /// before receiving which maybe required when using remote queues, for example
-        /// to set a MessageFormatter.</remarks>
+        /// before receiving which maybe required when using remote queues</remarks>
         /// <param name="messageQueue"></param>
         protected virtual void BeforeMessageReceived(MessageQueue messageQueue)
-        {            
+        {
         }
 
         #endregion

@@ -34,6 +34,7 @@
     <property name='RemoteQueue' value="true"/>
   </object>
 
+  <!-- MessageQueueTemplate -->
 
   <object id="queue" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
     <property name="DefaultMessageQueueObjectName" value="testtxqueue"/>

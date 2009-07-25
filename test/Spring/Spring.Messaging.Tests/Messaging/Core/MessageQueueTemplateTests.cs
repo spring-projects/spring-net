@@ -116,7 +116,7 @@ namespace Spring.Messaging.Core
         
   
         [Test]
-        [ExpectedException(typeof (ArgumentException), ExpectedMessage = "DefaultMessageQueueObjectName is required.")]
+        [ExpectedException(typeof (ArgumentNullException))]
         public void NoMessageQueueNameSpecified()
         {
             MessageQueueTemplate mqt = new MessageQueueTemplate();

@@ -77,7 +77,7 @@
   </object>
 
   <object id="distributedTransactionExceptionHandler" type="Spring.Messaging.Listener.SendToQueueDistributedTransactionExceptionHandler, Spring.Messaging">
-    <property name="DefaultMessageQueueObjectName" value="msmqtxretryqueue"/>
+    <property name="MessageQueueObjectName" value="msmqtxretryqueue"/>
     <property name="MaxRetry" value="2"/>
   </object>
   

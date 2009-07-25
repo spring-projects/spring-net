@@ -36,7 +36,7 @@ namespace Spring.Messaging.Core
     {
         protected override string[] ConfigLocations
         {
-            get { return new[] {"assembly://Spring.Messaging.Tests/Spring.Messaging.Core/MessageQueueTemplateTests.xml"}; }
+            get { return new[] {"assembly://Spring.Messaging.Tests/Spring.Messaging.Core/MessageQueueMetadataCacheTests.xml"}; }
         }
 
         [Test]

@@ -27,6 +27,7 @@ using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
+using Spring.Util;
 
 namespace Spring.Messaging.Core
 {
@@ -82,11 +83,13 @@ namespace Spring.Messaging.Core
         private string messageConverterObjectName;
 
         private IMessageQueueFactory messageQueueFactory;
-        protected IApplicationContext applicationContext;
+        protected IConfigurableApplicationContext applicationContext;
 
         private TimeSpan timeout = MessageQueue.InfiniteTimeout;
 
         private MessageQueueMetadataCache metadataCache;
+
+        public const string METADATA_CACHE_NAME = "__MessageQueueMetadataCache__";
 
         #endregion
 
@@ -241,7 +244,17 @@ namespace Spring.Messaging.Core
         public IApplicationContext ApplicationContext
         {
             get { return applicationContext; }
-            set { applicationContext = value; }
+            set {
+                AssertUtils.ArgumentNotNull(value, "An ApplicationContext instance is required");
+                IConfigurableApplicationContext ctx = value as IConfigurableApplicationContext;
+                if (ctx == null)
+                {
+                    throw new InvalidOperationException(
+                        "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
+                }
+
+                applicationContext = ctx;
+            }
         }
 
         #endregion
@@ -263,12 +276,10 @@ namespace Spring.Messaging.Core
         /// </remarks>
         public void AfterPropertiesSet()
         {
-            if (DefaultMessageQueueObjectName == null)
-            {
-                throw new ArgumentException("DefaultMessageQueueObjectName is required.");
-            }            
             if (MessageQueueFactory == null)
             {
+                AssertUtils.ArgumentNotNull(applicationContext, "MessageQueueTemplate requires the ApplicationContext property to be set if the MessageQueueFactory property is not set for automatic create of the DefaultMessageQueueFactory");
+          
                 DefaultMessageQueueFactory mqf = new DefaultMessageQueueFactory();
                 mqf.ApplicationContext = applicationContext;
                 messageQueueFactory = mqf;
@@ -278,12 +289,43 @@ namespace Spring.Messaging.Core
                 messageConverterObjectName = QueueUtils.RegisterDefaultMessageConverter(applicationContext);
             }
             //If it has not been set by the user explicitly, then initialize.
+            CreateDefaultMetadataCache();
+        }
+
+        protected virtual void CreateDefaultMetadataCache()
+        {
             if (metadataCache == null)
             {
-                metadataCache = new MessageQueueMetadataCache();
-                metadataCache.ApplicationContext = ApplicationContext;
-                metadataCache.AfterPropertiesSet();
-                metadataCache.Initialize();
+                if (applicationContext.ContainsObject(METADATA_CACHE_NAME))
+                {
+                    metadataCache = applicationContext.GetObject(METADATA_CACHE_NAME) as MessageQueueMetadataCache;
+                }
+                else
+                {
+                    metadataCache = new MessageQueueMetadataCache();
+                    if (ApplicationContext != null)
+                    {
+                        metadataCache.ApplicationContext = ApplicationContext;
+                        metadataCache.AfterPropertiesSet();
+                        metadataCache.Initialize();
+                        applicationContext.ObjectFactory.RegisterSingleton("__MessageQueueMetadataCache__",
+                                                                           metadataCache);
+                    }
+                    else
+                    {
+                        #region Logging
+
+                        if (LOG.IsWarnEnabled)
+                        {
+                            LOG.Warn(
+                                "The ApplicationContext property has not been set, so the MessageQueueMetadataCache can not be automatically generated.  " +
+                                "Please explictly set the MessageQueueMetadataCache using the property MetadataCache or set the ApplicationContext property.  " + 
+                                "This will only effect the use of MessageQueueTemplate when publishing to remote queues.");
+                        }
+
+                        #endregion
+                    }
+                }
             }
         }
 
@@ -500,19 +542,30 @@ namespace Spring.Messaging.Core
         protected virtual void DoSendMessageQueue(MessageQueue mq, Message msg)
         {
             MessageQueueTransaction transactionToUse = QueueUtils.GetMessageQueueTransaction(null);
-            MessageQueueMetadata mqMetadata = metadataCache.Get(mq.Path);
-            if (mqMetadata != null)
+            if (metadataCache != null)
             {
-                if (mqMetadata.RemoteQueue)
+                MessageQueueMetadata mqMetadata = metadataCache.Get(mq.Path);
+                if (mqMetadata != null)
                 {
-                    if (mqMetadata.RemoteQueueIsTransactional)
+                    if (mqMetadata.RemoteQueue)
                     {
-                        // DefaultMessageQueue transaction is externally managed.
-                        DoSendMessageTransaction(mq, transactionToUse, msg);
+                        if (mqMetadata.RemoteQueueIsTransactional)
+                        {
+                            // DefaultMessageQueue transaction is externally managed.
+                            DoSendMessageTransaction(mq, transactionToUse, msg);
+                            return;
+                        }
+                        DoSendMessageQueueNonTransactional(mq, transactionToUse, msg);
                         return;
                     }
-                    DoSendMessageQueueNonTransactional(mq, transactionToUse, msg);
-                    return;
+                }
+            } else
+            {
+                if (LOG.IsWarnEnabled)
+                {
+                    LOG.Warn("MetadataCache has not been initialized.  Set the MetadataCache explicitly in standalone usage and/or " +
+                             "configure the MessageQueueTemplate in an ApplicationContext.  If deployed in an ApplicationContext by default " + 
+                             "the MetadataCache will automaticaly populated.");
                 }
             }
             // Handle assuming these are local queues.

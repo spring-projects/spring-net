@@ -84,19 +84,20 @@ namespace Spring.Messaging.Listener
         [Test]
         public void SendAndAsyncReceive()
         {
+            
             //MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
+            
             MessageQueueTemplate q = applicationContext["testRemoteTemplate"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
-
-            /*
+            
             q.ConvertAndSend("Hello World 1");
             q.ConvertAndSend("Hello World 2");
             q.ConvertAndSend("Hello World 3");
             q.ConvertAndSend("Hello World 4");
             q.ConvertAndSend("Hello World 5");
-             */
-
             
+            
+
             Assert.AreEqual(0, listener.MessageCount);
 
             container.Start();
@@ -107,7 +108,7 @@ namespace Spring.Messaging.Listener
 
             container.Stop();
             container.Shutdown();
-            Thread.Sleep(2500);
+            Thread.Sleep(2500);                       
             
         }
 

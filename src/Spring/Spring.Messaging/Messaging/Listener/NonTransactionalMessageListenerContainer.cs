@@ -73,7 +73,7 @@ namespace Spring.Messaging.Listener
         /// Perform a receive opertion on the message queue and execute the
         /// message listener
         /// </summary>
-        /// <param name="mq">The DefaultMessageQueue.</param>
+        /// <param name="mq">The MessageQueue.</param>
         /// <returns>
         /// true if received a message, false otherwise
         /// </returns>
@@ -119,7 +119,7 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsErrorEnabled)
                     {
-                        LOG.Error("Error receiving message from DefaultMessageQueue [" + mq.Path +
+                        LOG.Error("Error receiving message from MessageQueue [" + mq.Path +
                                   "], closing queue and clearing connection cache.");
                     }
 

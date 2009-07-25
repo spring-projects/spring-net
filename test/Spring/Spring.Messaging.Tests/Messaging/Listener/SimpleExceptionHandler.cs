@@ -28,6 +28,7 @@ namespace Spring.Messaging.Listener
         public void OnException(Exception exception, Message message)
         {
             LOG.Error("Exception Handler processing message id = [" + message.Id + "]");
+            LOG.Error("Exception = ", exception);
             messageCount++;
         }
 

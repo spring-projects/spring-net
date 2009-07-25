@@ -36,14 +36,4 @@
   </object>
 
 
-
-  <object id='msqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='.\Private$\testqueue'/>
-    <property name='ProductTemplate'>
-      <object>
-        <property name='Label' value='MyLabel'/>
-      </object>
-    </property>
-  </object>
-
 </objects>

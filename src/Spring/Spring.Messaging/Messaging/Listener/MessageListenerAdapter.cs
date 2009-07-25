@@ -230,6 +230,12 @@ namespace Spring.Messaging.Listener
             {
                 messageConverterObjectName = QueueUtils.RegisterDefaultMessageConverter(applicationContext);
             }
+            if (messageQueueTemplate == null)
+            {
+                messageQueueTemplate = new MessageQueueTemplate();
+                messageQueueTemplate.ApplicationContext = ApplicationContext;
+                messageQueueTemplate.AfterPropertiesSet();
+            }
         }
 
         #endregion
@@ -351,6 +357,18 @@ namespace Spring.Messaging.Listener
             }
         }
 
+        /// <summary>
+        /// Sets the message queue template.
+        /// </summary>
+        /// <remarks>If not set, will create one for it own internal use whne MessageListenerAdapter is constructed.
+        /// It maybe useful to share an existing instance if you have an extensively configured MessageQueueTemplate.
+        /// </remarks>
+        /// <value>The message queue template.</value>
+        public MessageQueueTemplate MessageQueueTemplate
+        {
+            set { messageQueueTemplate = value; }
+        }
+
         #region IMessageListener Members
 
         /// <summary>
@@ -395,7 +413,6 @@ namespace Spring.Messaging.Listener
         protected virtual void InitDefaultStrategies()
         {
             processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
-            messageQueueTemplate = new MessageQueueTemplate();
         }
 
         /// <summary>
@@ -435,6 +452,10 @@ namespace Spring.Messaging.Listener
         protected virtual void SendResponse(MessageQueue destination, Message response)
         {
             //Will send with appropriate transaction semantics 
+            if (logger.IsDebugEnabled)
+            {
+                logger.Debug("Sending response message to path = [" + destination.Path + "]");
+            }
             messageQueueTemplate.Send(destination, response);
         }
 
