@@ -836,7 +836,7 @@ namespace Spring.Objects.Factory.Support
 
                 if (factory.IsSingleton && ContainsSingleton(canonicalName))
                 {
-                    lock (factoryObjectProductCache)
+                    lock (factoryObjectProductCache.SyncRoot)
                     {
                         resultInstance = factoryObjectProductCache[canonicalName];
                         if (resultInstance == null)
@@ -844,14 +844,15 @@ namespace Spring.Objects.Factory.Support
                             resultInstance = GetObjectFromFactoryObject(factory, canonicalName, rod);
                             if (resultInstance != null)
                             {
-                                factoryObjectProductCache.Add(canonicalName, resultInstance);
+                                factoryObjectProductCache[canonicalName] = resultInstance;
                             }
-                            return resultInstance;
                         }
                     }
                 }
-
-                resultInstance = GetObjectFromFactoryObject(factory, canonicalName, rod);
+                else
+                {
+                    resultInstance = GetObjectFromFactoryObject(factory, canonicalName, rod);
+                }
 
                 if (resultInstance == null)
                 {

@@ -58,7 +58,7 @@ namespace Spring.Objects.Factory.Xml
                     objectName = webObjectNameGenerator.CreatePageDefinitionName(url);
                 }
 
-                // adjust aliases if necessary
+                // strip leading homepath symbol ('~') from aliases if necessary
                 for (int ai = 0; ai < aliases.Count; ai++)
                 {
                     string alias = (string)aliases[ai];
@@ -70,9 +70,14 @@ namespace Spring.Objects.Factory.Xml
             }
             else if (strTypeName.EndsWith(".ascx") || strTypeName.EndsWith(".master"))
             {
+                string controlName = webObjectNameGenerator.CreateControlDefinitionName(url);
                 if (!StringUtils.HasText(objectName))
                 {
-                    objectName = webObjectNameGenerator.CreateControlDefinitionName(url);
+                    objectName = controlName;
+                }
+                else
+                {
+                    aliases.Add(controlName);
                 }
             }
 
