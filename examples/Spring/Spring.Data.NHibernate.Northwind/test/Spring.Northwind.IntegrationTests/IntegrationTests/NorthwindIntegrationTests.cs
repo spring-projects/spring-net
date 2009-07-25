@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Collections;
 using System.Data;
 using NHibernate;
 using NUnit.Framework;
@@ -99,7 +97,7 @@ namespace Spring.Northwind.IntegrationTests
 
             c.CompanyName = "SpringSource";
 
-            customerDao.SaveOrUpdate(c);
+            customerDao.Update(c);
 
             c = customerDao.Get("MPOLL");
             Assert.AreEqual(c.Id, "MPOLL");
@@ -149,7 +147,7 @@ namespace Spring.Northwind.IntegrationTests
             Assert.AreEqual(831, orderDao.GetAll().Count);
 
             order.ShipCity = "Sao Paulo";
-            orderDao.SaveOrUpdate(order);
+            orderDao.Update(order);
 
             order = orderDao.Get(orderId);
             Assert.AreEqual("PICCO", order.Customer.Id);

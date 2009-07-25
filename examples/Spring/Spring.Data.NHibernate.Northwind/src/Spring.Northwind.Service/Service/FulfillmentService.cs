@@ -96,7 +96,7 @@ namespace Spring.Northwind.Service
                 order.ShippedDate = DateTime.Now;
                 
                 //Update shipment date
-                OrderDao.SaveOrUpdate(order);
+                OrderDao.Update(order);
                 
                 //Other operations...Decrease product quantity... etc
             }             

@@ -34,6 +34,11 @@
         <property name="CustomerDao" ref="CustomerDao" />
     </object>
 
+    <object type="CustomerView.aspx">
+      <property name="CustomerDao" ref="CustomerDao" />
+      <property name="CustomerEditController" ref="CustomerEditController" />
+    </object>
+  
     <object type="CustomerOrders.aspx" parent="CustomerEditPage" />
   
 </objects>

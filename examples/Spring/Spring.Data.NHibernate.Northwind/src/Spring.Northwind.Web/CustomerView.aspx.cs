@@ -55,11 +55,7 @@ public partial class CustomerView : Page
 
     private void Page_InitializeControls(object sender, EventArgs e)
     {
-        btnSave.Click += new EventHandler(BtnSave_Click);
+        
     }
 
-    private void BtnSave_Click(object sender, EventArgs e)
-    {
-        customerDao.SaveOrUpdate(CurrentCustomer);
-    }
 }

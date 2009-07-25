@@ -1,69 +1,63 @@
 using System;
-using System.Web;
 using Spring.Northwind.Dao;
 using Spring.Northwind.Domain;
 using Spring.Web.UI;
 
 public partial class CustomerEditor : Page
 {
-  private ICustomerEditController customerEditController;
-  private ICustomerDao customerDao;
+    private ICustomerEditController customerEditController;
+    private ICustomerDao customerDao;
 
-  public ICustomerDao CustomerDao
-  {
-    set { this.customerDao = value; }
-  }
-
-  public ICustomerEditController CustomerEditController
-  {
-    set { this.customerEditController = value; }
-  }
-
-  public Customer CurrentCustomer
-  {
-    get
+    public ICustomerDao CustomerDao
     {
-      //return (Customer) Session[typeof(CustomerEditor).FullName + ".Customer"];
-      return customerEditController.CurrentCustomer;
+        set { customerDao = value; }
     }
-  }
 
-//  public static void Edit( Customer customer )
-//  {
-//    HttpContext.Current.Session[typeof(CustomerEditor).FullName + ".Customer"] = customer;
-//  }
+    public ICustomerEditController CustomerEditController
+    {
+        set { customerEditController = value; }
+    }
 
-  public CustomerEditor()
-  {
-    this.InitializeControls+=new EventHandler(Page_InitializeControls);
-    this.DataBound+=new EventHandler(Page_DataBound);
-    this.DataUnbound+=new EventHandler(Page_DataUnbound);
-  }
+    public Customer CurrentCustomer
+    {
+        get
+        {
+            return customerEditController.CurrentCustomer;
+        }
+    }
 
-  override protected void InitializeDataBindings()
-  {
-    base.InitializeDataBindings();
+    public CustomerEditor()
+    {
+        InitializeControls += Page_InitializeControls;
+        DataBound += Page_DataBound;
+        DataUnbound += Page_DataUnbound;
+    }
 
-    // do the "one time" setup for databinding
-  }
+    override protected void InitializeDataBindings()
+    {
+        base.InitializeDataBindings();
 
-  private void Page_DataBound(object sender, EventArgs e)
-  {
-    // perform custom tasks for binding data from model to the form
-  }
+        // do the "one time" setup for databinding
+    }
 
-  private void Page_DataUnbound(object sender, EventArgs e)
-  {
-    // perform custom tasks for unbinding data from form to the model
-  }
+    private void Page_DataBound(object sender, EventArgs e)
+    {
+        // perform custom tasks for binding data from model to the form
+    }
 
-  private void Page_InitializeControls(object sender, EventArgs e)
-  {
-    btnSave.Click += new EventHandler(BtnSave_Click);
-  }
+    private void Page_DataUnbound(object sender, EventArgs e)
+    {
+        // perform custom tasks for unbinding data from form to the model
+    }
 
-  private void BtnSave_Click(object sender, EventArgs e)
-  {
-    customerDao.SaveOrUpdate(CurrentCustomer);
-  }
+    private void Page_InitializeControls(object sender, EventArgs e)
+    {
+        btnSave.Click += BtnSave_Click;
+    }
+
+    private void BtnSave_Click(object sender, EventArgs e)
+    {
+        customerDao.Update(CurrentCustomer);
+        Response.Redirect("~/CustomerView.aspx");
+    }
 }

@@ -28,6 +28,9 @@ using Spring.Northwind.Domain;
 
 namespace Spring.Northwind.Dao
 {
+    /// <summary>
+    /// Customer related DAO operations interface.
+    /// </summary>
     public interface ICustomerDao : IDao<Customer, string>, ISupportsDeleteDao<Customer>, ISupportsSave<Customer, string>
     {
     }

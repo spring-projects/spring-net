@@ -3,6 +3,8 @@
 
 <asp:Content ID="content" ContentPlaceHolderID="content" runat="server">
 
+<h1>Customers in database</h1>
+
       <asp:DataGrid id="customerList" runat="server"
            AllowPaging="true"
            AllowSorting="false"

@@ -26,34 +26,41 @@ using Spring.Data.NHibernate.Generic;
 using Spring.Data.NHibernate.Support;
 
 using Spring.Northwind.Domain;
+using Spring.Stereotype;
+using Spring.Transaction.Interceptor;
 
 #endregion
 
 namespace Spring.Northwind.Dao.NHibernate
 {
+    [Repository]
     public class HibernateOrderDao : HibernateDao, IOrderDao
     {
+        [Transaction(ReadOnly = true)]
         public Order Get(int orderId)
         {
             return Session.Get<Order>(orderId);
-   
         }
 
+        [Transaction(ReadOnly = true)]
         public IList<Order> GetAll()
         {
             return GetAll<Order>();
         }
 
+        [Transaction]
         public int Save(Order order)
         {
             return (int) Session.Save(order);
         }
 
-        public void SaveOrUpdate(Order order)
+        [Transaction]
+        public void Update(Order order)
         {
             Session.SaveOrUpdate(order);
         }
 
+        [Transaction]
         public void Delete(Order order)
         {
             Session.Delete(order);

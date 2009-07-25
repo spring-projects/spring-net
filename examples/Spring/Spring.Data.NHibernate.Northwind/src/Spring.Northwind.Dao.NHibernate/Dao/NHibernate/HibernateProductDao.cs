@@ -25,34 +25,41 @@ using System.Collections.Generic;
 using Spring.Data.NHibernate.Support;
 
 using Spring.Northwind.Domain;
+using Spring.Stereotype;
+using Spring.Transaction.Interceptor;
 
 #endregion
 
 namespace Spring.Northwind.Dao.NHibernate
 {
+    [Repository]
     public class HibernateProductDao : HibernateDao, IProductDao
     {
+        [Transaction(ReadOnly = true)]
         public Product Get(int productId)
         {
             return Session.Get<Product>(productId);
-     
         }
 
+        [Transaction(ReadOnly = true)]
         public IList<Product> GetAll()
         {
             return GetAll<Product>();
         }
 
+        [Transaction]
         public int Save(Product product)
         {
             return (int) Session.Save(product);
         }
 
-        public void SaveOrUpdate(Product product)
+        [Transaction]
+        public void Update(Product product)
         {
             Session.SaveOrUpdate(product);
         }
 
+        [Transaction]
         public void Delete(Product product)
         {
             Session.Delete(product);

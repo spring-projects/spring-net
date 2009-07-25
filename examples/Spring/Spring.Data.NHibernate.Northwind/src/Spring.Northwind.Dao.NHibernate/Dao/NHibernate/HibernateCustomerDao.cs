@@ -64,7 +64,7 @@ namespace Spring.Northwind.Dao.NHibernate
         }
 
         [Transaction(ReadOnly = false)]
-        public void SaveOrUpdate(Customer customer)
+        public void Update(Customer customer)
         {
             Session.SaveOrUpdate(customer);
         }

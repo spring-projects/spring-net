@@ -3,6 +3,7 @@ body {
   padding: 0px; 
   background-color: #dfeac1; 
   text-align: center;
+  text-decoration: none;
 }
 
 .logo {
@@ -12,47 +13,103 @@ body {
   float:left;
 }
 
-#ad {
-  float:right;	
-  position:relative;
-  right: 22px;
-  top:-8px;
+.headerText
+{
+	color: White;
+	left: 350px;
+	top: 50px;
+	font-family: Verdana;
+	font-size: 150%;
+	font-weight: bold;
+	position: absolute;
 }
 
-
-
-.navigation {
-  position:relative;
-  left: 25px;
-  font-family: Verdana, Arial, Helvetica, sans;
-  font-size: 12px;
-  color: #000000;
-  text-decoration: none;
-  width:150px;
-}
-.navigation a, .navigation a:active, .navigation a:visited {
-  font-family: Verdana, Arial, Helvetica, sans;
-  font-size: 12px;
-  color: #7E7E7E;
-  text-decoration: none;
-}
-.navigation a:hover {
-  font-family: Verdana, Arial, Helvetica, sans;
-  font-size: 12px;
-  color: #000000;
-  text-decoration: none; 
+fieldset {
+	border: 1px solid #CCA383;
+	width: 60%;
+	background: LightGoldenrodYellow;
+	padding: 3px;
+	padding-bottom: 10px;
 }
 
-
-h4.navbar {
-  position:relative;
-  left: 0px;
-  font-family: Verdana, Arial, Helvetica, sans;
-  font-size: 12px;
-  color: #5F5F5F;
-  text-decoration: none;
-  margin-bottom: 2px;
+fieldset legend {
+	background: PaleGoldenrod;
+	padding: 6px;
+	font-weight: bold;
 }
+
+.formLabelCell
+{
+	text-align: left;
+	padding-left: 10px;
+	padding-right: 30px;
+	font-weight: bold;
+}
+
+.formValueCell
+{
+	text-align: left;
+}
+
+.actionPanel
+{
+	margin: 30px;
+	border: 1px solid #CCA383;
+	width: 50%;
+	background: LightGoldenrodYellow;
+	text-align: center;
+	padding: 5px;
+}
+
+#headerCell 
+{
+	background: url(../img/header-spring.png);
+	height: 150px;
+	width: 719px;
+}
+
+#contentCell
+{
+	background-image: url(../img/bg-spring.png);
+	text-align: left;
+	vertical-align: top;
+}
+
+#footerCell
+{
+	background-image: url(../img/footern.gif);
+	text-align: center;
+	height: 29px;
+}
+
+.datagrid 
+{
+	border: solid 1px Tan; 
+	margin-left: 10px;
+}
+
+.datagrid-header
+{
+    font-weight: bold;
+    background-color: Tan;
+}
+
+.datagid-item
+{
+    background-color: LightGoldenrodYellow;
+}
+
+.datagrid-alt-item
+{
+    background-color: PaleGoldenrod;
+}
+
+.datagrid-footer
+{
+    font-weight: bold;
+    background-color: Tan;
+}
+
 h1 {
   font-family: Verdana, Arial, Helvetica, sans;
   font-size: 14px;
@@ -98,31 +155,11 @@ table {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.news b {
-  font-family: Verdana, Arial, Helvetica, sans;
-  font-size: 11px;
-  font-weight: normal;
-  color: #90A720;
-}
-.news u {
-  font-family: Verdana, Arial, Helvetica, sans;
-  font-size: 12px;
-  font-weight: bold;
-  color: #606060;
-  text-decoration: none;
-}
+
 li {
   margin-bottom: 12px;
 }
 
-li.newslist {
-  margin-bottom: 2px;
-}
-
-ul.newslist {
-  margin-left: 10px;
-  margin-top: 10px;
-}
 ul {
   margin-left: 25px;
   margin-top: 10px;

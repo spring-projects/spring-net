@@ -1,5 +1,10 @@
 namespace Spring.Northwind.Dao
 {
+    /// <summary>
+    /// Role interface for DAOs that support saves and updates to entities.
+    /// </summary>
+    /// <typeparam name="TEntity">Entity type.</typeparam>
+    /// <typeparam name="TId">Entity id type.</typeparam>
     public interface ISupportsSave<TEntity, TId>
     {
         /// <summary>
@@ -13,6 +18,6 @@ namespace Spring.Northwind.Dao
         /// Saves or updates the entity. Behavior depends on the current state of entity's ID.
         /// </summary>
         /// <param name="entity">Entity to save or update.</param>
-        void SaveOrUpdate(TEntity entity);     
+        void Update(TEntity entity);     
     }
 }
