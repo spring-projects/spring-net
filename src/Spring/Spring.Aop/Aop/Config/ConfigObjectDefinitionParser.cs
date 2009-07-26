@@ -128,6 +128,7 @@ namespace Spring.Aop.Config
         {
             ObjectDefinitionBuilder advisorDefinitionBuilder =
                 parserContext.ParserHelper.CreateRootObjectDefinitionBuilder(typeof(DefaultObjectFactoryPointcutAdvisor));
+            advisorDefinitionBuilder.RawObjectDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
 
             if (advisorElement.HasAttribute(ORDER_PROPERTY))
             {

@@ -138,6 +138,7 @@
     <Compile Include="Aop\Framework\AopUtils.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AbstractFilteringAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AttributeAutoProxyCreator.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\IAdvisorRetrievalHelper.cs" />
     <Compile Include="Aop\Framework\AutoProxy\InfrastructureAdvisorAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\AutoProxy\InheritanceBasedAopConfigurer.cs" />
     <Compile Include="Aop\Framework\AutoProxy\ObjectFactoryAdvisorRetrievalHelper.cs" />

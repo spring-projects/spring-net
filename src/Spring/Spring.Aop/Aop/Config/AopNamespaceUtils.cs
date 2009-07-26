@@ -55,7 +55,7 @@ namespace Spring.Aop.Config
         /// <param name="sourceElement">The source element.</param>
         public static void RegisterAutoProxyCreatorIfNecessary(ParserContext parserContext, XmlElement sourceElement)
         {
-            RegisterApcAsRequired(typeof(DefaultAdvisorAutoProxyCreator), parserContext);
+            RegisterApcAsRequired(typeof(InfrastructureAdvisorAutoProxyCreator), parserContext);
         }
 
         /// <summary>

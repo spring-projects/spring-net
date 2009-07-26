@@ -22,7 +22,6 @@ using System;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
-using AopAlliance.Aop;
 using NUnit.Framework;
 using Spring.Aop.Interceptor;
 using Spring.Objects.Factory;

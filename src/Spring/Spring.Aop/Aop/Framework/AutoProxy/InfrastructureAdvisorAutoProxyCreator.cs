@@ -24,22 +24,38 @@ using Spring.Objects.Factory.Config;
 namespace Spring.Aop.Framework.AutoProxy
 {
     /// <summary>
+    /// A special version of an APC that explicitely cares for infrastructure (=internal)
+    /// advisors only
     /// </summary>
     /// <author>Erich Eichinger</author>
-    internal class InfrastructureAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator
+    public class InfrastructureAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator
     {
-        private IConfigurableListableObjectFactory _objectFactory;
-
-        protected override void InitObjectFactory(IConfigurableListableObjectFactory objectFactory)
+        /// <summary>
+        /// Overridden to create a special version of an <see cref="IAdvisorRetrievalHelper"/>
+        /// that accepts only infrastructure advisor definitions
+        /// </summary>
+        /// <param name="objectFactory"></param>
+        /// <returns></returns>
+        protected override IAdvisorRetrievalHelper CreateAdvisorRetrievalHelper(IConfigurableListableObjectFactory objectFactory)
         {
-            base.InitObjectFactory(objectFactory);
-            _objectFactory = objectFactory;
+            return new InfrastructurAdvisorRetrievalHelper(this, objectFactory);
         }
-
-        protected override bool IsEligibleAdvisorObject(string advisorName, Type targetType, string targetName)
+        
+        private class InfrastructurAdvisorRetrievalHelper : ObjectFactoryAdvisorRetrievalHelper
         {
-            return _objectFactory.ContainsObjectDefinition(advisorName)
-                   && _objectFactory.GetObjectDefinition(advisorName).Role == ObjectRole.ROLE_INFRASTRUCTURE;
+            private readonly InfrastructureAdvisorAutoProxyCreator _owner;
+
+            public InfrastructurAdvisorRetrievalHelper(InfrastructureAdvisorAutoProxyCreator owner, IConfigurableListableObjectFactory objectFactory)
+                : base(objectFactory)
+            {
+                _owner = owner;
+            }
+
+            protected override bool IsEligibleObject(string advisorName, Type objectType, string objectName)
+            {
+                return this.ObjectFactory.ContainsObjectDefinition(advisorName)
+                       && this.ObjectFactory.GetObjectDefinition(advisorName).Role == ObjectRole.ROLE_INFRASTRUCTURE;
+            }
         }
     }
 }

@@ -71,6 +71,7 @@ namespace Spring.Transaction.Config
 
             //Create the TransactionInterceptor definition.
             RootObjectDefinition interceptorDefinition = new RootObjectDefinition(typeof(TransactionInterceptor));
+            interceptorDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
             interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_MANAGER_PROPERTY,
                                                      new RuntimeObjectReference(transactionManagerName));
             interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_ATTRIBUTE_SOURCE,
@@ -78,6 +79,7 @@ namespace Spring.Transaction.Config
 
             //Create the TransactionAttributeSourceAdvisor definition.
             RootObjectDefinition advisorDefinition = new RootObjectDefinition(typeof(TransactionAttributeSourceAdvisor));
+            advisorDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
             advisorDefinition.PropertyValues.Add(TRANSACTION_INTERCEPTOR, interceptorDefinition);
             if (element.HasAttribute(ORDER))
             {

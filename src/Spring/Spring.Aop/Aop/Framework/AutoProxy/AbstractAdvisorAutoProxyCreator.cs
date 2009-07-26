@@ -57,7 +57,7 @@ namespace Spring.Aop.Framework.AutoProxy
     public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
     {
         private readonly ILog Log;
-        private ObjectFactoryAdvisorRetrievalHelper _advisorRetrievalHelper;
+        private IAdvisorRetrievalHelper _advisorRetrievalHelper;
 
         /// <summary>
         /// Initialize 
@@ -76,12 +76,12 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             set
             {
-                base.ObjectFactory = value;
                 if (!(value is IConfigurableListableObjectFactory))
                 {
                     throw new InvalidOperationException("Can not use AdvisorAutoProxyCreator without a ConfigurableListableObjectFactory");
                 }
-                InitObjectFactory((IConfigurableListableObjectFactory) value);
+                base.ObjectFactory = value;
+                InitObjectFactory((IConfigurableListableObjectFactory)value);
             }
         }
 
@@ -92,7 +92,21 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="objectFactory"></param>
         protected virtual void InitObjectFactory(IConfigurableListableObjectFactory objectFactory)
         {
-            _advisorRetrievalHelper = new ObjectFactoryAdvisorRetrievalHelperAdapter(this, objectFactory);
+            _advisorRetrievalHelper = CreateAdvisorRetrievalHelper(objectFactory);
+        }
+
+        /// <summary>
+        /// Create the <see cref="IAdvisorRetrievalHelper"/> for retrieving the list of
+        /// applicable advisor objects. The default implementation calls back into
+        /// <see cref="IsEligibleAdvisorObject"/> thus it usually is sufficient to just
+        /// override <see cref="IsEligibleAdvisorObject"/>. Override <see cref="CreateAdvisorRetrievalHelper"/>
+        /// only if you know what you are doing!
+        /// </summary>
+        /// <param name="objectFactory"></param>
+        /// <returns></returns>
+        protected virtual IAdvisorRetrievalHelper CreateAdvisorRetrievalHelper(IConfigurableListableObjectFactory objectFactory)
+        {
+            return new ObjectFactoryAdvisorRetrievalHelperAdapter(this, objectFactory);
         }
 
         /// <summary>
@@ -264,7 +278,8 @@ namespace Spring.Aop.Framework.AutoProxy
 
             protected override bool IsEligibleObject(string advisorName, Type objectType, string objectName)
             {
-                return _owner.IsEligibleAdvisorObject(advisorName, objectType, objectName);
+                return  base.IsEligibleObject(advisorName, objectType, objectName)
+                        && _owner.IsEligibleAdvisorObject(advisorName, objectType, objectName);
             }
         }
     }

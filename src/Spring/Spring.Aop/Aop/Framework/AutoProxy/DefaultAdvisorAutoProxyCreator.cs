@@ -124,7 +124,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetName">the target object's name</param>
         protected override bool IsEligibleAdvisorObject(string advisorName, Type targetType, string targetName)
         {
-            return (!usePrefix || advisorName.StartsWith(advisorObjectNamePrefix));
+            return (!usePrefix || advisorName.StartsWith(advisorObjectNamePrefix))
+                && base.IsEligibleAdvisorObject(advisorName, targetType, targetName);
         }
 
         /// <summary>

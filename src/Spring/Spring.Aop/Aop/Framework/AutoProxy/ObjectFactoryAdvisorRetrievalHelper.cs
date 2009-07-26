@@ -32,20 +32,28 @@ namespace Spring.Aop.Framework.AutoProxy
     /// use with auto-proxying.
     /// </summary>
     /// <author>Erich Eichinger</author>
-    public class ObjectFactoryAdvisorRetrievalHelper
+    public class ObjectFactoryAdvisorRetrievalHelper : IAdvisorRetrievalHelper
     {
         private readonly ILog _log;
-        private readonly IConfigurableListableObjectFactory _owningFactory;
+        private readonly IConfigurableListableObjectFactory _objectFactory;
         private string[] _cachedObjectNames;
 
         /// <summary>
-        /// Create a new helper for the specified <paramref name="owningFactory"/>.
+        /// The object factory to lookup advisors from
         /// </summary>
-        public ObjectFactoryAdvisorRetrievalHelper(IConfigurableListableObjectFactory owningFactory )
+        public IConfigurableListableObjectFactory ObjectFactory
         {
-            AssertUtils.ArgumentNotNull(owningFactory, "owningFactory");
+            get { return _objectFactory; }
+        }
+
+        /// <summary>
+        /// Create a new helper for the specified <paramref name="objectFactory"/>.
+        /// </summary>
+        public ObjectFactoryAdvisorRetrievalHelper(IConfigurableListableObjectFactory objectFactory )
+        {
+            AssertUtils.ArgumentNotNull(objectFactory, "objectFactory");
             _log = LogManager.GetLogger(this.GetType());
-            _owningFactory = owningFactory;
+            _objectFactory = objectFactory;
         }
 
         /// <summary>
@@ -68,7 +76,7 @@ namespace Spring.Aop.Framework.AutoProxy
             for (int i = 0; i < advisorNames.Length; i++)
             {
                 string name = advisorNames[i];
-                if (IsEligibleObject(name, targetType, targetName) && !_owningFactory.IsCurrentlyInCreation(name))
+                if (IsEligibleObject(name, targetType, targetName) && !_objectFactory.IsCurrentlyInCreation(name))
                 {
                     try
                     {
@@ -80,7 +88,7 @@ namespace Spring.Aop.Framework.AutoProxy
                         if (rootEx is ObjectCurrentlyInCreationException)
                         {
                             ObjectCurrentlyInCreationException oce = (ObjectCurrentlyInCreationException)rootEx;
-                            if (_owningFactory.IsCurrentlyInCreation(oce.ObjectName))
+                            if (_objectFactory.IsCurrentlyInCreation(oce.ObjectName))
                             {
                                 if (_log.IsDebugEnabled)
                                 {
@@ -105,7 +113,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="advisorName">the object name of the advisor to add</param>
         private void AddAdvisorCandidate(ArrayList advisors, string advisorName)
         {
-            object advisorCandidate = _owningFactory.GetObject(advisorName);
+            object advisorCandidate = _objectFactory.GetObject(advisorName);
             if (advisorCandidate is IAdvisor)
             {
                 advisors.Add(advisorCandidate);
@@ -136,9 +144,9 @@ namespace Spring.Aop.Framework.AutoProxy
                     if (_cachedObjectNames == null)
                     {
                         ArrayList candidateNameList = new ArrayList();
-                        string[] advisorCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors( _owningFactory, typeof(IAdvisor), true, false);
+                        string[] advisorCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors( _objectFactory, typeof(IAdvisor), true, false);
                         candidateNameList.AddRange(advisorCandidateNames);
-                        string[] advisorsCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_owningFactory, typeof(IAdvisors), true, false);
+                        string[] advisorsCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_objectFactory, typeof(IAdvisors), true, false);
                         candidateNameList.AddRange(advisorsCandidateNames);
                         _cachedObjectNames = (string[]) candidateNameList.ToArray(typeof(string));
                     }
@@ -149,14 +157,16 @@ namespace Spring.Aop.Framework.AutoProxy
 
         /// <summary>
         /// Determine, whether the specified aspect object is eligible.
-        /// The default implementation always returns <c>true</c>.
+        /// The default implementation accepts all except for advisors that are 
+        /// part of the internal infrastructure.
         /// </summary>
         /// <param name="advisorName">the name of the candidate advisor</param>
         /// <param name="objectType">the type of the object to be advised</param>
         /// <param name="objectName">the name of the object to be advised</param>
         protected virtual bool IsEligibleObject(string advisorName, Type objectType, string objectName )
         {
-            return true;
-        }
+            return this.ObjectFactory.ContainsObjectDefinition(advisorName)
+                   && this.ObjectFactory.GetObjectDefinition(advisorName).Role != ObjectRole.ROLE_INFRASTRUCTURE;
+       }
     }
 }

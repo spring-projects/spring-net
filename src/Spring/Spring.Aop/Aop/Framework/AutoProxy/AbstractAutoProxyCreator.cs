@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Reflection;
@@ -34,8 +32,6 @@ using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework.AutoProxy
 {
@@ -78,7 +74,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// The logger for this class hierarchy.
         /// </summary>
-        protected readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        protected readonly ILog logger;
 
         /// <summary>
         /// Convenience constant for subclasses: Return value for "do not proxy".
@@ -105,10 +101,13 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         private IAdvisorAdapterRegistry advisorAdapterRegistry = GlobalAdvisorAdapterRegistry.Instance;
 
-
         /// <summary>
-        /// 
+        /// Indicates whether to mark the create proxy as immutable.
         /// </summary>
+        /// <remarks>
+        /// Setting this to true effectively disables  modifying the generated 
+        /// proxy's advisor configuration
+        /// </remarks>
         private bool freezeProxy = false;
 
         /// <summary>
@@ -214,6 +213,18 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             get { return freezeProxy; }
             set { this.freezeProxy = value; }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Create a new instance of this AutoProxyCreator
+        /// </summary>
+        protected AbstractAutoProxyCreator()
+        {
+            logger = LogManager.GetLogger(this.GetType());
         }
 
         #endregion
