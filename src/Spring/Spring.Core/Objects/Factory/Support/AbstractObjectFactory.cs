@@ -1714,14 +1714,11 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Does this object factory contain an object with the given name?
+        /// Does this object factory or one of its parent factories contain an object with the given name?
         /// </summary>
         /// <remarks>
-        /// This method does not (and it should not) check if the specified
-        /// object exists in one of the parent object factories. If it did,
-        /// message sources and event registries within application context 
-        /// hierarchy would have circular references, which would cause stack
-        /// overflows during message lookup, for example. (A. Seovic)
+        /// This method scans the object factory hierarchy starting with the current factory instance upwards. 
+        /// Use <see cref="ContainsLocalObject"/> if you want to explicitely check just this object factory instance.
         /// </remarks>
         /// <see cref="Spring.Objects.Factory.IObjectFactory.ContainsObject"/>.
         public bool ContainsObject(string name)
@@ -1745,11 +1742,7 @@ namespace Spring.Objects.Factory.Support
         {
             string objectName = TransformedObjectName(name);
             // check if object actually exists in this object factory...
-            bool isInSingletonCache = false;
-            lock (singletonCache)
-            {
-                isInSingletonCache = singletonCache.Contains(objectName);
-            }
+            bool isInSingletonCache = ContainsSingleton(objectName);
             if (isInSingletonCache || ContainsObjectDefinition(objectName))
             {
                 // if found, gather aliases...
