@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using AopAlliance.Aop;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
@@ -34,6 +35,8 @@ namespace Spring.Aop.Framework.AutoProxy
     {
         public class TestAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator
         {
+            public ArrayList CheckedAdvisors = new ArrayList();
+
             public object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName)
             {
                 return base.GetAdvicesAndAdvisorsForObject(targetType, targetName, null);
@@ -41,7 +44,8 @@ namespace Spring.Aop.Framework.AutoProxy
 
             protected override bool IsEligibleAdvisorObject(string advisorName, Type targetType, string targetName)
             {
-                return true;
+                CheckedAdvisors.Add(advisorName);
+                return base.IsEligibleAdvisorObject(advisorName, targetType, targetName);
             }
         }
 
@@ -86,6 +90,9 @@ namespace Spring.Aop.Framework.AutoProxy
             object[] advisors = apc.GetAdvicesAndAdvisorsForObject(typeof (object), "dummyTarget");
             Assert.AreEqual(1, advisors.Length);
             Assert.AreEqual( "RegularAdvisor", ((TestAdvisor)advisors[0]).Name );
+
+            Assert.AreEqual(1, apc.CheckedAdvisors.Count);
+            Assert.AreEqual("regular", apc.CheckedAdvisors[0]);
         }
     }
 }
