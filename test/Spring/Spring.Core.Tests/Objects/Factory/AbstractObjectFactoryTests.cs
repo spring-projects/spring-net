@@ -22,6 +22,7 @@
 
 using System;
 using NUnit.Framework;
+using Spring.Expressions;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
@@ -29,45 +30,6 @@ using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory
 {
-    public class TestAbstractObjectFactory : AbstractObjectFactory
-    {
-        protected override void DestroyObject(string name, object target)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool ContainsObjectDefinition(string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override IObjectDefinition GetObjectDefinition(string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override IObjectDefinition GetObjectDefinition(string name, bool includeAncestors)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override object ConfigureObject(object target, string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override object ConfigureObject(object target, string name, IObjectDefinition definition)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override object InstantiateObject(string name, RootObjectDefinition definition, object[] arguments,
-                                               bool allowEagerCaching, bool suppressConfigure)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 	/// <summary>
 	/// Subclasses must override SetUp () to initialize the object factory
 	/// and any other variables they need.
@@ -118,9 +80,7 @@ namespace Spring.Objects.Factory
 
         #endregion
 
-        #region Tests
-
-        /// <summary>
+	    /// <summary>
 		/// Roderick objects inherits from rod, overriding name only.
 		/// </summary>
 		[Test]
@@ -515,6 +475,61 @@ namespace Spring.Objects.Factory
 //			ObjectFactory.GetObject("unsupportedDefinition");
 //		}
 
-		#endregion
+        /// <summary>
+        /// This test resembles a scenario that may happen e.g. using ProxyFactoryObject proxying sibling objects with cyclic dependencies
+        /// </summary>
+	    [Test]
+	    public void CanResolveCyclicSingletonFactoryObjectProductDependencies()
+	    {
+	        AbstractObjectFactory of = this.CreateObjectFactory(true);
+
+            GenericObjectDefinition od = new GenericObjectDefinition();
+            od.ObjectTypeName = typeof(TestObject).FullName;
+            od.IsSingleton = true;
+            od.PropertyValues.Add(new PropertyValue("Spouse", new RuntimeObjectReference("product2")));
+            of.RegisterObjectDefinition("product1Target", od);
+
+            GenericObjectDefinition od2 = new GenericObjectDefinition();
+            od2.ObjectTypeName = typeof(TestObject).FullName;
+            od2.IsSingleton = true;
+            od2.PropertyValues.Add(new PropertyValue("Sibling", new RuntimeObjectReference("product1")));
+            of.RegisterObjectDefinition("product2Target", od2);
+
+            of.RegisterSingleton("product1", new ObjectReferenceFactoryObject("product1Target", of));
+            of.RegisterSingleton("product2", new ObjectReferenceFactoryObject("product2Target", of));
+
+            TestObject to = (TestObject) of.GetObject("product1");
+            Assert.NotNull(to);
+            Assert.NotNull(to.Spouse);
+            Assert.NotNull( ((TestObject)to.Spouse).Sibling);
+	    }
+
+        [Test]
+        public void ThrowsOnCyclicDependenciesOnNonSingletons()
+        {
+            AbstractObjectFactory of = this.CreateObjectFactory(true);
+
+            GenericObjectDefinition od = new GenericObjectDefinition();
+            od.ObjectTypeName = typeof(TestObject).FullName;
+            od.IsSingleton = false;
+            od.PropertyValues.Add(new PropertyValue("Spouse", new RuntimeObjectReference("product2")));
+            of.RegisterObjectDefinition("product1", od);
+
+            GenericObjectDefinition od2 = new GenericObjectDefinition();
+            od2.ObjectTypeName = typeof(TestObject).FullName;
+            od2.IsSingleton = false;
+            od2.PropertyValues.Add(new PropertyValue("Sibling", new RuntimeObjectReference("product1")));
+            of.RegisterObjectDefinition("product2", od2);
+
+            try
+            {
+                of.GetObject("product1");
+                Assert.Fail();
+            }
+            catch (ObjectCurrentlyInCreationException ex)
+            {
+                Assert.AreEqual("product1", ex.ObjectName);
+            }
+        }
 	}
 }

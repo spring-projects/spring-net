@@ -382,7 +382,7 @@ namespace Spring.Objects.Factory.Support
         /// If the object definition is invalid.
         /// </exception>
         /// <seealso cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.RegisterObjectDefinition(string, IObjectDefinition)"/>
-        public void RegisterObjectDefinition(
+        public override void RegisterObjectDefinition(
             string name, IObjectDefinition objectDefinition)
         {
             if (objectDefinition is AbstractObjectDefinition)

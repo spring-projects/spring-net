@@ -50,7 +50,24 @@ namespace Spring.Objects.Factory.Config
 		private string _targetObjectName;
 		private IObjectFactory _objectFactory;
 
-		/// <summary>
+        /// <summary>
+        /// Initialize a new default instance
+        /// </summary>
+	    public ObjectReferenceFactoryObject()
+	    {
+	    }
+        /// <summary>
+        /// Initialize this instance with the predefined <paramref name="targetObjectName"/> and <paramref name="objectFactory"/>.
+        /// </summary>
+        /// <param name="targetObjectName"></param>
+        /// <param name="objectFactory"></param>
+	    public ObjectReferenceFactoryObject(string targetObjectName, IObjectFactory objectFactory)
+	    {
+	        this.TargetObjectName = targetObjectName;
+	        this.ObjectFactory = objectFactory;
+	    }
+
+	    /// <summary>
 		/// The name of the target object.
 		/// </summary>
 		/// <remarks>

@@ -339,7 +339,7 @@ namespace Spring.Objects.Factory.Support
             {
                 return;
             }
-            ObjectDefinitionValueResolver valueResolver = new ObjectDefinitionValueResolver(this, name, definition);
+            ObjectDefinitionValueResolver valueResolver = CreateValueResolver(name, definition);
 
             MutablePropertyValues deepCopy = new MutablePropertyValues(properties);
             PropertyValue[] copiedProperties = deepCopy.PropertyValues;
@@ -363,6 +363,14 @@ namespace Spring.Objects.Factory.Support
                 // improve the message by showing the context...
                 throw new ObjectCreationException(definition.ResourceDescription, name, "Error setting property values: " + ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Create the value resolver strategy to use for resolving raw property values
+        /// </summary>
+        protected virtual ObjectDefinitionValueResolver CreateValueResolver(string name, IObjectDefinition definition)
+        {
+            return new ObjectDefinitionValueResolver(this, name, definition);
         }
 
         /// <summary>

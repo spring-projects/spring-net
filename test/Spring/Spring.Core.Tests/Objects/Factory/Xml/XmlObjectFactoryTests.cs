@@ -1123,7 +1123,6 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [Ignore("SPRNET-1005")]
         public void AutowireWithParent()
         {
             XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("autowire.xml", GetType()));

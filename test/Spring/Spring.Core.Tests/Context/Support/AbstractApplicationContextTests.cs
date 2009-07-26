@@ -22,9 +22,11 @@
 
 using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Core;
 using Spring.Core.IO;
 using Spring.Objects;
+using Spring.Objects.Events;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -60,6 +62,38 @@ namespace Spring.Context.Support
         {
             
         }
+
+        [Test]
+        public void DoesNotSearchParentContextForMessageSource()
+        {
+            MockRepository mocks = new MockRepository();
+            IMessageSource msgSource = (IMessageSource) mocks.DynamicMock(typeof (IMessageSource));
+            MockApplicationContext parentCtx = new MockApplicationContext("parentContext");
+            parentCtx.ObjectFactory.RegisterSingleton(AbstractApplicationContext.MessageSourceObjectName, msgSource);
+            MockApplicationContext childContext = new MockApplicationContext("childContext", parentCtx);
+            parentCtx.Refresh();
+            childContext.Refresh();
+
+            Assert.AreNotSame( msgSource, childContext.MessageSource );
+            Assert.AreSame(msgSource, parentCtx.MessageSource);
+            Assert.AreEqual(msgSource, ((IHierarchicalMessageSource)childContext.MessageSource).ParentMessageSource);
+        }
+
+        [Test]
+        public void DoesNotSearchParentContextForEventRegistry()
+        {
+            MockRepository mocks = new MockRepository();
+            IEventRegistry eventRegistry = (IEventRegistry)mocks.DynamicMock(typeof(IEventRegistry));
+            MockApplicationContext parentCtx = new MockApplicationContext("parentContext");
+            parentCtx.ObjectFactory.RegisterSingleton(AbstractApplicationContext.EventRegistryObjectName, eventRegistry);
+            MockApplicationContext childContext = new MockApplicationContext("childContext", parentCtx);
+            parentCtx.Refresh();
+            childContext.Refresh();
+
+            Assert.AreSame( eventRegistry, parentCtx.EventRegistry );
+            Assert.AreNotSame( eventRegistry, childContext.EventRegistry );
+        }
+
 		/// <summary>
 		/// Tests the case where there is an object in the context with the name of the
 		/// default message source name, that is NOT an IMessageSource.

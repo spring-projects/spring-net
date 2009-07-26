@@ -21,7 +21,9 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Runtime.Remoting;
+using Common.Logging;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Expressions;
@@ -42,6 +44,8 @@ namespace Spring.Objects.Factory.Support
     /// <author>Mark Pollack (.NET)</author>
     public class ObjectDefinitionValueResolver
     {
+        private readonly ILog log;
+
         private readonly AbstractObjectFactory objectFactory;
         private readonly string objectName;
         private readonly IObjectDefinition objectDefinition;
@@ -55,6 +59,8 @@ namespace Spring.Objects.Factory.Support
         public ObjectDefinitionValueResolver(AbstractObjectFactory objectFactory, string objectName,
                                              IObjectDefinition objectDefinition)
         {
+            this.log = LogManager.GetLogger(this.GetType());
+
             this.objectFactory = objectFactory;
             this.objectName = objectName;
             this.objectDefinition = objectDefinition;
@@ -110,7 +116,7 @@ namespace Spring.Objects.Factory.Support
         /// <param name="argumentValue">
         /// The value of the property that is being resolved.
         /// </param>
-        public object ResolveValueIfNecessary(string name, RootObjectDefinition definition, string argumentName, object argumentValue)
+        public virtual object ResolveValueIfNecessary(string name, RootObjectDefinition definition, string argumentName, object argumentValue)
         {
             object resolvedValue = null;
             // we must check the argument value to see whether it requires a runtime
@@ -248,7 +254,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>
         /// The resolved object as defined by the inner object definition.
         /// </returns>
-        private object ResolveInnerObjectDefinition(string name, string innerObjectName, string argumentName, IObjectDefinition definition,
+        protected object ResolveInnerObjectDefinition(string name, string innerObjectName, string argumentName, IObjectDefinition definition,
                                                       bool singletonOwner)
         {
             RootObjectDefinition mod = objectFactory.GetMergedObjectDefinition(innerObjectName, definition);
@@ -318,19 +324,16 @@ namespace Spring.Objects.Factory.Support
         /// The runtime reference containing the value of the property.
         /// </param>
         /// <returns>A reference to another object in the factory.</returns>
-        private object ResolveReference(IConfigurableObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
+        protected object ResolveReference(IConfigurableObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
         {
-            /*
             #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug(
                         string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
                                       argumentName, name, reference.ObjectName));
             }
-
-            #endregion*/
+            #endregion
 
             try
             {

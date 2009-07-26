@@ -24,13 +24,14 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
-
+using System.Runtime.Serialization;
 using Common.Logging;
 
 using Spring.Collections;
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
+using Spring.Threading;
 using Spring.Util;
 
 #endregion
@@ -54,6 +55,40 @@ namespace Spring.Objects.Factory.Support
     [Serializable]
     public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     {
+        [Serializable]
+        private class LogicalThreadContextSetVariable : IDisposable
+        {
+            private readonly string name = Guid.NewGuid().ToString();
+
+            public ISet Value
+            {
+                get
+                {
+                    ISet set = LogicalThreadContext.GetData(this.name) as ISet;
+                    if (set == null)
+                    {
+                        set = CreateSet();
+                        LogicalThreadContext.SetData(this.name, set);
+                    }
+                    return set;
+                }
+            }
+
+            #region Implementation of IDisposable
+
+            public void Dispose()
+            {
+                LogicalThreadContext.FreeNamedDataSlot(this.name);
+            }
+
+            #endregion
+
+            private ISet CreateSet()
+            {
+                return new HashedSet();
+            }
+        }
+
         /// <summary>
         /// Makes a distinction between sort order and object identity. 
         /// This is important when used with <see cref="ISet"/>, since most
@@ -94,7 +129,7 @@ namespace Spring.Objects.Factory.Support
         /// process of being created.  Would not be necessary if we created a case insensitive implementation of
         /// ISet.
         /// </summary>
-        private static readonly object emptyObject = new object();
+        private static readonly object EMPTYOBJECT = new object();
 
         /// <summary>
         /// The <see cref="Common.Logging.ILog"/> instance for this class.
@@ -162,6 +197,7 @@ namespace Spring.Objects.Factory.Support
             this.singletonCache = new OrderedDictionary(comparer);
             this.singletonsInCreation = new OrderedDictionary(comparer);
 #endif
+            this.prototypesInCreation = new LogicalThreadContextSetVariable();
         }
 
         /// <summary>
@@ -571,30 +607,9 @@ namespace Spring.Objects.Factory.Support
                 mod = CreateRootObjectDefinition(pod);
                 mod.OverrideFrom(od);
             }
-            //            else
-            //            {
-            //                throw new ObjectDefinitionStoreException( definition.ResourceDescription, name,
-            //                                                         "Definition is neither a RootObjectDefinition nor a ChildObjectDefinition." );
-            //            }
             return mod;
         }
 
-        /*
-                /// <summary>
-                /// Merges the object definitions.
-                /// </summary>
-                /// <param name="name">Object definition name.</param>
-                /// <param name="parentDefinition">The parent definition.</param>
-                /// <param name="childDefinition">The child definition.</param>
-                /// <returns>Merged object definition.</returns>
-                protected virtual RootObjectDefinition MergeObjectDefinitions(string name, IObjectDefinition parentDefinition,
-                                                                              IObjectDefinition childDefinition)
-                {
-                    RootObjectDefinition rootDefinition = CreateRootObjectDefinition(parentDefinition);
-                    rootDefinition.OverrideFrom(childDefinition);
-                    return rootDefinition;
-                }
-        */
         /// <summary>
         /// Creates the root object definition.
         /// </summary>
@@ -604,6 +619,21 @@ namespace Spring.Objects.Factory.Support
         {
             return new RootObjectDefinition(templateDefinition);
         }
+
+        /// <summary>
+        /// Register a new object definition with this registry.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the object instance to register.
+        /// </param>
+        /// <param name="objectDefinition">
+        /// The definition of the object instance to register.
+        /// </param>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object definition is invalid.
+        /// </exception>
+        /// <seealso cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.RegisterObjectDefinition(string, IObjectDefinition)"/>
+        public abstract void RegisterObjectDefinition(string name, IObjectDefinition objectDefinition);
 
         /// <summary>
         /// Return the registered
@@ -1517,7 +1547,9 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         private ISet registeredSingletons = new HashedSet();
 
-        private IDictionary singletonsInCreation;
+        private readonly IDictionary singletonsInCreation;
+
+        private readonly LogicalThreadContextSetVariable prototypesInCreation;
 
         /// <summary>
         /// Set that holds all inner objects created by this factory that implement the IDisposable
@@ -1695,22 +1727,14 @@ namespace Spring.Objects.Factory.Support
         public bool ContainsObject(string name)
         {
             string objectName = TransformedObjectName(name);
-            lock (singletonCache)
+
+            if (ContainsSingleton(objectName) ||ContainsObjectDefinition(objectName))
             {
-                if (singletonCache.Contains(objectName))
-                {
-                    return true;
-                }
+                return (!ObjectFactoryUtils.IsFactoryDereference(name) || IsFactoryObject(name));
             }
-            if (ContainsObjectDefinition(objectName))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            //TODO investigate looking in parent context as this differs from java.
+
+            IObjectFactory parent = this.ParentObjectFactory;
+            return (parent != null) && parent.ContainsObject(OriginalObjectName(name));
         }
 
         /// <summary>
@@ -1896,11 +1920,12 @@ namespace Spring.Objects.Factory.Support
             {
                 string objectName = TransformedObjectName(name);
 
+                nestingCount++;
+
                 #region Instrumentation
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format("{2}GetObjectInternal: obtaining instance for name {0} => canonical name {1}", name, objectName, new String(' ', nestingCount * INDENT)));
-                    nestingCount++;
                 }
                 #endregion
 
@@ -1931,6 +1956,11 @@ namespace Spring.Objects.Factory.Support
                         instance = GetObjectForInstance(sharedInstance, name, objectName, null);
                         return EnsureObjectIsOfRequiredType(name, instance, requiredType);
                     }
+                }
+
+                if (IsPrototypeCurrentlyInCreation(name))
+                {
+                    throw new ObjectCurrentlyInCreationException(name);
                 }
 
                 // check if object definition exists
@@ -1974,18 +2004,26 @@ namespace Spring.Objects.Factory.Support
                 else
                 {
                     // it's a prototype, so create a new instance...
-                    instance = InstantiateObject(name, mergedObjectDefinition, arguments, true, suppressConfigure);
+                    BeforePrototypeCreation(name);
+                    try
+                    {
+                        instance = InstantiateObject(name, mergedObjectDefinition, arguments, true, suppressConfigure);
+                    }
+                    finally
+                    {
+                        AfterPrototypeCreation(name);
+                    }
                 }
 
                 return EnsureObjectIsOfRequiredType(name, instance, requiredType);
             }
             catch
             {
+                nestingCount--;
+                hasErrors = true;
                 #region Instrumentation
                 if (log.IsErrorEnabled)
                 {
-                    hasErrors = true;
-                    nestingCount--;
                     log.Error(string.Format("{1}GetObjectInternal: error obtaining object {0}", name, new String(' ', nestingCount * INDENT)));
                 }
                 #endregion
@@ -1993,13 +2031,16 @@ namespace Spring.Objects.Factory.Support
             }
             finally
             {
-                #region Instrumentation
-                if (log.IsDebugEnabled && !hasErrors)
+                if (!hasErrors)
                 {
                     nestingCount--;
-                    log.Debug(string.Format("{1}GetObjectInternal: returning instance for objectname {0}", name, new String(' ', nestingCount * INDENT)));
+                    #region Instrumentation
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug(string.Format("{1}GetObjectInternal: returning instance for objectname {0}", name, new String(' ', nestingCount * INDENT)));
+                    }
+                    #endregion
                 }
-                #endregion
             }
         }
 
@@ -2079,24 +2120,6 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
-        private void AfterSingletonCreation(string name)
-        {
-            if (!singletonsInCreation.Contains(name))
-            {
-                throw new InvalidOperationException("Singleton " + name + " isn't currently in creation.");
-            }
-            singletonsInCreation.Remove(name);
-        }
-
-        private void BeforeSingletonCreation(string name)
-        {
-            if (this.singletonsInCreation.Contains(name))
-            {
-                throw new ObjectCurrentlyInCreationException(name);
-            }
-            singletonsInCreation.Add(name, emptyObject);
-        }
-
         /// <summary>
         /// Injects dependencies into the supplied <paramref name="target"/> instance
         /// using the named object definition.
@@ -2129,6 +2152,8 @@ namespace Spring.Objects.Factory.Support
 
             #endregion
 
+            this.prototypesInCreation.Dispose();
+            
             lock (singletonCache)
             {
                 // copy the keys into a new set, 'cos we are going to modifying the
@@ -2162,22 +2187,47 @@ namespace Spring.Objects.Factory.Support
             return IsSingletonCurrentlyInCreation(objectName) || IsPrototypeCurrentlyInCreation(objectName);
         }
 
+        private void BeforePrototypeCreation(string name)
+        {
+            this.prototypesInCreation.Value.Add(name);
+        }
+
+        private void AfterPrototypeCreation(string name)
+        {
+            if (!IsPrototypeCurrentlyInCreation(name))
+            {
+                throw new InvalidOperationException("Singleton " + name + " isn't currently in creation.");
+            }
+            this.prototypesInCreation.Value.Remove(name);
+        }
+
         private bool IsPrototypeCurrentlyInCreation(string name)
         {
-            //TODO 
-            return false;
+            return this.prototypesInCreation.Value.Contains(name);
+        }
+
+
+        private void AfterSingletonCreation(string name)
+        {
+            if (!IsSingletonCurrentlyInCreation(name))
+            {
+                throw new InvalidOperationException("Singleton " + name + " isn't currently in creation.");
+            }
+            singletonsInCreation.Remove(name);
+        }
+
+        private void BeforeSingletonCreation(string name)
+        {
+            if (this.singletonsInCreation.Contains(name))
+            {
+                throw new ObjectCurrentlyInCreationException(name);
+            }
+            singletonsInCreation.Add(name, EMPTYOBJECT);
         }
 
         private bool IsSingletonCurrentlyInCreation(string name)
         {
-            if (this.singletonsInCreation.Contains(name))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return this.singletonsInCreation.Contains(name);
         }
 
         /// <summary>

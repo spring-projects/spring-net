@@ -547,7 +547,7 @@ namespace Spring.Context.Support
         /// </summary>
         private void InitEventRegistry()
         {
-            if (ContainsObject(EventRegistryObjectName))
+            if (ContainsLocalObject(EventRegistryObjectName))
             {
                 object candidateRegistry = GetObject(EventRegistryObjectName);
                 if (candidateRegistry is IEventRegistry)
@@ -631,7 +631,7 @@ namespace Spring.Context.Support
         /// </remarks>
         private void InitMessageSource()
         {
-            if (ContainsObject(MessageSourceObjectName))
+            if (ContainsLocalObject(MessageSourceObjectName))
             {
                 object candidateSource = GetObject(MessageSourceObjectName);
                 if (candidateSource is IMessageSource)
@@ -685,6 +685,7 @@ namespace Spring.Context.Support
             {
                 _messageSource = new DelegatingMessageSource(
                     GetInternalParentMessageSource());
+                ObjectFactory.RegisterSingleton(MessageSourceObjectName, _messageSource);
 
                 #region Instrumentation
 
@@ -700,6 +701,7 @@ namespace Spring.Context.Support
             else
             {
                 _messageSource = new StaticMessageSource();
+                ObjectFactory.RegisterSingleton(MessageSourceObjectName, _messageSource);
 
                 #region Instrumentation
 

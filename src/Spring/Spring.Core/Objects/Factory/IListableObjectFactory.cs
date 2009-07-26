@@ -133,6 +133,10 @@ namespace Spring.Objects.Factory
 		/// </p>
 		/// <p>
 		/// Does not consider any hierarchy this factory may participate in.
+        /// Use <see cref="ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(Spring.Objects.Factory.IListableObjectFactory,System.Type,bool,bool)"/>
+        /// to include beans in ancestor factories too.
+        /// &lt;p&gt;Note: Does &lt;i&gt;not&lt;/i&gt; ignore singleton objects that have been registered
+        /// by other means than bean definitions.
 		/// </p>
 		/// </remarks>
 		/// <param name="type">
