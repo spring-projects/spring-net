@@ -68,7 +68,7 @@ namespace Spring.Validation
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    public class RequiredValidator : BaseValidator
+    public class RequiredValidator : BaseSimpleValidator
     {
         #region Constructors
 

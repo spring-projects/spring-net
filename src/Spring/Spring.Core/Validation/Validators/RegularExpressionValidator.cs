@@ -40,7 +40,7 @@ namespace Spring.Validation
 	/// </p>
 	/// </remarks>
 	/// <author>Aleksandar Seovic</author>
-	public class RegularExpressionValidator : BaseValidator
+	public class RegularExpressionValidator : BaseSimpleValidator
 	{
 	    #region Fields
 

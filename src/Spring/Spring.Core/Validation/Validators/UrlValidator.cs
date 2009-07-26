@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2005 the original author or authors.
+ * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Text.RegularExpressions;
 using Spring.Expressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation.Validators
 {
@@ -33,15 +28,16 @@ namespace Spring.Validation.Validators
     /// Validates that the value is valid URL.
     /// </summary>
     /// <author>Goran Milosavljevic</author>
-    public class UrlValidator : BaseValidator
+    public class UrlValidator : BaseSimpleValidator
     {
         #region Constructors
-        
+
         /// <summary>
         /// Creates a new instance of the <b>UrlValidator</b> class.
         /// </summary>
         public UrlValidator()
-        {}
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of the <b>UrlValidator</b> class.

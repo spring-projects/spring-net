@@ -1044,6 +1044,8 @@
     <Compile Include="Util\StringUtils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Validation\BaseSimpleValidator.cs" />
+    <Compile Include="Validation\BaseValidatorGroup.cs" />
     <Compile Include="Validation\Actions\ErrorMessageAction.cs" />
     <Compile Include="Validation\Actions\ExpressionAction.cs" />
     <Compile Include="Validation\AnyValidatorGroup.cs">

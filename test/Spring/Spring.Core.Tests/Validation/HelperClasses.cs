@@ -27,7 +27,7 @@ using Spring.Validation.Actions;
 
 namespace Spring.Validation
 {
-    public abstract class BaseTestValidator : BaseValidator
+    public abstract class BaseTestValidator : BaseSimpleValidator
     {
         private bool _wasCalled;
 

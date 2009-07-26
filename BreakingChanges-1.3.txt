@@ -1,4 +1,4 @@
-Changes (1.2.0 to 1.2.1 or greater)
+Changes (1.2.0 to 1.3 or greater)
 ========================
 
 Spring.Core
@@ -32,6 +32,8 @@ Spring.Core
 
 4. AbstractApplicationContext.CaseSensitive renamed to AbstractApplicationContext.IsCaseSensitive
 
+5. Spring.Validation: Base class BaseValidator changed to BaseSingleValidator for single validators as compared to group validators
+   which now commonly derive from BaseGroupValidator instead of ValidatorGroup
 
 Spring.Aop
 ----------

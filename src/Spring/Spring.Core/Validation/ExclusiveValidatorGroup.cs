@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2004 the original author or authors.
+ * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -37,11 +36,12 @@ namespace Spring.Validation
     /// of the contained validators are valid).
     /// </p>
     /// <p>
-    /// By default, this validator group uses <c><see cref="ValidatorGroup.FastValidate"/> == true</c> semantics.
+    /// By default, this validator group uses <c><see cref="BaseValidatorGroup.FastValidate"/> == true</c> semantics.
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    public class ExclusiveValidatorGroup : ValidatorGroup
+    /// <author>Erich Eichinger</author>
+    public class ExclusiveValidatorGroup : BaseValidatorGroup
     {
         #region Constructors
 
@@ -57,7 +57,8 @@ namespace Spring.Validation
         /// Initializes a new instance of the <see cref="ExclusiveValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public ExclusiveValidatorGroup(string when) : base(when)
+        public ExclusiveValidatorGroup(string when) 
+            : base(when)
         {
             this.FastValidate = true;            
         }
@@ -66,7 +67,8 @@ namespace Spring.Validation
         /// Initializes a new instance of the <see cref="ExclusiveValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public ExclusiveValidatorGroup(IExpression when) : base(when)
+        public ExclusiveValidatorGroup(IExpression when) 
+            : base(when)
         {
             this.FastValidate = true;            
         }

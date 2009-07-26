@@ -39,7 +39,7 @@ namespace Spring.Validation.Validators
     /// pass validator, even though there is no TLD "nowhere".
     /// </remarks>
     /// <author>Goran Milosavljevic</author>    
-    public class EmailValidator : BaseValidator
+    public class EmailValidator : BaseSimpleValidator
     {
         #region Constructors
         

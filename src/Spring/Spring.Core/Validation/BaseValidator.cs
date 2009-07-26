@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
-
 using Spring.Expressions;
-
-#endregion
 
 namespace Spring.Validation
 {
@@ -40,13 +35,13 @@ namespace Spring.Validation
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
+    /// <author>Erich Eichinger</author>
     public abstract class BaseValidator : IValidator
     {
         #region Fields
 
         private IList actions = new ArrayList();
 
-        private IExpression test;
         private IExpression when;
 
         #endregion
@@ -62,36 +57,23 @@ namespace Spring.Validation
         /// <summary>
         /// Creates a new instance of the <see cref="BaseValidator"/> class.
         /// </summary>
-        /// <param name="test">The expression to validate.</param>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public BaseValidator(string test, string when)
-            : this((test != null ? Expression.Parse(test) : null), (when != null ? Expression.Parse(when) : null))
+        public BaseValidator(string when)
+            : this((when != null ? Expression.Parse(when) : null))
         {}
 
         /// <summary>
         /// Creates a new instance of the <see cref="BaseValidator"/> class.
         /// </summary>
-        /// <param name="test">The expression to validate.</param>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public BaseValidator(IExpression test, IExpression when)
+        public BaseValidator(IExpression when)
         {
-            this.test = test;
             this.when = when;
         }
 
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the test expression.
-        /// </summary>
-        /// <value>The test expression.</value>
-        public IExpression Test
-        {
-            get { return test; }
-            set { test = value; }
-        }
 
         /// <summary>
         /// Gets or sets the expression that determines if this validator should be evaluated.
@@ -133,42 +115,9 @@ namespace Spring.Validation
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        public virtual bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
-        {
-            bool valid = true;
-
-            if (EvaluateWhen(validationContext, contextParams))
-            {
-                valid = Validate(EvaluateTest(validationContext, contextParams));
-                ProcessActions(valid, validationContext, contextParams, errors);
-            }
-
-            return valid;
-        }
-
-        /// <summary>
-        /// Validates test object.
-        /// </summary>
-        /// <param name="objectToValidate">Object to validate.</param>
-        /// <returns><c>True</c> if specified object is valid, <c>False</c> otherwise.</returns>
-        protected abstract bool Validate(object objectToValidate);
+        public abstract bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors);
 
         #region Helper Methods
-
-        /// <summary>
-        /// Evaluates test expression.
-        /// </summary>
-        /// <param name="rootContext">Root context to use for expression evaluation.</param>
-        /// <param name="contextParams">Additional context parameters.</param>
-        /// <returns>Result of the test expression evaluation, or validation context if test is <c>null</c>.</returns>
-        protected object EvaluateTest(object rootContext, IDictionary contextParams)
-        {
-            if (Test == null)
-            {
-                return rootContext;
-            }
-            return Test.GetValue(rootContext, contextParams);
-        }
 
         /// <summary>
         /// Evaluates when expression.

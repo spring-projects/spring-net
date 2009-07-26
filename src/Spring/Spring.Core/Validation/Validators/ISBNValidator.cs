@@ -33,7 +33,7 @@ namespace Spring.Validation.Validators
     /// Validates that the object is valid ISBN-10 or ISBN-13 value.
     /// </summary>
     /// <author>Goran Milosavljevic</author>
-    public class ISBNValidator : BaseValidator
+    public class ISBNValidator : BaseSimpleValidator
     {                                                     
         #region Constructors
         

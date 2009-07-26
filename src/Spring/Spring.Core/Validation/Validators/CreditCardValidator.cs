@@ -37,7 +37,7 @@ namespace Spring.Validation.Validators
     /// the value of <see cref="CardType"/> property to a concrete <see cref="ICreditCardType"/>
     /// instance.
     /// </remarks>
-    public class CreditCardValidator : BaseValidator
+    public class CreditCardValidator : BaseSimpleValidator
     {
         #region Properties
 

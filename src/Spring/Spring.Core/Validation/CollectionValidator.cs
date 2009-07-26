@@ -1,3 +1,23 @@
+#region License
+
+/*
+ * Copyright 2002-2009 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
 using System;
 using System.Collections;
 using Spring.Expressions;
@@ -13,9 +33,10 @@ namespace Spring.Validation
     /// collection are valid for all of the objects in the specified collection.
     /// </p>
     /// <p>
-    /// You can specify if you want to validate all of the collection elements regardless of the errors, by
-    /// setting the <c>ValidateAll</c> property to true.
+    /// You can specify if you want to validate all of the collection elements regardless of the errors by
+    /// setting the <see cref="BaseValidatorGroup.FastValidate"/> property to <c>false</c>.
     /// </p>
+    /// <p><b>Note</b>, that <see cref="BaseValidatorGroup.FastValidate"/> defaults to <c>true</c> for this validator type!</p>
     /// <p>
     /// If you set the <c>IncludeElementErrors</c> property to <c>true</c>, 
     /// <c>ValidationErrors</c> collection will contain a union of all validation error messages 
@@ -25,7 +46,7 @@ namespace Spring.Validation
     /// </remarks>
     /// <author>Damjan Tomic</author>
     /// <author>Aleksandar Seovic</author>
-    public class CollectionValidator : ValidatorGroup
+    public class CollectionValidator : BaseValidatorGroup
     {
         #region Fields
 
@@ -40,7 +61,7 @@ namespace Spring.Validation
         /// Gets or sets the value that indicates whether to validate all elements of the collection
         /// regardless of the errors.
         /// </summary>        
-        /// <remarks>This is just an alias for <see cref="ValidatorGroup.FastValidate"/></remarks>
+        /// <remarks>This is just an alias for <see cref="BaseValidatorGroup.FastValidate"/> property</remarks>
         public bool ValidateAll
         {
             get { return !base.FastValidate; }
@@ -102,12 +123,10 @@ namespace Spring.Validation
         /// </param>
         /// <param name="includeElementErrors">The bool that determines whether Validate method should collect 
         /// all error messages returned by the item validators</param>
-
-        public CollectionValidator(IExpression when, bool validateAll, bool includeElementErrors)
-            : base(when)
+        public CollectionValidator(string when, bool validateAll, bool includeElementErrors)
+            : this((when != null ? Expression.Parse(when) : null), validateAll,includeElementErrors)
         {
             this.FastValidate = validateAll;
-            this.includeElementErrors = includeElementErrors;
         }
 
         /// <summary>
@@ -119,10 +138,12 @@ namespace Spring.Validation
         /// </param>
         /// <param name="includeElementErrors">The bool that determines whether Validate method should collect 
         /// all error messages returned by the item validators</param>
-        public CollectionValidator(string when, bool validateAll, bool includeElementErrors)
-            : this((when != null ? Expression.Parse(when) : null), validateAll,includeElementErrors)
+
+        public CollectionValidator(IExpression when, bool validateAll, bool includeElementErrors)
+            : base(when)
         {
             this.FastValidate = validateAll;
+            this.includeElementErrors = includeElementErrors;
         }
 
         #endregion

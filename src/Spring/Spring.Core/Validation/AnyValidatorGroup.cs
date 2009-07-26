@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2004 the original author or authors.
+ * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -37,9 +36,11 @@ namespace Spring.Validation
     /// for the contained validators, but only if this validator is not valid (meaning, when none
     /// of the contained validators are valid).
     /// </p>
+    /// <p><b>Note</b>, that <see cref="BaseValidatorGroup.FastValidate"/> defaults to <c>true</c> for this validator type!</p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    public class AnyValidatorGroup : ValidatorGroup
+    /// <author>Erich Eichinger</author>
+    public class AnyValidatorGroup : BaseValidatorGroup
     {
         #region Constructors
 
@@ -55,7 +56,8 @@ namespace Spring.Validation
         /// Initializes a new instance of the <see cref="AnyValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public AnyValidatorGroup(string when) : base(when)
+        public AnyValidatorGroup(string when) 
+            : base(when)
         {
             this.FastValidate = true;            
         }
@@ -64,7 +66,8 @@ namespace Spring.Validation
         /// Initializes a new instance of the <see cref="AnyValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public AnyValidatorGroup(IExpression when) : base(when)
+        public AnyValidatorGroup(IExpression when) 
+            : base(when)
         {
             this.FastValidate = true;            
         }
@@ -80,6 +83,7 @@ namespace Spring.Validation
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
         protected override bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
         {
+            // capture errors in separate collection to only add them to the error collector in case of errors
             ValidationErrors tmpErrors = new ValidationErrors();
             bool valid = false;
             foreach (IValidator validator in Validators)

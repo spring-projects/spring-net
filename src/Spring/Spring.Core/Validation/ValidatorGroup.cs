@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2004 the original author or authors.
+ * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -39,83 +37,35 @@ namespace Spring.Validation
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    public class ValidatorGroup : BaseValidator
+    /// <author>Erich Eichinger</author>
+    public class ValidatorGroup : BaseValidatorGroup
     {
-        #region Fields
-
-        private IList validators = new ArrayList();
-        private bool fastValidate = false;
-        #endregion
-
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidatorGroup"/> class.
+        /// Initializes a new instance
         /// </summary>
-        public ValidatorGroup()
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidatorGroup"/> class.
-        /// </summary>
-        /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public ValidatorGroup(string when) : this((when != null ? Expression.Parse(when) : null))
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidatorGroup"/> class.
-        /// </summary>
-        /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public ValidatorGroup(IExpression when) : base(null, when)
-        {}
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the validators.
-        /// </summary>
-        /// <value>The validators.</value>
-        public IList Validators
+        public ValidatorGroup() : base()
         {
-            get { return validators; }
-            set { validators = value; }
         }
 
         /// <summary>
-        /// When set <c>true</c>, shortcircuits evaluation.
+        /// Initializes a new instance
         /// </summary>
-        /// <remarks>
-        /// The validators within the group will only be validated 
-        /// in order until the first validator fails.
-        /// </remarks>
-        public bool FastValidate
+        /// <param name="when">The expression that determines if this validator should be evaluated.</param>
+        public ValidatorGroup(string when) : base(when)
         {
-            get { return fastValidate; }
-            set { fastValidate = value; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance
+        /// </summary>
+        /// <param name="when">The expression that determines if this validator should be evaluated.</param>
+        public ValidatorGroup(IExpression when) : base(when)
+        {
         }
 
         #endregion
-
-        /// <summary>
-        /// Validates the specified object.
-        /// </summary>
-        /// <param name="validationContext">The object to validate.</param>
-        /// <param name="contextParams">Additional context parameters.</param>
-        /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
-        /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        public override bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
-        {
-            if (EvaluateWhen(validationContext, contextParams))
-            {
-                bool valid = ValidateGroup(contextParams, errors, validationContext);
-                ProcessActions(valid, validationContext, contextParams, errors);
-                return valid;
-            }
-
-            return true;
-        }
 
         /// <summary>
         /// Actual implementation how to validate the specified object.
@@ -124,28 +74,18 @@ namespace Spring.Validation
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        protected virtual bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
+        protected override bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
         {
             bool valid = true;
-            foreach (IValidator validator in validators)
+            foreach (IValidator validator in this.Validators)
             {
                 valid = validator.Validate(validationContext, contextParams, errors) && valid;
-                if (!valid && FastValidate)
+                if (!valid && this.FastValidate)
                 {
                     break;
                 }
             }
             return valid;
-        }
-
-        /// <summary>
-        /// Doesn't do anything for validator group as there is no single test.
-        /// </summary>
-        /// <param name="objectToValidate">Object to validate.</param>
-        /// <returns><c>True</c> if specified object is valid, <c>False</c> otherwise.</returns>
-        protected override bool Validate(object objectToValidate)
-        {
-            throw new NotSupportedException("Validator group does not support this method.");
         }
     }
 }

@@ -129,13 +129,5 @@ namespace Spring.Validation
             Assert.AreEqual(0, errors.GetErrors("errors").Count);
             Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
         }
-
-        [Test]
-        [ExpectedException(typeof(NotSupportedException))]
-        public void TestNonSupportedValidateMethod()
-        {
-            this.Validate("xyz");
-        }
-
     }
 }
