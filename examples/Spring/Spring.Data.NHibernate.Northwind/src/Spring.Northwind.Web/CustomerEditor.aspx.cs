@@ -58,6 +58,14 @@ public partial class CustomerEditor : Page
     private void BtnSave_Click(object sender, EventArgs e)
     {
         customerDao.Update(CurrentCustomer);
-        Response.Redirect("~/CustomerView.aspx");
+        SetResult("ViewCustomer");
+    }
+    protected void customerList_Click(object sender, EventArgs e)
+    {
+        SetResult("CustomerList");
+    }
+    protected void cancel_Click(object sender, EventArgs e)
+    {
+        SetResult("CancelEdit");
     }
 }

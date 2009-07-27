@@ -25,6 +25,10 @@
       </layout>
   </appender>
 
+  <appender name="MemoryAppender" type="log4net.Appender.MemoryAppender">
+     <!-- simple appender to get results to UI -->
+  </appender>
+
   <!-- Set default logging level to DEBUG -->
   <root>
     <level value="DEBUG" />
@@ -41,5 +45,13 @@
   </logger>
   <logger name="NHibernate">
     <level value="INFO" />
+  </logger>
+  <logger name="Spring.Transaction>">
+    <level value="INFO" />
+    <appender-ref ref="MemoryAppender" />
+  </logger>
+  <logger name="Spring.Northwind">
+    <level value="INFO" />
+    <appender-ref ref="MemoryAppender" />
   </logger>
 </log4net>

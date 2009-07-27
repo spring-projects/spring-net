@@ -78,7 +78,7 @@ public partial class CustomerList : Spring.Web.UI.Page
     switch(e.CommandName)
     {
       case "ViewOrders":
-      case "EditCustomer":
+      case "ViewCustomer":
         customerList.SelectedIndex = e.Item.ItemIndex;
         customerEditController.EditCustomer(this.SelectedCustomer);
         SetResult(e.CommandName);

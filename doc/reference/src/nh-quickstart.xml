@@ -28,23 +28,31 @@
   <section>
     <title>Introduction</title>
 
-    <para>This QuickStart application uses the all too familiar Northwind
-    database and uses NHibernate browse and edit customers. It It is a very
-    simple application that directly uses the DAO layer in some cases and also
-    has a simple service layer that simulated a fullillment process. See the
-    integration tests as well for insight into how it works. The application
-    uses Spring's declarative transaction management features,
-    HibernateTemplate helper class, and Open Session In View module. <note>
-        The example will be updated to not use HibernateTemplate and instead use the standard NHibernate API in a future release. All functionality is still present when using the standard NHibernate API, as Spring transaction managment is integrated into NHibernate extension points and exception translation is provided by AOP advice. See the section titled Implementing DAOs based on plain Hibernate 1.2/2.0 API" in the hibernate orm section of the reference docs for more information.
-      </note>To run the application make the Web application the project that
-    starts and set Default.aspx as the start page. You will see a list of
-    customers. If you select 'edit' then you can edit some customer info and
-    save it by pressing the save button. Note that you will need to explicitly
-    navigate back to the Default.aspx page and reload it in order to see the
-    changes.<note>
-        <para>To follow this NHibernate QuickStart load the solution file
-        found in the directory
-        <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.Data.NHibernate.Northwind</literal></para>
-      </note></para>
+    <para>
+      This QuickStart application uses the all too familiar Northwind
+      database and uses NHibernate browse and edit customers. It It is a very
+      simple application that directly uses the DAO layer in some cases and also
+      has a simple service layer that simulated a fullillment process. See the
+      integration tests as well for insight into how it works. The application
+      uses Spring's declarative transaction management features,
+      standard NHibernate API, and Open Session In View module.
+      <note>
+        Even though data access is performed through NHibernate API all Spring.NET provided functionality is
+        still present when using the standard NHibernate API, as Spring transaction managment
+        is integrated into NHibernate extension points and exception translation is
+        provided by AOP advice.
+        See the section titled Implementing DAOs based on plain Hibernate 1.2/2.0 API"
+        in the hibernate orm section of the reference docs for more information.
+      </note>
+      To run the application make the Web application the project that
+      starts and set Default.aspx as the start page. 
+      <note>
+        <para>
+          To follow this NHibernate QuickStart load the solution file
+          found in the directory
+          <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.Data.NHibernate.Northwind</literal>
+        </para>
+      </note>
+    </para>
   </section>
 </chapter>

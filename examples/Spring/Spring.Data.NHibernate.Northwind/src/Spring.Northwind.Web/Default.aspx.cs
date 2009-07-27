@@ -46,4 +46,8 @@ public partial class _Default : Spring.Web.UI.Page
             }
         }
     }
+    protected void customerList_Click(object sender, EventArgs e)
+    {
+        SetResult("CustomerList");
+    }
 }

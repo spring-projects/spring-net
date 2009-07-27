@@ -61,6 +61,16 @@ fieldset legend {
 	padding: 5px;
 }
 
+.actionResultWindow
+{
+	margin: 30px;
+	border: 1px solid #CCA383;
+	width: 90%;
+	background: LightGoldenrodYellow;
+	text-align: left;
+	padding: 5px;
+}
+
 #headerCell 
 {
 	background: url(../img/header-spring.png);

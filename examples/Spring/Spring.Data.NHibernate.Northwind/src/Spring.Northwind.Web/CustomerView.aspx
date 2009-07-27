@@ -25,8 +25,8 @@
             </fieldset>
         </spring:DataBindingPanel>
         <div class="actionPanel">
-            <a href="customerlist.aspx">&laquo; Back to customer list</a> | <a href="CustomerEditor.aspx">
-                Edit Customer &raquo;</a>
+            <asp:LinkButton ID="customerList" runat="server" onclick="customerList_Click">&laquo; Back to customer list</asp:LinkButton> | 
+            <asp:LinkButton ID="editCustomer" runat="server" onclick="editCustomer_Click">Edit Customer &raquo;</asp:LinkButton>
         </div>
     </div>
 </asp:Content>

@@ -58,4 +58,12 @@ public partial class CustomerView : Page
         
     }
 
+    protected void customerList_Click(object sender, EventArgs e)
+    {
+        SetResult("CustomerList");
+    }
+    protected void editCustomer_Click(object sender, EventArgs e)
+    {
+        SetResult("EditCustomer");
+    }
 }

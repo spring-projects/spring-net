@@ -1,44 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <objects xmlns="http://www.springframework.net">
 
-    <!-- Referenced by main application context configuration file -->
+  <!-- Referenced by main application context configuration file -->
 
-    <description>
-        The Northwind web layer definitions
-    </description>
+  <description>
+    The Northwind web layer definitions
+  </description>
 
-    <object name="CustomerEditController" type="NHibernateCustomerEditController" scope="session">
-      <constructor-arg name="sessionFactory" ref="NHibernateSessionFactory"/>
-    </object>
-  
-    <object type="Default.aspx">
-        <property name="FulfillmentService" ref="FulfillmentService" />
-        <property name="CustomerDao" ref="CustomerDao" />
-    </object>
+  <object name="CustomerEditController" type="NHibernateCustomerEditController" scope="session">
+    <constructor-arg name="sessionFactory" ref="NHibernateSessionFactory"/>
+  </object>
 
-    <object name="CustomerEditPage" abstract="true">
-        <property name="CustomerEditController" ref="CustomerEditController" />
-    </object>
-  
-    <object type="CustomerList.aspx" parent="CustomerEditPage">
-        <property name="CustomerDao" ref="CustomerDao" />
-        <property name="Results">
-            <dictionary>
-                <entry key="EditCustomer" value="redirect:CustomerEditor.aspx" />
-              <entry key="ViewOrders" value="redirect:CustomerOrders.aspx" />
-            </dictionary>
-        </property>
-    </object>
+  <object type="Default.aspx">
+    <property name="FulfillmentService" ref="FulfillmentService" />
+    <property name="CustomerDao" ref="CustomerDao" />
+    <property name="Results">
+      <dictionary>
+        <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+      </dictionary>
+    </property>
+  </object>
 
-    <object type="CustomerEditor.aspx" parent="CustomerEditPage">
-        <property name="CustomerDao" ref="CustomerDao" />
-    </object>
+  <object name="CustomerEditPage" abstract="true">
+    <property name="CustomerEditController" ref="CustomerEditController" />
+  </object>
 
-    <object type="CustomerView.aspx">
-      <property name="CustomerDao" ref="CustomerDao" />
-      <property name="CustomerEditController" ref="CustomerEditController" />
-    </object>
-  
-    <object type="CustomerOrders.aspx" parent="CustomerEditPage" />
-  
+  <object type="CustomerList.aspx" parent="CustomerEditPage">
+    <property name="CustomerDao" ref="CustomerDao" />
+    <property name="Results">
+      <dictionary>
+        <entry key="ViewCustomer" value="redirect:CustomerView.aspx" />
+        <entry key="ViewOrders" value="redirect:CustomerOrders.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <object type="CustomerEditor.aspx" parent="CustomerEditPage">
+    <property name="CustomerDao" ref="CustomerDao" />
+    <property name="Results">
+      <dictionary>
+        <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+        <entry key="ViewCustomer" value="redirect:CustomerView.aspx" />
+        <entry key="CancelEdit" value="redirect:CustomerView.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <object type="CustomerView.aspx">
+    <property name="CustomerDao" ref="CustomerDao" />
+    <property name="CustomerEditController" ref="CustomerEditController" />
+    <property name="Results">
+      <dictionary>
+        <entry key="EditCustomer" value="redirect:CustomerEditor.aspx" />
+        <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <object type="CustomerOrders.aspx" parent="CustomerEditPage">
+    <property name="Results">
+      <dictionary>
+        <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+        <entry key="ProcessOrders" value="redirect:FulfillmentResult.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <object type="FulfillmentResult.aspx">
+    <property name="FulfillmentService" ref="FulfillmentService" />
+    <property name="CustomerEditController" ref="CustomerEditController" />
+    <property name="Results">
+      <dictionary>
+        <entry key="Back" value="redirect:CustomerOrders.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
 </objects>

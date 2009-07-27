@@ -30,8 +30,8 @@
             </fieldset>
         </spring:DataBindingPanel>
         <div class="actionPanel">
-            <a href="customerlist.aspx">&laquo; Back to customer list</a> | <a href="CustomerView.aspx">
-                Cancel edit &raquo;</a>
+            <asp:LinkButton ID="customerList" runat="server" onclick="customerList_Click">&laquo; Back to customer list</asp:LinkButton> |
+            <asp:LinkButton ID="cancel" runat="server" onclick="cancel_Click">Cancel edit &raquo;</asp:LinkButton>
         </div>
     </div>
 </asp:Content>

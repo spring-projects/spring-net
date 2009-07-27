@@ -9,5 +9,5 @@ This sample demostrates Spring.NET NHibernate integration and concepts. All data
 all transactions are automatically handled by Spring.NET.
 </p>
 
-<a href="CustomerList.aspx">Proceed to customer listing &raquo;</a>
+<asp:LinkButton ID="customerList" runat="server" onclick="customerList_Click">Proceed to customer listing &raquo;</asp:LinkButton>
 </asp:Content>

@@ -63,4 +63,12 @@ public partial class CustomerOrders : Spring.Web.UI.Page
             e.Item.DataItem = ((IList) customerOrders.DataSource)[e.Item.DataSetIndex];
         }
     }
+    protected void customerList_Click(object sender, EventArgs e)
+    {
+        SetResult("CustomerList");
+    }
+    protected void processOrders_Click(object sender, EventArgs e)
+    {
+        SetResult("ProcessOrders");
+    }
 }

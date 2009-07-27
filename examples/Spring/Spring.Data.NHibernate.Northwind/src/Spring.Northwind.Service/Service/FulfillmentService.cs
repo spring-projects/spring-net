@@ -23,6 +23,8 @@
 using System;
 using System.Collections;
 
+using Common.Logging;
+
 using Spring.Transaction.Interceptor;
 
 using Spring.Northwind.Dao;
@@ -35,7 +37,9 @@ namespace Spring.Northwind.Service
     public class FulfillmentService : IFulfillmentService
     {
         #region Fields
-        
+
+        private static readonly ILog log = LogManager.GetLogger(typeof (FulfillmentService));
+
         private IProductDao productDao;
 
         private ICustomerDao customerDao;
@@ -86,9 +90,16 @@ namespace Spring.Northwind.Service
                  
             foreach (Order order in customer.Orders)
             {
+                if (order.ShippedDate.HasValue)
+                {
+                    log.Warn("Order with " + order.Id + " has already been shipped, skipping.");
+                    continue;
+                }
+
                 //Validate Order
                 Validate(order);
-                
+                log.Info("Order " + order.Id + " validated, proceeding with shipping..");
+
                 //Ship with external shipping service
                 ShippingService.ShipOrder(order);
                 
@@ -97,7 +108,7 @@ namespace Spring.Northwind.Service
                 
                 //Update shipment date
                 OrderDao.Update(order);
-                
+               
                 //Other operations...Decrease product quantity... etc
             }             
             
