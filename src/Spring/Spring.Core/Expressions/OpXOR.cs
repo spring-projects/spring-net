@@ -67,6 +67,15 @@ namespace Spring.Expressions
             {
                 return NumberUtils.BitwiseXor(l, r);
             }
+            else if (l is Enum && l.GetType() == r.GetType())
+            {
+                Type enumType = l.GetType();
+                Type integralType = Enum.GetUnderlyingType(enumType);
+                l = Convert.ChangeType(l, integralType);
+                r = Convert.ChangeType(r, integralType);
+                object result = NumberUtils.BitwiseXor(l, r);
+                return Enum.ToObject(enumType, result);
+            }
             return Convert.ToBoolean(l) ^ Convert.ToBoolean(r);
         }
     }

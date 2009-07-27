@@ -67,7 +67,16 @@ namespace Spring.Expressions
             {
                 return NumberUtils.BitwiseNot(operand);
             }
-            return !Convert.ToBoolean(operand);
+            else if (operand is Enum)
+            {
+                Type enumType = operand.GetType();
+                Type integralType = Enum.GetUnderlyingType(enumType);
+                operand = Convert.ChangeType(operand, integralType);
+                object result = NumberUtils.BitwiseNot(operand);
+                return Enum.ToObject(enumType, result);
+            }
+            else
+                return !Convert.ToBoolean(operand);
         }
     }
 }

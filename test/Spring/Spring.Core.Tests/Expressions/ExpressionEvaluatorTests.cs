@@ -31,6 +31,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Formatters.Soap;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Services;
 using antlr;
@@ -957,6 +958,7 @@ namespace Spring.Expressions
         {
             Assert.AreEqual( 1 | 2, ExpressionEvaluator.GetValue(null, "1 or 2"));
             Assert.AreEqual( 1 | -2, ExpressionEvaluator.GetValue(null, "1 or -2"));
+            Assert.AreEqual(RegexOptions.IgnoreCase | RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase or T(System.Text.RegularExpressions.RegexOptions).Compiled"));
         }
 
         /// <summary>
@@ -981,6 +983,9 @@ namespace Spring.Expressions
         {
             Assert.AreEqual(1 & 3, ExpressionEvaluator.GetValue(null, "1 and 3"));
             Assert.AreEqual(1 & -1, ExpressionEvaluator.GetValue(null, "1 and -1"));
+            Hashtable vars = new Hashtable();
+            vars["ALL"] = (RegexOptions) 0xFFFF;
+            Assert.AreEqual(RegexOptions.IgnoreCase, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase and #ALL", vars));
         }
 
         /// <summary>
@@ -993,6 +998,7 @@ namespace Spring.Expressions
             Assert.IsTrue((bool)ExpressionEvaluator.GetValue(null, "!false"));
             string expression = @"IsMember('Nikola Tesla') and !IsMember('Mihajlo Pupin')";
             Assert.IsFalse((bool)ExpressionEvaluator.GetValue(ieee, expression));
+            Assert.AreEqual( ~RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "!T(System.Text.RegularExpressions.RegexOptions).Compiled"));
         }
 
         /// <summary>
@@ -1005,6 +1011,7 @@ namespace Spring.Expressions
             Assert.AreEqual(1 ^ -1, ExpressionEvaluator.GetValue(null, "1 xor -1"));
             Assert.AreEqual(true ^ false, ExpressionEvaluator.GetValue(null, "true xor false"));
             Assert.AreEqual(true ^ true, ExpressionEvaluator.GetValue(null, "true xor true"));
+            Assert.AreEqual(RegexOptions.IgnoreCase ^ RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase xor T(System.Text.RegularExpressions.RegexOptions).Compiled"));
         }
 
         /// <summary>
