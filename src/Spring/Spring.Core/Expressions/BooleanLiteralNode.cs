@@ -40,6 +40,14 @@ namespace Spring.Expressions
         }
 
         /// <summary>
+        /// Create a new instance
+        /// </summary>
+        public BooleanLiteralNode(string text)
+        {
+            this.Text = text;
+        }
+
+        /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected BooleanLiteralNode(SerializationInfo info, StreamingContext context)

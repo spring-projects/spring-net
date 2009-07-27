@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,10 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using Spring.Objects.Factory;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework.AutoProxy
 {
@@ -46,6 +42,7 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <seealso cref="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator.IsMatch"/>
     /// <author>Juergen Hoeller</author>
     /// <author>Adhari C Mahendra (.NET)</author>
+    /// <author>Erich Eichinger</author>
     public class ObjectNameAutoProxyCreator : AbstractFilteringAutoProxyCreator
     {
         private IList objectNames;

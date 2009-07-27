@@ -273,10 +273,17 @@ namespace Spring.Expressions
         #endregion Serialization Tests
 
         [Test]
+        public void TestBitwiseXOR()
+        {
+            object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
+            Assert.AreEqual("1231", value);
+        }
+
+        [Test]
         public void TestMixedAddition()
         {
             object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
-            Console.WriteLine(value);
+            Assert.AreEqual("1231", value);
         }
         
         [Test(Description="SPRNET-944")]
@@ -943,6 +950,16 @@ namespace Spring.Expressions
         }
 
         /// <summary>
+        /// Tests bitwise OR operator
+        /// </summary>
+        [Test]
+        public void TestBitwiseOrOperator()
+        {
+            Assert.AreEqual( 1 | 2, ExpressionEvaluator.GetValue(null, "1 or 2"));
+            Assert.AreEqual( 1 | -2, ExpressionEvaluator.GetValue(null, "1 or -2"));
+        }
+
+        /// <summary>
         /// Tests logical AND operator
         /// </summary>
         [Test]
@@ -957,6 +974,16 @@ namespace Spring.Expressions
         }
 
         /// <summary>
+        /// Tests bitwise OR operator
+        /// </summary>
+        [Test]
+        public void TestBitwiseAndOperator()
+        {
+            Assert.AreEqual(1 & 3, ExpressionEvaluator.GetValue(null, "1 and 3"));
+            Assert.AreEqual(1 & -1, ExpressionEvaluator.GetValue(null, "1 and -1"));
+        }
+
+        /// <summary>
         /// Tests logical NOT operator
         /// </summary>
         [Test]
@@ -966,6 +993,18 @@ namespace Spring.Expressions
             Assert.IsTrue((bool)ExpressionEvaluator.GetValue(null, "!false"));
             string expression = @"IsMember('Nikola Tesla') and !IsMember('Mihajlo Pupin')";
             Assert.IsFalse((bool)ExpressionEvaluator.GetValue(ieee, expression));
+        }
+
+        /// <summary>
+        /// Tests bitwise OR operator
+        /// </summary>
+        [Test]
+        public void TestXorOperator()
+        {
+            Assert.AreEqual(1 ^ 3, ExpressionEvaluator.GetValue(null, "1 xor 3"));
+            Assert.AreEqual(1 ^ -1, ExpressionEvaluator.GetValue(null, "1 xor -1"));
+            Assert.AreEqual(true ^ false, ExpressionEvaluator.GetValue(null, "true xor false"));
+            Assert.AreEqual(true ^ true, ExpressionEvaluator.GetValue(null, "true xor true"));
         }
 
         /// <summary>

@@ -20,11 +20,12 @@
 
 using System;
 using System.Runtime.Serialization;
+using Spring.Util;
 
 namespace Spring.Expressions
 {
     /// <summary>
-    /// Represents logical AND operator.
+    /// Represents AND operator (both, bitwise and logical).
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     [Serializable]
@@ -34,6 +35,14 @@ namespace Spring.Expressions
         /// Create a new instance
         /// </summary>
         public OpAND()
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance
+        /// </summary>
+        public OpAND(BaseNode left, BaseNode right)
+            :base(left, right)
         {
         }
 
@@ -53,8 +62,14 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            return Convert.ToBoolean(Left.GetValueInternal(context, evalContext))
-                   && Convert.ToBoolean(Right.GetValueInternal(context, evalContext));
+            object l = Left.GetValueInternal(context, evalContext);
+            object r = Right.GetValueInternal(context, evalContext);
+
+            if (NumberUtils.IsInteger(l) && NumberUtils.IsInteger(r))
+            {
+                return NumberUtils.BitwiseAnd(l, r);
+            }
+            return Convert.ToBoolean(l) && Convert.ToBoolean(r);
         }
     }
 }

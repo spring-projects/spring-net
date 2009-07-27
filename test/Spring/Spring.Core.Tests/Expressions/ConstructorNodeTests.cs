@@ -64,11 +64,9 @@ namespace Spring.Expressions
         [Test]
         public void CanCreatePublicInstance()
         {
-            ConstructorNode ctorNode = new ConstructorNode();
-            ctorNode.Text=typeof(PublicTestClass).FullName;
-            StringLiteralNode sNode = new StringLiteralNode();
-            sNode.Text = "theValue";
-            ctorNode.addChild(sNode);
+            ConstructorNode ctorNode = new ConstructorNode(typeof(PublicTestClass));
+            StringLiteralNode sNode = new StringLiteralNode("theValue");
+            ctorNode.AddArgument(sNode);
 
             PublicTestClass instance = (PublicTestClass) ((IExpression)ctorNode).GetValue();
             Assert.AreEqual( sNode.Text, instance._s );

@@ -20,11 +20,12 @@
 
 using System;
 using System.Runtime.Serialization;
+using Spring.Util;
 
 namespace Spring.Expressions
 {
     /// <summary>
-    /// Represents logical NOT operator.
+    /// Represents NOT operator (both, bitwise and logical).
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     [Serializable]
@@ -34,6 +35,14 @@ namespace Spring.Expressions
         /// Create a new instance
         /// </summary>
         public OpNOT():base()
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance
+        /// </summary>
+        public OpNOT(BaseNode operand)
+            :base(operand)
         {
         }
 
@@ -53,7 +62,12 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            return !Convert.ToBoolean(Operand.GetValueInternal(context, evalContext));
+            object operand = Operand.GetValueInternal(context, evalContext);
+            if (NumberUtils.IsInteger(operand))
+            {
+                return NumberUtils.BitwiseNot(operand);
+            }
+            return !Convert.ToBoolean(operand);
         }
     }
 }

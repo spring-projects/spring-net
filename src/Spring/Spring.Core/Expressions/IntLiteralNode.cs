@@ -40,6 +40,14 @@ namespace Spring.Expressions
         }
 
         /// <summary>
+        /// Create a new instance
+        /// </summary>
+        public IntLiteralNode(string text)
+        {
+            this.Text = text;
+        }
+
+        /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected IntLiteralNode(SerializationInfo info, StreamingContext context)

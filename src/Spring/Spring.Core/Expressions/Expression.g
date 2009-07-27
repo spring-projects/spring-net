@@ -22,6 +22,7 @@ tokens {
 	TRUE = "true";
 	AND = "and";
 	OR = "or";
+	XOR = "xor";
 	IN = "in";
 	IS = "is";
 	BETWEEN = "between";
@@ -84,7 +85,9 @@ expression	:	logicalOrExpression
 parenExpr
     : LPAREN! expression RPAREN!;
     
-logicalOrExpression : logicalAndExpression (OR^ <AST = Spring.Expressions.OpOR> logicalAndExpression)* ;
+logicalOrExpression : logicalXorExpression (OR^ <AST = Spring.Expressions.OpOR> logicalXorExpression)* ;
+
+logicalXorExpression : logicalAndExpression (XOR^ <AST = Spring.Expressions.OpXOR> logicalAndExpression)* ;
                         
 logicalAndExpression : relationalExpression (AND^ <AST = Spring.Expressions.OpAND> relationalExpression)* ;                        
 

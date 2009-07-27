@@ -98,5 +98,119 @@ namespace Spring.Util
 		{
 			Assert.AreEqual(-10, NumberUtils.Negate(10));
 		}
+
+        [Test]
+        public void CoercesTypes()
+        {
+            object x = (int)1;
+            object y = (double)2;
+            NumberUtils.CoerceTypes(ref x, ref y);
+            Assert.AreEqual(typeof(double), x.GetType());
+        }
+
+	    [Test]
+	    public void Add()
+	    {
+	        Assert.AreEqual(5, NumberUtils.Add(2, 3));
+            try
+            {
+                NumberUtils.Add(2, "3");
+                Assert.Fail();
+            }
+            catch(ArgumentException)
+            {}
+	    }
+
+        [Test]
+        public void BitwiseNot()
+        {
+            Assert.AreEqual( ~((Byte)2), NumberUtils.BitwiseNot((Byte)2) );
+            Assert.AreEqual(~((SByte)2), NumberUtils.BitwiseNot((SByte)2));
+            Assert.AreEqual(~((Int16)2), NumberUtils.BitwiseNot((Int16)2));
+            Assert.AreEqual(~((UInt16)2), NumberUtils.BitwiseNot((UInt16)2));
+            Assert.AreEqual(~((Int32)2), NumberUtils.BitwiseNot((Int32)2));
+            Assert.AreEqual(~((UInt32)2), NumberUtils.BitwiseNot((UInt32)2));
+            Assert.AreEqual(~((Int64)2), NumberUtils.BitwiseNot((Int64)2));
+            Assert.AreEqual(~((UInt64)2), NumberUtils.BitwiseNot((UInt64)2));
+            Assert.AreEqual( false, NumberUtils.BitwiseNot(true) );
+            try
+            {
+                NumberUtils.BitwiseNot((double)2.0);
+                Assert.Fail();
+            }
+            catch(ArgumentException)
+            {}
+        }
+
+        [Test]
+        public void BitwiseAnd()
+        {
+            Assert.AreEqual( ((Byte)2)&((Byte)3), NumberUtils.BitwiseAnd((Byte)2, (Byte)3));
+            Assert.AreEqual(((SByte)2) & ((SByte)3), NumberUtils.BitwiseAnd((SByte)2, (SByte)3));
+            Assert.AreEqual(((Int16)2) & ((Int16)3), NumberUtils.BitwiseAnd((Int16)2, (Int16)3));
+            Assert.AreEqual(((UInt16)2) & ((UInt16)3), NumberUtils.BitwiseAnd((UInt16)2, (UInt16)3));
+            Assert.AreEqual(((Int32)2) & ((Int32)3), NumberUtils.BitwiseAnd((Int32)2, (Int32)3));
+            Assert.AreEqual(((UInt32)2) & ((UInt32)3), NumberUtils.BitwiseAnd((UInt32)2, (UInt32)3));
+            Assert.AreEqual(((Int64)2) & ((Int64)3), NumberUtils.BitwiseAnd((Int64)2, (Int64)3));
+            Assert.AreEqual(((UInt64)2) & ((UInt64)3), NumberUtils.BitwiseAnd((UInt64)2, (UInt64)3));
+            Assert.AreEqual(((UInt64)2) & ((Byte)3), NumberUtils.BitwiseAnd((UInt64)2, (Byte)3));
+            Assert.AreEqual(true, NumberUtils.BitwiseAnd(true, true));
+            Assert.AreEqual( false, NumberUtils.BitwiseAnd(false, true) );
+            try
+            {
+                NumberUtils.BitwiseAnd((double)2.0, 3);
+                Assert.Fail();
+            }
+            catch(ArgumentException)
+            {}
+        }
+
+        [Test]
+        public void BitwiseOr()
+        {
+            Assert.AreEqual( ((Byte)2) | ((Byte)3), NumberUtils.BitwiseOr((Byte)2, (Byte)3));
+            Assert.AreEqual(((SByte)2) | ((SByte)3), NumberUtils.BitwiseOr((SByte)2, (SByte)3));
+            Assert.AreEqual(((Int16)2) | ((Int16)3), NumberUtils.BitwiseOr((Int16)2, (Int16)3));
+            Assert.AreEqual(((UInt16)2) | ((UInt16)3), NumberUtils.BitwiseOr((UInt16)2, (UInt16)3));
+            Assert.AreEqual(((Int32)2) | ((Int32)3), NumberUtils.BitwiseOr((Int32)2, (Int32)3));
+            Assert.AreEqual(((UInt32)2) | ((UInt32)3), NumberUtils.BitwiseOr((UInt32)2, (UInt32)3));
+            Assert.AreEqual(((Int64)2) | ((Int64)3), NumberUtils.BitwiseOr((Int64)2, (Int64)3));
+            Assert.AreEqual(((UInt64)2) | ((UInt64)3), NumberUtils.BitwiseOr((UInt64)2, (UInt64)3));
+            Assert.AreEqual(((UInt64)2) | ((Byte)3), NumberUtils.BitwiseOr((UInt64)2, (Byte)3));
+            Assert.AreEqual(false, NumberUtils.BitwiseOr(false, false));
+            Assert.AreEqual(true, NumberUtils.BitwiseOr(false, true));
+            try
+            {
+                NumberUtils.BitwiseAnd((double)2.0, 3);
+                Assert.Fail();
+            }
+            catch(ArgumentException)
+            {}
+        }
+
+        [Test]
+        public void BitwiseXor()
+        {
+            Assert.AreEqual( ((Byte)2) ^ ((Byte)3), NumberUtils.BitwiseXor((Byte)2, (Byte)3));
+            Assert.AreEqual(((SByte)2) ^ ((SByte)3), NumberUtils.BitwiseXor((SByte)2, (SByte)3));
+            Assert.AreEqual(((Int16)2) ^ ((Int16)3), NumberUtils.BitwiseXor((Int16)2, (Int16)3));
+            Assert.AreEqual(((UInt16)2) ^ ((UInt16)3), NumberUtils.BitwiseXor((UInt16)2, (UInt16)3));
+            Assert.AreEqual(((Int32)2) ^ ((Int32)3), NumberUtils.BitwiseXor((Int32)2, (Int32)3));
+            Assert.AreEqual(((UInt32)2) ^ ((UInt32)3), NumberUtils.BitwiseXor((UInt32)2, (UInt32)3));
+            Assert.AreEqual(((Int64)2) ^ ((Int64)3), NumberUtils.BitwiseXor((Int64)2, (Int64)3));
+            Assert.AreEqual(((UInt64)2) ^ ((UInt64)3), NumberUtils.BitwiseXor((UInt64)2, (UInt64)3));
+            Assert.AreEqual(((UInt64)2) ^ ((Byte)3), NumberUtils.BitwiseXor((UInt64)2, (Byte)3));
+            Assert.AreEqual(false, NumberUtils.BitwiseXor(false, false));
+            Assert.AreEqual(false, NumberUtils.BitwiseXor(true, true));
+            Assert.AreEqual(true, NumberUtils.BitwiseXor(false, true));
+            Assert.AreEqual(true, NumberUtils.BitwiseXor(true, false));
+            try
+            {
+                NumberUtils.BitwiseAnd((double)2.0, 3);
+                Assert.Fail();
+            }
+            catch(ArgumentException)
+            {}
+        }
 	}
 }

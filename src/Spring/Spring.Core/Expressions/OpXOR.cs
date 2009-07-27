@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,48 +20,54 @@
 
 using System;
 using System.Runtime.Serialization;
+using Spring.Util;
 
 namespace Spring.Expressions
 {
     /// <summary>
-    /// Represents parsed string literal node.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
+    /// <author>Erich Eichinger</author>
     [Serializable]
-    public class StringLiteralNode : BaseNode
+    public class OpXOR : BinaryOperator
     {
         /// <summary>
         /// Create a new instance
         /// </summary>
-        public StringLiteralNode():base()
-        {
-        }
+        public OpXOR()
+        { }
 
         /// <summary>
         /// Create a new instance
         /// </summary>
-        public StringLiteralNode(string text):base()
+        public OpXOR(BaseNode left, BaseNode right)
+            :base(left, right)
         {
-            this.Text = text;
         }
 
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
-        protected StringLiteralNode(SerializationInfo info, StreamingContext context)
+        protected OpXOR(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
         
         /// <summary>
-        /// Returns a value for the string literal node.
+        /// Returns a value for the logical AND operator node.
         /// </summary>
         /// <param name="context">Context to evaluate expressions against.</param>
         /// <param name="evalContext">Current expression evaluation context.</param>
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            return this.getText();
+            object l = Left.GetValueInternal(context, evalContext);
+            object r = Right.GetValueInternal(context, evalContext);
+
+            if (NumberUtils.IsInteger(l) && NumberUtils.IsInteger(r))
+            {
+                return NumberUtils.BitwiseXor(l, r);
+            }
+            return Convert.ToBoolean(l) ^ Convert.ToBoolean(r);
         }
     }
 }

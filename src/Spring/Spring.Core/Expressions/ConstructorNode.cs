@@ -50,6 +50,14 @@ namespace Spring.Expressions
         }
 
         /// <summary>
+        /// Create a new instance
+        /// </summary>
+        public ConstructorNode(Type type)
+            :base(type.FullName)
+        {
+        }
+
+        /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected ConstructorNode(SerializationInfo info, StreamingContext context)

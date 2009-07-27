@@ -43,6 +43,23 @@ namespace Spring.Expressions
         }
 
         /// <summary>
+        /// Create a new instance
+        /// </summary>
+        public NodeWithArguments(string text)
+        {
+            this.Text = text;
+        }
+
+        /// <summary>
+        /// Append an argument node to the list of child nodes
+        /// </summary>
+        /// <param name="argumentNode"></param>
+        public void AddArgument(BaseNode argumentNode)
+        {
+            base.addChild(argumentNode);
+        }
+
+        /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected NodeWithArguments(SerializationInfo info, StreamingContext context)

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2006 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ using System.Runtime.Serialization;
 namespace Spring.Expressions
 {
     /// <summary>
-    /// Base class for unary operators.
+    /// Base class for binary operators.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
     [Serializable]
@@ -33,8 +33,19 @@ namespace Spring.Expressions
         /// <summary>
         /// Create a new instance
         /// </summary>
-        public BinaryOperator()
+        protected BinaryOperator()
         {}
+
+        /// <summary>
+        /// Create a new instance with the supplied operands
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        protected BinaryOperator(BaseNode left, BaseNode right)
+        {
+            base.addChild(left);
+            base.addChild(right);
+        }
 
         /// <summary>
         /// Create a new instance from SerializationInfo

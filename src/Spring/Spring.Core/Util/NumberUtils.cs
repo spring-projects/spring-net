@@ -176,6 +176,112 @@ namespace Spring.Util
 		}
 
 		/// <summary>
+		/// Returns the bitwise not (~) of the supplied <paramref name="number"/>.
+		/// </summary>
+		/// <param name="number">The number.</param>
+		/// <returns>The value of ~<paramref name="number"/>.</returns>
+		/// <exception cref="System.ArgumentException">
+		/// If the supplied <paramref name="number"/> is not a supported numeric type.
+		/// </exception>
+		public static object BitwiseNot(object number)
+		{
+            if (number is bool) return !((bool) number);
+			else if (number is Int32) return ~((Int32) number);
+			else if (number is Int16) return ~((Int16) number);
+			else if (number is Int64) return ~((Int64) number);
+			else if (number is UInt16) return ~((UInt16) number);
+			else if (number is UInt32) return ~((UInt32) number);
+			else if (number is UInt64) return ~((UInt64)number);
+			else if (number is Byte) return ~((Byte) number);
+			else if (number is SByte) return ~((SByte) number);
+			else
+			{
+				throw new ArgumentException(string.Format("'{0}' is not one of the supported integer types.", number));
+			}
+		}
+
+        /// <summary>
+        /// Bitwise ANDs (&amp;) the specified integral values.
+        /// </summary>
+        /// <param name="m">The first number.</param>
+        /// <param name="n">The second number.</param>
+        /// <exception cref="System.ArgumentException">
+        /// If one of the supplied arguments is not a supported integral types.
+        /// </exception>
+        public static object BitwiseAnd(object m, object n)
+		{
+            CoerceTypes(ref m, ref n);
+
+            if (n is bool) return (bool)m  & (bool)n;
+            else if (n is Int32) return (Int32)m  & (Int32)n;
+            else if (n is Int16) return (Int16)m & (Int16)n;
+            else if (n is Int64) return (Int64)m & (Int64)n;
+            else if (n is UInt16) return (UInt16)m & (UInt16)n;
+            else if (n is UInt32) return (UInt32)m & (UInt32)n;
+            else if (n is UInt64) return (UInt64)m & (UInt64)n;
+            else if (n is Byte) return (Byte)m & (Byte)n;
+            else if (n is SByte) return (SByte)m & (SByte)n;
+            else
+			{
+                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported integral types.", m, n));
+            }
+		}
+
+        /// <summary>
+        /// Bitwise ORs (|) the specified integral values.
+        /// </summary>
+        /// <param name="m">The first number.</param>
+        /// <param name="n">The second number.</param>
+        /// <exception cref="System.ArgumentException">
+        /// If one of the supplied arguments is not a supported integral types.
+        /// </exception>
+        public static object BitwiseOr(object m, object n)
+		{
+            CoerceTypes(ref m, ref n);
+
+            if (n is bool) return (bool)m  | (bool)n;
+            else if (n is Int32) return (Int32)m  | (Int32)n;
+            else if (n is Int16) return (Int16)m | (Int16)n;
+            else if (n is Int64) return (Int64)m | (Int64)n;
+            else if (n is UInt16) return (UInt16)m | (UInt16)n;
+            else if (n is UInt32) return (UInt32)m | (UInt32)n;
+            else if (n is UInt64) return (UInt64)m | (UInt64)n;
+            else if (n is Byte) return (Byte)m | (Byte)n;
+            else if (n is SByte) return (SByte)m | (SByte)n;
+            else
+			{
+                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported integral types.", m, n));
+            }
+		}
+
+        /// <summary>
+        /// Bitwise XORs (^) the specified integral values.
+        /// </summary>
+        /// <param name="m">The first number.</param>
+        /// <param name="n">The second number.</param>
+        /// <exception cref="System.ArgumentException">
+        /// If one of the supplied arguments is not a supported integral types.
+        /// </exception>
+        public static object BitwiseXor(object m, object n)
+		{
+            CoerceTypes(ref m, ref n);
+
+            if (n is bool) return (bool)m  ^ (bool)n;
+            else if (n is Int32) return (Int32)m  ^ (Int32)n;
+            else if (n is Int16) return (Int16)m ^ (Int16)n;
+            else if (n is Int64) return (Int64)m ^ (Int64)n;
+            else if (n is UInt16) return (UInt16)m ^ (UInt16)n;
+            else if (n is UInt32) return (UInt32)m ^ (UInt32)n;
+            else if (n is UInt64) return (UInt64)m ^ (UInt64)n;
+            else if (n is Byte) return (Byte)m ^ (Byte)n;
+            else if (n is SByte) return (SByte)m ^ (SByte)n;
+            else
+			{
+                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported integral types.", m, n));
+            }
+		}
+
+		/// <summary>
 		/// Adds the specified numbers.
 		/// </summary>
 		/// <param name="m">The first number.</param>
@@ -195,8 +301,10 @@ namespace Spring.Util
 			else if (n is Single) return (Single) m + (Single) n;
 			else if (n is Double) return (Double) m + (Double) n;
 			else if (n is Decimal) return (Decimal) m + (Decimal) n;
-
-			return null;
+            else
+            {
+                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported numeric types.", m, n));
+            }
 		}
 
 		/// <summary>
@@ -219,8 +327,10 @@ namespace Spring.Util
 			else if (n is Single) return (Single) m - (Single) n;
 			else if (n is Double) return (Double) m - (Double) n;
 			else if (n is Decimal) return (Decimal) m - (Decimal) n;
-
-			return null;
+            else
+            {
+                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported numeric types.", m, n));
+            }
 		}
 
 		/// <summary>
@@ -243,9 +353,11 @@ namespace Spring.Util
 			else if (n is Single) return (Single) m*(Single) n;
 			else if (n is Double) return (Double) m*(Double) n;
 			else if (n is Decimal) return (Decimal) m*(Decimal) n;
-
-			return null;
-		}
+            else
+            {
+                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported numeric types.", m, n));
+            }
+        }
 
 		/// <summary>
 		/// Divides the specified numbers.
@@ -267,9 +379,11 @@ namespace Spring.Util
 			else if (n is Single) return (Single) m/(Single) n;
 			else if (n is Double) return (Double) m/(Double) n;
 			else if (n is Decimal) return (Decimal) m/(Decimal) n;
-
-			return null;
-		}
+            else
+            {
+                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported numeric types.", m, n));
+            }
+        }
 
 		/// <summary>
 		/// Calculates remainder for the specified numbers.
@@ -291,9 +405,11 @@ namespace Spring.Util
 			else if (n is Single) return (Single) m%(Single) n;
 			else if (n is Double) return (Double) m%(Double) n;
 			else if (n is Decimal) return (Decimal) m%(Decimal) n;
-
-			return null;
-		}
+            else
+            {
+                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported numeric types.", m, n));
+            }
+        }
 
 		/// <summary>
 		/// Raises first number to the power of the second one.

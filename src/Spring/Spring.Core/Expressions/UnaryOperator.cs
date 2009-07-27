@@ -37,6 +37,14 @@ namespace Spring.Expressions
         }
 
         /// <summary>
+        /// Create a new instance
+        /// </summary>
+        public UnaryOperator(BaseNode operand)
+        {
+            this.addChild(operand);
+        }
+
+        /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected UnaryOperator(SerializationInfo info, StreamingContext context)

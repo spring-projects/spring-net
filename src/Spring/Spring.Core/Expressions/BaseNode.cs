@@ -176,7 +176,7 @@ namespace Spring.Expressions
         /// <summary>
         /// This is the entrypoint into evaluating this expression.
         /// </summary>
-        private object GetValue(object context, IDictionary variables)
+        public object GetValue(object context, IDictionary variables)
         {
             EvaluationContext evalContext = new EvaluationContext( context,variables );
             return Get( context, evalContext );
@@ -223,7 +223,7 @@ namespace Spring.Expressions
         /// <summary>
         /// This is the entrypoint into evaluating this expression.
         /// </summary>
-        private void SetValue(object context,IDictionary variables,object newValue)
+        public void SetValue(object context,IDictionary variables,object newValue)
         {
             EvaluationContext evalContext = new EvaluationContext( context,variables );
             Set( context, evalContext,newValue );
