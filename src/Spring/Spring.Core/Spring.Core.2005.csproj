@@ -1031,10 +1031,12 @@
     <Compile Include="Validation\AnyValidatorGroup.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Validation\BaseSimpleValidator.cs" />
     <Compile Include="Validation\BaseValidationAction.cs" />
     <Compile Include="Validation\BaseValidator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Validation\BaseValidatorGroup.cs" />
     <Compile Include="Validation\Config\ValidationNamespaceParser.cs" />
     <Compile Include="Validation\ErrorMessage.cs" />
     <Compile Include="Validation\ExclusiveValidatorGroup.cs">
