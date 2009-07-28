@@ -76,7 +76,7 @@ namespace Spring.Transaction.Interceptor
         }
 
         [Test]
-        [ExpectedException(typeof (AopConfigException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void ConstructorArgMustBeAExceptionClass()
         {
             new RollbackRuleAttribute(typeof (StringBuilder));

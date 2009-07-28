@@ -38,11 +38,16 @@ namespace Spring.Transaction.Interceptor
 	[Serializable]
 	public class RollbackRuleAttribute : Attribute
 	{
+        /// <summary>
+        /// Could hold exception, resolving class name but would always require FQN.
+        /// This way does multiple string comparisons, but how often do we decide 
+        /// whether to roll back a transaction following an exception?
+        /// </summary>
 		private string _exceptionName;
 
 		/// <summary>
 		/// Canonical instance representing default behavior for rolling back on
-		/// all <see cref="System.SystemException"/>s.
+		/// all <see cref="System.Exception"/>s.
 		/// </summary>
 		public static RollbackRuleAttribute RollbackOnSystemExceptions
 			= new RollbackRuleAttribute(typeof (Exception).Name);
@@ -88,7 +93,7 @@ namespace Spring.Transaction.Interceptor
 		    AssertUtils.ArgumentNotNull(exceptionType, "exceptionType");            
 			if ( ! typeof(Exception).IsAssignableFrom( exceptionType ) )
 			{
-				throw new AopConfigException("Cannot construct rollback rule from " + exceptionType + "; " + "It's not an Exception");
+				throw new ArgumentException("Cannot construct rollback rule from " + exceptionType + "; " + "It's not an Exception");
 			}
 			_exceptionName = exceptionType.Name;
 		}
@@ -153,9 +158,10 @@ namespace Spring.Transaction.Interceptor
 		/// <returns>The hashcode of the exception name covered by this instance.</returns>
 		public override int GetHashCode()
 		{
-			return ExceptionName.GetHashCode();
+		    return base.GetHashCode();
 		}
 
+        
 		/// <summary>
 		/// Override of <see cref="System.Object.Equals(object)"/>.
 		/// </summary>
@@ -163,6 +169,7 @@ namespace Spring.Transaction.Interceptor
 		/// <returns><b>True</b> if the input object is equal to this instance.</returns>
 		public override bool Equals(object obj)
 		{
+            if (ReferenceEquals(this, obj)) return true;
 			RollbackRuleAttribute rollbackRuleAttribute = obj as RollbackRuleAttribute;
 			if ( rollbackRuleAttribute == null )
 			{
@@ -171,7 +178,7 @@ namespace Spring.Transaction.Interceptor
 			return Equals( rollbackRuleAttribute );
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Strongly typed <c>Equals()</c> implementation.
 		/// </summary>
 		/// <param name="rollbackRuleAttribute">
@@ -182,7 +189,7 @@ namespace Spring.Transaction.Interceptor
 		/// </returns>
 		public bool Equals( RollbackRuleAttribute rollbackRuleAttribute )
 		{
-			return ExceptionName.Equals(rollbackRuleAttribute.ExceptionName);
+		    return base.Equals(rollbackRuleAttribute);
 		}
 
 		private int getDepth( Type exceptionType, int depth )

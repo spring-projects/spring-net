@@ -43,7 +43,7 @@ namespace Spring.Transaction.Interceptor
 			Assert.IsTrue(rr.GetDepth(typeof(TransactionSystemException)) > 0);
 		}
 		[Test]
-		[ExpectedException(typeof(AopConfigException))]
+		[ExpectedException(typeof(ArgumentException))]
 		public void ConstructorArgMustBeAExceptionClass()
 		{
 			new NoRollbackRuleAttribute( typeof( StringBuilder ) );
