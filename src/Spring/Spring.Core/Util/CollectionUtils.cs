@@ -304,6 +304,30 @@ namespace Spring.Util
         }
 
         /// <summary>
+        /// Finds a value of the given type in the given collection.
+        /// </summary>
+        /// <param name="collection">The collection to search.</param>
+        /// <param name="type">The type to look for.</param>
+        /// <returns>a collection of matching values of the given type found, empty if none found, or null if the input collection was null.</returns>
+        public static ICollection FindValuesOfType(IEnumerable collection, Type type)
+        {
+            if (IsEmpty(collection))
+            {
+                return null;
+            }
+            Type typeToUse = (type != null ? type : typeof(object));
+            ArrayList results = new ArrayList();
+            foreach (object obj in collection)
+            {
+                if (typeToUse.IsAssignableFrom(obj.GetType()))
+                {
+                    results.Add(obj);
+                }
+            }
+            return results;
+        }
+
+        /// <summary>
         /// Find a value of one of the given types in the given Collection, 
         /// searching the Collection for a value of the first type, then
         /// searching for a value of the second type, etc.

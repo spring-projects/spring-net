@@ -23,6 +23,8 @@ using System.Collections;
 using NUnit.Framework;
 #if NET_2_0
 using System.Collections.Generic;
+using Spring.Objects.Factory.Config;
+
 #endif
 
 namespace Spring.Objects.Factory.Support
@@ -48,7 +50,7 @@ namespace Spring.Objects.Factory.Support
             dict2.ValueTypeName = typeof(InternalType).FullName;
 
             IDictionary resolved = (IDictionary) dict2.Resolve("other", new RootObjectDefinition(typeof (object)), "prop",
-                                                               delegate(string name, RootObjectDefinition definition, string argumentName, object element)
+                                                               delegate(string name, IObjectDefinition definition, string argumentName, object element)
                                                                    {
                                                                        if ("stringValue".Equals(element))
                                                                        {
@@ -69,7 +71,7 @@ namespace Spring.Objects.Factory.Support
 
             dict.ValueTypeName = "System.Collections.Generic.List<[string]>";
             IDictionary resolved = (IDictionary) dict.Resolve("somename", new RootObjectDefinition(typeof(object)), "prop",
-                                                              delegate(string name, RootObjectDefinition definition, string argumentName, object element)
+                                                              delegate(string name, IObjectDefinition definition, string argumentName, object element)
                                                                   {
                                                                       if ("value".Equals(element))
                                                                       {

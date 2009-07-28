@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using Spring.Objects.Factory.Config;
 
 #endregion
 
@@ -130,7 +131,7 @@ namespace Spring.Objects.Factory.Support
 		/// this managed collection.
 		/// </param>
 		/// <returns>A fully resolved collection.</returns>
-		ICollection Resolve(string objectName, RootObjectDefinition definition,
+		ICollection Resolve(string objectName, IObjectDefinition definition,
 			string propertyName, ManagedCollectionElementResolver resolver);
 	}
 
@@ -160,5 +161,5 @@ namespace Spring.Objects.Factory.Support
 	/// </param>
 	/// <returns>A fully resolved element.</returns>
 	public delegate object ManagedCollectionElementResolver(
-		string name, RootObjectDefinition definition, string argumentName, object element);
+		string name, IObjectDefinition definition, string argumentName, object element);
 }

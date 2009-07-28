@@ -343,7 +343,7 @@ namespace Spring.Expressions
                                                 this.memberName + "' of primitive type ["
                                                 + targetType + "]");
                 }
-                else if (newValue == null || targetType.IsAssignableFrom(newValue.GetType()))
+                else if (newValue == null || ObjectUtils.IsAssignable(targetType, newValue)) // targetType.IsAssignableFrom(newValue.GetType())
                 {
                     SetPropertyOrFieldValueInternal(context, newValue);
                 }

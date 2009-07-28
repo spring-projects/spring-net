@@ -53,7 +53,7 @@ namespace Spring.Validation
         /// <param name="errorsToMerge">
         /// The validation errors to merge; can be <see lang="null"/>.
         /// </param>
-        void MergeErrors(ValidationErrors errorsToMerge);
+        void MergeErrors(IValidationErrors errorsToMerge);
 
         /// <summary>
         /// Gets the list of errors for the supplied error <paramref name="provider"/>.

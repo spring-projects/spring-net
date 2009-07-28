@@ -630,6 +630,7 @@
     <Compile Include="Objects\TestObjectList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\TestTransparentProxyFactory.cs" />
     <Compile Include="Objects\TypeMismatchExceptionTests.cs">
       <SubType>Code</SubType>
     </Compile>

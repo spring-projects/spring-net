@@ -31,6 +31,7 @@ using System.Globalization;
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
+using Spring.Objects.Factory.Config;
 using Spring.Util;
 
 #endregion
@@ -89,7 +90,7 @@ namespace Spring.Objects.Factory.Support
 		/// </param>
 		/// <returns>A fully resolved collection.</returns>
 		public ICollection Resolve(
-			string objectName, RootObjectDefinition definition,
+			string objectName, IObjectDefinition definition,
 			string propertyName, ManagedCollectionElementResolver resolver)
 		{
             IDictionary dictionary;

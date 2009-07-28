@@ -296,7 +296,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Determine if the given <see cref="System.Type"/> is assignable from the
-        /// given value, assuming setting by reflection.
+        /// given value, assuming setting by reflection and taking care of transparent proxies.
         /// </summary>
         /// <remarks>
         /// <p>

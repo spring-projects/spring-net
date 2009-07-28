@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2008 the original author or authors.
+ * Copyright 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,8 @@ using System.Globalization;
 using System.Runtime.Remoting;
 using Common.Logging;
 using Spring.Core.TypeConversion;
-using Spring.Core.TypeResolution;
 using Spring.Expressions;
 using Spring.Objects.Factory.Config;
-using Spring.Util;
 
 namespace Spring.Objects.Factory.Support
 {
@@ -47,23 +45,16 @@ namespace Spring.Objects.Factory.Support
         private readonly ILog log;
 
         private readonly AbstractObjectFactory objectFactory;
-        private readonly string objectName;
-        private readonly IObjectDefinition objectDefinition;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ObjectDefinitionValueResolver"/> class.
         /// </summary>
         /// <param name="objectFactory">The object factory.</param>
-        /// <param name="objectName">Name of the object.</param>
-        /// <param name="objectDefinition">The object definition.</param>
-        public ObjectDefinitionValueResolver(AbstractObjectFactory objectFactory, string objectName,
-                                             IObjectDefinition objectDefinition)
+        public ObjectDefinitionValueResolver(AbstractObjectFactory objectFactory)
         {
             this.log = LogManager.GetLogger(this.GetType());
 
             this.objectFactory = objectFactory;
-            this.objectName = objectName;
-            this.objectDefinition = objectDefinition;
         }
 
         /// <summary>
@@ -116,9 +107,25 @@ namespace Spring.Objects.Factory.Support
         /// <param name="argumentValue">
         /// The value of the property that is being resolved.
         /// </param>
-        public virtual object ResolveValueIfNecessary(string name, RootObjectDefinition definition, string argumentName, object argumentValue)
+        public virtual object ResolveValueIfNecessary(string name, IObjectDefinition definition, string argumentName, object argumentValue)
         {
             object resolvedValue = null;
+            resolvedValue = ResolvePropertyValue(name, definition, argumentName, argumentValue);
+            return resolvedValue;
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="definition"></param>
+        /// <param name="argumentName"></param>
+        /// <param name="argumentValue"></param>
+        /// <returns></returns>
+        private object ResolvePropertyValue(string name, IObjectDefinition definition, string argumentName, object argumentValue)
+        {
+            object resolvedValue = null;
+            
             // we must check the argument value to see whether it requires a runtime
             // reference to another object to be resolved.
             // if it does, we'll attempt to instantiate the object and set the reference.
@@ -254,7 +261,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>
         /// The resolved object as defined by the inner object definition.
         /// </returns>
-        protected object ResolveInnerObjectDefinition(string name, string innerObjectName, string argumentName, IObjectDefinition definition,
+        protected virtual object ResolveInnerObjectDefinition(string name, string innerObjectName, string argumentName, IObjectDefinition definition,
                                                       bool singletonOwner)
         {
             RootObjectDefinition mod = objectFactory.GetMergedObjectDefinition(innerObjectName, definition);
@@ -324,7 +331,7 @@ namespace Spring.Objects.Factory.Support
         /// The runtime reference containing the value of the property.
         /// </param>
         /// <returns>A reference to another object in the factory.</returns>
-        protected object ResolveReference(IConfigurableObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
+        protected virtual object ResolveReference(IObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
         {
             #region Instrumentation
             if (log.IsDebugEnabled)

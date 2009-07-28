@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2008 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using NUnit.Framework;
-
-#endregion
+using Spring.Objects;
 
 namespace Spring.Expressions
 {
@@ -31,13 +28,15 @@ namespace Spring.Expressions
     /// Tests the behavior of PropertyOrFieldNode expression node
     /// </summary>
     /// <author>Erich Eichinger</author>
-    /// <version>$Id: $</version>
     [TestFixture]
     public class PropertyOrFieldNodeTests
     {
         private class BaseClass
         {
+            private ITestObject objectProp;
+
             public string StringProp { get { return "BaseStringProp"; }}
+            public ITestObject ObjectProp { get { return objectProp; } set { objectProp = value; } }
         }
 
         private class DerivedClass : BaseClass
@@ -53,6 +52,22 @@ namespace Spring.Expressions
             pofNode.Text = "StringProp";
 
             Assert.AreEqual(new DateTime(2008,1,1), ((IExpression) pofNode).GetValue(new DerivedClass()));
+        }
+
+        [Test]
+        public void CanSetTransparentProxy()
+        {
+            PropertyOrFieldNode pofNode = new PropertyOrFieldNode();
+            pofNode.Text = "ObjectProp";
+
+            BaseClass ouc = new BaseClass();
+            TestTransparentProxyFactory tpf = new TestTransparentProxyFactory(null, typeof(ITestObject), null);
+            object tpo = tpf.GetTransparentProxy();
+            Assert.IsTrue( tpo is ITestObject );
+            ITestObject itpo = tpo as ITestObject;
+            Assert.IsNotNull(itpo);
+            pofNode.SetValue( ouc, null, itpo);
+            Assert.AreSame( tpo, ouc.ObjectProp );
         }
     }
 }
