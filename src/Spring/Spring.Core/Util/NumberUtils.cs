@@ -241,13 +241,13 @@ namespace Spring.Util
 
             if (n is bool) return (bool)m  | (bool)n;
             else if (n is Int32) return (Int32)m  | (Int32)n;
-            else if (n is Int16) return (Int16)m | (Int16)n;
+            else if (n is Int16) return (UInt16)m | (UInt16)n;
             else if (n is Int64) return (Int64)m | (Int64)n;
             else if (n is UInt16) return (UInt16)m | (UInt16)n;
             else if (n is UInt32) return (UInt32)m | (UInt32)n;
             else if (n is UInt64) return (UInt64)m | (UInt64)n;
             else if (n is Byte) return (Byte)m | (Byte)n;
-            else if (n is SByte) return (SByte)m | (SByte)n;
+            else if (n is SByte) return (Byte)m | (Byte)n;
             else
 			{
                 throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported integral types.", m, n));
