@@ -15,7 +15,7 @@ namespace Spring.Messaging.Listener
     /// of the Message Ids of messages.
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public class AbstractSendToQueueExceptionHandler : IInitializingObject, IApplicationContextAware
+    public abstract class AbstractSendToQueueExceptionHandler : IInitializingObject, IApplicationContextAware
     {
         private int maxRetry = 5;
 
