@@ -67,7 +67,7 @@ namespace Spring.Template.Velocity{
         /// <param name="model">the Hashtable that contains model names as keys and model objects</param>       
         /// <returns>the result as string</returns>
         /// <exception cref="VelocityException">thrown if any exception is thrown by the velocity engine</exception>		
-        public static string MergeTemplateIntostring(
+        public static string MergeTemplateIntoString(
             VelocityEngine velocityEngine, string templateLocation, string encoding, Hashtable model) {
 
             StringWriter result = new StringWriter();

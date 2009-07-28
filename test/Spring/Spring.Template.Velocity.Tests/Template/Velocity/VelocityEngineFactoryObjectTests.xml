@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net" xmlns:template="http://www.springframework.net/template">
+<objects xmlns="http://www.springframework.net" xmlns:nv="http://www.springframework.net/nvelocity">
 
-    <template:nvelocity id="customNamespaceVelocityTemplate" >
-        <template:resource-loader>
-            <template:file path="Template/Velocity/" />
-        </template:resource-loader>
-    </template:nvelocity>
-
-
+  <nv:engine id="customNamespaceVelocityTemplate">
+    <nv:resource-loader>
+      <nv:file path="Template/Velocity/" />
+    </nv:resource-loader>
+  </nv:engine>
+ 
     <!-- Does file system access with hot tracking  with NVelocity assembly resource loader -->
     <object id="assemblyBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity">
         <property name="VelocityProperties">

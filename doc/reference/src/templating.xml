@@ -28,7 +28,7 @@
     <title>Introduction</title>
 
     <para>The Spring Framework features integration classes for templating
-    engine support. Currently, Spring supports the <ulink
+    engine support. Spring 1.3 provides support for the <ulink
     url="http://www.castleproject.org/others/nvelocity/index.html">NVelocity</ulink>
     templating engine.</para>
   </section>
@@ -37,24 +37,34 @@
     <title>Dependencies</title>
 
     <para>The Spring NVelocity support depends on the Castle project's
-    NVelocity implementation which is provided in the lib directory of the
-    spring release.</para>
+    NVelocity implementation which is located in the lib directory of the
+    Spring release.</para>
   </section>
 
   <section xml:id="templating-nvelocity-factory">
-    <title>Using the NVelocity Factory Object</title>
+    <title>Configuring a VelocityEngine</title>
 
     <para>The NVelocity template engine is set up using a
     <literal>IFactoryObject</literal> with optional configuration parameters
-    to define where templates reside, define logging and more.</para>
+    to define where templates reside, define logging and more. For more
+    information on <literal>IFactoryObjects</literal> see <xref
+    linkend="objects-factory-lifecycle-factoryobject" />. A custom namespace
+    parser is provided to simplify the configuration of a NVelocity template
+    engine. For more information on custom namespace parser see <xref
+    linkend="context-custom-parsers" />. </para>
 
     <section xml:id="templating-nvelocity-file">
       <title>Simple file based template engine definition</title>
 
-      <para>A simple definition of the template engine:</para>
+      <para>You create a simple definition of the template engine that uses
+      the default resource loader as follows:</para>
 
-      <programlisting language="myxml">&lt;!-- Simple no arg file based configuration use's NVeclocity default file resource loader  --&gt;
-&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" /&gt;</programlisting>
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" xmlns:nv="http://www.springframework.net/nvelocity"&gt;
+
+  &lt;!-- Simple no arg file based configuration use's NVeclocity default file resource loader  --&gt;
+  &lt;nv:engine id="velocityEngine" /&gt;
+
+&lt;/objects&gt;</programlisting>
 
       <para>The velocity engine could then be used to load and merge a local
       template using a simple relative path:</para>
@@ -65,6 +75,10 @@ modelTable.Add("var1", TEST_VALUE);
 VelocityContext velocityContext = new VelocityContext(modelTable);
 velocityEngine.MergeTemplate("Template/Velocity/MyTemplate.vm", Encoding.UTF8.WebName, velocityContext, stringWriter);
 string mergedContent = stringWriter.ToString();</programlisting>
+
+      <para>To disable the use of NVelocity's file loader that tracks runtime
+      changes, set the element <literal>prefer-file-system-access</literal> of
+      &lt;engine/&gt; to false.</para>
     </section>
 
     <section xml:id="templating-nvelocity-assembly">
@@ -73,65 +87,51 @@ string mergedContent = stringWriter.ToString();</programlisting>
       <para>When templates are packaged in an assembly, NVelocity's assembly
       resource loader can be used to define where templates reside:</para>
 
-      <programlisting language="myxml">&lt;!-- Assembly based template loading with NVelocity assembly resource loader --&gt;
-&lt;object id="assemblyBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity"&gt;
-    &lt;property name="VelocityProperties"&gt;
-        &lt;dictionary key-type="string" value-type="object"&gt;
-            &lt;entry key="resource.loader" value="assembly"/&gt;
-            &lt;entry key="assembly.resource.loader.class" value="NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader"/&gt;
-            &lt;entry key="assembly.resource.loader.assembly" value="MyAssembly"/&gt;
-        &lt;/dictionary&gt;
-    &lt;/property&gt;
-&lt;/object&gt;</programlisting>
+      <programlisting language="myxml">&lt;nv:engine id="velocityEngine" &gt;
+    &lt;nv:resource-loader&gt;
+        &lt;nv:assembly name="MyAssembly" /&gt;
+    &lt;/nv:resource-loader&gt;
+&lt;/nv:nvelocity&gt;</programlisting>
 
       <para>Using the example above the template would be loaded using a
       namespace syntax for the template resource:</para>
 
       <programlisting language="csharp">velocityEngine.MergeTemplate("MyAssembly.MyNamespace.MyTemplate.vm", Encoding.UTF8.WebName, velocityContext, stringWriter);</programlisting>
-
-      <para>Using the custom namespace the same definition could be
-      simplified:</para>
-
-      <programlisting language="myxml">&lt;template:nvelocity id="velocityEngine" &gt;
-    &lt;template:resource-loader&gt;
-        &lt;template:assembly name="MyAssembly" /&gt;
-    &lt;/template:resource-loader&gt;
-&lt;/template:nvelocity&gt;</programlisting>
     </section>
 
     <section xml:id="templating-nvelocity-resource-loader">
       <title>Using Spring's <literal>IResourceLoader</literal> to load
       templates</title>
 
-      <para>In some cases Spring's resource abstraction can be beneficial to
-      load templates from a variety of resources. A spring resource loader
-      extension to the NVelocity resource loader implementation is provided
-      for this use case.</para>
+      <para>In some cases Spring's <link linkend="resources">IResource</link>
+      abstraction can be beneficial to load templates from a variety of
+      resources. A Spring IResource loader extension to the NVelocity resource
+      loader implementation is provided for this use case. The following
+      object definition loads the NVelocity templates from a single
+      path</para>
 
-      <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
-    &lt;property name="ResourceLoaderPath" value="file://MyTemplateFolder/AnotherFolder/" /&gt;
-&lt;/object&gt;
-</programlisting>
+      <programlisting>&lt;nv:engine id="velocityEngine"&gt;
+  &lt;nv:resource-loader&gt;
+    &lt;nv:file path="MyTemplateFolder/AnotherFolder/" /&gt;
+  &lt;/nv:resource-loader&gt;
+&lt;/nv:engine&gt;</programlisting>
 
       <para>Or with multiple locations</para>
 
-      <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
-    &lt;property name="ResourceLoaderPaths" &gt;
-        &lt;list&gt;
-            &lt;value&gt;file://MyTemplateFolder/&lt;/value&gt;
-            &lt;value&gt;file://MyOtherTemplateFolder/&lt;/value&gt;
-        &lt;/list&gt;
-    &lt;/property&gt;
-&lt;/object&gt;</programlisting>
+      <programlisting language="myxml">&lt;nv:engine id="velocityEngine"&gt;
+  &lt;nv:resource-loader&gt;
+    &lt;nv:file path="MyTemplateFolder/AnotherFolder/" /&gt;
+    &lt;nv:file path="MyOtherTemplateFolder/" /&gt;
+  &lt;/nv:resource-loader&gt;
+&lt;/nv:engine&gt;
+</programlisting>
 
       <note>
         <para>By default spring will attempt to load resources using file
         based template loading (useful for detection of template changes at
         runtime). If this is not desirable you set the
-        <literal>preferFileSystemAccess</literal> property of the factory
-        object to <literal>false</literal>
-        (<literal>prefer-file-system-access="false"</literal> for custom
-        namespace use)</para>
+        <literal>prefer-file-system-access</literal> element of the
+        &lt;/engine&gt; element to <literal>false.</literal></para>
       </note>
 
       <para>Using the example above when resource loader paths are defined
@@ -146,19 +146,22 @@ string mergedContent = stringWriter.ToString();</programlisting>
       <para>If so desired one could provide a custom configuration resource to
       customize the NVelocity configuration:</para>
 
-      <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
-    &lt;property name="ConfigLocation " value="file://Template/Velocity/config.properties" /&gt;
-&lt;/object&gt;</programlisting>
+      <programlisting language="myxml">&lt;nv:engine id="velocityEngine" config-file="file://Template/Velocity/config.properties"/&gt;</programlisting>
 
-	<para>
-	<note>
-	        <para>You can override specific properties by providing the <literal>VelocityProperties</literal> property to the NVelocity factory object (shown above)</para>
-      </note>
-	</para>
+      <para>You can override specific properties by providing the
+      <literal>VelocityProperties</literal> property to the NVelocity factory
+      object (shown above)</para>
+
+      <programlisting>&lt;nv:engine id="customNamespaceVelocityTemplate" config-file="foo.prop"&gt;
+  &lt;nv:nvelocity-properties&gt;
+    &lt;entry key="input.encoding"  value="ISO-8859-1"/&gt;
+    &lt;entry key="output.encoding" value="ISO-8859-1"/&gt;
+  &lt;/nv:nvelocity-properties&gt;
+&lt;/nv:engine&gt;</programlisting>
     </section>
 
     <section xml:id="templating-nvelocity-resource-logging">
-       
+      
 
       <title>Logging</title>
 
@@ -166,30 +169,17 @@ string mergedContent = stringWriter.ToString();</programlisting>
 
       <para>By default Spring will override NVelocity's default
       <literal>ILogSystem</literal> implementation with its own
-      <literal>CommonsLoggingLogSystem</literal> implementation. If this is
-      not desirable, you can specify the following property of the NVelocity
-      factory object:</para>
+      <literal>CommonsLoggingLogSystem</literal> implementation so that the
+      logging stream of NVelocity will go to the same logging subsystem that
+      Spring uses. If this is not desirable, you can specify the following
+      property of the NVelocity factory object:</para>
 
        
-
-      <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
-    &lt;property name="OverrideLogging" value="false" /&gt;
-&lt;/object&gt;</programlisting>
-
-       or 
 
       <programlisting language="myxml">&lt;template:nvelocity id="velocityEngine" override-logging="false" /&gt;
 </programlisting>
 
-       
-
-      <note>
-        <para>You can override specific NVelocity properties locally by
-        providing a dictionary as the <literal>VelocityProperties</literal>
-        property of the NVelocity factory object (shown above)</para>
-      </note>
-
-       
+        
     </section>
   </section>
 
@@ -203,9 +193,19 @@ string mergedContent = stringWriter.ToString();</programlisting>
   </section>
 
   <section xml:id="templating-nvelocity-resource-namespace">
-    <title>Namespace</title>
+    <title>Configuring a VelocityEngine without a custom namespace</title>
 
-    <para>For convinience in defining NVelocity engine instances a custom
+    <para>While most users will prefer to use the NVelocity custom namespace
+    to configure a VelocityEngine, you can also use standard &lt;object/&gt;
+    definition syntax as shown below:</para>
+
+    <para>To create a VelocityEngine using the default file resource loader
+    use the definition:</para>
+
+    <programlisting>&lt;!-- Simple no arg file based configuration use's NVeclocity default file resource loader  --&gt;
+&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" /&gt;</programlisting>
+
+    <para>For convenience in defining NVelocity engine instances a custom
     namespace is provided, for example the resource loader definition could be
     done this way:</para>
 
@@ -218,6 +218,69 @@ string mergedContent = stringWriter.ToString();</programlisting>
     &lt;/template:resource-loader&gt;
 &lt;/template:nvelocity&gt;
 
-&lt;/objects&gt;</programlisting>
+&lt;/objects</programlisting>
+
+    <para>When templates are packaged in an assembly, NVelocity's assembly
+    resource loader can be used to define where templates reside:</para>
+
+    <programlisting language="myxml">&lt;!-- Assembly based template loading with NVelocity assembly resource loader --&gt;
+&lt;object id="assemblyBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity"&gt;
+    &lt;property name="VelocityProperties"&gt;
+        &lt;dictionary key-type="string" value-type="object"&gt;
+            &lt;entry key="resource.loader" value="assembly"/&gt;
+            &lt;entry key="assembly.resource.loader.class" value="NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader"/&gt;
+            &lt;entry key="assembly.resource.loader.assembly" value="MyAssembly"/&gt;
+        &lt;/dictionary&gt;
+    &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>To load NVelocity templates from a single path use the
+    definition:</para>
+
+    <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
+    &lt;property name="ResourceLoaderPath" value="file://MyTemplateFolder/AnotherFolder/" /&gt;
+&lt;/object&gt;
+</programlisting>
+
+    <para>To load NVelocity templates from multiple paths use the
+    definition:</para>
+
+    <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
+    &lt;property name="ResourceLoaderPaths" &gt;
+        &lt;list&gt;
+            &lt;value&gt;file://MyTemplateFolder/&lt;/value&gt;
+            &lt;value&gt;file://MyOtherTemplateFolder/&lt;/value&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+    <note>
+      <para>By default spring will attempt to load resources using file based
+      template loading (useful for detection of template changes at runtime).
+      If this is not desirable you set the
+      <literal>preferFileSystemAccess</literal> property of the factory object
+      to <literal>false.</literal></para>
+    </note>
+
+    <para>To refer to a property file based configuration of the
+    TemplateEngine use the definition:</para>
+
+    <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
+    &lt;property name="ConfigLocation " value="file://Template/Velocity/config.properties" /&gt;
+&lt;/object&gt;</programlisting>
+
+    <para><note>
+        <para>You can override specific properties by providing the
+        <literal>VelocityProperties</literal> property.</para>
+      </note></para>
+
+    <para>To not integrate with the Common.Logging subsystem, set the
+    OverrideLogging property to false: </para>
+
+    <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
+    &lt;property name="OverrideLogging" value="false" /&gt;
+&lt;/object&gt;</programlisting>
+
+    <para></para>
   </section>
 </chapter>

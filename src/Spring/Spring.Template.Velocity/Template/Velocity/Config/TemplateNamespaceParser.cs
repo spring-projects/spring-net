@@ -33,16 +33,16 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Template.Config {
+namespace Spring.Template.Velocity.Config {
     /// <summary>
     /// Implementation of the custom configuration parser for template configurations
     /// </summary>
     /// <author>Erez Mazor</author>
     [
         NamespaceParser(
-            Namespace = "http://www.springframework.net/template",
+            Namespace = "http://www.springframework.net/nvelocity",
             SchemaLocationAssemblyHint = typeof(TemplateNamespaceParser),
-            SchemaLocation = "/Spring.Template.Config/spring-template-1.2.xsd")
+            SchemaLocation = "/Spring.Template.Velocity.Config/spring-nvelocity-1.3.xsd")
     ]
     public sealed class TemplateNamespaceParser : AbstractSingleObjectDefinitionParser {
         private const string TemplateTypePrefix = "template: ";
@@ -167,7 +167,7 @@ namespace Spring.Template.Config {
         #region Element & Attribute Name Constants
 
         private class TemplateDefinitionConstants {
-            public const string NVelocityElement = "nvelocity";
+            public const string NVelocityElement = "engine";
             public const string AttributePreferFileSystemAccess = "prefer-file-system-access";
             public const string AttributeConfigFile = "config-file";
             public const string AttributeOverrideLogging = "override-logging";

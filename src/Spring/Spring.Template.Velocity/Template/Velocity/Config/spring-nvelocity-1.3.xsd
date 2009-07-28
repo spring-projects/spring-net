@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<xsd:schema xmlns="http://www.springframework.net/template"
+<xsd:schema xmlns="http://www.springframework.net/nvelocity"
         xmlns:objects="http://www.springframework.net"
 		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
-        targetNamespace="http://www.springframework.net/template"
+        targetNamespace="http://www.springframework.net/nvelocity"
         elementFormDefault="qualified"
         attributeFormDefault="unqualified"
-        vs:friendlyname="Spring.NET Templating Framework Configuration"
+        vs:friendlyname="Spring.NET NVelocity Templating Framework Configuration"
         vs:ishtmlschema="false"
         vs:iscasesensitive="true"
         vs:requireattributequotes="true"
@@ -113,5 +113,5 @@
     </xsd:complexType>
 
 
-    <xsd:element name="nvelocity" type="nvelocityTemplate" />
+    <xsd:element name="engine" type="nvelocityTemplate" />
 </xsd:schema>
