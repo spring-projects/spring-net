@@ -116,13 +116,18 @@ namespace Spring.Messaging.Listener
 
         #endregion
 
+        /// <summary>
+        /// Out-of-the-box value for the default listener method: "HandleMessage"
+        /// </summary>
+        public static readonly string ORIGINAL_DEFAULT_LISTENER_METHOD = "HandleMessage";
+
         #region Fields
 
         private IApplicationContext applicationContext;
 
         private object handlerObject;
 
-        private string defaultHandlerMethod = "HandleMessage";
+        private string defaultHandlerMethod = ORIGINAL_DEFAULT_LISTENER_METHOD;
 
         private IExpression processingExpression;
 

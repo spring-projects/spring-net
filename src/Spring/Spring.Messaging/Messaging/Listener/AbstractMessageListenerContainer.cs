@@ -234,6 +234,10 @@ namespace Spring.Messaging.Listener
         {
             lock (messageQueueMonitor)
             {
+                if (MessageQueue.EnableConnectionCache == true)
+                {
+                    LOG.Info("Setting global property MessageQueue.EnableConnectionCache from true to value in order to dispose property of the queue handle");
+                }
                 MessageQueue.EnableConnectionCache = false;
                 mq.Close();
                 mq.Dispose();

@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="Messaging\Core\MessageQueueMetadataCacheTests.cs" />
     <Compile Include="Messaging\Core\ThreadingTests.cs" />
+    <Compile Include="Messaging\Listener\Adapter\MessageListenerAdapterTests.cs" />
     <Compile Include="Messaging\Listener\DistributedTxMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Listener\LoggingExceptionHandler.cs" />
     <Compile Include="Messaging\Listener\NonTransactionalMessageListenerContainerTests.cs">
