@@ -185,8 +185,10 @@ ${tool.dir}       : dir for tools
     -->
     <target name="common.run-tests">
 
-      <!-- call target="common.run-tests.ncover" / --><!-- run this target instead if you which to produce coverage information -->
+      <call target="common.run-tests.ncover" />
+      <!--
       <call target="common.run-tests.nunit" />
+      -->
 
     </target>
 
