@@ -132,14 +132,6 @@ namespace Spring.Messaging.Listener
 
         #endregion
 
-        /// <summary>
-        /// Validates the configuration of this container
-        /// The default implementation is empty. To be overridden in subclasses.
-        /// </summary>
-        protected virtual void ValidateConfiguration()
-        {
-        }
-
         #region IDisposable Members
 
         /// <summary>
@@ -151,6 +143,14 @@ namespace Spring.Messaging.Listener
         }
 
         #endregion
+
+        /// <summary>
+        /// Validates the configuration of this container
+        /// The default implementation is empty. To be overridden in subclasses.
+        /// </summary>
+        protected virtual void ValidateConfiguration()
+        {
+        }
 
         /// <summary>
         /// Initializes this container.  Calls the abstract method <see cref="DoInitialize"/> to
@@ -220,7 +220,7 @@ namespace Spring.Messaging.Listener
         /// <summary>
         /// Template method suitable for overriding that stops the container.
         /// </summary>
-        public virtual void DoStop()
+        protected virtual void DoStop()
         {
             lock (lifecycleMonitor)
             {
