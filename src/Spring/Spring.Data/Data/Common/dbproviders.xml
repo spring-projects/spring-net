@@ -345,6 +345,9 @@
         <property name="ErrorCodes.InvalidResultSetAccessCodes">
           <value>17003</value>
         </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>1</value>
+        </property>
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>17002,17447</value>
         </property>
