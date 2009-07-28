@@ -28,39 +28,33 @@ using System.Runtime.Serialization;
 namespace Spring.Dao
 {
     /// <summary> 
-    /// Exception thrown on concurrency failure. This exception should be
-    /// sublassed to indicate the type of failure - optimistic locking,
-    /// failure to acquire lock, etc.
+    /// Root of the hierarchy of data access exception that are considered transient - 
+    /// where a previously failed operation might be able to succeed when the operation
+    /// is retried without any intervention by application-level functionality.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// This exception will be thrown either by O/R mapping tools or by custom DAO
-    /// implementations.
-    /// </p>
-    /// </remarks>
     /// <author>Thomas Risberg</author>
-    /// <author>Griffin Caprio (.NET)</author>
+    /// <author>Mark Pollack (.NET)</author>
 	[Serializable]
-	public class ConcurrencyFailureException : TransientDataAccessException
+    public abstract class TransientDataAccessException : DataAccessException
 	{
 		/// <summary>
 		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.ConcurrencyFailureException"/> class.
+		/// <see cref="Spring.Dao.TransientDataAccessException"/> class.
 		/// </summary>
-		public ConcurrencyFailureException() : base("No Exception Message") {}
+		public TransientDataAccessException() : base("No Exception Message") {}
 
 		/// <summary>
 		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.ConcurrencyFailureException"/> class.
+        /// <see cref="Spring.Dao.TransientDataAccessException"/> class.
 		/// </summary>
 		/// <param name="message">
 		/// A message about the exception.
 		/// </param>
-		public ConcurrencyFailureException( string message ) : base( message ) {}
+		public TransientDataAccessException( string message ) : base( message ) {}
 
 		/// <summary>
 		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.ConcurrencyFailureException"/> class.
+		/// <see cref="Spring.Dao.TransientDataAccessException"/> class.
 		/// </summary>
 		/// <param name="message">
 		/// A message about the exception.
@@ -68,12 +62,12 @@ namespace Spring.Dao
 		/// <param name="rootCause">
 		/// The root exception (from the underlying data access API, such as ADO.NET).
 		/// </param>
-		public ConcurrencyFailureException( string message, Exception rootCause)
+		public TransientDataAccessException( string message, Exception rootCause)
 			: base( message , rootCause ) {}
 
 		/// <summary>
 		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.ConcurrencyFailureException"/> class.
+        /// <see cref="Spring.Dao.TransientDataAccessException"/> class.
 		/// </summary>
 		/// <param name="info">
 		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
@@ -83,7 +77,7 @@ namespace Spring.Dao
 		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
 		/// that contains contextual information about the source or destination.
 		/// </param>
-        protected ConcurrencyFailureException(
+        protected TransientDataAccessException(
 			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
 	}
 }

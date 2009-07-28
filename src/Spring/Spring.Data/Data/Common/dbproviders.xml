@@ -837,14 +837,20 @@
         <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
-        <property name="ErrorCodes.badSqlGrammarCodes">
+        <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>-803</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
         </property>
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.DataIntegrityViolationCodes">
-          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
           <value>-911,-913</value>
@@ -879,14 +885,20 @@
         <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
-        <property name="ErrorCodes.badSqlGrammarCodes">
+        <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>-803</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
         </property>
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.DataIntegrityViolationCodes">
-          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
           <value>-911,-913</value>
@@ -923,14 +935,21 @@
         <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
-        <property name="ErrorCodes.badSqlGrammarCodes">
+
+        <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>-803</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
         </property>
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.DataIntegrityViolationCodes">
-          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
           <value>-911,-913</value>
@@ -964,15 +983,22 @@
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError"/>
         <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
-        
-        <property name="ErrorCodes.badSqlGrammarCodes">
+
+
+        <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>-803</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
         </property>
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.DataIntegrityViolationCodes">
-          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
           <value>-911,-913</value>
@@ -1010,14 +1036,21 @@
         <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
-        <property name="ErrorCodes.badSqlGrammarCodes">
+
+        <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>-803</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
         </property>
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.DataIntegrityViolationCodes">
-          <value>-407,-530,-531,-532,-543,-544,-545,-603,-667,-803</value>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
           <value>-911,-913</value>
@@ -1241,6 +1274,9 @@
         <property name="ErrorCodes.DataIntegrityViolationCodes">
           <value>423,511,515,530,547,2601,2615,2714</value>
         </property>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>921,1105</value>
+        </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
           <value>1205</value>
         </property>
@@ -1275,6 +1311,12 @@
         </property>
         <property name="ErrorCodes.DataIntegrityViolationCodes">
           <value>423,511,515,530,547,2601,2615,2714</value>
+        </property>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>921,1105</value>
+        </property>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>921,1105</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
           <value>1205</value>
@@ -1312,6 +1354,9 @@
         </property>
         <property name="ErrorCodes.DataIntegrityViolationCodes">
           <value>423,511,515,530,547,2601,2615,2714</value>
+        </property>
+        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+          <value>921,1105</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
           <value>1205</value>

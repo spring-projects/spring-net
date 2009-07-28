@@ -241,6 +241,11 @@ namespace Spring.Data.Support
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new DataAccessResourceFailureException(BuildMessage(task, sql, exception), exception);
                     }
+                    else if (Array.IndexOf(errorCodes.TransientAccessResourceFailureCodes, errorCode) >= 0)
+                    {
+                        LogTranslation(task, sql, errorCode, exception, false);
+                        return new TransientDataAccessResourceException(BuildMessage(task, sql, exception), exception);
+                    }
                     else if (Array.IndexOf(errorCodes.PermissionDeniedCodes, errorCode) >= 0) 
                     {
                         LogTranslation(task, sql, errorCode, exception, false);

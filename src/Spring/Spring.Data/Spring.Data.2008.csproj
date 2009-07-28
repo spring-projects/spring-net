@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -104,6 +104,8 @@
     <Compile Include="Dao\CannotSerializeTransactionException.cs" />
     <Compile Include="Dao\CleanupFailureDataAccessException.cs" />
     <Compile Include="Dao\ConcurrencyFailureException.cs" />
+    <Compile Include="Dao\TransientDataAccessResourceException.cs" />
+    <Compile Include="Dao\TransientDataAccessException.cs" />
     <Compile Include="Dao\PessimisticLockingFailureException.cs" />
     <Compile Include="Dao\DataAccessException.cs" />
     <Compile Include="Dao\DataAccessResourceFailureException.cs" />

@@ -45,19 +45,21 @@ namespace Spring.Data.Common
 
         private string[] invalidResultSetAccessCodes = new String[0];
 
-        private string[] dataAccessResourceFailureCodes = new String[0];
+        private string[] duplicateKeyCodes = new string[0];
+
+        private string[] dataIntegrityViolationCodes = new String[0];
 
         private string[] permissionDeniedCodes = new String[0];
 
-        private string[] dataIntegrityViolationCodes = new String[0];
-	
+        private string[] dataAccessResourceFailureCodes = new String[0];
+
+        private string[] transientAccessResourceFailureCodes = new String[0];
+
         private string[] cannotAcquireLockCodes = new String[0];
 
         private string[] deadlockLoserCodes = new String[0];
 
         private string[] cannotSerializeTransactionCodes = new String[0];
-
-        private string[] duplicateKeyCodes = new string[0];
 
         // CustomErrorCodesTranslation[] customTranslations;
         #endregion
@@ -133,6 +135,12 @@ namespace Spring.Data.Common
         {
             get { return cannotAcquireLockCodes; }
             set { cannotAcquireLockCodes = value; }
+        }
+
+        public string[] TransientAccessResourceFailureCodes
+        {
+            get { return transientAccessResourceFailureCodes; }
+            set { transientAccessResourceFailureCodes = value; }
         }
 
         public string[] DeadlockLoserCodes
