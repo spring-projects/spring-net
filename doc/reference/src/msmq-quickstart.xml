@@ -55,9 +55,18 @@
     Messages sent from the server to the client will use the transactional
     queue <literal>.\Private$\response.joe.txqueue</literal>. The queue for
     messages that cannot be processed, so called 'poison messages' will be
-    sent to the queue <literal>.\Private$\dead.queue</literal>. You can create
-    these queues using the computer management administration console. Private
-    queues are used to simplify the application setup requirements.</para>
+    sent to the queue <literal>.\Private$\dead.txqueue</literal>. You can
+    create these queues using the computer management administration console.
+    Private queues are used to simplify the application setup
+    requirements.</para>
+
+    <note>
+      <para>You must create the queues mentioned previously using standard
+      Windows Computer Management console to manage MSMQ. This <link
+      ns6:href="http://www.worldofasp.net/tut/MSMQ/Basic_Introduction_about_MSMQ_in_NET_Framework_98.aspx">article</link>
+      covers the basics of creating the queus in the management console.
+      </para>
+    </note>
 
     <para>Since MSMQ does not natively support the publish-subscribe messaging
     style as in other messaging systems, Apache MQ, IBM Websphere MQ, TIBCO

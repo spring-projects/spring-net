@@ -562,8 +562,9 @@
       business object that is being sent or received via messaging and not be
       concerned with the details of how it is represented as a JMS message.
       There is also an <literal>XmlMessageConverter</literal> that converts
-      objects to an XML string and vice-versa for sending via a
-      TextMessage.</para>
+      objects to an XML string and vice-versa for sending via a TextMessage.
+      Please refer to the API documentation and example application for more
+      information on configuring an XmlMessageConverter.</para>
 
       <para>The family of <literal>ConvertAndSend</literal> messages are
       similar to that of the Send method with the additional argument of type

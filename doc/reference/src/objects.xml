@@ -402,7 +402,7 @@
 
         <para>It can be useful to have object definitions span multiple XML
         files. Often each individual XML configuration file represents a
-        logical layer or module in your architecture. </para>
+        logical layer or module in your architecture.</para>
 
         <para>You can use the <classname>IApplicationContext</classname>
         constructor to load object definitions from all these XML fragments.
@@ -611,7 +611,7 @@ IList userList = service.GetUserNames();
       <literal>RegisterSingleton(..)</literal> and
       <literal>RegisterObjectDefinition(..)</literal>. However, typical
       applications work soley with objects defined through metadata object
-      definitions. </para>
+      definitions.</para>
 
       <sect3 xml:id="objects-objectname">
         <title>Naming objects</title>
@@ -1822,7 +1822,7 @@ public class MixedIocObject
 
         <para>An <literal>&lt;object/&gt;</literal> element inside the
         &lt;<literal>constructor-arg/&gt; or &lt;property/&gt;</literal>
-        element defines so called inner object. </para>
+        element defines so called inner object.</para>
 
         <para><programlisting language="myxml">&lt;object id="outer" type="..."&gt;
 
@@ -2769,7 +2769,7 @@ namespace Fiona.Apple
         described in the preceding section. The Spring framework implements
         this method injection by a dynamically generating a subclass
         overriding the method using the classes in the
-        <literal>System.Reflection.Emit</literal> namespace. </para>
+        <literal>System.Reflection.Emit</literal> namespace.</para>
 
         <note>
           <para>You can read more about the motivation for Method Injection in
@@ -3288,24 +3288,26 @@ public class MyClassFactory
   <sect1 xml:id="objects-factory-scopes">
     <title>Object Scopes</title>
 
-    <para>When you create a object definition what you are actually creating
-    is a recipe for creating actual instances of the class defined by that
-    object definition. The idea that a object definition is a recipe is
-    important, because it means that, just like a class, you can potentially
-    have many object instances created from a single recipe.</para>
+    <para>When you create an object definition, you create a
+    <emphasis>recipe</emphasis> for creating actual instances of the class
+    defined by that object definition. The idea that an object definition is a
+    recipe is important, because it means that, as with a class, you can
+    create many object instances from a single recipe.</para>
 
     <para>You can control not only the various dependencies and configuration
     values that are to be plugged into an object that is created from a
-    particular object definition, but also the scope of the objects created
-    from a particular object definition. This approach is very powerful and
-    gives you the flexibility to choose the scope of the objects you create
-    through configuration instead of having to 'bake in' the scope of an
-    object at the .NET class level. Objects can be defined to be deployed in
-    one of a number of scopes: out of the box, the Spring Framework supports
-    exactly five scopes (of which three are available only if you are using a
-    web-aware ApplicationContext).</para>
+    particular object definition, but also the <emphasis>scope</emphasis> of
+    the objects created from a particular object definition. This approach
+    powerful and flexible in that you can <emphasis>choose</emphasis> the
+    scope of the objects you create through configuration instead of having to
+    bake in the scope of an object at the .NET class level. Ob jects can be
+    defined to be deployed in one of a number of scopes: out of the box, the
+    Spring Framework supports five scopes, three of which are available only
+    if you use a web-aware
+    <interfacename>IApplicationContext</interfacename>.</para>
 
-    <para>The scopes supported out of the box are listed below:</para>
+    <para>The following scopes supported. Support for user defined custom
+    scopes is planned for Spring .NET 2.0.</para>
 
     <table frame="all">
       <title>Object Scopes</title>
@@ -3342,9 +3344,9 @@ public class MyClassFactory
             <entry>request</entry>
 
             <entry>Scopes a single object definition to the lifecycle of a
-            single HTTP request; that is each and every HTTP request will have
-            its own instance of an object created off the back of a single
-            object definition. Only valid in the context of a web-aware Spring
+            single HTTP request; that is, each and every HTTP request has its
+            own instance of an object created off the back of a single object
+            definition. Only valid in the context of a web-aware Spring
             ApplicationContext.</entry>
           </row>
 
@@ -3370,34 +3372,35 @@ public class MyClassFactory
     <sect2 xml:id="objects-factory-scopes-singleton">
       <title>The singleton scope</title>
 
-      <para>When an object is a singleton, only one shared instance of the
-      object will be managed, and all requests for objects with an id or ids
-      matching that object definition will result in that one specific object
+      <para>Singleton scoped objects have only one shared instance of an
+      object managed by the container. All request for objects with an id or
+      ids matching that object definition result in that one specific object
       instance being returned by the Spring container.</para>
 
       <para>To put it another way, when you define an object definition and it
-      is scoped as a singleton, then the Spring IoC container will create
-      exactly one instance of the object defined by that object definition.
-      This single instance will be stored in a cache of such singleton object,
-      and all subsequent requests and references for that named object will
-      result in the cached object being returned.</para>
+      is scoped as a singleton, the Spring IoC container creates exactly one
+      instance of the object defined by that object definition. This single
+      instance is stored in a cache of such singleton object, and all
+      subsequent requests and references for that named object return the
+      cached object.</para>
 
-      <para>Please be aware that Spring's concept of a singleton object is
-      quite different from the Singleton pattern as defined in the seminal
-      Gang of Four (GoF) patterns book. The GoF Singleton hard codes the scope
-      of an object such that one and only one instance of a particular class
-      will ever be created per ApplicationDomain. The scope of the Spring
-      singleton is best described as per container and per object. This means
-      that if you define one object for a particular class in a single Spring
-      container, then the Spring container will create one and only one
-      instance of the class defined by that object definition. The singleton
-      scope is the default scope in Spring. To define an object as a singleton
-      in XML, you would write configuration like so:</para>
+      <para>Spring's concept of a singleton differns from the Singleton
+      pattern as defined in the Gang of Four (GoF) patterns book. The GoF
+      Singleton hard-codes the scope of an object such that one <emphasis>and
+      only one</emphasis> instance of a particular class is created per
+      ApplicationDomain. The scope of the Spring singleton is best described
+      as <emphasis>per container and per object</emphasis>. This means that if
+      you define one object for a particular class in a single Spring
+      container, then the Spring container creates one <emphasis>and only
+      one</emphasis> instance of the class defined by that object definition.
+      The singleton scope is the default scope in Spring. To define an object
+      as a singleton in XML, you would write, for example:</para>
 
       <programlisting language="myxml">&lt;object id="accountService" type="MyApp.DefaultAccountService, MyApp"/&gt;
 
 &lt;!-- the following is equivalent, though redundant (singleton scope is the default) --&gt;
 &lt;object id="accountService" type="MyApp.DefaultAccountService, MyApp" singleton="true"/&gt;
+
 
 </programlisting>
     </sect2>
@@ -3406,74 +3409,85 @@ public class MyClassFactory
       <title>The prototype scope</title>
 
       <para>The non-singleton, prototype scope of object deployment results in
-      the creation of a new object instance every time a request for that
-      specific object is made (that is, it is injected into another object or
-      it is requested via a programmatic GetObject() method call on the
-      container). As a rule of thumb, you should use the prototype scope for
-      all objects that are stateful, while the singleton scope should be used
-      for stateless objects.</para>
+      the creation of a <emphasis>new object instance</emphasis> every time a
+      request for that specific object is made. That is, the object is
+      injected into another object or you request through a
+      <literal>GetObject()</literal> method call on the container. As a rule
+      use the prototype scope for all objects that are stateful and the
+      singleton scope for stateless objects.</para>
 
-      <para>To define an object as a prototype in XML, you would write
-      configuration like so:</para>
+      <para>The following examples defines an object as a prototype in
+      XML:</para>
 
-      <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary" singleton="false"/&gt;</programlisting>
+      <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary" scope="prototype"/&gt;</programlisting>
 
-      <para>There is one quite important thing to be aware of when deploying
-      an object in the prototype scope, in that the lifecycle of the object
-      changes slightly. Spring does not manage the complete lifecycle of a
-      prototype object: the container instantiates, configures, decorates and
-      otherwise assembles a prototype object, hands it to the client and then
-      has no further knowledge of that prototype instance. This means that
-      while <emphasis>initialization</emphasis> lifecycle callback methods
-      will be called on all objects regardless of scope, in the case of
-      prototypes, any configured <emphasis>destruction</emphasis> lifecycle
-      callbacks will <emphasis>not</emphasis> be called. It is the
-      responsibility of the client code to clean up prototype scoped objects
-      and release any expensive resources that the prototype object(s) are
-      holding onto. (One possible way to get the Spring container to release
-      resources used by singleton-scoped objects is through the use of a
-      custom object post processor which would hold a reference to the objects
-      that need to be cleaned up.)</para>
+      <note>
+        <para>The <literal>&lt;singleton/&gt;</literal> attribute was
+        introduced Spring 1.0 as there were only two types of scopes,
+        singleton and prototype. The element singleton=true refers to
+        singleton scope and singleton=false refers to prototype scope. In
+        Spring 1.1 the additional web scopes were introduced along with the
+        new elment 'scope'. The scope element is the preferred element to
+        use.</para>
+      </note>
 
-      <para>In some respects, you can think of the Spring containers role when
-      talking about a prototype-scoped object as somewhat of a replacement for
-      the C# 'new' operator. All lifecycle aspects past that point have to be
-      handled by the client. (The lifecycle of a object in the Spring
-      container is further described in the section entitled “Lifecycle
-      callbacks”.)</para>
+      <para>In contrast to the other scopes, Spring does not manage the
+      complete lifecycle of a prototype object: the container instantiates,
+      configures, decorates and otherwise assembles a prototype object, hands
+      it to the client, with no further record of that prototype instance.
+      Thus, although <emphasis>initialization</emphasis> lifecycle callback
+      methods are called on all objects regardless of scope, in the case of
+      prototypes, configured <emphasis>destruction</emphasis> lifecycle
+      callbacks are <emphasis>not</emphasis> called. The client code must
+      clean up prototype-scoped objects and release any expensive resources
+      that the prototype object(s) are holding. To get the Spring container to
+      release resources held by prototype-scoped objects, try using a custom
+      <link linkend="objects-factory-customizing">object post processor</link>
+      which would hold a reference to the objects that need to be cleaned
+      up.</para>
+
+      <para>In some respects, the Spring container's role in regard to a
+      prototype-scoped object is a replacement for the C# 'new' operator. All
+      lifecycle management past that point must be handled by the client. (For
+      details on the lifecycle of an object in the Spring container, see <xref
+      linkend="objects-factory-lifecycle" />.</para>
     </sect2>
 
     <sect2 xml:id="objects-factory-scopes-sing-prot-interaction">
-      <title>Singleton objecgts with prototype-object dependencies</title>
+      <title>Singleton objects with prototype-object dependencies</title>
 
-      <para>When using singleton-scoped objects that have dependencies on
-      objects that are scoped as prototypes, please be aware that dependencies
-      are resolved at instantiation time. This means that if you dependency
-      inject a prototype-scoped object into a singleton-scoped object, a brand
-      new prototype object will be instantiated and then dependency injected
-      into the singleton object... but that is all. That exact same prototype
-      instance will be the sole instance that is ever supplied to the
-      singleton-scoped object, which is fine if that is what you want.</para>
+      <para>When you use singleton-scoped objects with dependencies on
+      prototype objects, be aware that <emphasis>dependencies are resolved at
+      instantiation time</emphasis>. Thus if you dependency-inject a
+      prototype-scoped objects into a singleton-scoped object, a new prototype
+      bean is instantiated and then dependency-injected into the singleton
+      object. The prototype instance is the sole instance that is ever
+      supplied to the singleton-scoped object.</para>
 
-      <para>However, sometimes what you actually want is for the
-      singleton-scoped object to be able to acquire a brand new instance of
-      the prototype-scoped object again and again and again at runtime. In
-      that case it is no use just dependency injecting a prototype-scoped
-      object into your singleton object, because as explained above, that only
-      happens once when the Spring container is instantiating the singleton
-      object and resolving and injecting its dependencies. If you are in the
-      scenario where you need to get a brand new instance of a (prototype)
-      object again and again and again at runtime, you are referred to the
-      section entitled “Method Injection”.</para>
+      <para>However, suppose you want the singleton-scoped object to acquire a
+      new instance of the prototype-scoped object repeatedly at runtime. You
+      cannot dependency-inject a prototype-scoped object into your singleton
+      object, because that injection occurs only once, when the Spring
+      container is instantiating the singleton object and resolving and
+      injecting its dependencies. If you need a new instance of a prototype
+      object at runtime more than once, see <xref
+      linkend="objects-method-injection" />.</para>
     </sect2>
 
     <sect2>
-      <title>The other scopes</title>
+      <title>Request, session and web application scopes</title>
 
-      <para>The other scopes, namely request, session, and application are for
-      use only in web-based applications. Please refer to the <link
-      linkend="web-objectscope">web documentation on object scopes</link> for
-      more information.</para>
+      <para>The <link linkend="???">request</link>, <link
+      linkend="???">session</link> and <link linkend="???">application</link>
+      scopes are <emphasis>only</emphasis> available if you use a web-aware
+      Spring <interfacename>IApplicationContext</interfacename>
+      implementation, such as <classname>WebApplicationContext</classname>. If
+      you use these scopes with regular Spring IoC containers such as the
+      <classname>XmlApplicationContext</classname>, you will get an exception
+      complaining about an unknown object scope.</para>
+
+      <para>Please refer to the <link linkend="web-objectscope">web
+      documentation on object scopes</link> for more information.</para>
     </sect2>
   </sect1>
 
@@ -3777,37 +3791,37 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
     <sect2 xml:id="objects-factory-lifecycle">
       <title>Lifecycle interfaces</title>
 
-      <para>Spring.NET uses several marker interfaces to change the behaviour
-      of your object in the container, namely the Spring.NET specific
-      <literal>IInitializingObject</literal> interface and the standard
-      <literal>System.IDisposable</literal> interfaces. Implementing either of
-      the aforementioned interfaces will result in the container calling the
+      <para>To interact with the container's management of the object
+      lifecycle, you can implement the Spring
+      <literal>InitializingObject</literal> and standard
+      <literal>System.IDisposable</literal> interfaces. The container calls
       <literal>AfterPropertiesSet()</literal> method for the former and the
       <literal>Dispose()</literal> method for the latter, thus allowing you to
-      do things upon the initialization and destruction of your
-      objects.</para>
+      do things upon the initialization and destruction of your objects. You
+      can also achieve the same integration with the container without
+      coupling your objects to Spring interfaces though the use of
+      <literal>init-method</literal> and <literal>destroy-method</literal>
+      object definition metadata.</para>
 
       <para>Internally, Spring.NET uses implementations of the
-      <literal>IObjectPostProcessor</literal> interface to process any marker
+      <literal>IObjectPostProcessor</literal> interface to process any call
       interfaces it can find and call the appropriate methods. If you need
-      custom features or other lifecycle behavior Spring.NET doesn't offer
+      custom features or other lifecycle behavior Spring.NET does not offer
       out-of-the-box, you can implement an
-      <literal>IObjectPostProcessor</literal> yourself. More information about
-      this can be found in <xref
-      linkend="objects-factory-customizing" />.</para>
+      <literal>IObjectPostProcessor</literal> yourself. For more information
+      see<xref linkend="objects-factory-customizing" />.</para>
 
-      <para>All the different lifecycle marker interfaces are described
-      below.</para>
+      <para></para>
 
       <sect3 xml:id="objects-factory-lifecycle-initializingobject">
         <title>IInitializingObject / <literal>init-method</literal></title>
 
         <para>The
         <literal>Spring.Objects.Factory.IInitializingObject</literal>
-        interface gives you the ability to perform initialization work after
-        all the necessary properties on an object are set by the container.
-        The <literal>IInitializingObject</literal> interface specifies exactly
-        one method: <itemizedlist spacing="compact">
+        interface allows an object to perform initialization work after all
+        the necessary properties on an object are set by the container. The
+        <literal>IInitializingObject</literal> interface specifies a single
+        method: <itemizedlist spacing="compact">
             <listitem>
               <para><methodname>void AfterPropertiesSet()</methodname>: called
               after all properties have been set by the container. This method
@@ -3819,13 +3833,13 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
             </listitem>
           </itemizedlist></para>
 
-        <note>
-          <para>Generally, the use of the
-          <literal>IInitializingObject</literal> can be avoided. The
-          <literal>Spring.Core</literal> library provides support for a
-          generic init-method, given to the object definition in the object
-          configuration store (be it XML, or a database, etc).</para>
-        </note>
+        <para>It is recommended that you do not use the
+        <literal>IInitializingObject</literal> interface because it
+        unnecessarily coupules the code to Spring. Alternatively, specify an
+        POJO initialization method. In the case of XML-based configuration
+        metadata, you use the <literal>init-method</literal> attribute to
+        specify the name of the method that has a void no-argument signature.
+        For example, the following definition:</para>
 
         <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" init-method="init"/&gt;
 [C#]
@@ -3835,7 +3849,8 @@ public class ExampleObject
     {
         // do some initialization work
     }
-}</programlisting> Is exactly the same as... <programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.AnotherExampleObject"/&gt;
+}</programlisting>...is exactly the same as... <programlisting
+        language="myxml">&lt;object id="exampleInitObject" type="Examples.AnotherExampleObject"/&gt;
 [C#]
 public class AnotherExampleObject : IInitializingObject
 {
@@ -3843,29 +3858,16 @@ public class AnotherExampleObject : IInitializingObject
     {
         // do some initialization work
     }
-}</programlisting> but does not couple the code to Spring.NET.</para>
-
-        <note>
-          <para>When deploying an object in <literal>prototype</literal> mode,
-          the lifecycle of the object changes slightly. By definition,
-          Spring.NET cannot manage the complete lifecycle of a non-singleton /
-          <literal>prototype</literal> object, since after it is created, it
-          is given to the client and the container no longer keeps a reference
-          to the object. You can think of Spring.NET's role when talking about
-          a non-singleton ( <literal>prototype</literal> ) object as a
-          replacement for the <literal>new</literal> operator. Any lifecycle
-          aspects past that point have to be handled by the client.</para>
-        </note>
+}</programlisting>... but does not couple the code to Spring.NET.</para>
       </sect3>
 
       <sect3 xml:id="objects-factory-lifecycle-disposableobject">
         <title>IDisposable / <literal>destroy-method</literal></title>
 
-        <para>The <literal>System.IDisposable</literal> interface provides you
-        with the ability to get a callback when an
-        <literal>IObjectFactory</literal> is destroyed. The
-        <literal>IDisposable</literal> interface specifies exactly one method:
-        <itemizedlist spacing="compact">
+        <para>Implementing the <literal>System.IDisposable</literal> interface
+        allows an object to get a callback callback when the container
+        containing it is destroyed. The <literal>IDisposable</literal>
+        interface specifies a single method: <itemizedlist spacing="compact">
             <listitem>
               <para><literal>void Dispose()</literal>: and is called on
               destruction of the container. This allows you to release any
@@ -3873,18 +3875,19 @@ public class AnotherExampleObject : IInitializingObject
               connections). You can throw <emphasis>any</emphasis>
               <literal>Exception</literal> here... however, any such
               <literal>Exception</literal> will not stop the destruction of
-              the container - it will only get logged.</para>
+              the container - it will only get logged.v</para>
             </listitem>
           </itemizedlist></para>
 
-        <note>
-          <para><emphasis>Note: If you choose you can avoid having your class
-          implement <literal>IDisposable</literal> since the
-          <literal>Spring.Core</literal> library provides support for a
-          generic destroy-method, given to the object definition in the object
-          configuration store (be it XML, or a database,
-          etc).</emphasis></para>
-        </note>
+        <para>Since the <classname>IDisposable</classname> interface resides
+        in the core .NET library, it does not couple your class to Spring as
+        in the case with the <classname>IInitializingObject</classname>
+        interface. However, you may also specify a destruction method that is
+        not tied to the <classname>IDisposable</classname> interface. In the
+        case of XML-based configuration metadata, you use the
+        <literal>destroy-method</literal> attribute to specify the name of the
+        method that has a void no-argument signature. For example, the
+        following definition:</para>
 
         <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" destroy-method="cleanup"/&gt;
 [C#]
@@ -3907,48 +3910,53 @@ public class AnotherExampleObject : IDisposable
     </sect2>
 
     <sect2 xml:id="objects-factory-aware">
-      <title>Knowing who you are</title>
+      <title>IApplicationContextAware and IObjectNameAware</title>
 
-      <sect3 xml:id="objects-factory-aware-objectfactoryaware">
-        <title>IObjectFactoryAware</title>
+      <para>When an <classname>IApplicationContext</classname> creates a class
+      that implements the <classname>IApplicationContextAware</classname>
+      interface, the class is provided with a reference to that
+      <classname>IApplicationContext</classname>.</para>
 
-        <para>A class which implements the
-        <literal>Spring.Objects.Factory.IObjectFactoryAware</literal>
-        interface is provided with a reference to the
-        <literal>IObjectFactory</literal> that created it. The interface
-        specifies one (write-only) property: <itemizedlist spacing="compact">
-            <listitem>
-              <para><literal>IObjectFactory ObjectFactory</literal>: the
-              property that will be set <emphasis>after the initialization
-              methods</emphasis> (<literal>AfterPropertiesSet</literal> and
-              the init-method).</para>
-            </listitem>
-          </itemizedlist></para>
+      <programlisting>public interface IApplicationContextAware {    
+    IApplicationContext ApplicationContext { 
+      set; 
+    }
+}</programlisting>
 
-        <para>This allows objects to manipulate the
-        <literal>IObjectFactory</literal> that created them Programatically,
-        through the <literal>IObjectFactory</literal> interface, or by casting
-        the reference to a known subclass of this which exposes additional
-        functionality. Primarily this would consist of programmatic retrieval
-        of other objects. While there are cases when this capability is
-        useful, it should generally be avoided, since it couples the code to
-        Spring.NET, and does not follow the Inversion of Control style, where
-        collaborators are provided to objects as properties.</para>
-      </sect3>
+      <para>Thus objects can manipulate programmatically the
+      <classname>IApplicationContext</classname> that created them, through
+      the <classname>IApplicationContext</classname> interface, or by casting
+      the reference to a known subclass of this interface, such as
+      <classname>IConfigurableApplicationContext</classname>, which exposes
+      additional functionality. One use would be the programmatic retrieval of
+      other objects. Sometimes this capability is useful; however, in general
+      you should avoid it, because it couples the code to Spring and does not
+      follow the Inversion of Control style, where collaborators are provided
+      to objects as properties. Other methods of the
+      <classname>IApplicationContext</classname> provide access to file
+      resources, publishing application events, and accessing a
+      <classname>IMessageSource</classname>. These additional features are
+      described in <xref linkend="context-introduction" /></para>
 
       <sect3 xml:id="objects-factory-aware-objectnameaware">
         <title>IObjectNameAware</title>
 
-        <para>The <literal>Spring.Objects.Factory.IObjectNameAware</literal>
-        interface gives you the ability to let the container set the name of
-        the object definition on the object instance itself. In those cases
-        where your object needs to know what its name is, implement this
-        interface. <itemizedlist spacing="compact">
-            <listitem>
-              <para><literal>string ObjectName</literal>: the property that
-              will be set to let the object know what its name is.</para>
-            </listitem>
-          </itemizedlist></para>
+        <para>When an <classname>IApplicationContext</classname> creates a
+        class that implements the
+        <literal>Spring.Objects.Factory.IObjectNameAware</literal> interface,
+        the class is provided with a reference to the name defined in its
+        associated object definition.</para>
+
+        <programlisting>public interface IObjectNameAware {
+  string ObjectName {
+     set; 
+  }
+}</programlisting>
+
+        <para>The callback is invoked after population of normal object
+        properties but before an initialization callback such as
+        <classname>IInitializingObject</classname> 's AfterPropertiesSet
+        method or a custom initalization method is invoked.</para>
       </sect3>
     </sect2>
   </sect1>
@@ -3956,26 +3964,25 @@ public class AnotherExampleObject : IDisposable
   <sect1 xml:id="objects-childobjects">
     <title>Object definition inheritance</title>
 
-    <para>An object definition potentially contains a large amount of
-    configuration information, including container specific information (i.e.
-    initialization method, static factory method name, etc.) and constructor
-    arguments and property values. A child object definition is an object
-    definition that inherits configuration data from a parent definition. It
-    is then able to override some values, or add others, as needed. Using
-    parent and child object definitions can potentially save a lot of typing.
-    Effectively, this is a form of templating.</para>
+    <para>An object definition can contain a lot of configuration information,
+    including constructor arguments, property values, and container-specific
+    information such as initialization method, static factory method name, and
+    so on. A child object definition inherits configuration data from a parent
+    definition. The child definition can override some values, or add others,
+    as needed. Using parent and child object definitions can save a lot of
+    typing. Effectively, this is a form of templating.</para>
 
-    <para>When working with an <literal>IObjectFactory</literal>
-    Programatically, child object definitions are represented by the
-    <literal>ChildObjectDefinition</literal> class. Most users will never work
+    <para>If you work with an IApplicationContext interface programmatically,
+    child object definitions are represented by the
+    <literal>ChildObjectDefinition</literal> class. Most users do not work
     with them on this level, instead configuring object definitions
-    declaratively in something like the <literal>XmlObjectFactory</literal>.
-    In an <literal>XmlObjectFactory</literal> object definition, a child
-    object definition is indicated simply by using the parent attribute,
-    specifying the parent object definition as the value of this
+    declaratively in something like the
+    <literal>XmlApplicationContext.</literal> When you use XML-based
+    configuration metadata, you indicate a child object using the parent
+    attribute, specifying the parent object definition as the value of this
     attribute.</para>
 
-    <para><programlisting language="myxml">&lt;object id="inheritedTestObject" type="Spring.Objects.TestObject, Spring.Core.Tests"&gt;
+    <para><programlisting language="myxml">&lt;object id="inheritedTestObject" type="Spring.Objects.TestObject, Spring.Core.Tests" abstract="true"&gt;
   &lt;property name="name" value="parent"/&gt;
   &lt;property name="age" value="1"/&gt;
 &lt;/object&gt;
@@ -3985,26 +3992,27 @@ public class AnotherExampleObject : IDisposable
   &lt;!-- age will inherit value of 1 from parent --&gt;
 &lt;/object&gt;</programlisting></para>
 
-    <para>A child object definition will use the object class from the parent
+    <para>A child object definition uses the object class from the parent
     definition if none is specified, but can also override it. In the latter
-    case, the child object class must be compatible with the parent, i.e. it
-    must accept the parent's property values.</para>
+    case, the child object class must be compatible with the parent, that is,
+    it must accept the parent's property values.</para>
 
-    <para>A child object definition will inherit constructor argument values,
+    <para>A child object definition inherits constructor argument values,
     property values and method overrides from the parent, with the option to
-    add new values. If init method, destroy method and/or static factory
-    method are specified, they will override the corresponding parent
+    add new values. Any initialization method, destroy method and/or static
+    factory methods that you specify will override the corresponding parent
     settings.</para>
 
-    <para>The remaining settings will always be taken from the child
+    <para>The remaining settings are always be taken from the child
     definition: <literal>depends on</literal>, <literal>autowire
     mode</literal>, <literal>dependency check</literal>,
     <literal>singleton</literal>, <literal>lazy init</literal>.</para>
 
-    <para>In the case where the parent definition does not specify a
-    class...</para>
-
-    <para><programlisting language="myxml">&lt;object id="inheritedTestObjectWithoutClass" abstract="true"&gt;
+    <para>The preceding example explicitly marks the parent object definition
+    as abstract using the <literal>abstract</literal> attribute. If the parent
+    definition does not specify a class, explicitly marking the parent object
+    definition as abstract is required, as follows:<programlisting
+    language="myxml">&lt;object id="inheritedTestObjectWithoutClass" abstract="true"&gt;
   &lt;property name="name" value="parent"/&gt;
   &lt;property name="age" value="1"/&gt;
 &lt;/object&gt;
@@ -4014,38 +4022,39 @@ public class AnotherExampleObject : IDisposable
   &lt;!-- age will inherit value of 1 from parent --&gt;
 &lt;/object&gt;</programlisting></para>
 
-    <para>... the parent object cannot be instantiated on its own since it
+    <para>The parent object cannot be instantiated on its own since it
     incomplete, and it is also explicitly marked as abstract. When a
-    definition is defined to be abstract like this, it is usable only as a
-    pure template object definition that will serve as a parent definition for
-    child definitions. Trying to use such an abstract parent object on its own
-    (by referring to it as a ref property of another object, or doing an
-    explicit <methodname>GetObject()</methodname> with the parent object id),
-    will result in an error. The container's internal
+    definition is abstract like this, it is usable only as a pure template
+    object definition that serves as a parent definition for child
+    definitions. Trying to use such an abstract parent object on its own, by
+    referring to it as a ref property of another object, or doing an explicit
+    <methodname>GetObject()</methodname> with the parent object id, returns an
+    error. The container's internal
     <methodname>PreInstantiateSingletons</methodname> method will completely
     ignore object definitions that are considered abstract.</para>
 
     <note>
-      <para>Application contexts (but not simple object factories) will by
-      default pre-instantiate all singletons. Therefore it is important (at
-      least for singleton objects) that if you have a (parent) object
-      definition which you intend to use only as a template, and this
-      definition specifies a class, you must make sure to set the
-      <emphasis>abstract</emphasis> attribute to <emphasis>true</emphasis> ,
-      otherwise the application context will actually (attempt to)
-      pre-instantiate the abstract object.</para>
+      <para>Application contexts pre-instantiate all singletons by default.
+      Therefore it is important (at least for singleton objects) that if you
+      have a (parent) object definition which you intend to use only as a
+      template, and this definition specifies a class, you must make sure to
+      set the <emphasis>abstract</emphasis> attribute to
+      <emphasis>true</emphasis> , otherwise the application context will
+      actually (attempt to) pre-instantiate the abstract object.</para>
     </note>
   </sect1>
 
   <sect1 xml:id="objects-factory-extension">
-    <title>Interacting with the container</title>
+    <title>Container extension points</title>
 
     <para>The Spring container is essentially nothing more than an advanced
-    factory capable of maintaining a registry of different objects and their
-    dependencies. The <literal>IObjectFactory</literal> enables you to read
-    object definitions and access them using the object factory. When using
-    just the <literal>IObjectFactory</literal> you would create an instance of
-    one and then read in some object definitions in the XML format as follows:
+    factory capable of maintaining a registry of different</para>
+
+    <para>objects and their dependencies. The
+    <literal>IObjectFactory</literal> enables you to read object definitions
+    and access them using the object factory. When using just the
+    <literal>IObjectFactory</literal> you would create an instance of one and
+    then read in some object definitions in the XML format as follows:
     <programlisting language="csharp">[C#]
 IResource input = new FileSystemResource ("objects.xml");
 XmlObjectFactory factory = new XmlObjectFactory(input);</programlisting></para>
@@ -5869,11 +5878,12 @@ ctx.Subscribe( subscriber, typeof(MyEventPublisher) );</programlisting> This
       <literal>IApplicationContext</literal></title>
 
       <para>Event handling in the <literal>IApplicationContext</literal> is
-      provided through the <literal>IApplicationListener</literal> interface
-      that contains the single method <literal>void OnApplicationEvent( object
-      source, ApplicationEventArgs applicationEventArgs )</literal>. Classes
-      that implement the <literal>IApplicationListener</literal> interface are
-      automatically registered as a listener with the
+      provided through the <literal>IApplicationEventListener</literal>
+      interface that contains the single method <literal>void
+      HandleApplicationEvent( object source, ApplicationEventArgs
+      applicationEventArgs )</literal>. Classes that implement the
+      <literal>IApplicationEventListener</literal> interface are automatically
+      registered as a listener with the
       <literal>IApplicationContext</literal>. Publishing an event is done via
       the context's <literal>PublishEvent( ApplicationEventArgs eventArgs
       )</literal> method. This implementation is based on the traditional
@@ -5944,7 +5954,7 @@ ctx.Subscribe( subscriber, typeof(MyEventPublisher) );</programlisting> This
     }
 }
 
-public class BlackListNotifier : IApplicationListener
+public class BlackListNotifier : IApplicationEventListener
 {
 
     // notification address
@@ -5955,7 +5965,7 @@ public class BlackListNotifier : IApplicationListener
       set { this.notificationAddress = value; }
     }
 
-    public void OnApplicationEvent(ApplicationEvent evt)
+    public void HandleApplicationEvent(ApplicationEvent evt)
     {
         if (evt instanceof BlackListEvent)
         {
