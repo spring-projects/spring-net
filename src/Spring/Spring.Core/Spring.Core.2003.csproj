@@ -34,7 +34,7 @@
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
                     NoStdLib = "false"
-                    NoWarn = "219, 162"
+                    NoWarn = "219, 162, 675"
                     Optimize = "false"
                     OutputPath = "..\..\..\build\VS.Net.2003\Spring.Core\Debug-1.1\"
                     RegisterForComInterop = "false"
@@ -1077,6 +1077,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Expressions\OpXOR.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Expressions\ProjectionNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1691,6 +1696,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\ObjectRole.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\PropertyFileVariableSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1851,6 +1861,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Support\GenericObjectDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Support\IAutowireCandidateResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1996,6 +2011,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Xml\DefaultNamespaceHandlerResolver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Xml\DefaultObjectDefinitionDocumentReader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2007,6 +2027,11 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Xml\INamespaceParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Xml\INamespaceParserResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2398,6 +2423,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Util\IChainableConfigSystem.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\IoUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2443,6 +2472,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Util\SecurityCritical.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\StringUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2478,12 +2512,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Validation\BaseSimpleValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Validation\BaseValidationAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Validation\BaseValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\BaseValidatorGroup.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
