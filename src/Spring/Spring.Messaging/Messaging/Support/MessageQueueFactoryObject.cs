@@ -202,8 +202,6 @@ namespace Spring.Messaging.Support
             }
             else
             {
-                // TODO (EE): is it really a good idea to set a global property from within an instance?
-                MessageQueue.EnableConnectionCache = enableConnectionCache;
                 MessageQueue mq = new MessageQueue(Path, DenySharedReceive, EnableCache, AccessMode);
                 if (messageReadPropertyFilterSetDefaults)
                 {

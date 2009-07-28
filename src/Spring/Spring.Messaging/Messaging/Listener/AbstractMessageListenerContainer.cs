@@ -228,17 +228,13 @@ namespace Spring.Messaging.Listener
 
         /// <summary>
         /// Closes the queue handle.  Cancel pending receive operation by closing the queue handle
-        /// To dispose of the queue handle, set EnableConnectionCache=false and call Close/Dispose.
+        /// To properly dispose of the queue handle, ensure that EnableConnectionCache=false on the
+        /// MessageQueue that this listener is configured to use.
         /// </summary>
         protected void CloseQueueHandle(MessageQueue mq)
         {
             lock (messageQueueMonitor)
             {
-                if (MessageQueue.EnableConnectionCache == true)
-                {
-                    LOG.Info("Setting global property MessageQueue.EnableConnectionCache from true to value in order to dispose property of the queue handle");
-                }
-                MessageQueue.EnableConnectionCache = false;
                 mq.Close();
                 mq.Dispose();
             }
