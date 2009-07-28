@@ -228,12 +228,9 @@ ${tool.dir}       : dir for tools
 
     <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
     <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
-    <property name="nunit.console.exe" value="nunit-console.exe" if="${nant.settings.currentframework!='net-2.0'}"/>
-    <!-- to support use on x64 boxes -->
-    <property name="nunit.console.exe" value="nunit-console-x86.exe" if="${nant.settings.currentframework=='net-2.0'}"/>
-    <echo message="Unit Testing ${project.name} in ${test.bin.dir}" />
+    <echo message="Unit Testing ${project.name}, ${test.assemblyname} in ${test.bin.dir}" />
 
-    <exec program="${tool.dir}\nunit\${nant.settings.currentframework}\${nunit.console.exe}" workingdir="${test.bin.dir}" verbose="false">
+    <exec program="${tool.dir}\nunit\net-2.0\nunit-console-x86.exe" workingdir="${test.bin.dir}" verbose="false">
       <arg path="${test.bin.dir}/${test.assemblyname}.dll" />
       <arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
       <arg value="/framework:${nant.settings.currentframework}" />
