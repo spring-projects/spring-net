@@ -21,8 +21,8 @@
                 <include name="**/*.cs" />
                 <include name="../GenCommonAssemblyInfo.cs" />
             </sources>
-            <resources basedir="." prefix="Spring.Template.Config">
-	            <include name="Template/Config/spring-template-1.3.xsd" />
+            <resources basedir="." prefix="Spring.Template.Velocity.Config">
+	            <include name="Template/Velocity/Config/spring-nvelocity-1.3.xsd" />
       	    </resources>
 	    <references basedir="${current.bin.dir}">
 		<include name="*.dll" />
