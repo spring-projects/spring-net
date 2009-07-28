@@ -516,8 +516,7 @@ namespace Spring.Objects.Factory.Support
                                                 ConstructorArgumentValues cargs,
                                                 ConstructorArgumentValues resolvedValues)
         {
-            ObjectDefinitionValueResolver valueResolver =
-                new ObjectDefinitionValueResolver(objectFactory, objectName, definition);
+            ObjectDefinitionValueResolver valueResolver = new ObjectDefinitionValueResolver(objectFactory);
             int minNrOfArgs = cargs.ArgumentCount;
 
             foreach (DictionaryEntry entry in cargs.IndexedArgumentValues)

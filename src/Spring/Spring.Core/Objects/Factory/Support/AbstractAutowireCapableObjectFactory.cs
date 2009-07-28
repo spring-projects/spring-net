@@ -339,7 +339,7 @@ namespace Spring.Objects.Factory.Support
             {
                 return;
             }
-            ObjectDefinitionValueResolver valueResolver = CreateValueResolver(name, definition);
+            ObjectDefinitionValueResolver valueResolver = CreateValueResolver();
 
             MutablePropertyValues deepCopy = new MutablePropertyValues(properties);
             PropertyValue[] copiedProperties = deepCopy.PropertyValues;
@@ -368,9 +368,9 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Create the value resolver strategy to use for resolving raw property values
         /// </summary>
-        protected virtual ObjectDefinitionValueResolver CreateValueResolver(string name, IObjectDefinition definition)
+        protected virtual ObjectDefinitionValueResolver CreateValueResolver()
         {
-            return new ObjectDefinitionValueResolver(this, name, definition);
+            return new ObjectDefinitionValueResolver(this);
         }
 
         /// <summary>
