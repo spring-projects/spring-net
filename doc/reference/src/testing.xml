@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="testing" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="testing" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns2="http://www.w3.org/1999/xlink"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Testing</title>
 
   <section xml:id="testing-introduction">
@@ -74,46 +79,22 @@
       </listitem>
     </itemizedlist>
 
-    <para>The Spring Framework provides first class support for integration
-    testing in the form of the classes that are packaged in the <filename
-    class="libraryfile">Spring.Testing.NUnit.dll</filename> library.
-    <emphasis>Please note that these test classes are NUnit-specific. Support
-    for mbUnit and VSTS are under consideration for future
-    versions.</emphasis></para>
+    <para>The Spring Framework provides support for integration testing when
+    using NUnit and Microsoft's Testing framework 'MSTest'. The NUnit classses
+    are located in the assembly <filename
+    class="libraryfile">Spring.Testing.NUnit.dll</filename> and the MSTest is
+    located in <literal>Spring.Testing.Microsoft.dll</literal>.</para>
 
     <note>
-      <para>The Spring.Testing.NUnit.dll library is compiled against NUnit
-      2.4.1. At the time of this writing the latest version of NUnit is 2.4.6.
-      Note that add-in have their own versions of NUnit they use. For example,
-      ReSharper 3.0 uses 2.2.8. If you are using the GUI-runner that comes
-      with NUnit then you should add the following to your .config file, (in
-      the form of MyAssembly.dll.config)</para>
-
-      <programlisting language="myxml">&lt;runtime&gt;
-
-  &lt;assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1"&gt;
-
-    &lt;dependentAssembly&gt;
-      &lt;assemblyIdentity name="nunit.framework" 
-                        publicKeyToken="96d09a1eb7f44a77" 
-                        culture="neutral"/&gt;
-      &lt;bindingRedirect oldVersion="0.0.0.0-65535.65535.65535.65535
-                       newVersion="2.4.6.0"/&gt;
-
-    &lt;/dependentAssembly&gt;
-
-  &lt;/assemblyBinding&gt;
-
-&lt;/runtime&gt;</programlisting>
+      <para>The <literal>Spring.Testing.NUnit.dll</literal> library is
+      compiled against NUnit 2.5.1. Note that test runners integrated inside
+      VS.NET may or may not support this version. At the time of this writing
+      Reshaper 4.5.0 did not properly support NUnit 2.5.1. To use Resharper
+      with NUnit 2.5.1 you need to download 4.5.1 RC2 or later. </para>
     </note>
 
-    <para>The <literal>Spring.Testing.NUnit</literal> namespace provides
-    valuable NUnit <literal>TestCase</literal> superclasses for
-    integration testing using a Spring container. Note that as of NUnit 2.4
-    these can be rewritten in terms of custom attributes via NUnit's new
-    extensibility mechanism. This will be an additional option in an upcoming
-    release of Spring.NET and is already present in the Java version of the
-    Spring framework.</para>
+    <para>These namespaces provides NUnit and MSTest superclasses for
+    integration testing using a Spring container.</para>
 
     <para>These superclasses provide the following functionality:</para>
 
@@ -144,22 +125,23 @@
     <section xml:id="testing-ctx-management">
       <title>Context management and caching</title>
 
-      <para>The <literal><literal>Spring.Testing.NUnit</literal></literal>
-      package provides support for consistent loading of Spring contexts, and
-      caching of loaded contexts. Support for the caching of loaded contexts
-      is important, because if you are working on a large project, startup
-      time may become an issue - not because of the overhead of Spring itself,
-      but because the objects instantiated by the Spring container will
-      themselves take time to instantiate. For example, a project with 50-100
-      NHibernate mapping files might take 10-20 seconds to load the mapping
-      files, and incurring that cost before running every single test case in
-      every single test fixture will lead to slower overall test runs that
-      could reduce productivity.</para>
+      <para>The <literal><literal>Spring.Testing.NUnit</literal></literal> and
+      <literal>Spring.Testing.Microsoft </literal>namespace provides support
+      for consistent loading of Spring contexts, and caching of loaded
+      contexts. Similarly Spring.TestingSupport for the caching of loaded
+      contexts is important, because if you are working on a large project,
+      startup time may become an issue - not because of the overhead of Spring
+      itself, but because the objects instantiated by the Spring container
+      will themselves take time to instantiate. For example, a project with
+      50-100 NHibernate mapping files might take 10-20 seconds to load the
+      mapping files, and incurring that cost before running every single test
+      case in every single test fixture will lead to slower overall test runs
+      that could reduce productivity.</para>
 
       <para>To address this issue, the
-      <literal>AbstractDependencyInjectionSpringContextTests</literal> has
-      an <literal>protected</literal> property that subclasses must implement
-      to provide the location of context definition files:</para>
+      <literal>AbstractDependencyInjectionSpringContextTests</literal> has an
+      <literal>protected</literal> property that subclasses must implement to
+      provide the location of context definition files:</para>
 
       <programlisting language="csharp">protected abstract string[] ConfigLocations { get; }</programlisting>
 
@@ -186,26 +168,25 @@
       <title>Dependency Injection of test fixtures</title>
 
       <para>When
-      <literal>AbstractDependencyInjectionSpringContextTests</literal>
-      (and subclasses) load your application context, they can optionally
-      configure instances of your test classes by Setter Injection. All you
-      need to do is to define instance variables and the corresponding
-      setters.
-      <literal>AbstractDependencyInjectionSpringContextTests</literal>
-      will automatically locate the corresponding object in the set of
+      <literal>AbstractDependencyInjectionSpringContextTests</literal> (and
+      subclasses) load your application context, they can optionally configure
+      instances of your test classes by Setter Injection. All you need to do
+      is to define instance variables and the corresponding setters.
+      <literal>AbstractDependencyInjectionSpringContextTests</literal> will
+      automatically locate the corresponding object in the set of
       configuration files specified in the
       <methodname>ConfigLocations</methodname> property.</para>
 
       <para>Consider the scenario where we have a class,
-      <literal>HibernateTitleDao</literal>, that performs data access
-      logic for say, the <literal>Title</literal> domain object. We want
-      to write integration tests that test all of the following areas:</para>
+      <literal>HibernateTitleDao</literal>, that performs data access logic
+      for say, the <literal>Title</literal> domain object. We want to write
+      integration tests that test all of the following areas:</para>
 
       <itemizedlist>
         <listitem>
           <para>The Spring configuration; basically, is everything related to
-          the configuration of the <literal>HibernateTitleDao</literal>
-          object correct and present?</para>
+          the configuration of the <literal>HibernateTitleDao</literal> object
+          correct and present?</para>
         </listitem>
 
         <listitem>
@@ -214,16 +195,17 @@
         </listitem>
 
         <listitem>
-          <para>The logic of the <literal>HibernateTitleDao</literal>;
-          does the configured instance of this class perform as
-          anticipated?</para>
+          <para>The logic of the <literal>HibernateTitleDao</literal>; does
+          the configured instance of this class perform as anticipated?</para>
         </listitem>
       </itemizedlist>
 
-      <para>Let's look at the test class itself (we will look at the
+      <para>Let's look at the NUnit test class itself (we will look at the
       configuration immediately afterwards).</para>
 
-      <programlisting language="csharp">[TestFixture]
+      <programlisting language="csharp">/// Using NUnit
+
+[TestFixture]
 public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTests  {
 
     <lineannotation>// this instance will be (automatically) dependency injected</lineannotation>    
@@ -266,22 +248,51 @@ public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTe
 &lt;/objects&gt;</programlisting>
 
       <para>The
-      <literal>AbstractDependencyInjectionSpringContextTests</literal>
-      classes uses <link linkend="objects-factory-autowire"><emphasis>autowire
-      by type</emphasis></link>. Thus if you have multiple object definitions
-      of the same type, you cannot rely on this approach for those particular
+      <literal>AbstractDependencyInjectionSpringContextTests</literal> classes
+      uses <link linkend="objects-factory-autowire"><emphasis>autowire by
+      type</emphasis></link>. Thus if you have multiple object definitions of
+      the same type, you cannot rely on this approach for those particular
       object. In that case, you can use the inherited
       <literal>applicationContext</literal> instance variable, and explicit
       lookup using (for example) an explicit call to
       <methodname>applicationContext.GetObject("titleDao")</methodname>.</para>
 
+      <para>Using AbstractDependencyInjectionSpringContextTests with MSTest is
+      very similar. </para>
+
+      <programlisting language="csharp">/// Using Microsoft's Testing Framework
+
+[TestClass]
+public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTests  {
+
+    <lineannotation>// this instance will be (automatically) dependency injected</lineannotation>    
+    private HibernateTitleDao titleDao;
+
+    <lineannotation>// a setter method to enable DI of the 'titleDao' instance variable</lineannotation>
+    public HibernateTitleDao HibernateTitleDao {
+        set { titleDao = value; }
+    }
+
+    [Test]
+    public void LoadTitle() {
+        Title title = this.titleDao.LoadTitle(10);
+        Assert.IsNotNull(title);
+    }
+
+    <lineannotation>// specifies the Spring configuration to load for this test fixture</lineannotation>
+    protected override string[] ConfigLocations {
+        return new String[] { "assembly://MyAssembly/MyNamespace/daos.xml" };
+    }
+
+}</programlisting>
+
       <para>If you don't want dependency injection applied to your test cases,
       simply don't declare any set properties. Alternatively, you can extend
       the <literal>AbstractSpringContextTests</literal> - the root of the
-      class hierarchy in the <literal>Spring.Testing.NUnit</literal>
-      namespace. It merely contains convenience methods to load Spring
-      contexts, and performs no Dependency Injection of the test
-      fixture.</para>
+      class hierarchy in the <literal>Spring.Testing.NUnit</literal> and
+      <literal>Spring.Testing.Microsoft</literal> namespaces. It merely
+      contains convenience methods to load Spring contexts, and performs no
+      Dependency Injection of the test fixture.</para>
 
       <section xml:id="testing-fixture-di-field">
         <title>Field level injection</title>
@@ -304,7 +315,7 @@ public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTe
     <lineannotation>// this instance will be (automatically) dependency injected</lineannotation>
     <lineannotation><emphasis>protected</emphasis></lineannotation> HibernateTitleDao <lineannotation><emphasis>titleDao</emphasis></lineannotation>;
 
-    [Test]
+    [TestMethod]
     public void LoadTitle() {
         Title title = this.titleDao.LoadTitle(10);
         Assert.IsNotNull(title);
@@ -341,10 +352,10 @@ public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTe
       transactionally proxied objects in your tests, they will behave
       correctly, according to their transactional semantics.</para>
 
-      <para><literal>AbstractTransactionalSpringContextTests</literal>
-      depends on a <literal>IPlatformTransactionManager</literal> object
-      being defined in the application context. The name doesn't matter, due
-      to the use of autowire by type.</para>
+      <para><literal>AbstractTransactionalSpringContextTests</literal> depends
+      on a <literal>IPlatformTransactionManager</literal> object being defined
+      in the application context. The name doesn't matter, due to the use of
+      autowire by type.</para>
 
       <para>Typically you will extend the subclass,
       <literal>AbstractTransactionalDbProviderSpringContextTests</literal>.
@@ -358,8 +369,8 @@ public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTe
       <para>If you want a transaction to commit - unusual, but occasionally
       useful when you want a particular test to populate the database - you
       can call the <methodname>SetComplete()</methodname> method inherited
-      from <literal>AbstractTransactionalSpringContextTests</literal>.
-      This will cause the transaction to commit instead of roll back.</para>
+      from <literal>AbstractTransactionalSpringContextTests</literal>. This
+      will cause the transaction to commit instead of roll back.</para>
 
       <para>There is also convenient ability to end a transaction before the
       test case ends, through calling the
@@ -385,9 +396,8 @@ public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTe
       <itemizedlist>
         <listitem>
           <para><literal>applicationContext</literal> (a
-          <literal>IConfigurableApplicationContext</literal>):
-          inherited from the
-          <literal>AbstractDependencyInjectionSpringContextTests</literal>
+          <literal>IConfigurableApplicationContext</literal>): inherited from
+          the <literal>AbstractDependencyInjectionSpringContextTests</literal>
           superclass. Use this to perform explicit object lookup, or test the
           state of the context as a whole.</para>
         </listitem>
@@ -408,24 +418,7 @@ public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTe
 
       <para>Often you will provide an application-wide superclass for
       integration tests that provides further useful instance variables used
-      in many tests</para>
+      in many tests.</para>
     </section>
-
-    <section xml:id="testing-examples-petclinic"></section>
-  </section>
-
-  <section xml:id="testing-resources">
-    <title>Further Resources</title>
-
-    <para>This section contains links to further resources about testing in
-    general.</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>The <ulink url="http://www.nunit.org/index.htm">NUnit
-        homepage</ulink>. The Spring Framework's unit test suite is written
-        using NUnit as the testing framework.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 </chapter>
