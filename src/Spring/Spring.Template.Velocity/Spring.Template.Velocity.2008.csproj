@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BF3AB954-8375-407C-9E98-4C51D8072784}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -34,11 +34,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.NET.2005\Spring.Template.Velocity\Debug\</OutputPath>
+    <OutputPath>..\..\..\build\VS.NET.2008\Spring.Template.Velocity\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\build\VS.NET.2005\Spring.Template.Velocity\Debug\Spring.Template.Velocity.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\build\VS.NET.2008\Spring.Template.Velocity\Debug\Spring.Template.Velocity.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

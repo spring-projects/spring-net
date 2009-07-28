@@ -51,7 +51,7 @@
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
-    <NoWarn>219, 162, 618</NoWarn>
+    <NoWarn>219, 162, 618, 1591</NoWarn>
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -86,10 +86,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Net\2.0\antlr.runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging, Version=1.1.0.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
@@ -106,6 +102,107 @@
       <Link>CommonAssemblyInfo.cs</Link>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="antlr\ANTLRException.cs" />
+    <Compile Include="antlr\ANTLRPanicException.cs" />
+    <Compile Include="antlr\ASTFactory.cs" />
+    <Compile Include="antlr\ASTNodeCreator.cs" />
+    <Compile Include="antlr\ASTNULLType.cs" />
+    <Compile Include="antlr\ASTPair.cs" />
+    <Compile Include="antlr\ASTVisitor.cs" />
+    <Compile Include="antlr\BaseAST.cs" />
+    <Compile Include="antlr\ByteBuffer.cs" />
+    <Compile Include="antlr\CharBuffer.cs" />
+    <Compile Include="antlr\CharQueue.cs" />
+    <Compile Include="antlr\CharScanner.cs" />
+    <Compile Include="antlr\CharStreamException.cs" />
+    <Compile Include="antlr\CharStreamIOException.cs" />
+    <Compile Include="antlr\collections\AST.cs" />
+    <Compile Include="antlr\collections\impl\ASTArray.cs" />
+    <Compile Include="antlr\collections\impl\BitSet.cs" />
+    <Compile Include="antlr\CommonAST.cs" />
+    <Compile Include="antlr\CommonASTWithHiddenTokens.cs" />
+    <Compile Include="antlr\CommonHiddenStreamToken.cs" />
+    <Compile Include="antlr\CommonToken.cs" />
+    <Compile Include="antlr\debug\ANTLREventArgs.cs" />
+    <Compile Include="antlr\debug\DebuggingCharScanner.cs" />
+    <Compile Include="antlr\debug\DebuggingInputBuffer.cs" />
+    <Compile Include="antlr\debug\DebuggingParser.cs" />
+    <Compile Include="antlr\debug\GuessingEventArgs.cs" />
+    <Compile Include="antlr\debug\ICharScannerDebugSubject.cs" />
+    <Compile Include="antlr\debug\IDebugSubject.cs" />
+    <Compile Include="antlr\debug\InputBufferEventArgs.cs" />
+    <Compile Include="antlr\debug\InputBufferEventSupport.cs" />
+    <Compile Include="antlr\debug\InputBufferListener.cs" />
+    <Compile Include="antlr\debug\InputBufferListenerBase.cs" />
+    <Compile Include="antlr\debug\InputBufferReporter.cs" />
+    <Compile Include="antlr\debug\IParserDebugSubject.cs" />
+    <Compile Include="antlr\debug\Listener.cs" />
+    <Compile Include="antlr\debug\LLkDebuggingParser.cs" />
+    <Compile Include="antlr\debug\MessageEventArgs.cs" />
+    <Compile Include="antlr\debug\MessageListener.cs" />
+    <Compile Include="antlr\debug\MessageListenerBase.cs" />
+    <Compile Include="antlr\debug\NewLineEventArgs.cs" />
+    <Compile Include="antlr\debug\NewLineListener.cs" />
+    <Compile Include="antlr\debug\ParserController.cs" />
+    <Compile Include="antlr\debug\ParserEventSupport.cs" />
+    <Compile Include="antlr\debug\ParserListener.cs" />
+    <Compile Include="antlr\debug\ParserListenerBase.cs" />
+    <Compile Include="antlr\debug\ParserMatchEventArgs.cs" />
+    <Compile Include="antlr\debug\ParserMatchListener.cs" />
+    <Compile Include="antlr\debug\ParserMatchListenerBase.cs" />
+    <Compile Include="antlr\debug\ParserReporter.cs" />
+    <Compile Include="antlr\debug\ParserTokenEventArgs.cs" />
+    <Compile Include="antlr\debug\ParserTokenListener.cs" />
+    <Compile Include="antlr\debug\ParserTokenListenerBase.cs" />
+    <Compile Include="antlr\debug\ParseTreeDebugParser.cs" />
+    <Compile Include="antlr\debug\ScannerEventSupport.cs" />
+    <Compile Include="antlr\debug\SemanticPredicateEventArgs.cs" />
+    <Compile Include="antlr\debug\SemanticPredicateListener.cs" />
+    <Compile Include="antlr\debug\SemanticPredicateListenerBase.cs" />
+    <Compile Include="antlr\debug\SyntacticPredicateEventArgs.cs" />
+    <Compile Include="antlr\debug\SyntacticPredicateListener.cs" />
+    <Compile Include="antlr\debug\SyntacticPredicateListenerBase.cs" />
+    <Compile Include="antlr\debug\TraceEventArgs.cs" />
+    <Compile Include="antlr\debug\TraceListener.cs" />
+    <Compile Include="antlr\debug\TraceListenerBase.cs" />
+    <Compile Include="antlr\debug\Tracer.cs" />
+    <Compile Include="antlr\DefaultFileLineFormatter.cs" />
+    <Compile Include="antlr\DumpASTVisitor.cs" />
+    <Compile Include="antlr\FileLineFormatter.cs" />
+    <Compile Include="antlr\IHiddenStreamToken.cs" />
+    <Compile Include="antlr\InputBuffer.cs" />
+    <Compile Include="antlr\IToken.cs" />
+    <Compile Include="antlr\LexerSharedInputState.cs" />
+    <Compile Include="antlr\LLkParser.cs" />
+    <Compile Include="antlr\MismatchedCharException.cs" />
+    <Compile Include="antlr\MismatchedTokenException.cs" />
+    <Compile Include="antlr\NoViableAltException.cs" />
+    <Compile Include="antlr\NoViableAltForCharException.cs" />
+    <Compile Include="antlr\Parser.cs" />
+    <Compile Include="antlr\ParserSharedInputState.cs" />
+    <Compile Include="antlr\ParseTree.cs" />
+    <Compile Include="antlr\ParseTreeRule.cs" />
+    <Compile Include="antlr\ParseTreeToken.cs" />
+    <Compile Include="antlr\RecognitionException.cs" />
+    <Compile Include="antlr\SemanticException.cs" />
+    <Compile Include="antlr\StringUtils.cs" />
+    <Compile Include="antlr\SupportClass.cs" />
+    <Compile Include="antlr\Token.cs" />
+    <Compile Include="antlr\TokenBuffer.cs" />
+    <Compile Include="antlr\TokenCreator.cs" />
+    <Compile Include="antlr\TokenQueue.cs" />
+    <Compile Include="antlr\TokenStream.cs" />
+    <Compile Include="antlr\TokenStreamBasicFilter.cs" />
+    <Compile Include="antlr\TokenStreamException.cs" />
+    <Compile Include="antlr\TokenStreamHiddenTokenFilter.cs" />
+    <Compile Include="antlr\TokenStreamIOException.cs" />
+    <Compile Include="antlr\TokenStreamRecognitionException.cs" />
+    <Compile Include="antlr\TokenStreamRetryException.cs" />
+    <Compile Include="antlr\TokenStreamRewriteEngine.cs" />
+    <Compile Include="antlr\TokenStreamSelector.cs" />
+    <Compile Include="antlr\TokenWithIndex.cs" />
+    <Compile Include="antlr\TreeParser.cs" />
+    <Compile Include="antlr\TreeParserSharedInputState.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1106,6 +1203,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="README_ANTLR.txt" />
     <Content Include="Expressions\Parser\ExpressionParserTokenTypes.txt" />
   </ItemGroup>
   <ItemGroup>

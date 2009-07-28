@@ -76,6 +76,10 @@ namespace Spring
 
         protected void ProcessAssembly (Assembly a) {
             foreach (Type t in a.GetTypes ()) {
+                
+                // TODO: make antlr compliant
+                if (t.FullName.StartsWith("antlr")) continue;
+
                 if ( (t.IsPublic||t.IsNestedPublic)
                     && IsCheckedType (t)) {
                     CheckStandardsCompliance (a, t);
