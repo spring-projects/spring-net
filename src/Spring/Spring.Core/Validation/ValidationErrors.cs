@@ -208,22 +208,35 @@ namespace Spring.Validation
         /// <param name="errorsToMerge">
         /// The validation errors to merge; can be <see lang="null"/>.
         /// </param>
-        public void MergeErrors(ValidationErrors errorsToMerge)
+        public void MergeErrors(IValidationErrors errorsToMerge)
         {
             if (errorsToMerge != null)
             {
-                foreach (DictionaryEntry errorEntry in errorsToMerge.errorMap)
+                foreach(string provider in errorsToMerge.Providers)
                 {
-                    ArrayList errList = (ArrayList) this.errorMap[errorEntry.Key];
+                    ArrayList errList = (ArrayList) this.errorMap[provider];
+                    IList other = errorsToMerge.GetErrors(provider);
                     if (errList == null)
                     {
-                        this.errorMap[errorEntry.Key] = errorEntry.Value;
+                        this.errorMap[provider] = other;
                     }
                     else
                     {
-                        errList.AddRange((IList) errorEntry.Value);
+                        errList.AddRange((IList) other);
                     }
                 }
+//                foreach (DictionaryEntry errorEntry in errorsToMerge.errorMap)
+//                {
+//                    ArrayList errList = (ArrayList) this.errorMap[errorEntry.Key];
+//                    if (errList == null)
+//                    {
+//                        this.errorMap[errorEntry.Key] = errorEntry.Value;
+//                    }
+//                    else
+//                    {
+//                        errList.AddRange((IList) errorEntry.Value);
+//                    }
+//                }
             }
         }
 
