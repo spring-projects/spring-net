@@ -77,6 +77,35 @@ namespace Spring.Aop.Framework
 	    {
 	    }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="ProxyFactory"/> class for the 
+        /// given interface and interceptor.
+        /// </summary>
+        /// <remarks>Convenience method for creating a proxy for a single interceptor
+        /// , assuming that the interceptor handles all calls itself rather than delegating
+        /// to a target, like in the case of remoting proxies.</remarks>
+        /// <param name="proxyInterface">The interface that the proxy should implement.</param>
+        /// <param name="interceptor">The interceptor that the proxy should invoke.</param>
+        public ProxyFactory(Type proxyInterface, IInterceptor interceptor)
+        {
+            AddInterface(proxyInterface);
+            AddAdvice(interceptor);
+        }
+
+
+        /// <summary>
+        /// Create a new instance of the <see cref="ProxyFactory"/> class for the specified
+        /// <see cref="ITargetSource"/> making the proxy implement the specified interface.
+        /// </summary>
+        /// <remarks></remarks>
+        /// <param name="proxyInterface">The interface that the proxy should implement.</param>
+        /// <param name="targetSource">The target source that the proxy should invoek.</param>
+        public ProxyFactory(Type proxyInterface, ITargetSource targetSource)
+        {
+            AddInterface(proxyInterface);
+            TargetSource = targetSource;
+        }
+
 	    /// <summary>
 	    /// Creates a new proxy according to the settings in this factory.
 	    /// </summary>
