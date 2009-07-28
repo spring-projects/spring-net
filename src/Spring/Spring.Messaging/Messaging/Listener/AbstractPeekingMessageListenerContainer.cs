@@ -164,7 +164,7 @@ namespace Spring.Messaging.Listener
         /// <summary>
         /// Stops peeking on the message queue.
         /// </summary>
-        public override void DoStop()
+        protected override void DoStop()
         {
             base.DoStop();
             stopEvent.Set();
