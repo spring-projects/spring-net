@@ -199,7 +199,7 @@
     &lt;!-- additional collaborators and configuration for this object go here --&gt;
   &lt;/object&gt;
 
-  &lt;!-- more bean definitions for services go here --&gt;
+  &lt;!-- more object definitions for services go here --&gt;
 
 &lt;/objects&gt;</programlisting>The following example shows the data access
       objects <literal>(daos.xml)</literal> configuration file:</para>
@@ -207,14 +207,14 @@
       <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt; 
 
   &lt;object id="AccountDao" type="Petstore.Dao.HibernateAccountDao, PetStore"&gt;
-    &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+    &lt;!-- additional collaborators and configuration for this object go here --&gt;
   &lt;/object&gt;
 
   &lt;object id="ItemDao" type="Petstore.Dao.HibernateItemDao, PetStore"&gt;
-    &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+    &lt;!-- additional collaborators and configuration for this object go here --&gt;
   &lt;/object&gt;
   
-  &lt;!-- more bean definitions for data access objects go here --&gt;
+  &lt;!-- more object definitions for data access objects go here --&gt;
 &lt;/objects&gt;</programlisting>
 
       <para>In the preceeding example, the service layer consists of the class
@@ -436,7 +436,7 @@
         that these paths are relative, it is better form not to use the slash
         at all. The contents of the files being imported, including the top
         level <literal>&lt;objects/&gt;</literal> element, must be valid XML
-        bean definitions according to the Spring Schema.</para>
+        object definitions according to the Spring Schema.</para>
       </sect3>
     </sect2>
 
@@ -453,7 +453,7 @@
       <para>The <literal>IApplicationContext</literal> enables you to read
       object definitions and access them as follows:</para>
 
-      <programlisting language="csharp">// create and configure beans
+      <programlisting language="csharp">// create and configure objects
 IApplicationContext context = new XmlApplicationContext("services.xml", "daos.xml");
 
 // retrieve configured instance
@@ -1037,8 +1037,8 @@ public class TestGenericObjectFactory
       instance after it is constructed. (Factory methods may be considered a
       special case of providing constructor arguments for the purposes of this
       description). The container injects these dependencies when it creates
-      the bean. This process is fundamentally the inverse to the case when the
-      bean itself is controlling the instantiation or location of its
+      the object. This process is fundamentally the inverse to the case when
+      the object itself is controlling the instantiation or location of its
       dependencies by using direct construction of classes, or the Service
       Locator pattern. The inverting of this responsibility is why the name
       Inversion of Control (IoC) is used to describe the container's
@@ -1725,9 +1725,9 @@ public class MixedIocObject
           no validation is performed on the value that is passed to the
           <literal>targetName</literal> property of the client object. Typos
           are only discovered (with ost mikely fatal results) when the
-          'client' object is actually instantiated. If the 'client' bean is a
-          prototype bean, this typo and the resulting exception may only be
-          discovered long after the container is deployed.</para>
+          'client' object is actually instantiated. If the 'client' object is
+          a prototype object, this typo and the resulting exception may only
+          be discovered long after the container is deployed.</para>
 
           <para>Additionally, if the reference object is in the same XML unit,
           and the object name is the object <emphasis>id</emphasis>, you can
@@ -1770,7 +1770,7 @@ public class MixedIocObject
         collaborator is a singleton object it may be initialized already by
         the container.) All references are ultimately just a reference to
         another object. Scoping and validation depend on whether you specify
-        the id/name of the object through the <literal>bean</literal>,
+        the id/name of the object through the <literal>object</literal>,
         <literal>local</literal>, or <literal>parent</literal>
         attributes.</para>
 
@@ -1802,16 +1802,16 @@ public class MixedIocObject
         the values in the '<literal>name'</literal> attribute of the target
         object, and the target object must be in a parent container to the
         current one. You us ethis object reference variant mainly when you
-        have a hierarchy of containers and you want to wrap an existing bean
+        have a hierarchy of containers and you want to wrap an existing object
         in a parent container with some sort of proxy which will have the same
-        name as the parent bean.<programlisting language="myxml">&lt;!-- in the parent context --&gt;
+        name as the parent object.<programlisting language="myxml">&lt;!-- in the parent context --&gt;
 &lt;object id="AccountService" type="MyApp.SimpleAccountService, MyApp"&gt;
-&lt;!-- insert dependencies as required as here --&gt;
+  &lt;!-- insert dependencies as required as here --&gt;
 &lt;/object&gt;</programlisting><programlisting>&lt;!-- in the child (descendant) context --&gt;
-&lt;object id="AccountService" &lt;-- notice that the name of this bean is the same as the name of the 'parent' bean
-        type="Spring.Aop.Framework.ProxyFactoryBean, Spring.Aop"&gt;
+&lt;object id="AccountService" &lt;-- notice that the name of this object is the same as the name of the 'parent' object
+        type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
   &lt;property name="target"&gt;
-    &lt;ref parent="AccountService"/&gt; &lt;-- notice how we refer to the parent bean --&gt;
+    &lt;ref parent="AccountService"/&gt; &lt;-- notice how we refer to the parent object --&gt;
   &lt;/property&gt;
   &lt;!-- insert other configuration and dependencies as required as here --&gt;
 &lt;/object&gt;</programlisting></para>
@@ -1841,7 +1841,7 @@ public class MixedIocObject
         <literal>scope</literal> flag. Inner object are
         <emphasis>always</emphasis> anonymous and they are
         <emphasis>always</emphasis> scoped as prototypes. It is not possible
-        to inject inner objects into collaborating beans other than into the
+        to inject inner objects into collaborating objects other than into the
         enclosing object.</para>
       </sect3>
 
@@ -2030,6 +2030,85 @@ public class MixedIocObject
         &lt;/dictionary&gt;
     &lt;/property&gt;
 &lt;/object&gt;</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Collection Merging</title>
+
+        <para>As of Spring 1.3, the container supports the merging of
+        collections. An application developer can define a parent-style
+        <literal>&lt;list/&gt;</literal>,
+        <literal>&lt;dictionary/&gt;</literal>,
+        <literal>&lt;set/&gt;</literal> or
+        <literal>&lt;name-value/&gt;</literal> element, and have child-style
+        <literal>&lt;list/&gt;</literal>,
+        <literal>&lt;dictionary/&gt;</literal>,
+        <literal>&lt;set/&gt;</literal> or
+        <literal>&lt;name-value/&gt;</literal> elements inherit and override
+        values from the parent collection. That is, the child collection's
+        values are the result of merging the elements of the parent and child
+        collections, with the child's collection elements overriding values
+        specified in the parent collection.</para>
+
+        <para><emphasis>This section on merging discusses the parent-child
+        object mechanism. Readers unfamiliar with parent and child object
+        definitions may wish to read the <link
+        linkend="objects-childobjects">relevant section</link> before
+        continuing.</emphasis></para>
+
+        <para>The following example demonstrates collection merging:</para>
+
+        <programlisting>  &lt;object id="parent" abstract="true" type="Example.ComplexObject, Examples"&gt;
+    &lt;property name="AdminEmails"&gt;
+      &lt;name-values&gt;
+        &lt;add key="administrator" value="administrator@example.com"/&gt;
+        &lt;add key="support" value="support@example.com"/&gt;
+      &lt;/name-values&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+
+  &lt;object id="child" parent="parent" &gt;
+    &lt;property name="AdminEmails"&gt;
+      &lt;!-- the merge is specified on the *child* collection definition --&gt;
+      &lt;name-values merge="true"&gt;
+        &lt;add key="sales" value="sales@example.com"/&gt;
+        &lt;add key="support" value="support@example.co.uk"/&gt;                
+      &lt;/name-values&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+        <para>Notice the use of the <literal>merge=true</literal> attribute on
+        the <literal>&lt;name-values/&gt;</literal> element of the
+        <literal>AdminEmails</literal> property of the child object
+        definition. When the child object is resolved and instantiated by the
+        container, the resulting instance has an
+        <literal>AdminEmails</literal> Properties collection that contains the
+        result of the merging of the child's <literal>AdminEmails</literal>
+        collection with the parent's <literal>AdminEmails</literal>
+        collection.</para>
+
+        <programlisting>administrator=administrator@example.com
+sales=sales@example.com
+support=support@example.co.uk</programlisting>
+
+        <para>The child Properties collection's value set inherits all
+        property elements from the parent
+        <literal>&lt;name-values/&gt;</literal>, and the child's value for the
+        support value overrides the value in the parent collection. This
+        merging behavior applies similarly to the
+        <literal>&lt;list/&gt;</literal>,
+        <literal>&lt;dictionary/&gt;</literal>, and
+        <literal>&lt;set/&gt;</literal> collection types. In the specific case
+        of the <literal>&lt;list/&gt;</literal> element, the semantics
+        associated with the <literal>IList</literal> collection type, that is,
+        the notion of an ordered collection of values, is maintained; the
+        parent's values precede all of the child list's values. In the case of
+        the <literal>IDictionary</literal>, <literal>ISet</literal>, and
+        <literal>NameValue</literal> collection types, no ordering exists.
+        Hence no ordering semantics are in effect for the collection types
+        that underlie the associated <literal>IDictionary</literal>,
+        <literal>ISet</literal>, and <literal>NameValueCollection</literal>
+        implementation types that the container uses internally.</para>
       </sect3>
 
       <sect3 xml:id="objects-null-values">
@@ -2388,11 +2467,11 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       <para>If an object is a dependency of another that usually means that
       one object is set as a property of another. Typically you accomplish
       this with the <literal>&lt;ref/&gt;</literal> element in XML-based
-      configuration metadata. However, sometimes dependencies between beans
+      configuration metadata. However, sometimes dependencies between objects
       are less direct; for example, a static initializer in a class needs to
       be triggered, such as device driver registration. The
       <literal>depends-on</literal> attribute can explicitly force one or more
-      beans to be initialized before the bean using this element is
+      objects to be initialized before the object using this element is
       initialized. The following example uses the
       <literal>depends-on</literal> attribute to express a dependency on a
       single object: <programlisting language="myxml">&lt;object id="objectOne" type="Examples.ExampleObject, ExamplesLibrary" depends-on="manager"&gt;
@@ -2452,13 +2531,13 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       <literal>IApplicationContext</literal> is starting up, whereas the
       <literal>not.lazy</literal> object is eagerly pre-instantiated.</para>
 
-      <para>However, when a lazy-initialized bean is a dependency of a
+      <para>However, when a lazy-initialized object is a dependency of a
       singleton object that is <emphasis>not</emphasis>
       <literal>lazy-initialized</literal>, the
       <classname>IApplicationContext</classname> creates the lazy-initialized
-      bean at startup, because it must satisfy the singleton's dependencies.
-      The lazy-initialized bean is injected into a singleton object elsewhere
-      that is not lazy-initialized.</para>
+      object at startup, because it must satisfy the singleton's dependencies.
+      The lazy-initialized object is injected into a singleton object
+      elsewhere that is not lazy-initialized.</para>
 
       <para>You can also control lazy-initialization at the container level by
       using the <literal>default-lazy-init </literal>attribute on the
@@ -3460,7 +3539,7 @@ public class MyClassFactory
       prototype objects, be aware that <emphasis>dependencies are resolved at
       instantiation time</emphasis>. Thus if you dependency-inject a
       prototype-scoped objects into a singleton-scoped object, a new prototype
-      bean is instantiated and then dependency-injected into the singleton
+      object is instantiated and then dependency-injected into the singleton
       object. The prototype instance is the sole instance that is ever
       supplied to the singleton-scoped object.</para>
 

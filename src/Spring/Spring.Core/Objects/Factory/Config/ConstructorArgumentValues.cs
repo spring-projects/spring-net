@@ -181,7 +181,11 @@ namespace Spring.Objects.Factory.Config
 				}
 				foreach (DictionaryEntry entry in other.IndexedArgumentValues)
 				{
-					IndexedArgumentValues.Add(entry.Key, entry.Value);
+				    ValueHolder vh = entry.Value as ValueHolder;
+                    if (vh != null)
+                    {
+                        AddOrMergeIndexedArgumentValues( (int) entry.Key, vh.Copy());
+                    }
 				}
 				foreach (DictionaryEntry entry in other.NamedArgumentValues)
 				{
@@ -190,7 +194,21 @@ namespace Spring.Objects.Factory.Config
 			}
 		}
 
-		/// <summary>
+	    private void AddOrMergeIndexedArgumentValues(int key, ValueHolder newValue)
+	    {
+	        ValueHolder currentValue = _indexedArgumentValues[key] as ValueHolder;
+	        IMergable mergable = newValue.Value as IMergable;
+            if (currentValue != null && mergable != null )
+            {
+                if (mergable.MergeEnabled)
+                {
+                    newValue.Value = mergable.Merge(currentValue.Value);
+                }
+            }
+	        _indexedArgumentValues[key] = newValue;
+	    }
+
+	    /// <summary>
 		/// Add argument value for the given index in the constructor argument list.
 		/// </summary>
 		/// <param name="index">
@@ -600,6 +618,12 @@ namespace Spring.Objects.Factory.Config
 			#endregion
 
 			#region Methods
+
+            public ValueHolder Copy()
+            {
+                ValueHolder copy = new ValueHolder(this._ctorValue, this.typeName);
+                return copy;
+            }
 
 			/// <summary>
 			/// A <see cref="System.String"/> that represents the current

@@ -22,7 +22,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+#if !NET_1_1
 using System.Collections.Specialized;
+#endif
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
@@ -242,7 +245,7 @@ namespace Spring.Objects
 			get { return computers; }
 		}
 
-		public virtual Set SomeSet
+		public virtual ISet SomeSet
 		{
 			get { return someSet; }
 			set { this.someSet = value; }
@@ -265,6 +268,14 @@ namespace Spring.Objects
             get { return someList; }
             set { this.someList = value;}
 	    }
+
+#if !NET_1_1
+	    public virtual List<string>  SomeGenericStringList
+	    {
+            get { return someGenericStringList;  }
+            set { this.someGenericStringList = value; }
+	    }
+#endif
 
 	    public virtual NameValueCollection SomeNameValueCollection
 	    {
@@ -370,8 +381,8 @@ namespace Spring.Objects
 			};
 
 		private Type classProperty;
-		private Set computers = new HybridSet();
-		private Set someSet = new HybridSet();
+		private ISet computers = new HybridSet();
+		private ISet someSet = new HybridSet();
 		private IDictionary someMap = new Hashtable();
 	    private IList someList = new ArrayList();
 		private DateTime date = DateTime.Now;
@@ -397,6 +408,7 @@ namespace Spring.Objects
 
         private IDictionary sharedState;
 	    private NameValueCollection someNameValueCollection;
+	    private List<string> someGenericStringList;
 
 	    #endregion
 
@@ -431,6 +443,26 @@ namespace Spring.Objects
 		{
 			this.spouse = spouse;
 		}
+
+        public TestObject(IList someList)
+        {
+            this.someList = someList;
+        }
+
+        public TestObject(ISet someSet)
+        {
+            this.someSet = someSet;
+        }
+
+        public TestObject(IDictionary someMap)
+        {
+            this.someMap = someMap;
+        }
+
+        public TestObject(NameValueCollection someProps)
+        {
+            this.someNameValueCollection = someProps;
+        }
 
 		#endregion
 

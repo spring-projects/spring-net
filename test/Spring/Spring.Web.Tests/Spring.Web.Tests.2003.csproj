@@ -202,7 +202,7 @@
                 <File
                     RelPath = "Data\Spring\Objects\Factory\Support\TestForm.aspx.cs"
                     DependentUpon = "TestForm.aspx"
-                    SubType = "ASPXCodeBehind"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -321,7 +321,7 @@
                 />
                 <File
                     RelPath = "Web\Support\ControlInterceptionTests.cs"
-                    SubType = "ASPXCodeBehind"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

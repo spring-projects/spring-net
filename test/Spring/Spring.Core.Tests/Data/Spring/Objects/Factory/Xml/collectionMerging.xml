@@ -3,7 +3,7 @@
 <objects xmlns="http://www.springframework.net">
 
   <object id="parentWithList" type="Spring.Objects.TestObject, Spring.Core.Tests">
-    <property name="SomeList">
+    <property name="SomeGenericStringList">
       <list>
         <value>Rob Harrop</value>
         <value>Rod Johnson</value>
@@ -12,12 +12,21 @@
   </object>
 
   <object id="childWithList" parent="parentWithList">
-    <property name="SomeList">
+    <property name="SomeGenericStringList">
       <list merge="true">
         <value>Juergen Hoeller</value>
       </list>
     </property>
   </object>
+
+  <object id="childWithListOfRefs" parent="parentWithList">
+    <property name="SomeList">
+      <list merge="true">
+        <object type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+      </list>
+    </property>
+  </object>
+  
 
 
   <object id="parentWithSet" type="Spring.Objects.TestObject, Spring.Core.Tests">
@@ -34,6 +43,17 @@
         <value>Sally Greenwood</value>
       </set>
     </property>
+  </object>
+
+  <object id="childWithSetOfRefs" parent="parentWithSet">
+    <property name="SomeSet">
+      <set merge="true">
+        <object type="Spring.Objects.TestObject, Spring.Core.Tests">
+          <property name="Name" value="Sally"/>
+        </object>
+      </set>
+    </property>
+      
   </object>
 
   <object id="parentWithMap" type="Spring.Objects.TestObject, Spring.Core.Tests">
@@ -55,6 +75,19 @@
     </property>
   </object>
 
+
+  <object id="childWithMapOfRefs" parent="parentWithMap">
+    <property name="SomeMap">
+      <dictionary merge="true">
+        <entry key="Rob">
+          <object type="Spring.Objects.TestObject, Spring.Core.Tests">
+            <property name="Name" value="Sally"/>
+          </object>
+        </entry>
+      </dictionary>
+    </property>
+  </object>
+
   <object id="parentWithNameValues" type="Spring.Objects.TestObject, Spring.Core.Tests">
     <property name="SomeNameValueCollection">
       <name-values>
@@ -72,4 +105,106 @@
       </name-values>
     </property>
   </object>
+
+
+  <object name="parentWithListInConstructor" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <constructor-arg index="0">
+      <list>
+        <value>Rob Harrop</value>
+        <value>Rod Johnson</value>
+      </list>
+    </constructor-arg>
+  </object>
+
+
+  <object name="childWithListInConstructor" parent="parentWithListInConstructor">
+    <constructor-arg index="0">
+      <list merge="true">
+        <value>Juergen Hoeller</value>
+      </list>
+    </constructor-arg>
+  </object>
+  
+  <object name="childWithListOfRefsInConstructor" parent="parentWithListInConstructor">
+    <constructor-arg index="0">
+      <list merge="true">
+        <object type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+      </list>
+    </constructor-arg>
+  </object>
+
+  <object name="parentWithSetInConstructor" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <constructor-arg index="0">
+      <set>
+        <value>Rob Harrop</value>
+      </set>
+    </constructor-arg>
+  </object>
+
+  <object name="childWithSetInConstructor" parent="parentWithSetInConstructor">
+    <constructor-arg index="0">
+      <set merge="true">
+        <value>Sally Greenwood</value>
+      </set>
+    </constructor-arg>
+  </object>
+  
+  <object name="childWithSetOfRefsInConstructor" parent="parentWithSetInConstructor">
+    <constructor-arg index="0">
+      <set merge="true">
+        <object type="Spring.Objects.TestObject, Spring.Core.Tests">
+          <property name="Name" value="Sally"/>
+        </object>
+      </set>
+    </constructor-arg>
+  </object>
+
+  <object name="parentWithMapInConstructor" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <constructor-arg index="0">
+      <dictionary>
+        <entry key="Rob" value="Sall"/>
+        <entry key="Juergen" value="Eva"/>        
+      </dictionary>
+    </constructor-arg>
+  </object>
+
+  <object name="childWithMapInConstructor" parent="parentWithMapInConstructor">
+    <constructor-arg index="0">
+      <dictionary merge="true">
+        <entry key="Rod" value="Kerry"/>
+        <entry key="Rob" value="Sally"/>        
+      </dictionary>
+    </constructor-arg>
+  </object>
+
+  <object name="childWithMapOfRefsInConstructor" parent="parentWithMapInConstructor">
+    <constructor-arg index="0">
+      <dictionary merge="true">
+        <entry key="Rob">
+          <object type="Spring.Objects.TestObject, Spring.Core.Tests">
+            <property name="Name" value="Sally"/>
+          </object>
+        </entry>
+      </dictionary>
+    </constructor-arg>
+  </object>
+
+  <object name="parentWithPropsInConstructor" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <constructor-arg index="0">
+      <name-values>
+        <add key="Rob" value="Sall"/>
+        <add key="Rod" value="Kerry"/>
+      </name-values>
+    </constructor-arg>
+  </object>
+
+  <object name="childWithPropsInConstructor" parent="parentWithPropsInConstructor">
+    <constructor-arg index="0">
+      <name-values merge="true">
+        <add key="Juergen" value="Eva"/>
+        <add key="Rob" value="Sally"/>
+      </name-values>
+    </constructor-arg>
+  </object>
+  
 </objects>
