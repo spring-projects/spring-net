@@ -44,12 +44,28 @@ namespace Spring.Objects.Factory.Support
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>
     [Serializable]
-    public class ManagedDictionary : Hashtable, IManagedCollection
+    public class ManagedDictionary : Hashtable, IManagedCollection, IMergable
 	{
         private string keyTypeName;
         private string valueTypeName;
+	    private bool mergeEnabled;
 
-        /// <summary>
+	    /// <summary>
+	    /// Initializes a new, empty instance of the <see cref="T:System.Collections.Hashtable"/> class using the default initial capacity, load factor, hash code provider, and comparer.
+	    /// </summary>
+	    public ManagedDictionary()
+	    {
+	    }
+
+	    /// <summary>
+	    /// Initializes a new, empty instance of the <see cref="T:System.Collections.Hashtable"/> class using the specified initial capacity, and the default load factor, hash code provider, and comparer.
+	    /// </summary>
+	    /// <param name="capacity">The approximate number of elements that the <see cref="T:System.Collections.Hashtable"/> object can initially contain. </param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="capacity"/> is less than zero. </exception>
+	    public ManagedDictionary(int capacity) : base(capacity)
+	    {
+	    }
+
+	    /// <summary>
         /// Gets or sets the unresolved name for the <see cref="System.Type"/> 
         /// of the keys of this managed dictionary.
         /// </summary>
@@ -167,5 +183,56 @@ namespace Spring.Objects.Factory.Support
 
             return dictionary;
 		}
+
+	    /// <summary>
+	    /// Gets a value indicating whether this instance is merge enabled for this instance
+	    /// </summary>
+	    /// <value>
+	    /// 	<c>true</c> if this instance is merge enabled; otherwise, <c>false</c>.
+	    /// </value>
+	    public bool MergeEnabled
+	    {
+            get { return this.mergeEnabled; }
+            set { this.mergeEnabled = value; }
+	    }
+
+	    /// <summary>
+	    /// Merges the current value set with that of the supplied object.
+	    /// </summary>
+	    /// <remarks>The supplied object is considered the parent, and values in the 
+	    /// callee's value set must override those of the supplied object.
+	    /// </remarks>
+	    /// <param name="parent">The parent object to merge with</param>
+	    /// <returns>The result of the merge operation</returns>
+	    /// <exception cref="ArgumentNullException">If the supplied parent is <code>null</code></exception>
+	    /// <exception cref="InvalidOperationException">If merging is not enabled for this instance,
+	    /// (i.e. <code>MergeEnabled</code> equals <code>false</code>.</exception>
+	    public object Merge(object parent)
+	    {
+            if (!this.mergeEnabled)
+            {
+                throw new InvalidOperationException(
+                    "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
+            }
+            if (parent == null)
+            {
+                return this;
+            }
+            IDictionary pDict = parent as IDictionary;
+            if (pDict == null)
+            {
+                throw new InvalidOperationException("Cannot merge with object of type [" + parent.GetType() + "]");
+            }
+            IDictionary merged = new ManagedDictionary();
+	        foreach (DictionaryEntry dictionaryEntry in pDict)
+	        {
+	            merged[dictionaryEntry.Key] = dictionaryEntry.Value;
+	        }
+	        foreach (DictionaryEntry entry in this)
+	        {
+	            merged[entry.Key] = entry.Value;
+	        }
+            return merged;
+	    }
 	}
 }

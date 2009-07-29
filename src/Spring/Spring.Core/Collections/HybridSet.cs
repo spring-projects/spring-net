@@ -59,7 +59,16 @@ namespace Spring.Collections
 			InternalDictionary = new HybridDictionary();
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HybridSet"/> class with a given capacity
+        /// </summary>
+        /// <param name="size">The size.</param>
+	    public HybridSet(int size)
+	    {
+            InternalDictionary = new HybridDictionary(size);
+	    }
+
+	    /// <summary>
 		/// Creates a new set instance based on either a list or a hash table,
 		/// depending on which will be more efficient based on the data-set
 		/// size, and initializes it based on a collection of elements.

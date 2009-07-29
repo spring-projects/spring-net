@@ -30,11 +30,77 @@ using Spring.Objects.Factory.Config;
 namespace Spring.Objects.Factory.Support
 {
     /// <summary>
+    /// Integration tests for ManagedDictionary
     /// </summary>
     /// <author>Erich Eichinger</author>
+    /// <author>Mark Pollack</author>
     [TestFixture]
     public class ManagedDictionaryTests
     {
+        [Test]
+        public void MergeSunnyDay()
+        {
+            ManagedDictionary parent = new ManagedDictionary();
+            parent.Add("one", "one");
+            parent.Add("two", "two");
+            ManagedDictionary child = new ManagedDictionary();
+            child.Add("three", "three");
+            child.MergeEnabled = true;
+            IDictionary mergedList = (IDictionary)child.Merge(parent);
+            Assert.AreEqual(3, mergedList.Count);
+        }
+
+        [Test]
+        public void MergeWithNullParent()
+        {
+            ManagedDictionary child = new ManagedDictionary();
+            child.MergeEnabled = true;
+            Assert.AreSame(child, child.Merge(null));
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = @"Not allowed to merge when the 'MergeEnabled' property is set to 'false'")]
+        public void MergeNotAllowedWhenMergeNotEnabled()
+        {
+            ManagedDictionary child = new ManagedDictionary();
+            child.Merge(null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void MergeWithNonCompatibleParentType()
+        {
+            ManagedDictionary child = new ManagedDictionary();
+            child.MergeEnabled = true;
+            child.Merge("hello");
+        }
+
+        [Test]
+        public void MergeEmptyChild()
+        {
+            ManagedDictionary parent = new ManagedDictionary();
+            parent.Add("one", "one");
+            parent.Add("two", "two");
+            ManagedDictionary child = new ManagedDictionary();
+            child.MergeEnabled = true;
+            IDictionary mergedMap = (IDictionary)child.Merge(parent);
+            Assert.AreEqual(2, mergedMap.Count);
+        }
+
+        [Test]
+        public void MergeChildValueOverrideTheParents()
+        {
+            ManagedDictionary parent = new ManagedDictionary();
+            parent.Add("one", "one");
+            parent.Add("two", "two");
+            ManagedDictionary child = new ManagedDictionary();
+            child.Add("one", "fork");
+            child.MergeEnabled = true;
+            IDictionary mergedMap = (IDictionary)child.Merge(parent);
+            Assert.AreEqual(2, mergedMap.Count);
+            Assert.AreEqual("fork", mergedMap["one"]);
+        }
+
 #if NET_2_0
         internal class InternalType
         {

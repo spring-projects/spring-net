@@ -111,7 +111,7 @@ namespace Spring.Validation
         private XmlDocument GetValidatedXmlResource(string resourceExtension)
         {
             AssemblyResource validationSchema = new AssemblyResource("assembly://Spring.Core/Spring.Validation.Config/spring-validation-1.1.xsd");
-            AssemblyResource objectsSchema = new AssemblyResource("assembly://Spring.Core/Spring.Objects.Factory.Xml/spring-objects-1.1.xsd");
+            AssemblyResource objectsSchema = new AssemblyResource("assembly://Spring.Core/Spring.Objects.Factory.Xml/spring-objects-1.3.xsd");
 
             return TestResourceLoader.GetXmlValidated(this, resourceExtension, objectsSchema, validationSchema);
         }

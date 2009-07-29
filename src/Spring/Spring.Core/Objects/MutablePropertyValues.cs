@@ -156,11 +156,35 @@ namespace Spring.Objects
                 PropertyValue currentPv = (PropertyValue) propertyValuesList [i];
                 if (currentPv.Name.Equals (pv.Name))
                 {
+                    pv = MergeIfRequired(pv, currentPv);
                     propertyValuesList[i] = pv;
                     return ;
                 }
             }
             propertyValuesList.Add (pv);
+        }
+
+        /// <summary>
+        /// Merges the value of the supplied 'new' <see cref="PropertyValue"/> with that of
+        /// the current <see cref="PropertyValue"/> if merging is supported and enabled.
+        /// </summary>
+        /// <see cref="IMergable"/>
+        /// <param name="newPv">The new pv.</param>
+        /// <param name="currentPv">The current pv.</param>
+        /// <returns>The possibly merged PropertyValue</returns>
+        private PropertyValue MergeIfRequired(PropertyValue newPv, PropertyValue currentPv)
+        {
+            object val = newPv.Value;
+            IMergable mergable = val as IMergable;
+            if (mergable != null)
+            {
+                if (mergable.MergeEnabled)
+                {
+                    object merged = mergable.Merge(currentPv.Value);
+                    return new PropertyValue(newPv.Name, merged);
+                }
+            }
+            return newPv;
         }
 
         /// <summary>

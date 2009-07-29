@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns="http://www.springframework.net" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense" targetNamespace="http://www.springframework.net" elementFormDefault="qualified" attributeFormDefault="unqualified" vs:friendlyname="Spring.NET Configuration" vs:ishtmlschema="false" vs:iscasesensitive="true" vs:requireattributequotes="true" vs:defaultnamespacequalifier="" vs:defaultnsprefix="">
+    <xsd:annotation>
+        <xsd:documentation>
+            <![CDATA[
+            Spring Objects XML Schema Definition
+            Based on Spring Beans DTD, authored by Rod Johnson &amp; Juergen Hoeller
+
+            Author: Griffin Caprio
+
+            This defines a simple and consistent way of creating a namespace
+            of managed objects configured by a Spring XmlObjectFactory.
+            This document type is used by most Spring functionality, including
+            web application contexts, which are based on object factories.
+
+            Each object element in this document defines an object.
+            Typically the object type (System.Type is specified, along with plain vanilla
+            object properties.
+
+            Object instances can be "singletons" (shared instances) or "prototypes"
+            (independent instances).
+
+            References among objects are supported, i.e. setting an object property
+            to refer to another object in the same factory or an ancestor factory.
+
+            As alternative to object references, "inner object definitions" can be used.
+            Singleton flags and names of such "inner object" are always ignored:
+            Inner object are anonymous prototypes.
+
+            There is also support for lists, dictionaries, and sets.
+            ]]>
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <!-- base types -->
+    <xsd:complexType name="identifiedType" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[The unique identifier for a bean. The scope of the identifier is the enclosing object factory.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="id" type="xsd:ID">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[The unique identifier for an object.]]></xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:simpleType name="nonNullString">
+        <xsd:annotation>
+            <xsd:documentation>Defines a base type for any required string.  Defines a string with a minimum length of 0</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="description">
+        <xsd:annotation>
+            <xsd:documentation>
+                Element containing informative text describing the purpose of the enclosing
+                element. Always optional.
+                Used primarily for user documentation of XML object definition documents.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="nonNullString"/>
+    </xsd:simpleType>
+    <xsd:complexType name="valueObject">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="type" type="nonNullString" use="optional"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="expression">
+        <xsd:sequence>
+            <xsd:element name="property" type="property" minOccurs="0" maxOccurs="2"/>
+        </xsd:sequence>
+        <xsd:attribute name="value" type="nonNullString" use="required"/>
+    </xsd:complexType>
+    <!--
+         Defines a reference to another object in this factory or an external
+         factory (parent or included factory).
+    -->
+    <xsd:complexType name="objectReference">
+        <xsd:attribute name="object" type="nonNullString" use="optional"/>
+        <xsd:attribute name="local" type="xsd:IDREF" use="optional"/>
+        <xsd:attribute name="parent" type="nonNullString" use="optional"/>
+        <!--
+             References must specify a name of the target object.
+             The "object" attribute can reference any name from any object in the context,
+             to be checked at runtime.
+             Local references, using the "local" attribute, have to use object ids;
+             they can be checked by this DTD, thus should be preferred for references
+             within the same object factory XML file.
+        -->
+    </xsd:complexType>
+    <!-- Defines a reference to another object or a type. -->
+    <xsd:complexType name="objectOrClassReference">
+        <xsd:attribute name="object" type="nonNullString" use="optional"/>
+        <xsd:attribute name="local" type="xsd:IDREF" use="optional"/>
+        <xsd:attribute name="type" type="nonNullString" use="optional"/>
+    </xsd:complexType>
+    <xsd:group name="objectList">
+        <xsd:sequence>
+            <xsd:element name="description" type="description" minOccurs="0"/>
+            <xsd:choice>
+                <xsd:element name="object" type="vanillaObject"/>
+                <!--
+                     Defines a reference to another object in this factory or an external
+                     factory (parent or included factory).
+                -->
+                <xsd:element name="ref" type="objectReference"/>
+                <!--
+                     Defines a string property value, which must also be the id of another
+                     object in this factory or an external factory (parent or included factory).
+                     While a regular 'value' element could instead be used for the same effect,
+                     using idref in this case allows validation of local object ids by the xml
+                     parser, and name completion by helper tools.
+                -->
+                <xsd:element name="idref" type="objectReference"/>
+                <!--
+                     A objectList can contain multiple inner object, ref, collection, or value elements.
+                     Lists are untyped, pending generics support, although references will be
+                     strongly typed.
+                     A objectList can also map to an array type. The necessary conversion
+                     is automatically performed by AbstractObjectFactory.
+                -->
+                <xsd:element name="list">
+                    <xsd:complexType>
+                        <xsd:group ref="objectList" minOccurs="0" maxOccurs="unbounded"/>
+                        <xsd:attribute name="element-type" type="nonNullString" use="optional"/>
+                        <xsd:attribute name="merge" type="xsd:boolean" use="optional" default="false"/>
+                    </xsd:complexType>
+                </xsd:element>
+                <!--
+                     A set can contain multiple inner object, ref, collection, or value elements.
+                     Sets are untyped, pending generics support, although references will be
+                     strongly typed.
+                -->
+                <xsd:element name="set">
+                    <xsd:complexType>
+                        <xsd:group ref="objectList" minOccurs="0" maxOccurs="unbounded"/>
+                        <xsd:attribute name="element-type" type="nonNullString" use="optional"/>
+                      <xsd:attribute name="merge" type="xsd:boolean" use="optional" default="false"/>
+                    </xsd:complexType>
+                </xsd:element>
+                <!--
+                     A Spring map is a mapping from a string key to object (a .NET IDictionary).
+                     Maps may be empty.
+                -->
+                <xsd:element name="dictionary" type="objectMap"/>
+                <!--
+                     Name-values elements differ from map elements in that values must be strings.
+                     Name-values may be empty.
+                -->
+                <xsd:element name="name-values" type="objectNameValues"/>
+                <!--
+                     Contains a string representation of a property value.
+                     The property may be a string, or may be converted to the
+                     required type using the System.ComponentModel.TypeConverter
+                     machinery. This makes it possible for application developers
+                     to write custom TypeConverter implementations that can
+                     convert strings to objects.
+                     
+                     Note that this is recommended for simple objects only.
+                     Configure more complex objects by setting properties to references
+                     to other objects.
+                -->
+                <xsd:element name="value" type="valueObject"/>
+                <!--
+                     Contains a string representation of an expression.
+                -->
+                <xsd:element name="expression" type="expression"/>
+                <!--
+                     Denotes a .NET null value. Necessary because an empty "value" tag
+                     will resolve to an empty String, which will not be resolved to a
+                     null value unless a special TypeConverter does so.
+                -->
+                <xsd:element name="null" />
+                <xsd:any namespace="##other" processContents="strict" />
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:group>
+    <xsd:complexType name="objectNameValues">
+        <xsd:sequence>
+            <!--
+                 The "value" attribute is the string value of the property. The "key"
+                 attribute is the name of the property.
+            -->
+            <xsd:element name="add" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType mixed="true">
+                    <xsd:attribute name="key" type="nonNullString" use="required"/>
+                    <xsd:attribute name="value" use="required" type="xsd:string"/>
+                    <xsd:attribute name="delimiters" use="optional" type="xsd:string"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="merge" type="xsd:boolean" use="optional" default="false"/>
+    </xsd:complexType>
+    <xsd:complexType name="importElement">
+        <xsd:annotation>
+            <xsd:documentation>Import an external file containing object definitions into this file.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="resource" type="nonNullString" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="aliasElement">
+        <xsd:annotation>
+            <xsd:documentation>Defines an additional alias name for an object definition.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="name" type="nonNullString" use="required"/>
+        <xsd:attribute name="alias" type="nonNullString" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="objectMap">
+        <xsd:sequence>
+            <xsd:element type="mapEntryElement" name="entry" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="key-type" type="nonNullString" use="optional"/>
+        <xsd:attribute name="value-type" type="nonNullString" use="optional"/>
+        <xsd:attribute name="merge" type="xsd:boolean" use="optional" default="false"/>
+    </xsd:complexType>
+    <xsd:complexType name="mapEntryElement">
+        <xsd:sequence>
+            <xsd:element type="mapKeyElement" name="key" minOccurs="0" maxOccurs="1"/>
+            <xsd:group ref="objectList" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute name="key" type="nonNullString" use="optional"/>
+        <xsd:attribute name="value" type="nonNullString" use="optional"/>
+        <xsd:attribute name="expression" type="nonNullString" use="optional"/>
+        <xsd:attribute name="key-ref" type="nonNullString" use="optional"/>
+        <xsd:attribute name="value-ref" type="nonNullString" use="optional"/>
+    </xsd:complexType>
+    <xsd:complexType name="mapKeyElement">
+        <xsd:group ref="objectList" minOccurs="1"/>
+    </xsd:complexType>
+    <xsd:complexType name="lookupMethod">
+        <xsd:attribute name="name" type="nonNullString" use="required"/>
+        <xsd:attribute name="object" type="nonNullString" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="constructorArgument">
+        <xsd:annotation>
+            <xsd:documentation>Defines constructor argument.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:group ref="objectList" minOccurs="0"/>
+        <!--
+              The constructor-arg tag can have an optional named parameter attribute,
+              to specify a named parameter in the constructor argument list.
+        -->
+        <xsd:attribute name="name" type="nonNullString" use="optional"/>
+        <!--
+              The constructor-arg tag can have an optional index attribute,
+              to specify the exact index in the constructor argument list. Only needed
+              to avoid ambiguities, e.g. in case of 2 arguments of the same type.
+        -->
+        <xsd:attribute name="index" type="nonNullString" use="optional"/>
+        <!--
+              The constructor-arg tag can have an optional type attribute,
+              to specify the exact type of the constructor argument. Only needed
+              to avoid ambiguities, e.g. in case of 2 single argument constructors
+              that can both be converted from a String.
+        -->
+        <xsd:attribute name="type" type="nonNullString" use="optional"/>
+        <xsd:attribute name="value" type="nonNullString" use="optional"/>
+        <xsd:attribute name="expression" type="nonNullString" use="optional"/>
+        <xsd:attribute name="ref" type="nonNullString" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="property">
+        <xsd:annotation>
+            <xsd:documentation>Defines property.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:group ref="objectList" minOccurs="0"/>
+        <!-- The property name attribute is the name of the objects property. -->
+        <xsd:attribute name="name" type="nonNullString" use="required"/>
+        <xsd:attribute name="value" type="nonNullString" use="optional"/>
+        <xsd:attribute name="expression" type="nonNullString" use="optional"/>
+        <xsd:attribute name="ref" type="nonNullString" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="vanillaObject">
+        <xsd:annotation>
+            <xsd:documentation>Defines a single named object.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+            <!--
+                 Object definitions can specify zero or more constructor arguments.
+                 They correspond to either a specific index of the constructor argument list
+                 or are supposed to be matched generically by type.
+                 This is an alternative to "autowire constructor".
+            -->
+            <xsd:element name="constructor-arg" type="constructorArgument" minOccurs="0" maxOccurs="unbounded"/>
+            <!--
+                 Object definitions can have zero or more properties.
+                 Spring supports primitives, references to other objects in the same or
+                 related factories, lists, dictionaries and properties.
+            -->
+            <xsd:element name="property" type="property" minOccurs="0" maxOccurs="unbounded"/>
+            <!--
+                 Object definitions can specify zero or more lookup-methods.
+            -->
+            <xsd:element name="lookup-method" type="lookupMethod" minOccurs="0" maxOccurs="unbounded"/>
+            <!-- Object definitions can have zero or more replaced-methods. -->
+            <xsd:element name="replaced-method" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="arg-type" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:attribute name="match" type="nonNullString" use="required"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                    <xsd:attribute name="name" type="nonNullString" use="required"/>
+                    <xsd:attribute name="replacer" type="nonNullString" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+            <!-- Object definitions can have zero or more subscriptions. -->
+            <xsd:element name="listener" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ref" type="objectOrClassReference" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                    <!-- The event(s) the object is interested in. -->
+                    <xsd:attribute name="event" type="nonNullString" use="optional"/>
+                    <!-- The name or name pattern of the method that will handle the event(s). -->
+                    <xsd:attribute name="method" type="nonNullString" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <!--
+             Objects can be identified by an id, to enable reference checking.
+             There are constraints on a valid XML id: if you want to reference your object
+             in .NET code using a name that's illegal as an XML id, use the optional
+             "name" attribute. If neither given, the object type name is used as id.
+        -->
+        <xsd:attribute name="id" type="xsd:ID" use="optional"/>
+        <!--
+             Optional. Can be used to create one or more aliases illegal in an id.
+             Multiple aliases can be separated by any number of spaces or commas.
+        -->
+        <xsd:attribute name="name" type="nonNullString" use="optional"/>
+        <!--
+             Each object definition must specify the full, assembly qualified of the type,
+             or the name of the parent object from which the type can be worked out.
+             
+             Note that a child object definition that references a parent will just
+             add respectively override property values and be able to change the
+             singleton status. It will inherit all of the parent's other parameters
+             like lazy initialization or autowire settings.
+        -->
+        <xsd:attribute name="type" type="nonNullString" use="optional"/>
+        <xsd:attribute name="parent" type="nonNullString" use="optional"/>
+        <!--
+             Is this object "abstract", i.e. not meant to be instantiated itself but
+             rather just serving as parent for concrete child object definitions?
+             Default is false. Specify true to tell the object factory to not try to
+             instantiate that particular object in any case.
+        -->
+        <xsd:attribute name="abstract" type="xsd:boolean" use="optional" default="false"/>
+        <!--
+             Is this object a "singleton" (one shared instance, which will
+             be returned by all calls to GetObject() with the id),
+             or a "prototype" (independent instance resulting from each call to
+             getObject(). Default is singleton.
+             
+             Singletons are most commonly used, and are ideal for multi-threaded
+             service objects.
+        -->
+        <xsd:attribute name="singleton" type="xsd:boolean" use="optional" default="true"/>
+        <!--
+             Optional attribute controlling the scope of singleton instances. It is
+             only applicable to ASP.Net web applications and it has no effect on prototype
+             objects. Applications other than ASP.Net web applications simply ignore this attribute.
+             It has 3 possible values:
+             1. "application"
+             Default object scope. Objects defined with application scope will behave like
+             traditional singleton objects. Same instance will be returned from every call
+             to IApplicationContext.GetObject()
+             
+             2. "session"
+             Objects with this scope will be stored within user's HTTP session. Session scope
+             is typically used for objects such as shopping cart, user profile, etc.
+             
+             3. "request"
+             Object with this scope will be initialized for each HTTP request, but unlike with prototype
+             objects, same instance will be returned from all calls to IApplicationContext.GetObject()
+             within the same HTTP request. For example, if one ASP page forwards request to another using
+             Server.Transfer method, they can easily share the state by configuring dependency to the same
+             request-scoped object.
+        -->
+        <xsd:attribute name="scope" use="optional" default="application">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="application"/>
+                    <xsd:enumeration value="session"/>
+                    <xsd:enumeration value="request"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <!--
+             Is this object to be lazily initialized?
+             If false, it will get instantiated on startup by object factories
+             that perform eager initialization of singletons.
+        -->
+        <xsd:attribute name="lazy-init" use="optional" default="default">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="true"/>
+                    <xsd:enumeration value="false"/>
+                    <xsd:enumeration value="default"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <!--
+             Optional attribute controlling whether to "autowire" object properties.
+             This is an automagical process in which object references don't need to be coded
+             explicitly in the XML object definition file, but Spring works out dependencies.
+             
+             There are 5 modes:
+             
+             1. "no"
+             The traditional Spring default. No automagical wiring. Object references
+             must be defined in the XML file via the <ref> element. We recommend this
+             in most cases as it makes documentation more explicit.
+             
+             2. "byName"
+             Autowiring by property name. If a object of class Cat exposes a dog property,
+             Spring will try to set this to the value of the object "dog" in the current factory.
+             
+             3. "byType"
+             Autowiring if there is exactly one object of the property type in the object factory.
+             If there is more than one, a fatal error is raised, and you can't use byType
+             autowiring for that object. If there is none, nothing special happens - use
+             dependency-check="objects" to raise an error in that case.
+             
+             4. "constructor"
+             Analogous to "byType" for constructor arguments. If there isn't exactly one object
+             of the constructor argument type in the object factory, a fatal error is raised.
+             
+             5. "autodetect"
+             Chooses "constructor" or "byType" through introspection of the object class.
+             If a default constructor is found, "byType" gets applied.
+             
+             The latter two are similar to PicoContainer and make object factories simple to
+             configure for small namespaces, but doesn't work as well as standard Spring
+             behaviour for bigger applications.
+             
+             Note that explicit dependencies, i.e. "property" and "constructor-arg" elements,
+             always override autowiring. Autowire behaviour can be combined with dependency
+             checking, which will be performed after all autowiring has been completed.
+        -->
+        <xsd:attribute name="autowire" use="optional" default="default">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="no"/>
+                    <xsd:enumeration value="byName"/>
+                    <xsd:enumeration value="byType"/>
+                    <xsd:enumeration value="constructor"/>
+                    <xsd:enumeration value="autodetect"/>
+                    <xsd:enumeration value="default"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <!--
+             Optional attribute controlling whether to check whether all this
+             objects dependencies, expressed in its properties, are satisfied.
+             Default is no dependency checking.
+             
+             "simple" type dependency checking includes primitives and String
+             "object" includes collaborators (other objects in the factory)
+             "all" includes both types of dependency checking
+        -->
+        <xsd:attribute name="dependency-check" use="optional" default="default">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="none"/>
+                    <xsd:enumeration value="objects"/>
+                    <xsd:enumeration value="simple"/>
+                    <xsd:enumeration value="all"/>
+                    <xsd:enumeration value="default"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <!--
+             The names of the objects that this object depends on being initialized.
+             The object factory will guarantee that these objects get initialized before.
+             
+             Note that dependencies are normally expressed through object properties or
+             constructor arguments. This property should just be necessary for other kinds
+             of dependencies like statics (*ugh*) or database preparation on startup.
+        -->
+        <xsd:attribute name="depends-on" type="nonNullString" use="optional"/>
+        <!--
+             Optional attribute for the name of the custom initialization method
+             to invoke after setting object properties. The method must have no arguments,
+             but may throw any exception.
+        -->
+        <xsd:attribute name="init-method" type="nonNullString" use="optional"/>
+        <!--
+             Optional attribute for the name of the custom destroy method to invoke
+             on object factory shutdown. The method must have no arguments,
+             but may throw any exception. Note: Only invoked on singleton objects!
+        -->
+        <xsd:attribute name="destroy-method" type="nonNullString" use="optional"/>
+        <xsd:attribute name="factory-method" type="nonNullString" use="optional"/>
+        <xsd:attribute name="factory-object" type="nonNullString" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element name="objects">
+        <xsd:annotation>
+            <xsd:documentation>The document root.  At least one object definition is required.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="import" type="importElement"/>
+                    <xsd:element name="alias" type="aliasElement"/>
+                    <xsd:element name="object" type="vanillaObject"/>
+                    <xsd:any namespace="##other" processContents="strict"/>
+                </xsd:choice>
+            </xsd:sequence>
+            <!--
+                 Default values for all object definitions. Can be overridden at
+                 the "object" level. See those attribute definitions for details.
+            -->
+            <xsd:attribute name="default-lazy-init" type="xsd:boolean" use="optional" default="false"/>
+            <xsd:attribute name="default-merge" type="xsd:boolean" use="optional" default="false"/>
+            <xsd:attribute name="default-dependency-check" use="optional" default="none">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="none"/>
+                        <xsd:enumeration value="objects"/>
+                        <xsd:enumeration value="simple"/>
+                        <xsd:enumeration value="all"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+            <xsd:attribute name="default-autowire" use="optional" default="no">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="no"/>
+                        <xsd:enumeration value="byName"/>
+                        <xsd:enumeration value="byType"/>
+                        <xsd:enumeration value="constructor"/>
+                        <xsd:enumeration value="autodetect"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

@@ -949,6 +949,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Expressions\OpADDTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\OpANDTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\OpORTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\OpXORTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Expressions\PropertyOrFieldNodeTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

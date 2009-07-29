@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -672,7 +672,6 @@
     <Compile Include="Objects\Factory\Config\ObjectDefinitionHolder.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionVisitor.cs" />
     <Compile Include="Objects\Factory\Config\ObjectRole.cs" />
-    <Compile Include="Objects\Factory\Config\ResolvePropertyValueHandler.cs" />
     <Compile Include="Objects\Factory\Config\ResourceHandlerConfigurer.cs" />
     <Compile Include="Objects\Factory\Config\SharedStateAwareProcessor.cs" />
     <Compile Include="Objects\Factory\Config\SmartInstantiationAwareObjectPostProcessor.cs" />
@@ -692,6 +691,7 @@
     <Compile Include="Objects\Factory\Support\DefaultObjectNameGenerator.cs" />
     <Compile Include="Objects\Factory\Support\IConfigurableObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IObjectNameGenerator.cs" />
+    <Compile Include="Objects\Factory\Support\ManagedNameValueCollection.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionBuilder.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionValueResolver.cs" />
     <Compile Include="Objects\Factory\Support\SimpleAutowireCandidateResolver.cs" />
@@ -710,6 +710,7 @@
     <Compile Include="Objects\Factory\Xml\ParserContext.cs" />
     <Compile Include="Objects\Factory\Xml\XmlReaderContext.cs" />
     <Compile Include="Objects\FatalObjectException.cs" />
+    <Compile Include="Objects\IMergable.cs" />
     <Compile Include="Objects\ISharedStateAware.cs" />
     <Compile Include="Objects\ISharedStateFactory.cs" />
     <Compile Include="Objects\MutablePropertyValues.cs" />
@@ -958,7 +959,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Objects\Factory\Support\PropertiesObjectDefinitionReader.cs" />
-    <Compile Include="Objects\Factory\Support\ReplacedMethodOverride.cs">
+    <Compile Include="Objects\Factory\Xml\ReplacedMethodOverride.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Objects\Factory\Support\RootObjectDefinition.cs">
@@ -1196,6 +1197,7 @@
       <SubType>
       </SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-1.3.xsd" />
     <None Include="Spring.Core.build" />
     <EmbeddedResource Include="Validation\Config\spring-validation-1.1.xsd" />
     <EmbeddedResource Include="Resources\Strings.resx">

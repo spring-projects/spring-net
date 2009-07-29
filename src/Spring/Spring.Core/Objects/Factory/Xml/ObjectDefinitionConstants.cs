@@ -90,6 +90,12 @@ namespace Spring.Objects.Factory.Xml
 		/// </summary>
 		public const string DefaultAutowireAttribute = "default-autowire";
 
+        /// <summary>
+        /// Specifies the default collection merge mode.
+        /// </summary>
+	    public const string DefaultMergeAttribute = "default-merge";
+
+
 		/// <summary>
 		/// Defines a single named object.
 		/// </summary>
@@ -586,6 +592,11 @@ namespace Spring.Objects.Factory.Xml
 		/// dictionary entry element with <c>&lt;ref object="..."/&gt;</c>.
 		/// </summary>
 		public const string DictionaryValueRefShortcutAttribute = "value-ref";
+
+        /// <summary>
+        /// Specify if the collection values should be merged with the parent.
+        /// </summary>
+	    public const string MergeAttribute = "merge";
 
 		/// <summary>
 		/// The string of characters that delimit object names.

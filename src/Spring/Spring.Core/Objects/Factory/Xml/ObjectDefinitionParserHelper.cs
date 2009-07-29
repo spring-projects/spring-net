@@ -161,6 +161,20 @@ namespace Spring.Objects.Factory.Xml
 
             #endregion
 
+            ddd.Merge = GetAttributeValue(root, ObjectDefinitionConstants.DefaultMergeAttribute);
+
+            #region Instrumentation
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug(
+                    string.Format(
+                        "Default merge '{0}'.",
+                        ddd.Merge));
+            }
+
+            #endregion
+
             defaults = ddd;
         }
 

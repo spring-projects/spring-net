@@ -62,7 +62,7 @@ namespace Spring.Objects.Factory.Xml
         NamespaceParser(
             Namespace = "http://www.springframework.net",
             SchemaLocationAssemblyHint = typeof(ObjectsNamespaceParser),
-            SchemaLocation = "/Spring.Objects.Factory.Xml/spring-objects-1.1.xsd"
+            SchemaLocation = "/Spring.Objects.Factory.Xml/spring-objects-1.3.xsd"
         )
     ]
 //    [Obsolete("ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead", false)]
@@ -895,7 +895,7 @@ namespace Spring.Objects.Factory.Xml
                         }
                     case ObjectDefinitionConstants.NameValuesElement:
                         {
-                            return ParseNameValueCollectionElement(element, name);
+                            return ParseNameValueCollectionElement(element, name, parserContext);
                         }
                     case ObjectDefinitionConstants.ValueElement:
                         {
@@ -1026,7 +1026,7 @@ namespace Spring.Objects.Factory.Xml
         /// <summary>
         /// Gets a list definition.
         /// </summary>
-        /// <param name="element">
+        /// <param name="collectionEle">
         /// The element describing the list definition.
         /// </param>
         /// <param name="name">
@@ -1036,31 +1036,43 @@ namespace Spring.Objects.Factory.Xml
         /// The namespace-aware parser.
         /// </param>
         /// <returns>The list definition.</returns>
-        protected virtual IList ParseListElement(XmlElement element, string name, ParserContext parserContext)
+        protected virtual IList ParseListElement(XmlElement collectionEle, string name, ParserContext parserContext)
         {
-            ManagedList list = new ManagedList();
+            string elementTypeName = GetAttributeValue(collectionEle, "element-type");
+            XmlNodeList nl = collectionEle.ChildNodes;
+            ManagedList target = new ManagedList(nl.Count);
 
-            string elementTypeName = GetAttributeValue(element, "element-type");
             if (StringUtils.HasText(elementTypeName))
             {
-                list.ElementTypeName = elementTypeName;
+                target.ElementTypeName = elementTypeName;
             }
+            target.MergeEnabled = ParseMergeAttribute(collectionEle, parserContext.ParserHelper);
 
-            foreach (XmlNode node in element.ChildNodes)
+            foreach (XmlNode node in collectionEle.ChildNodes)
             {
                 XmlElement ele = node as XmlElement;
                 if (ele != null)
                 {
-                    list.Add(ParsePropertySubElement(ele, name, parserContext));
+                    target.Add(ParsePropertySubElement(ele, name, parserContext));
                 }
             }
-            return list;
+            return target;
+        }
+
+        private bool ParseMergeAttribute(XmlElement collectionElement, ObjectDefinitionParserHelper helper)
+        {
+            string val = collectionElement.GetAttribute(ObjectDefinitionConstants.MergeAttribute);
+            if (ObjectDefinitionConstants.DefaultValue.Equals(val))
+            {
+                val = helper.Defaults.Merge;
+            }
+            return ObjectDefinitionConstants.TrueValue.Equals(val);
         }
 
         /// <summary>
         /// Gets a set definition.
         /// </summary>
-        /// <param name="element">
+        /// <param name="collectionEle">
         /// The element describing the set definition.
         /// </param>
         /// <param name="name">
@@ -1070,44 +1082,42 @@ namespace Spring.Objects.Factory.Xml
         /// The namespace-aware parser.
         /// </param>
         /// <returns>The set definition.</returns>
-        protected Set ParseSetElement(XmlElement element, string name, ParserContext parserContext)
-        {
-            ManagedSet theSet = new ManagedSet();
-            string elementTypeName = GetAttributeValue(element, "element-type");
+        protected Set ParseSetElement(XmlElement collectionEle, string name, ParserContext parserContext)
+        {           
+            string elementTypeName = GetAttributeValue(collectionEle, "element-type");
+            XmlNodeList nl = collectionEle.ChildNodes;
+            ManagedSet target = new ManagedSet(nl.Count);
+
             if (StringUtils.HasText(elementTypeName))
             {
-                theSet.ElementTypeName = elementTypeName;
+                target.ElementTypeName = elementTypeName;
             }
-            foreach (XmlNode node in element.ChildNodes)
+            target.MergeEnabled = ParseMergeAttribute(collectionEle, parserContext.ParserHelper);
+
+            foreach (XmlNode node in collectionEle.ChildNodes)
             {
                 XmlElement ele = node as XmlElement;
                 if (ele != null)
                 {
                     object sub = ParsePropertySubElement(ele, name, parserContext);
-                    theSet.Add(sub);
+                    target.Add(sub);
                 }
             }
-            return theSet;
+            return target;
         }
 
         /// <summary>
         /// Gets a dictionary definition.
         /// </summary>
-        /// <param name="element">
-        /// The element describing the dictionary definition.
-        /// </param>
-        /// <param name="name">
-        /// The name of the object (definition) associated with the dictionary definition.
-        /// </param>
-        /// <param name="parserContext">
-        /// The namespace-aware parser.
-        /// </param>
+        /// <param name="mapEle">The element describing the dictionary definition.</param>
+        /// <param name="name">The name of the object (definition) associated with the dictionary definition.</param>
+        /// <param name="parserContext">The namespace-aware parser.</param>
         /// <returns>The dictionary definition.</returns>
-        protected IDictionary ParseDictionaryElement(XmlElement element, string name, ParserContext parserContext)
+        protected IDictionary ParseDictionaryElement(XmlElement mapEle, string name, ParserContext parserContext)
         {
             ManagedDictionary dictionary = new ManagedDictionary();
-            string keyTypeName = GetAttributeValue(element, "key-type");
-            string valueTypeName = GetAttributeValue(element, "value-type");
+            string keyTypeName = GetAttributeValue(mapEle, "key-type");
+            string valueTypeName = GetAttributeValue(mapEle, "value-type");
             if (StringUtils.HasText(keyTypeName))
             {
                 dictionary.KeyTypeName = keyTypeName;
@@ -1116,8 +1126,9 @@ namespace Spring.Objects.Factory.Xml
             {
                 dictionary.ValueTypeName = valueTypeName;
             }
+            dictionary.MergeEnabled = ParseMergeAttribute(mapEle, parserContext.ParserHelper);
 
-            XmlNodeList entryElements = SelectNodes(element, ObjectDefinitionConstants.EntryElement);
+            XmlNodeList entryElements = SelectNodes(mapEle, ObjectDefinitionConstants.EntryElement);
             foreach (XmlElement entryEle in entryElements)
             {
                 #region Key
@@ -1274,7 +1285,7 @@ namespace Spring.Objects.Factory.Xml
         /// <summary>
         /// Gets a name value collection mapping definition.
         /// </summary>
-        /// <param name="element">
+        /// <param name="nameValueEle">
         /// The element describing the name value collection mapping definition.
         /// </param>
         /// <param name="name">
@@ -1282,10 +1293,12 @@ namespace Spring.Objects.Factory.Xml
         /// name value collection mapping definition.
         /// </param>
         /// <returns>The name value collection definition.</returns>
-        protected NameValueCollection ParseNameValueCollectionElement(XmlElement element, string name)
+        protected NameValueCollection ParseNameValueCollectionElement(XmlElement nameValueEle, string name, ParserContext parserContext)
         {
-            NameValueCollection nvc = new NameValueCollection();
-            XmlNodeList addElements = element.GetElementsByTagName(ObjectDefinitionConstants.AddElement);
+            ManagedNameValueCollection nvc = new ManagedNameValueCollection();
+            nvc.MergeEnabled = ParseMergeAttribute(nameValueEle, parserContext.ParserHelper);
+
+            XmlNodeList addElements = nameValueEle.GetElementsByTagName(ObjectDefinitionConstants.AddElement);
             foreach (XmlElement addElement in addElements)
             {
                 string key = GetAttributeValue(addElement, ObjectDefinitionConstants.KeyAttribute);

@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
@@ -259,6 +260,18 @@ namespace Spring.Objects
 			set { this.someMap = value; }
 		}
 
+	    public virtual IList SomeList
+	    {
+            get { return someList; }
+            set { this.someList = value;}
+	    }
+
+	    public virtual NameValueCollection SomeNameValueCollection
+	    {
+            get { return someNameValueCollection; }
+            set { this.someNameValueCollection = value;}
+	    }
+
 		protected virtual string HappyPlace
 		{
 			get { return _happyPlace; }
@@ -360,6 +373,7 @@ namespace Spring.Objects
 		private Set computers = new HybridSet();
 		private Set someSet = new HybridSet();
 		private IDictionary someMap = new Hashtable();
+	    private IList someList = new ArrayList();
 		private DateTime date = DateTime.Now;
 		private Single myFloat = (float) 0.0;
 		private CultureInfo myCulture = CultureInfo.InvariantCulture;
@@ -382,6 +396,8 @@ namespace Spring.Objects
 	    private bool initCompleted;
 
         private IDictionary sharedState;
+	    private NameValueCollection someNameValueCollection;
+
 	    #endregion
 
 		#region Constructor (s) / Destructor

@@ -40,9 +40,29 @@ namespace Spring.Objects.Factory.Support
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
     [Serializable]
-    public class ManagedSet : HybridSet, IManagedCollection
+    public class ManagedSet : HybridSet, IManagedCollection, IMergable
     {
         private string elementTypeName;
+
+        private bool mergeEnabled;
+
+
+        /// <summary>
+        /// Creates a new set instance based on either a list or a hash table,
+        /// depending on which will be more efficient based on the data-set
+        /// size.
+        /// </summary>
+        public ManagedSet()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HybridSet"/> class with a given capacity
+        /// </summary>
+        /// <param name="size">The size.</param>
+        public ManagedSet(int size) : base(size)
+        {
+        }
 
         /// <summary>
         /// Gets or sets the unresolved name for the <see cref="System.Type"/> 
@@ -108,6 +128,57 @@ namespace Spring.Objects.Factory.Support
             }
 
             return set;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is merge enabled for this instance
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is merge enabled; otherwise, <c>false</c>.
+        /// </value>
+        public bool MergeEnabled
+        {
+            get { return this.mergeEnabled; }
+            set { this.mergeEnabled = value; }
+        }
+
+        /// <summary>
+        /// Merges the current value set with that of the supplied object.
+        /// </summary>
+        /// <remarks>The supplied object is considered the parent, and values in the 
+        /// callee's value set must override those of the supplied object.
+        /// </remarks>
+        /// <param name="parent">The parent object to merge with</param>
+        /// <returns>The result of the merge operation</returns>
+        /// <exception cref="ArgumentNullException">If the supplied parent is <code>null</code></exception>
+        /// <exception cref="InvalidOperationException">If merging is not enabled for this instance,
+        /// (i.e. <code>MergeEnabled</code> equals <code>false</code>.</exception>
+        public object Merge(object parent)
+        {
+            if (!this.mergeEnabled)
+            {
+                throw new InvalidOperationException(
+                    "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
+            }
+            if (parent == null)
+            {
+                return this;
+            }
+            ISet pSet = parent as ISet;
+            if (pSet == null)
+            {
+                throw new InvalidOperationException("Cannot merge with object of type [" + parent.GetType() + "]");
+            }
+            ISet merged = new ManagedSet();
+            foreach (object element in pSet)
+            {
+                merged.Add(element);
+            }
+            foreach (object o in this)
+            {
+                merged.Add(o);
+            }
+            return merged;
         }
     }
 }
