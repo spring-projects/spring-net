@@ -1,7 +1,7 @@
 options
 {
 	language = "CSharp";
-	namespace = "Spring.Expressions";
+	namespace = "Spring.Expressions.Parser";
 }
 
 class ExpressionParser extends Parser;

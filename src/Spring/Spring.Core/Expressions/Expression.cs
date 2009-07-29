@@ -23,8 +23,9 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
-using antlr;
-using antlr.collections;
+using Spring.Expressions.Parser;
+using Spring.Expressions.Parser.antlr;
+using Spring.Expressions.Parser.antlr.collections;
 using Spring.Core;
 using Spring.Util;
 using StringUtils = Spring.Util.StringUtils;
@@ -86,7 +87,7 @@ namespace Spring.Expressions
         static Expression()
         {
             // Ensure antlr is loaded (fixes GAC issues)!
-            Assembly antlrAss = typeof( antlr.LLkParser ).Assembly;
+            Assembly antlrAss = typeof( Parser.antlr.LLkParser ).Assembly;
         }
 
         /// <summary>

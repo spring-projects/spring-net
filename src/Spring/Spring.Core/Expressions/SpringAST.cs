@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
-using antlr;
-using antlr.collections;
+using Spring.Expressions.Parser.antlr;
+using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions
 {
@@ -17,13 +17,13 @@ namespace Spring.Expressions
     /// data during serialization.
     /// </remarks>
     [Serializable]
-    public class SpringAST : antlr.BaseAST, ISerializable
+    public class SpringAST : Parser.antlr.BaseAST, ISerializable
     {
         #region Global SpringAST Factory
 
-        internal class SpringASTCreator : antlr.ASTNodeCreator
+        internal class SpringASTCreator : Parser.antlr.ASTNodeCreator
         {
-            public override antlr.collections.AST Create()
+            public override Parser.antlr.collections.AST Create()
             {
                 return new SpringAST();
             }

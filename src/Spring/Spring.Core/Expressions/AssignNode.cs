@@ -20,7 +20,7 @@
 
 using System;
 using System.Runtime.Serialization;
-using antlr.collections;
+using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions
 {

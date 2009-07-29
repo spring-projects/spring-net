@@ -34,16 +34,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Services;
-using antlr;
-using antlr.collections;
 using NUnit.Framework;
-//using NUnit.Framework.SyntaxHelpers;
 using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Expressions;
+using Spring.Expressions.Parser.antlr;
+using Spring.Expressions.Parser.antlr.collections;
 using Spring.Expressions.Processors;
 using Spring.Objects;
 using Spring.Objects.Factory;
@@ -401,7 +400,6 @@ namespace Spring.Expressions
             Assert.AreEqual(Int64.MaxValue.ToString(), ExpressionEvaluator.GetValue(null, Int64.MaxValue.ToString() + ".ToString()"));
             Assert.AreEqual(Int64.MaxValue.ToString(), ExpressionEvaluator.GetValue(null, "long.MaxValue.ToString()"));
 
-            // TODO (EE): THIS ANTLR TEST FAILS SINCE SOURCECODE MERGE!!!!!!
             object int64 = ExpressionEvaluator.GetValue(null, Int64.MaxValue.ToString());
             Assert.AreEqual(int64, Int64.MaxValue);
             Assert.IsTrue(int64 is Int64);

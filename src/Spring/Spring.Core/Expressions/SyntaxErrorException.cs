@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using System.Globalization;
 using System.Runtime.Serialization;
-using antlr;
-
-#endregion
+using Spring.Expressions.Parser.antlr;
 
 namespace Spring.Expressions
 {
@@ -36,7 +31,7 @@ namespace Spring.Expressions
 	[Serializable]
 	internal class SyntaxErrorException : RecognitionException, ISerializable
 	{
-        private string _expression;
+        private readonly string _expression;
 
 	    ///<summary>
 	    ///</summary>

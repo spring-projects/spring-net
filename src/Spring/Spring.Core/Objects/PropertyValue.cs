@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Globalization;
-
-using antlr;
 using Spring.Core;
 using Spring.Expressions;
+using Spring.Expressions.Parser.antlr;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects
 {
@@ -54,9 +49,9 @@ namespace Spring.Objects
     [Serializable]
     public class PropertyValue
     {
-        private string propertyName;
+        private readonly string propertyName;
+        private readonly object propertyValue;
         private IExpression propertyExpression;
-        private object propertyValue;
 
         /// <summary>
         /// Creates a new instance of the

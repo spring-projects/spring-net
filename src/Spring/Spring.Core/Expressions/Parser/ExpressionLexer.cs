@@ -1,6 +1,6 @@
 // $ANTLR 2.7.6 (2005-12-22): "Expression.g" -> "ExpressionLexer.cs"$
 
-namespace Spring.Expressions
+namespace Spring.Expressions.Parser
 {
 	// Generate header specific to lexer CSharp file
 	using System;

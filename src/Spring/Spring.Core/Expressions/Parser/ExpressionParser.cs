@@ -1,6 +1,6 @@
 // $ANTLR 2.7.6 (2005-12-22): "Expression.g" -> "ExpressionParser.cs"$
 
-namespace Spring.Expressions
+namespace Spring.Expressions.Parser
 {
 	// Generate the header common to all output files.
 	using System;

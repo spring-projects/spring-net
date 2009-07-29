@@ -18,22 +18,18 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 
-using antlr;
 using Common.Logging;
 using Spring.Core;
 using Spring.Expressions;
+using Spring.Expressions.Parser.antlr;
 using Spring.Util;
 using StringUtils=Spring.Util.StringUtils;
-
-#endregion
 
 namespace Spring.Objects
 {
