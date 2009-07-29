@@ -107,9 +107,9 @@ namespace Spring.Expressions.Parser.antlr
 		}
 		
 		/*Get a lookahead character */
-		public virtual char LA(int i)
-		{
-			fill(i);
+        public virtual char LA(int i)
+        {
+            fill(i);
             if ((this.markerOffset + i) <= this.queue.Count)
             {
                 return (char)this.queue[(this.markerOffset + i) - 1];

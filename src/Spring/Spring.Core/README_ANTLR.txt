@@ -4,7 +4,7 @@
 28-07-2009
 ----------
 
-*) Added codebase version 2.7.6 of antlr
+*) Added codebase version 2.7.7 of antlr
 *) had to move <global>::SupportClass to namespace "antlr"
 *) Replaced Method antlr.InputBuffer.LA(int i) with
 

@@ -59,7 +59,7 @@ namespace Spring.Expressions.Parser.antlr
 		/// Constructs an <c>ASTFactory</c> with the default AST node type of
 		/// <see cref="antlr.CommonAST"/>.
 		/// </summary>
-		public ASTFactory() : this(typeof(CommonAST).FullName)
+		public ASTFactory() : this(typeof(antlr.CommonAST))
 		{
 		}
 
@@ -71,13 +71,25 @@ namespace Spring.Expressions.Parser.antlr
 		///		Name of default AST node type for this factory.
 		/// </param>
 		public ASTFactory(string nodeTypeName)
+			: this( loadNodeTypeObject(nodeTypeName) )
+		{	
+		}
+		
+		/// <summary>
+		/// Constructs an <c>ASTFactory</c> and use the specified AST node type
+		/// as the default.
+		/// </summary>
+		/// <param name="nodeType">
+		///		MetaType of default AST node type for this factory.
+		/// </param>
+		public ASTFactory(Type nodeType)
 		{
 			heteroList_					= new FactoryEntry[Token.MIN_USER_TYPE+1];
-			defaultASTNodeTypeObject_	= loadNodeTypeObject(nodeTypeName);
+			defaultASTNodeTypeObject_	= nodeType;
 			defaultCreator_				= null;
 			typename2creator_			= new Hashtable(32, (float) 0.3);
-			typename2creator_["antlr.CommonAST"]					= CommonAST.Creator;
-			typename2creator_["antlr.CommonASTWithHiddenTokens"]	= CommonASTWithHiddenTokens.Creator;
+			typename2creator_[typeof(antlr.CommonAST).FullName]					= CommonAST.Creator;
+			typename2creator_[typeof(antlr.CommonASTWithHiddenTokens).FullName]	= CommonASTWithHiddenTokens.Creator;
 
 		}
 		
@@ -555,7 +567,7 @@ namespace Spring.Expressions.Parser.antlr
 		// PRIVATE FUNCTION MEMBERS
 		//---------------------------------------------------------------------
 
-		private Type loadNodeTypeObject(string nodeTypeName)
+		private static Type loadNodeTypeObject(string nodeTypeName)
 		{
 			Type	nodeTypeObject	= null;
 			bool	typeCreated		= false;
