@@ -45,7 +45,7 @@ namespace Spring.Dao
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	[Serializable]
-	public class CleanupFailureDataAccessException : DataAccessException
+    public class CleanupFailureDataAccessException : NonTransientDataAccessException
 	{
 		/// <summary>
 		/// Creates a new instance of the

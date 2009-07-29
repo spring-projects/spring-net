@@ -151,8 +151,7 @@ namespace Spring.Data.Support
 	            LOG.Debug("Registering transaction synchronization for IDbConnection");
 	            //Use same connection for further ADO.NET actions with the transaction.
 	            //Thread-bound object will get removed by manager at transaction completion.
-
-	            //TODO investigate creating tx object...
+	            
 	            ConnectionHolder holderToUse = conHolder;
 	            if (holderToUse == null)
 	            {

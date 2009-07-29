@@ -33,7 +33,7 @@ namespace Spring.Dao
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
     [Serializable]
-    public class ObjectRetrievalFailureException : DataRetrievalFailureException, ISerializable
+    public class ObjectRetrievalFailureException : DataRetrievalFailureException
     {
         private object persistentClass;
 

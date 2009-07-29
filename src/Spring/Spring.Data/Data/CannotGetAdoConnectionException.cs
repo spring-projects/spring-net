@@ -34,7 +34,7 @@ namespace Spring.Data
     /// <author>Rod Johnson</author>
 	/// <author>Mark Pollack (.NET)</author>
 	[Serializable]
-	public class CannotGetAdoConnectionException : InvalidDataAccessResourceUsageException, ISerializable
+	public class CannotGetAdoConnectionException : InvalidDataAccessResourceUsageException
 	{
 
 		#region Constructor (s)

@@ -35,7 +35,7 @@ namespace Spring.Dao
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	[Serializable]
-	public abstract class UncategorizedDataAccessException : DataAccessException
+    public abstract class UncategorizedDataAccessException : NonTransientDataAccessException
 	{
 		/// <summary>
 		/// Creates a new instance of the

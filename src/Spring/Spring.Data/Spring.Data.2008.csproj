@@ -104,6 +104,8 @@
     <Compile Include="Dao\CannotSerializeTransactionException.cs" />
     <Compile Include="Dao\CleanupFailureDataAccessException.cs" />
     <Compile Include="Dao\ConcurrencyFailureException.cs" />
+    <Compile Include="Dao\NonTransientDataAccessResourceException.cs" />
+    <Compile Include="Dao\NonTransientDataAccessException.cs" />
     <Compile Include="Dao\TransientDataAccessResourceException.cs" />
     <Compile Include="Dao\TransientDataAccessException.cs" />
     <Compile Include="Dao\PessimisticLockingFailureException.cs" />

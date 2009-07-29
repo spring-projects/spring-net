@@ -40,7 +40,7 @@ namespace Spring.Dao
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	[Serializable]
-	public class InvalidDataAccessApiUsageException : DataAccessException
+    public class InvalidDataAccessApiUsageException : NonTransientDataAccessException
 	{
 		/// <summary>
 		/// Creates a new instance of the

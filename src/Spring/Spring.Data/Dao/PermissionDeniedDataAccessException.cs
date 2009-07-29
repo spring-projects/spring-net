@@ -34,7 +34,7 @@ namespace Spring.Dao
 	/// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
 	[Serializable]
-	public class PermissionDeniedDataAccessException : InvalidDataAccessResourceUsageException
+    public class PermissionDeniedDataAccessException : NonTransientDataAccessException
 	{
 		/// <summary>
 		/// Creates a new instance of the

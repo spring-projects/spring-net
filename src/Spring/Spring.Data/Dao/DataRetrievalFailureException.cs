@@ -40,7 +40,7 @@ namespace Spring.Dao
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	[Serializable]
-	public class DataRetrievalFailureException : DataAccessException
+    public class DataRetrievalFailureException : NonTransientDataAccessException
 	{
 		/// <summary>
 		/// Creates a new instance of the
