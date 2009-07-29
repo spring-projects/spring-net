@@ -402,9 +402,9 @@ namespace Spring.Expressions
             Assert.AreEqual(Int64.MaxValue.ToString(), ExpressionEvaluator.GetValue(null, "long.MaxValue.ToString()"));
 
             // TODO (EE): THIS ANTLR TEST FAILS SINCE SOURCECODE MERGE!!!!!!
-//            object int64 = ExpressionEvaluator.GetValue(null, Int64.MaxValue.ToString());
-//            Assert.AreEqual(int64, Int64.MaxValue);
-//            Assert.IsTrue(int64 is Int64);
+            object int64 = ExpressionEvaluator.GetValue(null, Int64.MaxValue.ToString());
+            Assert.AreEqual(int64, Int64.MaxValue);
+            Assert.IsTrue(int64 is Int64);
         }
 
         /// <summary>

@@ -110,8 +110,12 @@ namespace antlr
 		public virtual char LA(int i)
 		{
 			fill(i);
-			return (char) queue[markerOffset + i - 1];
-		}
+            if ((this.markerOffset + i) <= this.queue.Count)
+            {
+                return (char)this.queue[(this.markerOffset + i) - 1];
+            }
+            return CharScanner.EOF_CHAR;
+        }
 		
 		/*Return an integer marker that can be used to rewind the buffer to
 		* its current state.
