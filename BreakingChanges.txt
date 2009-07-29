@@ -35,6 +35,16 @@ Spring.Core
 5. Spring.Validation: Base class BaseValidator changed to BaseSingleValidator for single validators as compared to group validators
    which now commonly derive from BaseGroupValidator instead of ValidatorGroup
 
+6. IVariableSource implementations now must also implement CanResolveVariable(string variableName) and may throw exceptions in 
+   ResolveVariable() in case the variable cannot resolved by this particular variable source.
+   In order to distinguish between an existing variable having a null value and a non-existing variable, variable sources
+   need to be changed to this new contract. 
+
+7. a) Signature of CollectionUtils.Contains(ICollection collection, object element) changed to CollectionUtils.Contains(IEnumerable collection, object element)
+   b) returns 'null' in case of collection==null instead of throwing an exception
+   
+
+
 Spring.Aop
 ----------
 

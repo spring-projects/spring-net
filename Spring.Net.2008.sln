@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F04753EF-7A1B-4837-AB63-8C0821E8155D}"
 	ProjectSection(SolutionItems) = preProject
-		BreakingChanges-1.2.txt = BreakingChanges-1.2.txt
+		BreakingChanges.txt = BreakingChanges.txt
 		changelog.txt = changelog.txt
 		readme.txt = readme.txt
 		Spring.include = Spring.include
