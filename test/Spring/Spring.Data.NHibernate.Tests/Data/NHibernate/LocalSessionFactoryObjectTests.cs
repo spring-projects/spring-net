@@ -24,7 +24,7 @@ using System.Collections;
 using System.IO;
 using NHibernate;
 #if NH_2_1
-using NHibernate.ByteCode.LinFu;
+using Spring.Data.NHibernate.Bytecode;
 #endif
 using NHibernate.Cfg;
 using NHibernate.Connection;
@@ -32,6 +32,7 @@ using NHibernate.Dialect;
 using NHibernate.Driver;
 
 using NUnit.Framework;
+
 using Spring.Data.Common;
 
 #endregion
@@ -57,9 +58,7 @@ namespace Spring.Data.NHibernate
             properties.Add(Environment.Dialect, typeof(MsSql2000Dialect).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionDriver, typeof(SqlClientDriver).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionProvider, typeof(DriverConnectionProvider).AssemblyQualifiedName);
-#if NH_2_1
-            properties.Add(Environment.ProxyFactoryFactoryClass, typeof(ProxyFactoryFactory).AssemblyQualifiedName);
-#endif
+
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();
 

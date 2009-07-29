@@ -33,9 +33,6 @@
                 <entry key="connection.driver_class"
                        value="NHibernate.Driver.SqlClientDriver"/>
 
-               <entry key="proxyfactory.factory_class"
-                       value="NHibernate.ByteCode.LinFu.ProxyFactoryFactory, NHibernate.ByteCode.LinFu"/>
-
            </dictionary>
         </property>
                       

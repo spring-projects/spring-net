@@ -46,7 +46,7 @@
 
 		<!-- copy nh libs -->
 		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${nh.lib.dir}">
+			<fileset basedir="${nh21.lib.dir}">
 				<include name="**/*.dll" />
 			</fileset>
 		</copy>

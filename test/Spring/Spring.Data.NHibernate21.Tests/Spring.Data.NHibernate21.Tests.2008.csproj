@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{90FEE979-7367-4542-BCCB-BF634E04A9D3}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -36,10 +36,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\NHibernate21\net\2.0\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="LinFu.DynamicProxy, Version=1.0.3.14911, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\NHibernate21\net\2.0\LinFu.DynamicProxy.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\NHibernate21\net\2.0\log4net.dll</HintPath>
@@ -47,10 +43,6 @@
     <Reference Include="NHibernate, Version=1.0.4.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\NHibernate21\net\2.0\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate.ByteCode.LinFu, Version=2.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\NHibernate21\net\2.0\NHibernate.ByteCode.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.2.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -98,6 +90,12 @@
     <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\TestObject.cs">
       <Link>Data\NHibernate\TestObject.cs</Link>
     </Compile>
+    <Compile Include="Data\NHibernate\Bytecode\AbstractInjectableUserTypeFixture.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\Foo.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\IDelimiter.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\InjectableStringUserType.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\InjectableUserTypeFixture.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\Product.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Spring.Data.NHibernate21.Tests.dll.config">
@@ -132,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\NHibernate\TestObject.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\NHibernate\Bytecode\Foo.Spechbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

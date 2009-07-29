@@ -55,9 +55,6 @@
              <entry key="hibernate.dialect"
                     value="NHibernate.Dialect.Oracle9Dialect"/>
              -->
-
-             <entry key="proxyfactory.factory_class"
-                    value="NHibernate.ByteCode.LinFu.ProxyFactoryFactory, NHibernate.ByteCode.LinFu"/>
             </dictionary>
         </property>
                       

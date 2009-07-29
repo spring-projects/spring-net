@@ -148,6 +148,12 @@
       <Link>Data\NHibernate\LocalSessionFactoryObject.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\LazyInitializer.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\ProxyFactory.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\ProxyFactoryFactory.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\ReflectionOptimizer.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\BytecodeProvider.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\ObjectsFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Aop\Spring.Aop.2008.csproj">
