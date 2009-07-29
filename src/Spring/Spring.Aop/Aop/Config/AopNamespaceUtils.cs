@@ -72,7 +72,7 @@ namespace Spring.Aop.Config
             if (!registry.ContainsObjectDefinition(AUTO_PROXY_CREATOR_OBJECT_NAME))
             {
                 RootObjectDefinition objectDefinition = new RootObjectDefinition(type);
-                //TODO source/role not yet implemented in .NET
+                objectDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
                 objectDefinition.PropertyValues.Add("order", int.MaxValue);
                 registry.RegisterObjectDefinition(AUTO_PROXY_CREATOR_OBJECT_NAME, objectDefinition);           
             }
