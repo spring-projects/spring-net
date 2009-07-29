@@ -1292,6 +1292,7 @@ namespace Spring.Objects.Factory.Xml
         /// The name of the object (definition) associated with the
         /// name value collection mapping definition.
         /// </param>
+        /// <param name="parserContext">the context carrying parsing state information</param>
         /// <returns>The name value collection definition.</returns>
         protected NameValueCollection ParseNameValueCollectionElement(XmlElement nameValueEle, string name, ParserContext parserContext)
         {
