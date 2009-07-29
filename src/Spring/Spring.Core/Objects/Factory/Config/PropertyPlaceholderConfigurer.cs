@@ -225,11 +225,10 @@ namespace Spring.Objects.Factory.Config
 		/// <exception cref="Spring.Objects.ObjectsException">
 		/// If an error occured.
 		/// </exception>
-		protected override void ProcessProperties(
-			IConfigurableListableObjectFactory factory, NameValueCollection props)
+		protected override void ProcessProperties(IConfigurableListableObjectFactory factory, NameValueCollection props)
 		{
-		    IVariableSource variableSource = new PlaceholderResolvingStringVariableSource(this, props);
-            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(variableSource);
+            PlaceholderResolveHandlerAdapter resolveAdapter = new PlaceholderResolveHandlerAdapter(this, props);
+            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(resolveAdapter.ParseAndResolveVariables));
 
 			string[] objectDefinitionNames = factory.GetObjectDefinitionNames();
 			for (int i = 0; i < objectDefinitionNames.Length; ++i)
@@ -397,26 +396,26 @@ namespace Spring.Objects.Factory.Config
 		{
 			return props[placeholder];
 		}
-    }
 
-    #region Helper class
+        #region Helper class
 
-    internal class PlaceholderResolvingStringVariableSource : IVariableSource
-    {
-        private PropertyPlaceholderConfigurer ppc;
-        private NameValueCollection props;
-
-        public PlaceholderResolvingStringVariableSource(PropertyPlaceholderConfigurer outerPPC, NameValueCollection props)
+        private class PlaceholderResolveHandlerAdapter
         {
-            ppc = outerPPC;
-            this.props = props;
+            private readonly PropertyPlaceholderConfigurer ppc;
+            private readonly NameValueCollection props;
+
+            public PlaceholderResolveHandlerAdapter(PropertyPlaceholderConfigurer outerPPC, NameValueCollection props)
+            {
+                ppc = outerPPC;
+                this.props = props;
+            }
+
+            public string ParseAndResolveVariables(string name)
+            {
+                return ppc.ParseString(props, name, new HashedSet());
+            }
         }
 
-        public string ResolveVariable(string name)
-        {
-            return ppc.ParseString(props, name, new HashedSet());
-        }
+        #endregion
     }
-
-    #endregion
 }

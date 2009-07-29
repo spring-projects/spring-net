@@ -64,7 +64,6 @@ namespace Spring.Util
             }
         }
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ContainsNullCollection()
         {
             CollectionUtils.Contains(null, null);
@@ -77,12 +76,12 @@ namespace Spring.Util
             Assert.IsTrue(CollectionUtils.Contains(list, null));
         }
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ContainsCollectionDoesNotImplementContains()
+        public void ContainsCollectionThatDoesNotImplementContains()
         {
-            NoContainsNoAddCollection noAddCollection = new NoContainsNoAddCollection();
+            NoContainsNoAddCollection noAddCollection = new NoContainsNoAddCollection();            
             CollectionUtils.Contains(noAddCollection, new object());
         }
+
         [Test]
         public void ContainsValidElement()
         {

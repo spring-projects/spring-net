@@ -46,6 +46,14 @@ namespace Spring.Objects.Factory.Config
     public interface IVariableSource
     {
         /// <summary>
+        /// Before requesting a variable resolution, a client should
+        /// ask, whether the source can resolve a particular variable name.
+        /// </summary>
+        /// <param name="name">the name of the variable to resolve</param>
+        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+        bool CanResolveVariable(string name);
+
+        /// <summary>
         /// Resolves variable value for the specified variable name.
         /// </summary>
         /// <param name="name">

@@ -39,22 +39,6 @@ namespace Spring.Data.NHibernate.Support
     [TestFixture]
     public class ConfigSectionSessionScopeSettingsTests
     {
-        private class NameValueCollectionVariableSource : IVariableSource
-        {
-            private readonly NameValueCollection nameValuePairs = new NameValueCollection();
-
-            public NameValueCollectionVariableSource Add(string key, string value)
-            {
-                nameValuePairs.Add(key, value);
-                return this;
-            }
-
-            public string ResolveVariable(string name)
-            {
-                return nameValuePairs[name];
-            }
-        }
-
         [Test]
         public void CanCreateWithDefaults()
         {
@@ -104,7 +88,7 @@ namespace Spring.Data.NHibernate.Support
 
             // simulate config section
             string thisTypeName = this.GetType().FullName;
-            NameValueCollectionVariableSource variableSource = new NameValueCollectionVariableSource()
+            DictionaryVariableSource variableSource = new DictionaryVariableSource()
                 .Add(thisTypeName + ".SessionFactoryObjectName", SESSIONFACTORY_OBJECTNAME)
                 .Add(thisTypeName + ".EntityInterceptorObjectName", ENTITYINTERCEPTOR_OBJECTNAME)
                 .Add(thisTypeName + ".SingleSession", expectedSingleSession.ToString().ToLower() ) // case insensitive!

@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.Configuration;
 using Spring.Util;
@@ -53,7 +54,23 @@ namespace Spring.Objects.Factory.Config
     [Serializable]
     public class ConnectionStringsVariableSource : IVariableSource
     {
-        private NameValueCollection variables;
+        private Hashtable variables;
+
+
+        /// <summary>
+        /// Before requesting a variable resolution, a client should
+        /// ask, whether the source can resolve a particular variable name.
+        /// </summary>
+        /// <param name="name">the name of the variable to resolve</param>
+        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+        public bool CanResolveVariable(string name)
+        {
+            if (variables == null)
+            {
+                InitVariables();
+            }
+            return variables.Contains(name);
+        }
 
         /// <summary>
         /// Resolves variable value for the specified variable name.
@@ -70,7 +87,7 @@ namespace Spring.Objects.Factory.Config
             {
                 InitVariables();
             }
-            return variables.Get(name);
+            return (string) variables[name];
         }
 
         /// <summary>
@@ -79,7 +96,7 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         private void InitVariables()
         {
-            variables = new NameValueCollection();
+            variables = CollectionsUtil.CreateCaseInsensitiveHashtable();
             ConnectionStringSettingsCollection settings = ConfigurationManager.ConnectionStrings;
             foreach (ConnectionStringSettings setting in settings)
             {

@@ -24,6 +24,7 @@ using System.Globalization;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Core;
+using Spring.Util;
 
 namespace Spring.Objects.Factory.Config
 {
@@ -66,12 +67,12 @@ namespace Spring.Objects.Factory.Config
         /// <summary>
         /// The default placeholder prefix.
         /// </summary>
-        public const string DefaultPlaceholderPrefix = "${";
+        public static readonly string DefaultPlaceholderPrefix = "${";
 
         /// <summary>
         /// The default placeholder suffix.
         /// </summary>
-        public const string DefaultPlaceholderSuffix = "}";
+        public static readonly string DefaultPlaceholderSuffix = "}";
 
         #region Fields
 
@@ -81,9 +82,32 @@ namespace Spring.Objects.Factory.Config
         private string placeholderPrefix = DefaultPlaceholderPrefix;
         private string placeholderSuffix = DefaultPlaceholderSuffix;
 
-        private IList variableSourceList;
+        private IList variableSourceList = new ArrayList();
 
         #endregion
+
+        /// <summary>
+        /// Create a new instance without any variable sources
+        /// </summary>
+        public VariablePlaceholderConfigurer()
+        {}
+
+        /// <summary>
+        /// Create a new instance and initialize with the given variable source
+        /// </summary>
+        /// <param name="variableSource"></param>
+        public VariablePlaceholderConfigurer(IVariableSource variableSource)
+        {
+            this.VariableSource = variableSource;
+        }
+
+        /// <summary>
+        /// Create a new instance and initialize with the given list of variable sources
+        /// </summary>
+        public VariablePlaceholderConfigurer(IList variableSources)
+        {
+            this.VariableSources = variableSources;
+        }
 
         #region Properties
 
@@ -156,6 +180,17 @@ namespace Spring.Objects.Factory.Config
         /// </exception>
         public void PostProcessObjectFactory( IConfigurableListableObjectFactory factory )
         {
+            if (CollectionUtils.IsEmpty(variableSourceList))
+            {
+                throw new ArgumentException("No VariableSources configured");
+            }
+
+            ICollection filtered = CollectionUtils.FindValuesOfType(this.variableSourceList, typeof (IVariableSource));
+            if (filtered.Count != this.variableSourceList.Count)
+            {
+                throw new ArgumentException("'VariableSources' must contain IVariableSource elements only", "VariableSources");
+            }
+
             try
             {
                 ProcessProperties( factory );
@@ -206,11 +241,9 @@ namespace Spring.Objects.Factory.Config
         /// </exception>
         protected virtual void ProcessProperties( IConfigurableListableObjectFactory factory )
         {
-            IVariableSource compositeVariableSource = new PlaceholderResolvingCompositeVariableSource( placeholderPrefix
-                                                            , placeholderSuffix
-                                                            , variableSourceList
-                                                            , ignoreUnresolvablePlaceholders );
-            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor( compositeVariableSource );
+            CompositeVariableSource compositeVariableSource = new CompositeVariableSource(variableSourceList);
+            TextProcessor tp = new TextProcessor(this, compositeVariableSource);
+            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(tp.ParseAndResolveVariables));
 
             string[] objectDefinitionNames = factory.GetObjectDefinitionNames();
             for (int i = 0; i < objectDefinitionNames.Length; ++i)
@@ -231,84 +264,86 @@ namespace Spring.Objects.Factory.Config
 
         #region Helper class
 
-        private class PlaceholderResolvingCompositeVariableSource : IVariableSource
+        private class TextProcessor
         {
-            private readonly ILog logger = LogManager.GetLogger( typeof( PlaceholderResolvingCompositeVariableSource ) );
+            private readonly ILog logger = LogManager.GetLogger(typeof(TextProcessor));
+            private readonly VariablePlaceholderConfigurer owner;
+            private readonly IVariableSource variableSource;
 
-            private readonly string placeholderPrefix;
-            private readonly string placeholderSuffix;
-            private readonly bool ignoreUnresolvablePlaceholders;
-            private readonly IList variableSourceList;
-
-            public PlaceholderResolvingCompositeVariableSource( string placeholderPrefix, string placeholderSuffix, IList variableSourceList, bool ignoreUnresolvablePlaceholders )
+            public TextProcessor(VariablePlaceholderConfigurer owner, IVariableSource variableSource)
             {
-                this.placeholderPrefix = placeholderPrefix;
-                this.placeholderSuffix = placeholderSuffix;
-                this.variableSourceList = variableSourceList;
-                this.ignoreUnresolvablePlaceholders = ignoreUnresolvablePlaceholders;
+                this.owner = owner;
+                this.variableSource = variableSource;
             }
 
-            #region IVariableSource Members
-
-            public string ResolveVariable( string rawStringValue )
+            public string ParseAndResolveVariables(string rawStringValue)
             {
-                return ParseAndResolveVariable( rawStringValue, new HashedSet() );
+                return ParseAndResolveVariables(rawStringValue, new HashedSet());
             }
 
-
-            //TODO handle resolved values at are not string - identify this case as only 1 placeholder present?
-
-            private string ParseAndResolveVariable( string strVal, ISet visitedPlaceholders )
+            private string ParseAndResolveVariables(string strVal, ISet visitedPlaceholders)
             {
-                int startIndex = strVal.IndexOf( placeholderPrefix );
+                if (strVal == null)
+                {
+                    return null;
+                }
+
+                int startIndex = strVal.IndexOf(owner.placeholderPrefix);
                 while (startIndex != -1)
                 {
                     int endIndex = strVal.IndexOf(
-                        placeholderSuffix, startIndex + placeholderPrefix.Length );
+                        owner.placeholderSuffix, startIndex + owner.placeholderPrefix.Length);
                     if (endIndex != -1)
                     {
-                        int pos = startIndex + placeholderPrefix.Length;
-                        string placeholder = strVal.Substring( pos, endIndex - pos );
-                        if (visitedPlaceholders.Contains( placeholder ))
+                        int pos = startIndex + owner.placeholderPrefix.Length;
+                        string placeholder = strVal.Substring(pos, endIndex - pos);
+                        if (visitedPlaceholders.Contains(placeholder))
                         {
                             throw new ObjectDefinitionStoreException(
                                 string.Format(
                                     CultureInfo.InvariantCulture,
                                     "Circular placeholder reference '{0}' detected. ",
-                                    placeholder ) );
+                                    placeholder));
                         }
-                        visitedPlaceholders.Add( placeholder );
-                        string resolvedValue = ResolvePlaceholderVariable( placeholder );
-                        if (resolvedValue != null)
+                        visitedPlaceholders.Add(placeholder);
+
+                        if (variableSource.CanResolveVariable(placeholder))
                         {
-                            resolvedValue = ParseAndResolveVariable( resolvedValue, visitedPlaceholders );
+                            string resolvedValue = variableSource.ResolveVariable(placeholder);
+                            resolvedValue = ParseAndResolveVariables(resolvedValue, visitedPlaceholders);
 
                             #region Instrumentation
 
                             if (logger.IsDebugEnabled)
                             {
-                                logger.Debug( string.Format(
+                                logger.Debug(string.Format(
                                                  CultureInfo.InvariantCulture,
-                                                 "Resolving placeholder '{0}' to '{1}'.", placeholder, resolvedValue ) );
+                                                 "Resolving placeholder '{0}' to '{1}'.", placeholder, resolvedValue));
                             }
 
                             #endregion
 
-                            strVal = strVal.Substring( 0, startIndex ) + resolvedValue + strVal.Substring( endIndex + placeholderSuffix.Length );
-                            startIndex = strVal.IndexOf( placeholderPrefix, startIndex + resolvedValue.Length);
+                            if (resolvedValue == null
+                                && startIndex == 0
+                                && strVal.Length <= endIndex + owner.placeholderSuffix.Length)
+                            {
+                                return null;
+                            }
+                            strVal = strVal.Substring(0, startIndex) + resolvedValue + strVal.Substring(endIndex + owner.placeholderSuffix.Length);
+                            startIndex = strVal.IndexOf(owner.placeholderPrefix, startIndex + (resolvedValue == null ? 0 : resolvedValue.Length));
                         }
-                        else if (ignoreUnresolvablePlaceholders)
+                        else if (owner.ignoreUnresolvablePlaceholders)
                         {
                             // simply return the unprocessed value...
                             return strVal;
                         }
                         else
                         {
-                            throw new ObjectDefinitionStoreException( string.Format(
+                            throw new ObjectDefinitionStoreException(string.Format(
                                                                          CultureInfo.InvariantCulture,
-                                                                         "Could not resolve placeholder '{0}'.", placeholder ) );
+                                                                         "Could not resolve placeholder '{0}'.", placeholder));
                         }
-                        visitedPlaceholders.Remove( placeholder );
+                        visitedPlaceholders.Remove(placeholder);
                     }
                     else
                     {
@@ -316,34 +351,38 @@ namespace Spring.Objects.Factory.Config
                     }
                 }
                 return strVal;
+            }            
+        }
+
+        private class CompositeVariableSource : IVariableSource
+        {
+            private readonly IList variableSourceList;
+
+            public CompositeVariableSource( IList variableSourceList )
+            {
+                this.variableSourceList = variableSourceList;
             }
 
-            private string ResolvePlaceholderVariable( string variableName )
+            public string ResolveVariable( string variableName )
             {
                 foreach (IVariableSource variableSource in variableSourceList)
                 {
-                    //TODO handle resolved values at are not strings?
+                    if (!variableSource.CanResolveVariable(variableName)) continue;
 
-                    object resolvedValue = variableSource.ResolveVariable( variableName );
-                    if (resolvedValue is string)
-                    {
-                    }
-                    if (resolvedValue != null)
-                    {
-                        if (resolvedValue is string)
-                        {
-                            return resolvedValue as string;
-                        }
-                        else
-                        {
-                            logger.Warn( "Placeholder " + variableSource + " resolved to object type [" + resolvedValue.GetType() + "].  Only string type currently supported" );
-                        }
-                    }
+                    return variableSource.ResolveVariable( variableName );
                 }
-                return null;
+                throw new ArgumentException(string.Format("cannot resolve variable '{0}'", variableName));
             }
 
-            #endregion
+            public bool CanResolveVariable(string variableName)
+            {
+                foreach (IVariableSource variableSource in variableSourceList)
+                {
+                    if (variableSource.CanResolveVariable(variableName))
+                        return true;
+                }
+                return false;
+            }
         }
 
         #endregion

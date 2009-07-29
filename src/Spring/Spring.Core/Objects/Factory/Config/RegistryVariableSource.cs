@@ -30,6 +30,7 @@ namespace Spring.Objects.Factory.Config
     /// <author>Aleksandar Seovic</author>
     public class RegistryVariableSource : IVariableSource
     {
+        private static readonly object NULL = new object();
         private RegistryKey key;
 
         /// <summary>
@@ -42,6 +43,17 @@ namespace Spring.Objects.Factory.Config
         {
             get { return key; }
             set { key = value; }
+        }
+
+        /// <summary>
+        /// Before requesting a variable resolution, a client should
+        /// ask, whether the source can resolve a particular variable name.
+        /// </summary>
+        /// <param name="name">the name of the variable to resolve</param>
+        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+        public bool CanResolveVariable(string name)
+        {
+            return (key != null && key.GetValue(name, NULL) != NULL);
         }
 
         /// <summary>

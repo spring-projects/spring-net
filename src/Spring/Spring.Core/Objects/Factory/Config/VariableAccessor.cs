@@ -774,7 +774,11 @@ namespace Spring.Objects.Factory.Config
         /// </returns>
         public string GetString(string name, string defaultValue)
         {
-            string value = (variableSource == null) ? defaultValue : variableSource.ResolveVariable(name);
+            string value = null;
+            if (variableSource != null && variableSource.CanResolveVariable(name))
+            {
+                value = variableSource.ResolveVariable(name);
+            }
 
             if (!StringUtils.HasLength(value))
             {

@@ -88,6 +88,21 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
+        /// Before requesting a variable resolution, a client should
+        /// ask, whether the source can resolve a particular variable name.
+        /// </summary>
+        /// <param name="name">the name of the variable to resolve</param>
+        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+        public bool CanResolveVariable(string name)
+        {
+            if (arguments == null)
+            {
+                InitArguments();
+            }
+            return arguments.Contains(name);
+        }
+
+        /// <summary>
         /// Resolves variable value for the specified variable name.
         /// </summary>
         /// <param name="name">

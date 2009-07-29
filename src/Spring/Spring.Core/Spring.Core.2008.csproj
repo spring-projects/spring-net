@@ -666,6 +666,7 @@
     <Compile Include="Objects\Factory\Config\ConfigSectionVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\ConnectionStringsVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\DependencyDescriptor.cs" />
+    <Compile Include="Objects\Factory\Config\DictionaryVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\IConfigurableFactoryObject.cs" />
     <Compile Include="Objects\Factory\Config\InstantiationAwareObjectPostProcessorAdapter.cs" />
     <Compile Include="Objects\Factory\Config\ISingletonObjectRegistry.cs" />

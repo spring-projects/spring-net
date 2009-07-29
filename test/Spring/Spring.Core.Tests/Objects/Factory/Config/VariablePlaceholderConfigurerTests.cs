@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2007 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,45 +18,49 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using NUnit.Framework;
 using Spring.Context.Support;
-
-#endregion
+using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Config
 {
     /// <summary>
-    /// This calss contains tests for 
+    /// This class contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
     [TestFixture]
     public class VariablePlaceholderConfigurerTests
     {
-        private class DictionaryVariableSource : IVariableSource
+        [Test]
+        public void ThrowsOnMissingVariableSources()
         {
-            private Hashtable variables = new Hashtable();
-
-            public DictionaryVariableSource(params string[] args)
+            StaticApplicationContext ac = new StaticApplicationContext();
+            VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer();
+            try
             {
-                for(int i=0;i<args.Length;i+=2)
-                {
-                    variables[args[i]] = args[i+1];
-                }
+                vphc.PostProcessObjectFactory(ac.ObjectFactory);
+                Assert.Fail();
             }
-
-            public string ResolveVariable(string name)
-            {
-                return (string) variables[name];
-            }
+            catch (ArgumentException)
+            {}
         }
 
-        [SetUp]
-        public void Setup()
+        [Test]
+        public void ThrowsOnInvalidVariableSourcesElement()
         {
+            StaticApplicationContext ac = new StaticApplicationContext();
+            VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer();
+            vphc.VariableSources = new ArrayList( new object[] { new object() } );
+
+            try
+            {
+                vphc.PostProcessObjectFactory(ac.ObjectFactory);
+                Assert.Fail();
+            }
+            catch (ArgumentException)
+            {}
         }
 
         [Test]
@@ -119,7 +123,85 @@ namespace Spring.Objects.Factory.Config
         }  
       
         [Test]
-        [Ignore("Does not work yet because IVariableSource cannot differentiate between invalid key and key with a null value")]
+        public void MultiResolution()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            pvs.Add("Greeting", "Hello ${firstname} ${lastname}!");
+            of.RegisterObjectDefinition("tb1", new RootObjectDefinition("typename", null, pvs));
+
+            IList variableSources = new ArrayList();
+            variableSources.Add(new DictionaryVariableSource(new string[] { "firstname", "FirstName" }));
+            variableSources.Add(new DictionaryVariableSource(new string[] { "lastname", "LastName"}));
+            VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer(variableSources);
+            vphc.PostProcessObjectFactory(of);
+
+            RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
+            Assert.AreEqual("Hello FirstName LastName!", rod.PropertyValues.GetPropertyValue("Greeting").Value);
+        }
+
+        [Test]
+        public void NestedResolution()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            pvs.Add("NameProperty", "${name}");
+            of.RegisterObjectDefinition("tb1", new RootObjectDefinition("typename", null, pvs));
+
+            IList variableSources = new ArrayList();
+            variableSources.Add(new DictionaryVariableSource(new string[] { "name", "${nickname}" }));
+            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value"}));
+            VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer(variableSources);
+            vphc.PostProcessObjectFactory(of);
+
+            RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
+            Assert.AreEqual("nickname-value", rod.PropertyValues.GetPropertyValue("NameProperty").Value);
+        }
+
+        [Test]
+        public void ChainedResolution()
+        {
+            StaticApplicationContext ac = new StaticApplicationContext();
+
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            pvs.Add("name", "${name}");
+            pvs.Add("nickname", "${nickname}");
+            ac.RegisterSingleton("tb1", typeof(TestObject), pvs);
+
+            IList variableSources = new ArrayList();
+            variableSources.Add(new DictionaryVariableSource(new string[] { "name", "name-value" }));
+            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value"}));
+            VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer(variableSources);
+            ac.AddObjectFactoryPostProcessor(vphc);
+            ac.Refresh();
+
+            TestObject tb1 = (TestObject)ac.GetObject("tb1");
+            Assert.AreEqual("name-value", tb1.Name);
+            Assert.AreEqual("nickname-value", tb1.Nickname);
+        }
+
+        [Test]
+        public void ChainedResolutionWithNullValues()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            pvs.Add("NameProperty", "${name}");
+            pvs.Add("NickNameProperty", "${nickname}");
+            of.RegisterObjectDefinition("tb1", new RootObjectDefinition("typename", null, pvs));
+
+            IList variableSources = new ArrayList();
+            variableSources.Add(new DictionaryVariableSource(new string[] { "name", "name-value", "nickname", null }));
+            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value"}));
+            VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer(variableSources);
+
+            vphc.PostProcessObjectFactory(of);
+            RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
+            Assert.AreEqual("name-value", rod.PropertyValues.GetPropertyValue("NameProperty").Value);
+            Assert.AreEqual(null, rod.PropertyValues.GetPropertyValue("NickNameProperty").Value);
+        }
+
+        [Test]
         public void WhitespaceHandling()
         {
             StaticApplicationContext ac = new StaticApplicationContext();

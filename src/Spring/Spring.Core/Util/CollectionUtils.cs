@@ -70,20 +70,36 @@ namespace Spring.Util
         /// <param name="collection">The collection to check.</param>
         /// <param name="element">The object to locate in the collection.</param>
         /// <returns><see lang="true"/> if the element is in the collection, <see lang="false"/> otherwise.</returns>
-        public static bool Contains(ICollection collection, Object element)
+        public static bool Contains(IEnumerable collection, Object element)
         {
-            // TODO (EE): does not match Spring/J behavior. Change to IEnumerable and enumerable may be null
             if (collection == null)
             {
-                throw new ArgumentNullException("collection", "Collection cannot be null.");
+                return false;
             }
-            MethodInfo method;
-            method = collection.GetType().GetMethod("contains", BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            if (null == method)
+
+            if (collection is IList)
             {
-                throw new InvalidOperationException("Collection type " + collection.GetType() + " does not implement a Contains() method.");
+                return ((IList) collection).Contains(element);
             }
-            return (bool)method.Invoke(collection, new Object[] { element });
+
+            if (collection is IDictionary)
+            {
+                return ((IDictionary) collection).Contains(element);
+            }
+
+            MethodInfo method = collection.GetType().GetMethod("contains", BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+            if (null != method)
+            {
+                return (bool)method.Invoke(collection, new Object[] { element });
+            }
+            foreach (object item in collection)
+            {
+                if (object.Equals(item, element))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>

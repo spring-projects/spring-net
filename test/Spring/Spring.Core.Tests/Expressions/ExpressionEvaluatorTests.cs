@@ -727,6 +727,18 @@ namespace Spring.Expressions
         /// Tests type node
         /// </summary>
         [Test]
+        public void TestTypeNodeWithArrays()
+        {
+            Assert.AreEqual(typeof(DateTime[]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[])"));
+            Assert.AreEqual(typeof(DateTime[,]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[,])"));
+            Assert.AreEqual(typeof(DateTime[]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[], mscorlib)"));
+            Assert.AreEqual(typeof(DateTime[,]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[,], mscorlib)"));
+        }
+
+        /// <summary>
+        /// Tests type node
+        /// </summary>
+        [Test]
         public void TestTypeNodeWithAssemblyQualifiedName()
         {
             Assert.AreEqual(typeof(ExpressionEvaluator), ExpressionEvaluator.GetValue(null, string.Format("T({0})", typeof(ExpressionEvaluator).AssemblyQualifiedName)));

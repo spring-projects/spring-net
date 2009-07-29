@@ -18,10 +18,8 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Collections.Specialized;
-
 using NUnit.Framework;
 using Spring.Objects.Factory.Support;
 
@@ -34,14 +32,22 @@ namespace Spring.Objects.Factory.Config
     [TestFixture]
     public class ObjectDefinitionVisitorTests
     {
-        private NameValueCollectionVariableSource variableSource;
+        private Hashtable properties;
 
         [SetUp]
         public void SetUp()
         {
-            NameValueCollection nvc = new NameValueCollection();
-            nvc.Add("Property", "Value");
-            variableSource = new NameValueCollectionVariableSource(nvc);
+            properties = CollectionsUtil.CreateCaseInsensitiveHashtable();
+            properties.Add("Property", "Value");
+        }
+
+        private string ParseAndResolveVariables(string rawText)
+        {
+            if (rawText.StartsWith("$"))
+            {
+                return (string) properties[rawText.Substring(1)];
+            }
+            return rawText;
         }
 
         [Test]
@@ -50,7 +56,7 @@ namespace Spring.Objects.Factory.Config
             IObjectDefinition od = new RootObjectDefinition();
             od.ObjectTypeName = "$Property";
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(variableSource);
+            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
             odv.VisitObjectDefinition(od);
 
             Assert.AreEqual("Value", od.ObjectTypeName);
@@ -62,7 +68,7 @@ namespace Spring.Objects.Factory.Config
             IObjectDefinition od = new RootObjectDefinition();
             od.PropertyValues.Add("PropertyName", "$Property");
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(variableSource);
+            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
             odv.VisitObjectDefinition(od);
 
             Assert.AreEqual("Value", od.PropertyValues.GetPropertyValue("PropertyName").Value);
@@ -78,7 +84,7 @@ namespace Spring.Objects.Factory.Config
             ml.Add("$Property");
             od.PropertyValues.Add("PropertyName", ml);
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(variableSource);
+            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
             odv.VisitObjectDefinition(od);
 
             ManagedList list = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedList;
@@ -96,7 +102,7 @@ namespace Spring.Objects.Factory.Config
             ms.Add("$Property");
             od.PropertyValues.Add("PropertyName", ms);
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(variableSource);
+            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
             odv.VisitObjectDefinition(od);
 
             ManagedSet set = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedSet;
@@ -117,7 +123,7 @@ namespace Spring.Objects.Factory.Config
             md.Add("Key", "$Property");
             od.PropertyValues.Add("PropertyName", md);
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(variableSource);
+            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
             odv.VisitObjectDefinition(od);
 
             ManagedDictionary dictionary = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedDictionary;
@@ -135,7 +141,7 @@ namespace Spring.Objects.Factory.Config
             nvc["Key"] = "$Property";
             od.PropertyValues.Add("PropertyName", nvc);
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(variableSource);
+            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
             odv.VisitObjectDefinition(od);
 
             NameValueCollection visitedNvc =
@@ -143,31 +149,5 @@ namespace Spring.Objects.Factory.Config
 
             Assert.AreEqual("Value", visitedNvc["Key"]);
         }
-
-        #region Helper class
-
-        public class NameValueCollectionVariableSource : IVariableSource
-        {
-            private NameValueCollection properties;
-
-            public NameValueCollectionVariableSource(NameValueCollection properties)
-            {
-                this.properties = properties;
-            }
-
-            public string ResolveVariable(string name)
-            {
-                if (name.StartsWith("$"))
-                {
-                    return properties[name.Substring(1)];
-                }
-                else
-                {
-                    return name;
-                }
-            }
-        }
-
-        #endregion
     }
 }

@@ -44,17 +44,18 @@ namespace Spring.Objects.Factory.Config
     /// <author>Mark Pollack</author>
     public class ObjectDefinitionVisitor
     {
-        private IVariableSource variableSource;
+        public delegate string ResolveHandler(string rawStringValue);
 
+        private readonly ResolveHandler resolveHandler;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ObjectDefinitionVisitor"/> class, 
         /// applying the specified IVariableSource to all object metadata values.
         /// </summary>
-        /// <param name="variableSource">The variable source.</param>
-        public ObjectDefinitionVisitor(IVariableSource variableSource)
+        /// <param name="resolveHandler">The handler to be called for resolving variables contained in a string.</param>
+        public ObjectDefinitionVisitor(ResolveHandler resolveHandler)
         {
-            this.variableSource = variableSource;
+            this.resolveHandler = resolveHandler;
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace Spring.Objects.Factory.Config
             string objectTypeName = objectDefinition.ObjectTypeName;
             if (objectTypeName != null)
             {
-                string resolvedName = ResolveStringValue(objectTypeName).ToString();
+                string resolvedName = ResolveStringValue(objectTypeName);
                 if (!objectTypeName.Equals(resolvedName))
                 {
                     objectDefinition.ObjectTypeName = resolvedName;
@@ -197,7 +198,7 @@ namespace Spring.Objects.Factory.Config
             {
                 RuntimeObjectReference ror = (RuntimeObjectReference)value;
                 //name has to be of string type.
-                string newObjectName = ResolveStringValue(ror.ObjectName).ToString();
+                string newObjectName = ResolveStringValue(ror.ObjectName);
                 if (!newObjectName.Equals(ror.ObjectName))
                 {
                     return new RuntimeObjectReference(newObjectName);
@@ -225,7 +226,7 @@ namespace Spring.Objects.Factory.Config
                 String stringValue = typedStringValue.Value;
                 if (stringValue != null)
                 {
-                    String visitedString = ResolveStringValue(stringValue).ToString();
+                    String visitedString = ResolveStringValue(stringValue);
                     typedStringValue.Value = visitedString;
                 }
             }
@@ -236,7 +237,7 @@ namespace Spring.Objects.Factory.Config
             else if (value is ExpressionHolder)
             {
                 ExpressionHolder holder = (ExpressionHolder)value;
-                string newExpressionString = ResolveStringValue(holder.ExpressionString).ToString();
+                string newExpressionString = ResolveStringValue(holder.ExpressionString);
                 return new ExpressionHolder(newExpressionString);
             }
             return value;
@@ -251,7 +252,7 @@ namespace Spring.Objects.Factory.Config
             string elementTypeName = listVal.ElementTypeName;
             if (elementTypeName != null)
             {
-                string resolvedName = ResolveStringValue(elementTypeName).ToString();
+                string resolvedName = ResolveStringValue(elementTypeName);
                 if (!elementTypeName.Equals(resolvedName))
                 {
                     listVal.ElementTypeName = resolvedName;
@@ -278,7 +279,7 @@ namespace Spring.Objects.Factory.Config
             string elementTypeName = setVal.ElementTypeName;
             if (elementTypeName != null)
             {
-                string resolvedName = ResolveStringValue(elementTypeName).ToString();
+                string resolvedName = ResolveStringValue(elementTypeName);
                 if (!elementTypeName.Equals(resolvedName))
                 {
                     setVal.ElementTypeName = resolvedName;
@@ -306,7 +307,7 @@ namespace Spring.Objects.Factory.Config
             string keyTypeName = dictVal.KeyTypeName;
             if (keyTypeName != null)
             {
-                string resolvedName = ResolveStringValue(keyTypeName).ToString();
+                string resolvedName = ResolveStringValue(keyTypeName);
                 if (!keyTypeName.Equals(resolvedName))
                 {
                     dictVal.KeyTypeName = resolvedName;
@@ -316,7 +317,7 @@ namespace Spring.Objects.Factory.Config
             string valueTypeName = dictVal.ValueTypeName;
             if (valueTypeName != null)
             {
-                string resolvedName = ResolveStringValue(valueTypeName).ToString();
+                string resolvedName = ResolveStringValue(valueTypeName);
                 if (!valueTypeName.Equals(resolvedName))
                 {
                     dictVal.ValueTypeName = resolvedName;
@@ -357,23 +358,20 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Looks up the value of the given variable name in the configured <see cref="IVariableSource"/>.
+        /// calls the <see cref="ResolveHandler"/> to resolve any variables contained in the raw string.
         /// </summary>
-        /// <param name="variableName">The name of the variable to be looked up</param>
-        /// <returns>
-        /// The value of this variable, as returned from the <see cref="IVariableSource"/> passed 
-        /// into the constructor <see cref="ObjectDefinitionVisitor(IVariableSource)"/>
-        /// </returns>
+        /// <param name="rawStringValue">the raw string value containing variable placeholders to be resolved</param>
         /// <exception cref="InvalidOperationException">If no <see cref="IVariableSource"/> has been configured.</exception>
-        protected virtual object ResolveStringValue(string variableName)
+        /// <returns>the resolved string, having variables being replaced, if any</returns>
+        protected virtual string ResolveStringValue(string rawStringValue)
         {
-            if (variableSource == null)
+            if (resolveHandler == null)
             {
-                throw new InvalidOperationException("No IVariableSource specified - pass an instance " +
-                                                    "of this object into the constructor or override the 'ResolveStringValue' method");
+                throw new InvalidOperationException("No resolveHandler specified - pass an instance " +
+                                                    "into the constructor or override the 'ResolveStringValue' method");
             }
-            return variableSource.ResolveVariable(variableName);
-        }
 
+            return resolveHandler(rawStringValue);
+        }
     }
 }

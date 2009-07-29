@@ -32,6 +32,17 @@ namespace Spring.Objects.Factory.Config
     public class SpecialFolderVariableSource : IVariableSource
     {
         /// <summary>
+        /// Before requesting a variable resolution, a client should
+        /// ask, whether the source can resolve a particular variable name.
+        /// </summary>
+        /// <param name="name">the name of the variable to resolve</param>
+        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+        public bool CanResolveVariable(string name)
+        {
+            return ResolveVariable(name) != null;
+        }
+
+        /// <summary>
         /// Resolves specified special folder to its full path.
         /// </summary>
         /// <param name="name">

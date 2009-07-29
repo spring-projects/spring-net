@@ -41,23 +41,7 @@ namespace Spring.Objects.Factory.Config
         private static readonly DateTime TESTDATETIME = new DateTime(2007, 07, 06, 11, 12, 13);
         private static readonly DateTime TESTDATETIME_DEFAULT = TESTDATETIME.AddDays(-1);
         
-        private class NameValueCollectionVariableSource : IVariableSource
-        {
-            private readonly NameValueCollection nameValues = new NameValueCollection();
-
-            public NameValueCollectionVariableSource Add(string name, string value)
-            {
-                nameValues.Add(name, value);
-                return this;
-            }
-
-            public string ResolveVariable(string name)
-            {
-                return nameValues.Get(name);
-            }
-        }
-
-        private readonly IVariableSource _testVariableSource = new NameValueCollectionVariableSource()
+        private readonly IVariableSource _testVariableSource = new DictionaryVariableSource(null, true)
             .Add("ValidString", "String")
             .Add("EmptyString", "")
             .Add("ValidChar", "c")
