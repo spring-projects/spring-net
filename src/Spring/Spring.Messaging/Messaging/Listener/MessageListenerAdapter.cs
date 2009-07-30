@@ -24,7 +24,6 @@ using Common.Logging;
 using Spring.Context;
 using Spring.Expressions;
 using Spring.Messaging.Core;
-using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
 using Spring.Reflection.Dynamic;

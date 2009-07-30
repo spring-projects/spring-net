@@ -22,12 +22,11 @@ using System;
 using System.Collections;
 using System.Messaging;
 using Spring.Context;
-using Spring.Messaging.Core;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory.Support;
 using Spring.Transaction.Support;
 
-namespace Spring.Messaging.Support
+namespace Spring.Messaging.Core
 {
     /// <summary>
     /// Utility methods to support Spring's MSMQ functionality
@@ -116,12 +115,11 @@ namespace Spring.Messaging.Support
 
         public void BeforeCommit(bool readOnly)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AfterCommit()
         {
-            throw new NotImplementedException();
         }
 
         public void BeforeCompletion()
@@ -129,12 +127,12 @@ namespace Spring.Messaging.Support
             TransactionSynchronizationManager.UnbindResource(resourceKey);
             holderActive = false;
             //this.resourceHolder.closeAll();
-            throw new NotImplementedException();
+            //TODO SPRNET-1244
         }
 
         public void AfterCompletion(TransactionSynchronizationStatus status)
         {
-            throw new NotImplementedException();
+            //TODO SPRNET-1244
         }
 
         #endregion

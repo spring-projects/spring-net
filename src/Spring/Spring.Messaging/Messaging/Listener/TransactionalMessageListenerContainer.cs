@@ -23,7 +23,6 @@ using System.Messaging;
 using Common.Logging;
 using Spring.Data.Core;
 using Spring.Messaging.Core;
-using Spring.Messaging.Support;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 

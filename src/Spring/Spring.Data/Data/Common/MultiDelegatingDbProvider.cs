@@ -277,7 +277,7 @@ namespace Spring.Data
                 return defaultDbProvider;
             }
             throw new InvalidDataAccessApiUsageException("'" + dbProviderName + "'"
-                                        + "was not under the thread local key 'dbProviderName'");
+                                        + "was not under the thread local key 'dbProviderName' and no default IDbProvider was set.");
         }
 
         /// <summary>

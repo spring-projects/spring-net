@@ -252,7 +252,7 @@ namespace Spring.Data.Common
             {
                 return parameter.Value;
             }
-            throw new UncategorizedAdoException(
+            throw new InvalidDataAccessApiUsageException(
                 "object in IDataParameterCollection is not of the type IDataParameter, it is type [" +
                 dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)].GetType() + "].");
         }
