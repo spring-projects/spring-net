@@ -35,7 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
-    <NoWarn>219, 162, 618</NoWarn>
+    <NoWarn>219, 162, 618, 1591</NoWarn>
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -344,8 +344,111 @@
     <Compile Include="DataBinding\IDataBound.cs" />
     <Compile Include="Expressions\DefaultNode.cs" />
     <Compile Include="Expressions\ExpressionConverter.cs" />
+    <Compile Include="Expressions\OpXOR.cs" />
+    <Compile Include="Expressions\Parser\antlr\ANTLRException.cs" />
+    <Compile Include="Expressions\Parser\antlr\ANTLRPanicException.cs" />
+    <Compile Include="Expressions\Parser\antlr\ASTFactory.cs" />
+    <Compile Include="Expressions\Parser\antlr\ASTNodeCreator.cs" />
+    <Compile Include="Expressions\Parser\antlr\ASTNULLType.cs" />
+    <Compile Include="Expressions\Parser\antlr\ASTPair.cs" />
+    <Compile Include="Expressions\Parser\antlr\ASTVisitor.cs" />
+    <Compile Include="Expressions\Parser\antlr\BaseAST.cs" />
+    <Compile Include="Expressions\Parser\antlr\ByteBuffer.cs" />
+    <Compile Include="Expressions\Parser\antlr\CharBuffer.cs" />
+    <Compile Include="Expressions\Parser\antlr\CharQueue.cs" />
+    <Compile Include="Expressions\Parser\antlr\CharScanner.cs" />
+    <Compile Include="Expressions\Parser\antlr\CharStreamException.cs" />
+    <Compile Include="Expressions\Parser\antlr\CharStreamIOException.cs" />
+    <Compile Include="Expressions\Parser\antlr\collections\AST.cs" />
+    <Compile Include="Expressions\Parser\antlr\collections\impl\ASTArray.cs" />
+    <Compile Include="Expressions\Parser\antlr\collections\impl\BitSet.cs" />
+    <Compile Include="Expressions\Parser\antlr\CommonAST.cs" />
+    <Compile Include="Expressions\Parser\antlr\CommonASTWithHiddenTokens.cs" />
+    <Compile Include="Expressions\Parser\antlr\CommonHiddenStreamToken.cs" />
+    <Compile Include="Expressions\Parser\antlr\CommonToken.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ANTLREventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\DebuggingCharScanner.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\DebuggingInputBuffer.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\DebuggingParser.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\GuessingEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ICharScannerDebugSubject.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\IDebugSubject.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\InputBufferEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\InputBufferEventSupport.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\InputBufferListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\InputBufferListenerBase.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\InputBufferReporter.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\IParserDebugSubject.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\Listener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\LLkDebuggingParser.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\MessageEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\MessageListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\MessageListenerBase.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\NewLineEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\NewLineListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserController.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserEventSupport.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserListenerBase.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserMatchEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserMatchListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserMatchListenerBase.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserReporter.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserTokenEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserTokenListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParserTokenListenerBase.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ParseTreeDebugParser.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\ScannerEventSupport.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\SemanticPredicateEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\SemanticPredicateListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\SemanticPredicateListenerBase.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\SyntacticPredicateEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\SyntacticPredicateListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\SyntacticPredicateListenerBase.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\TraceEventArgs.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\TraceListener.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\TraceListenerBase.cs" />
+    <Compile Include="Expressions\Parser\antlr\debug\Tracer.cs" />
+    <Compile Include="Expressions\Parser\antlr\DefaultFileLineFormatter.cs" />
+    <Compile Include="Expressions\Parser\antlr\DumpASTVisitor.cs" />
+    <Compile Include="Expressions\Parser\antlr\FileLineFormatter.cs" />
+    <Compile Include="Expressions\Parser\antlr\IHiddenStreamToken.cs" />
+    <Compile Include="Expressions\Parser\antlr\InputBuffer.cs" />
+    <Compile Include="Expressions\Parser\antlr\IToken.cs" />
+    <Compile Include="Expressions\Parser\antlr\LexerSharedInputState.cs" />
+    <Compile Include="Expressions\Parser\antlr\LLkParser.cs" />
+    <Compile Include="Expressions\Parser\antlr\MismatchedCharException.cs" />
+    <Compile Include="Expressions\Parser\antlr\MismatchedTokenException.cs" />
+    <Compile Include="Expressions\Parser\antlr\NoViableAltException.cs" />
+    <Compile Include="Expressions\Parser\antlr\NoViableAltForCharException.cs" />
+    <Compile Include="Expressions\Parser\antlr\Parser.cs" />
+    <Compile Include="Expressions\Parser\antlr\ParserSharedInputState.cs" />
+    <Compile Include="Expressions\Parser\antlr\ParseTree.cs" />
+    <Compile Include="Expressions\Parser\antlr\ParseTreeRule.cs" />
+    <Compile Include="Expressions\Parser\antlr\ParseTreeToken.cs" />
+    <Compile Include="Expressions\Parser\antlr\RecognitionException.cs" />
+    <Compile Include="Expressions\Parser\antlr\SemanticException.cs" />
+    <Compile Include="Expressions\Parser\antlr\StringUtils.cs" />
+    <Compile Include="Expressions\Parser\antlr\SupportClass.cs" />
+    <Compile Include="Expressions\Parser\antlr\Token.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenBuffer.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenCreator.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenQueue.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStream.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStreamBasicFilter.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStreamException.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStreamHiddenTokenFilter.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStreamIOException.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStreamRecognitionException.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStreamRetryException.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStreamRewriteEngine.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenStreamSelector.cs" />
+    <Compile Include="Expressions\Parser\antlr\TokenWithIndex.cs" />
+    <Compile Include="Expressions\Parser\antlr\TreeParser.cs" />
+    <Compile Include="Expressions\Parser\antlr\TreeParserSharedInputState.cs" />
     <Compile Include="Expressions\Parser\ExpressionLexer.cs" />
     <Compile Include="Expressions\Parser\ExpressionParser.cs" />
+    <Compile Include="Expressions\Parser\ExpressionParserTokenTypes.cs" />
     <Compile Include="Expressions\Processors\AverageAggregator.cs" />
     <Compile Include="Expressions\Processors\ConversionProcessor.cs" />
     <Compile Include="Expressions\Processors\NonNullProcessor.cs" />
@@ -550,6 +653,7 @@
     <Compile Include="Objects\Factory\Config\ConfigSectionVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\ConnectionStringsVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\DependencyDescriptor.cs" />
+    <Compile Include="Objects\Factory\Config\DictionaryVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\IConfigurableFactoryObject.cs" />
     <Compile Include="Objects\Factory\Config\InstantiationAwareObjectPostProcessorAdapter.cs" />
     <Compile Include="Objects\Factory\Config\ISingletonObjectRegistry.cs" />
@@ -575,6 +679,7 @@
     <Compile Include="Objects\Factory\Support\DefaultObjectNameGenerator.cs" />
     <Compile Include="Objects\Factory\Support\IConfigurableObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IObjectNameGenerator.cs" />
+    <Compile Include="Objects\Factory\Support\ManagedNameValueCollection.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionBuilder.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionValueResolver.cs" />
     <Compile Include="Objects\Factory\Support\SimpleAutowireCandidateResolver.cs" />
@@ -591,8 +696,10 @@
     <Compile Include="Objects\Factory\Xml\NamespaceParserSupport.cs" />
     <Compile Include="Objects\Factory\Xml\ObjectDefinitionParserHelper.cs" />
     <Compile Include="Objects\Factory\Xml\ParserContext.cs" />
+    <Compile Include="Objects\Factory\Xml\ReplacedMethodOverride.cs" />
     <Compile Include="Objects\Factory\Xml\XmlReaderContext.cs" />
     <Compile Include="Objects\FatalObjectException.cs" />
+    <Compile Include="Objects\IMergable.cs" />
     <Compile Include="Objects\ISharedStateAware.cs" />
     <Compile Include="Objects\ISharedStateFactory.cs" />
     <Compile Include="Objects\MutablePropertyValues.cs" />
@@ -841,9 +948,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Objects\Factory\Support\PropertiesObjectDefinitionReader.cs" />
-    <Compile Include="Objects\Factory\Support\ReplacedMethodOverride.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Objects\Factory\Support\RootObjectDefinition.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1077,6 +1181,10 @@
     <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-1.1.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-1.3.xsd" />
+    <None Include="Objects\Factory\Xml\spring-objects-1.3.xsx">
+      <DependentUpon>spring-objects-1.3.xsd</DependentUpon>
+    </None>
     <None Include="Spring.Core.build" />
     <None Include="Validation\Config\spring-validation-1.1.xsx">
       <DependentUpon>spring-validation-1.1.xsd</DependentUpon>
