@@ -1,29 +1,29 @@
-THE SPRING.NET FRAMEWORK, Release 1.2.0  (November 10, 2008)
+THE SPRING.NET FRAMEWORK, Release 1.3.0RC1  (July 31, 2009)
 --------------------------------------------------------------------
 http://www.springframework.net/
 
 
 1. INTRODUCTION
 
-The 1.2 release of Spring.NET contains
+The 1.3.0RC release of Spring.NET contains
 
-     * A full featured Inversion of Control container 
+     * A full featured Inversion of Control container
      * An Aspect Oriented Programming framework
      * Expression Language for lightweight scripting
      * UI-agnostic validation framework
-     * ASP.NET Framework 
+     * ASP.NET Framework
        - Dependency Injection for pages and user controls, bi-directional data binding, and more.
      * Declarative transaction management abstraction
        - Declarative transaction management via use of common XML configuration and attributes across different transaction APIs
      * ADO.NET framework
        - Simplifies use of ADO.NET.  DAO support classes and integration with Spring's declarative transaction management functionality
-     * Portable Service Abstractions  
+     * Portable Service Abstractions
        - Export plain .NET objects via .NET Remoting, Web Service or .NET Serviced Component and create client side proxies based on endpoint URL and service interface.
      * NHibernate Integation
        - NHibernate 1.0 and 1.2 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
      * ASP.NET AJAX Integration
        - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
-     * NUnit integration 
+     * NUnit integration
        - Provides Dependency Injection of test cases and Spring container loading and caching. .  Data access and transaction management features aid with integration testing.
      * WCF integration
        - Provides Dependency Injection and applicatin of AOP advice to WCF services
@@ -35,7 +35,7 @@ The 1.2 release of Spring.NET contains
      * NMS integration
        - Simplifies the use of NMS by providing helper classes for message sending and receiving.
 
-Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002). 
+Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002).
 
 
 2. KNOWN ISSUES
@@ -59,7 +59,7 @@ Release contents:
 
 debug build is done using /DEBUG:full and release build using /DEBUG:pdbonly flags.
 
-The VS.NET solution for the framework and examples are provided.  
+The VS.NET solution for the framework and examples are provided.
 
 Latest info is available at the public website: http://www.springframework.net/
 
@@ -73,7 +73,7 @@ The Spring Framework is released under the terms of the Apache Software License 
 The "bin" directory contains the following distinct dll files for use in applications. Dependencies are those other than on the .NET BCL.
 
 * "Spring.Core" (~615 KB)
-- Contents: Inversion of control container. Collection classes. 
+- Contents: Inversion of control container. Collection classes.
 - Dependencies: antlr.runtime, Common.Logging
 
 * "Spring.Aop" (~150 KB)
@@ -94,6 +94,10 @@ The "bin" directory contains the following distinct dll files for use in applica
 
 * "Spring.Data.NHibernate20" (~90 KB)
 - Contents: NHibernate 2.0 RC1 integration
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
+
+* "Spring.Data.NHibernate21" (~90 KB)
+- Contents: NHibernate 2.1 integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
 * "Spring.Services" (~70 KB)
@@ -153,7 +157,6 @@ VS.NET
 ------
 There are four solution file for different version of VS.NET
 
-* Spring.Net.2002.sln for use with VS.NET 2002
 * Spring.Net.2003.sln for use with VS.NET 2003
 * Spring.Net.2005.sln for use with VS.NET 2005
 * Spring.Net.2008.sln for use with VS.NET 2008
@@ -161,7 +164,7 @@ There are four solution file for different version of VS.NET
 NAnt
 ----
 
-A NAnt build script can be obtained via CVS or nightly builds.   You will need to 
+A NAnt build script can be obtained via CVS or nightly builds.   You will need to
 get the supporting tools directory from CVS as well.
 
 To build the source and run the unit tests type
@@ -184,7 +187,7 @@ documentation and make a final release build. Refer to the Spring.NET Wiki at
 http://opensource.atlassian.com/confluence/spring/display/NET/Docbook+Reference
 for information on how to install the docbook toolchain.
 
-Innovasys Document X! is used to generate the SDK documentation.
+NDoc3 and InnovaSys Document X! are used to generate the SDK documentation.
 
 
 7. Support
@@ -202,7 +205,7 @@ A Fisheye repository browser is located at http://fisheye1.cenqua.com/viewrep/sp
 InnovaSys Document X!
 ---------------------
 InnovSys has kindly provided a license to generate the SDK documentation and supporting utilities for
-integration with Visual Studio. 
+integration with Visual Studio.
 
 
 

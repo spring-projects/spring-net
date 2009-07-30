@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<project name="Spring.Testing.Microsoft" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<!--
+    Required properties:
+      * current.bin.dir           - (path) root level to build to
+      * current.build.debug       - (true|false) debug build?
+      * current.build.defines.csc - framework-specific build defines for C# compiler
+ -->
+    <target name="build">
+        <csc target="library" define="${current.build.defines.csc}"
+                warnaserror="false"
+            debug="${current.build.debug}"
+            output="${current.bin.dir}/${project::get-name()}.dll"
+            doc="${current.bin.dir}/${project::get-name()}.xml"
+            >
+            <arg line="${compiler.args}"/>
+            <nowarn>
+                <warning number="219" />
+                <warning number="162" />
+                <warning number="1591" />
+            </nowarn>
+            <sources failonempty="true">
+                <include name="**/*.cs" />
+                <include name="../GenCommonAssemblyInfo.cs" />
+            </sources>
+		        <references basedir="${current.bin.dir}">
+			        <include name="System.Data.dll" />
+			        <include name="*.dll" />
+			        <include name="Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
+			        <exclude name="${project::get-name()}.dll" />
+		        </references>
+        </csc>
+    </target>
+
+</project>
+

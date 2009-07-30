@@ -22,8 +22,10 @@ Build properties that may be set:
         signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
 "package.version":
         set the package version
-"build-testing-mstest":
-        set to true if local machine has VS.NET 2008 MSTest installed
+"build-testing-ems":
+        set to true if you want to build Tibco EMS support (you need to copy tibco.ems.dll and tibco.ems.admin.dll into /lib/net/2.0 first)
+"build-testing-microsoft":
+        set to true if local machine has VS.NET 2008 MSTest installed (you need to copy Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll to /lib/net/2.0 first)
 -->
 
   <!-- global project settings -->
@@ -46,7 +48,6 @@ Build properties that may be set:
   <include buildfile="${spring.basedir}/Spring.include"/>
 
   <property name="package.version" value="0.0.0" overwrite="false"/>
-  <property name="using-clover" value="false"/>
   <!-- change this to sync the sdk doc version generated -->
   <property name="package.version.docs" value="${package.version}" />
   <!-- make system environment variables available as NAnt properties -->
@@ -378,8 +379,8 @@ Build properties that may be set:
     <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0') and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'mono-2.0') and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
-    <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-mstest  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz and not net-3.0}"/>
@@ -407,8 +408,8 @@ Build properties that may be set:
                  if="${build-data and nant.settings.currentframework == 'net-3.5' and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-mstest  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit and not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
@@ -416,9 +417,7 @@ Build properties that may be set:
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity and not net-3.0}"/>
 
     <!-- build examples -->
-
-    <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples and not using-clover and not net-3.0}"/>
-
+    <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples and not net-3.0}"/>
 
   </target>
 
@@ -874,6 +873,7 @@ Build properties that may be set:
     <call target="${nant.target.root.name}-1.1" />
     <call target="${nant.target.root.name}-2.0" />
     <call target="${nant.target.root.name}-3.0" />
+    <call target="${nant.target.root.name}-3.5" />
 
     <!-- ignore Mono 2.0 for now -->
     <!-- <call target="${nant.target.root.name}-mono-2.0" /> -->
@@ -920,6 +920,15 @@ Build properties that may be set:
     <call target="compile-build-3.0"/>
     <call target="set-release-build-configuration"/>
     <call target="compile-build-3.0"/>
+  </target>
+
+  <target name="daily-build-3.5">
+    <call target="set-build-namespaces-all"/>
+    <call target="set-package-configuration"/>
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-3.5"/>
+    <call target="set-release-build-configuration"/>
+    <call target="compile-build-3.5"/>
   </target>
 
 
@@ -1385,12 +1394,10 @@ Build properties that may be set:
   <target name="set-user-overrides" unless="${target::has-executed('set-user-overrides')}">
     <!--
              Per-user custom properties; we load any custom properties and / or
-             property overrides here... for instance, if a developer has installed
-             their Clover.NET executable into 'D:\dev_utils\Cenqua\Clover.NET', he or
-             she would use the following custom properties file...
+             property overrides here...
 
              <project name="MyCustomSpring.NETProperties">
-                <property name="Clover.home" value="D:\dev_utils\Cenqua\Clover.NET"/>
+                <property name="build-testing-microsoft" value="true"/>
              </project>
 
              These custom properties are loaded from a single file named
@@ -1419,8 +1426,8 @@ Build properties that may be set:
     <property name="build-aop" value="true" overwrite="false" />
     <property name="build-data" value="true" overwrite="false"/>
     <property name="build-services" value="true" overwrite="false" />
-    <property name="build-testing" value="true" overwrite="false" />
-    <property name="build-testing-mstest" value="false" overwrite="false"/>
+    <property name="build-testing-nunit" value="true" overwrite="false" />
+    <property name="build-testing-microsoft" value="false" overwrite="false"/>
     <property name="build-web" value="true" overwrite="false" />
     <property name="build-nms" value="true" overwrite="false" />
     <property name="build-ems" value="false" overwrite="false" />
@@ -1456,8 +1463,8 @@ Build properties that may be set:
     <property name="build-aop" value="true"/>
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>
-    <property name="build-testing" value="true"/>
-    <property name="build-testing-mstest" value="false" overwrite="false"/>
+    <property name="build-testing-nunit" value="true"/>
+    <property name="build-testing-microsoft" value="false" overwrite="false"/>
     <property name="build-web" value="true"/>
     <property name="build-examples" value="true"/>
     <property name="build-nms" value="true" />
