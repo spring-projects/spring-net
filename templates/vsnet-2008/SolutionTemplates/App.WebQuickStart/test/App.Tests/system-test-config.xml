@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<objects xmlns="http://www.springframework.net"
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx">
+
+
+  <!-- Imports application configuration -->
+  <import resource="assembly://App.Service/App.Service/service-config.xml"/>
+  <import resource="assembly://App.DataAcces/App.DataAccess/data-access-config.xml"/>
+  
+  <!-- Configuration of database connection strings -->
+  
+</objects>
