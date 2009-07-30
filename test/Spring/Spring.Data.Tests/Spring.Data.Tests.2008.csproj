@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ACD39D47-1811-40FA-9E7E-5DEA5B9CE6C0}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -186,6 +186,9 @@
     <Compile Include="Transaction\Interceptor\AbstractTransactionAspectTests.cs" />
     <Compile Include="Transaction\Interceptor\TransactionAttributeSourceTests.cs" />
     <Compile Include="Transaction\Interceptor\TransactionInterceptorTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Spring.Data.Tests.build" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

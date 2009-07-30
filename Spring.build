@@ -34,7 +34,7 @@ Build properties that may be set:
 
 
   <!-- default location of mstest executable -->
-  <!-- See target set-user-overrides for how to change this to your machine values --> 
+  <!-- See target set-user-overrides for how to change this to your machine values -->
   <property name="vs-net.mstest.bin.dir" value="K:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE"/>
 
   <!-- debug or release -->
@@ -380,7 +380,7 @@ Build properties that may be set:
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-mstest  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-nms and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq and not net-3.0}"/>
@@ -409,12 +409,10 @@ Build properties that may be set:
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-mstest  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
-<!--
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
--->
+    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq-tests and not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity and not net-3.0}"/>
 
     <!-- build examples -->
@@ -432,6 +430,7 @@ Build properties that may be set:
     <!-- disable namespaces not supported in net-1.0 -->
     <property name="build-web" value="false" />
     <property name="build-nms" value="false" />
+    <property name="build-ems" value="false" />
     <property name="build-quartz" value="false" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
@@ -443,8 +442,8 @@ Build properties that may be set:
           depends="set-net-1.1-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
+    <property name="build-ems" value="false" />
     <property name="build-nms" value="false" />
-    <property name="build-quartz" value="true" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
     <property name="build-velocity" value="false" />
@@ -455,11 +454,7 @@ Build properties that may be set:
           depends="set-net-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
-    <property name="build-nms" value="true" />
-    <property name="build-quartz" value="true" />
-    <property name="build-msmq" value="true" />
-    <property name="build-msmq-tests" value="false" />
-    <property name="build-velocity" value="true" />
+    <property name="build-ems" value="false" />
     <call target="compile-test" />
   </target>
 
@@ -467,6 +462,7 @@ Build properties that may be set:
           depends="set-net-3.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
+    <property name="build-ems" value="false" />
     <property name="build-nms" value="false" />
     <property name="build-quartz" value="false" />
     <property name="build-msmq" value="false" />
@@ -479,6 +475,7 @@ Build properties that may be set:
         depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
+    <property name="build-ems" value="false" />
     <property name="build-nms" value="false" />
     <property name="build-quartz" value="false" />
     <property name="build-msmq" value="false" />
@@ -486,16 +483,14 @@ Build properties that may be set:
     <property name="build-velocity" value="false" />
     <call target="compile-test" />
   </target>
-  
+
   <target name="compile-mono-2.0" description="Builds MONO Framework 2.0 version"
           depends="set-mono-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
-    <property name="build-nms" value="true" />
-    <property name="build-quartz" value="true" />
+    <property name="build-ems" value="false" />
     <property name="build-msmq" value="false" />
     <property name="build-msmq-tests" value="false" />
-    <property name="build-velocity" value="true" />
     <call target="compile-test" />
   </target>
 
@@ -1076,7 +1071,7 @@ Build properties that may be set:
           <include name="**/Spring.Data.NHibernate21.dll"/>
           <include name="**/Spring.Data.NHibernate21.xml"/>
           <include name="**/Spring.Data.NHibernate21.pdb"/>
-          
+
           <include name="**/Spring.Web.dll"/>
           <include name="**/Spring.Web.xml"/>
           <include name="**/Spring.Web.pdb"/>
@@ -1421,13 +1416,17 @@ Build properties that may be set:
   </target>
   <target name="set-build-namespaces-all">
     <property name="build.allnamespaces" value="true"/>
-    <property name="build-aop" value="true"/>
-    <property name="build-data" value="true"/>
-    <property name="build-services" value="true"/>
-    <property name="build-testing" value="true"/>
+    <property name="build-aop" value="true" overwrite="false" />
+    <property name="build-data" value="true" overwrite="false"/>
+    <property name="build-services" value="true" overwrite="false" />
+    <property name="build-testing" value="true" overwrite="false" />
     <property name="build-testing-mstest" value="false" overwrite="false"/>
-    <property name="build-winservices" value="true"/>
-    <property name="build-web" value="true"/>
+    <property name="build-web" value="true" overwrite="false" />
+    <property name="build-nms" value="true" overwrite="false" />
+    <property name="build-ems" value="false" overwrite="false" />
+    <property name="build-quartz" value="true" overwrite="false" />
+    <property name="build-msmq" value="true" overwrite="false" />
+    <property name="build-velocity" value="true" overwrite="false" />
     <property name="solution.file" value="Spring.Net.sln"/>
     <fileset id="src.to.copy">
       <include name="src/**"/>
@@ -1459,9 +1458,13 @@ Build properties that may be set:
     <property name="build-services" value="true"/>
     <property name="build-testing" value="true"/>
     <property name="build-testing-mstest" value="false" overwrite="false"/>
-    <property name="build-winservices" value="true"/>
     <property name="build-web" value="true"/>
     <property name="build-examples" value="true"/>
+    <property name="build-nms" value="true" />
+    <property name="build-ems" value="false" overwrite="false" />
+    <property name="build-quartz" value="true" />
+    <property name="build-msmq" value="true" />
+    <property name="build-velocity" value="true" />
     <property name="solution.file.2003" value="Spring.Net.2003.sln"/>
     <property name="solution.file.2005" value="Spring.Net.2005.sln"/>
     <property name="solution.file.2008" value="Spring.Net.2008.sln"/>
@@ -1544,60 +1547,6 @@ Build properties that may be set:
   <target name="TestInit">
       <!-- custom task for testing under different runtimes -->
     <!-- loadtasks assembly="${spring.basedir}/build-support/tools/NAnt.NUnit2OutProc.Task/NAnt.NUnit2OutProcTasks.dll" / -->
-  </target>
-
-  <!-- Clover.NET code coverage targets... -->
-  <target name="CloverInit">
-    <!-- initializes the Clover environment -->
-    <echo message="Building with Clover.NET..."/>
-    <if test="${not property::exists('Clover.home')}">
-      <property name="Clover.home" value="K:\Program Files\Cenqua\Clover.NET 2.0 for .NET 2.0\"/>
-    </if>
-    <!-- 1595 - (Clover.NET workaround) 'type' is defined in multiple places; using definition from 'assembly' -->
-    <property name="nowarn.numbers" value="${nowarn.numbers},1595"/>
-    <copy todir="${Clover.home}" failonerror="false" overwrite="true">
-      <fileset basedir=".">
-        <include name="clovernet.license"/>
-      </fileset>
-    </copy>
-    <!-- Note: Using custom build CloverNant tasks -->
-    <loadtasks assembly="${Clover.home}\CloverNAnt-0.85.dll"/>
-    <clover-setup initstring="CloverBuild\clover.cdb" builddir="CloverBuild" enabled="true" flatten="false">
-      <fileset basedir=".">
-        <include name="src/Spring/Spring.Data/**/*"/>
-        <exclude name="examples/**/*"/>
-        <exclude name="test/**/*"/>
-        <exclude name="src/Spring/CommonAssemblyInfo.cs"/>
-      </fileset>
-    </clover-setup>
-  </target>
-  <target name="CloverClean">
-    <delete dir="CloverBuild" failonerror="false"/>
-    <!-- delete any Cloverised output lying around from previous Cloverisings -->
-    <property name="target.dir"
-              value="${project::get-base-directory()}/build/${nant.settings.currentframework}.${nant.platform.name}"/>
-    <delete
-            dir="${project::get-base-directory()}/build/${nant.settings.currentframework}.${nant.platform.name}/bin"
-            if="${directory::exists(target.dir)}"
-            failonerror="false"/>
-  </target>
-  <target name="CloverTest" depends="CloverInit">
-    <!-- let Clover instrument a debug build -->
-    <property name="using-clover" value="true"/>
-    <call target="test"/>
-  </target>
-  <target name="CloverReport" depends="CloverInit">
-    <clover-report>
-      <current title="${project.name} Code Coverage" output="report">
-        <format type="html"/>
-      </current>
-    </clover-report>
-  </target>
-  <target name="CloverAll" depends="CloverClean, CloverReport, CloverClean"
-          description="Convenience target to execute the full Clover build cycle.">
-  </target>
-  <target name="clovercruise" depends="CloverAll"
-          description="Convenience target to execute the full Clover build cycle with reporting for cruise control.">
   </target>
 
 </project>

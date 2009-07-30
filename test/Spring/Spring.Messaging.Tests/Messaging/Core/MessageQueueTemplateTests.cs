@@ -266,7 +266,7 @@ namespace Spring.Messaging.Core
         #region Some simple driver code for debugging
         public void SimpleRemoteConsumption()
         {
-            string connectionWorking = @"FormatName:Direct=OS:MARKT60\Private$\testqueue";
+//            string connectionWorking = @"FormatName:Direct=OS:MARKT60\Private$\testqueue";
 
             //TCP:IP doesn't work...
             MessageQueue rmQ = new MessageQueue(@"FormatName:Direct=TCP:192.168.1.105\Private$\testqueue");

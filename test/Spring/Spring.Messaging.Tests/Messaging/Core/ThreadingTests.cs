@@ -31,7 +31,6 @@ namespace Spring.Messaging.Core
     /// This class contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
     [TestFixture]
     public class ThreadingTests
     {

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Messaging.Nms.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Messaging.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 
     <include buildfile="${spring.basedir}/common-project.include" />
 
@@ -39,7 +39,7 @@
 
     <target name="test" depends="build">
         <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
-        <call target="common.run-tests" />
+        <!-- call target="common.run-tests" / -->
     </target>
 
 <!--
