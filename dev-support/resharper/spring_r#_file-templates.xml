@@ -1,0 +1,26 @@
+<TemplatesExport family="File Templates">
+  <Template uid="4e56fdf2-4786-4c22-b327-6d6d052b93de" shortcut="" description="NUnitTestClass" text="using NUnit.Framework;&#xD;&#xA;&#xD;&#xA;namespace $namespace$&#xD;&#xA;{&#xD;&#xA;    [TestFixture]&#xD;&#xA;    public class $Class$&#xD;&#xA;    {&#xD;&#xA;        [Test]&#xD;&#xA;        public void First_test()&#xD;&#xA;        {&#xD;&#xA;        }&#xD;&#xA;    }&#xD;&#xA;}" reformat="True" shortenQualifiedReferences="True">
+    <Context>
+      <ProjectLanguageContext language="CSharp" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="namespace" expression="fileDefaultNamespace()" initialRange="0" />
+      <Variable name="Class" expression="getFileNameWithoutExtension()" initialRange="0" />
+    </Variables>
+    <CustomProperties>
+      <Property key="FileName" value="File" />
+      <Property key="Extension" value="cs" />
+      <Property key="ValidateFileName" value="False" />
+    </CustomProperties>
+  </Template>
+  <Template uid="b55397cb-9ad8-4b70-98aa-d5fa5fba17b0" shortcut="" description="Spring Object Definitions" text="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;&#xA;&lt;objects xmlns=&quot;http://www.springframework.net&quot;&#xD;&#xA;         xmlns:v='http://www.springframework.net/validation'&#xD;&#xA;         xmlns:aop=&quot;http://www.springframework.net/aop&quot;&#xD;&#xA;         xmlns:db=&quot;http://www.springframework.net/db&quot;&#xD;&#xA;         xmlns:r=&quot;http://www.springframework.net/remoting&quot;&gt;&#xD;&#xA;&#xA;  &lt;!-- add object definitions here --&gt;&#xA;  $END$&#xA;  &#xA;&lt;/objects&gt;" reformat="True" shortenQualifiedReferences="True">
+    <Categories />
+    <Variables />
+    <CustomProperties>
+      <Property key="FileName" value="objects-config" />
+      <Property key="Extension" value="xml" />
+      <Property key="ValidateFileName" value="False" />
+    </CustomProperties>
+  </Template>
+</TemplatesExport>

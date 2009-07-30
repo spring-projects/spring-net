@@ -1,0 +1,67 @@
+<TemplatesExport family="Live Templates">
+  <Template uid="11676a91-d898-442d-b0fd-2ad0d8a78aef" shortcut="appcfgnetcommon" description="Common Logging Configuration Section" text="        &lt;sectionGroup name=&quot;common&quot;&gt;&#xD;&#xA;            &lt;section name=&quot;logging&quot; type=&quot;Common.Logging.ConfigurationSectionHandler, Common.Logging&quot; /&gt;&#xD;&#xA;        &lt;/sectionGroup&gt;&#xD;&#xA;&#xD;&#xA;$END$&#xD;&#xA;    &lt;!-- to see logging output in the attached debugger --&gt;&#xD;&#xA;    &lt;common&gt;&#xD;&#xA;        &lt;logging&gt;&#xD;&#xA;            &lt;factoryAdapter type=&quot;Common.Logging.Simple.TraceLoggerFactoryAdapter, Common.Logging&quot;&gt;&#xD;&#xA;                &lt;arg key=&quot;Level&quot; value=&quot;ALL&quot; /&gt;&#xD;&#xA;            &lt;/factoryAdapter&gt;&#xD;&#xA;        &lt;/logging&gt;&#xD;&#xA;    &lt;/common&gt;&#xD;&#xA;" reformat="True" shortenQualifiedReferences="True">
+    <Categories />
+    <Variables />
+    <CustomProperties />
+  </Template>
+  <Template uid="c64e9dac-930d-4630-aad4-965c19f56957" shortcut="appcfgspring" description="Spring Configuration Section" text="    &lt;sectionGroup name=&quot;spring&quot;&gt;&#xD;&#xA;        &lt;section name=&quot;parsers&quot; type=&quot;Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core&quot;/&gt;&#xD;&#xA;        &lt;section name=&quot;context&quot; type=&quot;Spring.Context.Support.WebContextHandler, Spring.Web&quot;/&gt;        &#xD;&#xA;        &lt;section name=&quot;objects&quot; type=&quot;Spring.Context.Support.DefaultSectionHandler, Spring.Core&quot;/&gt;&#xD;&#xA;    &lt;/sectionGroup&gt;&#xD;&#xA;&#xD;&#xA;$END$&#xD;&#xA;&lt;spring&gt;&#xD;&#xA;    &lt;parsers&gt; &#xD;&#xA;      &lt;parser type=&quot;Spring.Aop.Config.AopNamespaceParser, Spring.Aop&quot; /&gt; &#xD;&#xA;      &lt;parser type=&quot;Spring.Data.Config.DatabaseNamespaceParser, Spring.Data&quot; /&gt; &#xD;&#xA;      &lt;parser type=&quot;Spring.Transaction.Config.TxNamespaceParser, Spring.Data&quot; /&gt;&#xD;&#xA;      &lt;parser type=&quot;Spring.Validation.Config.ValidationNamespaceParser, Spring.Core&quot; /&gt;&#xD;&#xA;      &lt;parser type=&quot;Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services&quot; /&gt;&#xD;&#xA;    &lt;/parsers&gt; &#xD;&#xA;&#xD;&#xA;    &lt;context&gt;&#xD;&#xA;        &lt;resource uri=&quot;config://spring/objects&quot;/&gt;&#xD;&#xA;    &lt;/context&gt;&#xD;&#xA;&#xD;&#xA;    &lt;objects xmlns=&quot;http://www.springframework.net&quot;&#xD;&#xA;             xmlns:v='http://www.springframework.net/validation'&#xD;&#xA;             xmlns:aop=&quot;http://www.springframework.net/aop&quot;&#xD;&#xA;             xmlns:db=&quot;http://www.springframework.net/db&quot;&#xD;&#xA;             xmlns:r=&quot;http://www.springframework.net/remoting&quot;&#xD;&#xA;             xmlns:tx=&quot;http://www.springframework.net/tx&quot;&#xD;&#xA;    &gt;&#xD;&#xA;    &lt;/objects&gt;&#xD;&#xA;&lt;/spring&gt;&#xD;&#xA;&#xD;&#xA;" reformat="False" shortenQualifiedReferences="True">
+    <Context>
+      <FileNameContext mask="*.config" />
+    </Context>
+    <Categories />
+    <Variables />
+    <CustomProperties />
+  </Template>
+  <Template uid="42689ee8-389e-455e-ba5b-859c72343fac" shortcut="odctor" description="Object Definition ConstructorArg" text="&lt;constructor-arg name=&quot;$NAME$&quot; value=&quot;$END$&quot; /&gt;" reformat="True" shortenQualifiedReferences="True">
+    <Context>
+      <XMLContext type="TAG_EXPECTED" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="NAME" expression="" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="8f2ddf02-a554-48b0-a2a8-d221f93c8b6c" shortcut="odef" description="Spring OObject Definition" text="&lt;object name=&quot;$NAME$&quot; type=&quot;$CLASS$&quot;&gt;&#xD;&#xA;	$END$&#xD;&#xA;&lt;/object&gt;" reformat="True" shortenQualifiedReferences="True">
+    <Context>
+      <XMLContext type="TAG_EXPECTED" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="NAME" expression="suggestVariableName()" initialRange="0" />
+      <Variable name="CLASS" expression="fixedTypeName()" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="ee700a0f-2551-4c6a-85fb-6a08d8514fcd" shortcut="odprop" description="Object Definition Property" text="&lt;property name=&quot;$NAME$&quot; value=&quot;$END$&quot; /&gt;" reformat="True" shortenQualifiedReferences="True">
+    <Context>
+      <XMLContext type="TAG_EXPECTED" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="NAME" expression="" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="c2a04277-de35-4f56-97e3-30d23fbfe2d5" shortcut="test" description="Create test method" text="		[Test]&#xD;&#xA;		public void $NAME$ ()&#xD;&#xA;		{&#xD;&#xA;			$END$&#xD;&#xA;		}" reformat="True" shortenQualifiedReferences="True">
+    <Context>
+      <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="NAME" expression="" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+  <Template uid="5e6b209a-b56c-43ea-8d96-2bcdd5216ab9" shortcut="testex" description="Create test method for expected exception" text="		[Test]&#xD;&#xA;  		[ExpectedException(typeof($EXCEPTION_TYPE$))]&#xD;&#xA;		public void $NAME$ ()&#xD;&#xA;		{&#xD;&#xA;			$END$&#xD;&#xA;		}" reformat="True" shortenQualifiedReferences="True">
+    <Context>
+      <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+    </Context>
+    <Categories />
+    <Variables>
+      <Variable name="EXCEPTION_TYPE" expression="" initialRange="0" />
+      <Variable name="NAME" expression="" initialRange="0" />
+    </Variables>
+    <CustomProperties />
+  </Template>
+</TemplatesExport>

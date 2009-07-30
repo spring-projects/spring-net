@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Type="Project" Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>App.Service</Name>
+    <Description />
+    <Icon>__TemplateIcon.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>App.Service</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="App.Service.csproj" TargetFileName="App.Service.csproj" ReplaceParameters="true">
+      <ProjectItem TargetFileName="service-config.xml" ReplaceParameters="true">service-config.xml</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem TargetFileName="AssemblyInfo.cs" ReplaceParameters="true">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly xsi:type="xsd:string">SolutionFactory.Wizard</Assembly>
+    <FullClassName xsi:type="xsd:string">SolutionFactory.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

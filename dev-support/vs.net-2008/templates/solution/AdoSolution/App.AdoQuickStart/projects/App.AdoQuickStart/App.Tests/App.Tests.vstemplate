@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Type="Project" Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>App.Tests</Name>
+    <Description />
+    <Icon>__TemplateIcon.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>App.Tests</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="App.Tests.csproj" TargetFileName="App.Tests.csproj" ReplaceParameters="true">
+      <ProjectItem TargetFileName="App.Tests.dll.config" ReplaceParameters="true">App.Tests.dll.config</ProjectItem>
+      <ProjectItem TargetFileName="system-test-config.xml" ReplaceParameters="true">system-test-config.xml</ProjectItem>
+      <Folder Name="DataAccess" TargetFolderName="DataAccess" />
+      <Folder Name="Service" TargetFolderName="Service" />
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly xsi:type="xsd:string">SolutionFactory.Wizard</Assembly>
+    <FullClassName xsi:type="xsd:string">SolutionFactory.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

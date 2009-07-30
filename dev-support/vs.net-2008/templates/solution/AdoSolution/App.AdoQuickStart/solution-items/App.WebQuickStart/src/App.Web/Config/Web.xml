@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  
+  <!-- Refer to the SpringAir example application for guidance should you decide to enable these settings -->
+
+  <!-- Base page definition. It is common for other pages inherit these settings -->
+  <!--
+  <object id="standardPage" abstract="true">
+    <property name="MasterPageFile" value="~/Web/StandardTemplate.master"/>
+    <property name="CultureResolver" ref="cultureResolver"/>
+    <property name="Localizer" ref="localizer"/>
+    <property name="ScriptsRoot" value="~/Scripts" />
+    <property name="CssRoot" value="~/Web/CSS"/>
+    <property name="ImagesRoot" value="~/Web/Images"/>
+  </object>
+  -->
+
+  <!-- If using Spring validation framework, configure the validation error renderer -->
+  <!--
+  <object id="Spring.Web.UI.Controls.ValidationError" abstract="true">
+    <property name="Renderer">
+      <object type="Spring.Web.UI.Validation.IconValidationErrorsRenderer, Spring.Web">
+        <property name="IconSrc" value="validation-error.gif"/>
+      </object>
+    </property>
+  </object>
+
+  <object id="Spring.Web.UI.Controls.ValidationSummary" abstract="true">
+    <property name="Renderer">
+      <object type="Spring.Web.UI.Validation.DivValidationErrorsRenderer, Spring.Web">
+        <property name="CssClass" value="validationError"/>
+      </object>
+    </property>
+  </object>
+  -->
+
+  <!-- If using a Mesage Source -->
+  <!--
+  <object id="messageSource" type="Spring.Context.Support.ResourceSetMessageSource, Spring.Core">
+    <property name="ResourceManagers">
+      <list>
+        <value>Resources.Strings, App_GlobalResources</value>
+      </list>
+    </property>
+    <property name="UseCodeAsDefaultMessage" value="true" />
+  </object>
+  -->
+
+  <!-- 
+    If using localization features
+    -->
+
+  <!-- 
+  <object id="cultureResolver" type="Spring.Globalization.Resolvers.SessionCultureResolver, Spring.Web" />
+
+  <object id="localizer" type="Spring.Globalization.Localizers.ResourceSetLocalizer, Spring.Core" />
+  -->
+
+
+</objects>

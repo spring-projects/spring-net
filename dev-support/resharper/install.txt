@@ -1,0 +1,17 @@
+Install
+=======
+
+
+1) Open "Resharper/Live Templates"
+2) Select "Live Templates" Tab and use "Import..." toolbar button to import "spring-r#_live-templates.xml" file
+3) Select "File Templates" Tab and use "Import..." toolbar button to import "spring-r#_file-templates.xml" file
+
+Usage
+=====
+
+To insert a live template, press Ctrl+J in the editor window and select the shortcuts you want, see also
+http://www.jetbrains.com/resharper/features/codeTemplate.html
+
+to insert a file template, choose menu "Resharper/New From Template" or on the project context menu "Add/New From Template"
+If you want to assign a keyboard shortcut to pop up the list of templates, assign your key to the action "Resharper.FileTemplates_QuickList_More"
+

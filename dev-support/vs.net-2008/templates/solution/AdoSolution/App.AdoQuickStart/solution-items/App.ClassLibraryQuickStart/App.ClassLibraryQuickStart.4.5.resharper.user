@@ -1,0 +1,32 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="string" priority="2" />
+      <Item value="private" priority="1" />
+      <Item value="IMessageService" priority="0" />
+      <Item value="return" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048/f:App.Tests.dll.config" caret="747" fromTop="21" />
+      <File id="94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048/f:system-test-config.xml" caret="347" fromTop="10" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048/f:system-test-config.xml" caret="360" fromTop="10" />
+    </RecentEdits>
+  </RecentFiles>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+</Configuration>

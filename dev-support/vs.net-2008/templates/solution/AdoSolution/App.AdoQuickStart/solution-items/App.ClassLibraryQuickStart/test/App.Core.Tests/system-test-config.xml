@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<objects xmlns="http://www.springframework.net"
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx">
+
+
+  <!-- Imports application configuration -->
+  <import resource="assembly://App.Core/App.Core/application-context-config.xml"/>
+  
+ 
+</objects>

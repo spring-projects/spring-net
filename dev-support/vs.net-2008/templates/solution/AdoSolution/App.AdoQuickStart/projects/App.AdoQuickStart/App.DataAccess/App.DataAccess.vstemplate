@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Type="Project" Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>App.DataAccess</Name>
+    <Description />
+    <Icon>__TemplateIcon.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>App.DataAccess</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="App.DataAccess.csproj" TargetFileName="App.DataAccess.csproj" ReplaceParameters="true">
+      <ProjectItem TargetFileName="data-access-config.xml" ReplaceParameters="true">data-access-config.xml</ProjectItem>
+      <Folder Name="Dao" TargetFolderName="Dao" />
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly xsi:type="xsd:string">SolutionFactory.Wizard</Assembly>
+    <FullClassName xsi:type="xsd:string">SolutionFactory.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

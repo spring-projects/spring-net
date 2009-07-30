@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Type="ProjectGroup" Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>ADO.NET Application</Name>
+    <Description>Creates service, data and test projects</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>Line Of Business App</ProjectSubType>
+    <SortOrder>1</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ADO.NETApplication</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <BuildOnLoad xsi:type="xsd:boolean">true</BuildOnLoad>
+    <LocationField>Enabled</LocationField>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectCollection>
+      <ProjectTemplateLink ProjectName="App.DataAccess">projects\App.AdoQuickStart\App.DataAccess\App.DataAccess.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="App.Service">projects\App.AdoQuickStart\App.Service\App.Service.vstemplate</ProjectTemplateLink>
+      <ProjectTemplateLink ProjectName="App.Tests">projects\App.AdoQuickStart\App.Tests\App.Tests.vstemplate</ProjectTemplateLink>
+    </ProjectCollection>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly xsi:type="xsd:string">SolutionFactory.Wizard</Assembly>
+    <FullClassName xsi:type="xsd:string">SolutionFactory.Wizard</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <directory xmlns="">App.AdoQuickStart</directory>
+    <startUpProject xmlns="">App.DataAccess</startUpProject>
+    <execute xmlns="">
+    </execute>
+  </WizardData>
+</VSTemplate>
