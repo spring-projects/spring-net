@@ -394,7 +394,7 @@ namespace Spring.Messaging.Ems.Core
             set { timeToLive = value; }
         }
 
-        
+        /*        
         /// <summary>
         /// Gets or sets a value indicating whether the EmsTemplate should itself
         /// be responsible for caching EMS Connection/Session/MessageProducer as compared to
@@ -404,7 +404,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <remarks>Connection/Session/MessageProducer are thread-safe classes in TIBCO EMS.</remarks>
         /// <value><c>true</c> to locally cache ems resources; otherwise, <c>false</c>.</value>
-/*        virtual public bool CacheEmsResources
+        virtual public bool CacheEmsResources
         {
             get { return cacheEmsResources; }
             set { cacheEmsResources = value; }
@@ -592,7 +592,7 @@ namespace Spring.Messaging.Ems.Core
                 return session.CreateConsumer(destination, messageSelector);
             }
         }
-
+        /*
         /// <summary>Create a EMS Connection via this template's ConnectionFactory.
         /// </summary>
         /// <remarks>If CacheJmsResource is true, then the connection 
@@ -602,7 +602,7 @@ namespace Spring.Messaging.Ems.Core
         /// <returns>A EMS Connection
         /// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
-/*        protected override IConnection CreateConnection()
+        protected override IConnection CreateConnection()
         {
             if (CacheEmsResources)
             {
@@ -618,7 +618,7 @@ namespace Spring.Messaging.Ems.Core
                 return ConnectionFactory.CreateConnection();
             }
         }*/
-
+        /*
         /// <summary> Create a EMS Session for the given Connection.
         /// </summary>
         /// <remarks>If CacheJmsResource is true, then the session 
@@ -630,7 +630,7 @@ namespace Spring.Messaging.Ems.Core
         /// <returns> the new EMS Session
         /// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
-/*        protected override ISession CreateSession(IConnection con)
+        protected override ISession CreateSession(IConnection con)
         {
             if (CacheEmsResources)
             {

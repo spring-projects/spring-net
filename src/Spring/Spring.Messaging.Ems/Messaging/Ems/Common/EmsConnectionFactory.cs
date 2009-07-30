@@ -266,7 +266,7 @@ namespace Spring.Messaging.Ems.Common
             {
                 nativeConnectionFactory.SetSSLProxyAuth(this.sslProxyAuthUsername, this.sslProxyAuthPassword);
             }
-            if (sslProxyHost != null && sslProxyPort != null)
+            if (sslProxyHost != null && sslProxyPort != 0)
             {
                 nativeConnectionFactory.SetSSLProxy(this.sslProxyHost, this.sslProxyPort);
             }

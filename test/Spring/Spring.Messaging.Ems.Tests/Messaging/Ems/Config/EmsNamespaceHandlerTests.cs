@@ -37,7 +37,6 @@ namespace Spring.Messaging.Ems.Config
     /// This class contains tests for 
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
     [TestFixture]
     public class EmsNamespaceHandlerTests
     {

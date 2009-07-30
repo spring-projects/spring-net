@@ -17,10 +17,13 @@
 
 
   <!-- the default ConnectionFactory -->
-  <object id="ConnectionFactory" type="TIBCO.EMS.ConnectionFactory, TIBCO.EMS"/>
-
-  <object id="testConnectionFactory" type="TIBCO.EMS.ConnectionFactory, TIBCO.EMS"/>
-
+  <object id="connectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+    <constructor-arg index="0" value="tcp://localhost:7222"/>
+  </object>
+  
+  <object id="testConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+    <constructor-arg index="0" value="tcp://localhost:7222"/>
+  </object>
 
   <!--
   <bean id="testActivationSpecFactory" class="org.springframework.jms.listener.endpoint.StubJmsActivationSpecFactory"/>

@@ -1,18 +1,20 @@
 ﻿<project SchemaVersion="1.3">
     <assemblies>
+        <assembly location="..\..\build\net\2.0\debug\Spring.Testing.Microsoft.dll" documentation="..\..\build\net\2.0\debug\Spring.Testing.Microsoft.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Testing.NUnit.dll" documentation="..\..\build\net\2.0\debug\Spring.Testing.NUnit.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Web.dll" documentation="..\..\build\net\2.0\debug\Spring.Web.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Aop.dll" documentation="..\..\build\net\2.0\debug\Spring.Aop.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Core.dll" documentation="..\..\build\net\2.0\debug\Spring.Core.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Data.dll" documentation="..\..\build\net\2.0\debug\Spring.Data.xml" />
-        <assembly location="..\..\build\net\2.0\debug\Spring.Data.NHibernate.dll" documentation="..\..\build\net\2.0\debug\Spring.Data.NHibernate.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Data.NHibernate12.dll" documentation="..\..\build\net\2.0\debug\Spring.Data.NHibernate12.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Data.NHibernate20.dll" documentation="..\..\build\net\2.0\debug\Spring.Data.NHibernate20.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Data.NHibernate21.dll" documentation="..\..\build\net\2.0\debug\Spring.Data.NHibernate21.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Messaging.dll" documentation="..\..\build\net\2.0\debug\Spring.Messaging.xml" />
+        <assembly location="..\..\build\net\2.0\debug\Spring.Messaging.Ems.dll" documentation="..\..\build\net\2.0\debug\Spring.Messaging.Ems.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Messaging.Nms.dll" documentation="..\..\build\net\2.0\debug\Spring.Messaging.Nms.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Scheduling.Quartz.dll" documentation="..\..\build\net\2.0\debug\Spring.Scheduling.Quartz.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Services.dll" documentation="..\..\build\net\2.0\debug\Spring.Services.xml" />
+        <assembly location="..\..\build\net\2.0\debug\Spring.Template.Velocity.dll" documentation="..\..\build\net\2.0\debug\Spring.Template.Velocity.xml" />
     </assemblies>
     <referencePaths>
         <referencePath path="..\..\lib\NHibernate12\net\2.0" />
@@ -22,8 +24,8 @@
     <documenters>
         <documenter name="MSDN">
             <property name="OutputDirectory" value=".\target\tmp" />
-            <property name="HtmlHelpName" value="Spring.NET-1.2.1-SDK" />
-            <property name="Title" value="Spring.NET 1.2.1 for NET 2.0 API Reference" />
+            <property name="HtmlHelpName" value="Spring.NET-1.3.0-RC1-SDK" />
+            <property name="Title" value="Spring.NET 1.3.0 RC1 for NET 2.0 API Reference" />
             <property name="ShowVisualBasic" value="True" />
             <property name="MergeAssemblies" value="False" />
             <property name="RootPageTOCName" value="Introduction" />

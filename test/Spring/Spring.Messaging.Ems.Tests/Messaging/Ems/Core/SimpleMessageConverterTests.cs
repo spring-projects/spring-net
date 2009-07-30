@@ -52,7 +52,7 @@ namespace Spring.Messaging.Ems.Core
         {
             //ConnectionFactory cf = new ConnectionFactory("tcp://localhost:7222");
             //Connection c = cf.CreateConnection();
-            Session tibcoSession = null;// c.CreateSession(false, SessionMode.AutoAcknowledge);
+            //Session tibcoSession = null;// c.CreateSession(false, SessionMode.AutoAcknowledge);
             mocks = new MockRepository();
             session = (ISession) mocks.CreateMock(typeof (ISession));
             converter = new SimpleMessageConverter();

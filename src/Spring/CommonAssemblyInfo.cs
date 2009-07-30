@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("net-2.0.win32; Release")]
 #endif
 [assembly: AssemblyCompany("http://www.springframework.net")]
-[assembly: AssemblyProduct("Spring.NET Framework 1.2.1")]
+[assembly: AssemblyProduct("Spring.NET Framework 1.3.0")]
 [assembly: AssemblyCopyright("Copyright 2002-2009 Spring.NET Framework Team.")]
 [assembly: AssemblyTrademark("Apache License, Version 2.0")]
 [assembly: AssemblyCulture("")]
@@ -31,9 +31,9 @@ using System.Reflection;
 //
 // This is to support side-by-side deployment of .NET 1.1 and .NET 2.0 versions of the assembly.
 #if !NET_2_0
-[assembly: AssemblyVersion("1.2.1.11001")]
+[assembly: AssemblyVersion("1.3.0.11001")]
 #else
-[assembly: AssemblyVersion("1.2.1.20001")]
+[assembly: AssemblyVersion("1.3.0.20001")]
 #endif
 
 //

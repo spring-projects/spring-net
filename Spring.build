@@ -20,8 +20,10 @@ Build properties that may be set:
 =================================
 "project.build.sign":
         signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
-"package.version:":
+"package.version":
         set the package version
+"build-testing-mstest":
+        set to true if local machine has VS.NET 2008 MSTest installed
 -->
 
   <!-- global project settings -->
@@ -378,6 +380,7 @@ Build properties that may be set:
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-mstest  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-nms and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq and not net-3.0}"/>
@@ -406,6 +409,9 @@ Build properties that may be set:
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-mstest  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
+<!--
+    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
+-->
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq-tests and not net-3.0}"/>
@@ -681,6 +687,8 @@ Build properties that may be set:
         <delete dir="src/Spring/Spring.Services/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Messaging.Nms/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Messaging.Nms/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Messaging.Ems/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Messaging.Ems/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Messaging/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Messaging/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Scheduling.Quartz/obj" failonerror="false"/>
@@ -689,6 +697,8 @@ Build properties that may be set:
         <delete dir="src/Spring/Spring.Template.Velocity/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Testing.NUnit/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Testing.NUnit/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Testing.Microsoft/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Testing.Microsoft/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Extensions/obj" failonerror="false"/>
@@ -722,6 +732,8 @@ Build properties that may be set:
         <delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Nms.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Ems.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Ems.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/obj" failonerror="false"/>
@@ -730,6 +742,8 @@ Build properties that may be set:
         <delete dir="test/Spring/Spring.Template.Velocity.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Testing.Microsoft.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Testing.Microsoft.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Testing.NUnit.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Testing.NUnit.Tests/bin" failonerror="false"/>
 
@@ -764,21 +778,21 @@ Build properties that may be set:
 
 
   <target name="package" depends="set-package-configuration" description="Build and Package distribution">
-
+<!--
     <property name="project.build.sign" value="true"/>
     <property name="project.build.package" value="true"/>
 
     <call target="clean-current-package-dir"/>
-
+-->
     <property name="nant.target.root.name" value="build"/>
 
     <call target="set-build-namespaces-release"/>
     <property name="project.build.sign" value="true"/>
     <property name="project.build.package" value="true"/>
-
+<!--
     <call target="build-all-function"/>
-
-    <call target="docs"/>
+-->
+    <call target="doc-sdk"/>
 
     <call target="package-release-files"/>
 
@@ -861,7 +875,9 @@ Build properties that may be set:
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
 
+<!--
     <call target="${nant.target.root.name}-1.1" />
+-->
     <call target="${nant.target.root.name}-2.0" />
     <call target="${nant.target.root.name}-3.0" />
 
@@ -1011,7 +1027,6 @@ Build properties that may be set:
     <echo message="Current package directory = ${current.package.dir}"/>
     <copy todir="${current.package.dir}">
       <fileset>
-        <include name="${solution.file.2002}"/>
         <include name="${solution.file.2003}"/>
         <include name="${solution.file.2005}"/>
         <include name="${solution.file.2008}"/>
@@ -1020,7 +1035,8 @@ Build properties that may be set:
         <include name="license.txt"/>
         <include name="Spring.build"/>
         <include name="Spring.include"/>
-        <include name="BreakingChanges-1.2.txt"/>
+        <include name="common-project.include"/>
+        <include name="BreakingChanges-1.3.txt"/>
         <!-- exclude VS.Net stuff -->
         <exclude name="**/sdk-web/**"/>
         <exclude name="**/*.suo"/>
@@ -1050,10 +1066,6 @@ Build properties that may be set:
           <include name="**/Spring.Data.xml"/>
           <include name="**/Spring.Data.pdb"/>
 
-          <include name="**/Spring.Data.NHibernate.dll"/>
-          <include name="**/Spring.Data.NHibernate.xml"/>
-          <include name="**/Spring.Data.NHibernate.pdb"/>
-
           <include name="**/Spring.Data.NHibernate12.dll"/>
           <include name="**/Spring.Data.NHibernate12.xml"/>
           <include name="**/Spring.Data.NHibernate12.pdb"/>
@@ -1082,6 +1094,14 @@ Build properties that may be set:
           <include name="**/Spring.Testing.NUnit.xml"/>
           <include name="**/Spring.Testing.NUnit.pdb"/>
 
+          <include name="**/Spring.Testing.Microsoft.dll"/>
+          <include name="**/Spring.Testing.Microsoft.xml"/>
+          <include name="**/Spring.Testing.Microsoft.pdb"/>
+
+          <include name="**/Spring.Messaging.Ems.dll"/>
+          <include name="**/Spring.Messaging.Ems.xml"/>
+          <include name="**/Spring.Messaging.Ems.pdb"/>
+
           <include name="**/Spring.Messaging.Nms.dll"/>
           <include name="**/Spring.Messaging.Nms.xml"/>
           <include name="**/Spring.Messaging.Nms.pdb"/>
@@ -1098,7 +1118,6 @@ Build properties that may be set:
           <include name="**/Spring.Template.Velocity.xml"/>
           <include name="**/Spring.Template.Velocity.pdb"/>
 
-          <include name="**/antlr.runtime.dll"/>
           <include name="**/Common.Logging.dll"/>
 
           <exclude name="**/3.0/**"/>
@@ -1106,6 +1125,7 @@ Build properties that may be set:
           <exclude name="**/debug/Spring/**"/>
           <exclude name="**/examples/**"/>
           <exclude name="**/results/**"/>
+          <exclude name="mono/**"/>
           <exclude name="mono/**"/>
         </fileset>
       </copy>
@@ -1127,7 +1147,6 @@ Build properties that may be set:
           <include name="**/Spring.*.dll"/>
           <include name="**/Spring.*.xml"/>
           <include name="**/Spring.*.pdb"/>
-          <include name="**/antlr.runtime.dll"/>
           <include name="**/log4net.dll"/>
           <include name="**/log4net.xml"/>
           <include name="**/log4net.pdb"/>
@@ -1151,9 +1170,11 @@ Build properties that may be set:
         <include name="**/sr/**"/>
         <include name="**/sr-SP-Cyrl/**"/>
         <include name="**/sr-Cyrl-CS/**"/>
+        <include name="**/mpollack*/**"/>
         <include name="**/results/**"/>
         <include name="**/release/Spring/**"/>
         <include name="**/debug/Spring/**"/>
+        <include name="**/debug/bin/**"/>
       </fileset>
     </delete>
 
@@ -1176,12 +1197,12 @@ Build properties that may be set:
           <include name="**/DotNetMock*.dll"/>
           <include name="**/log4net.dll"/>
           <include name="**/Common.Logging.dll"/>
-          <include name="**/Common.Logging.Log4Net.dll"/>
           <include name="**/antlr.runtime.dll"/>
           <include name="**/nunit.*.dll"/>
           <include name="**/NUnitAsp.dll"/>
           <include name="**/NUnitAspEx.dll"/>
           <include name="**/Rhino.Mocks.dll"/>
+          <include name="**/NVelocity.*"/>
           <include name="**/System.Web.Extensions.dll"/>
           <include name="**/Apache.NMS.dll"/>
           <include name="**/Apache.NMS.pdb"/>
@@ -1190,16 +1211,8 @@ Build properties that may be set:
           <include name="**/Quartz.dll"/>
           <include name="**/Nullables.dll"/>
           <include name="**/EULA.rtf"/>
-        </fileset>
-      </copy>
-    </if>
-
-    <mkdir dir="${current.package.dir}/lib/NHibernate10"/>
-    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/NHibernate10">
-        <fileset basedir="lib/NHibernate10">
-          <include name="**/*.dll"/>
-          <include name="**/*.license.txt"/>
+          <exclude name="**/TIBCO.EMS.ADMIN.dll"/>
+          <exclude name="**/TIBCO.EMS.dll"/>
         </fileset>
       </copy>
     </if>
@@ -1266,13 +1279,13 @@ Build properties that may be set:
     <!-- copy schema and dtd -->
     <mkdir dir="${current.package.dir}/doc/schema"/>
     <copy todir="${current.package.dir}/doc/schema"
-          file="src/Spring/Spring.Core/Objects/Factory/Xml/spring-objects-1.1.xsd"/>
+          file="src/Spring/Spring.Core/Objects/Factory/Xml/spring-objects-1.3.xsd"/>
 
     <copy todir="${current.package.dir}/doc/schema"
           file="src/Spring/Spring.Core/Objects/Factory/Xml/spring-tool-1.1.xsd"/>
 
     <copy todir="${current.package.dir}/doc/schema"
-          file="src/Spring/Spring.Core/Validation/Config/spring-validation-1.1.xsd"/>
+          file="src/Spring/Spring.Core/Validation/Config/spring-validation-1.3.xsd"/>
 
 
     <copy todir="${current.package.dir}/doc/schema"
@@ -1413,7 +1426,7 @@ Build properties that may be set:
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>
     <property name="build-testing" value="true"/>
-    <property name="build-testing-mstest" value="false"/>
+    <property name="build-testing-mstest" value="false" overwrite="false"/>
     <property name="build-winservices" value="true"/>
     <property name="build-web" value="true"/>
     <property name="solution.file" value="Spring.Net.sln"/>
@@ -1446,11 +1459,10 @@ Build properties that may be set:
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>
     <property name="build-testing" value="true"/>
-    <property name="build-testing-mstest" value="false"/>
+    <property name="build-testing-mstest" value="false" overwrite="false"/>
     <property name="build-winservices" value="true"/>
     <property name="build-web" value="true"/>
     <property name="build-examples" value="true"/>
-    <property name="solution.file.2002" value="Spring.Net.2002.sln"/>
     <property name="solution.file.2003" value="Spring.Net.2003.sln"/>
     <property name="solution.file.2005" value="Spring.Net.2005.sln"/>
     <property name="solution.file.2008" value="Spring.Net.2008.sln"/>
@@ -1461,15 +1473,16 @@ Build properties that may be set:
       <include name="src/Spring/Spring.Web.Extensions/**"/>
       <include name="src/Spring/Spring.Services/**"/>
       <include name="src/Spring/Spring.Data/**"/>
-      <include name="src/Spring/Spring.Data.NHibernate/**"/>
       <include name="src/Spring/Spring.Data.NHibernate12/**"/>
       <include name="src/Spring/Spring.Data.NHibernate20/**"/>
       <include name="src/Spring/Spring.Data.NHibernate21/**"/>
       <include name="src/Spring/Spring.Messaging/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
+      <include name="src/Spring/Spring.Messaging.Ems/**"/>
       <include name="src/Spring/Spring.Scheduling.Quartz/**"/>
       <include name="src/Spring/Spring.Template.Velocity/**"/>
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
+      <include name="src/Spring/Spring.Testing.Microsoft/**"/>
       <include name="src/Spring/CommonAssemblyInfo.cs"/>
 
       <include name="test/Spring/Spring.Core.Tests/**"/>
@@ -1478,7 +1491,6 @@ Build properties that may be set:
       <include name="test/Spring/Spring.Services.Tests/**"/>
       <include name="test/Spring/Spring.Data.Tests/**"/>
       <include name="test/Spring/Spring.Data.Integration.Tests/**"/>
-      <include name="test/Spring/Spring.Data.NHibernate.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate20.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate20.Integration.Tests/**"/>
@@ -1486,9 +1498,11 @@ Build properties that may be set:
       <include name="test/Spring/Spring.Data.NHibernate21.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
+      <include name="test/Spring/Spring.Messaging.Ems.Tests/**"/>
       <include name="test/Spring/Spring.Scheduling.Quartz.Tests/**"/>
       <include name="test/Spring/Spring.Template.Velocity.Tests/**"/>
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
+      <include name="test/Spring/Spring.Testing.Microsoft.Tests/**"/>
       <include name="test/Spring/CommonAssemblyInfo.cs"/>
 
       <include name="examples/Spring/Spring.Examples.build"/>
@@ -1509,6 +1523,7 @@ Build properties that may be set:
       <include name="examples/SpringAir/src/SpringAir.Web.2005/bin/*.refresh"/>
       <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>
       <include name="examples/Spring/Spring.NmsQuickStart/**"/>
+      <include name="examples/Spring/Spring.EmsQuickStart/**"/>
       <include name="examples/Spring/Spring.MsmqQuickStart/**"/>
       <include name="examples/Spring/Spring.WcfQuickStart/**"/>
       <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>

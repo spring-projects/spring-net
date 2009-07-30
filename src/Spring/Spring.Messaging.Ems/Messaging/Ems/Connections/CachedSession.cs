@@ -50,7 +50,6 @@ namespace Spring.Messaging.Ems.Connections
         private int sessionCacheSize;
         private IDictionary cachedProducers = new Hashtable();
         private IDictionary cachedConsumers = new Hashtable();
-        private IMessageProducer cachedUnspecifiedDestinationMessageProducer;
         private bool shouldCacheProducers;
         private bool shouldCacheConsumers;
         private bool transactionOpen = false;
