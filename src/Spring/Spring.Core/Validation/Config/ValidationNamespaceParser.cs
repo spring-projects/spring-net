@@ -47,7 +47,7 @@ namespace Spring.Validation.Config
         NamespaceParser(
             Namespace = "http://www.springframework.net/validation",
             SchemaLocationAssemblyHint = typeof(ValidationNamespaceParser),
-            SchemaLocation = "/Spring.Validation.Config/spring-validation-1.1.xsd")
+            SchemaLocation = "/Spring.Validation.Config/spring-validation-1.3.xsd")
     ]
     public sealed class ValidationNamespaceParser : ObjectsNamespaceParser
     {
@@ -167,6 +167,9 @@ namespace Spring.Validation.Config
                         case ValidatorDefinitionConstants.ActionElement:
                             actions.Add(ParseGenericAction(child, childParserContext));
                             break;
+                        case ValidatorDefinitionConstants.ExceptionElement:
+                            actions.Add(ParseExceptionAction(child, childParserContext));
+                            break;
                         case ValidatorDefinitionConstants.ReferenceElement:
                             nestedValidators.Add(ParseValidatorReference(child, childParserContext));
                             break;
@@ -280,6 +283,30 @@ namespace Spring.Validation.Config
             return action;
         }
 
+        private IObjectDefinition ParseExceptionAction(XmlElement element, ParserContext parserContext)
+        {
+            string typeName = "Spring.Validation.Actions.ExceptionAction, Spring.Core";
+            string throwExpression = GetAttributeValue(element, ValidatorDefinitionConstants.ThrowAttribute);
+
+            
+            ConstructorArgumentValues ctorArgs = new ConstructorArgumentValues();
+            ctorArgs.AddGenericArgumentValue(throwExpression);
+
+            string when = GetAttributeValue(element, ValidatorDefinitionConstants.WhenAttribute);
+            MutablePropertyValues properties = new MutablePropertyValues();
+            if (StringUtils.HasText(when))
+            {
+                properties.Add("When", when);
+            }
+
+            IConfigurableObjectDefinition action =
+                parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null, parserContext.ReaderContext.Reader.Domain);
+            action.ConstructorArgumentValues = ctorArgs;
+            action.PropertyValues = properties;
+
+            return action;
+        }
+
         /// <summary>
         /// Creates a generic action based on the specified element.
         /// </summary>
@@ -335,12 +362,14 @@ namespace Spring.Validation.Config
             public const string PropertyElement = "property";
             public const string MessageElement = "message";
             public const string ActionElement = "action";
+            public const string ExceptionElement = "exception";
             public const string ReferenceElement = "ref";
 
             public const string TypeAttribute = "type";
             public const string TestAttribute = "test";
             public const string NameAttribute = "name";
             public const string WhenAttribute = "when";
+            public const string ThrowAttribute = "throw";
 
             public const string PropertyNameAttribute = "name";
 

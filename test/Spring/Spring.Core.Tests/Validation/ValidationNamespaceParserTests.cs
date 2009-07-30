@@ -65,7 +65,7 @@ namespace Spring.Validation
                 }
             }
             IObjectDefinition[] defs = registry.GetObjectDefinitions();
-            Assert.AreEqual(8, defs.Length);
+            Assert.AreEqual(9, defs.Length);
 
             IObjectDefinition def = registry.GetObjectDefinition("destinationAirportValidator");
             Assert.IsTrue(def.IsSingleton);
@@ -89,7 +89,8 @@ namespace Spring.Validation
             Assert.AreEqual(typeof(RegularExpressionValidator), def.ObjectType);
             Assert.AreEqual("[A-Z]*", def.PropertyValues.GetPropertyValue("Expression").Value);
 
-            def = registry.GetObjectDefinition("airportCodeValidator");
+
+            def = registry.GetObjectDefinition("simpleAirportValidator");
             Assert.IsTrue(def.IsSingleton);
             Assert.IsTrue(def.IsLazyInit);
             Assert.IsTrue(typeof(IValidator).IsAssignableFrom(def.ObjectType));
@@ -98,6 +99,22 @@ namespace Spring.Validation
             object actionsObject = actionsProperty.Value;
             Assert.AreEqual(typeof(ManagedList), actionsObject.GetType());
             ManagedList actions = (ManagedList)actionsObject;
+            Assert.AreEqual(1, actions.Count);
+
+            IObjectDefinition exceptionActionDefinition = (IObjectDefinition)actions[0];
+            Assert.AreEqual(typeof(ExceptionAction), exceptionActionDefinition.ObjectType);
+            Assert.AreEqual("'new System.InvalidOperationException(\"invalid\")' []", exceptionActionDefinition.ConstructorArgumentValues.GenericArgumentValues[0].ToString());
+            //
+            
+            def = registry.GetObjectDefinition("airportCodeValidator");
+            Assert.IsTrue(def.IsSingleton);
+            Assert.IsTrue(def.IsLazyInit);
+            Assert.IsTrue(typeof(IValidator).IsAssignableFrom(def.ObjectType));
+            actionsProperty = def.PropertyValues.GetPropertyValue("Actions");
+            Assert.IsNotNull(actionsProperty);
+            actionsObject = actionsProperty.Value;
+            Assert.AreEqual(typeof(ManagedList), actionsObject.GetType());
+            actions = (ManagedList)actionsObject;
             Assert.AreEqual(4, actions.Count);
 
             IObjectDefinition messageDefinition = (IObjectDefinition)actions[1];
@@ -110,7 +127,7 @@ namespace Spring.Validation
 
         private XmlDocument GetValidatedXmlResource(string resourceExtension)
         {
-            AssemblyResource validationSchema = new AssemblyResource("assembly://Spring.Core/Spring.Validation.Config/spring-validation-1.1.xsd");
+            AssemblyResource validationSchema = new AssemblyResource("assembly://Spring.Core/Spring.Validation.Config/spring-validation-1.3.xsd");
             AssemblyResource objectsSchema = new AssemblyResource("assembly://Spring.Core/Spring.Objects.Factory.Xml/spring-objects-1.3.xsd");
 
             return TestResourceLoader.GetXmlValidated(this, resourceExtension, objectsSchema, validationSchema);

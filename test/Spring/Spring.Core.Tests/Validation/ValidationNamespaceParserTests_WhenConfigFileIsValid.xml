@@ -18,12 +18,17 @@
         <v:message id='error.airportCode.required' providers='summary'>
             <v:param value='#this.Abc'/>
             <v:param value='#this.Xyz'/>
-        </v:message>
+        </v:message>      
         <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' when='true'>
             <v:property name='Valid' value='#now = DateTime.Now'/>
         </v:action>
         <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
     </v:required>
+
+    <v:required id='simpleAirportValidator' test='false'>
+      <v:exception throw='new System.InvalidOperationException("invalid")'/>
+    </v:required>
+                
 
     <object id='myObject' type='DateTime'>
         <property name='' value='' />

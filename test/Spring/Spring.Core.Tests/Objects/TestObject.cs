@@ -22,10 +22,10 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 #if !NET_1_1
-using System.Collections.Specialized;
+using System.Collections.Generic;
 #endif
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
@@ -408,7 +408,9 @@ namespace Spring.Objects
 
         private IDictionary sharedState;
 	    private NameValueCollection someNameValueCollection;
+#if !NET_1_1
 	    private List<string> someGenericStringList;
+#endif
 
 	    #endregion
 

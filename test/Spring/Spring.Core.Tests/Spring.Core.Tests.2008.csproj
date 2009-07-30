@@ -722,6 +722,7 @@
     <Compile Include="Core\TypeConversion\UniqueKeyConverterTests.cs" />
     <Compile Include="Util\SystemUtilsTests.cs" />
     <Compile Include="Util\UniqueKeyTests.cs" />
+    <Compile Include="Validation\Actions\ExceptionActionTests.cs" />
     <Compile Include="Validation\Actions\ErrorMessageActionTests.cs" />
     <Compile Include="Validation\Actions\ExpressionActionTests.cs" />
     <Compile Include="Validation\AnyValidatorGroupTests.cs" />
@@ -811,8 +812,8 @@
     <Content Include="Data\Spring\Objects\Factory\Xml\collections.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\constructor-arg.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\array-autowire.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Xml\collectionMergingGen.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\collectionMerging.xml" />
-    <Content Include="Data\Spring\Objects\Factory\Xml\collectionMergingGeneric.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\objectNameGeneration.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\simple-constructor-arg.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\expressions.xml" />
@@ -853,7 +854,6 @@
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithAllRequiredPropertiesProvided.xml" />
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithCustomAttribute.xml" />
     <Content Include="Spring.Core.Tests.dll.config" />
-    <Content Include="Validation\dummy.xml" />
     <EmbeddedResource Include="Validation\ValidationNamespaceParserTests_WhenConfigFileIsNotValid.xml" />
     <EmbeddedResource Include="Validation\ValidationNamespaceParserTests_WhenConfigFileIsValid.xml" />
     <EmbeddedResource Include="Util\ConfigXmlDocumentTests_SampleConfig.xml" />

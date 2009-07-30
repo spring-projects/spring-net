@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns="http://www.springframework.net/validation"
+          xmlns:objects="http://www.springframework.net"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
+          targetNamespace="http://www.springframework.net/validation"
+          elementFormDefault="qualified" attributeFormDefault="unqualified"
+          vs:friendlyname="Spring.NET Validation Framework Configuration v" vs:ishtmlschema="false" vs:iscasesensitive="true" vs:requireattributequotes="true" vs:defaultnamespacequalifier="v" vs:defaultnsprefix="v">
+
+    <xs:import namespace="http://www.springframework.net"/>
+
+    <xs:annotation>
+        <xs:documentation>
+            <![CDATA[
+            Spring.NET Validation Framework Config Schema Definition
+
+            Author: Aleksandar Seovic
+
+            This file defines a configuration schema for the validation framework
+            object definitions. Using elements from this schema instead of the
+            standard object definitions can greatly simplify validator configuration.
+        ]]>
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType name="messageType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[Define the message action to be executed by the enclosing validator.]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[Define a parameter to the enclosing message action]]></xs:documentation>
+                    </xs:annotation>
+                    <xs:attribute name="value" type="objects:nonNullString" use="optional">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[the SpEL expression that evaluates to a parameter value to be passed into the message.]]></xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="objects:nonNullString" use="required">
+            <xs:annotation>
+                <xs:documentation><![CDATA[The identifier for the message.]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="providers" type="objects:nonNullString" use="required">
+            <xs:annotation>
+                <xs:documentation><![CDATA[A comma separated list of providers to send the message to.]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="when" type="objects:nonNullString" use="optional">
+            <xs:annotation>
+                <xs:documentation><![CDATA[A boolean SpEL expression that determines if this message action shall be executed.]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="actionType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[Define an action to be executed by the enclosing validator]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="property" type="objects:property" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="type" type="objects:nonNullString" use="required">
+            <xs:annotation>
+                <xs:documentation><![CDATA[The qualified CLR typename of this action]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="when" type="objects:nonNullString" use="optional">
+            <xs:annotation>
+                <xs:documentation><![CDATA[A boolean SpEL expression that determines if this action shall be executed.]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="exceptionActionType">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Define an exception throws to be executed by the enclosing validator]]></xs:documentation>
+      </xs:annotation>
+      <xs:attribute name="throw" type="objects:nonNullString" use="required">
+        <xs:annotation>
+          <xs:documentation><![CDATA[A boolean SpEL expression that return the exceptions to be thrown.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="when" type="objects:nonNullString" use="optional">
+        <xs:annotation>
+          <xs:documentation><![CDATA[A boolean SpEL expression that determines if this action shall be executed.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="validatorReferenceType">
+        <xs:annotation>
+            <xs:documentation>Defines a validator reference type.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="objects:nonNullString" use="required">
+            <xs:annotation>
+                <xs:documentation><![CDATA[The name of the referenced validator definition]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="context" type="objects:nonNullString" use="optional">
+            <xs:annotation>
+                <xs:documentation><![CDATA[A SpEL expression evaluating to the context to switch to when evaluating the referenced validator.]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="baseValidatorType">
+        <xs:annotation>
+            <xs:documentation>Defines common validator attributes and elements.</xs:documentation>
+        </xs:annotation>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="property" type="objects:property" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="message" type="messageType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="action" type="actionType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="exception" type="exceptionActionType" minOccurs="0" maxOccurs="1"/>  
+        </xs:choice>
+        <xs:attribute name="id" use="optional">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation><![CDATA[The unique identifier for the validator. The scope of the identifier is the enclosing object factory.]]></xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:ID"/>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="parent" use="optional">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation><![CDATA[The name of the parent object definition to inherit from.]]></xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="objects:nonNullString"/>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="when" use="optional">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation><![CDATA[A boolean SpEL expression that determines if this validator shall be executed.]]></xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="objects:nonNullString"/>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="simpleValidatorType">
+        <xs:annotation>
+            <xs:documentation>Defines simple validator type.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="baseValidatorType">
+                <xs:attribute name="test" type="objects:nonNullString" use="required">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[An SpEL expression evaluating to the object to be validated by this validator.]]></xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="genericValidatorType">
+        <xs:annotation>
+            <xs:documentation>Defines a generic validator type.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="simpleValidatorType">
+                <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[The qualified CLR typename of this generic validator]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:restriction base="objects:nonNullString"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="regexValidatorType">
+        <xs:annotation>
+            <xs:documentation>Defines a regex validator type.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="simpleValidatorType">
+                <xs:attribute name="expression" type="objects:nonNullString" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>The regular expression to match the result of evaluation the 'test' expression against.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="validatorGroupType">
+        <xs:annotation>
+            <xs:documentation>Defines a validator group type.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="baseValidatorType">
+                <xs:choice minOccurs="1" maxOccurs="unbounded">
+                    <xs:element ref="validator" />
+                    <xs:element ref="required" />
+                    <xs:element ref="condition" />
+                    <xs:element ref="regex" />
+                    <xs:element name="ref" type="validatorReferenceType"/>
+
+                    <xs:element ref="collection" />
+                    
+                    <xs:element ref="group" />
+                    <xs:element ref="any" />
+                    <xs:element ref="exclusive" />
+                </xs:choice>
+                <xs:attribute name="fast-validate" use="optional">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[Determines, whether to short-circuit validation. If true, once the result of the validation is determined, the validation process stops evaluating further validators and returns.]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:restriction base="xs:boolean"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="collectionValidatorGroupType">
+        <xs:annotation>
+            <xs:documentation>Defines a CollectionValidator.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="validatorGroupType">
+                <xs:attribute name="validate-all" type="xs:boolean" use="optional" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Whether to force validating all collection elements, regardless of errors. This attribute is just an alias for 'fast-validate' and kept for backwards compatibility.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="include-element-errors" type="xs:boolean" use="optional" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Whether to include individual element's error messages in the resulting list of messages.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="context" type="objects:nonNullString" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>an SpEL expression to narrow the validation context for each element</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="validator" type="genericValidatorType">
+        <xs:annotation>
+            <xs:documentation>Defines a custom validator, allowing to specify the CLR typename of the validator class.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="required" type="simpleValidatorType">
+        <xs:annotation>
+            <xs:documentation>Defines a RequiredValidator.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="condition" type="simpleValidatorType">
+        <xs:annotation>
+            <xs:documentation>Defines a ConditionValidator.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="regex" type="regexValidatorType">
+        <xs:annotation>
+            <xs:documentation>Defines a RegularExpressionValidator.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="group" type="validatorGroupType">
+        <xs:annotation>
+            <xs:documentation>Defines a ValidatorGroup.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="any" type="validatorGroupType">
+        <xs:annotation>
+            <xs:documentation>Defines an AnyValidatorGroup.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="exclusive" type="validatorGroupType">
+        <xs:annotation>
+            <xs:documentation>Defines an ExclusiveValidatorGroup.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="collection" type="collectionValidatorGroupType">
+        <xs:annotation>
+            <xs:documentation>Defines an CollectionValidator.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+</xs:schema>

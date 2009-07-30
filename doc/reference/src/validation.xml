@@ -566,6 +566,22 @@
     </section>
 
     <section>
+      <title>Exception Action</title>
+
+      <para>If you would like an exception to be thrown when validation fails
+      use the exception action.</para>
+
+      <programlisting>&lt;v:exception/&gt;</programlisting>
+
+      <para>This will throw an exception of the type ValidationException and
+      you can access error information via its ValidationErrors property. To
+      throw your own custom exception, provide a SpEL fragment that
+      instantiates the custom exception.</para>
+
+      <programlisting>&lt;v:exception throw='new System.InvalidOperationException("invalid")'/&gt;</programlisting>
+    </section>
+
+    <section>
       <title>Generic Actions</title>
 
       <para>The syntax is</para>
@@ -888,7 +904,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
     <section>
       <title>How Validate() and Validation Controls play together</title>
 
-      <para> Validation Controls (ValidationSummary, ValidationError) need to
+      <para>Validation Controls (ValidationSummary, ValidationError) need to
       somehow get the list of errors collected during validation. Both,
       Spring.Web.UI.Page and Spring.Web.UI.UserControl come with a
       ValidationErrors property and implement IValidationContainer.
