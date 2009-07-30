@@ -1061,8 +1061,51 @@
       </object>
     </constructor-arg>
   </object>
-  
-  
+
+  <!-- Sqlite + ADO Net provider for sqlite -->
+  <!-- Driver can be found at : http://sourceforge.net/projects/sqlite-dotnet2 -->
+  <!-- Reference for error codes : http://www.sqlite.org/capi3.html -->
+  <object id="SQLite-1.0.65" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="SQLite"/>
+        <constructor-arg name="assemblyName" value="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"/>
+        <constructor-arg name="connectionType" value="System.Data.SQLite.SQLiteConnection, System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"/>
+        <constructor-arg name="commandType" value="System.Data.SQLite.SQLiteCommand, System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"/>
+        <constructor-arg name="parameterType" value="System.Data.SQLite.SQLiteParameter, System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"/>
+        <constructor-arg name="dataAdapterType" value="System.Data.SQLite.SQLiteDataAdapter , System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"/>
+        <constructor-arg name="commandBuilderType" value="System.Data.SQLite.SQLiteCommandBuilder, System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="not supported"/>
+        <constructor-arg name="parameterDbType" value="System.Data.SQLite.TypeAffinity, System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"/>
+        <constructor-arg name="parameterDbTypeProperty" value="DbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value=":"/>
+        <constructor-arg name="exceptionType" value="System.Data.SQLite.SQLiteException, System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Number.ToString()"/>
+
+        <property name="ErrorCodes.badSqlGrammarCodes">
+          <value></value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>1</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value></value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>15</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>5,6</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
 
   <!-- Sqlite + ADO Net provider for sqlite -->
   <!-- Driver can be found at : http://sourceforge.net/projects/sqlite-dotnet2 -->

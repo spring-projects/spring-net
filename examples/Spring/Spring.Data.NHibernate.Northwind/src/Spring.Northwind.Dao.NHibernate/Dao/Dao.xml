@@ -14,8 +14,8 @@
 
   <!-- Database and NHibernate Configuration -->
   <db:provider id="DbProvider"
-                   provider="SqlServer-2.0"
-                   connectionString="Data Source=(local);Integrated Security=true;User Instance=true;AttachDBFilename=|DataDirectory|\Northwnd.mdf"/>
+                   provider="SQLite-1.0.65"
+                   connectionString="Data Source=|DataDirectory|Northwind.db;Version=3;FailIfMissing=True;"/>
 
   <object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
     <property name="DbProvider" ref="DbProvider"/>
@@ -27,9 +27,8 @@
     <property name="HibernateProperties">
       <dictionary>
         <entry key="hibernate.connection.provider" value="NHibernate.Connection.DriverConnectionProvider"/>
-        <entry key="dialect" value="NHibernate.Dialect.MsSql2000Dialect"/>
-        <entry key="connection.driver_class" value="NHibernate.Driver.SqlClientDriver"/>
-        <entry key="proxyfactory.factory_class" value="NHibernate.ByteCode.LinFu.ProxyFactoryFactory, NHibernate.ByteCode.LinFu" />
+        <entry key="dialect" value="NHibernate.Dialect.SQLiteDialect"/>
+        <entry key="connection.driver_class" value="NHibernate.Driver.SQLite20Driver"/>
       </dictionary>
     </property>
 
