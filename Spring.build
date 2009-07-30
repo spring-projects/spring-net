@@ -778,21 +778,21 @@ Build properties that may be set:
 
 
   <target name="package" depends="set-package-configuration" description="Build and Package distribution">
-<!--
+
     <property name="project.build.sign" value="true"/>
     <property name="project.build.package" value="true"/>
 
     <call target="clean-current-package-dir"/>
--->
+
     <property name="nant.target.root.name" value="build"/>
 
     <call target="set-build-namespaces-release"/>
     <property name="project.build.sign" value="true"/>
     <property name="project.build.package" value="true"/>
-<!--
+
     <call target="build-all-function"/>
--->
-    <call target="doc-sdk"/>
+
+    <call target="docs"/>
 
     <call target="package-release-files"/>
 
@@ -875,9 +875,8 @@ Build properties that may be set:
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
 
-<!--
+
     <call target="${nant.target.root.name}-1.1" />
--->
     <call target="${nant.target.root.name}-2.0" />
     <call target="${nant.target.root.name}-3.0" />
 
