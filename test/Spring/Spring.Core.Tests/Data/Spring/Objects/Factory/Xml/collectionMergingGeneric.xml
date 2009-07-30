@@ -2,9 +2,11 @@
 
 <objects xmlns="http://www.springframework.net">
 
+
+
   <object id="parentWithList" type="Spring.Objects.TestObject, Spring.Core.Tests">
-    <property name="SomeList">
-      <list element-type="string">
+    <property name="SomeGenericStringList">
+      <list>
         <value>Rob Harrop</value>
         <value>Rod Johnson</value>
       </list>
@@ -12,8 +14,8 @@
   </object>
 
   <object id="childWithList" parent="parentWithList">
-    <property name="SomeList">
-      <list merge="true" element-type="string">
+    <property name="SomeGenericStringList">
+      <list merge="true">
         <value>Juergen Hoeller</value>
       </list>
     </property>

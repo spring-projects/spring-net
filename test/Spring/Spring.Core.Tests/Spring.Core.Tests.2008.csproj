@@ -812,7 +812,7 @@
     <Content Include="Data\Spring\Objects\Factory\Xml\collections.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\constructor-arg.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\array-autowire.xml" />
-    <Content Include="Data\Spring\Objects\Factory\Xml\collectionMergingGen.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Xml\collectionMergingGeneric.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\collectionMerging.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\objectNameGeneration.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\simple-constructor-arg.xml" />
