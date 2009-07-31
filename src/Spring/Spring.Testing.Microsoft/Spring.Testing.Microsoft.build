@@ -25,9 +25,10 @@
             </sources>
 		        <references basedir="${current.bin.dir}">
 			        <include name="System.Data.dll" />
+				<include name="${vs-net.mstest.bin.dir}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
 			        <include name="*.dll" />
-			        <include name="Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
 			        <exclude name="${project::get-name()}.dll" />
+				<exclude name="CloverRuntime.dll" />
 		        </references>
         </csc>
     </target>
