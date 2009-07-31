@@ -32,10 +32,9 @@ using Spring.Northwind.Domain;
 namespace Spring.Northwind.IntegrationTests
 {
     /// <summary>
-    /// This class contains tests for 
+    /// This class contains tests for the DAO implementations
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
     [TestFixture]
     public class NorthwindIntegrationTests : AbstractDaoIntegrationTests
     {
@@ -44,6 +43,8 @@ namespace Spring.Northwind.IntegrationTests
 
         private ISessionFactory sessionFactory;
 
+
+        // These properties will be injected based on type
         public ICustomerDao CustomerDao
         {
             set { customerDao = value; }

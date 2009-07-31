@@ -558,9 +558,9 @@ on exception name ArithmeticException return 12</programlisting>
     <literal>SimpleLoggingAdvice</literal> programatically.</para>
 
     <programlisting language="myxml">&lt;object name="loggingAdvice" type="Spring.Aspects.Logging.SimpleLoggingAdvice, Spring.Aop"&gt;
-  &lt;property name="logUniqueIdentifier" value="true"/&gt;               
-  &lt;property name="logExecutionTime"    value="true"/&gt;               
-  &lt;property name="logMethodArguments"  value="true"/&gt;
+  &lt;property name="LogUniqueIdentifier" value="true"/&gt;               
+  &lt;property name="LogExecutionTime"    value="true"/&gt;               
+  &lt;property name="LogMethodArguments"  value="true"/&gt;
   &lt;property name="LogReturnValue"      value="true"/&gt;
 
   &lt;property name="Separator"           value=";"/&gt;
@@ -571,10 +571,11 @@ on exception name ArithmeticException return 12</programlisting>
   &lt;property name="UseDynamicLogger"    value="true"/&gt;
 &lt;/object&gt;</programlisting>
 
-    <para>The default values for LogUniqueIdentifier, LogExecutionTime,
-    LogMethodArguments and LogReturnValue are false. The default separator
+    <para>The default values for <literal>LogUniqueIdentifier</literal>,
+    <literal>LogExecutionTime</literal>, <literal>LogMethodArguments</literal>
+    and <literal>LogReturnValue</literal> are false. The default separator
     value is ", " and the default log level is Common.Logging's
-    LogLevel.Trace.</para>
+    <literal>LogLevel.Trace</literal>.</para>
 
     <para>You can set the name of the logger with the property
     <property>LoggerName</property>, for example "DataAccessLayer" for a
@@ -586,7 +587,12 @@ on exception name ArithmeticException return 12</programlisting>
     being called, the target type. Since often this is a proxy class with a
     relatively meaningless name, the property
     <property>HideProxyTypeNames</property> can be set to true to show the
-    true target type and not the proxy type.</para>
+    true target type and not the proxy type. The
+    <literal>UseDynamicLogger</literal> property determines which
+    <literal>ILog</literal> instance should be used to write log messages for
+    a particular method invocation: a dynamic one for the Type getting called,
+    or a static one for the Type of the trace interceptor. The default is to
+    use a static logger.</para>
 
     <para>To further extend the functionality of the
     <literal>SimpleLoggingAdvice</literal> you can subclass
@@ -642,11 +648,6 @@ Exiting Bark, 5d2bad47-62cd-435b-8de7-91f12b7f433e, 30453.125 ms, return=4</prog
     method. If you would like to have an alternate implementation, say to view
     some values in an array, override the method string
     GetMethodArgumentAsString(IMethodInvocation invocation).</para>
-
-    <para>The Spring 1.2 release will have an additional logging advice
-    implementation that leverages the Spring Expression Language to further
-    customize the content of the logging messages via simple configuration
-    using similar syntax to the retry and exception handling advice.</para>
   </sect1>
 
   <sect1 xml:id="retry-aspect">

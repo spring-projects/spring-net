@@ -39,7 +39,7 @@ namespace Spring.Northwind.Dao.NHibernate
         [Transaction(ReadOnly = true)]
         public Order Get(int orderId)
         {
-            return Session.Get<Order>(orderId);
+            return CurrentSession.Get<Order>(orderId);
         }
 
         [Transaction(ReadOnly = true)]
@@ -51,19 +51,19 @@ namespace Spring.Northwind.Dao.NHibernate
         [Transaction]
         public int Save(Order order)
         {
-            return (int) Session.Save(order);
+            return (int) CurrentSession.Save(order);
         }
 
         [Transaction]
         public void Update(Order order)
         {
-            Session.SaveOrUpdate(order);
+            CurrentSession.SaveOrUpdate(order);
         }
 
         [Transaction]
         public void Delete(Order order)
         {
-            Session.Delete(order);
+            CurrentSession.Delete(order);
         }
     }
 }

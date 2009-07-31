@@ -12,11 +12,12 @@
     <property name="ConfigSections" value="databaseSettings"/>
   </object>
 
-  <!-- Database and NHibernate Configuration -->
+  <!-- Database Configuration -->
   <db:provider id="DbProvider"
                    provider="SQLite-1.0.65"
                    connectionString="Data Source=|DataDirectory|Northwind.db;Version=3;FailIfMissing=True;"/>
 
+  <!-- NHibernate Configuration -->
   <object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
     <property name="DbProvider" ref="DbProvider"/>
     <property name="MappingAssemblies">
@@ -32,12 +33,13 @@
       </dictionary>
     </property>
 
+    <!-- provides integation with Spring's declarative transaction management features -->
     <property name="ExposeTransactionAwareSessionFactory" value="true" />
 
 
   </object>
 
-
+  <!-- Transaction Management Strategy - local database transactions -->
   <object id="transactionManager"
         type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate21">
 
@@ -45,6 +47,9 @@
     <property name="SessionFactory" ref="NHibernateSessionFactory"/>
 
   </object>
+
+  <!-- Exception translation object post processor -->
+  <object type="Spring.Dao.Attributes.PersistenceExceptionTranslationPostProcessor, Spring.Data"/>
 
   <!-- Data Access Objects -->
   <object id="CustomerDao" type="Spring.Northwind.Dao.NHibernate.HibernateCustomerDao, Spring.Northwind.Dao.NHibernate">

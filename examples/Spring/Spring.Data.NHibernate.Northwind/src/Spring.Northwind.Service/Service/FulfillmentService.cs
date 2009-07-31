@@ -82,7 +82,7 @@ namespace Spring.Northwind.Service
 
 
 
-        [Transaction(ReadOnly=false)]
+        [Transaction]
         public void ProcessCustomer(string customerId)
         {
             //Find all orders for customer
@@ -117,7 +117,7 @@ namespace Spring.Northwind.Service
         private void Validate(Order order)
         {
             
-            //TODO throw exception on error.
+            //no-op - throw exception on error.
 
         }
 

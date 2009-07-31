@@ -28,31 +28,685 @@
   <section>
     <title>Introduction</title>
 
-    <para>
-      This QuickStart application uses the all too familiar Northwind
-      database and uses NHibernate browse and edit customers. It It is a very
-      simple application that directly uses the DAO layer in some cases and also
-      has a simple service layer that simulated a fullillment process. See the
-      integration tests as well for insight into how it works. The application
-      uses Spring's declarative transaction management features,
-      standard NHibernate API, and Open Session In View module.
+    <para>This QuickStart application uses the all too familiar Northwind
+    database and uses NHibernate browse and edit customers. It It is a very
+    simple application that directly uses the DAO layer in many use-cases, as
+    it is doing nothing more than table maintenance, but there is also a
+    simple service layer that handles a fullillment process. The application
+    uses Spring's declarative transaction management features, standard
+    NHibernate API, and Open Session In View module. See <xref
+    linkend="orm" /> for information on those features.<note>
+        Even though data access is performed through NHibernate API all Spring.NET provided functionality is still present when using the standard NHibernate API, as Spring transaction managment is integrated into NHibernate extension points and exception translation is provided by AOP advice.
+      </note></para>
+  </section>
+
+  <section>
+    <title>Getting Started</title>
+
+    <para>The QuickStart application is located in the directory directory
+    <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.Data.NHibernate.Northwind</literal>.
+    Load the application using the VS.NET 2008 solution file
+    <literal>Spring.Northwind.2008.sln</literal>. The application uses the
+    SqlLite database so no additional configuration is needed. To run the
+    application set the Web application as the project that starts and
+    Default.aspx as the start page.</para>
+
+    <para>The application has several layers with each layer represented as
+    one or more VS.NET projects. </para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nh-quickstart-solution-explorer.png"></imagedata>
+      </imageobject>
+
+      <caption>
+        <para>Solution Explorer for NHibernate QuickStart Application</para>
+      </caption>
+    </mediaobject>
+
+    <para>The data access layer consists of two projects, Spring.Northwind.Dao
+    and Spring.Northwind.Dao.NHibernate. The former contains only the DAO
+    (data access object) interfaces and the latter the NHibernate
+    implementation of those interfaces. The project Spring.Northwind.Service
+    contains a simple service that calls into multiple DAO objects in order to
+    satisfy a fulliment process. The Web project is a ASP.NET web application
+    and the Spring.Northwind.IntegrationTests project contains integration
+    tests for the DAO and Service layers.</para>
+
+    <para>When you run the application you will see </para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nh-quickstart-default-screen.png"></imagedata>
+      </imageobject>
+    </mediaobject>
+
+    <para>Following the link to the customer listing pages bring up the
+    following screen </para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nh-quickstart-customer-listing.png"></imagedata>
+      </imageobject>
+    </mediaobject>
+
+    <para>You can click on the Name of the customer or the Orders link to view
+    that customers orders. Selecting "BOTTM"'s orders brings us to the next
+    page</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nh-quickstart-orders.png"></imagedata>
+      </imageobject>
+    </mediaobject>
+
+    <para>Notice that the order 11045 has yet to be shipped. If you select
+    'Process Orders' this will call the Fulliment Service and the order will
+    be processed and shipped.p</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nh-quickstart-process.png"></imagedata>
+      </imageobject>
+    </mediaobject>
+
+    <para>You can then go back to the customer list. If you select the name
+    Elizabeth Lincoln, then you can edit the customer details. </para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nh-quickstart-edit-customer.png"></imagedata>
+      </imageobject>
+    </mediaobject>
+  </section>
+
+  <section>
+    <title>Implementation </title>
+
+    <para>This section discussed the Spring implementation details for each
+    layer.</para>
+
+    <section>
+      <title>The Data Access Layer</title>
+
+      <para>The interface IDao is a generic DAO layer that provides basic
+      retrieval methods. They are located in the Spring.Northwind.Dao
+      project.</para>
+
+      <programlisting language="csharp">    public interface IDao&lt;TEntity, TId&gt;
+    {
+        TEntity Get(TId id);
+
+        IList&lt;TEntity&gt; GetAll();
+
+    }</programlisting>
+
+      <para>The ISupportsSave and ISupportsDeleteDao interfaces provide the
+      rest of the CRUD functionality.</para>
+
+      <programlisting language="csharp">    public interface ISupportsSave&lt;TEntity, TId&gt;
+    {
+        TId Save(TEntity entity);
+
+        void Update(TEntity entity);     
+    }
+
+
+    public interface ISupportsDeleteDao&lt;TEntity&gt;
+    {
+        void Delete(TEntity entity);
+    }</programlisting>
+
+      <para>The ICustomerDao interface combines these to manage the
+      persistence of customer objects. </para>
+
+      <programlisting language="csharp">    public interface ICustomerDao : IDao&lt;Customer, string&gt;, ISupportsDeleteDao&lt;Customer&gt;, ISupportsSave&lt;Customer, string&gt;
+    {
+    }</programlisting>
+
+      <para>Similar interfaces are defined to manage
+      <classname>Order</classname> and <classname>Products</classname> in
+      <classname>IOrderDao</classname> and <classname>IProductDao</classname>
+      respectfully.</para>
+    </section>
+
+    <section>
+      <title>The domain objects</title>
+
+      <para>The POCO domain objects, Customer, Order, OrderDetail and Product
+      are defined in the Spring.Northwind.Domain namespace within the
+      Spring.Northwind.Dao project. </para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/nh-quickstart-domain.png"></imagedata>
+        </imageobject>
+      </mediaobject>
+    </section>
+
+    <section>
+      <title>NHibernate based DAO implementation</title>
+
+      <para>The NHibernate based DAO implemenation uses the standard
+      NHibernate APIs, retrieving the current session from the SessionFactory
+      and using the session to retrieve or store objects to the database. An
+      abstract base class HibernateDao is used to capture the common
+      ISessionFactory property, provide a convenience property to access the
+      current session, and define a GetAll Method.p</para>
+
+      <programlisting language="csharp">    public abstract class HibernateDao
+    {
+        private ISessionFactory sessionFactory;
+
+        /// &lt;summary&gt;
+        /// Session factory for sub-classes.
+        /// &lt;/summary&gt;
+        public ISessionFactory SessionFactory
+        {
+            protected get { return sessionFactory; }
+            set { sessionFactory = value; }
+        }
+
+        /// &lt;summary&gt;
+        /// Get's the current active session. Will retrieve session as managed by the 
+        /// Open Session In View module if enabled.
+        /// &lt;/summary&gt;
+        protected ISession CurrentSession
+        {
+            get { return sessionFactory.GetCurrentSession(); }
+        }
+
+        protected IList&lt;T&gt; GetAll&lt;T&gt;() where T : class
+        {
+            ICriteria criteria = CurrentSession.CreateCriteria&lt;T&gt;();
+            return criteria.List&lt;T&gt;();
+        }
+    }</programlisting>
+
+      <para>The implementation of <classname>ICustomerDao</classname> is shown
+      below</para>
+
+      <programlisting language="csharp">    [Repository]
+    public class HibernateCustomerDao : HibernateDao, ICustomerDao
+    {
+
+        // Note that the transaction demaraction is here only for the case when
+        // the DAO object is being used directly, i.e. not as part of a service layer
+        // call.  This would be commonly only when creating an application that contains
+        // no business logic and is essentially a table maintenance application.  
+        // These applications are affectionaly known as 'CRUD' applications, the acronym
+        // refering to Create, Retrieve, Update, And Delete and the only operations
+        // performed by the application.
+
+        // If called from a transactional service layer, typically with the transaction
+        // propagation setting set to REQUIRED, then any DAO operations will use the 
+        // same settings as started from the transactional layer.
+
+        [Transaction(ReadOnly = true)]
+        public Customer Get(string customerId)
+        {
+            return CurrentSession.Get&lt;Customer&gt;(customerId);
+        }
+
+        [Transaction(ReadOnly = true)]
+        public IList&lt;Customer&gt; GetAll()
+        {
+            return GetAll&lt;Customer&gt;();
+        }
+
+
+        [Transaction(ReadOnly = false)]
+        public string Save(Customer customer)
+        {
+            return (string) CurrentSession.Save(customer);
+        }
+
+        [Transaction(ReadOnly = false)]
+        public void Update(Customer customer)
+        {
+            CurrentSession.SaveOrUpdate(customer);
+        }
+
+        [Transaction(ReadOnly = false)]
+        public void Delete(Customer customer)
+        {
+            CurrentSession.Delete(customer);
+        }
+    }</programlisting>
+
       <note>
-        Even though data access is performed through NHibernate API all Spring.NET provided functionality is
-        still present when using the standard NHibernate API, as Spring transaction managment
-        is integrated into NHibernate extension points and exception translation is
-        provided by AOP advice.
-        See the section titled Implementing DAOs based on plain Hibernate 1.2/2.0 API"
-        in the hibernate orm section of the reference docs for more information.
+        <para>As mentioned in the code comments above, as this application has
+        a distinctly CRUD based component, Spring's Transaction attribute is
+        used to ensure that that method exeuctes as a unit of work. Often in
+        more sophisticated applications even the basic of CRUD are handled
+        through a service layer so as to enforce security, auditing, alterting
+        or enforce business rules.</para>
       </note>
-      To run the application make the Web application the project that
-      starts and set Default.aspx as the start page. 
+
+      <para>The <classname>Repository</classname> attribute is used to
+      indicate that this class plays the role of a Repository or a Data Access
+      Object. The term repository comes from modeling terminology popularized
+      by Eric Evan's book Domain Driven Design (DDD). Those familiar with DDD
+      will note that this implementation is very simply and does not expose
+      higher level persistence functionality to the application, for example
+      <literal>FindCustomersWithOpenOrders</literal>. How well the role of
+      Repository applies to this implementation is not relevant, and we will
+      often refer to Repository and DAO intechangable when describing the data
+      access layer. What <emphasis>is</emphasis> relevant is that the
+      <classname>Repository</classname> attribute serves as a marker, a place
+      in the code that can be used to identify methods whose invocation should
+      be intercepted so that additional behavior can be added. In
+      Aspect-Oriented Programming terminology, the Repository attribute
+      represents a pointcut. The behavior that we would like to add to this
+      DAO implementation exception translation. Exception translation from the
+      data access layer to a service layer is important as it shields the
+      service layer from the implementation details of the data access layer.
+      A NHibernate based DAO will throw different exceptions and a ADO.NET
+      based implementation and so on. Spring provides a rich technology
+      neutral data-access exception hierarchy. See <xref linkend="dao" />.
+      </para>
+
+      <para>Instead of adding exception translation code in each data access
+      method, AOP offers a simple solution. Using Spring's
+      <classname>IObjectPostProcessor</classname> extension point, each DAO
+      object that is managed by Spring will be automatically wrapped up in a
+      proxy that adds the exception translation behavior. This is done by
+      adding the following object definition to the Spring application
+      context.</para>
+
+      <programlisting>&lt;objects&gt;
+
+  &lt;!-- configure session factory --&gt;
+
+  &lt;!-- Exception translation object post processor --&gt;
+  &lt;object type="Spring.Dao.Attributes.PersistenceExceptionTranslationPostProcessor, Spring.Data"/&gt;
+
+  &lt;!-- Configure transaction management strategy --&gt;
+  &lt;!-- DAO objects go here --&gt;
+
+
+&lt;/objects&gt;</programlisting>
+
+      <para>The Spring managed DAO object definitions are shown below,
+      referring to a SessionFactory that is created via Spring's
+      LocalSessionFactoryObject. See the file Dao.xml for more details.</para>
+
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
+         xmlns:db="http://www.springframework.net/database"&gt;
+
+  &lt;!-- Referenced by main application context configuration file --&gt;
+  &lt;description&gt;
+    The Northwind object definitions for the Data Access Objects.
+  &lt;/description&gt;
+
+  &lt;!-- Database Configuration --&gt;
+  &lt;db:provider id="DbProvider"
+                   provider="SQLite-1.0.65"
+                   connectionString="Data Source=|DataDirectory|Northwind.db;Version=3;FailIfMissing=True;"/&gt;
+
+  &lt;!-- NHibernate SessionFactory configuration --&gt;
+  &lt;object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21"&gt;
+    &lt;property name="DbProvider" ref="DbProvider"/&gt;
+    &lt;property name="MappingAssemblies"&gt;
+      &lt;list&gt;
+        &lt;value&gt;Spring.Northwind.Dao.NHibernate&lt;/value&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="HibernateProperties"&gt;
+      &lt;dictionary&gt;
+        &lt;entry key="hibernate.connection.provider" value="NHibernate.Connection.DriverConnectionProvider"/&gt;
+        &lt;entry key="dialect" value="NHibernate.Dialect.SQLiteDialect"/&gt;
+        &lt;entry key="connection.driver_class" value="NHibernate.Driver.SQLite20Driver"/&gt;
+      &lt;/dictionary&gt;
+    &lt;/property&gt;
+
+    &lt;!-- provides integation with Spring's declarative transaction management features --&gt;
+    &lt;property name="ExposeTransactionAwareSessionFactory" value="true" /&gt;
+
+  &lt;/object&gt;
+
+  &lt;!-- Transaction Management Strategy - local database transactions --&gt;
+  &lt;object id="transactionManager"
+        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate21"&gt;
+    &lt;property name="DbProvider" ref="DbProvider"/&gt;
+    &lt;property name="SessionFactory" ref="NHibernateSessionFactory"/&gt;
+  &lt;/object&gt;
+
+  &lt;!-- Exception translation object post processor --&gt;
+  &lt;object type="Spring.Dao.Attributes.PersistenceExceptionTranslationPostProcessor, Spring.Data"/&gt;
+
+  &lt;!-- Data Access Objects --&gt;
+  &lt;object id="CustomerDao" type="Spring.Northwind.Dao.NHibernate.HibernateCustomerDao, Spring.Northwind.Dao.NHibernate"&gt;
+    &lt;property name="SessionFactory" ref="NHibernateSessionFactory"/&gt;
+  &lt;/object&gt;
+
+  &lt;object id="OrderDao" type="Spring.Northwind.Dao.NHibernate.HibernateOrderDao, Spring.Northwind.Dao.NHibernate"&gt;
+    &lt;property name="SessionFactory" ref="NHibernateSessionFactory"/&gt;
+  &lt;/object&gt;
+
+
+&lt;/objects&gt;</programlisting>
+
+      <para><note>
+          <para>It is not required that you use Spring's
+          <classname>[Repository]</classname> attribute. You can specify an
+          attribute type to the
+          <classname>PersistenceExceptionTranslationPostProcessor</classname>
+          via the property <classname>RepositoryAttributeType</classname> to
+          avoid coupling your DAO implementation to Spring. </para>
+        </note></para>
+    </section>
+
+    <section>
+      <title>The Service layer</title>
+
+      <para>The service layer is located in the Spring.Northwind.Services
+      project. It defines a single service for the fulliment process</para>
+
+      <programlisting language="csharp">    public interface IFulfillmentService
+    {
+        void ProcessCustomer(string customerId);
+    }</programlisting>
+
+      <para>The implementatiion class is shown below</para>
+
+      <programlisting language="csharp">    public class FulfillmentService : IFulfillmentService
+    {
+
+
+        private IProductDao productDao;
+
+        private ICustomerDao customerDao;
+
+        private IOrderDao orderDao;
+
+        private IShippingService shippingService;
+
+
+       // Properties for the preceding fields omitted for brevity
+
+        [Transaction]
+        public void ProcessCustomer(string customerId)
+        {
+            //Find all orders for customer
+            Customer customer = CustomerDao.Get(customerId);
+                 
+            foreach (Order order in customer.Orders)
+            {
+                if (order.ShippedDate.HasValue)
+                {
+                    log.Warn("Order with " + order.Id + " has already been shipped, skipping.");
+                    continue;
+                }
+
+                //Validate Order
+                Validate(order);
+                log.Info("Order " + order.Id + " validated, proceeding with shipping..");
+
+                //Ship with external shipping service
+                ShippingService.ShipOrder(order);
+                
+                //Update shipping date
+                order.ShippedDate = DateTime.Now;
+                
+                //Update shipment date
+                OrderDao.Update(order);
+               
+                //Other operations...Decrease product quantity... etc
+            }             
+            
+        }
+
+        private void Validate(Order order)
+        {            
+            //no-op - throw exception on error.
+        }
+    }
+}
+</programlisting>
+
+      <para>What is important to note about this method is that it uses two
+      DAO objects, CustomerDao and OrderDao as well as an additional
+      collaborating service, IShippingService. The fact that all of the
+      collaborating objects are interfaced based means that we can write a
+      unit test for the business functionality of the ProcessCustomer method.
+      Also, the use of the [Transaction] attribute will enable this business
+      processing to proceed as a single unit-of-work. Spring's declarative
+      transaction management features make it very easy to mix and match
+      different DAO objects with a service method without having to worry
+      about propagating the transaction/connection or hibernate session to
+      each DAO object.</para>
+
+      <para>The Fullfillment service layer is configured to refer to its
+      collaborating objects as shown below in the configuration file
+      Services.xml</para>
+
+      <programlisting language="myxml">  &lt;!-- Property placeholder configurer for database settings --&gt;
+  &lt;object id="FulfillmentService" type="Spring.Northwind.Service.FulfillmentService, Spring.Northwind.Service"&gt;
+    &lt;property name="CustomerDao" ref="CustomerDao"/&gt;
+    &lt;property name="OrderDao" ref="OrderDao"/&gt;
+    &lt;property name="ShippingService" ref="ShippingService"/&gt;
+  &lt;/object&gt;
+
+  &lt;object id="ShippingService" type="Spring.Northwind.Service.FedExShippingService, Spring.Northwind.Service"/&gt;
+    
+  &lt;tx:attribute-driven/&gt;</programlisting>
+    </section>
+
+    <section>
+      <title>Integration testing</title>
+
+      <para>Integraiton testing in addition to unit testing can be done before
+      integrating the service and data access layer into the Web application -
+      where automated testing is much more difficult. While coding to
+      interfaces and using an IoC container help enable unit testing, unit
+      tests should not have any Spring dependency. Integration tests however
+      greatly benefit from being able to access the objects that Spring is
+      managing in production. This way the gap between what you testi in QA
+      and what runs is minimized, ideally with only environment specific
+      settings being different. In addition to easily obtaining, say a
+      transactionally aware service object from the Spring IoC container,
+      Spring intergration testing support classes allow you to implicitly
+      start a transaction at the start of test method and rollback at the end.
+      The isolation guaranteed by the database means that multiple developers
+      can run integration tests for their data access layers simultaneously
+      and the rollback ensures that the changes made are not persisted. While
+      in the test method, you have a consistent view of the data and can
+      therefore exercise all the methods of your DAO object.</para>
+
+      <para>The project Spring.Northwind.IntegrationTests shows how this
+      works. As a convenience, an abstract base class is created that in turn
+      inherits from Spring's integration testing class
+      <classname>AbstractTransactionalDbProviderSpringContextTests</classname></para>
+
+      <programlisting language="csharp">    [TestFixture]
+    public abstract class AbstractDaoIntegrationTests : AbstractTransactionalDbProviderSpringContextTests
+    {
+
+        protected override string[] ConfigLocations
+        {
+            get
+            {
+                return new string[]
+                    {
+                        "assembly://Spring.Northwind.Dao.NHibernate/Spring.Northwind.Dao/Dao.xml",
+                        "assembly://Spring.Northwind.Service/Spring.Northwind.Service/Services.xml"
+                    };
+            }
+        }
+    }</programlisting>
+
       <note>
-        <para>
-          To follow this NHibernate QuickStart load the solution file
-          found in the directory
-          <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.Data.NHibernate.Northwind</literal>
-        </para>
+        <para>This unit test is NUnit based but there is similar support
+        available for Microsoft MSTest framework.</para>
       </note>
-    </para>
+
+      <para>The exact same object definition files that will be used in the
+      production application are loaded for the integration test. To test the
+      data access layer, you inherit from AbstractDaoIntegrationTests and
+      expose public properties for each DAO implementation you want to test.
+      Within each test method exercise the API of the DAO. This also tests the
+      NHibernate mappings.</para>
+
+      <programlisting>    [TestFixture]
+    public class NorthwindIntegrationTests : AbstractDaoIntegrationTests
+    {
+        private ICustomerDao customerDao;
+        private IOrderDao orderDao;
+
+        private ISessionFactory sessionFactory;
+
+        // These properties will be injected based on type
+        public ICustomerDao CustomerDao
+        {
+            set { customerDao = value; }
+        }
+
+        public IOrderDao OrderDao
+        {
+            set { orderDao = value; }
+        }
+
+        public ISessionFactory SessionFactory
+        {
+            set { sessionFactory = value; }
+        }
+
+        [Test]
+        public void CustomerDaoTests()
+        {
+            Assert.AreEqual(91, customerDao.GetAll().Count);
+
+            Customer c = new Customer();
+            c.Id = "MPOLL";           
+            c.CompanyName = "Interface21";
+            customerDao.Save(c);
+            c = customerDao.Get("MPOLL");
+            Assert.AreEqual(c.Id, "MPOLL");
+            Assert.AreEqual(c.CompanyName, "Interface21");
+
+            //Without flushing, nothing changes in the database:
+            int customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");           
+            Assert.AreEqual(91, customerCount);
+
+            //Flush the session to execute sql in the db.
+            SessionFactoryUtils.GetSession(sessionFactory, true).Flush();
+           
+            //Now changes are visible outside the session but within the same database transaction
+            customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");
+            Assert.AreEqual(92, customerCount);
+            
+            Assert.AreEqual(92, customerDao.GetAll().Count);
+
+            c.CompanyName = "SpringSource";
+
+            customerDao.Update(c);
+
+            c = customerDao.Get("MPOLL");
+            Assert.AreEqual(c.Id, "MPOLL");
+            Assert.AreEqual(c.CompanyName, "SpringSource");
+
+            customerDao.Delete(c);
+
+
+            SessionFactoryUtils.GetSession(sessionFactory, true).Flush();
+            customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");
+            Assert.AreEqual(92, customerCount);
+
+            try
+            {
+                c = customerDao.Get("MPOLL");
+                Assert.Fail("Should have thrown HibernateObjectRetrievalFailureException when finding customer with Id = MPOLL");
+            }
+            catch (HibernateObjectRetrievalFailureException e)
+            {
+                Assert.AreEqual("Customer", e.PersistentClassName);
+            }
+
+        }
+
+        [Test]
+        public void ProductDaoTests()
+        {
+            // ommited for brevity
+        }
+    }</programlisting>
+
+      <para>This test uses AdoTemplate to access the database using the
+      standard ADO.NET APIs. It is done to demonstrate that the common
+      configuration of NHibernate is for it not to flush to the database until
+      a commit occurs. If we did not explicitly flush, then no SQL would be
+      sent down to the database and some potential errors would go undetected.
+      Since the test method will rollback the transaction, we don't have to
+      worry about 'dirtying' the database and changing its state.</para>
+    </section>
+
+    <section>
+      <title>Web Application</title>
+
+      <para>The Web application uses Dependency Injection on the .aspx pages
+      so that they can access the servcies of the middle tier, for example the
+      FullfillmentService, or in the case of simple table maintenance, the DAO
+      objects directly.</para>
+
+      <para>For example the FullfillmentResult.aspx code behind is shown
+      below</para>
+
+      <programlisting>public partial class FullfillmentResult : Page
+{
+    private IFulfillmentService fulfillmentService;
+    private ICustomerEditController customerEditController;
+
+    public IFulfillmentService FulfillmentService
+    {
+        set { fulfillmentService = value; }
+    }
+
+    public ICustomerEditController CustomerEditController
+    {
+        set { customerEditController = value; }
+    }
+
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+      /// code omitted for brevity
+
+      fulfillmentService.ProcessCustomer(customerEditController.CurrentCustomer.Id);
+
+    }
+
+    protected void customerOrders_Click(object sender, EventArgs e)
+    {
+        SetResult("Back");
+    }
+
+</programlisting>
+
+      <para>The page is configured in Spring as shown below</para>
+
+      <programlisting>  &lt;object type="FulfillmentResult.aspx"&gt;
+    &lt;property name="FulfillmentService" ref="FulfillmentService" /&gt;
+    &lt;property name="CustomerEditController" ref="CustomerEditController" /&gt;
+    &lt;property name="Results"&gt;
+      &lt;dictionary&gt;
+        &lt;entry key="Back" value="redirect:CustomerOrders.aspx" /&gt;
+      &lt;/dictionary&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+</programlisting>
+
+      <para>The page is injected with a reference to the FullfillmentService
+      and also another UI component. While Spring's ASP.NET framework supports
+      DI for standard ASP.NET pages and user controls, you can also inherit
+      from Spring's base page class to get added functionality. In this
+      example the use of externalized page flow, or Result Mapping is shown.
+      The Results property indicates the 'how', 'where' and 'what data' to
+      bring along when moving between different web pages and associates it
+      with a logical name "Back". This avoid hardcoding server side transfers
+      or redirects in your code as well as other ASP.NET page references. See
+      the chapter on Spring's ASP.NET Web Framework for more details.</para>
+    </section>
   </section>
 </chapter>

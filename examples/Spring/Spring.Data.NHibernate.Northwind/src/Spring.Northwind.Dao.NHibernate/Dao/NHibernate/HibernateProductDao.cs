@@ -38,7 +38,7 @@ namespace Spring.Northwind.Dao.NHibernate
         [Transaction(ReadOnly = true)]
         public Product Get(int productId)
         {
-            return Session.Get<Product>(productId);
+            return CurrentSession.Get<Product>(productId);
         }
 
         [Transaction(ReadOnly = true)]
@@ -50,19 +50,19 @@ namespace Spring.Northwind.Dao.NHibernate
         [Transaction]
         public int Save(Product product)
         {
-            return (int) Session.Save(product);
+            return (int) CurrentSession.Save(product);
         }
 
         [Transaction]
         public void Update(Product product)
         {
-            Session.SaveOrUpdate(product);
+            CurrentSession.SaveOrUpdate(product);
         }
 
         [Transaction]
         public void Delete(Product product)
         {
-            Session.Delete(product);
+            CurrentSession.Delete(product);
         }
     }
 }

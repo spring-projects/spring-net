@@ -49,7 +49,7 @@ namespace Spring.Northwind.Dao.NHibernate
         [Transaction(ReadOnly = true)]
         public Customer Get(string customerId)
         {
-            return Session.Get<Customer>(customerId);
+            return CurrentSession.Get<Customer>(customerId);
         }
 
         [Transaction(ReadOnly = true)]
@@ -59,22 +59,22 @@ namespace Spring.Northwind.Dao.NHibernate
         }
 
 
-        [Transaction(ReadOnly = false)]
+        [Transaction]
         public string Save(Customer customer)
         {
-            return (string) Session.Save(customer);
+            return (string) CurrentSession.Save(customer);
         }
 
-        [Transaction(ReadOnly = false)]
+        [Transaction]
         public void Update(Customer customer)
         {
-            Session.SaveOrUpdate(customer);
+            CurrentSession.SaveOrUpdate(customer);
         }
 
-        [Transaction(ReadOnly = false)]
+        [Transaction]
         public void Delete(Customer customer)
         {
-            Session.Delete(customer);
+            CurrentSession.Delete(customer);
         }
     }
 }
