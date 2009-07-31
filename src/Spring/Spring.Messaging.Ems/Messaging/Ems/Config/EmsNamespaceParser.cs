@@ -33,7 +33,7 @@ namespace Spring.Messaging.Ems.Config
         NamespaceParser(
             Namespace = "http://www.springframework.net/ems",
             SchemaLocationAssemblyHint = typeof (EmsNamespaceParser),
-            SchemaLocation = "/Spring.Messaging.Ems.Config/spring-ems-1.2.xsd"
+            SchemaLocation = "/Spring.Messaging.Ems.Config/spring-ems-1.3.xsd"
             )
     ]
     public class EmsNamespaceParser : NamespaceParserSupport
