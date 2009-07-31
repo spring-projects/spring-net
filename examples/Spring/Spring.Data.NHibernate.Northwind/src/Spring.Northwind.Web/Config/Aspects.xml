@@ -2,8 +2,18 @@
 
 <objects xmlns="http://www.springframework.net">
   
-  <object id="CommonLoggingAroundAdvice" type="Spring.Aspects.Logging.CommonLoggingAroundAdvice, Spring.Aspects">
-    <property name="Level" value="Info" />
+  <object name="CommonLoggingAroundAdvice" type="Spring.Aspects.Logging.SimpleLoggingAdvice, Spring.Aop">
+    <property name="LogUniqueIdentifier" value="true"/>
+    <property name="LogExecutionTime"    value="true"/>
+    <property name="LogMethodArguments"  value="true"/>
+    <property name="LogReturnValue"      value="true"/>
+
+    <property name="Separator"           value=";"/>
+    <property name="LogLevel"            value="Info"/>
+
+
+    <property name="HideProxyTypeNames"  value="true"/>
+    <property name="UseDynamicLogger"    value="true"/>
   </object>
   
 </objects>

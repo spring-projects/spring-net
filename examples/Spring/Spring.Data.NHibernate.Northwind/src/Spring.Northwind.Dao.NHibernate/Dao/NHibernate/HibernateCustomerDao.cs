@@ -33,17 +33,6 @@ namespace Spring.Northwind.Dao.NHibernate
     [Repository]
     public class HibernateCustomerDao : HibernateDao, ICustomerDao
     {
-        [Transaction(ReadOnly = true)]
-        public Customer Get(string customerId)
-        {
-            return Session.Get<Customer>(customerId);
-        }
-
-        [Transaction(ReadOnly = true)]
-        public IList<Customer> GetAll()
-        {
-            return GetAll<Customer>();
-        }
 
         // Note that the transaction demaraction is here only for the case when
         // the DAO object is being used directly, i.e. not as part of a service layer
@@ -56,6 +45,19 @@ namespace Spring.Northwind.Dao.NHibernate
         // If called from a transactional service layer, typically with the transaction
         // propagation setting set to REQUIRED, then any DAO operations will use the 
         // same settings as started from the transactional layer.
+
+        [Transaction(ReadOnly = true)]
+        public Customer Get(string customerId)
+        {
+            return Session.Get<Customer>(customerId);
+        }
+
+        [Transaction(ReadOnly = true)]
+        public IList<Customer> GetAll()
+        {
+            return GetAll<Customer>();
+        }
+
 
         [Transaction(ReadOnly = false)]
         public string Save(Customer customer)

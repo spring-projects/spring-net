@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2D0C5DF7-3BDB-44FB-BC1B-58E60B170BAD}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -91,10 +91,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Spring.Aspects\Spring.Aspects.2008.csproj">
-      <Project>{53B04C54-63EA-45AA-BB83-8950AF3C5D68}</Project>
-      <Name>Spring.Aspects</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.2008.csproj">
       <Project>{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}</Project>
       <Name>Spring.Northwind.Dao.NHibernate</Name>
