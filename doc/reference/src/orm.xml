@@ -394,158 +394,31 @@
         instances based on values in thread local storage, much like the
         implementation of <literal>MultiDelegatingDbProvider</literal>.</para>
       </note>
-    </section>
 
-    <section xml:id="orm-hibernate-template">
-      <title>The <literal>HibernateTemplate</literal></title>
+      <section xml:id="orm-hibernate-bytecodeprovider">
+        <title>Spring's IByteCodeProvider implementation</title>
 
-      <para>The basic programming model for templating looks as follows for
-      methods that can be part of any custom data access object or business
-      service. There are no restrictions on the implementation of the
-      surrounding object at all, it just needs to provide a Hibernate
-      <literal>SessionFactory</literal>. It can get the latter from anywhere,
-      but preferably as an object reference from a Spring IoC container - via
-      a simple <methodname>SessionFactory</methodname> property setter. The
-      following snippets show a DAO definition in a Spring container,
-      referencing the above defined <literal>SessionFactory</literal>, and an
-      example for a DAO method implementation.</para>
-
-      <programlisting language="myxml">&lt;objects&gt;
-
-  &lt;object id="CustomerDao" type="Spring.Northwind.Dao.NHibernate.HibernateCustomerDao, Spring.Northwind.Dao.NHibernate"&gt;
-    &lt;property name="SessionFactory" ref="MySessionFactory"/&gt;
-  &lt;/object&gt;
-
-&lt;/objects&gt;</programlisting>
-
-      <para></para>
-
-      <programlisting language="csharp">public class HibernateCustomerDao : ICustomerDao {
-
-  private HibernateTemplate hibernateTemplate;
-
-  public ISessionFactory SessionFactory
-  {
-      set { hibernateTemplate = new HibernateTemplate(value); }
-  }
-
-  public Customer SaveOrUpdate(Customer customer)
-  {
-      hibernateTemplate.SaveOrUpdate(customer);
-      return customer;
-  }
-}</programlisting>
-
-      <para>The <literal>HibernateTemplate</literal> class provides many
-      methods that mirror the methods exposed on the Hibernate
-      <literal>Session</literal> interface, in addition to a number of
-      convenience methods such as the one shown above. If you need access to
-      the <literal>Session</literal> to invoke methods that are not exposed on
-      the <literal>HibernateTemplate</literal>, you can always drop down to a
-      callback-based approach like so.</para>
-
-      <programlisting language="csharp">public class HibernateCustomerDao : ICustomerDao {
-
-  private HibernateTemplate hibernateTemplate;
-
-  public ISessionFactory SessionFactory
-  {
-      set { hibernateTemplate = new HibernateTemplate(value); }
-  }
-
-  public Customer SaveOrUpdate(Customer customer)
-  {
-      return HibernateTemplate.Execute(
-                 delegate(ISession session)
-                     {
-                         // do whatever you want with the session....
-                         session.SaveOrUpdate(customer);
-                         return customer;
-                     }) as Customer;
-  }
-
-}</programlisting>
-
-      <para>Using the anonymous delegate is particularly convenient when you
-      would otherwise be passing various method parameter calls to the
-      interface based version of this callback. Furthermore, when using
-      generics, you can avoid the typecast and write code like the
-      following</para>
-
-      <programlisting language="csharp">IList&lt;Supplier&gt; suppliers = HibernateTemplate.ExecuteFind&lt;Supplier&gt;(
-   delegate(ISession session)
-   {
-      return session.CreateQuery("from Supplier s were s.Code = ?")
-                    .SetParameter(0, code)
-                    .List&lt;Supplier&gt;();
-    });</programlisting>
-
-      <para>where code is a variable in the surrounding block, accessible
-      inside the anonymous delegate implementation.</para>
-
-      <para>A callback implementation effectively can be used for any
-      Hibernate data access. <literal>HibernateTemplate</literal> will ensure
-      that <literal>Session</literal> instances are properly opened and
-      closed, and automatically participate in transactions. The template
-      instances are thread-safe and reusable, they can thus be kept as
-      instance variables of the surrounding class. For simple single step
-      actions like a single Find, Load, SaveOrUpdate, or Delete call,
-      <literal>HibernateTemplate</literal> offers alternative convenience
-      methods that can replace such one line callback implementations.
-      Furthermore, Spring provides a convenient
-      <literal>HibernateDaoSupport</literal> base class that provides a
-      <methodname>SessionFactory</methodname> property for receiving a
-      <literal>SessionFactory</literal> and for use by subclasses. In
-      combination, this allows for very simple DAO implementations for typical
-      requirements:</para>
-
-      <programlisting language="csharp">public class HibernateCustomerDao : HibernateDaoSupport, ICustomerDao
-{
-    public Customer SaveOrUpdate(Customer customer)
-    {
-        HibernateTemplate.SaveOrUpdate(customer);
-        return customer;
-    }
-}</programlisting>
-    </section>
-
-    <section xml:id="orm-hibernate-daos">
-      <title>Implementing Spring-based DAOs without callbacks</title>
-
-      <para>As an alternative to using Spring's
-      <literal>HibernateTemplate</literal> to implement DAOs, data access code
-      can also be written in a more traditional fashion, without wrapping the
-      Hibernate access code in a callback, while still respecting and
-      participating in Spring's generic <literal>DataAccessException</literal>
-      hierarchy. The <literal>HibernateDaoSupport</literal> base class offers
-      methods to access the current transactional <literal>Session</literal>
-      and to convert exceptions in such a scenario; similar methods are also
-      available as static helpers on the
-      <literal>SessionFactoryUtils</literal> class. Note that such code will
-      usually pass '<literal>false</literal>' as the value of the
-      <methodname>DoGetSession(..)</methodname> method's
-      '<literal>allowCreate</literal>' argument, to enforce running within a
-      transaction (which avoids the need to close the returned
-      <literal>Session</literal>, as its lifecycle is managed by the
-      transaction). Asking for the</para>
-
-      <programlisting language="csharp">public class HibernateProductDao : HibernateDaoSupport, IProductDao {
-
-        public Customer SaveOrUpdate(Customer customer)
-        {
-            ISession session = DoGetSession(false);
-            session.SaveOrUpdate(customer);
-            return customer;
-        }
-    }
-}</programlisting>
-
-      <para>This code will <emphasis>not</emphasis> translate the Hibernate
-      exception to a generic <literal>DataAccessException</literal>.</para>
+        <para>Introduced in Hibernate 2.1 is support for <link
+        ns6:href="http://fabiomaulo.blogspot.com/2009/05/nhibernate-ioc-integration.html">dependency
+        injection of hibernate managed objects</link> via the
+        <classname>IBytecodeProvider</classname> extension point. As of Spring
+        1.3 provides
+        <classname>Spring.Data.NHibernate.Bytecode.BytecodeProvider</classname>
+        as the default <classname>IBytecodeProvider</classname> implementation
+        when using <classname>LocalSessionFactory</classname> object to
+        configure an <classname>ISessionFactory</classname>. To use a
+        different <classname>IBytecodeProvider</classname> configure it via
+        the standard the Hibernate means, using App.confg or Web.config via
+        the element <literal>&lt;bytecode-provider type="..."/&gt;
+        </literal>inside the
+        <literal>&lt;hibernate-configuration&gt;</literal> section or
+        progammatically by setting
+        <literal>Environment.BytecodeProvider</literal>.</para>
+      </section>
     </section>
 
     <section xml:id="orm-hibernate-straight">
-      <title>Implementing DAOs based on plain Hibernate 1.2/2.0 API</title>
+      <title>Implementing DAOs based on plain Hibernate 1.2/2.x API</title>
 
       <para>Hibernate 1.2 introduced a feature called "contextual Sessions",
       where Hibernate itself manages one current <literal>ISession</literal>
@@ -718,87 +591,154 @@ public class HibernateCustomerDao : ICustomerDao {
       </section>
     </section>
 
-    <section xml:id="orm-hibernate-tx-programmatic">
-      <title>Programmatic transaction demarcation</title>
+    <section xml:id="orm-hibernate-template">
+      <title>The <literal>HibernateTemplate</literal> for Hibernate
+      1.2</title>
 
-      <para>Transactions can be demarcated in a higher level of the
-      application, on top of such lower-level data access services spanning
-      any number of operations. There are no restrictions on the
-      implementation of the surrounding business service here as well, it just
-      needs a Spring <literal>PlatformTransactionManager</literal>. Again, the
-      latter can come from anywhere, but preferably as an object reference via
-      a <methodname>TransactionManager</methodname> property - just like the
-      <literal>productDAO</literal> should be set via a
-      <methodname>setProductDao(..)</methodname> method. The following
-      snippets show a transaction manager and a business service definition in
-      a Spring application context, and an example for a business method
-      implementation.</para>
+      <para>The basic programming model for templating looks as follows for
+      methods that can be part of any custom data access object or business
+      service. There are no restrictions on the implementation of the
+      surrounding object at all, it just needs to provide a Hibernate
+      <literal>SessionFactory</literal>. It can get the latter from anywhere,
+      but preferably as an object reference from a Spring IoC container - via
+      a simple <methodname>SessionFactory</methodname> property setter. The
+      following snippets show a DAO definition in a Spring container,
+      referencing the above defined <literal>SessionFactory</literal>, and an
+      example for a DAO method implementation.</para>
 
       <programlisting language="myxml">&lt;objects&gt;
 
-  &lt;object id="TransactionManager"
-        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate"&gt;
-
-    &lt;property name="DbProvider" ref="DbProvider"/&gt;
+  &lt;object id="CustomerDao" type="Spring.Northwind.Dao.NHibernate.HibernateCustomerDao, Spring.Northwind.Dao.NHibernate"&gt;
     &lt;property name="SessionFactory" ref="MySessionFactory"/&gt;
-
   &lt;/object&gt;
-
-  &lt;!-- DAO definition not listed, see above for an example. --&gt;
-
-  &lt;object id="FulfillmentService" type="Spring.Northwind.Service.FulfillmentService, Spring.Northwind.Service"&gt;
-    &lt;property name="CustomerDao" ref="CustomerDao"/&gt;
-    &lt;property name="OrderDao" ref="OrderDao"/&gt;
-    &lt;property name="ShippingService" ref="ShippingService"/&gt;
-    &lt;property name="TransactionManager" ref="TransactionManager"/&gt;
-  &lt;/object&gt;
-
 
 &lt;/objects&gt;</programlisting>
 
-      <programlisting language="csharp">public class FulfillmentService : IFulfillmentService
+      <para></para>
 
-    private TransactionTemplate transactionTemplate;
+      <programlisting language="csharp">public class HibernateCustomerDao : ICustomerDao {
 
-    private IProductDao productDao;
+  private HibernateTemplate hibernateTemplate;
 
-    private ICustomerDao customerDao;
+  public ISessionFactory SessionFactory
+  {
+      set { hibernateTemplate = new HibernateTemplate(value); }
+  }
 
-    private IOrderDao orderDao;
+  public Customer SaveOrUpdate(Customer customer)
+  {
+      hibernateTemplate.SaveOrUpdate(customer);
+      return customer;
+  }
+}</programlisting>
 
-    private IShippingService shippingService;
+      <para>The <literal>HibernateTemplate</literal> class provides many
+      methods that mirror the methods exposed on the Hibernate
+      <literal>Session</literal> interface, in addition to a number of
+      convenience methods such as the one shown above. If you need access to
+      the <literal>Session</literal> to invoke methods that are not exposed on
+      the <literal>HibernateTemplate</literal>, you can always drop down to a
+      callback-based approach like so.</para>
 
+      <programlisting language="csharp">public class HibernateCustomerDao : ICustomerDao {
 
-    public TransactionManager TransactionManager
+  private HibernateTemplate hibernateTemplate;
+
+  public ISessionFactory SessionFactory
+  {
+      set { hibernateTemplate = new HibernateTemplate(value); }
+  }
+
+  public Customer SaveOrUpdate(Customer customer)
+  {
+      return HibernateTemplate.Execute(
+                 delegate(ISession session)
+                     {
+                         // do whatever you want with the session....
+                         session.SaveOrUpdate(customer);
+                         return customer;
+                     }) as Customer;
+  }
+
+}</programlisting>
+
+      <para>Using the anonymous delegate is particularly convenient when you
+      would otherwise be passing various method parameter calls to the
+      interface based version of this callback. Furthermore, when using
+      generics, you can avoid the typecast and write code like the
+      following</para>
+
+      <programlisting language="csharp">IList&lt;Supplier&gt; suppliers = HibernateTemplate.ExecuteFind&lt;Supplier&gt;(
+   delegate(ISession session)
+   {
+      return session.CreateQuery("from Supplier s were s.Code = ?")
+                    .SetParameter(0, code)
+                    .List&lt;Supplier&gt;();
+    });</programlisting>
+
+      <para>where code is a variable in the surrounding block, accessible
+      inside the anonymous delegate implementation.</para>
+
+      <para>A callback implementation effectively can be used for any
+      Hibernate data access. <literal>HibernateTemplate</literal> will ensure
+      that <literal>Session</literal> instances are properly opened and
+      closed, and automatically participate in transactions. The template
+      instances are thread-safe and reusable, they can thus be kept as
+      instance variables of the surrounding class. For simple single step
+      actions like a single Find, Load, SaveOrUpdate, or Delete call,
+      <literal>HibernateTemplate</literal> offers alternative convenience
+      methods that can replace such one line callback implementations.
+      Furthermore, Spring provides a convenient
+      <literal>HibernateDaoSupport</literal> base class that provides a
+      <methodname>SessionFactory</methodname> property for receiving a
+      <literal>SessionFactory</literal> and for use by subclasses. In
+      combination, this allows for very simple DAO implementations for typical
+      requirements:</para>
+
+      <programlisting language="csharp">public class HibernateCustomerDao : HibernateDaoSupport, ICustomerDao
+{
+    public Customer SaveOrUpdate(Customer customer)
     {
-       set { transactionTemplate = new TransactionTemplate(value);
-    }
-    public void ProcessCustomer(string customerId)
-    {
-      tt.Execute(delegate(ITransactionStatus status) 
-          {
-            //Find all orders for customer
-            Customer customer = CustomerDao.FindById(customerId);
-            foreach (Order order in customer.Orders)
-            {
-                //Validate Order
-                Validate(order);
-
-                //Ship with external shipping service
-                ShippingService.ShipOrder(order);
-
-                //Update shipping date
-                order.ShippedDate = DateTime.Now;
-
-                //Update shipment date
-                OrderDao.SaveOrUpdate(order);
-
-                //Other operations...Decrease product quantity... etc
-            }
-            return null;
-          });
+        HibernateTemplate.SaveOrUpdate(customer);
+        return customer;
     }
 }</programlisting>
+    </section>
+
+    <section xml:id="orm-hibernate-daos">
+      <title>Implementing Spring-based DAOs without HibernateTemplate in
+      Hibernate 1.2</title>
+
+      <para>As an alternative to using Spring's
+      <literal>HibernateTemplate</literal> to implement DAOs, data access code
+      can also be written in a more traditional fashion, without wrapping the
+      Hibernate access code in a callback, while still respecting and
+      participating in Spring's generic <literal>DataAccessException</literal>
+      hierarchy. The <literal>HibernateDaoSupport</literal> base class offers
+      methods to access the current transactional <literal>Session</literal>
+      and to convert exceptions in such a scenario; similar methods are also
+      available as static helpers on the
+      <literal>SessionFactoryUtils</literal> class. Note that such code will
+      usually pass '<literal>false</literal>' as the value of the
+      <methodname>DoGetSession(..)</methodname> method's
+      '<literal>allowCreate</literal>' argument, to enforce running within a
+      transaction (which avoids the need to close the returned
+      <literal>Session</literal>, as its lifecycle is managed by the
+      transaction). Asking for the</para>
+
+      <programlisting language="csharp">public class HibernateProductDao : HibernateDaoSupport, IProductDao {
+
+        public Customer SaveOrUpdate(Customer customer)
+        {
+            ISession session = DoGetSession(false);
+            session.SaveOrUpdate(customer);
+            return customer;
+        }
+    }
+}</programlisting>
+
+      <para>This code will <emphasis>not</emphasis> translate the Hibernate
+      exception to a generic <literal>DataAccessException</literal>.</para>
     </section>
 
     <section xml:id="orm-hibernate-tx-declarative">
@@ -926,6 +866,89 @@ public class HibernateCustomerDao : ICustomerDao {
       configuration of other features, such as rollback rules.</para>
     </section>
 
+    <section xml:id="orm-hibernate-tx-programmatic">
+      <title>Programmatic transaction demarcation</title>
+
+      <para>Transactions can be demarcated in a higher level of the
+      application, on top of such lower-level data access services spanning
+      any number of operations. There are no restrictions on the
+      implementation of the surrounding business service here as well, it just
+      needs a Spring <literal>PlatformTransactionManager</literal>. Again, the
+      latter can come from anywhere, but preferably as an object reference via
+      a <methodname>TransactionManager</methodname> property - just like the
+      <literal>productDAO</literal> should be set via a
+      <methodname>setProductDao(..)</methodname> method. The following
+      snippets show a transaction manager and a business service definition in
+      a Spring application context, and an example for a business method
+      implementation.</para>
+
+      <programlisting language="myxml">&lt;objects&gt;
+
+  &lt;object id="TransactionManager"
+        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate"&gt;
+
+    &lt;property name="DbProvider" ref="DbProvider"/&gt;
+    &lt;property name="SessionFactory" ref="MySessionFactory"/&gt;
+
+  &lt;/object&gt;
+
+  &lt;!-- DAO definition not listed, see above for an example. --&gt;
+
+  &lt;object id="FulfillmentService" type="Spring.Northwind.Service.FulfillmentService, Spring.Northwind.Service"&gt;
+    &lt;property name="CustomerDao" ref="CustomerDao"/&gt;
+    &lt;property name="OrderDao" ref="OrderDao"/&gt;
+    &lt;property name="ShippingService" ref="ShippingService"/&gt;
+    &lt;property name="TransactionManager" ref="TransactionManager"/&gt;
+  &lt;/object&gt;
+
+
+&lt;/objects&gt;</programlisting>
+
+      <programlisting language="csharp">public class FulfillmentService : IFulfillmentService
+
+    private TransactionTemplate transactionTemplate;
+
+    private IProductDao productDao;
+
+    private ICustomerDao customerDao;
+
+    private IOrderDao orderDao;
+
+    private IShippingService shippingService;
+
+
+    public TransactionManager TransactionManager
+    {
+       set { transactionTemplate = new TransactionTemplate(value);
+    }
+    public void ProcessCustomer(string customerId)
+    {
+      tt.Execute(delegate(ITransactionStatus status) 
+          {
+            //Find all orders for customer
+            Customer customer = CustomerDao.FindById(customerId);
+            foreach (Order order in customer.Orders)
+            {
+                //Validate Order
+                Validate(order);
+
+                //Ship with external shipping service
+                ShippingService.ShipOrder(order);
+
+                //Update shipping date
+                order.ShippedDate = DateTime.Now;
+
+                //Update shipment date
+                OrderDao.SaveOrUpdate(order);
+
+                //Other operations...Decrease product quantity... etc
+            }
+            return null;
+          });
+    }
+}</programlisting>
+    </section>
+
     <section xml:id="orm-hibernate-tx-strategies">
       <title>Transaction management strategies</title>
 
@@ -1035,9 +1058,10 @@ public class HibernateCustomerDao : ICustomerDao {
     ... do multiple operations with a single session, possibly in multiple transactions.
 }</programlisting>
 
-      <para>At the end of the using block the session is automatically closed.
-      All transactions within the scope use the same session, if you are using
-      Spring's HibernateTemplate or using Spring's implementation of
+      <para>Refer to the API documentation for information on overloaded
+      constructor. At the end of the using block the session is automatically
+      closed. All transactions within the scope use the same session, if you
+      are using Spring's HibernateTemplate or using Spring's implementation of
       NHibernate 1.2's ICurrentSessionContext interface. See other sections in
       this chapter for further information on those usage scenarios.</para>
     </section>

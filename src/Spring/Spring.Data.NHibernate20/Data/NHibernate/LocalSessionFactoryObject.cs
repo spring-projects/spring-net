@@ -88,10 +88,6 @@ namespace Spring.Data.NHibernate
 
 	    private string[] configFilenames;
 
-        /// <summary>
-        /// TODO: consider changing to NamevalueCollection for easier
-        /// cut-n-paste from existing App.config based configurations.
-        /// </summary>
         private IDictionary hibernateProperties;
 
         private IDbProvider dbProvider;

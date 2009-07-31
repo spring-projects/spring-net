@@ -33,7 +33,7 @@ using Spring.Objects.Factory;
 namespace Spring.Data.NHibernate.Bytecode
 {
     /// <summary>
-    /// 
+    /// Bytecode provider using Spring Proxy
     /// </summary>
     /// <author>Fabio Maulo</author>
     public class BytecodeProvider : IBytecodeProvider
