@@ -66,6 +66,12 @@
         -->
     </object>
 
+    <!-- Spring based defualt file fallback to spring definition -->
+    <object id="springFallbackVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" >
+        <property name="ResourceLoaderPath " value="assembly://Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.Template.Velocity/" />
+    </object>
+
+
     <!-- Configuration comes from a properties file -->
     <object id="propertiesFileBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" >
         <property name="ConfigLocation " value="file://Template/Velocity/config.properties" />

@@ -134,8 +134,9 @@ string mergedContent = stringWriter.ToString();</programlisting>
               <entry>
                 <para>Instructs the NVelocity engine factory to attempt use
                 NVelocity's file loader. When set to false the provided
-                <literal>SpringResourceLoader</literal> will be used (and the <literal>ResourceLoaderPath</literal>
-                property must be set)</para>
+                <literal>SpringResourceLoader</literal> will be used (and the
+                <literal>ResourceLoaderPath</literal> property must be
+                set)</para>
               </entry>
 
               <entry>no</entry>
@@ -148,7 +149,7 @@ string mergedContent = stringWriter.ToString();</programlisting>
 
               <entry>
                 <para>Instructs the NVelocity engine factory to use the
-                provided spring commons logging based logging system. See See
+                provided spring commons logging based logging system. See
                 <xref
                 linkend="templating-nvelocity-resource-logging" /></para>
               </entry>
@@ -208,12 +209,12 @@ string mergedContent = stringWriter.ToString();</programlisting>
 </programlisting>
 
       <note>
-        <para>By default spring will attempt to load resources using NVelocity's
-      file based template loading (useful for detection of template changes at
-      runtime). If this is not desirable you set the
-      <literal>prefer-file-system-access</literal> property of the factory object
-      to <literal>false</literal> which will cause the factory to utilize the supplied
-      spring resource loader.</para>
+        <para>By default spring will attempt to load resources using
+        NVelocity's file based template loading (useful for detection of
+        template changes at runtime). If this is not desirable you set the
+        <literal>prefer-file-system-access</literal> property of the factory
+        object to <literal>false</literal> which will cause the factory to
+        utilize the supplied spring resource loader.</para>
       </note>
 
       <para>Using the example above when resource loader paths are defined
@@ -435,8 +436,8 @@ string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngi
       file based template loading (useful for detection of template changes at
       runtime). If this is not desirable you set the
       <literal>preferFileSystemAccess</literal> property of the factory object
-      to <literal>false</literal> which will cause the factory to utilize the supplied
-      spring resource loader.</para>
+      to <literal>false</literal> which will cause the factory to utilize the
+      supplied spring resource loader.</para>
     </note>
 
     <para>To refer to a property file based configuration of the

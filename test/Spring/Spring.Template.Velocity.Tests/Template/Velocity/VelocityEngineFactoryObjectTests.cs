@@ -21,8 +21,11 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 using NUnit.Framework;
 using NVelocity.App;
+using NVelocity.Exception;
 
 #endregion
 
@@ -53,6 +56,14 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
             VelocityEngine velocityEngine = appContext.GetObject("fileBasedVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
             AssertMergedValue(velocityEngine, "Template/Velocity/SimpleTemplate.vm");
+
+            try {
+                VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, "NoneExistingFile", Encoding.UTF8.WebName, model);
+                throw new TestException(
+                    "Merge using non existing file should throw exception");
+            } catch (Exception ex) {
+                Assert.IsTrue(ex is VelocityException, "Illegal merge should throw VelocityException");
+            }
         }
 
         /// <summary>
@@ -73,6 +84,18 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
         public void TestMergeUsingResourceLoaderPath() {
             VelocityEngine velocityEngine =
                 appContext.GetObject("pathBasedVelocityEngine") as VelocityEngine;
+            Assert.IsNotNull(velocityEngine, "velocityEngine is null");
+            AssertMergedValue(velocityEngine, "SimpleTemplate.vm");
+        }  
+        
+        /// <summary>
+        /// Test using definition of ResourceLoaderPath (file-based configuration) falling back from velocity
+        /// file-base to spring-based (prefer-file-system-access one but resource path is string compliant)
+        /// </summary>
+        [Test]
+        public void TestMergeUsingResourceLoaderPathFallback() {
+            VelocityEngine velocityEngine =
+                appContext.GetObject("springFallbackVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
             AssertMergedValue(velocityEngine, "SimpleTemplate.vm");
         }
@@ -99,6 +122,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
             AssertMergedValue(velocityEngine, "SimpleTemplate.vm");
         }
 
+
         /// <summary>
         /// Test using invalid configuration
         /// </summary>
@@ -114,6 +138,41 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
             } catch (ArgumentException) {
                 Assert.IsNull(velocityEngine, "velocityEngine should be null");
             }
+
+            // no resource loader with spring
+            velocityEngineFactory = new VelocityEngineFactory();
+            velocityEngineFactory.ResourceLoader = null;
+            velocityEngineFactory.PreferFileSystemAccess = false;
+            try {
+                velocityEngineFactory.CreateVelocityEngine();
+                throw new TestException(
+                    "Should not be able to construct VelocityEngineFactory with null ResourceLoader");
+            } catch (ArgumentException) {
+                Assert.IsNull(velocityEngine, "velocityEngine should be null");
+            }
+
+            // no resource loader path with spring
+            velocityEngineFactory = new VelocityEngineFactory();
+            velocityEngineFactory.ResourceLoaderPaths = new List<string>();
+            velocityEngineFactory.PreferFileSystemAccess = false;
+            try {
+                velocityEngineFactory.CreateVelocityEngine();
+                throw new TestException(
+                    "Should not be able to construct VelocityEngineFactory with empty resource loader path list");
+            } catch (ArgumentException) {
+                Assert.IsNull(velocityEngine, "velocityEngine should be null");
+            }
         }
+
+        [Test]
+        public void TestLogging(){
+            VelocityEngine velocityEngine = new VelocityEngineFactoryObject().CreateVelocityEngine();
+            velocityEngine.Info("test");
+            velocityEngine.Debug("test");
+            velocityEngine.Warn("test");
+            velocityEngine.Error("test");
+        }
+
+
     }
 }

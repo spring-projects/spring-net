@@ -22,7 +22,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Common.Logging;
 using Commons.Collections;
 using NVelocity.App;
@@ -290,11 +289,12 @@ namespace Spring.Template.Velocity {
                 // Try to load via the file system, fall back to SpringResourceLoader
                 // (for hot detection of template changes, if possible).
                 IList resolvedPaths = new ArrayList();
-                foreach (string path in paths) {
-                    IResource resource = ResourceLoader.GetResource(path);
-                    resolvedPaths.Add(resource.File.FullName);
-                }
                 try {
+                    foreach (string path in paths) {
+                        IResource resource = ResourceLoader.GetResource(path);
+                        resolvedPaths.Add(resource.File.FullName);
+                    }
+
                     extendedProperties.SetProperty(RuntimeConstants.RESOURCE_LOADER, VelocityConstants.File);
                     extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, 
                         StringUtils.CollectionToCommaDelimitedString(resolvedPaths));
