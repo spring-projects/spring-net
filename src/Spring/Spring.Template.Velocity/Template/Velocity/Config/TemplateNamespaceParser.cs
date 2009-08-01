@@ -21,9 +21,11 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using NVelocity.Runtime;
+using NVelocity.Runtime.Resource.Loader;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
@@ -46,6 +48,7 @@ namespace Spring.Template.Velocity.Config {
     ]
     public sealed class TemplateNamespaceParser : AbstractSingleObjectDefinitionParser {
         private const string TemplateTypePrefix = "template: ";
+        private static readonly ObjectNamespaceParserHelper objectNamespaceParserHelper = new ObjectNamespaceParserHelper();
 
         static TemplateNamespaceParser() {
             TypeRegistry.RegisterType(TemplateTypePrefix + TemplateDefinitionConstants.NVelocityElement, typeof(VelocityEngineFactoryObject));
@@ -58,134 +61,369 @@ namespace Spring.Template.Velocity.Config {
         }
 
         /// <summary>
-        /// 
+        /// Parses single object definition for the templating namespace
         /// </summary>
-        /// <param name="element"></param>
-        /// <param name="parserContext"></param>
-        /// <param name="builder"></param>
+        /// <param name="element">the current XmlElement to parse</param>
+        /// <param name="parserContext">the parser context</param>
+        /// <param name="builder">the ObjectDefinitionBuilder used to configure this object</param>
+        /// <see cref="AbstractSingleObjectDefinitionParser"/>
         protected override void DoParse(XmlElement element, ParserContext parserContext, ObjectDefinitionBuilder builder) {
             switch (element.LocalName) {
                 case TemplateDefinitionConstants.NVelocityElement:
-                    ParseNVelocityTemplate(element, parserContext, builder);
+                    ParseNVelocityEngine(element, parserContext, builder);
                     return;
                 default:
                     throw new ArgumentException(string.Format("undefined element for templating namespace: {0}", element.LocalName));
             }
         }
 
-        private void ParseNVelocityTemplate(XmlElement element, ParserContext parseContext, ObjectDefinitionBuilder builder) {
+        /// <summary>
+        /// Parses the object definition for the engine object, configures a single NVelocity template engine based 
+        /// on the element definitions.
+        /// </summary>
+        /// <param name="element">the root element defining the velocity engine</param>
+        /// <param name="parserContext">the parser context</param>
+        /// <param name="builder">the ObjectDefinitionBuilder used to configure this object</param>
+        private void ParseNVelocityEngine(XmlElement element, ParserContext parserContext, ObjectDefinitionBuilder builder) {
             string preferFileSystemAccess = GetAttributeValue(element, TemplateDefinitionConstants.AttributePreferFileSystemAccess);
             string overrideLogging = GetAttributeValue(element, TemplateDefinitionConstants.AttributeOverrideLogging);
             string configFile = GetAttributeValue(element, TemplateDefinitionConstants.AttributeConfigFile);
 
             if (StringUtils.HasText(preferFileSystemAccess)) {
-                builder.AddPropertyValue(NVelocityEngineFactoryProperties.PropertyPreferFileSystemAccess, preferFileSystemAccess);
+                builder.AddPropertyValue(TemplateDefinitionConstants.PropertyPreferFileSystemAccess, preferFileSystemAccess);
             }
 
             if (StringUtils.HasText(overrideLogging)) {
-                builder.AddPropertyValue(NVelocityEngineFactoryProperties.PropertyOverrideLogging, overrideLogging);
+                builder.AddPropertyValue(TemplateDefinitionConstants.PropertyOverrideLogging, overrideLogging);
             }
 
             if (StringUtils.HasText(configFile)) {
-                builder.AddPropertyValue(NVelocityEngineFactoryProperties.PropertyConfigFile, configFile);
+                builder.AddPropertyValue(TemplateDefinitionConstants.PropertyConfigFile, configFile);
             }
 
             XmlNodeList childElements = element.ChildNodes;
             if (childElements.Count > 0) {
-                ParseChildDefinitions(childElements, parseContext, builder);
+                ParseChildDefinitions(childElements, parserContext, builder);
             }
         }
 
-        private void ParseChildDefinitions(XmlNodeList childElements, ParserContext context, ObjectDefinitionBuilder builder) {
+        /// <summary>
+        /// Parses child element definitions for the NVelocity engine. Typically resource loaders and locally defined properties are parsed here
+        /// </summary>
+        /// <param name="childElements">the XmlNodeList representing the child configuration of the root NVelocity engine element</param>
+        /// <param name="parserContext">the parser context</param>
+        /// <param name="builder">the ObjectDefinitionBuilder used to configure this object</param>
+        private void ParseChildDefinitions(XmlNodeList childElements, ParserContext parserContext, ObjectDefinitionBuilder builder) {
             IDictionary<string, object> properties = new Dictionary<string, object>();
 
             foreach (XmlElement element in childElements) {
                 switch (element.LocalName) {
                     case TemplateDefinitionConstants.ElementResourceLoader:
-                        ParseResourceLoader(element, context, builder, properties);
+                        ParseResourceLoader(element, builder, properties);
                         break;
                     case TemplateDefinitionConstants.ElementNVelocityProperties:
-                        ParseNVelocityProperties(element, properties);
+                        ParseNVelocityProperties(element, parserContext, properties);
                         break;
                 }
             }
 
             if (properties.Count > 0) {
-                builder.AddPropertyValue(NVelocityEngineFactoryProperties.PropertyVelocityProperties, properties);
+                builder.AddPropertyValue(TemplateDefinitionConstants.PropertyVelocityProperties, properties);
             }
         }
 
-        private void ParseResourceLoader(XmlElement element, ParserContext context, ObjectDefinitionBuilder builder, IDictionary<string, object> properties) {
-            string loaderTypeDefinition = GetAttributeValue(element, TemplateDefinitionConstants.AttributeLoaderType);
+        /// <summary>
+        /// Configures the NVelocity resource loader definitions from the xml definition
+        /// </summary>
+        /// <param name="element">the root resource loader element</param>
+        /// <param name="builder">the ObjectDefinitionBuilder used to configure this object</param>
+        /// <param name="properties">the properties used to initialize the velocity engine</param>
+        private void ParseResourceLoader(XmlElement element, ObjectDefinitionBuilder builder, IDictionary<string, object> properties) {
+            string caching = GetAttributeValue(element, TemplateDefinitionConstants.AttributeTemplateCaching);
+            string defaultCacheSize = GetAttributeValue(element, TemplateDefinitionConstants.AttributeDefaultCacheSize);
+            string modificationCheckInterval = GetAttributeValue(element, TemplateDefinitionConstants.AttributeModificationCheckInterval);
+
+            if (!string.IsNullOrEmpty(defaultCacheSize)) {
+                properties.Add(RuntimeConstants.RESOURCE_MANAGER_DEFAULTCACHE_SIZE, defaultCacheSize);
+            }
+
             XmlNodeList loaderElements = element.ChildNodes;
-            foreach (XmlElement loaderElement in loaderElements) {
-                switch (loaderElement.LocalName) {
-                    case TemplateDefinitionConstants.ElementResourceLoaderFile:
-                        AppendResourceLoaderPaths(loaderElements, builder);
-                        break;
-                    case TemplateDefinitionConstants.ElementResourceLoaderAssembly:
-                        AppendAssemblyLoaderProperties((XmlElement)loaderElements.Item(0), properties, loaderTypeDefinition);
-                        break;
-                }
+            switch (loaderElements[0].LocalName) {
+                case VelocityConstants.File:
+                    AppendFileLoaderProperties(loaderElements, properties);
+                    AppendResourceLoaderGlobalProperties(properties, VelocityConstants.File, caching,
+                                                         modificationCheckInterval);
+                    break;
+                case VelocityConstants.Assembly:
+                    AppendAssemblyLoaderProperties(loaderElements, properties);
+                    AppendResourceLoaderGlobalProperties(properties, VelocityConstants.Assembly, caching, null);
+                    break;
+                case TemplateDefinitionConstants.Spring:
+                    AppendResourceLoaderPaths(loaderElements, builder);
+                    AppendResourceLoaderGlobalProperties(properties, TemplateDefinitionConstants.Spring, caching, null);
+                    break;
+                case TemplateDefinitionConstants.Custom:
+                    XmlElement firstElement = (XmlElement)loaderElements.Item(0);
+                    AppendCustomLoaderProperties(firstElement, properties);
+                    AppendResourceLoaderGlobalProperties(properties, firstElement.LocalName, caching, modificationCheckInterval);
+                    break;
+                default:
+                    throw new ArgumentException(string.Format("undefined element for resource loadre type: {0}", element.LocalName));
             }
-
         }
 
-        private void AppendAssemblyLoaderProperties(XmlElement element, IDictionary<string, object> properties, string loaderTypeDefinition) {
-            string assemblyName = GetAttributeValue(element, TemplateDefinitionConstants.AttributeName);
-            string loaderType = (StringUtils.HasText(loaderTypeDefinition))
-                                    ? loaderTypeDefinition
-                                    : "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader";
-            properties.Add(RuntimeConstants.RESOURCE_LOADER, element.LocalName);
-            properties.Add(element.LocalName + "." + RuntimeConstants.RESOURCE_LOADER + ".class", loaderType);
-            properties.Add(element.LocalName + "." + RuntimeConstants.RESOURCE_LOADER + ".assembly", assemblyName);
+
+        /// <summary>
+        /// Set the caching and modification interval checking properties of a resource loader of a given type
+        /// </summary>
+        /// <param name="properties">the properties used to initialize the velocity engine</param>
+        /// <param name="type">type of the resource loader</param>
+        /// <param name="caching">caching flag</param>
+        /// <param name="modificationInterval">modification interval value</param>
+        private void AppendResourceLoaderGlobalProperties(IDictionary<string, object> properties, string type, string caching, string modificationInterval) {
+            AppendResourceLoaderGlobalProperty(properties, type,
+                                                 TemplateDefinitionConstants.PropertyResourceLoaderCaching,
+                                                 Convert.ToBoolean(caching));
+            AppendResourceLoaderGlobalProperty
+                (properties, type, TemplateDefinitionConstants.PropertyResourceLoaderModificationCheckInterval, Convert.ToInt64(modificationInterval));
         }
 
+        /// <summary>
+        /// Set global velocity resource loader properties (caching, modification interval etc.)
+        /// </summary>
+        /// <param name="properties">the properties used to initialize the velocity engine</param>
+        /// <param name="type">the type of resource loader</param>
+        /// <param name="property">the suffix property</param>
+        /// <param name="value">the value of the property</param>
+        private void AppendResourceLoaderGlobalProperty(IDictionary<string, object> properties, string type, string property, object value) {
+            if (null != value) {
+                properties.Add(type + VelocityConstants.Separator + property, value);
+            }
+        }
+
+        /// <summary>
+        /// Creates a nvelocity file based resource loader by setting the required properties
+        /// </summary>
+        /// <param name="elements">a list of nv:file elements defining the paths to template files</param>
+        /// <param name="properties">the properties used to initialize the velocity engine</param>
+        private void AppendFileLoaderProperties(XmlNodeList elements, IDictionary<string, object> properties) {
+            IList paths = new List<string>(elements.Count);
+            foreach (XmlElement element in elements) {
+                paths.Add(GetAttributeValue(element, VelocityConstants.Path));
+            }
+            properties.Add(RuntimeConstants.RESOURCE_LOADER, VelocityConstants.File);
+            properties.Add(getResourceLoaderProperty(VelocityConstants.File, VelocityConstants.Class), TemplateDefinitionConstants.FileResourceLoaderClass);
+            properties.Add(getResourceLoaderProperty(VelocityConstants.File, VelocityConstants.Path), StringUtils.CollectionToCommaDelimitedString(paths));
+        }
+
+        /// <summary>
+        /// Creates a nvelocity assembly based resource loader by setting the required properties
+        /// </summary>
+        /// <param name="elements">a list of nv:assembly elements defining the assemblies</param>
+        /// <param name="properties">the properties used to initialize the velocity engine</param>
+        private void AppendAssemblyLoaderProperties(XmlNodeList elements, IDictionary<string, object> properties) {
+            IList assemblies = new List<string>(elements.Count);
+            foreach (XmlElement element in elements) {
+                assemblies.Add(GetAttributeValue(element, VelocityConstants.Name));
+            }
+            properties.Add(RuntimeConstants.RESOURCE_LOADER, VelocityConstants.Assembly);
+            properties.Add(getResourceLoaderProperty(VelocityConstants.Assembly, VelocityConstants.Class), TemplateDefinitionConstants.AssemblyResourceLoaderClass);
+            properties.Add(getResourceLoaderProperty(VelocityConstants.Assembly, VelocityConstants.Assembly), StringUtils.CollectionToCommaDelimitedString(assemblies));
+        }
+
+        /// <summary>
+        /// Creates a spring resource loader by setting the ResourceLoaderPaths of the
+        /// engine factory (the resource loader itself will be created internally either as 
+        /// spring or as file resource loader based on the value of prefer-file-system-access
+        /// attribute).
+        /// </summary>
+        /// <param name="elements">list of resource loader path elements</param>
+        /// <param name="builder">the object definiton builder to set the property for the engine factory</param>
         private void AppendResourceLoaderPaths(XmlNodeList elements, ObjectDefinitionBuilder builder) {
             IList<string> paths = new List<string>();
             foreach (XmlElement element in elements) {
-                string path = GetAttributeValue(element, TemplateDefinitionConstants.AttributePath);
+                string path = GetAttributeValue(element, TemplateDefinitionConstants.AttributeUri);
                 paths.Add(path);
             }
-            builder.AddPropertyValue(NVelocityEngineFactoryProperties.PropertyResourceLoaderPaths, paths);
+            builder.AddPropertyValue(TemplateDefinitionConstants.PropertyResourceLoaderPaths, paths);
         }
 
-
-        private void ParseNVelocityProperties(XmlElement element, IDictionary<string, object> dictionary) {
-            // todo add impl
+        /// <summary>
+        /// Create a custom resource loader from an nv:custom element 
+        /// generates the 4 required nvelocity props for a resource loader (name, description, class and path).
+        /// </summary>
+        /// <param name="element">the nv:custom xml definition element</param>
+        /// <param name="properties">the properties used to initialize the velocity engine</param>
+        private void AppendCustomLoaderProperties(XmlElement element, IDictionary<string, object> properties) {
+            string name = GetAttributeValue(element, VelocityConstants.Name);
+            string description = GetAttributeValue(element, VelocityConstants.Description);
+            string type = GetAttributeValue(element, VelocityConstants.Type);
+            string path = GetAttributeValue(element, VelocityConstants.Path);
+            properties.Add(RuntimeConstants.RESOURCE_LOADER, name);
+            properties.Add(getResourceLoaderProperty(name, VelocityConstants.Description), description);
+            properties.Add(getResourceLoaderProperty(name, VelocityConstants.Class), type.Replace(',', ';'));
+            properties.Add(getResourceLoaderProperty(name, VelocityConstants.Path), path);
         }
 
-
-        protected override string GetObjectTypeName(XmlElement element) {
-            string typeName = GetAttributeValue(element, ObjectDefinitionConstants.TypeAttribute);
-            if (StringUtils.IsNullOrEmpty(typeName)) {
-                return TemplateTypePrefix + element.LocalName;
+        /// <summary>
+        /// Parses the nvelocity properties map using <code>ObjectNamespaceParserHelper</code> 
+        /// and appends it to the properties dictionary
+        /// </summary>
+        /// <param name="element">root element of the map element</param>
+        /// <param name="parserContext">the parser context</param>
+        /// <param name="properties">the properties used to initialize the velocity engine</param>
+        private void ParseNVelocityProperties(XmlElement element, ParserContext parserContext, IDictionary<string, object> properties) {
+            IDictionary parsedProperties = objectNamespaceParserHelper.ParseDictionaryElementInternal(element, "NVelocityProperties", parserContext);
+            foreach (DictionaryEntry entry in parsedProperties) {
+                properties.Add(Convert.ToString(entry.Key), entry.Value);
             }
-            return typeName;
         }
 
+        /// <summary>
+        /// construct the element type name (e.g, nv:engine, nv:resource-loader)
+        /// </summary>
+        /// <param name="element">the current xml element</param>
+        protected override string GetObjectTypeName(XmlElement element) {
+            return TemplateTypePrefix + element.LocalName;
+        }
+
+
+        /// <summary>
+        /// Helper class to access the ParseDictionaryElement of the ObjectsNamespaceParser
+        /// todo: remove this and externalize the logic in ObjectsNamespaceParser.ParseDictionaryElement
+        /// </summary>
+        internal sealed class ObjectNamespaceParserHelper : ObjectsNamespaceParser {
+            public IDictionary ParseDictionaryElementInternal(XmlElement element, string name, ParserContext parserContext) {
+                return ParseDictionaryElement(element, name, parserContext);
+            }
+        }
+
+        /// <summary>
+        /// constructs an nvelocity style resource loader property in the format:
+        /// prefix.resource.loader.suffix
+        /// </summary>
+        /// <param name="type">the prefix</param>
+        /// <param name="suffix">the suffix</param>
+        /// <returns>a concatenated string like: prefix.resource.loader.suffix</returns>
+        public static string getResourceLoaderProperty(string type, string suffix) {
+            return type + VelocityConstants.Separator + RuntimeConstants.RESOURCE_LOADER + VelocityConstants.Separator +
+                   suffix;
+        }
         #region Element & Attribute Name Constants
 
-        private class TemplateDefinitionConstants {
+        /// <summary>
+        /// Template definition constants
+        /// </summary>
+        public class TemplateDefinitionConstants {
+            /// <summary>
+            /// Engine element definition
+            /// </summary>
             public const string NVelocityElement = "engine";
-            public const string AttributePreferFileSystemAccess = "prefer-file-system-access";
-            public const string AttributeConfigFile = "config-file";
-            public const string AttributeOverrideLogging = "override-logging";
-            public const string AttributeLoaderType = "loader-type";
-            public const string ElementResourceLoader = "resource-loader";
-            public const string ElementResourceLoaderFile = "file";
-            public const string ElementResourceLoaderAssembly = "assembly";
-            public const string ElementNVelocityProperties = "nvelocity-properties";
-            public const string AttributeName = "name";
-            public const string AttributePath = "path";
-        }
 
-        private class NVelocityEngineFactoryProperties {
+            /// <summary>
+            /// Spring resource loader element definition
+            /// </summary>
+            public const string Spring = "spring";
+
+            /// <summary>
+            /// Custom resource loader element definition
+            /// </summary>
+            public const string Custom = "custom";
+
+            /// <summary>
+            /// uri attribute of the spring element
+            /// </summary>
+            public const string AttributeUri = "uri";
+
+            /// <summary>
+            /// prefer-file-system-access attribute of the engine factory
+            /// </summary>
+            public const string AttributePreferFileSystemAccess = "prefer-file-system-access";
+
+            /// <summary>
+            /// config-file attribute of the engine factory
+            /// </summary>
+            public const string AttributeConfigFile = "config-file";
+
+            /// <summary>
+            /// override-logging attribute of the engine factory
+            /// </summary>
+            public const string AttributeOverrideLogging = "override-logging";
+
+            /// <summary>
+            /// template-caching attribute of the nvelocity engine
+            /// </summary>
+            public const string AttributeTemplateCaching = "template-caching";
+
+            /// <summary>
+            /// default-cache-size attribute of the nvelocity engine resource manager
+            /// </summary>
+            public const string AttributeDefaultCacheSize = "default-cache-size";
+
+            /// <summary>
+            /// modification-check-interval attribute of the nvelocity engine resource loader
+            /// </summary>
+            public const string AttributeModificationCheckInterval = "modification-check-interval";
+
+            /// <summary>
+            /// resource loader element
+            /// </summary>
+            public const string ElementResourceLoader = "resource-loader";
+
+            /// <summary>
+            /// nvelocity propeties element (map)
+            /// </summary>
+            public const string ElementNVelocityProperties = "nvelocity-properties";
+
+            /// <summary>
+            /// PreferFileSystemAccess property of the engine factory
+            /// </summary>
             public const string PropertyPreferFileSystemAccess = "PreferFileSystemAccess";
+
+            /// <summary>
+            /// OverrideLogging property of the engine factory
+            /// </summary>
             public const string PropertyOverrideLogging = "OverrideLogging";
+
+            /// <summary>
+            /// ConfigLocation property of the engine factory
+            /// </summary>
             public const string PropertyConfigFile = "ConfigLocation";
+
+            /// <summary>
+            /// ResourceLoaderPaths property of the engine factory
+            /// </summary>
             public const string PropertyResourceLoaderPaths = "ResourceLoaderPaths";
+
+            /// <summary>
+            /// VelocityProperties property of the engine factory
+            /// </summary>
             public const string PropertyVelocityProperties = "VelocityProperties";
+
+            /// <summary>
+            /// resource.loader.cache property of the resource loader configuration 
+            /// </summary>
+            public const string PropertyResourceLoaderCaching = "resource.loader.cache";
+
+            /// <summary>
+            /// resource.loader.modificationCheckInterval property of the resource loader configuration 
+            /// </summary>
+            public const string PropertyResourceLoaderModificationCheckInterval = "resource.loader.modificationCheckInterval";
+
+            /// <summary>
+            /// the type used for file resource loader
+            /// </summary>
+            public const string FileResourceLoaderClass = "NVelocity.Runtime.Resource.Loader.FileResourceLoader; NVelocity";
+
+            /// <summary>
+            /// the type used for assembly resource loader
+            /// </summary>
+            public const string AssemblyResourceLoaderClass = "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader; NVelocity";
+
+            /// <summary>
+            /// the type used for spring resource loader
+            /// </summary>
+            public const string SpringResourceLoaderClass = "Spring.Template.Velocity.SpringResourceLoader; Spring.Template.Velocity";
         }
         #endregion
     }

@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Template\Velocity\Config\TemplateNamespaceParserTests.cs" />
     <Compile Include="Template\Velocity\VelocityEngineFactoryObjectTests.cs" />
+    <Compile Include="Template\Velocity\VelocityEngineTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">
@@ -75,6 +77,8 @@
     <None Include="Template\Velocity\config.properties">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Template\Velocity\EmbeddedTemplate.vm">
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

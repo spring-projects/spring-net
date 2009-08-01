@@ -50,7 +50,8 @@
         <xsd:attribute name="config-file" use="optional">
             <xsd:simpleType>
                 <xsd:annotation>
-                    <xsd:documentation><![CDATA[Optional location of a properties file defining the NVelocity configuration.]]></xsd:documentation>
+                    <xsd:documentation><![CDATA[Optional location of a properties file defining the 
+                    NVelocity configuration.]]></xsd:documentation>
                 </xsd:annotation>
                 <xsd:restriction base="objects:nonNullString"/>
             </xsd:simpleType>
@@ -58,7 +59,8 @@
         <xsd:attribute name="prefer-file-system-access" use="optional" default="true">
             <xsd:simpleType>
                 <xsd:annotation>
-                    <xsd:documentation><![CDATA[Optional. Instructs the NVelocity engine factory to attempt use NVelocity's file loader with hot tracking.]]></xsd:documentation>
+                    <xsd:documentation><![CDATA[Optional. Instructs the NVelocity engine factory to 
+                    attempt use NVelocity's file loader with hot tracking.]]></xsd:documentation>
                 </xsd:annotation>
                 <xsd:restriction base="xsd:boolean"/>
             </xsd:simpleType>
@@ -66,7 +68,8 @@
         <xsd:attribute name="override-logging" use="optional" default="true">
             <xsd:simpleType>
                 <xsd:annotation>
-                    <xsd:documentation><![CDATA[Optional. Instructs the NVelocity engine factory to use the provided spring commons logging based logging system.]]></xsd:documentation>
+                    <xsd:documentation><![CDATA[Optional. Instructs the NVelocity engine factory to use the provided 
+                    spring commons logging based logging system.]]></xsd:documentation>
                 </xsd:annotation>
                 <xsd:restriction base="xsd:boolean"/>
             </xsd:simpleType>
@@ -79,9 +82,10 @@
             <xsd:documentation><![CDATA[Defines Assembly based template loader.]]></xsd:documentation>
         </xsd:annotation>
         <xsd:choice>
-            <xsd:element name="assembly" minOccurs="1" maxOccurs="1">
+            <xsd:element name="assembly" minOccurs="1" maxOccurs="unbounded">
                 <xsd:annotation>
-                    <xsd:documentation><![CDATA[The assembly where templates reside.]]></xsd:documentation>
+                    <xsd:documentation><![CDATA[An assembly based resource loader, when used 
+                    NVelocity's AssemblyResourceLoader will be used.]]></xsd:documentation>
                 </xsd:annotation>
                 <xsd:complexType>
                     <xsd:attribute name="name" type="objects:nonNullString" use="required">
@@ -94,7 +98,8 @@
             </xsd:element>
             <xsd:element name="file" minOccurs="1" maxOccurs="unbounded">
                 <xsd:annotation>
-                    <xsd:documentation><![CDATA[The location of the template files.]]></xsd:documentation>
+                    <xsd:documentation><![CDATA[A file based resource loader, when used NVelocity's 
+                    FileResourceLoader will be used.]]></xsd:documentation>
                 </xsd:annotation>
                 <xsd:complexType>
                     <xsd:attribute name="path" type="objects:nonNullString" use="required">
@@ -104,14 +109,73 @@
                     </xsd:attribute>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="spring" minOccurs="1" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[A spring resource loader based on spring's resource abstraction. 
+                    When used detection of template changes is disabled]]></xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="uri" type="objects:nonNullString" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[A fully qualified spring resource locator 
+                            (e.g., file://, assembly://, http://) uri]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="custom" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[A custom resource loader.]]></xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="name" type="objects:nonNullString" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[A logical name (resource.loader property) for the resource loader 
+                            (e.g., custom), cannot contain whitespace.]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="description" type="objects:nonNullString" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[Description (<name>.loader.description property) of the resource loader]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="type" type="objects:nonNullString" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[The type (<name>.resource.loader.class property) of the resource loader]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="path" type="objects:nonNullString" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[The paths (<name>.resource.loader.path property) of the resource loader]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
         </xsd:choice>
-        <xsd:attribute name="loader-type" type="objects:nonNullString" use="optional">
+        <xsd:attribute name="default-cache-size" type="xsd:integer" use="optional">
             <xsd:annotation>
-                <xsd:documentation><![CDATA[Optional. The NVelocity.Runtime.Resource.Loader.ResourceLoader extension class used to load the files. By default a file based resource loader is used (unless prefer-file-system-access is set to false)]]></xsd:documentation>
+                <xsd:documentation>
+                    <![CDATA[Optional (default is 89, resource.manager.defaultcache.size property), 
+                    defines resource manager global cache size
+                    applies when caching is turned on]]>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="template-caching" type="xsd:boolean" use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <![CDATA[Enabled or disables template caching 
+                (<name>.resource.loader.cache property) of the resource loader).]]>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="modification-check-interval" type="xsd:integer" use="optional">
+            <xsd:annotation>
+                <xsd:documentation><![CDATA[The modification check interval value 
+                (<name>.resource.loader.modificationCheckInterval property) of the resource loader, 
+                applies only to resource loader with change detection capabilities (file or custom)]]></xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
     </xsd:complexType>
-
-
     <xsd:element name="engine" type="nvelocityTemplate" />
 </xsd:schema>

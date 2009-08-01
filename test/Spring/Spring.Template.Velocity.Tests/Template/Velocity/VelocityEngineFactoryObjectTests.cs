@@ -21,42 +21,20 @@
 #region Imports
 
 using System;
-using System.Collections;
-using System.Text;
 using NUnit.Framework;
 using NVelocity.App;
-using Spring.Context.Support;
-using Spring.Objects.Factory.Xml;
 
 #endregion
 
 namespace Spring.Template.Velocity.Tests.Template.Velocity {
+
     /// <summary>
     /// This class contains tests for VelocityEngineFactoryObject
     /// </summary>
     /// <author>Mark Pollack</author>
     /// <author>Erez Mazor</author>
     [TestFixture]
-    public class VelocityEngineFactoryObjectTests {
-        private const string TEST_VALUE = "TEST_VALUE";
-        private XmlApplicationContext appContext;
-        private readonly Hashtable model = new Hashtable();
-
-        [SetUp]
-        public void Setup() {
-            appContext = new XmlApplicationContext(false,
-                                                                          ReadOnlyXmlTestResource.GetFilePath(
-                                                                              "VelocityEngineFactoryObjectTests.xml",
-                                                                              typeof(VelocityEngineFactoryObjectTests)));
-            model.Add("var1", TEST_VALUE);
-        }
-
-        [TearDown]
-        public void TearDown() {
-            appContext.Dispose();
-            model.Clear();
-        }
-
+    public class VelocityEngineFactoryObjectTests : VelocityEngineTestBase {
         /// <summary>
         /// Test the assemblyBasedVelocityEngine bean configuration from VelocityEngineFactoryObjectTests.xml
         /// </summary>
@@ -64,9 +42,8 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
         public void TestMergeUsingAssembly() {
             VelocityEngine velocityEngine = appContext.GetObject("assemblyBasedVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
-            string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, "Spring.Template.Velocity.Tests.Template.Velocity.SimpleTemplate.vm", Encoding.UTF8.WebName, model);
-            Assert.AreEqual(string.Format("value={0}", TEST_VALUE), mergedTemplate);
-        }
+            AssertMergedValue(velocityEngine, "Spring.Template.Velocity.Tests.Template.Velocity.SimpleTemplate.vm");
+         }
 
         /// <summary>
         /// Test the fileBasedVelocityEngine bean configuration from VelocityEngineFactoryObjectTests.xml
@@ -75,9 +52,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
         public void TestMergeUsingFile() {
             VelocityEngine velocityEngine = appContext.GetObject("fileBasedVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
-            string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(
-                velocityEngine, "Template/Velocity/SimpleTemplate.vm", Encoding.UTF8.WebName, model);
-            Assert.AreEqual(string.Format("value={0}", TEST_VALUE), mergedTemplate);
+            AssertMergedValue(velocityEngine, "Template/Velocity/SimpleTemplate.vm");
         }
 
         /// <summary>
@@ -86,11 +61,9 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
         [Test]
         public void TestMergeUsingCustomNamespaceDefinition() {
             VelocityEngine velocityEngine =
-                appContext.GetObject("customNamespaceVelocityTemplate") as VelocityEngine;
+                appContext.GetObject("cnFileVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
-            string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, "SimpleTemplate.vm",
-                                                                                Encoding.UTF8.WebName, model);
-            Assert.AreEqual(string.Format("value={0}", "TEST_VALUE"), mergedTemplate);
+            AssertMergedValue(velocityEngine, "SimpleTemplate.vm");
         }
 
         /// <summary>
@@ -101,9 +74,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
             VelocityEngine velocityEngine =
                 appContext.GetObject("pathBasedVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
-            string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, "SimpleTemplate.vm",
-                                                                                Encoding.UTF8.WebName, model);
-            Assert.AreEqual(string.Format("value={0}", "TEST_VALUE"), mergedTemplate);
+            AssertMergedValue(velocityEngine, "SimpleTemplate.vm");
         }
 
         /// <summary>
@@ -114,10 +85,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
             VelocityEngine velocityEngine =
                 appContext.GetObject("propertiesFileBasedVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
-            string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine,
-                                                                                "Spring.Template.Velocity.Tests.Template.Velocity.SimpleTemplate.vm",
-                                                                                Encoding.UTF8.WebName, model);
-            Assert.AreEqual(string.Format("value={0}", "TEST_VALUE"), mergedTemplate);
+            AssertMergedValue(velocityEngine, "Spring.Template.Velocity.Tests.Template.Velocity.SimpleTemplate.vm");
         }
 
         /// <summary>
@@ -128,9 +96,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
             VelocityEngine velocityEngine =
                 appContext.GetObject("springResourceLoaderBasedVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
-            string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, "SimpleTemplate.vm",
-                                                                                Encoding.UTF8.WebName, model);
-            Assert.AreEqual(string.Format("value={0}", "TEST_VALUE"), mergedTemplate);
+            AssertMergedValue(velocityEngine, "SimpleTemplate.vm");
         }
 
         /// <summary>

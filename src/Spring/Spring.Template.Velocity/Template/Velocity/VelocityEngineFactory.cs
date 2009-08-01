@@ -31,6 +31,7 @@ using NVelocity.Runtime;
 using NVelocity.Runtime.Resource.Loader;
 using Spring.Context.Support;
 using Spring.Core.IO;
+using Spring.Util;
 
 namespace Spring.Template.Velocity {
     /// <summary>
@@ -195,18 +196,17 @@ namespace Spring.Template.Velocity {
         /// <see cref="PostProcessVelocityEngine" />
         /// <see cref="VelocityEngine.Init()" />
         public VelocityEngine CreateVelocityEngine() {
-            VelocityEngine velocityEngine = NewVelocityEngine();
             ExtendedProperties extendedProperties = new ExtendedProperties();
+            VelocityEngine velocityEngine = NewVelocityEngine();
 
-            // load defaults - see documentation why this is needed
-            LoadDefaultProperties(velocityEngine);
+            LoadDefaultProperties(extendedProperties);
 
             // Load config file if set.
             if (configLocation != null) {
                 if (log.IsInfoEnabled) {
                     log.Info(string.Format("Loading Velocity config from [{0}]", configLocation));
                 }
-                FillProperties(extendedProperties, configLocation);
+                FillProperties(extendedProperties, configLocation, false);
             }
 
             // merge local properties if set.
@@ -217,12 +217,12 @@ namespace Spring.Template.Velocity {
             }
 
             // Set a resource loader path, if required.
-            if( !preferFileSystemAccess && resourceLoaderPaths.Count == 0){
+            if (!preferFileSystemAccess && resourceLoaderPaths.Count == 0) {
                 throw new ArgumentException("When using SpringResourceLoader you must provide a path using the ResourceLoaderPath property");
             }
 
             if (resourceLoaderPaths.Count > 0) {
-                InitVelocityResourceLoader(velocityEngine, resourceLoaderPaths);
+                InitVelocityResourceLoader(velocityEngine, extendedProperties, resourceLoaderPaths);
             }
 
             // Log via Commons Logging?
@@ -233,13 +233,7 @@ namespace Spring.Template.Velocity {
             PostProcessVelocityEngine(velocityEngine);
 
             try {
-                // do not init with extended properties rather set one by one 
-                foreach (DictionaryEntry property in extendedProperties) {
-                    velocityEngine.SetProperty(Convert.ToString(property.Key), property.Value);
-                }
-
-                // velocity engine initialization - required
-                velocityEngine.Init();
+                velocityEngine.Init(extendedProperties);
             } catch (Exception ex) {
                 throw new VelocityException(ex.ToString(), ex);
             }
@@ -261,16 +255,11 @@ namespace Spring.Template.Velocity {
         /// directive.manager=NVelocity.Runtime.Directive.DirectiveManager <br/>
         /// runtime.introspector.uberspect=NVelocity.Util.Introspection.UberspectImpl <br/>
         /// </summary>
-        /// <param name="velocityEngine">the instance of the velocity engine unto which we load the default properties</param>
-        private static void LoadDefaultProperties(VelocityEngine velocityEngine) {
-            ExtendedProperties extendedProperties = new ExtendedProperties();
+        private static void LoadDefaultProperties(ExtendedProperties extendedProperties) {
             IResource defaultRuntimeProperties = new AssemblyResource("assembly://NVelocity/NVelocity.Runtime.Defaults/nvelocity.properties");
             IResource defaultRuntimeDirectives = new AssemblyResource("assembly://NVelocity/NVelocity.Runtime.Defaults/directive.properties");
-            FillProperties(extendedProperties, defaultRuntimeProperties);
-            FillProperties(extendedProperties, defaultRuntimeDirectives);
-            foreach (DictionaryEntry property in extendedProperties) {
-                velocityEngine.SetProperty(Convert.ToString(property.Key), property.Value);
-            }
+            FillProperties(extendedProperties, defaultRuntimeProperties, true);
+            FillProperties(extendedProperties, defaultRuntimeDirectives, true);
         }
 
         /// <summary>
@@ -295,49 +284,35 @@ namespace Spring.Template.Velocity {
         /// <see cref="SpringResourceLoader"/>
         /// <see cref="InitSpringResourceLoader"/>
         /// <see cref="CreateVelocityEngine"/>
-        protected void InitVelocityResourceLoader(VelocityEngine velocityEngine, IList paths) {
-            
+        protected void InitVelocityResourceLoader(VelocityEngine velocityEngine, ExtendedProperties extendedProperties, IList paths) {
+
             if (PreferFileSystemAccess) {
                 // Try to load via the file system, fall back to SpringResourceLoader
                 // (for hot detection of template changes, if possible).
                 IList resolvedPaths = new ArrayList();
-                foreach (string path in paths){
+                foreach (string path in paths) {
                     IResource resource = ResourceLoader.GetResource(path);
                     resolvedPaths.Add(resource.File.FullName);
                 }
                 try {
-                    
-                    velocityEngine.SetProperty(RuntimeConstants.RESOURCE_LOADER, "file");
-                    velocityEngine.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_CACHE, "true");
-                    velocityEngine.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, joinList(resolvedPaths));
+                    extendedProperties.SetProperty(RuntimeConstants.RESOURCE_LOADER, VelocityConstants.File);
+                    extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, 
+                        StringUtils.CollectionToCommaDelimitedString(resolvedPaths));
                 } catch (IOException ex) {
                     if (log.IsDebugEnabled) {
-                        log.Error(string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader", joinList(resolvedPaths)), ex);
+                        log.Error(string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader", 
+                            StringUtils.CollectionToCommaDelimitedString(resolvedPaths)), ex);
                     }
 
-                    InitSpringResourceLoader(velocityEngine, joinList(paths));
+                    InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));
                 }
             } else {
                 // Always load via SpringResourceLoader (without hot detection of template changes).
                 if (log.IsDebugEnabled) {
                     log.Debug("File system access not preferred: using SpringResourceLoader");
                 }
-                InitSpringResourceLoader(velocityEngine, joinList(paths));
+                InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));
             }
-        }
-
-        /// <summary>
-        /// Join the list of strings to a comma delimited string
-        /// </summary>
-        /// <param name="values">values list of strings to join</param>
-        /// <returns>comma delimited string representation of the list</returns>
-        private static string joinList(IList values) {
-            StringBuilder result = new StringBuilder();
-            foreach (string value in values) {
-                result.Append(value);
-                result.Append(DELIMITER);
-            }
-            return result.ToString(0, result.Length < 1 ? 0 : result.Length - 1);
         }
 
         /// <summary>
@@ -354,12 +329,11 @@ namespace Spring.Template.Velocity {
         /// <param name="resourceLoaderPathString">resourceLoaderPath the path to load Velocity resources from</param>
         /// <see cref="SpringResourceLoader"/>
         /// <see cref="InitVelocityResourceLoader"/>
-        protected void InitSpringResourceLoader(VelocityEngine velocityEngine, string resourceLoaderPathString) {
-            velocityEngine.SetProperty(RuntimeConstants.RESOURCE_LOADER, SpringResourceLoader.NAME);
+        protected void InitSpringResourceLoader(VelocityEngine velocityEngine, ExtendedProperties extendedProperties, string resourceLoaderPathString) {
+            extendedProperties.SetProperty(RuntimeConstants.RESOURCE_LOADER, SpringResourceLoader.NAME);
             Type springResourceLoaderType = typeof(SpringResourceLoader);
             string springResourceLoaderTypeName = springResourceLoaderType.FullName + "; " + springResourceLoaderType.Assembly.GetName().Name;
-            velocityEngine.SetProperty(SpringResourceLoader.SPRING_RESOURCE_LOADER_CLASS, springResourceLoaderTypeName);
-            velocityEngine.SetProperty(SpringResourceLoader.SPRING_RESOURCE_LOADER_CACHE, "true");
+            extendedProperties.SetProperty(SpringResourceLoader.SPRING_RESOURCE_LOADER_CLASS, springResourceLoaderTypeName);
             velocityEngine.SetApplicationAttribute(SpringResourceLoader.SPRING_RESOURCE_LOADER, ResourceLoader);
             velocityEngine.SetApplicationAttribute(SpringResourceLoader.SPRING_RESOURCE_LOADER_PATH, resourceLoaderPathString);
         }
@@ -375,7 +349,7 @@ namespace Spring.Template.Velocity {
         /// <exception cref="IOException" />
         /// <see cref="CreateVelocityEngine"/>
         /// <see cref="VelocityEngine.Init()"/>
-        protected static void PostProcessVelocityEngine(VelocityEngine velocityEngine) {
+        protected void PostProcessVelocityEngine(VelocityEngine velocityEngine) {
         }
 
         /// <summary>
@@ -383,9 +357,18 @@ namespace Spring.Template.Velocity {
         /// </summary>
         /// <param name="extendedProperties">ExtendedProperties instance to populate</param>
         /// <param name="resource">The resource from which to load the properties</param>
-        private static void FillProperties(ExtendedProperties extendedProperties, IInputStreamSource resource) {
+        /// <param name="append">A flag indicated weather the properties loaded from the resource should be appended or replaced in the extendedProperties</param>
+        private static void FillProperties(ExtendedProperties extendedProperties, IInputStreamSource resource, bool append) {
             try {
-                extendedProperties.Load(resource.InputStream);
+                if (append) {
+                    extendedProperties.Load(resource.InputStream);
+                } else {
+                    ExtendedProperties overrides = new ExtendedProperties();
+                    overrides.Load(resource.InputStream);
+                    foreach (DictionaryEntry entry in overrides) {
+                        extendedProperties.SetProperty(Convert.ToString(entry.Key), entry.Value);
+                    }
+                }
             } finally {
                 resource.InputStream.Close();
             }

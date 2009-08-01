@@ -51,7 +51,7 @@
     linkend="objects-factory-lifecycle-factoryobject" />. A custom namespace
     parser is provided to simplify the configuration of a NVelocity template
     engine. For more information on custom namespace parser see <xref
-    linkend="context-custom-parsers" />. </para>
+    linkend="context-custom-parsers" />.</para>
 
     <section xml:id="templating-nvelocity-file">
       <title>Simple file based template engine definition</title>
@@ -67,7 +67,8 @@
 &lt;/objects&gt;</programlisting>
 
       <para>The velocity engine could then be used to load and merge a local
-      template using a simple relative path:</para>
+      template using a simple relative path (the default resource loader path
+      is the current execution directory):</para>
 
       <programlisting language="csharp">StringWriter stringWriter = new StringWriter();
 Hashtable modelTable = new Hashtable();
@@ -79,6 +80,86 @@ string mergedContent = stringWriter.ToString();</programlisting>
       <para>To disable the use of NVelocity's file loader that tracks runtime
       changes, set the element <literal>prefer-file-system-access</literal> of
       &lt;engine/&gt; to false.</para>
+    </section>
+
+    <section xml:id="templating-nvelocity-engine-configuration">
+      <title>Configuration Options</title>
+
+      <para>You can define several attributes on the &lt;engine&gt; element to
+      control how the factory is configured:</para>
+
+      <table id="template-velocity-engine-config-tbl">
+        <title>Engine Factory Configuration Options</title>
+
+        <tgroup cols="4">
+          <colspec colname="c1" colwidth="2*" />
+
+          <colspec colname="c2" colwidth="4*" />
+
+          <colspec colname="c3" colwidth="1*" />
+
+          <colspec colname="c4" colwidth="1*" />
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Description</entry>
+
+              <entry>Required</entry>
+
+              <entry>Default Value</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>config-file</entry>
+
+              <entry>
+                <para>A uri of a properties file defining the NVelocity
+                configuration. This value accepts all spring resource loader
+                uri (e.g., file://, http://). See <xref
+                linkend="templating-nvelocity-resource-config" /></para>
+              </entry>
+
+              <entry>no</entry>
+
+              <entry>N/A</entry>
+            </row>
+
+            <row>
+              <entry>prefer-file-system-access</entry>
+
+              <entry>
+                <para>Instructs the NVelocity engine factory to attempt use
+                NVelocity's file loader. When set to false the provided
+                <literal>SpringResourceLoader</literal> will be used (and the <literal>ResourceLoaderPath</literal>
+                property must be set)</para>
+              </entry>
+
+              <entry>no</entry>
+
+              <entry>true</entry>
+            </row>
+
+            <row>
+              <entry>override-logging</entry>
+
+              <entry>
+                <para>Instructs the NVelocity engine factory to use the
+                provided spring commons logging based logging system. See See
+                <xref
+                linkend="templating-nvelocity-resource-logging" /></para>
+              </entry>
+
+              <entry>no</entry>
+
+              <entry>true</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
 
     <section xml:id="templating-nvelocity-assembly">
@@ -99,7 +180,7 @@ string mergedContent = stringWriter.ToString();</programlisting>
       <programlisting language="csharp">velocityEngine.MergeTemplate("MyAssembly.MyNamespace.MyTemplate.vm", Encoding.UTF8.WebName, velocityContext, stringWriter);</programlisting>
     </section>
 
-    <section xml:id="templating-nvelocity-resource-loader">
+    <section xml:id="templating-nvelocity-spring-resource-loader">
       <title>Using Spring's <literal>IResourceLoader</literal> to load
       templates</title>
 
@@ -110,9 +191,9 @@ string mergedContent = stringWriter.ToString();</programlisting>
       object definition loads the NVelocity templates from a single
       path</para>
 
-      <programlisting>&lt;nv:engine id="velocityEngine"&gt;
+      <programlisting language="myxml">&lt;nv:engine id="velocityEngine"&gt;
   &lt;nv:resource-loader&gt;
-    &lt;nv:file path="MyTemplateFolder/AnotherFolder/" /&gt;
+    &lt;nv:spring uri="file://Template/Velocity/"/&gt;
   &lt;/nv:resource-loader&gt;
 &lt;/nv:engine&gt;</programlisting>
 
@@ -120,24 +201,127 @@ string mergedContent = stringWriter.ToString();</programlisting>
 
       <programlisting language="myxml">&lt;nv:engine id="velocityEngine"&gt;
   &lt;nv:resource-loader&gt;
-    &lt;nv:file path="MyTemplateFolder/AnotherFolder/" /&gt;
-    &lt;nv:file path="MyOtherTemplateFolder/" /&gt;
+    &lt;nv:spring uri="file://Template/Velocity/"/&gt;
+    &lt;nv:spring uri="assembly://MyAssembly/MyNameSpace"/&gt;
   &lt;/nv:resource-loader&gt;
 &lt;/nv:engine&gt;
 </programlisting>
 
       <note>
-        <para>By default spring will attempt to load resources using file
-        based template loading (useful for detection of template changes at
-        runtime). If this is not desirable you set the
-        <literal>prefer-file-system-access</literal> element of the
-        &lt;/engine&gt; element to <literal>false.</literal></para>
+        <para>By default spring will attempt to load resources using NVelocity's
+      file based template loading (useful for detection of template changes at
+      runtime). If this is not desirable you set the
+      <literal>prefer-file-system-access</literal> property of the factory object
+      to <literal>false</literal> which will cause the factory to utilize the supplied
+      spring resource loader.</para>
       </note>
 
       <para>Using the example above when resource loader paths are defined
       templates can be loaded using their name:</para>
 
-      <programlisting language="csharp">string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngine, "MyTemplate.vm", Encoding.UTF8.WebName, model);</programlisting>
+      <programlisting language="csharp">string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngine, "MyFileTemplate.vm", Encoding.UTF8.WebName, model); // template loaded from file://Template/Velocity/
+string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngine, "MyAseemblyTemplate.vm", Encoding.UTF8.WebName, model); // template loaded from assembly://MyAssembly/MyNameSpace</programlisting>
+    </section>
+
+    <section xml:id="templating-nvelocity-custom-resource-loader">
+      <title>Defining a custom resource loader</title>
+
+      <para>The following defines a custom resource loader (the type is an
+      extension of NVelocity's <literal>ResourceLoader</literal>
+      class):</para>
+
+      <programlisting language="myxml">&lt;nv:engine id="velocityEngine"&gt;
+    &lt;nv:resource-loader&gt;
+        &lt;nv:custom name="myResourceLoader" 
+                   description="A custom resource loader" 
+                   type="MyNamespace.MyResourceLoader, MyAssembly"  
+                   path="Template/Velocity/"/&gt;
+    &lt;/nv:resource-loader&gt;
+&lt;/nv:engine&gt;
+</programlisting>
+    </section>
+
+    <section xml:id="templating-nvelocity-resource-loader-configuration">
+      <title>Resource Loader configuration options</title>
+
+      <para>The &lt;nv:resource-loader&gt; element has additional attributes
+      which define how NVelocity's resource manager and resource loader
+      behave.</para>
+
+      <table id="templating-nvelocity-resource-loader-configuration-tbl">
+        <title>Resource Loader Configuration Options</title>
+
+        <tgroup cols="4">
+          <colspec colname="c1" colwidth="2*" />
+
+          <colspec colname="c2" colwidth="4*" />
+
+          <colspec colname="c3" colwidth="1*" />
+
+          <colspec colname="c4" colwidth="1*" />
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Description</entry>
+
+              <entry>Required</entry>
+
+              <entry>Default Value</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>default-cache-size</entry>
+
+              <entry>
+                <para>defines resource manager global cache size, applies when
+                caching is turned on. This maps to NVelocity's resource
+                manager <literal>resource.manager.defaultcache.size</literal>
+                property</para>
+              </entry>
+
+              <entry>no</entry>
+
+              <entry>89</entry>
+            </row>
+
+            <row>
+              <entry>template-caching</entry>
+
+              <entry>
+                <para>Enables template caching for the defined resource
+                loader. This maps to NVelocity's resource loader
+                <literal>&lt;name&gt;.resource.loader.cache</literal>
+                property</para>
+              </entry>
+
+              <entry>no</entry>
+
+              <entry>false</entry>
+            </row>
+
+            <row>
+              <entry>modification-check-interval</entry>
+
+              <entry>
+                <para>The modification check interval value (seconds) of the
+                resource loader, applies only to resource loader with change
+                detection capabilities (file or custom). This maps to
+                NVelocity's resource loader
+                <literal>&lt;name&gt;.resource.loader.modificationCheckInterval</literal>
+                property</para>
+              </entry>
+
+              <entry>no</entry>
+
+              <entry>2</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </section>
 
     <section xml:id="templating-nvelocity-resource-config">
@@ -152,7 +336,7 @@ string mergedContent = stringWriter.ToString();</programlisting>
       <literal>VelocityProperties</literal> property to the NVelocity factory
       object (shown above)</para>
 
-      <programlisting>&lt;nv:engine id="customNamespaceVelocityTemplate" config-file="foo.prop"&gt;
+      <programlisting language="myxml">&lt;nv:engine id="velocityTemplate" &gt;
   &lt;nv:nvelocity-properties&gt;
     &lt;entry key="input.encoding"  value="ISO-8859-1"/&gt;
     &lt;entry key="output.encoding" value="ISO-8859-1"/&gt;
@@ -161,11 +345,7 @@ string mergedContent = stringWriter.ToString();</programlisting>
     </section>
 
     <section xml:id="templating-nvelocity-resource-logging">
-      
-
       <title>Logging</title>
-
-       
 
       <para>By default Spring will override NVelocity's default
       <literal>ILogSystem</literal> implementation with its own
@@ -174,12 +354,8 @@ string mergedContent = stringWriter.ToString();</programlisting>
       Spring uses. If this is not desirable, you can specify the following
       property of the NVelocity factory object:</para>
 
-       
-
       <programlisting language="myxml">&lt;template:nvelocity id="velocityEngine" override-logging="false" /&gt;
 </programlisting>
-
-        
     </section>
   </section>
 
@@ -202,7 +378,7 @@ string mergedContent = stringWriter.ToString();</programlisting>
     <para>To create a VelocityEngine using the default file resource loader
     use the definition:</para>
 
-    <programlisting>&lt;!-- Simple no arg file based configuration use's NVeclocity default file resource loader  --&gt;
+    <programlisting language="myxml">&lt;!-- Simple no arg file based configuration use's NVelocity default file resource loader  --&gt;
 &lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" /&gt;</programlisting>
 
     <para>For convenience in defining NVelocity engine instances a custom
@@ -210,13 +386,13 @@ string mergedContent = stringWriter.ToString();</programlisting>
     done this way:</para>
 
     <programlisting language="myxml">
-&lt;objects xmlns="http://www.springframework.net" xmlns:template="http://www.springframework.net/template"&gt;
+&lt;objects xmlns="http://www.springframework.net" xmlns:nv="http://www.springframework.net/nvelocity"&gt;
 
-&lt;template:nvelocity id="customNamespaceVelocityTemplate" &gt;
-    &lt;template:resource-loader&gt;
-        &lt;template:file path="Template/Velocity/" /&gt;
-    &lt;/template:resource-loader&gt;
-&lt;/template:nvelocity&gt;
+&lt;nv:nvelocity id="velocityEngine" &gt;
+    &lt;nv:resource-loader&gt;
+        &lt;nv:file path="Template/Velocity/" /&gt;
+    &lt;/nv:resource-loader&gt;
+&lt;/nv:nvelocity&gt;
 
 &lt;/objects</programlisting>
 
@@ -224,7 +400,7 @@ string mergedContent = stringWriter.ToString();</programlisting>
     resource loader can be used to define where templates reside:</para>
 
     <programlisting language="myxml">&lt;!-- Assembly based template loading with NVelocity assembly resource loader --&gt;
-&lt;object id="assemblyBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity"&gt;
+&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity"&gt;
     &lt;property name="VelocityProperties"&gt;
         &lt;dictionary key-type="string" value-type="object"&gt;
             &lt;entry key="resource.loader" value="assembly"/&gt;
@@ -255,11 +431,12 @@ string mergedContent = stringWriter.ToString();</programlisting>
 &lt;/object&gt;</programlisting>
 
     <note>
-      <para>By default spring will attempt to load resources using file based
-      template loading (useful for detection of template changes at runtime).
-      If this is not desirable you set the
+      <para>By default spring will attempt to load resources using NVelocity's
+      file based template loading (useful for detection of template changes at
+      runtime). If this is not desirable you set the
       <literal>preferFileSystemAccess</literal> property of the factory object
-      to <literal>false.</literal></para>
+      to <literal>false</literal> which will cause the factory to utilize the supplied
+      spring resource loader.</para>
     </note>
 
     <para>To refer to a property file based configuration of the
@@ -275,7 +452,7 @@ string mergedContent = stringWriter.ToString();</programlisting>
       </note></para>
 
     <para>To not integrate with the Common.Logging subsystem, set the
-    OverrideLogging property to false: </para>
+    OverrideLogging property to false:</para>
 
     <programlisting language="myxml">&lt;object id="velocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" &gt;
     &lt;property name="OverrideLogging" value="false" /&gt;
