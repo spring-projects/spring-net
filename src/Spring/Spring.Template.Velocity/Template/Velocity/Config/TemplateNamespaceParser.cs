@@ -28,6 +28,7 @@ using NVelocity.Runtime;
 using NVelocity.Runtime.Resource.Loader;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
+using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Template.Velocity;
@@ -273,7 +274,8 @@ namespace Spring.Template.Velocity.Config {
         /// <param name="parserContext">the parser context</param>
         /// <param name="properties">the properties used to initialize the velocity engine</param>
         private void ParseNVelocityProperties(XmlElement element, ParserContext parserContext, IDictionary<string, object> properties) {
-            IDictionary parsedProperties = objectNamespaceParserHelper.ParseDictionaryElementInternal(element, "NVelocityProperties", parserContext);
+            IDictionary parsedProperties = objectNamespaceParserHelper.ParseDictionaryElementInternal(element, 
+                TemplateDefinitionConstants.ElementNVelocityProperties, parserContext);
             foreach (DictionaryEntry entry in parsedProperties) {
                 properties.Add(Convert.ToString(entry.Key), entry.Value);
             }
@@ -287,17 +289,6 @@ namespace Spring.Template.Velocity.Config {
             return TemplateTypePrefix + element.LocalName;
         }
 
-
-        /// <summary>
-        /// Helper class to access the ParseDictionaryElement of the ObjectsNamespaceParser
-        /// todo: remove this and externalize the logic in ObjectsNamespaceParser.ParseDictionaryElement
-        /// </summary>
-        internal sealed class ObjectNamespaceParserHelper : ObjectsNamespaceParser {
-            public IDictionary ParseDictionaryElementInternal(XmlElement element, string name, ParserContext parserContext) {
-                return ParseDictionaryElement(element, name, parserContext);
-            }
-        }
-
         /// <summary>
         /// constructs an nvelocity style resource loader property in the format:
         /// prefix.resource.loader.suffix
@@ -309,7 +300,139 @@ namespace Spring.Template.Velocity.Config {
             return type + VelocityConstants.Separator + RuntimeConstants.RESOURCE_LOADER + VelocityConstants.Separator +
                    suffix;
         }
-        #region Element & Attribute Name Constants
+    }
+
+
+
+    /// <summary>
+    /// Helper class to access the ParseDictionaryElement of the ObjectsNamespaceParser
+    /// todo: remove this and externalize the logic in ObjectsNamespaceParser.ParseDictionaryElement
+    /// </summary>
+    internal class ObjectNamespaceParserHelper : ObjectsNamespaceParser {
+        /// <summary>
+        /// Gets a dictionary definition.
+        /// </summary>
+        /// <param name="mapEle">The element describing the dictionary definition.</param>
+        /// <param name="name">The name of the object (definition) associated with the dictionary definition.</param>
+        /// <param name="parserContext">The namespace-aware parser.</param>
+        /// <returns>The dictionary definition.</returns>
+        public IDictionary ParseDictionaryElementInternal(XmlElement mapEle, string name, ParserContext parserContext) {
+            ManagedDictionary dictionary = new ManagedDictionary();
+            string keyTypeName = GetAttributeValue(mapEle, "key-type");
+            string valueTypeName = GetAttributeValue(mapEle, "value-type");
+            if (StringUtils.HasText(keyTypeName)) {
+                dictionary.KeyTypeName = keyTypeName;
+            }
+            if (StringUtils.HasText(valueTypeName)) {
+                dictionary.ValueTypeName = valueTypeName;
+            }
+            dictionary.MergeEnabled = ParseMergeAttribute(mapEle, parserContext.ParserHelper);
+
+            XmlNodeList entryElements = SelectNodes(mapEle, ObjectDefinitionConstants.EntryElement);
+            foreach (XmlElement entryEle in entryElements) {
+                #region Key
+
+                object key = null;
+
+                XmlAttribute keyAtt = entryEle.Attributes[ObjectDefinitionConstants.KeyAttribute];
+                if (keyAtt != null) {
+                    key = keyAtt.Value;
+                } else {
+                    // ok, we're not using the 'key' attribute; lets check for the ref shortcut...
+                    XmlAttribute keyRefAtt = entryEle.Attributes[ObjectDefinitionConstants.DictionaryKeyRefShortcutAttribute];
+                    if (keyRefAtt != null) {
+                        key = new RuntimeObjectReference(keyRefAtt.Value);
+                    } else {
+                        // so check for the 'key' element...
+                        XmlNode keyNode = SelectSingleNode(entryEle, ObjectDefinitionConstants.KeyElement);
+                        if (keyNode == null) {
+                            throw new ObjectDefinitionStoreException(
+                                parserContext.ReaderContext.Resource, name,
+                                string.Format("One of either the '{0}' element, or the the '{1}' or '{2}' attributes " +
+                                              "is required for the <{3}/> element.",
+                                              ObjectDefinitionConstants.KeyElement,
+                                              ObjectDefinitionConstants.KeyAttribute,
+                                              ObjectDefinitionConstants.DictionaryKeyRefShortcutAttribute,
+                                              ObjectDefinitionConstants.EntryElement));
+                        }
+                        XmlElement keyElement = (XmlElement)keyNode;
+                        XmlNodeList keyNodes = keyElement.GetElementsByTagName("*");
+                        if (keyNodes == null || keyNodes.Count == 0) {
+                            throw new ObjectDefinitionStoreException(
+                                parserContext.ReaderContext.Resource, name,
+                                string.Format("Malformed <{0}/> element... the value of the key must be " +
+                                    "specified as a child value-style element.",
+                                              ObjectDefinitionConstants.KeyElement));
+                        }
+                        key = ParsePropertySubElement((XmlElement)keyNodes.Item(0), name, parserContext);
+                    }
+                }
+
+                #endregion
+
+                #region Value
+
+                XmlAttribute inlineValueAtt = entryEle.Attributes[ObjectDefinitionConstants.ValueAttribute];
+                if (inlineValueAtt != null) {
+                    // ok, we're using the value attribute shortcut...
+                    dictionary[key] = inlineValueAtt.Value;
+                } else if (entryEle.Attributes[ObjectDefinitionConstants.DictionaryValueRefShortcutAttribute] != null) {
+                    // ok, we're using the value-ref attribute shortcut...
+                    XmlAttribute inlineValueRefAtt = entryEle.Attributes[ObjectDefinitionConstants.DictionaryValueRefShortcutAttribute];
+                    RuntimeObjectReference ror = new RuntimeObjectReference(inlineValueRefAtt.Value);
+                    dictionary[key] = ror;
+                } else if (entryEle.Attributes[ObjectDefinitionConstants.ExpressionAttribute] != null) {
+                    // ok, we're using the expression attribute shortcut...
+                    XmlAttribute inlineExpressionAtt = entryEle.Attributes[ObjectDefinitionConstants.ExpressionAttribute];
+                    ExpressionHolder expHolder = new ExpressionHolder(inlineExpressionAtt.Value);
+                    dictionary[key] = expHolder;
+                } else {
+                    XmlNode keyNode = SelectSingleNode(entryEle, ObjectDefinitionConstants.KeyElement);
+                    if (keyNode != null) {
+                        entryEle.RemoveChild(keyNode);
+                    }
+                    // ok, we're using the original full-on value element...
+                    XmlNodeList valueElements = entryEle.GetElementsByTagName("*");
+                    if (valueElements == null || valueElements.Count == 0) {
+                        throw new ObjectDefinitionStoreException(
+                            parserContext.ReaderContext.Resource, name,
+                            string.Format("One of either the '{0}' or '{1}' attributes, or a value-style element " +
+                                "is required for the <{2}/> element.",
+                                          ObjectDefinitionConstants.ValueAttribute, ObjectDefinitionConstants.DictionaryValueRefShortcutAttribute, ObjectDefinitionConstants.EntryElement));
+                    }
+                    dictionary[key] = ParsePropertySubElement((XmlElement)valueElements.Item(0), name, parserContext);
+                }
+
+                #endregion
+            }
+            return dictionary;
+        }
+        private bool ParseMergeAttribute(XmlElement collectionElement, ObjectDefinitionParserHelper helper) {
+            string val = collectionElement.GetAttribute(ObjectDefinitionConstants.MergeAttribute);
+            if (ObjectDefinitionConstants.DefaultValue.Equals(val)) {
+                val = helper.Defaults.Merge;
+            }
+            return ObjectDefinitionConstants.TrueValue.Equals(val);
+        }
+
+       /// <summary>
+        ///  This method overrides SelectNodes from ObjectsNamespaceParser because the original method 
+        /// picks up the NamespaceURI from the nvelocity which causes element.SelectNodes to return an empty 
+        /// list. Consider removing. 
+       /// </summary>
+        protected new XmlNodeList SelectNodes(XmlElement element, string childElementName) {
+            XmlNamespaceManager nsManager = new XmlNamespaceManager(new NameTable());
+            nsManager.AddNamespace(GetNamespacePrefix(element), Namespace);
+            return element.SelectNodes(GetNamespacePrefix(element) + ":" + childElementName, nsManager);
+        }
+
+
+        private string GetNamespacePrefix(XmlElement element) {
+            return StringUtils.HasText(element.Prefix) ? element.Prefix : "spring";
+        }
+    }
+    
+    #region Element & Attribute Name Constants
 
         /// <summary>
         /// Template definition constants
@@ -426,5 +549,4 @@ namespace Spring.Template.Velocity.Config {
             public const string SpringResourceLoaderClass = "Spring.Template.Velocity.SpringResourceLoader; Spring.Template.Velocity";
         }
         #endregion
-    }
 }

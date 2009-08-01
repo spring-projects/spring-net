@@ -20,18 +20,25 @@
             <nv:spring uri="assembly://Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.Template.Velocity/"/>
         </nv:resource-loader>
     </nv:engine>
-    
+
     <nv:engine id="cnVelocityEngineConfig" config-file="file://Template/Velocity/config.properties" override-logging="false" />
 
-<nv:engine id="cnVelocityEngingCustomResourceLoader">
-    <nv:resource-loader default-cache-size="200" modification-check-interval="30" template-caching="true">
-        <nv:custom name="myResourceLoader" 
-                   description="A custom resource loader" 
-                   type="Spring.Template.Velocity.Tests.Template.Velocity.Config.TestCustomResourceLoader, Spring.Template.Velocity.Tests"  
-                   path="Template/Velocity/"/>
-    </nv:resource-loader>
-</nv:engine>
-    
+    <nv:engine id="cnVelocityEngineLocalConfig" >
+        <nv:nvelocity-properties>
+            <entry key="input.encoding"  value="UTF-8"/>
+            <entry key="myproperty.mysubproperty" value="TEST_VALUE"/>
+        </nv:nvelocity-properties>
+    </nv:engine>
+
+    <nv:engine id="cnVelocityEngingCustomResourceLoader">
+        <nv:resource-loader default-cache-size="200" modification-check-interval="30" template-caching="true">
+            <nv:custom name="myResourceLoader"
+                       description="A custom resource loader"
+                       type="Spring.Template.Velocity.Tests.Template.Velocity.Config.TestCustomResourceLoader, Spring.Template.Velocity.Tests"
+                       path="Template/Velocity/"/>
+        </nv:resource-loader>
+    </nv:engine>
+
     <!-- Does file system access with hot tracking  with NVelocity assembly resource loader -->
     <object id="assemblyBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity">
         <property name="VelocityProperties">

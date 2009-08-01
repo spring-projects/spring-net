@@ -22,6 +22,7 @@
 
 using System.Collections;
 using System.IO;
+using System.Text;
 using Commons.Collections;
 using NUnit.Framework;
 using NVelocity.App;
@@ -42,9 +43,9 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity.Config {
     public class TemplateNamespaceParserTests : VelocityEngineTestBase {
         #region convinience properties aliases
         private const string PropertyModificationCheck =
-            TemplateNamespaceParser.TemplateDefinitionConstants.PropertyResourceLoaderModificationCheckInterval;
+            TemplateDefinitionConstants.PropertyResourceLoaderModificationCheckInterval;
         private const string PropertyResourceLoaderCachce =
-            TemplateNamespaceParser.TemplateDefinitionConstants.PropertyResourceLoaderCaching;
+            TemplateDefinitionConstants.PropertyResourceLoaderCaching;
         #endregion
 
         #region test constants
@@ -61,7 +62,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity.Config {
             VelocityEngine velocityEngine = appContext.GetObject("cnFileVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocity engine is null");
             Assert.AreEqual(VelocityConstants.File, getSingleProperty(velocityEngine, RuntimeConstants.RESOURCE_LOADER), "incorrect resource loader");
-            Assert.AreEqual(TemplateNamespaceParser.TemplateDefinitionConstants.FileResourceLoaderClass, getSingleProperty(velocityEngine,
+            Assert.AreEqual(TemplateDefinitionConstants.FileResourceLoaderClass, getSingleProperty(velocityEngine,
                 TemplateNamespaceParser.getResourceLoaderProperty(VelocityConstants.File, VelocityConstants.Class)), "incorrect resource loader type");
             Assert.AreEqual(new string[]{"Template/Velocity/", "Template/"}, velocityEngine.GetProperty(
                 TemplateNamespaceParser.getResourceLoaderProperty(VelocityConstants.File, VelocityConstants.Path)), "incorrect resource loader path");
@@ -82,7 +83,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity.Config {
             VelocityEngine velocityEngine = appContext.GetObject("cnAssemblyVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocity engine is null");
             Assert.AreEqual(VelocityConstants.Assembly, getSingleProperty(velocityEngine, RuntimeConstants.RESOURCE_LOADER), "incorrect resource loader");
-            Assert.AreEqual(TemplateNamespaceParser.TemplateDefinitionConstants.AssemblyResourceLoaderClass, getSingleProperty(velocityEngine,
+            Assert.AreEqual(TemplateDefinitionConstants.AssemblyResourceLoaderClass, getSingleProperty(velocityEngine,
                 TemplateNamespaceParser.getResourceLoaderProperty(VelocityConstants.Assembly, VelocityConstants.Class)), "incorrect resource loader type");
             Assert.AreEqual("Spring.Template.Velocity.Tests", getSingleProperty(velocityEngine,
                 TemplateNamespaceParser.getResourceLoaderProperty(VelocityConstants.Assembly,VelocityConstants.Assembly)), "incorrect resource loader path");
@@ -99,9 +100,9 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity.Config {
         public void TestSpringBasedConfig() {
             VelocityEngine velocityEngine = appContext.GetObject("cnSpringVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocity engine is null");
-            const string PropertySpring = TemplateNamespaceParser.TemplateDefinitionConstants.Spring;
+            const string PropertySpring = TemplateDefinitionConstants.Spring;
             Assert.AreEqual(PropertySpring, getSingleProperty(velocityEngine, RuntimeConstants.RESOURCE_LOADER), "incorrect resource loader");
-            Assert.AreEqual(TemplateNamespaceParser.TemplateDefinitionConstants.SpringResourceLoaderClass, getSingleProperty(velocityEngine,
+            Assert.AreEqual(TemplateDefinitionConstants.SpringResourceLoaderClass, getSingleProperty(velocityEngine,
                 TemplateNamespaceParser.getResourceLoaderProperty(PropertySpring, VelocityConstants.Class)), "incorrect resource loader type");
             // no way to test the path property other than trying to actually perform a merge (it is set in velocity engine as an application attribute which is not exposed)
             Assert.AreEqual(DEFAULT_CACHE_SIZE, velocityEngine.GetProperty(RuntimeConstants.RESOURCE_MANAGER_DEFAULTCACHE_SIZE), "incorrect default cache size");
@@ -127,6 +128,15 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity.Config {
             Assert.AreEqual("NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader", 
                 getSingleProperty(velocityEngine,classProp), "incorrect resource loader type");
             Assert.AreEqual("TestDescription", getSingleProperty(velocityEngine, descProp), "incorrect description");
+        }
+
+        [Test]
+        public void TestLocalConfig() {
+            VelocityEngine velocityEngine = appContext.GetObject("cnVelocityEngineLocalConfig") as VelocityEngine;
+            Assert.IsNotNull(velocityEngine, "velocity engine is null");
+
+            Assert.AreEqual(Encoding.UTF8.WebName.ToUpper(), getSingleProperty(velocityEngine, RuntimeConstants.INPUT_ENCODING), "incorrect input encoding value");
+            Assert.AreEqual(TEST_VALUE, getSingleProperty(velocityEngine, "myproperty.mysubproperty"), "incorrect custom property value");
         }
 
         /// <summary>
