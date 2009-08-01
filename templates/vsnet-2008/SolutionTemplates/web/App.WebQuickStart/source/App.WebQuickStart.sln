@@ -4,7 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "App.Web", "App.Web\", "{AA13082E-93B7-43DD-9CF6-D512C1ED02E4}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "2.0"
-		ProjectReferences = "{EDDC48D5-4F25-4476-9BA3-12F2E8BB5A8C}|App.DataAccess.dll;{EB687B88-5ECD-4897-AFF1-70CE565721E2}|App.Service.dll;"
+		ProjectReferences = "{EDDC48D5-4F25-4476-9BA3-12F2E8BB5A8C}|App.DataAccess.dll;{EB687B88-5ECD-4897-AFF1-70CE565721E2}|App.Service.dll;{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}|App.Web.References.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/App.Web"
 		Debug.AspNetCompiler.PhysicalPath = "App.Web\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\App.Web\"
@@ -28,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Service", "App.Service\App.Service.csproj", "{EB687B88-5ECD-4897-AFF1-70CE565721E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Tests", "App.Tests\App.Tests.csproj", "{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Web.References", "App.Web.References\App.Web.References.csproj", "{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,16 @@ Global
 		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Release|.NET.ActiveCfg = Release|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{03E4885D-C1D1-4B9E-B5FD-C5CE9FDB486C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

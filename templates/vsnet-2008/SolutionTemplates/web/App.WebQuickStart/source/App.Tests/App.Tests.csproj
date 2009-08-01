@@ -105,6 +105,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\Common.Logging.Log4Net.dll" />
+    <Content Include="bin\Debug\log4net.dll" />
+    <Content Include="bin\Debug\nunit.framework.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="DataAccess\" />
     <Folder Include="Service\" />
   </ItemGroup>
