@@ -5,32 +5,45 @@ Main build targets:
 ===================
 
 "test":
-        builds all projects for all available target platforms
+  builds debug builds for all projects for all available target platforms
 
 "compile-build-<framework id>":
-	builds all projects for a specific platform, e.g. compile-build-net-2.0 for net-2.0
+  builds all projects for a specific platform, e.g. compile-build-net-2.0 for net-2.0
 
 "docs":
-        builds the reference documentation
+  builds the reference and sdk documentation
 
 "package":
-	builds all projects for all target platforms, builds docs and packages everything for distribution
+  builds all projects for all target platforms, builds docs and packages everything for distribution
 
 Build properties that may be set:
 =================================
 "project.build.sign":
-        signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
+  signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
 "package.version":
-        set the package version
+  set the package version
 
 Additional Remarks:
 ===================
 
 *) Building Spring.Messaging.Ems
-if you want to build Spring.Messaging.Ems (Tibco EMS support), you need to copy tibco.ems.dll and tibco.ems.admin.dll into '/lib/net/2.0'
+  if you want to build Spring.Messaging.Ems (Tibco EMS support), you need to copy tibco.ems.dll and tibco.ems.admin.dll into '/lib/net/2.0'
 
 *) Building Spring.Testing.Microsoft
-if you want to build Spring.Testing.Microsoft (MSTest Support), you need to have VS Test support installed
+  if you want to build Spring.Testing.Microsoft (MSTest Support), you need to have VS MSTest support installed (mstest.exe)
+
+Examples:
+=========
+
+*) to build the distribution package, copy the key file into $/Spring.Net.snk and execute
+  nant clean package -f:spring.build -D:project.build.sign=true -D:package.version=1.3.0
+
+*) to build a specific target platform
+  nant compile-build-2.0
+
+*) to build just debug builds for all available platforms and execute tests
+  nant test
+
 -->
 
   <!-- global project settings -->
