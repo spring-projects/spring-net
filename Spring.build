@@ -10,7 +10,7 @@ Main build targets:
 "compile-build-<framework id>":
   builds all projects for a specific platform, e.g. compile-build-net-2.0 for net-2.0
 
-"docs":
+"doc":
   builds the reference and sdk documentation
 
 "package":
@@ -806,13 +806,13 @@ Examples:
 
     <call target="build-all-function"/>
 
-    <call target="docs"/>
+    <call target="doc"/>
 
     <call target="package-release-files"/>
 
   </target>
 
-  <target name="docs">
+  <target name="doc">
     <call target="doc-reference" cascade="false" />
     <call target="doc-sdk" cascade="false" />
   </target>
@@ -850,7 +850,7 @@ Examples:
     </move>
 
     <!-- clean tmp dir -->
-    <!-- delete dir="./doc/sdk/target/tmp" failonerror="false" / -->
+    <delete dir="./doc/sdk/target/tmp" failonerror="false" />
 
   </target>
 
@@ -958,7 +958,8 @@ Examples:
     <tstamp/>
     <property name="package.version" value="${tstamp.date}-${tstamp.time}"/>
 
-    <nant buildfile="./doc/reference/docbook.build" target="all"/>
+    <!-- nant buildfile="./doc/reference/docbook.build" target="all"/ -->
+    <call target="doc" />
 
     <call target="set-debug-build-configuration"/>
 
