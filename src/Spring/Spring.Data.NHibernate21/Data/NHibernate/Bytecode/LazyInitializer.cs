@@ -2,7 +2,7 @@
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,14 @@
 
 #endregion
 
-#region Imports
 using System;
 using System.Reflection;
-
 using AopAlliance.Intercept;
-
 using NHibernate.Engine;
 using NHibernate.Proxy.Poco;
 using NHibernate.Type;
-
 using Spring.Aop;
 using Spring.Reflection.Dynamic;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Bytecode
 {
@@ -43,8 +37,12 @@ namespace Spring.Data.NHibernate.Bytecode
     [Serializable]
     public class LazyInitializer : BasicLazyInitializer, IMethodInterceptor, ITargetSource
     {
-        private static readonly MethodInfo exceptionInternalPreserveStackTrace =
-            typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly MethodInfo exceptionInternalPreserveStackTrace;
+
+        static LazyInitializer()
+        {
+            exceptionInternalPreserveStackTrace = typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
+        }
 
         ///<summary>
         ///</summary>

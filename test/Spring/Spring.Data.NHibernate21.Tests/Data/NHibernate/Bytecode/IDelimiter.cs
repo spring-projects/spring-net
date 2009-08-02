@@ -1,4 +1,4 @@
-#if NH_2_1XX
+#if NH_2_1
 namespace Spring.Data.NHibernate.Bytecode
 {
     public interface IDelimiter

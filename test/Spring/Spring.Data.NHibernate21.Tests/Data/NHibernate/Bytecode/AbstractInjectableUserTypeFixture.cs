@@ -1,6 +1,6 @@
-#if NH_2_1XX
+#if NH_2_1
 using log4net.Config;
-
+using NHibernate;
 using NHibernate.Bytecode;
 using NHibernate.Cfg;
 using NHibernate.Engine;
@@ -39,7 +39,7 @@ namespace Spring.Data.NHibernate.Bytecode
         public void CreateDb()
         {
             InitializeServiceLocator();
-            var cfg = new Configuration();
+            Configuration cfg = new Configuration();
             Environment.BytecodeProvider = GetBytecodeProvider();
             cfg.Configure();
             cfg.AddResource("uNhAddIns.Adapters.CommonTests.EnhancedBytecodeProvider.Foo.Spechbm.xml",
@@ -64,18 +64,18 @@ namespace Spring.Data.NHibernate.Bytecode
         public void SaveObjectWithStringChangedToUpper()
         {
             object savedId;
-            Foo f = new Foo { Description = "something" };
+            Foo f = new Foo("something");
 
-            using (var s = sessions.OpenSession())
-            using (var tx = s.BeginTransaction())
+            using (ISession s = sessions.OpenSession())
+            using (ITransaction tx = s.BeginTransaction())
             {
                 savedId = s.Save(f);
                 tx.Commit();
             }
 
-            using (var s = sessions.OpenSession())
+            using (ISession s = sessions.OpenSession())
             {
-                var upperFoo = s.Get<Foo>(savedId);
+                Foo upperFoo = s.Get<Foo>(savedId);
 
                 Assert.AreEqual("[something]", upperFoo.Description);
             }
@@ -86,18 +86,18 @@ namespace Spring.Data.NHibernate.Bytecode
         public void SaveNullPropertyAndGetItBack()
         {
             object savedId;
-            var f = new Foo();
+            Foo f = new Foo("");
 
-            using (var s = sessions.OpenSession())
-            using (var tx = s.BeginTransaction())
+            using (ISession s = sessions.OpenSession())
+            using (ITransaction tx = s.BeginTransaction())
             {
                 savedId = s.Save(f);
                 tx.Commit();
             }
 
-            using (var s = sessions.OpenSession())
+            using (ISession s = sessions.OpenSession())
             {
-                var upperFoo = s.Get<Foo>(savedId);
+                Foo upperFoo = s.Get<Foo>(savedId);
 
                 Assert.IsNull(upperFoo.Description);
             }

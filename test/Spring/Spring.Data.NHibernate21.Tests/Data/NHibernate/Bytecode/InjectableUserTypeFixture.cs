@@ -1,4 +1,4 @@
-#if NH_2_1XX
+#if NH_2_1
 using NHibernate.Bytecode;
 
 using NUnit.Framework;
@@ -10,7 +10,7 @@ using Spring.Objects.Factory.Support;
 
 namespace Spring.Data.NHibernate.Bytecode
 {
-    //[TestFixture]
+    [TestFixture, Explicit("requires database")]
     public class InjectableUserTypeFixture : AbstractInjectableUserTypeFixture
     {
         private IConfigurableListableObjectFactory objectFactory;
@@ -32,14 +32,14 @@ namespace Spring.Data.NHibernate.Bytecode
 
         private static void Register<TSerivice, TImplementation>(IConfigurableListableObjectFactory confObjFactory)
         {
-            var odb = ObjectDefinitionBuilder.RootObjectDefinition(objectDefinitionFactory, typeof (TImplementation)).
+            ObjectDefinitionBuilder odb = ObjectDefinitionBuilder.RootObjectDefinition(objectDefinitionFactory, typeof(TImplementation)).
                 SetAutowireMode(AutoWiringMode.Constructor);
             confObjFactory.RegisterObjectDefinition(typeof (TSerivice).FullName, odb.ObjectDefinition);
         }
 
         private static void RegisterPrototype<TImplementation>(IConfigurableListableObjectFactory confObjFactory)
 		{
-			var odb = ObjectDefinitionBuilder.RootObjectDefinition(objectDefinitionFactory, typeof(TImplementation))
+            ObjectDefinitionBuilder odb = ObjectDefinitionBuilder.RootObjectDefinition(objectDefinitionFactory, typeof(TImplementation))
 				.SetSingleton(false).SetAutowireMode(AutoWiringMode.AutoDetect);
 			confObjFactory.RegisterObjectDefinition(typeof(TImplementation).FullName, odb.ObjectDefinition);
 		}

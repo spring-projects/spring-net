@@ -30,7 +30,7 @@
 		      hive="LocalMachine"
 		      unless="${property::exists('registry.net-3.0.installed')}"
 		      failonerror="false" />
-		
+
 	<property name="net-3.0.installed" value="${registry.net-3.0.installed == '1'}" />
 
 	<if test="${net-3.0.installed}">
@@ -207,7 +207,7 @@
         </imports>
 
         <code>
-	<!-- format for assembly revision is RRXXX where RR = framework number (1.0=10; 1.1=11; 2.0=20, 3.0=30, 3.5=35, etc.) and 
+	<!-- format for assembly revision is RRXXX where RR = framework number (1.0=10; 1.1=11; 2.0=20, 3.0=30, 3.5=35, etc.) and
              XXX is the number of days from the year the project 'started', property project.year.  -->
             <![CDATA[
                 public static void ScriptMain(Project project) {
@@ -218,7 +218,7 @@
             	    DateTime start = new DateTime(startYear, 1, 1);
                     TimeSpan ts = DateTime.Now - start;
                     int days = ts.Days;
-                    string version = project.Properties["package.version"].ToString() + "." + frameworkRevisionNumber + days.ToString();            
+                    string version = project.Properties["package.version"].ToString() + "." + frameworkRevisionNumber + days.ToString();
             	    project.Properties["project.version.numeric"] = version.ToString();
 
                 }
@@ -274,8 +274,8 @@
 
 		<attribute type="AssemblyDelaySignAttribute" value="false"/>
 		<attribute type="AssemblyKeyFileAttribute" value="${assembly.keyfile}" if="${(nant.settings.currentframework == 'net-1.0' or nant.settings.currentframework == 'net-1.1') and project.build.sign}" />
-		
-			
+
+
 		<!--
 		<attribute type="AssemblyTitleAttribute" value="${assembly.title}" />
 		<attribute type="AssemblyDescriptionAttribute" value="${assembly.description}" />
@@ -285,7 +285,7 @@
             </attributes>
 	</asminfo>
     </target>
-    
+
 
     <target name="set-debug-build-configuration">
         <property name="compiler.args" value=""/>
@@ -402,8 +402,8 @@
     </target>
     <target name="set-net-3.5-runtime-configuration"
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
-      <property name="nant.settings.currentframework" value="net-2.0"/>
-      <property name="nant.settings.currentframework.number" value="2.0"/>
+      <property name="nant.settings.currentframework" value="net-3.5"/>
+      <property name="nant.settings.currentframework.number" value="3.5"/>
       <!-- revision number used when generating assembly info -->
       <property name="nant.settings.currentframework.revisionnumber" value="35"/>
       <property name="net-2.0" value="true"/>
@@ -418,7 +418,7 @@
                 value="${sdkdoc.dir}/${framework::get-family(framework::get-target-framework())}/3.5"/>
       <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
       <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default},1701"/>
-    </target>  
+    </target>
     <target name="set-netcf-1.0-runtime-configuration"
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="nant.settings.currentframework" value="netcf-1.0"/>

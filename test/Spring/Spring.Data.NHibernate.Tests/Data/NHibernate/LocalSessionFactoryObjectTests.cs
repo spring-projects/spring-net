@@ -59,6 +59,11 @@ namespace Spring.Data.NHibernate
             properties.Add(Environment.ConnectionDriver, typeof(SqlClientDriver).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionProvider, typeof(DriverConnectionProvider).AssemblyQualifiedName);
 
+#if NH_2_1
+            // since 2.1. "hbm2ddl.keywords = 'keywords'" is the default which causes the SessionFactory to connect to the db upon creation
+            // we don't want this in this unit test
+            properties.Add(Environment.Hbm2ddlKeyWords, "none");
+#endif
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();
 

@@ -27,8 +27,7 @@
         <entry key="connection.driver_class"
                value="NHibernate.Driver.SqlClientDriver"/>
 
-        <entry key="proxyfactory.factory_class" 
-               value="NHibernate.ByteCode.LinFu.ProxyFactoryFactory, NHibernate.ByteCode.LinFu" />
+        <entry key="hbm2ddl.keywords" value="none" />
       </dictionary>
     </property>
 

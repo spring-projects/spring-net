@@ -10,7 +10,16 @@
             * current.build.defines.csc - framework-specific build defines
     -->
 	<target name="build">
-		<csc target="library" define="${current.build.defines.csc},NH_2_0"
+
+    <!-- copy nh libs -->
+    <echo message="NH Libs: ${nh20.lib.dir}" />
+    <copy todir="${current.bin.dir}" overwrite="true">
+      <fileset basedir="${nh20.lib.dir}">
+        <include name="**/*.dll" />
+      </fileset>
+    </copy>
+
+    <csc target="library" define="${current.build.defines.csc},NH_2_0"
 		     warnaserror="true"
 		     debug="${current.build.debug}"
       		     output="${current.bin.dir}/${project::get-name()}.dll"
@@ -19,22 +28,21 @@
 				<warning number="${nowarn.numbers.test}" />
 			</nowarn>
 			<sources failonempty="true">
-				<include name="**/*.cs" />
-				<include name="../CommonAssemblyInfo.cs" />
-			</sources>
+        <include name="../Spring.Data.NHibernate.Tests/**/*.cs" />
+        <include name="../Spring.Data.NHibernate12.Tests/**/*.cs" />
+        <include name="**/*.cs" />
+        <exclude name="../Spring.Data.NHibernate.Tests/Data/NHibernate/SessionFactoryUtilsTests.cs" />
+        <exclude name="AssemblyInfo.cs" />
+      </sources>
 			<references basedir="${current.bin.dir}">
-				<lib>
-					<include name="${nh20.lib.dir}"/>
-				</lib>
 				<include name="System.Data.dll" />
 				<include name="System.EnterpriseServices.dll" />
-				<include name="NHibernate.dll" />
 				<include name="*.dll" />
-				<exclude name="${project::get-name()}.dll" />
+        <include name="Spring.Data.NHibernate20.dll" />
 				<exclude name="Spring.Data.NHibernate.dll" />
-				<exclude name="Spring.Data.NHibernate12.dll" />
-				<exclude name="Spring.Data.NHibernate21.dll" />
-				<exclude name="CloverRuntime.dll" />
+				<exclude name="Spring.Data.NHibernate12*.dll" />
+				<exclude name="Spring.Data.NHibernate21*.dll" />
+				<exclude name="Spring.Data.NHibernate*.Tests.dll" />
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
 				<include name="**/*.xml" />
@@ -43,13 +51,6 @@
 
         <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
               tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>
-
-<!-- copy nh libs -->
-		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${nh.lib.dir}">
-				<include name="**/*.dll" />
-			</fileset>
-		</copy>
 
 	</target>
 

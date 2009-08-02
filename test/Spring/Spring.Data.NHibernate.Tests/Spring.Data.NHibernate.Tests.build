@@ -10,6 +10,15 @@
             * current.build.defines.csc - framework-specific build defines
     -->
 	<target name="build">
+
+        <!-- copy nh libs -->
+        <echo message="NH Libs: ${nh.lib.dir}" />
+        <copy todir="${current.bin.dir}" overwrite="true">
+          <fileset basedir="${nh.lib.dir}">
+            <include name="**/*.dll" />
+          </fileset>
+        </copy>
+
 		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
 		     debug="${current.build.debug}"
@@ -20,21 +29,16 @@
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />
-				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
 			<references basedir="${current.bin.dir}">
-				<lib>
-					<include name="${nh.lib.dir}"/>
-				</lib>
 				<include name="System.Data.dll" />
 				<include name="System.EnterpriseServices.dll" />
-				<include name="NHibernate.dll" />
+				<include name="Spring.Data.NHibernate.dll" />
 				<include name="*.dll" />
-				<exclude name="${project::get-name()}.dll" />
-				<exclude name="Spring.Data.NHibernate12.dll" />
-				<exclude name="Spring.Data.NHibernate20.dll" />
-				<exclude name="Spring.Data.NHibernate21.dll" />
-				<exclude name="CloverRuntime.dll" />
+				<exclude name="Spring.Data.NHibernate12*.dll" />
+				<exclude name="Spring.Data.NHibernate20*.dll" />
+				<exclude name="Spring.Data.NHibernate21*.dll" />
+				<exclude name="Spring.Data.NHibernate*.Tests.dll" />
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
 				<include name="**/*.xml" />
@@ -43,13 +47,6 @@
 
         <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
               tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>
-
-<!-- copy nh libs -->
-		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${nh.lib.dir}">
-				<include name="**/*.dll" />
-			</fileset>
-		</copy>
 
 	</target>
 

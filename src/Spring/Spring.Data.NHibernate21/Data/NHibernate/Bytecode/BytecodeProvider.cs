@@ -1,7 +1,9 @@
+#if NH_2_1
+
 #region License
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +20,16 @@
 
 #endregion
 
-#region Imports
-
 using System;
-
 using NHibernate.Bytecode;
 using NHibernate.Properties;
 using NHibernate.Type;
-
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Bytecode
 {
     /// <summary>
-    /// Bytecode provider using Spring Proxy
+    /// The Spring for .NET-backed ByteCodeprovider for NHibernate
     /// </summary>
     /// <author>Fabio Maulo</author>
     public class BytecodeProvider : IBytecodeProvider
@@ -41,15 +37,18 @@ namespace Spring.Data.NHibernate.Bytecode
 		private readonly IListableObjectFactory listableObjectFactory;
 		private readonly IObjectsFactory objectsFactory;
 		private readonly DefaultCollectionTypeFactory collectionTypefactory;
+        private readonly IProxyFactoryFactory proxyFactoryFactory;
 
         ///<summary>
+        /// Creates a new bytecode Provider instance using the specified object factory
         ///</summary>
         ///<param name="listableObjectFactory"></param>
         public BytecodeProvider(IListableObjectFactory listableObjectFactory)
 		{
 			this.listableObjectFactory = listableObjectFactory;
-			objectsFactory = new ObjectsFactory(listableObjectFactory);
-			collectionTypefactory = new DefaultCollectionTypeFactory();
+			this.objectsFactory = new ObjectsFactory(listableObjectFactory);
+			this.collectionTypefactory = new DefaultCollectionTypeFactory();
+            this.proxyFactoryFactory = new ProxyFactoryFactory();
 		}
 
         /// <summary>
@@ -69,7 +68,7 @@ namespace Spring.Data.NHibernate.Bytecode
         /// </summary>
         public IProxyFactoryFactory ProxyFactoryFactory
 		{
-			get { return new ProxyFactoryFactory(); }
+			get { return this.proxyFactoryFactory; }
 		}
 
         /// <summary>
@@ -80,7 +79,7 @@ namespace Spring.Data.NHibernate.Bytecode
         /// </remarks>
         public IObjectsFactory ObjectsFactory
 		{
-			get { return objectsFactory; }
+			get { return this.objectsFactory; }
 		}
 
         /// <summary>
@@ -88,8 +87,10 @@ namespace Spring.Data.NHibernate.Bytecode
         /// </summary>
         public ICollectionTypeFactory CollectionTypeFactory
 		{
-			get { return collectionTypefactory; }
+			get { return this.collectionTypefactory; }
 		}
 
     }
 }
+
+#endif

@@ -34,7 +34,7 @@ using NHibernate.Dialect;
 using NHibernate.Engine;
 using NHibernate.Event;
 using NHibernate.Tool.hbm2ddl;
-
+using Spring.Context;
 using Spring.Core.IO;
 using Spring.Dao;
 using Spring.Dao.Attributes;
@@ -73,8 +73,8 @@ namespace Spring.Data.NHibernate
 	/// </para>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: LocalSessionFactoryObject.cs,v 1.2 2008/05/01 12:50:34 lahma Exp $</version>
     public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IPersistenceExceptionTranslator, IDisposable
+        , IApplicationContextAware
 	{
 		#region Fields
 
@@ -112,6 +112,8 @@ namespace Spring.Data.NHibernate
 
         private IAdoExceptionTranslator adoExceptionTranslator;
 
+	    private IResourceLoader resourceLoader;
+
         // Configuration time DB provider. 
         // This will not be available after configuration has been done.
         private static IDbProvider configTimeDbProvider;
@@ -142,6 +144,33 @@ namespace Spring.Data.NHibernate
 		#region Properties
 
         /// <summary>
+        /// Setting the Application Context determines were resources are loaded from
+        /// </summary>
+	    IApplicationContext IApplicationContextAware.ApplicationContext
+	    {
+	        set
+	        {
+	            this.ResourceLoader = value;
+	        }
+	    }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IResourceLoader"/> to use for loading mapping assemblies etc.
+        /// </summary>
+	    public IResourceLoader ResourceLoader
+	    {
+	        get
+	        {
+                if (resourceLoader == null)
+                {
+                    resourceLoader = new ConfigurableResourceLoader();
+                }
+	            return resourceLoader;
+	        }
+	        set { resourceLoader = value; }
+	    }
+
+	    /// <summary>
         /// Sets the assemblies to load that contain mapping files.
         /// </summary>
         /// <value>The mapping assemblies.</value>
@@ -387,6 +416,7 @@ namespace Spring.Data.NHibernate
             }
         }
 
+
 	    #endregion
 
 		#region Methods
@@ -540,13 +570,11 @@ namespace Spring.Data.NHibernate
                 }
             }
 
-            IResourceLoader resourceLoader = new ConfigurableResourceLoader();
-
             if (this.mappingResources != null)
             {
                 foreach (string resourceName in mappingResources)
                 {
-                    config.AddInputStream(resourceLoader.GetResource(resourceName).InputStream);
+                    config.AddInputStream(this.ResourceLoader.GetResource(resourceName).InputStream);
                 }
             }
 

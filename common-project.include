@@ -5,7 +5,7 @@
         <![CDATA[
 Credits for this shared build script go to the NHibernate Team
 
-This file contains common tasks tailored specifically for the NDoc3
+This file contains common tasks tailored specifically for the Spring
 build process. The goal was to define all the actions in this file, so
 that actual project build files only have to configure a few variables
 and call tasks in this file.
@@ -253,6 +253,8 @@ ${tool.dir}       : dir for tools
     <target name="common.run-tests.ncover" description="Run NUnit tests">
 
         <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
+        <property name="test.assemblyfile" value="${test.assemblyname}.dll" overwrite="false" />
+        <property name="test.assemblyname.tocover" value="${string::substring(test.assemblyname,0,string::last-index-of(test.assemblyname, '.Tests') )}" overwrite="false" />
         <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
 
         <echo message="Coverage Testing ${test.assemblyname} in ${test.bin.dir}" />
@@ -265,12 +267,12 @@ ${tool.dir}       : dir for tools
 			<arg value="//x" />
 			<arg path="${test.bin.dir}/${test.assemblyname}.dll-TestCoverage.xml" />
 			<arg value="//a" />
-			<arg value="${string::substring(test.assemblyname,0,string::last-index-of(test.assemblyname, '.Tests') )}" />
+			<arg value="${test.assemblyname.tocover}" />
             <arg value="//ea" />
             <arg value="CoverageExcludeAttribute" />
 			<arg value="//q" />
 			<arg path="${tool.dir}/nunit/net-2.0/nunit-console-x86.exe" />
-			<arg path="${test.bin.dir}/${test.assemblyname}.dll" />
+			<arg path="${test.bin.dir}/${test.assemblyfile}" />
 			<arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
 			<arg value="/nologo" />
             <arg value="/framework:${nant.settings.currentframework}" />

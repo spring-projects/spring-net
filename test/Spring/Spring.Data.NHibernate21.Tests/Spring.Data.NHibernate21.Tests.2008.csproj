@@ -40,7 +40,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\NHibernate21\net\2.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=1.0.4.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+    <Reference Include="NHibernate, Version=2.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\NHibernate21\net\2.0\NHibernate.dll</HintPath>
     </Reference>
@@ -90,6 +90,7 @@
     <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\TestObject.cs">
       <Link>Data\NHibernate\TestObject.cs</Link>
     </Compile>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Data\NHibernate\Bytecode\AbstractInjectableUserTypeFixture.cs" />
     <Compile Include="Data\NHibernate\Bytecode\Foo.cs" />
     <Compile Include="Data\NHibernate\Bytecode\IDelimiter.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Data\NHibernate\Bytecode\Product.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Spring.Data.NHibernate21.Tests.build" />
     <None Include="Spring.Data.NHibernate21.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

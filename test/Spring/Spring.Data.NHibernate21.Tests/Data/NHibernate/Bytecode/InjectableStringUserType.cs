@@ -1,4 +1,4 @@
-#if NH_2_1XX
+#if NH_2_1
 using System.Data;
 using NHibernate;
 using NHibernate.SqlTypes;
@@ -17,7 +17,7 @@ namespace Spring.Data.NHibernate.Bytecode
 
         public object NullSafeGet(IDataReader rs, string[] names, object owner)
         {
-            var resultString = (string)NHibernateUtil.String.NullSafeGet(rs, names[0]);
+            string resultString = (string)NHibernateUtil.String.NullSafeGet(rs, names[0]);
             if (resultString != null)
                 return delimiter.Delimit(resultString);
             return null;
@@ -61,7 +61,7 @@ namespace Spring.Data.NHibernate.Bytecode
         {
             get
             {
-                return new[] { new SqlType(DbType.String) };
+                return new SqlType[] { new SqlType(DbType.String) };
             }
         }
 

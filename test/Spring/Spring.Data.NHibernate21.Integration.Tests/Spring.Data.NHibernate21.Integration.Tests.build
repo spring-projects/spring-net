@@ -25,17 +25,15 @@
 				<lib>
 					<include name="${nh21.lib.dir}"/>
 				</lib>
-				<include name="System.Data.dll" />
-				<include name="System.EnterpriseServices.dll" />
-				<include name="log4net.dll" />
-				<include name="NHibernate.dll" />
-				<include name="*.dll" />
-				<exclude name="${project::get-name()}.dll" />
-				<exclude name="Spring.Data.NHibernate.Tests.dll" />
-				<exclude name="Spring.Data.NHibernate.dll" />
-				<exclude name="Spring.Data.NHibernate12.dll" />
-				<exclude name="Spring.Data.NHibernate20.dll" />
-				<exclude name="CloverRuntime.dll" />
+        <include name="${nh21.lib.dir}/NHibernate.dll" />
+        <include name="System.Data.dll" />
+        <include name="System.EnterpriseServices.dll" />
+        <include name="log4net.dll" />
+        <include name="*.dll" />
+        <exclude name="NHibernate.dll" />
+        <exclude name="${project::get-name()}.dll" />
+				<exclude name="Spring.Data.NHibernate*.dll" />
+				<include name="Spring.Data.NHibernate21.dll" />
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
 				<include name="**/*.xml" />

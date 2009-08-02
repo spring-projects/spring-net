@@ -1,9 +1,20 @@
-#if NH_2_1XX
+#if NH_2_1
 namespace Spring.Data.NHibernate.Bytecode
 {
     public class Foo
     {
-        public virtual string Description { get; set; }
+        private string _description;
+
+        public Foo(string description)
+        {
+            _description = description;
+        }
+
+        public virtual string Description
+        {
+            get { return _description; }
+            set { _description = value; }
+        }
     }
 }
 #endif

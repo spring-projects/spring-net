@@ -116,9 +116,18 @@
     <None Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\creditdebit.sql">
       <Link>Data\NHibernate\creditdebit.sql</Link>
     </None>
+    <None Include="Spring.Data.NHibernate21.Integration.Tests.build" />
     <None Include="Spring.Data.NHibernate21.Integration.Tests.dll.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\projects\nhibernate\trunk\nhibernate\src\NHibernate.DomainModel\NHibernate.DomainModel.csproj">
+      <Project>{5C649B55-1B3F-4C38-9998-1B043E94A244}</Project>
+      <Name>NHibernate.DomainModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\projects\nhibernate\trunk\nhibernate\src\NHibernate.Test\NHibernate.Test.csproj">
+      <Project>{7AEE5B37-C552-4E59-9B6F-88755BCB5070}</Project>
+      <Name>NHibernate.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2008.csproj">
       <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
       <Name>Spring.Aop.2008</Name>

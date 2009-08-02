@@ -71,7 +71,7 @@ namespace Spring.Data.NHibernate.Bytecode
 
                 SerializableProxyFactory proxyFactory = new SerializableProxyFactory();
                 proxyFactory.Interfaces = Interfaces;
-                proxyFactory.TargetSource = initializer;
+//                proxyFactory.TargetSource = initializer;
                 proxyFactory.ProxyTargetType = IsClassProxy;
                 proxyFactory.AddAdvice(initializer);
 

@@ -1,13 +1,31 @@
-#if NH_2_1XX
+#if NH_2_1
 using System;
 
 namespace Spring.Data.NHibernate.Bytecode
 {
     public class Product
     {
-        public virtual Guid Id { get; set; }
-        public virtual string Description { get; set; }
-        public virtual decimal Price { get; set; }
+        private Guid _id;
+        private string _description;
+        private decimal _price;
+
+        public virtual Guid Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
+        public virtual string Description
+        {
+            get { return _description; }
+            set { _description = value; }
+        }
+
+        public virtual decimal Price
+        {
+            get { return _price; }
+            set { _price = value; }
+        }
     }
 }
 #endif

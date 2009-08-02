@@ -7,7 +7,15 @@
       * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
 	<target name="build">
-		<echo message="nh.lib.dir=${nh.lib.dir}"/>
+
+        <!-- copy nh libs -->
+        <echo message="NH Libs: ${nh.lib.dir}" />
+        <copy todir="${current.bin.dir}" overwrite="true">
+          <fileset basedir="${nh.lib.dir}">
+            <include name="**/*.dll" />
+          </fileset>
+        </copy>
+
 		<!-- build Spring.Data.NHibernate -->
 		<csc target="library" define="${current.build.defines.csc}"
 				warnaserror="true"
@@ -24,17 +32,13 @@
 				<include name="../GenCommonAssemblyInfo.cs" />
 			</sources>
 			<references basedir="${current.bin.dir}">
-				<lib>
-					<include name="${nh.lib.dir}"/>
-				</lib>
 				<include name="System.Data.dll" />
 				<include name="System.Web.dll" />
 				<include name="System.EnterpriseServices.dll" />
-				<include name="NHibernate.dll" />
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
-				<exclude name="Spring.Data.NHibernate12.dll" />
-				<exclude name="CloverRuntime.dll" />
+				<exclude name="Spring.Data.NHibernate*.dll" />
+				<exclude name="Spring.Data.NHibernate*.*.dll" />
 			</references>
 		</csc>
 	</target>
