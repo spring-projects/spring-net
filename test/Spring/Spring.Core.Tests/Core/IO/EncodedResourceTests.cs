@@ -37,7 +37,7 @@ namespace Spring.Core.IO
         {
             StringResource testResource = new StringResource("test");
             EncodedResource er1 = new EncodedResource(testResource, Encoding.ASCII, true);
-            EncodedResource er2 = new EncodedResource(testResource, Encoding.UTF32, false);
+            EncodedResource er2 = new EncodedResource(testResource, Encoding.UTF8, false);
 
             Assert.AreEqual(testResource.GetHashCode(), er1.GetHashCode());
             Assert.AreEqual(er1.GetHashCode(), er2.GetHashCode());
@@ -52,6 +52,7 @@ namespace Spring.Core.IO
             Assert.AreEqual("test", reader.ReadToEnd());
         }
 
+#if NET_2_0
         [Test]
         public void OpensReaderWithAutoDetectEncoding()
         {
@@ -83,7 +84,7 @@ namespace Spring.Core.IO
             Assert.AreEqual(Encoding.UTF8.GetString(resourceData), actual);
             Assert.AreEqual(Encoding.UTF8, reader.CurrentEncoding);
         }
-
+#endif
         /// <summary>
         /// Returns the text bytes including the encoding's preamble (<see cref="Encoding.GetPreamble"/>), if any.
         /// </summary>
