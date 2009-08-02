@@ -205,7 +205,7 @@
     <orderedlist>
       <listitem>
         <para>Add the registry key
-        <literal>[HKEY_CURRENT_USER\SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\MyAssemblies]</literal>
+        <literal>[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\MyAssemblies]</literal>
         and set the value to be the directory
         <literal>&lt;spring.net-install-directory\bin\net\2.0</literal></para>
       </listitem>

@@ -1521,6 +1521,7 @@ if you want to build Spring.Testing.Microsoft (MSTest Support), you need to copy
       <include name="test/Spring/Spring.Services.Tests/**"/>
       <include name="test/Spring/Spring.Data.Tests/**"/>
       <include name="test/Spring/Spring.Data.Integration.Tests/**"/>
+      <include name="test/Spring/Spring.Data.NHibernate.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate20.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate20.Integration.Tests/**"/>
