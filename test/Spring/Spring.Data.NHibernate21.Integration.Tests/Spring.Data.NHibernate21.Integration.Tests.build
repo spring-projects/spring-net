@@ -29,8 +29,8 @@
         <warning number="${nowarn.numbers.test}" />
       </nowarn>
       <sources failonempty="true">
+        <include name="../Spring.Data.NHibernate.Integration.Tests/**/*.cs" />
         <include name="**/*.cs" />
-        <include name="../CommonAssemblyInfo.cs" />
       </sources>
       <references basedir="${current.bin.dir}">
         <include name="System.Data.dll" />
@@ -44,6 +44,10 @@
       </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />
+        <include name="**/*.sql" />
+      </resources>
+      <resources prefix="Spring" dynamicprefix="true" basedir="../Spring.Data.NHibernate.Integration.Tests" failonempty="true">
+        <include name="**/*.sql" />
       </resources>
     </csc>
 
@@ -54,7 +58,7 @@
 
   <target name="test" depends="build">
     <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
-    <call target="common.run-tests" />
+    <call target="common.run-tests" if="${test.integration.data}" />
   </target>
 
 </project>

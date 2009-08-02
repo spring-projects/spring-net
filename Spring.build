@@ -19,9 +19,16 @@ Main build targets:
 Build properties that may be set:
 =================================
 "project.build.sign":
+  values: bool: true|false
   signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
+
 "package.version":
+  values: string: a 3-part number xx.xx.xx
   set the package version
+
+"test.integration.data":
+  values: bool: true|false
+  set this to true to run integration tests
 
 Additional Remarks:
 ===================
@@ -32,8 +39,21 @@ Additional Remarks:
 *) Building Spring.Testing.Microsoft
   if you want to build Spring.Testing.Microsoft (MSTest Support), you need to have VS MSTest support installed (mstest.exe)
 
-Examples:
-=========
+
+Running Integration Tests:
+==========================
+
+*) Database Integration Tests
+- you need to have an MSSQL 2005 Server instance installed and configured an alias "SPRINGQA" for this instance
+- create a login "springqa" with password "springqa" and assign the 'db_sysadmin' role
+
+on the commandline enable the "test.integration.data" flag, e.g.:
+  nant test -f:spring.build -D:test.integration.data=true
+
+
+
+Commandline Examples:
+=====================
 
 *) to build the distribution package, copy the key file into $/Spring.Net.snk and execute
   nant clean package -f:spring.build -D:project.build.sign=true -D:package.version=1.3.0
@@ -427,7 +447,7 @@ Examples:
     <nant buildfile="test/Spring/Spring.Data.NHibernate30.Tests/Spring.Data.NHibernate30.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate30.Integration.Tests/Spring.Data.NHibernate30.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5' and not net-3.0}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services and not net-3.5}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit and not net-3.0}"/>
@@ -1463,6 +1483,7 @@ Examples:
   </target>
   <target name="set-build-namespaces-all">
     <property name="build.allnamespaces" value="true"/>
+    <property name="test.integration.data" value="false" />
     <property name="build-aop" value="true" />
     <property name="build-data" value="true" />
     <property name="build-services" value="true" />
@@ -1499,6 +1520,7 @@ Examples:
     </fileset>
   </target>
   <target name="set-build-namespaces-release">
+    <property name="test.integration.data" value="false" />
     <property name="build-aop" value="true"/>
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>
