@@ -51,6 +51,8 @@
     <Compile Include="Gateways\EmsStockServiceGateway.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Gateways\ISyncStockService.cs" />
+    <Compile Include="Gateways\RequestReplyEmsTemplate.cs" />
     <Compile Include="Handlers\StockAppHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -97,11 +97,6 @@
                     HintPath = "..\..\..\lib\Net\1.1\Common.Logging.dll"
                 />
                 <Reference
-                    Name = "antlr.runtime"
-                    AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\lib\Net\1.1\antlr.runtime.dll"
-                />
-                <Reference
                     Name = "Spring.Core.2003"
                     Project = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"

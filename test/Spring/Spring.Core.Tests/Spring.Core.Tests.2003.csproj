@@ -93,11 +93,6 @@
                     HintPath = "..\..\..\lib\Net\1.1\DotNetMock.dll"
                 />
                 <Reference
-                    Name = "antlr.runtime"
-                    AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\lib\Net\1.1\antlr.runtime.dll"
-                />
-                <Reference
                     Name = "Common.Logging"
                     AssemblyName = "Common.Logging"
                     HintPath = "..\..\..\lib\Net\1.1\Common.Logging.dll"

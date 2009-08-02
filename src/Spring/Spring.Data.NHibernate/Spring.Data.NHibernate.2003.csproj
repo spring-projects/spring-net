@@ -105,11 +105,6 @@
                     HintPath = "..\..\..\lib\Net\1.1\Common.Logging.dll"
                 />
                 <Reference
-                    Name = "antlr.runtime"
-                    AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\lib\Net\1.1\antlr.runtime.dll"
-                />
-                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\..\lib\NHibernate10\net\1.1\NHibernate.dll"

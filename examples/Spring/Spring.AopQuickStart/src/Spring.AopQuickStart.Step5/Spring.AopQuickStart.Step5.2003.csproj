@@ -84,11 +84,6 @@
                     AssemblyName = "Spring.Core"
                     HintPath = "..\..\..\..\..\bin\net\1.1\debug\Spring.Core.dll"
                 />
-                <Reference
-                    Name = "antlr.runtime"
-                    AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\..\..\bin\net\1.1\debug\antlr.runtime.dll"
-                />
             </References>
         </Build>
         <Files>

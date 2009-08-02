@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "antlr.runtime"
-                    AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\lib\net\1.1\antlr.runtime.dll"
-                />
-                <Reference
                     Name = "Common.Logging"
                     AssemblyName = "Common.Logging"
                     HintPath = "..\..\..\lib\net\1.1\Common.Logging.dll"
