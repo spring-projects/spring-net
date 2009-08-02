@@ -27,9 +27,14 @@
 			        <include name="**/*.xml" />
 			</resources>
 			<references basedir="${current.bin.dir}">
+				<include name="Spring.Core.dll" />
+				<include name="Spring.Data.dll" />
+				<include name="Spring.Core.Tests.dll" />
+				<include name="Spring.Data.Tests.dll" />
+				<include name="${vs-net.mstest.bin.dir}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
 				<include name="*.dll" />
-			    <include name="Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
 				<exclude name="${project::get-name()}.dll" />
+				<exclude name="CloverRuntime.dll" />
 			</references>
 		</csc>
 
@@ -39,16 +44,7 @@
 
     <target name="test" depends="build">
         <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
-        <call target="common.run-tests" />
+        <call target="common.run-tests.mstest" />
     </target>
-<!--
-	<target name="test" depends="build">
-		<nunit2outproc>
-			<formatter type="Plain" />
-			<formatter type="Xml" usefile="true" extension=".xml"
-			           outputdir="${current.bin.dir}/results" />
-			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll" />
-		</nunit2outproc>
-	</target>
--->
+
 </project>

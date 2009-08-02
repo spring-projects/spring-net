@@ -387,7 +387,7 @@ if you want to build Spring.Testing.Microsoft (MSTest Support), you need to copy
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services and not net-3.5}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq and not net-3.0}"/>
@@ -416,7 +416,9 @@ if you want to build Spring.Testing.Microsoft (MSTest Support), you need to copy
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and not net-3.0}"/>
+    <!--
+    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
+    -->
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq and not net-3.0}"/>
@@ -1044,7 +1046,7 @@ if you want to build Spring.Testing.Microsoft (MSTest Support), you need to copy
         <include name="Spring.build"/>
         <include name="Spring.include"/>
         <include name="common-project.include"/>
-        <include name="BreakingChanges-1.3.txt"/>
+        <include name="BreakingChanges.txt"/>
         <!-- exclude VS.Net stuff -->
         <exclude name="**/sdk-web/**"/>
         <exclude name="**/*.suo"/>
@@ -1312,6 +1314,12 @@ if you want to build Spring.Testing.Microsoft (MSTest Support), you need to copy
           file="src/Spring/Spring.Messaging.Nms/Messaging/Nms/Config/spring-nms-1.2.xsd"/>
 
     <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Messaging.Ems/Messaging/Ems/Config/spring-ems-1.3.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
+          file="src/Spring/Spring.Template.Velocity/Template/Velocity/Config/spring-nvelocity-1.3.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
           file="build-support/install-schema.build"/>
 
     <echo message="copying source code for release..."/>
@@ -1321,13 +1329,21 @@ if you want to build Spring.Testing.Microsoft (MSTest Support), you need to copy
       <fileset refid="src.to.copy"/>
     </copy>
 
-
-      <copy todir="${current.package.dir}/examples">
+    <!-- copy examples -->
+    <copy todir="${current.package.dir}/examples">
         <fileset basedir="examples">
           <include name="**/*.refresh"/>
           <include name="**/*.refresh"/>
         </fileset>
-      </copy>
+    </copy>
+
+    <!-- copy templates -->
+    <copy todir="${current.package.dir}/dev-support">
+        <fileset basedir="dev-support">
+          <include name="resharper/**"/>
+          <include name="vs.net-2008/**"/>
+        </fileset>
+    </copy>
 
 
 

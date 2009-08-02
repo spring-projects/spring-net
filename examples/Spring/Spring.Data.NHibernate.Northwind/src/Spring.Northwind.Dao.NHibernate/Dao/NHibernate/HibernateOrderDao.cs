@@ -33,6 +33,9 @@ using Spring.Transaction.Interceptor;
 
 namespace Spring.Northwind.Dao.NHibernate
 {
+    /// <summary>
+    /// Data access object for Orders
+    /// </summary>
     [Repository]
     public class HibernateOrderDao : HibernateDao, IOrderDao
     {
