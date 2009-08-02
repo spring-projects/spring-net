@@ -58,8 +58,8 @@
     include the schema as part of your application project.</para>
 
     <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+&lt;objects xmlns="http://www.springframework.net"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"&gt;
   &lt;object id="..." type="..."&gt;
   ...
@@ -112,10 +112,6 @@
       </tgroup>
     </table>
 
-    <table>
-      <title />
-    </table>
-
     <para>Spring's .xsd schemas are located in the directory doc/schema. In
     that directory is also a NAnt build file to help copy over the .xsd files
     to the appropriate VS.NET locations. To execute this script simply type
@@ -160,7 +156,7 @@
     &lt;context&gt;
       &lt;resource uri="config://spring/objects"/&gt;
     &lt;/context&gt;
-       
+
     &lt;objects xmlns="http://www.springframework.net"&gt;
         ...
     &lt;/objects&gt;

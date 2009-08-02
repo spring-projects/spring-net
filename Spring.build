@@ -818,7 +818,7 @@ Examples:
   </target>
 
   <target name="doc-reference">
-    <nant buildfile="./doc/reference/docbook.build" target="all"/>
+    <nant buildfile="./doc/reference/docbook.build" />
   </target>
 
   <target name="doc-sdk">
