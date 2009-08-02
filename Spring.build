@@ -53,9 +53,12 @@ Examples:
   <property name="tool.dir" value="${project::get-base-directory()}/build-support/tools"/>
 
   <!-- default location of mstest executable and reference assemblies -->
-  <!-- See target set-user-overrides for how to change this to your machine values -->
-  <!-- property name="vs-net.mstest.bin.dir" value="C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE"/ -->
   <readregistry property="vs-net.mstest.bin.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+  <!--
+      the line below is for the ccnet build box - see target set-user-overrides for how to change this to your machine values if necessary
+      - or better check the registry key as shown above
+   -->
+  <property name="vs-net.mstest.bin.dir" value="K:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE" if="${not property::exists('vs-net.mstest.bin.dir')}" />
 
   <!-- debug or release -->
   <property name="project.build.config" value="debug"/>
