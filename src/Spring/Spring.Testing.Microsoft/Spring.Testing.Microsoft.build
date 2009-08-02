@@ -28,7 +28,6 @@
 				<include name="${vs-net.mstest.bin.dir}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
 			        <include name="*.dll" />
 			        <exclude name="${project::get-name()}.dll" />
-				<exclude name="CloverRuntime.dll" />
 		        </references>
         </csc>
     </target>
