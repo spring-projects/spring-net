@@ -1477,8 +1477,6 @@ if you want to build Spring.Testing.Microsoft (MSTest Support), you need to copy
       <exclude name="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web.References/*.dll"/>
       <exclude name="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web.References/*.pdb"/>
       <exclude name="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web.References/*.xml"/>
-      <include name="installer/**"/>
-
     </fileset>
   </target>
   <target name="set-build-namespaces-release">
@@ -1504,6 +1502,7 @@ if you want to build Spring.Testing.Microsoft (MSTest Support), you need to copy
       <include name="src/Spring/Spring.Web.Extensions/**"/>
       <include name="src/Spring/Spring.Services/**"/>
       <include name="src/Spring/Spring.Data/**"/>
+      <include name="src/Spring/Spring.Data.NHibernate/**"/>
       <include name="src/Spring/Spring.Data.NHibernate12/**"/>
       <include name="src/Spring/Spring.Data.NHibernate20/**"/>
       <include name="src/Spring/Spring.Data.NHibernate21/**"/>

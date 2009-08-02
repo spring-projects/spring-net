@@ -150,10 +150,6 @@
     <EmbeddedResource Include="Web\Support\ControlInterceptionTests.objects.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="antlr.runtime, Version=2.7.6.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Net\2.0\antlr.runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging, Version=1.1.0.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>

@@ -1,11 +1,11 @@
-THE SPRING.NET FRAMEWORK, Release 1.3.0RC1  (July 31, 2009)
+THE SPRING.NET FRAMEWORK, Release 1.3.0 RC1  (August 3, 2009)
 --------------------------------------------------------------------
 http://www.springframework.net/
 
 
 1. INTRODUCTION
 
-The 1.3.0RC release of Spring.NET contains
+The 1.3.0 RC1 release of Spring.NET contains
 
      * A full featured Inversion of Control container
      * An Aspect Oriented Programming framework
@@ -34,6 +34,10 @@ The 1.3.0RC release of Spring.NET contains
        - Simplifies the use MSMQ by providing helper classes for message sending and receiving.  Integrates with Spring's transaction management features.
      * NMS integration
        - Simplifies the use of NMS by providing helper classes for message sending and receiving.
+     * TIBCO EMS integration
+       - Simplifies the use of TIBCO EMS by providing helper classes for message sending and receiving.
+     * NVelocity integration
+       - Simplifies the use of configuring NVelocity
 
 Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002).
 
@@ -56,6 +60,7 @@ Release contents:
 * "examples" contains sample applications.
 * "build-support" contains additonal applications need to build using NAnt as some convenience
    VS.NET solution files.
+* "dev-supprt" contains 'developer support' tools and code, such as solution templates for VS.NET
 
 debug build is done using /DEBUG:full and release build using /DEBUG:pdbonly flags.
 

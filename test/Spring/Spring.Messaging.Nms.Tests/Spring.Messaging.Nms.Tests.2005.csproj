@@ -29,10 +29,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
-    <Reference Include="antlr.runtime, Version=2.7.5.22, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\net\2.0\antlr.runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Apache.NMS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\Apache.NMS.dll</HintPath>
