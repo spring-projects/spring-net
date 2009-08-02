@@ -38,6 +38,26 @@ namespace Spring.Util
     public sealed class CollectionUtils
     {
         /// <summary>
+        /// Checks if the given array or collection has elements and none of the elements is null.
+        /// </summary>
+        /// <param name="collection">the collection to be checked.</param>
+        /// <returns>true if the collection has a length and contains only non-null elements.</returns>
+        public static bool HasElements(ICollection collection)
+        {
+            return ArrayUtils.HasElements(collection);
+        }
+
+        /// <summary>
+        /// Checks if the given array or collection is null or has no elements.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        public static bool HasLength(ICollection collection)
+        {
+            return ArrayUtils.HasLength(collection);
+        }
+
+        /// <summary>
         /// Determine whether a given collection only contains
         /// a single unique object
         /// </summary>

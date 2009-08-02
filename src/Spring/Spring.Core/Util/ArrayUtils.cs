@@ -174,5 +174,38 @@ namespace Spring.Util
 
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Concatenates 2 arrays of compatible element types
+        /// </summary>
+        /// <remarks>
+        /// If either of the arguments is null, the other array is returned as the result. 
+        /// The array element types may differ as long as they are assignable. The result array will be of the "smaller" element type.
+        /// </remarks>
+        public static Array Concat(Array first, Array second)
+        {
+            if (first == null) return second;
+            if (second == null) return first;
+
+            Type resultElementType;
+            Type firstElementType = first.GetType().GetElementType();
+            Type secondElementType = second.GetType().GetElementType();
+            if (firstElementType.IsAssignableFrom(secondElementType))
+            {
+                resultElementType = firstElementType;
+            }
+            else if (secondElementType.IsAssignableFrom(firstElementType))
+            {
+                resultElementType = secondElementType;
+            }
+            else
+            {
+                throw new ArgumentException(string.Format("Array element types '{0}' and '{1}' are not compatible", firstElementType, secondElementType));
+            }
+            Array result = Array.CreateInstance(resultElementType, first.Length + second.Length);
+            Array.Copy( first, result, first.Length );
+            Array.Copy(second, 0, result, first.Length, second.Length);
+            return result;
+        }
     }
 }

@@ -64,5 +64,22 @@ namespace Spring.Util
             Assert.IsFalse(ArrayUtils.HasLength(new byte[0]));
             Assert.IsTrue(ArrayUtils.HasLength(new byte[1]));
         }
+
+	    [Test]
+	    public void ConcatsArrays()
+	    {
+	        byte[] array1 = new byte[] { 0, 1, 2, 3};
+            byte[] array2 = new byte[] { 4, 5, 6, 7};
+	        byte[] result = (byte[])ArrayUtils.Concat(array1, array2);
+            Assert.AreEqual( new byte[] { 0,1,2,3,4,5,6,7 }, result );
+	    }
+
+        [Test]
+	    public void ConcatsNullArrays()
+	    {
+	        byte[] array = new byte[] { 0, 1, 2, 3};
+            Assert.AreEqual(new byte[] { 0, 1, 2, 3 }, ArrayUtils.Concat(array, null));
+            Assert.AreEqual(new byte[] { 0, 1, 2, 3 }, ArrayUtils.Concat(null, array));
+	    }
 	}
 }

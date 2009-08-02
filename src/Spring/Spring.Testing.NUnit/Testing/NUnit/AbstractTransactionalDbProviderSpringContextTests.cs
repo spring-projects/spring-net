@@ -1,8 +1,8 @@
 using System;
 using System.Data;
-using Spring.Data;
 using Spring.Data.Common;
 using Spring.Data.Core;
+using Spring.Testing.Ado;
 
 namespace Spring.Testing.NUnit
 {
@@ -98,8 +98,16 @@ namespace Spring.Testing.NUnit
             return (int) adoTemplate.ExecuteScalar(CommandType.Text, "SELECT COUNT(0) FROM " + tableName); 
 
         }
-        
-        //TODO ExecuteScript...
 
+        /// <summary>
+        /// Execute the given SQL script using 
+        /// <see cref="SimpleAdoTestUtils.ExecuteSqlScript(Spring.Data.IAdoOperations,Spring.Core.IO.IResourceLoader,string,bool,System.Text.RegularExpressions.Regex[])"/>
+        /// </summary>
+        /// <param name="scriptResourcePath"></param>
+        /// <param name="continueOnError"></param>
+        protected void ExecuteSqlScript(string scriptResourcePath, bool continueOnError)
+        {
+            SimpleAdoTestUtils.ExecuteSqlScript( this.AdoTemplate, this.applicationContext, scriptResourcePath, continueOnError);
+        }
     }
 }
