@@ -58,15 +58,5 @@
         <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
         <call target="common.run-tests" />
     </target>
-<!--
-	<target name="test" depends="build">
-		<nunit2outproc>
-			<formatter type="Plain" />
-			<formatter type="Xml" usefile="true" extension=".xml"
-			           outputdir="${current.bin.dir}/results" />
-			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll"
-			      appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
-		</nunit2outproc>
-	</target>
--->
+
 </project>

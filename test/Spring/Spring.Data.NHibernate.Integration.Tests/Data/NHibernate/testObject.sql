@@ -7,4 +7,4 @@ CREATE TABLE [TestObjects] (
 	(
 		[TestObjectNo] ASC
 	)
-)
+);

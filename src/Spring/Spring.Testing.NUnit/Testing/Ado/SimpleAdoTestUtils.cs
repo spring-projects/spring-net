@@ -95,9 +95,17 @@ namespace Spring.Testing.Ado
         /// <summary>
         /// Execute the given script
         /// </summary>
-        public static void ExecuteSqlScript(AdoTemplate adoTemplate, string script, params Regex[] blockDelimiter)
+        public static void ExecuteSqlScript(IAdoOperations adoTemplate, string script, params Regex[] blockDelimiter)
         {
             ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(new StringResource(script)), false, blockDelimiter);
+        }
+
+        /// <summary>
+        /// Execute the given script
+        /// </summary>
+        public static void ExecuteSqlScript(IAdoOperations adoTemplate, string script, bool continueOnError, params Regex[] blockDelimiter)
+        {
+            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(new StringResource(script)), continueOnError, blockDelimiter);
         }
 
         /// <summary>
@@ -106,6 +114,14 @@ namespace Spring.Testing.Ado
         public static void ExecuteSqlScript(IAdoOperations adoTemplate, IResourceLoader resourceLoader, string scriptResourcePath, bool continueOnError, params Regex[] blockDelimiter)
         {
             ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(resourceLoader.GetResource(scriptResourcePath)), continueOnError, blockDelimiter);
+        }
+
+        /// <summary>
+        /// Execute the given script
+        /// </summary>
+        public static void ExecuteSqlScript(IAdoOperations adoTemplate, IResource resource, params Regex[] blockDelimiter)
+        {
+            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(resource), false, blockDelimiter);
         }
 
         /// <summary>

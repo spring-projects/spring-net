@@ -7,6 +7,7 @@ CREATE TABLE [Credits](
 	[CreditID] ASC
 ) ON [PRIMARY]
 ) ON [PRIMARY]
+;
 
 CREATE TABLE [Debits](
 	[DebitID] [int] IDENTITY NOT NULL,
@@ -16,3 +17,4 @@ CREATE TABLE [Debits](
 	[DebitID] ASC
 ) ON [PRIMARY]
 ) ON [PRIMARY]
+;

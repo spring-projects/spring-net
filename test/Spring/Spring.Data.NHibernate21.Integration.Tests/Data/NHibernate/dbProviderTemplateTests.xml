@@ -16,12 +16,12 @@
 
   <db:provider id="targetDbProvider" 
                provider="SqlServer-2.0"
-               connectionString="Data Source=(local);Database=Spring;Trusted_Connection=False"/>
+               connectionString="Data Source=SPRINGQA;Database=Spring;Trusted_Connection=False"/>
 
 
   <db:provider id="standardDbProvider"
              provider="SqlServer-2.0"
-             connectionString="Data Source=(local);Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa"/>
+             connectionString="Data Source=SPRINGQA;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa"/>
 
 
 

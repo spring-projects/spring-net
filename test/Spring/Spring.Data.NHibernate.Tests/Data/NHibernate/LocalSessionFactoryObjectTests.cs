@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2007 the original author or authors.
+ * Copyright © 2002-2009 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,24 +18,20 @@
 
 #endregion
 
-#region Imports
-
 using System.Collections;
 using System.IO;
 using NHibernate;
-#if NH_2_1
-using Spring.Data.NHibernate.Bytecode;
-#endif
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 
-using NUnit.Framework;
-
 using Spring.Data.Common;
+#if NH_2_1
+using Spring.Data.NHibernate.Bytecode;
+#endif
 
-#endregion
+using NUnit.Framework;
 
 namespace Spring.Data.NHibernate
 {
