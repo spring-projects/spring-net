@@ -84,12 +84,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.NUnit.2005",
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.2005", "src\Spring\Spring.Data.NHibernate\Spring.Data.NHibernate.2005.csproj", "{130E1609-45A7-4F65-B112-105F2DD3E2CE}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Integration.Tests.2005", "test\Spring\Spring.Data.NHibernate.Integration.Tests\Spring.Data.NHibernate.Integration.Tests.2005.csproj", "{4A07E150-ED90-407C-8CAD-4760444DDFD9}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -97,12 +91,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Inte
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate12.2005", "src\Spring\Spring.Data.NHibernate12\Spring.Data.NHibernate12.2005.csproj", "{90F2D070-6F98-4926-A626-BD7A6071D6D9}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Tests.2005", "test\Spring\Spring.Data.NHibernate.Tests\Spring.Data.NHibernate.Tests.2005.csproj", "{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -151,6 +139,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.2005", "sr
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Tests.2005", "test\Spring\Spring.Messaging.Tests\Spring.Messaging.Tests.2005.csproj", "{41BC3AEA-7EB3-48BF-B1EC-84119376AC98}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate20.Tests.2005", "test\Spring\Spring.Data.NHibernate20.Tests\Spring.Data.NHibernate20.Tests.2005.csproj", "{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -322,18 +316,6 @@ Global
 		{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Debug|.NET.Build.0 = Debug|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Release|.NET.ActiveCfg = Release|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Release|.NET.Build.0 = Release|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{130E1609-45A7-4F65-B112-105F2DD3E2CE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Debug|.NET.Build.0 = Debug|Any CPU
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -358,18 +340,6 @@ Global
 		{90F2D070-6F98-4926-A626-BD7A6071D6D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90F2D070-6F98-4926-A626-BD7A6071D6D9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{90F2D070-6F98-4926-A626-BD7A6071D6D9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|.NET.Build.0 = Debug|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|.NET.ActiveCfg = Release|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|.NET.Build.0 = Release|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4D6D616B-7643-4D6B-8E5E-14ECFDB9AF82}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{4D6D616B-7643-4D6B-8E5E-14ECFDB9AF82}.Debug|.NET.Build.0 = Debug|Any CPU
 		{4D6D616B-7643-4D6B-8E5E-14ECFDB9AF82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -454,6 +424,16 @@ Global
 		{41BC3AEA-7EB3-48BF-B1EC-84119376AC98}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41BC3AEA-7EB3-48BF-B1EC-84119376AC98}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{41BC3AEA-7EB3-48BF-B1EC-84119376AC98}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|.NET.ActiveCfg = Release|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\build\VS.Net.2005\Spring.Data.NHibernate.Tests\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0,NH_2_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -28,25 +28,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+    <Reference Include="Castle.Core, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\NHibernate10\net\2.0\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\..\lib\NHibernate20\net\2.0\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy2, Version=2.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\NHibernate20\net\2.0\Castle.DynamicProxy2.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging, Version=1.1.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+    <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\NHibernate10\net\2.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\lib\NHibernate20\net\2.0\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\NHibernate10\net\2.0\log4net.dll</HintPath>
+      <HintPath>..\..\..\lib\NHibernate20\net\2.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=1.0.4.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+    <Reference Include="NHibernate, Version=2.0.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\NHibernate10\net\2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\lib\NHibernate20\net\2.0\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.2.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,9 +73,9 @@
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
       <Name>Spring.Core.2005</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Data.NHibernate\Spring.Data.NHibernate.2005.csproj">
-      <Project>{130E1609-45A7-4F65-B112-105F2DD3E2CE}</Project>
-      <Name>Spring.Data.NHibernate.2005</Name>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data.NHibernate20\Spring.Data.NHibernate20.2005.csproj">
+      <Project>{71368632-B8B7-4A6A-8C65-8DA848120C82}</Project>
+      <Name>Spring.Data.NHibernate20.2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2005.csproj">
       <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
