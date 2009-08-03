@@ -77,7 +77,8 @@ Commandline Examples:
   <property name="tool.dir" value="${project::get-base-directory()}/build-support/tools"/>
 
   <!-- turn on all tests if test.full specified -->
-  <property name="test.integration.data" value="${property::exists('test.full') and test.full}" />
+  <property name="test.full" value="false" />
+  <property name="test.integration.data" value="${test.full}" />
 
   <!-- default location of mstest executable and reference assemblies -->
   <readregistry property="vs-net.mstest.bin.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
@@ -548,7 +549,6 @@ Commandline Examples:
     <echo message="Compiling debug configuration for all runtime configurations."/>
     <property name="nant.target.root.name" value="build"/>
     <call target="build-all-function"/>
-    <call target="build-solutions" if="${test.full}" />
   </target>
 
   <target name="build-1.1">
@@ -855,8 +855,6 @@ Commandline Examples:
     <!-- call target="copykeys"/ -->
     <!-- build all binaries -->
     <call target="build-all-function"/>
-    <!-- build all vs solutions -->
-    <call target="build-solutions" />
     <call target="package-cvs"/>
     <!-- only copy the supporting tools directory for the daily build. -->
     <call target="package-tools"/>
@@ -875,6 +873,8 @@ Commandline Examples:
     <!-- ignore Mono 2.0 for now -->
     <!-- <call target="${nant.target.root.name}-mono-2.0" /> -->
 
+    <!-- build all vs solutions -->
+    <call target="build-solutions" if="${test.full}" />
   </target>
 
   <target name="daily-build-1.1">
@@ -1285,28 +1285,23 @@ Commandline Examples:
           <include name="*/*/Spring.Template.Velocity.xml"/>
           <include name="*/*/Spring.Template.Velocity.pdb"/>
 
-<!--
-          <exclude name="**/3.0/**"/>
-          <exclude name="**/release/Spring/**"/>
-          <exclude name="**/debug/Spring/**"/>
-          <exclude name="**/examples/**"/>
-          <exclude name="**/results/**"/>
-          <exclude name="mono/**"/>
-          <exclude name="mono/**"/>
--->
+          <exclude name="/3.0/**"/>
+          <exclude name="/3.5/**"/>
+
         </fileset>
       </copy>
-    </if>
-<!--
+   </if>
+
     <if test="${net-3.0.installed}">
-      <copy todir="${current.package.dir}/bin/net">
-        <fileset basedir="./build/net">
-          <include name="**/Spring.Services.dll"/>
-          <include name="**/Spring.Services.xml"/>
-          <include name="**/Spring.Services.pdb"/>
+      <copy todir="${current.package.dir}/bin/net/3.0">
+        <fileset basedir="./build/net/3.0">
+          <include name="Spring.Services.dll"/>
+          <include name="Spring.Services.xml"/>
+          <include name="Spring.Services.pdb"/>
         </fileset>
       </copy>
     </if>
+
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
       <copy todir="${current.package.dir}/bin/net">
         <fileset basedir="./build/net">
@@ -1343,7 +1338,7 @@ Commandline Examples:
         <include name="**/debug/bin/**"/>
       </fileset>
     </delete>
--->
+
   </target>
 
   <target name="package-sdkdocs" depends="set-package-configuration">
