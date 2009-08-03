@@ -14,16 +14,16 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\..\..\build\VS.NET.2005\Spring.Messaging.Tests\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\..\..\build\VS.NET.2005\Spring.Messaging.Tests\Debug\</OutputPath>
+    <DefineConstants>TRACE;NET_2_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -79,12 +79,15 @@
     <EmbeddedResource Include="Messaging\queue-context.xml" />
     <EmbeddedResource Include="Messaging\Core\MessageQueueTemplateTests.xml" />
     <EmbeddedResource Include="Messaging\Listener\DistributedTxMessageListenerContainerTests.xml" />
+    <EmbeddedResource Include="Messaging\Core\MessageQueueMetadataCacheTests.xml" />
     <Content Include="Spring.Messaging.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messaging\Core\MessageQueueMetadataCacheTests.cs" />
     <Compile Include="Messaging\Core\ThreadingTests.cs" />
+    <Compile Include="Messaging\Listener\Adapter\MessageListenerAdapterTests.cs" />
     <Compile Include="Messaging\Listener\DistributedTxMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Listener\LoggingExceptionHandler.cs" />
     <Compile Include="Messaging\Listener\NonTransactionalMessageListenerContainerTests.cs">
@@ -102,8 +105,11 @@
     </Compile>
     <Compile Include="Messaging\Support\MessageAlreadyProcessedException.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Spring.Messaging.Tests.build" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

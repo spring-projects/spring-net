@@ -21,7 +21,7 @@ Rebuilding Solutions using Nant and "solutions.build":
 
         <property name="vs2003.install.dir.key" value="SOFTWARE\Microsoft\VisualStudio\7.1\InstallDir"/>
         <readregistry property="vs2003.install.dir" key="${vs2003.install.dir.key}" hive="LocalMachine" failonerror="false"/>
-	<property name="devenv11.exe" value="${vs2003.install.dir}devenv.exe" />
+	<property name="devenv11.exe" value="${vs2003.install.dir}devenv.exe" failonerror="false" />
 	<property name="msbuild.exe" value="C:\WINDOWS\Microsoft.NET\Framework\v3.5\msbuild.exe"/>
 	<property name="buildconfiguration" value="Debug" />
 
@@ -69,8 +69,8 @@ Rebuilding Solutions using Nant and "solutions.build":
 		    <in>
 		        <items basedir="examples/Spring">
 		            <include name="**/*.2005.sln" />
+		            <include name="**/*.2008.sln" />
 		            <include name="Spring.Data.NHibernate/Spring.Northwind.sln" />
-		            <include name="Spring.WcfQuickStart/Spring.WcfQuickStart.2008.sln" />
 		        </items>
 		    </in>
 		    <do>
@@ -80,8 +80,13 @@ Rebuilding Solutions using Nant and "solutions.build":
 		    </do>
 		</foreach>
 
-		<!-- build "main" solution (extra call because of configuration 'debug-1.1') -->
+		<!-- build "main" solution -->
 		<property name="solutionfile" value="Spring.NET.2005.sln" />
+		<property name="solutionconfiguration" value="${buildconfiguration}" />
+		<call target="RebuildSolution-2.0" />
+
+		<!-- build "main" solution -->
+		<property name="solutionfile" value="Spring.NET.2008.sln" />
 		<property name="solutionconfiguration" value="${buildconfiguration}" />
 		<call target="RebuildSolution-2.0" />
 

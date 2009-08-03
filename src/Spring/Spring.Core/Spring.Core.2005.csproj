@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
@@ -22,6 +22,11 @@
     <StartupObject>
     </StartupObject>
     <SignAssembly>false</SignAssembly>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\build\VS.Net.2005\Spring.Core\Debug\</OutputPath>
@@ -103,6 +108,7 @@
     <Compile Include="Collections\DictionarySet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\Generic\ReadOnlyDictionary.cs" />
     <Compile Include="Collections\HashedSet.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -167,9 +173,7 @@
     <Compile Include="Context\IApplicationEventPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Context\IConfigurableApplicationContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Context\IConfigurableApplicationContext.cs" />
     <Compile Include="Context\IHierarchicalMessageSource.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -255,6 +259,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Conventions.cs" />
+    <Compile Include="Core\IO\EncodedResource.cs" />
+    <Compile Include="Core\MethodArgumentsCriteria.cs" />
     <Compile Include="Core\IO\AbstractResource.cs" />
     <Compile Include="Core\IO\AssemblyResource.cs" />
     <Compile Include="Core\IO\ConfigSectionResource.cs" />
@@ -284,11 +290,12 @@
     <Compile Include="Core\IOrdered.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\MethodArgumentsCriteria.cs" />
     <Compile Include="Core\MethodInvocationException.cs" />
     <Compile Include="Core\MethodParameter.cs" />
     <Compile Include="Core\MethodParametersCountCriteria.cs" />
-    <Compile Include="Core\MethodParametersCriteria.cs" />
+    <Compile Include="Core\MethodParametersCriteria.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\MethodReturnTypeCriteria.cs" />
     <Compile Include="Core\NotReadablePropertyException.cs" />
     <Compile Include="Core\NotWritablePropertyException.cs" />
@@ -442,9 +449,9 @@
     <Compile Include="Expressions\Parser\antlr\TokenWithIndex.cs" />
     <Compile Include="Expressions\Parser\antlr\TreeParser.cs" />
     <Compile Include="Expressions\Parser\antlr\TreeParserSharedInputState.cs" />
+    <Compile Include="Expressions\SyntaxErrorException.cs" />
     <Compile Include="Expressions\Parser\ExpressionLexer.cs" />
     <Compile Include="Expressions\Parser\ExpressionParser.cs" />
-    <Compile Include="Expressions\Parser\ExpressionParserTokenTypes.cs" />
     <Compile Include="Expressions\Processors\AverageAggregator.cs" />
     <Compile Include="Expressions\Processors\ConversionProcessor.cs" />
     <Compile Include="Expressions\Processors\NonNullProcessor.cs" />
@@ -591,7 +598,6 @@
     <Compile Include="Expressions\StringLiteralNode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Expressions\SyntaxErrorException.cs" />
     <Compile Include="Expressions\TernaryNode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -692,7 +698,6 @@
     <Compile Include="Objects\Factory\Xml\NamespaceParserSupport.cs" />
     <Compile Include="Objects\Factory\Xml\ObjectDefinitionParserHelper.cs" />
     <Compile Include="Objects\Factory\Xml\ParserContext.cs" />
-    <Compile Include="Objects\Factory\Xml\ReplacedMethodOverride.cs" />
     <Compile Include="Objects\Factory\Xml\XmlReaderContext.cs" />
     <Compile Include="Objects\FatalObjectException.cs" />
     <Compile Include="Objects\IMergable.cs" />
@@ -944,6 +949,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Objects\Factory\Support\PropertiesObjectDefinitionReader.cs" />
+    <Compile Include="Objects\Factory\Xml\ReplacedMethodOverride.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Objects\Factory\Support\RootObjectDefinition.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1126,17 +1134,18 @@
     <Compile Include="Util\StringUtils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Validation\Actions\ExceptionAction.cs" />
+    <Compile Include="Validation\BaseSimpleValidator.cs" />
+    <Compile Include="Validation\BaseValidatorGroup.cs" />
     <Compile Include="Validation\Actions\ErrorMessageAction.cs" />
     <Compile Include="Validation\Actions\ExpressionAction.cs" />
     <Compile Include="Validation\AnyValidatorGroup.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Validation\BaseSimpleValidator.cs" />
     <Compile Include="Validation\BaseValidationAction.cs" />
     <Compile Include="Validation\BaseValidator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Validation\BaseValidatorGroup.cs" />
     <Compile Include="Validation\Config\ValidationNamespaceParser.cs" />
     <Compile Include="Validation\ErrorMessage.cs" />
     <Compile Include="Validation\ExclusiveValidatorGroup.cs">
@@ -1172,34 +1181,28 @@
     </Compile>
     <None Include="Expressions\Expression.g" />
     <EmbeddedResource Include="Objects\Factory\Xml\spring-tool-1.1.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-1.1.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-1.3.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <None Include="Objects\Factory\Xml\spring-objects-1.3.xsx">
-      <DependentUpon>spring-objects-1.3.xsd</DependentUpon>
-    </None>
+    <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-1.3.xsd" />
     <None Include="Spring.Core.build" />
-    <None Include="Validation\Config\spring-validation-1.1.xsx">
-      <DependentUpon>spring-validation-1.1.xsd</DependentUpon>
-    </None>
-    <EmbeddedResource Include="Validation\Config\spring-validation-1.1.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Validation\Config\spring-validation-1.3.xsd" />
+    <EmbeddedResource Include="Validation\Config\spring-validation-1.1.xsd" />
     <EmbeddedResource Include="Resources\Strings.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="README_ANTLR.txt" />
     <Content Include="Expressions\Parser\ExpressionParserTokenTypes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>rem $(ProjectDir)\..\..\..\tools\antlr-2.7.6\antlr-2.7.6.exe -o $(ProjectDir)\Expressions\Parser $(ProjectDir)\Expressions\Expression.g
+    <PreBuildEvent>$(ProjectDir)..\..\..\build-support\tools\antlr-2.7.6\antlr-2.7.6.exe -o $(ProjectDir)Expressions\Parser $(ProjectDir)Expressions\Expression.g
 </PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>

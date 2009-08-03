@@ -82,10 +82,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Spring.Aspects\Spring.Aspects.csproj">
-      <Project>{53B04C54-63EA-45AA-BB83-8950AF3C5D68}</Project>
-      <Name>Spring.Aspects</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.csproj">
       <Project>{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}</Project>
       <Name>Spring.Northwind.Dao.NHibernate</Name>

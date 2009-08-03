@@ -117,7 +117,6 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Data\AccountCreditDao.cs" />
     <Compile Include="Data\AccountDebitDao.cs" />
     <Compile Include="Data\AccountManager.cs" />
@@ -127,7 +126,7 @@
     <Compile Include="Data\AutoDeclarativeTxTests.cs" />
     <Compile Include="Data\CallCreateTestObject.cs" />
     <Compile Include="Data\ConsoleLoggingAroundAdvice.cs" />
-    <Compile Include="Data\Objects\Generic\MappingVacationQuery.cs" />
+    <Compile Include="Data\OracleAdoTemplateTests.cs" />
     <Compile Include="Data\TestTxIsolationLevelTests.cs" />
     <Compile Include="Data\Generic\GenericAdoTemplateTests.cs" />
     <Compile Include="Data\Generic\ITestObjectDao.cs" />
@@ -179,12 +178,19 @@
     <EmbeddedResource Include="Data\templateTests.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Spring.Data.Integration.Tests.build" />
     <None Include="Spring.Data.Integration.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\TestTxIsolationLevel.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\CreateTestObject.sql" />
+    <Content Include="Data\CreditsDebitsSchema.sql" />
+    <Content Include="Data\DTC1.1AppContext.xml" />
+    <Content Include="Data\testobjects-sqlserver.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -47,6 +47,8 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Testing\Ado\IPlatformTransaction.cs" />
+    <Compile Include="Testing\Ado\SimpleAdoTestUtils.cs" />
     <Compile Include="Testing\NUnit\AbstractDependencyInjectionSpringContextTests.cs" />
     <Compile Include="Testing\NUnit\AbstractSpringContextTests.cs" />
     <Compile Include="Testing\NUnit\AbstractTransactionalDbProviderSpringContextTests.cs" />
