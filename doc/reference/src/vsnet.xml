@@ -194,7 +194,11 @@
     templates are provided and there are plans for more. All the templates
     aside from the web template have been created using <link
     ns2:href="http://solutionfactory.codeplex.com/">SolutionFactory VS.NET
-    Add-in</link>.</para>
+    Add-in</link>. The source to creating the templates is not included in the
+    distribution now, so please download the source from the <link
+    ns2:arcrole=""
+    ns2:href="https://src.springframework.org/svn/spring-net/trunk">subversion
+    repository</link> if you are interested in making modifications.</para>
 
     <para>To install the templates</para>
 
@@ -278,8 +282,8 @@
       <para>This solution template provides a Spring based web layer project,
       service layer project, ADO.NET based data access layer project and an
       unit/integration testing project. You will need to set the reference of
-      the App.Web project to refer to the App.Web.References project manually.
-      </para>
+      the App.Web project to refer to the App.Web.References project
+      manually.</para>
 
       <mediaobject>
         <imageobject>
