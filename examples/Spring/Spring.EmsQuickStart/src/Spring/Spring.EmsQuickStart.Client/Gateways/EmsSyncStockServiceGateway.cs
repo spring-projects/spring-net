@@ -19,7 +19,7 @@
 #endregion
 
 
-using Spring.Messaging.Ems.Core;
+using Spring.Messaging.Ems.Cor;e
 using Spring.EmsQuickStart.Common.Data;
 
 namespace Spring.EmsQuickStart.Client.Gateways

@@ -22,7 +22,7 @@
          xmlns:ns4="http://www.w3.org/1999/xhtml"
          xmlns:ns3="http://www.w3.org/2000/svg"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Message Oriented Middleware - Apache ActiveMQ</title>
+  <title>Message Oriented Middleware - Apache ActiveMQ and TIBCO EMS</title>
 
   <section>
     <title>Introduction</title>
@@ -62,20 +62,20 @@
 
       <listitem>
         <para>TIBCO EMS in namespace <literal>Spring.Messaging.Ems</literal>.
-        'Ems' is sometimes used as the class prefix (to becommerically
-        available )</para>
+        'Ems' is sometimes used as the class prefix (available as of
+        Spring.NET 1.3 )</para>
       </listitem>
 
       <listitem>
         <para>SonicMQ in namespace <literal>Spring.Messaging.Sonic</literal>,
-        'Jms' is sometimes used as the class prefix. (to be commercially
-        available)</para>
+        'Jms' is sometimes used as the class prefix. (in a future
+        release)</para>
       </listitem>
 
       <listitem>
         <para>Websphere MQ in namespace
         <literal>Spring.Messaging.Xms</literal>, 'Xms' is sometimes used as
-        the class prefix (to be commerically available)</para>
+        the class prefix (in a future release)</para>
       </listitem>
     </orderedlist>
 
@@ -276,6 +276,30 @@
       application as a factory to create connections to the messaging server
       and encapsulates various configuration parameters, many of which are
       vendor specific such as SSL configuration options.</para>
+
+      <para><classname>EmsTemplate</classname> also requres a reference to a
+      ConnectionFactory, however, it is not the 'native'
+      <classname>TIBCO.EMS.ConnectionFactory</classname>. Instead the
+      connection factory type is
+      Spring.Messaging.Ems.Common.IConnectionFactory. A set of interfaces has
+      created that mirror the standard TIBCO API for ConnectionFactory,
+      Connection, Session, MessageProducer, MessageConsumer, and
+      ITopicSubscriber. This was done in order to provide caching of these
+      resources internally in a transparent manager and to a lesser extent,
+      provide a convenient API that makes them easy to configure using
+      dependency injection. Typically users of Spring.NET do not need to
+      programmatically interact with these classes, instead using methods of
+      EmsTemplate to syncrhonously send and consume messages and a
+      SimpleMessageListenerContainer to asynchronously consume messages. It
+      will be common to configure an
+      Spring.Messaging.Ems.Common.ConnectionFactory using depdency injection.
+      Please refer to the Spring APi documentation for the properties that are
+      available - they mirror all the properties you find on the standard
+      TIBCO ConnectionFactory. You can also set or get the underlying 'native'
+      TIBCO EMS object, such as the TIBCO.EMS.ConnectionFactory using a
+      property 'NativeConnectionFactory' There is a similar 'Native' property
+      that is available on all of the classes that are in the
+       Spring.Messaging.Ems.Common.namespace.</para>
     </section>
 
     <section xml:id="activemq-using-caching-resources">
@@ -1123,7 +1147,8 @@ namespace MyApp
       <title>Messaging Namespace support</title>
 
       <para>To use the NMS namespace elements you will need to reference the
-      NMS schema. For information on how to set this up refer to <xref
+      NMS schema. When using TIBCO EMS you should refer to the TIBCO EMS
+      Schema. For information on how to set this up refer to <xref
       linkend="xsd-config-body-schemas-nms" />. The namespace consists of one
       top level elements: &lt;listener-container/&gt; which can contain one or
       more &lt;listener/&gt; child elements. Here is an example of a basic
@@ -1254,15 +1279,15 @@ namespace MyApp
       to define highly-customized listener containers while still benefiting
       from the convenience of the namespace.</para>
 
-      <programlisting language="myxml">&lt;jms:listener-container connection-factory="MyConnectionFactory"
+      <programlisting language="myxml">&lt;nms:listener-container connection-factory="MyConnectionFactory"
                         destination-resolver="MyDestinationResolver"                        
                         concurrency="10"&gt;
 
-    &lt;jms:listener destination="queue.orders" ref="OrderService" method="PlaceOrder"/&gt;
+    &lt;nms:listener destination="queue.orders" ref="OrderService" method="PlaceOrder"/&gt;
 
-    &lt;jms:listener destination="queue.confirmations" ref="ConfirmationLogger" method="Log"/&gt;
+    &lt;nms:listener destination="queue.confirmations" ref="ConfirmationLogger" method="Log"/&gt;
 
-&lt;/jms:listener-container&gt;</programlisting>
+&lt;/nms:listener-container&gt;</programlisting>
 
       <para>The following table describes all available attributes. Consult
       the class-level SDK documentation of the

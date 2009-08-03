@@ -45,6 +45,7 @@
   <!ENTITY nh-quickstart        SYSTEM "nh-quickstart.xml">
   <!ENTITY quartz-quickstart    SYSTEM "quartz-quickstart.xml">
   <!ENTITY nms-quickstart       SYSTEM "nms-quickstart.xml">
+  <!ENTITY ems-quickstart       SYSTEM "ems-quickstart.xml">
   <!ENTITY msmq-quickstart      SYSTEM "msmq-quickstart.xml">
   <!ENTITY wcf-quickstart       SYSTEM "wcf-quickstart.xml">
   <!ENTITY javadevelopers       SYSTEM "javadevelopers.xml">
@@ -401,6 +402,9 @@
           <xref linkend="nms-quickstart" />
         </listitem>
         <listitem>
+          <xref linkend="ems-quickstart" />
+        </listitem>
+        <listitem>
           <xref linkend="msmq-quickstart" />
         </listitem>
         <listitem>
@@ -418,6 +422,7 @@
     &nh-quickstart;
     &quartz-quickstart;
     &nms-quickstart;
+    &ems-quickstart;
     &msmq-quickstart;
     &wcf-quickstart;
   </part>

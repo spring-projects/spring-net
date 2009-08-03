@@ -220,7 +220,7 @@ namespace Spring.Messaging.Core
             ReceiveHelloWorld(messageQueueObjectName, q, 2);
             ReceiveHelloWorld(messageQueueObjectName, q, 3);
         }
-
+#if NET_2_0
         private static void SendUsingMessageTx(string messageQueueObjectName, MessageQueueTemplate q)
         {
             IPlatformTransactionManager txManager = new MessageQueueTransactionManager();
@@ -254,7 +254,7 @@ namespace Spring.Messaging.Core
                                                 return null;
                                             });
         }
-
+#endif
         #endregion
 
         protected override string[] ConfigLocations
