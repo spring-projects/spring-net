@@ -18,6 +18,7 @@
          doc="${current.bin.dir}/${project::get-name()}.xml">
       <nowarn>
         <warning number="${nowarn.numbers.test}" />
+        <warning number="${nowarn.numbers.test},219" if="${nant.settings.currentframework=='mono-2.0'}" />
       </nowarn>
       <sources failonempty="true">
         <include name="**/*.cs" />
@@ -27,6 +28,13 @@
       </resources>
       <references basedir="${current.bin.dir}">
         <include name="*.dll" />
+        <include name="System.Data.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+        <include name="System.Data.Common.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+        <include name="System.Data.OracleClient.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+        <include name="System.Drawing.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+        <include name="System.EnterpriseServices.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+        <include name="System.Transactions.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+        <include name="System.Logging.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
         <include name="System.Data.OracleClient.dll" />
         <exclude name="${project::get-name()}.dll" />
       </references>
