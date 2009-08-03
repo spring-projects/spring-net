@@ -1082,16 +1082,6 @@ Commandline Examples:
       </copy>
     </if>
 
-    <mkdir dir="${current.package.dir}/lib/NHibernate10"/>
-    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/NHibernate10">
-        <fileset basedir="lib/NHibernate10">
-          <include name="**/*.dll"/>
-          <include name="**/*.license.txt"/>
-        </fileset>
-      </copy>
-    </if>
-
     <mkdir dir="${current.package.dir}/lib/NHibernate12"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
       <copy todir="${current.package.dir}/lib/NHibernate12">
@@ -1293,22 +1283,23 @@ Commandline Examples:
           <include name="*/*/Spring.Template.Velocity.xml"/>
           <include name="*/*/Spring.Template.Velocity.pdb"/>
 
-          <exclude name="/3.0/**"/>
-          <exclude name="/3.5/**"/>
+          <exclude name="3.0/**"/>
+          <exclude name="3.5/**"/>
 
         </fileset>
       </copy>
+
+      <if test="${net-3.0.installed}">
+        <mkdir dir="${current.package.dir}/bin/net/3.0"/>
+        <copy todir="${current.package.dir}/bin/net/3.0">
+          <fileset basedir="./build/net/3.0">
+            <include name="*/Spring.Services.dll"/>
+            <include name="*/Spring.Services.xml"/>
+            <include name="*/Spring.Services.pdb"/>
+          </fileset>
+        </copy>
+      </if>
    </if>
-
-    <if test="${net-3.0.installed}">
-      <copy todir="${current.package.dir}/bin/net/3.0">
-        <fileset basedir="./build/net/3.0">
-          <include name="Spring.Services.dll"/>
-          <include name="Spring.Services.xml"/>
-          <include name="Spring.Services.pdb"/>
-        </fileset>
-      </copy>
-    </if>
 
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
       <copy todir="${current.package.dir}/bin/net">
