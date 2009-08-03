@@ -19,107 +19,127 @@ Rebuilding Solutions using Nant and "solutions.build":
 -->
 <project name="Spring.NET Examples" default="RebuildAllSolutions">
 
-        <property name="vs2003.install.dir.key" value="SOFTWARE\Microsoft\VisualStudio\7.1\InstallDir"/>
-        <readregistry property="vs2003.install.dir" key="${vs2003.install.dir.key}" hive="LocalMachine" failonerror="false"/>
-	<property name="devenv11.exe" value="${vs2003.install.dir}devenv.exe" failonerror="false" />
-	<property name="msbuild.exe" value="C:\WINDOWS\Microsoft.NET\Framework\v3.5\msbuild.exe"/>
-	<property name="buildconfiguration" value="Debug" />
+  <property name="root.dir" value="${project::get-base-directory()}\.." overwrite="false" />
 
-	<target name="RebuildAllSolutions" description="Rebuild all Solutions">
-		<call target="RebuildAllSolutions-1.1" />
-		<call target="RebuildAllSolutions-2.0" />
-	</target>
+  <property name="vs2003.install.dir.key" value="SOFTWARE\Microsoft\VisualStudio\7.1\InstallDir"/>
+  <readregistry property="vs2003.install.dir" key="${vs2003.install.dir.key}" hive="LocalMachine" failonerror="false"/>
+  <property name="devenv11.exe" value="${vs2003.install.dir}devenv.exe" if="${property::exists('vs2003.install.dir')}" />
 
-	<target name="Clean">
-		<delete>
-		    <fileset basedir="examples">
-		        <include name="**/bin/**/*.*" />
-		        <include name="**/obj/**/*.*" />
-		        <exclude name="**/bin/*.refresh" />
-		    </fileset>
-		</delete>
-	</target>
+  <readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
+  <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
 
-	<target name="RebuildAllSolutions-1.1" depends="Clean">
+  <property name="buildconfiguration" value="Debug" />
 
-		<!-- build examples -->
-		<foreach item="File" property="filename">
-		    <in>
-		        <items basedir="examples">
-		            <include name="**/*.2003.sln" />
-		            <exclude name="**/SpringAir.2003.sln" />  <!-- unfort. doesn't work -->
-		        </items>
-		    </in>
-		    <do>
-						<property name="solutionfile" value="${filename}" />
-						<property name="solutionconfiguration" value="${buildconfiguration}" />
-						<call target="RebuildSolution-1.1" />
-		    </do>
-		</foreach>
+  <target name="RebuildAllSolutions" description="Rebuild all Solutions">
+    <call target="RebuildAllSolutions-1.1" if="${property::exists('vs2003.install.dir')}" />
+    <call target="RebuildAllSolutions-2.0"  />
+  </target>
 
-		<!-- build "main" solution (extra call because of configuration 'debug-1.1') -->
-		<property name="solutionfile" value="Spring.NET.2003.sln" />
-		<property name="solutionconfiguration" value="${buildconfiguration}-1.1" />
-		<call target="RebuildSolution-1.1" />
+  <target name="Clean">
+    <foreach item="Folder" property="dirname">
+        <in>
+            <items basedir="${root.dir}">
+                <include name="examples/**/obj" />
+                <include name="examples/**/PreCompiledWeb" />
+                <include name="build/VS.NET.*" />
+            </items>
+        </in>
+        <do>
+            <delete dir="${dirname}" />
+        </do>
+    </foreach>
+    <delete>
+        <fileset basedir="${root.dir}">
+            <include name="examples/**/bin/**/*.*" />
+            <exclude name="examples/**/bin/*.refresh" />
+        </fileset>
+    </delete>
+  </target>
 
-	</target>
+  <target name="RebuildAllSolutions-1.1" depends="Clean">
 
-	<target name="RebuildAllSolutions-2.0" dependes="Clean">
-		<foreach item="File" property="filename">
-		    <in>
-		        <items basedir="examples/Spring">
-		            <include name="**/*.2005.sln" />
-		            <include name="**/*.2008.sln" />
-		            <include name="Spring.Data.NHibernate/Spring.Northwind.sln" />
-		        </items>
-		    </in>
-		    <do>
-						<property name="solutionfile" value="${filename}" />
-						<property name="solutionconfiguration" value="${buildconfiguration}" />
-						<call target="RebuildSolution-2.0" />
-		    </do>
-		</foreach>
+    <!-- build examples -->
+    <foreach item="File" property="filename">
+        <in>
+            <items basedir="${root.dir}/examples">
+                <include name="**/*.2003.sln" />
+                <exclude name="**/SpringAir.2003.sln" />  <!-- unfort. doesn't work -->
+            </items>
+        </in>
+        <do>
+            <property name="solutionfile" value="${filename}" />
+            <property name="solutionconfiguration" value="${buildconfiguration}" />
+            <call target="RebuildSolution-1.1" />
+        </do>
+    </foreach>
 
-		<!-- build "main" solution -->
-		<property name="solutionfile" value="Spring.NET.2005.sln" />
-		<property name="solutionconfiguration" value="${buildconfiguration}" />
-		<call target="RebuildSolution-2.0" />
+    <!-- build "main" solution (extra call because of configuration 'debug-1.1') -->
+    <property name="solutionfile" value="Spring.NET.2003.sln" />
+    <property name="solutionconfiguration" value="${buildconfiguration}-1.1" />
+    <call target="RebuildSolution-1.1" />
 
-		<!-- build "main" solution -->
-		<property name="solutionfile" value="Spring.NET.2008.sln" />
-		<property name="solutionconfiguration" value="${buildconfiguration}" />
-		<call target="RebuildSolution-2.0" />
+  </target>
 
-	</target>
+  <target name="RebuildAllSolutions-2.0" depends="Clean">
+    <foreach item="File" property="filename">
+        <in>
+            <items basedir="${root.dir}">
+                <include name="examples/Spring/**/*.2005.sln" />
+                <include name="examples/Spring/**/*.2008.sln" />
+                <include name="examples/Spring/Spring.Data.NHibernate/Spring.Northwind.sln" />
+                <include name="*.2005.sln" />
+                <include name="*.2008.sln" />
+            </items>
+        </in>
+        <do>
+            <property name="solutionfile" value="${filename}" />
+            <property name="solutionconfiguration" value="${buildconfiguration}" />
+            <call target="RebuildSolution-2.0" />
+        </do>
+    </foreach>
 
-	<target name="RebuildSolution-1.1" description="rebuilds a given VS2003 solution file">
-	<!-- "c:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.exe" Spring.NET.2003.sln /rebuild Debug-1.1 /out solutions.build-1.1.log -->
-		<echo message="Rebuilding VS2003 Solution ${solutionfile}" />
-		<exec program="${devenv11.exe}" basedir="${devenv11.exe}">
-			<arg value="${solutionfile}" />
-			<arg line="/rebuild ${solutionconfiguration}" />
-			<arg line="/out solutions.build-1.1.log" />
-		</exec>
+    <!-- build "main" solution -->
 <!--
-		<solution configuration="${solutionconfiguration}" solutionfile="${solutionfile}">
-	    <webmap>
-	        <map url="http://localhost/Spring.Calculator.2003" path="examples\Spring\Spring.Calculator\src\Spring.Calculator.Web.2003" />
-	        <map url="http://localhost/SpringAir.2003" path="examples\Spring\SpringAir\src\SpringAir.Web.2003" />
-	    </webmap>
- 		</solution>
+    <property name="solutionfile" value="${root.dir}/Spring.NET.2005.sln" />
+    <property name="solutionconfiguration" value="${buildconfiguration}" />
+    <call target="RebuildSolution-2.0" />
 -->
-	</target>
-
-	<target name="RebuildSolution-2.0" description="rebuilds a given VS2005 solution file">
-		<echo message="Rebuilding VS2005 Solution ${solutionfile}" />
-		<exec program="${msbuild.exe}">
+    <!-- build "main" solution -->
 <!--
-			<arg value="/property:OutDir=${output.dir}/"/>
+    <property name="solutionfile" value="${root.dir}/Spring.NET.2008.sln" />
+    <property name="solutionconfiguration" value="${buildconfiguration}" />
+    <call target="RebuildSolution-2.0" />
 -->
-			<arg value="${solutionfile}"/>
-			<arg line="/nologo" />
-			<arg line="/property:Configuration=${solutionconfiguration}"/>
-		</exec>
-	</target>
+  </target>
+
+  <target name="RebuildSolution-1.1" description="rebuilds a given VS2003 solution file">
+  <!-- "c:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.exe" Spring.NET.2003.sln /rebuild Debug-1.1 /out solutions.build-1.1.log -->
+    <echo message="Rebuilding VS2003 Solution ${solutionfile}" />
+    <exec program="${devenv11.exe}" basedir="${devenv11.exe}">
+      <arg value="${solutionfile}" />
+      <arg line="/rebuild ${solutionconfiguration}" />
+      <arg line="/out solutions.build-1.1.log" />
+    </exec>
+<!--
+    <solution configuration="${solutionconfiguration}" solutionfile="${solutionfile}">
+      <webmap>
+          <map url="http://localhost/Spring.Calculator.2003" path="examples\Spring\Spring.Calculator\src\Spring.Calculator.Web.2003" />
+          <map url="http://localhost/SpringAir.2003" path="examples\Spring\SpringAir\src\SpringAir.Web.2003" />
+      </webmap>
+    </solution>
+-->
+  </target>
+
+  <target name="RebuildSolution-2.0" description="rebuilds a given VS2005 solution file">
+    <echo message="Rebuilding VS2005 Solution ${solutionfile}" />
+    <exec program="${msbuild.exe}">
+<!--
+      <arg value="/property:OutDir=${output.dir}/"/>
+-->
+      <arg value="${solutionfile}"/>
+      <arg line="/nologo" />
+      <arg line="/property:Configuration=${solutionconfiguration}"/>
+    </exec>
+  </target>
 
 </project>

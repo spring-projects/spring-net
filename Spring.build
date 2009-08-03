@@ -30,6 +30,10 @@ Build properties that may be set:
   values: bool: true|false
   set this to true to run integration tests
 
+"test.full":
+  values: bool: true|false
+  set this to true to run all available tests (example solutions, integration tests, etc.)
+
 Additional Remarks:
 ===================
 
@@ -71,6 +75,9 @@ Commandline Examples:
   <property name="project.name.full" value="Spring.NET Framework"/>
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
   <property name="tool.dir" value="${project::get-base-directory()}/build-support/tools"/>
+
+  <!-- turn on all tests if test.full specified -->
+  <property name="test.integration.data" value="${property::exists('test.full') and test.full}" />
 
   <!-- default location of mstest executable and reference assemblies -->
   <readregistry property="vs-net.mstest.bin.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
@@ -153,14 +160,6 @@ Commandline Examples:
 
   <!-- Displays configuration info, usefull for working out why Spring.NET doesn't build -->
   <target name="display-setup" depends="check-htmlhelp-compiler">
-    <!-- .NET Framework 1.0 -->
-    <if test="${framework::exists('net-1.0')}">
-      <property name="nant.settings.currentframework" value="net-1.0"/>
-      <call target="display-target-framework"/>
-    </if>
-    <if test="${not framework::exists('net-1.0')}">
-      <echo message=".NET Framework 1.0 runtime is not available."/>
-    </if>
     <!-- .NET Framework 1.1 -->
     <if test="${framework::exists('net-1.1')}">
       <property name="nant.settings.currentframework" value="net-1.1"/>
@@ -267,7 +266,6 @@ Commandline Examples:
   <target name="compile-build" description="Compile current build configurations for all runtime configurations">
     <echo message="Compiling all framework versions for the ${current.build.config} build configuration."/>
 
-    <call target="compile-build-1.0"/>
     <call target="compile-build-1.1"/>
     <call target="compile-build-2.0"/>
     <call target="compile-build-3.0"/>
@@ -277,21 +275,6 @@ Commandline Examples:
     <!-- call target="compile-build-netcf-1.0"/ -->
     <call target="compile-build-mono-2.0"/>
 
-  </target>
-
-  <target name="compile-build-1.0" description="Builds for .NET 1.0 if available">
-    <if test="${framework::exists('net-1.0')}">
-      <call target="compile-net-1.0"/>
-    </if>
-
-    <if test="${not framework::exists('net-1.0')}">
-      <if test="${property::exists('project.build.package') and project.build.package}">
-        <fail message="The .NET Framework 1.0 is not available."/>
-      </if>
-      <if test="${not(property::exists('project.build.package') and project.build.package)}">
-        <echo message="The .NET Framework 1.0 is not available. Build skipped."/>
-      </if>
-    </if>
   </target>
 
   <target name="compile-build-1.1" description="Builds for .NET 1.1 if available">>
@@ -433,6 +416,8 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.build" target="test" if="${build-aop and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Data.Tests/Spring.Data.Tests.build" target="test" if="${build-data and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data and not net-3.0}"/>
+    <!-- nant buildfile="test/Spring/Spring.Data.NHibernate12.Tests/Spring.Data.NHibernate12.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0') and not net-3.0}"/ -->
+    <!-- nant buildfile="test/Spring/Spring.Data.NHibernate12.Integration.Tests/Spring.Data.NHibernate12.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0') and not net-3.0}"/ -->
     <nant buildfile="test/Spring/Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate20.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate20.Integration.Tests.build" target="test"
@@ -462,25 +447,9 @@ Commandline Examples:
 
   </target>
 
-  <target name="compile-net-1.0" description="Builds .NET Framework 1.0 version"
-          depends="set-net-1.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
-
-    <call target="copykeys" if="${project.build.sign}"/>
-    <call target="common.generate-assemblyinfo"/>
-    <!-- disable namespaces not supported in net-1.0 -->
-    <property name="build-web" value="false" overwrite="true" />
-    <property name="build-nms" value="false" overwrite="true" />
-    <property name="build-ems" value="false" overwrite="true" />
-    <property name="build-quartz" value="false" overwrite="true" />
-    <property name="build-msmq" value="false" overwrite="true" />
-    <property name="build-msmq-tests" value="false" overwrite="true" />
-    <property name="build-velocity" value="false" overwrite="true" />
-    <property name="build-testing-microsoft" value="false" overwrite="true" />
-    <call target="compile-test" />
-  </target>
 
   <target name="compile-net-1.1" description="Builds .NET Framework 1.1 version"
-          depends="set-net-1.1-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+          depends="set-net-1.1-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-ems" value="false" overwrite="true" />
@@ -493,14 +462,14 @@ Commandline Examples:
   </target>
 
   <target name="compile-net-2.0" description="Builds .NET Framework 2.0 version"
-          depends="set-net-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+          depends="set-net-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <call target="compile-test" />
   </target>
 
   <target name="compile-net-3.0" description="Builds .NET Framework 3.0 version"
-          depends="set-net-3.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+          depends="set-net-3.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-ems" value="false" overwrite="true" />
@@ -513,7 +482,7 @@ Commandline Examples:
   </target>
 
   <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
-        depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+        depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-ems" value="false" overwrite="true" />
@@ -526,7 +495,7 @@ Commandline Examples:
   </target>
 
   <target name="compile-mono-2.0" description="Builds MONO Framework 2.0 version"
-          depends="set-mono-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, TestInit">
+          depends="set-mono-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-ems" value="false" overwrite="true" />
@@ -579,24 +548,7 @@ Commandline Examples:
     <echo message="Compiling debug configuration for all runtime configurations."/>
     <property name="nant.target.root.name" value="build"/>
     <call target="build-all-function"/>
-  </target>
-
-  <target name="build-1.0">
-    <call target="set-build-namespaces-release"/>
-    <echo message="------------------------"/>
-    <echo message="Building .NET 1.0 DEBUG "/>
-    <echo message="----------------------- "/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-1.0"/>
-
-    <if test="${property::exists('project.build.package') and project.build.package}">
-      <echo message="--------------------------"/>
-      <echo message="Building .NET 1.0 RELEASE "/>
-      <echo message="--------------------------"/>
-      <call target="set-release-build-configuration"/>
-      <call target="compile-build-1.0"/>
-    </if>
-
+    <call target="build-solutions" if="${test.full}" />
   </target>
 
   <target name="build-1.1">
@@ -830,6 +782,7 @@ Commandline Examples:
 
     <call target="doc"/>
 
+
     <call target="package-release-files"/>
 
   </target>
@@ -900,7 +853,10 @@ Commandline Examples:
     <property name="nant.target.root.name" value="daily-build"/>
     <property name="project.build.sign" value="true"/>
     <!-- call target="copykeys"/ -->
+    <!-- build all binaries -->
     <call target="build-all-function"/>
+    <!-- build all vs solutions -->
+    <call target="build-solutions" />
     <call target="package-cvs"/>
     <!-- only copy the supporting tools directory for the daily build. -->
     <call target="package-tools"/>
@@ -910,7 +866,6 @@ Commandline Examples:
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
 
     <!-- net-1.0 dropped since 1.3.0 -->
-    <!-- call target="${nant.target.root.name}-1.0" / -->
     <call target="${nant.target.root.name}-1.1" />
     <call target="${nant.target.root.name}-2.0" />
     <call target="${nant.target.root.name}-3.0" />
@@ -919,17 +874,6 @@ Commandline Examples:
 
     <!-- ignore Mono 2.0 for now -->
     <!-- <call target="${nant.target.root.name}-mono-2.0" /> -->
-
-  </target>
-
-  <target name="daily-build-1.0">
-    <call target="set-build-namespaces-all"/>
-    <call target="set-package-configuration"/>
-
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-1.0"/>
-    <call target="set-release-build-configuration"/>
-    <call target="compile-build-1.0"/>
 
   </target>
 
@@ -1096,138 +1040,8 @@ Commandline Examples:
       </fileset>
     </copy>
 
-    <!-- copy built assemblies -->
-    <mkdir dir="${current.package.dir}/bin/net"/>
-    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/bin/net">
-        <fileset basedir="./build/net">
-          <include name="**/Spring.Core.dll"/>
-          <include name="**/Spring.Core.xml"/>
-          <include name="**/Spring.Core.pdb"/>
-
-          <include name="**/Spring.Aop.dll"/>
-          <include name="**/Spring.Aop.xml"/>
-          <include name="**/Spring.Aop.pdb"/>
-
-          <include name="**/Spring.Data.dll"/>
-          <include name="**/Spring.Data.xml"/>
-          <include name="**/Spring.Data.pdb"/>
-
-          <include name="**/Spring.Data.NHibernate12.dll"/>
-          <include name="**/Spring.Data.NHibernate12.xml"/>
-          <include name="**/Spring.Data.NHibernate12.pdb"/>
-
-          <include name="**/Spring.Data.NHibernate20.dll"/>
-          <include name="**/Spring.Data.NHibernate20.xml"/>
-          <include name="**/Spring.Data.NHibernate20.pdb"/>
-
-          <include name="**/Spring.Data.NHibernate21.dll"/>
-          <include name="**/Spring.Data.NHibernate21.xml"/>
-          <include name="**/Spring.Data.NHibernate21.pdb"/>
-
-          <include name="**/Spring.Web.dll"/>
-          <include name="**/Spring.Web.xml"/>
-          <include name="**/Spring.Web.pdb"/>
-
-          <include name="**/Spring.Web.Extensions.dll"/>
-          <include name="**/Spring.Web.Extensions.xml"/>
-          <include name="**/Spring.Web.Extensions.pdb"/>
-
-          <include name="**/Spring.Services.dll"/>
-          <include name="**/Spring.Services.xml"/>
-          <include name="**/Spring.Services.pdb"/>
-
-          <include name="**/Spring.Testing.NUnit.dll"/>
-          <include name="**/Spring.Testing.NUnit.xml"/>
-          <include name="**/Spring.Testing.NUnit.pdb"/>
-
-          <include name="**/Spring.Testing.Microsoft.dll"/>
-          <include name="**/Spring.Testing.Microsoft.xml"/>
-          <include name="**/Spring.Testing.Microsoft.pdb"/>
-
-          <include name="**/Spring.Messaging.Ems.dll"/>
-          <include name="**/Spring.Messaging.Ems.xml"/>
-          <include name="**/Spring.Messaging.Ems.pdb"/>
-
-          <include name="**/Spring.Messaging.Nms.dll"/>
-          <include name="**/Spring.Messaging.Nms.xml"/>
-          <include name="**/Spring.Messaging.Nms.pdb"/>
-
-          <include name="**/Spring.Messaging.dll"/>
-          <include name="**/Spring.Messaging.xml"/>
-          <include name="**/Spring.Messaging.pdb"/>
-
-          <include name="**/Spring.Scheduling.Quartz.dll"/>
-          <include name="**/Spring.Scheduling.Quartz.xml"/>
-          <include name="**/Spring.Scheduling.Quartz.pdb"/>
-
-          <include name="**/Spring.Template.Velocity.dll"/>
-          <include name="**/Spring.Template.Velocity.xml"/>
-          <include name="**/Spring.Template.Velocity.pdb"/>
-
-          <include name="**/Common.Logging.dll"/>
-
-          <exclude name="**/3.0/**"/>
-          <exclude name="**/3.5/**"/>
-          <exclude name="**/release/Spring/**"/>
-          <exclude name="**/debug/Spring/**"/>
-          <exclude name="**/examples/**"/>
-          <exclude name="**/results/**"/>
-          <exclude name="mono/**"/>
-          <exclude name="mono/**"/>
-        </fileset>
-      </copy>
-    </if>
-
-    <!-- copy over .NET 3.0 build of Spring.Services -->
-    <if test="${net-3.0.installed}">
-      <copy todir="${current.package.dir}/bin/net">
-        <fileset basedir="./build/net">
-          <include name="**/Spring.Services.dll"/>
-          <include name="**/Spring.Services.xml"/>
-          <include name="**/Spring.Services.pdb"/>
-        </fileset>
-      </copy>
-    </if>
-
-
-    <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
-      <copy todir="${current.package.dir}/bin/net">
-        <fileset basedir="./build/net">
-          <include name="**/Spring.Services.*.exe"/>
-          <include name="**/Spring.*.dll"/>
-          <include name="**/Spring.*.xml"/>
-          <include name="**/Spring.*.pdb"/>
-          <include name="**/log4net.dll"/>
-          <include name="**/log4net.xml"/>
-          <include name="**/log4net.pdb"/>
-          <include name="**/Common.Logging.dll"/>
-          <include name="**/Common.Logging.xml"/>
-          <exclude name="**/examples/**"/>
-          <exclude name="**/results/**"/>
-          <exclude name="**/Spring.*.Tests.dll"/>
-          <exclude name="**/Spring.*.Tests.xml"/>
-          <exclude name="**/Spring.*.Tests.pdb"/>
-          <exclude name="**/Spring.Examples.*"/>
-        </fileset>
-      </copy>
-    </if>
-
-    <delete>
-      <fileset basedir="${current.package.dir}/bin/net">
-        <include name="**/es/**"/>
-        <include name="**/PT-BR/**"/>
-        <include name="**/pt-BR/**"/>
-        <include name="**/sr/**"/>
-        <include name="**/sr-SP-Cyrl/**"/>
-        <include name="**/sr-Cyrl-CS/**"/>
-        <include name="**/mpollack*/**"/>
-        <include name="**/results/**"/>
-        <include name="**/release/Spring/**"/>
-        <include name="**/debug/Spring/**"/>
-        <include name="**/debug/bin/**"/>
-      </fileset>
-    </delete>
+    <!-- copy spring binaries -->
+    <call target="package-release-files-spring.binaries" />
 
     <!-- copy user reference documentation -->
     <mkdir dir="${current.package.dir}/doc/reference"/>
@@ -1268,6 +1082,15 @@ Commandline Examples:
       </copy>
     </if>
 
+    <mkdir dir="${current.package.dir}/lib/NHibernate10"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib/NHibernate10">
+        <fileset basedir="lib/NHibernate10">
+          <include name="**/*.dll"/>
+          <include name="**/*.license.txt"/>
+        </fileset>
+      </copy>
+    </if>
 
     <mkdir dir="${current.package.dir}/lib/NHibernate12"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
@@ -1386,8 +1209,141 @@ Commandline Examples:
         </fileset>
     </copy>
 
+  </target>
 
+<!-- copy spring binaries from build dir to package bin dir -->
+  <target name="package-release-files-spring.binaries">
+    <!-- copy built assemblies -->
+    <mkdir dir="${current.package.dir}/bin/net"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/bin/net">
+        <fileset basedir="./build/net">
 
+          <include name="*/*/Common.Logging.dll"/>
+
+          <include name="*/*/Spring.Core.dll"/>
+          <include name="*/*/Spring.Core.xml"/>
+          <include name="*/*/Spring.Core.pdb"/>
+
+          <include name="*/*/Spring.Aop.dll"/>
+          <include name="*/*/Spring.Aop.xml"/>
+          <include name="*/*/Spring.Aop.pdb"/>
+
+          <include name="*/*/Spring.Data.dll"/>
+          <include name="*/*/Spring.Data.xml"/>
+          <include name="*/*/Spring.Data.pdb"/>
+
+          <include name="*/*/Spring.Data.NHibernate12.dll"/>
+          <include name="*/*/Spring.Data.NHibernate12.xml"/>
+          <include name="*/*/Spring.Data.NHibernate12.pdb"/>
+
+          <include name="*/*/Spring.Data.NHibernate20.dll"/>
+          <include name="*/*/Spring.Data.NHibernate20.xml"/>
+          <include name="*/*/Spring.Data.NHibernate20.pdb"/>
+
+          <include name="*/*/Spring.Data.NHibernate21.dll"/>
+          <include name="*/*/Spring.Data.NHibernate21.xml"/>
+          <include name="*/*/Spring.Data.NHibernate21.pdb"/>
+
+          <include name="*/*/Spring.Web.dll"/>
+          <include name="*/*/Spring.Web.xml"/>
+          <include name="*/*/Spring.Web.pdb"/>
+
+          <include name="*/*/Spring.Web.Extensions.dll"/>
+          <include name="*/*/Spring.Web.Extensions.xml"/>
+          <include name="*/*/Spring.Web.Extensions.pdb"/>
+
+          <include name="*/*/Spring.Services.dll"/>
+          <include name="*/*/Spring.Services.xml"/>
+          <include name="*/*/Spring.Services.pdb"/>
+
+          <include name="*/*/Spring.Testing.NUnit.dll"/>
+          <include name="*/*/Spring.Testing.NUnit.xml"/>
+          <include name="*/*/Spring.Testing.NUnit.pdb"/>
+
+          <include name="*/*/Spring.Testing.Microsoft.dll"/>
+          <include name="*/*/Spring.Testing.Microsoft.xml"/>
+          <include name="*/*/Spring.Testing.Microsoft.pdb"/>
+
+          <include name="*/*/Spring.Messaging.Ems.dll"/>
+          <include name="*/*/Spring.Messaging.Ems.xml"/>
+          <include name="*/*/Spring.Messaging.Ems.pdb"/>
+
+          <include name="*/*/Spring.Messaging.Nms.dll"/>
+          <include name="*/*/Spring.Messaging.Nms.xml"/>
+          <include name="*/*/Spring.Messaging.Nms.pdb"/>
+
+          <include name="*/*/Spring.Messaging.dll"/>
+          <include name="*/*/Spring.Messaging.xml"/>
+          <include name="*/*/Spring.Messaging.pdb"/>
+
+          <include name="*/*/Spring.Scheduling.Quartz.dll"/>
+          <include name="*/*/Spring.Scheduling.Quartz.xml"/>
+          <include name="*/*/Spring.Scheduling.Quartz.pdb"/>
+
+          <include name="*/*/Spring.Template.Velocity.dll"/>
+          <include name="*/*/Spring.Template.Velocity.xml"/>
+          <include name="*/*/Spring.Template.Velocity.pdb"/>
+
+<!--
+          <exclude name="**/3.0/**"/>
+          <exclude name="**/release/Spring/**"/>
+          <exclude name="**/debug/Spring/**"/>
+          <exclude name="**/examples/**"/>
+          <exclude name="**/results/**"/>
+          <exclude name="mono/**"/>
+          <exclude name="mono/**"/>
+-->
+        </fileset>
+      </copy>
+    </if>
+<!--
+    <if test="${net-3.0.installed}">
+      <copy todir="${current.package.dir}/bin/net">
+        <fileset basedir="./build/net">
+          <include name="**/Spring.Services.dll"/>
+          <include name="**/Spring.Services.xml"/>
+          <include name="**/Spring.Services.pdb"/>
+        </fileset>
+      </copy>
+    </if>
+    <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
+      <copy todir="${current.package.dir}/bin/net">
+        <fileset basedir="./build/net">
+          <include name="**/Spring.Services.*.exe"/>
+          <include name="**/Spring.*.dll"/>
+          <include name="**/Spring.*.xml"/>
+          <include name="**/Spring.*.pdb"/>
+          <include name="**/log4net.dll"/>
+          <include name="**/log4net.xml"/>
+          <include name="**/log4net.pdb"/>
+          <include name="**/Common.Logging.dll"/>
+          <include name="**/Common.Logging.xml"/>
+          <exclude name="**/examples/**"/>
+          <exclude name="**/results/**"/>
+          <exclude name="**/Spring.*.Tests.dll"/>
+          <exclude name="**/Spring.*.Tests.xml"/>
+          <exclude name="**/Spring.*.Tests.pdb"/>
+          <exclude name="**/Spring.Examples.*"/>
+        </fileset>
+      </copy>
+    </if>
+    <delete>
+      <fileset basedir="${current.package.dir}/bin/net">
+        <include name="**/es/**"/>
+        <include name="**/PT-BR/**"/>
+        <include name="**/pt-BR/**"/>
+        <include name="**/sr/**"/>
+        <include name="**/sr-SP-Cyrl/**"/>
+        <include name="**/sr-Cyrl-CS/**"/>
+        <include name="**/mpollack*/**"/>
+        <include name="**/results/**"/>
+        <include name="**/release/Spring/**"/>
+        <include name="**/debug/Spring/**"/>
+        <include name="**/debug/bin/**"/>
+      </fileset>
+    </delete>
+-->
   </target>
 
   <target name="package-sdkdocs" depends="set-package-configuration">
@@ -1615,10 +1571,26 @@ Commandline Examples:
     </fileset>
   </target>
 
-  <!-- Set up test environment -->
-  <target name="TestInit">
-      <!-- custom task for testing under different runtimes -->
-    <!-- loadtasks assembly="${spring.basedir}/build-support/tools/NAnt.NUnit2OutProc.Task/NAnt.NUnit2OutProcTasks.dll" / -->
+  <!-- build all Visual Studio Solutions -->
+  <target name="build-solutions">
+    <!-- some examples are linked against the "bin" dir of the distribution so copy them from 'build' to 'bin' -->
+    <delete dir="${spring.basedir}/bin" />
+
+    <property name="current.package.dir" value="${spring.basedir}" />
+    <call target="package-release-files-spring.binaries" />
+
+    <!-- rebuild all solutions -->
+    <nant buildfile="build-support/solutions.build.nant">
+      <properties>
+        <property name="root.dir" value="${spring.basedir}" />
+      </properties>
+    </nant>
+    <!-- be nice and cleanup after building -->
+    <nant buildfile="build-support/solutions.build.nant" target="Clean">
+      <properties>
+        <property name="root.dir" value="${spring.basedir}" />
+      </properties>
+    </nant>
   </target>
 
 </project>

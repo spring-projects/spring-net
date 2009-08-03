@@ -60,12 +60,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Spring.Data.NHibernate21, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Data.NHibernate21.dll</HintPath>
+    </Reference>
     <Reference Include="Spring.Web, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Web.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net\2.0\System.Data.SQLite.DLL</HintPath>

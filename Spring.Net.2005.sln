@@ -84,12 +84,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.NUnit.2005",
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Integration.Tests.2005", "test\Spring\Spring.Data.NHibernate.Integration.Tests\Spring.Data.NHibernate.Integration.Tests.2005.csproj", "{4A07E150-ED90-407C-8CAD-4760444DDFD9}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate12.2005", "src\Spring\Spring.Data.NHibernate12\Spring.Data.NHibernate12.2005.csproj", "{90F2D070-6F98-4926-A626-BD7A6071D6D9}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
