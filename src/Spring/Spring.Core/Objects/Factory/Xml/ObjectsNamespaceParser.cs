@@ -1247,7 +1247,7 @@ namespace Spring.Objects.Factory.Xml
         /// <paramref name="childElementName"/>.
         /// </returns>
         [Obsolete("not used anymore - ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead", false)]
-        protected XmlNodeList SelectNodes(XmlElement element, string childElementName)
+        protected virtual XmlNodeList SelectNodes(XmlElement element, string childElementName)
         {
             XmlNamespaceManager nsManager = new XmlNamespaceManager(new NameTable());
             nsManager.AddNamespace(GetNamespacePrefix(element), element.NamespaceURI);

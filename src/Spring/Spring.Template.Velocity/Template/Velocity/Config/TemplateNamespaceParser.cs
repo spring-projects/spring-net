@@ -27,6 +27,7 @@ using System.Xml;
 using NVelocity.Runtime;
 using NVelocity.Runtime.Resource.Loader;
 using Spring.Core.TypeResolution;
+using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -39,17 +40,19 @@ using Spring.Util;
 namespace Spring.Template.Velocity.Config {
     /// <summary>
     /// Implementation of the custom configuration parser for template configurations
+    /// based on 
+    /// <see cref="ObjectsNamespaceParser"/>
     /// </summary>
     /// <author>Erez Mazor</author>
+    /// <see cref="ObjectsNamespaceParser"/>
     [
         NamespaceParser(
             Namespace = "http://www.springframework.net/nvelocity",
             SchemaLocationAssemblyHint = typeof(TemplateNamespaceParser),
             SchemaLocation = "/Spring.Template.Velocity.Config/spring-nvelocity-1.3.xsd")
     ]
-    public sealed class TemplateNamespaceParser : AbstractSingleObjectDefinitionParser {
+    public class TemplateNamespaceParser : ObjectsNamespaceParser {
         private const string TemplateTypePrefix = "template: ";
-        private static readonly ObjectNamespaceParserHelper objectNamespaceParserHelper = new ObjectNamespaceParserHelper();
 
         static TemplateNamespaceParser() {
             TypeRegistry.RegisterType(TemplateTypePrefix + TemplateDefinitionConstants.NVelocityElement, typeof(VelocityEngineFactoryObject));
@@ -61,18 +64,27 @@ namespace Spring.Template.Velocity.Config {
         public TemplateNamespaceParser() {
         }
 
+        /// <see cref="INamespaceParser"/>
+        public override IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext) {
+            string name = element.GetAttribute(ObjectDefinitionConstants.IdAttribute);
+            IConfigurableObjectDefinition templateDefinition = ParseTemplateDefinition(element, parserContext);
+            if (!StringUtils.HasText(name)) {
+                name = ObjectDefinitionReaderUtils.GenerateObjectName(templateDefinition, parserContext.Registry);
+            }
+            parserContext.Registry.RegisterObjectDefinition(name, templateDefinition);
+            return null;
+        }
+
         /// <summary>
-        /// Parses single object definition for the templating namespace
+        /// Parse a template definition from the templating namespace
         /// </summary>
-        /// <param name="element">the current XmlElement to parse</param>
+        /// <param name="element">the root element defining the templating object</param>
         /// <param name="parserContext">the parser context</param>
-        /// <param name="builder">the ObjectDefinitionBuilder used to configure this object</param>
-        /// <see cref="AbstractSingleObjectDefinitionParser"/>
-        protected override void DoParse(XmlElement element, ParserContext parserContext, ObjectDefinitionBuilder builder) {
+        /// <returns></returns>
+        private IConfigurableObjectDefinition ParseTemplateDefinition(XmlElement element, ParserContext parserContext) {
             switch (element.LocalName) {
                 case TemplateDefinitionConstants.NVelocityElement:
-                    ParseNVelocityEngine(element, parserContext, builder);
-                    return;
+                    return ParseNVelocityEngine(element, parserContext);
                 default:
                     throw new ArgumentException(string.Format("undefined element for templating namespace: {0}", element.LocalName));
             }
@@ -84,28 +96,34 @@ namespace Spring.Template.Velocity.Config {
         /// </summary>
         /// <param name="element">the root element defining the velocity engine</param>
         /// <param name="parserContext">the parser context</param>
-        /// <param name="builder">the ObjectDefinitionBuilder used to configure this object</param>
-        private void ParseNVelocityEngine(XmlElement element, ParserContext parserContext, ObjectDefinitionBuilder builder) {
+        private IConfigurableObjectDefinition ParseNVelocityEngine(XmlElement element, ParserContext parserContext) {
+            string typeName = GetTypeName(element);
+            IConfigurableObjectDefinition configurableObjectDefinition = parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(
+                typeName, null, parserContext.ReaderContext.Reader.Domain);
+
             string preferFileSystemAccess = GetAttributeValue(element, TemplateDefinitionConstants.AttributePreferFileSystemAccess);
             string overrideLogging = GetAttributeValue(element, TemplateDefinitionConstants.AttributeOverrideLogging);
             string configFile = GetAttributeValue(element, TemplateDefinitionConstants.AttributeConfigFile);
 
+            MutablePropertyValues objectDefinitionProperties = new MutablePropertyValues();
             if (StringUtils.HasText(preferFileSystemAccess)) {
-                builder.AddPropertyValue(TemplateDefinitionConstants.PropertyPreferFileSystemAccess, preferFileSystemAccess);
+                objectDefinitionProperties.Add(TemplateDefinitionConstants.PropertyPreferFileSystemAccess, preferFileSystemAccess);
             }
 
             if (StringUtils.HasText(overrideLogging)) {
-                builder.AddPropertyValue(TemplateDefinitionConstants.PropertyOverrideLogging, overrideLogging);
+                objectDefinitionProperties.Add(TemplateDefinitionConstants.PropertyOverrideLogging, overrideLogging);
             }
 
             if (StringUtils.HasText(configFile)) {
-                builder.AddPropertyValue(TemplateDefinitionConstants.PropertyConfigFile, configFile);
+                objectDefinitionProperties.Add(TemplateDefinitionConstants.PropertyConfigFile, configFile);
             }
 
             XmlNodeList childElements = element.ChildNodes;
             if (childElements.Count > 0) {
-                ParseChildDefinitions(childElements, parserContext, builder);
+                ParseChildDefinitions(childElements, parserContext, objectDefinitionProperties);
             }
+            configurableObjectDefinition.PropertyValues = objectDefinitionProperties;
+            return configurableObjectDefinition;
         }
 
         /// <summary>
@@ -113,14 +131,14 @@ namespace Spring.Template.Velocity.Config {
         /// </summary>
         /// <param name="childElements">the XmlNodeList representing the child configuration of the root NVelocity engine element</param>
         /// <param name="parserContext">the parser context</param>
-        /// <param name="builder">the ObjectDefinitionBuilder used to configure this object</param>
-        private void ParseChildDefinitions(XmlNodeList childElements, ParserContext parserContext, ObjectDefinitionBuilder builder) {
+        /// <param name="objectDefinitionProperties">the MutablePropertyValues used to configure this object</param>
+        private void ParseChildDefinitions(XmlNodeList childElements, ParserContext parserContext, MutablePropertyValues objectDefinitionProperties) {
             IDictionary<string, object> properties = new Dictionary<string, object>();
 
             foreach (XmlElement element in childElements) {
                 switch (element.LocalName) {
                     case TemplateDefinitionConstants.ElementResourceLoader:
-                        ParseResourceLoader(element, builder, properties);
+                        ParseResourceLoader(element, objectDefinitionProperties, properties);
                         break;
                     case TemplateDefinitionConstants.ElementNVelocityProperties:
                         ParseNVelocityProperties(element, parserContext, properties);
@@ -129,7 +147,7 @@ namespace Spring.Template.Velocity.Config {
             }
 
             if (properties.Count > 0) {
-                builder.AddPropertyValue(TemplateDefinitionConstants.PropertyVelocityProperties, properties);
+                objectDefinitionProperties.Add(TemplateDefinitionConstants.PropertyVelocityProperties, properties);
             }
         }
 
@@ -137,9 +155,9 @@ namespace Spring.Template.Velocity.Config {
         /// Configures the NVelocity resource loader definitions from the xml definition
         /// </summary>
         /// <param name="element">the root resource loader element</param>
-        /// <param name="builder">the ObjectDefinitionBuilder used to configure this object</param>
+        /// <param name="objectDefinitionProperties">the MutablePropertyValues used to configure this object</param>
         /// <param name="properties">the properties used to initialize the velocity engine</param>
-        private void ParseResourceLoader(XmlElement element, ObjectDefinitionBuilder builder, IDictionary<string, object> properties) {
+        private void ParseResourceLoader(XmlElement element, MutablePropertyValues objectDefinitionProperties, IDictionary<string, object> properties) {
             string caching = GetAttributeValue(element, TemplateDefinitionConstants.AttributeTemplateCaching);
             string defaultCacheSize = GetAttributeValue(element, TemplateDefinitionConstants.AttributeDefaultCacheSize);
             string modificationCheckInterval = GetAttributeValue(element, TemplateDefinitionConstants.AttributeModificationCheckInterval);
@@ -160,7 +178,7 @@ namespace Spring.Template.Velocity.Config {
                     AppendResourceLoaderGlobalProperties(properties, VelocityConstants.Assembly, caching, null);
                     break;
                 case TemplateDefinitionConstants.Spring:
-                    AppendResourceLoaderPaths(loaderElements, builder);
+                    AppendResourceLoaderPaths(loaderElements, objectDefinitionProperties);
                     AppendResourceLoaderGlobalProperties(properties, TemplateDefinitionConstants.Spring, caching, null);
                     break;
                 case TemplateDefinitionConstants.Custom:
@@ -239,14 +257,14 @@ namespace Spring.Template.Velocity.Config {
         /// attribute).
         /// </summary>
         /// <param name="elements">list of resource loader path elements</param>
-        /// <param name="builder">the object definiton builder to set the property for the engine factory</param>
-        private void AppendResourceLoaderPaths(XmlNodeList elements, ObjectDefinitionBuilder builder) {
+        /// <param name="objectDefinitionProperties">the MutablePropertyValues to set the property for the engine factory</param>
+        private void AppendResourceLoaderPaths(XmlNodeList elements, MutablePropertyValues objectDefinitionProperties) {
             IList<string> paths = new List<string>();
             foreach (XmlElement element in elements) {
                 string path = GetAttributeValue(element, TemplateDefinitionConstants.AttributeUri);
                 paths.Add(path);
             }
-            builder.AddPropertyValue(TemplateDefinitionConstants.PropertyResourceLoaderPaths, paths);
+            objectDefinitionProperties.Add(TemplateDefinitionConstants.PropertyResourceLoaderPaths, paths);
         }
 
         /// <summary>
@@ -274,7 +292,7 @@ namespace Spring.Template.Velocity.Config {
         /// <param name="parserContext">the parser context</param>
         /// <param name="properties">the properties used to initialize the velocity engine</param>
         private void ParseNVelocityProperties(XmlElement element, ParserContext parserContext, IDictionary<string, object> properties) {
-            IDictionary parsedProperties = objectNamespaceParserHelper.ParseDictionaryElementInternal(element, 
+            IDictionary parsedProperties = ParseDictionaryElement(element,
                 TemplateDefinitionConstants.ElementNVelocityProperties, parserContext);
             foreach (DictionaryEntry entry in parsedProperties) {
                 properties.Add(Convert.ToString(entry.Key), entry.Value);
@@ -282,11 +300,16 @@ namespace Spring.Template.Velocity.Config {
         }
 
         /// <summary>
-        /// construct the element type name (e.g, nv:engine, nv:resource-loader)
+        /// Gets the name of the object type for the specified element.
         /// </summary>
-        /// <param name="element">the current xml element</param>
-        protected override string GetObjectTypeName(XmlElement element) {
-            return TemplateTypePrefix + element.LocalName;
+        /// <param name="element">The element.</param>
+        /// <returns>The name of the object type.</returns>
+        private string GetTypeName(XmlElement element) {
+            string typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
+            if (StringUtils.IsNullOrEmpty(typeName)) {
+                return TemplateTypePrefix + element.LocalName;
+            }
+            return typeName;
         }
 
         /// <summary>
@@ -300,253 +323,151 @@ namespace Spring.Template.Velocity.Config {
             return type + VelocityConstants.Separator + RuntimeConstants.RESOURCE_LOADER + VelocityConstants.Separator +
                    suffix;
         }
-    }
 
-
-
-    /// <summary>
-    /// Helper class to access the ParseDictionaryElement of the ObjectsNamespaceParser
-    /// todo: remove this and externalize the logic in ObjectsNamespaceParser.ParseDictionaryElement
-    /// </summary>
-    internal class ObjectNamespaceParserHelper : ObjectsNamespaceParser {
         /// <summary>
-        /// Gets a dictionary definition.
+        /// This method is overriden from ObjectsNamespaceParser since when invoked on
+        /// sub-elements from the objets namespace (e.g., objects:objectMap for nvelocity
+        /// property map) the <code>element.SelectNodes</code> fails because it is in
+        /// the nvelocity custom namespace and not the object's namespace (http://www.springframwork.net)
+        /// to amend this the object's namespace is added to the provided XmlNamespaceManager
         /// </summary>
-        /// <param name="mapEle">The element describing the dictionary definition.</param>
-        /// <param name="name">The name of the object (definition) associated with the dictionary definition.</param>
-        /// <param name="parserContext">The namespace-aware parser.</param>
-        /// <returns>The dictionary definition.</returns>
-        public IDictionary ParseDictionaryElementInternal(XmlElement mapEle, string name, ParserContext parserContext) {
-            ManagedDictionary dictionary = new ManagedDictionary();
-            string keyTypeName = GetAttributeValue(mapEle, "key-type");
-            string valueTypeName = GetAttributeValue(mapEle, "value-type");
-            if (StringUtils.HasText(keyTypeName)) {
-                dictionary.KeyTypeName = keyTypeName;
-            }
-            if (StringUtils.HasText(valueTypeName)) {
-                dictionary.ValueTypeName = valueTypeName;
-            }
-            dictionary.MergeEnabled = ParseMergeAttribute(mapEle, parserContext.ParserHelper);
-
-            XmlNodeList entryElements = SelectNodes(mapEle, ObjectDefinitionConstants.EntryElement);
-            foreach (XmlElement entryEle in entryElements) {
-                #region Key
-
-                object key = null;
-
-                XmlAttribute keyAtt = entryEle.Attributes[ObjectDefinitionConstants.KeyAttribute];
-                if (keyAtt != null) {
-                    key = keyAtt.Value;
-                } else {
-                    // ok, we're not using the 'key' attribute; lets check for the ref shortcut...
-                    XmlAttribute keyRefAtt = entryEle.Attributes[ObjectDefinitionConstants.DictionaryKeyRefShortcutAttribute];
-                    if (keyRefAtt != null) {
-                        key = new RuntimeObjectReference(keyRefAtt.Value);
-                    } else {
-                        // so check for the 'key' element...
-                        XmlNode keyNode = SelectSingleNode(entryEle, ObjectDefinitionConstants.KeyElement);
-                        if (keyNode == null) {
-                            throw new ObjectDefinitionStoreException(
-                                parserContext.ReaderContext.Resource, name,
-                                string.Format("One of either the '{0}' element, or the the '{1}' or '{2}' attributes " +
-                                              "is required for the <{3}/> element.",
-                                              ObjectDefinitionConstants.KeyElement,
-                                              ObjectDefinitionConstants.KeyAttribute,
-                                              ObjectDefinitionConstants.DictionaryKeyRefShortcutAttribute,
-                                              ObjectDefinitionConstants.EntryElement));
-                        }
-                        XmlElement keyElement = (XmlElement)keyNode;
-                        XmlNodeList keyNodes = keyElement.GetElementsByTagName("*");
-                        if (keyNodes == null || keyNodes.Count == 0) {
-                            throw new ObjectDefinitionStoreException(
-                                parserContext.ReaderContext.Resource, name,
-                                string.Format("Malformed <{0}/> element... the value of the key must be " +
-                                    "specified as a child value-style element.",
-                                              ObjectDefinitionConstants.KeyElement));
-                        }
-                        key = ParsePropertySubElement((XmlElement)keyNodes.Item(0), name, parserContext);
-                    }
-                }
-
-                #endregion
-
-                #region Value
-
-                XmlAttribute inlineValueAtt = entryEle.Attributes[ObjectDefinitionConstants.ValueAttribute];
-                if (inlineValueAtt != null) {
-                    // ok, we're using the value attribute shortcut...
-                    dictionary[key] = inlineValueAtt.Value;
-                } else if (entryEle.Attributes[ObjectDefinitionConstants.DictionaryValueRefShortcutAttribute] != null) {
-                    // ok, we're using the value-ref attribute shortcut...
-                    XmlAttribute inlineValueRefAtt = entryEle.Attributes[ObjectDefinitionConstants.DictionaryValueRefShortcutAttribute];
-                    RuntimeObjectReference ror = new RuntimeObjectReference(inlineValueRefAtt.Value);
-                    dictionary[key] = ror;
-                } else if (entryEle.Attributes[ObjectDefinitionConstants.ExpressionAttribute] != null) {
-                    // ok, we're using the expression attribute shortcut...
-                    XmlAttribute inlineExpressionAtt = entryEle.Attributes[ObjectDefinitionConstants.ExpressionAttribute];
-                    ExpressionHolder expHolder = new ExpressionHolder(inlineExpressionAtt.Value);
-                    dictionary[key] = expHolder;
-                } else {
-                    XmlNode keyNode = SelectSingleNode(entryEle, ObjectDefinitionConstants.KeyElement);
-                    if (keyNode != null) {
-                        entryEle.RemoveChild(keyNode);
-                    }
-                    // ok, we're using the original full-on value element...
-                    XmlNodeList valueElements = entryEle.GetElementsByTagName("*");
-                    if (valueElements == null || valueElements.Count == 0) {
-                        throw new ObjectDefinitionStoreException(
-                            parserContext.ReaderContext.Resource, name,
-                            string.Format("One of either the '{0}' or '{1}' attributes, or a value-style element " +
-                                "is required for the <{2}/> element.",
-                                          ObjectDefinitionConstants.ValueAttribute, ObjectDefinitionConstants.DictionaryValueRefShortcutAttribute, ObjectDefinitionConstants.EntryElement));
-                    }
-                    dictionary[key] = ParsePropertySubElement((XmlElement)valueElements.Item(0), name, parserContext);
-                }
-
-                #endregion
-            }
-            return dictionary;
-        }
-        private bool ParseMergeAttribute(XmlElement collectionElement, ObjectDefinitionParserHelper helper) {
-            string val = collectionElement.GetAttribute(ObjectDefinitionConstants.MergeAttribute);
-            if (ObjectDefinitionConstants.DefaultValue.Equals(val)) {
-                val = helper.Defaults.Merge;
-            }
-            return ObjectDefinitionConstants.TrueValue.Equals(val);
-        }
-
-       /// <summary>
-        ///  This method overrides SelectNodes from ObjectsNamespaceParser because the original method 
-        /// picks up the NamespaceURI from the nvelocity which causes element.SelectNodes to return an empty 
-        /// list. Consider removing. 
-       /// </summary>
-        protected new XmlNodeList SelectNodes(XmlElement element, string childElementName) {
+        ///<param name="element"> The element to be searched in. </param>
+        /// <param name="childElementName"> The name of the child nodes to look for.
+        /// </param>
+        /// <returns> The child <see cref="System.Xml.XmlNode"/>s of the supplied
+        /// <paramref name="element"/> with the supplied <paramref name="childElementName"/>.
+        /// </returns>
+        /// <see cref="ObjectsNamespaceParser"/>
+        [Obsolete("not used anymore - ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead")]
+        protected override XmlNodeList SelectNodes(XmlElement element, string childElementName) {
             XmlNamespaceManager nsManager = new XmlNamespaceManager(new NameTable());
+            nsManager.AddNamespace(GetNamespacePrefix(element), element.NamespaceURI);
             nsManager.AddNamespace(GetNamespacePrefix(element), Namespace);
             return element.SelectNodes(GetNamespacePrefix(element) + ":" + childElementName, nsManager);
         }
-
 
         private string GetNamespacePrefix(XmlElement element) {
             return StringUtils.HasText(element.Prefix) ? element.Prefix : "spring";
         }
     }
-    
+
+ 
+
     #region Element & Attribute Name Constants
 
+    /// <summary>
+    /// Template definition constants
+    /// </summary>
+    public class TemplateDefinitionConstants {
         /// <summary>
-        /// Template definition constants
+        /// Engine element definition
         /// </summary>
-        public class TemplateDefinitionConstants {
-            /// <summary>
-            /// Engine element definition
-            /// </summary>
-            public const string NVelocityElement = "engine";
+        public const string NVelocityElement = "engine";
 
-            /// <summary>
-            /// Spring resource loader element definition
-            /// </summary>
-            public const string Spring = "spring";
+        /// <summary>
+        /// Spring resource loader element definition
+        /// </summary>
+        public const string Spring = "spring";
 
-            /// <summary>
-            /// Custom resource loader element definition
-            /// </summary>
-            public const string Custom = "custom";
+        /// <summary>
+        /// Custom resource loader element definition
+        /// </summary>
+        public const string Custom = "custom";
 
-            /// <summary>
-            /// uri attribute of the spring element
-            /// </summary>
-            public const string AttributeUri = "uri";
+        /// <summary>
+        /// uri attribute of the spring element
+        /// </summary>
+        public const string AttributeUri = "uri";
 
-            /// <summary>
-            /// prefer-file-system-access attribute of the engine factory
-            /// </summary>
-            public const string AttributePreferFileSystemAccess = "prefer-file-system-access";
+        /// <summary>
+        /// prefer-file-system-access attribute of the engine factory
+        /// </summary>
+        public const string AttributePreferFileSystemAccess = "prefer-file-system-access";
 
-            /// <summary>
-            /// config-file attribute of the engine factory
-            /// </summary>
-            public const string AttributeConfigFile = "config-file";
+        /// <summary>
+        /// config-file attribute of the engine factory
+        /// </summary>
+        public const string AttributeConfigFile = "config-file";
 
-            /// <summary>
-            /// override-logging attribute of the engine factory
-            /// </summary>
-            public const string AttributeOverrideLogging = "override-logging";
+        /// <summary>
+        /// override-logging attribute of the engine factory
+        /// </summary>
+        public const string AttributeOverrideLogging = "override-logging";
 
-            /// <summary>
-            /// template-caching attribute of the nvelocity engine
-            /// </summary>
-            public const string AttributeTemplateCaching = "template-caching";
+        /// <summary>
+        /// template-caching attribute of the nvelocity engine
+        /// </summary>
+        public const string AttributeTemplateCaching = "template-caching";
 
-            /// <summary>
-            /// default-cache-size attribute of the nvelocity engine resource manager
-            /// </summary>
-            public const string AttributeDefaultCacheSize = "default-cache-size";
+        /// <summary>
+        /// default-cache-size attribute of the nvelocity engine resource manager
+        /// </summary>
+        public const string AttributeDefaultCacheSize = "default-cache-size";
 
-            /// <summary>
-            /// modification-check-interval attribute of the nvelocity engine resource loader
-            /// </summary>
-            public const string AttributeModificationCheckInterval = "modification-check-interval";
+        /// <summary>
+        /// modification-check-interval attribute of the nvelocity engine resource loader
+        /// </summary>
+        public const string AttributeModificationCheckInterval = "modification-check-interval";
 
-            /// <summary>
-            /// resource loader element
-            /// </summary>
-            public const string ElementResourceLoader = "resource-loader";
+        /// <summary>
+        /// resource loader element
+        /// </summary>
+        public const string ElementResourceLoader = "resource-loader";
 
-            /// <summary>
-            /// nvelocity propeties element (map)
-            /// </summary>
-            public const string ElementNVelocityProperties = "nvelocity-properties";
+        /// <summary>
+        /// nvelocity propeties element (map)
+        /// </summary>
+        public const string ElementNVelocityProperties = "nvelocity-properties";
 
-            /// <summary>
-            /// PreferFileSystemAccess property of the engine factory
-            /// </summary>
-            public const string PropertyPreferFileSystemAccess = "PreferFileSystemAccess";
+        /// <summary>
+        /// PreferFileSystemAccess property of the engine factory
+        /// </summary>
+        public const string PropertyPreferFileSystemAccess = "PreferFileSystemAccess";
 
-            /// <summary>
-            /// OverrideLogging property of the engine factory
-            /// </summary>
-            public const string PropertyOverrideLogging = "OverrideLogging";
+        /// <summary>
+        /// OverrideLogging property of the engine factory
+        /// </summary>
+        public const string PropertyOverrideLogging = "OverrideLogging";
 
-            /// <summary>
-            /// ConfigLocation property of the engine factory
-            /// </summary>
-            public const string PropertyConfigFile = "ConfigLocation";
+        /// <summary>
+        /// ConfigLocation property of the engine factory
+        /// </summary>
+        public const string PropertyConfigFile = "ConfigLocation";
 
-            /// <summary>
-            /// ResourceLoaderPaths property of the engine factory
-            /// </summary>
-            public const string PropertyResourceLoaderPaths = "ResourceLoaderPaths";
+        /// <summary>
+        /// ResourceLoaderPaths property of the engine factory
+        /// </summary>
+        public const string PropertyResourceLoaderPaths = "ResourceLoaderPaths";
 
-            /// <summary>
-            /// VelocityProperties property of the engine factory
-            /// </summary>
-            public const string PropertyVelocityProperties = "VelocityProperties";
+        /// <summary>
+        /// VelocityProperties property of the engine factory
+        /// </summary>
+        public const string PropertyVelocityProperties = "VelocityProperties";
 
-            /// <summary>
-            /// resource.loader.cache property of the resource loader configuration 
-            /// </summary>
-            public const string PropertyResourceLoaderCaching = "resource.loader.cache";
+        /// <summary>
+        /// resource.loader.cache property of the resource loader configuration 
+        /// </summary>
+        public const string PropertyResourceLoaderCaching = "resource.loader.cache";
 
-            /// <summary>
-            /// resource.loader.modificationCheckInterval property of the resource loader configuration 
-            /// </summary>
-            public const string PropertyResourceLoaderModificationCheckInterval = "resource.loader.modificationCheckInterval";
+        /// <summary>
+        /// resource.loader.modificationCheckInterval property of the resource loader configuration 
+        /// </summary>
+        public const string PropertyResourceLoaderModificationCheckInterval = "resource.loader.modificationCheckInterval";
 
-            /// <summary>
-            /// the type used for file resource loader
-            /// </summary>
-            public const string FileResourceLoaderClass = "NVelocity.Runtime.Resource.Loader.FileResourceLoader; NVelocity";
+        /// <summary>
+        /// the type used for file resource loader
+        /// </summary>
+        public const string FileResourceLoaderClass = "NVelocity.Runtime.Resource.Loader.FileResourceLoader; NVelocity";
 
-            /// <summary>
-            /// the type used for assembly resource loader
-            /// </summary>
-            public const string AssemblyResourceLoaderClass = "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader; NVelocity";
+        /// <summary>
+        /// the type used for assembly resource loader
+        /// </summary>
+        public const string AssemblyResourceLoaderClass = "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader; NVelocity";
 
-            /// <summary>
-            /// the type used for spring resource loader
-            /// </summary>
-            public const string SpringResourceLoaderClass = "Spring.Template.Velocity.SpringResourceLoader; Spring.Template.Velocity";
-        }
-        #endregion
+        /// <summary>
+        /// the type used for spring resource loader
+        /// </summary>
+        public const string SpringResourceLoaderClass = "Spring.Template.Velocity.SpringResourceLoader; Spring.Template.Velocity";
+    }
+    #endregion
 }
