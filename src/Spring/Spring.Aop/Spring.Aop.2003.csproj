@@ -88,11 +88,6 @@
                     Project = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
-                <Reference
-                    Name = "antlr.runtime"
-                    AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\lib\Net\1.1\antlr.runtime.dll"
-                />
             </References>
         </Build>
         <Files>
@@ -383,59 +378,142 @@
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\AbstractAdvisorAutoProxyCreator.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\AbstractAutoProxyCreator.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\AbstractFilteringAutoProxyCreator.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\AttributeAutoProxyCreator.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\DefaultAdvisorAutoProxyCreator.cs"
-                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\IAdvisorRetrievalHelper.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\InfrastructureAdvisorAutoProxyCreator.cs"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\InheritanceBasedAopConfigurer.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\ITargetSourceCreator.cs"
-                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\ObjectFactoryAdvisorRetrievalHelper.cs"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\ObjectNameAutoProxyCreator.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreator.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\TypeNameAutoProxyCreator.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\all-wcprops"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\entries"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "Aop\Framework\AutoProxy\.svn\prop-base\" />
+                <Folder RelPath = "Aop\Framework\AutoProxy\.svn\props\" />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\AbstractAdvisorAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\AbstractAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\AbstractFilteringAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\AttributeAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\DefaultAdvisorAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\IAdvisorRetrievalHelper.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\InfrastructureAdvisorAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\InheritanceBasedAopConfigurer.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\ITargetSourceCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\ObjectFactoryAdvisorRetrievalHelper.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\ObjectNameAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\PointcutFilteringAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\.svn\text-base\TypeNameAutoProxyCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "Aop\Framework\AutoProxy\.svn\tmp\prop-base\" />
+                <Folder RelPath = "Aop\Framework\AutoProxy\.svn\tmp\props\" />
+                <Folder RelPath = "Aop\Framework\AutoProxy\.svn\tmp\text-base\" />
+                <File
                     RelPath = "Aop\Framework\AutoProxy\Target\AbstractPrototypeTargetSourceCreator.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\Target\.svn\all-wcprops"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\Target\.svn\entries"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "Aop\Framework\AutoProxy\Target\.svn\prop-base\" />
+                <Folder RelPath = "Aop\Framework\AutoProxy\Target\.svn\props\" />
+                <File
+                    RelPath = "Aop\Framework\AutoProxy\Target\.svn\text-base\AbstractPrototypeTargetSourceCreator.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "Aop\Framework\AutoProxy\Target\.svn\tmp\prop-base\" />
+                <Folder RelPath = "Aop\Framework\AutoProxy\Target\.svn\tmp\props\" />
+                <Folder RelPath = "Aop\Framework\AutoProxy\Target\.svn\tmp\text-base\" />
                 <File
                     RelPath = "Aop\Framework\DynamicProxy\AbstractAopProxyMethodBuilder.cs"
                     SubType = "Code"

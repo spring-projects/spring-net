@@ -47,10 +47,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.NUnit.2003",
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.2003", "src\Spring\Spring.Data.NHibernate\Spring.Data.NHibernate.2003.csproj", "{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.Tests.2003", "test\Spring\Spring.Data.NHibernate.Tests\Spring.Data.NHibernate.Tests.2003.csproj", "{8755D942-7828-4971-835B-37A5992C06C9}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -68,6 +64,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.20
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(VisualSVN) = preSolution
+	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug-1.1 = Debug-1.1
 		Release-1.1 = Release-1.1
@@ -123,10 +121,6 @@ Global
 		{6B8639E3-88BB-4F7B-9F23-699E84C30D58}.Debug-1.1.Build.0 = Debug-1.1|.NET
 		{6B8639E3-88BB-4F7B-9F23-699E84C30D58}.Release-1.1.ActiveCfg = Release-1.1|.NET
 		{6B8639E3-88BB-4F7B-9F23-699E84C30D58}.Release-1.1.Build.0 = Release-1.1|.NET
-		{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}.Debug-1.1.ActiveCfg = Debug-1.1|.NET
-		{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}.Debug-1.1.Build.0 = Debug-1.1|.NET
-		{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}.Release-1.1.ActiveCfg = Release-1.1|.NET
-		{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}.Release-1.1.Build.0 = Release-1.1|.NET
 		{8755D942-7828-4971-835B-37A5992C06C9}.Debug-1.1.ActiveCfg = Debug-1.1|.NET
 		{8755D942-7828-4971-835B-37A5992C06C9}.Debug-1.1.Build.0 = Debug-1.1|.NET
 		{8755D942-7828-4971-835B-37A5992C06C9}.Release-1.1.ActiveCfg = Release-1.1|.NET
@@ -145,6 +139,7 @@ Global
 		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release-1.1.Build.0 = Release-1.1|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		common-project.include = common-project.include
 		doc\NamespaceSummary.xml = doc\NamespaceSummary.xml
 		Spring.build = Spring.build
 		Spring.include = Spring.include

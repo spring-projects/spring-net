@@ -194,6 +194,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dao\NonTransientDataAccessException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dao\NonTransientDataAccessResourceException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dao\ObjectOptimisticLockingFailureException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -215,6 +225,16 @@
                 />
                 <File
                     RelPath = "Dao\PessimisticLockingFailureException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dao\TransientDataAccessException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dao\TransientDataAccessResourceException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -285,6 +305,11 @@
                 />
                 <File
                     RelPath = "Data\CommandSetterDelegate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\DuplicateKeyException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

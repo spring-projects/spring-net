@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{6B8639E3-88BB-4F7B-9F23-699E84C30D58}"
     >
@@ -106,6 +106,16 @@
                 <File
                     RelPath = "CommonAssemblyInfo.cs"
                     Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Testing\Ado\IPlatformTransaction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Testing\Ado\SimpleAdoTestUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

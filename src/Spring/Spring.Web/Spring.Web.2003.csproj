@@ -211,6 +211,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Support\IWebObjectNameGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Support\ObjectScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -241,6 +246,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Xml\WebObjectDefinitionDocumentReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Xml\WebObjectDefinitionParserHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Xml\WebObjectDefinitionReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Xml\WebObjectsNamespaceParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -267,6 +287,11 @@
                 />
                 <File
                     RelPath = "Util\IVirtualEnvironment.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\SecurityCritical.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

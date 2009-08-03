@@ -150,11 +150,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MyNUnitAddinHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Spring.Web.Tests.build"
                     BuildAction = "None"
                 />
@@ -197,7 +192,7 @@
                 <File
                     RelPath = "Data\Spring\Objects\Factory\Support\TestForm.aspx.cs"
                     DependentUpon = "TestForm.aspx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File
@@ -285,6 +280,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TestSupport\WebApplicationTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Threading\HttpContextStorageTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -316,7 +316,7 @@
                 />
                 <File
                     RelPath = "Web\Support\ControlInterceptionTests.cs"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File

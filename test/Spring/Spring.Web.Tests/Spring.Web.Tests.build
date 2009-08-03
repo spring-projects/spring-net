@@ -15,6 +15,7 @@
             output="${current.bin.dir}/${project::get-name()}.dll" doc="${current.bin.dir}/${project::get-name()}.xml">
             <nowarn>
                 <warning number="${nowarn.numbers.test}" /> <!-- 1701 -->
+                <warning number="${nowarn.numbers.test},1587" if="${nant.settings.currentframework=='mono-2.0'}"/>
             </nowarn>
             <sources failonempty="true">
                 <include name="**/*.cs" />
@@ -30,6 +31,12 @@
             </resources>
             <references basedir="${current.bin.dir}">
                 <include name="*.dll" />
+		<include name="System.Configuration.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Drawing.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Web.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Web.Services.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Data.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
                 <exclude name="${project::get-name()}.dll" />
                 <exclude name="CloverRuntime.dll" />
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />

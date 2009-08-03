@@ -1178,6 +1178,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\TestTransparentProxyFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\TypeMismatchExceptionTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2003,11 +2008,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Validation\ValidationConfigParserTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Validation\ValidationErrorsTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2016,6 +2016,19 @@
                     RelPath = "Validation\ValidationExceptionTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\ValidationNamespaceParserTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\ValidationNamespaceParserTests_WhenConfigFileIsNotValid.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Validation\ValidationNamespaceParserTests_WhenConfigFileIsValid.xml"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Validation\ValidatorGroupTests.cs"

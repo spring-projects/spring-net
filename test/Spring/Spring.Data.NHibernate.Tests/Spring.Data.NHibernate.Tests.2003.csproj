@@ -90,11 +90,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Spring.Data.NHibernate.2003"
-                    Project = "{E8467024-8AE3-44A4-BAAD-1D78747EC7BD}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Spring.Aop.2003"
                     Project = "{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -110,29 +105,39 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\lib\NHibernate10\net\1.1\Castle.DynamicProxy.dll"
-                />
-                <Reference
-                    Name = "Iesi.Collections"
-                    AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\..\lib\NHibernate10\net\1.1\Iesi.Collections.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\..\lib\NHibernate10\net\1.1\log4net.dll"
+                    Name = "Rhino.Mocks"
+                    AssemblyName = "Rhino.Mocks"
+                    HintPath = "..\..\..\lib\Net\1.1\Rhino.Mocks.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\..\lib\NHibernate10\net\1.1\NHibernate.dll"
+                    HintPath = "..\..\..\lib\NHibernate12\net\1.1\NHibernate.dll"
                 />
                 <Reference
-                    Name = "Rhino.Mocks"
-                    AssemblyName = "Rhino.Mocks"
-                    HintPath = "..\..\..\lib\Net\1.1\Rhino.Mocks.dll"
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\lib\NHibernate12\net\1.1\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "HashCodeProvider"
+                    AssemblyName = "HashCodeProvider"
+                    HintPath = "..\..\..\lib\NHibernate12\net\1.1\HashCodeProvider.dll"
+                />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\..\lib\NHibernate12\net\1.1\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\..\lib\NHibernate12\net\1.1\log4net.dll"
+                />
+                <Reference
+                    Name = "Spring.Data.NHibernate12.2003"
+                    Project = "{2E12AE3E-5690-46A5-9F89-80F1D3004ADB}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

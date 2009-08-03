@@ -119,11 +119,6 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Spring.Data.Integration.Tests.build"
                     BuildAction = "None"
                 />
