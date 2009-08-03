@@ -46,6 +46,7 @@ Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE 
 
 The fallback rules for localized resources seem to have a bug that is fixed by applying Service Pack 1 for .NET 1.1.  This affects the use of IMessageSource.GetMessage methods that specify CultureInfo.
 
+
 3. RELEASE INFO
 
 Release contents:
@@ -91,10 +92,6 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: Transaction and ADO.NET Framework.
 - Dependencies: Spring.Core, Spring.Aop
 
-* "Spring.Data.NHibernate" (~68 KB)
-- Contents: NHibernate 1.0 integration
-- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
-
 * "Spring.Data.NHibernate12" (~84 KB)
 - Contents: NHibernate 1.2 integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
@@ -123,6 +120,10 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: NUnit Integration
 - Dependencies: Spring.Core, Spring.Data, NUnit
 
+* "Spring.Testing.Microsoft" (~24 KB)
+- Contents: MSTest Integration
+- Dependencies: Spring.Core, Spring.Data, MSTest
+
 * "Spring.Messaging" (~65 KB)
 - Contents: MSMQ Integration
 - Dependencies: Spring.Core, Spring.Data, System.Messaging
@@ -132,7 +133,7 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Dependencies: Spring.Core, Spring.Data, Apache NMS
 
 * "Spring.Scheduling.Quartz" (~44 KB)
-- Contents: Quartz RC2 Integration
+- Contents: Quartz 1.0 Integration
 - Dependencies: Spring.Core, Spring.Data, Quartz
 
 
@@ -199,13 +200,24 @@ NDoc3 and InnovaSys Document X! are used to generate the SDK documentation.
 
 7. Support
 
-The user forms at http://forum.springframework.net/ are available for you to submit questions, support requests, and interact with other Spring.NET users.
+The user forums at http://forum.springframework.net/ are available for you to submit questions, support requests,
+and interact with other Spring.NET users.
 
-Bug and issue tracking can be found at http://opensource.atlassian.com/projects/spring/secure/BrowseProject.jspa?id=10020
+Bug and issue tracking can be found at http://jira.springframework.org/secure/BrowseProject.jspa?id=10020
 
 The Spring.NET wiki is located at http://opensource.atlassian.com/confluence/spring/display/NET/Home
 
 A Fisheye repository browser is located at http://fisheye1.cenqua.com/viewrep/springnet
+
+To get the sources, check them out at the Subversion repository at https://src.springframework.org/svn/spring-net/trunk
+We are always happy to receive your feedback on the forums. If you think you found a bug, have an improvement suggestion
+or feature request, please submit a ticket in JIRA (see link above).
+
+A word on bug reports: If at all possible, try to download one of the nightly snapshots at http://www.springframework.net/downloads/nightly/
+and see, if this bug has already been fixed. If the problem still persists, don't forget to mention the version of Spring.NET
+you are using (check the file versions of Spring.NET dlls), the .NET version you are running on and a description how to reproduce the problem.
+Ideally attach some sample code reproducing the problem to the JIRA ticket.
+
 
 8. Acknowledgements
 
