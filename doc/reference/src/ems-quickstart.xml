@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter version="5" xml:id="ems-quickstart"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>TIBCO EMS QuickStart</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The TIBCO EMS quick start application demonstrates how to use
+    asynchronous messaging to implement a system for purchasing a stock. To
+    purchase a stock, a client application will send a stock request message
+    containing the information about the stock, i.e. ticker symbol, quantity,
+    etc. The client request message will be received by the server where it
+    will perform business processing on the request, for example to determine
+    if the user has sufficient credit to purchase the stock or if the user is
+    even allowed to make the purchase due to existing account restrictions.
+    These are typically external processes as well. Usually the server
+    application will persist state about the request and forward it on to an
+    execute venue where the actual execution of the stock request is
+    performed. In addition, market data for the stock will be sent from the
+    server process to the client. The high level exchange of information is
+    shown below.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nms-quickstart.jpg" scale="75"></imagedata>
+      </imageobject>
+    </mediaobject>
+
+    <note>
+      <para>To follow this EMS QuickStart load the solution file found in the
+      directory
+      <literal>&lt;spring-install-dir&gt;\examples\Spring\Spring.EmsQuickStart</literal></para>
+    </note>
+  </section>
+
+  <section>
+    <title>Message Destinations</title>
+
+    <para>To implement this flow using messaging the following queues and
+    topics will be used. All requests from the client to the server will be
+    sent on the queue named APP.STOCK.REQUEST. Responses to the requests will
+    be sent from the server to the client on a queue unique to each client. In
+    this example the queue name is of the form APP.STOCK.&lt;UserName&gt;, and
+    more specifically is configured to be APP.STOCK.JOE. Market data does not
+    need to be delivered to an individual client as many client applications
+    are interested in this shared information. As such, the server will send
+    market data information on a topic named APP.STOCK.MARKETDATA. The
+    messaging communication between the server and the execution venue is not
+    included as part of the application. An local implementation of the
+    service interface that represents the execution venue is used instead of
+    one based on messaging or another middleware technology. The messaging
+    flow showing the queues and topics used is shown below.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nms-quickstart-msg-destinations.jpg"
+                   role="" scale="75"></imagedata>
+      </imageobject>
+    </mediaobject>
+
+    <para>Queues are shown in red and topics in green.</para>
+  </section>
+
+  <section>
+    <title>Messaging Infrastructure</title>
+
+    <para>Much of this application mirrors the quickstart that is available
+    with ActiveMQ and you should refer to the NMS QuickStart for the
+    description on how the application in structured in terms of Gateway,
+    Message Data formats, Message Handler, and Message Converters. What this
+    section describeds are the specific configuration related to using TIBCO
+    EMS.</para>
+
+    <para>The implementations of the gateway interfaces inherit from Spring's
+    helper class <literal>EmsGatewaySupport</literal> in order to get easy
+    access to a <classname>EmsTemplate</classname> for sending. The
+    implementation of the <literal>IStockService</literal> interface is shown
+    below</para>
+
+    <programlisting language="csharp">    public class EmsStockServiceGateway : EmsGatewaySupport, IStockService
+    {
+        private Destination defaultReplyToQueue;
+        
+        public Destination DefaultReplyToQueue
+        {
+            set { defaultReplyToQueue = value; }
+        }
+
+        public void Send(TradeRequest tradeRequest)
+        {            
+            EmsTemplate.ConvertAndSendWithDelegate(tradeRequest, delegate(Message message)
+                                                                     {
+                                                                         message.ReplyTo = defaultReplyToQueue;
+                                                                         message.CorrelationID = new Guid().ToString();
+                                                                         return message;
+                                                                     });
+        }        
+    }</programlisting>
+
+    <para>The <literal>Send</literal> method is using EmsTemplate's
+    <literal>ConvertAndSendWithDelegate(object obj,
+    MessagePostProcessorDelegate messagePostProcessorDelegate)</literal>
+    method. The anonymous delegate allows you to modify the message
+    properties, such as ReplyTo and CorrelationID after the message has been
+    converted from an object but before it has been sent. The use of an
+    anonymous delegate allows makes it very easy to apply any post processing
+    logic to the converted message.</para>
+
+    <para>The object definition for the
+    <literal>EmsStockServiceGateway</literal> is shown below along with its
+    dependent object definitions of <classname>EmsTemplate</classname> and the
+    <classname>ConnectionFactory</classname>.</para>
+
+    <para><programlisting language="myxml">  &lt;object id="ConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems"&gt;
+    &lt;constructor-arg index="0" value="tcp://localhost:7222"/&gt;
+  &lt;/object&gt;
+
+  &lt;!-- EMS based implementation of technology neutral IStockServiceGateway --&gt;
+  &lt;object name="StockServiceGateway" type="Spring.EmsQuickStart.Client.Gateways.EmsStockServiceGateway, Spring.EmsQuickStart.Client"&gt;
+    &lt;property name="EmsTemplate"  ref="EmsTemplate"/&gt;
+    &lt;property name="DefaultReplyToQueue"&gt;
+      &lt;object type="TIBCO.EMS.Queue, TIBCO.EMS"&gt;
+        &lt;constructor-arg value="APP.STOCK.JOE"/&gt;
+      &lt;/object&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+
+
+  &lt;object name="EmsTemplate" type="Spring.Messaging.Ems.Core.EmsTemplate, Spring.Messaging.Ems"&gt;
+    &lt;property name="ConnectionFactory" ref="ConnectionFactory"/&gt;
+    &lt;property name="DefaultDestinationName" value="APP.STOCK.REQUEST"/&gt;
+    &lt;property name="MessageConverter" ref="XmlMessageConverter"/&gt;
+  &lt;/object&gt;</programlisting>In this example the
+    <literal>Spring.Messaging.Ems.Common.EmsConnectionFactory
+    </literal>connection factory was used. It would be more efficient resource
+    wise to use Spring's <literal>CachingConnectionFactory</literal> wrapper
+    class so that connections will not be open and closed for each message
+    send as well as allowing for the caching of other intermediate EMS API
+    objects such as sessions and message producers.</para>
+
+    <para>A similar configuration is used on the server to configure the class
+    <literal>Spring.EmsQuickStart.Server.Gateways.MarketDataServiceGateway
+    </literal>that implements the <literal>IMarketDataService</literal>
+    interface.</para>
+
+    <para>Since the client is also a consumer of messages, on the topic
+    APP.STOCK.MARKETDATA and the queue APP.STOCK.JOE (for Trader Joe!), two
+    message listener containers are defined as shown below.</para>
+
+    <programlisting language="myxml">  &lt;ems:listener-container connection-factory="ConnectionFactory"&gt;
+    &lt;ems:listener ref="MessageListenerAdapter" destination="APP.STOCK.JOE" /&gt;
+    &lt;ems:listener ref="MessageListenerAdapter" destination="APP.STOCK.MARKETDATA" pubsub-domain="true"/&gt;
+  &lt;/ems:listener-container&gt;</programlisting>
+
+    <para>Refer to the <link linkend="messaging">messages reference
+    docs</link> for all the available attributes to configure the container
+    and also the section on <link
+    linkend="xsd-config-body-schemas-nms">registering the EMS schema</link>
+    with Spring..</para>
+
+    <para>On the server we define a message listener container for the queue
+    APP.STOCK.REQUEST but set the concurrency property to 10 so that 10
+    threads will be consuming messages from the queue.</para>
+
+    <programlisting language="myxml">  &lt;ems:listener-container connection-factory="ConnectionFactory" concurrency="<emphasis
+        role="bold">10</emphasis>"&gt;
+    &lt;ems:listener ref="MessageListenerAdapter" destination="APP.STOCK.REQUEST" /&gt;
+  &lt;/ems:listener-container&gt;</programlisting>
+  </section>
+
+  <section>
+    <title>Running the application</title>
+
+    <para>To run both the client and server make sure that you select
+    'Multiple Startup Projects' within VS.NET. The GUI has a button to make a
+    hardcoded trade request and show confirmation in a text box. A text area
+    is used to display the market data. There is a 'Get Portfolio' button that
+    is not implemented at the moment. A picture of the GUI after it has been
+    running for a while and trade has been sent and responded to is shown
+    below</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/nms-quickstart-gui.png"></imagedata>
+      </imageobject>
+    </mediaobject>
+
+    <para></para>
+  </section>
+</chapter>
