@@ -20,7 +20,7 @@ The 1.3.0 RC1 release of Spring.NET contains
      * Portable Service Abstractions
        - Export plain .NET objects via .NET Remoting, Web Service or .NET Serviced Component and create client side proxies based on endpoint URL and service interface.
      * NHibernate Integation
-       - NHibernate 1.0 and 1.2 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
+       - NHibernate 1.0, 1.2, 2.0 and 2.1 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
      * ASP.NET AJAX Integration
        - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
      * NUnit integration
@@ -56,11 +56,13 @@ Release contents:
 * "lib/Net" contains shared third-party libraries needed for building the framework
 * "lib/NHibernate10" contains NHibernate 1.0 dlls
 * "lib/NHibernate12" contains NHibernate 1.2 dlls
+* "lib/NHibernate20" contains NHibernate 2.0 dlls
+* "lib/NHibernate21" contains NHibernate 2.1 dlls
 * "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
 * "examples" contains sample applications.
 * "build-support" contains additonal applications need to build using NAnt as some convenience
    VS.NET solution files.
-* "dev-supprt" contains 'developer support' tools and code, such as solution templates for VS.NET
+* "dev-support" contains 'developer support' tools and code, such as solution templates for VS.NET
 
 debug build is done using /DEBUG:full and release build using /DEBUG:pdbonly flags.
 

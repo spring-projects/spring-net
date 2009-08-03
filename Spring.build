@@ -1015,8 +1015,10 @@ Commandline Examples:
       <fileset basedir="build-support/tools">
         <include name="antlr-2.7.6/*"/>
         <include name="HttpRequestRecorder/*"/>
-        <include name="NAnt.NUnit2OutProc.Task/*"/>
         <include name="nunit/*"/>
+        <include name="ncover/*"/>
+        <include name="ncoverexplorer/*"/>
+        <include name="ndoc3/*"/>
       </fileset>
     </copy>
   </target>
@@ -1267,6 +1269,16 @@ Commandline Examples:
       </copy>
     </if>
 
+    <mkdir dir="${current.package.dir}/lib/NHibernate10"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib/NHibernate10">
+        <fileset basedir="lib/NHibernate10">
+          <include name="**/*.dll"/>
+          <include name="**/*.license.txt"/>
+        </fileset>
+      </copy>
+    </if>
+
     <mkdir dir="${current.package.dir}/lib/NHibernate12"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
       <copy todir="${current.package.dir}/lib/NHibernate12">
@@ -1276,7 +1288,6 @@ Commandline Examples:
         </fileset>
       </copy>
     </if>
-
 
     <mkdir dir="${current.package.dir}/lib/NHibernate20"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
