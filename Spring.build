@@ -1013,12 +1013,11 @@ Commandline Examples:
     <mkdir dir="${current.package.dir}/build-support/tools"/>
     <copy todir="${current.package.dir}/build-support/tools">
       <fileset basedir="build-support/tools">
-        <include name="antlr-2.7.6/*"/>
-        <include name="HttpRequestRecorder/*"/>
-        <include name="nunit/*"/>
-        <include name="ncover/*"/>
-        <include name="ncoverexplorer/*"/>
-        <include name="ndoc3/*"/>
+        <include name="antlr-2.7.6/**/*"/>
+        <include name="nunit/**/*"/>
+        <include name="ncover/**/*"/>
+        <include name="ncoverexplorer/**/*"/>
+        <include name="ndoc3/**/*"/>
       </fileset>
     </copy>
   </target>
