@@ -31,6 +31,7 @@
       <sources failonempty="true">
         <include name="../Spring.Data.NHibernate.Integration.Tests/**/*.cs" />
         <include name="**/*.cs" />
+        <exclude name="AssemblyInfo.cs" />
       </sources>
       <references basedir="${current.bin.dir}">
         <include name="System.Data.dll" />
@@ -57,7 +58,6 @@
   </target>
 
   <target name="test" depends="build">
-    <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
     <call target="common.run-tests" if="${test.integration.data}" />
   </target>
 

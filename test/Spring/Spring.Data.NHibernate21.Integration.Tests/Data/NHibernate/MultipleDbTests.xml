@@ -2,13 +2,13 @@
 <objects xmlns='http://www.springframework.net'
          xmlns:db="http://www.springframework.net/database">
 
-  <db:provider id="DbProvider1" 
-                 provider="SqlServer-1.1" 
-                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+  <db:provider id="DbProvider1"
+                 provider="SqlServer-2.0"
+                 connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
 
-  <db:provider id="DbProvider2" 
-                 provider="SqlServer-1.1" 
-                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+  <db:provider id="DbProvider2"
+                 provider="SqlServer-2.0"
+                 connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
 
   <object id="SessionFactory1" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
 
@@ -71,9 +71,9 @@
     <property name="SessionFactory" ref="SessionFactory2"/>
   </object>
 
-  
+
   <!-- The DAO object that performs multiple data access operations -->
-  <object id="accountManagerTarget" 
+  <object id="accountManagerTarget"
           type="Spring.Data.NHibernate.AccountManager, Spring.Data.NHibernate21.Integration.Tests">
     <property name="AccountCreditDao" ref="AccountCreditDao"/>
     <property name="AccountDebitDao" ref="AccountDebitDao"/>
@@ -104,7 +104,7 @@
     -->
 
   <!-- Transactional Proxy for TestObjectManager using the ProxyFactoryObject -->
-  <object id="accountManager" 
+  <object id="accountManager"
           type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
 
     <property name="Target" ref="accountManagerTarget"/>
@@ -116,7 +116,7 @@
   </object>
 
   <!-- Transaction Interceptor based on attribute [Transaction()] -->
-  <object id="transactionInterceptor" 
+  <object id="transactionInterceptor"
           type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data">
     <property name="TransactionManager" ref="transactionManager"/>
     <!-- note do not have converter from string to this property type registered -->

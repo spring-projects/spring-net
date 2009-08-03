@@ -117,7 +117,6 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Data\AccountCreditDao.cs" />
     <Compile Include="Data\AccountDebitDao.cs" />
     <Compile Include="Data\AccountManager.cs" />
@@ -179,6 +178,7 @@
     <EmbeddedResource Include="Data\templateTests.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Spring.Data.Integration.Tests.build" />
     <None Include="Spring.Data.Integration.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

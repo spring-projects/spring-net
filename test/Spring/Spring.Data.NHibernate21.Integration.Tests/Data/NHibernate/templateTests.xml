@@ -4,14 +4,14 @@
 
 
   <db:provider   id="DbProvider"
-                 provider="SqlServer-1.1"
+                 provider="SqlServer-2.0"
                  connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
   <!--
                    connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;User ID=springqa; Password=springqa"/>
                    -->
-  <!--                   
-    <db:provider id="DbProvider" 
-                   provider="OracleODP-2.0" 
+  <!--
+    <db:provider id="DbProvider"
+                   provider="OracleODP-2.0"
                    connectionString="Data Source=AGORA; User Id=agora_user; Password=welcome_bad"/>
    -->
   <!--

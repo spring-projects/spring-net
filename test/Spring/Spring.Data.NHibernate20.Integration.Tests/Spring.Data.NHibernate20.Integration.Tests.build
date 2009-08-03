@@ -3,13 +3,13 @@
 
   <include buildfile="${spring.basedir}/common-project.include" />
 
-<!--
-	Required properties:
-	  * current.bin.dir           - (path) root level to build to
-	  * current.build.debug       - (true|false) debug build?
-	  * current.build.defines.csc - framework-specific build defines for C# compiler
+  <!--
+  Required properties:
+    * current.bin.dir           - (path) root level to build to
+    * current.build.debug       - (true|false) debug build?
+    * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
-	<target name="build">
+  <target name="build">
 
     <!-- copy nh libs -->
     <echo message="NH Libs: ${nh20.lib.dir}" />
@@ -19,22 +19,21 @@
       </fileset>
     </copy>
 
-		<!-- build Spring.Data.NHibernate20.Integration.Tests -->
-		<csc target="library" define="${current.build.defines.csc},NH_2_0"
-				warnaserror="true"
-				debug="${current.build.debug}"
-				output="${current.bin.dir}/${project::get-name()}.dll"
-				doc="${current.bin.dir}/${project::get-name()}.xml">
-			<nowarn>
-				<warning number="${nowarn.numbers.test}" />
-			</nowarn>
-			<sources failonempty="true">
+    <!-- build Spring.Data.NHibernate20.Integration.Tests -->
+    <csc target="library" define="${current.build.defines.csc},NH_2_0"
+        warnaserror="true"
+        debug="${current.build.debug}"
+        output="${current.bin.dir}/${project::get-name()}.dll"
+        doc="${current.bin.dir}/${project::get-name()}.xml">
+      <nowarn>
+        <warning number="${nowarn.numbers.test}" />
+      </nowarn>
+      <sources failonempty="true">
         <include name="../Spring.Data.NHibernate.Integration.Tests/**/*.cs" />
         <include name="**/*.cs" />
-        <exclude name="../Spring.Data.NHibernate.Tests/Data/NHibernate/SessionFactoryUtilsTests.cs" />
         <exclude name="AssemblyInfo.cs" />
-			</sources>
-			<references basedir="${current.bin.dir}">
+      </sources>
+      <references basedir="${current.bin.dir}">
         <include name="System.Data.dll" />
         <include name="System.EnterpriseServices.dll" />
         <include name="*.dll" />
@@ -43,7 +42,7 @@
         <exclude name="Spring.Data.NHibernate12*.dll" />
         <exclude name="Spring.Data.NHibernate21*.dll" />
         <exclude name="Spring.Data.NHibernate*.Tests.dll" />
-			</references>
+      </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />
         <include name="**/*.sql" />
@@ -51,13 +50,13 @@
       <resources prefix="Spring" dynamicprefix="true" basedir="../Spring.Data.NHibernate.Integration.Tests" failonempty="true">
         <include name="**/*.sql" />
       </resources>
-		</csc>
+    </csc>
 
-        <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
-              tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>
+    <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
+          tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>
 
-	</target>
-	<target name="test" depends="build">
+  </target>
+  <target name="test" depends="build">
     <!-- call target="common.run-tests" if="${test.integration.data}" / -->
-	</target>
+  </target>
 </project>
