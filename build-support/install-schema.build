@@ -180,10 +180,10 @@
             overwrite="true"/>
 
       <echo message="----------------------------------------------------------"/>
-      <echo message="Copying spring-nms-1.3.xsd to ${vsXXXX.version} installation."/>
+      <echo message="Copying spring-ems-1.3.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
-      <copy file="spring-nms-1.3.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
+      <copy file="spring-ems-1.3.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
             overwrite="true"/>
 
