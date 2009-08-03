@@ -1131,6 +1131,14 @@ Commandline Examples:
       </copy>
     </if>
 
+    <!-- copy additional scripts -->
+    <mkdir dir="${current.package.dir}/build-support"/>
+    <copy todir="${current.package.dir}/build-support">
+      <fileset basedir="build-support">
+        <include name="solutions.build.nant"/>
+      </fileset>
+    </copy>
+
     <!-- copy third-party icons -->
     <mkdir dir="${current.package.dir}/build-support/icons"/>
     <copy todir="${current.package.dir}/build-support/icons">
