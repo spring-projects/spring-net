@@ -50,6 +50,12 @@
 
   <property name="net-3.5.installed" value="${registry.net-3.5.installed == '1'}" />
 
+  <readregistry property="vs-net90.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+
+  <!-- default location of mstest executable and reference assemblies -->
+  <property name="mstest.exe" value="${vs-net90.dir}/mstest.exe" if="${property::exists('vs-net90-dir')}" />
+
+
     <target name="check-bin-dir">
         <if test="${not property::exists('bin.dir')}">
             <property name="bin.dir" value="${project::get-base-directory()}/build"/>

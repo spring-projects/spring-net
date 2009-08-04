@@ -28,11 +28,13 @@ Rebuilding Solutions using Nant and "solutions.build":
   <readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
   <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
 
+  <readregistry property="vs2008.install.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+
   <property name="buildconfiguration" value="Debug" />
 
   <target name="RebuildAllSolutions" description="Rebuild all Solutions">
     <call target="RebuildAllSolutions-1.1" if="${property::exists('vs2003.install.dir')}" />
-    <call target="RebuildAllSolutions-2.0"  />
+    <call target="RebuildAllSolutions-2.0" if="${property::exists('vs2008.install.dir')}" />
   </target>
 
   <target name="Clean">

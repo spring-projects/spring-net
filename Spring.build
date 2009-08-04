@@ -80,8 +80,6 @@ Commandline Examples:
   <property name="test.full" value="false" />
   <property name="test.integration.data" value="${test.full}" />
 
-  <!-- default location of mstest executable and reference assemblies -->
-  <readregistry property="vs-net.mstest.bin.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
   <!--
       the line below is for the ccnet build box - see target set-user-overrides for how to change this to your machine values if necessary
       - or better check the registry key as shown above
@@ -1441,7 +1439,7 @@ Commandline Examples:
     <property name="build-services" value="true" />
     <property name="build-testing-nunit" value="true" />
     <property name="build-testing-microsoft" value="false" />
-    <property name="build-testing-microsoft" value="${property::exists('vs-net.mstest.bin.dir')}" />
+    <property name="build-testing-microsoft" value="${property::exists('mstest.exe')}" />
     <property name="build-web" value="true" />
     <property name="build-nms" value="true" />
     <property name="build-ems" value="${file::exists('lib/net/2.0/tibco.ems.dll')}" />
@@ -1477,7 +1475,7 @@ Commandline Examples:
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>
     <property name="build-testing-nunit" value="true"/>
-    <property name="build-testing-microsoft" value="${property::exists('vs-net.mstest.bin.dir')}" />
+    <property name="build-testing-microsoft" value="${property::exists('mstest.exe')}" />
     <property name="build-web" value="true"/>
     <property name="build-examples" value="true"/>
     <property name="build-nms" value="true" />
