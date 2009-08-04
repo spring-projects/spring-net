@@ -874,7 +874,7 @@ Commandline Examples:
     <!-- <call target="${nant.target.root.name}-mono-2.0" /> -->
 
     <!-- build all vs solutions -->
-    <call target="build-solutions" if="${test.full}" />
+    <call target="build-solutions" />
   </target>
 
   <target name="daily-build-1.1">
