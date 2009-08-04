@@ -3,7 +3,6 @@ body {
   padding: 0px; 
   background-color: #dfeac1; 
   text-align: center;
-  text-decoration: none;
 }
 
 .logo {
@@ -130,7 +129,6 @@ a, a:active, a:visited {
   font-family: Verdana, Arial, Helvetica, sans;
   font-size: 12px;
   color: #606060;
-  text-decoration: underline;
 }
 a:hover {
   font-family: Verdana, Arial, Helvetica, sans;
