@@ -8,11 +8,23 @@ BEGIN
 END
 GO
 
+IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'NHibernate')
+BEGIN
+    ALTER DATABASE NHibernate 
+        SET SINGLE_USER 
+        WITH ROLLBACK IMMEDIATE
+
+    DROP DATABASE NHibernate
+END
+GO
+
 IF  EXISTS (SELECT * FROM sys.server_principals WHERE name = N'springqa2')
     DROP LOGIN [springqa2]
 GO
 
 CREATE DATABASE Spring
+GO
+CREATE DATABASE NHibernate
 GO
 
 CREATE LOGIN [springqa2] WITH PASSWORD=N'springqa2', DEFAULT_DATABASE=[Spring], DEFAULT_LANGUAGE=[us_english]

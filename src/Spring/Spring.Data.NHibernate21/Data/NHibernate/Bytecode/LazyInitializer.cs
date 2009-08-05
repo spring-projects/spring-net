@@ -57,7 +57,7 @@ namespace Spring.Data.NHibernate.Bytecode
                                MethodInfo setIdentifierMethod, IAbstractComponentType componentIdType,
                                ISessionImplementor session)
             : base(
-                entityName, persistentClass.IsInterface ? typeof(object) : persistentClass, id, getIdentifierMethod,
+                entityName, persistentClass, id, getIdentifierMethod,
                 setIdentifierMethod, componentIdType, session) { }
 
         #region Implementation of IInterceptor

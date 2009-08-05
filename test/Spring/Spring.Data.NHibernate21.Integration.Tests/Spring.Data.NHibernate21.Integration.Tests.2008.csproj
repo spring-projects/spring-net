@@ -36,9 +36,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetMock, Version=0.8.1.0, Culture=neutral, PublicKeyToken=65e474d141e25e07">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\DotNetMock.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\NHibernate21\net\2.0\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.3.14911, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\NHibernate21\net\2.0\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -61,7 +69,10 @@
       <HintPath>..\..\..\lib\Net\2.0\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +133,13 @@
     <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\TestObject.cs">
       <Link>Data\NHibernate\TestObject.cs</Link>
     </Compile>
+    <Compile Include="Data\NHibernate\Bytecode\AbstractInjectableUserTypeFixture.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\Foo.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\IDelimiter.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\InjectableStringUserType.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\InjectableUserTypeFixture.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\NHibernateTestImports.cs" />
+    <Compile Include="Data\NHibernate\Bytecode\Product.cs" />
     <Compile Include="Setup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +150,9 @@
     <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\testObject.sql">
       <Link>Data\NHibernate\testObject.sql</Link>
     </EmbeddedResource>
+    <None Include="NHibernate.Test.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Spring.Data.NHibernate21.Integration.Tests.build" />
     <None Include="Spring.Data.NHibernate21.Integration.Tests.dll.config" />
   </ItemGroup>
@@ -145,7 +166,7 @@
       <Name>Spring.Core.2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Data.NHibernate21\Spring.Data.NHibernate21.2008.csproj">
-      <Project>{71368632-B8B7-4A6A-8C65-8DA848120C82}</Project>
+      <Project>{E57B4652-0231-49CB-B058-87E10EFE540D}</Project>
       <Name>Spring.Data.NHibernate21.2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2008.csproj">
@@ -173,6 +194,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\NHibernate\dbProviderTemplateTests.xml" />
     <EmbeddedResource Include="Data\NHibernate\templateTests.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\NHibernate\Bytecode\Foo.Spechbm.xml" />
+    <Content Include="TestEnbeddedConfig.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

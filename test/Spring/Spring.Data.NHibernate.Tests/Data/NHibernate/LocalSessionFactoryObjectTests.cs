@@ -27,11 +27,11 @@ using NHibernate.Dialect;
 using NHibernate.Driver;
 
 using Spring.Data.Common;
+
+using NUnit.Framework;
 #if NH_2_1
 using Spring.Data.NHibernate.Bytecode;
 #endif
-
-using NUnit.Framework;
 
 namespace Spring.Data.NHibernate
 {

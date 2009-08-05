@@ -34,8 +34,6 @@ namespace Spring.Data.NHibernate.Bytecode
     /// <author>Erich Eichinger</author>
     public class ProxyFactoryFactory : IProxyFactoryFactory
     {
-        #region IProxyFactoryFactory Members
-
         /// <summary>
         /// Build a proxy factory specifically for handling runtime lazy loading. 
         /// </summary>
@@ -51,8 +49,6 @@ namespace Spring.Data.NHibernate.Bytecode
         {
             get { return new DynProxyTypeValidator(); }
         }
-
-        #endregion
     }
 }
 #endif

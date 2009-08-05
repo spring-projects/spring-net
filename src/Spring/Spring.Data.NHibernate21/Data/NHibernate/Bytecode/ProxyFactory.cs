@@ -1,6 +1,4 @@
 #if NH_2_1
-using System;
-
 #region License
 
 /*
@@ -21,15 +19,11 @@ using System;
 
 #endregion
 
-#region Imports
-
+using System;
 using Common.Logging;
-
 using NHibernate;
 using NHibernate.Engine;
 using NHibernate.Proxy;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Bytecode
 {
@@ -66,12 +60,13 @@ namespace Spring.Data.NHibernate.Bytecode
         {
             try
             {
-                LazyInitializer initializer = new LazyInitializer(EntityName, PersistentClass.IsInterface ? typeof(object) : PersistentClass,
+                // PersistentClass = PersistentClass.IsInterface ? typeof(object) : PersistentClass
+                LazyInitializer initializer = new LazyInitializer(EntityName, PersistentClass,
                                                       id, GetIdentifierMethod, SetIdentifierMethod, ComponentIdType, session);
 
                 SerializableProxyFactory proxyFactory = new SerializableProxyFactory();
                 proxyFactory.Interfaces = Interfaces;
-//                proxyFactory.TargetSource = initializer;
+                proxyFactory.TargetSource = initializer;
                 proxyFactory.ProxyTargetType = IsClassProxy;
                 proxyFactory.AddAdvice(initializer);
 

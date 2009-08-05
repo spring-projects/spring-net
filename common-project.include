@@ -185,7 +185,7 @@ ${tool.dir}       : dir for tools
     -->
     <target name="common.run-tests">
 
-      <call target="common.run-tests.ncover" />
+      <call target="common.run-tests.nunit" />
       <!--
       <call target="common.run-tests.nunit" />
       -->
@@ -229,11 +229,13 @@ ${tool.dir}       : dir for tools
   <target name="common.run-tests.nunit">
 
     <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
+    <property name="test.assemblyfile" value="${test.assemblyname}.dll" overwrite="false" />
+
     <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
     <echo message="Unit Testing ${project.name}, ${test.assemblyname} in ${test.bin.dir}" />
 
-    <exec program="${tool.dir}\nunit\net-2.0\nunit-console-x86.exe" workingdir="${test.bin.dir}" verbose="false">
-      <arg path="${test.bin.dir}/${test.assemblyname}.dll" />
+    <exec program="${tool.dir}\nunit\net-2.0\nunit-console-x86.exe" workingdir="${test.bin.dir}" verbose="true">
+      <arg line="${test.assemblyfile}" />
       <arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
       <arg value="/framework:${nant.settings.currentframework}" />
       <arg value="/nologo" />
@@ -255,11 +257,12 @@ ${tool.dir}       : dir for tools
         <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
         <property name="test.assemblyfile" value="${test.assemblyname}.dll" overwrite="false" />
         <property name="test.assemblyname.tocover" value="${string::substring(test.assemblyname,0,string::last-index-of(test.assemblyname, '.Tests') )}" overwrite="false" />
+
         <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
 
         <echo message="Coverage Testing ${test.assemblyname} in ${test.bin.dir}" />
 
-		<exec program="${tool.dir}/ncover/ncover.console.exe" workingdir="${test.bin.dir}" verbose="false">
+		<exec program="${tool.dir}/ncover/ncover.console.exe" workingdir="${test.bin.dir}" verbose="true">
 			<arg value="//q" />
 			<arg value="//reg" />
 			<arg value="//w" />
@@ -272,7 +275,7 @@ ${tool.dir}       : dir for tools
             <arg value="CoverageExcludeAttribute" />
 			<arg value="//q" />
 			<arg path="${tool.dir}/nunit/net-2.0/nunit-console-x86.exe" />
-			<arg path="${test.bin.dir}/${test.assemblyfile}" />
+			<arg line="${test.assemblyfile}" />
 			<arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
 			<arg value="/nologo" />
             <arg value="/framework:${nant.settings.currentframework}" />
