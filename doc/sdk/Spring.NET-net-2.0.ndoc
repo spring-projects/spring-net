@@ -1,6 +1,6 @@
 ﻿<project SchemaVersion="1.3">
     <assemblies>
-        <assembly location="..\..\build\net\2.0\debug\Spring.Testing.Microsoft.dll" documentation="..\..\build\net\2.0\debug\Spring.Testing.Microsoft.xml" />
+        <!-- assembly location="..\..\build\net\2.0\debug\Spring.Testing.Microsoft.dll" documentation="..\..\build\net\2.0\debug\Spring.Testing.Microsoft.xml" / -->
         <assembly location="..\..\build\net\2.0\debug\Spring.Testing.NUnit.dll" documentation="..\..\build\net\2.0\debug\Spring.Testing.NUnit.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Web.dll" documentation="..\..\build\net\2.0\debug\Spring.Web.xml" />
         <assembly location="..\..\build\net\2.0\debug\Spring.Aop.dll" documentation="..\..\build\net\2.0\debug\Spring.Aop.xml" />
