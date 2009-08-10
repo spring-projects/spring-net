@@ -88,7 +88,7 @@ namespace Spring
         public static Uri GetUri(object context, string ext)
         {
             string resname = context.GetType().AssemblyQualifiedName + "#" + ext;
-            Uri uri = new Uri("testres://./" + resname, false);
+            Uri uri = new Uri("testres://inline/" + resname, false);
             return uri;
         }
 

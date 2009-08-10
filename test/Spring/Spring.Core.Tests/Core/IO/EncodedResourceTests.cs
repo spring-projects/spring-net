@@ -48,7 +48,7 @@ namespace Spring.Core.IO
         {
             EncodedResource r = new EncodedResource( new StringResource("test") );
             StreamReader reader = (StreamReader)r.OpenReader();
-            Assert.AreEqual(Encoding.UTF8, reader.CurrentEncoding);
+            Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
             Assert.AreEqual("test", reader.ReadToEnd());
         }
 
@@ -62,7 +62,7 @@ namespace Spring.Core.IO
             resourceData = (byte[])ArrayUtils.Concat(utf32.GetPreamble(), resourceData);
             EncodedResource r = new EncodedResource( new InputStreamResource( new MemoryStream( resourceData), "description" ), Encoding.UTF8, true);
             StreamReader reader = (StreamReader)r.OpenReader();
-            Assert.AreEqual(Encoding.UTF8, reader.CurrentEncoding);
+            Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
             string actual = reader.ReadToEnd();
             Assert.AreEqual( "\uFEFF" + expected , actual);
 // interestingly the line below is *not* true!
@@ -78,11 +78,11 @@ namespace Spring.Core.IO
             byte[] resourceData = GetBytes(expected, utf32);
             EncodedResource r = new EncodedResource(new InputStreamResource(new MemoryStream(resourceData), "description"), Encoding.UTF8, false);
             StreamReader reader = (StreamReader)r.OpenReader();
-            Assert.AreEqual(Encoding.UTF8, reader.CurrentEncoding);
+            Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
             string actual = reader.ReadToEnd();
 //            Assert.AreEqual("\uFFFD\uFFFD\0\0t\0\0\0e\0\0\0s\0\0\0t\0\0\0", actual);
             Assert.AreEqual(Encoding.UTF8.GetString(resourceData), actual);
-            Assert.AreEqual(Encoding.UTF8, reader.CurrentEncoding);
+            Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
         }
 #endif
         /// <summary>

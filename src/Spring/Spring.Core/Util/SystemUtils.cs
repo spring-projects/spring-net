@@ -35,9 +35,15 @@ namespace Spring.Util
     public sealed class SystemUtils
     {
         private static bool assemblyResolverRegistered = false;
-        private static object assemblyResolverLock = new object();
+        private static readonly object assemblyResolverLock;
 
-        private static readonly bool isMono = Type.GetType("Mono.Runtime") == null ? false : true;
+        private static readonly bool isMono;
+
+        static SystemUtils()
+        {
+            isMono = Type.GetType("Mono.Runtime") == null ? false : true;
+            assemblyResolverLock = new object();
+        }
 
         /// <summary>
         /// Registers assembly resolver that iterates over the
@@ -54,7 +60,7 @@ namespace Spring.Util
         {
             if (!assemblyResolverRegistered)
             {
-                lock(assemblyResolverLock)
+                lock (assemblyResolverLock)
                 {
                     AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadedAssemblyResolver);
                     assemblyResolverRegistered = true;

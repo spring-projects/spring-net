@@ -51,6 +51,21 @@ namespace Spring.Util
         }
 
         /// <summary>
+        /// Use this sort method instead of <see cref="Array.Sort(System.Array,System.Collections.IComparer)"/> to overcome
+        /// bugs in Mono.
+        /// </summary>
+        public static void Sort(Array array, IComparer comparer)
+        {
+            if (SystemUtils.MonoRuntime)
+            {
+                ArrayList list = new ArrayList(array);
+                list.Sort(comparer);
+                list.ToArray().CopyTo(array, list.Count);
+                return;
+            }
+            Array.Sort(array, comparer);
+        }
+        /// <summary>
         /// Checks if the given array or collection is null or has no elements.
         /// </summary>
         /// <param name="collection"></param>

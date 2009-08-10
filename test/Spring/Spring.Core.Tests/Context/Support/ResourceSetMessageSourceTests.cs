@@ -32,6 +32,7 @@ using System.Text;
 using NUnit.Framework;
 using Spring.Globalization;
 using Spring.Objects;
+using Spring.Util;
 
 #endregion
 
@@ -103,27 +104,27 @@ namespace Spring.Context.Support
 
 
             // Localizaiton fallbacks
-            GetMessageLocalizaitonFallbacks(ac);
+            GetMessageLocalizationFallbacks(ac);
 
             // MessageSourceAccessor functionality
             MessageSourceAccessor accessor = new MessageSourceAccessor(ac);
             Assert.AreEqual("message3", accessor.GetMessage("code3", CultureInfo.CurrentUICulture, (object[])null));
 
             // IMessageSourceResolveable
-            Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, (object[]) null));
+            Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, (object[])null));
             IMessageSourceResolvable resolvable = new DefaultMessageSourceResolvable("code3");
-            
+
             Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
-            resolvable = new DefaultMessageSourceResolvable(new string[] {"code4", "code3"});
+            resolvable = new DefaultMessageSourceResolvable(new string[] { "code4", "code3" });
             Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
 
             Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, (object[])null));
             resolvable = new DefaultMessageSourceResolvable(new string[] { "code4", "code3" });
             Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
 
-            object[] arguments = new object[] { "Hello", new DefaultMessageSourceResolvable(new string[]{"code1"}) };
+            object[] arguments = new object[] { "Hello", new DefaultMessageSourceResolvable(new string[] { "code1" }) };
             Assert.AreEqual("Hello, message1", ac.GetMessage("hello", CultureInfo.CurrentUICulture, arguments));
-            
+
 
             // test default message without and with args
             Assert.AreEqual("default", ac.GetMessage(null, "default", CultureInfo.CurrentUICulture, null));
@@ -132,7 +133,7 @@ namespace Spring.Context.Support
             /* not supported 
             Assert.AreEqual("{0}, default", ac.GetMessage(null, "{0}, default", CultureInfo.CurrentUICulture, null));
              */
-            
+
             Assert.AreEqual("Hello, default", ac.GetMessage(null, "{0}, default", CultureInfo.CurrentUICulture, arguments));
 
             // test resolvable with default message, without and with args
@@ -151,7 +152,7 @@ namespace Spring.Context.Support
 
 
             // test message args
-            Assert.AreEqual("Arg1, Arg2", ac.GetMessage("hello", CultureInfo.CurrentUICulture, new object[]{"Arg1", "Arg2"}));
+            Assert.AreEqual("Arg1, Arg2", ac.GetMessage("hello", CultureInfo.CurrentUICulture, new object[] { "Arg1", "Arg2" }));
 
             /* not supported 
                 Assert.AreEqual("{0}, {1}", ac.GetMessage("hello", CultureInfo.CurrentUICulture, null));
@@ -225,7 +226,7 @@ namespace Spring.Context.Support
             Assert.AreEqual("ResourceSetMessageSource with ResourceManagers of base names = [Spring.Resources.Spring.Context.Tests]",
                             messageSource.ToString(), "ToString not as expected");
         }
-#if !MONO
+
         /// <summary>
         /// Happy day scenario where the requested message key is found and substitutions are made.
         /// </summary>
@@ -233,36 +234,50 @@ namespace Spring.Context.Support
         public void ResourceSetMessageSourceGetMessage()
         {
             messageSource.ResourceManagers = resourceManagerList;
-            GetMessageLocalizaitonFallbacks(messageSource);
+            GetMessageLocalizationFallbacks(messageSource);
         }
-#endif
-        private void GetMessageLocalizaitonFallbacks(IMessageSource msgSource)
+
+        private void GetMessageLocalizationFallbacks(IMessageSource msgSource)
         {
-            Assert.AreEqual("This is Spring.NET",
+            Assert.AreEqual("Dies ist Spring.NET",
                             msgSource.GetMessage("MyMessage", new object[] { "Spring", ".NET" }), "message not as expected");
 
             Assert.AreEqual("Isso e Spring.NET",
                             msgSource.GetMessage("MyMessage", new CultureInfo("pt-BR"), new object[] { "Spring", ".NET" }), "message not as expected");
 
-            Assert.AreEqual("Visual Studio loves Spring.NET",
+            Assert.AreEqual("Visual Studio liebt Spring.NET",
                             msgSource.GetMessage("MyNewMessage", new object[] { "Spring", ".NET" }), "message not as expected");
 
             // test localization fallbacks
             Assert.AreEqual("Visual Studio loves Spring.NET",
                             msgSource.GetMessage("MyNewMessage", new CultureInfo("pt-BR"), new object[] { "Spring", ".NET" }), "message not as expected");
 
-            Assert.AreEqual("Ovo je Spring.NET",
-                            msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianLatinCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
+            Assert.AreEqual("Des is Spring.NET",
+                            msgSource.GetMessage("MyMessage", new CultureInfo("de-AT"), new object[] { "Spring", ".NET" }), "message not as expected");
 
-            Assert.AreEqual("Ово је Spring.NET",
-                            msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
-                                                     new object[] { "Spring", ".NET" }), "message not as expected");
+            Assert.AreEqual("Dies ist Spring.NET",
+                            msgSource.GetMessage("MyMessage", new CultureInfo("de"), new object[] { "Spring", ".NET" }), "message not as expected");
 
-            Assert.AreEqual("Visual Studio voli Spring.NET",
-                            msgSource.GetMessage("MyNewMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
+            Assert.AreEqual("Visual Studio liebt Spring.NET",
+                            msgSource.GetMessage("MyNewMessage", new CultureInfo("de-AT"), new object[] { "Spring", ".NET" }), "message not as expected");
 
-            Assert.AreEqual("First name",
-                            msgSource.GetMessage("field.firstname", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName)), "message not as expected");
+            // extra tests for the "exotic" serbian culture
+            if (!SystemUtils.MonoRuntime)
+            {
+
+                Assert.AreEqual("Ovo je Spring.NET",
+                                msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianLatinCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
+
+                Assert.AreEqual("Ово је Spring.NET",
+                                msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
+                                                         new object[] { "Spring", ".NET" }), "message not as expected");
+
+                Assert.AreEqual("Visual Studio voli Spring.NET",
+                                msgSource.GetMessage("MyNewMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
+
+                Assert.AreEqual("First name",
+                                msgSource.GetMessage("field.firstname", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName)), "message not as expected");
+            }
         }
 
         /// <summary>
@@ -332,7 +347,7 @@ namespace Spring.Context.Support
             Assert.AreEqual(35, to.Age);
         }
 #endif
-#if !MONO
+
         /// <summary>
         /// Test when the code being resolves itself implements IMessageResolvable.
         /// </summary>
@@ -345,7 +360,7 @@ namespace Spring.Context.Support
             messageSource.ResourceManagers = resourceManagerList;
             Assert.AreEqual(messageSource.GetMessage("error.required", CultureInfo.CurrentCulture, dmr, "dude!"), "First name is required dude!", "message not as expected");
         }
-#endif
+
         /// <summary>
         /// Get exception when resource doesn't exist.
         /// </summary>
@@ -413,7 +428,7 @@ namespace Spring.Context.Support
             //Repeat the test for the first resource manager
 
             Assert.AreEqual("This is Spring.NET",
-                            messageSource.GetMessage("MyMessage", new object[] { "Spring", ".NET" }), "message not as expected");
+                            messageSource.GetMessage("MyMessage",  new CultureInfo("en"), new object[] { "Spring", ".NET" }), "message not as expected");
 
             //Now with the newly added one
             Assert.AreEqual("Hello Mr. Anderson",

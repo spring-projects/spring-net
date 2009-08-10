@@ -84,7 +84,10 @@ namespace Spring.Reflection.Dynamic
         #endregion
 
 #if NET_2_0
-	    private void RespectsPermissionsPrivateMethod() {}
+	    private string RespectsPermissionsPrivateMethod()
+	    {
+	        return "Result";
+	    }
 
         public void RespectsPermissionsPublicMethod() {}
 
@@ -114,8 +117,16 @@ namespace Spring.Reflection.Dynamic
 
 	        try
 	        {
-	            m.Invoke(this, null);
-	            Assert.Fail();
+	            object result = m.Invoke(this, null);
+                if (SystemUtils.MonoRuntime)
+                {
+                    Assert.AreEqual("Result", result);
+                }
+                else
+                {
+                    Assert.Fail("shoud throw a security exception");
+                }
+
 	        }
 	        catch(MethodAccessException)
 	        {}

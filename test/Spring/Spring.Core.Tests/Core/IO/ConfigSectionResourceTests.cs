@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Net;
 using System.Xml;
 using NUnit.Framework;
 using Spring.Objects.Factory.Xml;
@@ -12,11 +14,30 @@ namespace Spring.Core.IO
     [TestFixture]
     public class ConfigSectionResourceTests
     {
+        private class TestXmlUrlResolver : XmlUrlResolver
+        {
+            public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
+            {
+                object result = base.GetEntity(absoluteUri, role, ofObjectToReturn);
+                return result;
+            }
+
+            public override Uri ResolveUri(Uri baseUri, string relativeUri)
+            {
+                Console.WriteLine("baseUri=" + baseUri);
+                Console.WriteLine("relativeUri=" + relativeUri);
+                Uri result = base.ResolveUri(baseUri, relativeUri);
+                return result;
+            }
+        }
+
         private ConfigSectionResource CreateConfigSectionResource(string filename)
         {
             ConfigXmlDocument xmlDoc = new ConfigXmlDocument();
+
             Uri testUri = TestResourceLoader.GetUri(this, filename);
-            xmlDoc.Load( testUri.AbsoluteUri );
+
+            xmlDoc.Load("test config section", testUri.AbsoluteUri);
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
             nsmgr.AddNamespace("od", "http://www.springframework.net");
             XmlElement configElement = (XmlElement)xmlDoc.SelectSingleNode("//configuration/spring/od:objects", nsmgr);

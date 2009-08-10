@@ -92,6 +92,69 @@ namespace Spring.Util
 
         #endregion
 
+        private class DummyException : ApplicationException
+        {
+            public DummyException() : base("dummy message")
+            {
+            }
+        }
+
+        public static void ThrowDummyException()
+        {
+            throw new DummyException();
+        }
+
+        public delegate void VoidAction();
+
+        [Test]
+        public void UnwrapsTargetInvocationException()
+        {
+            if (SystemUtils.MonoRuntime)
+            {
+#if DEBUG
+                // TODO (EE): find solution for Mono
+                return;
+#endif
+            }
+
+            MethodInfo mi = new VoidAction(ThrowDummyException).Method;
+            try
+            {
+                try
+                {
+                    mi.Invoke(null, null);
+                    Assert.Fail();
+                }
+                catch(TargetInvocationException tie)
+                {
+//                    Console.WriteLine(tie);
+                    throw ReflectionUtils.UnwrapTargetInvocationException(tie);
+                }
+                Assert.Fail();
+            }
+            catch (DummyException e)
+            {
+//                Console.WriteLine(e);
+                string[] stackFrames = e.StackTrace.Split('\n');
+#if !MONO
+                // TODO: mono includes the invoke() call in inner stackframe does not include the outer stackframes - either remove or document it
+                string firstFrameMethodName = mi.DeclaringType.FullName + "." + mi.Name;
+                AssertStringContains( firstFrameMethodName, stackFrames[0]);
+                string lastFrameMethodName = MethodBase.GetCurrentMethod().DeclaringType.FullName + "." + MethodBase.GetCurrentMethod().Name;
+                AssertStringContains(lastFrameMethodName, stackFrames[stackFrames.Length-1]);
+
+#endif
+            }
+        }
+
+        private void AssertStringContains(string toSearch, string source)
+        {
+            if (source.IndexOf(toSearch) == -1)
+            {
+                Assert.Fail("Expected '{0}' contained in source, but not found. Source was {1}", toSearch, source);
+            }
+        }
+
         [Test]
         public void MapsInterfaceMethodsToImplementation()
         {

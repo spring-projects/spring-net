@@ -40,7 +40,7 @@ namespace Spring.Util
 
             public void CopyTo(Array array, int index)
             {
-                throw new NotImplementedException();
+                return;
             }
 
             public int Count
@@ -50,7 +50,7 @@ namespace Spring.Util
 
             public object SyncRoot
             {
-                get { throw new NotImplementedException(); }
+                get { return this; }
             }
 
             public bool IsSynchronized

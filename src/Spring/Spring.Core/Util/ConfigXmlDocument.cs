@@ -20,7 +20,9 @@
 
 #region Imports
 
+using System;
 using System.IO;
+using System.Net;
 using System.Xml;
 
 #endregion
@@ -122,7 +124,46 @@ namespace Spring.Util
                 _currentTextPositionHolder.CurrentResourceName = null;
             }
         }
-        
+
+        /// <summary>
+        /// Load the document from the given <see cref="XmlReader"/>.
+        /// </summary>
+        ///<param name="filePath">The XML source </param>
+        public override void Load(string filePath)
+        {
+            try
+            {
+                Uri baseUri = new Uri(Directory.GetCurrentDirectory());
+                Stream istm = (Stream) new XmlUrlResolver().GetEntity(new Uri(baseUri, filePath), null, typeof (Stream));
+                base.Load(istm);
+            }
+            finally
+            {
+                _currentTextPositionHolder.CurrentResourceName = null;
+            }
+        }
+
+        /// <summary>
+        /// Load the document from the given <see cref="XmlReader"/>.
+        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.        
+        /// </summary>
+        ///<param name="resourceName">the name of the resource</param>
+        ///<param name="filePath">The XML source </param>
+        public void Load(string resourceName, string filePath)
+        {
+            try
+            {
+                _currentTextPositionHolder.CurrentResourceName = resourceName;
+                Uri baseUri = new Uri(Directory.GetCurrentDirectory());
+                Stream istm = (Stream) new XmlUrlResolver().GetEntity(new Uri(baseUri, filePath), null, typeof (Stream));
+                base.Load(istm);
+            }
+            finally
+            {
+                _currentTextPositionHolder.CurrentResourceName = null;
+            }
+        }
+
         /// <summary>
         /// Load the document from the given <see cref="XmlReader"/>.
         /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.        
@@ -243,6 +284,5 @@ namespace Spring.Util
                 _currentTextPositionHolder.CurrentXmlLineInfo = null;
             }
         }
-
     }
 }

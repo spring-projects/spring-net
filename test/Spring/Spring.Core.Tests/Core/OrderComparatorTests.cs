@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 
 using NUnit.Framework;
+using Spring.Util;
 
 #endregion
 
@@ -54,8 +55,8 @@ namespace Spring.Core
         {
             Ordered one = new Ordered (1);
             object [] list = new object [] {null, one, null};
-            Array.Sort (list, new OrderComparator ());
-            Assert.AreEqual (one, list [0]);
+            ArrayUtils.Sort(list, new OrderComparator ());
+            Assert.AreEqual (one, list [0], "order comparator instance should be first");
             Assert.AreEqual (null, list [1]);
             Assert.AreEqual (null, list [2]);
         }

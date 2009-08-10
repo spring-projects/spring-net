@@ -32,8 +32,8 @@ namespace Spring.Globalization
     /// <author>Mark Pollack</author>
     public class CultureInfoUtils
     {
-        private static string srLatn = "sr-SP-Latn";
-        private static string srCyrl = "sr-SP-Cyrl";
+        private static readonly string srLatn = "sr-SP-Latn";
+        private static readonly string srCyrl = "sr-SP-Cyrl";
 
         static CultureInfoUtils()
         {

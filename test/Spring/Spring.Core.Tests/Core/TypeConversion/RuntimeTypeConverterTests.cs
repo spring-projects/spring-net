@@ -64,7 +64,7 @@ namespace Spring.Core.TypeConversion
             RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
             object foo = cnv.ConvertFrom ("System.String");
             Assert.IsNotNull (foo);
-            Assert.AreEqual ("System.RuntimeType", foo.GetType ().FullName);
+            Assert.AreEqual (this.GetType().GetType().FullName, foo.GetType ().FullName);
         }
 
         [Test]

@@ -91,6 +91,11 @@ namespace Spring.Core.IO
 		/// </param>
 		public UrlResource(string resourceName) : base(resourceName)
 		{
+            if (resourceName.StartsWith("file:///"))
+            {
+                resourceName = resourceName.Substring("file:///".Length);
+            }
+
 			this._uri = new Uri(resourceName);
 			_rootLocation = _uri.Host;
 			if (!_uri.IsDefaultPort)

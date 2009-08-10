@@ -31,6 +31,7 @@ using Spring.Objects;
 using Spring.Proxy;
 using Spring.Objects.Factory.Support;
 using Spring.Reflection.Dynamic;
+using Spring.Util;
 
 #endregion
 
@@ -53,6 +54,10 @@ namespace Spring.Context.Support
         private static void ResetConfigurationSystem()
         {
 #if NET_2_0
+            if (SystemUtils.MonoRuntime)
+            {
+                return;
+            }
             FieldInfo initStateRef = typeof(ConfigurationManager).GetField("s_initState",BindingFlags.NonPublic|BindingFlags.Static);
             object notStarted = Activator.CreateInstance(initStateRef.FieldType);
             initStateRef.SetValue(null,notStarted);

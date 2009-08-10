@@ -298,13 +298,19 @@ namespace Spring.Util
             else if (n is Byte)
                 return (Byte)m | (Byte)n;
 #if NET_2_0
-            else if (n is SByte) 
-                return ((SByte) m | (SByte) n);
-#endif
-            else
+            else if (n is SByte)
             {
-                throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported integral types.", m, n));
+                if (SystemUtils.MonoRuntime)
+                {
+                    SByte x = (sbyte) n;
+                    SByte y = (sbyte) m;
+                    int result = (int) x | (int) y;
+                    return SByte.Parse(result.ToString());
+                }
+                return (SByte) ((SByte) m | (SByte) n);
             }
+#endif
+            throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported integral types.", m, n));
         }
 
         /// <summary>

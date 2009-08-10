@@ -39,7 +39,7 @@ namespace Spring.Util
         /// Avoid BeforeFieldInit pitfall
         /// </summary>
         static ConfigurationUtils()
-        {}
+        { }
 
         /// <summary>
         /// Parses the configuration section.
@@ -62,7 +62,18 @@ namespace Spring.Util
 #if !NET_2_0
             return ConfigurationSettings.GetConfig(sectionName.TrimEnd('/'));
 #else
-            return ConfigurationManager.GetSection(sectionName.TrimEnd('/'));
+            try
+            {
+                return ConfigurationManager.GetSection(sectionName.TrimEnd('/'));
+            }
+            catch (ConfigurationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw ConfigurationUtils.CreateConfigurationException(string.Format("Error reading section {0}", sectionName), ex);
+            }
 #endif
         }
 
@@ -248,6 +259,11 @@ namespace Spring.Util
         public static System.Configuration.Internal.IInternalConfigSystem SetConfigurationSystem(System.Configuration.Internal.IInternalConfigSystem configSystem, bool enforce)
         {
             FieldInfo s_configSystem = typeof(ConfigurationManager).GetField("s_configSystem", BindingFlags.Static | BindingFlags.NonPublic);
+            // for MONO
+            if (s_configSystem == null)
+            {
+                s_configSystem = typeof(ConfigurationManager).GetField("configSystem", BindingFlags.Static | BindingFlags.NonPublic);
+            }
             System.Configuration.Internal.IInternalConfigSystem innerConfigSystem = (System.Configuration.Internal.IInternalConfigSystem)s_configSystem.GetValue(null);
             if (configSystem is IChainableConfigSystem)
             {
@@ -256,7 +272,20 @@ namespace Spring.Util
 
             try
             {
-                setConfigurationSystem(configSystem, true);
+                MethodInfo mi = typeof(ConfigurationManager).GetMethod("SetConfigurationSystem", BindingFlags.Static | BindingFlags.NonPublic);
+                if (mi == null)
+                {
+                    mi = typeof(ConfigurationManager).GetMethod("ChangeConfigurationSystem", BindingFlags.Static | BindingFlags.NonPublic);
+                    mi.Invoke(null, new object[] { configSystem });
+                }
+                else
+                {
+                    if (enforce)
+                    {
+                        ResetConfigurationSystem();
+                    }
+                    mi.Invoke(null, new object[] { configSystem, true });
+                }
             }
             catch (InvalidOperationException)
             {
@@ -270,16 +299,42 @@ namespace Spring.Util
             return innerConfigSystem;
         }
 
-        private static T CreateDelegate<T>(MethodInfo method)
+        /// <summary>
+        /// Resets the global configuration system instance. Use for unit testing only!
+        /// </summary>
+        public static void ResetConfigurationSystem()
         {
-            return (T)(object)Delegate.CreateDelegate(typeof(T), method);
+#if NET_2_0
+            if (SystemUtils.MonoRuntime)
+            {
+                return;
+            }
+            FieldInfo initStateRef = typeof(ConfigurationManager).GetField("s_initState", BindingFlags.NonPublic | BindingFlags.Static);
+            object notStarted = Activator.CreateInstance(initStateRef.FieldType);
+            initStateRef.SetValue(null, notStarted);
+#endif
+#if NET_1_1
+            FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_initState",BindingFlags.NonPublic|BindingFlags.Static);
+            object notStarted = Activator.CreateInstance(initStateRef.FieldType);
+            initStateRef.SetValue(null,notStarted);
+#endif
+#if NET_1_0
+            FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_configurationInitialized",BindingFlags.NonPublic|BindingFlags.Static);
+            FieldInfo configSystemRef = typeof(ConfigurationSettings).GetField("_configSystem",BindingFlags.NonPublic|BindingFlags.Static);
+            initStateRef.SetValue(null,false);		
+            configSystemRef.SetValue(null,null);
+#endif
         }
-
-        private delegate void SetConfigurationSystemHandler(System.Configuration.Internal.IInternalConfigSystem configSystem, bool setComplete);
-
-        private static SetConfigurationSystemHandler setConfigurationSystem =
-            CreateDelegate<SetConfigurationSystemHandler>(typeof(ConfigurationManager).GetMethod("SetConfigurationSystem"
-                                                         , BindingFlags.Static | BindingFlags.NonPublic));
+        //        private static T CreateDelegate<T>(MethodInfo method)
+        //        {
+        //            return (T)(object)Delegate.CreateDelegate(typeof(T), method);
+        //        }
+        //
+        //        private delegate void SetConfigurationSystemHandler(System.Configuration.Internal.IInternalConfigSystem configSystem, bool setComplete);
+        //
+        //        private static SetConfigurationSystemHandler setConfigurationSystem =
+        //            CreateDelegate<SetConfigurationSystemHandler>(typeof(ConfigurationManager).GetMethod("SetConfigurationSystem"
+        //                                                         , BindingFlags.Static | BindingFlags.NonPublic));
 #endif
 
     }

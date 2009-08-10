@@ -1170,6 +1170,10 @@ namespace Spring.Util
         public static Exception UnwrapTargetInvocationException(TargetInvocationException ex)
         {
 #if NET_2_0
+            if (SystemUtils.MonoRuntime)
+            {
+                return ex.InnerException;
+            }
             Exception_InternalPreserveStackTrace.Invoke(ex.InnerException, new Object[] { });
 #else
             Exception_RemoteStackTraceString.SetValue(ex.InnerException, ex.InnerException.StackTrace + Environment.NewLine);

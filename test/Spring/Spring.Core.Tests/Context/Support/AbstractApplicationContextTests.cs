@@ -356,19 +356,26 @@ namespace Spring.Context.Support
 		}
 
         [Test]
-        [ExpectedException(typeof(CannotLoadObjectTypeException))]
         public void ThrowsCannotLoadObjectTypeExceptionOnInvalidTypename()
         {
+          try
+          {
             MockApplicationContext myContext = new MockApplicationContext("myContext");
             DefaultListableObjectFactory objectFactory = (DefaultListableObjectFactory)myContext.ObjectFactory;
             XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(objectFactory);
             reader.LoadObjectDefinitions(new StringResource(
-                @"<?xml version='1.0' encoding='UTF-8' ?>
+                                           @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>  
 	<object id='test2' type='DOESNOTEXIST' />
 </objects>
 "));      
             myContext.Refresh();
+          }
+          catch (Exception e)
+          {
+//            Console.WriteLine(e);
+            Assert.IsInstanceOf(typeof(CannotLoadObjectTypeException), e);
+          }
         }
 	}
 }
