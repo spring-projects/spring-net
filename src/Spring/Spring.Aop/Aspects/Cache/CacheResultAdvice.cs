@@ -128,6 +128,8 @@ namespace Spring.Aspects.Cache
 
                 IDictionary vars = PrepareVariables(invocation.Method, invocation.Arguments);
 
+                AssertUtils.ArgumentNotNull(resultInfo.KeyExpression, "KeyExpression",
+                            "The cache attribute is missing the key definition.");
                 object resultKey = resultInfo.KeyExpression.GetValue(null, vars);
                 ICache cache = GetCache(resultInfo.CacheName);
                 AssertUtils.ArgumentNotNull(cache, "CacheName",
@@ -197,6 +199,9 @@ namespace Spring.Aspects.Cache
                 AssertUtils.ArgumentNotNull(cache, "CacheName",
                                             "Result item cache with the specified name [" + itemInfo.CacheName +
                                             "] does not exist.");
+
+                AssertUtils.ArgumentNotNull(itemInfo.KeyExpression, "KeyExpression",
+                                            "The cache attribute is missing the key definition.");
 
                 bool isDebugEnabled = logger.IsDebugEnabled;
                 foreach (object item in items)

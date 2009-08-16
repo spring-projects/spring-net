@@ -82,6 +82,24 @@ namespace Spring.Aspects.Cache
             Assert.AreEqual(0, cache.Count);
         }
 
+        /// <summary>
+        /// http://jira.springframework.org/browse/SPRNET-1226
+        /// </summary>
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException))]
+        public void NoCacheKeySpecified()
+        {
+            ICache cache = new NonExpiringCache();
+            context.ObjectFactory.RegisterSingleton("inventors", cache);
+
+            ProxyFactory pf = new ProxyFactory(new InventorStore());
+            pf.AddAdvisors(cacheAspect);
+
+            IInventorStore store = (IInventorStore)pf.GetProxy();
+            IList items = store.GetAllNoCacheKey();
+            Assert.IsNotNull(items);
+        }
+
 #if NET_2_0
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-959")]
         public void UseMethodInfoForKeyGeneration()
@@ -111,6 +129,7 @@ namespace Spring.Aspects.Cache
     public interface IInventorStore
     {
         IList GetAll();
+        IList GetAllNoCacheKey();
         Inventor Load(string name);
         void Save(Inventor inventor);
         void Delete(Inventor inventor);
@@ -131,6 +150,13 @@ namespace Spring.Aspects.Cache
 
         [CacheResultItems("inventors", "Name")]
         public IList GetAll()
+        {
+            return new ArrayList(inventors.Values);
+        }
+
+
+        [CacheResult(CacheName = "inventors")]
+        public IList GetAllNoCacheKey()
         {
             return new ArrayList(inventors.Values);
         }
