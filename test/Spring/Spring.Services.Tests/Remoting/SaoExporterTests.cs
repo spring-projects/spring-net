@@ -77,11 +77,7 @@ namespace Spring.Remoting
                 saoExporter.AfterPropertiesSet();
                 of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
 
-                ISimpleCounter client = (ISimpleCounter)Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/RemotedSaoSingletonCounter");
-                client.Count();
-                client.Count();
-
-                Assert.AreEqual(2, client.Counter);
+                AssertExportedService(saoExporter.ServiceName, 2);
             }
         }
 
@@ -98,18 +94,15 @@ namespace Spring.Remoting
                 saoExporter.AfterPropertiesSet();
                 of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
 
-                ISimpleCounter client = (ISimpleCounter)Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/RemotedSaoSingleCallCounter");
-                client.Count();
-                client.Count();
-                Assert.AreEqual(0, client.Counter);
+                AssertExportedService(saoExporter.ServiceName, 0);
             }
         }
 
         /// <summary>
-        /// Checks that exp an IFactoryObject.ObjectType returns an interface type, 
+        /// Checks that we can also export if IFactoryObject.ObjectType returns an interface type, 
         /// </summary>
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
-        public void CanExportFromInterfaceTargetType()
+        public void CanExportFromFactoryObjectIfObjectTypeIsInterface()
         {
             using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
             {
@@ -127,33 +120,57 @@ namespace Spring.Remoting
                 saoExporter.TargetName = "simpleCounter";
                 saoExporter.ServiceName = "RemotedSaoCallCounter";
                 saoExporter.AfterPropertiesSet();
+                of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
 
-//                XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
-//                reader.LoadObjectDefinitions(new StringResource(
-//                                                 @"<?xml version='1.0' encoding='UTF-8' ?>
-//<objects xmlns='http://www.springframework.net' xmlns:r='http://www.springframework.net/remoting'>  
-//    
-//    <r:saoExporter id='ISimpleCounterExporter' targetName='ISimpleCounterProxy' serviceName='RemotedSaoCounterProxy' />
-//    
-//    <object id='ISimpleCounter' type='Spring.Remoting.SimpleCounter, Spring.Services.Tests' />
-//
-//    <object id='ISimpleCounterProxy' type='Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop'>
-//        <property name='proxyInterfaces' value='Spring.Remoting.ISimpleCounter' />
-//        <property name='target' ref='ISimpleCounter'/>
-//    </object>
-//</objects>
-//"));
-//                SaoExporter saoExporter = (SaoExporter) of.GetObject("ISimpleCounterExporter");
-//                Assert.IsNotNull(saoExporter);
-
-                ISimpleCounter client = (ISimpleCounter)Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/RemotedSaoCallCounter");
-                client.Count();
-                client.Count();
-
-                Assert.AreEqual(2, client.Counter);
+                AssertExportedService(saoExporter.ServiceName, 2);
 
                 mocks.VerifyAll();
             }
+        }
+
+        /// <summary>
+        /// Checks that exp an IFactoryObject.ObjectType returns an interface type, 
+        /// </summary>
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
+        public void ThrowsTypeLoadExceptionIfProxyInterfacesValueIsSpecifiedInsteadOfListElement()
+        {
+            using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
+            {
+                XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+                reader.LoadObjectDefinitions(new StringResource(
+                                                 @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net' xmlns:r='http://www.springframework.net/remoting'>  
+    
+    <r:saoExporter id='ISimpleCounterExporter' targetName='ISimpleCounterProxy' serviceName='RemotedSaoCounterProxy' />
+    
+    <object id='ISimpleCounter' type='Spring.Remoting.SimpleCounter, Spring.Services.Tests' />
+
+    <object id='ISimpleCounterProxy' type='Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop'>
+        <property name='proxyInterfaces' value='Spring.Remoting.ISimpleCounter, Spring.Services.Tests' />
+        <property name='target' ref='ISimpleCounter'/>
+    </object>
+</objects>
+"));
+                try
+                {
+                    SaoExporter saoExporter = (SaoExporter) of.GetObject("ISimpleCounterExporter");
+                    Assert.Fail();
+                }
+                catch (ObjectCreationException oce)
+                {
+                    TypeLoadException tle = (TypeLoadException) oce.GetBaseException();
+                    Assert.AreEqual("Could not load type from string value ' Spring.Services.Tests'.", tle.Message);
+                }
+            }
+        }
+
+        private void AssertExportedService(string serviceName, int expectedCount)
+        {
+            ISimpleCounter client = (ISimpleCounter)Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/" + serviceName);
+            client.Count();
+            client.Count();
+
+            Assert.AreEqual(expectedCount, client.Counter);
         }
     }
 }
