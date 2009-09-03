@@ -249,10 +249,26 @@ namespace Spring.Remoting
             }
 
             IProxyTypeBuilder builder = new SaoRemoteObjectProxyTypeBuilder( this );
-            builder.TargetType = this.objectFactory.GetType( targetName );
-            if (interfaces != null && interfaces.Length > 0)
+            Type targetType = this.objectFactory.GetType( targetName );
+            if (targetType == null)
             {
-                builder.Interfaces = TypeResolutionUtils.ResolveInterfaceArray( interfaces );
+                // perform full object retrieval if type cannot be predicted - this will 
+                // also cause any object creation exceptions to be thrown
+                targetType = this.objectFactory.GetObject(targetName).GetType();
+            }
+
+            if (targetType.IsInterface)
+            {
+                builder.Interfaces = new Type[] { targetType };
+                builder.TargetType = typeof(object);
+            }
+            else
+            {
+                if (interfaces != null && interfaces.Length > 0)
+                {
+                    builder.Interfaces = TypeResolutionUtils.ResolveInterfaceArray(interfaces);
+                }
+                builder.TargetType = targetType;
             }
 
             Type proxyType = builder.BuildProxyType();

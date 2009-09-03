@@ -740,11 +740,11 @@ namespace Spring.Objects.Factory.Support
         /// To be overridden in subclasses, applying more sophisticated type detection.
         /// </remarks>
         /// <param name="objectName">Name of the object.</param>
-        /// <param name="mod">The merged object definition to determine the type for.</param>
+        /// <param name="mod">The merged object definition to determine the type for. May be <c>null</c></param>
         /// <returns>The type of the object, or <code>null</code> if not predictable</returns>
         protected virtual Type PredictObjectType(string objectName, RootObjectDefinition mod)
         {
-            if (StringUtils.HasText(mod.FactoryObjectName))
+            if (mod == null || StringUtils.HasText(mod.FactoryObjectName))
             {
                 return null;
             }

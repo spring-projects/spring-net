@@ -142,13 +142,18 @@ namespace Spring.Objects.Factory.Support
         /// specified object.
         /// </summary>
         /// <param name="objectName">Name of the object.</param>
-        /// <param name="mod">The merged object definition to determine the type for.</param>
+        /// <param name="mod">The merged object definition to determine the type for. May be <c>null</c></param>
         /// <returns>
         /// The type of the object, or <code>null</code> if not predictable
         /// </returns>
         protected override Type PredictObjectType(string objectName, RootObjectDefinition mod)
         {
             Type objectType;
+            if (mod == null)
+            {
+                return null;
+            }
+
             if (StringUtils.HasText(mod.FactoryMethodName))
             {
                 objectType = GetTypeForFactoryMethod(objectName, mod);
