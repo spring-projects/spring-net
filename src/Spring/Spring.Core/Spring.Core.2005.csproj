@@ -464,6 +464,8 @@
     <Compile Include="Expressions\Processors\MinAggregator.cs" />
     <Compile Include="Expressions\Processors\MaxAggregator.cs" />
     <Compile Include="Expressions\Processors\ICollectionProcessor.cs" />
+    <Compile Include="Expressions\Processors\DateConversionProcessor.cs" />
+    <Compile Include="Expressions\Processors\IMethodCallProcessor.cs" />
     <Compile Include="Expressions\ArrayConstructorNode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -500,7 +502,6 @@
     <Compile Include="Expressions\OpIn.cs" />
     <Compile Include="Expressions\QualifiedIdentifier.cs" />
     <Compile Include="Expressions\NamedArgumentNode.cs" />
-    <Compile Include="Expressions\DateLiteralNode.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Expressions\Expression.cs">

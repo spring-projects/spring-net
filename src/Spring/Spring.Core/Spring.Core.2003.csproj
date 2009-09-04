@@ -858,7 +858,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Expressions\DateLiteralNode.cs"
+                    RelPath="Expressions\Processors\DateConversionProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath="Expressions\Processors\IMethodCallProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
