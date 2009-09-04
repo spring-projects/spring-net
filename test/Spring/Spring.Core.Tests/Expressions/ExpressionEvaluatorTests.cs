@@ -293,8 +293,17 @@ namespace Spring.Expressions
             Assert.AreEqual("date", dateLiteral);
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1155")]
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-944")]
         public void TestDateVariableExpression()
+        {
+            Hashtable vars = new Hashtable();
+            vars["date"] = "2008-05-15";
+            object value = ExpressionEvaluator.GetValue(null, "#date", vars);
+            Assert.That(value, Is.EqualTo("2008-05-15"));
+        }
+
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1155")]
+        public void TestDateVariableExpressionCamelCased()
         {
             Hashtable vars = new Hashtable();
             vars["Date"] = "2008-05-15";
@@ -466,17 +475,14 @@ namespace Spring.Expressions
         public void TestDateLiterals()
         {
             IExpression exp = Expression.Parse("date('1974/08/24')");
-            Assert.AreEqual(exp.GetValue(), new DateTime(1974, 8, 24));
-            Assert.AreEqual(exp.GetValue(), new DateTime(1974, 8, 24));
-            Assert.AreEqual(ExpressionEvaluator.GetValue(null, "date('1974-08-24')"), new DateTime(1974, 8, 24));
-            Assert.AreEqual(ExpressionEvaluator.GetValue(null, "date('08-24-1974', 'MM-dd-yyyy')"),
-                            new DateTime(1974, 8, 24));
-            Assert.AreEqual(ExpressionEvaluator.GetValue(null, "date('08/24/1974', 'MM/dd/yyyy')"),
-                            new DateTime(1974, 8, 24));
-            Assert.AreEqual(ExpressionEvaluator.GetValue(null, "date('1974-08-24 12:35:06Z', 'u')"),
-                            new DateTime(1974, 8, 24, 12, 35, 6));
-            Assert.AreEqual(ExpressionEvaluator.GetValue(null, "date('1974/08/24').Year"), 1974);
-            Assert.AreEqual(ExpressionEvaluator.GetValue(null, "date('1974/08/24').AddYears(31).Year"), 2005);
+            Assert.AreEqual(new DateTime(1974, 8, 24), exp.GetValue());
+            Assert.AreEqual(new DateTime(1974, 8, 24), exp.GetValue());
+            Assert.AreEqual(new DateTime(1974, 8, 24), ExpressionEvaluator.GetValue(null, "date('1974-08-24')"));
+            Assert.AreEqual(new DateTime(1974, 8, 24), ExpressionEvaluator.GetValue(null, "date('08-24-1974', 'MM-dd-yyyy')"));
+            Assert.AreEqual(new DateTime(1974, 8, 24), ExpressionEvaluator.GetValue(null, "date('08/24/1974', 'MM/dd/yyyy')"));
+            Assert.AreEqual(new DateTime(1974, 8, 24, 12, 35, 6), ExpressionEvaluator.GetValue(null, "date('1974-08-24 12:35:06Z', 'u')"));
+            Assert.AreEqual(1974, ExpressionEvaluator.GetValue(null, "date('1974/08/24').Year"));
+            Assert.AreEqual(2005, ExpressionEvaluator.GetValue(null, "date('1974/08/24').AddYears(31).Year"));
         }
 
         /// <summary>

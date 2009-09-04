@@ -154,7 +154,7 @@ node :
     |   firstSelection 
     |   lastSelection 
     |   exprList
-    |	DOT! 
+    |   DOT! 
     )+
     ;
 
@@ -173,15 +173,17 @@ localFunctionOrVar
     | localVar
     ;
 
-localFunction : DOLLAR! ID^ <AST = Spring.Expressions.LocalFunctionNode> methodArgs
+localFunction 
+    : DOLLAR! ID^ <AST = Spring.Expressions.LocalFunctionNode> methodArgs
     ;
 
-localVar : DOLLAR! ID^ <AST = Spring.Expressions.LocalVariableNode>;
+localVar 
+    : DOLLAR! ID^ <AST = Spring.Expressions.LocalVariableNode>
+    ;
 
 methodOrProperty
-	:	(ID LPAREN)=>
-		ID^ <AST = Spring.Expressions.MethodNode> methodArgs
-	|	property
+	: (ID LPAREN)=> ID^ <AST = Spring.Expressions.MethodNode> methodArgs
+	| property
 	;
 
 methodArgs
@@ -301,7 +303,6 @@ literal
 	|   REAL_LITERAL <AST = Spring.Expressions.RealLiteralNode>
 	|	STRING_LITERAL <AST = Spring.Expressions.StringLiteralNode>
 	|   boolLiteral
-	|   dateLiteral
 	;
 
 boolLiteral
@@ -309,11 +310,6 @@ boolLiteral
     |   FALSE <AST = Spring.Expressions.BooleanLiteralNode>
     ;
     
-dateLiteral
-    :   "date"^ <AST = Spring.Expressions.DateLiteralNode> 
-            LPAREN! STRING_LITERAL (COMMA! STRING_LITERAL)? RPAREN!
-    ;
-
 relationalOperator
     :   EQUAL 
     |   NOT_EQUAL
@@ -328,6 +324,7 @@ relationalOperator
     |   MATCHES   
     ; 
     
+
 
 class ExpressionLexer extends Lexer;
 

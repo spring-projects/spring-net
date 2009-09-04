@@ -57,7 +57,7 @@ namespace Spring.Expressions.Processors
             Type targetType = typeof(double);
             if (args == null || args.Length == 0)
             {
-                throw new ArgumentNullException("convert() processor requires a Type value argument.");
+                throw new ArgumentNullException("args", "convert() processor requires a Type value argument.");
             }
             else if (args.Length == 1)
             {

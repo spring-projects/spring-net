@@ -56,25 +56,24 @@ namespace Spring.Expressions.Parser
 		public const int INTEGER_LITERAL = 51;
 		public const int HEXADECIMAL_INTEGER_LITERAL = 52;
 		public const int REAL_LITERAL = 53;
-		public const int LITERAL_date = 54;
-		public const int EQUAL = 55;
-		public const int NOT_EQUAL = 56;
-		public const int LESS_THAN = 57;
-		public const int LESS_THAN_OR_EQUAL = 58;
-		public const int GREATER_THAN = 59;
-		public const int GREATER_THAN_OR_EQUAL = 60;
-		public const int WS = 61;
-		public const int BACKTICK = 62;
-		public const int BACKSLASH = 63;
-		public const int DOT_ESCAPED = 64;
-		public const int APOS = 65;
-		public const int NUMERIC_LITERAL = 66;
-		public const int DECIMAL_DIGIT = 67;
-		public const int INTEGER_TYPE_SUFFIX = 68;
-		public const int HEX_DIGIT = 69;
-		public const int EXPONENT_PART = 70;
-		public const int SIGN = 71;
-		public const int REAL_TYPE_SUFFIX = 72;
+		public const int EQUAL = 54;
+		public const int NOT_EQUAL = 55;
+		public const int LESS_THAN = 56;
+		public const int LESS_THAN_OR_EQUAL = 57;
+		public const int GREATER_THAN = 58;
+		public const int GREATER_THAN_OR_EQUAL = 59;
+		public const int WS = 60;
+		public const int BACKTICK = 61;
+		public const int BACKSLASH = 62;
+		public const int DOT_ESCAPED = 63;
+		public const int APOS = 64;
+		public const int NUMERIC_LITERAL = 65;
+		public const int DECIMAL_DIGIT = 66;
+		public const int INTEGER_TYPE_SUFFIX = 67;
+		public const int HEX_DIGIT = 68;
+		public const int EXPONENT_PART = 69;
+		public const int SIGN = 70;
+		public const int REAL_TYPE_SUFFIX = 71;
 		
 	}
 }

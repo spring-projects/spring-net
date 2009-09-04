@@ -461,6 +461,8 @@
     <Compile Include="Expressions\Parser\antlr\TokenWithIndex.cs" />
     <Compile Include="Expressions\Parser\antlr\TreeParser.cs" />
     <Compile Include="Expressions\Parser\antlr\TreeParserSharedInputState.cs" />
+    <Compile Include="Expressions\Processors\DateConversionProcessor.cs" />
+    <Compile Include="Expressions\Processors\IMethodCallProcessor.cs" />
     <Compile Include="Expressions\SyntaxErrorException.cs" />
     <Compile Include="Expressions\Parser\ExpressionLexer.cs" />
     <Compile Include="Expressions\Parser\ExpressionParser.cs" />
@@ -512,9 +514,6 @@
     <Compile Include="Expressions\OpIn.cs" />
     <Compile Include="Expressions\QualifiedIdentifier.cs" />
     <Compile Include="Expressions\NamedArgumentNode.cs" />
-    <Compile Include="Expressions\DateLiteralNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Expressions\Expression.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -41,15 +41,14 @@ namespace Spring.Expressions
             | BindingFlags.IgnoreCase;
 
         private static readonly IDictionary collectionProcessorMap = new Hashtable();
+        private static readonly IDictionary extensionMethodProcessorMap = new Hashtable();
 
         private bool initialized = false;
-        private bool isParamArray = false;
+        private bool cachedIsParamArray = false;
         private Type paramArrayType;
         private int argumentCount;
-        private SafeMethod method;
-        private int methodHash;
-        private bool isCollectionProcessor = false;
-        private ICollectionProcessor collectionProcessor;
+        private SafeMethod cachedInstanceMethod;
+        private int cachedInstanceMethodHash;
 
         /// <summary>
         /// Static constructor. Initializes a map of special collection processor methods.
@@ -65,8 +64,10 @@ namespace Spring.Expressions
             collectionProcessorMap.Add("orderBy", new OrderByProcessor());
             collectionProcessorMap.Add("distinct", new DistinctProcessor());
             collectionProcessorMap.Add("nonNull", new NonNullProcessor());
-            collectionProcessorMap.Add("convert", new ConversionProcessor());
             collectionProcessorMap.Add("reverse", new ReverseProcessor());
+            collectionProcessorMap.Add("convert", new ConversionProcessor());
+
+            extensionMethodProcessorMap.Add("date", new DateConversionProcessor());
         }
 
         /// <summary>
@@ -92,71 +93,73 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
+            string methodName = this.getText();
             object[] argValues = ResolveArguments(evalContext);
-
-            ICollectionProcessor localCollectionProcessor = null;
-            SafeMethod localMethod = null;
 
             // resolve method, if necessary
             lock (this)
             {
-                if (!isCollectionProcessor)
+                // check if it is a collection and the methodname denotes a collection processor
+                if ((context == null || context is ICollection))
                 {
-                    if ((context == null || context is ICollection))
+                    ICollectionProcessor localCollectionProcessor;
+                    // predefined collection processor?
+                    localCollectionProcessor = (ICollectionProcessor) collectionProcessorMap[methodName];
+
+                    // user-defined collection processor?
+                    if (localCollectionProcessor == null && evalContext.Variables != null)
                     {
-                        string methodName = this.getText();
-
-                        // predefined collection processor?
-                        collectionProcessor = (ICollectionProcessor)collectionProcessorMap[methodName];
-                        isCollectionProcessor = (collectionProcessor != null);
-                        localCollectionProcessor = collectionProcessor;
-
-                        if (!isCollectionProcessor && evalContext.Variables != null)
-                        {
-                            localCollectionProcessor = evalContext.Variables[methodName] as ICollectionProcessor;
-                        }
-                    }
-                }
-                else
-                {
-                    localCollectionProcessor = collectionProcessor;
-                }
-
-                if (localCollectionProcessor == null)
-                {
-                    if (context == null)
-                    {
-                        throw new ArgumentNullException("Context for method invocation cannot be null.");
+                        localCollectionProcessor = evalContext.Variables[methodName] as ICollectionProcessor;
                     }
 
+                    if (localCollectionProcessor != null)
+                    {
+                        return localCollectionProcessor.Process((ICollection) context, argValues);
+                    }
+                }
+
+                // try extension methods
+                IMethodCallProcessor methodCallProcessor = (IMethodCallProcessor)extensionMethodProcessorMap[methodName];
+                {
+                    // user-defined extension method processor?
+                    if (methodCallProcessor == null && evalContext.Variables != null)
+                    {
+                        methodCallProcessor = evalContext.Variables[methodName] as IMethodCallProcessor;
+                    }
+
+                    if (methodCallProcessor != null)
+                    {
+                        return methodCallProcessor.Process(context, argValues);
+                    }
+                }
+
+                // try instance method
+                if (context != null)
+                {
                     // calculate checksum, if the cached method matches the current context
                     if (initialized)
                     {
                         int calculatedHash = CalculateMethodHash(context.GetType(), argValues);
-                        initialized = (calculatedHash == methodHash);
+                        initialized = (calculatedHash == cachedInstanceMethodHash);
                     }
 
                     if (!initialized)
                     {
-                        string methodName = this.getText();
                         Initialize(methodName, argValues, context);
                         initialized = true;
                     }
 
-                    localMethod = method;
+                    if (cachedInstanceMethod != null)
+                    {
+                        object[] paramValues = (cachedIsParamArray)
+                                                ? ReflectionUtils.PackageParamArray(argValues, argumentCount, paramArrayType)
+                                                : argValues;
+                        return cachedInstanceMethod.Invoke(context, paramValues);
+                    }
                 }
             }
-
-            // invoke method
-            if (localCollectionProcessor != null)
-            {
-                return localCollectionProcessor.Process((ICollection)context, argValues);
-            }
-            else
-            {
-                object[] paramValues = (isParamArray ? ReflectionUtils.PackageParamArray(argValues, argumentCount, paramArrayType) : argValues);
-                return localMethod.Invoke(context, paramValues);
-            }
+            
+            throw new ArgumentException(string.Format("Method '{0}' with the specified number and types of arguments does not exist.", methodName));
         }
 
         private int CalculateMethodHash(Type contextType, object[] argValues)
@@ -165,7 +168,8 @@ namespace Spring.Expressions
             for (int i = 0; i < argValues.Length; i++)
             {
                 object arg = argValues[i];
-                if (arg != null) hash += s_primes[i] * arg.GetType().GetHashCode();
+                if (arg != null)
+                    hash += s_primes[i] * arg.GetType().GetHashCode();
             }
             return hash;
         }
@@ -185,9 +189,7 @@ namespace Spring.Expressions
 
             if (mi == null)
             {
-                throw new ArgumentException(
-                    string.Format("Method '{0}' with the specified number and types of arguments does not exist.",
-                                  methodName));
+                return;
             }
             else
             {
@@ -195,16 +197,16 @@ namespace Spring.Expressions
                 if (parameters.Length > 0)
                 {
                     ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                    isParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
-                    if (isParamArray)
+                    cachedIsParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+                    if (cachedIsParamArray)
                     {
                         paramArrayType = lastParameter.ParameterType.GetElementType();
                         argumentCount = parameters.Length;
                     }
                 }
 
-                method = new SafeMethod(mi);
-                methodHash = CalculateMethodHash(contextType, argValues);
+                cachedInstanceMethod = new SafeMethod(mi);
+                cachedInstanceMethodHash = CalculateMethodHash(contextType, argValues);
             }
         }
 

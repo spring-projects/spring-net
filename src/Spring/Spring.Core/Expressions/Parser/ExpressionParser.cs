@@ -78,25 +78,24 @@ namespace Spring.Expressions.Parser
 		public const int INTEGER_LITERAL = 51;
 		public const int HEXADECIMAL_INTEGER_LITERAL = 52;
 		public const int REAL_LITERAL = 53;
-		public const int LITERAL_date = 54;
-		public const int EQUAL = 55;
-		public const int NOT_EQUAL = 56;
-		public const int LESS_THAN = 57;
-		public const int LESS_THAN_OR_EQUAL = 58;
-		public const int GREATER_THAN = 59;
-		public const int GREATER_THAN_OR_EQUAL = 60;
-		public const int WS = 61;
-		public const int BACKTICK = 62;
-		public const int BACKSLASH = 63;
-		public const int DOT_ESCAPED = 64;
-		public const int APOS = 65;
-		public const int NUMERIC_LITERAL = 66;
-		public const int DECIMAL_DIGIT = 67;
-		public const int INTEGER_TYPE_SUFFIX = 68;
-		public const int HEX_DIGIT = 69;
-		public const int EXPONENT_PART = 70;
-		public const int SIGN = 71;
-		public const int REAL_TYPE_SUFFIX = 72;
+		public const int EQUAL = 54;
+		public const int NOT_EQUAL = 55;
+		public const int LESS_THAN = 56;
+		public const int LESS_THAN_OR_EQUAL = 57;
+		public const int GREATER_THAN = 58;
+		public const int GREATER_THAN_OR_EQUAL = 59;
+		public const int WS = 60;
+		public const int BACKTICK = 61;
+		public const int BACKSLASH = 62;
+		public const int DOT_ESCAPED = 63;
+		public const int APOS = 64;
+		public const int NUMERIC_LITERAL = 65;
+		public const int DECIMAL_DIGIT = 66;
+		public const int INTEGER_TYPE_SUFFIX = 67;
+		public const int HEX_DIGIT = 68;
+		public const int EXPONENT_PART = 69;
+		public const int SIGN = 70;
+		public const int REAL_TYPE_SUFFIX = 71;
 		
 		
     // CLOVER:OFF
@@ -1190,7 +1189,6 @@ _loop29_breakloop:				;
 				case INTEGER_LITERAL:
 				case HEXADECIMAL_INTEGER_LITERAL:
 				case REAL_LITERAL:
-				case LITERAL_date:
 				{
 					literal();
 					if (0 == inputState.guessing)
@@ -1885,16 +1883,6 @@ _loop67_breakloop:				;
 			case TRUE:
 			{
 				boolLiteral();
-				if (0 == inputState.guessing)
-				{
-					astFactory.addASTChild(ref currentAST, (AST)returnAST);
-				}
-				literal_AST = (Spring.Expressions.SpringAST)currentAST.root;
-				break;
-			}
-			case LITERAL_date:
-			{
-				dateLiteral();
 				if (0 == inputState.guessing)
 				{
 					astFactory.addASTChild(ref currentAST, (AST)returnAST);
@@ -3261,58 +3249,6 @@ _loop96_breakloop:						;
 		returnAST = boolLiteral_AST;
 	}
 	
-	public void dateLiteral() //throws RecognitionException, TokenStreamException
-{
-		
-		returnAST = null;
-		ASTPair currentAST = new ASTPair();
-		Spring.Expressions.SpringAST dateLiteral_AST = null;
-		
-		try {      // for error handling
-			Spring.Expressions.DateLiteralNode tmp112_AST = null;
-			tmp112_AST = (Spring.Expressions.DateLiteralNode) astFactory.create(LT(1), "Spring.Expressions.DateLiteralNode");
-			astFactory.makeASTRoot(ref currentAST, (AST)tmp112_AST);
-			match(LITERAL_date);
-			match(LPAREN);
-			Spring.Expressions.SpringAST tmp114_AST = null;
-			tmp114_AST = (Spring.Expressions.SpringAST) astFactory.create(LT(1));
-			astFactory.addASTChild(ref currentAST, (AST)tmp114_AST);
-			match(STRING_LITERAL);
-			{
-				if ((LA(1)==COMMA))
-				{
-					match(COMMA);
-					Spring.Expressions.SpringAST tmp116_AST = null;
-					tmp116_AST = (Spring.Expressions.SpringAST) astFactory.create(LT(1));
-					astFactory.addASTChild(ref currentAST, (AST)tmp116_AST);
-					match(STRING_LITERAL);
-				}
-				else if ((LA(1)==RPAREN)) {
-				}
-				else
-				{
-					throw new NoViableAltException(LT(1), getFilename());
-				}
-				
-			}
-			match(RPAREN);
-			dateLiteral_AST = (Spring.Expressions.SpringAST)currentAST.root;
-		}
-		catch (RecognitionException ex)
-		{
-			if (0 == inputState.guessing)
-			{
-				reportError(ex);
-				recover(ex,tokenSet_2_);
-			}
-			else
-			{
-				throw ex;
-			}
-		}
-		returnAST = dateLiteral_AST;
-	}
-	
 	public new Spring.Expressions.SpringAST getAST()
 	{
 		return (Spring.Expressions.SpringAST) returnAST;
@@ -3328,7 +3264,7 @@ _loop96_breakloop:						;
 	}
 	static public void initializeASTFactory( ASTFactory factory )
 	{
-		factory.setMaxNodeType(72);
+		factory.setMaxNodeType(71);
 	}
 	
 	public static readonly string[] tokenNames_ = new string[] {
@@ -3386,7 +3322,6 @@ _loop96_breakloop:						;
 		@"""INTEGER_LITERAL""",
 		@"""HEXADECIMAL_INTEGER_LITERAL""",
 		@"""REAL_LITERAL""",
-		@"""date""",
 		@"""EQUAL""",
 		@"""NOT_EQUAL""",
 		@"""LESS_THAN""",
@@ -3421,7 +3356,7 @@ _loop96_breakloop:						;
 	public static readonly BitSet tokenSet_1_ = new BitSet(mk_tokenSet_1_());
 	private static long[] mk_tokenSet_2_()
 	{
-		long[] data = { 2269831713112653570L, 0L};
+		long[] data = { 1134924607015288578L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_2_ = new BitSet(mk_tokenSet_2_());
@@ -3445,7 +3380,7 @@ _loop96_breakloop:						;
 	public static readonly BitSet tokenSet_5_ = new BitSet(mk_tokenSet_5_());
 	private static long[] mk_tokenSet_6_()
 	{
-		long[] data = { 2269814212194793472L, 0L};
+		long[] data = { 1134907106097428480L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_6_ = new BitSet(mk_tokenSet_6_());
@@ -3457,37 +3392,37 @@ _loop96_breakloop:						;
 	public static readonly BitSet tokenSet_7_ = new BitSet(mk_tokenSet_7_());
 	private static long[] mk_tokenSet_8_()
 	{
-		long[] data = { 2269815620960583426L, 0L};
+		long[] data = { 1134908514863218434L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_8_ = new BitSet(mk_tokenSet_8_());
 	private static long[] mk_tokenSet_9_()
 	{
-		long[] data = { 35710725750194368L, 0L};
+		long[] data = { 17696327240712384L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_9_ = new BitSet(mk_tokenSet_9_());
 	private static long[] mk_tokenSet_10_()
 	{
-		long[] data = { 2269815621010915074L, 0L};
+		long[] data = { 1134908514913550082L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_10_ = new BitSet(mk_tokenSet_10_());
 	private static long[] mk_tokenSet_11_()
 	{
-		long[] data = { 2269815621480677122L, 0L};
+		long[] data = { 1134908515383312130L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_11_ = new BitSet(mk_tokenSet_11_());
 	private static long[] mk_tokenSet_12_()
 	{
-		long[] data = { 35710724626120896L, 0L};
+		long[] data = { 17696326116638912L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_12_ = new BitSet(mk_tokenSet_12_());
 	private static long[] mk_tokenSet_13_()
 	{
-		long[] data = { 2269815622017548034L, 0L};
+		long[] data = { 1134908515920183042L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_13_ = new BitSet(mk_tokenSet_13_());
@@ -3511,7 +3446,7 @@ _loop96_breakloop:						;
 	public static readonly BitSet tokenSet_16_ = new BitSet(mk_tokenSet_16_());
 	private static long[] mk_tokenSet_17_()
 	{
-		long[] data = { -35184381001744L, 511L, 0L, 0L};
+		long[] data = { -35184381001744L, 255L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_17_ = new BitSet(mk_tokenSet_17_());
@@ -3529,7 +3464,7 @@ _loop96_breakloop:						;
 	public static readonly BitSet tokenSet_19_ = new BitSet(mk_tokenSet_19_());
 	private static long[] mk_tokenSet_20_()
 	{
-		long[] data = { 2270957613019496194L, 0L};
+		long[] data = { 1136050506922131202L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_20_ = new BitSet(mk_tokenSet_20_());
@@ -3541,7 +3476,7 @@ _loop96_breakloop:						;
 	public static readonly BitSet tokenSet_21_ = new BitSet(mk_tokenSet_21_());
 	private static long[] mk_tokenSet_22_()
 	{
-		long[] data = { 2305806450443419584L, 0L};
+		long[] data = { 1152884945836572608L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_22_ = new BitSet(mk_tokenSet_22_());
