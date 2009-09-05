@@ -502,8 +502,6 @@
     <Compile Include="Expressions\OpIn.cs" />
     <Compile Include="Expressions\QualifiedIdentifier.cs" />
     <Compile Include="Expressions\NamedArgumentNode.cs" />
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Expressions\Expression.cs">
       <SubType>Code</SubType>
     </Compile>
