@@ -43,6 +43,8 @@ Spring.Core
 7. a) Signature of CollectionUtils.Contains(ICollection collection, object element) changed to CollectionUtils.Contains(IEnumerable collection, object element)
    b) returns 'null' in case of collection==null instead of throwing an exception
 
+8. dropped Spring.Expressions.DateLiteralNode
+
 
 
 Spring.Aop
