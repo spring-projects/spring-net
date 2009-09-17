@@ -244,11 +244,15 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         /// <summary>
-        /// Extension hook that subclasses can override to register additional advisors,
+        /// Extension hook that subclasses can override to add additional advisors for the given object,
         /// given the sorted advisors obtained to date.<br/>
         /// The default implementation does nothing.<br/>
         /// Typically used to add advisors that expose contextual information required by some of the later advisors.
         /// </summary>
+        /// <remarks>
+        /// The advisor list passed into this method is already reduced to advisors applying to this particular object.
+        /// If you want to register additional common advisor candidates, override <see cref="FindCandidateAdvisors"/>.
+        /// </remarks>
         /// <param name="advisors">Advisors that have already been identified as applying to a given object</param>
         /// <param name="objectType">the type of the object to be advised</param>
         /// <param name="objectName">the name of the object to be advised</param>

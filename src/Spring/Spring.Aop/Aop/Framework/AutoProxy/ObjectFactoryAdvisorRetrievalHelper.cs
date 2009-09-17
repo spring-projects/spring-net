@@ -165,8 +165,12 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="objectName">the name of the object to be advised</param>
         protected virtual bool IsEligibleObject(string advisorName, Type objectType, string objectName )
         {
-            return this.ObjectFactory.ContainsObjectDefinition(advisorName)
-                   && this.ObjectFactory.GetObjectDefinition(advisorName).Role != ObjectRole.ROLE_INFRASTRUCTURE;
+            bool containsObjectDefinition = this.ObjectFactory.ContainsObjectDefinition(advisorName);
+            if (containsObjectDefinition)
+            {
+                return this.ObjectFactory.GetObjectDefinition(advisorName).Role != ObjectRole.ROLE_INFRASTRUCTURE;
+            }
+            return this.ObjectFactory.ContainsObject(advisorName);
        }
     }
 }
