@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using NUnit.Framework;
 using Spring.Aop.Framework;
 
@@ -58,23 +59,28 @@ namespace Spring.Aspects
 
         private static void InvokeOncePassOnceFail(bool useExceptionName, bool isDelay)
         {
-            ITestRemoteService rs = GetRemoteService(2, useExceptionName, isDelay);
+            TestSleepHandler testSleepHandler = new TestSleepHandler();
+            ITestRemoteService rs = GetRemoteService(2, useExceptionName, isDelay, testSleepHandler);
 
             rs.DoTransfer();
+            AssertSleepsAndReset(testSleepHandler, 2, isDelay);
 
-            rs = GetRemoteService(3, useExceptionName, isDelay);
+            rs = GetRemoteService(3, useExceptionName, isDelay, testSleepHandler);
             try
             {
                 rs.DoTransfer();
                 Assert.Fail("Should have failed.");
             } catch (ArithmeticException)
             {
-                
+                // they maximum retry count is 3, thus only 2 sleep calls
+                AssertSleepsAndReset(testSleepHandler, 2, isDelay);
             }
         }
+
         private static void InvokeOnceFailWithUnexceptedException(bool useExceptionName, bool isDelay)
         {
-            ITestRemoteService rs = GetRemoteService(3, useExceptionName, isDelay);
+            TestSleepHandler testSleepHandler = new TestSleepHandler();
+            ITestRemoteService rs = GetRemoteService(3, useExceptionName, isDelay, testSleepHandler);
             try
             {
                 rs.DoTransfer2();
@@ -86,12 +92,40 @@ namespace Spring.Aspects
             }
         }
 
-        private static ITestRemoteService GetRemoteService(int numFailures, bool usingExceptionName, bool isDelay)
+        private static void AssertSleepsAndReset(TestSleepHandler testSleepHandler, int numFailures, bool isDelay)
+        {
+            Assert.AreEqual(numFailures, testSleepHandler.CalledTimeSpans.Count);
+            for(int i=0;i<numFailures;i++)
+            {
+                if (isDelay)
+                {
+                    Assert.AreEqual(TimeSpan.FromSeconds(1), testSleepHandler.CalledTimeSpans[i]);
+                }
+                else
+                {
+                    Assert.AreEqual(TimeSpan.FromSeconds(1 * (i + 1) + 0.5), testSleepHandler.CalledTimeSpans[i]);
+                }
+            }
+            testSleepHandler.CalledTimeSpans.Clear();
+        }
+
+        private class TestSleepHandler
+        {
+            public readonly ArrayList CalledTimeSpans = new ArrayList();
+
+            public void Sleep(TimeSpan duration)
+            {
+                CalledTimeSpans.Add(duration);
+            }
+        }
+
+        private static ITestRemoteService GetRemoteService(int numFailures, bool usingExceptionName, bool isDelay, TestSleepHandler testSleepHandler)
         {
             TestRemoteService remoteService = new TestRemoteService();
             remoteService.NumFailures = numFailures;
             ProxyFactory factory = new ProxyFactory(remoteService);
-            RetryAdvice retryAdvice = new RetryAdvice();
+
+            RetryAdvice retryAdvice = new RetryAdvice(new RetryAdvice.SleepHandler(testSleepHandler.Sleep));
             if (usingExceptionName)
             {
                 if (isDelay)

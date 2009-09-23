@@ -41,6 +41,11 @@ namespace Spring.Aspects
     [Serializable]
     public class RetryAdvice : AbstractExceptionHandlerAdvice
     {
+        ///<summary>
+        ///The type of the callback that is called for delaying retries.
+        ///</summary>
+        public delegate void SleepHandler(TimeSpan duration);
+ 
         private static readonly ILog log;
         private static readonly TimeSpanConverter timeSpanConverter;
 
@@ -51,6 +56,8 @@ namespace Spring.Aspects
         }
 
         #region Fields
+
+        private SleepHandler sleepHandler;
 
         [NonSerialized]
         private RetryExceptionHandler retryExceptionHandler;
@@ -101,6 +108,21 @@ namespace Spring.Aspects
         }
 
         #endregion
+
+        /// <summary>
+        /// Creates a new RetryAdvice instance, using <see cref="Thread.Sleep(TimeSpan)"/> for delaying retries
+        /// </summary>
+        public RetryAdvice()            :this(new SleepHandler(Thread.Sleep))
+        {
+        }
+
+        /// <summary>
+        /// Creates a new RetryAdvice instance, using any arbitrary callback for delaying retries
+        /// </summary>
+        public RetryAdvice(SleepHandler sleepHandler)
+        {
+            this.sleepHandler = sleepHandler;
+        }
 
         #region IMethodInterceptor implementation
 
@@ -158,7 +180,7 @@ namespace Spring.Aspects
                                 log.Trace("Retrying " + invocation.Method.Name);
                             }
                             callContextDictionary["n"] = numAttempts;
-                            Sleep(retryExceptionHandler, callContextDictionary);
+                            Sleep(retryExceptionHandler, callContextDictionary, sleepHandler);
                         }
                     }
                     else
@@ -173,11 +195,11 @@ namespace Spring.Aspects
             return returnVal;
         }
 
-        private static void Sleep(RetryExceptionHandler handler, IDictionary callContextDictionary)
+        private static void Sleep(RetryExceptionHandler handler, IDictionary callContextDictionary, SleepHandler sleepHandler)
         {
             if (handler.IsDelayBased)
             {
-                Thread.Sleep(handler.DelayTimeSpan);
+                sleepHandler(handler.DelayTimeSpan);
             }
             else
             {                
@@ -187,18 +209,18 @@ namespace Spring.Aspects
                     object result = expression.GetValue(null, callContextDictionary);
                     decimal d = decimal.Parse(result.ToString());
                     decimal rounded = decimal.Round(d*1000,0);
-                    int sleepInSeconds = decimal.ToInt32(rounded);
-                    Thread.Sleep(sleepInSeconds);
+                    TimeSpan duration = TimeSpan.FromMilliseconds(decimal.ToDouble(rounded));
+                    sleepHandler(duration);
                 }
                 catch (InvalidCastException e)
                 {
                     log.Warn("Was not able to cast expression to decimal [" + handler.DelayRateExpression + "]. Sleeping for 1 second", e);
-                    Thread.Sleep(1000);
+                    sleepHandler(new TimeSpan(0,0,1));
                 }
                 catch (Exception e)
                 {
                     log.Warn("Was not able to evaluate rate expression [" + handler.DelayRateExpression + "]. Sleeping for 1 second", e);
-                    Thread.Sleep(1000);
+                    sleepHandler(new TimeSpan(0,0,1));
                 }
             }
         }

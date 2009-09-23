@@ -53,8 +53,27 @@ namespace Spring.Aop.Support
 		/// <see cref="AttributeMatchMethodPointcutAdvisor"/> class
 		/// for the supplied <paramref name="advice"/>.
 		/// </summary>
-		/// <param name="advice"></param>
+		/// <param name="advice">the advice to apply if the pointcut matches</param>
 		public AttributeMatchMethodPointcutAdvisor(IAdvice advice)
+		{
+			this._advice = advice;
+		}
+
+		/// <summary>
+		/// Creates a new instance of the
+		/// <see cref="AttributeMatchMethodPointcutAdvisor"/> class
+		/// for the supplied <paramref name="advice"/>.
+		/// </summary>
+        /// <param name="attribute">
+        /// The <see cref="System.Attribute"/> to match.
+        /// </param>
+        /// <param name="inherit">
+        /// Flag that controls whether or not the inheritance tree of the
+        /// method to be included in the search for the <see cref="Attribute"/>?
+        /// </param>
+        /// <param name="advice">the advice to apply if the pointcut matches</param>
+        public AttributeMatchMethodPointcutAdvisor(Type attribute, bool inherit, IAdvice advice)
+            :base(attribute, inherit)
 		{
 			this._advice = advice;
 		}
