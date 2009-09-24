@@ -445,7 +445,7 @@ Commandline Examples:
     <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples and not net-3.0}"/>
 
 <!-- build coverage summary -->
-		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}">
+		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}" failonerror="false">
 			<arg value="/xml:&quot;${current.bin.dir}/TestCoverageSummary.xml&quot;" />
 			<arg value="/report:ModuleClassFunctionSummary" />
 			<arg value="/sort:4" />
