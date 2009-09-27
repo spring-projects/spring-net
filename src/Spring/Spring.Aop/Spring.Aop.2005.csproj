@@ -130,6 +130,7 @@
     <Compile Include="Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\AutoProxy\TypeNameAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\DynamicMethodInvocation.cs" />
+    <Compile Include="Aop\Framework\DynamicProxy\AbstractAopProxyFactory.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\CachedAopProxyFactory.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\DefaultAopProxyFactory.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\InheritanceAopProxyTypeBuilder.cs" />

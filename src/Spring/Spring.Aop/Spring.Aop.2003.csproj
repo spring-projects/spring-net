@@ -241,6 +241,10 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File RelPath="Aop\Framework\DynamicProxy\AbstractAopProxyFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "Aop\Framework\DynamicTargetSourceWrapper.cs"
                     SubType = "Code"
