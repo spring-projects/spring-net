@@ -44,8 +44,8 @@ namespace Spring.Aop.Target
     [Serializable]
     public sealed class SingletonTargetSource : ITargetSource
 	{
-		private object target;
-	    private Type targetType;
+		private readonly object target;
+	    private readonly Type targetType;
 
 		/// <summary>
 		/// Creates a new instance of the

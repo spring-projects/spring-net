@@ -19,11 +19,8 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Reflection;
-using Spring.Aop.Support;
 using Spring.Proxy;
-using Spring.Aop.Target;
 using Spring.Util;
 
 namespace Spring.Aop.Framework.DynamicProxy
@@ -51,7 +48,7 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Erich Eichinger (.NET)</author>
     /// <seealso cref="Spring.Aop.Framework.IAopProxyFactory"/>
     [Serializable]
-    public class DefaultAopProxyFactory : IAopProxyFactory
+    public class DefaultAopProxyFactory : AbstractAopProxyFactory
     {
         /// <summary>
         /// Force transient assemblies to be resolvable by <see cref="Assembly.Load(string)"/>.
@@ -62,26 +59,12 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Creates an <see cref="Spring.Aop.Framework.IAopProxy"/> for the
-        /// supplied <paramref name="advisedSupport"/> configuration.
+        /// Creates an actual proxy instance based on the supplied <paramref name="advisedSupport"/>
         /// </summary>
-        /// <param name="advisedSupport">The AOP configuration.</param>
-        /// <returns>An <see cref="Spring.Aop.Framework.IAopProxy"/>.</returns>
-        /// <exception cref="AopConfigException">
-        /// If the supplied <paramref name="advisedSupport"/> configuration is
-        /// invalid.
-        /// </exception>
-        /// <seealso cref="Spring.Aop.Framework.IAopProxyFactory.CreateAopProxy"/>
-        public virtual IAopProxy CreateAopProxy(AdvisedSupport advisedSupport)
+        /// <param name="advisedSupport"></param>
+        /// <returns></returns>
+        protected override IAopProxy DoCreateAopProxyInstance(AdvisedSupport advisedSupport)
         {
-            if (advisedSupport == null)
-            {
-                throw new AopConfigException("Cannot create IAopProxy with null ProxyConfig");
-            }
-            if (advisedSupport.Advisors.Length == 0 && advisedSupport.TargetSource == EmptyTargetSource.Empty)
-            {
-                throw new AopConfigException("Cannot create IAopProxy with no advisors and no target source");
-            }
             if (advisedSupport.ProxyType == null)
             {
                 IProxyTypeBuilder typeBuilder;
@@ -97,32 +80,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 advisedSupport.ProxyType = BuildProxyType(typeBuilder);
                 advisedSupport.ProxyConstructor = advisedSupport.ProxyType.GetConstructor(new Type[] { typeof(IAdvised) });
             }
-
-            if (advisedSupport.TargetSource is SingletonTargetSource
-                && AopUtils.IsAopProxyType(advisedSupport.TargetSource.TargetType))
-            {
-                IAdvised innerProxy = (IAdvised)advisedSupport.TargetSource.GetTarget();
-                // eliminate duplicate advisors
-                ArrayList thisAdvisors = new ArrayList(advisedSupport.Advisors);
-                foreach (IAdvisor innerAdvisor in innerProxy.Advisors)
-                {
-                    foreach (IAdvisor thisAdvisor in thisAdvisors)
-                    {
-                        if (ReferenceEquals(thisAdvisor, innerAdvisor)
-                            || (thisAdvisor.GetType() == typeof(DefaultPointcutAdvisor)
-                                  && ((DefaultPointcutAdvisor)thisAdvisor).Equals(innerAdvisor)
-                               )
-                            )
-                        {
-                            advisedSupport.RemoveAdvisor(thisAdvisor);
-                        }
-                    }
-                }
-
-                // elimination of duplicate introductions is not necessary 
-                // since they do not propagate to nested proxy anyway
-            }
-
             return (IAopProxy)advisedSupport.ProxyConstructor.Invoke(new object[] { advisedSupport });
         }
 

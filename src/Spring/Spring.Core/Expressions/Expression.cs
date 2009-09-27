@@ -27,6 +27,7 @@ using Spring.Expressions.Parser;
 using Spring.Expressions.Parser.antlr;
 using Spring.Expressions.Parser.antlr.collections;
 using Spring.Core;
+using Spring.Reflection.Dynamic;
 using Spring.Util;
 using StringUtils = Spring.Util.StringUtils;
 
@@ -63,14 +64,57 @@ namespace Spring.Expressions
             internal static readonly string CurrentObjectFactory = RESERVEDPREFIX + "CurrentObjectFactory";
         }
 
+        private class ASTNodeCreator : Parser.antlr.ASTNodeCreator
+        {
+            private readonly SafeConstructor ctor;
+            private readonly string name;
+
+            public ASTNodeCreator(ConstructorInfo ctor)
+            {
+                this.ctor = new SafeConstructor(ctor);
+                this.name = ctor.DeclaringType.FullName;
+            }
+
+            public override AST Create()
+            {
+                return (AST) ctor.Invoke(new object[0]);
+            }
+
+            public override string ASTNodeTypeName
+            {
+                get { return name; }
+            }
+        }
+
         private class SpringASTFactory : ASTFactory
         {
-            public SpringASTFactory( Type t )
-                : base( t.FullName )
+            private static readonly Type BASENODE_TYPE;
+            private static readonly Hashtable Typename2Creator;
+
+            static SpringASTFactory()
             {
-                base.defaultASTNodeTypeObject_ = t;
-                base.typename2creator_ = new Hashtable( 32, 0.3f );
-                base.typename2creator_[t.FullName] = SpringAST.Creator;
+                BASENODE_TYPE = typeof (SpringAST);
+
+                Typename2Creator = new Hashtable();
+                foreach (Type type in typeof(SpringASTFactory).Assembly.GetTypes())
+                {
+                    if (BASENODE_TYPE.IsAssignableFrom(type))
+                    {
+                        ConstructorInfo ctor = type.GetConstructor(new Type[0]);
+                        if (ctor != null)
+                        {
+                            ASTNodeCreator creator = new ASTNodeCreator(ctor);
+                            Typename2Creator[creator.ASTNodeTypeName] = creator;
+                        }
+                    }
+                }
+                Typename2Creator[BASENODE_TYPE.FullName] = SpringAST.Creator;
+            }
+
+            public SpringASTFactory() : base(BASENODE_TYPE)
+            {
+                base.defaultASTNodeTypeObject_ = BASENODE_TYPE;
+                base.typename2creator_ = Typename2Creator;
             }
         }
 
@@ -79,7 +123,7 @@ namespace Spring.Expressions
             public SpringExpressionParser( TokenStream lexer )
                 : base( lexer )
             {
-                base.astFactory = new SpringASTFactory( typeof( SpringAST ) );
+                base.astFactory = new SpringASTFactory();
                 base.initialize();
             }
         }

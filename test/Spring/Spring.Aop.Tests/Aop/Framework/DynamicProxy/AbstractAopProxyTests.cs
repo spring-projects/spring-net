@@ -847,6 +847,8 @@ namespace Spring.Aop.Framework.DynamicProxy
                 CreateProxy(advised) as AbstractProxyTypeBuilderTests.InterfaceWithGenericMethod;
             Assert.IsNotNull(proxy);
 
+            DynamicProxyManager.SaveAssembly();
+
             proxy.PolymorphicMethod<int>();
             proxy.PolymorphicMethod<string>();
 

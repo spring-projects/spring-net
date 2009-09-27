@@ -43,7 +43,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         private const string PROXY_TYPE_NAME = "CompositionAopProxy";
 
-        private IAdvised advised;
+        private readonly IAdvised advised;
 
         #endregion
 

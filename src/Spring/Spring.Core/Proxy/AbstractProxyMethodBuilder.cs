@@ -266,11 +266,9 @@ namespace Spring.Proxy
         /// Calls target method directly.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
-        /// <param name="interfaceMethod">
-        /// The interface definition of the method, if applicable.
-        /// </param>
+        /// <param name="targetMethod">The method to invoke.</param>
         protected virtual void CallDirectTargetMethod(
-            ILGenerator il, MethodInfo interfaceMethod)
+            ILGenerator il, MethodInfo targetMethod)
         {
             // setup target object for call
             PushTarget(il);
@@ -279,21 +277,21 @@ namespace Spring.Proxy
             LocalBuilder targetRef = il.DeclareLocal(typeof(object));
             il.Emit(OpCodes.Stloc, targetRef);
 
-            CallAssertUnderstands(il, interfaceMethod, targetRef, "target");
+            CallAssertUnderstands(il, targetMethod, targetRef, "target");
 
             // setup target and cast to type method is on
             il.Emit(OpCodes.Ldloc, targetRef);
-            il.Emit(OpCodes.Castclass, interfaceMethod.DeclaringType);
+            il.Emit(OpCodes.Castclass, targetMethod.DeclaringType);
 
             // setup parameters for call
-            ParameterInfo[] paramArray = interfaceMethod.GetParameters();
+            ParameterInfo[] paramArray = targetMethod.GetParameters();
             for (int i = 0; i < paramArray.Length; i++)
             {
                 il.Emit(OpCodes.Ldarg_S, i + 1);
             }
 
             // call method
-            il.EmitCall(OpCodes.Callvirt, interfaceMethod, null);
+            il.EmitCall(OpCodes.Callvirt, targetMethod, null);
         }
 
         /// <summary>

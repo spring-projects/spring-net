@@ -94,11 +94,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <returns>true if the specified Object is equal to the current target object; otherwise, false</returns>
         public override bool Equals(object obj)
         {
-//            if (ReferenceEquals(this, obj))
-//            {
-//                return true;
-//            }
-
             AdvisedProxy otherProxy = obj as AdvisedProxy;
             if (otherProxy != null)
             {

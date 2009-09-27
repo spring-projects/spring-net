@@ -243,18 +243,6 @@ namespace Spring.Aop.Framework
             set
             {
                 m_targetSource= (value != null) ? value : EmptyTargetSource.Empty;
-// TODO (EE):remove
-//                bool initialized = !(this.m_targetSource is EmptyTargetSource);
-//                this.m_targetSource = value;
-//
-//                if (this.m_targetSource != null && !initialized && interfaceMap.Count == 0)
-//                {
-//                    Type[] interfaces = ReflectionUtils.GetInterfaces(this.m_targetSource.TargetType);
-//                    foreach (Type intf in interfaces)
-//                    {
-//                        AddInterfaceInternal(intf);
-//                    }
-//                }
             }
         }
 
@@ -963,7 +951,7 @@ namespace Spring.Aop.Framework
 
         #endregion
 
-        #region ITargetTypeAware implementation
+        #region Properties
 
         /// <summary>
         /// Gets the target type behind the implementing object.
@@ -974,10 +962,6 @@ namespace Spring.Aop.Framework
         {
             get { return TargetSource.TargetType; }
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// If no explicit interfaces are specified, interfaces will be automatically determined 
