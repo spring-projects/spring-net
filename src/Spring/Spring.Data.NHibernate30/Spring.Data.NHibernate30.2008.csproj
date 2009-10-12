@@ -84,6 +84,24 @@
     <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\SpringSessionSynchronization.cs">
       <Link>Data\NHibernate\SpringSessionSynchronization.cs</Link>
     </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\BytecodeProvider.cs">
+      <Link>Data\NHibernate\Bytecode\BytecodeProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\LazyInitializer.cs">
+      <Link>Data\NHibernate\Bytecode\LazyInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ObjectsFactory.cs">
+      <Link>Data\NHibernate\Bytecode\ObjectsFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ProxyFactory.cs">
+      <Link>Data\NHibernate\Bytecode\ProxyFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ProxyFactoryFactory.cs">
+      <Link>Data\NHibernate\Bytecode\ProxyFactoryFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ReflectionOptimizer.cs">
+      <Link>Data\NHibernate\Bytecode\ReflectionOptimizer.cs</Link>
+    </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateAdoException.cs">
       <Link>Data\NHibernate\HibernateAdoException.cs</Link>
     </Compile>
