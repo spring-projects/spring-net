@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Runtime.Serialization;
+using Spring.Reflection.Dynamic;
 
 namespace Spring.Expressions
 {
@@ -68,7 +69,9 @@ namespace Spring.Expressions
             // delegate?
             if (function != null)
             {
-                return function.DynamicInvoke(argValues);
+                SafeMethod m = new SafeMethod(function.Method);
+                return m.Invoke(function.Target, argValues);
+//                return function.DynamicInvoke(argValues);
             }
 
             // lambda!

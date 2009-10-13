@@ -55,22 +55,66 @@ namespace Spring.Expressions
         public void ExecutesDelegate()
         {
             Hashtable vars = new Hashtable();
-            vars["ident"] = new IdentityCallback(Identity);
+            vars["concat"] = new TestCallback(Concat);
 
             FunctionNode fn = new FunctionNode();
-            fn.Text = "ident";
+            fn.Text = "concat";
             StringLiteralNode str = new StringLiteralNode();
             str.Text = "theValue";
             fn.addChild(str);
+            StringLiteralNode str2 = new StringLiteralNode();
+            str2.Text = "theValue";
+            fn.addChild(str2);
 
             IExpression exp = fn;
-            Assert.AreEqual(str.Text, exp.GetValue(null, vars));
+            Assert.AreEqual(string.Format("{0},{1},{2}", this.GetHashCode(), str.Text, str2.Text), exp.GetValue(null, vars));
         }
 
-        private delegate object IdentityCallback(object arg);
-        private object Identity(object arg)
+        [Category("Performance")]
+        [Test, Explicit]
+        public void ExecutesDelegatePerformance()
         {
-            return arg;
+            Hashtable vars = new Hashtable();
+            TestCallback concat = new TestCallback(Concat);
+            vars["concat"] = concat;
+
+            FunctionNode fn = new FunctionNode();
+            fn.Text = "concat";
+            StringLiteralNode str = new StringLiteralNode();
+            str.Text = "theValue";
+            fn.addChild(str);
+            StringLiteralNode str2 = new StringLiteralNode();
+            str2.Text = "theValue";
+            fn.addChild(str2);
+
+            IExpression exp = fn;
+
+            string result = string.Format("{0},{1},{2}", this.GetHashCode(), str.Text, str2.Text);
+
+            int ITERATIONS = 1000000;
+
+            StopWatch watch = new StopWatch();
+            using (watch.Start("Duration SpEL: {0}"))
+            {
+                for (int i = 0; i < ITERATIONS; i++)
+                {
+                    Assert.AreEqual(result, exp.GetValue(null, vars));
+                }
+            }
+
+            using (watch.Start("Duration Direct: {0}"))
+            {
+                for (int i = 0; i < ITERATIONS; i++)
+                {
+                    Assert.AreEqual(result, concat(str.Text, str2.Text));
+                }
+            }
+        }
+
+        private delegate object TestCallback(object arg1, object arg2);
+        private object Concat(object arg1, object arg2)
+        {
+            return string.Format("{0},{1},{2}", this.GetHashCode(), arg1, arg2);
         }
     }
 }
