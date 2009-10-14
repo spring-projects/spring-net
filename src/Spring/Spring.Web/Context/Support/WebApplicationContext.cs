@@ -18,11 +18,10 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Web;
@@ -37,8 +36,6 @@ using Spring.Objects.Factory.Xml;
 using Spring.Objects.Support;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Context.Support
 {
