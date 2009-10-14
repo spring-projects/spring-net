@@ -89,7 +89,23 @@ namespace Spring.Reflection.Dynamic
             }
         }
 
-        private static readonly IDictionary stateCache = new HybridDictionary();
+        private class IdentityTable : Hashtable
+        {
+            public IdentityTable()
+            {}
+
+            protected override int GetHash(object key)
+            {
+                return key.GetHashCode();
+            }
+
+            protected override bool KeyEquals(object item, object key)
+            {
+                return ReferenceEquals(item, key);
+            }
+        }
+
+        private static readonly Hashtable stateCache = new IdentityTable();
 
         #endregion
 

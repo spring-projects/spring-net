@@ -64,12 +64,27 @@ namespace Spring.Expressions
         }
 
         /// <summary>
+        /// Evaluate the left operand
+        /// </summary>
+        protected object GetLeftValue(object context, EvaluationContext evalContext)
+        {
+            return GetValue(Left, context, evalContext);
+        }
+        /// <summary>
         /// Gets the right operand.
         /// </summary>
         /// <value>The right operand.</value>
         public BaseNode Right
         {
             get { return (BaseNode) this.getFirstChild().getNextSibling(); }
+        }
+
+        /// <summary>
+        /// Evaluate the left operand
+        /// </summary>
+        protected object GetRightValue(object context, EvaluationContext evalContext)
+        {
+            return GetValue(Right, context, evalContext);
         }
     }
 }

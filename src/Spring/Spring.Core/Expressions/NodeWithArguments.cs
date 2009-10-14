@@ -72,36 +72,33 @@ namespace Spring.Expressions
         /// </summary>
         private void InitializeNode()
         {
-            if (args == null)
+            lock (this)
             {
-                lock (this)
+                if (args == null)
                 {
-                    if (args == null)
+                    ArrayList argList = new ArrayList();
+                    namedArgs = new Hashtable();
+
+                    AST node = this.getFirstChild();
+
+                    while (node != null)
                     {
-                        ArrayList argList = new ArrayList();
-                        namedArgs = new Hashtable();
-
-                        AST node = this.getFirstChild();
-
-                        while (node != null)
+                        if (node.getFirstChild() is LambdaExpressionNode)
                         {
-                            if (node.getFirstChild() is LambdaExpressionNode)
-                            {
-                                argList.Add(node.getFirstChild());
-                            }
-                            else if (node is NamedArgumentNode)
-                            {
-                                namedArgs.Add(node.getText(), node);
-                            }
-                            else
-                            {
-                                argList.Add(node);
-                            }
-                            node = node.getNextSibling();
+                            argList.Add(node.getFirstChild());
                         }
-
-                        args = (BaseNode[])argList.ToArray(typeof(BaseNode));
+                        else if (node is NamedArgumentNode)
+                        {
+                            namedArgs.Add(node.getText(), node);
+                        }
+                        else
+                        {
+                            argList.Add(node);
+                        }
+                        node = node.getNextSibling();
                     }
+
+                    args = (BaseNode[]) argList.ToArray(typeof (BaseNode));
                 }
             }
         }
@@ -128,7 +125,11 @@ namespace Spring.Expressions
         /// <returns>An array of argument values</returns>
         protected object[] ResolveArguments(EvaluationContext evalContext)
         {
-            InitializeNode();
+            if (args == null)
+            {
+                InitializeNode();
+            }
+
             int length = args.Length;
             object[] values = new object[length];
             for (int i = 0; i < length; i++)
@@ -145,7 +146,11 @@ namespace Spring.Expressions
         /// <returns>A dictionary of argument name to value mappings.</returns>
         protected IDictionary ResolveNamedArguments(EvaluationContext evalContext)
         {
-            InitializeNode();
+            if (args == null)
+            {
+                InitializeNode();
+            }
+            
             if (namedArgs.Count == 0)
             {
                 return null;
@@ -167,7 +172,10 @@ namespace Spring.Expressions
         /// <returns>Resolved argument value.</returns>
         protected object ResolveArgument(int position, EvaluationContext evalContext)
         {
-            InitializeNode();
+            if (args == null)
+            {
+                InitializeNode();
+            }
             return ResolveArgumentInternal(position, evalContext);
         }
 
@@ -184,7 +192,7 @@ namespace Spring.Expressions
             {
                 return arg;
             }
-            return arg.GetValueInternal(evalContext.ThisContext, evalContext);
+            return GetValue(arg, evalContext.ThisContext, evalContext);
         }
 
         /// <summary>
@@ -195,7 +203,7 @@ namespace Spring.Expressions
         /// <returns>Resolved named argument value.</returns>
         private object ResolveNamedArgument(string name, EvaluationContext evalContext)
         {
-            return ((BaseNode)namedArgs[name]).GetValueInternal(evalContext.ThisContext, evalContext);
+            return GetValue(((BaseNode)namedArgs[name]), evalContext.ThisContext, evalContext);
         }
 
     }

@@ -62,8 +62,8 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object l = Left.GetValueInternal(context, evalContext);
-            object r = Right.GetValueInternal(context, evalContext);
+            object l = GetLeftValue(context, evalContext);
+            object r = GetRightValue(context, evalContext);
 
             if (NumberUtils.IsInteger(l) && NumberUtils.IsInteger(r))
             {

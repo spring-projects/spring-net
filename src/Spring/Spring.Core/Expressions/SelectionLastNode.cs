@@ -69,7 +69,7 @@ namespace Spring.Expressions
                 {
                     object listItem = list[i];
                     evalContext.ThisContext = listItem;
-                    bool isMatch = (bool)expression.GetValueInternal( listItem, evalContext );
+                    bool isMatch = (bool)GetValue(expression, listItem, evalContext );
                     if (isMatch)
                     {
                         return listItem;

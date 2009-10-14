@@ -64,13 +64,13 @@ namespace Spring.Expressions
                 {
                     if (regex == null)
                     {
-                        string pattern = Right.GetValueInternal( context, evalContext ) as string;
+                        string pattern = GetRightValue( context, evalContext ) as string;
                         regex = new Regex(pattern, RegexOptions.Compiled);
                     }
                 }
             }
 
-            string text = Left.GetValueInternal( context, evalContext ) as string;
+            string text = GetLeftValue( context, evalContext ) as string;
             return regex.IsMatch(text);
         }
     }

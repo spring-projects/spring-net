@@ -85,26 +85,36 @@ namespace Spring.Expressions
                 InitializeLambda();
             }
 
-            object result = bodyExpression.GetValueInternal(context, evalContext);
+            object result = GetValue(bodyExpression, context, evalContext);
             return result;
         }
 
         /// <summary>
-        /// Returns Lambda Expression's value for the given context.
+        /// Evaluates this node, switching local variables map to the ones specified in <paramref name="argValues"/>.
         /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <param name="arguments">A dictionary containing argument map for this lambda expression.</param>
-        /// <returns>Node's value.</returns>
-        public object GetValueInternal(object context, EvaluationContext evalContext, IDictionary arguments)
+        protected override object Get(object context, EvaluationContext evalContext, object[] argValues)
         {
-            using (evalContext.SwitchLocalVariables(arguments))
+            string[] argNames = this.ArgumentNames;
+
+            if (argValues.Length != argNames.Length)
             {
-                object result = base.GetValueInternal(context, evalContext);
+                throw new ArgumentMismatchException(string.Format("Invalid number of arguments - expected {0} arguments, but was called with {1}", argNames.Length, argValues.Length));
+            }
+
+            IDictionary arguments = new Hashtable();
+            for (int i = 0; i < argValues.Length; i++)
+            {
+                arguments[argNames[i]] = argValues[i];
+            }
+
+            EvaluationContext ec = (EvaluationContext)evalContext;
+            using (ec.SwitchLocalVariables(arguments))
+            {
+                object result = Get(context, ec);
                 return result;
             }
         }
-        
+
         private void InitializeLambda()
         {
             lock (this)

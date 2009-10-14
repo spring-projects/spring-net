@@ -69,10 +69,10 @@ namespace Spring.Expressions
             }
             else
             {
-                result = ((BaseNode)right).GetValueInternal(context, evalContext);
+                result = GetValue(((BaseNode)right), context, evalContext);
             }
 
-            ((BaseNode)left).SetValueInternal( context, evalContext, result );
+            SetValue(((BaseNode)left), context, evalContext, result );
 
             return result;
         }

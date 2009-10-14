@@ -77,13 +77,13 @@ namespace Spring.Expressions
                 }
             }
 
-            if (Convert.ToBoolean(condition.GetValueInternal(context, evalContext)))
+            if (Convert.ToBoolean(GetValue(condition, context, evalContext)))
             {
-                return trueExp.GetValueInternal(context, evalContext);
+                return GetValue(trueExp, context, evalContext);
             }
             else
             {
-                return falseExp.GetValueInternal(context, evalContext);
+                return GetValue(falseExp, context, evalContext);
             }
         }
     }

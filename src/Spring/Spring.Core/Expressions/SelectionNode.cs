@@ -69,10 +69,10 @@ namespace Spring.Expressions
 
             int minIndex = (int)((minIndexExpression == null)
                                       ? Int32.MinValue
-                                      : minIndexExpression.GetValueInternal(context, evalContext));
+                                      : GetValue(minIndexExpression, context, evalContext));
             int maxIndex = (int)((maxIndexExpression == null)
                                       ? Int32.MaxValue
-                                      : maxIndexExpression.GetValueInternal(context, evalContext));
+                                      : GetValue(maxIndexExpression, context, evalContext));
 
             IList selectionList = new ArrayList();
 
@@ -82,7 +82,7 @@ namespace Spring.Expressions
                 foreach (object o in enumerable)
                 {
                     evalContext.ThisContext = o;
-                    bool isMatch = (bool)expression.GetValueInternal(o, evalContext);
+                    bool isMatch = (bool)GetValue(expression, o, evalContext);
                     if (isMatch)
                     {
                         if (minIndex <= found && found <= maxIndex)

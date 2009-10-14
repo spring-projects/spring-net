@@ -62,7 +62,7 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object operand = Operand.GetValueInternal(context, evalContext);
+            object operand = GetValue(Operand, context, evalContext);
             if (NumberUtils.IsInteger(operand))
             {
                 return NumberUtils.BitwiseNot(operand);

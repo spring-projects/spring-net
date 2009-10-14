@@ -54,7 +54,7 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object n = Operand.GetValueInternal( context, evalContext );
+            object n = GetValue(Operand, context, evalContext);
 
             if (!NumberUtils.IsNumber(n))
             {

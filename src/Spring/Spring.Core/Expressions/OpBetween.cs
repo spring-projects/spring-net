@@ -57,8 +57,8 @@ namespace Spring.Expressions
         /// </returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object value = Left.GetValueInternal(context, evalContext);
-            IList range = Right.GetValueInternal(context, evalContext) as IList;
+            object value = GetLeftValue(context, evalContext);
+            IList range = GetRightValue(context, evalContext) as IList;
 
             if (range == null || range.Count != 2)
             {

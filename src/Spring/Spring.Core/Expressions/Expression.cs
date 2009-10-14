@@ -263,7 +263,7 @@ namespace Spring.Expressions
         /// <param name="context">Context to evaluate expressions against.</param>
         /// <param name="evalContext">Current expression evaluation context.</param>
         /// <returns>Value of the last node.</returns>
-        protected override object Get( object context, EvaluationContext evalContext )
+        protected override object Get(object context, EvaluationContext evalContext)
         {
             object result = context;
 
@@ -272,7 +272,7 @@ namespace Spring.Expressions
                 AST node = this.getFirstChild();
                 while (node != null)
                 {
-                    result = ((BaseNode)node).GetValueInternal( result, evalContext );
+                    result = GetValue(((BaseNode)node), result, evalContext );
 
                     node = node.getNextSibling();
                 }
@@ -301,7 +301,7 @@ namespace Spring.Expressions
                 {
                     try
                     {
-                        target = ((BaseNode)node).GetValueInternal( target, evalContext );
+                        target = GetValue(((BaseNode)node), target, evalContext);
                         node = node.getNextSibling();
                     }
                     catch (NotReadablePropertyException e)
@@ -309,7 +309,7 @@ namespace Spring.Expressions
                         throw new NotWritablePropertyException( "Cannot read the value of '" + node.getText() + "' property in the expression.", e );
                     }
                 }
-                ((BaseNode)node).SetValueInternal( target, evalContext, newValue );
+                SetValue(((BaseNode)node), target, evalContext, newValue);
             }
             else
             {

@@ -60,8 +60,8 @@ namespace Spring.Expressions
         protected override object Get(object context, EvaluationContext evalContext)
         {
 #if NET_2_0 && !MONO_2_0
-            string text = Left.GetValueInternal( context, evalContext ) as string;
-            string pattern = Right.GetValueInternal( context, evalContext ) as string;
+            string text = GetLeftValue( context, evalContext ) as string;
+            string pattern = GetRightValue( context, evalContext ) as string;
 
             return LikeOperator.LikeString(text, pattern, CompareMethod.Text);
 #else

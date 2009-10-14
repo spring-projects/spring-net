@@ -53,7 +53,7 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            return ((BaseNode) this.getFirstChild()).GetValueInternal(evalContext.RootContext, evalContext);
+            return GetValue(((BaseNode) this.getFirstChild()), evalContext.RootContext, evalContext);
         }
     }
 }

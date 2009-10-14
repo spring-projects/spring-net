@@ -56,36 +56,30 @@ namespace Spring.Expressions
         protected override object Get(object context, EvaluationContext evalContext)
         {
             string name = this.getText();
-            object function = evalContext.Variables[name];
 
             object[] argValues = ResolveArguments(evalContext);
+
+            object function = evalContext.Variables[name];
 
             // delegate?
             Delegate callback = function as Delegate;
             if (callback != null)
             {
-                return new SafeMethod(callback.Method).Invoke(callback.Target, argValues);
+                return InvokeDelegate(callback, argValues);
             }
 
             // lambda?
             LambdaExpressionNode lambda = function as LambdaExpressionNode;
             if (lambda != null)
             {
-                string[] argNames = lambda.ArgumentNames;
-
-                if (argValues.Length != argNames.Length)
+                try
                 {
-                    throw new InvalidOperationException(
-                        "Function '" + name + "' requires " + argNames.Length + " arguments.");
+                    return GetValueWithArguments(lambda, context, evalContext, argValues);
                 }
-
-                IDictionary arguments = new Hashtable();
-                for (int i = 0; i < argValues.Length; i++)
+                catch (ArgumentMismatchException ame)
                 {
-                    arguments[argNames[i]] = argValues[i];
+                    throw new InvalidOperationException( "Failed executing function " + name + ": " + ame.Message );
                 }
-
-                return lambda.GetValueInternal(context, evalContext, arguments);
             }
 
             if (function == null)
@@ -93,6 +87,11 @@ namespace Spring.Expressions
                 throw new InvalidOperationException("Function '" + name + "' is not defined.");
             }
             throw new InvalidOperationException("Function '" + name + "' is defined but of unknown type.");
+        }
+
+        private object InvokeDelegate(Delegate callback, object[] arguments)
+        {
+            return new SafeMethod(callback.Method).Invoke(callback.Target, arguments);
         }
     }
 }

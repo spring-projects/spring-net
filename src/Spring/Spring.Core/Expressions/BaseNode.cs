@@ -31,12 +31,19 @@ namespace Spring.Expressions
     //[Serializable]
     public abstract class BaseNode : SpringAST, IExpression
     {
+        protected class ArgumentMismatchException : Exception
+        {
+            public ArgumentMismatchException(string message)
+                : base(message)
+            { }
+        }
+
         #region EvaluationContext class
 
         /// <summary>
         /// Holds the state during evaluating an expression.
         /// </summary>
-        public class EvaluationContext
+        protected class EvaluationContext
         {
             #region Holder classes
 
@@ -147,7 +154,7 @@ namespace Spring.Expressions
         /// Returns node's value.
         /// </summary>
         /// <returns>Node's value.</returns>
-        object IExpression.GetValue()
+        public object GetValue()
         {
             return GetValue(null, null);
         }
@@ -157,7 +164,7 @@ namespace Spring.Expressions
         /// </summary>
         /// <param name="context">Object to evaluate node against.</param>
         /// <returns>Node's value.</returns>
-        object IExpression.GetValue(object context)
+        public object GetValue(object context)
         {
             return GetValue(context, null);
         }
@@ -168,28 +175,9 @@ namespace Spring.Expressions
         /// <param name="context">Object to evaluate node against.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <returns>Node's value.</returns>
-        object IExpression.GetValue(object context, IDictionary variables)
-        {
-            return GetValue(context, variables);
-        }
-
-        /// <summary>
-        /// This is the entrypoint into evaluating this expression.
-        /// </summary>
         public object GetValue(object context, IDictionary variables)
         {
             EvaluationContext evalContext = new EvaluationContext(context, variables);
-            return Get(context, evalContext);
-        }
-
-        /// <summary>
-        /// Called internally during expression evaluation
-        /// </summary>
-        /// <param name="context">Object to evaluate node against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns></returns>
-        protected internal object GetValueInternal(object context, EvaluationContext evalContext)
-        {
             return Get(context, evalContext);
         }
 
@@ -200,11 +188,19 @@ namespace Spring.Expressions
         protected abstract object Get(object context, EvaluationContext evalContext);
 
         /// <summary>
+        /// Evaluates this node for the given context, switching local variables map to the ones specified in <paramref name="arguments"/>.
+        /// </summary>
+        protected virtual object Get(object context, EvaluationContext evalContext, object[] arguments)
+        {
+            throw new NotSupportedException("Node " + this.GetType() + " does not support evaluation with arguments");
+        }
+
+        /// <summary>
         /// Sets node's value for the given context.
         /// </summary>
         /// <param name="context">Object to evaluate node against.</param>
         /// <param name="newValue">New value for this node.</param>
-        void IExpression.SetValue(object context, object newValue)
+        public void SetValue(object context, object newValue)
         {
             SetValue(context, null, newValue);
         }
@@ -215,25 +211,9 @@ namespace Spring.Expressions
         /// <param name="context">Object to evaluate node against.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <param name="newValue">New value for this node.</param>
-        void IExpression.SetValue(object context, IDictionary variables, object newValue)
-        {
-            SetValue( context,variables,newValue );
-        }
-
-        /// <summary>
-        /// This is the entrypoint into evaluating this expression.
-        /// </summary>
         public void SetValue(object context, IDictionary variables, object newValue)
         {
             EvaluationContext evalContext = new EvaluationContext(context, variables);
-            Set(context, evalContext, newValue);
-        }
-
-        /// <summary>
-        /// Called internally during expression evaluation.
-        /// </summary>
-        protected internal void SetValueInternal(object context, EvaluationContext evalContext, object newValue)
-        {
             Set(context, evalContext, newValue);
         }
 
@@ -263,14 +243,22 @@ namespace Spring.Expressions
             return string.Format("{0}[{1}]", this.GetType().Name, base.GetHashCode());
         }
 
-        protected static object GetValueInternal(BaseNode node, object context, EvaluationContext evalContext)
+        /// <summary>
+        /// Evaluates this node, switching local variables map to the ones specified in <paramref name="arguments"/>.
+        /// </summary>
+        protected object GetValueWithArguments(BaseNode node, object context, EvaluationContext evalContext, object[] arguments)
         {
-            return node.GetValueInternal(context, evalContext);
+            return node.Get(context, evalContext, arguments);
         }
 
-        protected static void SetValueInternal(BaseNode node, object context, EvaluationContext evalContext, object newValue)
+        protected object GetValue(BaseNode node, object context, EvaluationContext evalContext)
         {
-            node.SetValueInternal(context, evalContext, newValue);
+            return node.Get(context, evalContext);
+        }
+
+        protected void SetValue(BaseNode node, object context, EvaluationContext evalContext, object newValue)
+        {
+            node.Set(context, evalContext, newValue);
         }
     }
 }

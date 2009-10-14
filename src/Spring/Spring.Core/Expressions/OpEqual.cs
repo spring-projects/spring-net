@@ -41,11 +41,11 @@ namespace Spring.Expressions
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
-                protected OpEqual(SerializationInfo info, StreamingContext context)
+        protected OpEqual(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Returns a value for the logical equality operator node.
         /// </summary>
@@ -54,8 +54,8 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object left = Left.GetValueInternal( context, evalContext );
-            object right = Right.GetValueInternal( context, evalContext );
+            object left = GetLeftValue(context, evalContext);
+            object right = GetRightValue(context, evalContext);
 
             if (left == null)
             {
@@ -73,16 +73,16 @@ namespace Spring.Expressions
                 }
                 else
                 {
-                    return left.Equals(right);                    
+                    return left.Equals(right);
                 }
             }
             else if (left.GetType().IsEnum && right is string)
             {
-                return left.Equals(Enum.Parse(left.GetType(), (string) right));
+                return left.Equals(Enum.Parse(left.GetType(), (string)right));
             }
             else if (right.GetType().IsEnum && left is string)
             {
-                return right.Equals(Enum.Parse(right.GetType(), (string) left));
+                return right.Equals(Enum.Parse(right.GetType(), (string)left));
             }
             else
             {

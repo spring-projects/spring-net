@@ -53,8 +53,9 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object key = ((BaseNode)this.getFirstChild()).GetValueInternal(context, evalContext);
-            object value = ((BaseNode)this.getFirstChild().getNextSibling()).GetValueInternal(context, evalContext);
+            BaseNode firstChild = (BaseNode)this.getFirstChild();
+            object key = GetValue(firstChild, context, evalContext);
+            object value = GetValue((BaseNode) firstChild.getNextSibling(), context, evalContext);
 
             return new DictionaryEntry(key, value);
         }

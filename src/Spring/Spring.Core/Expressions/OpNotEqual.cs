@@ -54,31 +54,31 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object left = Left.GetValueInternal( context, evalContext );
-            object right = Right.GetValueInternal( context, evalContext );
+            object leftVal = GetLeftValue( context, evalContext );
+            object rightVal = GetRightValue( context, evalContext );
 
-            if (left == null)
+            if (leftVal == null)
             {
-                return (right != null);
+                return (rightVal != null);
             }
-            else if (right == null)
+            else if (rightVal == null)
             {
                 return true;
             }
-            else if (left.GetType() == right.GetType())
+            else if (leftVal.GetType() == rightVal.GetType())
             {
-                if (left is Array)
+                if (leftVal is Array)
                 {
-                    return !ArrayUtils.AreEqual(left as Array, right as Array);
+                    return !ArrayUtils.AreEqual(leftVal as Array, rightVal as Array);
                 }
                 else
                 {
-                    return !left.Equals(right);
+                    return !leftVal.Equals(rightVal);
                 }
             }
             else
             {
-                return CompareUtils.Compare(left, right) != 0;
+                return CompareUtils.Compare(leftVal, rightVal) != 0;
             }
         }
     }

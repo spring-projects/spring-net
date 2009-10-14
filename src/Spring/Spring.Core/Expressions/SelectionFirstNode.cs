@@ -67,7 +67,7 @@ namespace Spring.Expressions
                 foreach (object o in enumerable)
                 {
                     evalContext.ThisContext = o;
-                    bool isMatch = (bool) expression.GetValueInternal(o, evalContext);
+                    bool isMatch = (bool)GetValue(expression, o, evalContext);
                     if (isMatch)
                     {
                         return o;

@@ -64,21 +64,15 @@ namespace Spring.Expressions
             }
 
             object[] argValues = ResolveArguments(evalContext);
-            string[] argNames = lambda.ArgumentNames;
-            
-            if (argValues.Length != argNames.Length)
-            {
-                throw new InvalidOperationException(
-                    "Function '" + name + "' requires " + argNames.Length + " arguments.");
-            }
 
-            IDictionary arguments = new Hashtable();
-            for (int i = 0; i < argValues.Length; i++)
+            try
             {
-                arguments[argNames[i]] = argValues[i];
+                return GetValueWithArguments(lambda, context, evalContext, argValues);
             }
-            
-            return lambda.GetValueInternal(context, evalContext, arguments);
+            catch (ArgumentMismatchException ame)
+            {
+                throw new InvalidOperationException("Failed executing function '" + name + "': " + ame.Message);
+            }
         }
     }
 }

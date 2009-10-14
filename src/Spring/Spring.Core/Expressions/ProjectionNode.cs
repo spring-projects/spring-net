@@ -69,7 +69,7 @@ namespace Spring.Expressions
                 foreach(object o in enumerable)
                 {
                     evalContext.ThisContext = o;
-                    projectedList.Add(expression.GetValueInternal(o, evalContext));
+                    projectedList.Add(GetValue(expression, o, evalContext));
                 }
             }
             return projectedList;

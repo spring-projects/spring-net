@@ -54,19 +54,19 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object left = Left.GetValueInternal( context, evalContext );
-            object right = Right.GetValueInternal( context, evalContext );
+            object leftVal = GetLeftValue(context, evalContext );
+            object rightVal = GetRightValue(context, evalContext );
 
-            if (NumberUtils.IsNumber(left) && NumberUtils.IsNumber(right))
+            if (NumberUtils.IsNumber(leftVal) && NumberUtils.IsNumber(rightVal))
             {
-                return NumberUtils.Modulus(left, right);
+                return NumberUtils.Modulus(leftVal, rightVal);
             }
             else
             {
                 throw new ArgumentException("Cannot calculate modulus for instances of '"
-                                            + left.GetType().FullName
+                                            + leftVal.GetType().FullName
                                             + "' and '"
-                                            + right.GetType().FullName
+                                            + rightVal.GetType().FullName
                                             + "'.");
             }
         }

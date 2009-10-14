@@ -58,8 +58,7 @@ namespace Spring.Expressions
             AST entryNode = this.getFirstChild();
             while (entryNode != null)
             {
-                DictionaryEntry entry = (DictionaryEntry)
-                                        ((MapEntryNode)entryNode).GetValueInternal( evalContext.RootContext, evalContext );
+                DictionaryEntry entry = (DictionaryEntry) GetValue(((MapEntryNode)entryNode), evalContext.RootContext, evalContext );
                 entries[entry.Key] = entry.Value;
                 entryNode = entryNode.getNextSibling();
             }

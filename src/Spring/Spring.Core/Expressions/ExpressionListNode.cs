@@ -59,7 +59,7 @@ namespace Spring.Expressions
             AST node = this.getFirstChild();
             while (node != null)
             {
-                result = ((BaseNode) node).GetValueInternal(context, evalContext);
+                result = GetValue(((BaseNode) node), context, evalContext);
                 node = node.getNextSibling();
             }
             return result;

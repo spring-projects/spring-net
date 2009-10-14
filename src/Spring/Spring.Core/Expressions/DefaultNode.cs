@@ -53,10 +53,10 @@ namespace Spring.Expressions
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object left = Left.GetValueInternal(context, evalContext);
-            object right = Right.GetValueInternal(context, evalContext);
+            object leftVal = GetValue(Left, context, evalContext);
+            object rightVal = GetValue(Right, context, evalContext);
 
-            return (left != null ? left : right);
+            return (leftVal != null ? leftVal : rightVal);
         }
     }
 }

@@ -56,8 +56,8 @@ namespace Spring.Expressions
         /// </returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            object left = Left.GetValueInternal( context, evalContext );
-            object right = Right.GetValueInternal( context, evalContext );
+            object left = GetLeftValue( context, evalContext );
+            object right = GetRightValue( context, evalContext );
 
             if (right == null)
             {
