@@ -55,8 +55,7 @@ namespace Spring.Aspects.Cache
     /// <author>Aleksandar Seovic</author>
     public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
     {
-        // shared logger instance
-        //private static readonly ILog logger = LogManager.GetLogger(typeof(InvalidateCacheAdvice));
+        private readonly Hashtable _invalidateCacheAttributeCache = new Hashtable();
 
         /// <summary>
         /// Executes after <paramref name="target"/> <paramref name="method"/>
@@ -81,8 +80,7 @@ namespace Spring.Aspects.Cache
         /// <seealso cref="AopAlliance.Intercept.IMethodInterceptor.Invoke"/>
         public void AfterReturning(object returnValue, MethodInfo method, object[] arguments, object target)
         {
-            InvalidateCacheAttribute[] cacheInfoArray =
-                (InvalidateCacheAttribute[]) method.GetCustomAttributes(typeof(InvalidateCacheAttribute), false);
+            InvalidateCacheAttribute[] cacheInfoArray = GetInvalidateCacheInfo(method);
 
             if (cacheInfoArray.Length > 0)
             {
@@ -115,6 +113,17 @@ namespace Spring.Aspects.Cache
                     }
                 }
             }
+        }
+
+        private InvalidateCacheAttribute[] GetInvalidateCacheInfo(MethodInfo method)
+        {
+            InvalidateCacheAttribute[] cacheInfoArray = (InvalidateCacheAttribute[]) _invalidateCacheAttributeCache[method];
+            if (cacheInfoArray == null)
+            {
+                cacheInfoArray = (InvalidateCacheAttribute[])GetCustomAttributes(method, typeof(InvalidateCacheAttribute));
+                _invalidateCacheAttributeCache[method] = cacheInfoArray;
+            }
+            return cacheInfoArray;
         }
     }
 }

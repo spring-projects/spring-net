@@ -77,7 +77,7 @@ namespace Spring.Transaction.Interceptor
 		/// <summary>
 		/// Cache of <see cref="ITransactionAttribute"/>s, keyed by method and target class.
 		/// </summary>
-		private IDictionary _transactionAttibuteCache = new Hashtable();
+		private readonly IDictionary _transactionAttibuteCache = new Hashtable();
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -135,11 +135,10 @@ namespace Spring.Transaction.Interceptor
 		public ITransactionAttribute ReturnTransactionAttribute(MethodInfo method, Type targetType)
 		{
 			object cacheKey = getCacheKey(method, targetType);
-            object cached = null;
 
-            lock (_transactionAttibuteCache)
+		    lock (_transactionAttibuteCache)
             {
-                cached = _transactionAttibuteCache[cacheKey];
+                object cached = _transactionAttibuteCache[cacheKey];
 
                 if (cached != null)
                 {
@@ -228,7 +227,7 @@ namespace Spring.Transaction.Interceptor
 
 		private object getCacheKey(MethodBase method, Type targetType)
 		{
-			return targetType + String.Empty + method.GetHashCode();
+			return string.Intern(targetType.AssemblyQualifiedName + "." + method);
 		}
 
         private ITransactionAttribute computeTransactionAttribute(MethodInfo method, Type targetType)

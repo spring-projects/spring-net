@@ -375,14 +375,13 @@ namespace Spring.Aspects.Cache
 
         private void ExpectAttributeRetrieval( MethodInfo method )
         {
-            mockInvocation.ExpectAndReturn( "Method", method );
-            mockInvocation.ExpectAndReturn( "Method", method );
+            mockInvocation.SetValue( "Method", method );
         }
 
         private void ExpectCacheKeyGeneration( MethodInfo method, params object[] arguments )
         {
-            mockInvocation.ExpectAndReturn( "Method", method );
-            mockInvocation.ExpectAndReturn( "Arguments", arguments );
+//            mockInvocation.ExpectAndReturn( "Method", method );
+            mockInvocation.SetValue( "Arguments", arguments );
         }
 
         private void ExpectCacheInstanceRetrieval( string cacheName, ICache cache )

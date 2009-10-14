@@ -20,6 +20,8 @@
 
 #region Imports
 
+using System;
+using System.Collections;
 using System.Reflection;
 using Common.Logging;
 using Spring.Aop;
@@ -52,8 +54,19 @@ namespace Spring.Aspects.Cache
     /// <author>Aleksandar Seovic</author>
     public class CacheParameterAdvice : BaseCacheAdvice, IAfterReturningAdvice
     {
-        // shared logger instance
-        private static readonly ILog logger = LogManager.GetLogger(typeof(CacheParameterAdvice));
+        private class CacheParameterInfo
+        {
+            public readonly ParameterInfo[] Parameters;
+            public readonly CacheParameterAttribute[][] CacheParameterAttributes;
+
+            public CacheParameterInfo(ParameterInfo[] parameters, CacheParameterAttribute[][] cacheParameterAttributes)
+            {
+                Parameters = parameters;
+                CacheParameterAttributes = cacheParameterAttributes;
+            }
+        }
+
+        private readonly Hashtable _cacheParameterInfoCache = new Hashtable();
 
         /// <summary>
         /// Executes after target <paramref name="method"/>
@@ -78,35 +91,54 @@ namespace Spring.Aspects.Cache
         /// <seealso cref="AopAlliance.Intercept.IMethodInterceptor.Invoke"/>
         public void AfterReturning(object returnValue, MethodInfo method, object[] arguments, object target)
         {
-            ParameterInfo[] parameters = method.GetParameters();
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                ParameterInfo p = parameters[i];
-                CacheParameterAttribute[] paramInfoArray =
-                    (CacheParameterAttribute[])p.GetCustomAttributes(typeof(CacheParameterAttribute), false);
+            bool isLogDebugEnabled = logger.IsDebugEnabled;
 
-                bool isLogDebugEnabled = logger.IsDebugEnabled;
-                foreach (CacheParameterAttribute paramInfo in paramInfoArray)
+            CacheParameterInfo cpi = GetCacheParameterInfo(method);
+            CacheParameterAttribute[][] cacheParameterAttributes = cpi.CacheParameterAttributes;
+
+            for (int i = 0; i < cacheParameterAttributes.Length; i++)
+            {
+                foreach (CacheParameterAttribute paramInfo in cacheParameterAttributes[i])
                 {
                     if (EvalCondition(paramInfo.Condition, paramInfo.ConditionExpression, arguments[i], null))
                     {
                         ICache cache = GetCache(paramInfo.CacheName);
-                        AssertUtils.ArgumentNotNull(cache, "CacheName",
-                                                    "Parameter cache with the specified name [" + paramInfo.CacheName +
-                                                    "] does not exist.");
+                        if (cache == null)
+                        {
+                            throw new ArgumentNullException("CacheName", string.Format("Parameter cache with the specified name [{0}] does not exist.", paramInfo.CacheName));
+                        }
                         object key = paramInfo.KeyExpression.GetValue(arguments[i]);
-                        #region Instrumentation
 
+                        #region Instrumentation
                         if (isLogDebugEnabled)
                         {
-                            logger.Debug("Caching parameter for key [" + key + "].");
+                            logger.Debug(string.Format("Caching parameter for key [{0}].", key));
                         }
-
                         #endregion
+
                         cache.Insert(key, arguments[i], paramInfo.TimeToLiveTimeSpan);
                     }
                 }
             }
+        }
+
+        private CacheParameterInfo GetCacheParameterInfo(MethodInfo method)
+        {
+            CacheParameterInfo cpi = (CacheParameterInfo) _cacheParameterInfoCache[method];
+            if (cpi == null)
+            {
+                ParameterInfo[] parameters = method.GetParameters();
+                CacheParameterAttribute[][] parameterInfos = new CacheParameterAttribute[parameters.Length][];
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    ParameterInfo p = parameters[i];
+                    CacheParameterAttribute[] paramInfoArray = (CacheParameterAttribute[])GetCustomAttributes(p, typeof(CacheParameterAttribute));
+                    parameterInfos[i] = paramInfoArray;
+                }
+                cpi = new CacheParameterInfo(parameters, parameterInfos);
+                _cacheParameterInfoCache[method] = cpi;
+            }
+            return cpi;
         }
     }
 }

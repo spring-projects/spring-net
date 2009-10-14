@@ -22,7 +22,7 @@
 
 using System;
 using System.Reflection;
-
+using Common.Logging;
 using Spring.Caching;
 using Spring.Context;
 using Spring.Expressions;
@@ -37,10 +37,23 @@ namespace Spring.Aspects.Cache
     /// access to common functionality, such as obtaining a cache instance.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    public class BaseCacheAdvice : IApplicationContextAware
+    public abstract class BaseCacheAdvice : IApplicationContextAware
     {
+        /// <summary>
+        /// Shared logger instance
+        /// </summary>
+        protected readonly ILog logger;
+
         private IApplicationContext applicationContext;
-        
+
+        /// <summary>
+        /// Create a new default instance.
+        /// </summary>
+        protected BaseCacheAdvice()
+        {
+            logger = LogManager.GetLogger(this.GetType());
+        }
+
         /// <summary>
         /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
         /// object runs in.
@@ -138,8 +151,8 @@ namespace Spring.Aspects.Cache
         /// <summary>
         /// Retrieves custom attribute for the specified attribute type.
         /// </summary>
-        /// <param name="method">
-        /// Method to get attribute from.
+        /// <param name="attributeProvider">
+        /// Method/Parameter to get attribute from.
         /// </param>
         /// <param name="attributeType">
         /// Attribute type.
@@ -147,14 +160,32 @@ namespace Spring.Aspects.Cache
         /// <returns>
         /// Attribute instance if one is found, <c>null</c> otherwise.
         /// </returns>
-        protected static object GetCustomAttribute(MethodInfo method, Type attributeType)
+        protected object GetCustomAttribute(ICustomAttributeProvider attributeProvider, Type attributeType)
         {
-            object[] attributes = method.GetCustomAttributes(attributeType, false);
+            object[] attributes = attributeProvider.GetCustomAttributes(attributeType, false);
             if (attributes.Length > 0)
             {
                 return attributes[0];
             }
             return null;
+        }
+
+        /// <summary>
+        /// Retrieves custom attribute for the specified attribute type.
+        /// </summary>
+        /// <param name="attributeProvider">
+        /// Method/Parameter to get attribute from.
+        /// </param>
+        /// <param name="attributeType">
+        /// Attribute type.
+        /// </param>
+        /// <returns>
+        /// Attribute instance if one is found, <c>null</c> otherwise.
+        /// </returns>
+        protected object[] GetCustomAttributes(ICustomAttributeProvider attributeProvider, Type attributeType)
+        {
+            object[] attributes = attributeProvider.GetCustomAttributes(attributeType, false);
+            return attributes;
         }
     }
 }

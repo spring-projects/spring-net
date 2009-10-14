@@ -170,6 +170,5 @@ namespace Spring.Caching
             get { return timeToLiveTimeSpan; }
         }
 
-        #endregion
-    }
+        #endregion    }
 }

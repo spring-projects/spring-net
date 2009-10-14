@@ -50,11 +50,22 @@ namespace Spring.Aspects.Cache
     /// <author>Aleksandar Seovic</author>
     public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
     {
-        // shared logger instance
-        private static readonly ILog logger = LogManager.GetLogger(typeof (CacheResultAdvice));
+        // NullValue
+        private static readonly object NullValue = new object();
 
-		// NullValue
-		private static readonly object NullValue = new object();
+        private class CacheResultInfo
+        {
+            public readonly CacheResultAttribute ResultInfo;
+            public readonly CacheResultItemsAttribute[] ItemInfoArray;
+
+            public CacheResultInfo(CacheResultAttribute resultInfo, CacheResultItemsAttribute[] itemInfoArray)
+            {
+                ResultInfo = resultInfo;
+                ItemInfoArray = itemInfoArray;
+            }
+        }
+
+        private readonly Hashtable _cacheResultAttributeCache = new Hashtable();
 
         /// <summary>
         /// Applies caching around a method invocation.
@@ -85,17 +96,14 @@ namespace Spring.Aspects.Cache
         /// </exception>
         public object Invoke(IMethodInvocation invocation)
         {
-            CacheResultAttribute resultInfo =
-                (CacheResultAttribute) GetCustomAttribute(invocation.Method, typeof (CacheResultAttribute));
-            CacheResultItemsAttribute[] itemInfoArray =
-                (CacheResultItemsAttribute[])invocation.Method.GetCustomAttributes(typeof(CacheResultItemsAttribute), false);
+            CacheResultInfo cacheResultInfo = GetCacheResultInfo(invocation.Method);
 
             bool cacheHit = false;
-            object returnValue = GetReturnValue(invocation, resultInfo, out cacheHit);
+            object returnValue = GetReturnValue(invocation, cacheResultInfo.ResultInfo, out cacheHit);
 
-            if (!cacheHit && itemInfoArray.Length > 0 && returnValue is IEnumerable)
+            if (!cacheHit && cacheResultInfo.ItemInfoArray.Length > 0 && returnValue is IEnumerable)
             {
-                CacheResultItems((IEnumerable)returnValue, itemInfoArray);
+                CacheResultItems((IEnumerable)returnValue, cacheResultInfo.ItemInfoArray);
             }
 
             return returnValue;
@@ -160,7 +168,7 @@ namespace Spring.Aspects.Cache
                         }
 
                         #endregion
-                        cache.Insert(resultKey, (returnValue==null)?NullValue:returnValue, resultInfo.TimeToLiveTimeSpan);
+                        cache.Insert(resultKey, (returnValue == null) ? NullValue : returnValue, resultInfo.TimeToLiveTimeSpan);
                     }
                 }
                 else
@@ -175,7 +183,7 @@ namespace Spring.Aspects.Cache
                     #endregion
                 }
 
-                return (returnValue==NullValue)?null:returnValue;
+                return (returnValue == NullValue) ? null : returnValue;
             }
 
             cacheHit = false;
@@ -217,10 +225,25 @@ namespace Spring.Aspects.Cache
                         }
 
                         #endregion
-                        cache.Insert(itemKey, (item==null?NullValue:item), itemInfo.TimeToLiveTimeSpan);
+                        cache.Insert(itemKey, (item == null ? NullValue : item), itemInfo.TimeToLiveTimeSpan);
                     }
                 }
             }
+        }
+
+        private CacheResultInfo GetCacheResultInfo(MethodInfo method)
+        {
+            CacheResultInfo cacheResultInfo = (CacheResultInfo)_cacheResultAttributeCache[method];
+            // no need for locking here - last one wins
+            if (cacheResultInfo == null)
+            {
+                CacheResultAttribute resultInfo = (CacheResultAttribute)GetCustomAttribute(method, typeof(CacheResultAttribute));
+                CacheResultItemsAttribute[] itemInfoArray = (CacheResultItemsAttribute[])GetCustomAttributes(method, typeof(CacheResultItemsAttribute));
+
+                cacheResultInfo = new CacheResultInfo(resultInfo, itemInfoArray);
+                _cacheResultAttributeCache[method] = cacheResultInfo;
+            }
+            return cacheResultInfo;
         }
     }
 }
