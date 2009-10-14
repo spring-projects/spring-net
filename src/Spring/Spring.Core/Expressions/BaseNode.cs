@@ -78,24 +78,24 @@ namespace Spring.Expressions
             #endregion
 
             /// <summary>
-			/// Gets/Sets the root context of the current evaluation
-			/// </summary>
+            /// Gets/Sets the root context of the current evaluation
+            /// </summary>
             public object RootContext;
-			/// <summary>
-			/// Gets the type of the <see cref="RootContext"/>
-			/// </summary>
+            /// <summary>
+            /// Gets the type of the <see cref="RootContext"/>
+            /// </summary>
             public Type RootContextType { get { return (RootContext == null) ? null : RootContext.GetType(); } }
-			/// <summary>
-			/// Gets/Sets the current context of the current evaluation
-			/// </summary>
+            /// <summary>
+            /// Gets/Sets the current context of the current evaluation
+            /// </summary>
             public object ThisContext;
-			/// <summary>
-			/// Gets/Sets global variables of the current evaluation
-			/// </summary>
+            /// <summary>
+            /// Gets/Sets global variables of the current evaluation
+            /// </summary>
             public IDictionary Variables;
-			/// <summary>
-			/// Gets/Sets local variables of the current evaluation
-			/// </summary>
+            /// <summary>
+            /// Gets/Sets local variables of the current evaluation
+            /// </summary>
             public IDictionary LocalVariables;
 
             /// <summary>
@@ -133,7 +133,7 @@ namespace Spring.Expressions
         /// Create a new instance
         /// </summary>
         public BaseNode()
-        {}
+        { }
 
         /// <summary>
         /// Create a new instance from SerializationInfo
@@ -178,8 +178,8 @@ namespace Spring.Expressions
         /// </summary>
         public object GetValue(object context, IDictionary variables)
         {
-            EvaluationContext evalContext = new EvaluationContext( context,variables );
-            return Get( context, evalContext );
+            EvaluationContext evalContext = new EvaluationContext(context, variables);
+            return Get(context, evalContext);
         }
 
         /// <summary>
@@ -223,10 +223,10 @@ namespace Spring.Expressions
         /// <summary>
         /// This is the entrypoint into evaluating this expression.
         /// </summary>
-        public void SetValue(object context,IDictionary variables,object newValue)
+        public void SetValue(object context, IDictionary variables, object newValue)
         {
-            EvaluationContext evalContext = new EvaluationContext( context,variables );
-            Set( context, evalContext,newValue );
+            EvaluationContext evalContext = new EvaluationContext(context, variables);
+            Set(context, evalContext, newValue);
         }
 
         /// <summary>
@@ -254,13 +254,23 @@ namespace Spring.Expressions
         {
             throw new NotSupportedException("You cannot set the value for the node of this type: [" + this.GetType().Name + "].");
         }
-        
+
         /// <summary>
         /// Returns a string representation of this node instance.
         /// </summary>
         public override string ToString()
         {
             return string.Format("{0}[{1}]", this.GetType().Name, base.GetHashCode());
+        }
+
+        protected static object GetValueInternal(BaseNode node, object context, EvaluationContext evalContext)
+        {
+            return node.GetValueInternal(context, evalContext);
+        }
+
+        protected static void SetValueInternal(BaseNode node, object context, EvaluationContext evalContext, object newValue)
+        {
+            node.SetValueInternal(context, evalContext, newValue);
         }
     }
 }

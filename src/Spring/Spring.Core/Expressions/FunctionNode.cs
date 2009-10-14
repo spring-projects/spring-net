@@ -56,40 +56,43 @@ namespace Spring.Expressions
         protected override object Get(object context, EvaluationContext evalContext)
         {
             string name = this.getText();
-            LambdaExpressionNode lambda = evalContext.Variables[name] as LambdaExpressionNode;
-            Delegate function = evalContext.Variables[name] as Delegate;
-
-            if (lambda == null && function == null)
-            {
-                throw new InvalidOperationException("Function '" + name + "' is not defined.");
-            }
+            object function = evalContext.Variables[name];
 
             object[] argValues = ResolveArguments(evalContext);
 
             // delegate?
-            if (function != null)
+            Delegate callback = function as Delegate;
+            if (callback != null)
             {
-                SafeMethod m = new SafeMethod(function.Method);
-                return m.Invoke(function.Target, argValues);
-//                return function.DynamicInvoke(argValues);
+                return new SafeMethod(callback.Method).Invoke(callback.Target, argValues);
             }
 
-            // lambda!
-            string[] argNames = lambda.ArgumentNames;
-
-            if (argValues.Length != argNames.Length)
+            // lambda?
+            LambdaExpressionNode lambda = function as LambdaExpressionNode;
+            if (lambda != null)
             {
-                throw new InvalidOperationException(
-                    "Function '" + name + "' requires " + argNames.Length + " arguments.");
+                string[] argNames = lambda.ArgumentNames;
+
+                if (argValues.Length != argNames.Length)
+                {
+                    throw new InvalidOperationException(
+                        "Function '" + name + "' requires " + argNames.Length + " arguments.");
+                }
+
+                IDictionary arguments = new Hashtable();
+                for (int i = 0; i < argValues.Length; i++)
+                {
+                    arguments[argNames[i]] = argValues[i];
+                }
+
+                return lambda.GetValueInternal(context, evalContext, arguments);
             }
 
-            IDictionary arguments = new Hashtable();
-            for (int i = 0; i < argValues.Length; i++)
+            if (function == null)
             {
-                arguments[argNames[i]] = argValues[i];
+                throw new InvalidOperationException("Function '" + name + "' is not defined.");
             }
-
-            return lambda.GetValueInternal(context, evalContext, arguments);
+            throw new InvalidOperationException("Function '" + name + "' is defined but of unknown type.");
         }
     }
 }

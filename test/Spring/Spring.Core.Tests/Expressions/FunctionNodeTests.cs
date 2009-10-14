@@ -22,7 +22,9 @@
 
 using System;
 using System.Collections;
+using System.Threading;
 using NUnit.Framework;
+using Spring.Collections;
 
 #endregion
 
@@ -70,51 +72,55 @@ namespace Spring.Expressions
             Assert.AreEqual(string.Format("{0},{1},{2}", this.GetHashCode(), str.Text, str2.Text), exp.GetValue(null, vars));
         }
 
+        private delegate string TestCallback(string arg1, string arg2);
+
+        private string Concat(string arg1, string arg2)
+        {
+            return string.Format("{0},{1},{2}", this.GetHashCode(), arg1, arg2);
+        }
+
+#if NET_2_0
         [Category("Performance")]
         [Test, Explicit]
         public void ExecutesDelegatePerformance()
         {
-            Hashtable vars = new Hashtable();
-            TestCallback concat = new TestCallback(Concat);
-            vars["concat"] = concat;
+            Hashtable vars = new Hashtable(5);
+            WaitCallback noop = delegate (object arg)
+                                      {
+                                          // noop
+                                      };
+            vars["noop"] = noop;
 
             FunctionNode fn = new FunctionNode();
-            fn.Text = "concat";
+            fn.Text = "noop";
             StringLiteralNode str = new StringLiteralNode();
-            str.Text = "theValue";
+            str.Text = "theArg";
             fn.addChild(str);
-            StringLiteralNode str2 = new StringLiteralNode();
-            str2.Text = "theValue";
-            fn.addChild(str2);
 
             IExpression exp = fn;
 
-            string result = string.Format("{0},{1},{2}", this.GetHashCode(), str.Text, str2.Text);
+            string result = str.Text;
+//            string result = string.Format("{0},{1},{2}", this.GetHashCode(), str.Text, str2.Text);
 
             int ITERATIONS = 1000000;
 
             StopWatch watch = new StopWatch();
+//            using (watch.Start("Duration Direct: {0}"))
+//            {
+//                for (int i = 0; i < ITERATIONS; i++)
+//                {
+//                    noop(str.getText());
+//                }
+//            }
+
             using (watch.Start("Duration SpEL: {0}"))
             {
                 for (int i = 0; i < ITERATIONS; i++)
                 {
-                    Assert.AreEqual(result, exp.GetValue(null, vars));
-                }
-            }
-
-            using (watch.Start("Duration Direct: {0}"))
-            {
-                for (int i = 0; i < ITERATIONS; i++)
-                {
-                    Assert.AreEqual(result, concat(str.Text, str2.Text));
+                    exp.GetValue(null, vars);
                 }
             }
         }
-
-        private delegate object TestCallback(object arg1, object arg2);
-        private object Concat(object arg1, object arg2)
-        {
-            return string.Format("{0},{1},{2}", this.GetHashCode(), arg1, arg2);
-        }
+#endif
     }
 }

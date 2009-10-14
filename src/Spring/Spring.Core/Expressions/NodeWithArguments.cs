@@ -47,7 +47,7 @@ namespace Spring.Expressions
         /// </summary>
         public NodeWithArguments(string text)
         {
-            this.Text = text;
+            this.setText(text);
         }
 
         /// <summary>
@@ -129,10 +129,11 @@ namespace Spring.Expressions
         protected object[] ResolveArguments(EvaluationContext evalContext)
         {
             InitializeNode();
-            object[] values = new object[args.Length];
-            for (int i = 0; i < args.Length; i++)
+            int length = args.Length;
+            object[] values = new object[length];
+            for (int i = 0; i < length; i++)
             {
-                values[i] = ResolveArgument(i, evalContext);
+                values[i] = ResolveArgumentInternal(i, evalContext);
             }
             return values;
         }
@@ -167,14 +168,23 @@ namespace Spring.Expressions
         protected object ResolveArgument(int position, EvaluationContext evalContext)
         {
             InitializeNode();
-            if (args[position] is LambdaExpressionNode)
+            return ResolveArgumentInternal(position, evalContext);
+        }
+
+        /// <summary>
+        /// Resolves the argument without ensuring <see cref="InitializeNode"/> was called.
+        /// </summary>
+        /// <param name="position">Argument position.</param>
+        /// <param name="evalContext">Current expression evaluation context.</param>
+        /// <returns>Resolved argument value.</returns>
+        private object ResolveArgumentInternal(int position, EvaluationContext evalContext)
+        {
+            BaseNode arg = args[position];
+            if (arg is LambdaExpressionNode)
             {
-                return args[position];
+                return arg;
             }
-            else
-            {
-                return ((BaseNode)args[position]).GetValueInternal(evalContext.ThisContext, evalContext);
-            }
+            return arg.GetValueInternal(evalContext.ThisContext, evalContext);
         }
 
         /// <summary>
