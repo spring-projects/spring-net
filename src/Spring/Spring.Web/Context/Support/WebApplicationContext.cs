@@ -44,7 +44,7 @@ namespace Spring.Context.Support
 {
     /// <summary>
     /// Web application context, taking the context definition files
-    /// from the file system or from URLs. 
+    /// from the file system or from URLs.
     ///
     /// Treats resource paths as web resources, when using
     /// IApplicationContext.GetResource. Resource paths are considered relative
@@ -129,7 +129,7 @@ namespace Spring.Context.Support
         static WebApplicationContext()
         {
             ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
-            
+
             // register for ContextRegistry.Cleared event - we need to discard our cache in this case
             ContextRegistry.Cleared += new EventHandler(OnContextRegistryCleared);
 
@@ -229,7 +229,7 @@ namespace Spring.Context.Support
 
             ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
             bool isLogDebugEnabled = s_weblog.IsDebugEnabled;
-            
+
             lock (s_webContextCache)
             {
                 if (isLogDebugEnabled)
@@ -296,7 +296,7 @@ namespace Spring.Context.Support
                         {
                             if (s_weblog.IsErrorEnabled)
                             {
-                                s_weblog.Error(string.Format("failed creating context '{0}'", contextName), ex);
+                                s_weblog.Error(string.Format("failed creating context '{0}', Stacktrace:\n{1}", contextName, new StackTrace()), ex);
                             }
 #if NET_1_1
                             if (ConfigurationUtils.IsConfigurationException(ex))

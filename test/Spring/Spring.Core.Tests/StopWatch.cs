@@ -68,7 +68,7 @@ namespace Spring
         /// <summary>
         /// Starts the timer and returns and "handle" that must be disposed to stop the timer.
         /// </summary>
-        /// <param name="outputFormat">the output format string, that is used to render the result message</param>
+        /// <param name="outputFormat">the output format string, that is used to render the result message. Use '{0}' to print the elapsed timespan.</param>
         /// <returns>the handle to dispose for stopping the timer</returns>
         public IDisposable Start(string outputFormat)
         {
