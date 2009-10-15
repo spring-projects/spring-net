@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-
+using System.Collections;
 using NUnit.Framework;
 
 #endregion
@@ -81,9 +81,9 @@ namespace Spring.Util
     {
         public event PopHandler Pop;
 
-        public void OnPop (string soda, EventRaiser raiser) 
+        public IDictionary OnPop (string soda, EventRaiser raiser) 
         {
-            raiser.Raise (Pop, this, soda);
+            return raiser.Raise (Pop, this, soda);
         }
 
         public void OnPopWithBadNumberOfArguments (string soda, EventRaiser raiser) 

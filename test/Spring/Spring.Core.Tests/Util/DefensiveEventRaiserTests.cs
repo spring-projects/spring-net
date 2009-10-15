@@ -21,28 +21,53 @@
 #region Imports
 
 using System;
-
+using System.Collections;
 using NUnit.Framework;
 
 #endregion
 
 namespace Spring.Util
 {
-	/// <summary>
-	/// Unit tests for the DefensiveEventRaiser class.
+    /// <summary>
+    /// Unit tests for the DefensiveEventRaiser class.
     /// </summary>
     /// <author>Rick Evans</author>
-	[TestFixture]
+    [TestFixture]
     public sealed class DefensiveEventRaiserTests
     {
         [Test]
-        public void RaiseSwallowsExceptionRaisedByHandlers () 
+        public void RaiseSwallowsExceptionRaisedByHandlers()
         {
-            OneThirstyDude dude = new OneThirstyDude ();
-            Soda bru = new Soda ();
-            bru.Pop += new PopHandler (dude.HandlePopWithException);
-            bru.OnPop ("Iron Brew", new DefensiveEventRaiser ());
-            Assert.AreEqual ("Iron Brew", dude.Soda); // should have got through before exception was thrown
+            OneThirstyDude dude = new OneThirstyDude();
+            Soda bru = new Soda();
+            bru.Pop += new PopHandler(dude.HandlePopWithException);
+            bru.OnPop("Iron Brew", new DefensiveEventRaiser());
+            Assert.AreEqual("Iron Brew", dude.Soda); // should have got through before exception was thrown
         }
-	}
+
+#if NET_2_0
+        [Test]
+        public void RaiseSwallowsExceptionRaisedByHandlerButCallsAllOtherHandlers()
+        {
+            bool firstCall = false;
+            bool secondCall = false;
+            bool thirdCall = false;
+
+            OneThirstyDude dude = new OneThirstyDude();
+            Soda bru = new Soda();
+            bru.Pop += new PopHandler(delegate { firstCall = true; });
+            bru.Pop += new PopHandler(delegate { secondCall = true; throw new Exception(); });
+            bru.Pop += new PopHandler(delegate { thirdCall = true; });
+
+            DefensiveEventRaiser eventRaiser = new DefensiveEventRaiser();
+
+            IDictionary exceptions = bru.OnPop( "Iron Brew", eventRaiser );
+
+            Assert.AreEqual(1, exceptions.Count);
+            Assert.IsTrue(firstCall);
+            Assert.IsTrue(secondCall);
+            Assert.IsTrue(thirdCall);
+        }
+#endif
+    }
 }

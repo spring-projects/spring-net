@@ -145,8 +145,10 @@ namespace Spring.Context.Support
         private string _name;
         private DateTime _startupDate;
         private readonly bool _isCaseSensitive;
+        private EventRaiser _eventRaiser;
 
         #endregion
+
 
         #region Constructor (s) / Destructor
 
@@ -202,6 +204,7 @@ namespace Spring.Context.Support
             _name = (StringUtils.IsNullOrEmpty(name)) ? DefaultRootContextName : name;
             _isCaseSensitive = caseSensitive;
             _parentApplicationContext = parentApplicationContext;
+            EventRaiser = CreateEventRaiser();
             _objectFactoryPostProcessors = new ArrayList();
             _defaultObjectPostProcessors = new ArrayList();
             AddDefaultObjectPostProcessor(new ObjectPostProcessorChecker());
@@ -244,10 +247,10 @@ namespace Spring.Context.Support
 
             #endregion
 
-            // TODO: any reason, why Closed event is raised before destroying objectfactory?
-            new DefensiveEventRaiser().Raise(
-                ContextEvent, this,
-                new ContextEventArgs(ContextEventArgs.ContextEvent.Closed));
+            // Closed event is raised before destroying objectfactory to enable registered IApplicationEventListeners 
+            // to handle the event before they get disposed.
+            PublishEvent(this, new ContextClosedEventArgs());
+
             ObjectFactory.Dispose();
         }
 
@@ -279,6 +282,18 @@ namespace Spring.Context.Support
         public object SyncRoot
         {
             get { return this; }
+        }
+
+        /// <summary>
+        /// Set the <see cref="EventRaiser"/> to be used by this context.
+        /// </summary>
+        public EventRaiser EventRaiser
+        {
+            set
+            {
+                AssertUtils.ArgumentNotNull(value, "EventRaiser");
+                _eventRaiser = value;
+            }
         }
 
         /// <summary>
@@ -387,7 +402,15 @@ namespace Spring.Context.Support
         /// </param>
         protected virtual void OnContextEvent(object source, ApplicationEventArgs e)
         {
-            new DefensiveEventRaiser().Raise(ContextEvent, source, e);
+            _eventRaiser.Raise(ContextEvent, source, e);
+        }
+
+        /// <summary>
+        /// Create the <see cref="EventRaiser"/> strategy to be used
+        /// </summary>
+        protected virtual EventRaiser CreateEventRaiser()
+        {
+            return new DefensiveEventRaiser();
         }
 
         /// <summary>
@@ -444,6 +467,7 @@ namespace Spring.Context.Support
         /// </summary>
         protected virtual void OnPostRefresh()
         {
+            PublishEvent(this, new ContextRefreshedEventArgs());
         }
 
         /// <summary>
@@ -864,9 +888,10 @@ namespace Spring.Context.Support
                 RegisterObjectPostProcessors(objectFactory);
                 InitEventRegistry();
                 InitMessageSource();
-                OnRefresh();
 
                 RefreshApplicationEventListeners();
+
+                OnRefresh();
 
                 #region Instrumentation
 
@@ -880,10 +905,6 @@ namespace Spring.Context.Support
                 objectFactory.PreInstantiateSingletons();
 
                 OnPostRefresh();
-
-                new DefensiveEventRaiser().Raise(
-                    ContextEvent, this,
-                    new ContextEventArgs(ContextEventArgs.ContextEvent.Refreshed));
 
                 #region Instrumentation
 

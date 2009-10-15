@@ -35,7 +35,7 @@ namespace Spring.Objects.Events.Support
     /// <author>Griffin Caprio</author>
     public class EventRegistry : IEventRegistry
     {
-        private IList _publishers;
+        private readonly IList _publishers;
 
         /// <summary>
         /// Creates a new instance of the EventRegistry class.

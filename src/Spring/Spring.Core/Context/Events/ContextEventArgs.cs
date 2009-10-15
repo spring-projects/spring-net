@@ -49,7 +49,7 @@ namespace Spring.Context.Events
 			Closed
 		} ;
 
-		private ContextEvent _contextEvent;
+		private readonly ContextEvent _contextEvent;
 
 		/// <summary>
 		/// Creates a new instance of the ContextEventArgs class to represent the
@@ -80,4 +80,28 @@ namespace Spring.Context.Events
 				"{0} [{1}]", GetType().Name, Event);
 		}
 	}
+
+    /// <summary>
+    /// Event object sent to listeners registered with an
+    /// <see cref="Spring.Context.IApplicationContext"/> to inform them of
+    /// context <see cref="ContextEventArgs.ContextEvent.Refreshed"/> lifecycle event.
+    /// </summary>
+    public class ContextRefreshedEventArgs : ContextEventArgs
+    {
+        public ContextRefreshedEventArgs() : base(ContextEvent.Refreshed)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Event object sent to listeners registered with an
+    /// <see cref="Spring.Context.IApplicationContext"/> to inform them of
+    /// context <see cref="ContextEventArgs.ContextEvent.Closed"/> lifecycle event.
+    /// </summary>
+    public class ContextClosedEventArgs : ContextEventArgs
+    {
+        public ContextClosedEventArgs() : base(ContextEvent.Closed)
+        {
+        }
+    }
 }
