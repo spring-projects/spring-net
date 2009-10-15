@@ -63,7 +63,7 @@ namespace Spring.Objects.Factory.Config
             MockObjectFactoryPostProcessor mofp = new MockObjectFactoryPostProcessor();
 
             IConfigurableApplicationContext ctx = new XmlApplicationContext(false, "name", false, null);
-            ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(of =>
+            ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(delegate(IConfigurableListableObjectFactory of)
                 {
                     of.RegisterSingleton("mofp", mofp);
                 }));
