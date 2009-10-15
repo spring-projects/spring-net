@@ -1,4 +1,4 @@
-// $ANTLR 2.7.6 (2005-12-22): Expressions/Expression.g -> ExpressionParserTokenTypes.txt$
+// $ANTLR 2.7.6 (2005-12-22): Expression.g -> ExpressionParserTokenTypes.txt$
 ExpressionParser    // output token vocab name
 EXPR=4
 OPERAND=5
