@@ -52,15 +52,15 @@
 
     <!-- if on linux using mono consider using java call -->
     <target name="compileGrammar" description="calls ANTLR to generate Lexers/Parsers">
-        <if test="${not framework::exists('mono-1.0')}">
           <exec program="antlr-2.7.6.exe"
                 basedir="${spring.basedir}\build-support\tools\antlr-2.7.6\"
-                commandline="-o Expressions\Parser Expressions\Expression.g"
-                failonerror="true"/>
-        </if>
+                commandline="-o ${project::get-base-directory()}\Expressions\Parser ${project::get-base-directory()}\Expressions\Expression.g"
+                failonerror="true" verbose="true" />
+<!--
         <if test="${framework::exists('mono-1.0')}">
                 <exec program="java" commandline="-cp ${spring.basedir}/build-support/tools/antlr-2.7.6/antlr.jar antlr.Tool -o Expressions/Parser Expressions/Expression.g" failonerror="true"/>
         </if>
+-->
 <!--
         ANTLR 2.7.6 win executable has missing dependency, so we have to use JAR file
         <exec program="java.exe" commandline="-cp ${spring.basedir}\build-support\tools\antlr-2.7.6\antlr.jar antlr.Tool -o Expressions\Parser Expressions\Expression.g" failonerror="true"/>
