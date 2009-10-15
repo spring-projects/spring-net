@@ -653,6 +653,7 @@
     <Compile Include="Objects\Factory\Config\CommandLineArgsVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\ConfigSectionVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\ConnectionStringsVariableSource.cs" />
+    <Compile Include="Objects\Factory\Config\DelegateObjectFactoryConfigurer.cs" />
     <Compile Include="Objects\Factory\Config\DependencyDescriptor.cs" />
     <Compile Include="Objects\Factory\Config\DictionaryVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\IConfigurableFactoryObject.cs" />

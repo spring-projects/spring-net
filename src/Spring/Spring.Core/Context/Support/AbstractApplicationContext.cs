@@ -523,9 +523,9 @@ namespace Spring.Context.Support
             #endregion
         }
 
-        private void ProcessObjectFactoryPostProcessors(IList orderedFactoryProcessors)
+        private void ProcessObjectFactoryPostProcessors(IList objectFactoryPostProcessors)
         {
-            foreach (IObjectFactoryPostProcessor processor in orderedFactoryProcessors)
+            foreach (IObjectFactoryPostProcessor processor in objectFactoryPostProcessors)
             {
                 processor.PostProcessObjectFactory(ObjectFactory);
             }

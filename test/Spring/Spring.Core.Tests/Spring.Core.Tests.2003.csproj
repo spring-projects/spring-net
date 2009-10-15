@@ -1348,6 +1348,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\DelegateObjectFactoryConfigurerTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\ConstructorArgumentValuesTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -70,5 +70,20 @@ namespace Spring.Core.IO
         {
             new ConfigSectionResource((XmlElement)null);
         }
+
+        [Test]
+        public void ThrowsIoExceptionIfConfigSectionDoesNotExist()
+        {
+            IResource res = new ConfigSectionResource("DOES NOT EXIST");
+            try
+            {
+                Stream istm = res.InputStream;
+                Assert.Fail();
+            }
+            catch(IOException ioex)
+            {
+                Console.WriteLine(ioex);
+            }
+        }
     }
 }

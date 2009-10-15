@@ -177,7 +177,14 @@ namespace Spring.Core.IO
         /// <seealso cref="Spring.Core.IO.IInputStreamSource"/>
         public override Stream InputStream
         {
-            get { return new MemoryStream(Encoding.UTF8.GetBytes(configElement.OuterXml)); }
+            get
+            {
+                if (configElement == null)
+                {
+                    throw new FileNotFoundException(string.Format("Configuration Section '{0}' does not exist", this.sectionName), this.sectionName);
+                }
+                return new MemoryStream(Encoding.UTF8.GetBytes(configElement.OuterXml));
+            }
         }
 
         #endregion
