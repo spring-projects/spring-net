@@ -22,9 +22,11 @@
 
 using System;
 using System.Text;
+using System.Reflection;
 using Spring.Aop.Framework.DynamicProxy;
 using Spring.Core.TypeResolution;
 using Spring.Util;
+using Spring.Reflection.Dynamic;
 
 #endregion
 
@@ -51,15 +53,21 @@ namespace Spring.Aop.Framework
     public class ProxyConfig
     {
         #region Fields
+
+        private static readonly ConstructorInfo cachedAopProxyFactoryCtorInfo =
+            typeof(ProxyConfig).Assembly.GetType("Spring.Aop.Framework.DynamicProxy.CachedAopProxyFactory", false, false).GetConstructor(Type.EmptyTypes);
+
         private bool proxyTargetType;
 	    private bool proxyTargetAttributes = true;
 		private bool optimize;
 		private bool frozen;
 
-	    private IAopProxyFactory aopProxyFactory =
-	        ObjectUtils.InstantiateType( typeof(ProxyConfig).Assembly, "Spring.Aop.Framework.DynamicProxy.CachedAopProxyFactory") as IAopProxyFactory;
+        private IAopProxyFactory aopProxyFactory =
+            DynamicConstructor.Create(cachedAopProxyFactoryCtorInfo).Invoke(ObjectUtils.EmptyObjects) as IAopProxyFactory;
+
 		private bool exposeProxy;
         private readonly object syncRoot = new object();
+
         #endregion
 
         #region Properites

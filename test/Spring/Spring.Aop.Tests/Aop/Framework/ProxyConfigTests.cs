@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Diagnostics;
 using NUnit.Framework;
 
 #endregion
@@ -39,5 +40,22 @@ namespace Spring.Aop.Framework
 		{
 
 		}
+
+#if NET_2_0
+        [Category("Performance")]
+        [Test, Explicit]
+        public void InstantiationPerformance()
+        {
+            int iterations = 10000;
+
+            Stopwatch watch = Stopwatch.StartNew();
+            for (int i = 0; i < iterations; i++)
+            {
+                new ProxyConfig();
+            }
+            watch.Stop();
+            Console.WriteLine("Instantiation time: {0}ms", watch.ElapsedMilliseconds);
+        }
+#endif
 	}
 }
