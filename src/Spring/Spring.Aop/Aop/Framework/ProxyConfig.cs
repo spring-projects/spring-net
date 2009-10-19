@@ -54,16 +54,15 @@ namespace Spring.Aop.Framework
     {
         #region Fields
 
-        private static readonly ConstructorInfo cachedAopProxyFactoryCtorInfo =
-            typeof(ProxyConfig).Assembly.GetType("Spring.Aop.Framework.DynamicProxy.CachedAopProxyFactory", false, false).GetConstructor(Type.EmptyTypes);
+        private static readonly IDynamicConstructor cachedAopProxyFactoryDynCtor =
+            new SafeConstructor(typeof(ProxyConfig).Assembly.GetType("Spring.Aop.Framework.DynamicProxy.CachedAopProxyFactory", false, false).GetConstructor(Type.EmptyTypes));
 
         private bool proxyTargetType;
 	    private bool proxyTargetAttributes = true;
 		private bool optimize;
 		private bool frozen;
 
-        private IAopProxyFactory aopProxyFactory =
-            DynamicConstructor.Create(cachedAopProxyFactoryCtorInfo).Invoke(ObjectUtils.EmptyObjects) as IAopProxyFactory;
+        private IAopProxyFactory aopProxyFactory = cachedAopProxyFactoryDynCtor.Invoke(ObjectUtils.EmptyObjects) as IAopProxyFactory;
 
 		private bool exposeProxy;
         private readonly object syncRoot = new object();
