@@ -55,13 +55,19 @@ namespace Spring.Messaging.Nms.Core
 
 
         #endregion
+
         #region Fields
 
         /// <summary>
         /// Timeout value indicating that a receive operation should
 	    /// check if a message is immediately available without blocking.	 
         /// </summary>
-        public static readonly long DEFAULT_RECEIVE_TIMEOUT = -1;
+        public static readonly long RECEIVE_TIMEOUT_NO_WAIT = -1;
+
+        /// <summary>
+        /// Timeout value indicating a blocking receive without timeout.
+        /// </summary>
+        public static readonly long RECEIVE_TIMEOUT_INDEFINITE_WAIT = 0;
 
         private NmsTemplateResourceFactory transactionalResourceFactory;
 
@@ -76,7 +82,7 @@ namespace Spring.Messaging.Nms.Core
 
         private bool pubSubNoLocal = false;
 
-        private long receiveTimeout = DEFAULT_RECEIVE_TIMEOUT;
+        private long receiveTimeout = RECEIVE_TIMEOUT_NO_WAIT;
 
         private bool explicitQosEnabled = false;
 
@@ -284,7 +290,7 @@ namespace Spring.Messaging.Nms.Core
         }
 
         /// <summary>
-        /// Gets or sets the receive timeout to use for recieve calls.
+        /// Gets or sets the receive timeout to use for recieve calls (in milliseconds)
         /// </summary>
         /// <remarks>The default is -1, which means no timeout.</remarks>
         /// <value>The receive timeout.</value>
@@ -1064,9 +1070,9 @@ namespace Spring.Messaging.Nms.Core
                 if (resourceHolder != null && resourceHolder.HasTimeout)
                 {
                     timeout = Convert.ToInt64(resourceHolder.TimeToLiveInMilliseconds);
-                }
+                }    
                 IMessage message = (timeout > 0)
-                                      ? consumer.Receive(new TimeSpan(timeout))
+                                      ? consumer.Receive(TimeSpan.FromMilliseconds(timeout))
                                       : consumer.Receive();
                 if (session.Transacted)
                 {
