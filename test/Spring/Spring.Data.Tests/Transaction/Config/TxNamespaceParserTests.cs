@@ -96,8 +96,8 @@ namespace Spring.Transaction.Config
         {
             Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/tx"));
             Assert.IsTrue(ctx.ContainsObjectDefinition(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME));
-           
-            string className = typeof(TransactionAttributeSourceAdvisor).FullName;
+
+            string className = typeof(ObjectFactoryTransactionAttributeSourceAdvisor).FullName;
             string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
 
             Assert.IsTrue(ctx.ContainsObjectDefinition(targetName));

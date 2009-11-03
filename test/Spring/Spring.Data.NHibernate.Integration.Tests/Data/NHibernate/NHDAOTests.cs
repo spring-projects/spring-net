@@ -63,9 +63,17 @@ namespace Spring.Data.NHibernate
         [SetUp]
         public void SetUp()
         {
-            BasicConfigurator.Configure();
+            //BasicConfigurator.Configure();
             string assemblyName = GetType().Assembly.GetName().Name;
-            ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/NHDAOTests.xml");
+            //ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/NHDAOTests.xml");
+            string[] contextFiles = new string[]
+                                        {
+                                            "assembly://" + assemblyName + "/Spring.Data.NHibernate/Controllers.xml",
+                                            "assembly://" + assemblyName + "/Spring.Data.NHibernate/Services.xml",
+                                            "assembly://" + assemblyName + "/Spring.Data.NHibernate/Dao.xml"
+
+        };
+            ctx = new XmlApplicationContext(contextFiles);
             ctx.Name = AbstractApplicationContext.DefaultRootContextName;
 
             if (!ContextRegistry.IsContextRegistered(AbstractApplicationContext.DefaultRootContextName))

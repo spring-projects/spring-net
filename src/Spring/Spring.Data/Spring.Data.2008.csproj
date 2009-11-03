@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -247,6 +247,7 @@
     <Compile Include="Transaction\Interceptor\MethodMapTransactionAttributeSource.cs" />
     <Compile Include="Transaction\Interceptor\NameMatchTransactionAttributeSource.cs" />
     <Compile Include="Transaction\Interceptor\NoRollbackRuleAttribute.cs" />
+    <Compile Include="Transaction\Interceptor\ObjectFactoryTransactionAttributeSourceAdvisor.cs" />
     <Compile Include="Transaction\Interceptor\RollbackRuleAttribute.cs" />
     <Compile Include="Transaction\Interceptor\RuleBasedTransactionAttribute.cs" />
     <Compile Include="Transaction\Interceptor\TransactionAspectSupport.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Transaction\Interceptor\TransactionAttributeEditor.cs" />
     <Compile Include="Transaction\Interceptor\TransactionAttributeSourceAdvisor.cs" />
     <Compile Include="Transaction\Interceptor\TransactionAttributeSourceEditor.cs" />
+    <Compile Include="Transaction\Interceptor\AbstractTransactionAttributeSourcePointcut.cs" />
     <Compile Include="Transaction\Interceptor\TransactionInterceptor.cs" />
     <Compile Include="Transaction\Interceptor\TransactionProxyFactoryObject.cs" />
     <Compile Include="Transaction\InvalidIsolationLevelException.cs" />

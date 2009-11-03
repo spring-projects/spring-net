@@ -26,9 +26,9 @@ using Spring.Aop.Support;
 namespace Spring.Transaction.Interceptor
 {
 	/// <summary>
-	/// Advisor driven by a <see cref="Spring.Transaction.Interceptor.ITransactionAttributeSource"/>, used to exclude
-	/// a <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/> from methods that
-	/// are non-transactional.
+	/// Advisor driven by a <see cref="Spring.Transaction.Interceptor.ITransactionAttributeSource"/>, used to include
+	/// a <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/> for methods that
+	/// are transactional.
 	/// </summary>
 	/// <remarks>
 	/// <p>

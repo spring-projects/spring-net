@@ -65,28 +65,40 @@ namespace Spring.Transaction.Config
         protected override AbstractObjectDefinition ParseInternal(XmlElement element, ParserContext parserContext)
         {
             ConfigureAutoProxyCreator(parserContext, element);
-
-            string transactionManagerName = GetAttributeValue(element, TxNamespaceUtils.TRANSACTION_MANAGER_ATTRIBUTE);
-            Type sourceType = typeof(AttributesTransactionAttributeSource);
+           
+            //Create the TransactionAttributeSource
+            RootObjectDefinition sourceDef = new RootObjectDefinition(typeof(AttributesTransactionAttributeSource));
+            sourceDef.Role = ObjectRole.ROLE_INFRASTRUCTURE;
+            string sourceName = parserContext.ReaderContext.RegisterWithGeneratedName(sourceDef);
 
             //Create the TransactionInterceptor definition.
             RootObjectDefinition interceptorDefinition = new RootObjectDefinition(typeof(TransactionInterceptor));
             interceptorDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
-            interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_MANAGER_PROPERTY,
-                                                     new RuntimeObjectReference(transactionManagerName));
-            interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_ATTRIBUTE_SOURCE,
-                                                     new RootObjectDefinition(sourceType));
+            RegisterTransactionManager(element, interceptorDefinition);
+            interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_ATTRIBUTE_SOURCE, new RuntimeObjectReference(sourceName));
+            String interceptorName = parserContext.ReaderContext.RegisterWithGeneratedName(interceptorDefinition);
 
-            //Create the TransactionAttributeSourceAdvisor definition.
-            RootObjectDefinition advisorDefinition = new RootObjectDefinition(typeof(TransactionAttributeSourceAdvisor));
-            advisorDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
-            advisorDefinition.PropertyValues.Add(TRANSACTION_INTERCEPTOR, interceptorDefinition);
+            // Create the TransactionAttributeSourceAdvisor definition.
+            RootObjectDefinition advisorDef = new RootObjectDefinition(typeof(ObjectFactoryTransactionAttributeSourceAdvisor));
+            advisorDef.Role = ObjectRole.ROLE_INFRASTRUCTURE;
+            advisorDef.PropertyValues.Add("transactionAttributeSource", new RuntimeObjectReference(sourceName));
+            advisorDef.PropertyValues.Add("adviceObjectName", interceptorName);
+            
             if (element.HasAttribute(ORDER))
             {
-                advisorDefinition.PropertyValues.Add(ORDER, GetAttributeValue(element, ORDER));
+                advisorDef.PropertyValues.Add(ORDER, GetAttributeValue(element, ORDER));
             }
 
-            return advisorDefinition;
+            return advisorDef;
+        }
+
+        private void RegisterTransactionManager(XmlElement element, RootObjectDefinition interceptorDefinition)
+        {
+            string transactionManagerName = GetAttributeValue(element, TxNamespaceUtils.TRANSACTION_MANAGER_ATTRIBUTE);
+            interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_MANAGER_PROPERTY,
+                                          new RuntimeObjectReference(transactionManagerName));
+            
+            
         }
 
         /// <summary>
