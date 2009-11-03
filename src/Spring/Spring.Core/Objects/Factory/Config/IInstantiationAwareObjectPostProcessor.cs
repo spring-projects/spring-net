@@ -27,15 +27,22 @@ namespace Spring.Objects.Factory.Config {
 	/// <summary>
 	/// Subinterface of
 	/// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>
-	/// that adds a before-instantiation callback.
+	/// that adds a before-instantiation callback and a callback after instantiation but before
+	/// explicit properties are set or autowiring occurs.
 	/// </summary>
 	/// <remarks>
-	/// <p>
-	/// Typical use cases might include being used to suppress the default
-	/// instantiation of specific target objects, perhaps in favour of creating
-	/// proxies with special <c>Spring.Aop.ITargetSource</c>s (pooling targets,
-	/// lazily initializing targets, etc).
-	/// </p>
+	/// <para>
+	/// Typically used to suppress default instantiation for specific target objects,
+	/// for example to create proxies with special <c>Spring.Aop.ITargetSource</c>s (pooling targets,
+	/// lazily initializing targets, etc), or to implement additional injection strategies such as field
+	/// injection.
+	/// </para>
+	/// <para>
+	/// NOTE: This interface is a special purpose interface, mainly for internal use within the framework.
+	/// It is recommended to implement the plain <see cref="IObjectPostProcessor"/> interface as far as 
+	/// possible, or to derive from <see cref="IInstantiationAwareObjectPostProcessor"/> in order to be shielded
+	/// from extension to this interface.
+	/// </para>
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Rick Evans (.NET)</author>

@@ -39,10 +39,10 @@ namespace Spring.Aop.Framework.AutoProxy
     /// any particular aspects, such as pooling aspects.
     /// </summary>
     /// <remarks>
-    /// <p>Subclasses must implement the abstract findCandidateAdvisors() method
+    /// <p>Subclasses must implement the abstract FindCandidateAdvisors() method
     /// to return a list of Advisors applying to any object. Subclasses can also
-    /// override the inherited shouldSkip() method to exclude certain objects
-    /// from autoproxying, but they must be careful to invoke the shouldSkip()
+    /// override the inherited ShouldSkip() method to exclude certain objects
+    /// from autoproxying, but they must be careful to invoke the ShouldSkip()
     /// method of this class, which tries to avoid circular reference problems
     /// and infinite loops.</p>
     /// <p>Advisors or advices requiring ordering should implement the Ordered interface.
