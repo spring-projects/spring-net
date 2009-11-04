@@ -241,6 +241,7 @@
     <Compile Include="Transaction\HeuristicCompletionException.cs" />
     <Compile Include="Transaction\IllegalTransactionStateException.cs" />
     <Compile Include="Transaction\Interceptor\AbstractFallbackTransactionAttributeSource.cs" />
+    <Compile Include="Transaction\Interceptor\AbstractTransactionAttributeSourcePointcut.cs" />
     <Compile Include="Transaction\Interceptor\AttributesTransactionAttributeSource.cs" />
     <Compile Include="Transaction\Interceptor\DefaultTransactionAttribute.cs" />
     <Compile Include="Transaction\Interceptor\DefaultTransactionAttributeSourceAdvisor.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Transaction\Interceptor\MethodMapTransactionAttributeSource.cs" />
     <Compile Include="Transaction\Interceptor\NameMatchTransactionAttributeSource.cs" />
     <Compile Include="Transaction\Interceptor\NoRollbackRuleAttribute.cs" />
+    <Compile Include="Transaction\Interceptor\ObjectFactoryTransactionAttributeSourceAdvisor.cs" />
     <Compile Include="Transaction\Interceptor\RollbackRuleAttribute.cs" />
     <Compile Include="Transaction\Interceptor\RuleBasedTransactionAttribute.cs" />
     <Compile Include="Transaction\Interceptor\TransactionAspectSupport.cs" />
