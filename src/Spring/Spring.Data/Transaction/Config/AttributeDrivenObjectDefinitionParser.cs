@@ -38,11 +38,6 @@ namespace Spring.Transaction.Config
     public class AttributeDrivenObjectDefinitionParser : AbstractObjectDefinitionParser
     {
         /// <summary>
-        /// Object property name for injection the TransactionInterceptor
-        /// </summary>
-        private static readonly string TRANSACTION_INTERCEPTOR = "transactionInterceptor";
-
-        /// <summary>
         /// The '<code>proxy-target-type</code>' attribute
         /// </summary>
         private static readonly string PROXY_TARGET_TYPE = "proxy-target-type";
