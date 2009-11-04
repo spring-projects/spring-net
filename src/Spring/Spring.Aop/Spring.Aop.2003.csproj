@@ -241,10 +241,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File RelPath="Aop\Framework\DynamicProxy\AbstractAopProxyFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "Aop\Framework\DynamicTargetSourceWrapper.cs"
                     SubType = "Code"
@@ -382,54 +378,67 @@
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\AbstractAdvisorAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\AbstractAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\AbstractFilteringAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\AttributeAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\DefaultAdvisorAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\IAdvisorRetrievalHelper.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\InfrastructureAdvisorAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\InheritanceBasedAopConfigurer.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\ITargetSourceCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\ObjectFactoryAdvisorRetrievalHelper.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\ObjectNameAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\PointcutFilteringAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\TypeNameAutoProxyCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -499,6 +508,7 @@
                 <Folder RelPath = "Aop\Framework\AutoProxy\.svn\tmp\text-base\" />
                 <File
                     RelPath = "Aop\Framework\AutoProxy\Target\AbstractPrototypeTargetSourceCreator.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -518,6 +528,11 @@
                 <Folder RelPath = "Aop\Framework\AutoProxy\Target\.svn\tmp\prop-base\" />
                 <Folder RelPath = "Aop\Framework\AutoProxy\Target\.svn\tmp\props\" />
                 <Folder RelPath = "Aop\Framework\AutoProxy\Target\.svn\tmp\text-base\" />
+                <File
+                    RelPath = "Aop\Framework\DynamicProxy\AbstractAopProxyFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "Aop\Framework\DynamicProxy\AbstractAopProxyMethodBuilder.cs"
                     SubType = "Code"

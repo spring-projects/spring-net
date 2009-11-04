@@ -66,6 +66,7 @@ Rebuilding Solutions using Nant and "solutions.build":
             <items basedir="${root.dir}/examples">
                 <include name="**/*.2003.sln" />
                 <exclude name="**/SpringAir.2003.sln" />  <!-- unfort. doesn't work -->
+		<exclude name="**/Spring.Calculator.2003.sln" />  <!-- need virtual directory to be setup in IIS -->
             </items>
         </in>
         <do>
@@ -76,7 +77,7 @@ Rebuilding Solutions using Nant and "solutions.build":
     </foreach>
 
     <!-- build "main" solution (extra call because of configuration 'debug-1.1') -->
-    <property name="solutionfile" value="Spring.NET.2003.sln" />
+    <property name="solutionfile" value="${root.dir}/Spring.NET.2003.sln" />
     <property name="solutionconfiguration" value="${buildconfiguration}-1.1" />
     <call target="RebuildSolution-1.1" />
 
@@ -117,7 +118,7 @@ Rebuilding Solutions using Nant and "solutions.build":
   <target name="RebuildSolution-1.1" description="rebuilds a given VS2003 solution file">
   <!-- "c:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.exe" Spring.NET.2003.sln /rebuild Debug-1.1 /out solutions.build-1.1.log -->
     <echo message="Rebuilding VS2003 Solution ${solutionfile}" />
-    <exec program="${devenv11.exe}" basedir="${devenv11.exe}">
+    <exec program="${devenv11.exe}" basedir="${devenv11.exe}" verbose="true">
       <arg value="${solutionfile}" />
       <arg line="/rebuild ${solutionconfiguration}" />
       <arg line="/out solutions.build-1.1.log" />

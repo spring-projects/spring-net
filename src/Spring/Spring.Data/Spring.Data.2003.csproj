@@ -905,6 +905,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Transaction\Interceptor\AbstractTransactionAttributeSourcePointcut.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Transaction\Interceptor\AttributesTransactionAttributeSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -951,6 +956,11 @@
                 />
                 <File
                     RelPath = "Transaction\Interceptor\NoRollbackRuleAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Transaction\Interceptor\ObjectFactoryTransactionAttributeSourceAdvisor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
