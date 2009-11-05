@@ -146,7 +146,11 @@ namespace Spring.Data.NHibernate
         /// </summary>
         public void AfterPropertiesSet()
         {
+#if NH_2_1
+            this.filterDefinition = new FilterDefinition(this.filterName, this.defaultFilterCondition, this.parameterTypeMap, true);
+#else
             this.filterDefinition = new FilterDefinition(this.filterName, this.defaultFilterCondition, this.parameterTypeMap);
+#endif
         }
 
         /// <summary>
