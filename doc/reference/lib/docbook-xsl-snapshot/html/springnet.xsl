@@ -210,7 +210,7 @@
                 </td>
                 <td width="20%" align="center">
                   <span style="color:white;font-size:90%;">
-                    <a href="http://www.springsoure.com/" title="SpringSource">Sponsored by SpringSource</a>
+                    <a href="http://www.springsource.com/" title="SpringSource">Sponsored by SpringSource</a>
                   </span>
                 </td>
                 <td width="40%" align="right" valign="top">
