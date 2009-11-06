@@ -369,6 +369,60 @@
 
   <alias name="OracleODP-2.0" alias="Oracle.DataAccess.Client"/>
 
+  <!-- 11g changed the property to get the exception error code from ErrorCode to Number -->
+
+  <object id="OracleODP-11-2.0" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Oracle, Oracle provider V2.111.7.20"  />
+        <constructor-arg name="assemblyName" value="Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="connectionType" value="Oracle.DataAccess.Client.OracleConnection, Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="commandType" value="Oracle.DataAccess.Client.OracleCommand, Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="parameterType" value="Oracle.DataAccess.Client.OracleParameter, Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="dataAdapterType" value="Oracle.DataAccess.Client.OracleDataAdapter, Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="commandBuilderType" value="Oracle.DataAccess.Client.OracleCommandBuilder, Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="Oracle.DataAccess.Client.OracleDbType, Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="parameterDbTypeProperty" value="OracleDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value=":"/>
+        <constructor-arg name="exceptionType" value="Oracle.DataAccess.Client.OracleException, Oracle.DataAccess, Version=2.111.7.20, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>        
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Number.ToString()"/>
+
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>900,903,904,917,936,942,17006</value>
+        </property>
+        <property name="ErrorCodes.InvalidResultSetAccessCodes">
+          <value>17003</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>1</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>17002,17447</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>1,1400,1722,2291,2292</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>54</value>
+        </property>
+        <property name="ErrorCodes.CannotSerializeTransactionCodes">
+          <value>8177</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>60</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+
+
   
   <!-- My Sql -->
   

@@ -160,7 +160,12 @@
       <listitem>
         <para><code>OracleODP-2.0</code> (aliased to
         <code>System.DataAccess.Client</code>) - Oracle, Oracle provider
-        V2.102.2.20</para>
+        V2.102.2.20 (Oracle 10g)</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>OracleODP-11-2.0 </literal>- Oracle, Oracle provider
+        V2.111.7.20 (Oracle 11g)</para>
       </listitem>
 
       <listitem>
