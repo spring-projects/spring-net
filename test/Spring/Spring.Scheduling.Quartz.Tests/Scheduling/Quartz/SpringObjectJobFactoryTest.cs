@@ -25,7 +25,7 @@ using Quartz.Spi;
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>
-    /// 
+    /// Unit tests for SpringObjectJobFactory.
     /// </summary>
     /// <author>Marko Lahma (.NET)</author>
     [TestFixture]
@@ -33,12 +33,18 @@ namespace Spring.Scheduling.Quartz
     {
         private SpringObjectJobFactory factory;
 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
             factory = new SpringObjectJobFactory();
         }
 
+        /// <summary>
+        /// Tests job instane creation.
+        /// </summary>
         [Test]
         public void TestCreateJobInstance_SimpleDefaults()
         {
@@ -49,6 +55,9 @@ namespace Spring.Scheduling.Quartz
             Assert.IsNotNull(job, "Created job was null");
         }
 
+        /// <summary>
+        /// Tests job instane creation.
+        /// </summary>
         [Test]
         public void TestCreateJobInstance_SchedulerContextGiven()
         {
@@ -65,6 +74,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(123, job.Number, "integer injection failed");
         }
 
+        /// <summary>
+        /// Tests job instane creation.
+        /// </summary>
         [Test]
         public void TestCreateJobInstance_IgnoredProperties()
         {
@@ -82,18 +94,26 @@ namespace Spring.Scheduling.Quartz
 
     }
 
+    /// <summary>
+    /// Test job object that has injectable properties
+    /// </summary>
     public class InjectableJob : NoOpJob
     {
         private int number;
         private string foo;
 
-
+        /// <summary>
+        /// Simple int property.
+        /// </summary>
         public int Number
         {
             get { return number; }
             set { number = value; }
         }
 
+        /// <summary>
+        /// Simple string property.
+        /// </summary>
         public string Foo
         {
             get { return foo; }

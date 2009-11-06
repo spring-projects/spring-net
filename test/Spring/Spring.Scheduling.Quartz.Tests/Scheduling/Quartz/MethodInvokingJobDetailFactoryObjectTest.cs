@@ -21,7 +21,7 @@ using Quartz;
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>
-    /// 
+    /// Unit tests for MethodInvokingJobDetailFactoryObject.
     /// </summary>
     /// <author>Marko Lahma (.NET)</author>
     [TestFixture]
@@ -30,6 +30,9 @@ namespace Spring.Scheduling.Quartz
         private const string FACTORY_NAME = "springObjectFactory";
         private MethodInvokingJobDetailFactoryObject factory;
 
+        /// <summary>
+        /// Setup for the test.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
@@ -39,6 +42,9 @@ namespace Spring.Scheduling.Quartz
             factory.TargetObject = new InvocationCountingJob();
         }
 
+        /// <summary>
+        /// Tests JobDetail retrieval and it's set properties.
+        /// </summary>
         [Test]
         public void TestGetObject_MinimalDefaults()
         {
@@ -51,6 +57,9 @@ namespace Spring.Scheduling.Quartz
             Assert.IsTrue(jd.Volatile, "job was not volatile");
         }
 
+        /// <summary>
+        /// Tests JobDetail retrieval and it's set properties.
+        /// </summary>
         [Test]
         public void TestGetObject_ConcurrentJob()
         {
@@ -61,6 +70,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(jd.JobType, typeof(StatefulMethodInvokingJob), "factory did not create stateful method invoking job");
         }
 
+        /// <summary>
+        /// Tests JobDetail retrieval and it's set properties.
+        /// </summary>
         [Test]
         public void TestGetObject_TriggerListenersSet()
         {

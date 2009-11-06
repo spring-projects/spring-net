@@ -43,24 +43,36 @@ namespace Spring.Scheduling.Quartz
     {
         private MockRepository mockery;
 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
             mockery = new MockRepository();
         }
 
+        /// <summary>
+        /// Executes parametrized test.
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObject()
         {
             DoTestSchedulerFactoryObject(false, false);
         }
 
+        /// <summary>
+        /// Executes parametrized test.
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObjectWithExplicitJobDetail()
         {
             DoTestSchedulerFactoryObject(true, false);
         }
 
+        /// <summary>
+        /// Executes parametrized test.
+        /// </summary>
         [Test]
         [Ignore("Requires change to MethodInvoker for overriding target object and type")]
         public void TestSchedulerFactoryObjectWithPrototypeJob()
@@ -155,12 +167,18 @@ namespace Spring.Scheduling.Quartz
             mockery.VerifyAll();
         }
 
+        /// <summary>
+        /// Executes parametrized test.
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObjectWithExistingJobs()
         {
             DoTestSchedulerFactoryObjectWithExistingJobs(false);
         }
 
+        /// <summary>
+        /// Executes parametrized test.
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObjectWithOverwriteExistingJobs()
         {
@@ -245,12 +263,18 @@ namespace Spring.Scheduling.Quartz
             mockery.VerifyAll();
         }
 
+        /// <summary>
+        /// Executes parametrized test.
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObjectWithExistingJobsAndRaceCondition()
         {
             DoTestSchedulerFactoryObjectWithExistingJobsAndRaceCondition(false);
         }
-
+        
+        /// <summary>
+        /// Executes parametrized test.
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObjectWithOverwriteExistingJobsAndRaceCondition()
         {
@@ -344,6 +368,8 @@ namespace Spring.Scheduling.Quartz
             mockery.VerifyAll();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObjectWithListeners()
         {
@@ -478,6 +504,8 @@ namespace Spring.Scheduling.Quartz
             schedulerFactoryObject.Dispose();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObjectWithPlainQuartzObjects()
         {
@@ -551,6 +579,8 @@ namespace Spring.Scheduling.Quartz
             mockery.VerifyAll();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryObjectWithApplicationContext()
         {
@@ -587,6 +617,8 @@ namespace Spring.Scheduling.Quartz
             mockery.VerifyAll();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestJobDetailObjectWithApplicationContext()
         {
@@ -607,6 +639,8 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(ac, jobDetail.JobDataMap.Get("appCtx"));
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestMethodInvokingJobDetailFactoryObjectWithListenerNames()
         {
@@ -624,6 +658,8 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(names, result);
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestJobDetailObjectWithListenerNames()
         {
@@ -634,6 +670,8 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(names, result);
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestCronTriggerObjectWithListenerNames()
         {
@@ -644,6 +682,8 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(names, result);
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSimpleTriggerObjectWithListenerNames()
         {
@@ -654,6 +694,8 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(names, result);
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerWithTaskExecutor()
         {
@@ -686,6 +728,8 @@ namespace Spring.Scheduling.Quartz
             bean.Dispose();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerWithRunnable()
         {
@@ -714,6 +758,8 @@ namespace Spring.Scheduling.Quartz
             bean.Dispose();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerWithQuartzJobObject()
         {
@@ -745,6 +791,8 @@ namespace Spring.Scheduling.Quartz
             sfo.Dispose();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerWithSpringObjectJobFactory()
         {
@@ -778,6 +826,8 @@ namespace Spring.Scheduling.Quartz
             bean.Dispose();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerWithSpringObjectJobFactoryAndParamMismatchNotIgnored()
         {
@@ -813,6 +863,8 @@ namespace Spring.Scheduling.Quartz
             bean.Dispose();
         }
 
+        /// <summary>
+        /// </summary>
         [Test]
         public void TestSchedulerWithSpringObjectJobFactoryAndRunnable()
         {
@@ -845,6 +897,8 @@ namespace Spring.Scheduling.Quartz
             bean.Dispose();
         }
 
+        ///<summary>
+        ///</summary>
         [Test]
         public void TestSchedulerWithSpringObjectJobFactoryAndQuartzJobObject()
         {
@@ -877,6 +931,9 @@ namespace Spring.Scheduling.Quartz
             bean.Dispose();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Test]
         public void TestSchedulerWithSpringObjectJobFactoryAndJobSchedulingData()
         {
@@ -934,6 +991,9 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
+        /// <summary>
+        /// Tests calling of services with method invoke.
+        /// </summary>
         [Test]
         public void TestWithTwoAnonymousMethodInvokingJobDetailFactoryObjects()
         {
@@ -955,6 +1015,9 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
+        /// <summary>
+        /// Tests how quartz triggers and services interact.
+        /// </summary>
         [Test]
         public void TestSchedulerAccessorObject()
         {
@@ -976,6 +1039,9 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
+        /// <summary>
+        /// Tests how scheduler is exposed to application context.
+        /// </summary>
         [Test]
         public void TestSchedulerRepositoryExposure()
         {
@@ -1073,10 +1139,17 @@ namespace Spring.Scheduling.Quartz
         }
 
 
+        /// <summary>
+        /// Simple task executor that tracks invocation count.
+        /// </summary>
         public class CountingTaskExecutor : ITaskExecutor
         {
             internal int count;
 
+            /// <summary>
+            /// Executes task instance.
+            /// </summary>
+            /// <param name="task"></param>
             public void Execute(ThreadStart task)
             {
                 count++;
@@ -1084,12 +1157,18 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-
+        /// <summary>
+        /// Simple test job object.
+        /// </summary>
         public class DummyJobObject : QuartzJobObject
         {
             internal static int param;
             internal static int count;
 
+            /// <summary>
+            /// Sets parameter value.
+            /// </summary>
+            /// <param name="value"></param>
             public void SetParam(int value)
             {
                 if (param > 0)
@@ -1099,19 +1178,29 @@ namespace Spring.Scheduling.Quartz
                 param = value;
             }
 
+            /// <summary> 
+            /// Execute the actual job. The job data map will already have been
+            /// applied as object property values by execute. The contract is
+            /// exactly the same as for the standard Quartz execute method.
+            /// </summary>
             protected override void ExecuteInternal(JobExecutionContext jobExecutionContext)
             {
                 count++;
             }
         }
 
-
+        /// <summary>
+        /// Simple thread runnable.
+        /// </summary>
         public class DummyRunnable : IThreadRunnable
         {
             internal static int param;
-
             internal static int count;
 
+            /// <summary>
+            /// Sets param value.
+            /// </summary>
+            /// <param name="value"></param>
             public void SetParam(int value)
             {
                 if (param > 0)
@@ -1121,6 +1210,9 @@ namespace Spring.Scheduling.Quartz
                 param = value;
             }
 
+            /// <summary>
+            /// Runs thread runnable.
+            /// </summary>
             public void Run()
             {
                 count++;
@@ -1128,12 +1220,18 @@ namespace Spring.Scheduling.Quartz
         }
     }
 
+    /// <summary>
+    /// A simple job that tracks invocation count and allows setting of a simple parameter.
+    /// </summary>
     public class DummyJob : IJob
     {
         internal static int param;
-
         internal static int count;
 
+        /// <summary>
+        /// Sets param value.
+        /// </summary>
+        /// <param name="value"></param>
         public void SetParam(int value)
         {
             if (param > 0)
@@ -1143,21 +1241,39 @@ namespace Spring.Scheduling.Quartz
             param = value;
         }
 
+        ///<summary>
+        /// Executes this job instance.
+        ///</summary>
+        ///<param name="jobExecutionContext"></param>
         public void Execute(JobExecutionContext jobExecutionContext)
         {
             count++;
         }
     }
 
+    /// <summary>
+    /// Subclass of SchedulerFactoryObject for testing purposes.
+    /// </summary>
     public class TestSchedulerFactoryObject : SchedulerFactoryObject
     {
         private readonly IScheduler sched;
 
+        /// <summary>
+        /// Creates new instance of this class.
+        /// </summary>
+        /// <param name="sched"></param>
         public TestSchedulerFactoryObject(IScheduler sched)
         {
             this.sched = sched;
         }
 
+        /// <summary>
+        /// Creates a scheduler actually returning the scheduler this intance
+        /// was instantiated with.
+        /// </summary>
+        /// <param name="schedulerFactory"></param>
+        /// <param name="schedulerName"></param>
+        /// <returns></returns>
         protected override IScheduler CreateScheduler(ISchedulerFactory schedulerFactory, String schedulerName)
         {
             return sched;

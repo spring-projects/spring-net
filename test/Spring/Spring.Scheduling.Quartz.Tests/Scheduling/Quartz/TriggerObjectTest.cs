@@ -31,14 +31,22 @@ namespace Spring.Scheduling.Quartz
     public abstract class TriggerObjectTest
     {
         private Trigger trigger;
+        /// <summary>
+        /// Constant name for tested triggers.
+        /// </summary>
         protected const string TRIGGER_NAME = "trigger";
 
-
+        /// <summary>
+        /// TriggerObject under test.
+        /// </summary>
         protected Trigger Trigger
         {
             set { trigger = value; }
         }
 
+        /// <summary>
+        /// Tests that TriggerObject defaults values as expected in AfterPropertiesSet.
+        /// </summary>
         [Test]
         public virtual void TestAfterPropertiesSet_Defaults()
         {
@@ -51,6 +59,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.JobGroup, "trigger job group was not default");
         }
 
+        /// <summary>
+        /// Tests that TriggerObject defaults values as expected in AfterPropertiesSet.
+        /// </summary>
         [Test]
         public virtual void TestAfterPropertiesSet_ValuesGiven()
         {
@@ -67,7 +78,9 @@ namespace Spring.Scheduling.Quartz
             AssertDateTimesEqualityWithAllowedDelta(START_TIME, trigger.StartTimeUtc, 1000);
         }
 
-        
+        /// <summary>
+        /// Tests that TriggerObject defaults values as expected in AfterPropertiesSet.
+        /// </summary>
         [Test]
         public virtual void TestAfterPropertiesSet_JobDetailGiven()
         {
@@ -79,8 +92,11 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(jobGroup, trigger.JobGroup, "trigger job group was not from job detail");
         }
 
+        /// <summary>
+        /// Tests that TriggerObject defaults values as expected in AfterPropertiesSet.
+        /// </summary>
         [Test]
-        public virtual void TestTriggerListenerNames_Valis()
+        public virtual void TestTriggerListenerNames_Valid()
         {
             ((IInitializingObject)trigger).AfterPropertiesSet();
 
@@ -89,6 +105,12 @@ namespace Spring.Scheduling.Quartz
             CollectionAssert.AreEqual(LISTENER_NAMES, trigger.TriggerListenerNames, "Trigger listeners were not equal");
         }
 
+        /// <summary>
+        /// Tests whether two datetimes are close enough.
+        /// </summary>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <param name="allowedDeltaInMilliseconds"></param>
         protected static void AssertDateTimesEqualityWithAllowedDelta(DateTime d1, DateTime d2, int allowedDeltaInMilliseconds)
         {
             int diffInMillis = (int) Math.Abs((d1 - d2).TotalMilliseconds);

@@ -32,6 +32,9 @@ namespace Spring.Scheduling.Quartz
     {
         private CronTriggerObject cronTrigger;
 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
@@ -54,7 +57,9 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-       
+        /// <summary>
+        /// Tests that JobDetail defaults values as expected in AfterPropertiesSet.
+        /// </summary>
         [Test]
         public override void TestAfterPropertiesSet_JobDetailGiven()
         {
@@ -67,6 +72,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreSame(jd, cronTrigger.JobDetail, "job details weren't same");
         }
 
+        /// <summary>
+        /// Tests that JobDetail maps job data map as expected.
+        /// </summary>
         [Test]
         public void TestJobDataAsMap()
         {

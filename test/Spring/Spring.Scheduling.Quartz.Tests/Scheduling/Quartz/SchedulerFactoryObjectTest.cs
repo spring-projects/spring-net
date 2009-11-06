@@ -34,7 +34,7 @@ using Spring.Core.IO;
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>
-    /// 
+    /// Tests for SchedulerFactoryObject.
     /// </summary>
     /// <author>Marko Lahma (.NET)</author>
     [TestFixture]
@@ -45,6 +45,9 @@ namespace Spring.Scheduling.Quartz
         private MockRepository mockery;
         private SchedulerFactoryObject factory;
 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
@@ -57,6 +60,9 @@ namespace Spring.Scheduling.Quartz
                 .Repeat.Any();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_Defaults()
         {
@@ -64,6 +70,9 @@ namespace Spring.Scheduling.Quartz
             TestSchedulerFactory.Mockery.ReplayAll();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_NullJobFactory()
         {
@@ -72,6 +81,9 @@ namespace Spring.Scheduling.Quartz
             TestSchedulerFactory.Mockery.ReplayAll();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_NoAutoStartup()
         {
@@ -85,6 +97,9 @@ namespace Spring.Scheduling.Quartz
             factory.AfterPropertiesSet();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_AutoStartup()
         {
@@ -98,6 +113,9 @@ namespace Spring.Scheduling.Quartz
             factory.AfterPropertiesSet();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_AddListeners()
         {
@@ -129,6 +147,9 @@ namespace Spring.Scheduling.Quartz
             factory.AfterPropertiesSet();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_Calendars()
         {
@@ -147,6 +168,9 @@ namespace Spring.Scheduling.Quartz
             factory.AfterPropertiesSet();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_Trigger_TriggerExists()
         {
@@ -165,6 +189,9 @@ namespace Spring.Scheduling.Quartz
             factory.AfterPropertiesSet();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_Trigger_TriggerDoesntExist()
         {
@@ -197,6 +224,9 @@ namespace Spring.Scheduling.Quartz
             LastCall.IgnoreArguments();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_AutoStartup_WithDelay()
         {
@@ -212,6 +242,9 @@ namespace Spring.Scheduling.Quartz
             factory.AfterPropertiesSet();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestStart()
         {
@@ -227,6 +260,9 @@ namespace Spring.Scheduling.Quartz
             factory.Start();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestStop()
         {
@@ -242,6 +278,9 @@ namespace Spring.Scheduling.Quartz
             factory.Stop();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestGetObject()
         {
@@ -251,6 +290,9 @@ namespace Spring.Scheduling.Quartz
             Assert.IsNotNull(sched, "scheduler was null");
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void TestSchedulerFactoryType_InvalidType()
@@ -259,6 +301,9 @@ namespace Spring.Scheduling.Quartz
             factory.SchedulerFactoryType = typeof(SchedulerFactoryObjectTest);
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestSchedulerFactoryType_ValidType()
         {
@@ -266,6 +311,9 @@ namespace Spring.Scheduling.Quartz
             factory.SchedulerFactoryType = typeof(StdSchedulerFactory);
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestInitSchedulerFactory_MinimalDefaults()
         {
@@ -276,6 +324,9 @@ namespace Spring.Scheduling.Quartz
             m_InitSchedulerFactory.Invoke(factory, new object[] { factoryToPass });
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestInitSchedulerFactory_ConfigLocationReadingShouldPreserverExtraEqualsMarksAndTrimKeysAndValues()
         {
@@ -308,6 +359,9 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
 
         }
 
+        /// <summary>
+        /// Cleans this test instance.
+        /// </summary>
         [TearDown]
         public void TearDown()
         {
@@ -328,6 +382,9 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
         }
     }
 
+    /// <summary>
+    /// ISchedulerFactory implementation for testing purposes.
+    /// </summary>
     public class TestSchedulerFactory : ISchedulerFactory
     {
         private static readonly MockRepository mockery = new MockRepository();
@@ -338,41 +395,66 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
             mockScheduler = (IScheduler) mockery.CreateMock(typeof (IScheduler));
         }
 
+        /// <summary>
+        /// MockRepository intance.
+        /// </summary>
         public static MockRepository Mockery
         {
             get { return mockery; }
         }
 
+        /// <summary>
+        /// The mocked scheduler.
+        /// </summary>
         public static IScheduler MockScheduler
         {
             get { return mockScheduler; }
         }
 
+        ///<summary>
+        ///</summary>
+        ///<returns></returns>
         public IScheduler GetScheduler()
         {
             return mockScheduler;
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="schedName"></param>
+        ///<returns></returns>
         public IScheduler GetScheduler(string schedName)
         {
             return mockScheduler;
         }
 
+        ///<summary>
+        ///</summary>
         public ICollection AllSchedulers
         {
             get { return new ArrayList(); }
         }
     }
 
+    ///<summary>
+    /// Scheduler factory that supports property interception.
+    ///</summary>
     public class InterceptingStdSChedulerFactory : StdSchedulerFactory
     {
         private NameValueCollection properties;
 
+        ///<summary>
+        /// Initializes the factory.
+        ///</summary>
+        ///<param name="props"></param>
         public override void Initialize(NameValueCollection props)
         {
             this.properties = props;
         }
 
+        /// <summary>
+        /// Return propeties given to this factory at initialization time.
+        /// </summary>
         public NameValueCollection Properties
         {
             get { return properties; }

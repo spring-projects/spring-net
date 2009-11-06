@@ -33,6 +33,9 @@ namespace Spring.Scheduling.Quartz
     {
         private SimpleTriggerObject simpleTrigger;
 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
@@ -55,6 +58,9 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public override void TestAfterPropertiesSet_Defaults()
         {
@@ -62,6 +68,9 @@ namespace Spring.Scheduling.Quartz
             base.TestAfterPropertiesSet_Defaults();
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public override void TestAfterPropertiesSet_ValuesGiven()
         {
@@ -69,7 +78,10 @@ namespace Spring.Scheduling.Quartz
             simpleTrigger.AfterPropertiesSet();
             base.TestAfterPropertiesSet_ValuesGiven();
         }
-
+        
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_StartDelayGiven()
         {
@@ -80,7 +92,9 @@ namespace Spring.Scheduling.Quartz
             AssertDateTimesEqualityWithAllowedDelta(startTime.AddMilliseconds(START_DELAY), simpleTrigger.StartTimeUtc, 1000);
         }
 
-        
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public override void TestAfterPropertiesSet_JobDetailGiven()
         {
@@ -93,6 +107,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreSame(jd, simpleTrigger.JobDetail, "job details weren't same");
         }
 
+        /// <summary>
+        /// Tests AfterPropertiesSet behavior.
+        /// </summary>
         [Test]
         public void TestJobDataAsMap()
         {

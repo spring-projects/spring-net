@@ -34,12 +34,18 @@ namespace Spring.Scheduling.Quartz
     {
         private AdaptableJobFactory jobFactory;
 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
             jobFactory = new AdaptableJobFactory();
         }
 
+        /// <summary>
+        /// Tests job creation.
+        /// </summary>
         [Test]
         public void TestNewJob_IncompatibleJob()
         {
@@ -64,12 +70,18 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
+        /// <summary>
+        /// Tests job creation.
+        /// </summary>
         [Test]
         public void TestNewJob_ThreadStartJob()
         {
             // TODO ThreadStart is not the way to go
         }
 
+        /// <summary>
+        /// Tests job creation.
+        /// </summary>
         [Test]
         public void TestNewJob_NormalIJob()
         {

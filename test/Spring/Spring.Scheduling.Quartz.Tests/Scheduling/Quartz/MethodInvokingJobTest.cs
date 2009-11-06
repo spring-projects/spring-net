@@ -30,7 +30,7 @@ using Spring.Objects.Support;
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>
-    /// 
+    /// Tests for MethodInvokingJob.
     /// </summary>
     /// <author>Marko Lahma (.NET)</author>
     [TestFixture]
@@ -38,12 +38,18 @@ namespace Spring.Scheduling.Quartz
     {
         private MethodInvokingJob methodInvokingJob;
 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {
             methodInvokingJob = new MethodInvokingJob();
         }
 
+        /// <summary>
+        /// Test method invoke via execute.
+        /// </summary>
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void TestMethodInvoker_SetWithNull()
@@ -51,6 +57,9 @@ namespace Spring.Scheduling.Quartz
             methodInvokingJob.MethodInvoker = null;
         }
 
+        /// <summary>
+        /// Test method invoke via execute.
+        /// </summary>
         [Test]
         [ExpectedException(typeof(JobExecutionException))]
         public void TestMethodInvocation_NullMethodInvokder()
@@ -58,6 +67,9 @@ namespace Spring.Scheduling.Quartz
             methodInvokingJob.Execute(CreateMinimalJobExecutionContext());
         }
 
+        /// <summary>
+        /// Test method invoke via execute.
+        /// </summary>
         [Test]
         public void TestMethodInvoker_MethodSetCorrectly()
         {
@@ -71,6 +83,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(1, job.CounterValue, "Job was not invoked once");
         }
 
+        /// <summary>
+        /// Test method invoke via execute.
+        /// </summary>
         [Test]
         public void TestMethodInvoker_MethodSetCorrectlyThrowsException()
         {
@@ -92,6 +107,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(1, job.CounterValue, "Job was not invoked once");
         }
 
+        /// <summary>
+        /// Test method invoke via execute.
+        /// </summary>
         [Test]
         public void TestMethodInvoker_PrivateMethod()
         {
@@ -130,11 +148,17 @@ namespace Spring.Scheduling.Quartz
     {
         private int counter;
 
+        /// <summary>
+        /// Increments method invoke counter.
+        /// </summary>
         public void Invoke()
         {
             Interlocked.Increment(ref counter);    
         }
 
+        /// <summary>
+        /// Throws exception after incrementing counter.
+        /// </summary>
         public void InvokeAndThrowException()
         {
             Interlocked.Increment(ref counter);
@@ -145,6 +169,9 @@ namespace Spring.Scheduling.Quartz
         {
         }
 
+        /// <summary>
+        /// Invocation count.
+        /// </summary>
         public int CounterValue
         {
             get { return counter; }

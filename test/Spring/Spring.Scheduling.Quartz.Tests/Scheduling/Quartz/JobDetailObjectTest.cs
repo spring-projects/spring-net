@@ -35,12 +35,18 @@ namespace Spring.Scheduling.Quartz
     {
         private JobDetailObject jobDetail;
 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void SetUp()
         {               
              jobDetail = new JobDetailObject();
         }
 
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void TestJobType_Null()
@@ -48,6 +54,9 @@ namespace Spring.Scheduling.Quartz
             jobDetail.JobType = null;            
         }
 
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         public void TestJobType_NonIJob()
         {
@@ -55,6 +64,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(typeof(object), jobDetail.JobType, "JobDetail did not create same type as expected");
         }
 
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         public void TestJobType_IJob()
         {
@@ -63,7 +75,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(jobDetail.JobType, CORRECT_IJOB, "JobDetail did not register correct job type");
         }
 
-
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void TestJobDataAsMap_Null()
@@ -71,6 +85,9 @@ namespace Spring.Scheduling.Quartz
             jobDetail.JobDataAsMap = null;
         }
 
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         public void TestJobDataAsMap_ProperValues()
         {
@@ -83,6 +100,9 @@ namespace Spring.Scheduling.Quartz
             CollectionAssert.AreEqual(values.Keys, jobDetail.JobDataMap.Keys, "JobDataMap values not equal");
         }
 
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_Defaults()
         {
@@ -94,6 +114,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(objectName, jobDetail.Name, "Names differ");
         }
 
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_CustomNameAndGroup()
         {
@@ -108,6 +131,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(jobDetailName, jobDetail.Name, "Names differ");
         }
 
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         public void TestAfterPropertiesSet_ApplicationContextJobDataKeySetWithApplicationContext()
         {
@@ -122,6 +148,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreSame(ctx, jobDetail.JobDataMap[key], "ApplicationContext was not set to job data map");
         }
 
+        /// <summary>
+        /// Tests job detail's property behavior.
+        /// </summary>
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void TestAfterPropertiesSet_ApplicationContextJobDataKeySetWithoutApplicationContext()
