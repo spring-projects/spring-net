@@ -81,6 +81,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="NmsCompilerOptionsTests.cs" />
     <Compile Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\CachingConnectionFactoryTests.cs" />
     <Compile Include="Messaging\Nms\Connections\MessageTransactionManagerTests.cs" />

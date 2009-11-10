@@ -267,6 +267,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AopCompilerOptionsTests.cs" />
     <None Include="Spring.Aop.Tests.build" />
     <None Include="Spring.Aop.Tests.dll.config" />
     <EmbeddedResource Include="Aop\Config\AopNamespaceParserTests.xml" />

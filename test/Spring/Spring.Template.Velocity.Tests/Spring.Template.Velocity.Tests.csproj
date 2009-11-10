@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VelocityCompilerOptionsTests.cs" />
     <Compile Include="Template\Velocity\Config\TemplateNamespaceParserTests.cs" />
     <Compile Include="Template\Velocity\VelocityEngineFactoryObjectTests.cs" />
     <Compile Include="Template\Velocity\VelocityEngineTestBase.cs" />

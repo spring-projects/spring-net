@@ -63,6 +63,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QuartzCompilerOptionsTests.cs" />
     <Compile Include="Scheduling\Quartz\AdaptableJobFactoryTest.cs" />
     <Compile Include="Scheduling\Quartz\QuartzSupportTests.cs" />
     <Compile Include="Scheduling\Quartz\QuartzTestObject.cs" />

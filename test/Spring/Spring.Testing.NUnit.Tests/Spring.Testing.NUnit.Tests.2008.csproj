@@ -51,6 +51,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Testing\Ado\SimpleAdoTestUtilsTests.cs" />
     <Compile Include="Testing\NUnit\AbstractDependencyInjectionSpringContextTestsTests.cs" />
+    <Compile Include="NUnitCompilerOptionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">

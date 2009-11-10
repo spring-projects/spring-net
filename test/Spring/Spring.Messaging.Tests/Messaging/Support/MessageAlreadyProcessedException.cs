@@ -9,6 +9,7 @@ namespace Spring.Messaging
     /// message that has been processed by the database but not acknowledged to MSMQ
     /// due to an application failure.
     /// </summary>
+    [Serializable]
     public class MessageAlreadyProcessedException : MessagingException
     {
         #region Constructor (s) / Destructor

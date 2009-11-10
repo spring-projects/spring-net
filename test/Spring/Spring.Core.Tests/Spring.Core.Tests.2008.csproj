@@ -220,6 +220,7 @@
     <Compile Include="Context\Support\XmlApplicationContextTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CoreCompilerOptionsTests.cs" />
     <Compile Include="CoreExceptionTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -274,9 +275,10 @@
     <Compile Include="Core\TypeResolution\TypeResolverTests.cs" />
     <Compile Include="DataBinding\SimpleExpressionBindingTests.cs" />
     <Compile Include="DataBinding\BaseBindingManagerTests.cs" />
-    <Compile Include="ExceptionsTest.cs">
+    <Compile Include="CompilerOptionsTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ExceptionsTest.cs" />
     <Compile Include="Expressions\ConstructorNodeTests.cs" />
     <Compile Include="Expressions\ExpressionEvaluatorTests.cs">
       <SubType>Code</SubType>

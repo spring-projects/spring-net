@@ -42,11 +42,32 @@ namespace Spring.Data.NHibernate
 		#region Constructor (s)
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HibernateSystemException"/> class.
-                /// </summary>
-		public 	HibernateSystemException()
+        /// </summary>
+		public HibernateSystemException()
 		{
-
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HibernateSystemException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public HibernateSystemException(string message): base(message)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of the HibernateSystemException class with the specified message
+        /// and root cause.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        /// <param name="rootCause">
+        /// The root exception that is being wrapped.
+        /// </param>
+        public HibernateSystemException(string message, Exception rootCause) : base(message, rootCause)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateSystemException"/> class.

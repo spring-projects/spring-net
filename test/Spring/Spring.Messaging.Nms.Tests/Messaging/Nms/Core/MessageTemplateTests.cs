@@ -102,6 +102,77 @@ namespace Spring.Messaging.Nms.Core
         }
 
         [Test]
+        public void ProducerCallback()
+        {
+            NmsTemplate template = CreateTemplate();
+            template.ConnectionFactory = mockConnectionFactory;
+
+            IMessageProducer mockProducer = (IMessageProducer)mocks.CreateMock(typeof(IMessageProducer));
+            Expect.Call(mockSession.CreateProducer(null)).Return(mockProducer);
+
+            Expect.Call(mockProducer.Priority).Return(MsgPriority.Normal);
+            CloseProducerSessionConnection(mockProducer);
+
+            mocks.ReplayAll();
+
+            MsgPriority priority = MsgPriority.Highest;
+            template.Execute(delegate(ISession session, IMessageProducer producer)
+            {
+                bool b = session.Transacted;
+                priority = producer.Priority;
+                return null;
+
+            });
+            
+            Assert.AreEqual(priority, MsgPriority.Normal);
+            mocks.VerifyAll();
+
+        }
+
+        [Test]
+        public void ProducerCallbackWithIdAndTimestampDisabled()
+        {
+            NmsTemplate template = CreateTemplate();
+            template.ConnectionFactory = mockConnectionFactory;
+            template.MessageIdEnabled = false;
+            template.MessageTimestampEnabled = false;
+
+            IMessageProducer mockProducer = (IMessageProducer) mocks.CreateMock(typeof (IMessageProducer));
+            Expect.Call(mockSession.CreateProducer(null)).Return(mockProducer);
+
+            mockProducer.DisableMessageID = true;
+            LastCall.On(mockProducer).Repeat.Once();
+            mockProducer.DisableMessageTimestamp = true;
+            LastCall.On(mockProducer).Repeat.Once();
+
+            Expect.Call(mockProducer.Priority).Return(MsgPriority.Normal);
+            CloseProducerSessionConnection(mockProducer);
+
+            mocks.ReplayAll();
+
+            template.Execute(delegate(ISession session, IMessageProducer producer)
+                                 {
+                                     bool b = session.Transacted;
+                                     MsgPriority priority = producer.Priority;
+                                     return null;
+
+                                 });
+
+            mocks.VerifyAll();
+
+        }
+
+        private void CloseProducerSessionConnection(IMessageProducer mockProducer)
+        {
+            mockProducer.Close();
+            LastCall.On(mockProducer).Repeat.Once();
+            mockSession.Close();
+            LastCall.On(mockSession).Repeat.Once();
+            mockConnection.Close();
+            LastCall.On(mockConnection).Repeat.Once();
+        }
+
+        [Test]
         public void SessionCallback()
         {
             NmsTemplate template = CreateTemplate();
@@ -130,6 +201,7 @@ namespace Spring.Messaging.Nms.Core
 
             mockConnection.Start();
             LastCall.On(mockConnection).Repeat.Times(2);
+            // We're gonna call getTransacted 3 times, i.e. 2 more times.
             Expect.Call(mockSession.Transacted).Return(UseTransactedSession).Repeat.Twice();
 
             if (UseTransactedTemplate)
@@ -194,5 +266,7 @@ namespace Spring.Messaging.Nms.Core
             Assert.IsTrue(TransactionSynchronizationManager.ResourceDictionary.Count == 0);
             mocks.VerifyAll();
         }
+
+ 
     }
 }

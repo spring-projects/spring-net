@@ -51,6 +51,15 @@ namespace Spring.Data.NHibernate
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public HibernateObjectRetrievalFailureException(string message)
+            : base(message)
+        {
+        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
@@ -84,9 +93,25 @@ namespace Spring.Data.NHibernate
         /// </summary>
         /// <param name="ex">The ex.</param>
         public HibernateObjectRetrievalFailureException(WrongClassException ex) : base(ex.EntityName, ex.Identifier, ex.Message, ex)
-        {
-          
+        {          
         }
+
+        /// <summary>
+        /// Creates a new instance of the HibernateObjectRetrievalFailureException class with the specified message
+        /// and root cause.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        /// <param name="rootCause">
+        /// The root exception that is being wrapped.
+        /// </param>
+        public HibernateObjectRetrievalFailureException(string message, Exception rootCause)
+            : base(message, rootCause)
+        {
+        }
+
+
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="HibernateObjectRetrievalFailureException"/> class.

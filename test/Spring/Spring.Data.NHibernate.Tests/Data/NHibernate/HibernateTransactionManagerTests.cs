@@ -554,7 +554,7 @@ namespace Spring.Data.NHibernate
                 }
                 else
                 {
-#if NH_2_0
+#if NH_2_0 || NH_2_1
                     rootCause = new PropertyValueException("mymsg", typeof(string).Name, "Name");
 #else
                     rootCause = new PropertyValueException("mymsg", typeof(string), "Name");

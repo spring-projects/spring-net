@@ -21,6 +21,7 @@
 
     <csc target="library" define="${current.build.defines.csc},NH_2_0"
 		     warnaserror="true"
+                     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
       		     output="${current.bin.dir}/${project::get-name()}.dll"
 		     doc="${current.bin.dir}/${project::get-name()}.xml">
@@ -38,7 +39,7 @@
 				<include name="System.Data.dll" />
 				<include name="System.EnterpriseServices.dll" />
 				<include name="*.dll" />
-        <include name="Spring.Data.NHibernate20.dll" />
+				<include name="Spring.Data.NHibernate20.dll" />
 				<exclude name="Spring.Data.NHibernate.dll" />
 				<exclude name="Spring.Data.NHibernate12*.dll" />
 				<exclude name="Spring.Data.NHibernate21*.dll" />

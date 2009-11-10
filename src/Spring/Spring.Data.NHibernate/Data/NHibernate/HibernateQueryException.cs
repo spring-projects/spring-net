@@ -47,10 +47,34 @@ namespace Spring.Data.NHibernate
         }
 
         /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="HibernateQueryException"/> class.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        public HibernateQueryException(string message) : base(message) { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HibernateQueryException"/> class.
         /// </summary>
         /// <param name="ex">The ex.</param>
         public HibernateQueryException(QueryException ex) : base(ex.Message, ex)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of the HibernateQueryException class with the specified message
+        /// and root cause.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        /// <param name="rootCause">
+        /// The root exception that is being wrapped.
+        /// </param>
+        public HibernateQueryException(string message, Exception rootCause)
+            : base(message, rootCause)
         {
         }
 

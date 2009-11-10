@@ -54,6 +54,15 @@ namespace Spring.Data.NHibernate
         }
 
         /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="HibernateOptimisticLockingFailureException"/> class.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        public HibernateOptimisticLockingFailureException(string message) : base(message) { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HibernateOptimisticLockingFailureException"/> class.
         /// </summary>
         /// <param name="ex">The StaleObjectStateException.</param>

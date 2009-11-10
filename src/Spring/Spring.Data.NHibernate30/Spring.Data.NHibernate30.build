@@ -13,6 +13,7 @@
 		<!-- build Spring.Data.NHibernate30 -->
 		<csc target="library" define="${current.build.defines.csc},NH_2_0,NH_2_1"
                      warnaserror="true"
+		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
                      output="${current.bin.dir}/${project::get-name()}.dll"
                      doc="${current.bin.dir}/${project::get-name()}.xml">

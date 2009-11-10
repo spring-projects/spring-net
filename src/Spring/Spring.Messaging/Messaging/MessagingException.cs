@@ -7,6 +7,7 @@ namespace Spring.Messaging
     /// Base exception class for exceptions thrown by Spring in Spring.Messaging
     /// </summary>
     /// <author>Mark Pollack</author>
+    [Serializable]
     public class MessagingException : ApplicationException
     {
         #region Constructor (s) / Destructor

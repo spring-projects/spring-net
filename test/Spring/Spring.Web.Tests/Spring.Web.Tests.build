@@ -11,8 +11,12 @@
     -->
     <target name="build">
         <!-- build Spring.Web -->
-        <csc target="library" define="${current.build.defines.csc}" warnaserror="true" debug="${current.build.debug}"
-            output="${current.bin.dir}/${project::get-name()}.dll" doc="${current.bin.dir}/${project::get-name()}.xml">
+        <csc target="library" define="${current.build.defines.csc}" 
+	     warnaserror="true" 
+             optimize="${build.optimize}"
+	     debug="${current.build.debug}"
+             output="${current.bin.dir}/${project::get-name()}.dll" 
+	     doc="${current.bin.dir}/${project::get-name()}.xml">
             <nowarn>
                 <warning number="${nowarn.numbers.test}" /> <!-- 1701 -->
                 <warning number="${nowarn.numbers.test},1587" if="${nant.settings.currentframework=='mono-2.0'}"/>

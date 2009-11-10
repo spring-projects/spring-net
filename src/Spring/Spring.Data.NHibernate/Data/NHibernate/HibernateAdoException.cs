@@ -68,6 +68,21 @@ namespace Spring.Data.NHibernate
         /// </param>        
         public HibernateAdoException( string message, ADOException rootCause ) : base( message, rootCause ) {}
 
+
+        /// <summary>
+        /// Creates a new instance of the HibernateSystemException class with the specified message
+        /// and root cause.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        /// <param name="rootCause">
+        /// The root exception that is being wrapped.
+        /// </param>
+        public HibernateAdoException(string message, Exception rootCause) : base(message, rootCause)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="HibernateAdoException"/> class.

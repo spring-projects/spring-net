@@ -111,6 +111,7 @@
     <Compile Include="EnterpriseServices\ExeConfigurationSystemTests.cs" />
     <Compile Include="EnterpriseServices\ExportedServicedComponentSample.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentExporterTests.cs" />
+    <Compile Include="ServicesCompilerOptionsTests.cs" />
     <Compile Include="Remoting\BaseRemotingTestFixture.cs" />
     <Compile Include="Remoting\CaoExporterTests.cs">
       <SubType>Code</SubType>

@@ -55,6 +55,15 @@ namespace Spring.Data.NHibernate
         }
 
         /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="HibernateOptimisticLockingFailureException"/> class.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        public HibernateOptimisticLockingFailureException(string message) : base(message) { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HibernateOptimisticLockingFailureException"/> class.
         /// </summary>
         /// <param name="ex">The ex.</param>
@@ -71,6 +80,21 @@ namespace Spring.Data.NHibernate
  	    }
 
         /// <summary>
+        /// Creates a new instance of the HibernateOptimisticLockingFailureException class with the specified message
+        /// and root cause.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        /// <param name="rootCause">
+        /// The root exception that is being wrapped.
+        /// </param>
+        public HibernateOptimisticLockingFailureException(string message, Exception rootCause)
+            : base(message, rootCause)
+        {
+        }
+
+        /// <summary>
         /// Creates a new instance of the
         /// <see cref="HibernateOptimisticLockingFailureException"/> class.
         /// </summary>
@@ -85,6 +109,8 @@ namespace Spring.Data.NHibernate
         protected HibernateOptimisticLockingFailureException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+
+
 
         #endregion
 
