@@ -96,7 +96,7 @@ namespace Spring.Data
         public void DataSetFillNoParams()
         {
             String sql = "select USER_ID, USER_NAME from USER_TABLE";
-            var dataSet = new DataSet();
+            DataSet dataSet = new DataSet();
             adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
             Assert.AreEqual(1, dataSet.Tables.Count);
             Assert.AreEqual(18, dataSet.Tables["Table"].Rows.Count);
@@ -126,7 +126,7 @@ namespace Spring.Data
         public void DataSetFillWithParameters()
         {
             String sql = "select USER_ID, USER_NAME from USER_TABLE where USER_ID < :maxId";
-            var dataSet = new DataSet();
+            DataSet dataSet = new DataSet();
             IDbParameters parameters = adoOperations.CreateDbParameters();
             parameters.Add("maxId", OracleType.Int32).Value = 10;
             adoOperations.DataSetFillWithParameters(dataSet, CommandType.Text, sql,
@@ -141,7 +141,7 @@ namespace Spring.Data
         {
             //'pretend' unique key is the age...
             String sql = "select USER_ID, USER_NAME from USER_TABLE";
-            var dataSet = new DataSet();
+            DataSet dataSet = new DataSet();
             adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] {"TestObjects"});
 
             //Create and add new row.
