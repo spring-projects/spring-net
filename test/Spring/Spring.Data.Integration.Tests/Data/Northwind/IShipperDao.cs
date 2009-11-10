@@ -27,7 +27,7 @@ using System;
 namespace Spring.Data.Northwind
 {
 	/// <summary>
-	/// TODO: 
+	/// ShipperDao interface
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
 	public interface IShipperDao 

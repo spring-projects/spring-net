@@ -31,7 +31,7 @@ using Spring.Transaction;
 namespace Spring.Data
 {
 	/// <summary>
-	/// TODO: 
+	/// Test for declarative transaction management 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
 	[TestFixture]

@@ -33,77 +33,81 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.Common;
 using Spring.Data.Core;
-using Spring.Data.Support;
 using Spring.Objects;
 
 #endregion
 
 namespace Spring.Data
 {
-	/// <summary>
-	/// TODO:
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: OracleAdoTemplateTests.cs,v 1.8 2007/08/03 19:51:22 markpollack Exp $</version>
-	[TestFixture]
-	public class OracleAdoTemplateTests
-	{
-		#region Fields
+    /// <summary>
+    ///
+    /// </summary>
+    /// <author>Mark Pollack (.NET)</author>
+    [TestFixture]
+    public class OracleAdoTemplateTests
+    {
+        #region Setup/Teardown
 
-	    private IAdoOperations adoOperations;
-	    private IDbProvider dbProvider;
-		#endregion
-
-		#region Constants
-
-		/// <summary>
-		/// The shared ILog instance for this class (and derived classes).
-		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (OracleAdoTemplateTests));
-
-		#endregion
-
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OracleAdoTemplateTests"/> class.
-        /// </summary>
-		public OracleAdoTemplateTests()
-		{
-
-		}
-
-		#endregion
-
-		#region Methods
         [SetUp]
         public void CreateAdoTemplate()
         {
             IApplicationContext ctx =
-                new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/oracleAdoTemplateTests.xml");
+                new XmlApplicationContext(
+                    "assembly://Spring.Data.Integration.Tests/Spring.Data/oracleAdoTemplateTests.xml");
             Assert.IsNotNull(ctx);
             dbProvider = ctx["DbProvider"] as IDbProvider;
             Assert.IsNotNull(dbProvider);
             adoOperations = new AdoTemplate(dbProvider);
+        }
 
+        #endregion
+
+        private IAdoOperations adoOperations;
+        private IDbProvider dbProvider;
+
+        /// <summary>
+        /// The shared ILog instance for this class (and derived classes).
+        /// </summary>
+        protected static readonly ILog log =
+            LogManager.GetLogger(typeof (OracleAdoTemplateTests));
+
+        private class TestObjectExtractor : IResultSetExtractor
+        {
+            #region IResultSetExtractor Members
+
+            public object ExtractData(IDataReader reader)
+            {
+                IList testObjects = new ArrayList();
+                while (reader.Read())
+                {
+                    var to = new TestObject();
+                    //object foo = reader.GetDataTypeName(0);
+                    to.ObjectNumber = (int) reader.GetInt64(0);
+                    to.Name = reader.GetString(1);
+                    testObjects.Add(to);
+                }
+                return testObjects;
+            }
+
+            #endregion
         }
 
         [Test]
         public void DataSetFillNoParams()
         {
             String sql = "select USER_ID, USER_NAME from USER_TABLE";
-            DataSet dataSet = new DataSet();
+            var dataSet = new DataSet();
             adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
             Assert.AreEqual(1, dataSet.Tables.Count);
             Assert.AreEqual(18, dataSet.Tables["Table"].Rows.Count);
 
             dataSet = new DataSet();
-            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] {"TestObjects"});
+            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new[] {"TestObjects"});
             Assert.AreEqual(1, dataSet.Tables.Count);
             Assert.AreEqual(18, dataSet.Tables["TestObjects"].Rows.Count);
 
             dataSet = new DataSet();
-            DataTableMappingCollection mappingCollection =
+            var mappingCollection =
                 new DataTableMappingCollection();
             DataTableMapping testObjectsMapping = mappingCollection.Add("Table", "TestObjects");
             testObjectsMapping.ColumnMappings.Add("USER_ID", "UserID");
@@ -116,19 +120,18 @@ namespace Spring.Data
                 Assert.IsNotNull(testObjectRow["UserID"]);
                 Assert.IsNotNull(testObjectRow["UserName"]);
             }
-
         }
 
         [Test]
         public void DataSetFillWithParameters()
         {
             String sql = "select USER_ID, USER_NAME from USER_TABLE where USER_ID < :maxId";
-            DataSet dataSet = new DataSet();
+            var dataSet = new DataSet();
             IDbParameters parameters = adoOperations.CreateDbParameters();
             parameters.Add("maxId", OracleType.Int32).Value = 10;
             adoOperations.DataSetFillWithParameters(dataSet, CommandType.Text, sql,
-                                      parameters,
-                                      new string[] {"TestObjects"});
+                                                    parameters,
+                                                    new[] {"TestObjects"});
             Assert.AreEqual(1, dataSet.Tables.Count);
             Assert.AreEqual(6, dataSet.Tables["TestObjects"].Rows.Count);
         }
@@ -138,8 +141,8 @@ namespace Spring.Data
         {
             //'pretend' unique key is the age...
             String sql = "select USER_ID, USER_NAME from USER_TABLE";
-            DataSet dataSet = new DataSet();
-            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] {"TestObjects"});
+            var dataSet = new DataSet();
+            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new[] {"TestObjects"});
 
             //Create and add new row.
             DataRow myDataRow = dataSet.Tables["TestObjects"].NewRow();
@@ -156,9 +159,10 @@ namespace Spring.Data
 
             //Extanious CommandTypes....
             adoOperations.DataSetUpdate(dataSet, "TestObjects",
-                CommandType.Text, "insert into USER_TABLE(USER_ID, USER_NAME) values (:id,:name)", parameters,
-                CommandType.Text, null, null,
-                CommandType.Text, null, null);
+                                        CommandType.Text,
+                                        "insert into USER_TABLE(USER_ID, USER_NAME) values (:id,:name)", parameters,
+                                        CommandType.Text, null, null,
+                                        CommandType.Text, null, null);
 
 
             //TODO - think about api...
@@ -197,21 +201,27 @@ namespace Spring.Data
             //                            null, null);
 
             //TODO how about breaking up the operations...
+        }
 
+        [Test]
+        public void ExceptionTranslation()
+        {
+            try
+            {
+                adoOperations.ExecuteNonQuery(CommandType.Text, "select foo from bar");
+            }
+            catch (BadSqlGrammarException e)
+            {
+                // should execute in here in sunny day scenario...
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Exception translation not working.");
+            }
         }
 
 
         [Test]
-        public void ExecuteQueryWithResultSetExtractor()
-        {
-            IResultSetExtractor rse = new TestObjectExtractor();
-            String sql = "select USER_ID, USER_NAME from USER_TABLE";
-            IList testObjectList = (IList)adoOperations.QueryWithResultSetExtractor(CommandType.Text, sql, rse);
-            Assert.AreEqual(18, testObjectList.Count);
-
-        }
-
-	    [Test]
         public void ExecuteNonQueryText()
         {
             int counter = 0;
@@ -228,36 +238,30 @@ namespace Spring.Data
             sql = "insert into USER_TABLE(USER_ID, USER_NAME) values (:id,:name)";
             IDbParameters parameters = adoOperations.CreateDbParameters();
 
-	        int user_id1 = 101;
-	        string user_name1 = "George1";
+            int user_id1 = 101;
+            string user_name1 = "George1";
             parameters.Add("id", OracleType.Int32).Value = user_id1;
-	        counter++;
+            counter++;
             parameters.Add("name", DbType.String, 12).Value = user_name1;
 
-	        adoOperations.ExecuteNonQuery(CommandType.Text, sql, parameters);
+            adoOperations.ExecuteNonQuery(CommandType.Text, sql, parameters);
         }
 
-		#endregion
-
-        private class TestObjectExtractor    : IResultSetExtractor
+        [Test]
+        public void ExecuteQueryWithResultSetExtractor()
         {
-            public object ExtractData(IDataReader reader)
-            {
-                IList testObjects = new ArrayList();
-                while(reader.Read())
-                {
-                    TestObject to = new TestObject();
-                    //object foo = reader.GetDataTypeName(0);
-                    to.ObjectNumber = (int) reader.GetInt64(0);
-                    to.Name = reader.GetString(1);
-                    testObjects.Add(to);
-                }
-                return testObjects;
-            }
+            IResultSetExtractor rse = new TestObjectExtractor();
+            String sql = "select USER_ID, USER_NAME from USER_TABLE";
+            var testObjectList = (IList) adoOperations.QueryWithResultSetExtractor(CommandType.Text, sql, rse);
+            Assert.AreEqual(18, testObjectList.Count);
         }
 
-
-	}
+        [Test]
+        public void SanityCheck()
+        {
+            adoOperations.ExecuteNonQuery(CommandType.Text, "select * from DUAL");
+        }
+    }
 }
 
 #endif // (!NET_1_0)

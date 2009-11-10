@@ -163,7 +163,6 @@ namespace Spring.Data
             DefaultTransactionDefinition def = new DefaultTransactionDefinition();
             def.PropagationBehavior = TransactionPropagation.Required;
 
-            //TODO change to property of name TransactionStatus...
             ITransactionStatus status = transactionManager.GetTransaction(def);
             
             int iCount = 0;

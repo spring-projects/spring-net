@@ -2,18 +2,11 @@
 <objects xmlns='http://www.springframework.net'
          xmlns:db="http://www.springframework.net/database">
 
+  <!-- This is a server running in the Hyperic Data Center, specifed so that one does not need to use a tnsnames.ora file -->
   <db:provider id="DbProvider" 
-                 provider="OracleODP-2.0" 
-                 connectionString="Data Source=AGORA; User Id=agora_user; Password=welcome"/>
+                 provider="OracleODP-11-2.0" 
+                 connectionString="Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 10.2.0.56)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = QADB))); User Id=mpollack; Password=springqa"/>
 
-  <!--
-  <object id="DbProvider" 
-            type="Spring.Data.Support.Oracle.OracleClientProvider, Spring.Data">
-            
-        <property name="ConnectionString" 
-                  value="Data Source=agora; User Id=agora_user; Password=welcome;  Integrated Security=no;"/>
-    </object>
-  -->
     <object id="adoTemplate" 
             type="Spring.Data.Core.AdoTemplate, Spring.Data">
             

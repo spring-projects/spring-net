@@ -30,7 +30,7 @@ using Spring.Data.Objects;
 namespace Spring.Data
 {
 	/// <summary>
-	/// TODO: 
+	/// Simple StoredProcedure implementation 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
 	public class TestObjectStoredProcedure : StoredProcedure

@@ -31,7 +31,7 @@ using Spring.Data.Support;
 namespace Spring.Data.Northwind
 {
 	/// <summary>
-	/// TODO: 
+	/// AdoTemplate based implementation of IShipperDao 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
 	public class AdoTemplateShipperDao : AdoDaoSupport, IShipperDao

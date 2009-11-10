@@ -31,7 +31,7 @@ using Spring.Objects;
 namespace Spring.Data
 {
 	/// <summary>
-	/// TODO: 
+	/// Simple MappingAdoQuery implementation 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
     public class TestObjectQuery : MappingAdoQuery

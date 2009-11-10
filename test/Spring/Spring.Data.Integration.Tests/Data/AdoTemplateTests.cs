@@ -186,7 +186,7 @@ namespace Spring.Data
             myDataRow["Name"] = "OldManWinter";
             dataSet.Tables["TestObjects"].Rows.Add(myDataRow);
 
-            //TODO - think about api...
+            
             IDbCommand insertCommand = dbProvider.CreateCommand();
             insertCommand.CommandText = "insert into TestObjects(Age,Name) values (@Age,@Name)";
             IDbParameters parameters = adoOperations.CreateDbParameters();

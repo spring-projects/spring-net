@@ -33,7 +33,7 @@ using Spring.Data.Common;
 namespace Spring.Data
 {
 	/// <summary>
-	/// TODO: 
+	/// Test a MappingAdoQuery implementation 
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
 	[TestFixture]
