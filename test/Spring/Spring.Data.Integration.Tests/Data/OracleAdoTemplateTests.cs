@@ -131,7 +131,7 @@ namespace Spring.Data
             parameters.Add("maxId", OracleType.Int32).Value = 10;
             adoOperations.DataSetFillWithParameters(dataSet, CommandType.Text, sql,
                                                     parameters,
-                                                    new[] {"TestObjects"});
+                                                    new string[] {"TestObjects"});
             Assert.AreEqual(1, dataSet.Tables.Count);
             Assert.AreEqual(6, dataSet.Tables["TestObjects"].Rows.Count);
         }
