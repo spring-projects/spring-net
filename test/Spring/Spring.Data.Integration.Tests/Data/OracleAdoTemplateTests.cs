@@ -20,7 +20,7 @@
 
 #if (!NET_1_0)
 
-#region Imports
+#region
 
 using System;
 using System.Collections;
@@ -80,7 +80,7 @@ namespace Spring.Data
                 IList testObjects = new ArrayList();
                 while (reader.Read())
                 {
-                    var to = new TestObject();
+                    TestObject to = new TestObject();
                     //object foo = reader.GetDataTypeName(0);
                     to.ObjectNumber = (int) reader.GetInt64(0);
                     to.Name = reader.GetString(1);
@@ -102,12 +102,12 @@ namespace Spring.Data
             Assert.AreEqual(18, dataSet.Tables["Table"].Rows.Count);
 
             dataSet = new DataSet();
-            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new[] {"TestObjects"});
+            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] {"TestObjects"});
             Assert.AreEqual(1, dataSet.Tables.Count);
             Assert.AreEqual(18, dataSet.Tables["TestObjects"].Rows.Count);
 
             dataSet = new DataSet();
-            var mappingCollection =
+            DataTableMappingCollection mappingCollection =
                 new DataTableMappingCollection();
             DataTableMapping testObjectsMapping = mappingCollection.Add("Table", "TestObjects");
             testObjectsMapping.ColumnMappings.Add("USER_ID", "UserID");
@@ -142,7 +142,7 @@ namespace Spring.Data
             //'pretend' unique key is the age...
             String sql = "select USER_ID, USER_NAME from USER_TABLE";
             var dataSet = new DataSet();
-            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new[] {"TestObjects"});
+            adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] {"TestObjects"});
 
             //Create and add new row.
             DataRow myDataRow = dataSet.Tables["TestObjects"].NewRow();
@@ -210,7 +210,7 @@ namespace Spring.Data
             {
                 adoOperations.ExecuteNonQuery(CommandType.Text, "select foo from bar");
             }
-            catch (BadSqlGrammarException e)
+            catch (BadSqlGrammarException)
             {
                 // should execute in here in sunny day scenario...
             }
@@ -252,7 +252,7 @@ namespace Spring.Data
         {
             IResultSetExtractor rse = new TestObjectExtractor();
             String sql = "select USER_ID, USER_NAME from USER_TABLE";
-            var testObjectList = (IList) adoOperations.QueryWithResultSetExtractor(CommandType.Text, sql, rse);
+            IList testObjectList = (IList) adoOperations.QueryWithResultSetExtractor(CommandType.Text, sql, rse);
             Assert.AreEqual(18, testObjectList.Count);
         }
 
