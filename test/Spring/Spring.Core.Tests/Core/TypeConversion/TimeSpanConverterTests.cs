@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Reflection;
+
 using NUnit.Framework;
 
 #endregion
@@ -113,7 +113,13 @@ namespace Spring.Core.TypeConversion
         public void ConvertFromStringWithHourSpecifier()
         {
             TimeSpanConverter tsc = new TimeSpanConverter();
+            
             object timeSpan = tsc.ConvertFrom("1H");
+            Assert.IsNotNull(timeSpan);
+            Assert.IsTrue(timeSpan is TimeSpan);
+            Assert.AreEqual(TimeSpan.FromHours(1), (TimeSpan)timeSpan);
+
+            tsc.ConvertFrom("1h");
             Assert.IsNotNull(timeSpan);
             Assert.IsTrue(timeSpan is TimeSpan);
             Assert.AreEqual(TimeSpan.FromHours(1), (TimeSpan)timeSpan);

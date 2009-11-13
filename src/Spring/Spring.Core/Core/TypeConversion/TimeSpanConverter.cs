@@ -23,24 +23,239 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 #endregion
 
 namespace Spring.Core.TypeConversion
 {
+    #region Specifier parsers
+
+    #if NET_1_1
+
+    /// <summary>
+    /// Nullable TimeSpan
+    /// </summary>
+    /// <remarks>
+    /// Can be replaced with a TimeSpan? in .NET 2
+    /// </remarks>
+    class TimeSpanNullable {
+
+        readonly bool _hasValue;
+        readonly TimeSpan _value;
+
+        /// <summary>
+        /// ctor without Value;
+        /// </summary>
+        public TimeSpanNullable() {
+            _hasValue = false;
+        }
+
+        /// <summary>
+        /// ctor with Value
+        /// </summary>
+        /// <param name="timeSpan"></param>
+        public TimeSpanNullable(TimeSpan timeSpan) {
+            _hasValue = true;
+            _value = timeSpan;
+        }
+
+        /// <summary>
+        /// HasValue
+        /// </summary>
+        public bool HasValue {
+            get { return _hasValue; }
+        }
+
+        /// <summary>
+        /// Value if HasValue==true
+        /// </summary>
+        public TimeSpan Value {
+            get { return _value; }
+        }
+    }
+    
+    #else
+
+    using TimeSpanNullable = Nullable<TimeSpan>;
+    
+    #endif
+    
+
+    /// <summary>
+    /// Base parser for <see cref="TimeSpanConverter"/> custom specifiers.
+    /// </summary>
+    abstract class SpecifierParser 
+    {
+        const RegexOptions ParsingOptions = RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.IgnoreCase;
+
+        /// <summary>
+        /// Specifier
+        /// </summary>
+        public abstract string Specifier { get; }
+
+        /// <summary>
+        /// Convert int value to a Timespan based on the specifier
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public abstract TimeSpan Parse(int value);
+
+        /// <summary>
+        /// Check if the string contains the specifier and 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public TimeSpanNullable Match(string value) 
+        {
+            string regex = @"^(\d+)" + Specifier + "$";
+            Match match = Regex.Match(value, regex, ParsingOptions);
+
+            if (!match.Success) return new TimeSpanNullable();
+
+            return new TimeSpanNullable(Parse(int.Parse(match.Groups[1].Value)));
+        }  
+      
+    }
+
+    /// <summary>
+    /// Recognize 10d as ten days
+    /// </summary>
+    class DaySpecifier: SpecifierParser 
+    {
+        /// <summary>
+        /// Day specifier: d
+        /// </summary>
+        public override string Specifier 
+        {
+            get { return "d"; }
+        }
+
+        /// <summary>
+        /// Parse value as days
+        /// </summary>
+        /// <param name="value">Timespan in days</param>
+        /// <returns></returns>
+        public override TimeSpan Parse(int value) 
+        {
+            return TimeSpan.FromDays(value);
+        }
+    }
+
+    /// <summary>
+    /// Recognize 10h as ten hours
+    /// </summary>
+    class HourSpecifier : SpecifierParser 
+    {
+        /// <summary>
+        /// Hour specifier: h
+        /// </summary>
+        public override string Specifier 
+        {
+            get { return "h"; }
+        }
+
+        /// <summary>
+        /// Parse value as hours
+        /// </summary>
+        /// <param name="value">Timespan in hours</param>
+        /// <returns></returns>
+        public override TimeSpan Parse(int value)
+        {
+            return TimeSpan.FromHours(value);
+        }
+    }
+
+    /// <summary>
+    /// Recognize 10m as ten minutes
+    /// </summary>
+    class MinuteSpecifier : SpecifierParser 
+    {
+        /// <summary>
+        /// Minute specifier: m
+        /// </summary>
+        public override string Specifier 
+        {
+            get { return "m"; }
+        }
+
+        /// <summary>
+        /// Parse value as minutes
+        /// </summary>
+        /// <param name="value">Timespan in minutes</param>
+        /// <returns></returns>
+        public override TimeSpan Parse(int value) 
+        {
+            return TimeSpan.FromMinutes(value);
+        }
+    }
+
+    /// <summary>
+    /// Recognize 10s as ten seconds
+    /// </summary>
+    class SecondSpecifier : SpecifierParser 
+    {
+        /// <summary>
+        /// Second specifier: s
+        /// </summary>
+        public override string Specifier 
+        {
+            get { return "s"; }
+        }
+
+        /// <summary>
+        /// Parse value as seconds
+        /// </summary>
+        /// <param name="value">Timespan in seconds</param>
+        /// <returns></returns>
+        public override TimeSpan Parse(int value) 
+        {
+            return TimeSpan.FromSeconds(value);
+        }
+    }
+
+    /// <summary>
+    /// Recognize 10ms as ten milliseconds
+    /// </summary>
+    class MillisecondSpecifier : SpecifierParser 
+    {
+        /// <summary>
+        /// Millisecond specifier: ms
+        /// </summary>
+        public override string Specifier 
+        {
+            get { return "ms"; }
+        }
+
+        /// <summary>
+        /// Parse value as milliseconds
+        /// </summary>
+        /// <param name="value">Timespan in milliseconds</param>
+        /// <returns></returns>
+        public override TimeSpan Parse(int value) 
+        {
+            return TimeSpan.FromMilliseconds(value);
+        }
+    }
+
+    #endregion
+
     /// <summary>
     /// Converter for <see cref="System.TimeSpan"/> instances.
     /// </summary>
     /// <author>Bruno Baia</author>
+    /// <author>Roberto Paterlini</author>
     public class TimeSpanConverter : System.ComponentModel.TimeSpanConverter
     {
         #region Constants
 
-        private const string DaySpecifier = "d";
-        private const string HourSpecifier = "h";
-        private const string MinuteSpecifier = "m";
-        private const string SecondSpecifier = "s";
-        private const string MillisecondSpecifier = "ms";
+        static readonly SpecifierParser[] Specifiers = {
+                                                  new DaySpecifier(), 
+                                                  new HourSpecifier(), 
+                                                  new MinuteSpecifier(), 
+                                                  new SecondSpecifier(),
+                                                  new MillisecondSpecifier()
+                                              };
 
         #endregion
 
@@ -77,26 +292,17 @@ namespace Spring.Core.TypeConversion
             ITypeDescriptorContext context,
             CultureInfo culture, object value)
         {
-            if (value is string)
+            string stringValue = value as string;
+            if (stringValue!=null)
             {
                 try
                 {
-                    string timeSpan = ((string)value).ToLower();
-                    int specifierLengh = (timeSpan.EndsWith(MillisecondSpecifier)) ? 2 : 1;
-                    int time = int.Parse(timeSpan.Substring(0, timeSpan.Length - specifierLengh));
+                    stringValue = stringValue.Trim();
 
-                    switch (timeSpan.Substring(timeSpan.Length - specifierLengh, specifierLengh))
+                    foreach (SpecifierParser specifierParser in Specifiers) 
                     {
-                        case MillisecondSpecifier:
-                            return TimeSpan.FromMilliseconds((double)time);
-                        case SecondSpecifier:
-                            return TimeSpan.FromSeconds((double)time);
-                        case MinuteSpecifier:
-                            return TimeSpan.FromMinutes((double)time);
-                        case HourSpecifier:
-                            return TimeSpan.FromHours((double)time);
-                        case DaySpecifier:
-                            return TimeSpan.FromDays((double)time);
+                        TimeSpanNullable res = specifierParser.Match(stringValue);
+                        if (res.HasValue) return res.Value;
                     }
                 }
                 catch { }
