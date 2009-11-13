@@ -4,7 +4,7 @@
 
     <d:provider id="DbProvider" 
                provider="System.Data.SqlClient"
-               connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;User ID=springqa; Password=springqa"/>
+               connectionString="Data Source=SPRINGQA;Initial Catalog=Spring;User ID=springqa; Password=springqa"/>
 
   <object name="LoggingAdvice" type="Spring.Aspects.Logging.SimpleLoggingAdvice, Spring.Aop">
     <property name="logUniqueIdentifier" value="true"/>
@@ -43,7 +43,7 @@
     </object>
     
         
-    <object id="adoTransactionManager" 
+    <object id="transactionManager" 
             type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
             
         <property name="DbProvider" ref="DbProvider"/>
@@ -79,7 +79,7 @@
     <object id="testObjectManagerTP" 
             type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data">
         
-        <property name="PlatformTransactionManager" ref="adoTransactionManager"/>
+        <property name="PlatformTransactionManager" ref="transactionManager"/>
         <property name="Target">
             <object type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests">
                 <property name="TestObjectDao" ref="testObjectDao"/>
@@ -110,7 +110,7 @@
     <!-- Transaction Interceptor -->
     <object id="transactionInterceptor" 
             type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data">
-        <property name="TransactionManager" ref="adoTransactionManager"/>
+        <property name="TransactionManager" ref="transactionManager"/>
         <!-- note do not have converter from string to this property type registered -->
         <property name="TransactionAttributeSource" ref="methodMapTransactionAttributeSource"/>        
     </object>

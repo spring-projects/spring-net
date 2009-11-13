@@ -532,7 +532,7 @@ namespace Spring.Data.Core
             }
             #endregion
 
-            return (int)Execute(new ExecuteScalarCallbackWithCommandSetter(cmdType, cmdText, commandSetter));
+            return Execute(new ExecuteScalarCallbackWithCommandSetter(cmdType, cmdText, commandSetter));
 
         }
 
