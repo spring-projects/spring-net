@@ -81,7 +81,7 @@ namespace Spring.Util
     {
         public event PopHandler Pop;
 
-        public IDictionary OnPop (string soda, EventRaiser raiser) 
+        public IEventExceptionsCollector OnPop (string soda, EventRaiser raiser) 
         {
             return raiser.Raise (Pop, this, soda);
         }

@@ -63,6 +63,38 @@ namespace Spring.Context.Support
             
         }
 
+#if NET_2_0
+	    [Test]
+	    public void ExecutesAllContextEventHandlersAndRethrowsExceptionsThrownDuringContextEventHandlingByDefault()
+	    {
+	        MockApplicationContext appCtx = new MockApplicationContext();
+            bool secondHandlerExecuted = false;
+            appCtx.ContextEvent += new ApplicationEventHandler(delegate(object sender, ApplicationEventArgs e)
+            {
+                throw new ApplicationException("dummy");
+            } );
+            appCtx.ContextEvent += new ApplicationEventHandler(delegate(object sender, ApplicationEventArgs e)
+            {
+                secondHandlerExecuted = true;
+            } );
+
+
+	        ApplicationException resultException = null;
+	        try
+	        {
+	            appCtx.PublishEvent(this, new ApplicationEventArgs());
+                Assert.Fail();
+	        }
+	        catch (ApplicationContextException e)
+	        {
+	            resultException = (ApplicationException) e.GetBaseException();
+	        }
+
+            Assert.AreEqual("dummy", resultException.Message);
+            Assert.IsTrue(secondHandlerExecuted);
+        }
+#endif
+
         [Test]
         public void DoesNotSearchParentContextForMessageSource()
         {

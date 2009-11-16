@@ -18,15 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using Common.Logging;
-
-#endregion
 
 namespace Spring.Util
 {
@@ -36,6 +32,41 @@ namespace Spring.Util
     /// <author>Rick Evans</author>
     public class EventRaiser
     {
+        protected class EventExceptionsCollector : IEventExceptionsCollector
+        {
+            private readonly Hashtable _eventExceptions;
+
+            public EventExceptionsCollector()
+            {
+                _eventExceptions = new Hashtable();
+            }
+
+            public bool HasExceptions
+            {
+                get { return _eventExceptions.Count > 0; }
+            }
+
+            public Delegate[] Sources
+            {
+                get { return (Delegate[]) CollectionUtils.ToArray(_eventExceptions.Keys, typeof(Delegate)); }
+            }
+
+            public Exception[] Exceptions
+            {
+                get { return (Exception[]) CollectionUtils.ToArray(_eventExceptions.Values, typeof (Exception)); }
+            }
+
+            public Exception this[Delegate source]
+            {
+                get { return (Exception) _eventExceptions[source]; }
+            }
+
+            public void Add(Delegate source, Exception exception)
+            {
+                _eventExceptions.Add(source, exception);
+            }
+        }
+
         protected readonly ILog Log;
 
         /// <summary>
@@ -54,19 +85,19 @@ namespace Spring.Util
         /// <param name="source">The event to be raised.</param>
         /// <param name="arguments">The arguments to the event.</param>
         /// <returns>a map of sink/exception entries that occurred during event raising</returns>
-        public virtual IDictionary Raise (Delegate source, params object [] arguments)  
+        public virtual IEventExceptionsCollector Raise(Delegate source, params object[] arguments)  
         {
             if (source == null) 
             {
                 return null;
             }
 
-            IDictionary exceptions = null;
+            EventExceptionsCollector exceptions = new EventExceptionsCollector();
 
             Delegate [] delegates = source.GetInvocationList ();
             foreach (Delegate sink in delegates) 
             {
-                exceptions = Invoke (sink, arguments, exceptions);
+                Invoke (sink, arguments, exceptions);
             }
 
             return exceptions;
@@ -79,17 +110,18 @@ namespace Spring.Util
         /// <param name="sink">The sink to be invoked.</param>
         /// <param name="arguments">The arguments to the sink.</param>
         /// <param name="exceptions">the map of sink/exception entries to add any exception to</param>
-        protected virtual IDictionary Invoke (Delegate sink, object [] arguments, IDictionary exceptions) 
+        protected virtual void Invoke(Delegate sink, object[] arguments, EventExceptionsCollector exceptions) 
         {
             try 
             {
                 sink.DynamicInvoke (arguments);
-                return exceptions;
             } 
             catch (TargetInvocationException ex) 
             {
                 // unwrap the exception that actually caused the TargetInvocationException and throw that...
-                throw ReflectionUtils.UnwrapTargetInvocationException(ex);
+                Exception cause = ReflectionUtils.UnwrapTargetInvocationException(ex);
+                exceptions.Add(sink, cause);
+                throw cause;
             }
         }
     }
@@ -114,7 +146,7 @@ namespace Spring.Util
         /// <param name="sink">The sink to be invoked.</param>
         /// <param name="arguments">The arguments to the sink.</param>
         /// <param name="exceptions">the map of sink/exception entries to add any exception to</param>
-        protected override IDictionary Invoke(Delegate sink, object[] arguments, IDictionary exceptions) 
+        protected override void Invoke(Delegate sink, object[] arguments, EventExceptionsCollector exceptions) 
         {
             try 
             {
@@ -123,10 +155,8 @@ namespace Spring.Util
             catch(Exception ex)
             {
                 Log.Warn("Error during raising an event from " + new StackTrace(), ex);
-                if (exceptions == null) exceptions = new Hashtable();
                 exceptions.Add(sink, ex);
             }
-            return exceptions;
         }
     }
 }

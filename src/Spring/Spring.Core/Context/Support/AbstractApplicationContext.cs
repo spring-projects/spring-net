@@ -402,7 +402,13 @@ namespace Spring.Context.Support
         /// </param>
         protected virtual void OnContextEvent(object source, ApplicationEventArgs e)
         {
-            _eventRaiser.Raise(ContextEvent, source, e);
+            IEventExceptionsCollector exceptions = _eventRaiser.Raise(ContextEvent, source, e);
+            if (exceptions.HasExceptions)
+            {
+                Delegate target = ContextEvent.GetInvocationList()[0];
+                Exception exception = (Exception) exceptions[target];
+                throw new ApplicationContextException(string.Format("An unhandled exception occured during processing application event {0} in handler {1}", e.GetType(), target.Method), exception);
+            }
         }
 
         /// <summary>
