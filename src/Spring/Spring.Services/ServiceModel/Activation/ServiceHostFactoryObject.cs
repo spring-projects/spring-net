@@ -46,6 +46,7 @@ namespace Spring.ServiceModel.Activation
         #region Fields
 
         private string _targetName;
+        private bool _useServiceProxyTypeCache = true;
         private Uri[] _baseAddresses = new Uri[] { };
 
         /// <summary>
@@ -84,6 +85,16 @@ namespace Spring.ServiceModel.Activation
         {
             get { return _baseAddresses; }
             set { _baseAddresses = value; }
+        }
+
+        /// <summary>
+        /// Contorls, wether the underlying <see cref="SpringServiceHost"/> should cache
+        /// the generated proxy types based on the service name. Defaults to <c>true</c>.
+        /// </summary>
+        public bool UseServiceProxyTypeCache
+        {
+            get { return _useServiceProxyTypeCache; }
+            set { _useServiceProxyTypeCache = value; }
         }
 
         #endregion
@@ -171,7 +182,7 @@ namespace Spring.ServiceModel.Activation
         {
             ValidateConfiguration();
 
-            springServiceHost = new SpringServiceHost(TargetName, objectFactory, BaseAddresses);
+            springServiceHost = new SpringServiceHost(TargetName, objectFactory, UseServiceProxyTypeCache, BaseAddresses);
 
             springServiceHost.Open();
 

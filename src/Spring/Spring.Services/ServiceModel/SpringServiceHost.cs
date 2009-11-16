@@ -22,7 +22,7 @@
 #region Imports
 
 using System;
-
+using System.Collections;
 using Spring.Util;
 using Spring.Context;
 using Spring.Context.Support;
@@ -69,7 +69,19 @@ namespace Spring.ServiceModel
         /// <param name="objectFactory">The <see cref="IObjectFactory"/> to use.</param>
         /// <param name="baseAddresses">The base addresses for the hosted service.</param>
         public SpringServiceHost(string serviceName, IObjectFactory objectFactory, params Uri[] baseAddresses)
-            : base(CreateServiceType(serviceName, objectFactory), baseAddresses)
+            : this(serviceName, objectFactory, true, baseAddresses)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="Spring.ServiceModel.SpringServiceHost"/> class.
+        /// </summary>
+        /// <param name="serviceName">The name of the service within Spring's IoC container.</param>
+        /// <param name="objectFactory">The <see cref="IObjectFactory"/> to use.</param>
+        /// <param name="useServiceProxyTypeCache">whether to cache the generated service proxy type by <paramref name="serviceName"/></param>
+        /// <param name="baseAddresses">The base addresses for the hosted service.</param>
+        public SpringServiceHost(string serviceName, IObjectFactory objectFactory, bool useServiceProxyTypeCache, params Uri[] baseAddresses)
+            : base(CreateServiceType(serviceName, objectFactory, useServiceProxyTypeCache), baseAddresses)
         {
         }
 
@@ -85,7 +97,9 @@ namespace Spring.ServiceModel
             }
         }
 
-        private static Type CreateServiceType(string serviceName, IObjectFactory objectFactory)
+        private static Hashtable s_serviceTypeCache = new Hashtable();
+
+        private static Type CreateServiceType(string serviceName, IObjectFactory objectFactory, bool useServiceProxyTypeCache)
         {
             if (StringUtils.IsNullOrEmpty(serviceName))
             {
@@ -96,10 +110,26 @@ namespace Spring.ServiceModel
             {
                 return objectFactory.GetObject(serviceName) as Type;
             }
+
+            Type serviceType = null;
+            if (useServiceProxyTypeCache)
+            {
+                lock(s_serviceTypeCache)
+                {
+                    serviceType = (Type) s_serviceTypeCache[serviceName];
+                    if (serviceType == null)
+                    {
+                        serviceType = new ServiceProxyTypeBuilder(serviceName, objectFactory).BuildProxyType();
+                        s_serviceTypeCache[serviceName] = serviceType;
+                    }
+                }
+            }
             else
             {
-                return new ServiceProxyTypeBuilder(serviceName, objectFactory).BuildProxyType();
+                serviceType = new ServiceProxyTypeBuilder(serviceName, objectFactory).BuildProxyType();                    
             }
+
+            return serviceType;
         }
 
         #endregion
