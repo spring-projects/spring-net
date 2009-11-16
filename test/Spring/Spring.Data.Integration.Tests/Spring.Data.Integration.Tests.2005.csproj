@@ -109,6 +109,10 @@
       <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
       <Name>Spring.Data.2005</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.2005.csproj">
+      <Project>{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}</Project>
+      <Name>Spring.Testing.NUnit.2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2005.csproj">
       <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
       <Name>Spring.Core.Tests.2005</Name>
