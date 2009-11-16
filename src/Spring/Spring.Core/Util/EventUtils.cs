@@ -87,19 +87,16 @@ namespace Spring.Util
         /// <returns>a map of sink/exception entries that occurred during event raising</returns>
         public virtual IEventExceptionsCollector Raise(Delegate source, params object[] arguments)  
         {
-            if (source == null) 
-            {
-                return null;
-            }
-
             EventExceptionsCollector exceptions = new EventExceptionsCollector();
 
-            Delegate [] delegates = source.GetInvocationList ();
-            foreach (Delegate sink in delegates) 
+            if (source != null)
             {
-                Invoke (sink, arguments, exceptions);
+                Delegate [] delegates = source.GetInvocationList ();
+                foreach (Delegate sink in delegates) 
+                {
+                    Invoke (sink, arguments, exceptions);
+                }
             }
-
             return exceptions;
         }
 
