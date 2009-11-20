@@ -194,7 +194,7 @@ namespace Spring.Data.Generic
         /// <returns>object returned from callback</returns>
         public T Execute<T>(ICommandCallback<T> action)
         {
-            ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(DbProvider);
+            ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
             IDbCommand command = null;
             try
@@ -223,9 +223,9 @@ namespace Spring.Data.Generic
             }
             catch (Exception e)
             {
-                AdoUtils.DisposeCommand(command);
+                DisposeCommand(command);
                 command = null;
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
                 connectionTxPairToUse.Connection = null;
                 if (DbProvider.IsDataAccessException(e))
                 {
@@ -240,8 +240,8 @@ namespace Spring.Data.Generic
             }
             finally
             {
-                AdoUtils.DisposeCommand(command);
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeCommand(command);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
             }
         }
 
@@ -254,7 +254,7 @@ namespace Spring.Data.Generic
         /// <returns>A result object returned by the action or null</returns>
         public T Execute<T>(CommandDelegate<T> del)
         {
-            ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(DbProvider);
+            ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
             IDbCommand command = null;
             try
@@ -282,9 +282,9 @@ namespace Spring.Data.Generic
             catch (Exception e)
             {
                 string commandText = command.CommandText;
-                AdoUtils.DisposeCommand(command);
+                DisposeCommand(command);
                 command = null;
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
                 connectionTxPairToUse.Connection = null;
                 if (DbProvider.IsDataAccessException(e))
                 {
@@ -299,8 +299,8 @@ namespace Spring.Data.Generic
             }
             finally
             {
-                AdoUtils.DisposeCommand(command);
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeCommand(command);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
             }
         }
 
@@ -312,7 +312,7 @@ namespace Spring.Data.Generic
         /// <returns>object returned from callback</returns>
         public T Execute<T>(IDbCommandCallback<T> action)
         {
-            ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(DbProvider);
+            ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
             IDbCommand command = null;
             try
@@ -330,9 +330,9 @@ namespace Spring.Data.Generic
             }
             catch (Exception e)
             {
-                AdoUtils.DisposeCommand(command);
+                DisposeCommand(command);
                 command = null;
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
                 connectionTxPairToUse.Connection = null;
                 if (DbProvider.IsDataAccessException(e))
                 {
@@ -347,8 +347,8 @@ namespace Spring.Data.Generic
             }
             finally
             {
-                AdoUtils.DisposeCommand(command);
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeCommand(command);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
             }
         }
 
@@ -361,7 +361,7 @@ namespace Spring.Data.Generic
         /// <returns>A result object returned by the action or null</returns>
         public T Execute<T>(IDbCommandDelegate<T> del)
         {
-            ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(DbProvider);
+            ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
             IDbCommand command = null;
             try
@@ -380,9 +380,9 @@ namespace Spring.Data.Generic
             catch (Exception e)
             {
                 string commandText = command.CommandText;
-                AdoUtils.DisposeCommand(command);
+                DisposeCommand(command);
                 command = null;
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
                 connectionTxPairToUse.Connection = null;
                 if (DbProvider.IsDataAccessException(e))
                 {
@@ -397,8 +397,8 @@ namespace Spring.Data.Generic
             }
             finally
             {
-                AdoUtils.DisposeCommand(command);
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeCommand(command);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
             }
         }
 
@@ -417,7 +417,7 @@ namespace Spring.Data.Generic
         {
             AssertUtils.ArgumentNotNull(commandCreator, "commandCreator", "IDbCommandCreator must not be null");
             AssertUtils.ArgumentNotNull(action, "action", "Callback object must not be null");
-            ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(DbProvider);
+            ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
             IDbCommand command = null;
             try
@@ -435,9 +435,9 @@ namespace Spring.Data.Generic
             }
             catch (Exception e)
             {
-                AdoUtils.DisposeCommand(command);
+                DisposeCommand(command);
                 command = null;
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
                 connectionTxPairToUse.Connection = null;
                 if (DbProvider.IsDataAccessException(e))
                 {
@@ -452,8 +452,8 @@ namespace Spring.Data.Generic
             }
             finally
             {
-                AdoUtils.DisposeCommand(command);
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeCommand(command);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
             }
 
         }
@@ -471,7 +471,7 @@ namespace Spring.Data.Generic
         /// </remarks>
         public T Execute<T>(IDataAdapterCallback<T> dataAdapterCallback)
         {
-            ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(DbProvider);
+            ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
             IDbDataAdapter dataAdapter = null;
             try
             {
@@ -487,17 +487,17 @@ namespace Spring.Data.Generic
             }
             catch (Exception)
             {
-                AdoUtils.DisposeDataAdapterCommands(dataAdapter);
+                DisposeDataAdapterCommands(dataAdapter);
                 //TODO set dataAdapter command's = null; ?
                 //TODO exception translation? different hierarchy for data set operations.
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
                 connectionTxPairToUse.Connection = null;
                 throw;
             }
             finally
             {
-                AdoUtils.DisposeDataAdapterCommands(dataAdapter);
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeDataAdapterCommands(dataAdapter);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
             }
 
 
@@ -514,7 +514,7 @@ namespace Spring.Data.Generic
         /// <returns>A result object returned by the callback or null</returns>
         public T Execute<T>(DataAdapterDelegate<T> dataAdapterCallback)
         {
-            ConnectionTxPair connectionTxPairToUse = ConnectionUtils.GetConnectionTxPair(DbProvider);
+            ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
             IDbDataAdapter dataAdapter = null;
             try
             {
@@ -531,17 +531,17 @@ namespace Spring.Data.Generic
             }
             catch (Exception)
             {
-                AdoUtils.DisposeDataAdapterCommands(dataAdapter);
+                DisposeDataAdapterCommands(dataAdapter);
                 //TODO set dataAdapter command's = null; ?
                 //TODO exception translation? different hierarchy for data set operations.
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
                 connectionTxPairToUse.Connection = null;
                 throw;
             }
             finally
             {
-                AdoUtils.DisposeDataAdapterCommands(dataAdapter);
-                ConnectionUtils.DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
+                DisposeDataAdapterCommands(dataAdapter);
+                DisposeConnection(connectionTxPairToUse.Connection, DbProvider);
             }
         }
 
@@ -1201,7 +1201,7 @@ namespace Spring.Data.Generic
                 }
                 finally
                 {
-                    AdoUtils.CloseReader(reader);
+                    Support.AdoUtils.CloseReader(reader);
                     ParameterUtils.CopyParameters(parameters, command);
                 }
             }
@@ -1273,7 +1273,7 @@ namespace Spring.Data.Generic
                 }
                 finally
                 {
-                    AdoUtils.CloseReader(reader);
+                    Support.AdoUtils.CloseReader(reader);
                 }
             }
 
@@ -1343,7 +1343,7 @@ namespace Spring.Data.Generic
                 }
                 finally
                 {
-                    AdoUtils.CloseReader(reader);
+                    Support.AdoUtils.CloseReader(reader);
                 }
             }
 
@@ -1376,7 +1376,7 @@ namespace Spring.Data.Generic
                 }
                 finally
                 {
-                    AdoUtils.CloseReader(reader);
+                    Support.AdoUtils.CloseReader(reader);
                 }
                 ParameterUtils.ExtractOutputParameters(returnedParameters, command);
                 return objectList;
@@ -1408,7 +1408,7 @@ namespace Spring.Data.Generic
                 }
                 finally
                 {
-                    AdoUtils.CloseReader(reader);
+                    Support.AdoUtils.CloseReader(reader);
                 }
                 ParameterUtils.ExtractOutputParameters(returnedParameters, command);
                 return returnVal;
@@ -1555,7 +1555,7 @@ namespace Spring.Data.Generic
                 }
                 finally
                 {
-                    AdoUtils.CloseReader(reader);
+                    Support.AdoUtils.CloseReader(reader);
                 }
                 ParameterUtils.ExtractOutputParameters(returnedResults, command);
                 return returnedResults;
@@ -1691,7 +1691,7 @@ namespace Spring.Data.Generic
                 }
                 finally
                 {
-                    AdoUtils.CloseReader(reader);
+                    Support.AdoUtils.CloseReader(reader);
                 }
                 ParameterUtils.ExtractOutputParameters(returnedResults, command);
                 return returnedResults;

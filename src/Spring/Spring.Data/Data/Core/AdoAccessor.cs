@@ -34,6 +34,8 @@ namespace Spring.Data.Core
     /// <author>Juergen Hoeller</author>
     public abstract class AdoAccessor : IInitializingObject
     {
+        protected object AdoUtils;
+
         protected int commandTimeout;
 
         #region Properties
@@ -111,9 +113,28 @@ namespace Spring.Data.Core
         /// <param name="command"></param>
         protected virtual void ApplyCommandSettings(IDbCommand command)
         {
-            ConnectionUtils.ApplyTransactionTimeout(command, DbProvider, CommandTimeout );
+            Support.ConnectionUtils.ApplyTransactionTimeout(command, DbProvider, CommandTimeout);
         }
 
+        /// <summary>
+        /// Dispose the command, if any
+        /// </summary>
+        protected virtual void DisposeCommand(IDbCommand command)
+        {
+            Support.AdoUtils.DisposeCommand(command);
+        }
+
+        /// <summary>
+        /// Dispose the command, if any
+        /// </summary>
+        protected virtual void DisposeDataAdapterCommands(IDbDataAdapter adapter)
+        {
+            Support.AdoUtils.DisposeDataAdapterCommands(adapter);
+        }
+
+        /// <summary>
+        /// Extract the command text from the given <see cref="ICommandTextProvider"/>, if any.
+        /// </summary>
         protected virtual string GetCommandText(object cmdTextProvider)
         {
             ICommandTextProvider commandTextProvider = cmdTextProvider as ICommandTextProvider;
@@ -127,6 +148,18 @@ namespace Spring.Data.Core
             }
         }
 
+        /// <summary>
+        /// Obtain a connection/transaction pair
+        /// </summary>
+        protected virtual ConnectionTxPair GetConnectionTxPair(IDbProvider provider)
+        {
+            return Support.ConnectionUtils.GetConnectionTxPair(provider);
+        }
+
+        protected virtual void DisposeConnection(IDbConnection connection, IDbProvider provider)
+        {
+            Support.ConnectionUtils.DisposeConnection(connection, provider);
+        }
 
         /// <summary>
         /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
