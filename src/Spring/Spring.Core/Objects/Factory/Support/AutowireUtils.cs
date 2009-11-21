@@ -349,5 +349,28 @@ namespace Spring.Objects.Factory.Support
 	    {
             return new SimpleAutowireCandidateResolver();
 	    }
+
+        /// <summary>
+        /// Returns the list of <paramref name="propertyInfos"/> that are not satisfied by <paramref name="properties"/>.
+        /// </summary>
+        /// <returns>the filtered list. Is never <c>null</c></returns>
+        public static PropertyInfo[] GetUnsatisfiedDependencies(PropertyInfo[] propertyInfos, IPropertyValues properties, DependencyCheckingMode dependencyCheck)
+        {
+            ArrayList unsatisfiedDependenciesList = new ArrayList();
+            foreach (PropertyInfo property in propertyInfos)
+            {
+                if (property.CanWrite && properties.GetPropertyValue(property.Name) == null)
+                {
+                    bool isSimple = ObjectUtils.IsSimpleProperty(property.PropertyType);
+                    bool unsatisfied = (dependencyCheck == DependencyCheckingMode.All) || (isSimple && dependencyCheck == DependencyCheckingMode.Simple)
+                                       || (!isSimple && dependencyCheck == DependencyCheckingMode.Objects);
+                    if (unsatisfied)
+                    {
+                        unsatisfiedDependenciesList.Add(property);
+                    }
+                }
+            }
+            return (PropertyInfo[])unsatisfiedDependenciesList.ToArray(typeof(PropertyInfo));
+        }
 	}
 }

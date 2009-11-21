@@ -1156,22 +1156,15 @@ namespace Spring.Objects.Factory.Support
             CheckDependencies(name, definition, filteredPropInfo, properties);
         }
 
-        private static void CheckDependencies(string name, IConfigurableObjectDefinition definition, PropertyInfo[] filteredPropInfo, IPropertyValues properties)
+        private void CheckDependencies(string name, IConfigurableObjectDefinition definition, PropertyInfo[] filteredPropInfo, IPropertyValues properties)
         {
             DependencyCheckingMode dependencyCheck = definition.DependencyCheck;
-            foreach (PropertyInfo property in filteredPropInfo)
+            PropertyInfo[] unsatisfiedDependencies = AutowireUtils.GetUnsatisfiedDependencies(filteredPropInfo, properties, dependencyCheck);
+
+            if (unsatisfiedDependencies.Length > 0)
             {
-                if (property.CanWrite && properties.GetPropertyValue(property.Name) == null)
-                {
-                    bool isSimple = ObjectUtils.IsSimpleProperty(property.PropertyType);
-                    bool unsatisfied = (dependencyCheck == DependencyCheckingMode.All) || (isSimple && dependencyCheck == DependencyCheckingMode.Simple)
-                                       || (!isSimple && dependencyCheck == DependencyCheckingMode.Objects);
-                    if (unsatisfied)
-                    {
-                        throw new UnsatisfiedDependencyException(definition.ResourceDescription, name, property.Name,
-                            "Set this property value or disable dependency checking for this object.");
-                    }
-                }
+                throw new UnsatisfiedDependencyException(definition.ResourceDescription, name, unsatisfiedDependencies[0].Name,
+                    "Set this property value or disable dependency checking for this object.");                
             }
         }
 
