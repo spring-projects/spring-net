@@ -858,16 +858,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath="Expressions\Processors\DateConversionProcessor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath="Expressions\Processors\IMethodCallProcessor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Expressions\DefaultNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1701,12 +1691,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Expressions\Processors\DateConversionProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Expressions\Processors\DistinctProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Expressions\Processors\ICollectionProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Expressions\Processors\IMethodCallProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2071,11 +2071,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Objects\Factory\Config\DelegateObjectFactoryConfigurer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Objects\Factory\Config\ConstructorArgumentValues.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2087,6 +2082,11 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Config\DelegateFactoryObject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Config\DelegateObjectFactoryConfigurer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2959,6 +2959,11 @@
                 />
                 <File
                     RelPath = "Util\IChainableConfigSystem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\IEventExceptionsCollector.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

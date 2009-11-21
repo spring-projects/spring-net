@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Runtime.Serialization;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Listener
@@ -27,8 +28,16 @@ namespace Spring.Messaging.Nms.Listener
     /// Exception thrown when the maximum connection recovery time has been exceeded.
     /// </summary>
     /// <author>Mark Pollack</author>
+    [Serializable]
     public class RecoveryTimeExceededException : NMSException
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class.
+        /// </summary>
+        public RecoveryTimeExceededException(): base()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class, with the specified message
@@ -49,5 +58,8 @@ namespace Spring.Messaging.Nms.Listener
             : base(message, innerException)
         {
         }
+
+        /* Note, can not add this exception since the signature is not present in the base class.  
+           protected RecoveryTimeExceededException(SerializationInfo info, StreamingContext context ) : base( info, context ) {} */
     }
 }

@@ -19,7 +19,6 @@
 #endregion
 
 using System;
-using System.Collections;
 using Common.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Connections;
@@ -88,15 +87,7 @@ namespace Spring.Messaging.Ems.Core
         private int deliveryMode = Message.DEFAULT_DELIVERY_MODE;
 
         private long timeToLive = Message.DEFAULT_TIME_TO_LIVE;
-		
-        //TODO make optimizations later based on TIBCO EMS having thread safe sessions 
-        /*
-        private EmsResources emsResources = new EmsResources();
-
-        private bool cacheEmsResources = true;
-        */
-
-       
+		       
         #endregion
 
         #region Constructor (s)

@@ -35,10 +35,9 @@ using TIBCO.EMS;
 namespace Spring.Messaging.Ems.Core
 {
     /// <summary>
-    /// This class contains tests for 
+    /// This class contains tests for EmsTemplate
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
     [TestFixture]
     public class MessageTemplateTests
     {

@@ -120,6 +120,8 @@
     <Compile Include="Messaging\Ems\Integration\LoggingExceptionHandler.cs" />
     <Compile Include="Messaging\Ems\Integration\SimpleMessageListener.cs" />
     <Compile Include="Messaging\Ems\Integration\SimpleMessageListenerContainerTests.cs" />
+    <Compile Include="Messaging\Ems\Jndi\ExpectedLookupContext.cs" />
+    <Compile Include="Messaging\Ems\Jndi\JndiLookupFactoryObjectTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Ems\Integration\SimpleMessageListenerContainerTests.xml" />

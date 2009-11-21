@@ -85,8 +85,8 @@ namespace Spring.Objects.Factory {
             string.Format (
             "Object named '{0}' must be of type [{1}], but was actually of type [{2}]",
             name,
-            requiredType.Name,
-            actualInstance.GetType ().Name)) {
+            requiredType.FullName,
+            actualInstance.GetType ().FullName)) {
             this.name = name;
             this.actualInstance = actualInstance;
             this.requiredType = requiredType;

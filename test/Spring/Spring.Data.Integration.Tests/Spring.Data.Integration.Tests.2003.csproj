@@ -114,6 +114,11 @@
                     AssemblyName = "Common.Logging"
                     HintPath = "..\..\..\lib\Net\1.1\Common.Logging.dll"
                 />
+                <Reference
+                    Name = "Spring.Testing.NUnit.2003"
+                    Project = "{6B8639E3-88BB-4F7B-9F23-699E84C30D58}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>

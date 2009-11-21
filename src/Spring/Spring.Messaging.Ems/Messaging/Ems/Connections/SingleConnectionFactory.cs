@@ -98,6 +98,11 @@ namespace Spring.Messaging.Ems.Connections
         /// </summary>
         private object connectionMonitor = new object();
 
+        private bool sslProxyHostSet;
+        private bool sslProxyPortSet;
+        private bool sslProxyAuthPasswordSet;
+        private bool sslProxyAuthUsernameSet;
+
         #endregion
 
         #region Constructors
@@ -350,25 +355,44 @@ namespace Spring.Messaging.Ems.Connections
 
         public string SSLProxyHost
         {
-            get { return TargetConnectionFactory.SSLProxyHost; }
-            set { TargetConnectionFactory.SSLProxyHost = value; }
+            get
+            {
+                return TargetConnectionFactory.SSLProxyHost;
+            }
+            set
+            {
+                TargetConnectionFactory.SSLProxyHost = value;
+                sslProxyHostSet = true;
+            }
         }
         
         public int SSLProxyPort
         {
             get { return TargetConnectionFactory.SSLProxyPort;}
-            set { TargetConnectionFactory.SSLProxyPort = value; }
+            set
+            {
+                TargetConnectionFactory.SSLProxyPort = value;
+                sslProxyPortSet = true;
+            }
         }
 
         public string SSLProxyAuthUsername
         {
-            set { TargetConnectionFactory.SSLProxyAuthUsername = value; }
+            set
+            {
+                TargetConnectionFactory.SSLProxyAuthUsername = value;
+                sslProxyAuthUsernameSet = true;
+            }
             get { return TargetConnectionFactory.SSLProxyAuthUsername;  }
         }
 
         public string SSLProxyAuthPassword
         {
-            set { TargetConnectionFactory.SSLProxyAuthPassword = value; }
+            set
+            {
+                TargetConnectionFactory.SSLProxyAuthPassword = value;
+                sslProxyAuthPasswordSet = true;
+            }
             get { return TargetConnectionFactory.SSLProxyAuthPassword;  }
         }
 
@@ -543,10 +567,16 @@ namespace Spring.Messaging.Ems.Connections
             {
                 throw new ArgumentException("Connection or 'TargetConnectionFactory' is required.");
             }
-            // Note this is repeated in EmsConnectionFactory as this class only referes to IConnectionFactory and 
+            // Note this is repeated in EmsConnectionFactory as this class only refers to IConnectionFactory and 
             // IConnectionFactory does not implement the spring specific lifecycle interface IInitializingObject
-            TargetConnectionFactory.NativeConnectionFactory.SetSSLProxyAuth(SSLProxyAuthUsername, SSLProxyAuthPassword);
-            TargetConnectionFactory.NativeConnectionFactory.SetSSLProxy(SSLProxyHost, SSLProxyPort);
+            if (sslProxyAuthUsernameSet || sslProxyAuthPasswordSet)
+            {
+                TargetConnectionFactory.NativeConnectionFactory.SetSSLProxyAuth(SSLProxyAuthUsername, SSLProxyAuthPassword);
+            }
+            if (sslProxyHostSet || sslProxyPortSet)
+            {
+                TargetConnectionFactory.NativeConnectionFactory.SetSSLProxy(SSLProxyHost, SSLProxyPort);
+            }
         }
 
         #endregion

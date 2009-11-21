@@ -2051,9 +2051,9 @@ namespace Spring.Objects.Factory.Support
         /// if <paramref name="instance"/> is null or not assignable to <paramref name="requiredType"/>.
         /// </exception>
         private object EnsureObjectIsOfRequiredType(string name, object instance, Type requiredType)
-        {
+        {           
             // check that any required type matches the type of the actual object instance...
-            if (requiredType != null && !requiredType.IsAssignableFrom(instance.GetType()))
+            if (requiredType != null && instance!= null && !requiredType.IsAssignableFrom(instance.GetType()))
             {
                 throw new ObjectNotOfRequiredTypeException(name, requiredType, instance);
             }
