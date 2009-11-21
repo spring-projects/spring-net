@@ -34,6 +34,12 @@
     <literal>Trigger</literal> instances, respectively. Furthermore, a
     convenience class for the Quartz Scheduler is available that allows you to
     invoke a method of an existing target object.</para>
+
+    <note>
+      <para>There is a Quartz Quickstart application that is shipped with
+      Spring.NET. It is documented <link
+      linkend="quartz-quickstart">here</link>.</para>
+    </note>
   </section>
 
   <section xml:id="scheduling-quartz">
@@ -77,7 +83,7 @@
 
       <programlisting language="csharp">namespace Example.Quartz;
 
-public class ExampleJob extends QuartzJobObject {
+public class ExampleJob : QuartzJobObject {
 
   private int timeout;
   

@@ -15,6 +15,7 @@
   <!ENTITY psa-intro            SYSTEM "psa-intro.xml">
   <!ENTITY remoting             SYSTEM "remoting.xml">
   <!ENTITY messaging            SYSTEM "messaging.xml">
+  <!ENTITY messaging-ems        SYSTEM "messaging-ems.xml">
   <!ENTITY msmq	                SYSTEM "msmq.xml">
   <!ENTITY scheduling           SYSTEM "scheduling.xml">
   <!ENTITY templating           SYSTEM "templating.xml">
@@ -322,6 +323,11 @@
         <listitem>
           <para>
             <xref linkend="messaging"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="messaging-ems"/>
           </para>
         </listitem>
         <listitem>

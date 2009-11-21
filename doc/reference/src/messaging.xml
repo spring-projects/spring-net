@@ -40,108 +40,118 @@
 
     <para>This chapter discusses Spring's messaging support for providers
     whose API was modeled after the Java Message Service (JMS) API. Vendors
-    who provide a JMS inspired API include Apache, TIBCO, IBM, and Progress
-    Software. If you are using Microsoft's Message Queue, please refer to the
-    specific <link linkend="msmq">MSMQ section</link>.</para>
+    who provide a JMS inspired API include Apache ActiveMQ, TIBCO, IBM, and
+    Progress Software. If you are using Microsoft's Message Queue, please
+    refer to the specific <link linkend="msmq">MSMQ section</link>. The
+    description of Spring messages features in this chapter apply to all of
+    these JMS vendors. However, the documentation focuses on showing code
+    examples that use Apache ActiveMQ. For code examples and some features
+    specific to TIBCO EMS please refer to <link
+    linkend="messaging-ems">this</link> chapter.</para>
 
-    <para>As there is no de facto-standard common API across messaging
-    vendors, Spring provides an implementation of its helper classes for each
-    of the major messaging middleware vendors. The naming of the classes you
-    will interact with most frequently will either be identical for each
-    provider, but located in a different namespace, or have their prefix
-    change to be the three-letter-acronym commonly associated with the message
-    provider. The list of providers supported by Spring is show below along
-    with their namespace and prefix.</para>
+    <section xml:id="activemq-multi-vendor">
+      <title>Multiple Vendor Support</title>
 
-    <orderedlist>
-      <listitem>
-        <para>Apache ActiveMQ (NMS) in namespace
-        <literal>Spring.Messaging.Nms</literal>. 'Nms' is sometimes used as
-        the class prefix</para>
-      </listitem>
+      <para>As there is no de facto-standard common API across messaging
+      vendors, Spring provides an implementation of its helper classes for
+      each of the major messaging middleware vendors. The naming of the
+      classes you will interact with most frequently will either be identical
+      for each provider, but located in a different namespace, or have their
+      prefix change to be the three-letter-acronym commonly associated with
+      the message provider. The list of providers supported by Spring is show
+      below along with their namespace and prefix.</para>
 
-      <listitem>
-        <para>TIBCO EMS in namespace <literal>Spring.Messaging.Ems</literal>.
-        'Ems' is sometimes used as the class prefix (available as of
-        Spring.NET 1.3 )</para>
-      </listitem>
+      <orderedlist>
+        <listitem>
+          <para>Apache ActiveMQ (NMS) in namespace
+          <literal>Spring.Messaging.Nms</literal>. 'Nms' is used as the class
+          prefix</para>
+        </listitem>
 
-      <listitem>
-        <para>SonicMQ in namespace <literal>Spring.Messaging.Sonic</literal>,
-        'Jms' is sometimes used as the class prefix. (in a future
-        release)</para>
-      </listitem>
+        <listitem>
+          <para>TIBCO EMS in namespace
+          <literal>Spring.Messaging.Ems</literal>. 'Ems' is used as the class
+          prefix.</para>
+        </listitem>
 
-      <listitem>
-        <para>Websphere MQ in namespace
-        <literal>Spring.Messaging.Xms</literal>, 'Xms' is sometimes used as
-        the class prefix (in a future release)</para>
-      </listitem>
-    </orderedlist>
+        <listitem>
+          <para>Websphere MQ in namespace
+          <literal>Spring.Messaging.Xms</literal>, 'Xms' is used as the class
+          prefix (in a future release)</para>
+        </listitem>
+      </orderedlist>
 
-    <para>JMS can be roughly divided into two areas of functionality, namely
-    the production and consumption of messages. For message production and the
-    synchronous consumption of messages the a template class, named
-    <literal>NmsTemplate</literal>, <literal> EmsTemplate</literal> (etc.) is
-    used. Asynchronous message consumption is performed though a
-    multi-threaded message listener container,
-    <literal>SimpleMessageListenerContainer</literal>. This message listener
-    container is used to create Message-Driven PONOs (MDPs) which refer to a
-    messaging callback class that consists of just 'plain .NET object's and is
-    devoid of any specific messaging types or other artifacts. The
-    <literal>IMessageConverter</literal> interface is used by both the
-    template class and the message listener container to convert between
-    provider message types and PONOs.</para>
+      <para>JMS can be roughly divided into two areas of functionality, namely
+      the production and consumption of messages. For message production and
+      the synchronous consumption of messages the a template class, named
+      <literal>NmsTemplate</literal>, <literal> EmsTemplate</literal> (etc.)
+      is used. Asynchronous message consumption is performed though a
+      multi-threaded message listener container,
+      <literal>SimpleMessageListenerContainer</literal>. This message listener
+      container is used to create Message-Driven PONOs (MDPs) which refer to a
+      messaging callback class that consists of just 'plain .NET object's and
+      is devoid of any specific messaging types or other artifacts. The
+      <literal>IMessageConverter</literal> interface is used by both the
+      template class and the message listener container to convert between
+      provider message types and PONOs.</para>
 
-    <para>The namespace
-    <literal>Spring.Messaging.&lt;Vendor&gt;.Core</literal> contains the
-    messing template class (e.g. <literal>NmsTemplate</literal>). The template
-    class simplifies the use of the messaging APIs by handling the creation
-    and release of resources, much like the <literal>AdoTemplate</literal>
-    does for ADO.NET. The JMS inspired APIs are low-level API, much like
-    ADO.NET. As such, even the simplest of operations requires 10s of lines of
-    code with the bulk of that code related to resource management of
-    intermediate API objects Spring's messaging support, both in Java and
-    .NET, addresses the error-prone boiler plate coding style one needs when
-    using these APIs.</para>
+      <para>The namespace
+      <literal>Spring.Messaging.&lt;Vendor&gt;.Core</literal> contains the
+      messing template class (e.g. <literal>NmsTemplate</literal>). The
+      template class simplifies the use of the messaging APIs by handling the
+      creation and release of resources, much like the
+      <literal>AdoTemplate</literal> does for ADO.NET. The JMS inspired APIs
+      are low-level API, much like ADO.NET. As such, even the simplest of
+      operations requires 10s of lines of code with the bulk of that code
+      related to resource management of intermediate API objects Spring's
+      messaging support, both in Java and .NET, addresses the error-prone
+      boiler plate coding style one needs when using these APIs.</para>
 
-    <para>The design principle common to Spring template classes is to provide
-    helper methods to perform common operations and for more sophisticated
-    usage, delegate the essence of the processing task to user implemented
-    callback interfaces. The messaging template follows the same design. The
-    message template class offer various convenience methods for the sending
-    of messages, consuming a message synchronously, and exposing the message
-    Session and MessageProducer to the user.</para>
+      <para>The design principle common to Spring template classes is to
+      provide helper methods to perform common operations and for more
+      sophisticated usage, delegate the essence of the processing task to user
+      implemented callback interfaces. The messaging template follows the same
+      design. The message template class offer various convenience methods for
+      the sending of messages, consuming a message synchronously, and exposing
+      the message Session and MessageProducer to the user.</para>
 
-    <para>The namespace
-    <literal>Spring.Messaging.&lt;VendorAcronym&gt;.Support.Converter</literal>
-    provides a <literal>IMessageConverter</literal> abstraction to convert
-    between .NET objects and messages. The namespace
-    <literal>Spring.Messaging.&lt;VendorAcronym&gt;.Support.Destinations</literal>
-    provides various strategies for managing destinations, such as providing a
-    service locater for destinations stored in a directory service.</para>
+      <para>The namespace
+      <literal>Spring.Messaging.&lt;VendorAcronym&gt;.Support.Converter</literal>
+      provides a <literal>IMessageConverter</literal> abstraction to convert
+      between .NET objects and messages. The namespace
+      <literal>Spring.Messaging.&lt;VendorAcronym&gt;.Support.Destinations</literal>
+      provides various strategies for managing destinations, such as providing
+      a service locater for destinations stored in a directory service.</para>
 
-    <para>Finally, the namespace
-    <literal>Spring.Messaging.&lt;VendorAcronym&gt;.Connections</literal>
-    provides an implementations of the ConnectionFactory suitable for use in
-    standalone applications.</para>
+      <para>Finally, the namespace
+      <literal>Spring.Messaging.&lt;VendorAcronym&gt;.Connections</literal>
+      provides an implementations of the ConnectionFactory suitable for use in
+      standalone applications.</para>
 
-    <para>The rest of the sections in this chapter discusses each of the major
-    helper classes in detail. Please refer to the sample application that
-    ships with Spring for additional hands-on usage.</para>
+      <para>The rest of the sections in this chapter discusses each of the
+      major helper classes in detail. Please refer to the sample application
+      that ships with Spring for additional hands-on usage.</para>
 
-    <note>
-      <para>To simplify documenting features that are common across all
-      provider implementations of Spring's helper classes a specific provider,
-      Apache ActiveMQ, was selected. As such when you see 'NmsTemplate' in the
-      documentation, it also refers to EmsTemplate, XmsTemplate, etc. unless
-      specifically documented otherwise. The provider specific API classes are
-      typically named after their JMS counterparts with the possible exception
-      of a leading 'I' in front of interfaces in order to follow .NET naming
-      conventions. In the documentation these API artifacts are referred to as
-      'ConnectionFactory', 'Session', 'Message', etc. without the leading
-      'I'.</para>
-    </note>
+      <note>
+        <para>To simplify documenting features that are common across all
+        provider implementations of Spring's helper classes a specific
+        provider, Apache ActiveMQ, was selected. As such when you see
+        'NmsTemplate' in the documentation, it also refers to EmsTemplate,
+        XmsTemplate, etc. unless specifically documented otherwise. The
+        provider specific API classes are typically named after their JMS
+        counterparts with the possible exception of a leading 'I' in front of
+        interfaces in order to follow .NET naming conventions. In the
+        documentation these API artifacts are referred to as
+        'ConnectionFactory', 'Session', 'Message', etc. without the leading
+        'I'.</para>
+      </note>
+
+      <note>
+        <para>To view some of this chapters contents that are based on TIBCO
+        EMS please refer to the <link linkend="messaging-ems">TIBCO EMS
+        chapter</link>.</para>
+      </note>
+    </section>
 
     <section xml:id="activemq-intro-soc">
       <title>Separation of Concerns</title>
@@ -243,7 +253,8 @@
       <literal>ISessionCallback</literal> provides the user with the provider
       specific messaging Session and the callback
       <literal>IProducerCallback</literal> exposes a provider specific Session
-      and MessageProducer pair.</para>
+      and MessageProducer pair. See <xref
+      linkend="messaging-session-callback" />.</para>
 
       <para>Provider messaging APIs typically expose two types of send
       methods, one that takes delivery mode, priority, and time-to-live as
@@ -277,29 +288,20 @@
       and encapsulates various configuration parameters, many of which are
       vendor specific such as SSL configuration options.</para>
 
+      <para>To create a ActivfeMQ ConnectionFactory define can create an
+      object definition as shown</para>
+
+      <programlisting>  &lt;object id="nmsConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ"&gt;
+    &lt;constructor-arg index="0" value="tcp://localhost:61616"/&gt;
+  &lt;/object&gt;</programlisting>
+
       <para><classname>EmsTemplate</classname> also requres a reference to a
       ConnectionFactory, however, it is not the 'native'
       <classname>TIBCO.EMS.ConnectionFactory</classname>. Instead the
       connection factory type is
-      Spring.Messaging.Ems.Common.IConnectionFactory. A set of interfaces has
-      created that mirror the standard TIBCO API for ConnectionFactory,
-      Connection, Session, MessageProducer, MessageConsumer, and
-      ITopicSubscriber. This was done in order to provide caching of these
-      resources internally in a transparent manager and to a lesser extent,
-      provide a convenient API that makes them easy to configure using
-      dependency injection. Typically users of Spring.NET do not need to
-      programmatically interact with these classes, instead using methods of
-      EmsTemplate to syncrhonously send and consume messages and a
-      SimpleMessageListenerContainer to asynchronously consume messages. It
-      will be common to configure an
-      Spring.Messaging.Ems.Common.ConnectionFactory using depdency injection.
-      Please refer to the Spring APi documentation for the properties that are
-      available - they mirror all the properties you find on the standard
-      TIBCO ConnectionFactory. You can also set or get the underlying 'native'
-      TIBCO EMS object, such as the TIBCO.EMS.ConnectionFactory using a
-      property 'NativeConnectionFactory' There is a similar 'Native' property
-      that is available on all of the classes that are in the
-       Spring.Messaging.Ems.Common.namespace.</para>
+      Spring.Messaging.Ems.Common.IConnectionFactory. See the documentation
+      for TIBCO EMS supper for more information <link
+      linkend="messaging-ems">here</link>.</para>
     </section>
 
     <section xml:id="activemq-using-caching-resources">
@@ -347,11 +349,23 @@
         destination. <literal>MessageConsumers</literal> are cached based on a
         key composed of the destination, selector, noLocal delivery flag, and
         the durable subscription name (if creating durable consumers).</para>
+
+        <para>Here is an example configuration</para>
+
+        <programlisting>  &lt;object id="connectionFactory" type="Spring.Messaging.Nms.Connections.CachingConnectionFactory, Spring.Messaging.Nms"&gt;
+    &lt;property name="SessionCacheSize" value="10" /&gt;
+    &lt;property name="TargetConnectionFactory"&gt;
+      &lt;object type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ"&gt;
+        &lt;constructor-arg index="0" value="tcp://localhost:61616"/&gt;
+      &lt;/object&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+</programlisting>
       </section>
     </section>
 
     <section xml:id="activemq-using-destination-mgmt">
-      <title>Destination Management</title>
+      <title>Dynamic Destination Management</title>
 
       <para>In Java implementations of JMS, Connections and Destinations are
       'administered objects' accessible though JNDI - a directory service much
@@ -409,13 +423,14 @@
       resolution via implementations of the
       <literal>IDestinationResolver</literal> interface.</para>
 
-      <para>You can also configure the NmsTemplate with a default destination
-      via the property <literal>DefaultDestination</literal>. The default
-      destination will be used with send and receive operations that do not
-      refer to a specific destination.</para>
+      <para>You can also configure the <classname>NmsTemplate</classname> with
+      a default destination via the property
+      <literal>DefaultDestination</literal>. The default destination will be
+      used with send and receive operations that do not refer to a specific
+      destination.</para>
     </section>
 
-    <section>
+    <section xml:id="activemq-listener-containers" xml:lang="">
       <title>Message Listener Containers</title>
 
       <para>One of the most common uses of JMS is to concurrently process
@@ -441,13 +456,19 @@
       the provider supports it), will be provided in future releases.
       SimpleMessageListenerContainer creates a fixed number of JMS sessions at
       startup and uses them throughout the lifespan of the container.</para>
+
+      <para>Creating and configuring a ActiveMQ MessageListener container is
+      described in <link linkend="activemq-async-reception">this</link>
+      section.</para>
     </section>
 
     <section xml:id="activemq-using-txmgmt">
       <title>Transaction Management</title>
 
-      <para>Spring provides a <literal>NmsTransactionManager</literal> that
-      manages transactions for a single ConnectionFactory. This allows
+      <para>Spring provides an implementation of the
+      IPlatformTransactionManager interface for managing ActiveMQ messaging
+      transactions. The class is <literal>NmsTransactionManager</literal> and
+      it manages transactions for a single ConnectionFactory. This allows
       messaging applications to leverage the managed transaction features of
       Spring as described in <xref linkend="transaction" />. The
       <literal>NmsTransactionManager</literal> performs local resource
@@ -568,7 +589,7 @@
     a ConnectionFactory property that will instantiate a NmsTemplate instance
     that is made available via the property NmsTemplate.</para>
 
-    <section>
+    <section xml:id="activemq-messageconverter">
       <title>Using MessageConverters</title>
 
       <para>In order to facilitate the sending of domain model objects, the
@@ -580,19 +601,23 @@
       <literal>IMessageConverter</literal> interface. This interface defines a
       simple contract to convert between .NET objects and JMS messages. The
       default implementation <literal>SimpleMessageConverter</literal>
-      supports conversion between String and TextMessage, byte[] and
-      BytesMesssage, and System.Collections.IDictionary and MapMessage. By
-      using the converter, you and your application code can focus on the
-      business object that is being sent or received via messaging and not be
-      concerned with the details of how it is represented as a JMS message.
-      There is also an <literal>XmlMessageConverter</literal> that converts
-      objects to an XML string and vice-versa for sending via a TextMessage.
-      Please refer to the API documentation and example application for more
-      information on configuring an XmlMessageConverter.</para>
+      supports conversion between <classname>String</classname> and
+      <classname>TextMessage</classname>, <classname>byte[]</classname> and
+      <classname>BytesMesssage</classname>, and
+      <classname>System.Collections.IDictionary</classname> and
+      <classname>MapMessage</classname>. By using the converter, you and your
+      application code can focus on the business object that is being sent or
+      received via messaging and not be concerned with the details of how it
+      is represented as a JMS message. There is also an
+      <literal>XmlMessageConverter</literal> that converts objects to an XML
+      string and vice-versa for sending via a TextMessage. Please refer to the
+      API documentation and example application for more information on
+      configuring an <classname>XmlMessageConverter</classname>.</para>
 
       <para>The family of <literal>ConvertAndSend</literal> messages are
       similar to that of the Send method with the additional argument of type
-      IMessagePostProcessor. These methods are listed below.</para>
+      <interfacename>IMessagePostProcessor</interfacename>. These methods are
+      listed below.</para>
 
       <itemizedlist>
         <listitem>
@@ -686,7 +711,7 @@
     </section>
   </section>
 
-  <section>
+  <section label="" xml:id="messaging-session-callback" xml:lang="">
     <title>Session and Producer Callback</title>
 
     <para>While the send operations cover many common usage scenarios, there
@@ -721,12 +746,12 @@
 
     <para><programlisting language="csharp">public interface IProducerCallback
 {
-    object DoInJms(Session session, MessageProducer producer);
+    object DoInNms(ISession session, IMessageProducer producer);
 }</programlisting>and</para>
 
     <programlisting language="csharp">public interface ISessionCallback
 {
-    object DoInJms(Session session);
+    object DoInNms(ISession session);
 }</programlisting>
 
     <para>The delegate signatures are listed below and mirror the interface
@@ -740,7 +765,7 @@ public delegate object ProducerDelegate(ISession session, IMessageProducer produ
   <section>
     <title>Receiving a message</title>
 
-    <section>
+    <section xml:id="activemq-sync-receive">
       <title>Synchronous Reception</title>
 
       <para>While messaging middleware is typically associated with
@@ -833,13 +858,13 @@ public delegate object ProducerDelegate(ISession session, IMessageProducer produ
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="activemq-async-reception">
       <title>Asynchronous Reception</title>
 
       <para>Asynchronous reception of messages occurs by the messaging
       provider invoking a callback function. This is commonly an interface
-      such as the IMessageListener interface shown below, taken from the TIBCO
-      EMS provider.</para>
+      such as the <interfacename>IMessageListener</interfacename> interface
+      shown below, taken from the TIBCO EMS provider.</para>
 
       <programlisting language="csharp">public interface IMessageListener
 {
@@ -901,9 +926,13 @@ namespace MyApp
       <literal>SimpleMessageListenerContainer</literal> creates a fixed number
       of JMS Sessions/MessageConsumer pairs as set by the property
       <property>ConcurrentConsumers</property>. The default value of
-      ConcurrentConsumers is one. Here is a sample configuration</para>
+      ConcurrentConsumers is one. Here is a sample configuration that uses the
+      the custom schema provided in Spring.NET to more reasily configure
+      MessageListenerContainers.</para>
 
-      <programlisting language="myxml">
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
+         xmlns:nms="http://www.springframework.net/nms"&gt;
+
   &lt;object id="ActiveMqConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ"&gt;
     &lt;constructor-arg index="0" value="tcp://localhost:61616"/&gt;
   &lt;/object&gt;
@@ -915,17 +944,15 @@ namespace MyApp
 
   &lt;object id="MyMessageListener" type="MyApp.SimpleMessageListener, MyApp"/&gt;
 
-  &lt;object id="MessageListenerContainer" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms"&gt;
-    &lt;property name="ConnectionFactory" ref="ConnectionFactory"/&gt;
-    &lt;property name="DestinationName" value="APP.REQUEST"/&gt;
-    &lt;property name="ConcurrentConsumers" value="10"/&gt;
-    &lt;property name="MessageListener" ref="MyMessageListener"/&gt;
-  &lt;/object&gt;
-</programlisting>
+  &lt;nms:listener-container connection-factory="ConnectionFactory" concurrency="10"&gt;
+    &lt;nms:listener ref="MyMessageListener" destination="APP.STOCK.REQUEST" /&gt;
+  &lt;/nms:listener-container&gt;
+
+&lt;/objects&gt;</programlisting>
 
       <para>The above configuration will create 10 threads that process
-      messages off of the queue named "APP.REQUEST". The threads are those
-      owned by the messaging provider as a result of creating a
+      messages off of the queue named "APP.STOCK.REQUEST". The threads are
+      those owned by the messaging provider as a result of creating a
       MessageConsumer. Other important properties are
       <property>ClientID</property>, used to set the ClientID of the
       Connection and <property>MessageSelector</property> to specify the
@@ -934,21 +961,6 @@ namespace MyApp
       <property>DurableSubscriptionName</property>. You may also register an
       exception listener using the property
       <literal>ExceptionListener</literal>.</para>
-
-      <para>A custom schema to create the
-      <literal>SimpleMessageListener</literal> container is also provided.
-      Using this schema the configuration above looks like the
-      following</para>
-
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-         xmlns:nms="http://www.springframework.net/nms"&gt;
-
-  &lt;!-- other object definitions --&gt;
-  &lt;nms:listener-container connection-factory="ConnectionFactory" concurrency="10"&gt;
-    &lt;nms:listener ref="MyMessageListener" destination="APP.STOCK.REQUEST" /&gt;
-  &lt;/nms:listener-container&gt;
-
-&lt;/objects&gt;</programlisting>
 
       <para>Exceptions that are thrown during message processing can be passed
       to an implementation of <literal>IExceptionHandler</literal> and
@@ -968,7 +980,7 @@ namespace MyApp
       <literal>SimpleMessageListenerContainer</literal>.</para>
     </section>
 
-    <section>
+    <section xml:id="activemq-sessionaware">
       <title>The ISessionAwareMessageListener interface</title>
 
       <para>The <literal>ISessionAwareMessageListener</literal> interface is a
@@ -1120,7 +1132,7 @@ namespace MyApp
       <para></para>
     </section>
 
-    <section>
+    <section xml:id="activemq-msg-tx">
       <title>Processing messages within a messaging transaction</title>
 
       <para>Invoking a message listener within a transaction only requires
@@ -1143,7 +1155,7 @@ namespace MyApp
       transactions.</para>
     </section>
 
-    <section>
+    <section xml:id="activemq-namespace">
       <title>Messaging Namespace support</title>
 
       <para>To use the NMS namespace elements you will need to reference the

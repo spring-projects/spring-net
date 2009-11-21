@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter version="5" xml:id="messaging-ems" xml:lang=""
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Message Oriented Middleware - TIBCO EMS</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The bulk of the documentation for Spring's JMS support , independent
+    of vendor, is described in the chapter <xref linkend="messaging" />. While
+    that chapter refers to classes that are part of Spring's ActiveMQ
+    integration, those classes have counter parts as part of Spring's TIBCO
+    EMS integration. For example,
+    <literal>Spring.Messaging.Nms.Core.NmsTemplate</literal> and
+    <literal>Spring.Messaging.Ems.Core.EmsTemplate</literal>. This chapter
+    fills in some of the gaps in taking that approach by describing Spring.NET
+    features that are specific to its integration with TIBCO EMS and showing
+    some examples using the TIBCO EMS integration.</para>
+
+    <note>
+      <para>A complete sample application using Spring's EMS integration
+      classes is in the distribution under the directory
+      <literal>examples\Spring\Spring.EmsQuickStart</literal>. Documentation
+      for the Quickstart is available <link
+      linkend="ems-quickstart">here</link>.</para>
+    </note>
+  </section>
+
+  <section>
+    <title>Interface based APIs</title>
+
+    <para>The TIBCO EMS APIs are not interface based. What this means is that
+    the class <classname>TIBCO.EMS.Session</classname> does not inherit from
+    an <classname>ISession</classname> interface. The lack of interfaces makes
+    it impossible to apply traditional approahces to support caching of
+    Connections, Sessions, MessageProducers, and MessageProducers. Also, in
+    some cases Java like setter methods were used instead of standard .NET
+    properties making it difficult to configure those classes using dependency
+    injection. (For example, see
+    <classname>EmssslSystemStoreInfo.SetCertificateStoreLocation()</classname>).
+    For these reasons it was decided to create a 'mirror' API of the TIBCO EMS
+    API that is interface based. In the namespace
+    <literal>Spring.Messaging.Ems.Common</literal> are interfaces such as
+    <interfacename>IConnectionFactory</interfacename>,
+    <interfacename>IConnection</interfacename>,
+    <interfacename>ISession</interfacename>,
+    <interfacename>IMessageProducer</interfacename>, etc as well as their
+    implementation classes <classname>EmsConnectionFactory</classname>,
+    <classname>EmsConnection</classname>, <classname>EmsSession</classname>,
+    etc. The interfaces mirror all the operations that are on the standard
+    TIBCO EMS classes so you should feel right as home when programming
+    against these classes.</para>
+
+    <para>Typically users of Spring.NET do not need to programmatically
+    interact with these classes, instead using methods of
+    <classname>EmsTemplate</classname> to syncrhonously send and consume
+    messages and a <classname>SimpleMessageListenerContainer</classname> to
+    asynchronously consume messages. It will be common to configure an
+    <classname>Spring.Messaging.Ems.Common.ConnectionFactory</classname> using
+    dependency injection. The following sections show some example usage. You
+    can also set or get the underlying 'native' TIBCO EMS object, such as the
+    TIBCO.EMS.ConnectionFactory using a property 'NativeConnectionFactory'
+    Each class in the Spring.Messaging.Ems.Common namespace has a similar
+    'Native' property, for example NativeSession, NativeMessageProducer if you
+    need access the raw TIBCO EMS class.</para>
+  </section>
+
+  <section>
+    <title>Using Spring's EMS based Messaging</title>
+
+    <section>
+      <title>Overivew</title>
+
+      <para>In the namespace Spring.Messaging.Ems.Core is the class
+      EmsTemplate. This is the main class you will use to send messages and to
+      receive messages synchronously. In the namespace
+      Spring.Messaging.Ems.Listener is the class
+      SimpleMessageListenerContainer. This is the main class you will use to
+      recieve messages asynchronously.</para>
+    </section>
+
+    <section>
+      <title>Connections</title>
+
+      <para>To create a
+      <classname>Spring.Messaging.Ems.Common.ConnectionFactory</classname> use
+      the following object definition</para>
+
+      <programlisting language="myxml">  &lt;object id="emsConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems"&gt;
+    &lt;constructor-arg name="serverUrl" value="tcp://localhost:7222"/&gt;
+    &lt;constructor-arg name="clientId" value="SpringEMSClient"/&gt;
+    &lt;property name="ConnAttemptCount" value="10" /&gt;
+    &lt;property name="ConnAttemptDelay" value="100" /&gt;
+    &lt;property name="ConnAttemptTimeout" value="1000" /&gt;
+  &lt;/object&gt;</programlisting>
+
+      <para>Please refer to the API documentation for other properties you way
+      want to set, in particular for those relating to SSL.</para>
+    </section>
+
+    <section>
+      <title>Caching Messaging Resources</title>
+
+      <para>While TIBCO EMS provides thread safe access to EMS Sessions (above
+      and beyond what is specified in the JMS specification), Spring provides
+      two implementations of the IConnectionFactory infrastructure to manage
+      the use of intermediate objects when following the 'standard' API walk
+      of</para>
+
+      <programlisting>IConnectionFactory-&gt;IConnection-&gt;ISession-&gt;IMessageProducer-&gt;Send</programlisting>
+
+      <section>
+        <title>SingleConnectionFactory</title>
+
+        <para><literal>Spring.Messaging.Ems.Connections.SingleConnectionFactory
+        </literal>will return the same connection on all calls to
+        <methodname>CreateConnection</methodname> and ignore calls to
+        Close.</para>
+
+        <para>You can configure a SingleConnectionFactory as you would an
+        <classname>EmsConnectionFactory</classname>.</para>
+      </section>
+
+      <section>
+        <title>CachingConnectionFactory</title>
+
+        <para><literal>Spring.Messaging.Ems.Connections.CachingConnectionFactory</literal>
+        extends the functionality of SingleConnectionFactory and adds the
+        caching of Sessions, MessageProducers, and MessageConsumers. See the
+        documentation for ActiveMQ CachingConnectionFactory for some
+        additional information <link
+        linkend="activemq-using-caching-cachingconnectionfactory"
+        os="">here</link>.</para>
+
+        <para>An example configuration is shown below</para>
+
+        <programlisting language="myxml">  &lt;object id="connectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems"&gt;
+    &lt;property name="SessionCacheSize" value="10" /&gt;
+    &lt;property name="TargetConnectionFactory" ref="emsConnectionFactory" /&gt;
+  &lt;/object&gt;</programlisting>
+
+        <para>Notice that the property TargetConnectionFactory refers to
+        'emsConnectionFactory' defined in the previous section. This
+        connection factory implementation also set the ReconnectOnException
+        property to true by default allowing for automatic recovery of the
+        underlying Connection.</para>
+
+        <note>
+          <para>The CachingConnectionFactory requires explicit closing of all
+          Sessions obtained from its shared Connection. This is the usual
+          recommendation for native EMS access code anyway and Spring EMS code
+          follows this recommendation. However, with the
+          CachingConnectionFactory, its use is mandatory in order to actually
+          allow for Session reuse.</para>
+        </note>
+
+        <note>
+          <para>MessageConsumers obtained from a cached Session won't get
+          closed until the Session will eventually be removed from the pool.
+          This may lead to semantic side effects in some cases. For a durable
+          subscriber, the logical Session.Close() call will also close the
+          subscription. Re-registering a durable consumer for the same
+          subscription on the same Session handle is not supported; close and
+          reobtain a cached Session first.</para>
+        </note>
+
+        <para>To avoid accidentally referring to the ConnectionFactory that
+        does not support caching, (emsConnectionFactory), you should use an
+        inner object definition as shown below.</para>
+
+        <programlisting language="myxml">  &lt;object id="connectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems"&gt;
+    &lt;property name="SessionCacheSize" value="10" /&gt;
+    &lt;property name="TargetConnectionFactory"&gt;
+      &lt;object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems"&gt;
+        &lt;constructor-arg name="serverUrl" value="tcp://localhost:7222"/&gt;
+        &lt;constructor-arg name="clientId" value="SpringEMSClient"/&gt;
+        &lt;property name="ConnAttemptCount" value="10" /&gt;
+        &lt;property name="ConnAttemptDelay" value="100" /&gt;
+        &lt;property name="ConnAttemptTimeout" value="1000" /&gt;
+      &lt;/object&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+      </section>
+    </section>
+
+    <section>
+      <title>Dynamic Destination Management</title>
+
+      <para>The <link linkend="activemq-using-destination-mgmt">section</link>
+      in the ActiveMQ documentation covers the use of Dynamic Destination
+      mangement for TIBCO as well.</para>
+    </section>
+
+    <section>
+      <title>Accessing Admistrated objects via JNDI</title>
+
+      <para>TIBCO provides an implementation of JNDI to retrieve admistrive
+      objects in .NET. You can retrieve TIBCO
+      <classname>Destinations</classname> and
+      <literal>ConnectionFactories</literal> from the JNDI registry. To
+      provide ease of access to these JNDI managed objects in a Spring
+      application context the class <classname>JndiFactoryObject</classname>
+      is used. This allows you look configure the location of the JNDI
+      registry and to retrieve objects by name. The objects are retrieved from
+      JNDI at application startup. </para>
+
+      <para>These retrieved objetcts from JNDI in turn can be dependency
+      injected into other collaborating objects such as Spring's
+      <classname>CachingConnectionFactory</classname> (for connections) or
+      EmsTemplate (for destinations). Here is an example to retrieve a TIBCO
+      ConnectionFactory object from the JNDI registry.</para>
+
+      <programlisting language="myxml">  &lt;object id="jndiEmsConnectionFactory" type="Spring.Messaging.Ems.Jndi.JndiLookupFactoryObject, Spring.Messaging.Ems"&gt;
+    &lt;property name="JndiName" value="TopicConnectionFactory"/&gt;   
+    &lt;property name="JndiProperties[LookupContext.PROVIDER_URL]" value="tibjmsnaming://localhost:7222"/&gt;
+  &lt;/object&gt;</programlisting>
+
+      <para>JndiLookupFactory object implements the IFactoryObject interface,
+      so the type that is associated with the name 'jndiConnectionFactory' is
+      not JndiLookupFactoryObject, but the type returned from this factory's
+      'GetType' method, in this case the type of what was retrieved from
+      JNDI.</para>
+
+      <note>
+        <para>The dictionary JndiProperties is set using Spring Expression
+        language syntax for the property name. This provides a shortcut to the
+        more verbose &lt;dictionary/&gt; element. To enable this functionality
+        a the TIBCO.EMS.LookupContext was registered under the name
+        'LookupContext' in Spring's TypeRegistry.</para>
+      </note>
+
+      <para>The use of this object retrieved from JNDI to configure Spring's
+      CachingConnectionFactory set the property TargetConnectionFactory as
+      shown below </para>
+
+      <programlisting language="myxml">  &lt;object id="cachingJndiConnectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems"&gt;
+    &lt;property name="SessionCacheSize" value="10" /&gt;
+    &lt;property name="TargetConnectionFactory"&gt;
+      &lt;object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems"&gt;
+        &lt;constructor-arg ref="jndiEmsConnectionFactory"/&gt;
+      &lt;/object&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+      <para>Other useful properties and features of JndiLookupFactoryObject
+      are</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>JndiContextType</literal> : This is an enumeration
+          that can have either the value JMS or LDAP. These translate to
+          configuring JNDI context with the constants
+          LookupContextFactory.TIBJMS_NAMING_CONT or
+          LookupContextFactory.LDAP_CONTEXT for use with EMS's own JNDI
+          registry or an LDAP directory respectively. The default is set use
+          LookupContextFactory.TIBJMS_NAMING_CONT. The type JndiContextType is
+          also registered in Spring's TypeRegistry so that you can use a SpEL
+          expression to set the value as shown below.</para>
+
+          <programlisting language="myxml">  &lt;object id="jndiEmsConnectionFactory" type="Spring.Messaging.Ems.Jndi.JndiLookupFactoryObject, Spring.Messaging.Ems"&gt;
+    &lt;property name="JndiName" value="TopicConnectionFactory"/&gt;   
+    &lt;property name="JndiProperties[LookupContext.PROVIDER_URL]" value="tibjmsnaming://localhost:7222"/&gt;
+    &lt;property name="JndiContextType" expression="JndiContextType.JMS"/&gt;
+    &lt;property name="ExpectedType" value="TIBCO.EMS.ConnectionFactory"/&gt;
+  &lt;/object&gt;</programlisting>
+
+          <note>
+            <para>The <literal>TargetConnectionFactory</literal> is of the
+            Spring wrapper type
+            <interfacename>Spring.Messaging.Ems.Common.IConnectionFactory</interfacename>.
+            You can pass into Spring's implementation of that interface,
+            <classname>Spring.Messaging.Ems.Common.EmsConnectionFactory</classname>,
+            the 'raw' TIBCO EMS type,
+            <classname>TIBCO.EMS.ConnectionFactory</classname>.</para>
+          </note>
+        </listitem>
+
+        <listitem>
+          <para><literal>ExpectedType</literal>: This is a property of the
+          type System.Type. You can set the type that the located JNDI object
+          is supposed to be assignable to, if any. It's use is shown in the
+          previous XML configuraiton listing.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>JndiLookupContext</literal>: This is a property of
+          the type <classname>TIBCO.EMS.ILookupContext</classname>. If you
+          create a custom implementation of
+          <interfacename>ILookupContext</interfacename> (for example one that
+          performs lazy caching), assign this property instead of configuring
+          the property <literal>JndiContextType.</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><literal>DefaultObject</literal>: Sets a reference to an
+          instance of an object to fall back to if the JNDI lookup fails. The
+          default is not to have a fallback object.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>MessageListenerContainers</title>
+
+      <para>Spring's MessageListenerContainer's are used to process messages
+      asynchronously and concurrently. MessageListenerContainers are described
+      more in <link linkend="activemq-listener-containers">this</link>
+      section. </para>
+    </section>
+
+    <section>
+      <title>Transaction Management</title>
+
+      <para>Spring provides an implementation of the
+      IPlatformTransactionManager interface for managing TiBCO messaging
+      transactions. The class is <literal>EmsTransactionManager</literal> and
+      it manages transactions for a single ConnectionFactory. Please refer to
+      <link linkend="activemq-using-txmgmt">this</link> section for addtional
+      information on messaging based transaction managers.</para>
+    </section>
+
+    <section>
+      <title>Sending a Message</title>
+
+      <para>The class Spring.Messaging.Ems.Core.EmsTemplate contains several
+      convenience methods to send a message. These methods are identical to
+      those described in the ActiveMQ documentation <link
+      linkend="activemq-sending-messages">section</link> aside from the use of
+      type destination type TIBCO.EMS.Destination instead of
+      Apache.NMS.IDestination and switching of the namespace from Apache.NMS
+      to Spring.Messaging.Ems.Common. </para>
+
+      <para>Shown below is the code example for a SimplePublisher using
+      Spring's TIBCO EMS classes. This does now show the 'one-liner' send
+      methods but one that gives you direct access to the ISession to create
+      the message however you wish.</para>
+
+      <programlisting language="csharp">using Spring.Messaging.Ems.Common;
+using TIBCO.EMS;
+
+namespace Spring.Messaging.Ems.Core
+{
+    public class SimplePublisher
+    {
+        private EmsTemplate emsTemplate;
+
+        public SimplePublisher()
+        {
+            emsTemplate = new EmsTemplate(new EmsConnectionFactory("tcp://localhost:7222"));
+        }
+
+        public void Publish(string ticker, double price)
+        {
+            emsTemplate.SendWithDelegate("APP.STOCK.MARKETDATA",
+                          delegate(ISession session)
+                          {
+                              MapMessage message = session.CreateMapMessage();
+                              message.SetString("TICKER", ticker);
+                              message.SetDouble("PRICE", price);
+                              message.Priority = 5;
+                              return message;
+                          });
+        }
+    }
+}</programlisting>
+
+      <para>A more DI friendly implementation would be to expose a EmsTemplate
+      property or to inherit from Spring's EmsGatewaySupport base class which
+      provides a IConnectionFactory property that will instantiate a
+      EmsTemplate instance that is made available via the property
+      EmsTemplate.</para>
+
+      <programlisting language="csharp">using Spring.Messaging.Ems.Common;
+using TIBCO.EMS;
+
+namespace Spring.Messaging.Ems.Core
+{
+    public class SimpleGateway : EmsGatewaySupport
+    {
+        public void Publish(string ticker, double price)
+        {
+            EmsTemplate.SendWithDelegate("APP.STOCK.MARKETDATA",
+                          delegate(ISession session)
+                          {
+                              MapMessage message = session.CreateMapMessage();
+                              message.SetString("TICKER", ticker);
+                              message.SetDouble("PRICE", price);
+                              message.Priority = 5;
+                              return message;
+                          });
+        }
+    }
+}</programlisting>
+
+      <para>Where the ConnectionFactory is injected using the
+      configuration.</para>
+
+      <programlisting language="myxml">  &lt;object id="simpleGateway" type="Spring.Messaging.Ems.Core.SimpleGateway, Spring.Messaging.Ems.Integration.Tests"&gt;
+    &lt;property name="ConnectionFactory" ref="connectionFactory" /&gt;
+  &lt;/object&gt;</programlisting>
+    </section>
+  </section>
+
+  <section xml:id="ems-messageconverters">
+    <title>Using MessageConverters</title>
+
+    <para>In order to facilitate the sending of domain model objects, the
+    <literal>EmsTemplate</literal> has various send methods that take a .NET
+    object as an argument for a message's data content. The overloaded methods
+    <literal>ConvertAndSend</literal> and <literal>ReceiveAndConvert</literal>
+    in <literal>NmsTemplate</literal> delegate the conversion process to an
+    instance of the <literal>IMessageConverter</literal> interface. Please
+    refer to <link linkend="activemq-messageconverter">this</link> section for
+    more information on MessageConverters.</para>
+
+    <para>Example code that uses the <literal>EmsTemplate's</literal>
+    <literal>ConvertAndSendWithDelegate</literal>, which allows access to the
+    message after it has been converted but before it has been sent is shown
+    below. For examples of using other <literal>ConvertAndSend</literal>
+    methods see the section referred to in the previous paragraph.</para>
+
+    <programlisting language="csharp">public void PublishUsingDict(string ticker, double price)
+{
+  IDictionary marketData = new Hashtable();
+  marketData.Add("TICKER", ticker);
+  marketData.Add("PRICE", price);
+  EmsTemplate.ConvertAndSendWithDelegate("APP.STOCK.MARKETDATA", marketData, 
+           delegate(Message message)
+           { 
+             message.Priority = 5;
+             message.CorrelationID = new Guid().ToString();
+             return message;
+           });
+} </programlisting>
+  </section>
+
+  <section xml:id="ems-session-producer">
+    <title>Session and Producer Callback</title>
+
+    <para>Please refer to <link
+    linkend="messaging-session-callback">this</link> section for more
+    information on Session and Producer Callbacks.</para>
+  </section>
+
+  <section xml:id="ems-receive">
+    <title>Receiving a messages</title>
+
+    <para>There are two ways to receive messages, synchronously and
+    asynchronously. To recieve messages synchronously use EmsTemplate, to
+    recieve asynchronously use a MessageListenerContainer.</para>
+
+    <section xml:id="ems-sync">
+      <title>Synchronous Reception</title>
+
+      <para>Please refer to <link linkend="???"
+      xml:id="activemq-sync-receive">this</link> section for using
+      EmsTemplate's overloaded Recieve methods.</para>
+    </section>
+
+    <section xml:id="ems-async">
+      <title>Asynchronous Reception </title>
+
+      <para>Please refer to <link linkend="???"
+      xml:id="activemq-async-reception">this</link> section for an
+      introduction to Spring's MessageListenerContainers. The TIBCO EMS
+      namespace to create an instance of a message listener container is shown
+      below.</para>
+
+      <para><programlisting language="csharp">using Common.Logging;
+using TIBCO.EMS;
+
+namespace Spring.Messaging.Ems.Core
+{
+    public class SimpleMessageListener : IMessageListener
+    {
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(SimpleMessageListener));
+
+        private int messageCount;
+
+        public int MessageCount
+        {
+            get { return messageCount; }
+        }
+
+        public void OnMessage(Message message)
+        {           
+            messageCount++;
+            LOG.Debug("Message listener count = " + messageCount);
+            TextMessage textMessage = message as TextMessage;
+            if (textMessage != null)
+            {
+                LOG.Info("Message Text = " + textMessage.Text);
+            } else
+            {
+                LOG.Warn("Can not process message of type " message.GetType());
+            }
+        }
+    }
+}</programlisting>And the configuration to create 10 threads that process
+      message off the queue named "APP.STOCK.REQUEST". See this section for
+      more details about the message listener container.</para>
+
+      <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ems="http://www.springframework.net/ems"&gt;
+
+  &lt;object id="connectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems"&gt;
+    &lt;property name="SessionCacheSize" value="10" /&gt;
+    &lt;property name="TargetConnectionFactory"&gt;
+      &lt;object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems"&gt;
+        &lt;constructor-arg name="serverUrl" value="tcp://localhost:7222"/&gt;
+        &lt;constructor-arg name="clientId" value="SpringEMSClient"/&gt;
+      &lt;/object&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+
+  &lt;object name="simpleMessageListener" 
+          type="Spring.Messaging.Ems.Core.SimpleMessageListener, Spring.Messaging.Ems.Integration.Tests"/&gt;
+	  
+  
+  &lt;ems:listener-container connection-factory="connectionFactory" concurrency="10"&gt;
+    &lt;ems:listener ref="simpleMessageListener" destination="APP.STOCK.REQUEST" /&gt;
+  &lt;/ems:listener-container&gt;
+  
+&lt;/objects&gt;</programlisting></para>
+    </section>
+
+    <section xml:id="ems-session-aware">
+      <title>The ISessionAwareMessageListener interface</title>
+
+      <para xml:id="ems-sessionaware">Refer to <link
+      linkend="activemq-sessionaware">this</link> section for more information
+      on the use of this interface.</para>
+    </section>
+
+    <section xml:id="ems-message-adapter">
+      <title>MessageListenerAdapter</title>
+
+      <para>Refer to <link linkend="message-listener-adapter">this</link>
+      section for more information on this feature and change code/XML
+      references of 'Nms' to 'Ems'.</para>
+    </section>
+
+    <section xml:id="ems-msg-tx">
+      <title>Processing messages within a messaging transaction</title>
+
+      <para>Refer to <link linkend="activemq-msg-tx">this</link> section for
+      more information about this type of message processing.</para>
+    </section>
+
+    <section xml:id="ems-namespace">
+      <title>Messaging Namespace support</title>
+
+      <para>To use the EMS namespace you will need to reference the Ems
+      schema. Please refer to <link linkend="activemq-namespace">this</link>
+      section for more information on configuring message listener containers.
+      Change references of 'Nms' to 'Ems' in that section.</para>
+    </section>
+  </section>
+</chapter>
