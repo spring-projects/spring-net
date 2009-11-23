@@ -82,7 +82,7 @@ The "bin" directory contains the following distinct dll files for use in applica
 
 * "Spring.Core" (~615 KB)
 - Contents: Inversion of control container. Collection classes.
-- Dependencies: antlr.runtime, Common.Logging
+- Dependencies: Common.Logging
 
 * "Spring.Aop" (~150 KB)
 - Contents: Abstract Oriented Programming Framework.
