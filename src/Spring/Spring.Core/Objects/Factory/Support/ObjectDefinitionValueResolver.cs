@@ -81,7 +81,7 @@ namespace Spring.Objects.Factory.Support
         /// </item>
         /// <item>
         /// <p>
-        /// An <see cref="Spring.Objects.Factory.Support.IManagedCollection"/>. This is a
+        /// An <see cref="Spring.Objects.Factory.Config.IManagedCollection"/>. This is a
         /// special placeholder collection that may contain
         /// <see cref="Spring.Objects.Factory.Config.RuntimeObjectReference"/>s or
         /// collections that will need to be resolved.

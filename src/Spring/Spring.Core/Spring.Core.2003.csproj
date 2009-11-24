@@ -2161,6 +2161,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\IManagedCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\InstantiationAwareObjectPostProcessorAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2197,6 +2202,26 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Config\LogFactoryObject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Config\ManagedDictionary.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Config\ManagedList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Config\ManagedNameValueCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Config\ManagedSet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2411,11 +2436,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Objects\Factory\Support\IManagedCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Objects\Factory\Support\IMethodReplacer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2442,26 +2462,6 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Support\LookupMethodReplacer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Objects\Factory\Support\ManagedDictionary.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Objects\Factory\Support\ManagedList.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Objects\Factory\Support\ManagedNameValueCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Objects\Factory\Support\ManagedSet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

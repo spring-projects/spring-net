@@ -47,17 +47,17 @@ namespace Spring.Objects.Factory.Config
 	/// <list type="bullet">
 	/// <item>
 	/// <description>
-	/// <see cref="Spring.Objects.Factory.Support.ManagedList"/>.
+	/// <see cref="Spring.Objects.Factory.Config.ManagedList"/>.
 	/// </description>
 	/// </item>
 	/// <item>
 	/// <description>
-	/// <see cref="Spring.Objects.Factory.Support.ManagedDictionary"/>.
+	/// <see cref="Spring.Objects.Factory.Config.ManagedDictionary"/>.
 	/// </description>
 	/// </item>
 	/// <item>
 	/// <description>
-	/// <see cref="Spring.Objects.Factory.Support.ManagedSet"/>.
+	/// <see cref="Spring.Objects.Factory.Config.ManagedSet"/>.
 	/// </description>
 	/// </item>
 	/// </list>

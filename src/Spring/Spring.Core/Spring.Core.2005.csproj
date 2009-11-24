@@ -657,8 +657,13 @@
     <Compile Include="Objects\Factory\Config\DependencyDescriptor.cs" />
     <Compile Include="Objects\Factory\Config\DictionaryVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\IConfigurableFactoryObject.cs" />
+    <Compile Include="Objects\Factory\Config\IManagedCollection.cs" />
     <Compile Include="Objects\Factory\Config\InstantiationAwareObjectPostProcessorAdapter.cs" />
     <Compile Include="Objects\Factory\Config\ISingletonObjectRegistry.cs" />
+    <Compile Include="Objects\Factory\Config\ManagedDictionary.cs" />
+    <Compile Include="Objects\Factory\Config\ManagedList.cs" />
+    <Compile Include="Objects\Factory\Config\ManagedNameValueCollection.cs" />
+    <Compile Include="Objects\Factory\Config\ManagedSet.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionHolder.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionVisitor.cs" />
     <Compile Include="Objects\Factory\Config\ObjectRole.cs" />
@@ -681,7 +686,6 @@
     <Compile Include="Objects\Factory\Support\DefaultObjectNameGenerator.cs" />
     <Compile Include="Objects\Factory\Support\IConfigurableObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IObjectNameGenerator.cs" />
-    <Compile Include="Objects\Factory\Support\ManagedNameValueCollection.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionBuilder.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionValueResolver.cs" />
     <Compile Include="Objects\Factory\Support\SimpleAutowireCandidateResolver.cs" />
@@ -906,9 +910,6 @@
     <Compile Include="Objects\Factory\Support\IInstantiationStrategy.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objects\Factory\Support\IManagedCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Objects\Factory\Support\IMethodReplacer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -922,15 +923,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Objects\Factory\Support\LookupMethodReplacer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Objects\Factory\Support\ManagedDictionary.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Objects\Factory\Support\ManagedList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Objects\Factory\Support\ManagedSet.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Objects\Factory\Support\MethodInjectingInstantiationStrategy.cs">
