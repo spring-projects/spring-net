@@ -61,18 +61,23 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         public IList ObjectNames
         {
-            set { objectNames = value; }
-            get { return objectNames; }
+            set
+            {
+                AssertUtils.ArgumentHasElements(value, "ObjectNames");
+                objectNames = value;
+            }
+            get
+            {
+                return objectNames;
+            }
         }
 
         /// <summary>
         /// Identify as object to proxy if the object name is in the configured list of names.
         /// </summary>
         protected override bool IsEligibleForProxying( Type targetType, string targetName )
-        {
-            AssertUtils.ArgumentNotNull(this.ObjectNames, "ObjectNames");
-            
-            bool shallProxy = PatternMatchUtils.IsObjectNameMatch(targetType, targetName, this.ObjectNames, new PatternMatchUtils.ObjectNameMatchPredicate(IsMatch), ObjectFactoryUtils.FactoryObjectPrefix);
+        {           
+            bool shallProxy = IsObjectNameMatch(targetType, targetName, this.ObjectNames);
             return shallProxy;
         }
 
@@ -91,6 +96,41 @@ namespace Spring.Aop.Framework.AutoProxy
         protected virtual bool IsMatch( string objectName, string mappedName )
         {
             return PatternMatchUtils.SimpleMatch( mappedName, objectName );
+        }
+
+        /// <summary>
+        /// Convenience method that may be used by derived classes. Iterates over the list of <paramref name="objectNamePatterns"/> to match <paramref name="objectName"/> against.
+        /// </summary>
+        /// <param name="objType">the object's type. Must not be <c>null</c>.</param>
+        /// <param name="objectName">the name of the object Must not be <c>null</c>.</param>
+        /// <param name="objectNamePatterns">the list of patterns, that <paramref name="objectName"/> shall be matched against. Must not be <c>null</c>.</param>        
+        /// <returns>
+        /// If <paramref name="objectNamePatterns"/> is <c>null</c>, will always return <c>true</c>, otherwise
+        /// if <paramref name="objectName"/> matches any of the patterns specified in <paramref name="objectNamePatterns"/>. 
+        /// </returns>
+        protected bool IsObjectNameMatch(Type objType, string objectName, IList objectNamePatterns)
+        {
+            AssertUtils.ArgumentNotNull(objType, "objType");
+            AssertUtils.ArgumentNotNull(objectName, "objectName" );
+            AssertUtils.ArgumentNotNull(objectNamePatterns, "objectNamePatterns");
+
+            for (int i = 0; i < objectNamePatterns.Count; i++)
+            {
+                string mappedName = (string)objectNamePatterns[i];
+                if (typeof(IFactoryObject).IsAssignableFrom(objType))
+                {
+                    if (!objectName.StartsWith(ObjectFactoryUtils.FactoryObjectPrefix))
+                    {
+                        continue;
+                    }
+                    mappedName = mappedName.Substring(ObjectFactoryUtils.FactoryObjectPrefix.Length);
+                }
+                if (IsMatch(objectName, mappedName))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

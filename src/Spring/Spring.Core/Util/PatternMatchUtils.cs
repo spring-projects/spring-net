@@ -22,8 +22,6 @@
 
 using System;
 using System.Collections;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using Spring.Objects.Factory;
 
 #endregion
@@ -97,55 +95,5 @@ namespace Spring.Util
             return false;
         }
 
-        /// <summary>
-        /// Signature of callbacks that may be used for matching object names.
-        /// </summary>
-        /// <param name="objectName">the object name to check.</param>
-        /// <param name="namePattern">the pattern to match <paramref name="objectName"/> against.</param>
-        /// <returns>true, if the <paramref name="objectName"/> matches <paramref name="namePattern"/></returns>
-        /// <see cref="IsObjectNameMatch"/>
-        public delegate bool ObjectNameMatchPredicate(string objectName, string namePattern);
-
-        /// <summary>
-        /// Convenience method that may be used by derived classes. Iterates over the list of <paramref name="objectNamePatterns"/> to match <paramref name="objectName"/> against.
-        /// </summary>
-        /// <param name="objType">the object's type. Must not be <c>null</c>.</param>
-        /// <param name="objectName">the name of the object Must not be <c>null</c>.</param>
-        /// <param name="objectNamePatterns">the list of patterns, that <paramref name="objectName"/> shall be matched against. Must not be <c>null</c>.</param>
-        /// <param name="isMatchPredicate">
-        /// the <see cref="ObjectNameMatchPredicate"/> used for 
-        /// matching <paramref name="objectName"/> against each pattern in <paramref name="objectNamePatterns"/>. Must not be <c>null</c>.
-        /// </param>
-        /// <param name="factoryObjectPrefix">the prefix to be used for dereferencing factory object names.</param>
-        /// <returns>
-        /// If <paramref name="objectNamePatterns"/> is <c>null</c>, will always return <c>true</c>, otherwise
-        /// if <paramref name="objectName"/> matches any of the patterns specified in <paramref name="objectNamePatterns"/>. 
-        /// </returns>
-        public static bool IsObjectNameMatch(Type objType, string objectName, IList objectNamePatterns, ObjectNameMatchPredicate isMatchPredicate, string factoryObjectPrefix)
-        {
-            AssertUtils.ArgumentNotNull(objType, "objType");
-            AssertUtils.ArgumentNotNull(objectName, "objectName");
-            AssertUtils.ArgumentNotNull(objectNamePatterns, "objectNamePatterns");
-            AssertUtils.ArgumentNotNull(isMatchPredicate, "isMatchPredicate");
-            AssertUtils.ArgumentNotNull(factoryObjectPrefix, "factoryObjectPrefix");
-
-            for (int i = 0; i < objectNamePatterns.Count; i++)
-            {
-                string mappedName = (string)objectNamePatterns[i];
-                if (typeof( IFactoryObject ).IsAssignableFrom( objType ))
-                {
-                    if (!objectName.StartsWith( factoryObjectPrefix ))
-                    {
-                        continue;
-                    }
-                    mappedName = mappedName.Substring( factoryObjectPrefix.Length );
-                }
-                if (isMatchPredicate( objectName, mappedName ))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 }
