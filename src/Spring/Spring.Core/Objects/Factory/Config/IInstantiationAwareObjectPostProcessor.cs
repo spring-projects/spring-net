@@ -20,7 +20,6 @@
 
 using System;
 using System.Reflection;
-using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Config {
 
@@ -38,7 +37,7 @@ namespace Spring.Objects.Factory.Config {
 	/// injection.
 	/// </para>
 	/// <para>
-	/// NOTE: This interface is a special purpose interface, mainly for internal use within the framework.
+	/// This interface is a special purpose interface, mainly for internal use within the framework.
 	/// It is recommended to implement the plain <see cref="IObjectPostProcessor"/> interface as far as 
 	/// possible, or to derive from <see cref="IInstantiationAwareObjectPostProcessor"/> in order to be shielded
 	/// from extension to this interface.
@@ -90,7 +89,7 @@ namespace Spring.Objects.Factory.Config {
 		/// In the case of any errors.
 		/// </exception>
 		/// <seealso cref="Spring.Objects.Factory.Support.AbstractObjectDefinition.HasObjectType"/>
-		/// <seealso cref="IConfigurableObjectDefinition.FactoryMethodName"/>
+		/// <seealso cref="Spring.Objects.Factory.Support.IConfigurableObjectDefinition.FactoryMethodName"/>
 		object PostProcessBeforeInstantiation(Type objectType, string objectName);
 
 

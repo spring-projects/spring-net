@@ -26,7 +26,7 @@ using Spring.Objects.Factory.Config;
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Config
 {
 	/// <summary>
 	/// Denotes a special placeholder collection that may contain

@@ -26,7 +26,6 @@ using System.Collections.Specialized;
 
 using Spring.Collections;
 using Spring.Util;
-using Spring.Objects.Factory.Support;
 
 #endregion
 
@@ -55,6 +54,7 @@ namespace Spring.Objects.Factory.Config
         /// <param name="resolveHandler">The handler to be called for resolving variables contained in a string.</param>
         public ObjectDefinitionVisitor(ResolveHandler resolveHandler)
         {
+            AssertUtils.ArgumentNotNull(resolveHandler, "ResovleHandler");
             this.resolveHandler = resolveHandler;
         }
 
@@ -248,7 +248,7 @@ namespace Spring.Objects.Factory.Config
         /// calls <see cref="ResolveValue"/> for list element.
         /// </summary>
         protected virtual void VisitManagedList(ManagedList listVal)
-        {
+        {            
             string elementTypeName = listVal.ElementTypeName;
             if (elementTypeName != null)
             {

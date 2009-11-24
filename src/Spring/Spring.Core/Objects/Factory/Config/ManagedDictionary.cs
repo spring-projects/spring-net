@@ -36,7 +36,7 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Config
 {
 	/// <summary>
 	/// Tag subclass used to hold a dictionary of managed elements.

@@ -693,7 +693,7 @@
     <Compile Include="Objects\Factory\Support\DefaultObjectNameGenerator.cs" />
     <Compile Include="Objects\Factory\Support\IConfigurableObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IObjectNameGenerator.cs" />
-    <Compile Include="Objects\Factory\Support\ManagedNameValueCollection.cs" />
+    <Compile Include="Objects\Factory\Config\ManagedNameValueCollection.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionBuilder.cs" />
     <Compile Include="Objects\Factory\Support\ObjectDefinitionValueResolver.cs" />
     <Compile Include="Objects\Factory\Support\SimpleAutowireCandidateResolver.cs" />
@@ -918,7 +918,7 @@
     <Compile Include="Objects\Factory\Support\IInstantiationStrategy.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objects\Factory\Support\IManagedCollection.cs">
+    <Compile Include="Objects\Factory\Config\IManagedCollection.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Objects\Factory\Support\IMethodReplacer.cs">
@@ -936,13 +936,13 @@
     <Compile Include="Objects\Factory\Support\LookupMethodReplacer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objects\Factory\Support\ManagedDictionary.cs">
+    <Compile Include="Objects\Factory\Config\ManagedDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objects\Factory\Support\ManagedList.cs">
+    <Compile Include="Objects\Factory\Config\ManagedList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objects\Factory\Support\ManagedSet.cs">
+    <Compile Include="Objects\Factory\Config\ManagedSet.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Objects\Factory\Support\MethodInjectingInstantiationStrategy.cs">

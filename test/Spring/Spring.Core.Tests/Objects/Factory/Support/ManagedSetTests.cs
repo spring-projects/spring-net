@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using NUnit.Framework;
 using Spring.Collections;
+using Spring.Objects.Factory.Config;
 
 namespace Spring.Objects.Factory.Support
 {

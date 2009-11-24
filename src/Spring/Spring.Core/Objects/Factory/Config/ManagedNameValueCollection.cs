@@ -19,10 +19,9 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Specialized;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Config
 {
     /// <summary>
     /// Tag class which represent a Spring-managed <see cref="NameValueCollection"/> instance that

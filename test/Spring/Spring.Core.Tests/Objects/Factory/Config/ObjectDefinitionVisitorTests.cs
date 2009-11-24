@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Specialized;
 using NUnit.Framework;
@@ -48,6 +49,13 @@ namespace Spring.Objects.Factory.Config
                 return (string) properties[rawText.Substring(1)];
             }
             return rawText;
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void BadConstructorCall()
+        {
+            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(null);
         }
 
         [Test]
@@ -89,6 +97,8 @@ namespace Spring.Objects.Factory.Config
 
             ManagedList list = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedList;
 
+            Assert.IsNotNull(list, "Property value is not of type ManagedList.  Type = [" +
+                od.PropertyValues.GetPropertyValue("PropertyName").Value.GetType() + "]");
             Assert.AreEqual("Value", list.ElementTypeName);
             Assert.AreEqual("Value", list[0]);
         }

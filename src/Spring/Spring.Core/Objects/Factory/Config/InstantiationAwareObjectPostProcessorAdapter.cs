@@ -20,7 +20,6 @@
 
 using System;
 using System.Reflection;
-using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Config
 {
@@ -114,7 +113,7 @@ namespace Spring.Objects.Factory.Config
         /// In the case of any errors.
         /// </exception>
         /// <seealso cref="Spring.Objects.Factory.Support.AbstractObjectDefinition.HasObjectType"/>
-        /// <seealso cref="IConfigurableObjectDefinition.FactoryMethodName"/>
+        /// <seealso cref="Spring.Objects.Factory.Support.IConfigurableObjectDefinition.FactoryMethodName"/>
         public virtual object PostProcessBeforeInstantiation(Type objectType, string objectName)
         {
             return null;

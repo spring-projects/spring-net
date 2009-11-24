@@ -30,12 +30,11 @@ using System.Globalization;
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
-using Spring.Objects.Factory.Config;
 using Spring.Util;
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Config
 {
     /// <summary>
     /// Tag subclass used to hold a list of managed elements.
