@@ -21,10 +21,11 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
-#if NET_2_0
-using System.Collections.Generic;
+
 using Spring.Objects.Factory.Config;
 
+#if NET_2_0
+using System.Collections.Generic;
 #endif
 
 namespace Spring.Objects.Factory.Support
