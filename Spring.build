@@ -392,57 +392,57 @@ Commandline Examples:
     <call target="copylibs"/>
 
     <!-- build assemblies -->
-    <nant buildfile="src/Spring/Spring.Core/Spring.Core.build" target="build" if="${not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0') and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0') and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0') and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0') and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Core/Spring.Core.build" target="build" />
+    <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop}"/>
+    <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web}"/>
+    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services and not net-3.5}"/>
-    <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq and not net-3.0}"/>
-    <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity and not net-3.0}"/>
+    <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
+    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
+    <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
+    <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
+    <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity}"/>
 
     <!-- test assemblies -->
-    <nant buildfile="test/Spring/Spring.Core.Tests/Spring.Core.Tests.build" target="test" if="${not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.build" target="test" if="${build-aop and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Data.Tests/Spring.Data.Tests.build" target="test" if="${build-data and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data and not net-3.0}"/>
-    <!-- nant buildfile="test/Spring/Spring.Data.NHibernate12.Tests/Spring.Data.NHibernate12.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0') and not net-3.0}"/ -->
-    <!-- nant buildfile="test/Spring/Spring.Data.NHibernate12.Integration.Tests/Spring.Data.NHibernate12.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0') and not net-3.0}"/ -->
+    <nant buildfile="test/Spring/Spring.Core.Tests/Spring.Core.Tests.build" target="test"/>
+    <nant buildfile="test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.build" target="test" if="${build-aop}"/>
+    <nant buildfile="test/Spring/Spring.Data.Tests/Spring.Data.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data}"/>
+    <!-- nant buildfile="test/Spring/Spring.Data.NHibernate12.Tests/Spring.Data.NHibernate12.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/ -->
+    <!-- nant buildfile="test/Spring/Spring.Data.NHibernate12.Integration.Tests/Spring.Data.NHibernate12.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0')}"/ -->
     <nant buildfile="test/Spring/Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate20.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate20.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate21.Tests/Spring.Data.NHibernate21.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate21.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate30.Tests/Spring.Data.NHibernate30.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate30.Integration.Tests/Spring.Data.NHibernate30.Integration.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services and not net-3.5}"/>
-    <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and nant.settings.currentframework == 'net-2.0' and not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
+    <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
+    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and nant.settings.currentframework == 'net-2.0'}"/>
     <!--
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     -->
-    <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity and not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
+    <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz }"/>
+    <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
+    <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
 
     <!-- build examples -->
-    <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples and not net-3.0}"/>
+    <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples}"/>
 
 <!-- build coverage summary -->
 		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}" failonerror="false">
