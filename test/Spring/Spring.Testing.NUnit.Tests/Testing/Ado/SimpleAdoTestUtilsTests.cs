@@ -69,6 +69,19 @@ namespace Spring.Testing.Ado
         }
 
         [Test]
+        public void ExecuteScriptWithMissingSeparatorOnLastBlock()
+        {
+            IResource scriptResource = new StringResource("\tstatement 1 \n\n\t GO\t \n   statement 2");
+
+            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "\tstatement 1 \n")).Return(0);
+            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "\n   statement 2")).Return(0);
+            mocks.ReplayAll();
+
+            SimpleAdoTestUtils.ExecuteSqlScript(adoTemplate, scriptResource, false, SimpleAdoTestUtils.BLOCKDELIM_GO_EXP);
+            mocks.VerifyAll();
+        }
+
+        [Test]
         public void ExecuteScriptWithGOBlocks()
         {
             IResource scriptResource = new StringResource("\tstatement 1 \n\n\t GO\t \n   statement 2\nGO");
