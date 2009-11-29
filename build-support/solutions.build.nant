@@ -141,6 +141,7 @@ Rebuilding Solutions using Nant and "solutions.build":
 -->
       <arg value="${solutionfile}"/>
       <arg line="/nologo" />
+	  <arg line="/verbosity:minimal" />
       <arg line="/property:Configuration=${solutionconfiguration}"/>
     </exec>
   </target>

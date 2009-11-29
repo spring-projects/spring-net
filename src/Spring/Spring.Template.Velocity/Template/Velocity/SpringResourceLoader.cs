@@ -76,6 +76,9 @@ namespace Spring.Template.Velocity {
         /// </summary>
         public const string SPRING_RESOURCE_LOADER_PATH = "spring.resource.loader.path";
 
+        /// <summary>
+        /// Shared logger instance.
+        /// </summary>
         protected static readonly ILog log = LogManager.GetLogger(typeof(SpringResourceLoader));
 
         private IResourceLoader resourceLoader;

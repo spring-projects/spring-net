@@ -67,6 +67,9 @@ namespace Spring.Template.Velocity {
     public class VelocityEngineFactory {
         private const char DELIMITER = ',';
 
+        /// <summary>
+        /// Shared logger instance.
+        /// </summary>
         protected static readonly ILog log = LogManager.GetLogger(typeof(VelocityEngineFactory));
 
         private IResource configLocation;
@@ -278,6 +281,7 @@ namespace Spring.Template.Velocity {
         /// <br/>Called by <code>CreateVelocityEngine()</code>.
         /// </summary>
         /// <param name="velocityEngine">velocityEngine the VelocityEngine to configure</param>
+        /// <param name="extendedProperties"></param>
         /// <param name="paths">paths the path list to load Velocity resources from</param>
         /// <see cref="FileResourceLoader"/>
         /// <see cref="SpringResourceLoader"/>
@@ -326,6 +330,7 @@ namespace Spring.Template.Velocity {
         /// of the tranditional "ClassFullName, AssemblyName" to work.
         /// </summary>
         /// <param name="velocityEngine">velocityEngine the VelocityEngine to configure</param>
+        /// <param name="extendedProperties"></param>
         /// <param name="resourceLoaderPathString">resourceLoaderPath the path to load Velocity resources from</param>
         /// <see cref="SpringResourceLoader"/>
         /// <see cref="InitVelocityResourceLoader"/>

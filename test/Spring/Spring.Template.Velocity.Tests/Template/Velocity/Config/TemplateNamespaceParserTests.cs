@@ -130,6 +130,9 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity.Config {
             Assert.AreEqual("TestDescription", getSingleProperty(velocityEngine, descProp), "incorrect description");
         }
 
+        /// <summary>
+        /// Test using local config.
+        /// </summary>
         [Test]
         public void TestLocalConfig() {
             VelocityEngine velocityEngine = appContext.GetObject("cnVelocityEngineLocalConfig") as VelocityEngine;

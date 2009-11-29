@@ -34,6 +34,9 @@ namespace Spring
     [TestFixture]
     public sealed class VelocityCompilerOptionTests : CompilerOptionsTests
     {
+        /// <summary>
+        /// Setup for entiry test fixture.
+        /// </summary>
         [TestFixtureSetUp]
         public void FixtureSetUp()
         {

@@ -164,6 +164,9 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
             }
         }
 
+        /// <summary>
+        /// Test engine's logging capabilities.
+        /// </summary>
         [Test]
         public void TestLogging(){
             VelocityEngine velocityEngine = new VelocityEngineFactoryObject().CreateVelocityEngine();

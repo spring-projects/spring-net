@@ -31,6 +31,10 @@ namespace Spring.Template.Velocity
     /// </summary>
     /// <author>Erez Mazor</author>
     public class CommonsLoggingLogSystem : ILogSystem {
+        
+        /// <summary>
+        /// Shared logger instance.
+        /// </summary>
         protected static readonly ILog log = LogManager.GetLogger(typeof(CommonsLoggingLogSystem));
 
         /// <summary>

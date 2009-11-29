@@ -39,6 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\build\VS.NET.2008\Spring.Template.Velocity\Debug\Spring.Template.Velocity.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,6 +48,8 @@
     <DefineConstants>TRACE;NET_2_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\build\VS.NET.2005\Spring.Template.Velocity\Release\Spring.Template.Velocity.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
@@ -69,7 +72,7 @@
   <ItemGroup>
     <Compile Include="Template\Velocity\Config\TemplateNamespaceParser.cs" />
     <Compile Include="Template\Velocity\CommonsLoggingLogSystem.cs" />
-   <Compile Include="Template\Velocity\SpringResourceLoader.cs" />
+    <Compile Include="Template\Velocity\SpringResourceLoader.cs" />
     <Compile Include="Template\Velocity\VelocityConstants.cs" />
     <Compile Include="Template\Velocity\VelocityEngineFactory.cs" />
     <Compile Include="Template\Velocity\VelocityEngineFactoryObject.cs" />

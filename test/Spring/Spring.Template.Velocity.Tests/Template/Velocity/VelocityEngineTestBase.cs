@@ -30,12 +30,29 @@ using Spring.Objects.Factory.Xml;
 #endregion
 
 namespace Spring.Template.Velocity.Tests.Template.Velocity {
+
+    /// <summary>
+    /// Base class for Velocity engine tests.
+    /// </summary>
     public class VelocityEngineTestBase {
+        
+        /// <summary>
+        /// Shared application context instance.
+        /// </summary>
         protected XmlApplicationContext appContext;
+        /// <summary>
+        /// Model used in templating.
+        /// </summary>
         protected readonly Hashtable model = new Hashtable();
+        /// <summary>
+        /// Simple test value.
+        /// </summary>
         protected const string TEST_VALUE = "TEST_VALUE";
 
         #region setup 
+        /// <summary>
+        /// Test setup.
+        /// </summary>
         [SetUp]
         public void Setup() {
             appContext = new XmlApplicationContext(false,
@@ -47,6 +64,9 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
         #endregion
 
         #region teardown
+        /// <summary>
+        /// Test cleanup.
+        /// </summary>
         [TearDown]
         public void TearDown() {
             appContext.Dispose();
