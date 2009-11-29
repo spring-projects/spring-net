@@ -64,7 +64,7 @@ namespace Spring.Data.Common
             get { return provider; }
             set
             {
-                AssertUtils.ArgumentHasText(value, "The 'ProviderName' property must have a value.");
+                AssertUtils.ArgumentHasText(value, "The 'Provider' property must have a value.");
                 provider = value.Trim();
             }
         }
@@ -103,18 +103,14 @@ namespace Spring.Data.Common
         /// probably fatal) exception.
         /// </note>
         /// </remarks>
-        public object GetObject()
+        public virtual object GetObject()
         {
             lock (this)
             {
                 if (dbProvider == null)
                 {
                     ValidateProperties();
-                    dbProvider = DbProviderFactory.GetDbProvider(Provider);
-                    if (connectionString != null)
-                    {
-                        dbProvider.ConnectionString = this.connectionString;
-                    }
+                    dbProvider = CreateProviderInstance();
                 }
 
                 return dbProvider;
@@ -122,9 +118,23 @@ namespace Spring.Data.Common
         }
 
         /// <summary>
+        /// Create the actual provider instance as specified by this factory's configuration properties.
+        /// </summary>
+        /// <returns>the fully configured provider</returns>
+        protected virtual IDbProvider CreateProviderInstance()
+        {
+            IDbProvider providerInstance = DbProviderFactory.GetDbProvider(Provider);
+            if (connectionString != null)
+            {
+                providerInstance.ConnectionString = this.connectionString;
+            }
+            return providerInstance;
+        }
+
+        /// <summary>
         /// Return the type of <see cref="IDbProvider"/>
         /// </summary>
-        public Type ObjectType
+        public virtual Type ObjectType
         {
             get { return typeof (IDbProvider); }
         }
@@ -133,7 +143,7 @@ namespace Spring.Data.Common
         /// Returns true, as the the object managed by this factory is a singleton.
         /// </summary>
         /// <value></value>
-        public bool IsSingleton
+        public virtual bool IsSingleton
         {
             get { return true; }
         }
@@ -152,7 +162,7 @@ namespace Spring.Data.Common
         /// <exception cref="System.ArgumentException">
         /// In the event of not setting the ProviderName.
         /// </exception>
-        public void AfterPropertiesSet()
+        public virtual void AfterPropertiesSet()
         {
             ValidateProperties();
         }
