@@ -11,7 +11,6 @@
     <AssemblyName>Spring.Template.Velocity</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <PublishUrl>http://localhost/Spring.Template.Velocity/</PublishUrl>

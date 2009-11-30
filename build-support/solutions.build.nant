@@ -117,7 +117,7 @@ Rebuilding Solutions using Nant and "solutions.build":
 
   <target name="RebuildSolution-1.1" description="rebuilds a given VS2003 solution file">
   <!-- "c:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.exe" Spring.NET.2003.sln /rebuild Debug-1.1 /out solutions.build-1.1.log -->
-    <echo message="Rebuilding VS2003 Solution ${solutionfile}" />
+    <echo message="Rebuilding .NET 1.1 Solution ${solutionfile}" />
     <exec program="${devenv11.exe}" basedir="${devenv11.exe}" verbose="true">
       <arg value="${solutionfile}" />
       <arg line="/rebuild ${solutionconfiguration}" />
@@ -134,7 +134,7 @@ Rebuilding Solutions using Nant and "solutions.build":
   </target>
 
   <target name="RebuildSolution-2.0" description="rebuilds a given VS2005 solution file">
-    <echo message="Rebuilding VS2005 Solution ${solutionfile}" />
+    <echo message="Rebuilding .NET 2.0 Solution ${solutionfile}" />
     <exec program="${msbuild.exe}">
 <!--
       <arg value="/property:OutDir=${output.dir}/"/>
