@@ -117,11 +117,18 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// TODO
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="definition"></param>
-        /// <param name="argumentName"></param>
-        /// <param name="argumentValue"></param>
-        /// <returns></returns>
+        /// <param name="name">
+        /// The name of the object that is having the value of one of its properties resolved.
+        /// </param>
+        /// <param name="definition">
+        /// The definition of the named object.
+        /// </param>
+        /// <param name="argumentName">
+        /// The name of the property the value of which is being resolved.
+        /// </param>
+        /// <param name="argumentValue">
+        /// The value of the property that is being resolved.
+        /// </param>
         private object ResolvePropertyValue(string name, IObjectDefinition definition, string argumentName, object argumentValue)
         {
             object resolvedValue = null;
@@ -132,6 +139,10 @@ namespace Spring.Objects.Factory.Support
             if (RemotingServices.IsTransparentProxy(argumentValue))
             {
                 resolvedValue = argumentValue;
+            }
+            else if (argumentValue is ICustomValueReferenceHolder)
+            {
+                resolvedValue = ((ICustomValueReferenceHolder) argumentValue).Resolve(objectFactory, name, definition, argumentName, argumentValue);
             }
             else if (argumentValue is ObjectDefinitionHolder)
             {

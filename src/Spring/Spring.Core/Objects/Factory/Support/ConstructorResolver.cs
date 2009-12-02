@@ -51,6 +51,7 @@ namespace Spring.Objects.Factory.Support
         private readonly IAutowireCapableObjectFactory autowireFactory;
 
         private readonly IInstantiationStrategy instantiationStrategy;
+        private readonly ObjectDefinitionValueResolver valueResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConstructorResolver"/> class for the given factory
@@ -59,12 +60,14 @@ namespace Spring.Objects.Factory.Support
         /// <param name="objectFactory">The object factory to work with.</param>
         /// <param name="autowireFactory">The object factory as IAutowireCapableObjectFactory.</param>
         /// <param name="instantiationStrategy">The instantiation strategy for creating objects.</param>
+        /// <param name="valueResolver">the resolver to resolve property value placeholders if any</param>
         public ConstructorResolver(AbstractObjectFactory objectFactory, IAutowireCapableObjectFactory autowireFactory,
-                                   IInstantiationStrategy instantiationStrategy)
+                                   IInstantiationStrategy instantiationStrategy, ObjectDefinitionValueResolver valueResolver)
         {
             this.objectFactory = objectFactory;
             this.autowireFactory = autowireFactory;
             this.instantiationStrategy = instantiationStrategy;
+            this.valueResolver = valueResolver;
         }
 
         /// <summary>
@@ -516,7 +519,7 @@ namespace Spring.Objects.Factory.Support
                                                 ConstructorArgumentValues cargs,
                                                 ConstructorArgumentValues resolvedValues)
         {
-            ObjectDefinitionValueResolver valueResolver = new ObjectDefinitionValueResolver(objectFactory);
+//            ObjectDefinitionValueResolver valueResolver = new ObjectDefinitionValueResolver(objectFactory);
             int minNrOfArgs = cargs.ArgumentCount;
 
             foreach (DictionaryEntry entry in cargs.IndexedArgumentValues)

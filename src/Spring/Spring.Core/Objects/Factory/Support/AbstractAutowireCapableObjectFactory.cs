@@ -1068,7 +1068,7 @@ namespace Spring.Objects.Factory.Support
         protected virtual IObjectWrapper InstantiateUsingFactoryMethod(string name, RootObjectDefinition definition, object[] arguments)
         {
             ConstructorResolver constructorResolver =
-                    new ConstructorResolver(this, this, InstantiationStrategy);
+                    new ConstructorResolver(this, this, InstantiationStrategy, CreateValueResolver());
             return constructorResolver.InstantiateUsingFactoryMethod(name, definition, arguments);
         }
 
@@ -1097,7 +1097,7 @@ namespace Spring.Objects.Factory.Support
         protected IObjectWrapper AutowireConstructor(string name, RootObjectDefinition definition, ConstructorInfo[] ctors, object[] explicitArgs)
         {
             ConstructorResolver constructorResolver =
-                new ConstructorResolver(this, this, InstantiationStrategy);
+                new ConstructorResolver(this, this, InstantiationStrategy, CreateValueResolver());
             return constructorResolver.AutowireConstructor(name, definition, ctors, explicitArgs);
 
         }
