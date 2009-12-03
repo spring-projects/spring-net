@@ -21,14 +21,14 @@
 using System;
 using System.Collections;
 using System.Data;
+using Common.Logging;
 using Spring.Collections;
 using Spring.Dao;
-using Spring.Data.Common;
 using Spring.Objects.Factory;
 using Spring.Threading;
 
 
-namespace Spring.Data
+namespace Spring.Data.Common
 {
     /// <summary>
     /// A wrapper implementation for IDbProvider such that multiple DbProvider instances can be
@@ -48,6 +48,12 @@ namespace Spring.Data
         private IDbProvider defaultDbProvider;
 
         private IDictionary targetDbProviders = new SynchronizedHashtable();
+
+        #region Logging Definition
+
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(MultiDelegatingDbProvider));
+
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -102,12 +108,12 @@ namespace Spring.Data
             {
                 if (! entry.Key.GetType().Equals(typeof(string)))
                 {
-                    throw new ArgumentException("Key identifying target IDbProvider in TargetDbProviders dictionary property is required to be of type string.  Key = " + entry.Key);
+                    throw new ArgumentException("Key identifying target IDbProvider in TargetDbProviders dictionary property is required to be of type string.  Key = [" + entry.Key + "], type = [" + entry.Key.GetType() + "]");
                 }
                 IDbProvider targetProvider = entry.Value as IDbProvider;
                 if (targetProvider == null)
                 {
-                    throw new ArgumentException("Value in TargetDbProviders dictionary is not of type IDbProvider.");
+                    throw new ArgumentException("Value in TargetDbProviders dictionary is not of type IDbProvider.  Type = [" + entry.Value.GetType() + "]");
                 }
             } 
         }
@@ -268,16 +274,26 @@ namespace Spring.Data
         protected virtual IDbProvider GetTargetProvider()
         {
             string dbProviderName = (string)LogicalThreadContext.GetData(CURRENT_DBPROVIDER_SLOTNAME);
-            if (targetDbProviders.Contains(dbProviderName))
+            if (dbProviderName != null && targetDbProviders.Contains(dbProviderName))
             {
                 return (IDbProvider)targetDbProviders[dbProviderName];
             }
+            //Fall back to default if available
             if (defaultDbProvider != null)
             {
+                if (LOG.IsDebugEnabled)
+                {
+                    LOG.Debug("No DbProvider defined in thread local storage, falling back to use DefaultDbProvider.");
+                }
                 return defaultDbProvider;
             }
+            if (dbProviderName == null)
+            {
+                throw new InvalidDataAccessApiUsageException(
+                    "No provider name found in thread local storage.  Consider setting the property DefaultDbProvider to fallback to a default value.");
+            }
             throw new InvalidDataAccessApiUsageException("'" + dbProviderName + "'"
-                                        + "was not under the thread local key 'dbProviderName' and no default IDbProvider was set.");
+                                        + " was not under the thread local key 'dbProviderName' and no default IDbProvider was set.");
         }
 
         /// <summary>

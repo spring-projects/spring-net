@@ -177,6 +177,7 @@
     <Compile Include="Dao\Attributes\PersistenceExceptionTranslationPostProcessorTests.cs" />
     <Compile Include="Dao\Support\DataAccessUtilsTests.cs" />
     <Compile Include="Data\Common\DbParametersTests.cs" />
+    <Compile Include="Data\Common\MultiDelegatingDbProviderTests.cs" />
     <Compile Include="Data\Common\UserCredentialsDbProviderTests.cs" />
     <Compile Include="Data\Core\ServiceDomainTransactionManagerTests.cs" />
     <Compile Include="Data\Core\TxScopeTransactionManagerIntegrationTests.cs" />
