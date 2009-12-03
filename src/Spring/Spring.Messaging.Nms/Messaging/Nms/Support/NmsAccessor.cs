@@ -20,6 +20,7 @@
 
 using System;
 using Common.Logging;
+using Spring.Messaging.Nms.Core;
 using Spring.Objects.Factory;
 using Apache.NMS;
 
@@ -133,6 +134,14 @@ namespace Spring.Messaging.Nms.Support
             if (ConnectionFactory == null)
             {
                 throw new ArgumentException("ConnectionFactory is required");
+            }
+            if (Tracer.Trace == null)
+            {
+                if (logger.IsTraceEnabled)
+                {
+                    logger.Trace("Setting Apache.NMS.Tracer.Trace to default implementation that directs output to Common.Logging");
+                }
+                Tracer.Trace = new NmsTrace();
             }
         }
 

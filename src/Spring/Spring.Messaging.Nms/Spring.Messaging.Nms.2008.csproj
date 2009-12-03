@@ -21,7 +21,8 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Spring.Messaging.Nms.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn></NoWarn>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -74,6 +75,7 @@
     <Compile Include="Messaging\Nms\Core\MessagePostProcessorDelegate.cs" />
     <Compile Include="Messaging\Nms\Core\NmsGatewaySupport.cs" />
     <Compile Include="Messaging\Nms\Core\NmsTemplate.cs" />
+    <Compile Include="Messaging\Nms\Core\NmsTrace.cs" />
     <Compile Include="Messaging\Nms\Core\ProducerDelegate.cs" />
     <Compile Include="Messaging\Nms\Core\SessionDelegate.cs" />
     <Compile Include="Messaging\Nms\Listener\AbstractListenerContainer.cs" />
