@@ -43,7 +43,7 @@ namespace Spring.Data.Common
     /// <author>Mark Pollack</author>
     public class MultiDelegatingDbProvider : IDbProvider, IInitializingObject
     {
-        private static readonly string CURRENT_DBPROVIDER_SLOTNAME = Spring.Util.UniqueKey.GetTypeScopedString(typeof(MultiDelegatingDbProvider), "Current");
+        public static readonly string CURRENT_DBPROVIDER_SLOTNAME = Spring.Util.UniqueKey.GetTypeScopedString(typeof(MultiDelegatingDbProvider), "Current");
 
         private IDbProvider defaultDbProvider;
 
