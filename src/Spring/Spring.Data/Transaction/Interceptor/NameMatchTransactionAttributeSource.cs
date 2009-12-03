@@ -34,7 +34,7 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Juergen Hoeller</author>
 	/// <author>Griffin Caprio (.NET)</author>
 	[Serializable]
-	public class NameMatchTransactionAttributeSource : ITransactionAttributeSource
+	public class NameMatchTransactionAttributeSource : ITransactionAttributeSource, IEnumerable
 	{
         /// <summary>
         /// Logger available to subclasses, static for optimal serialization
@@ -45,7 +45,7 @@ namespace Spring.Transaction.Interceptor
         /// <summary>
         /// Keys are method names; values are ITransactionAttributes
         /// </summary>
-		private IDictionary nameMap;
+		private readonly IDictionary nameMap;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -56,7 +56,34 @@ namespace Spring.Transaction.Interceptor
 			nameMap = new Hashtable();
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Enumerate the string/<see cref="ITransactionAttribute"/> mapping entries.
+        /// </summary>
+	    public IEnumerator GetEnumerator()
+	    {
+	        return nameMap.GetEnumerator();
+	    }
+
+        /// <summary>
+        /// Add a mapping.
+        /// </summary>
+        public void Add(string methodPattern, ITransactionAttribute txAttribute)
+        {
+            AddTransactionMethod(methodPattern, txAttribute);
+        }
+
+        /// <summary>
+        /// Add a mapping.
+        /// </summary>
+        public void Add(string methodPattern, string txAttributeText)
+        {
+            TransactionAttributeEditor editor = new TransactionAttributeEditor();
+            editor.SetAsText(txAttributeText);
+            ITransactionAttribute txAttribute = editor.Value;
+            AddTransactionMethod(methodPattern, txAttribute);
+        }
+
+	    /// <summary>
 		/// Set a name/attribute map, consisting of method names (e.g. "MyMethod") and
 		/// <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> instances
         /// (or Strings to be converted to ITransactionAttribute instances).
