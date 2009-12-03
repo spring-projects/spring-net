@@ -22,7 +22,7 @@ using System;
 using System.Collections;
 using NUnit.Framework;
 using Spring.Dao;
-using Spring.Objects;
+using Spring.Threading;
 
 namespace Spring.Data.Common
 {
@@ -95,6 +95,9 @@ namespace Spring.Data.Common
             } catch (InvalidDataAccessApiUsageException exception)
             {
                 Assert.AreEqual("No provider name found in thread local storage.  Consider setting the property DefaultDbProvider to fallback to a default value.", exception.Message);
+            } finally
+            {
+                LogicalThreadContext.FreeNamedDataSlot(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME);
             }
         }
 
@@ -118,6 +121,10 @@ namespace Spring.Data.Common
             {
                 Assert.AreEqual("'db2' was not under the thread local key 'dbProviderName' and no default IDbProvider was set.", exception.Message);
             }
+            finally
+            {
+                LogicalThreadContext.FreeNamedDataSlot(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME);
+            }
         }
 
         [Test]
@@ -136,7 +143,14 @@ namespace Spring.Data.Common
             multiDbProvider.AfterPropertiesSet();
 
             MultiDelegatingDbProvider.CurrentDbProviderName = "db2";
-            Assert.AreEqual("connString2", multiDbProvider.ConnectionString);                
+            try
+            {
+                Assert.AreEqual("connString2", multiDbProvider.ConnectionString);
+            }
+            finally
+            {
+                LogicalThreadContext.FreeNamedDataSlot(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME);
+            }
         }
 
         [Test]
@@ -155,7 +169,14 @@ namespace Spring.Data.Common
             multiDbProvider.AfterPropertiesSet();
 
             MultiDelegatingDbProvider.CurrentDbProviderName = "db314";
-            Assert.AreEqual("connString1", multiDbProvider.ConnectionString);
+            try
+            {
+                Assert.AreEqual("connString1", multiDbProvider.ConnectionString);
+            }
+            finally
+            {
+                LogicalThreadContext.FreeNamedDataSlot(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME);
+            }
         }
     }
 
