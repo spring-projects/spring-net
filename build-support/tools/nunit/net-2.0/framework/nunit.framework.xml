@@ -1498,6 +1498,12 @@
             constraint to the Message property of the object being tested.
             </summary>
         </member>
+        <member name="P:NUnit.Framework.Constraints.ConstraintExpression.InnerException">
+            <summary>
+            Returns a new ConstraintExpression, which will apply the following
+            constraint to the InnerException property of the object being tested.
+            </summary>
+        </member>
         <member name="P:NUnit.Framework.Constraints.ConstraintExpression.With">
             <summary>
             With is currently a NOP - reserved for future use.
@@ -3101,6 +3107,12 @@
             constraint to the Message property of the object being tested.
             </summary>
         </member>
+        <member name="P:NUnit.Framework.Constraints.ConstraintFactory.InnerException">
+            <summary>
+            Returns a new ConstraintExpression, which will apply the following
+            constraint to the InnerException property of the object being tested.
+            </summary>
+        </member>
         <member name="P:NUnit.Framework.Constraints.ConstraintFactory.Null">
             <summary>
             Returns a constraint that tests for null
@@ -4100,6 +4112,18 @@
             Gets the description of the test
             </summary>
         </member>
+        <member name="P:NUnit.Framework.ITestCaseData.Ignored">
+            <summary>
+            Gets a value indicating whether this <see cref="T:NUnit.Framework.ITestCaseData"/> is ignored.
+            </summary>
+            <value><c>true</c> if ignored; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:NUnit.Framework.ITestCaseData.IgnoreReason">
+            <summary>
+            Gets the ignore reason.
+            </summary>
+            <value>The ignore reason.</value>
+        </member>
         <member name="F:NUnit.Framework.TestCaseData.arguments">
             <summary>
             The argument list to be provided to the test
@@ -4134,6 +4158,16 @@
             <summary>
             A dictionary of properties, used to add information
             to tests without requiring the class to change.
+            </summary>
+        </member>
+        <member name="F:NUnit.Framework.TestCaseData.isIgnored">
+            <summary>
+            If true, indicates that the test case is to be ignored
+            </summary>
+        </member>
+        <member name="F:NUnit.Framework.TestCaseData.ignoreReason">
+            <summary>
+            The reason for ignoring a test case
             </summary>
         </member>
         <member name="M:NUnit.Framework.TestCaseData.#ctor(System.Object[])">
@@ -4229,6 +4263,19 @@
             <param name="propValue"></param>
             <returns></returns>
         </member>
+        <member name="M:NUnit.Framework.TestCaseData.Ignore">
+            <summary>
+            Ignores this TestCase.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NUnit.Framework.TestCaseData.Ignore(System.String)">
+            <summary>
+            Ignores this TestCase, specifying the reason.
+            </summary>
+            <param name="reason">The reason.</param>
+            <returns></returns>
+        </member>
         <member name="P:NUnit.Framework.TestCaseData.Arguments">
             <summary>
             Gets the argument list to be provided to the test
@@ -4258,6 +4305,18 @@
             <summary>
             Gets the description of the test
             </summary>
+        </member>
+        <member name="P:NUnit.Framework.TestCaseData.Ignored">
+            <summary>
+            Gets a value indicating whether this <see cref="T:NUnit.Framework.ITestCaseData"/> is ignored.
+            </summary>
+            <value><c>true</c> if ignored; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:NUnit.Framework.TestCaseData.IgnoreReason">
+            <summary>
+            Gets the ignore reason.
+            </summary>
+            <value>The ignore reason.</value>
         </member>
         <member name="P:NUnit.Framework.TestCaseData.Categories">
             <summary>
@@ -4374,6 +4433,12 @@
             <summary>
             Returns a new ConstraintExpression, which will apply the following
             constraint to the Message property of the object being tested.
+            </summary>
+        </member>
+        <member name="P:NUnit.Framework.Has.InnerException">
+            <summary>
+            Returns a new ConstraintExpression, which will apply the following
+            constraint to the InnerException property of the object being tested.
             </summary>
         </member>
         <member name="T:NUnit.Framework.List">
@@ -4539,6 +4604,22 @@
             Gets or sets the name of the test.
             </summary>
             <value>The name of the test.</value>
+        </member>
+        <member name="P:NUnit.Framework.TestCaseAttribute.Ignore">
+            <summary>
+            Gets or sets the ignored status of the test
+            </summary>
+        </member>
+        <member name="P:NUnit.Framework.TestCaseAttribute.Ignored">
+            <summary>
+            Gets or sets the ignored status of the test
+            </summary>
+        </member>
+        <member name="P:NUnit.Framework.TestCaseAttribute.IgnoreReason">
+            <summary>
+            Gets the ignore reason.
+            </summary>
+            <value>The ignore reason.</value>
         </member>
         <member name="T:NUnit.Framework.SuccessException">
             <summary>
@@ -4899,6 +4980,84 @@
             </summary>
             <typeparam name="T">Type of the expected exception</typeparam>
             <param name="code">A TestSnippet delegate</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch(NUnit.Framework.TestDelegate,System.String,System.Object[])">
+            <summary>
+            Verifies that a delegate throws an exception when called
+            and returns it.
+            </summary>
+            <param name="code">A TestDelegate</param>
+            <param name="message">The message that will be displayed on failure</param>
+            <param name="args">Arguments to be used in formatting the message</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch(NUnit.Framework.TestDelegate,System.String)">
+            <summary>
+            Verifies that a delegate throws an exception when called
+            and returns it.
+            </summary>
+            <param name="code">A TestDelegate</param>
+            <param name="message">The message that will be displayed on failure</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch(NUnit.Framework.TestDelegate)">
+            <summary>
+            Verifies that a delegate throws an exception when called
+            and returns it.
+            </summary>
+            <param name="code">A TestDelegate</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch(System.Type,NUnit.Framework.TestDelegate,System.String,System.Object[])">
+            <summary>
+            Verifies that a delegate throws an exception of a certain Type
+            or one derived from it when called and returns it.
+            </summary>
+            <param name="expectedExceptionType">The expected Exception Type</param>
+            <param name="code">A TestDelegate</param>
+            <param name="message">The message that will be displayed on failure</param>
+            <param name="args">Arguments to be used in formatting the message</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch(System.Type,NUnit.Framework.TestDelegate,System.String)">
+            <summary>
+            Verifies that a delegate throws an exception of a certain Type
+            or one derived from it when called and returns it.
+            </summary>
+            <param name="expectedExceptionType">The expected Exception Type</param>
+            <param name="code">A TestDelegate</param>
+            <param name="message">The message that will be displayed on failure</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch(System.Type,NUnit.Framework.TestDelegate)">
+            <summary>
+            Verifies that a delegate throws an exception of a certain Type
+            or one derived from it when called and returns it.
+            </summary>
+            <param name="expectedExceptionType">The expected Exception Type</param>
+            <param name="code">A TestDelegate</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch``1(NUnit.Framework.TestDelegate,System.String,System.Object[])">
+            <summary>
+            Verifies that a delegate throws an exception of a certain Type
+            or one derived from it when called and returns it.
+            </summary>
+            <typeparam name="T">The expected Exception Type</typeparam>
+            <param name="code">A TestDelegate</param>
+            <param name="message">The message that will be displayed on failure</param>
+            <param name="args">Arguments to be used in formatting the message</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch``1(NUnit.Framework.TestDelegate,System.String)">
+            <summary>
+            Verifies that a delegate throws an exception of a certain Type
+            or one derived from it when called and returns it.
+            </summary>
+            <typeparam name="T">The expected Exception Type</typeparam>
+            <param name="code">A TestDelegate</param>
+            <param name="message">The message that will be displayed on failure</param>
+        </member>
+        <member name="M:NUnit.Framework.Assert.Catch``1(NUnit.Framework.TestDelegate)">
+            <summary>
+            Verifies that a delegate throws an exception of a certain Type
+            or one derived from it when called and returns it.
+            </summary>
+            <typeparam name="T">The expected Exception Type</typeparam>
+            <param name="code">A TestDelegate</param>
         </member>
         <member name="M:NUnit.Framework.Assert.DoesNotThrow(NUnit.Framework.TestDelegate,System.String,System.Object[])">
             <summary>
@@ -7218,6 +7377,18 @@
             The arguments originally provided to the attribute
             </summary>
         </member>
+        <member name="P:NUnit.Framework.TestFixtureAttribute.Ignore">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:NUnit.Framework.TestFixtureAttribute"/> should be ignored.
+            </summary>
+            <value><c>true</c> if ignore; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:NUnit.Framework.TestFixtureAttribute.IgnoreReason">
+            <summary>
+            Gets or sets the ignore reason. May set Ignored as a side effect.
+            </summary>
+            <value>The ignore reason.</value>
+        </member>
         <member name="P:NUnit.Framework.TestFixtureAttribute.TypeArgs">
             <summary>
             Get or set the type arguments. If not set
@@ -7739,16 +7910,17 @@
         </member>
         <member name="T:NUnit.Framework.TimeoutAttribute">
             <summary>
-            Marks a test with a timeout value in milliseconds. The
-            test will be run in a separate thread and cancelled if
-            the timeout is exceeded.
+            WUsed on a method, marks the test with a timeout value in milliseconds. 
+            The test will be run in a separate thread and is cancelled if the timeout 
+            is exceeded. Used on a method or assembly, sets the default timeout 
+            for all contained test methods.
             </summary>
         </member>
         <member name="M:NUnit.Framework.TimeoutAttribute.#ctor(System.Int32)">
             <summary>
             Construct a TimeoutAttribute given a time in milliseconds
             </summary>
-            <param name="timeout"></param>
+            <param name="timeout">The timeout value in milliseconds</param>
         </member>
         <member name="T:NUnit.Framework.RequiresSTAAttribute">
             <summary>
@@ -9123,6 +9295,26 @@
             Creates a constraint specifying an expected exception
             </summary>
         </member>
+        <member name="P:NUnit.Framework.Throws.InnerException">
+            <summary>
+            Creates a constraint specifying an exception with a given InnerException
+            </summary>
+        </member>
+        <member name="P:NUnit.Framework.Throws.TargetInvocationException">
+            <summary>
+            Creates a constraint specifying an expected TargetInvocationException
+            </summary>
+        </member>
+        <member name="P:NUnit.Framework.Throws.ArgumentException">
+            <summary>
+            Creates a constraint specifying an expected TargetInvocationException
+            </summary>
+        </member>
+        <member name="P:NUnit.Framework.Throws.InvalidOperationException">
+            <summary>
+            Creates a constraint specifying an expected TargetInvocationException
+            </summary>
+        </member>
         <member name="P:NUnit.Framework.Throws.Nothing">
             <summary>
             Creates a constraint specifying that no exception is thrown
@@ -9159,18 +9351,6 @@
             all the tests in a fixture have run. The method is 
             guaranteed to be called, even if an exception is thrown.
             </summary>
-        </member>
-        <member name="T:NUnit.Framework.Catch">
-            <summary>
-            The Catch class is used to capture an exception.
-            </summary>
-        </member>
-        <member name="M:NUnit.Framework.Catch.Exception(NUnit.Framework.TestDelegate)">
-            <summary>
-            Capture any exception that is thrown by the delegate
-            </summary>
-            <param name="code">A TestDelegate</param>
-            <returns>The exception thrown, or null</returns>
         </member>
         <member name="T:NUnit.Framework.Text">
             <summary>
@@ -9243,6 +9423,17 @@
             Construct a MaxTimeAttribute, given a time in milliseconds.
             </summary>
             <param name="milliseconds">The maximum elapsed time in milliseconds</param>
+        </member>
+        <member name="T:NUnit.Framework.SetUICultureAttribute">
+            <summary>
+            Summary description for SetUICultureAttribute.
+            </summary>
+        </member>
+        <member name="M:NUnit.Framework.SetUICultureAttribute.#ctor(System.String)">
+            <summary>
+            Construct given the name of a culture
+            </summary>
+            <param name="culture"></param>
         </member>
         <member name="T:NUnit.Framework.DirectoryAssert">
             <summary>

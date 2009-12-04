@@ -55,6 +55,7 @@
     <Compile Include="Messaging\Nms\Core\MessagePostProcessorDelegate.cs" />
     <Compile Include="Messaging\Nms\Core\NmsTemplate.cs" />
     <Compile Include="Messaging\Nms\Core\NmsGatewaySupport.cs" />
+    <Compile Include="Messaging\Nms\Core\NmsTrace.cs" />
     <Compile Include="Messaging\Nms\Core\ProducerDelegate.cs" />
     <Compile Include="Messaging\Nms\Core\SessionDelegate.cs" />
     <Compile Include="Messaging\Nms\Config\MessageListenerContainerObjectDefinitionParser.cs" />

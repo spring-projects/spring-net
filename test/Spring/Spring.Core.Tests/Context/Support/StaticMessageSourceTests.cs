@@ -45,6 +45,7 @@ namespace Spring.Context.Support
         }
 
         [Test]
+        [SetUICulture("de-DE")]
         public void GetMessageDefaultsToCurrentUICulture()
         {
             StaticMessageSource msgSource = new StaticMessageSource();
