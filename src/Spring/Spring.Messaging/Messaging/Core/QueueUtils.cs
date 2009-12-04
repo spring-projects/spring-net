@@ -19,7 +19,6 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Messaging;
 using Spring.Context;
 using Spring.Messaging.Support.Converters;
@@ -113,6 +112,14 @@ namespace Spring.Messaging.Core
             }
         }
 
+        public void BeforeCompletion()
+        {
+            TransactionSynchronizationManager.UnbindResource(resourceKey);
+            holderActive = false;
+            //this.resourceHolder.closeAll();
+            //TODO SPRNET-1244
+        }
+
         public void BeforeCommit(bool readOnly)
         {
             
@@ -120,14 +127,6 @@ namespace Spring.Messaging.Core
 
         public void AfterCommit()
         {
-        }
-
-        public void BeforeCompletion()
-        {
-            TransactionSynchronizationManager.UnbindResource(resourceKey);
-            holderActive = false;
-            //this.resourceHolder.closeAll();
-            //TODO SPRNET-1244
         }
 
         public void AfterCompletion(TransactionSynchronizationStatus status)

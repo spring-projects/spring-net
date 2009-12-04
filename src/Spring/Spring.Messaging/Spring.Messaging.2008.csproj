@@ -82,7 +82,7 @@
     <Compile Include="Messaging\Support\Converters\XmlDocumentConverter.cs" />
     <Compile Include="Messaging\Support\Converters\XmlMessageConverter.cs" />
     <Compile Include="Messaging\Support\MessageQueueFactoryObject.cs" />
-    <Compile Include="Messaging\Support\QueueUtils.cs" />
+    <Compile Include="Messaging\Core\QueueUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.2008.csproj">

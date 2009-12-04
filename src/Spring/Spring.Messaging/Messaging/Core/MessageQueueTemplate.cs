@@ -23,6 +23,7 @@ using System.Collections;
 using System.Messaging;
 using Common.Logging;
 using Spring.Context;
+using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
