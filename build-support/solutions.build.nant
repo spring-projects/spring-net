@@ -47,6 +47,8 @@ Rebuilding Solutions using Nant and "solutions.build":
             </items>
         </in>
         <do>
+            <delete dir="${dirname}" failonerror="false"/>
+	    <sleep seconds="1"/>
             <delete dir="${dirname}" />
         </do>
     </foreach>
@@ -84,6 +86,13 @@ Rebuilding Solutions using Nant and "solutions.build":
   </target>
 
   <target name="RebuildAllSolutions-2.0" depends="Clean">
+    <!-- build "main" solution -->
+
+    <property name="solutionfile" value="${root.dir}/Spring.NET.2008.sln" />
+    <property name="solutionconfiguration" value="${buildconfiguration}" />
+    <call target="RebuildSolution-2.0" />
+
+
     <foreach item="File" property="filename">
         <in>
             <items basedir="${root.dir}">
@@ -92,8 +101,12 @@ Rebuilding Solutions using Nant and "solutions.build":
                 <include name="examples/Spring/Spring.Data.NHibernate/Spring.Northwind.sln" />
 		<!-- Does not build on bamboo server SPRNET-1283 -->
 		<exclude name="examples/Spring/Spring.MsmqQuickStart/**/*.2005.sln"/>
+		<!--
                 <include name="*.2005.sln" />
+
+		-->
                 <include name="*.2008.sln" />
+		<exclude name="Spring.NET.2008.sln"/>
             </items>
         </in>
         <do>
@@ -106,12 +119,6 @@ Rebuilding Solutions using Nant and "solutions.build":
     <!-- build "main" solution -->
 <!--
     <property name="solutionfile" value="${root.dir}/Spring.NET.2005.sln" />
-    <property name="solutionconfiguration" value="${buildconfiguration}" />
-    <call target="RebuildSolution-2.0" />
--->
-    <!-- build "main" solution -->
-<!--
-    <property name="solutionfile" value="${root.dir}/Spring.NET.2008.sln" />
     <property name="solutionconfiguration" value="${buildconfiguration}" />
     <call target="RebuildSolution-2.0" />
 -->
