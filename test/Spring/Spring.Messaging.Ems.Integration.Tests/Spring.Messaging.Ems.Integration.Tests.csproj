@@ -54,6 +54,8 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Messaging\Ems\Config\EmsNamespaceHandlerTests.cs" />
+    <Compile Include="Messaging\Ems\Connections\TestMessageListener.cs" />
     <Compile Include="Messaging\Ems\Core\EmsTemplateTests.cs" />
     <Compile Include="Messaging\Ems\Core\SimpleGateway.cs" />
     <Compile Include="Messaging\Ems\Core\SimpleMessageListener.cs" />
@@ -90,6 +92,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Ems\Core\EmsTemplateTests.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messaging\Ems\Config\EmsNamespaceHandlerTests.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

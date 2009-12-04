@@ -35,7 +35,7 @@ namespace Spring.Messaging.Ems.Jndi
     public class JndiLookupFactoryObjectTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ConfigurationException))]
         public void NoJndiName()
         {
             JndiLookupFactoryObject jfo = new JndiLookupFactoryObject();

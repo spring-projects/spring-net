@@ -22,9 +22,9 @@
 
 using System.Collections;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Listener;
 using Spring.Objects.Factory.Xml;
 using TIBCO.EMS;
@@ -48,14 +48,12 @@ namespace Spring.Messaging.Ems.Config
 
         private IApplicationContext ctx;
 
-        private MockRepository mocks;
 
         [SetUp]
         public void Setup()
         {
             NamespaceParserRegistry.RegisterParser(typeof(EmsNamespaceParser));
             ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("EmsNamespaceHandlerTests.xml", GetType()));
-            mocks = new MockRepository();
         }
 
         [Test]
@@ -75,8 +73,9 @@ namespace Spring.Messaging.Ems.Config
         public void ContainerConfiguration()
         {
             IDictionary containers = ctx.GetObjectsOfType(typeof (SimpleMessageListenerContainer));
-            ConnectionFactory defaultConnectionFactory = (ConnectionFactory) ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
-            ConnectionFactory explicitConnectionFactory = (ConnectionFactory) ctx.GetObject(EXPLICIT_CONNECTION_FACTORY);
+            EmsConnectionFactory defaultConnectionFactory = (EmsConnectionFactory)ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
+            defaultConnectionFactory = (EmsConnectionFactory)ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
+            EmsConnectionFactory explicitConnectionFactory = (EmsConnectionFactory)ctx.GetObject(EXPLICIT_CONNECTION_FACTORY);
             
 
             int defaultConnectionFactoryCount = 0;

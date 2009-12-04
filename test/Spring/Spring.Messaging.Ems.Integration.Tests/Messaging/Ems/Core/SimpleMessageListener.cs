@@ -24,7 +24,7 @@ namespace Spring.Messaging.Ems.Core
                 LOG.Info("Message Text = " + textMessage.Text);
             } else
             {
-                LOG.Warn("Can not process message of type " message.GetType());
+                LOG.Warn("Can not process message of type " + message.GetType());
             }
         }
     }

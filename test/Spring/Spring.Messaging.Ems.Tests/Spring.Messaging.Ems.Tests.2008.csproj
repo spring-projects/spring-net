@@ -102,7 +102,6 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Messaging\Ems\Config\EmsNamespaceHandlerTests.cs" />
     <Compile Include="Messaging\Ems\Connections\CachingConnectionFactoryTests.cs" />
     <Compile Include="Messaging\Ems\Connections\MessageTransactionManagerTests.cs" />
     <Compile Include="Messaging\Ems\Connections\SingleConnectionFactoryTests.cs" />
@@ -124,9 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Ems\Integration\SimpleMessageListenerContainerTests.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Messaging\Ems\Config\EmsNamespaceHandlerTests.xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

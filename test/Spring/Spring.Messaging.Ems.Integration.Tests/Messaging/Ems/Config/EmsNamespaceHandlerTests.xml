@@ -11,13 +11,13 @@
                   response-destination="responseDestination"/>
   </nms:listener-container>
 
-  <nms:listener-container>
+  <nms:listener-container auto-startup="false">
     <nms:listener destination="testDestination" ref="testObject3"/>
   </nms:listener-container>
 
 
   <!-- the default ConnectionFactory -->
-  <object id="connectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+  <object id="ConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
     <constructor-arg index="0" value="tcp://localhost:7222"/>
   </object>
   
@@ -38,7 +38,7 @@
 
   <object id="testObject2"  type="Spring.Objects.TestObject, Spring.Core.Tests"/>
 
-  <object id="testObject3"  type="Spring.Messaging.Ems.Connections.TestMessageListener, Spring.Messaging.Ems.Tests"/>
+  <object id="testObject3"  type="Spring.Messaging.Ems.Connections.TestMessageListener, Spring.Messaging.Ems.Integration.Tests"/>
 
   <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
     <property name="VariableSources">

@@ -37,8 +37,8 @@ namespace Spring.Messaging.Ems.Integration
     /// This class contains integration tests for the SimpleMessageListenerContainer
     /// </summary>
     /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
     [TestFixture]
+    [Ignore]
     public class SimpleMessageListenerContainerTests : AbstractDependencyInjectionSpringContextTests
     {
 
