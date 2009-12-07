@@ -118,12 +118,6 @@ namespace Spring.Messaging.Ems.Core
             AssertRecievedHelloWorldMessage(msgText, emsTemplate.ReceiveAndConvert(destination));
         }
 
-        [Test]
-        public void SimpleMessageListenerContainer()
-        {
-            
-        }
-
         private void AssertRecievedHelloWorldMessage(string msgText, object message)
         {
             Assert.NotNull(message);

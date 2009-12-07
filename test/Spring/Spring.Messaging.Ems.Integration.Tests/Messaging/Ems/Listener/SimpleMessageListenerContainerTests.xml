@@ -10,7 +10,7 @@
     <property name="TargetConnectionFactory">
       <object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
         <constructor-arg name="serverUrl" value="tcp://localhost:7222"/>
-        <constructor-arg name="clientId" value="SpringEMSClient3"/>
+        <constructor-arg name="clientId" value="SpringEMSClient4"/>
       </object>
     </property>
   </object>
