@@ -237,7 +237,7 @@ namespace Spring.Messaging.Ems.Config
             if (containerElement.HasAttribute(AUTO_STARTUP))
             {
                 string autoStartup = containerElement.GetAttribute(AUTO_STARTUP);
-                if (!StringUtils.HasText(autoStartup))
+                if (StringUtils.HasText(autoStartup))
                 {
                     containerDef.AddPropertyValue("AutoStartup", autoStartup);
                 }

@@ -7,7 +7,7 @@
   
   <object id="emsConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
     <constructor-arg name="serverUrl" value="tcp://localhost:7222"/>
-    <constructor-arg name="clientId" value="SpringEMSClient"/>
+    <constructor-arg name="clientId" value="SpringEMSClient2"/>
     <property name="ConnAttemptCount" value="10" />
     <property name="ConnAttemptDelay" value="100" />
     <property name="ConnAttemptTimeout" value="1000" />
@@ -34,7 +34,10 @@
       </dictionary> 
     </property>
     -->
-
+  <object id="jndiEmsConnectionFactory" type="Spring.Messaging.Ems.Jndi.JndiLookupFactoryObject, Spring.Messaging.Ems">
+    <property name="JndiName" value="TopicConnectionFactory"/>
+    <property name="JndiProperties[LookupContext.PROVIDER_URL]" value="tibjmsnaming://localhost:7222"/>
+  </object>
 
   
   <object id="simpleGateway" type="Spring.Messaging.Ems.Core.SimpleGateway, Spring.Messaging.Ems.Integration.Tests">

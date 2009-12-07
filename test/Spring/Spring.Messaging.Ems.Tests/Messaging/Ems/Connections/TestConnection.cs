@@ -1,6 +1,5 @@
 using System;
 using Spring.Messaging.Ems.Common;
-using Spring.Messaging.Nms.Connections;
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Connections

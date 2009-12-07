@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<project name="Spring.Messaging.Ems.Integration.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+
+  <include buildfile="${spring.basedir}/common-project.include" />
+
+  <!--
+  Required properties:
+    * current.bin.dir           - (path) root level to build to
+    * current.build.debug       - (true|false) debug build?
+    * current.build.defines.csc - framework-specific build defines for C# compiler
+ -->
+  <target name="build">
+
+    <!-- build Spring.Messaging.Ems.Integration.Tests -->
+    <csc target="library" define="${current.build.defines.csc}"
+        warnaserror="true"
+        optimize="${build.optimize}"
+        debug="${current.build.debug}"
+        output="${current.bin.dir}/${project::get-name()}.dll"
+        doc="${current.bin.dir}/${project::get-name()}.xml">
+      <nowarn>
+        <warning number="${nowarn.numbers.test}" />
+      </nowarn>
+      <sources failonempty="true">
+        <include name="../Spring.Messaging.Ems.Integration.Tests/**/*.cs" />
+        <include name="**/*.cs" />
+        <exclude name="AssemblyInfo.cs" />
+      </sources>
+      <references basedir="${current.bin.dir}">
+        <include name="System.Data.dll" />
+        <include name="System.EnterpriseServices.dll" />
+        <include name="*.dll" />
+        <include name="Spring.Messaging.Ems.dll" />
+      </references>
+      <resources prefix="Spring" dynamicprefix="true" failonempty="true">
+        <include name="**/*.xml" />
+        <include name="**/*.sql" />
+      </resources>
+      <resources prefix="Spring" dynamicprefix="true" basedir="../Spring.Data.NHibernate.Integration.Tests" failonempty="true">
+        <include name="**/*.sql" />
+      </resources>
+    </csc>
+
+    <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
+          tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>
+
+    <copy todir="${current.bin.dir}" overwrite="true">
+      <fileset basedir="${project::get-base-directory()}">
+        <include name="Spring.Messaging.Ems.Integration.Tests.dll.config" />
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="test" depends="build">
+    <property name="test.assemblyfile" value="${project::get-name()}.dll" />
+    <call target="common.run-tests" if="${test.integration.ems}" />
+  </target>
+
+</project>

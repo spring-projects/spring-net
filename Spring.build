@@ -28,7 +28,15 @@ Build properties that may be set:
 
 "test.integration.data":
   values: bool: true|false
-  set this to true to run integration tests
+  set this to true to run integration tests that access a database
+
+"test.integration.ems":
+  values: bool: true|false
+  set this to true to run integration tests that access TIBCO EMS
+
+"test.integration.nms":
+  values: bool: true|false
+  set this to true to run integration tests that access ActiveMQ
 
 "test.full":
   values: bool: true|false
@@ -53,6 +61,17 @@ Running Integration Tests:
 
 on the commandline enable the "test.integration.data" flag, e.g.:
   nant test -f:spring.build -D:test.integration.data=true
+
+*) TIBCO EMS Integration Tests
+- You need to have an EMS instance running at the URL tcp://localhost:7222
+
+on the commandline enable the "test.integration.ems" flag, e.g.:
+  nant test -f:spring.build -D:test.integration.ems=true
+
+*) ActiveMQ Inegration Tests
+
+on the commandline enable the "test.integration.nms" flag, e.g.:
+  nant test -f:spring.build -D:test.integration.nms=true
 
 
 
@@ -79,6 +98,8 @@ Commandline Examples:
   <!-- turn on all tests if test.full specified -->
   <property name="test.full" value="false" />
   <property name="test.integration.data" value="${test.full}" />
+  <property name="test.integration.ems" value="${test.full}" />
+  <property name="test.integration.nms" value="${test.full}" />
 
   <!--
       the line below is for the ccnet build box - see target set-user-overrides for how to change this to your machine values if necessary
@@ -433,11 +454,10 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
     <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and nant.settings.currentframework == 'net-2.0'}"/>
-    <!--
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
-    -->
+    <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
-    <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz }"/>
+    <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
 
@@ -530,8 +550,7 @@ Commandline Examples:
 
   </target>
 
-  <target name="copylibs">
-    <echo message="Current bin dir = ${current.bin.dir}"/>
+  <target name="copylibs">    <echo message="Current bin dir = ${current.bin.dir}"/>
     <echo message="Current lib dir = ${lib.dir}"/>
     <!-- copy framework-neutral libraries -->
     <copy todir="${current.bin.dir}">
@@ -1444,6 +1463,8 @@ Commandline Examples:
   <target name="set-build-namespaces-all">
     <property name="build.allnamespaces" value="true"/>
     <property name="test.integration.data" value="false" />
+    <property name="test.integration.ems" value="false" />
+    <property name="test.integration.nms" value="false" />
     <property name="build-aop" value="true" />
     <property name="build-data" value="true" />
     <property name="build-services" value="true" />
@@ -1481,6 +1502,8 @@ Commandline Examples:
   </target>
   <target name="set-build-namespaces-release">
     <property name="test.integration.data" value="false" />
+    <property name="test.integration.ems" value="false" />
+    <property name="test.integration.nms" value="false" />
     <property name="build-aop" value="true"/>
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>

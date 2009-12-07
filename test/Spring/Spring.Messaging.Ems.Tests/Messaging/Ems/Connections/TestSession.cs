@@ -21,12 +21,10 @@
 using System;
 using Rhino.Mocks;
 using Spring.Messaging.Ems.Common;
-using Spring.Messaging.Ems.Connections;
 using TIBCO.EMS;
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Ems.Connections
 {
-
     public class TestSession : ISession
     {
         private MockRepository mocks = new MockRepository();

@@ -23,7 +23,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Messaging.Ems.Common;
-using Spring.Messaging.Nms.Connections;
 using TIBCO.EMS;
 
 #endregion
