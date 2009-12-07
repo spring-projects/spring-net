@@ -44,6 +44,10 @@
     <property name="ConnectionFactory" ref="connectionFactory" />
   </object>
 
+  <object id="emsTemplate" type="Spring.Messaging.Ems.Core.EmsTemplate, Spring.Messaging.Ems">
+    <property name="ConnectionFactory" ref="connectionFactory" />
+  </object>
+
 
   <object id="cachingJndiConnectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems">
     <property name="SessionCacheSize" value="10" />

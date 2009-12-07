@@ -48,6 +48,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\TIBCO.EMS.dll</HintPath>
     </Reference>
+    <Reference Include="TIBCO.EMS.ADMIN, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5b83db8ff05c64ba, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\TIBCO.EMS.ADMIN.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -60,6 +64,7 @@
     <Compile Include="Messaging\Ems\Core\SimpleGateway.cs" />
     <Compile Include="Messaging\Ems\Core\SimpleMessageListener.cs" />
     <Compile Include="Messaging\Ems\Core\SimplePublisher.cs" />
+    <Compile Include="Messaging\Ems\Listener\SimpleMessageListenerContainerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2008.csproj">
@@ -95,6 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Ems\Config\EmsNamespaceHandlerTests.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messaging\Ems\Listener\SimpleMessageListenerContainerTests.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

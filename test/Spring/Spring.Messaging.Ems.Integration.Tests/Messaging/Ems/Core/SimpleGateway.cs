@@ -8,7 +8,7 @@ namespace Spring.Messaging.Ems.Core
     public class SimpleGateway : EmsGatewaySupport
     {
         public void Publish(string ticker, double price)
-        {
+        {            
             EmsTemplate.SendWithDelegate("APP.STOCK.MARKETDATA",
                           delegate(ISession session)
                           {

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:ems="http://www.springframework.net/ems">
+
+  <!-- the default ConnectionFactory -->
+  
+  <object id="connectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems">
+    <property name="SessionCacheSize" value="10" />
+    <property name="TargetConnectionFactory">
+      <object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+        <constructor-arg name="serverUrl" value="tcp://localhost:7222"/>
+        <constructor-arg name="clientId" value="SpringEMSClient3"/>
+      </object>
+    </property>
+  </object>
+  
+  <!-- Send messages -->
+  <object id="simpleGateway" type="Spring.Messaging.Ems.Core.SimpleGateway, Spring.Messaging.Ems.Integration.Tests">
+    <property name="ConnectionFactory" ref="connectionFactory" />
+  </object>
+
+  <!-- Listener Infrastructure -->
+  <ems:listener-container connection-factory="connectionFactory" concurrency="10">
+    <ems:listener ref="simpleMessageListener" destination="APP.STOCK.MARKETDATA" />
+  </ems:listener-container>
+
+  <!-- POCO based message processing -->
+  <object name="simpleMessageListener"
+          type="Spring.Messaging.Ems.Core.SimpleMessageListener, Spring.Messaging.Ems.Integration.Tests"/>
+
+
+</objects>
+

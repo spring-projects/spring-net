@@ -34,6 +34,7 @@ using Spring.Messaging.Ems.Listener;
 using Spring.Objects.Factory.Xml;
 using Spring.Testing.NUnit;
 using TIBCO.EMS;
+using TIBCO.EMS.ADMIN;
 
 #endregion
 
@@ -51,23 +52,84 @@ namespace Spring.Messaging.Ems.Core
 
         protected IConnectionFactory cachingJndiConnectionFactory;
 
+        protected EmsTemplate emsTemplate;
+
+        protected SimpleGateway simpleGateway;
+
+
+        private Admin admin;
+
+        private string queueName = "INT_TEST_QUEUE";
+
+        private Hashtable env = new Hashtable();
+
+        private LookupContext lookupContext;
+
         /// <summary>
         /// Default constructor for EmsTemplateTests.
         /// </summary>
         public EmsTemplateTests()
         {
             this.PopulateProtectedVariables = true;
+
+            env.Add(LookupContext.PROVIDER_URL, "tibjmsnaming://localhost:7222");
+            env.Add(LookupContext.SECURITY_PRINCIPAL, "admin");
+            env.Add(LookupContext.SECURITY_CREDENTIALS, "");
+            lookupContext = new LookupContext(env);
         }
 
+        protected override void OnSetUp()
+        {
+            admin = new Admin("tcp://localhost:7222", "admin", "");
+            Destination destination = (Destination)lookupContext.Lookup(queueName);
+            if (destination != null) admin.DestroyQueue(queueName);                        
+            admin.CreateQueue(new QueueInfo(queueName));
+            admin.BindQueue(queueName, queueName);
+            admin.PurgeQueue(queueName);
+        }
+
+     
 
 
         [Test]
-        public void SendAndReceive()
+        public void ConvertAndSend()
         {
             Assert.NotNull(emsConnectionFactory);
             Assert.NotNull(connectionFactory);
             Assert.NotNull(jndiEmsConnectionFactory);       
             Assert.NotNull(cachingJndiConnectionFactory);
+            Assert.NotNull(emsTemplate);
+
+            string msgText = "Hello World";
+
+            //Use with destination set at runtime
+            emsTemplate.ConvertAndSend("APP.TESTING", msgText);
+            AssertRecievedHelloWorldMessage(msgText, emsTemplate.ReceiveAndConvert("APP.TESTING"));
+
+            //Now using default destination set via property
+            emsTemplate.DefaultDestinationName = "APP.TESTING";
+            emsTemplate.ConvertAndSend(msgText);
+            AssertRecievedHelloWorldMessage(msgText, emsTemplate.ReceiveAndConvert());
+            
+            //Now using destination oject
+            Destination destination = (Destination)lookupContext.Lookup(queueName);
+
+            emsTemplate.ConvertAndSend(destination, msgText);
+            AssertRecievedHelloWorldMessage(msgText, emsTemplate.ReceiveAndConvert(destination));
+        }
+
+        [Test]
+        public void SimpleMessageListenerContainer()
+        {
+            
+        }
+
+        private void AssertRecievedHelloWorldMessage(string msgText, object message)
+        {
+            Assert.NotNull(message);
+            string text = message as string;
+            Assert.NotNull(text);
+            Assert.AreEqual(msgText, text);
         }
 
         #region Overrides of AbstractDependencyInjectionSpringContextTests
