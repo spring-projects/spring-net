@@ -31,6 +31,8 @@ namespace Spring.Messaging.Nms.Core
 
         protected IConnectionFactory connectionFactory;
 
+        protected NmsTemplate nmsTemplate;
+
         /// <summary>
         /// Default constructor for NmsTemplateTests.
         /// </summary>
@@ -39,11 +41,33 @@ namespace Spring.Messaging.Nms.Core
             this.PopulateProtectedVariables = true;
         }
 
+
         [Test]
-        public void SendAndReceive()
+        public void ConvertAndSend()
         {
-            Assert.NotNull(nmsConnectionFactory);
-            Assert.NotNull(connectionFactory);                     
+            Assert.NotNull(connectionFactory);
+            Assert.NotNull(nmsTemplate);
+
+            string msgText = "Hello World";
+
+            //Use with destination set at runtime
+            nmsTemplate.ConvertAndSend("APP.TESTING", msgText);
+            AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert("APP.TESTING"));
+
+            //Now using default destination set via property
+            nmsTemplate.DefaultDestinationName = "APP.TESTING";
+            nmsTemplate.ConvertAndSend(msgText);
+            AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert());
+
+        }
+
+
+        private void AssertRecievedHelloWorldMessage(string msgText, object message)
+        {
+            Assert.NotNull(message);
+            string text = message as string;
+            Assert.NotNull(text);
+            Assert.AreEqual(msgText, text);
         }
 
         #region Overrides of AbstractDependencyInjectionSpringContextTests

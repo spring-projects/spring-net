@@ -18,8 +18,18 @@
     </property>
   </object>
 
-  <object id="nmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">
+  <!-- Send messages -->
+  <object id="simpleGateway" type="Spring.Messaging.Nms.Core.SimpleGateway, Spring.Messaging.Nms.Integration.Tests">
     <property name="ConnectionFactory" ref="connectionFactory" />
   </object>
+
+  <!-- Listener Infrastructure -->
+  <nms:listener-container connection-factory="connectionFactory" concurrency="10">
+    <nms:listener ref="simpleMessageListener" destination="APP.STOCK.MARKETDATA" />
+  </nms:listener-container>
+
+  <!-- POCO based message processing -->
+  <object name="simpleMessageListener"
+          type="Spring.Messaging.Nms.Core.SimpleMessageListener, Spring.Messaging.Nms.Integration.Tests"/>
 
 </objects>

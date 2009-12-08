@@ -62,6 +62,9 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Messaging\Nms\Core\NmsTemplateTests.cs" />
+    <Compile Include="Messaging\Nms\Core\SimpleGateway.cs" />
+    <Compile Include="Messaging\Nms\Core\SimpleMessageListener.cs" />
+    <Compile Include="Messaging\Nms\Listener\SimpleMessageListenerContainerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Nms\Core\NmsTemplateTests.xml" />
@@ -83,6 +86,9 @@
       <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
       <Name>Spring.Core.Tests.2008</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messaging\Nms\Listener\SimpleMessageListenerContainerTests.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
