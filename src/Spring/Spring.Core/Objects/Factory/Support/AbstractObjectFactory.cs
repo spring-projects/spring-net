@@ -722,7 +722,7 @@ namespace Spring.Objects.Factory.Support
             catch (ObjectCreationException ex)
             {
                 // Can only happen when getting a FactoryObject.
-                log.Debug("Ignoring object creation exception on FactoryObject type check", ex);
+                log.Warn("Ignoring object creation exception on FactoryObject type check", ex);
                 return null;
             }
         }
