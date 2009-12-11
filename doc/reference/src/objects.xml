@@ -35,10 +35,10 @@
 
     <para>The <literal>Spring.Core</literal> assembly is the basis for
     Spring.NET's IoC container. The <literal><link
-    ns6:href="http://www.springframework.net/doc/api/html/Spring.Objects.Factory.IObjectFactory.html">IObjectFactory</link></literal>
+    ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Objects.Factory.IObjectFactory.html">IObjectFactory</link></literal>
     interface provides an advanced configuration mechanism capable of managing
     any type of object. <literal><link
-    ns6:href="http://www.springframework.net/doc/api/html/Spring.Context.IApplicationContext.html">IApplicationContext</link></literal>
+    ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Context.IApplicationContext.html">IApplicationContext</link></literal>
     is a sub-interface of <literal>IObjectFactory</literal>. It adds easier
     integration with Spring.NET's Aspect Oriented Programming (AOP) features,
     message resource handling (for use in internationalization), event
@@ -235,7 +235,7 @@
         <para>In the previous example the configuration resources are assumed
         to be located in the bin\Debug directory. You can use Spring's
         <classname><link
-        ns6:href="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</link></classname>
+        ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core.IO.IResource.html">IResource</link></classname>
         abstraction to load resources from other locations.</para>
 
         <para>The following example shows how to create an IoC container
@@ -246,7 +246,7 @@
                  "file:///services.xml",
                  "assembly://MyAssembly/MyDataAccess/data-access.xml");
 </programlisting>The above example uses Spring.NET's <classname><link
-        ns6:href="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</link></classname>
+        ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core.IO.IResource.html">IResource</link></classname>
         abstraction. The <literal>IResource</literal> interface provides a
         simple and uniform interface to a wide array of IO resources that can
         represent themselves as <literal>System.IO.Stream</literal>.</para>
@@ -254,7 +254,7 @@
         <note>
           <para>After you learn about Spring's IoC container, you may want to
           know more about Spring's <classname><link
-          ns6:href="http://www.springframework.net/doc/api/html/Spring.Core.IO.IResource.html">IResource</link></classname>
+          ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core.IO.IResource.html">IResource</link></classname>
           abstraction to load metadata from other locations as desribed below
           and alsoin the chapter <xref linkend="resources" /></para>
         </note>
