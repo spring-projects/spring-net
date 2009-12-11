@@ -1,0 +1,14 @@
+IF (Name.Text <> )  THEN  Next.Enabled := True;
+IF (Company.Text <> )  THEN  Next.Enabled := True;
+IF (Serial1.Text <> )  THEN  Next.Enabled := True;
+IF (Serial2.Text <> )  THEN  Next.Enabled := True;
+IF (Serial3.Text <> )  THEN  Next.Enabled := True;
+IF (Serial4.Text <> )  THEN  Next.Enabled := True;
+IF (Serial5.Text <> )  THEN  Next.Enabled := True;
+IF (Name.Text = )  THEN  Next.Enabled := False;
+IF (Company.Text = )  THEN  Next.Enabled := False;
+IF (Serial1.Text = )  THEN  Next.Enabled := False;
+IF (Serial2.Text = )  THEN  Next.Enabled := False;
+IF (Serial3.Text = )  THEN  Next.Enabled := False;
+IF (Serial4.Text = )  THEN  Next.Enabled := False;
+IF (Serial5.Text = )  THEN  Next.Enabled := False;
