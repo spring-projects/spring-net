@@ -1,11 +1,11 @@
-THE SPRING.NET FRAMEWORK, Release 1.3.0 RC1  (August 3, 2009)
+THE SPRING.NET FRAMEWORK, Release 1.3.0  (December 15, 2009)
 --------------------------------------------------------------------
 http://www.springframework.net/
 
 
 1. INTRODUCTION
 
-The 1.3.0 RC1 release of Spring.NET contains
+The 1.3.0 release of Spring.NET contains
 
      * A full featured Inversion of Control container
      * An Aspect Oriented Programming framework
@@ -42,12 +42,17 @@ The 1.3.0 RC1 release of Spring.NET contains
 Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002).
 
 
-2. KNOWN ISSUES
+2. SUPPORTED .NET FRAMEWORK VERSIONS
+
+Spring.NET 1.3 supports .NET 1.1, 2.0, 3.0 and 3.5.  Note, there are no specific .DLLs for .NET 3.5 as we do not use any features or libraries from that framework version.  For .NET 3.0 in the directory bin\net\3.0 is the Spring.Services.dll that should be used if you are using .NET 3.0 or higher as contains Spring's WCF integration.
+
+
+3. KNOWN ISSUES
 
 The fallback rules for localized resources seem to have a bug that is fixed by applying Service Pack 1 for .NET 1.1.  This affects the use of IMessageSource.GetMessage methods that specify CultureInfo.
 
 
-3. RELEASE INFO
+4. RELEASE INFO
 
 Release contents:
 
@@ -76,7 +81,7 @@ Project info at the SourceForge site: http://sourceforge.net/projects/springnet/
 The Spring Framework is released under the terms of the Apache Software License (see license.txt).
 
 
-4. DISTRIBUTION DLLs
+5. DISTRIBUTION DLLs
 
 The "bin" directory contains the following distinct dll files for use in applications. Dependencies are those other than on the .NET BCL.
 
@@ -136,8 +141,12 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: Quartz 1.0 Integration
 - Dependencies: Spring.Core, Spring.Data, Quartz
 
+* "Spring.Template.Velocity" (~44 KB)
+- Contents: NVelocity Integration
+- Dependencies: Spring.Core, NVelocity
 
-5. WHERE TO START?
+
+6. WHERE TO START?
 
 Documentation can be found in the "docs" directory:
 * The Spring reference documentation
@@ -159,7 +168,7 @@ Documented sample applications can be found in "examples":
 * MSMQ QuickStart - Sample applicaiton usingMSMQ
 * Quartz Example - Scheduling using Quartz
 
-6. How to build
+7. How to build
 
 VS.NET
 ------
@@ -198,7 +207,7 @@ for information on how to install the docbook toolchain.
 NDoc3 and InnovaSys Document X! are used to generate the SDK documentation.
 
 
-7. Support
+8. Support
 
 The user forums at http://forum.springframework.net/ are available for you to submit questions, support requests,
 and interact with other Spring.NET users.
@@ -219,12 +228,14 @@ you are using (check the file versions of Spring.NET dlls), the .NET version you
 Ideally attach some sample code reproducing the problem to the JIRA ticket.
 
 
-8. Acknowledgements
+9. Acknowledgements
 
 InnovaSys Document X!
 ---------------------
 InnovSys has kindly provided a license to generate the SDK documentation and supporting utilities for
 integration with Visual Studio.
+
+
 
 
 

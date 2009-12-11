@@ -2,6 +2,92 @@ SPRING.NET FRAMEWORK CHANGELOG
 ==============================
 http://www.springframework.net
 
+Release Version 1.3.0 December 15, 2009
+
+Release Notes - Spring.NET - Version 1.3.0
+
+Bug
+
+[SPRNET-576] - Allow formatting null values for .NET 2.0 Nullable Types
+[SPRNET-694] - Error creating hierarchical IAppliationContext when using default names.
+[SPRNET-1041] - Add new DbProvider for Oracle 11g
+[SPRNET-1075] - AdoTemplate DataSetCreateWithParams not working as expected - investigate.
+[SPRNET-1155] - Error when evaluating expression with #date variable
+[SPRNET-1187] - inconsistent behaviour getting/setting database parameters
+[SPRNET-1228] - NmsTemplate: wrong timeout units in receive method (ticks instead of milliseconds)
+[SPRNET-1253] - NmsTemplate: wrong timeout units in receive method (ticks instead of milliseconds)
+[SPRNET-1256] - DefaultAdvisorAutoProxyCreator should cache FindCandidateAdvisors() list on a per-type basis
+[SPRNET-1266] - Context creation can throw ObjectCurrentlyInCreatation exception thrown when using <tx:attribute-driven/> with NHibernateTransactionManager
+[SPRNET-1270] - Selection of DefaultProvider in MultiDelegatingDbProvider can be null
+[SPRNET-1272] - Recreating application context can result in calls to create same type twice leading to System.ArgumentException: Duplicate type name within an assembly.
+[SPRNET-1273] - Remove unnecessary cast to (int) in Spring.Data.Core.AdoTemplate ExecuteScalar with ICommandSetter method argument
+[SPRNET-1276] - SimpleAdoTestUtils doesn't handle statement separators correctly
+[SPRNET-1277] - Wellknown Namespacesparsers don't get loaded automatically without prior explicit registration
+[SPRNET-1284] - IL code generation can result in System.BadImageFormatException in Windows 2008
+[SPRNET-1285] - MultiDelegatingDbProvider in wrong namespace
+[SPRNET-1288] - auto-start not parsed correctly in TIBCO EMS/ActiveMQ message listener container schema.
+[SPRNET-1289] - A target retrieved from a dynamic target source, is not entirely thread safe, e.g.ThreadLocalTargetSource
+
+Improvement
+[SPRNET-579] - Add NHibernate DAO implementation to SpringAir example application
+[SPRNET-825] - Rename HtmlHelp-formatted reference docs to spring-net-reference.chm 
+[SPRNET-837] - TypedDataSetUtils - check that the connection in the typedDataSet isn't already open, if it is throw exception.
+[SPRNET-878] - Support setting of generic collections when only getter property is exposed.
+[SPRNET-959] - Use 'invocation.Method' as variable for CacheResultAdvice Key expression resolution
+[SPRNET-968] - AOP documentation improvements
+[SPRNET-973] - Document how to mix ado.net based and nhibernate based operations within the service tier
+[SPRNET-987] - entry key should work with property configurer
+[SPRNET-989] - Avoid throwing exception in Spring's custom timespan converter when delegating to default .NET BCL implementation.
+[SPRNET-1097] - Provide VS.NET 2008 integrated API help
+[SPRNET-1101] - Exception translation for NHibernate ADOException can be improved.
+[SPRNET-1119] - Support type alias resolution in all places where 'type' is used in objects.xsd
+[SPRNET-1120] - Expose "AllowObjectDefinitionOverriding" to be easily configurable in ApplicationContext both programmatically and declaratively in XML.
+[SPRNET-1152] - All for all current listener threads to complete processing before shutting down MessageListenerContainer
+[SPRNET-1180] - Document use of HttpApplicationConfigurer.ApplicationTemplate for configuring HttpApplication instances
+[SPRNET-1194] - Making public and protected method in AdoTemplate (both core and generic) virtual
+[SPRNET-1203] - provide invocation context to cache attributes
+[SPRNET-1232] - Document how to support for using Fluent NHibernate in LocalSessionFactoryObject
+[SPRNET-1242] - Support for collection merging with generic collections
+[SPRNET-1245] - enable cross-AppDomain proxy serialization/deserialization
+[SPRNET-1246] - Show DI for NHibernate managed objects in NHibernate example application
+[SPRNET-1257] - Slow Delegate in ExpressionParser
+[SPRNET-1259] - cache CachingAspect custom attributes to improve performance
+[SPRNET-1260] - DefensiveEventRaiser must not swallow exceptions without notice - provide means to get exception information
+[SPRNET-1267] - Add optimize compiler flag for release build
+[SPRNET-1268] - Exceptions in Spring should pass tests to ensure compliance with .NET framework guidelines.
+[SPRNET-1282] - Provide alternative to static to retrieve transaction status to support unit testing.
+[SPRNET-1286] - Provide implementation of Apache.NMS.ITrace to merge NMS logging stream with Common.Logging stream.
+
+New Feature
+[SPRNET-791] - Logging of parameter values in AdoTemplate, in particular on exception.
+[SPRNET-1136] - add firebird db provider
+[SPRNET-1278] - Add integration with JNDI for TIBCO EMS
+
+Refactoring
+[SPRNET-1093] - Investigate implementation of QueueUtils.GetMessageQueueTransaction() when argument is null and returns null
+[SPRNET-1251] - Investigate regression bug in ProxyFactoryObject due to sync with Spring Java
+
+k
+[SPRNET-401] - Show use case of strategy/command pattern usage to create/set objects parameters at runtime.
+[SPRNET-458] - Create "How To" section in reference documentation
+[SPRNET-754] - Investigate calling of oracle functions with StoredProcedure class
+[SPRNET-850] - Upgrade to NUnit 2.5.2
+[SPRNET-983] - Show use of AbstractTransactionalSpringContextTests in NHibernate sample application and reference documentation
+[SPRNET-1076] - API doc links from reference doc are broken
+[SPRNET-1096] - Show example configuraiton using TxScopeTransactionMansager with NHibernate
+[SPRNET-1148] - Provide quick start documentation for Spring NHibernate integration.
+[SPRNET-1229] - Documentation for TIBCO EMS integration
+[SPRNET-1239] - Check for package cycles with NDepend
+[SPRNET-1241] - Remove  'TODO' comments in code and create JIRA issue for them if needed.
+[SPRNET-1250] - Document use of  'DelegatingLocalSessionFactoryObject' and 'UserCredentialsDbProvider'
+[SPRNET-1265] - Upgrade to NHibernate 2.1.2
+[SPRNET-1269] - Time based test in  NHibernate.Test failed.
+[SPRNET-1274] - Automate packaging with InstallAware
+[SPRNET-1275] - Automate API documentation with Document X!
+[SPRNET-1279] - Create integration test project for NMS
+[SPRNET-1280] - Create integration test project for TIBCO EMS
+[SPRNET-1281] - Error when calling pre-build task to antlr in Spring.Core.2008 project 
+
 
 Release Version 1.3.0 RC1 August 3, 2009
 

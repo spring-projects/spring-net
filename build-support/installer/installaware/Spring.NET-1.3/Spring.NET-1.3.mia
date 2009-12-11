@@ -248,7 +248,6 @@ Install Files
 Install Files
 Install Files
 Install Files
-Install Files
 Create Shortcut
 Install Files
 Install Files
@@ -286,7 +285,6 @@ Install Files
 Install Files
 Create Shortcut
 Install Files
-Install Files
 Create Shortcut
 Install Files
 Install Files
@@ -295,18 +293,6 @@ Create Shortcut
 Install Files
 Create Shortcut
 Install Files
-Install Files
-Install Files
-Install Files
-Install Files
-Install Files
-Install Files
-Install Files
-Create Shortcut
-Install Files
-Install Files
-Install Files
-Create Shortcut
 Install Files
 Install Files
 Install Files
@@ -326,6 +312,25 @@ Install Files
 Install Files
 Install Files
 Create Shortcut
+Install Files
+Install Files
+Create Shortcut
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Create Shortcut
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
 Install Files
 Install Files
 Install Files
@@ -704,7 +709,6 @@ $
 {6028D781-1B56-4CF6-8567-B3266184A580}
 {9A899381-224C-4960-8EE9-114927CF3331}
 {5A52EB3A-E6DF-4A80-80ED-7479ECB6B587}
-{49B7241A-38C5-4AFA-8816-2DF906B2E558}
 {689F4852-777B-4865-B493-F42F05CF3EFA}
 {8A3D44F9-A8F2-489B-B57E-CC9146833960}
 {74EE6033-B67D-4559-A3CD-8EB3B5D601AB}
@@ -742,7 +746,6 @@ $
 {40E187E4-9812-43DF-BB93-F2729EC5F519}
 {F43AAB92-2311-4285-95F5-FBD2503543C3}
 {3EDD2AA2-2F08-414A-BD66-37240675D6DC}
-{C8FC0883-E862-4A8F-8421-CEA1AF318888}
 {E521F49A-503D-4708-9B8C-5F8D68D75CDC}
 {93CF5997-A66F-4AA4-AAF5-BBAAD4F951E6}
 {C63FE01E-7752-4B7B-9C32-AC04B4547229}
@@ -761,7 +764,6 @@ $
 {5A87C33D-BE83-407F-97BE-8B6CD2ED03DD}
 {6A34B8C8-F35E-439C-8397-2FFC974CA3FD}
 {01A69B5D-C70A-4131-BBC9-5E69BCF169B9}
-{1F0FE536-3683-4AD0-9E6A-65267F01B707}
 {135C4B66-A160-4CF9-8FD0-7774A8A5287D}
 {6CD84B9A-CC5E-4AC0-931A-1FF969A0F231}
 {E6CA9FFC-1A47-433D-B53D-CD57E174C420}
@@ -845,6 +847,14 @@ $
 {1999079C-D841-4ADC-B924-289B2F9DDFCA}
 {9725D1FA-92B1-4B24-8929-DC39AFBD03F1}
 {71980279-3612-4DF5-8D67-8B51D2662FBB}
+{41DA33E7-A3E8-4999-8EE6-302D2464DCB9}
+{5F719B59-67B1-4B1F-9001-852B9058C7E6}
+{65A8B8BE-FADF-4565-90E7-7440020C8A59}
+{D2738F84-6742-4868-93CD-047A5089A899}
+{CAF8F878-2693-4E7A-8058-3915B80C8907}
+{E154DCA1-AF92-489A-892D-FB87ECCD91F3}
+{E20A4D0A-903F-491E-AFA2-2B27F79F9A1C}
+{B506C1D5-B22B-4191-BB7A-9F55C46CEE35}
 {CA8886A7-0940-49AE-8FBF-B6D8857621C3}
 {830DA74D-7462-48B6-A133-06DA43BA64D6}
 {2FDC7A9C-BB27-44B0-A855-08F5E4E78C03}
@@ -1781,19 +1791,6 @@ FALSE
 FALSE
 FALSE
 FALSE
-{49B7241A-38C5-4AFA-8816-2DF906B2E558}
-L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.sln
-FALSE|
-$TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
 {8A3D44F9-A8F2-489B-B57E-CC9146833960}
 L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\src\*.*
 TRUE|
@@ -2119,19 +2116,6 @@ FALSE
 FALSE
 FALSE
 FALSE
-{C8FC0883-E862-4A8F-8421-CEA1AF318888}
-L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2005.sln
-FALSE|
-$TARGETDIR$\examples\Spring\Spring.WebQuickStart
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
 {93CF5997-A66F-4AA4-AAF5-BBAAD4F951E6}
 L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\src\*.*
 TRUE|
@@ -2305,19 +2289,6 @@ FALSE
 L:\projects\spring-net\trunk\build\package\Spring.NET\Spring.include
 FALSE|
 $TARGETDIR$
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{1F0FE536-3683-4AD0-9E6A-65267F01B707}
-L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2005.sln
-FALSE|
-$TARGETDIR$\examples\Spring\Spring.MsmqQuickStart
 FALSE
 FALSE
 FALSE
@@ -3354,6 +3325,110 @@ FALSE
 FALSE
 FALSE
 FALSE
+{41DA33E7-A3E8-4999-8EE6-302D2464DCB9}
+L:\projects\spring-net\trunk\build\package\Spring.NET\dev-support\*.*
+TRUE|
+$TARGETDIR$\dev-support
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{5F719B59-67B1-4B1F-9001-852B9058C7E6}
+L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\readme.txt
+FALSE|
+$TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{65A8B8BE-FADF-4565-90E7-7440020C8A59}
+L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2008.sln
+FALSE|
+$TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{D2738F84-6742-4868-93CD-047A5089A899}
+L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\lib\*.*
+TRUE|
+$TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\lib
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{CAF8F878-2693-4E7A-8058-3915B80C8907}
+L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2008.sln
+FALSE|
+$TARGETDIR$\examples\Spring\Spring.WebQuickStart
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{E154DCA1-AF92-489A-892D-FB87ECCD91F3}
+L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2008.sln
+FALSE|
+$TARGETDIR$\examples\Spring\Spring.MsmqQuickStart
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{E20A4D0A-903F-491E-AFA2-2B27F79F9A1C}
+L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2005.sln
+FALSE|
+$TARGETDIR$\examples\Spring\Spring.MsmqQuickStart
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{B506C1D5-B22B-4191-BB7A-9F55C46CEE35}
+L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2005.sln
+FALSE|
+$TARGETDIR$\examples\Spring\Spring.WebQuickStart
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
 {F3D1B9D2-7A04-44B6-9F91-860D3A2384C0}
 $UNINSTALLLINK$
 Uninstall Spring.NET 1.3.0
@@ -3425,7 +3500,7 @@ $SHORTCUTFOLDER$\Examples\.NET 2.0
 
 0
 {689F4852-777B-4865-B493-F42F05CF3EFA}
-$TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.sln
+$TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2008.sln
 Northwind NHibernate
 $SHORTCUTFOLDER$\Examples\.NET 2.0
 
@@ -3433,7 +3508,7 @@ $SHORTCUTFOLDER$\Examples\.NET 2.0
 
 
 
-0
+0|
 {55E0BEAD-43B8-4A0F-A94C-D5D23B3C9250}
 $TARGETDIR$\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2005.sln
 Data Access
@@ -3495,7 +3570,7 @@ $SHORTCUTFOLDER$\Examples\.NET 2.0
 
 0
 {E521F49A-503D-4708-9B8C-5F8D68D75CDC}
-$TARGETDIR$\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2005.sln
+$TARGETDIR$\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2008.sln
 Web
 $SHORTCUTFOLDER$\Examples\.NET 2.0
 
@@ -3503,7 +3578,7 @@ $SHORTCUTFOLDER$\Examples\.NET 2.0
 
 
 
-0
+0|
 {57388F2C-8AAE-468A-92AC-C6CADBAC344C}
 $TARGETDIR$\examples\Spring\SpringAir\SpringAir.2005.sln
 Spring Air
@@ -3605,7 +3680,7 @@ $SHORTCUTFOLDER$\Documentation
 
 0
 {BEDC79F7-85D3-4837-881A-CF1A07342BB0}
-$TARGETDIR$\doc\reference\htmlhelp\htmlhelp.chm
+$TARGETDIR$\doc\reference\htmlhelp\spring-net-reference.chm
 Reference - HTMLHELP
 $SHORTCUTFOLDER$\Documentation
 
@@ -3613,7 +3688,7 @@ $SHORTCUTFOLDER$\Documentation
 
 
 
-0
+0|
 {94BDA812-5706-4256-BB6A-E8F451677F49}
 $TARGETDIR$\changelog.txt
 View changelog
@@ -3635,7 +3710,7 @@ $SHORTCUTFOLDER$
 
 0
 {4CB85B60-D0A0-442A-A683-94039B70DDA0}
-$TARGETDIR$\BreakingChanges-1.2.txt
+$TARGETDIR$\BreakingChanges.txt
 View breaking changes
 $SHORTCUTFOLDER$
 
@@ -3643,7 +3718,7 @@ $SHORTCUTFOLDER$
 
 
 
-0
+0|
 {5A87C33D-BE83-407F-97BE-8B6CD2ED03DD}
 $TARGETDIR$\Spring.Net.2008.sln
 VS.NET 2008 Solution
@@ -3655,7 +3730,7 @@ $SHORTCUTFOLDER$\Source Code
 
 0
 {135C4B66-A160-4CF9-8FD0-7774A8A5287D}
-$TARGETDIR$\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2005.sln
+$TARGETDIR$\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2008.sln
 MSMQ Messaging
 $SHORTCUTFOLDER$\Examples\.NET 2.0
 
@@ -3663,7 +3738,7 @@ $SHORTCUTFOLDER$\Examples\.NET 2.0
 
 
 
-0
+0|
 {CD6019F0-6679-4D83-9FCC-42AC661E449F}
 $TARGETDIR$\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2005.sln
 ActiveMQ NMS Messaging
@@ -4303,7 +4378,17 @@ C
 
 
 
+
+
+
+
+
 $
+
+
+
+
+
 
 
 

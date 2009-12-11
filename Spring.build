@@ -22,6 +22,13 @@ Build properties that may be set:
   values: bool: true|false
   signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
 
+"mstest.exe":
+  value: bool: true:false
+  set to true to build Spring.Testing.Microsoft 
+
+"vs-net.mstest.bin.dir":
+  value: string: location of mstest.exe, for example C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE
+
 "package.version":
   values: string: a 3-part number xx.xx.xx
   set the package version
@@ -41,6 +48,10 @@ Build properties that may be set:
 "test.full":
   values: bool: true|false
   set this to true to run all available tests (example solutions, integration tests, etc.)
+
+"doc.sdk":
+  values: bool: true|false
+  set this to true to use NDoc to generate API documentation.  Note Spring ships with documentation generated using Document X!
 
 Additional Remarks:
 ===================
@@ -94,6 +105,9 @@ Commandline Examples:
   <property name="project.name.full" value="Spring.NET Framework"/>
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
   <property name="tool.dir" value="${project::get-base-directory()}/build-support/tools"/>
+
+  <!-- build SDK docs with NDoc -->
+  <property name="doc.sdk" value="false"/>
 
   <!-- turn on all tests if test.full specified -->
   <property name="test.full" value="false" />
@@ -793,7 +807,6 @@ Commandline Examples:
         <delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/bin" failonerror="false"/>
   </target>
 
-
   <target name="package" depends="set-package-configuration" description="Build and Package distribution">
 
     <property name="project.build.sign" value="true" overwrite="false" />
@@ -818,7 +831,7 @@ Commandline Examples:
 
   <target name="doc">
     <call target="doc-reference" cascade="false" />
-    <call target="doc-sdk" cascade="false" />
+    <call target="doc-sdk" cascade="false" if="${doc.sdk}"/>
   </target>
 
   <target name="doc-reference">
@@ -1117,6 +1130,7 @@ Commandline Examples:
         <fileset basedir="lib/NHibernate12">
           <include name="**/*.dll"/>
           <include name="**/*.license.txt"/>
+	  <exclude name="mono/**"/>
         </fileset>
       </copy>
     </if>
@@ -1127,6 +1141,7 @@ Commandline Examples:
         <fileset basedir="lib/NHibernate20">
           <include name="**/*.dll"/>
           <include name="**/*.license.txt"/>
+	  <exclude name="mono/**"/>
         </fileset>
       </copy>
     </if>
@@ -1137,6 +1152,7 @@ Commandline Examples:
         <fileset basedir="lib/NHibernate21">
           <include name="**/*.dll"/>
           <include name="**/*.license.txt"/>
+	  <exclude name="mono/**"/>
         </fileset>
       </copy>
     </if>
@@ -1510,6 +1526,7 @@ Commandline Examples:
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>
     <property name="build-testing-nunit" value="true"/>
+    <property name="build-testing-microsoft" value="false" />
     <property name="build-testing-microsoft" value="${property::exists('mstest.exe')}" />
     <property name="build-web" value="true"/>
     <property name="build-examples" value="true"/>
@@ -1586,8 +1603,12 @@ Commandline Examples:
       <include name="examples/Spring/Spring.Scheduling.Quartz.Example/**"/>
 
 
+      <exclude name="examples/Spring/Spring.Data.NHibernate.Northwind/Debug*.sln"/>
+      <exclude name="examples/Spring/Spring.Data.NHibernate.Northwind/Spring.Northwind.sln"/>
+
       <!-- exclude VS.Net stuff -->
       <exclude name="**/sdk-web/**"/>
+      <exclude name="**/*.sln.cache"/>
       <exclude name="**/*.suo"/>
       <exclude name="**/*.user"/>
       <exclude name="**/bin/**"/>
