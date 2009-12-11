@@ -246,8 +246,13 @@
       </listitem>
 
       <listitem>
-        <para><literal>SQLite-1.0.47 </literal>- (aliased to
-        System.Data.SQLite) - SQLite provider 1.0.43 for .NET Framework
+        <para><literal>SQLite-1.0.47 </literal>SQLite provider 1.0.47 for .NET
+        Framework 2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SQLite-1.0.56 </literal>- (aliased to
+        System.Data.SQLite) - SQLite provider 1.0.56 for .NET Framework
         2.0</para>
 
         <note>
@@ -255,6 +260,11 @@
           please write your SQL accordingly or define a privider definition
           for SQLite.</para>
         </note>
+      </listitem>
+
+      <listitem>
+        <para><literal>Firebird-2.1</literal>- (aliased to
+        <literal>Firebird-2.1</literal>) - Firebird Server, provider V2.1.0.0 in framework .NET V2.0</para>
       </listitem>
 
       <listitem>
