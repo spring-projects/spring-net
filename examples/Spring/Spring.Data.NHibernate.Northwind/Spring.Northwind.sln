@@ -46,12 +46,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Integratio
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aspects", "src\Spring.Aspects\Spring.Aspects.csproj", "{53B04C54-63EA-45AA-BB83-8950AF3C5D68}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.References", "src\Spring.Northwind.Web.References\Spring.Northwind.Web.References.csproj", "{FD89FEBE-4914-45F3-9123-B2CB954810DD}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -118,16 +112,6 @@ Global
 		{2D0C5DF7-3BDB-44FB-BC1B-58E60B170BAD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D0C5DF7-3BDB-44FB-BC1B-58E60B170BAD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2D0C5DF7-3BDB-44FB-BC1B-58E60B170BAD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Release|.NET.ActiveCfg = Release|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Release|Any CPU.Build.0 = Release|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{53B04C54-63EA-45AA-BB83-8950AF3C5D68}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FD89FEBE-4914-45F3-9123-B2CB954810DD}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{FD89FEBE-4914-45F3-9123-B2CB954810DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD89FEBE-4914-45F3-9123-B2CB954810DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
