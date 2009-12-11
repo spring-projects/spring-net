@@ -81,8 +81,13 @@ namespace Spring.Messaging.Ems.Core
         protected override void OnSetUp()
         {
             admin = new Admin("tcp://localhost:7222", "admin", "");
-            Destination destination = (Destination)lookupContext.Lookup(queueName);
-            if (destination != null) admin.DestroyQueue(queueName);                        
+            Destination destination = null;
+            try
+            {
+                destination = (Destination) lookupContext.Lookup(queueName);
+                if (destination != null) admin.DestroyQueue(queueName);
+            } catch (NameNotFoundException)
+            {}                        
             admin.CreateQueue(new QueueInfo(queueName));
             admin.BindQueue(queueName, queueName);
             admin.PurgeQueue(queueName);
