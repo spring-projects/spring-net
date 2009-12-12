@@ -121,24 +121,31 @@ namespace Spring.Aspects.Cache
             CacheParameterInfo cpi = GetCacheParameterInfo(method);
             CacheParameterAttribute[][] cacheParameterAttributes = cpi.CacheParameterAttributes;
 
-            for (int i = 0; i < cacheParameterAttributes.Length; i++)
+            if (cacheParameterAttributes.Length > 0)
             {
-                foreach (CacheParameterAttribute paramInfo in cacheParameterAttributes[i])
+                IDictionary vars = PrepareVariables(method, arguments);
+                for (int i = 0; i < cacheParameterAttributes.Length; i++)
                 {
-                    if (EvalCondition(paramInfo.Condition, paramInfo.ConditionExpression, arguments[i], null))
+                    foreach (CacheParameterAttribute paramInfo in cacheParameterAttributes[i])
                     {
-                        ICache cache = GetCache(paramInfo.CacheName);
+                        AssertUtils.ArgumentNotNull(paramInfo.KeyExpression, "Key",
+                            "The cache attribute is missing the key definition.");
 
-                        object key = paramInfo.KeyExpression.GetValue(arguments[i]);
-
-                        #region Instrumentation
-                        if (isLogDebugEnabled)
+                        if (EvalCondition(paramInfo.Condition, paramInfo.ConditionExpression, arguments[i], vars))
                         {
-                            logger.Debug(string.Format("Caching parameter for key [{0}] into cache [{1}].", key, paramInfo.CacheName));
-                        }
-                        #endregion
+                            ICache cache = GetCache(paramInfo.CacheName);
 
-                        cache.Insert(key, arguments[i], paramInfo.TimeToLiveTimeSpan);
+                            object key = paramInfo.KeyExpression.GetValue(arguments[i], vars);
+
+                            #region Instrumentation
+                            if (isLogDebugEnabled)
+                            {
+                                logger.Debug(string.Format("Caching parameter for key [{0}] into cache [{1}].", key, paramInfo.CacheName));
+                            }
+                            #endregion
+
+                            cache.Insert(key, arguments[i], paramInfo.TimeToLiveTimeSpan);
+                        }
                     }
                 }
             }

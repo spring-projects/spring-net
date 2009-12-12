@@ -195,6 +195,7 @@ namespace Spring.Aspects.Cache
             object expectedReturnValue = new object[] { "one", "two", "three" };
 
             ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
             ExpectCallToProceed(new object[] { "one", "two", "three" });
             ExpectCacheInstanceRetrieval("items", itemCache);
 
@@ -228,6 +229,7 @@ namespace Spring.Aspects.Cache
             object expectedReturnValue = new object[] { "one", "two", "three" };
 
             ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
             ExpectCallToProceed(new object[] { "one", "two", "three" });
             ExpectCacheInstanceRetrieval( "items", itemCache );
             ExpectCacheInstanceRetrieval( "items", itemCache );
@@ -264,6 +266,7 @@ namespace Spring.Aspects.Cache
             object expectedReturnValue = new object[] { "one", "two", "three" };
 
             ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
             ExpectCallToProceed(new object[] { "one", "two", "three" });
             ExpectCacheInstanceRetrieval( "items", itemCache );
 
@@ -365,6 +368,49 @@ namespace Spring.Aspects.Cache
             Assert.AreSame(expectedReturnValue, resultCache.Get(5));
             Assert.AreEqual( 1, resultCache.Count );
             Assert.AreEqual( 2, itemCache.Count );
+
+            mockInvocation.Verify();
+            mockContext.Verify();
+        }
+
+        [Test]
+        public void CacheResultWithMethodInfo()
+        {
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.CacheResultWithMethodInfo).Method;
+            object expectedReturnValue = new object[] { "one", "two", "three" };
+
+            ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+            ExpectCacheInstanceRetrieval("results", resultCache);
+            ExpectCallToProceed(new object[] { "one", "two", "three" });
+
+            // return value should be added to cache
+            object returnValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
+            Assert.AreEqual(expectedReturnValue, returnValue);
+            Assert.AreEqual(1, resultCache.Count);
+            Assert.AreEqual(returnValue, resultCache.Get("CacheResultWithMethodInfo-5"));
+
+            mockInvocation.Verify();
+            mockContext.Verify();
+        }
+
+        [Test]
+        public void CacheResultItemsWithMethodInfo()
+        {
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.CacheResultItemsWithMethodInfo).Method;
+            object expectedReturnValue = new object[] { "one", "two", "three" };
+
+            ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+            ExpectCallToProceed(new object[] { "one", "two", "three" });
+            ExpectCacheInstanceRetrieval("items", itemCache);
+
+            // return value should be added to result cache and each item to item cache
+            object returnValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
+            Assert.AreEqual(expectedReturnValue, returnValue);
+            Assert.AreEqual(0, resultCache.Count);
+            Assert.AreEqual(3, itemCache.Count);
+            Assert.AreEqual("two", itemCache.Get("CacheResultItemsWithMethodInfo-two"));
 
             mockInvocation.Verify();
             mockContext.Verify();
@@ -495,6 +541,18 @@ namespace Spring.Aspects.Cache
         [CacheResultItems( "items", "#this" )]
         [CacheResultItems( "items", "#this.ToUpper()" )]
         public IEnumerable MultipleCacheResultItems( int key, params object[] elements )
+        {
+            return elements;
+        }
+
+        [CacheResult("results", "#CacheResultWithMethodInfo.Name + '-' + #key")]
+        public IEnumerable CacheResultWithMethodInfo(int key, params object[] elements)
+        {
+            return elements;
+        }
+
+        [CacheResultItems("items", "#CacheResultItemsWithMethodInfo.Name + '-' + #this")]
+        public IEnumerable CacheResultItemsWithMethodInfo(int key, params object[] elements)
         {
             return elements;
         }

@@ -73,6 +73,23 @@ namespace Spring.Aspects.Cache
         }
 
         [Test]
+        public void TestSimpleWithMethodInfoParameterCaching()
+        {
+            MethodInfo method = typeof(SimpleWithMethodInfoCacheParameterTarget).GetMethod("Save");
+            object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
+
+            ExpectCacheInstanceRetrieval("cache", cache);
+            mocks.ReplayAll();
+
+            // parameter value should be added to cache
+            advice.AfterReturning(null, method, args, null);
+            Assert.AreEqual(1, cache.Count);
+            Assert.AreEqual(args[0], cache.Get("Save-Nikola Tesla"));
+
+            mocks.VerifyAll();
+        }
+
+        [Test]
         public void TestMultipleParameterCaching()
         {
             MethodInfo method = typeof(MultipleCacheParameterTarget).GetMethod("Save");
@@ -122,6 +139,13 @@ namespace Spring.Aspects.Cache
     public sealed class SimpleCacheParameterTarget : ICacheParameterTarget
     {
         public void Save([CacheParameter("cache", "Name")] Inventor inventor)
+        {
+        }
+    }
+
+    public sealed class SimpleWithMethodInfoCacheParameterTarget : ICacheParameterTarget
+    {
+        public void Save([CacheParameter("cache", "#Save.Name + '-' + Name")] Inventor inventor)
         {
         }
     }

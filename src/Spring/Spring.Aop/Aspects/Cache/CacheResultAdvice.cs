@@ -118,12 +118,15 @@ namespace Spring.Aspects.Cache
         {
             CacheResultInfo cacheResultInfo = GetCacheResultInfo(invocation.Method);
 
+            // prepare variables for SpEL expressions
+            IDictionary vars = PrepareVariables(invocation.Method, invocation.Arguments);
+
             bool cacheHit = false;
-            object returnValue = GetReturnValue(invocation, cacheResultInfo.ResultInfo, out cacheHit);
+            object returnValue = GetReturnValue(invocation, cacheResultInfo.ResultInfo, vars, out cacheHit);
 
             if (!cacheHit && cacheResultInfo.ItemInfoArray.Length > 0 && returnValue is IEnumerable)
             {
-                CacheResultItems((IEnumerable)returnValue, cacheResultInfo.ItemInfoArray);
+                CacheResultItems((IEnumerable)returnValue, cacheResultInfo.ItemInfoArray, vars);
             }
 
             return returnValue;
@@ -141,13 +144,16 @@ namespace Spring.Aspects.Cache
         /// in which case no caching of the result as a whole will be performed 
         /// (if the result is collection, individual items could still be cached separately).
         /// </param>
+        /// <param name="vars">
+        /// Variables for expression evaluation.
+        /// </param>
         /// <param name="cacheHit">
         /// Returns <c>true</c> if the return value was found in cache, <c>false</c> otherwise.
         /// </param>
         /// <returns>
         /// Return value for the specified <paramref name="invocation"/>.
         /// </returns>
-        private object GetReturnValue(IMethodInvocation invocation, CacheResultAttribute resultInfo, out bool cacheHit)
+        private object GetReturnValue(IMethodInvocation invocation, CacheResultAttribute resultInfo, IDictionary vars, out bool cacheHit)
         {
             if (resultInfo != null)
             {
@@ -155,15 +161,13 @@ namespace Spring.Aspects.Cache
                 bool isLogDebugEnabled = logger.IsDebugEnabled;
                 #endregion
                 
+                AssertUtils.ArgumentNotNull(resultInfo.KeyExpression, "Key", 
+                    "The cache attribute is missing the key definition.");
+
                 object returnValue = null;
-
-                IDictionary vars = PrepareVariables(invocation.Method, invocation.Arguments);
-
-                AssertUtils.ArgumentNotNull(resultInfo.KeyExpression, "KeyExpression",
-                            "The cache attribute is missing the key definition.");
                 object resultKey = resultInfo.KeyExpression.GetValue(null, vars);
+                
                 ICache cache = GetCache(resultInfo.CacheName);
-
                 returnValue = cache.Get(resultKey);
                 cacheHit = (returnValue != null);
                 if (!cacheHit)
@@ -213,12 +217,15 @@ namespace Spring.Aspects.Cache
         /// <param name="itemInfoArray">
         /// Attributes specifying where and how to cache each item from the collection.
         /// </param>
-        private void CacheResultItems(IEnumerable items, CacheResultItemsAttribute[] itemInfoArray)
+        /// <param name="vars">
+        /// Variables for expression evaluation.
+        /// </param>
+        private void CacheResultItems(IEnumerable items, CacheResultItemsAttribute[] itemInfoArray, IDictionary vars)
         {
             foreach (CacheResultItemsAttribute itemInfo in itemInfoArray)
             {
-                AssertUtils.ArgumentNotNull(itemInfo.KeyExpression, "KeyExpression",
-                                            "The cache attribute is missing the key definition.");
+                AssertUtils.ArgumentNotNull(itemInfo.KeyExpression, "Key", 
+                    "The cache attribute is missing the key definition.");
 
                 ICache cache = GetCache(itemInfo.CacheName);
 
@@ -227,9 +234,9 @@ namespace Spring.Aspects.Cache
                 #endregion
                 foreach (object item in items)
                 {
-                    if (EvalCondition(itemInfo.Condition, itemInfo.ConditionExpression, item, null))
+                    if (EvalCondition(itemInfo.Condition, itemInfo.ConditionExpression, item, vars))
                     {
-                        object itemKey = itemInfo.KeyExpression.GetValue(item);
+                        object itemKey = itemInfo.KeyExpression.GetValue(item, vars);
                         #region Instrumentation
                         if (isDebugEnabled)
                         {
