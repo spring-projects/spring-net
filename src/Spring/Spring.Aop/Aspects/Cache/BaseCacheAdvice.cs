@@ -71,9 +71,24 @@ namespace Spring.Aspects.Cache
         /// Cache instance for the specified <paramref name="name"/> if one
         /// is registered in the application context, or <c>null</c> if it isn't.
         /// </returns>
+        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+        /// If there's no cache instance registered for the specified <paramref name="name"/>.
+        /// </exception>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the cache instance could not be created.
+        /// </exception>
+        /// <exception cref="System.ArgumentException">
+        /// If the cache instance registered does not implement the <see cref="Spring.Caching.ICache"/> interface.
+        /// </exception>
         public ICache GetCache(string name)
         {
-            return applicationContext.GetObject(name) as ICache;
+            ICache cache = applicationContext.GetObject(name) as ICache;
+            if (cache == null)
+            {
+                throw new ArgumentException(String.Format(
+                    "Cache with the specified name [{0}] does not implement the 'Spring.Caching.ICache' interface.", name));
+            }
+            return cache;
         }
 
         /// <summary>

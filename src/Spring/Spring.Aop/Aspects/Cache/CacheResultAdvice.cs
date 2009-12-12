@@ -27,6 +27,7 @@ using Common.Logging;
 using Spring.Caching;
 using Spring.Expressions;
 using Spring.Util;
+using System;
 
 #endregion
 
@@ -50,8 +51,7 @@ namespace Spring.Aspects.Cache
     /// <author>Aleksandar Seovic</author>
     public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
     {
-        // NullValue
-        private static readonly object NullValue = new object();
+        #region CacheResultAttribute & CacheResultItemsAttribute caching
 
         private class CacheResultInfo
         {
@@ -66,6 +66,26 @@ namespace Spring.Aspects.Cache
         }
 
         private readonly Hashtable _cacheResultAttributeCache = new Hashtable();
+
+        private CacheResultInfo GetCacheResultInfo(MethodInfo method)
+        {
+            CacheResultInfo cacheResultInfo = (CacheResultInfo)_cacheResultAttributeCache[method];
+            // no need for locking here - last one wins
+            if (cacheResultInfo == null)
+            {
+                CacheResultAttribute resultInfo = (CacheResultAttribute)GetCustomAttribute(method, typeof(CacheResultAttribute));
+                CacheResultItemsAttribute[] itemInfoArray = (CacheResultItemsAttribute[])GetCustomAttributes(method, typeof(CacheResultItemsAttribute));
+
+                cacheResultInfo = new CacheResultInfo(resultInfo, itemInfoArray);
+                _cacheResultAttributeCache[method] = cacheResultInfo;
+            }
+            return cacheResultInfo;
+        }
+
+        #endregion
+
+        // NullValue
+        private static readonly object NullValue = new object();
 
         /// <summary>
         /// Applies caching around a method invocation.
@@ -131,8 +151,11 @@ namespace Spring.Aspects.Cache
         {
             if (resultInfo != null)
             {
-                object returnValue = null;
+                #region Instrumentation
                 bool isLogDebugEnabled = logger.IsDebugEnabled;
+                #endregion
+                
+                object returnValue = null;
 
                 IDictionary vars = PrepareVariables(invocation.Method, invocation.Arguments);
 
@@ -140,33 +163,26 @@ namespace Spring.Aspects.Cache
                             "The cache attribute is missing the key definition.");
                 object resultKey = resultInfo.KeyExpression.GetValue(null, vars);
                 ICache cache = GetCache(resultInfo.CacheName);
-                AssertUtils.ArgumentNotNull(cache, "CacheName",
-                                            "Result cache with the specified name [" + resultInfo.CacheName +
-                                            "] does not exist.");
 
                 returnValue = cache.Get(resultKey);
                 cacheHit = (returnValue != null);
                 if (!cacheHit)
                 {
                     #region Instrumentation
-
                     if (isLogDebugEnabled)
                     {
-                        logger.Debug("Object for key [" + resultKey + "] was not found in cache. Proceeding...");
+                        logger.Debug(String.Format("Object for key [{0}] was not found in cache [{1}]. Proceeding...", resultKey, resultInfo.CacheName));
                     }
-
                     #endregion
 
                     returnValue = invocation.Proceed();
                     if (EvalCondition(resultInfo.Condition, resultInfo.ConditionExpression, returnValue, vars))
                     {
                         #region Instrumentation
-
                         if (isLogDebugEnabled)
                         {
-                            logger.Debug("Caching object for key [" + resultKey + "].");
+                            logger.Debug(String.Format("Caching object for key [{0}] into cache [{1}].", resultKey, resultInfo.CacheName));
                         }
-
                         #endregion
                         cache.Insert(resultKey, (returnValue == null) ? NullValue : returnValue, resultInfo.TimeToLiveTimeSpan);
                     }
@@ -174,12 +190,10 @@ namespace Spring.Aspects.Cache
                 else
                 {
                     #region Instrumentation
-
                     if (isLogDebugEnabled)
                     {
-                        logger.Debug("Cache hit for [" + resultKey + "]. Aborting invocation...");
+                        logger.Debug(String.Format("Object for key [{0}] found in cache [{1}]. Aborting invocation...", resultKey, resultInfo.CacheName));
                     }
-
                     #endregion
                 }
 
@@ -203,47 +217,29 @@ namespace Spring.Aspects.Cache
         {
             foreach (CacheResultItemsAttribute itemInfo in itemInfoArray)
             {
-                ICache cache = GetCache(itemInfo.CacheName);
-                AssertUtils.ArgumentNotNull(cache, "CacheName",
-                                            "Result item cache with the specified name [" + itemInfo.CacheName +
-                                            "] does not exist.");
-
                 AssertUtils.ArgumentNotNull(itemInfo.KeyExpression, "KeyExpression",
                                             "The cache attribute is missing the key definition.");
 
+                ICache cache = GetCache(itemInfo.CacheName);
+
+                #region Instrumentation
                 bool isDebugEnabled = logger.IsDebugEnabled;
+                #endregion
                 foreach (object item in items)
                 {
                     if (EvalCondition(itemInfo.Condition, itemInfo.ConditionExpression, item, null))
                     {
                         object itemKey = itemInfo.KeyExpression.GetValue(item);
                         #region Instrumentation
-
                         if (isDebugEnabled)
                         {
                             logger.Debug("Caching collection item for key [" + itemKey + "].");
                         }
-
                         #endregion
                         cache.Insert(itemKey, (item == null ? NullValue : item), itemInfo.TimeToLiveTimeSpan);
                     }
                 }
             }
-        }
-
-        private CacheResultInfo GetCacheResultInfo(MethodInfo method)
-        {
-            CacheResultInfo cacheResultInfo = (CacheResultInfo)_cacheResultAttributeCache[method];
-            // no need for locking here - last one wins
-            if (cacheResultInfo == null)
-            {
-                CacheResultAttribute resultInfo = (CacheResultAttribute)GetCustomAttribute(method, typeof(CacheResultAttribute));
-                CacheResultItemsAttribute[] itemInfoArray = (CacheResultItemsAttribute[])GetCustomAttributes(method, typeof(CacheResultItemsAttribute));
-
-                cacheResultInfo = new CacheResultInfo(resultInfo, itemInfoArray);
-                _cacheResultAttributeCache[method] = cacheResultInfo;
-            }
-            return cacheResultInfo;
         }
     }
 }

@@ -54,6 +54,8 @@ namespace Spring.Aspects.Cache
     /// <author>Aleksandar Seovic</author>
     public class CacheParameterAdvice : BaseCacheAdvice, IAfterReturningAdvice
     {
+        #region CacheParameterAttribute caching
+
         private class CacheParameterInfo
         {
             public readonly ParameterInfo[] Parameters;
@@ -67,6 +69,27 @@ namespace Spring.Aspects.Cache
         }
 
         private readonly Hashtable _cacheParameterInfoCache = new Hashtable();
+
+        private CacheParameterInfo GetCacheParameterInfo(MethodInfo method)
+        {
+            CacheParameterInfo cpi = (CacheParameterInfo)_cacheParameterInfoCache[method];
+            if (cpi == null)
+            {
+                ParameterInfo[] parameters = method.GetParameters();
+                CacheParameterAttribute[][] parameterInfos = new CacheParameterAttribute[parameters.Length][];
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    ParameterInfo p = parameters[i];
+                    CacheParameterAttribute[] paramInfoArray = (CacheParameterAttribute[])GetCustomAttributes(p, typeof(CacheParameterAttribute));
+                    parameterInfos[i] = paramInfoArray;
+                }
+                cpi = new CacheParameterInfo(parameters, parameterInfos);
+                _cacheParameterInfoCache[method] = cpi;
+            }
+            return cpi;
+        }
+
+        #endregion
 
         /// <summary>
         /// Executes after target <paramref name="method"/>
@@ -91,7 +114,9 @@ namespace Spring.Aspects.Cache
         /// <seealso cref="AopAlliance.Intercept.IMethodInterceptor.Invoke"/>
         public void AfterReturning(object returnValue, MethodInfo method, object[] arguments, object target)
         {
+            #region Instrumentation
             bool isLogDebugEnabled = logger.IsDebugEnabled;
+            #endregion
 
             CacheParameterInfo cpi = GetCacheParameterInfo(method);
             CacheParameterAttribute[][] cacheParameterAttributes = cpi.CacheParameterAttributes;
@@ -103,16 +128,13 @@ namespace Spring.Aspects.Cache
                     if (EvalCondition(paramInfo.Condition, paramInfo.ConditionExpression, arguments[i], null))
                     {
                         ICache cache = GetCache(paramInfo.CacheName);
-                        if (cache == null)
-                        {
-                            throw new ArgumentNullException("CacheName", string.Format("Parameter cache with the specified name [{0}] does not exist.", paramInfo.CacheName));
-                        }
+
                         object key = paramInfo.KeyExpression.GetValue(arguments[i]);
 
                         #region Instrumentation
                         if (isLogDebugEnabled)
                         {
-                            logger.Debug(string.Format("Caching parameter for key [{0}].", key));
+                            logger.Debug(string.Format("Caching parameter for key [{0}] into cache [{1}].", key, paramInfo.CacheName));
                         }
                         #endregion
 
@@ -120,25 +142,6 @@ namespace Spring.Aspects.Cache
                     }
                 }
             }
-        }
-
-        private CacheParameterInfo GetCacheParameterInfo(MethodInfo method)
-        {
-            CacheParameterInfo cpi = (CacheParameterInfo) _cacheParameterInfoCache[method];
-            if (cpi == null)
-            {
-                ParameterInfo[] parameters = method.GetParameters();
-                CacheParameterAttribute[][] parameterInfos = new CacheParameterAttribute[parameters.Length][];
-                for (int i = 0; i < parameters.Length; i++)
-                {
-                    ParameterInfo p = parameters[i];
-                    CacheParameterAttribute[] paramInfoArray = (CacheParameterAttribute[])GetCustomAttributes(p, typeof(CacheParameterAttribute));
-                    parameterInfos[i] = paramInfoArray;
-                }
-                cpi = new CacheParameterInfo(parameters, parameterInfos);
-                _cacheParameterInfoCache[method] = cpi;
-            }
-            return cpi;
         }
     }
 }

@@ -55,7 +55,22 @@ namespace Spring.Aspects.Cache
     /// <author>Aleksandar Seovic</author>
     public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
     {
+        #region InvalidateCacheAttribute caching
+
         private readonly Hashtable _invalidateCacheAttributeCache = new Hashtable();
+
+        private InvalidateCacheAttribute[] GetInvalidateCacheInfo(MethodInfo method)
+        {
+            InvalidateCacheAttribute[] cacheInfoArray = (InvalidateCacheAttribute[])_invalidateCacheAttributeCache[method];
+            if (cacheInfoArray == null)
+            {
+                cacheInfoArray = (InvalidateCacheAttribute[])GetCustomAttributes(method, typeof(InvalidateCacheAttribute));
+                _invalidateCacheAttributeCache[method] = cacheInfoArray;
+            }
+            return cacheInfoArray;
+        }
+
+        #endregion
 
         /// <summary>
         /// Executes after <paramref name="target"/> <paramref name="method"/>
@@ -80,6 +95,10 @@ namespace Spring.Aspects.Cache
         /// <seealso cref="AopAlliance.Intercept.IMethodInterceptor.Invoke"/>
         public void AfterReturning(object returnValue, MethodInfo method, object[] arguments, object target)
         {
+            #region Instrumentation
+            bool isLogDebugEnabled = logger.IsDebugEnabled;
+            #endregion
+
             InvalidateCacheAttribute[] cacheInfoArray = GetInvalidateCacheInfo(method);
 
             if (cacheInfoArray.Length > 0)
@@ -90,40 +109,44 @@ namespace Spring.Aspects.Cache
                     if (EvalCondition(cacheInfo.Condition, cacheInfo.ConditionExpression, returnValue, vars))
                     {
                         ICache cache = GetCache(cacheInfo.CacheName);
-                        AssertUtils.ArgumentNotNull(cache, "CacheName",
-                                                    "Cache with the specified name [" + cacheInfo.CacheName +
-                                                    "] does not exist.");
 
                         if (cacheInfo.KeysExpression != null)
                         {
                             object keys = cacheInfo.KeysExpression.GetValue(returnValue, vars);
                             if (keys is ICollection)
                             {
+                                #region Instrumentation
+                                if (isLogDebugEnabled)
+                                {
+                                    logger.Debug(string.Format("Removing objects for keys [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
+                                }
+                                #endregion
                                 cache.RemoveAll(keys as ICollection);
                             }
                             else
                             {
+                                #region Instrumentation
+                                if (isLogDebugEnabled)
+                                {
+                                    logger.Debug(string.Format("Removing object for key [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
+                                }
+                                #endregion
                                 cache.Remove(keys);
                             }
                         }
                         else
                         {
+                            #region Instrumentation
+                            if (isLogDebugEnabled)
+                            {
+                                logger.Debug(string.Format("Invalidate cache [{0}].", cacheInfo.CacheName));
+                            }
+                            #endregion
                             cache.Clear();
                         }
                     }
                 }
             }
-        }
-
-        private InvalidateCacheAttribute[] GetInvalidateCacheInfo(MethodInfo method)
-        {
-            InvalidateCacheAttribute[] cacheInfoArray = (InvalidateCacheAttribute[]) _invalidateCacheAttributeCache[method];
-            if (cacheInfoArray == null)
-            {
-                cacheInfoArray = (InvalidateCacheAttribute[])GetCustomAttributes(method, typeof(InvalidateCacheAttribute));
-                _invalidateCacheAttributeCache[method] = cacheInfoArray;
-            }
-            return cacheInfoArray;
         }
     }
 }
