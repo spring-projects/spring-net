@@ -153,7 +153,7 @@ namespace Spring.Scheduling.Quartz
         public override string ProductName
         {
             get { return metadata.ProductName; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Spring.Scheduling.Quartz
         public override Type ConnectionType
         {
             get { return metadata.ConnectionType; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Spring.Scheduling.Quartz
         public override Type CommandType
         {
             get { return metadata.CommandType; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Spring.Scheduling.Quartz
         public override Type ParameterType
         {
             get { return metadata.ParameterType; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Spring.Scheduling.Quartz
         public override Type CommandBuilderType
         {
             get { return metadata.CommandBuilderType; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Spring.Scheduling.Quartz
         public override MethodInfo CommandBuilderDeriveParametersMethod
         {
             get { return metadata.CommandBuilderDeriveParametersMethod; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Spring.Scheduling.Quartz
         public override string ParameterNamePrefix
         {
             get { return metadata.ParameterNamePrefix; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace Spring.Scheduling.Quartz
         public override Type ExceptionType
         {
             get { return metadata.ExceptionType; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Spring.Scheduling.Quartz
         public override bool BindByName
         {
             get { return metadata.BindByName; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Spring.Scheduling.Quartz
         public override Type ParameterDbType
         {
             get { return metadata.ParameterDbType; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Spring.Scheduling.Quartz
         public override PropertyInfo ParameterDbTypeProperty
         {
             get { return metadata.ParameterDbTypeProperty; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace Spring.Scheduling.Quartz
         public override PropertyInfo ParameterIsNullableProperty
         {
             get { return metadata.ParameterIsNullableProperty; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace Spring.Scheduling.Quartz
         public override bool UseParameterNamePrefixInParameterCollection
         {
             get { return metadata.UseParameterNamePrefixInParameterCollection; }
-            set { throw new NotImplementedException(); }
+            set { throw new NotSupportedException(); }
         }
     }
 

@@ -202,7 +202,7 @@ namespace Spring.Data.NHibernate.Support
         /// </summary>
         protected virtual ISessionFactory ResolveSessionFactory()
         {
-            throw new NotImplementedException("you need to override this method to resolve an ISessionFactory instance");
+            throw new NotSupportedException("you need to override this method to resolve an ISessionFactory instance");
         }
     }
 }

@@ -278,7 +278,7 @@ namespace Spring.Messaging.Listener
             //NonTransactionalMessageListenerContainer and having the database
             //transaction done in the service tier.
 
-            throw new NotImplementedException("Try using NonTransactionalMessageListenerContainer instead.");
+            throw new NotSupportedException("Try using NonTransactionalMessageListenerContainer instead.");
         }
 
         /// <summary>
