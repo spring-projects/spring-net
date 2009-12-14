@@ -192,7 +192,7 @@ namespace Spring.Data.Generic
         /// </summary>
         /// <param name="action">the callback to execute</param>
         /// <returns>object returned from callback</returns>
-        public T Execute<T>(ICommandCallback<T> action)
+        public virtual T Execute<T>(ICommandCallback<T> action)
         {
             ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
@@ -252,7 +252,7 @@ namespace Spring.Data.Generic
         /// on a single command within Spring's managed ADO.NET environment.</remarks>
         /// <param name="del">The delegate called with a command object.</param>
         /// <returns>A result object returned by the action or null</returns>
-        public T Execute<T>(CommandDelegate<T> del)
+        public virtual T Execute<T>(CommandDelegate<T> del)
         {
             ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
@@ -310,7 +310,7 @@ namespace Spring.Data.Generic
         /// </summary>
         /// <param name="action">the callback to execute</param>
         /// <returns>object returned from callback</returns>
-        public T Execute<T>(IDbCommandCallback<T> action)
+        public virtual T Execute<T>(IDbCommandCallback<T> action)
         {
             ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
@@ -359,7 +359,7 @@ namespace Spring.Data.Generic
         /// on a single command within Spring's managed ADO.NET environment.</remarks>
         /// <param name="del">The delegate called with a command object.</param>
         /// <returns>A result object returned by the action or null</returns>
-        public T Execute<T>(IDbCommandDelegate<T> del)
+        public virtual T Execute<T>(IDbCommandDelegate<T> del)
         {
             ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
@@ -413,7 +413,7 @@ namespace Spring.Data.Generic
         /// <returns>
         /// A result object returned by the action or null
         /// </returns>
-        public T Execute<T>(IDbCommandCreator commandCreator, IDbCommandCallback<T> action)
+        public virtual T Execute<T>(IDbCommandCreator commandCreator, IDbCommandCallback<T> action)
         {
             AssertUtils.ArgumentNotNull(commandCreator, "commandCreator", "IDbCommandCreator must not be null");
             AssertUtils.ArgumentNotNull(action, "action", "Callback object must not be null");
@@ -469,7 +469,7 @@ namespace Spring.Data.Generic
         /// <remarks>This allows for implementing abritrary data access operations
         /// on a single DataAdapter within Spring's managed ADO.NET environment.
         /// </remarks>
-        public T Execute<T>(IDataAdapterCallback<T> dataAdapterCallback)
+        public virtual T Execute<T>(IDataAdapterCallback<T> dataAdapterCallback)
         {
             ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
             IDbDataAdapter dataAdapter = null;
@@ -512,7 +512,7 @@ namespace Spring.Data.Generic
         /// <typeparam name="T">The type of object returned from the callback.</typeparam>
         /// <param name="dataAdapterCallback">The delegate called with a IDbDataAdapter object.</param>
         /// <returns>A result object returned by the callback or null</returns>
-        public T Execute<T>(DataAdapterDelegate<T> dataAdapterCallback)
+        public virtual T Execute<T>(DataAdapterDelegate<T> dataAdapterCallback)
         {
             ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
             IDbDataAdapter dataAdapter = null;
@@ -555,7 +555,7 @@ namespace Spring.Data.Generic
         /// <param name="cmdType">The command type.</param>
         /// <param name="cmdText">The command text to execute.</param>
         /// <returns>The number of rows affected.</returns>
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText)
+        public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText)
         {
             return classicAdoTemplate.ExecuteNonQuery(cmdType, cmdText);
         }
@@ -571,7 +571,7 @@ namespace Spring.Data.Generic
         /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
         /// <param name="parameterValue">The parameter value.</param>
         /// <returns>The number of rows affected.</returns>
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText,
+        public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText,
                                    string parameterName, Enum dbType, int size, object parameterValue)
         {
             return classicAdoTemplate.ExecuteNonQuery(cmdType, cmdText, parameterName, dbType, size, parameterValue);
@@ -586,8 +586,8 @@ namespace Spring.Data.Generic
         /// <param name="cmdText">The command text to execute.</param>
         /// <param name="parameters">The parameter collection to map.</param>
         /// <returns>The number of rows affected.</returns>
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText,
-                                   IDbParameters parameters)
+        public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText,
+                                           IDbParameters parameters)
         {
             return classicAdoTemplate.ExecuteNonQuery(cmdType, cmdText, parameters);
 
@@ -601,8 +601,8 @@ namespace Spring.Data.Generic
         /// <param name="cmdText">The command text to execute.</param>
         /// <param name="commandSetter">The command setter.</param>
         /// <returns>The number of rows affected.</returns>
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText,
-                                   ICommandSetter commandSetter)
+        public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText,
+                                           ICommandSetter commandSetter)
         {
             return classicAdoTemplate.ExecuteNonQuery(cmdType, cmdText, commandSetter);
         }
@@ -620,7 +620,7 @@ namespace Spring.Data.Generic
         /// </remarks>
         /// <param name="commandCreator">The callback to create a IDbCommand.</param>
         /// <returns>The number of rows affected.</returns>
-        public IDictionary ExecuteNonQuery(IDbCommandCreator commandCreator)
+        public virtual IDictionary ExecuteNonQuery(IDbCommandCreator commandCreator)
         {
             return classicAdoTemplate.ExecuteNonQuery(commandCreator);
         }
@@ -638,7 +638,7 @@ namespace Spring.Data.Generic
         /// <param name="cmdType">The command type</param>
         /// <param name="cmdText">The command text to execute.</param>
         /// <returns>The first column of the first row in the result set</returns>
-        public object ExecuteScalar(CommandType cmdType, string cmdText)
+        public virtual object ExecuteScalar(CommandType cmdType, string cmdText)
         {
             return classicAdoTemplate.ExecuteScalar(cmdType, cmdText);
         }
@@ -653,8 +653,8 @@ namespace Spring.Data.Generic
         /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
         /// <param name="parameterValue">The parameter value.</param>
         /// <returns>The first column of the first row in the result set</returns>
-        public object ExecuteScalar(CommandType cmdType, string cmdText,
-                                    string parameterName, Enum dbType, int size, object parameterValue)
+        public virtual object ExecuteScalar(CommandType cmdType, string cmdText,
+                                            string parameterName, Enum dbType, int size, object parameterValue)
         {
             return classicAdoTemplate.ExecuteScalar(cmdType, cmdText, parameterName, dbType, size, parameterValue);
 
@@ -668,8 +668,8 @@ namespace Spring.Data.Generic
         /// <param name="cmdText">The command text to execute.</param>
         /// <param name="parameters">The parameter collection to map.</param>
         /// <returns>The first column of the first row in the result set</returns>
-        public object ExecuteScalar(CommandType cmdType, string cmdText,
-                                    IDbParameters parameters)
+        public virtual object ExecuteScalar(CommandType cmdType, string cmdText,
+                                            IDbParameters parameters)
         {
             return classicAdoTemplate.ExecuteScalar(cmdType, cmdText, parameters);
         }
@@ -682,8 +682,8 @@ namespace Spring.Data.Generic
         /// <param name="cmdText">The command text to execute.</param>
         /// <param name="commandSetter">The command setter.</param>
         /// <returns>The first column of the first row in the result set</returns>
-        public object ExecuteScalar(CommandType cmdType, string cmdText,
-                                    ICommandSetter commandSetter)
+        public virtual object ExecuteScalar(CommandType cmdType, string cmdText,
+                                            ICommandSetter commandSetter)
         {
             return classicAdoTemplate.ExecuteScalar(cmdType, cmdText, commandSetter);
         }
@@ -700,7 +700,7 @@ namespace Spring.Data.Generic
         /// </para></remarks>
         /// <param name="commandCreator">The callback to create a IDbCommand.</param>
         /// <returns>A dictionary containing output parameters, if any</returns>
-        public IDictionary ExecuteScalar(IDbCommandCreator commandCreator)
+        public virtual IDictionary ExecuteScalar(IDbCommandCreator commandCreator)
         {
             return classicAdoTemplate.ExecuteScalar(commandCreator);
         }
@@ -721,8 +721,8 @@ namespace Spring.Data.Generic
         /// one row at a time.
         /// </param>
         /// <param name="commandSetter">The command setter.</param>
-        public void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
-                                         ICommandSetter commandSetter)
+        public virtual void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
+                                                 ICommandSetter commandSetter)
         {
             classicAdoTemplate.QueryWithRowCallback(cmdType, cmdText, rowCallback, commandSetter);
         }
@@ -735,7 +735,7 @@ namespace Spring.Data.Generic
         /// <param name="rowCallback">callback that will extract results
         /// one row at a time.
         /// </param>
-        public void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback)
+        public virtual void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback)
         {
             classicAdoTemplate.QueryWithRowCallback(cmdType, cmdText, rowCallback);
         }
@@ -754,8 +754,8 @@ namespace Spring.Data.Generic
         /// <param name="dbType">One of the database parameter type enumerations.</param>
         /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
         /// <param name="parameterValue">The parameter value.</param>
-        public void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
-                                         string parameterName, Enum dbType, int size, object parameterValue)
+        public virtual void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
+                                                 string parameterName, Enum dbType, int size, object parameterValue)
         {
             classicAdoTemplate.QueryWithRowCallback(cmdType, cmdText, rowCallback,
                                                     parameterName, dbType, size, parameterValue);
@@ -770,7 +770,7 @@ namespace Spring.Data.Generic
         /// <param name="rowCallback">callback that will extract results
         /// one row at a time.</param>
         /// <param name="parameter">The parameter collection to map.</param>
-        public void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
+        public virtual void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
                                   IDbParameters parameter)
         {
             classicAdoTemplate.QueryWithRowCallback(cmdType, cmdText, rowCallback,
@@ -781,17 +781,17 @@ namespace Spring.Data.Generic
 
         #region Queries with RowCallback Delegate
 
-        public void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate)
+        public virtual void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate)
         {
             classicAdoTemplate.QueryWithRowCallbackDelegate(cmdType, sql, rowCallbackDelegate);
 
         }
-        public void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, ICommandSetter commandSetter)
+        public virtual void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, ICommandSetter commandSetter)
         {
-            throw new NotImplementedException();
+            classicAdoTemplate.QueryWithRowCallbackDelegate(cmdType, sql, rowCallbackDelegate, commandSetter);
         }
 
-        public void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate,
+        public virtual void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate,
                         string parameterName, Enum dbType, int size, object parameterValue)
         {
             classicAdoTemplate.QueryWithRowCallbackDelegate(cmdType, sql, rowCallbackDelegate,

@@ -207,7 +207,7 @@ namespace Spring.Data.Core
         /// </returns>
         /// <remarks>This allows for implementing arbitrary data access operations
         /// on a single command within Spring's managed ADO.NET environment.</remarks>
-        public Object Execute(CommandDelegate del)
+        public virtual Object Execute(CommandDelegate del)
         {
             return Execute(new ExecuteCommandCallbackUsingDelegate(del));
         }
@@ -217,7 +217,7 @@ namespace Spring.Data.Core
         /// </summary>
         /// <param name="action">the callback to execute</param>
         /// <returns>object returned from callback</returns>
-        public object Execute(ICommandCallback action)
+        public virtual object Execute(ICommandCallback action)
         {
             ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
 
@@ -267,7 +267,7 @@ namespace Spring.Data.Core
         /// <param name="commandCreator">The command creator.</param>
         /// <param name="action">The callback to execute based on IDbCommand</param>
         /// <returns>A result object returned by the action or null</returns>
-        public object Execute(IDbCommandCreator commandCreator, ICommandCallback action)
+        public virtual object Execute(IDbCommandCreator commandCreator, ICommandCallback action)
         {
             AssertUtils.ArgumentNotNull(commandCreator, "commandCreator", "IDbCommandCreator must not be null");
             AssertUtils.ArgumentNotNull(action, "action", "Callback object must not be null");
@@ -323,7 +323,7 @@ namespace Spring.Data.Core
         /// </remarks>
         /// <param name="dataAdapterCallback">The data adapter callback.</param>
         /// <returns>A result object returned by the callback or null</returns>
-        public object Execute(IDataAdapterCallback dataAdapterCallback)
+        public virtual object Execute(IDataAdapterCallback dataAdapterCallback)
         {
             ConnectionTxPair connectionTxPairToUse = GetConnectionTxPair(DbProvider);
             IDbDataAdapter dataAdapter = null;
@@ -369,7 +369,7 @@ namespace Spring.Data.Core
         /// <param name="cmdType">The command type.</param>
         /// <param name="cmdText">The command text to execute.</param>
         /// <returns>The number of rows affected.</returns>
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText)
+        public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText)
         {
             #region Instrumentation
             if (LOG.IsDebugEnabled)
@@ -391,8 +391,8 @@ namespace Spring.Data.Core
         /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
         /// <param name="parameterValue">The parameter value.</param>
         /// <returns>The number of rows affected.</returns>
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText,
-                                   string parameterName, Enum dbType, int size, object parameterValue)
+        public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText,
+                                           string parameterName, Enum dbType, int size, object parameterValue)
         {
             return (int)Execute(new ExecuteNonQueryCallbackWithParameters(cmdType, cmdText,
                                                                           CreateDbParameters(parameterName, dbType, size, parameterValue)));
@@ -407,8 +407,8 @@ namespace Spring.Data.Core
         /// <param name="cmdText">The command text to execute.</param>
         /// <param name="parameters">The parameter collection to map.</param>
         /// <returns>The number of rows affected.</returns>
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText,
-                                   IDbParameters parameters)
+        public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText,
+                                           IDbParameters parameters)
         {
             #region Instrumentation
             if (LOG.IsDebugEnabled)
@@ -429,8 +429,8 @@ namespace Spring.Data.Core
         /// <param name="cmdText">The command text to execute.</param>
         /// <param name="commandSetter">The command setter.</param>
         /// <returns>The number of rows affected.</returns>
-        public int ExecuteNonQuery(CommandType cmdType, string cmdText,
-                                   ICommandSetter commandSetter)
+        public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText,
+                                           ICommandSetter commandSetter)
         {
             #region Instrumentation
             if (LOG.IsDebugEnabled)
@@ -456,7 +456,7 @@ namespace Spring.Data.Core
         /// </remarks>
         /// <param name="commandCreator">The callback to create a IDbCommand.</param>
         /// <returns>The number of rows affected.</returns>
-        public IDictionary ExecuteNonQuery(IDbCommandCreator commandCreator)
+        public virtual IDictionary ExecuteNonQuery(IDbCommandCreator commandCreator)
         {
 
             return (IDictionary)Execute(commandCreator, new AdoNonQueryWithOutputParamsCommandCallback());
@@ -476,7 +476,7 @@ namespace Spring.Data.Core
         /// <param name="cmdType">The command type</param>
         /// <param name="cmdText">The command text to execute.</param>
         /// <returns>The first column of the first row in the result set</returns>
-        public object ExecuteScalar(CommandType cmdType, string cmdText)
+        public virtual object ExecuteScalar(CommandType cmdType, string cmdText)
         {
             return Execute(new ExecuteScalarCallbackWithParameters(cmdType, cmdText, null));
         }
@@ -491,8 +491,8 @@ namespace Spring.Data.Core
         /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
         /// <param name="parameterValue">The parameter value.</param>
         /// <returns>The first column of the first row in the result set</returns>
-        public object ExecuteScalar(CommandType cmdType, string cmdText,
-                                    string parameterName, Enum dbType, int size, object parameterValue)
+        public virtual object ExecuteScalar(CommandType cmdType, string cmdText,
+                                            string parameterName, Enum dbType, int size, object parameterValue)
         {
             return Execute(new ExecuteScalarCallbackWithParameters(cmdType, cmdText,
                                                                    CreateDbParameters(parameterName, dbType, size, parameterValue)));
@@ -507,7 +507,7 @@ namespace Spring.Data.Core
         /// <param name="cmdText">The command text to execute.</param>
         /// <param name="parameters">The parameter collection to map.</param>
         /// <returns>The first column of the first row in the result set</returns>
-        public object ExecuteScalar(CommandType cmdType, string cmdText,
+        public virtual object ExecuteScalar(CommandType cmdType, string cmdText,
                                     IDbParameters parameters)
         {
             return Execute(new ExecuteScalarCallbackWithParameters(cmdType, cmdText, parameters));
@@ -522,7 +522,7 @@ namespace Spring.Data.Core
         /// <param name="cmdText">The command text to execute.</param>
         /// <param name="commandSetter">The command setter.</param>
         /// <returns>The first column of the first row in the result set</returns>
-        public object ExecuteScalar(CommandType cmdType, string cmdText,
+        public virtual object ExecuteScalar(CommandType cmdType, string cmdText,
                                     ICommandSetter commandSetter)
         {
             #region Instrumentation
@@ -548,7 +548,7 @@ namespace Spring.Data.Core
         /// </para></remarks>
         /// <param name="commandCreator">The callback to create a IDbCommand.</param>
         /// <returns>A dictionary containing output parameters, if any</returns>
-        public IDictionary ExecuteScalar(IDbCommandCreator commandCreator)
+        public virtual IDictionary ExecuteScalar(IDbCommandCreator commandCreator)
         {
             return (IDictionary)Execute(commandCreator, new AdoStoredProcedureScalarCommandCallback());
         }
@@ -566,7 +566,7 @@ namespace Spring.Data.Core
         /// <param name="rowCallback">callback that will extract results
         /// one row at a time.
         /// </param>
-        public void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback)
+        public virtual void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback)
         {
             QueryWithResultSetExtractor(cmdType, cmdText, new RowCallbackResultSetExtractor(rowCallback));
         }
@@ -583,8 +583,8 @@ namespace Spring.Data.Core
         /// one row at a time.
         /// </param>
         /// <param name="commandSetter">The command setter.</param>
-        public void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
-                                         ICommandSetter commandSetter)
+        public virtual void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
+                                                 ICommandSetter commandSetter)
         {
             QueryWithResultSetExtractor(cmdType, cmdText, new RowCallbackResultSetExtractor(rowCallback), commandSetter);
 
@@ -604,14 +604,14 @@ namespace Spring.Data.Core
         /// <param name="dbType">One of the database parameter type enumerations.</param>
         /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
         /// <param name="parameterValue">The parameter value.</param>
-        public void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
+        public virtual void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
                                          string parameterName, Enum dbType, int size, object parameterValue)
         {
             QueryWithResultSetExtractor(cmdType, cmdText, new RowCallbackResultSetExtractor(rowCallback), parameterName, dbType, size, parameterValue);
         }
 
 
-        public void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback, IDbParameters parameters)
+        public virtual void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback, IDbParameters parameters)
         {
             QueryWithResultSetExtractor(cmdType, cmdText, new RowCallbackResultSetExtractor(rowCallback), parameters);
         }
@@ -623,25 +623,25 @@ namespace Spring.Data.Core
 
         #region Query with RowCallback Delegate
 
-        public void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate)
+        public virtual void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate)
         {
             QueryWithResultSetExtractor(cmdType, sql, new RowCallbackResultSetExtractor(rowCallbackDelegate));
 
         }
-        public void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, ICommandSetter commandSetter)
+        public virtual void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, ICommandSetter commandSetter)
         {
             QueryWithResultSetExtractor(cmdType, sql, new RowCallbackResultSetExtractor(rowCallbackDelegate), commandSetter);
 
         }
 
-        public void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate,
+        public virtual void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate,
                                                  string name, Enum dbType, int size, object parameterValue)
         {
             QueryWithResultSetExtractor(cmdType, sql, new RowCallbackResultSetExtractor(rowCallbackDelegate), name, dbType, size, parameterValue);
 
         }
 
-        public void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, IDbParameters parameters)
+        public virtual void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, IDbParameters parameters)
         {
             QueryWithResultSetExtractor(cmdType, sql, new RowCallbackResultSetExtractor(rowCallbackDelegate), parameters);
 
@@ -653,12 +653,12 @@ namespace Spring.Data.Core
 
         #region Query with RowMapper
 
-        public IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper)
+        public virtual IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper)
         {
             return (IList)QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor(rowMapper));
         }
 
-        public IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper, ICommandSetter commandSetter)
+        public virtual IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper, ICommandSetter commandSetter)
         {
 
             return (IList)QueryWithResultSetExtractor(cmdType, cmdText,
@@ -667,14 +667,14 @@ namespace Spring.Data.Core
         }
 
 
-        public IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper,
-                                        string name, Enum dbType, int size, object parameterValue)
+        public virtual IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper,
+                                                string name, Enum dbType, int size, object parameterValue)
         {
             return (IList)QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor(rowMapper), name, dbType, size, parameterValue);
         }
 
 
-        public IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper, IDbParameters parameters)
+        public virtual IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper, IDbParameters parameters)
         {
             return (IList)QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor(rowMapper), parameters);
         }
@@ -684,26 +684,26 @@ namespace Spring.Data.Core
 
         #region Query With RowMapper Delegate
 
-        public IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate)
+        public virtual IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate)
         {
             return (IList)QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor(rowMapperDelegate));
         }
 
-        public IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate, ICommandSetter commandSetter)
+        public virtual IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate, ICommandSetter commandSetter)
         {
             return (IList)QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor(rowMapperDelegate), commandSetter);
         }
 
 
-        public IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate,
-                                                string parameterName, Enum dbType, int size, object parameterValue)
+        public virtual IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate,
+                                                        string parameterName, Enum dbType, int size, object parameterValue)
         {
             return (IList)QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor(rowMapperDelegate), parameterName, dbType, size, parameterValue);
         }
 
 
-        public IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate,
-                                                IDbParameters parameters)
+        public virtual IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate,
+                                                        IDbParameters parameters)
         {
             return (IList)QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor(rowMapperDelegate), parameters);
         }
@@ -720,7 +720,7 @@ namespace Spring.Data.Core
         /// <param name="sql">The SQL/Stored Procedure to execute</param>
         /// <param name="rse">Object that will extract all rows of a result set</param>
         /// <returns>An arbitrary result object, as returned by the IResultSetExtractor</returns>
-        public object QueryWithResultSetExtractor(CommandType cmdType, string sql, IResultSetExtractor rse)
+        public virtual object QueryWithResultSetExtractor(CommandType cmdType, string sql, IResultSetExtractor rse)
         {
             AssertUtils.ArgumentNotNull(sql, "sql", "SQL must not be null");
 
@@ -735,7 +735,7 @@ namespace Spring.Data.Core
 
         }
 
-        public object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor, ICommandSetter commandSetter)
+        public virtual object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor, ICommandSetter commandSetter)
         {
             AssertUtils.ArgumentNotNull(resultSetExtractor, "resultSetExtractor", "Result Set Extractor must not be null");
             return Execute(new QueryCallbackWithCommandSetter(this, cmdType, cmdText,
@@ -743,15 +743,15 @@ namespace Spring.Data.Core
         }
 
 
-        public object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor,
-                                                  string name, Enum dbType, int size, object parameterValue)
+        public virtual object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor,
+                                                          string name, Enum dbType, int size, object parameterValue)
         {
             AssertUtils.ArgumentNotNull(resultSetExtractor, "resultSetExtractor", "Result Set Extractor must not be null");
             return Execute(new QueryCallback(this, cmdType, cmdText, resultSetExtractor, CreateDbParameters(name, dbType, size, parameterValue)));
         }
 
-        public object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor,
-                                                  IDbParameters parameters)
+        public virtual object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor,
+                                                          IDbParameters parameters)
         {
             AssertUtils.ArgumentNotNull(resultSetExtractor, "resultSetExtractor", "Result Set Extractor must not be null");
             return Execute(new QueryCallback(this, cmdType, cmdText, resultSetExtractor, parameters));
@@ -771,7 +771,7 @@ namespace Spring.Data.Core
         /// <param name="sql">The SQL/Stored Procedure to execute</param>
         /// <param name="resultSetExtractorDelegate">Delegate that will extract all rows of a result set</param>
         /// <returns>An arbitrary result object, as returned by the IResultSetExtractor</returns>
-        public object QueryWithResultSetExtractorDelegate(CommandType cmdType, string sql, ResultSetExtractorDelegate resultSetExtractorDelegate)
+        public virtual object QueryWithResultSetExtractorDelegate(CommandType cmdType, string sql, ResultSetExtractorDelegate resultSetExtractorDelegate)
         {
             AssertUtils.ArgumentNotNull(sql, "sql", "SQL must not be null");
 
@@ -786,7 +786,7 @@ namespace Spring.Data.Core
 
         }
 
-        public object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate,
+        public virtual object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate,
                                                           ICommandSetter commandSetter)
         {
             AssertUtils.ArgumentNotNull(resultSetExtractorDelegate, "resultSetExtractorDelegate", "Result set extractor delegate must not be null");
@@ -795,15 +795,15 @@ namespace Spring.Data.Core
         }
 
 
-        public object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate,
-                                                          string name, Enum dbType, int size, object parameterValue)
+        public virtual object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate,
+                                                                  string name, Enum dbType, int size, object parameterValue)
         {
             AssertUtils.ArgumentNotNull(resultSetExtractorDelegate, "resultSetExtractorDelegate", "Result set extractor delegate must not be null");
             return Execute(new QueryCallback(this, cmdType, cmdText, resultSetExtractorDelegate, CreateDbParameters(name, dbType, size, parameterValue)));
         }
 
-        public object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate,
-                                                          IDbParameters parameters)
+        public virtual object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate,
+                                                                  IDbParameters parameters)
         {
             AssertUtils.ArgumentNotNull(resultSetExtractorDelegate, "resultSetExtractorDelegate", "Result set extractor delegate must not be null");
             return Execute(new QueryCallback(this, cmdType, cmdText, resultSetExtractorDelegate, parameters));
@@ -828,7 +828,7 @@ namespace Spring.Data.Core
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
         /// </exception>
-        public object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper)
+        public virtual object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper)
         {
             IList results = QueryWithRowMapper(cmdType, cmdText, rowMapper);
             return DataAccessUtils.RequiredUniqueResultSet(results);
@@ -849,7 +849,7 @@ namespace Spring.Data.Core
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
         /// </exception>
-        public object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper, ICommandSetter commandSetter)
+        public virtual object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper, ICommandSetter commandSetter)
         {
             IList results = QueryWithRowMapper(cmdType, cmdText, rowMapper, commandSetter);
             return DataAccessUtils.RequiredUniqueResultSet(results);
@@ -870,7 +870,7 @@ namespace Spring.Data.Core
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
         /// </exception>
-        public object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper, IDbParameters parameters)
+        public virtual object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper, IDbParameters parameters)
         {
             IList results = QueryWithRowMapper(cmdType, cmdText, rowMapper, parameters);
             return DataAccessUtils.RequiredUniqueResultSet(results);
@@ -894,8 +894,8 @@ namespace Spring.Data.Core
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
         /// </exception>
-        public object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper, string parameterName, Enum dbType, int size,
-                                     object parameterValue)
+        public virtual object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper, string parameterName, Enum dbType, int size,
+                                             object parameterValue)
         {
             IList results = QueryWithRowMapper(cmdType, cmdText, rowMapper, parameterName, dbType, size, parameterValue);
             return DataAccessUtils.RequiredUniqueResultSet(results);
@@ -919,7 +919,7 @@ namespace Spring.Data.Core
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
         /// </exception>
-        public object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate)
+        public virtual object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate)
         {
             IList results = QueryWithRowMapperDelegate(cmdType, cmdText, rowMapperDelegate);
             return DataAccessUtils.RequiredUniqueResultSet(results);
@@ -941,7 +941,7 @@ namespace Spring.Data.Core
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
         /// </exception>
-        public object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate, ICommandSetter commandSetter)
+        public virtual object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate, ICommandSetter commandSetter)
         {
             IList results = QueryWithRowMapperDelegate(cmdType, cmdText, rowMapperDelegate, commandSetter);
             return DataAccessUtils.RequiredUniqueResultSet(results);
@@ -962,7 +962,7 @@ namespace Spring.Data.Core
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
         /// </exception>
-        public object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate, IDbParameters parameters)
+        public virtual object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate, IDbParameters parameters)
         {
             IList results = QueryWithRowMapperDelegate(cmdType, cmdText, rowMapperDelegate, parameters);
             return DataAccessUtils.RequiredUniqueResultSet(results);
@@ -986,8 +986,8 @@ namespace Spring.Data.Core
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
         /// </exception>
-        public object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate, string parameterName, Enum dbType, int size,
-                                             object parameterValue)
+        public virtual object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate, string parameterName, Enum dbType, int size,
+                                                     object parameterValue)
         {
             IList results = QueryWithRowMapperDelegate(cmdType, cmdText, rowMapperDelegate, parameterName, dbType, size, parameterValue);
             return DataAccessUtils.RequiredUniqueResultSet(results);
@@ -997,22 +997,22 @@ namespace Spring.Data.Core
 
         #region Query with CommandCreator
 
-        public object QueryWithCommandCreator(IDbCommandCreator cc, IResultSetExtractor rse)
+        public virtual object QueryWithCommandCreator(IDbCommandCreator cc, IResultSetExtractor rse)
         {
             return QueryWithCommandCreator(cc, rse, null);
         }
-        
-        public void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback)
+
+        public virtual void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback)
         {
             QueryWithCommandCreator(cc, rowCallback, null);
         }
 
-        public IList QueryWithCommandCreator(IDbCommandCreator cc, IRowMapper rowMapper)
+        public virtual IList QueryWithCommandCreator(IDbCommandCreator cc, IRowMapper rowMapper)
         {
             return QueryWithCommandCreator(cc, rowMapper, null);
         }
 
-        public object QueryWithCommandCreator(IDbCommandCreator cc, IResultSetExtractor rse, IDictionary returnedParameters)
+        public virtual object QueryWithCommandCreator(IDbCommandCreator cc, IResultSetExtractor rse, IDictionary returnedParameters)
         {
             if (rse == null)
             {
@@ -1022,7 +1022,7 @@ namespace Spring.Data.Core
             return Execute(cc, new AdoResultSetExtractorWithOutputParamsCommandCallback(this, rse, returnedParameters));
         }
 
-        public void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback, IDictionary returnedParameters)
+        public virtual void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback, IDictionary returnedParameters)
         {
             if (rowCallback == null)
             {
@@ -1031,7 +1031,7 @@ namespace Spring.Data.Core
             Execute(cc, new AdoRowCallbackCommandCallback(this, rowCallback, returnedParameters));
         }
 
-        public IList QueryWithCommandCreator(IDbCommandCreator cc, IRowMapper rowMapper, IDictionary returnedParameters)
+        public virtual IList QueryWithCommandCreator(IDbCommandCreator cc, IRowMapper rowMapper, IDictionary returnedParameters)
         {
             if (rowMapper == null)
             {
@@ -1055,14 +1055,14 @@ namespace Spring.Data.Core
 
         #region DataTable Create operations without parameters
 
-        public DataTable DataTableCreate(CommandType commandType, string sql)
+        public virtual DataTable DataTableCreate(CommandType commandType, string sql)
         {
             DataTable dataTable = CreateDataTable();
             DataTableFill(dataTable, commandType, sql);
             return dataTable;
         }
 
-        public DataTable DataTableCreate(CommandType commandType, string sql,
+        public virtual DataTable DataTableCreate(CommandType commandType, string sql,
                                          string tableMappingName)
         {
             DataTable dataTable = CreateDataTable();
@@ -1070,17 +1070,17 @@ namespace Spring.Data.Core
             return dataTable;
         }
 
-        public DataTable DataTableCreate(CommandType commandType, string sql,
-                                         ITableMapping tableMapping)
+        public virtual DataTable DataTableCreate(CommandType commandType, string sql,
+                                                 ITableMapping tableMapping)
         {
             DataTable dataTable = CreateDataTable();
             DataTableFill(dataTable, commandType, sql, tableMapping);
             return dataTable;
         }
 
-        public DataTable DataTableCreate(CommandType commandType, string sql,
-                                         ITableMapping tableMapping,
-                                         IDataAdapterSetter setter)
+        public virtual DataTable DataTableCreate(CommandType commandType, string sql,
+                                                 ITableMapping tableMapping,
+                                                 IDataAdapterSetter setter)
         {
             DataTable dataTable = CreateDataTable();
             DataTableFill(dataTable, commandType, sql, tableMapping, setter);
@@ -1091,36 +1091,36 @@ namespace Spring.Data.Core
 
         #region DataTable Create operations with parameters
 
-        public DataTable DataTableCreateWithParams(CommandType commandType, string sql,
-                                                   IDbParameters parameters)
+        public virtual DataTable DataTableCreateWithParams(CommandType commandType, string sql,
+                                                           IDbParameters parameters)
         {
             DataTable dataTable = CreateDataTable();
             DataTableFillWithParams(dataTable, commandType, sql, parameters);
             return dataTable;
         }
 
-        public DataTable DataTableCreateWithParams(CommandType commandType, string sql,
-                                                   IDbParameters parameters,
-                                                   string tableMappingName)
+        public virtual DataTable DataTableCreateWithParams(CommandType commandType, string sql,
+                                                           IDbParameters parameters,
+                                                           string tableMappingName)
         {
             DataTable dataTable = CreateDataTable();
             DataTableFillWithParams(dataTable, commandType, sql, parameters, tableMappingName);
             return dataTable;
         }
 
-        public DataTable DataTableCreateWithParams(CommandType commandType, string sql,
-                                                   IDbParameters parameters,
-                                                   ITableMapping tableMapping)
+        public virtual DataTable DataTableCreateWithParams(CommandType commandType, string sql,
+                                                           IDbParameters parameters,
+                                                           ITableMapping tableMapping)
         {
             DataTable dataTable = CreateDataTable();
             DataTableFillWithParams(dataTable, commandType, sql, parameters, tableMapping);
             return dataTable;
         }
 
-        public DataTable DataTableCreateWithParams(CommandType commandType, string sql,
-                                                   IDbParameters parameters,
-                                                   ITableMapping tableMapping,
-                                                   IDataAdapterSetter dataAdapterSetter)
+        public virtual DataTable DataTableCreateWithParams(CommandType commandType, string sql,
+                                                           IDbParameters parameters,
+                                                           ITableMapping tableMapping,
+                                                           IDataAdapterSetter dataAdapterSetter)
         {
             DataTable dataTable = CreateDataTable();
             DataTableFillWithParams(dataTable, commandType, sql, parameters, tableMapping, dataAdapterSetter);
@@ -1138,7 +1138,7 @@ namespace Spring.Data.Core
         /// <param name="commandType">The type of command</param>
         /// <param name="sql">SQL query to execute</param>
         /// <returns>The number of rows successfully added to or refreshed in the  <see cref="DataTable"/></returns>
-        public int DataTableFill(DataTable dataTable, CommandType commandType, string sql)
+        public virtual int DataTableFill(DataTable dataTable, CommandType commandType, string sql)
         {
             ValidateFillArguments(dataTable, sql);
 
@@ -1155,8 +1155,8 @@ namespace Spring.Data.Core
                                                             mappingCollection, null, null, null));
         }
 
-        public int DataTableFill(DataTable dataTable, CommandType commandType, string sql,
-                                 string tableMappingName)
+        public virtual int DataTableFill(DataTable dataTable, CommandType commandType, string sql,
+                                         string tableMappingName)
         {
             ValidateFillArguments(dataTable, sql);
 
@@ -1178,8 +1178,8 @@ namespace Spring.Data.Core
 
         }
 
-        public int DataTableFill(DataTable dataTable, CommandType commandType, string sql,
-                                 ITableMapping tableMapping)
+        public virtual int DataTableFill(DataTable dataTable, CommandType commandType, string sql,
+                                         ITableMapping tableMapping)
         {
             ValidateFillArguments(dataTable, sql, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
@@ -1190,9 +1190,9 @@ namespace Spring.Data.Core
                                                             mappingCollection, null, null, null));
         }
 
-        public int DataTableFill(DataTable dataTable, CommandType commandType, string sql,
-                                 ITableMapping tableMapping,
-                                 IDataAdapterSetter setter)
+        public virtual int DataTableFill(DataTable dataTable, CommandType commandType, string sql,
+                                         ITableMapping tableMapping,
+                                         IDataAdapterSetter setter)
         {
             ValidateFillArguments(dataTable, sql, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
@@ -1207,8 +1207,8 @@ namespace Spring.Data.Core
 
         #region DataTable Fill operations with parameters
 
-        public int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
-                                           IDbParameters parameters)
+        public virtual int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
+                                                   IDbParameters parameters)
         {
             ValidateFillWithParameterArguments(dataTable, sql, parameters);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(null);
@@ -1218,9 +1218,9 @@ namespace Spring.Data.Core
                                                             parameters));
         }
 
-        public int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
-                                           IDbParameters parameters,
-                                           string tableMappingName)
+        public virtual int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
+                                                   IDbParameters parameters,
+                                                   string tableMappingName)
         {
             ValidateFillWithParameterArguments(dataTable, sql, parameters);
             if (tableMappingName == null)
@@ -1233,9 +1233,9 @@ namespace Spring.Data.Core
                                                             mappingCollection, null, null, parameters));
         }
 
-        public int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
-                                           IDbParameters parameters,
-                                           ITableMapping tableMapping)
+        public virtual int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
+                                                   IDbParameters parameters,
+                                                   ITableMapping tableMapping)
         {
             ValidateFillWithParameterArguments(dataTable, sql, parameters, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
@@ -1245,10 +1245,10 @@ namespace Spring.Data.Core
                                                             mappingCollection, null, null, parameters));
         }
 
-        public int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
-                                           IDbParameters parameters,
-                                           ITableMapping tableMapping,
-                                           IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
+                                                   IDbParameters parameters,
+                                                   ITableMapping tableMapping,
+                                                   IDataAdapterSetter dataAdapterSetter)
         {
             ValidateFillWithParameterArguments(dataTable, sql, parameters, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
@@ -1264,11 +1264,11 @@ namespace Spring.Data.Core
         #region DataTable Update operations
         //TODO conflict options...
 
-        public int DataTableUpdateWithCommandBuilder(DataTable dataTable,
-                                                     CommandType commandType,
-                                                     string selectSql,
-                                                     IDbParameters parameters,
-                                                     string tableName)
+        public virtual int DataTableUpdateWithCommandBuilder(DataTable dataTable,
+                                                             CommandType commandType,
+                                                             string selectSql,
+                                                             IDbParameters parameters,
+                                                             string tableName)
         {
             ValidateUpdateWithCommandBuilderArguments(dataTable, tableName, selectSql);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableName });
@@ -1281,12 +1281,12 @@ namespace Spring.Data.Core
                                                                                 null));
         }
 
-        public int DataTableUpdateWithCommandBuilder(DataTable dataTable,
-                                                     CommandType commandType,
-                                                     string selectSql,
-                                                     IDbParameters parameters,
-                                                     string tableName,
-                                                     IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataTableUpdateWithCommandBuilder(DataTable dataTable,
+                                                             CommandType commandType,
+                                                             string selectSql,
+                                                             IDbParameters parameters,
+                                                             string tableName,
+                                                             IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateWithCommandBuilderArguments(dataTable, tableName, selectSql);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableName });
@@ -1300,12 +1300,12 @@ namespace Spring.Data.Core
         }
 
 
-        public int DataTableUpdateWithCommandBuilder(DataTable dataTable,
-                                                     CommandType commandType,
-                                                     string selectSql,
-                                                     IDbParameters parameters,
-                                                     ITableMapping tableMapping,
-                                                     IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataTableUpdateWithCommandBuilder(DataTable dataTable,
+                                                             CommandType commandType,
+                                                             string selectSql,
+                                                             IDbParameters parameters,
+                                                             ITableMapping tableMapping,
+                                                             IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateWithCommandBuilderArguments(dataTable, tableMapping, selectSql);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
@@ -1321,11 +1321,11 @@ namespace Spring.Data.Core
 
 
 
-        public int DataTableUpdate(DataTable dataTable,
-                                   string tableName,
-                                   CommandType insertCommandtype, string insertSql, IDbParameters insertParameters,
-                                   CommandType updateCommandtype, string updateSql, IDbParameters updateParameters,
-                                   CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters)
+        public virtual int DataTableUpdate(DataTable dataTable,
+                                           string tableName,
+                                           CommandType insertCommandtype, string insertSql, IDbParameters insertParameters,
+                                           CommandType updateCommandtype, string updateSql, IDbParameters updateParameters,
+                                           CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters)
         {
             ValidateUpdateArguments(dataTable, tableName);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableName });
@@ -1337,12 +1337,12 @@ namespace Spring.Data.Core
 
         }
 
-        public int DataTableUpdate(DataTable dataTable,
-                                   string tableName,
-                                   CommandType insertCommandtype, string insertSql, IDbParameters insertParameters,
-                                   CommandType updateCommandtype, string updateSql, IDbParameters updateParameters,
-                                   CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters,
-                                   IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataTableUpdate(DataTable dataTable,
+                                           string tableName,
+                                           CommandType insertCommandtype, string insertSql, IDbParameters insertParameters,
+                                           CommandType updateCommandtype, string updateSql, IDbParameters updateParameters,
+                                           CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters,
+                                           IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateArguments(dataTable, tableName);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableName });
@@ -1353,12 +1353,12 @@ namespace Spring.Data.Core
                                    dataAdapterSetter);
         }
 
-        public int DataTableUpdate(DataTable dataTable,
-                                   ITableMapping tableMapping,
-                                   CommandType insertCommandtype, string insertSql, IDbParameters insertParameters,
-                                   CommandType updateCommandtype, string updateSql, IDbParameters updateParameters,
-                                   CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters,
-                                   IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataTableUpdate(DataTable dataTable,
+                                           ITableMapping tableMapping,
+                                           CommandType insertCommandtype, string insertSql, IDbParameters insertParameters,
+                                           CommandType updateCommandtype, string updateSql, IDbParameters updateParameters,
+                                           CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters,
+                                           IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateArguments(dataTable, tableMapping);
             ITableMappingCollection mappingCollection = new DataTableMappingCollection();
@@ -1380,7 +1380,7 @@ namespace Spring.Data.Core
 
         #region DataSet Create operations without parameters
 
-        public DataSet DataSetCreate(CommandType commandType, string sql)
+        public virtual DataSet DataSetCreate(CommandType commandType, string sql)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFill(dataSet, commandType, sql);
@@ -1388,35 +1388,35 @@ namespace Spring.Data.Core
         }
 
 
-        public DataSet DataSetCreate(CommandType commandType, string sql,
-                                     string[] tableNames)
+        public virtual DataSet DataSetCreate(CommandType commandType, string sql,
+                                             string[] tableNames)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFill(dataSet, commandType, sql, tableNames);
             return dataSet;
         }
 
-        public DataSet DataSetCreate(CommandType commandType, string sql,
-                                     ITableMappingCollection tableMapping)
+        public virtual DataSet DataSetCreate(CommandType commandType, string sql,
+                                             ITableMappingCollection tableMapping)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFill(dataSet, commandType, sql, tableMapping);
             return dataSet;
         }
 
-        public DataSet DataSetCreate(CommandType commandType, string sql,
-                                     ITableMappingCollection tableMapping,
-                                     IDataAdapterSetter setter)
+        public virtual DataSet DataSetCreate(CommandType commandType, string sql,
+                                             ITableMappingCollection tableMapping,
+                                             IDataAdapterSetter setter)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFill(dataSet, commandType, sql, tableMapping, setter);
             return dataSet;
         }
 
-        public DataSet DataSetCreate(CommandType commandType, string sql,
-                                     ITableMappingCollection tableMapping,
-                                     IDataAdapterSetter setter,
-                                     IDataSetFillLifecycleProcessor fillLifecycleProcessor)
+        public virtual DataSet DataSetCreate(CommandType commandType, string sql,
+                                             ITableMappingCollection tableMapping,
+                                             IDataAdapterSetter setter,
+                                             IDataSetFillLifecycleProcessor fillLifecycleProcessor)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFill(dataSet, commandType, sql, tableMapping, setter, fillLifecycleProcessor);
@@ -1426,47 +1426,47 @@ namespace Spring.Data.Core
 
         #region DataSet Create operations with parameters
 
-        public DataSet DataSetCreateWithParams(CommandType commandType, string sql,
-                                               IDbParameters parameters)
+        public virtual DataSet DataSetCreateWithParams(CommandType commandType, string sql,
+                                                       IDbParameters parameters)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFillWithParameters(dataSet, commandType, sql, parameters);
             return dataSet;
         }
 
-        public DataSet DataSetCreateWithParams(CommandType commandType, string sql,
-                                               IDbParameters parameters,
-                                               string[] tableNames)
+        public virtual DataSet DataSetCreateWithParams(CommandType commandType, string sql,
+                                                       IDbParameters parameters,
+                                                       string[] tableNames)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFillWithParameters(dataSet, commandType, sql, parameters, tableNames);
             return dataSet;
         }
 
-        public DataSet DataSetCreateWithParams(CommandType commandType, string sql,
-                                               IDbParameters parameters,
-                                               ITableMappingCollection tableMapping)
+        public virtual DataSet DataSetCreateWithParams(CommandType commandType, string sql,
+                                                       IDbParameters parameters,
+                                                       ITableMappingCollection tableMapping)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFillWithParameters(dataSet, commandType, sql, parameters, tableMapping);
             return dataSet;
         }
 
-        public DataSet DataSetCreateWithParams(CommandType commandType, string sql,
-                                               IDbParameters parameters,
-                                               ITableMappingCollection tableMapping,
-                                               IDataAdapterSetter dataAdapterSetter)
+        public virtual DataSet DataSetCreateWithParams(CommandType commandType, string sql,
+                                                       IDbParameters parameters,
+                                                       ITableMappingCollection tableMapping,
+                                                       IDataAdapterSetter dataAdapterSetter)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFillWithParameters(dataSet, commandType, sql, parameters, tableMapping, dataAdapterSetter);
             return dataSet;
         }
 
-        public DataSet DataSetCreateWithParams(CommandType commandType, string sql,
-                                               IDbParameters parameters,
-                                               ITableMappingCollection tableMapping,
-                                               IDataAdapterSetter dataAdapterSetter,
-                                               IDataSetFillLifecycleProcessor fillLifecycleProcessor)
+        public virtual DataSet DataSetCreateWithParams(CommandType commandType, string sql,
+                                                       IDbParameters parameters,
+                                                       ITableMappingCollection tableMapping,
+                                                       IDataAdapterSetter dataAdapterSetter,
+                                                       IDataSetFillLifecycleProcessor fillLifecycleProcessor)
         {
             DataSet dataSet = CreateDataSet();
             DataSetFillWithParameters(dataSet, commandType, sql, parameters, tableMapping, dataAdapterSetter, fillLifecycleProcessor);
@@ -1477,7 +1477,7 @@ namespace Spring.Data.Core
 
         #region DataSet Fill operations without parameters
 
-        public int DataSetFill(DataSet dataSet, CommandType commandType, string sql)
+        public virtual int DataSetFill(DataSet dataSet, CommandType commandType, string sql)
         {
             ValidateFillArguments(dataSet, sql);
 
@@ -1497,7 +1497,7 @@ namespace Spring.Data.Core
 
 
 
-        public int DataSetFill(DataSet dataSet, CommandType commandType, string sql, string[] tableNames)
+        public virtual int DataSetFill(DataSet dataSet, CommandType commandType, string sql, string[] tableNames)
         {
             ValidateFillArguments(dataSet, sql);
 
@@ -1519,8 +1519,8 @@ namespace Spring.Data.Core
         }
 
 
-        public int DataSetFill(DataSet dataSet, CommandType commandType, string sql,
-                               ITableMappingCollection tableMapping)
+        public virtual int DataSetFill(DataSet dataSet, CommandType commandType, string sql,
+                                       ITableMappingCollection tableMapping)
         {
             ValidateFillArguments(dataSet, sql, tableMapping);
             return (int)Execute(new DataAdapterFillCallback(dataSet,
@@ -1529,9 +1529,9 @@ namespace Spring.Data.Core
 
         }
 
-        public int DataSetFill(DataSet dataSet, CommandType commandType, string sql,
-                               ITableMappingCollection tableMapping,
-                               IDataAdapterSetter setter)
+        public virtual int DataSetFill(DataSet dataSet, CommandType commandType, string sql,
+                                       ITableMappingCollection tableMapping,
+                                       IDataAdapterSetter setter)
         {
             ValidateFillArguments(dataSet, sql, tableMapping);
             return (int)Execute(new DataAdapterFillCallback(dataSet,
@@ -1540,10 +1540,10 @@ namespace Spring.Data.Core
 
         }
 
-        public int DataSetFill(DataSet dataSet, CommandType commandType, string sql,
-                               ITableMappingCollection tableMapping,
-                               IDataAdapterSetter setter,
-                               IDataSetFillLifecycleProcessor fillLifecycleProcessor)
+        public virtual int DataSetFill(DataSet dataSet, CommandType commandType, string sql,
+                                       ITableMappingCollection tableMapping,
+                                       IDataAdapterSetter setter,
+                                       IDataSetFillLifecycleProcessor fillLifecycleProcessor)
         {
             ValidateFillArguments(dataSet, sql, tableMapping);
             return (int)Execute(new DataAdapterFillCallback(dataSet,
@@ -1556,8 +1556,8 @@ namespace Spring.Data.Core
 
         #region DataSet Fill operations with parameters
 
-        public int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
-                                             IDbParameters parameters)
+        public virtual int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
+                                                     IDbParameters parameters)
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(null);
@@ -1567,9 +1567,9 @@ namespace Spring.Data.Core
                                                             parameters));
         }
 
-        public int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
-                                             IDbParameters parameters,
-                                             string[] tableNames)
+        public virtual int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
+                                                     IDbParameters parameters,
+                                                     string[] tableNames)
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters);
             if (tableNames == null)
@@ -1583,9 +1583,9 @@ namespace Spring.Data.Core
 
         }
 
-        public int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
-                                             IDbParameters parameters,
-                                             ITableMappingCollection tableMapping)
+        public virtual int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
+                                                     IDbParameters parameters,
+                                                     ITableMappingCollection tableMapping)
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters, tableMapping);
             return (int)Execute(new DataAdapterFillCallback(dataSet,
@@ -1593,10 +1593,10 @@ namespace Spring.Data.Core
                                                             tableMapping, null, null, parameters));
         }
 
-        public int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
-                                             IDbParameters parameters,
-                                             ITableMappingCollection tableMapping,
-                                             IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
+                                                     IDbParameters parameters,
+                                                     ITableMappingCollection tableMapping,
+                                                     IDataAdapterSetter dataAdapterSetter)
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters, tableMapping);
             return (int)Execute(new DataAdapterFillCallback(dataSet,
@@ -1604,11 +1604,11 @@ namespace Spring.Data.Core
                                                             tableMapping, dataAdapterSetter, null, parameters));
         }
 
-        public int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
-                                             IDbParameters parameters,
-                                             ITableMappingCollection tableMapping,
-                                             IDataAdapterSetter dataAdapterSetter,
-                                             IDataSetFillLifecycleProcessor fillLifecycleProcessor)
+        public virtual int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
+                                                     IDbParameters parameters,
+                                                     ITableMappingCollection tableMapping,
+                                                     IDataAdapterSetter dataAdapterSetter,
+                                                     IDataSetFillLifecycleProcessor fillLifecycleProcessor)
         {
             ValidateFillWithParameterArguments(dataSet, sql, parameters, tableMapping);
             return (int)Execute(new DataAdapterFillCallback(dataSet,
@@ -1619,11 +1619,11 @@ namespace Spring.Data.Core
         #endregion
 
         #region DataSet Update operations
-        public int DataSetUpdateWithCommandBuilder(DataSet dataSet,
-                                                   CommandType commandType,
-                                                   string selectSql,
-                                                   IDbParameters selectParameters,
-                                                   string tableName)
+        public virtual int DataSetUpdateWithCommandBuilder(DataSet dataSet,
+                                                           CommandType commandType,
+                                                           string selectSql,
+                                                           IDbParameters selectParameters,
+                                                           string tableName)
         {
             ValidateUpdateWithCommandBuilderArguments(dataSet, tableName, selectSql);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableName });
@@ -1636,12 +1636,12 @@ namespace Spring.Data.Core
                                                                                 null));
         }
 
-        public int DataSetUpdateWithCommandBuilder(DataSet dataSet,
-                                                   CommandType commandType,
-                                                   string selectSql,
-                                                   IDbParameters selectParameters,
-                                                   string tableName,
-                                                   IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataSetUpdateWithCommandBuilder(DataSet dataSet,
+                                                           CommandType commandType,
+                                                           string selectSql,
+                                                           IDbParameters selectParameters,
+                                                           string tableName,
+                                                           IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateWithCommandBuilderArguments(dataSet, tableName, selectSql);
             ITableMappingCollection mappingCollection = DoCreateMappingCollection(new string[] { tableName });
@@ -1654,12 +1654,12 @@ namespace Spring.Data.Core
                                                                                 dataAdapterSetter));
         }
 
-        public int DataSetUpdateWithCommandBuilder(DataSet dataSet,
-                                                   CommandType commandType,
-                                                   string selectSql,
-                                                   IDbParameters selectParameters,
-                                                   ITableMappingCollection mappingCollection,
-                                                   IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataSetUpdateWithCommandBuilder(DataSet dataSet,
+                                                           CommandType commandType,
+                                                           string selectSql,
+                                                           IDbParameters selectParameters,
+                                                           ITableMappingCollection mappingCollection,
+                                                           IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateWithCommandBuilderArguments(dataSet, mappingCollection, selectSql);
             return (int)Execute(new DataAdapterUpdateWithCommandBuilderCallback(dataSet,
@@ -1671,11 +1671,11 @@ namespace Spring.Data.Core
                                                                                 dataAdapterSetter));
         }
 
-        public int DataSetUpdate(DataSet dataSet,
-                                 string tableName,
-                                 IDbCommand insertCommand,
-                                 IDbCommand updateCommand,
-                                 IDbCommand deleteCommand)
+        public virtual int DataSetUpdate(DataSet dataSet,
+                                         string tableName,
+                                         IDbCommand insertCommand,
+                                         IDbCommand updateCommand,
+                                         IDbCommand deleteCommand)
         {
             ValidateUpdateArguments(dataSet, tableName);
 
@@ -1689,11 +1689,11 @@ namespace Spring.Data.Core
                                                               null));
         }
 
-        public int DataSetUpdate(DataSet dataSet,
-                                 string tableName,
-                                 CommandType insertCommandtype, string insertSql, IDbParameters insertParameters,
-                                 CommandType updateCommandtype, string updateSql, IDbParameters updateParameters,
-                                 CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters)
+        public virtual int DataSetUpdate(DataSet dataSet,
+                                         string tableName,
+                                         CommandType insertCommandtype, string insertSql, IDbParameters insertParameters,
+                                         CommandType updateCommandtype, string updateSql, IDbParameters updateParameters,
+                                         CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters)
         {
             ValidateUpdateArguments(dataSet, tableName);
             IDbCommand insertCommand = null;
@@ -1742,12 +1742,12 @@ namespace Spring.Data.Core
 
 
 
-        public int DataSetUpdate(DataSet dataSet,
-                                 string tableName,
-                                 IDbCommand insertCommand,
-                                 IDbCommand updateCommand,
-                                 IDbCommand deleteCommand,
-                                 IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataSetUpdate(DataSet dataSet,
+                                         string tableName,
+                                         IDbCommand insertCommand,
+                                         IDbCommand updateCommand,
+                                         IDbCommand deleteCommand,
+                                         IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateArguments(dataSet, tableName);
             ITableMappingCollection tableMapping = DoCreateMappingCollection(new string[] { tableName });
@@ -1760,11 +1760,11 @@ namespace Spring.Data.Core
         }
 
 
-        public int DataSetUpdate(DataSet dataSet,
-                                 ITableMappingCollection tableMapping,
-                                 IDbCommand insertCommand,
-                                 IDbCommand updateCommand,
-                                 IDbCommand deleteCommand)
+        public virtual int DataSetUpdate(DataSet dataSet,
+                                         ITableMappingCollection tableMapping,
+                                         IDbCommand insertCommand,
+                                         IDbCommand updateCommand,
+                                         IDbCommand deleteCommand)
         {
             ValidateUpdateArguments(dataSet, tableMapping);
             return (int)Execute(new DataAdapterUpdateCallback(dataSet,
@@ -1775,12 +1775,12 @@ namespace Spring.Data.Core
                                                               null));
         }
 
-        public int DataSetUpdate(DataSet dataSet,
-                                 ITableMappingCollection tableMapping,
-                                 IDbCommand insertCommand,
-                                 IDbCommand updateCommand,
-                                 IDbCommand deleteCommand,
-                                 IDataAdapterSetter dataAdapterSetter)
+        public virtual int DataSetUpdate(DataSet dataSet,
+                                         ITableMappingCollection tableMapping,
+                                         IDbCommand insertCommand,
+                                         IDbCommand updateCommand,
+                                         IDbCommand deleteCommand,
+                                         IDataAdapterSetter dataAdapterSetter)
         {
             ValidateUpdateArguments(dataSet, tableMapping);
             return (int)Execute(new DataAdapterUpdateCallback(dataSet,
@@ -1894,7 +1894,7 @@ namespace Spring.Data.Core
 
         #region Protected Helper Methods
 
-        protected void InitExceptionTranslator()
+        protected virtual void InitExceptionTranslator()
         {
             if (exceptionTranslator == null)
             {
