@@ -283,27 +283,6 @@ namespace Spring.Messaging.Ems.Connections
             return CreateDurableSubscriber(destination, subscription, null, false);
         }
 
-
-
-        /// <summary>
-        /// Deletes the durable consumer.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        public void DeleteDurableConsumer(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Deletes the durable consumer.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="requestTimeout">The request timeout.</param>
-        public void DeleteDurableConsumer(string name, TimeSpan requestTimeout)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Creates the consumer.
         /// </summary>
@@ -615,8 +594,15 @@ namespace Spring.Messaging.Ems.Connections
 
         public IMessageListener MessageListener
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { 
+                this.transactionOpen = true;
+                return target.MessageListener;
+            }
+            set
+            {
+                this.transactionOpen = true;
+                target.MessageListener = value;
+            }
         }
 
         #endregion

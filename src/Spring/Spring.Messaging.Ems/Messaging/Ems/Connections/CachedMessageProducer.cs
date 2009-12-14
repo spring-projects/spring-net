@@ -218,11 +218,9 @@ namespace Spring.Messaging.Ems.Connections
             }
         }
 
-
-
         public MessageProducer NativeMessageProducer
         {
-            get { throw new System.NotImplementedException(); }
+            get { return target.NativeMessageProducer; }
         }
 
         /// <summary>
