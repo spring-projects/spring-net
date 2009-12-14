@@ -22,6 +22,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -43,8 +44,10 @@ namespace Spring.ServiceModel.Support
         private static readonly MethodInfo GetObject =
             typeof(IObjectFactory).GetMethod("GetObject", new Type[] { typeof(string) });
 
-        private IObjectFactory objectFactory;
+        private static Hashtable s_serviceTypeCache = new Hashtable();
+
         private string targetName;
+        private bool useServiceProxyTypeCache;
 
         /// <summary>
         /// Target instance calls should be delegated to.
@@ -60,9 +63,10 @@ namespace Spring.ServiceModel.Support
         /// <see cref="Spring.ServiceModel.Support.ServiceProxyTypeBuilder"/> class.
         /// </summary>
         /// <param name="targetName">The name of the service within Spring's IoC container.</param>
-        /// <param name="objectFactory">The <see cref="IObjectFactory"/> to use.</param>
-        public ServiceProxyTypeBuilder(string targetName, IObjectFactory objectFactory)
-            : this(targetName, targetName, objectFactory)
+        /// <param name="targetType">The type of the service.</param>
+        /// <param name="useServiceProxyTypeCache">Whether to cache the generated service proxy type.</param>
+        public ServiceProxyTypeBuilder(string targetName, Type targetType, bool useServiceProxyTypeCache)
+            : this(targetName, targetType, targetName, useServiceProxyTypeCache)
         {
         }
 
@@ -72,15 +76,16 @@ namespace Spring.ServiceModel.Support
         /// <see cref="Spring.ServiceModel.Support.ServiceProxyTypeBuilder"/> class.
         /// </summary>
         /// <param name="targetName">The name of the service within Spring's IoC container.</param>
+        /// <param name="targetType">The type of the service.</param>
         /// <param name="serviceTypeName">The name of the generated WCF service <see cref="System.Type"/>.</param>
-        /// <param name="objectFactory">The <see cref="IObjectFactory"/> to use.</param>
-        public ServiceProxyTypeBuilder(string targetName, string serviceTypeName, IObjectFactory objectFactory)
+        /// <param name="useServiceProxyTypeCache">Whether to cache the generated service proxy type.</param>
+        public ServiceProxyTypeBuilder(string targetName, Type targetType, string serviceTypeName, bool useServiceProxyTypeCache)
         {
             this.targetName = targetName;
-            this.objectFactory = objectFactory;
+            this.useServiceProxyTypeCache = useServiceProxyTypeCache;
 
             this.Name = serviceTypeName;
-            this.TargetType = objectFactory.GetType(targetName);
+            this.TargetType = targetType;
         }
 
         #endregion
@@ -88,16 +93,35 @@ namespace Spring.ServiceModel.Support
         #region Protected Methods
 
         /// <summary>
-        /// Creates a proxy that delegates calls to an instance of the target object. 
-        /// This overriden implementation also sets the field __objectFactory.
+        /// Creates a proxy that delegates calls to an instance of the target object 
+        /// and caches the <see cref="System.Type"/> instance.
         /// </summary>
+        /// <param name="objectFactory">
+        /// The <see cref="IObjectFactory"/> to use to get the target object.
+        /// </param>
         /// <exception cref="System.ArgumentException">
         /// If the <see cref="IProxyTypeBuilder.TargetType"/>
         /// does not implement any interfaces.
         /// </exception>
-        public override Type BuildProxyType()
+        public virtual Type BuildProxyType(IObjectFactory objectFactory)
         {
-            Type proxyType = base.BuildProxyType();
+            Type proxyType = null;
+            if (useServiceProxyTypeCache)
+            {
+                lock (s_serviceTypeCache)
+                {
+                    proxyType = (Type)s_serviceTypeCache[this.Name];
+                    if (proxyType == null)
+                    {
+                        proxyType = BuildProxyType();
+                        s_serviceTypeCache[this.Name] = proxyType;
+                    }
+                }
+            }
+            else
+            {
+                proxyType = BuildProxyType();
+            }
 
             FieldInfo field = proxyType.GetField("__objectFactory", BindingFlags.NonPublic | BindingFlags.Static);
             field.SetValue(proxyType, objectFactory);

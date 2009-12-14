@@ -88,8 +88,8 @@ namespace Spring.ServiceModel.Activation
         }
 
         /// <summary>
-        /// Contorls, wether the underlying <see cref="SpringServiceHost"/> should cache
-        /// the generated proxy types based on the service name. Defaults to <c>true</c>.
+        /// Controls, whether the underlying <see cref="SpringServiceHost"/> should cache
+        /// the generated proxy types. Defaults to <c>true</c>.
         /// </summary>
         public bool UseServiceProxyTypeCache
         {

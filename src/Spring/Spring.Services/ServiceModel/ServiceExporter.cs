@@ -59,6 +59,7 @@ namespace Spring.ServiceModel
         private Type _contractInterface;
         private IList _typeAttributes = new ArrayList();
         private IDictionary _memberAttributes = new Hashtable();
+        private bool _useServiceProxyTypeCache = true;
 
         private string _name;
         private string _namespace;
@@ -143,6 +144,16 @@ namespace Spring.ServiceModel
         {
             get { return _memberAttributes; }
             set { _memberAttributes = value; }
+        }
+
+        /// <summary>
+        /// Controls, whether the underlying <see cref="ServiceExporter"/> should cache
+        /// the generated proxy types. Defaults to <c>true</c>.
+        /// </summary>
+        public bool UseServiceProxyTypeCache
+        {
+            get { return _useServiceProxyTypeCache; }
+            set { _useServiceProxyTypeCache = value; }
         }
 
         /// <summary>
@@ -355,7 +366,8 @@ namespace Spring.ServiceModel
         /// </summary>
         protected virtual void GenerateProxy()
         {
-            IProxyTypeBuilder builder = new ConfigurableServiceProxyTypeBuilder(TargetName, this.objectName, objectFactory, 
+            IProxyTypeBuilder builder = new ConfigurableServiceProxyTypeBuilder(
+                TargetName, objectFactory.GetType(TargetName), this.objectName, _useServiceProxyTypeCache, 
                 Name, Namespace, ConfigurationName, CallbackContract, ProtectionLevel, SessionMode);
 
             if (ContractInterface != null)
@@ -386,9 +398,9 @@ namespace Spring.ServiceModel
         {
             private CustomAttributeBuilder serviceContractAttribute;
 
-            public ConfigurableServiceProxyTypeBuilder(string targetName, string objectName, IObjectFactory objectFactory,  
+            public ConfigurableServiceProxyTypeBuilder(string targetName, Type targetType, string objectName, bool useServiceProxyTypeCache, 
                 string name, string ns, string configurationName, Type callbackContract, ProtectionLevel protectionLevel, SessionMode sessionMode)
-                : base(targetName, objectName, objectFactory)
+                : base(targetName, targetType, objectName, useServiceProxyTypeCache)
             {
 
                 if (!StringUtils.HasText(configurationName))
