@@ -76,9 +76,15 @@ namespace Spring.Web.Services
             {
                 exporterInstance = (WebServiceExporter)s_activeExporters[exporterId];
             }
-            AssertUtils.ArgumentNotNull( exporterInstance, "exporterId", "Remoting Server object is not associated with any active SaoExporter" );
+            if (exporterInstance == null)
+            {
+                throw new ArgumentNullException("exporterId", "WebService object is not associated with any active WebServiceExporter");
+            }
             object target = exporterInstance.GetTargetInstance();
-            AssertUtils.ArgumentNotNull( target, "exporterId", string.Format( "Failed retrieving target object for SaoExporter ID {0}", exporterId ) );
+            if (target == null)
+            {
+                throw new ArgumentNullException("exporterId", string.Format( "Failed retrieving target object for WebServiceExporter ID {0}", exporterId ));
+            }
             return target;
         }
 
