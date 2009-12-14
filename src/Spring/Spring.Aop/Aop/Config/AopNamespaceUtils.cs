@@ -30,7 +30,6 @@ using Spring.Util;
 
 #endregion
 
-
 namespace Spring.Aop.Config
 {
     /// <summary>
@@ -49,34 +48,36 @@ namespace Spring.Aop.Config
         public static readonly string AUTO_PROXY_CREATOR_OBJECT_NAME = "Spring.Aop.Config.InternalAutoProxyCreator";
 
         /// <summary>
-        /// Registers the auto proxy creator if necessary.
+        /// The type of the APC that handles advisors with object role <see cref="ObjectRole.ROLE_INFRASTRUCTURE"/>.
+        /// </summary>
+        private static readonly Type InfrastructureAutoProxyCreatorType = typeof(InfrastructureAdvisorAutoProxyCreator);
+       
+        /// <summary>
+        /// Registers the internal auto proxy creator if necessary.
         /// </summary>
         /// <param name="parserContext">The parser context.</param>
         /// <param name="sourceElement">The source element.</param>
         public static void RegisterAutoProxyCreatorIfNecessary(ParserContext parserContext, XmlElement sourceElement)
         {
-            RegisterApcAsRequired(typeof(InfrastructureAdvisorAutoProxyCreator), parserContext);
+            AssertUtils.ArgumentNotNull(parserContext, "parserContext");
+            IObjectDefinitionRegistry registry = parserContext.Registry;
+            RegisterAutoProxyCreatorIfNecessary(registry);
         }
 
         /// <summary>
-        /// Registries the or escalate apc as required.
+        /// Registers the internal auto proxy creator if necessary.
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="parserContext">The parser context.</param>
-        private static void RegisterApcAsRequired(Type type, ParserContext parserContext)
+        public static void RegisterAutoProxyCreatorIfNecessary(IObjectDefinitionRegistry registry)
         {
-            AssertUtils.ArgumentNotNull(parserContext, "parserContext");
-            IObjectDefinitionRegistry registry = parserContext.Registry;
-
+            AssertUtils.ArgumentNotNull(registry, "registry");
 
             if (!registry.ContainsObjectDefinition(AUTO_PROXY_CREATOR_OBJECT_NAME))
             {
-                RootObjectDefinition objectDefinition = new RootObjectDefinition(type);
+                RootObjectDefinition objectDefinition = new RootObjectDefinition(InfrastructureAutoProxyCreatorType);
                 objectDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
                 objectDefinition.PropertyValues.Add("order", int.MaxValue);
-                registry.RegisterObjectDefinition(AUTO_PROXY_CREATOR_OBJECT_NAME, objectDefinition);           
+                registry.RegisterObjectDefinition(AUTO_PROXY_CREATOR_OBJECT_NAME, objectDefinition);
             }
-
         }
 
         /// <summary>
