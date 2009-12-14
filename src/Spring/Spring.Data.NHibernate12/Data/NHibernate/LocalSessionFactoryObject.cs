@@ -27,6 +27,7 @@ using Common.Logging;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
+using Spring.Context;
 using Spring.Core.IO;
 using Spring.Dao;
 using Spring.Dao.Attributes;
@@ -61,7 +62,8 @@ namespace Spring.Data.NHibernate
     /// </para>
     /// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-    public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IPersistenceExceptionTranslator, System.IDisposable
+    public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IPersistenceExceptionTranslator, System.IDisposable, 
+		IApplicationContextAware
 	{
 		#region Fields
 
@@ -86,6 +88,11 @@ namespace Spring.Data.NHibernate
 	    private bool exposeTransactionAwareSessionFactory = false;
         
         private IAdoExceptionTranslator adoExceptionTranslator;
+
+		private IResourceLoader resourceLoader;
+		
+		private IApplicationContext applicationContext;
+
 
 		#endregion
 
@@ -113,6 +120,32 @@ namespace Spring.Data.NHibernate
 		#endregion
 
 		#region Properties
+
+		/// <summary>
+		/// Setting the Application Context determines were resources are loaded from
+		/// </summary>
+		public IApplicationContext ApplicationContext
+		{
+			set { this.applicationContext = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the <see cref="IResourceLoader"/> to use for loading mapping assemblies etc.
+		/// </summary>
+		public IResourceLoader ResourceLoader
+		{
+			get
+			{
+				if (resourceLoader == null)
+				{
+					resourceLoader = new ConfigurableResourceLoader();
+				}
+				return resourceLoader;
+			}
+			set { resourceLoader = value; }
+		}
+
+
 
         /// <summary>
         /// Sets the assemblies to load that contain mapping files.
@@ -327,6 +360,12 @@ namespace Spring.Data.NHibernate
 
             if (this.mappingResources != null)
             {
+				IResourceLoader loader = this.ResourceLoader;
+				if (loader == null)
+				{
+					loader = this.applicationContext;
+				}
+
                 foreach (string resourceName in mappingResources)
                 {
                     config.AddInputStream(resourceLoader.GetResource(resourceName).InputStream);
