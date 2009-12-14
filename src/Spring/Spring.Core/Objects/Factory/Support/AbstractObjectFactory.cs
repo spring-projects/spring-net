@@ -1082,11 +1082,6 @@ namespace Spring.Objects.Factory.Support
         {
             string objectName = TransformedObjectName(name);
             object objectInstance = GetSingleton(objectName);
-            //TODO investigate
-            if (IsSingletonCurrentlyInCreation(name))
-            {
-                throw new ObjectCurrentlyInCreationException(objectName);
-            }
 
             if (objectInstance != null)
             {

@@ -127,6 +127,7 @@
     <Compile Include="Aop\Framework\AutoProxy\AdvisorAutoProxyCreatorCircularReferencesTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AdvisorAutoProxyCreatorTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\AttributeAutoProxyCreatorTests.cs" />
+    <Compile Include="Aop\Framework\AutoProxy\DefaultAdvisorAutoProxyCreatorTests.cs" />
     <Compile Include="Aop\Framework\AutoProxy\InfrastructureAdvisorAutoProxyCreator.cs" />
     <Compile Include="Aop\Framework\AutoProxy\LogicalThreadContextAdvice.cs" />
     <Compile Include="Aop\Framework\AutoProxy\NoSetterProperties.cs" />

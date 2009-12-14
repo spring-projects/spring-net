@@ -108,7 +108,7 @@ namespace Spring.Data.NHibernate.Support
                 ISessionFactory sessionFactory = sss.SessionFactory;
                 Assert.Fail("should fail, because derived classes must override ResolveSessionFactory()");
             }
-            catch (NotImplementedException) { }
+            catch (NotSupportedException) { }
         }
 
         [Test]
