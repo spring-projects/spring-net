@@ -341,6 +341,36 @@ namespace Spring.Objects.Factory.Support
             // explicit no-op...
         }
 
+        /// <summary>
+        /// Apply the property values of the object definition with the supplied
+        /// <paramref name="name"/> to the supplied <paramref name="instance"/>.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// The object definition can either define a fully self-contained object,
+        /// reusing it's property values, or just property values meant to be used
+        /// for existing object instances.
+        /// </p>
+        /// </remarks>
+        /// <param name="instance">
+        /// The existing object that the property values for the named object will
+        /// be applied to.
+        /// </param>
+        /// <param name="name">
+        /// The name of the object definition associated with the property values that are
+        /// to be applied.
+        /// </param>
+        /// <param name="definition">
+        /// An object definition that should be used to apply property values.
+        /// </param>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// In case of errors.
+        /// </exception>
+        public virtual void ApplyObjectPropertyValues(object instance, string name, IObjectDefinition definition)
+        {
+            // explicit no-op...
+        }
+
         //        /// <summary>
         //        /// Create an object instance for the given object definition.
         //        /// </summary>
@@ -954,9 +984,7 @@ namespace Spring.Objects.Factory.Support
 
                 if (configurableFactory.ProductTemplate != null)
                 {
-                    instance = ConfigureObject(instance,
-                        String.Format("{0}.ProductTemplate", objectName),
-                        configurableFactory.ProductTemplate);
+                    ApplyObjectPropertyValues(instance, objectName, configurableFactory.ProductTemplate);
                 }
             }
 

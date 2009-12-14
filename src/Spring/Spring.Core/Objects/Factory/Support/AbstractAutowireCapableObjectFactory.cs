@@ -268,6 +268,26 @@ namespace Spring.Objects.Factory.Support
                 ApplyPropertyValues(name, definition, new ObjectWrapper(instance), definition.PropertyValues);
             }
         }
+        
+        /// <summary>
+        /// Apply the property values of the object definition with the supplied
+        /// <paramref name="name"/> to the supplied <paramref name="instance"/>.
+        /// </summary>
+        /// <param name="instance">
+        /// The existing object that the property values for the named object will
+        /// be applied to.
+        /// </param>
+        /// <param name="name">
+        /// The name of the object definition associated with the property values that are
+        /// to be applied.
+        /// </param>
+        /// <param name="definition">
+        /// An object definition that should be used to apply property values.
+        /// </param>
+        public override void ApplyObjectPropertyValues(object instance, string name, IObjectDefinition definition)
+        {
+            ApplyPropertyValues(name, new RootObjectDefinition(definition), new ObjectWrapper(instance), definition.PropertyValues);
+        }
 
         /// <summary>
         /// Apply any
