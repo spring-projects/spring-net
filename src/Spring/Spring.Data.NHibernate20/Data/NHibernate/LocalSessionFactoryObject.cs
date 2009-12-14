@@ -28,6 +28,7 @@ using System.Data.Common;
 
 using Common.Logging;
 using NHibernate;
+using NHibernate.Bytecode;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
@@ -114,10 +115,15 @@ namespace Spring.Data.NHibernate
 
 	    private IResourceLoader resourceLoader;
 
+        private IApplicationContext applicationContext;
+
         // Configuration time DB provider. 
         // This will not be available after configuration has been done.
         private static IDbProvider configTimeDbProvider;
 
+#if NH_2_1
+        private IBytecodeProvider bytecodeProvider;
+#endif
 		#endregion
 
 		#region Constants
@@ -146,12 +152,9 @@ namespace Spring.Data.NHibernate
         /// <summary>
         /// Setting the Application Context determines were resources are loaded from
         /// </summary>
-	    IApplicationContext IApplicationContextAware.ApplicationContext
+	    public IApplicationContext ApplicationContext
 	    {
-	        set
-	        {
-	            this.ResourceLoader = value;
-	        }
+	        set { this.applicationContext = value; }
 	    }
 
         /// <summary>
@@ -416,6 +419,19 @@ namespace Spring.Data.NHibernate
             }
         }
 
+#if NH_2_1
+        /// <summary>
+        /// Sets custom byte code provider implementation to be used. This corresponds to setting
+        /// the <see cref="Environment.BytecodeProvider" /> property before NHibernate session factory
+        /// configuration.
+        /// </summary>
+	    public virtual IBytecodeProvider BytecodeProvider
+	    {
+            get { return this.bytecodeProvider; }
+            set { this.bytecodeProvider = value; }
+	    }
+#endif
+
 
 	    #endregion
 
@@ -572,9 +588,14 @@ namespace Spring.Data.NHibernate
 
             if (this.mappingResources != null)
             {
+                IResourceLoader loader = this.ResourceLoader;
+                if (loader == null)
+                {
+                    loader = this.applicationContext;
+                }
                 foreach (string resourceName in mappingResources)
                 {
-                    config.AddInputStream(this.ResourceLoader.GetResource(resourceName).InputStream);
+                    config.AddInputStream(loader.GetResource(resourceName).InputStream);
                 }
             }
 
@@ -662,10 +683,21 @@ namespace Spring.Data.NHibernate
 				}
 			}
 
-#if NH_2_1
-#endif
             // Perform custom post-processing in subclasses.
             PostProcessConfiguration(config);
+
+#if NH_2_1
+            if (BytecodeProvider != null)
+            {
+                // set custom IBytecodeProvider
+                Environment.BytecodeProvider = BytecodeProvider;
+            }
+            else
+            {
+                // use Spring's as default
+                // Environment.BytecodeProvider = new Bytecode.BytecodeProvider(this.applicationContext);
+            }
+#endif
 
             // Build SessionFactory instance.
             log.Info("Building new Hibernate SessionFactory");

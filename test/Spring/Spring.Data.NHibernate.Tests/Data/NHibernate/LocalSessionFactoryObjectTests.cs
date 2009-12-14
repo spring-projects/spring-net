@@ -26,11 +26,13 @@ using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 
+using Spring.Context.Support;
 using Spring.Data.Common;
 
 using NUnit.Framework;
 #if NH_2_1
 using Spring.Data.NHibernate.Bytecode;
+
 #endif
 
 namespace Spring.Data.NHibernate
@@ -50,6 +52,8 @@ namespace Spring.Data.NHibernate
             dbProvider.ConnectionString = "Data Source=(local);Database=Spring;Trusted_Connection=false";
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
             sfo.DbProvider = dbProvider;
+            sfo.ApplicationContext = new StaticApplicationContext();
+
             IDictionary properties = new Hashtable();
             properties.Add(Environment.Dialect, typeof(MsSql2000Dialect).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionDriver, typeof(SqlClientDriver).AssemblyQualifiedName);
@@ -70,6 +74,8 @@ namespace Spring.Data.NHibernate
 
 #if NH_2_1
             Assert.AreEqual(sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass], typeof(ProxyFactoryFactory).AssemblyQualifiedName);
+            // Spring's IBytecodeProvider should be the default
+            // Assert.AreEqual(typeof(BytecodeProvider), Environment.BytecodeProvider.GetType(), "default IBytecodeProvider was not Spring's BytecodeProvider");
 #endif
         }
 
