@@ -475,10 +475,7 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
 
-    <!-- build examples -->
-    <!--
-    <nant buildfile="examples/Spring/Spring.Examples.build" target="build" if="${build-examples}"/>
-    -->
+    <!-- Main solutions and examples are compiled via task build-solutions -->
 
     <!-- build coverage summary -->
 		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}" failonerror="false">
@@ -523,7 +520,13 @@ Commandline Examples:
     <property name="build-msmq" value="false" overwrite="true" />
     <property name="build-msmq-tests" value="false" overwrite="true" />
     <property name="build-velocity" value="false" overwrite="true" />
-    <call target="compile-test" />
+
+    <!-- Do not call compile-test target - only build Spring.Services and tests which uses WCF in .NET 3.0 -->
+    <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <call target="copylibs"/>
+    <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services and not net-3.5}"/>
+    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services and not net-3.5}"/>
+
   </target>
 
   <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
@@ -566,7 +569,8 @@ Commandline Examples:
 
   </target>
 
-  <target name="copylibs">    <echo message="Current bin dir = ${current.bin.dir}"/>
+  <target name="copylibs">
+    <echo message="Current bin dir = ${current.bin.dir}"/>
     <echo message="Current lib dir = ${lib.dir}"/>
     <!-- copy framework-neutral libraries -->
     <copy todir="${current.bin.dir}">
@@ -909,14 +913,17 @@ Commandline Examples:
     <call target="${nant.target.root.name}-1.1" />
     <call target="${nant.target.root.name}-2.0" />
     <call target="${nant.target.root.name}-3.0" />
+
     <!-- ignore .NET 3.5 for now -->
     <!-- call target="${nant.target.root.name}-3.5" / -->
 
     <!-- ignore Mono 2.0 for now -->
     <!-- <call target="${nant.target.root.name}-mono-2.0" /> -->
 
-    <!-- build all vs solutions -->
+    <!-- build all Spring.NET solutions and example applications -->
+
     <call target="build-solutions" />
+
   </target>
 
   <target name="daily-build-1.1">
@@ -1228,6 +1235,22 @@ Commandline Examples:
 
     <copy todir="${current.package.dir}/doc/schema"
           file="build-support/install-schema.build"/>
+
+    <copy todir="${current.package.dir}/net/3.0/debug"
+          file="build-support/readme-net-3.0.txt"/>
+
+    <copy todir="${current.package.dir}/net/3.0/release"
+          file="build-support/readme-net-3.0.txt"/>
+
+    <mkdir dir="${current.package.dir}/net/3.5/debug"/>
+    <mkdir dir="${current.package.dir}/net/3.5/release"/>
+
+    <copy todir="${current.package.dir}/net/3.5/debug"
+          file="build-support/readme-net-3.5.txt"/>
+
+    <copy todir="${current.package.dir}/net/3.5/release"
+          file="build-support/readme-net-3.5.txt"/>
+
 
     <echo message="copying source code for release..."/>
 
