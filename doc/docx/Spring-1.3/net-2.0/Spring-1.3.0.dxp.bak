@@ -18,6 +18,8 @@
     <VariableValues>
         <VariableValue Name="CopyrightNotice" Value="&amp;copy; 2004-2008 Spring.NET Authors. All Rights Reserved."/>
         <VariableValue Name="FeedbackLink" Value="&lt;a href=&quot;forum.springframework.net&quot;&gt;Send comments&lt;/a&gt; on this topic."/>
+        <VariableValue Name="DefaultTypeRequirements" Value="&lt;h4 class=dxh4&gt;$$Requirements$$&lt;/h4&gt;&lt;p&gt;&lt;b&gt;Namespace: &lt;/b&gt;%%linkedcurrentnamespace%%&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Platforms:&lt;/b&gt; Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family, Windows Vista, Windows Server 2008 family&lt;/p&gt;&lt;p&gt;&lt;b&gt;Assembly: &lt;/b&gt;%%assemblyname%% (in %%assemblyfilename%%)&lt;/p&gt;"/>
+        <VariableValue Name="DefaultMemberRequirements" Value="&lt;h4 class=dxh4&gt;$$Requirements$$&lt;/h4&gt;&lt;p&gt;&lt;b&gt;Platforms:&lt;/b&gt; Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family, Windows Vista, Windows Server 2008 family&lt;/p&gt;"/>
     </VariableValues>
     <AdditionalFiles/>
     <ModelComments/>
@@ -63,15 +65,12 @@
         <e>Spring.Core~Spring.Context.Support.DelegatingMessageSource+SpecialCaseNullMessageSource</e>
         <e>Spring.Core~Spring.Core.ControlFlowFactory+DefaultControlFlow</e>
         <e>Spring.Core~Spring.Core.ControlFlowFactory+DefaultControlFlow+MethodsDeclaredTypeCriteria</e>
-        <e>Spring.Core~Spring.Expressions.ExpressionLexer</e>
-        <e>Spring.Core~Spring.Expressions.ExpressionParser</e>
         <e>Spring.Core~Spring.Expressions.NodeWithArguments</e>
         <e>Spring.Core~Spring.Expressions.ArrayConstructorNode</e>
         <e>Spring.Core~Spring.Expressions.AssignNode</e>
         <e>Spring.Core~Spring.Expressions.BinaryOperator</e>
         <e>Spring.Core~Spring.Expressions.BooleanLiteralNode</e>
         <e>Spring.Core~Spring.Expressions.ConstructorNode</e>
-        <e>Spring.Core~Spring.Expressions.DateLiteralNode</e>
         <e>Spring.Core~Spring.Expressions.ExpressionListNode</e>
         <e>Spring.Core~Spring.Expressions.HexLiteralNode</e>
         <e>Spring.Core~Spring.Expressions.IndexerNode</e>
@@ -149,7 +148,6 @@
         <e>Spring.Core~Spring.Expressions.PropertyOrFieldNode+FieldValueAccessor</e>
         <e>Spring.Core~Spring.Expressions.PropertyOrFieldNode+EnumValueAccessor</e>
         <e>Spring.Core~Spring.Expressions.PropertyOrFieldNode+TypeValueAccessor</e>
-        <e>Spring.Core~Spring.Objects.Factory.Config.PlaceholderResolvingStringVariableSource</e>
         <e>Spring.Core~Spring.Objects.Factory.Support.UnsatisfiedDependencyExceptionData</e>
         <e>Spring.Core~Spring.Objects.Factory.Support.ConstructorResolver</e>
         <e>Spring.Core~Spring.Objects.Factory.Support.ConstructorResolver+AutowiredArgumentMarker</e>
@@ -189,7 +187,6 @@
         <e>Spring.Messaging~__Delegates</e>
         <e>Spring.Messaging~Spring.Messaging.Core.MessageQueueTransactionManager+MessageQueueTransactionObject</e>
         <e>Spring.Messaging~Spring.Messaging.Listener.MessageStats</e>
-        <e>Spring.Messaging~Spring.Messaging.Support.MessageQueueResourceSynchronization</e>
         <e>Spring.Messaging.Nms~Spring.Messaging.Nms.Connections.ConsumerCacheKey</e>
         <e>Spring.Messaging.Nms~Spring.Messaging.Nms.Connections.ConnectionFactoryUtils+AnonymousClassResourceFactory</e>
         <e>Spring.Messaging.Nms~Spring.Messaging.Nms.Connections.ConnectionFactoryUtils+NmsResourceSynchronization</e>
@@ -221,50 +218,7 @@
         <e>Spring.Services~Spring.Web.Services.WebServiceProxyFactory+SoapHttpClientProxyTypeBuilder</e>
         <e>Spring.Services~Spring.Web.Services.WebServiceProxyFactory+SoapHttpClientProxyTypeBuilder+SoapHttpClientProxyMethodBuilder</e>
         <e>Spring.Services~Spring.Web.Services.WebServiceProxyFactory+WebServiceProxyProxyTypeBuilder</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.LocalSessionFactoryObject+DbProviderWrapper</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder</e>
-        <e>Spring.Data.NHibernate20~__Delegates</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.HibernateAccessor+FlushModeHolder</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.ContainsHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.DeleteLockModeHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.DeletebyQueryHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.DeleteAllHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.EvictHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.FindHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.FindByNamedParamHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.FindByNamedQueryHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.FindByNamedQueryAndNamedParamHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.FindByNamedQueryAndValueObjectHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.FindByValueObjectHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.ExecuteHibernateCallbackUsingDelegate</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.GetByTypeHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.LoadByTypeHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.LoadByEntityHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.LoadAllByTypeHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.LockHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.RefreshHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.SaveObjectHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.SaveObjectWithIdHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.UpdateObjectHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.SaveOrUpdateObjectHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.SaveOrUpdateAllHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.SaveOrUpdateCopyHibernateCallback</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.HibernateTransactionManager+HibernateTransactionObject</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.HibernateTransactionManager+SuspendedResourcesHolder</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.ExecuteHibernateCallbackUsingDelegate`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.GetByTypeHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.LoadByTypeHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.LoadAllByTypeHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.FindHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.FindByNamedParamHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.FindByNamedQueryHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.FindByNamedQueryAndNamedParamHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.FindByNamedQueryAndValueObjectHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.FindByValueObjectHibernateCallback`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.ExecuteFindHibernateCallbackUsingDelegate`1</e>
-        <e>Spring.Data.NHibernate20~Spring.Data.NHibernate.CloseSuppressingMethodInterceptor</e>
         <e>Spring.Core~Spring.Core.IO.ResourceHandlerRegistry+TolerantUriParser</e>
-        <e>Spring.Core~Spring.Objects.Factory.Config.VariablePlaceholderConfigurer+PlaceholderResolvingCompositeVariableSource</e>
         <e>Spring.Core~Spring.Objects.Factory.Support.AbstractObjectFactory+ObjectOrderComparator</e>
         <e>Spring.Core~Spring.Objects.Factory.Xml.NamespaceParserRegistry+XmlResourceUrlResolver</e>
         <e>Spring.Core~Spring.Util.ConfigXmlDocument+CurrentTextPositionHolder</e>
@@ -275,6 +229,67 @@
         <e>Spring.Web~Spring.Web.Support.NamingContainerSupportsWebDependencyInjectionOwnerProxy</e>
         <e>Spring.Web~Spring.Web.Support.WebFormsResultWebNavigator+NavigableControlInfo</e>
         <e>Spring.Messaging~Spring.Messaging.Support.Converters.MessageConverterFactoryObject</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Bytecode.ProxyFactory+SerializableProxyFactory</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Support.SessionScope+LazySessionHolder</e>
+        <e>Spring.Data.NHibernate21~__Delegates</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.HibernateAccessor+FlushModeHolder</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.ContainsHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.DeleteLockModeHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.DeletebyQueryHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.DeleteAllHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.EvictHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.FindHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.FindByNamedParamHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.FindByNamedQueryHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.FindByNamedQueryAndNamedParamHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.FindByNamedQueryAndValueObjectHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.FindByValueObjectHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.ExecuteHibernateCallbackUsingDelegate</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.GetByTypeHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.LoadByTypeHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.LoadByEntityHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.LoadAllByTypeHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.LockHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.RefreshHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.SaveObjectHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.SaveObjectWithIdHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.UpdateObjectHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.SaveOrUpdateObjectHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.SaveOrUpdateAllHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.SaveOrUpdateCopyHibernateCallback</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.HibernateTransactionManager+HibernateTransactionObject</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.HibernateTransactionManager+SuspendedResourcesHolder</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.ExecuteHibernateCallbackUsingDelegate`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.GetByTypeHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.LoadByTypeHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.LoadAllByTypeHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.FindHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.FindByNamedParamHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.FindByNamedQueryHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.FindByNamedQueryAndNamedParamHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.FindByNamedQueryAndValueObjectHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.FindByValueObjectHibernateCallback`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.Generic.ExecuteFindHibernateCallbackUsingDelegate`1</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.CloseSuppressingMethodInterceptor</e>
+        <e>Spring.Data.NHibernate21~Spring.Data.NHibernate.LocalSessionFactoryObject+DbProviderWrapper</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Connections.ConsumerCacheKey</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Connections.ConnectionFactoryUtils+AnonymousClassResourceFactory</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Connections.ConnectionFactoryUtils+EmsResourceSynchronization</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Connections.EmsTransactionManager+EmsTransactionObject</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Connections.InternalChainedExceptionListener</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Connections.CloseSupressingConnection</e>
+        <e>Spring.Messaging.Ems~__Delegates</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Core.EmsTemplate+EmsTemplateResourceFactory</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Core.EmsTemplate+ProducerCreatorCallback</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Core.EmsTemplate+ReceiveCallback</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Core.EmsTemplate+ConvertAndSendMessageCreator</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Core.EmsTemplate+ReceiveSelectedCallback</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Core.EmsTemplate+ExecuteSessionCallbackUsingDelegate</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Core.SimpleMessageCreator</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Core.SendDestinationCallback</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Listener.Adapter.DestinationNameHolder</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Listener.MessageRejectedWhileStoppingException</e>
+        <e>Spring.Messaging.Ems~Spring.Messaging.Ems.Listener.SimpleMessageListener</e>
     </NamespaceExclusions>
     <DotNetProperties IncludeRelationshipDiagrams="True" IncludeInheritanceHierarchies="True" IncludeBaseMembers="False" StandardInterfaces="System.*,Microsoft.*" OnlyLinkInherited="True" ExternalDocs="True" UseCommentFiles="True" DrillCommentFiles="True" GenerateXMLLinks="False" XMLIsland="" NoInheritedTopics="True" NoInheritedInLists="False" CreateXMLCommentFile="False" ExcludedLanguages="Delphi,JScript,CPP,CPP2005" GenerateAttributes="True" AttributeFilter="" AttributeFilterInclude="False" VBNETDefaultConstructor="False" LinkOverridenMembersToBaseImplementation="False" UseOverloadSummaryForMasterSummary="False" ExcludeEditorBrowsable="True" GenerateBreadCrumbs="True" IncludeAssemblyBreadCrumb="False"/>
     <DatabaseProperties DocumentViewSource="True" DocumentTriggerSource="True" DocumentProcedureSource="True" RetainTaggedComments="False"/>
@@ -286,15 +301,19 @@
         <CommentFile FileName="Spring.Web.Extensions.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Web.Extensions.dll"/>
         <CommentFile FileName="Spring.Services.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\3.0\debug\Spring.Services.dll"/>
         <CommentFile FileName="Spring.Data.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.dll"/>
-        <CommentFile FileName="Spring.Data.NHibernate20.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.NHibernate20.dll"/>
+        <CommentFile FileName="Spring.Data.NHibernate21.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.NHibernate21.dll"/>
         <CommentFile FileName="..\net-1.1\Spring.Testing.NUnit.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Testing.NUnit.dll"/>
         <CommentFile FileName="Spring.Messaging.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.dll"/>
         <CommentFile FileName="Spring.Messaging.Nms.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.Nms.dll"/>
+        <CommentFile FileName="Spring.Messaging.Ems.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.Ems.dll"/>
         <CommentFile FileName="Spring.Scheduling.Quartz.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Scheduling.Quartz.dll"/>
+        <CommentFile FileName="Spring.Template.Velocity.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Template.Velocity.dll"/>
+        <CommentFile FileName="Spring.Testing.Microsoft.dxc" DocType="dx.net" ItemMoniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Testing.Microsoft.dll"/>
     </CommentFiles>
-    <DocType Name="dx.net" Template="Visual Studio 2005 Style" UseHelpTemplates="False">
+    <CommunityExtensions CommunityProjectKey="" Enabled="false" ServerType="0" URL="" HostingId="" UseLocalProxyURL="false" LocalProxyURL=""/>
+    <DocType Name="dx.net" Template="Visual Studio 2008 Style" UseHelpTemplates="False">
         <TOCSource TOCSource="0" SpecificTOCName=""/>
-        <ModelCommentProfile Version="5.0" Namespace="dx.net" Name="" Description=""/>
+        <ModelCommentProfile Version="6.0" Namespace="dx.net" Name="" Description=""/>
     </DocType>
     <NetAssemblies RootAssemblyName="">
         <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Core.dll" mRootModule="" AssemblyName="Spring.Core" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
@@ -303,11 +322,14 @@
         <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Web.Extensions.dll" mRootModule="" AssemblyName="Spring.Web.Extensions" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
         <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\3.0\debug\Spring.Services.dll" mRootModule="" AssemblyName="Spring.Services" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
         <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.dll" mRootModule="" AssemblyName="Spring.Data" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
-        <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.NHibernate20.dll" mRootModule="" AssemblyName="Spring.Data.NHibernate20" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.NHibernate21.dll" mRootModule="" AssemblyName="Spring.Data.NHibernate21" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
         <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Testing.NUnit.dll" mRootModule="" AssemblyName="Spring.Testing.NUnit" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Testing.Microsoft.dll" mRootModule="" AssemblyName="Spring.Testing.Microsoft" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
         <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.dll" mRootModule="" AssemblyName="Spring.Messaging" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
         <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.Nms.dll" mRootModule="" AssemblyName="Spring.Messaging.Nms" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.Ems.dll" mRootModule="" AssemblyName="Spring.Messaging.Ems" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
         <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Scheduling.Quartz.dll" mRootModule="" AssemblyName="Spring.Scheduling.Quartz" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
+        <Assembly Version="5.0" FileName="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Template.Velocity.dll" mRootModule="" AssemblyName="Spring.Template.Velocity" AssemblyType="1" ExamplesOnly="False" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivateItems="True"/>
     </NetAssemblies>
     <PropertyBag/>
 </DocumentXProject>

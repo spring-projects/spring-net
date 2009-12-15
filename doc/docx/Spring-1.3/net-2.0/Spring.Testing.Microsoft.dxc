@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Testing.Microsoft.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Testing.Microsoft" RelatedProject="Spring-1.3.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Testing.Microsoft" tid="##SUMMARY" q="" cd="40162.2561458333">Superclasses for tests requiring Spring application contexts, including support for transactional execution of test cases, with automatic rollback on completion. Useful as base classes for application-specific tests.</c>
+<c eid="Spring.Testing.Microsoft" tid="##PROJECT_GETTINGSTARTED" q="" cd="40162.2592708333"><![CDATA[Please refer to the <A href="http://www.springframework.net/doc-latest/reference/html/testing.html">reference documentation on testing</A> for information on how to get started.]]></c>
+<c eid="Spring.Testing.Microsoft" tid="##PROJECT_INTRODUCTION" q="" cd="40162.2600578704"><![CDATA[<P>While dependecy injection generally leads to classes that are easier to unit test, precisely becuase there are no hidden dependencies in the code and an objects collaborators can be coded explicitly in the test, it is also important to be able to perform some integration testing enabling you to test things such as: </P>
+<UL>
+<LI>The correct wiring of your Spring IoC container contexts.</LI>
+<LI>Data access using ADO.NET or an ORM tool. This would include such things such as the correctness of SQL statements / or NHibernate XML mapping files.</LI></UL>]]></c>
+<c eid="Spring.Testing.Microsoft~Spring.Testing.Microsoft_namespace" tid="##SUMMARY" q="" cd="40162.256412037"><![CDATA[Classes for Applicationcontext based and transactional tests with Microsoft's Testing Framework]]></c>
+    </DocumentXComments>

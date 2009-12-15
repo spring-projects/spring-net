@@ -3,15 +3,19 @@
     <IgnoreWordList/>
 <UserData>
     <InPlaceEditor>
-        <dtscrollpos>493</dtscrollpos>
         <inheritedMembers>on</inheritedMembers>
         <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
     </InPlaceEditor>
 </UserData>
 <c eid="Spring.Messaging.Ems" tid="##SUMMARY" q="" cd="39675.0839467593">This package contains integration classes for TIBCO EMS, allowing for Spring-style EMS access.</c>
+<c eid="Spring.Messaging.Ems" tid="##PROJECT_GETTINGSTARTED" q="" cd="40162.2647222222"><![CDATA[The quick start application, <A href="http://www.springframework.net/doc-latest/reference/html/nms-quickstart.html">Spring.EmsQuickStart</A> as well as the section in the <A href="http://www.springframework.net/doc-latest/reference/html/messaging-ems.html">reference docs</A> are good places to get started.]]></c>
+<c eid="Spring.Messaging.Ems" tid="##PROJECT_INTRODUCTION" q="" cd="40162.2637384259"><![CDATA[The goal of Spring's messaging is to increase your productiviity when writing an enterprise strength messaging middleware applications. Spring achieves these goals in several ways. First it provides several helper classes that remove from the developer the incidental complexity and resource management issues that arise when using messaging APIs. Second, the design of these messaging helper classes promote best practices in designing a messaging application by promoting a clear separation between the messaging middleware specific code and business processing that is technology agnostic. This is generally referred to a "plain old .NET object" (or PONO) programming model.]]></c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Common_namespace" tid="##SUMMARY" q="" cd="40162.1266550926">Provides interface based wrapper classes over native TIBCO EMS APIs</c>
 <c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Config_namespace" tid="##SUMMARY" q="" cd="39675.08375"><![CDATA[Support package for declarative messaging configuration,<BR>with XML schema being the primary configuration format.]]></c>
 <c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Connections_namespace" tid="##SUMMARY" q="" cd="39675.0841898148">Provides a PlatformTransactionManager implementation for a single EMS ConnectionFactory</c>
 <c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Core_namespace" tid="##SUMMARY" q="" cd="39675.0846759259"><![CDATA[Core namespace of the EMS support.<BR>Provides a EmsTemplate class and various callback interfaces/delegates.]]></c>
+<c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Jndi_namespace" tid="##SUMMARY" q="" cd="40162.1273032407"><![CDATA[Provides convenience classes for retrieving JMS managed objects from TIBCO's JNDI support]]></c>
 <c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Listener_namespace" tid="##SUMMARY" q="" cd="39675.0847222222"><![CDATA[This namespace contains the base message listener container facility.<BR>]]></c>
 <c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Listener.Adapter_namespace" tid="##SUMMARY" q="" cd="39675.0848958333">Message listener adapter mechanism that delegates to target listener methods, converting messages to appropriate message content types (such as String or byte array) that get passed into listener methods.</c>
 <c eid="Spring.Messaging.Ems~Spring.Messaging.Ems.Support_namespace" tid="##SUMMARY" q="" cd="39675.0850462963"><![CDATA[This package provides generic EMS support classes,<BR>to be used by higher-level classes like EmsTemplate.]]></c>
