@@ -21,8 +21,10 @@
 #region Imports
 
 using System;
+using System.Reflection;
 using System.Xml;
 using NUnit.Framework;
+using Spring.Aop.Config;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -72,6 +74,15 @@ namespace Spring.Objects.Factory.Xml
         {
             try
             {
+                Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+                foreach(Assembly assembly in loadedAssemblies)
+                {
+                    if (assembly.GetName(true).Name.StartsWith("Spring.Data"))
+                    {
+                        Assert.Fail("Spring.Data is already loaded - this test checks if it gets loaded during xml parsing");
+                    }
+                }
+
                 NamespaceParserRegistry.Reset();
 
                 DefaultListableObjectFactory of = new DefaultListableObjectFactory();
@@ -79,11 +90,12 @@ namespace Spring.Objects.Factory.Xml
                 reader.LoadObjectDefinitions(new StringResource(
                                                  @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' 
-         xmlns:v='http://www.springframework.net/validation'>  
-      <v:required id='tripValidator' test='true' />
+         xmlns:tx='http://www.springframework.net/tx'>  
+      <tx:attribute-driven />
 </objects>
 "));
-                Assert.AreEqual(typeof(RequiredValidator), of.GetObject("tripValidator").GetType());
+                object apc = of.GetObject(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME);
+                Assert.NotNull(apc);
             }
             finally
             {
