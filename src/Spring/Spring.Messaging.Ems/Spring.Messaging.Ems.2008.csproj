@@ -49,7 +49,6 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Messaging\Ems\Common\CertificateStoreConfig.cs" />
     <Compile Include="Messaging\Ems\Common\EmsConnection.cs" />
     <Compile Include="Messaging\Ems\Common\EmsConnectionFactory.cs" />
     <Compile Include="Messaging\Ems\Common\EmsMessageConsumer.cs" />
