@@ -48,8 +48,7 @@ namespace Spring.Objects.Factory.Config
         private readonly ResolveHandler resolveHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObjectDefinitionVisitor"/> class, 
-        /// applying the specified IVariableSource to all object metadata values.
+        /// Initializes a new instance of the <see cref="ObjectDefinitionVisitor"/> class.
         /// </summary>
         /// <param name="resolveHandler">The handler to be called for resolving variables contained in a string.</param>
         public ObjectDefinitionVisitor(ResolveHandler resolveHandler)
