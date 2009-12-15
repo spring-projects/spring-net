@@ -78,8 +78,7 @@ namespace Spring.Messaging.Ems.Common
         /// Gets a value indicating whether the connection communicates with a secure protocol
         /// </summary>
         /// <value><c>true</c> if the connection communicates with a secure protocol; otherwise, <c>false</c>.</value>
-        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("EMS clients should no longer use this method; it has been deprecated.")]
-        [Obsolete("EMS clients should no longer use this method; it has been deprecated")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         bool IsSecure { get; }
 
         /// <summary>
