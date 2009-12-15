@@ -127,6 +127,7 @@ namespace Spring.Data.NHibernate
 		public IApplicationContext ApplicationContext
 		{
 			set { this.applicationContext = value; }
+            protected get { return this.applicationContext; }
 		}
 
 		/// <summary>
@@ -368,7 +369,7 @@ namespace Spring.Data.NHibernate
 
                 foreach (string resourceName in mappingResources)
                 {
-                    config.AddInputStream(resourceLoader.GetResource(resourceName).InputStream);
+                    config.AddInputStream(loader.GetResource(resourceName).InputStream);
                 }
             }
 
