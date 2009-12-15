@@ -155,6 +155,7 @@ namespace Spring.Data.NHibernate
 	    public IApplicationContext ApplicationContext
 	    {
 	        set { this.applicationContext = value; }
+            protected get { return this.applicationContext; }
 	    }
 
         /// <summary>
