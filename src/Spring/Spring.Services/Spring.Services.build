@@ -8,11 +8,13 @@
 -->
   <target name="build">
     <if test="${net-3.0.installed and net-3.0}">
+      <property name="bin.dir.to.use" value="${current.bin.dir}\..\..\2.0\${current.build.config}"/>
       <echo message="-----------------"/>
       <echo message="Copying Spring NET 2.0 output to 3.0 bin directory except for Spring.Services, which will be compiled."/>
+      <echo message="Copying from ${bin.dir.to.use}"/>
+      <echo message="          to ${current.bin.dir}"/>
       <echo message="-----------------"/>
-      <property name="bin.dir.to.use" value="${current.bin.dir}\..\..\2.0\${project.build.config}"/>
-      <copy todir="${current.bin.dir}">
+      <copy todir="${current.bin.dir}" overwrite="true" failonerror="true">
 	<fileset basedir="${bin.dir.to.use}">
 	  <include name="*.dll"/>
 	  <include name="*.pdb"/>
@@ -25,7 +27,7 @@
     </if>
     
     <if test="${net-3.0.installed and net-3.0}">
-      <copy todir="${current.bin.dir}">
+      <copy todir="${current.bin.dir}" overwrite="true" failonerror="true">
 	<fileset basedir="${bin.dir.to.use}">
 	  <include name="*.dll"/>
 	  <include name="*.pdb"/>
