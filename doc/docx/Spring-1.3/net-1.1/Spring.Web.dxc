@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\Spring.Net\build\package\Spring.NET\bin\net\1.1\debug\Spring.Web.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Web" RelatedProject="Spring-1.1.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="True" LoadOnDemand="False" LoadSourceComments="False">
+    <IgnoreWordList>depednecy</IgnoreWordList>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Web" tid="##PROJECT_INTRODUCTION" q="" cd="39756.7017592593"><![CDATA[<P>Spring.NET's web application framework aims to increase your productivity writing ASP.NET WebForms applications. It offers a unique value proposition to creating ASP.NET applications not found in other .NET web frameworks.</P>
+<P>The goal of the framework is to make it easy to write 'thin and clean' web applications. By thin, what is meant is that the WebForm's responsibility is to act as adapter between the HTML based world of the web and the oo world of your application. The application layer your web form communicates with is where the business logic resides, not in the web tier. By 'clean' what is meant that the web framework should have a good separation of concerns, leading ideally to an event-handler that does not contain any reference to UI elements. This makes it possible to test your event handler code in integration style tests. Last but not least, Spring's web framework reduces the incidental complexity of common tasks in the web tier, for example the conversion of HTML control data to object and then vice-versa after the request has been processed by the application layer.</P>
+<P>Highlights of Spring's Web framework are</P>
+<DIV class=itemizedlist>
+<UL type=disc>
+<LI>
+<P><A class=link title="22.4.&nbsp;Dependency Injection for ASP.NET Pages" href="http://www.springframework.net/doc-latest/reference/html/web.html#web-di">Dependency Injection</A> for all ASP.NET artifacts. This includes pages and user controls but also modules, providers and HTTP handlers. Your pages, controls, etc., do not have any Spring dependencies in order to be configured via dependency injection.</P></LI>
+<LI>
+<P><A class=link title="22.7.&nbsp;Bidirectional Data Binding and Model Management" href="http://www.springframework.net/doc-latest/reference/html/web.html#web-databinding">Bi-directional data binding</A>. This allows you to declaratively define the data that will be marshaled out of your html/user controls and into a data model that in turn is generally submitted to the application layer. After the data model is updated in the application layer, those changes are automatically reflected in the html/user controls on post back. This removes large amounts of tedious, error prone boilerplate code.</P></LI>
+<LI>
+<P><A class=link title="22.5.&nbsp;Web object scopes" href="http://www.springframework.net/doc-latest/reference/html/web.html#web-objectscope">Web object scopes</A>. Object definitions can be defined at the application, session or request scope. This makes it easy to inject, say a session scoped shopping cart, into your page without having to do any lower level programming</P></LI>
+<LI>
+<P><A class=link title="22.7.&nbsp;Bidirectional Data Binding and Model Management" href="http://www.springframework.net/doc-latest/reference/html/web.html#web-databinding">Data Model Management</A>. While ASP.NET managed the view state of your form, it does not offer facilities to manage the data model that you build up to submit to the application layer. Spring provides a mechanism similar to view state to help manage your data model.</P></LI>
+<LI>
+<P><A class=link title="22.11.1.&nbsp;Validation Controls" href="http://www.springframework.net/doc-latest/reference/html/web.html#web-validation-controls">UI agnostic validation framework</A>. Declaratively define complex validation rules, for example that take into account complex relationships in your data model. Error controls are provided to easily render validation failure. This allows you to centralize your validation logic and also reuse it on the server side, for example using parameter validation advice described in the aspect library chapter</P></LI>
+<LI>
+<P><A class=link title="22.9.&nbsp;Result Mapping" href="http://www.springframework.net/doc-latest/reference/html/web.html#web-resultmapping">Externalized page navigation through 'result mapping'</A>. Instead of hard coding urls and data to direct where a page should go next, result mappings are externally defined and configured that associate logical names and a URL (+ data). This also allows to encryption of values that are sent via Response.Redirect.</P></LI>
+<LI>
+<P>Improved <A class=link title="22.8.&nbsp;Localization and Message Sources" href="http://www.springframework.net/doc-latest/reference/html/web.html#web-localization">localization</A> and master page support - Advanced localization features (including image localization) as well as declarative configuration of what mater page to apply to different parts of your web application are easy to perform.</P>
+<P></P></LI></UL></DIV>
+<P>All you know about ASP.NET development still applies, Spring's approach is to 'embrace and extend' the basic ASP.NET programming model so you can be as productive as possible.</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>]]></c>
+<c eid="Spring.Web" tid="##PROJECT_GETTINGSTARTED" q="" cd="39756.7015277778"><![CDATA[The <A href="http://www.springframework.net/doc-latest/reference/html/web.html">ASP.NET Web Framework section</A> of the reference documentation and QuickStart applications (<A href="http://www.springframework.net/doc-latest/reference/html/springair.html">SpringAir</A> and Spring.WebQuickStart) &nbsp;are the best places to get started using the functionality contained in Spring.Web.]]></c>
+<c eid="Spring.Web~Spring.Caching_namespace" tid="##SUMMARY" q="" cd="39423.5224537037">Caching provider based on ASP.NET cache</c>
+<c eid="Spring.Web~Spring.Context.Support_namespace" tid="##SUMMARY" q="" cd="39053.8687731481">Contains implementation of IoC Container for the web environment.</c>
+<c eid="Spring.Web~Spring.Core.IO_namespace" tid="##SUMMARY" q="" cd="39423.5229282407">Abstraction for web resources</c>
+<c eid="Spring.Web~Spring.DataBinding_namespace" tid="##SUMMARY" q="" cd="39053.8696296296"><![CDATA[Provides&nbsp;bidirectional data binding to handle the mapping of values to and from the controls on a page to the underlying data model]]></c>
+<c eid="Spring.Web~Spring.Globalization_namespace" tid="##SUMMARY" q="" cd="39756.7025115741">Provides infrastructure for supporting Globalization in the web tier.</c>
+<c eid="Spring.Web~Spring.Globalization.Resolvers_namespace" tid="##SUMMARY" q="" cd="39053.8713888889"><![CDATA[Support for user culture management by exposing the current Culture info <FONT color=#000000>through the UserCulture&nbsp;property on the Page and UserControl classes.&nbsp; </FONT>]]></c>
+<c eid="Spring.Web~Spring.Objects.Factory.Support_namespace" tid="##SUMMARY" q="" cd="39053.8728125">Support classes for web based IoC container.</c>
+<c eid="Spring.Web~Spring.Objects.Factory.Xml_namespace" tid="##SUMMARY" q="" cd="39053.8729166667">Support classes for web based IoC container.</c>
+<c eid="Spring.Web~Spring.Threading_namespace" tid="##SUMMARY" q="" cd="39423.5231597222">Support classes for thread local storage</c>
+<c eid="Spring.Web~Spring.Util_namespace" tid="##SUMMARY" q="" cd="39053.8736111111">Miscellaneous utility classes</c>
+<c eid="Spring.Web~Spring.Web.Process_namespace" tid="##SUMMARY" q="" cd="39053.8749189815">Support for processing across multiple distinct requests.</c>
+<c eid="Spring.Web~Spring.Web.Services_namespace" tid="##SUMMARY" q="" cd="39053.8785763889">Exporters to create server and client side web service proxies that support dependency injection and AOP.</c>
+<c eid="Spring.Web~Spring.Web.Support_namespace" tid="##SUMMARY" q="" cd="39053.8791666667">Support classes for web based IoC container.</c>
+<c eid="Spring.Web~Spring.Web.UI_namespace" tid="##SUMMARY" q="" cd="39053.8796759259">Master Pages support for .NET 1.1 and Spring Page/UserControl base classes.</c>
+<c eid="Spring.Web~Spring.Web.UI.Controls_namespace" tid="##SUMMARY" q="" cd="39053.8800578704">Various web controls for use with validation and localization features of Spring.Web</c>
+<c eid="Spring.Web~Spring.Web.UI.Validation_namespace" tid="##SUMMARY" q="" cd="39423.5234722222">Renderers for the validaiton framework</c>
+    </DocumentXComments>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.NHibernate20.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Data.NHibernate20" RelatedProject="Spring-1.2.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Data.NHibernate20" tid="##SUMMARY" q="" cd="39756.6905324074"><![CDATA[<P>This assembly provides integration of NHibernate 2.0 with Spring concepts.</P>
+<P>Contains SessionFactory helper classes, a template plus callback for Hibernate access, and an implementation of Spring's transaction SPI for local Hibernate transactions.</P>]]></c>
+<c eid="Spring.Data.NHibernate20" tid="##PROJECT_GETTINGSTARTED" q="" cd="39756.692037037"><![CDATA[The Spring.Data.NHibernate.Northwind Quick Start application as well as the reference documentation chapter on <A href="http://www.springframework.net/doc-latest/reference/html/orm.htmlhttp://www.springframework.net/doc-latest/reference/html/orm.html">NHibernate integration</A> are good places to get started.]]></c>
+<c eid="Spring.Data.NHibernate20" tid="##PROJECT_INTRODUCTION" q="" cd="39756.6923726852"><![CDATA[<P>The Spring Framework provides integration with <SPAN class=emphasis><EM>NHibernate </EM></SPAN>in terms of resource management, DAO implementation support, and transaction strategies. For example for NHibernate, there is first-class support with lots of IoC convenience features, addressing many typical NHibernate integration issues. All of these support packages for O/R (Object Relational) mappers comply with Spring's generic transaction and DAO exception hierarchies. There are usually two integration styles: either using Spring's DAO 'templates' or coding DAOs against the 'plain' NHibernate APIs. In both cases, DAOs can be configured through Dependency Injection and participate in Spring's resource and transaction management.</P>
+<P>You can use Spring's support for NHibernate without needing to use Spring IoC or transaction management functionality. The NHibernate support classes can be used in typical 3rd party library style. However, usage inside a Spring IoC container does provide additional benefits in terms of ease of configuration and deployment; as such, most examples in this section show configuration inside a Spring containe</P>]]></c>
+<c eid="Spring.Data.NHibernate20~Spring.Data.NHibernate_namespace" tid="##SUMMARY" q="" cd="39735.9706944444">Contains HibernateTemplate</c>
+<c eid="Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic_namespace" tid="##SUMMARY" q="" cd="39735.9703703704">Generic implementation of HibernateTemplate</c>
+<c eid="Spring.Data.NHibernate20~Spring.Data.NHibernate.Generic.Support_namespace" tid="##SUMMARY" q="" cd="39735.9704861111">Generic implementation of base DAO class</c>
+<c eid="Spring.Data.NHibernate20~Spring.Data.NHibernate.Support_namespace" tid="##SUMMARY" q="" cd="39735.9705902778">Provides Open Session In View module, base DAO class for HibernateTemplate usage, and SessionScope utilty class</c>
+    </DocumentXComments>

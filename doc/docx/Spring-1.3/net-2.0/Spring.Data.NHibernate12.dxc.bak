@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Data.NHibernate12.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="" RelatedProject="Spring-1.2.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+    <c eid="Spring.Data.NHibernate12" tid="##SUMMARY" q="" cd="39674.7563773148"><![CDATA[<P>This namespace provides integration of NHibernate 1.2 with Spring concepts.</P>
+<P>Contains SessionFactory helper classes, a template plus callback for Hibernate </P>]]></c>
+</DocumentXComments>

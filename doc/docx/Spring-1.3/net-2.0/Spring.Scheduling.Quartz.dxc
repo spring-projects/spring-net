@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Scheduling.Quartz.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Scheduling.Quartz" RelatedProject="Spring-1.2.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Scheduling.Quartz" tid="##SUMMARY" q="" cd="39675.087962963">Support for configuring Quartz.NET scheduler objects in a Spring context.</c>
+<c eid="Spring.Scheduling.Quartz" tid="##PROJECT_GETTINGSTARTED" q="" cd="39756.6981365741"><![CDATA[The quick start application <A href="http://www.springframework.net/doc-latest/reference/html/quartz-quickstart.html">Spring.Scheduling.Quartz.Example</A>, as well as the <A href="http://www.springframework.net/doc-latest/reference/html/scheduling.html#scheduling-quartz">Quartz section</A> in the reference docs are good places to get started.]]></c>
+<c eid="Spring.Scheduling.Quartz" tid="##PROJECT_INTRODUCTION" q="" cd="39756.6987615741"><![CDATA[For convenience purposes, Spring offers a couple of classes that simplify the usage of Quartz within Spring-based applications.&nbsp; For example&nbsp;a convenience class for the Quartz Scheduler is available that allows you to invoke a method of an existing target object.]]></c>
+<c eid="Spring.Scheduling.Quartz~Spring.Scheduling_namespace" tid="##SUMMARY" q="" cd="39675.0885300926">Base exceptions</c>
+<c eid="Spring.Scheduling.Quartz~Spring.Scheduling.Quartz_namespace" tid="##SUMMARY" q="" cd="39675.0884259259"><![CDATA[Support classes for the open source scheduler Quartz.NET allowing to set up Quartz Scheduler, JobDetails and Triggers as objects ina Spring context.&nbsp; Also provides convenience classes for implementing Quartz Jobs]]></c>
+    </DocumentXComments>

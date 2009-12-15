@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\spring-net\trunk\build\net\2.0\debug\Spring.Messaging.Nms.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Messaging.Nms" RelatedProject="Spring-1.2.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Messaging.Nms" tid="##SUMMARY" q="" cd="39756.6955324074"><![CDATA[Integration classes or Apache ActiveMQ (NMS) providing helper classes for sending and receiving messages synchronously as well as multi-threaded consumption of messages asynchronously.&nbsp; Provides support for PONO based message callbacks.]]></c>
+<c eid="Spring.Messaging.Nms" tid="##PROJECT_GETTINGSTARTED" q="" cd="39756.6965740741"><![CDATA[The quick start application, <A href="http://www.springframework.net/doc-latest/reference/html/nms-quickstart.html">Spring.NmsQuickStart</A> as well as the section in the <A href="http://www.springframework.net/doc-latest/reference/html/messaging.html">reference docs</A> are good places to get started.]]></c>
+<c eid="Spring.Messaging.Nms" tid="##PROJECT_INTRODUCTION" q="" cd="39756.6966782407"><![CDATA[The goal of Spring's messaging is to increase your productiviity when writing an enterprise strength messaging middleware applications. Spring achieves these goals in several ways. First it provides several helper classes that remove from the developer the incidental complexity and resource management issues that arise when using messaging APIs. Second, the design of these messaging helper classes promote best practices in designing a messaging application by promoting a clear separation between the messaging middleware specific code and business processing that is technology agnostic. This is generally referred to a "plain old .NET object" (or PONO) programming model.]]></c>
+<c eid="Spring.Messaging.Nms~Spring.Messaging.Nms.Config_namespace" tid="##SUMMARY" q="" cd="39675.0814699074">Support namespace for declarative messaging configuration, with XML schema being the primary configuration format.</c>
+<c eid="Spring.Messaging.Nms~Spring.Messaging.Nms.Connections_namespace" tid="##SUMMARY" q="" cd="39675.0819444444">Provides a IPlatformTransactionManager implementation for a single NMS ConnectionFactory, a SingleConnectionFactory and a CachingConnectionFactory.</c>
+<c eid="Spring.Messaging.Nms~Spring.Messaging.Nms.Core_namespace" tid="##SUMMARY" q="" cd="39675.0822337963"><![CDATA[Core namespace of the NMS support.&nbsp; Provides a NmsTemplate and various callback interfaces/delegates]]></c>
+<c eid="Spring.Messaging.Nms~Spring.Messaging.Nms.Listener_namespace" tid="##SUMMARY" q="" cd="39675.0826388889"><![CDATA[This namespace contains the base message listener container facility. It contains the&nbsp;SimpleMessageListenerContainer.]]></c>
+<c eid="Spring.Messaging.Nms~Spring.Messaging.Nms.Listener.Adapter_namespace" tid="##SUMMARY" q="" cd="39675.0828125">Message listener adapter mechanism that delegates to target listener methods, converting messages to appropriate message content types (such as String or byte array) that get passed into listener methods.</c>
+<c eid="Spring.Messaging.Nms~Spring.Messaging.Nms.Support_namespace" tid="##SUMMARY" q="" cd="39675.0830092593"><![CDATA[This package provides generic NMSsupport classes,<BR>to be used by higher-level classes like NmsTemplate.]]></c>
+<c eid="Spring.Messaging.Nms~Spring.Messaging.Nms.Support.Converter_namespace" tid="##SUMMARY" q="" cd="39675.0832407407"><![CDATA[Provides a IMessageConverter abstraction to convert<BR>between .NET objects and NMS messages.]]></c>
+<c eid="Spring.Messaging.Nms~Spring.Messaging.Nms.Support.Destinations_namespace" tid="##SUMMARY" q="" cd="39675.0834606482">Support classes that deal with destination management.</c>
+    </DocumentXComments>

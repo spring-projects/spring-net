@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\Spring.Net\build\net\1.1\debug\Spring.Testing.NUnit.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Testing.NUnit" RelatedProject="Spring-1.1.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Testing.NUnit" tid="##PROJECT_GETTINGSTARTED" q="" cd="39756.6938078704"><![CDATA[The <A href="http://www.springframework.net/doc-latest/reference/html/testing.html">reference documentation</A> is the best place to get started using Spring and NUnit together.&nbsp; If you are not familiar with NUnit, check out the NUnit website at www.nunit.org]]></c>
+<c eid="Spring.Testing.NUnit" tid="##PROJECT_INTRODUCTION" q="" cd="39234.7411689815"><![CDATA[While dependecy injection generally leads to classes that are easier to unit test, precisely becuase there are no hidden dependencies in the code and an objects collaborators can be coded explicitly in the test, it is also important to be able to perform some integration testing enabling you to test things such as: 
+<DIV class=itemizedlist>
+<UL type=disc>
+<LI>
+<P>The correct wiring of your Spring IoC container contexts.</P>
+<LI>
+<P>Data access using ADO.NET or an ORM tool. This would include such things such as the correctness of SQL statements / or NHibernate XML mapping files.</P></LI></UL></DIV>
+<P>The Spring Framework provides first class support for integration testing in the form of the classes that are packaged in the <FONT color=#000000><CODE class=filename>Spring.Testing.NUnit.dll</CODE> library</FONT></P>]]></c>
+<c eid="Spring.Testing.NUnit" tid="##SUMMARY" q="" cd="39756.6931944444"><![CDATA[<P>Superclasses for tests requiring Spring application contexts, including support for transactional execution of test cases,<BR>with automatic rollback on completion. Useful as base classes for application-specific tests.</P>
+<P>The superclasses in this package are ideal for integration testing. Unit testing should not normally involve the Spring container,<BR>but should test classes in isolation.<BR></P>]]></c>
+<c eid="Spring.Testing.NUnit~Spring.Testing.NUnit_namespace" tid="##SUMMARY" q="" cd="39423.5247569444">Classes for Applicationcontext-ased and transactional tests with NUnit</c>
+    </DocumentXComments>

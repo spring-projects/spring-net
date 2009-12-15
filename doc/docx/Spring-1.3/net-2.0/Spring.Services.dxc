@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DocumentXComments Version="5.0" Moniker="L:\projects\spring-net\trunk\build\net\3.0\debug\Spring.Services.dll" DocType="dx.Net" Template="" ShowInherited="False" SpellLastCheckDateTime="30/12/1899 00:00:00" TreePath="Spring.Services" RelatedProject="Spring-1.2.0.dxp" RelatedHSProject="" LoadIncludeFilter="" LoadExcludeFilter="" LoadPrivate="False" LoadOnDemand="True" LoadSourceComments="False">
+    <IgnoreWordList/>
+<UserData>
+    <InPlaceEditor>
+        <inheritedMembers>on</inheritedMembers>
+        <protectedMembers>on</protectedMembers>
+        <dtscrollpos>0</dtscrollpos>
+    </InPlaceEditor>
+</UserData>
+<c eid="Spring.Services" tid="##PROJECT_GETTINGSTARTED" q="" cd="39756.6884837963"><![CDATA[Please refer to the Portable Service Abstraction QuickStart application distributed with Spring and described in the reference docs <A href="http://www.springframework.net/doc-latest/reference/html/remoting-quickstart.html">here</A>.&nbsp; The <A href="http://www.springframework.net/doc-latest/reference/html/spring-services.html">reference docs</A> are also a good place to get started.]]></c>
+<c eid="Spring.Services" tid="##PROJECT_INTRODUCTION" q="" cd="39756.6888425926"><![CDATA[<P>The goal of Spring's integration with distributed technologies is to adapt plain .NET objects so they can be used with a specific distributed technology. This integration is designed to be as non-intrusive as possible. If you need to expose an object to a remote process then you can define an exporter for that object. Similarly, on the client side you define an corresponding endpoint accessor. Of course, the object's methods still need to be suitable for remoting, i.e. coarse grained, to avoid making unnecessary and expensive remote calls.</P>
+<P>Since these exporters and client side endpoint accessors are defined using meta data for Spring IoC container, you can easily use dependency injection on them to set initial state and to 'wire up' the presentation tier, such as web forms, to the service layer. In addition, you may apply AOP aspects to the exported classes and/or service endpoints to apply behavior such as logging, security, or other custom behavior that may not be provided by the target distributed technology. The Spring specific terminology for this approach to object distribution is known as Portable Service Abstractions (PSA). As a result of this approach, you can decide much later in the development process the technical details of how you will distribute your objects as compared to traditional code centric approaches. Changing of the implementation is done though configuration of the IoC container and not by recompilation. Of course, you may choose to not use the IoC container to manage these objects and use the exporter and service endpoints programatically.</P>
+<P>&nbsp;</P>
+<P>Supported technologies are:</P>
+<UL>
+<UL>
+<LI>.NET Remoting</LI>
+<LI>EnterpriseServices</LI>
+<LI>.ASMX WebServices</LI>
+<LI>WCF Services</LI></UL></UL>]]></c>
+<c eid="Spring.Services" tid="##SUMMARY" q="" cd="39756.6887847222"><![CDATA[Provides support for adapting plain .NET objects (PONOs) to a specific disributed technology. Supported technologies are: 
+<UL>
+<UL>
+<LI>.NET Remoting</LI>
+<LI>EnterpriseServices</LI>
+<LI>.ASMX WebServices</LI>
+<LI>WCF Services</LI></UL></UL>]]></c>
+<c eid="Spring.Services~Spring.EnterpriseServices_namespace" tid="##SUMMARY" q="" cd="39756.6835069444">Remoting classes for EnterpriseService/COM+ Services in .NET. Provides a proxy factory for accessing .NET EnterpriseService objects, an exporter for making object available to .NET EnterpriseService clients, and an application exporter to register EnterpriseService applications</c>
+<c eid="Spring.Services~Spring.Remoting_namespace" tid="##SUMMARY" q="" cd="39756.6851041667"><![CDATA[<FONT size=2>Remoting classes for conventional .NET remotoing. Provides a proxy factory for accessing .NET remoted objects and an exporter for making objects available to .NET Remoting clients.</FONT><FONT size=2> 
+<P align=left>&nbsp;</P></FONT>]]></c>
+<c eid="Spring.Services~Spring.Remoting.Config_namespace" tid="##SUMMARY" q="" cd="39756.6840393519">Configuration support classes for Spring .NET Remoting support, such as custom namespaces</c>
+<c eid="Spring.Services~Spring.Remoting.Support_namespace" tid="##SUMMARY" q="" cd="39756.6873263889">Support classes for the .NET Remoting subsystem, such as the proxy type builder.</c>
+<c eid="Spring.Services~Spring.ServiceModel_namespace" tid="##SUMMARY" q="" cd="39756.6868634259">Provides a Spring specific System.ServiceModel.ServiceHost</c>
+<c eid="Spring.Services~Spring.ServiceModel.Activation_namespace" tid="##SUMMARY" q="" cd="39756.6861458333">Support for hosting WCF services in a standalone application</c>
+<c eid="Spring.Services~Spring.ServiceModel.Support_namespace" tid="##SUMMARY" q="" cd="39756.687349537">Support classes for the WCF subsystem, providing proxy builder, such as the proxy type builder.</c>
+<c eid="Spring.Services~Spring.Web.Services_namespace" tid="##SUMMARY" q="" cd="39756.6852546296"><![CDATA[Remoting classes for .ASMX Web Services.&nbsp; This namespace provides proxy factories for accessing .ASMX Web Services and an exporter for making objects available to .ASMX Web Service clients.]]></c>
+    </DocumentXComments>
