@@ -1248,13 +1248,13 @@ Commandline Examples:
     <copy todir="${current.package.dir}/net/3.0/release"
           file="build-support/readme-net-3.0.txt"/>
 
-    <mkdir dir="${current.package.dir}/net/3.5/debug"/>
-    <mkdir dir="${current.package.dir}/net/3.5/release"/>
+    <mkdir dir="${current.package.dir}/bin/net/3.5/debug"/>
+    <mkdir dir="${current.package.dir}/bin/net/3.5/release"/>
 
-    <copy todir="${current.package.dir}/net/3.5/debug"
+    <copy todir="${current.package.dir}/bin/net/3.5/debug"
           file="build-support/readme-net-3.5.txt"/>
 
-    <copy todir="${current.package.dir}/net/3.5/release"
+    <copy todir="${current.package.dir}/bin/net/3.5/release"
           file="build-support/readme-net-3.5.txt"/>
 
 
@@ -1438,42 +1438,42 @@ Commandline Examples:
 
     <!-- Copy htmlhelp 1.0 files for .NET 1.1 and 2.0 assemblies -->
     <copy todir="${current.package.dir}/doc/sdk/1.1/htmlhelp"
-          file="${sdk.src.dir}/doc/sdk/Spring-1.2/net-1.1/htmlhelp1and2/Spring.NET.chm"/>
+          file="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/htmlhelp1and2/Spring.NET.chm"/>
 
     <copy todir="${current.package.dir}/doc/sdk/2.0/htmlhelp"
-          file="${sdk.src.dir}/doc/sdk/Spring-1.2/net-2.0/htmlhelp1and2/Spring.NET.chm"/>
+          file="${sdk.src.dir}/doc/sdk/Spring-1.3/net-2.0/htmlhelp1and2/Spring.NET.chm"/>
 
     <!-- Copy generated htmlhelp 2.x files, install scripts, -->
     <!-- and install utility for .NET 1.1 assemblies         -->
     <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003">
-      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.2/net-1.1/web">
+      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/web">
         <include name="COL_*.*"/>
       </fileset>
     </copy>
     <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
-          file="${sdk.src.dir}/doc/sdk/Spring-1.2/net-1.1/htmlhelp1and2/Spring.NET.hxs"/>
+          file="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/htmlhelp1and2/Spring.NET.hxs"/>
     <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
           file="doc/InnovaHxReg.exe"/>
     <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
-          file="doc\docx\Spring-1.2\net-1.1\RegisterHelp2.bat"/>
+          file="doc\docx\Spring-1.3\net-1.1\RegisterHelp2.bat"/>
     <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
-          file="doc\docx\Spring-1.2\net-1.1\UnRegisterHelp2.bat"/>
+          file="doc\docx\Spring-1.3\net-1.1\UnRegisterHelp2.bat"/>
 
     <!-- Copy generated htmlhelp 2.x files, install scripts, -->
     <!-- and install utility for .NET 2.0 assemblies         -->
     <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005">
-      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.2/net-2.0/web">
+      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-2.0/web">
         <include name="COL_*.*"/>
       </fileset>
     </copy>
     <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005"
-          file="${sdk.src.dir}/doc/sdk/Spring-1.2/net-2.0/htmlhelp1and2/Spring.NET.hxs"/>
+          file="${sdk.src.dir}/doc/sdk/Spring-1.3/net-2.0/htmlhelp1and2/Spring.NET.hxs"/>
     <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005"
           file="doc/InnovaHxReg.exe"/>
     <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005"
-          file="doc\docx\Spring-1.2\net-2.0\RegisterHelp2.bat"/>
+          file="doc\docx\Spring-1.3\net-2.0\RegisterHelp2.bat"/>
     <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005"
-          file="doc\docx\Spring-1.2\net-2.0\UnRegisterHelp2.bat"/>
+          file="doc\docx\Spring-1.3\net-2.0\UnRegisterHelp2.bat"/>
 
   </target>
 
