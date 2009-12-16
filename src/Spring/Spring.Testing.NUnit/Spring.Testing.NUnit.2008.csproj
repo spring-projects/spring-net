@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>1587, 1591, 219, 162, 618</NoWarn>
     <DocumentationFile>Spring.Testing.NUnit.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=1.0.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">

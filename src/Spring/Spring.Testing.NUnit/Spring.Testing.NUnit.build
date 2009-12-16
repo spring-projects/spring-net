@@ -8,7 +8,7 @@
  -->
     <target name="build">
         <csc target="library" define="${current.build.defines.csc}"
-            warnaserror="false"
+            warnaserror="true"
             optimize="${build.optimize}"
             debug="${current.build.debug}"
             output="${current.bin.dir}/${project::get-name()}.dll"
