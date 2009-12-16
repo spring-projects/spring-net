@@ -33,7 +33,7 @@ namespace Spring.Messaging.Nms.Config
         NamespaceParser(
             Namespace = "http://www.springframework.net/nms",
             SchemaLocationAssemblyHint = typeof (NmsNamespaceParser),
-            SchemaLocation = "/Spring.Messaging.Nms.Config/spring-nms-1.2.xsd"
+            SchemaLocation = "/Spring.Messaging.Nms.Config/spring-nms-1.3.xsd"
             )
     ]
     public class NmsNamespaceParser : NamespaceParserSupport

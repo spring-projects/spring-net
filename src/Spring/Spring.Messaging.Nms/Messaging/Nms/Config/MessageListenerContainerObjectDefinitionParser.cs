@@ -21,7 +21,6 @@
 using System;
 using System.Xml;
 using Apache.NMS;
-using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Messaging.Nms.Listener;
 using Spring.Messaging.Nms.Listener.Adapter;
@@ -95,6 +94,10 @@ namespace Spring.Messaging.Nms.Config
         private readonly string PUBSUB_DOMAIN_ATTRIBUTE = "pubsub-domain";
 
         private readonly string AUTO_STARTUP = "auto-startup";
+
+        private readonly string ERROR_HANDLER_ATTRIBUTE = "error-handler";
+
+        private readonly string EXCEPTION_LISTENER_ATTRIBUTE = "exception-listener";
         
         #endregion
 
@@ -260,11 +263,26 @@ namespace Spring.Messaging.Nms.Config
 
             containerDef.AddPropertyValue("ConnectionFactory", new RuntimeObjectReference(connectionFactoryObjectName));
 
-            string destinationResolverBeanName = containerElement.GetAttribute(DESTINATION_RESOLVER_ATTRIBUTE);
-            if (StringUtils.HasText(destinationResolverBeanName))
+
+            string errorHandlerObjectName = containerElement.GetAttribute(ERROR_HANDLER_ATTRIBUTE);
+            if (StringUtils.HasText(errorHandlerObjectName))
+            {
+                containerDef.AddPropertyValue("ErrorHandler",
+                                              new RuntimeObjectReference(errorHandlerObjectName));
+            }
+
+            string exceptionListenerObjectName = containerElement.GetAttribute(EXCEPTION_LISTENER_ATTRIBUTE);
+            if (StringUtils.HasText(exceptionListenerObjectName))
+            {
+                containerDef.AddPropertyValue("ExceptionListener",
+                                              new RuntimeObjectReference(exceptionListenerObjectName));
+            }
+
+            string destinationResolverObjectName = containerElement.GetAttribute(DESTINATION_RESOLVER_ATTRIBUTE);
+            if (StringUtils.HasText(destinationResolverObjectName))
             {
                 containerDef.AddPropertyValue("DestinationResolver",
-                                              new RuntimeObjectReference(destinationResolverBeanName));
+                                              new RuntimeObjectReference(destinationResolverObjectName));
             }
 
             string acknowledge = containerElement.GetAttribute(ACKNOWLEDGE_ATTRIBUTE);

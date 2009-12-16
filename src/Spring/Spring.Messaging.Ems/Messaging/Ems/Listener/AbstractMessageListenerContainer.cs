@@ -55,6 +55,8 @@ namespace Spring.Messaging.Ems.Listener
 
         private IExceptionListener exceptionListener;
 
+        private IErrorHandler errorHandler;
+
         private bool exposeListenerSession = true;
 
         private bool acceptMessagesWhileStopping = false;
@@ -205,6 +207,17 @@ namespace Spring.Messaging.Ems.Listener
         {
             get { return exceptionListener; }
             set { exceptionListener = value; }
+        }
+
+        /// <summary>
+        /// Sets an ErrorHandler to be invoked in case of any uncaught exceptions thrown
+        /// while processing a Message. By default there will be no ErrorHandler
+        /// so that error-level logging is the only result.
+        /// </summary>
+        /// <value>The error handler.</value>
+        public IErrorHandler ErrorHandler
+        {
+            set { errorHandler = value; }
         }
 
 
@@ -545,14 +558,26 @@ namespace Spring.Messaging.Ems.Listener
             if (Active)
             {
                 // Regular case: failed while active.
-                // Log at error level.
-                logger.Error("Execution of EMS message listener failed", ex);
+                // Invoke ErrorHandler if available.
+                InvokeErrorHandler(ex);
             }
             else
             {
                 // Rare case: listener thread failed after container shutdown.
                 // Log at debug level, to avoid spamming the shutdown log.
                 logger.Debug("Listener exception after container shutdown", ex);
+            }
+        }
+
+        protected virtual void InvokeErrorHandler(Exception exception)
+        {
+            if (errorHandler != null)
+            {
+                errorHandler.HandleError(exception);
+            }
+            else if (logger.IsWarnEnabled)
+            {
+                logger.Warn("Execution of EMS message listener failed, and no ErrorHandler has been set.", exception);
             }
         }
 

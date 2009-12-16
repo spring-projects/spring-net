@@ -1428,6 +1428,26 @@ namespace MyApp
               initialization. Default is true, optionally set to
               false.</entry>
             </row>
+
+            <row>
+              <entry>error-handler</entry>
+
+              <entry>A reference to a IErrorHandler that will handle any
+              uncaught exceptions other than those of the type NMSException
+              (in the case of ActiveMQ or EMSException int he case of TIBCO
+              EMS) that may occur during the execution of the message
+              listener. By default no ErrorHandler is registered and that
+              error-level logging is the default behavior.</entry>
+            </row>
+
+            <row>
+              <entry>exception-listener</entry>
+
+              <entry>A reference to an
+              Spring.Messaging.Nms.Core.IExceptionListener or
+              TIBCO.EMS.IExceptionListener as appropriate. Is invokved in case
+              of a NMSException or EMSException.</entry>
+            </row>
           </tbody>
         </tgroup>
       </table>

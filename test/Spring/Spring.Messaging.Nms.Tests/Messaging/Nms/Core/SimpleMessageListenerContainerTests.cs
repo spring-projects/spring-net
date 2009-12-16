@@ -25,6 +25,7 @@ using Apache.NMS;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Messaging.Nms.Listener;
+using Spring.Util;
 
 #endregion
 
@@ -94,15 +95,48 @@ namespace Spring.Messaging.Nms.Core
 
             // manually trigger an Exception with the above bad MessageListener...
             messageConsumer.SendMessage(message);
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void RegisteredErrorHandlerIsInvokedOnException()
+        {
+            SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
+
+            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
+            Expect.Call(session.GetQueue(DESTINATION_NAME)).Return(QUEUE_DESTINATION);
+            Expect.Call(session.CreateConsumer(QUEUE_DESTINATION, null)).Return(messageConsumer);
+            // an exception is thrown, so the rollback logic is being applied here...
+            Expect.Call(session.Transacted).Return(false);
+
+            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
+            connection.ExceptionListener += container.OnException;
+            Expect.Call(connection.CreateSession(container.SessionAcknowledgeMode)).Return(session);
+            connection.Start();
+
+            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            Expect.Call(connectionFactory.CreateConnection()).Return(connection);
+
+            IllegalStateException theException = new IllegalStateException(EXCEPTION_MESSAGE);
+
+            IErrorHandler errorHandler = (IErrorHandler)mocks.CreateMock(typeof(IErrorHandler));
+            errorHandler.HandleError(theException);
+
+            IMessage message = (IMessage)mocks.CreateMock(typeof(IMessage));
+
+            mocks.ReplayAll();
 
 
+            container.ConnectionFactory = connectionFactory;
+            container.DestinationName = DESTINATION_NAME;
+            container.MessageListener = new BadSessionAwareMessageListener(theException);
+            container.ErrorHandler = errorHandler;
+            container.AfterPropertiesSet();
+
+            // manually trigger an Exception with the above bad MessageListener...
+            messageConsumer.SendMessage(message);
 
             mocks.VerifyAll();
-
-
-
-
-
         }
     }
 
