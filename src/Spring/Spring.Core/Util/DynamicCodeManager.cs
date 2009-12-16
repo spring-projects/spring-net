@@ -101,6 +101,7 @@ namespace Spring.Util
                     assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.RunAndSave, null, null, null, null,null, true );
                     module = assembly.DefineDynamicModule(an.Name, an.Name + ".dll", true);
 #else
+                    an.SetPublicKey(Assembly.GetExecutingAssembly().GetName().GetPublicKey());
                     assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run, null, null, null, null,null, true );
 #if DEBUG                    
                     module = assembly.DefineDynamicModule(an.Name, true);
