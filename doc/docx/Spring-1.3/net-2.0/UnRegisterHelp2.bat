@@ -7,12 +7,14 @@ REM For more information on deploying Help 2 files, refer to the
 REM  HelpStudio on-line help file under the 'Deploying the Help 
 REM  System' section.
 
-REM Un-comment to remove the plug in to the Visual Studio.NET 2005 help system
+REM Remove the plug in to the Visual Studio.NET 2008 help system
+InnovaHxReg /U /P /productnamespace:MS.VSIPCC.v90 /producthxt:_DEFAULT /namespace:Spring.NET /hxt:_DEFAULT
+
+REM Remove the plug in to the Visual Studio.NET 2005 help system
 InnovaHxReg /U /P /productnamespace:MS.VSIPCC.v80 /producthxt:_DEFAULT /namespace:Spring.NET /hxt:_DEFAULT
 
 REM Un-Register the help file (title in Help 2.0 terminology)
-InnovaHxReg /U /T /namespace:Spring.NET /id:Spring.NET-1.2.0 /langid:1033 /helpfile:"Spring.NET.hxs"
+InnovaHxReg /U /T /namespace:Spring.NET /id:Spring.NET-1.3.0 /langid:1033 /helpfile:"Spring.NET.hxs"
 
 REM Un-Register the Namespace
-InnovaHxReg /U /N /Namespace:Spring.NET /Description:"Spring.Scheduling.Quartz" /Collection:COL_Spring-1.2.0.hxc
-
+InnovaHxReg /U /N /Namespace:Spring.NET /Description:"Spring.Template.Velocity" /Collection:COL_Spring-1.3.0.hxc
