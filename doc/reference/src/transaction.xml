@@ -439,16 +439,16 @@
     </emphasis>lightweight container.</remark>
 
     <para>Spring's declarative transaction management is made possible with
-    Spring AOP, although, as the transactional aspects code comes with Spring
-    and may be used in a boilerplate fashion, AOP concepts do not generally
-    have to be understood to make effective use of this code.</para>
+    Spring's aspect-oriented programming (AOP), although, as the transactional
+    aspects code comes with Spring and may be used in a boilerplate fashion,
+    AOP concepts do not generally have to be understood to make effective use
+    of this code.</para>
 
-    <para>The basic approach is to specify transaction behavior (or lack of
-    it) down to the individual method level. It is also possible to mark a
-    transaction for rollback by setting the 'RollbackOnly' property on the
-    ITransactionStatus object returned from the IPlatformTransactionManager
-    within a transaction context if necessary. Some of the highlights of
-    Spring's declarative transaction management are:</para>
+    <para>The approach is to specify transaction behavior (or lack of it) down
+    to the individual method level. It is also possible to mark a transaction
+    for rollback by calling the <methodname>SetRollbackOnly()</methodname>
+    method within a transaction context if necessary. Some of the highlights
+    of Spring's declarative transaction management are:</para>
 
     <itemizedlist>
       <listitem>
@@ -482,20 +482,17 @@
       </listitem>
     </itemizedlist>
 
-    <para>Note rollback rules as configured from XML are still under
-    development.</para>
-
     <para>The concept of rollback rules is important: they enable us to
     specify which exceptions should cause automatic roll back. We specify this
-    declaratively, in configuration, not in code. So, while we can still set
-    <literal>RollbackOnly</literal> on the
+    declaratively, in configuration, not in code. So, although you can still
+    call <methodname>SetRollbackOnly() </methodname>on the
     <literal>ITransactionStatus</literal> object to roll the current
-    transaction back Programatically, most often we can specify a rule that
+    transaction back, most often you can specify a rule that
     MyApplicationException must always result in rollback. This has the
-    significant advantage that business objects don't need to depend on the
+    significant advantage that business objects do not depend on the
     transaction infrastructure. For example, they typically don't need to
-    import any Spring APIs, transaction or other. If you would like to
-    rollback the transaction programmatically and you are using declarative
+    import any Spring transaction APIs or other Spring APIs. However, to
+    rollback the transaction programmatically when using declarative
     transaction management, use the utility method</para>
 
     <programlisting language="csharp">TransactionInterceptor.CurrentTransactionStatus.SetRollbackOnly();</programlisting>
@@ -510,37 +507,26 @@
       <title>Understanding Spring's declarative transaction
       implementation</title>
 
-      <para>The aim of this section is to dispel the mystique that is
-      sometimes associated with the use of declarative transactions. It is all
-      very well for this reference documentation to simply tell you to
-      annotate your classes with the Transaction attribute and add some
-      boilerplate XML to your IoC configuration, and then expect you to
-      understand how it all works. This section will explain the inner
-      workings of Spring's declarative transaction infrastructure to help you
-      navigate your way back upstream to calmer waters in the event of
-      transaction-related issues.</para>
+      <para>It is not sufficient to tell you simply to annotate your classes
+      with the <literal>[Transaction]</literal> attribute, add the line
+      (<literal>&lt;tx:attribute-driven/&gt;</literal>) to your configuration,
+      and then expect you to understand how it all works. This section
+      explains the inner workings of the Spring Framework's declarative
+      transaction infrastructure in the event of transaction-related
+      issues.</para>
 
-      <note>
-        <para>Looking at the Spring source code is a good way to get a real
-        understanding of Spring's transaction support. You should find the API
-        documentation informative and complete. We suggest turning the logging
-        level to 'DEBUG' in your Spring-enabled application(s) during
-        development to better see what goes on under the hood.</para>
-      </note>
-
-      <para>The most important concepts to grasp with regard to Spring's
-      declarative transaction support are that this support is enabled via AOP
-      proxies, and that the transactional advice is driven by metadata
-      (currently XML- or attribute-based). The combination of a proxy with
-      transactional metadata yields an AOP proxy that uses a
-      <literal>TransactionInterceptor</literal> in conjunction with an
-      appropriate <literal>IPlatformTransactionManager</literal>
+      <para>The most important concepts to grasp with regard to the Spring
+      Framework's declarative transaction support are that this support is
+      enabled via <link linkend="aop-proxy-mechanism">AOP proxies</link>, and
+      that the transactional advice is driven by metadata (currently XML- or
+      attribute-based). The combination of AOP with transactional metadata
+      yields an AOP proxy that uses a
+      <classname>TransactionInterceptor</classname> in conjunction with an
+      appropriate <interfacename>IPlatformTransactionManager</interfacename>
       implementation to drive transactions around method invocations.</para>
 
       <note>
-        <para>Although knowledge of AOP (and specifically Spring AOP) is not
-        required in order to use Spring's declarative transaction support, it
-        can help. Spring AOP is thoroughly covered in the AOP chapter.</para>
+        <para>Spring AOP is covered in <xref linkend="aop" /></para>
       </note>
 
       <para>Conceptually, calling a method on a transactional proxy looks like
@@ -551,96 +537,26 @@
           <imagedata fileref="images/tx.png"></imagedata>
         </imageobject>
       </mediaobject>
-
-      <para>The flow of events is the following. First the set of objects you
-      would like to apply AOP transactional advice to are identified. There
-      are a variety of ways to configure the Spring IoC container to create
-      proxies for the defined object definitions. The standard Spring AOP
-      based options are</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>ProxyFactoryObject</literal>. The common properties
-          to set are the reference to the object to proxy (the target object)
-          and a reference to the transaction advice. See <xref
-          linkend="aop-proxyfactoryobject" /> for more details.</para>
-        </listitem>
-
-        <listitem>
-          <para>AutoProxy - Defines criteria to select a collection of objects
-          to create a transactional AOP proxy.</para>
-
-          <para>The AutoProxy options are</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>ObjectNameAutoProxyCreator</literal> which
-              specifies a collection of object names based on wildcard
-              matching of object names. See <xref
-              linkend="aop-nameautoproxy" /></para>
-            </listitem>
-
-            <listitem>
-              <para><literal>DefaultAdvisorAutoProxyCreator</literal> which
-              specifies one or more "advisors" i.e an object representing an
-              aspect, including both an advice and a pointcut targeting it to
-              specific joinpoints. See <xref
-              linkend="aop-advisorautoproxy" /></para>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-      </itemizedlist>
-
-      <para>There is also a convenience subclass of
-      <literal>ProxyFactoryObject</literal>, namely
-      <literal>TransactionProxyFactoryObject</literal>, that sets some common
-      default values for the specific case of applying transactional
-      advice.</para>
-
-      <para>The <literal>DefaultAdvisorAutoProxyCreator</literal> is very
-      powerful and is the means by which Spring can be configured to use
-      attributes to identify the pointcuts where transaction advice should be
-      applied. The advisor that performs that task is
-      TransactionAttributeSourceAdvisor.<note>
-          <para>Note, think of the word 'Attribute' in this class name not as
-          the .NET attribute but as the transaction 'options' you want to
-          specify. This name is inherited from the Java version and the name
-          will be changed in the RC1 release to avoid confusion since a common
-          naming convention when creating classes are .NET attributes is to
-          put the word 'Attribute' in the name.</para>
-        </note></para>
-
-      <para>Which one of the many options available should you choose for your
-      development? That depends, each one has it own set of pro's and con's
-      which will be discussed in turn in the following sections.</para>
-
-      <para>With the transactional AOP proxy now created we can discuss the
-      flow of events in the code as proxied methods are invoked. When the
-      method is invoked, before calling the target object's method, a
-      transaction is created if one hasn't already been created. Then the
-      target method is invoked. If there was an exception throw, the
-      transaction is typically rolled back, but it can also be committed if
-      the exception type specified in the transaction option, NoRollbackFor,
-      matches the thrown exception. If no exception was thrown, that is taken
-      as a sign of success and the transaction is committed.</para>
-
-      <para>When using other AOP advice with the transactional advice you can
-      set the order of the 'interceptor chain' so that, for example,
-      performance monitoring advice always precede the transactional
-      advice.</para>
     </sect2>
 
     <sect2 xml:id="tx-firstexample">
-      <title>A First Example</title>
+      <title>Example of declarative transaction implementation</title>
 
       <para>Consider the following interface. The intent is to convey the
       concepts to you so you can concentrate on the transaction usage and not
-      have to worry about domain specific details. The
-      <literal>ITestObjectManager</literal> is a poor-mans business service
-      layer - the implementation of which will make two DAO calls. Clearly
-      this example is overly simplistic from the service layer perspective as
-      there isn't any business logic at all!. The 'service' interface is shown
-      below.</para>
+      have to worry about domain specific details. </para>
+
+      <note>
+        <para>A QuickStart application for declarative transaction management
+        is included in the Spring.NET distribution and is decribed <link
+        linkend="tx-quickstart">here</link>.</para>
+      </note>
+
+      <para>The <literal>ITestObjectManager</literal> is a poor-mans business
+      service layer - the implementation of which will make two DAO calls.
+      Clearly this example is overly simplistic from the service layer
+      perspective as there isn't any business logic at all!. The 'service'
+      interface is shown below.</para>
 
       <programlisting language="csharp">public interface ITestObjectManager 
 {
@@ -657,14 +573,14 @@
 
    // Fields/Properties ommited
 
-   [Transaction()]
+   [Transaction]
    public void SaveTwoTestObjects(TestObject to1, TestObject to2)
    {
      TestObjectDao.Create(to1.Name, to1.Age);
      TestObjectDao.Create(to2.Name, to1.Age);
    }
 
-   [Transaction()]
+   [Transaction]
    public void DeleteTwoTestObjects(string name1, string name2)
    {
      TestObjectDao.Delete(name1);
@@ -773,8 +689,7 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
             
     
     &lt;!-- The object that performs multiple data access operations --&gt;
-    &lt;object id="testObjectManager" 
-            type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests"&gt;
+    &lt;object id="testObjectManager" type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests"&gt;
         &lt;property name="TestObjectDao" ref="testObjectDao"/&gt;
     &lt;/object&gt;
  
@@ -783,144 +698,10 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
       <para>This is standard Spring configuration and as such provides you
       with the flexibility to parameterize your connection string and to
-      easily switch implementations of your DAO objects. The configuration to
-      create a transactional proxy for the manager class is shown
-      below.</para>
+      easily switch implementations of your DAO objects.</para>
 
-      <programlisting language="myxml">    &lt;!-- The rest of the config file is common no matter how many objects you add --&gt;
-    &lt;!-- that you would like to have declarative tx management applied to --&gt;    
-    
-    &lt;object id="autoProxyCreator" 
-            type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop"&gt;
-    &lt;/object&gt;
-    
-    &lt;object id="transactionAdvisor"
-            type="Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor, Spring.Data"&gt;
-        &lt;property name="TransactionInterceptor" ref="transactionInterceptor"/&gt;
-    &lt;/object&gt;
-    
-    
-    &lt;!-- Transaction Interceptor --&gt;
-    &lt;object id="transactionInterceptor" 
-            type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data"&gt;
-        &lt;property name="TransactionManager" ref="transactionManager"/&gt;
-        &lt;property name="TransactionAttributeSource" ref="attributeTransactionAttributeSource"/&gt;        
-    &lt;/object&gt;
-    
-    &lt;object id="attributeTransactionAttributeSource"
-            type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data"&gt;    
-    &lt;/object&gt;
-</programlisting>
-
-      <para>Granted this is a bit verbose and hard to grok at first sight -
-      however you only need to grok this once as it is 'boiler plate' XML you
-      can reuse across multiple projects. What these object definitions are
-      doing is to instruct Spring's to look for all objects within the IoC
-      configuration that have the [Transaction] attribute and then apply the
-      AOP transaction interceptor to them based on the transaction options
-      contained in the attribute. The attribute serves both as a pointcut and
-      as the declaration of transactional option information.</para>
-
-      <para>Since this XML fragment is not tied to any specific object
-      references it can be included in its own file and then imported via the
-      &lt;import&gt; element. In examples and test code this XML configuration
-      fragment is named autoDeclarativeServices.xml See <xref
-      linkend="objects-factory-xml-import" /> for more information.</para>
-
-      <para>The classes and their roles in this configuration fragment are
-      listed below</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>TransactionInterceptor</literal> is the AOP advice
-          responsible for performing transaction management
-          functionality.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>TransactionAttributeSourceAdvisor</literal> is an AOP
-          Advisor that holds the TransactionInterceptor, which is the advice,
-          and a pointcut (where to apply the advice), in the form of a
-          TransactionAttributeSource.</para>
-        </listitem>
-
-        <listitem>
-          <para><literal>AttributesTransactionAttributeSource</literal> is an
-          implementation of the <literal>ITransactionAttributeSource</literal>
-          interface that defines where to get the transaction metadata
-          defining the transaction semantics (isolation level, propagation
-          behavior, etc) that should be applied to specific methods of
-          specific classes. The transaction metadata is specified via
-          implementations of the
-          <literal>ITransactionAttributeSource</literal> interface. This
-          example shows the use of the implementation
-          <literal>Spring.Transaction.Interceptor.AttributesTransactionAttributeSource</literal>
-          to obtain that information from standard .NET attributes. By the
-          very nature of using standard .NET attributes, the attribute serves
-          double duty in identifying the methods where the transaction
-          semantics apply. Alternative implementations of
-          <literal>ITransactionAttributeSource</literal> available are
-          <literal>MatchAlwaysTransactionAttributeSource</literal>,
-          <literal>NameMatchTransactionAttributeSource</literal>, or
-          <literal>MethodMapTransactionAttributeSource</literal>.</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal>MatchAlwaysTransactionAttributeSource</literal>
-              is configured with a ITransactionAttribute instance that is
-              applied to all methods. The shorthand string representation,
-              i.e. PROPAGATION_REQUIRED can be used</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>AttributesTransactionAttributeSource</literal> :
-              Use a standard. .NET attributes to specify the transactional
-              information. See <literal>TransactionAttribute</literal> class
-              for more information.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>NameMatchTransactionAttributeSource</literal>
-              allows ITransactionAttributes to be matched by method name. The
-              NameMap IDictionary property is used to specify the mapping. For
-              example</para>
-
-              <programlisting language="myxml">&lt;object name="nameMatchTxAttributeSource" type="Spring.Transaction.Interceptor.NameMatchTransactionAttributeSource, Spring.Data"
-      &lt;property name="NameMap"&gt;
-          &lt;dictionary&gt;
-              &lt;entry key="Execute" value="PROPAGATION_REQUIRES_NEW, -ApplicationException"/&gt;
-              &lt;entry key="HandleData" value="PROPAGATION_REQUIRED, -DataHandlerException"/&gt;
-              &lt;entry key="Find*" value="ISOLATION_READUNCOMMITTED, -DataHandlerException"/&gt;
-          &lt;/dictionary&gt;
-      &lt;/property&gt;
-
-&lt;/object&gt;</programlisting>
-
-              <para>Key values can be prefixed and/or suffixed with wildcards
-              as well as include the full namespace of the containing
-              class.</para>
-            </listitem>
-
-            <listitem>
-              <para><literal>MethodMapTransactionAttributeSource</literal> :
-              Similar to NameMatchTransactionAttributeSource but specifies
-              that only fully qualified method names (i.e. type.method,
-              assembly) and wildcards can be used at the start or end of the
-              method name for matching multiple methods.</para>
-            </listitem>
-          </itemizedlist>
-        </listitem>
-
-        <listitem>
-          <para><literal>DefaultAdvisorAutoProxyCreator</literal>: looks for
-          Advisors in the context, and automatically creates proxy objects
-          which are the transactional wrappers</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Refer to the following section for a more convenient way to
-      achieve the same goal of declarative transaction management using
-      attributes.</para>
+      <para>The following section shows how to configure the declarative
+      transactions using Spring's transaction namespace.</para>
     </sect2>
 
     <sect2 xml:id="tx-namespace">
@@ -1554,13 +1335,12 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
       <para>if you choose not to use the transaction namespace for declarative
       transaction management then you can use 'lower level' object definitions
-      to configure declarative transactions. This approach was shown in the
-      <link linkend="tx-firstexample">first example</link>. The use of
-      Spring's autoproxy functionality defines criteria to select a collection
-      of objects to create a transactional AOP proxy. There are two AutoProxy
-      classes that you can use, <literal>ObjectNameAutoProxyCreator</literal>
-      and <literal>DefaultAdvisorAutoProxyCreator</literal>. If you are using
-      the new transaction namespace support you do not need to configure these
+      to configure declarative transactions. The use of Spring's autoproxy
+      functionality defines criteria to select a collection of objects to
+      create a transactional AOP proxy. There are two AutoProxy classes that
+      you can use, <literal>ObjectNameAutoProxyCreator</literal> and
+      <literal>DefaultAdvisorAutoProxyCreator</literal>. If you are using the
+      new transaction namespace support you do not need to configure these
       objects as a DefaultAdvisorAutoProxyCreator is created 'under the
       covers' while parsing the transaction namespace elements</para>
 
@@ -1593,218 +1373,10 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
         <title>Creating transactional proxies with
         DefaultAdvisorAutoProxyCreator</title>
 
-        <para>This is a commonly used way to configure declarative
-        transactions since it enables you to refer to the transaction
-        attribute as the pointcut to use for the transactional advice for any
-        object definition defined in the IoC container. An example of this
-        configuration approach was shown in Chapter 5.</para>
+        <para>This is not longer a common way to configure declarative
+        transactions but is discussed in the "Classic Spring" appendiex <link
+        linkend="classic-txadvisor">here</link>.</para>
       </sect3>
-    </sect2>
-
-    <sect2 xml:id="tx-txproxyfactoryobject">
-      <title>Declarative Transactions using
-      TransactionProxyFactoryObject</title>
-
-      <para>The TransactionProxyFactoryObject is easier to use than a
-      ProxyFactoryObject for most cases since the transaction interceptor and
-      transaction attributes are properties of this object. This removes the
-      need to declare them as separate objects. Also, unlike the case with the
-      ProxyFactoryObject, you do not have to give fully qualified method
-      names, just the normal 'short' method name. Wild card matching on the
-      method name is also allowed, which in practice helps to enforce a common
-      naming convention for the methods of your DAOs. The example from chapter
-      5 is shown here using a TransactionProxyFactoryObject.</para>
-
-      <programlisting language="myxml">
-    &lt;object id="testObjectManager" 
-            type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data"&gt;
-        
-        &lt;property name="PlatformTransactionManager" ref="adoTransactionManager"/&gt;
-        &lt;property name="Target"&gt;
-            &lt;object type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests"&gt;
-                &lt;property name="TestObjectDao" ref="testObjectDao"/&gt;
-            &lt;/object&gt;
-        &lt;/property&gt; 
-        &lt;property name="TransactionAttributes"&gt;
-            &lt;name-values&gt;
-                &lt;add key="Save*" value="PROPAGATION_REQUIRED"/&gt;
-                &lt;add key="Delete*" value="PROPAGATION_REQUIRED"/&gt;
-            &lt;/name-values&gt;
-        &lt;/property&gt;
-    &lt;/object&gt;
-    
-</programlisting>
-
-      <para>Note the use of an inner object definition for the target which
-      will make it impossible to obtain an unproxied reference to the
-      TestObjectManager.</para>
-
-      <para>As can be seen in the above definition, the TransactionAttributes
-      property holds a collection of name/value pairs. The key of each pair is
-      a method or methods (a * wildcard ending is optional) to apply
-      transactional semantics to. Note that the method name is not qualified
-      with a package name, but rather is considered relative to the class of
-      the target object being wrapped. The value portion of the name/value
-      pair is the TransactionAttribute itself that needs to be applied. When
-      specifying it as a string value as in this example, it's in String
-      format as defined by TransactionAttributeConverter. This format
-      is:</para>
-
-      <para><literal>PROPAGATION_NAME,ISOLATION_NAME,readOnly,timeout_NNNN,+Exception1,-Exception2</literal></para>
-
-      <para>Note that the only mandatory portion of the string is the
-      propagation setting. The default transactions semantics which apply are
-      as follows:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Exception Handling: All exceptions thrown trigger a
-          rollback.</para>
-        </listitem>
-
-        <listitem>
-          <para>Transactions are read/write</para>
-        </listitem>
-
-        <listitem>
-          <para>Isolation Level:
-          TransactionDefinition.ISOLATION_DEFAULT</para>
-        </listitem>
-
-        <listitem>
-          <para>Timeout: TransactionDefinition.TIMEOUT_DEFAULT</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Multiple rollback rules can be specified here, comma-separated. A
-      - prefix forces rollback; a + prefix specifies commit. Under the covers
-      the IDictionary of name value pairs will be converted to an instance of
-      <literal>NameMatchTransactionAttributeSource</literal></para>
-
-      <para>The string used for PROPAGATION_NAME are those defined on the
-      Spring.Transaction.TransactionPropagation enumeration, namely Required,
-      Supports, Mandatory, RequiresNew, NotSupported, Never, Nested. The
-      string used for ISOLATION_NAME are those defined on the
-      System.Data.IsolationLevel enumberateion, namely ReadCommitted,
-      ReadUncommitted, RepeatableRead, Serializable.</para>
-
-      <para>The TransactionProxyFactoryObject allows you to set optional "pre"
-      and "post" advice, for additional interception behavior, using the
-      "PreInterceptors" and "PostInterceptors" properties. Any number of pre
-      and post advices can be set, and their type may be Advisor (in which
-      case they can contain a pointcut), MethodInterceptor or any advice type
-      supported by the current Spring configuration (such as ThrowsAdvice,
-      AfterReturningAdvice or BeforeAdvice, which are supported by default.)
-      These advices must support a shared-instance model. If you need
-      transactional proxying with advanced AOP features such as stateful
-      mixins, it's normally best to use the generic ProxyFactoryObject, rather
-      than the TransactionProxyFactoryObject convenience proxy creator.</para>
-    </sect2>
-
-    <sect2 xml:id="tx-using-abstract-objectdefs">
-      <title>Concise proxy definitions</title>
-
-      <para>Using abstract object definitions in conjunction with a
-      TransactionProxyFactoryObject provides you a more concise means to reuse
-      common configuration information instead of duplicating it over and over
-      again with a definition of a TransactionProxyFactoryObject per object.
-      Objects that are to be proxied typically have the same pattern of method
-      names, Save*, Find*, etc. This commonality can be placed in an abstract
-      object definition, which other object definitions refer to and change
-      only the configuration information that is different. An abstract object
-      definition is shown below</para>
-
-      <programlisting language="myxml">   &lt;object id="txProxyTemplate" abstract="true"
-            type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data"&gt;
-        
-        &lt;property name="PlatformTransactionManager" ref="adoTransactionManager"/&gt;
-
-        &lt;property name="TransactionAttributes"&gt;
-            &lt;name-values&gt;
-                &lt;add key="Save*" value="PROPAGATION_REQUIRED"/&gt;
-                &lt;add key="Delete*" value="PROPAGATION_REQUIRED"/&gt;
-            &lt;/name-values&gt;
-        &lt;/property&gt;
-    &lt;/object&gt;</programlisting>
-
-      <para>Subsequent definitions can refer to this 'base' configuration as
-      shown below</para>
-
-      <programlisting language="myxml">&lt;object id="testObjectManager" parent="txProxyTemplate"&gt;
-    &lt;property name="Target"&gt;
-            &lt;object type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests"&gt;
-                &lt;property name="TestObjectDao" ref="testObjectDao"/&gt;
-            &lt;/object&gt;
-    &lt;/property&gt; 
-&lt;/object&gt;</programlisting>
-    </sect2>
-
-    <sect2 xml:id="tx-proxyfactoryobject">
-      <title>Declarative Transactions using ProxyFactoryObject</title>
-
-      <para>Using the general ProxyFactoryObject to declare transactions gives
-      you a great deal of control over the proxy created since you can specify
-      additional advice, such as for logging or performance. Based on the
-      example shown previously a sample configuration using ProxyFactoryObject
-      is shown below</para>
-
-      <programlisting language="myxml">    &lt;object id="testObjectManagerTarget" type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests"&gt;
-        &lt;property name="TestObjectDao" ref="testObjectDao"/&gt;
-    &lt;/object&gt;
-
-    &lt;object id="testObjectManager" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
-        
-        &lt;property name="Target" ref="testObjectManagerTarget"/&gt;
-        &lt;property name="ProxyInterfaces"&gt;
-            &lt;value&gt;Spring.Data.ITestObjectManager&lt;/value&gt;
-        &lt;/property&gt;
-        &lt;property name="InterceptorNames"&gt;
-            &lt;value&gt;transactionInterceptor&lt;/value&gt;
-        &lt;/property&gt;      
-        
-    &lt;/object&gt;</programlisting>
-
-      <para>The ProxyFactoryObject will create a proxy for the Target, i.e. a
-      TestObjectManager instance. An inner object definition could also have
-      been used such that it would make it impossible to obtain an unproxied
-      object from the container. The interceptor name refers to the following
-      definition.</para>
-
-      <programlisting language="myxml">    &lt;object id="transactionInterceptor" type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data"&gt;
-
-        &lt;property name="TransactionManager" ref="adoTransactionManager"/&gt;
-
-        &lt;!-- note do not have converter from string to this property type registered --&gt;
-        &lt;property name="TransactionAttributeSource" ref="methodMapTransactionAttributeSource"/&gt;        
-    &lt;/object&gt;
-    
-    &lt;object name="methodMapTransactionAttributeSource" 
-            type="Spring.Transaction.Interceptor.MethodMapTransactionAttributeSource, Spring.Data"&gt;
-        &lt;property name="MethodMap"&gt;
-           &lt;dictionary&gt;           
-              &lt;entry key="Spring.Data.TestObjectManager.SaveTwoTestObjects, Spring.Data.Integration.Tests" 
-                     value="PROPAGATION_REQUIRED"/&gt;
-              &lt;entry key="Spring.Data.TestObjectManager.DeleteTwoTestObjects, Spring.Data.Integration.Tests" 
-                     value="PROPAGATION_REQUIRED"/&gt;                     
-           &lt;/dictionary&gt;        
-        &lt;/property&gt;     
-    &lt;/object&gt;</programlisting>
-
-      <para>The transaction options for each method are specified using a
-      dictionary containing the class name + method name, assembly as the key
-      and the value is of the form</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>&lt;Propagation Behavior&gt;, &lt;Isolation Level&gt;,
-          &lt;ReadOnly&gt;, -Exception, +Exception</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>All but the propagation behavior are optional. The + and - are
-      used in front of the name of an exception. Minus indicates to rollback
-      if the exception is thrown, the Plus indicates to commit if the
-      exception is thrown.</para>
     </sect2>
   </sect1>
 

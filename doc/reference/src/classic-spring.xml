@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright 2002-2008 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<appendix id="classic-spring">
+  <title>Classic Spring Usage</title>
+
+  <para>This appendix discusses some classic Spring usage patterns as a
+  reference for developers maintaining legacy Spring applications. These usage
+  patterns no longer reflect the recommended way of using these features and
+  the current recommended usage is covered in the respective sections of the
+  reference manual.</para>
+
+  <section>
+    <title>Classic Hibernate Usage</title>
+
+    <para>For the currently recommended usage patterns for NHibernate see
+    <xref linkend="orm-hibernate" /></para>
+
+    <section xml:id="orm-hibernate-template">
+      <title>The <literal>HibernateTemplate</literal></title>
+
+      <para>The basic programming model for templating looks as follows for
+      methods that can be part of any custom data access object or business
+      service. There are no restrictions on the implementation of the
+      surrounding object at all, it just needs to provide a Hibernate
+      <literal>SessionFactory</literal>. It can get the latter from anywhere,
+      but preferably as an object reference from a Spring IoC container - via
+      a simple <methodname>SessionFactory</methodname> property setter. The
+      following snippets show a DAO definition in a Spring container,
+      referencing the above defined <literal>SessionFactory</literal>, and an
+      example for a DAO method implementation.</para>
+
+      <programlisting language="myxml">&lt;objects&gt;
+
+  &lt;object id="CustomerDao" type="Spring.Northwind.Dao.NHibernate.HibernateCustomerDao, Spring.Northwind.Dao.NHibernate"&gt;
+    &lt;property name="SessionFactory" ref="MySessionFactory"/&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+
+      <para />
+
+      <programlisting language="csharp">public class HibernateCustomerDao : ICustomerDao {
+
+  private HibernateTemplate hibernateTemplate;
+
+  public ISessionFactory SessionFactory
+  {
+      set { hibernateTemplate = new HibernateTemplate(value); }
+  }
+
+  public Customer SaveOrUpdate(Customer customer)
+  {
+      hibernateTemplate.SaveOrUpdate(customer);
+      return customer;
+  }
+}</programlisting>
+
+      <para>The <literal>HibernateTemplate</literal> class provides many
+      methods that mirror the methods exposed on the Hibernate
+      <literal>Session</literal> interface, in addition to a number of
+      convenience methods such as the one shown above. If you need access to
+      the <literal>Session</literal> to invoke methods that are not exposed on
+      the <literal>HibernateTemplate</literal>, you can always drop down to a
+      callback-based approach like so.</para>
+
+      <programlisting language="csharp">public class HibernateCustomerDao : ICustomerDao {
+
+  private HibernateTemplate hibernateTemplate;
+
+  public ISessionFactory SessionFactory
+  {
+      set { hibernateTemplate = new HibernateTemplate(value); }
+  }
+
+  public Customer SaveOrUpdate(Customer customer)
+  {
+      return HibernateTemplate.Execute(
+                 delegate(ISession session)
+                     {
+                         // do whatever you want with the session....
+                         session.SaveOrUpdate(customer);
+                         return customer;
+                     }) as Customer;
+  }
+
+}</programlisting>
+
+      <para>Using the anonymous delegate is particularly convenient when you
+      would otherwise be passing various method parameter calls to the
+      interface based version of this callback. Furthermore, when using
+      generics, you can avoid the typecast and write code like the
+      following</para>
+
+      <programlisting language="csharp">IList&lt;Supplier&gt; suppliers = HibernateTemplate.ExecuteFind&lt;Supplier&gt;(
+   delegate(ISession session)
+   {
+      return session.CreateQuery("from Supplier s were s.Code = ?")
+                    .SetParameter(0, code)
+                    .List&lt;Supplier&gt;();
+    });</programlisting>
+
+      <para>where code is a variable in the surrounding block, accessible
+      inside the anonymous delegate implementation.</para>
+
+      <para>A callback implementation effectively can be used for any
+      Hibernate data access. <literal>HibernateTemplate</literal> will ensure
+      that <literal>Session</literal> instances are properly opened and
+      closed, and automatically participate in transactions. The template
+      instances are thread-safe and reusable, they can thus be kept as
+      instance variables of the surrounding class. For simple single step
+      actions like a single Find, Load, SaveOrUpdate, or Delete call,
+      <literal>HibernateTemplate</literal> offers alternative convenience
+      methods that can replace such one line callback implementations.
+      Furthermore, Spring provides a convenient
+      <literal>HibernateDaoSupport</literal> base class that provides a
+      <methodname>SessionFactory</methodname> property for receiving a
+      <literal>SessionFactory</literal> and for use by subclasses. In
+      combination, this allows for very simple DAO implementations for typical
+      requirements:</para>
+
+      <programlisting language="csharp">public class HibernateCustomerDao : HibernateDaoSupport, ICustomerDao
+{
+    public Customer SaveOrUpdate(Customer customer)
+    {
+        HibernateTemplate.SaveOrUpdate(customer);
+        return customer;
+    }
+}</programlisting>
+    </section>
+
+    <section xml:id="orm-hibernate-daos">
+      <title>Implementing Spring-based DAOs without callbacks</title>
+
+      <para>As an alternative to using Spring's
+      <literal>HibernateTemplate</literal> to implement DAOs, data access code
+      can also be written in a more traditional fashion, without wrapping the
+      Hibernate access code in a callback, while still respecting and
+      participating in Spring's generic <literal>DataAccessException</literal>
+      hierarchy. The <literal>HibernateDaoSupport</literal> base class offers
+      methods to access the current transactional <literal>Session</literal>
+      and to convert exceptions in such a scenario; similar methods are also
+      available as static helpers on the
+      <literal>SessionFactoryUtils</literal> class. Note that such code will
+      usually pass '<literal>false</literal>' as the value of the
+      <methodname>DoGetSession(..)</methodname> method's
+      '<literal>allowCreate</literal>' argument, to enforce running within a
+      transaction (which avoids the need to close the returned
+      <literal>Session</literal>, as its lifecycle is managed by the
+      transaction). Asking for the</para>
+
+      <programlisting language="csharp">public class HibernateProductDao : HibernateDaoSupport, IProductDao {
+
+        public Customer SaveOrUpdate(Customer customer)
+        {
+            ISession session = DoGetSession(false);
+            session.SaveOrUpdate(customer);
+            return customer;
+        }
+    }
+}</programlisting>
+
+      <para>This code will <emphasis>not</emphasis> translate the Hibernate
+      exception to a generic <literal>DataAccessException</literal>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Classic Declarative Transaction Configurations</title>
+
+    <section xml:id="classic-tx-advisor">
+      <title>Declarative Transaction Configuration using
+      DefaultAdvisorAutoProxyCreator</title>
+
+      <para>Using the DefaultAdvisorAutoProxyCreator to configure declarative
+      transactions enables you to refer to the transaction attribute as the
+      pointcut to use for the transactional advice for any object definition
+      defined in the IoC container. The configuration to create a
+      transactional proxy for the manager class shown in the chapter on
+      transaction management is shown below.</para>
+
+      <programlisting language="myxml">    &lt;!-- The rest of the config file is common no matter how many objects you add --&gt;
+    &lt;!-- that you would like to have declarative tx management applied to --&gt;    
+    
+    &lt;object id="autoProxyCreator" 
+            type="Spring.Aop.Framework.AutoProxy.DefaultAdvisorAutoProxyCreator, Spring.Aop"&gt;
+    &lt;/object&gt;
+    
+    &lt;object id="transactionAdvisor"
+            type="Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor, Spring.Data"&gt;
+        &lt;property name="TransactionInterceptor" ref="transactionInterceptor"/&gt;
+    &lt;/object&gt;
+    
+    
+    &lt;!-- Transaction Interceptor --&gt;
+    &lt;object id="transactionInterceptor" 
+            type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data"&gt;
+        &lt;property name="TransactionManager" ref="transactionManager"/&gt;
+        &lt;property name="TransactionAttributeSource" ref="attributeTransactionAttributeSource"/&gt;        
+    &lt;/object&gt;
+    
+    &lt;object id="attributeTransactionAttributeSource"
+            type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data"&gt;    
+    &lt;/object&gt;
+</programlisting>
+
+      <para>Granted this is a bit verbose and hard to grok at first sight -
+      however you only need to grok this once as it is 'boiler plate' XML you
+      can reuse across multiple projects. What these object definitions are
+      doing is to instruct Spring's to look for all objects within the IoC
+      configuration that have the [Transaction] attribute and then apply the
+      AOP transaction interceptor to them based on the transaction options
+      contained in the attribute. The attribute serves both as a pointcut and
+      as the declaration of transactional option information.</para>
+
+      <para>Since this XML fragment is not tied to any specific object
+      references it can be included in its own file and then imported via the
+      &lt;import&gt; element. In examples and test code this XML configuration
+      fragment is named autoDeclarativeServices.xml See <xref
+      linkend="objects-factory-xml-import" /> for more information.</para>
+
+      <para>The classes and their roles in this configuration fragment are
+      listed below</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>TransactionInterceptor</literal> is the AOP advice
+          responsible for performing transaction management
+          functionality.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>TransactionAttributeSourceAdvisor</literal> is an AOP
+          Advisor that holds the TransactionInterceptor, which is the advice,
+          and a pointcut (where to apply the advice), in the form of a
+          TransactionAttributeSource.</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>AttributesTransactionAttributeSource</literal> is an
+          implementation of the <literal>ITransactionAttributeSource</literal>
+          interface that defines where to get the transaction metadata
+          defining the transaction semantics (isolation level, propagation
+          behavior, etc) that should be applied to specific methods of
+          specific classes. The transaction metadata is specified via
+          implementations of the
+          <literal>ITransactionAttributeSource</literal> interface. This
+          example shows the use of the implementation
+          <literal>Spring.Transaction.Interceptor.AttributesTransactionAttributeSource</literal>
+          to obtain that information from standard .NET attributes. By the
+          very nature of using standard .NET attributes, the attribute serves
+          double duty in identifying the methods where the transaction
+          semantics apply. Alternative implementations of
+          <literal>ITransactionAttributeSource</literal> available are
+          <literal>MatchAlwaysTransactionAttributeSource</literal>,
+          <literal>NameMatchTransactionAttributeSource</literal>, or
+          <literal>MethodMapTransactionAttributeSource</literal>.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>MatchAlwaysTransactionAttributeSource</literal>
+              is configured with a ITransactionAttribute instance that is
+              applied to all methods. The shorthand string representation,
+              i.e. PROPAGATION_REQUIRED can be used</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>AttributesTransactionAttributeSource</literal> :
+              Use a standard. .NET attributes to specify the transactional
+              information. See <literal>TransactionAttribute</literal> class
+              for more information.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>NameMatchTransactionAttributeSource</literal>
+              allows ITransactionAttributes to be matched by method name. The
+              NameMap IDictionary property is used to specify the mapping. For
+              example</para>
+
+              <programlisting language="myxml">&lt;object name="nameMatchTxAttributeSource" type="Spring.Transaction.Interceptor.NameMatchTransactionAttributeSource, Spring.Data"
+      &lt;property name="NameMap"&gt;
+          &lt;dictionary&gt;
+              &lt;entry key="Execute" value="PROPAGATION_REQUIRES_NEW, -ApplicationException"/&gt;
+              &lt;entry key="HandleData" value="PROPAGATION_REQUIRED, -DataHandlerException"/&gt;
+              &lt;entry key="Find*" value="ISOLATION_READUNCOMMITTED, -DataHandlerException"/&gt;
+          &lt;/dictionary&gt;
+      &lt;/property&gt;
+
+&lt;/object&gt;</programlisting>
+
+              <para>Key values can be prefixed and/or suffixed with wildcards
+              as well as include the full namespace of the containing
+              class.</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>MethodMapTransactionAttributeSource</literal> :
+              Similar to NameMatchTransactionAttributeSource but specifies
+              that only fully qualified method names (i.e. type.method,
+              assembly) and wildcards can be used at the start or end of the
+              method name for matching multiple methods.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para><literal>DefaultAdvisorAutoProxyCreator</literal>: looks for
+          Advisors in the context, and automatically creates proxy objects
+          which are the transactional wrappers</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Refer to the following section for a more convenient way to
+      achieve the same goal of declarative transaction management using
+      attributes.</para>
+    </section>
+        <section xml:id="classic-tx-txproxyfactoryobject">
+      <title>Declarative Transactions using TransactionProxyFactoryObject</title>
+
+      <para>The TransactionProxyFactoryObject is easier to use than a
+      ProxyFactoryObject for most cases since the transaction interceptor and
+      transaction attributes are properties of this object. This removes the
+      need to declare them as separate objects. Also, unlike the case with the
+      ProxyFactoryObject, you do not have to give fully qualified method
+      names, just the normal 'short' method name. Wild card matching on the
+      method name is also allowed, which in practice helps to enforce a common
+      naming convention for the methods of your DAOs. The example from chapter
+      5 is shown here using a TransactionProxyFactoryObject.</para>
+
+      <programlisting language="myxml">
+    &lt;object id="testObjectManager" 
+            type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data"&gt;
+        
+        &lt;property name="PlatformTransactionManager" ref="adoTransactionManager"/&gt;
+        &lt;property name="Target"&gt;
+            &lt;object type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests"&gt;
+                &lt;property name="TestObjectDao" ref="testObjectDao"/&gt;
+            &lt;/object&gt;
+        &lt;/property&gt; 
+        &lt;property name="TransactionAttributes"&gt;
+            &lt;name-values&gt;
+                &lt;add key="Save*" value="PROPAGATION_REQUIRED"/&gt;
+                &lt;add key="Delete*" value="PROPAGATION_REQUIRED"/&gt;
+            &lt;/name-values&gt;
+        &lt;/property&gt;
+    &lt;/object&gt;
+    
+</programlisting>
+
+      <para>Note the use of an inner object definition for the target which
+      will make it impossible to obtain an unproxied reference to the
+      TestObjectManager.</para>
+
+      <para>As can be seen in the above definition, the TransactionAttributes
+      property holds a collection of name/value pairs. The key of each pair is
+      a method or methods (a * wildcard ending is optional) to apply
+      transactional semantics to. Note that the method name is not qualified
+      with a package name, but rather is considered relative to the class of
+      the target object being wrapped. The value portion of the name/value
+      pair is the TransactionAttribute itself that needs to be applied. When
+      specifying it as a string value as in this example, it's in String
+      format as defined by TransactionAttributeConverter. This format
+      is:</para>
+
+      <para><literal>PROPAGATION_NAME,ISOLATION_NAME,readOnly,timeout_NNNN,+Exception1,-Exception2</literal></para>
+
+      <para>Note that the only mandatory portion of the string is the
+      propagation setting. The default transactions semantics which apply are
+      as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Exception Handling: All exceptions thrown trigger a
+          rollback.</para>
+        </listitem>
+
+        <listitem>
+          <para>Transactions are read/write</para>
+        </listitem>
+
+        <listitem>
+          <para>Isolation Level:
+          TransactionDefinition.ISOLATION_DEFAULT</para>
+        </listitem>
+
+        <listitem>
+          <para>Timeout: TransactionDefinition.TIMEOUT_DEFAULT</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Multiple rollback rules can be specified here, comma-separated. A
+      - prefix forces rollback; a + prefix specifies commit. Under the covers
+      the IDictionary of name value pairs will be converted to an instance of
+      <literal>NameMatchTransactionAttributeSource</literal></para>
+
+      <para>The string used for PROPAGATION_NAME are those defined on the
+      Spring.Transaction.TransactionPropagation enumeration, namely Required,
+      Supports, Mandatory, RequiresNew, NotSupported, Never, Nested. The
+      string used for ISOLATION_NAME are those defined on the
+      System.Data.IsolationLevel enumberateion, namely ReadCommitted,
+      ReadUncommitted, RepeatableRead, Serializable.</para>
+
+      <para>The TransactionProxyFactoryObject allows you to set optional "pre"
+      and "post" advice, for additional interception behavior, using the
+      "PreInterceptors" and "PostInterceptors" properties. Any number of pre
+      and post advices can be set, and their type may be Advisor (in which
+      case they can contain a pointcut), MethodInterceptor or any advice type
+      supported by the current Spring configuration (such as ThrowsAdvice,
+      AfterReturningAdvice or BeforeAdvice, which are supported by default.)
+      These advices must support a shared-instance model. If you need
+      transactional proxying with advanced AOP features such as stateful
+      mixins, it's normally best to use the generic ProxyFactoryObject, rather
+      than the TransactionProxyFactoryObject convenience proxy creator.</para>
+    </section>
+
+    <section xml:id="classic-using-abstract-objectdefs">
+      <title>Concise proxy definitions</title>
+
+      <para>Using abstract object definitions in conjunction with a
+      TransactionProxyFactoryObject provides you a more concise means to reuse
+      common configuration information instead of duplicating it over and over
+      again with a definition of a TransactionProxyFactoryObject per object.
+      Objects that are to be proxied typically have the same pattern of method
+      names, Save*, Find*, etc. This commonality can be placed in an abstract
+      object definition, which other object definitions refer to and change
+      only the configuration information that is different. An abstract object
+      definition is shown below</para>
+
+      <programlisting language="myxml">   &lt;object id="txProxyTemplate" abstract="true"
+            type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data"&gt;
+        
+        &lt;property name="PlatformTransactionManager" ref="adoTransactionManager"/&gt;
+
+        &lt;property name="TransactionAttributes"&gt;
+            &lt;name-values&gt;
+                &lt;add key="Save*" value="PROPAGATION_REQUIRED"/&gt;
+                &lt;add key="Delete*" value="PROPAGATION_REQUIRED"/&gt;
+            &lt;/name-values&gt;
+        &lt;/property&gt;
+    &lt;/object&gt;</programlisting>
+
+      <para>Subsequent definitions can refer to this 'base' configuration as
+      shown below</para>
+
+      <programlisting language="myxml">&lt;object id="testObjectManager" parent="txProxyTemplate"&gt;
+    &lt;property name="Target"&gt;
+            &lt;object type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests"&gt;
+                &lt;property name="TestObjectDao" ref="testObjectDao"/&gt;
+            &lt;/object&gt;
+    &lt;/property&gt; 
+&lt;/object&gt;</programlisting>
+    </section>
+
+    <section xml:id="classic-tx-proxyfactoryobject">
+      <title>Declarative Transactions using ProxyFactoryObject</title>
+
+      <para>Using the general ProxyFactoryObject to declare transactions gives
+      you a great deal of control over the proxy created since you can specify
+      additional advice, such as for logging or performance. Based on the
+      example shown previously a sample configuration using ProxyFactoryObject
+      is shown below</para>
+
+      <programlisting language="myxml">    &lt;object id="testObjectManagerTarget" type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests"&gt;
+        &lt;property name="TestObjectDao" ref="testObjectDao"/&gt;
+    &lt;/object&gt;
+
+    &lt;object id="testObjectManager" type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
+        
+        &lt;property name="Target" ref="testObjectManagerTarget"/&gt;
+        &lt;property name="ProxyInterfaces"&gt;
+            &lt;value&gt;Spring.Data.ITestObjectManager&lt;/value&gt;
+        &lt;/property&gt;
+        &lt;property name="InterceptorNames"&gt;
+            &lt;value&gt;transactionInterceptor&lt;/value&gt;
+        &lt;/property&gt;      
+        
+    &lt;/object&gt;</programlisting>
+
+      <para>The ProxyFactoryObject will create a proxy for the Target, i.e. a
+      TestObjectManager instance. An inner object definition could also have
+      been used such that it would make it impossible to obtain an unproxied
+      object from the container. The interceptor name refers to the following
+      definition.</para>
+
+      <programlisting language="myxml">    &lt;object id="transactionInterceptor" type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data"&gt;
+
+        &lt;property name="TransactionManager" ref="adoTransactionManager"/&gt;
+
+        &lt;!-- note do not have converter from string to this property type registered --&gt;
+        &lt;property name="TransactionAttributeSource" ref="methodMapTransactionAttributeSource"/&gt;        
+    &lt;/object&gt;
+    
+    &lt;object name="methodMapTransactionAttributeSource" 
+            type="Spring.Transaction.Interceptor.MethodMapTransactionAttributeSource, Spring.Data"&gt;
+        &lt;property name="MethodMap"&gt;
+           &lt;dictionary&gt;           
+              &lt;entry key="Spring.Data.TestObjectManager.SaveTwoTestObjects, Spring.Data.Integration.Tests" 
+                     value="PROPAGATION_REQUIRED"/&gt;
+              &lt;entry key="Spring.Data.TestObjectManager.DeleteTwoTestObjects, Spring.Data.Integration.Tests" 
+                     value="PROPAGATION_REQUIRED"/&gt;                     
+           &lt;/dictionary&gt;        
+        &lt;/property&gt;     
+    &lt;/object&gt;</programlisting>
+
+      <para>The transaction options for each method are specified using a
+      dictionary containing the class name + method name, assembly as the key
+      and the value is of the form</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>&lt;Propagation Behavior&gt;, &lt;Isolation Level&gt;,
+          &lt;ReadOnly&gt;, -Exception, +Exception</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>All but the propagation behavior are optional. The + and - are
+      used in front of the name of an exception. Minus indicates to rollback
+      if the exception is thrown, the Plus indicates to commit if the
+      exception is thrown.</para>
+    </section>
+  </section>
+  
+</appendix>

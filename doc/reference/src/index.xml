@@ -55,6 +55,7 @@
   <!ENTITY xsd-configuration    SYSTEM "xsd-configuration.xml">
   <!ENTITY xml-custom           SYSTEM "xml-custom.xml">
   <!ENTITY xsd	                SYSTEM "xsd.xml">
+  <!ENTITY classic-spring       SYSTEM "classic-spring.xml">
 ]>
 <book xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -65,7 +66,7 @@
     <title>The Spring.NET Framework</title>
     <subtitle>Reference Documentation</subtitle>
     <releaseinfo>Version 1.3.0</releaseinfo>
-    <pubdate>Last Updated December 15, 2009 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
+    <pubdate>Last Updated December 17, 2009 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
     <authorgroup>
       <author>
         <firstname>Mark</firstname>
@@ -452,8 +453,12 @@
   </part>
 
   <!-- back matter -->
-  &xsd-configuration;
-  &xml-custom;
-  &xsd;
+  <part id="spring-appendices">
+  <title>Appendices</title>
+    &classic-spring;
+    &xsd-configuration;
+    &xml-custom;
+    &xsd;
+  </part>
 
 </book>
