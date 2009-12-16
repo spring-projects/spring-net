@@ -395,6 +395,18 @@
         implementation of <literal>MultiDelegatingDbProvider</literal>.</para>
       </note>
 
+      <section>
+        <title>Using FluentNHibernate to configure mappings with
+        LocalSessionFactoryObject</title>
+
+        <para>Direct support for configuration of NHibernate mapping files
+        using FluentNHibernate will be included in a future release. Until
+        then, to see how you can extend LocalSessionFactoryObject to suppport
+        using FluentNHibernate follow the instructions on Benny Michielson's
+        blog post <link
+        ns6:href="http://www.bennymichielsen.be/post/2009/01/04/Using-Fluent-NHibernate-in-SpringNet.aspx">here</link>.</para>
+      </section>
+
       <section xml:id="orm-hibernate-bytecodeprovider">
         <title>Spring's IByteCodeProvider implementation</title>
 
@@ -590,7 +602,6 @@ public class HibernateCustomerDao : ICustomerDao {
           </note></para>
       </section>
     </section>
-
 
     <section xml:id="orm-hibernate-tx-declarative">
       <title>Declarative transaction demarcation</title>

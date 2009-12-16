@@ -119,14 +119,14 @@
 
     <itemizedlist>
       <listitem>
-        <para><literal>SqlServer-1.1</literal> - Microsoft SQL Server, provider
-        V1.0.5000.0 in framework .NET V1.1</para>
+        <para><literal>SqlServer-1.1</literal> - Microsoft SQL Server,
+        provider V1.0.5000.0 in framework .NET V1.1</para>
       </listitem>
 
       <listitem>
         <para><literal>SqlServer-2.0</literal> (aliased to
-        <literal>System.Data.SqlClient</literal>) - Microsoft SQL Server, provider
-        V2.0.0.0 in framework .NET V2.0</para>
+        <literal>System.Data.SqlClient</literal>) - Microsoft SQL Server,
+        provider V2.0.0.0 in framework .NET V2.0</para>
       </listitem>
 
       <listitem>
@@ -153,8 +153,8 @@
 
       <listitem>
         <para><literal>OracleClient-2.0</literal> (aliased to
-        <literal>System.Data.OracleClient</literal>) - Oracle, Microsoft provider
-        V2.0.0.0</para>
+        <literal>System.Data.OracleClient</literal>) - Oracle, Microsoft
+        provider V2.0.0.0</para>
       </listitem>
 
       <listitem>
@@ -201,7 +201,7 @@
         <para><literal>MySql-5.2.3</literal> - MySQL, MySQL provider
         5.2.3.0</para>
       </listitem>
-      
+
       <listitem>
         <para><literal>MySql-6.1.3</literal> (aliased to
         <literal>MySql.Data.MySqlClient</literal>) - MySQL, MySQL provider
@@ -244,36 +244,35 @@
         <literal>IBM.Data.DB2.9.1.0</literal>) - IBM DB2 Data Provider 9.1.0
         for .NET Framework 2.0</para>
       </listitem>
-      
+
       <listitem>
-        <para><literal>iDB2-10.0.0.0</literal> - IBM iSeries DB2 Data Provider 10.0.0.0 
-        for .NET Framework 2.0</para>
+        <para><literal>iDB2-10.0.0.0</literal> - IBM iSeries DB2 Data Provider
+        10.0.0.0 for .NET Framework 2.0</para>
       </listitem>
 
       <listitem>
-        <para><literal>SQLite-1.0.43</literal> - SQLite provider 1.0.43 for .NET
-        Framework 2.0</para>
-      </listitem>
-      
-      <listitem>
-        <para><literal>SQLite-1.0.44</literal> - SQLite provider 1.0.44 for .NET
-        Framework 2.0</para>
+        <para><literal>SQLite-1.0.43</literal> - SQLite provider 1.0.43 for
+        .NET Framework 2.0</para>
       </listitem>
 
       <listitem>
-        <para><literal>SQLite-1.0.47</literal> - SQLite provider 1.0.47 for .NET
-        Framework 2.0</para>
-      </listitem>
-      
-      <listitem>
-        <para><literal>SQLite-1.0.56</literal> - SQLite provider 1.0.56 for .NET 
-        Framework 2.0</para>
+        <para><literal>SQLite-1.0.44</literal> - SQLite provider 1.0.44 for
+        .NET Framework 2.0</para>
       </listitem>
 
       <listitem>
-        <para><literal>SQLite-1.0.65</literal> (aliased to
-        System.Data.SQLite) - SQLite provider 1.0.65 for .NET Framework
-        2.0</para>
+        <para><literal>SQLite-1.0.47</literal> - SQLite provider 1.0.47 for
+        .NET Framework 2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SQLite-1.0.56</literal> - SQLite provider 1.0.56 for
+        .NET Framework 2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SQLite-1.0.65</literal> (aliased to System.Data.SQLite)
+        - SQLite provider 1.0.65 for .NET Framework 2.0</para>
 
         <note>
           <para>The default parameter prefix used in SQLite is : and not @,
@@ -284,7 +283,8 @@
 
       <listitem>
         <para><literal>Firebird-2.1</literal> (aliased to
-        <literal>Firebird-2.1</literal>) - Firebird Server, provider V2.1.0.0 in framework .NET V2.0</para>
+        <literal>Firebird-2.1</literal>) - Firebird Server, provider V2.1.0.0
+        in framework .NET V2.0</para>
       </listitem>
 
       <listitem>
@@ -314,8 +314,8 @@
 
       <listitem>
         <para><literal>Cache-2.0.0.1</literal> (aliased to
-          <literal>InterSystems.Data.CacheClient</literal>) - Cache provider Version 2.0.0.1
-          in framework .NET V2</para>
+        <literal>InterSystems.Data.CacheClient</literal>) - Cache provider
+        Version 2.0.0.1 in framework .NET V2</para>
       </listitem>
     </itemizedlist>
 
@@ -500,6 +500,16 @@
     <para>Spring provides some convenient implementations of the IDbProvider
     interface that add addtional behavior on top of the standard
     implementation.</para>
+
+    <note>
+      <para>These provider implementations do not take into account usage with
+      NHibernate. NHibernate scopes a SessionFactory, where second level
+      caching is managed, to each connection. This <link
+      ns6:href="http://forum.springframework.net/showthread.php?t=4462">forum
+      thread</link>, contains an implementation of the class
+      LocalDelegatingSessionFactoryObject that will create multiple
+      SessionFactories for each database connection.</para>
+    </note>
 
     <section xml:id="dbprovider-usercredentials">
       <title>UserCredentialsDbProvider</title>
