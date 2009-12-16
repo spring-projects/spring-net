@@ -127,7 +127,11 @@ namespace Spring.Data.NHibernate
 		public IApplicationContext ApplicationContext
 		{
 			set { this.applicationContext = value; }
+#if NET_1_1
+            get { return this.applicationContext; }
+#else
             protected get { return this.applicationContext; }
+#endif
 		}
 
 		/// <summary>
