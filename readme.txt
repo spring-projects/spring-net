@@ -1,4 +1,4 @@
-THE SPRING.NET FRAMEWORK, Release 1.3.0  (December 15, 2009)
+THE SPRING.NET FRAMEWORK, Release 1.3.0  (December 17, 2009)
 --------------------------------------------------------------------
 http://www.springframework.net/
 
