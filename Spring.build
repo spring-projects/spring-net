@@ -1446,7 +1446,7 @@ Commandline Examples:
     <!-- Copy generated htmlhelp 2.x files, install scripts, -->
     <!-- and install utility for .NET 1.1 assemblies         -->
     <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003">
-      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/web">
+      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/htmlhelp1and2">
         <include name="COL_*.*"/>
       </fileset>
     </copy>
@@ -1462,7 +1462,7 @@ Commandline Examples:
     <!-- Copy generated htmlhelp 2.x files, install scripts, -->
     <!-- and install utility for .NET 2.0 assemblies         -->
     <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005">
-      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-2.0/web">
+      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-2.0/htmlhelp1and2">
         <include name="COL_*.*"/>
       </fileset>
     </copy>

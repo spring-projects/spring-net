@@ -23,7 +23,7 @@ The 1.3.0 release of Spring.NET contains
        - NHibernate 1.0, 1.2, 2.0 and 2.1 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
      * ASP.NET AJAX Integration
        - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
-     * NUnit integration
+     * NUnit and MSTest integration
        - Provides Dependency Injection of test cases and Spring container loading and caching. .  Data access and transaction management features aid with integration testing.
      * WCF integration
        - Provides Dependency Injection and applicatin of AOP advice to WCF services
