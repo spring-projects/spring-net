@@ -10,7 +10,6 @@ Bug
 [SPRNET-1155] - Error when evaluating expression with #date variable
 [SPRNET-1198] - Dynamic Assemblies are not Strong Named
 [SPRNET-1228] - NmsTemplate: wrong timeout units in receive method (ticks instead of milliseconds)
-[SPRNET-1253] - NmsTemplate: wrong timeout units in receive method (ticks instead of milliseconds)
 [SPRNET-1266] - Context creation can throw ObjectCurrentlyInCreatation exception thrown when using <tx:attribute-driven/> with NHibernateTransactionManager
 [SPRNET-1270] - Selection of DefaultProvider in MultiDelegatingDbProvider can be null
 [SPRNET-1272] - Recreating application context can result in calls to create same type twice leading to System.ArgumentException: Duplicate type name within an assembly.
