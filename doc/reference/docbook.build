@@ -83,7 +83,7 @@
         <exclude name="*.chm"/>
       </fileset>
     </delete>
-
+    <delete file="${project.targetdir}\htmlhelp\spring-net-reference.chm"/>
     <move file="${project.targetdir}\htmlhelp\htmlhelp.chm"
 	  tofile="${project.targetdir}\htmlhelp\spring-net-reference.chm" verbose="true"/>
   </target>
