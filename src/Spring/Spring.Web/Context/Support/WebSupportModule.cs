@@ -157,31 +157,36 @@ namespace Spring.Context.Support
             app.PreRequestHandlerExecute += new EventHandler(OnConfigureHandler);
             app.EndRequest += new EventHandler(VirtualEnvironment.RaiseEndRequest);
 
-            // ensure context is instantiated
-            IConfigurableApplicationContext appContext = WebApplicationContext.GetRootContext() as IConfigurableApplicationContext;
-            // configure this app + it's module instances
-            if (appContext == null)
-            {
-                throw new InvalidOperationException("Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
-            }
-
 #if NET_2_0
             // TODO: this is only a workaround to get us up & running in IIS7/integrated mode
             // We must review all code for relative virtual paths - they must be resolved to application-relative paths
             // during parsing of the object definitions
-            bool hideRequestResponse = (ContextHideRequestResponse!=null)? (bool) ContextHideRequestResponse.GetValue(app.Context) : false;
-            if (ContextHideRequestResponse!=null) ContextHideRequestResponse.SetValue(app.Context, false);
+            bool hideRequestResponse = false;
+            if (ContextHideRequestResponse != null)
+            {
+                hideRequestResponse = (bool)ContextHideRequestResponse.GetValue(app.Context);
+                ContextHideRequestResponse.SetValue(app.Context, false);
+            }
+            
+#endif
             try
             {
+                // ensure context is instantiated
+                IConfigurableApplicationContext appContext = WebApplicationContext.GetRootContext() as IConfigurableApplicationContext;
+                // configure this app + it's module instances
+                if (appContext == null)
+                {
+                    throw new InvalidOperationException("Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
+                }
+
                 HttpApplicationConfigurer.Configure(appContext, app);
             }
             finally
             {
+#if NET_2_0
                 if (ContextHideRequestResponse!=null) ContextHideRequestResponse.SetValue(app.Context, hideRequestResponse);
-            }
-#else
-            HttpApplicationConfigurer.Configure(appContext, app);
 #endif
+            }
         }
 
         #region IHttpHandler configuration
