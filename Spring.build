@@ -24,7 +24,7 @@ Build properties that may be set:
 
 "mstest.exe":
   value: bool: true:false
-  set to true to build Spring.Testing.Microsoft 
+  set to true to build Spring.Testing.Microsoft
 
 "vs-net.mstest.bin.dir":
   value: string: location of mstest.exe, for example C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE
@@ -1242,6 +1242,7 @@ Commandline Examples:
     <copy todir="${current.package.dir}/doc/schema"
           file="build-support/install-schema.build"/>
 
+<!--
     <copy todir="${current.package.dir}/net/3.0/debug"
           file="build-support/readme-net-3.0.txt"/>
 
@@ -1256,7 +1257,7 @@ Commandline Examples:
 
     <copy todir="${current.package.dir}/bin/net/3.5/release"
           file="build-support/readme-net-3.5.txt"/>
-
+-->
 
     <echo message="copying source code for release..."/>
 
