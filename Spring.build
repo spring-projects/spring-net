@@ -1242,7 +1242,6 @@ Commandline Examples:
     <copy todir="${current.package.dir}/doc/schema"
           file="build-support/install-schema.build"/>
 
-<!--
     <copy todir="${current.package.dir}/net/3.0/debug"
           file="build-support/readme-net-3.0.txt"/>
 
@@ -1257,7 +1256,6 @@ Commandline Examples:
 
     <copy todir="${current.package.dir}/bin/net/3.5/release"
           file="build-support/readme-net-3.5.txt"/>
--->
 
     <echo message="copying source code for release..."/>
 
