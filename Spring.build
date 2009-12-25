@@ -104,6 +104,7 @@ Commandline Examples:
   <property name="project.name" value="Spring.NET"/>
   <property name="project.name.full" value="Spring.NET Framework"/>
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
+  <property name="spring.nonredistdir" value="${spring.basedir}/../nonredist"/>
   <property name="tool.dir" value="${project::get-base-directory()}/build-support/tools"/>
 
   <!-- build SDK docs with NDoc -->
@@ -125,6 +126,18 @@ Commandline Examples:
   <property name="project.build.config" value="debug"/>
   <property name="project.build.package" value="false"/>
   <property name="project.build.sign" value="false" overwrite="false" />
+
+  <!-- import non-redistributables if available -->
+  <!-- to build certain libraries (e.g. Spring.Messaging.Ems), 3rd party libraries are required
+       that we are not allowed to redistribute -->
+  <if test="${directory::exists(spring.nonredistdir)}">
+    <echo message="Copying non-redistributables into source tree"/>
+    <copy todir="${spring.basedir}">
+      <fileset basedir="${spring.nonredistdir}">
+        <include name="**/*.*"/>
+      </fileset>
+    </copy>
+  </if>
 
   <!-- Include spring helpers -->
   <include buildfile="${spring.basedir}/Spring.include"/>
