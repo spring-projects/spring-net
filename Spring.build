@@ -915,8 +915,6 @@ Commandline Examples:
     <!-- build all binaries -->
     <call target="build-all-function"/>
     <call target="package-cvs"/>
-    <!-- only copy the supporting tools directory for the daily build. -->
-    <call target="package-tools"/>
     <call target="upload-cvs-release"/>
   </target>
 
@@ -1255,10 +1253,10 @@ Commandline Examples:
     <copy todir="${current.package.dir}/doc/schema"
           file="build-support/install-schema.build"/>
 
-    <copy todir="${current.package.dir}/net/3.0/debug"
+    <copy todir="${current.package.dir}/bin/net/3.0/debug"
           file="build-support/readme-net-3.0.txt"/>
 
-    <copy todir="${current.package.dir}/net/3.0/release"
+    <copy todir="${current.package.dir}/bin/net/3.0/release"
           file="build-support/readme-net-3.0.txt"/>
 
     <mkdir dir="${current.package.dir}/bin/net/3.5/debug"/>
