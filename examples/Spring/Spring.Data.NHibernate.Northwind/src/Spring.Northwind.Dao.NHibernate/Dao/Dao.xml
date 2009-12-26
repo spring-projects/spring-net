@@ -18,7 +18,7 @@
                    connectionString="Data Source=|DataDirectory|Northwind.db;Version=3;FailIfMissing=True;"/>
 
   <!-- NHibernate Configuration -->
-  <object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
+  <object id="NHibernateSessionFactory" type="Spring.Northwind.Dao.NHibernate.CustomLocalSessionFactoryObject, Spring.Northwind.Dao.NHibernate">
     <property name="DbProvider" ref="DbProvider"/>
     <property name="MappingAssemblies">
       <list>
@@ -30,12 +30,12 @@
         <entry key="hibernate.connection.provider" value="NHibernate.Connection.DriverConnectionProvider"/>
         <entry key="dialect" value="NHibernate.Dialect.SQLiteDialect"/>
         <entry key="connection.driver_class" value="NHibernate.Driver.SQLite20Driver"/>
+        <entry key="use_proxy_validator" value="false" />
       </dictionary>
     </property>
 
     <!-- provides integation with Spring's declarative transaction management features -->
     <property name="ExposeTransactionAwareSessionFactory" value="true" />
-
 
   </object>
 
@@ -58,6 +58,14 @@
 
   <object id="OrderDao" type="Spring.Northwind.Dao.NHibernate.HibernateOrderDao, Spring.Northwind.Dao.NHibernate">
     <property name="SessionFactory" ref="NHibernateSessionFactory"/>
+  </object>
+
+  <object id="CustomerClassificationCalculator" type="Spring.Northwind.Domain.DefaultCustomerClassificationCalculator, Spring.Northwind.Dao">
+    
+  </object>
+
+  <object id="CustomerEntityProtoType" type="Spring.Northwind.Domain.Customer, Spring.Northwind.Dao" singleton="false">
+    <constructor-arg ref="CustomerClassificationCalculator" />
   </object>
 
 

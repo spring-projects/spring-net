@@ -95,6 +95,7 @@ fieldset legend {
 {
 	border: solid 1px Tan; 
 	margin-left: 10px;
+	width: 95%;
 }
 
 .datagrid-header

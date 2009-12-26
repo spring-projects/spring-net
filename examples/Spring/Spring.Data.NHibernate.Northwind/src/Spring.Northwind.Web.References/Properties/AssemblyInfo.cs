@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
@@ -31,8 +30,18 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
+#pragma warning disable 414
 class LinkThem
 {
   private Spring.Data.NHibernate.HibernateTemplate ht = null;
   private Spring.Web.UI.Page page = null;
+  private Common.Logging.ILog log = null;
+
+  public LinkThem(Spring.Data.NHibernate.HibernateTemplate ht, Spring.Web.UI.Page page, Common.Logging.ILog log)
+    {
+        this.ht = ht;
+        this.page = page;
+        this.log = log;
+    }
 }
+#pragma warning restore 414

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -43,6 +43,9 @@
     <Compile Include="Dao\ISupportsDeleteDao.cs" />
     <Compile Include="Dao\ISupportsSave.cs" />
     <Compile Include="Domain\Customer.cs" />
+    <Compile Include="Domain\DefaultCustomerClassificationCalculator.cs" />
+    <Compile Include="Domain\ICustomer.cs" />
+    <Compile Include="Domain\ICustomerClassificationCalculator.cs" />
     <Compile Include="Domain\Order.cs" />
     <Compile Include="Domain\OrderDetail.cs" />
     <Compile Include="Domain\Product.cs" />

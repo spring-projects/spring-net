@@ -24,9 +24,9 @@ namespace Spring.Northwind.Domain
 {
     public class OrderDetail
     {
-        protected double unitPrice;
+        protected decimal unitPrice;
         protected int quantity;
-        protected double discount;
+        protected decimal discount;
         protected Order order;
         protected int productId;
         //protected Product product;
@@ -44,7 +44,7 @@ namespace Spring.Northwind.Domain
             return order.Id.GetHashCode() + 29*productId.GetHashCode();
         }
 
-        public double UnitPrice
+        public decimal UnitPrice
         {
             get { return this.unitPrice; }
             set { this.unitPrice = value; }
@@ -56,7 +56,7 @@ namespace Spring.Northwind.Domain
             set { this.quantity = value; }
         }
 
-        public double Discount
+        public decimal Discount
         {
             get { return this.discount; }
             set { this.discount = value; }

@@ -75,7 +75,7 @@ namespace Spring.Northwind.IntegrationTests
         {
             Assert.AreEqual(91, customerDao.GetAll().Count);
 
-            Customer c = new Customer();
+            Customer c = new Customer(new DefaultCustomerClassificationCalculator());
             c.Id = "MPOLL";           
             c.CompanyName = "Interface21";
             customerDao.Save(c);

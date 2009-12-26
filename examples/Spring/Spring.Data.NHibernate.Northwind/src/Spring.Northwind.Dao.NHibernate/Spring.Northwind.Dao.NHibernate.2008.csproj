@@ -33,9 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging">
+    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <SpecificVersion>False</SpecificVersion>
@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dao\NHibernate\CustomLocalSessionFactoryObject.cs" />
     <Compile Include="Dao\NHibernate\HibernateCustomerDao.cs">
       <SubType>Code</SubType>
     </Compile>

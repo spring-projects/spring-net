@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "L:\...\Spring.Northwind.Web\", "src\Spring.Northwind.Web\", "{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}"
 	ProjectSection(WebsiteProperties) = preProject
-		ProjectReferences = "{53B04C54-63EA-45AA-BB83-8950AF3C5D68}|Spring.Aspects.dll;{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}|Spring.Northwind.Dao.dll;{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}|Spring.Northwind.Dao.NHibernate.dll;{9E15876F-E9E0-43B7-9874-B54F163757D6}|Spring.Northwind.Service.dll;{FD89FEBE-4914-45F3-9123-B2CB954810DD}|Spring.Northwind.Web.References.dll;"
+		ProjectReferences = "{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}|Spring.Northwind.Dao.dll;{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}|Spring.Northwind.Dao.NHibernate.dll;{9E15876F-E9E0-43B7-9874-B54F163757D6}|Spring.Northwind.Service.dll;{FD89FEBE-4914-45F3-9123-B2CB954810DD}|Spring.Northwind.Web.References.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Spring.Northwind.Web"
 		Debug.AspNetCompiler.PhysicalPath = "src\Spring.Northwind.Web\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Spring.Northwind.Web\"

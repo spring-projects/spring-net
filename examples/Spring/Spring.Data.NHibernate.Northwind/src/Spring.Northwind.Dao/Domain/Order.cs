@@ -19,7 +19,8 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Spring.Northwind.Domain
 {
@@ -42,7 +43,9 @@ namespace Spring.Northwind.Domain
 
         //protected Employee _employee;
         //protected Shipper _shipVia;
-        protected IList orderDetails;
+        protected IList<OrderDetail> orderDetails;
+
+        protected ICustomerClassificationCalculator calculator;
 
         #endregion
 
@@ -54,7 +57,7 @@ namespace Spring.Northwind.Domain
 
         public Order(DateTime orderDate, DateTime requiredDate, DateTime shippedDate, decimal freight, string shipName,
                      string shipAddress, string shipCity, string shipRegion, string shipPostalCode, string shipCountry,
-                     Customer customer)
+                     Customer customer, ICustomerClassificationCalculator calculator)
         {
             this.orderDate = orderDate;
             this.requiredDate = requiredDate;
@@ -67,6 +70,7 @@ namespace Spring.Northwind.Domain
             this.shipPostalCode = shipPostalCode;
             this.shipCountry = shipCountry;
             this.customer = customer;
+            this.calculator = calculator;
         }
 
         #endregion
@@ -146,18 +150,9 @@ namespace Spring.Northwind.Domain
             set { customer = value; }
         }
 
-
-        public IList OrderDetails
+        public ReadOnlyCollection<OrderDetail> OrderDetails
         {
-            get
-            {
-                if(orderDetails == null)
-                {
-                    orderDetails = new ArrayList();
-                }
-                return orderDetails;
-            }
-            set { orderDetails = value; }
+            get { return new ReadOnlyCollection<OrderDetail>(orderDetails ?? new List<OrderDetail>()); }
         }
 
         #endregion

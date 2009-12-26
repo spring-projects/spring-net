@@ -38,6 +38,9 @@
     <Compile Include="Dao\ISupportsDeleteDao.cs" />
     <Compile Include="Dao\ISupportsSave.cs" />
     <Compile Include="Domain\Customer.cs" />
+    <Compile Include="Domain\DefaultCustomerClassificationCalculator.cs" />
+    <Compile Include="Domain\ICustomer.cs" />
+    <Compile Include="Domain\ICustomerClassificationCalculator.cs" />
     <Compile Include="Domain\Order.cs" />
     <Compile Include="Domain\OrderDetail.cs" />
     <Compile Include="Domain\Product.cs" />

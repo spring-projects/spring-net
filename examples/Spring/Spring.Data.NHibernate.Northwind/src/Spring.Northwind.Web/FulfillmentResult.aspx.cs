@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 
-using Common.Logging;
-
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
@@ -11,7 +9,6 @@ using log4net.Repository;
 using Spring.Northwind.Service;
 using Spring.Web.UI;
 
-using ILog=log4net.ILog;
 using LogManager=log4net.LogManager;
 
 public partial class FullfillmentResult : Page

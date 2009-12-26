@@ -1,41 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
-  <class name="Spring.Northwind.Domain.Customer, Spring.Northwind.Dao" table="Customers" lazy="false">
-    <id name="Id" type="String" unsaved-value="null">
+
+  <class name="Spring.Northwind.Domain.Customer, Spring.Northwind.Dao" table="Customers" lazy="false" proxy="Spring.Northwind.Domain.ICustomer, Spring.Northwind.Dao">
+    
+    <id name="Id" unsaved-value="null">
       <column name="CustomerID" length="5" sql-type="nchar" not-null="true" unique="true" index="PK_Customers"/>
       <generator class="assigned" />
     </id>
-    <property name="CompanyName" type="String">
+    <property name="CompanyName">
       <column name="CompanyName" length="40" sql-type="nvarchar" not-null="true" index="CompanyName"/>
     </property>
-    <property name="ContactName" type="String">
+    <property name="ContactName">
       <column name="ContactName" length="30" sql-type="nvarchar" not-null="false"/>
     </property>
-    <property name="ContactTitle" type="String">
+    <property name="ContactTitle">
       <column name="ContactTitle" length="30" sql-type="nvarchar" not-null="false"/>
     </property>
-    <property name="Address" type="String">
+    <property name="Address">
       <column name="Address" length="60" sql-type="nvarchar" not-null="false"/>
     </property>
-    <property name="City" type="String">
+    <property name="City">
       <column name="City" length="15" sql-type="nvarchar" not-null="false" index="City"/>
     </property>
-    <property name="Region" type="String">
+    <property name="Region">
       <column name="Region" length="15" sql-type="nvarchar" not-null="false" index="Region"/>
     </property>
-    <property name="PostalCode" type="String">
+    <property name="PostalCode">
       <column name="PostalCode" length="10" sql-type="nvarchar" not-null="false" index="PostalCode"/>
     </property>
     <property name="Country" type="String">
       <column name="Country" length="15" sql-type="nvarchar" not-null="false"/>
     </property>
-    <property name="Phone" type="String">
+    <property name="Phone">
       <column name="Phone" length="24" sql-type="nvarchar" not-null="false"/>
     </property>
-    <property name="Fax" type="String">
+    <property name="Fax">
       <column name="Fax" length="24" sql-type="nvarchar" not-null="false"/>
     </property>
-    <bag name="Orders" inverse="true" lazy="true" cascade="all">
+    <bag name="Orders" inverse="true" lazy="true" cascade="all" access="field.camelcase">
       <key column="CustomerID"/>
       <one-to-many class="Spring.Northwind.Domain.Order, Spring.Northwind.Dao"/>
     </bag>

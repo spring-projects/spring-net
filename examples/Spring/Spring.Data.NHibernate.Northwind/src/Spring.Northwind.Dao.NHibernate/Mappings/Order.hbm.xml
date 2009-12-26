@@ -38,7 +38,7 @@
       <column name="ShipCountry" length="15" sql-type="nvarchar" not-null="false"/>
     </property>
       
-    <bag name="OrderDetails" inverse="true" lazy="true" cascade="all">
+    <bag name="OrderDetails" inverse="true" lazy="true" cascade="all" access="field.camelcase">
       <key column="OrderID"/>
       <one-to-many class="Spring.Northwind.Domain.OrderDetail, Spring.Northwind.Dao"/>
     </bag>

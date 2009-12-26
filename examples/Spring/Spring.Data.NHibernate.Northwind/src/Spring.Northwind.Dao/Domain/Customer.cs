@@ -18,11 +18,16 @@
 
 #endregion
 
-using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Spring.Northwind.Domain
 {
-    public class Customer
+    /// <summary>
+    /// Customer entity. We 
+    /// </summary>
+    public class Customer : ICustomer
     {
         #region Fields
 
@@ -37,8 +42,11 @@ namespace Spring.Northwind.Domain
         protected string country;
         protected string phone;
         protected string fax;
-        protected IList orders;
+        protected IList<Order> orders;
 
+        // our calculator that is injected by Spring
+        private readonly ICustomerClassificationCalculator calculator;
+        
         #endregion
 
         #region Properties
@@ -109,25 +117,30 @@ namespace Spring.Northwind.Domain
             set { fax = value; }
         }
 
-        public IList Orders
+        public ReadOnlyCollection<Order> Orders
         {
             get
             {
-                if (orders == null)
-                {
-                    orders = new ArrayList();
-                }
-                return orders;
+                return new ReadOnlyCollection<Order>(orders ?? new List<Order>(0));
             }
-            set { orders = value; }
+        }
+
+        public string Classification
+        {
+            get { return calculator.CalculateClassification(this);  }
         }
 
         #endregion
 
         #region Constructor (s)
 
-        public Customer()
+        public Customer(ICustomerClassificationCalculator calculator)
         {
+            if (calculator == null)
+            {
+                throw new ArgumentNullException("calculator", "Calculator cannot be null");
+            }
+            this.calculator = calculator;
         }
 
         public Customer(string companyName, string contactName, string contactTitle, string address, string city,

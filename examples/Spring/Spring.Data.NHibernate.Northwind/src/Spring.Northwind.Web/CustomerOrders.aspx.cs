@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Web.UI.WebControls;
+
+using NHibernate;
+
 using Spring.Northwind.Domain;
 
 public partial class CustomerOrders : Spring.Web.UI.Page
