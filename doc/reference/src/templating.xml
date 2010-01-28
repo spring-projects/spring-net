@@ -220,8 +220,8 @@ string mergedContent = stringWriter.ToString();</programlisting>
       <para>Using the example above when resource loader paths are defined
       templates can be loaded using their name:</para>
 
-      <programlisting language="csharp">string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngine, "MyFileTemplate.vm", Encoding.UTF8.WebName, model); // template loaded from file://Template/Velocity/
-string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngine, "MyAseemblyTemplate.vm", Encoding.UTF8.WebName, model); // template loaded from assembly://MyAssembly/MyNameSpace</programlisting>
+      <programlisting language="csharp">string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, "MyFileTemplate.vm", Encoding.UTF8.WebName, model); // template loaded from file://Template/Velocity/
+string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, "MyAssemblyTemplate.vm", Encoding.UTF8.WebName, model); // template loaded from assembly://MyAssembly/MyNameSpace</programlisting>
     </section>
 
     <section xml:id="templating-nvelocity-custom-resource-loader">
@@ -366,7 +366,7 @@ string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngi
     <para>Spring provides the <literal>VelocityEngineUtils</literal> utility
     for merging templates using an engine instance:</para>
 
-    <programlisting language="myxml">string mergedTemplate = VelocityEngineUtils.MergeTemplateIntostring(velocityEngine, "MyTemplate.vm", Encoding.UTF8.WebName, model);</programlisting>
+    <programlisting language="myxml">string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, "MyTemplate.vm", Encoding.UTF8.WebName, model);</programlisting>
   </section>
 
   <section xml:id="templating-nvelocity-resource-namespace">
