@@ -178,6 +178,16 @@ There are four solution file for different version of VS.NET
 * Spring.Net.2005.sln for use with VS.NET 2005
 * Spring.Net.2008.sln for use with VS.NET 2008
 
+Note:
+When building on Vista with activated UAC, you might get an error:
+
+xcopy
+"C:\Spring.Net\Spring.NET-1.3.0\Spring.NET\test\Spring\Spring.Co
+re.Tests\Spring.Core.Tests.dll.config"
+..\..\..\..\build\VS.Net.2008\Spring.Core.Tests\Debug\ /y /s /q-Command exited with Code 9009.	Spring.Core.Tests.2008
+
+In this case you need to run Visual Studio with Administrator-permissions.
+
 NAnt
 ----
 
@@ -186,18 +196,17 @@ get the supporting tools directory from CVS as well.
 
 To build the source and run the unit tests type
 
-nant test -D:project.build.sign=false
+nant test
 
-NOTE!  You need to comment out the <startup> section of NAnt.exe.config in order to
-property run unit tests under different version of the .NET framework.
-
-Debug builds are strongly named using the Spring.Net.snk key file.  The ANTLR assemblies
-are signed with this key as well until such time as the ANTR distribution provides their
-own strongly signed assemblies.  If you want to run the build to creat strongly signed
-assebmlies you can generate a key file by executing the following commands
+If you want to run the build to create strongly
+signed assemblies you can generate a key file by executing the following command
 
 sn -k Spring.Net.snk
-nant
+
+You need to place the Spring.NET.snk file into the root folder of the source tree. All builds are strongly named using this key file
+when executing the following nant command:
+
+nant -D:project.build.sign=true
 
 The installation of the docbook toolchain is required to generate the reference
 documentation and make a final release build. Refer to the Spring.NET Wiki at
