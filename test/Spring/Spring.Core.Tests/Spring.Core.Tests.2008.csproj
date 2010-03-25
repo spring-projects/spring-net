@@ -319,6 +319,7 @@
     <Compile Include="Objects\Factory\Attributes\MyRequiredAttribute.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredAttributeObjectPostProcessorTests.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredTestObject.cs" />
+    <Compile Include="Objects\Factory\ConcurrentObjectFactoryTests.cs" />
     <Compile Include="Objects\Factory\Config\CommandLineArgsVariableSourceTests.cs" />
     <Compile Include="Objects\Factory\Config\ConfigSectionVariableSourceTests.cs" />
     <Compile Include="Objects\Factory\Config\ConnectionStringsVariableSourceTests.cs" />

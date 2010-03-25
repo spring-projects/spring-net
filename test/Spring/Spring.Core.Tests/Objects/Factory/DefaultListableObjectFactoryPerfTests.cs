@@ -32,7 +32,8 @@ using Spring.Threading;
 namespace Spring.Objects.Factory
 {
     /// <summary>
-    /// This class contains tests related to performance of the object factory implementation.  Ignored by default.
+    /// This class contains tests related to performance of the object factory implementation and some concurrency test.
+    /// The performance test are ignored by default.
     /// </summary>
     /// <author>Mark Pollack</author>
     [TestFixture]
@@ -106,6 +107,12 @@ namespace Spring.Objects.Factory
                               iterations / duration));
         }
 
+        [Test]
+        public void ConcurrencyTest()
+        {
+            AsyncTestTask t1 = new BeanFactoryTask(100).Start();
+            t1.AssertNoException();
+        }
 
     }
 
