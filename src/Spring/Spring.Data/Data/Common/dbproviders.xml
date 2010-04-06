@@ -945,7 +945,7 @@
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
           <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
@@ -993,7 +993,7 @@
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
           <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
@@ -1045,7 +1045,7 @@
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
           <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
@@ -1094,7 +1094,7 @@
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
           <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
@@ -1145,7 +1145,7 @@
         <property name="ErrorCodes.DataAccessResourceFailureCodes">
           <value>-904,-971</value>
         </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
           <value>-1035,-1218,-30080,-30081</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
@@ -1459,7 +1459,7 @@
         <property name="ErrorCodes.DataIntegrityViolationCodes">
           <value>423,511,515,530,547,2601,2615,2714</value>
         </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
           <value>921,1105</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
@@ -1497,10 +1497,7 @@
         <property name="ErrorCodes.DataIntegrityViolationCodes">
           <value>423,511,515,530,547,2601,2615,2714</value>
         </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
-          <value>921,1105</value>
-        </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
           <value>921,1105</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
@@ -1539,7 +1536,7 @@
         <property name="ErrorCodes.DataIntegrityViolationCodes">
           <value>423,511,515,530,547,2601,2615,2714</value>
         </property>
-        <property name="ErrorCodes.TransientDataAccessResourceCodes">
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
           <value>921,1105</value>
         </property>
         <property name="ErrorCodes.DeadlockLoserCodes">
