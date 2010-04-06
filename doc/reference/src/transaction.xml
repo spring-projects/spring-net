@@ -1549,7 +1549,7 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
         into as many services as are required.</para>
 
         <programlisting language="myxml">&lt;object id="sharedTransactionTemplate"
-        type="Spring.Transaction.Support.TransactionTemplate, Sprng.Data"&gt;
+        type="Spring.Transaction.Support.TransactionTemplate, Spring.Data"&gt;
   &lt;property name="TransactionIsolationLevel" value="IsolationLevel.ReadUncommitted"/&gt;
   &lt;property name="TransactionTimeout" value="30"/&gt;
 &lt;/object&gt;</programlisting>
