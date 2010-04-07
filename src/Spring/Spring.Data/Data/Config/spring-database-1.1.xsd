@@ -161,9 +161,14 @@
               <xs:documentation>MySQL provider 6.1.3.0</xs:documentation>
             </xs:annotation>
           </xs:enumeration>
+          <xs:enumeration value="MySql-6.2.2">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 6.2.2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
           <xs:enumeration value="MySql.Data.MySqlClient">
             <xs:annotation>
-              <xs:documentation>MySQL provider 6.1.3.0</xs:documentation>
+              <xs:documentation>MySQL provider 6.2.2.0</xs:documentation>
             </xs:annotation>
           </xs:enumeration>
           <xs:enumeration value="Npgsql-1.0">

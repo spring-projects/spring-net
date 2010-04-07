@@ -203,9 +203,16 @@
       </listitem>
 
       <listitem>
-        <para><literal>MySql-6.1.3</literal> (aliased to
-        <literal>MySql.Data.MySqlClient</literal>) - MySQL, MySQL provider
+        <para><literal>MySql-6.1.3</literal> - MySQL, MySQL provider
         6.1.3.0</para>
+      </listitem>
+
+      <listitem>
+        <para>
+          <literal>MySql-6.2.2</literal> (aliased to
+          <literal>MySql.Data.MySqlClient</literal>) - MySQL, MySQL provider
+          6.2.2.0
+        </para>
       </listitem>
 
       <listitem>
