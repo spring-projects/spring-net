@@ -416,8 +416,8 @@ namespace Spring.Expressions
         /// <returns>true if was able add to IList, IDictionary, or ISet</returns>
         private bool AddToCollections(object context, EvaluationContext evalContext, object newValue)
         {
-            // short-circuit if accessor is not readable
-            if (!this.accessor.IsReadable)
+            // short-circuit if accessor is not readable or if we have an array
+            if (!this.accessor.IsReadable || this.accessor.TargetType.IsArray)
             {
                 return false;
             }

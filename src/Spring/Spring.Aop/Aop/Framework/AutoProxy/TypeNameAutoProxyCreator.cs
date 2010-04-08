@@ -41,7 +41,14 @@ namespace Spring.Aop.Framework.AutoProxy
         ///</summary>
         public string[] TypeNames
         {
-            get { return _typeNameFilter.TypeNamePatterns; }
+            get 
+            {
+                if (_typeNameFilter != null)
+                {
+                    return _typeNameFilter.TypeNamePatterns;
+                }
+                return null;
+            }
             set
             {
                 AssertUtils.ArgumentNotNull(value, "TypeNames");
