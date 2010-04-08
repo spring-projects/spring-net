@@ -179,6 +179,26 @@ namespace Spring.Aop.Support
                 "but the method from an indirectly implemented interface was, so this must match.");
         }
 
+        /// <summary>
+        /// Confirms that methods, explicitly implemented in the derived classes will match
+        /// </summary>
+        [Test(Description="SPRNET-1314")]
+        public void MatchesWhenExplicitlyImplemed()
+        {
+            AttributeMatchMethodPointcut cut = new AttributeMatchMethodPointcut();
+            cut.Attribute = typeof(MarkupAttribute);
+            cut.CheckInterfaces = true;
+
+            // Only methods implemented expicitly are marked with attribute
+            foreach (MethodInfo mi in typeof(ExplicitlyImplementingClass).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)) 
+            {
+                if (mi.Name.IndexOf('.') == -1) continue;
+                bool matches = cut.Matches(mi, null);
+                Assert.IsTrue(matches, "Explicitly implemented method must match");
+            }
+
+        }
+
         #region Helper classes definitions
 
         [AttributeUsage(AttributeTargets.Method)]
@@ -210,6 +230,12 @@ namespace Spring.Aop.Support
             void OtherTestMethod();
         }
 
+        private interface AnotherSuperInterface
+        {
+            [Markup]
+            void TestMethod();
+        }
+
         private class ImplementingClass : SubInterface
         {
             public void TestMethod() {}
@@ -221,6 +247,15 @@ namespace Spring.Aop.Support
 
         private sealed class InheritedImplementingClass : ImplementingClass
         {
+        }
+
+        private class ExplicitlyImplementingClass : SuperInterface, AnotherSuperInterface
+        {
+            void AnotherSuperInterface.TestMethod() { }
+
+            void SuperInterface.TestMethod() { }
+
+            public void TestMethod(string param) {}
         }
 
         #endregion

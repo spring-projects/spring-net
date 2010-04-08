@@ -181,15 +181,25 @@ namespace Spring.Aop.Support
             {
                 if (CheckInterfaces)
                 {
-                    Type[] parameterTypes = ReflectionUtils.GetParameterTypes(method);
-
                     // Also check whether the attribute is defined on a method implemented from an interface.
                     // First find all interfaces for the type that contains the method.
                     // Next, check each interface for the presence of the attribute on the corresponding
                     // method from the interface.
+                    Type[] parameterTypes = ReflectionUtils.GetParameterTypes(method);
                     foreach (Type interfaceType in method.DeclaringType.GetInterfaces())
                     {
-                        MethodInfo intfMethod = interfaceType.GetMethod(method.Name, parameterTypes);
+                        // The method may be implemented explicitly, so the method name
+                        // will include the interface name also
+                        string methodName = method.Name;
+                        if (methodName.IndexOf('.') != -1)
+                        {
+                            if (methodName.StartsWith(interfaceType.FullName.Replace('+', '.')))
+                            {
+                                methodName = methodName.Remove(0, interfaceType.FullName.Length + 1);
+                            }
+                        }
+
+                        MethodInfo intfMethod = interfaceType.GetMethod(methodName, parameterTypes);
                         if (intfMethod != null && intfMethod.IsDefined(Attribute, Inherit))
                         {
                             return true;
