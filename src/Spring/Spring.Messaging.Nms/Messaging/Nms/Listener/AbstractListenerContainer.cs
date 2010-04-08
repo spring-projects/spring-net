@@ -35,16 +35,15 @@ namespace Spring.Messaging.Nms.Listener
     /// Inherits basic Connection and Session configuration handling from the
     /// <see cref="NmsAccessor"/> base class.
     /// </summary>
+    /// <remarks> 
     /// <para>
     /// This class provides basic lifecycle management, in particular management
     /// of a shared Connection. Subclasses are supposed to plug into this
     /// lifecycle, implementing the <see cref="SharedConnectionEnabled"/> as well as
-    ///
     /// </para>
-    /// <remarks>
-    ///
     /// </remarks>
-    /// <author>Mark Pollack</author>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Mark Pollack(.NET)</author>
     public abstract class AbstractListenerContainer : NmsDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
     {
         #region Logging

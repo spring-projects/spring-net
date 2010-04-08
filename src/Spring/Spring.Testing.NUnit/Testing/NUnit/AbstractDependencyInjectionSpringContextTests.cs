@@ -331,7 +331,8 @@ namespace Spring.Testing.NUnit
 
         /// <summary>
         /// Subclasses can override this method in order to 
-        /// add custom test setup logic.
+        /// add custom test setup logic after the context has been created and dependencies injected.
+        /// Called from this class's [SetUp] method.
         /// </summary>
         protected virtual void OnSetUp()
         {}
@@ -354,7 +355,7 @@ namespace Spring.Testing.NUnit
 
         /// <summary>
         /// Subclasses can override this method in order to 
-        /// add custom test teardown logic.
+        /// add custom test teardown logic.  Called from this class's [TearDown] method.
         /// </summary>
         protected virtual void OnTearDown()
         {}

@@ -218,6 +218,8 @@ namespace Spring.Testing.NUnit
 	    }
 
 
+
+
 	    /// <summary>
 	    /// Loads application context from the specified resource locations.
 	    /// </summary>
