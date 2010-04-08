@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using Spring.Pool;
+using Spring.Pool.Support;
 using Spring.Threading;
 
 namespace Spring.Examples.Pool
@@ -20,7 +21,7 @@ namespace Spring.Examples.Pool
             // ah, self documenting code:
             // Here you can see that we decided to let the 
             // executor process all the currently queued tasks.
-            QueuedExecutor executor = o as QueuedExecutor;
+            QueuedExecutor executor = o as Spring.Threading.QueuedExecutor;
             executor.ShutdownAfterProcessingCurrentlyQueuedTasks();
         }
         //// </example>
@@ -110,7 +111,7 @@ namespace Spring.Examples.Pool
     
     public class PooledQueuedExecutor : IExecutor
 	{
-	    Spring.Pool.SimplePool pool;
+	    SimplePool pool;
         private IList syncs;
 
         class Queuer
@@ -173,7 +174,12 @@ namespace Spring.Examples.Pool
             // queue the task and remember its ISync ...
             syncs.Add(Queuer.Queue(pool, runnable));
         }
-        
+
+        public void Execute(Action action)
+        {
+            throw new NotImplementedException();
+        }
+
         //// <example name="stop">
         public void Stop ()
         {
