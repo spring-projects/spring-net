@@ -1003,15 +1003,7 @@ namespace Spring.Objects.Factory.Xml
             }
             else
             {
-                Type resolvedValueType = TypeResolutionUtils.ResolveType(valueType);
-                if (resolvedValueType == typeof(string))
-                {
-                    return ParseTextValueElement(element, name);
-                }
-                else
-                {
-                    return new TypedStringValue(ParseTextValueElement(element, name), resolvedValueType);
-                }
+                return new TypedStringValue(ParseTextValueElement(element, name), valueType);
             }
         }
 

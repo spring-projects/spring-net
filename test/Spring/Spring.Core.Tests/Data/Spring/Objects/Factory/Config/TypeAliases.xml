@@ -5,6 +5,7 @@
     <property name="TypeAliases">
       <dictionary>
         <entry key="TestObject" value="Spring.Objects.TestObject, Spring.Core.Tests" />
+        <entry key="intAlias" value="System.Int32" />
       </dictionary>
     </property>
   </object>
@@ -17,6 +18,14 @@
   <object id="testObject3" type="TestObject">
     <constructor-arg name="name" value="Bruno"/>
     <constructor-arg name="age" value="26"/>
+  </object>
+
+  <!-- SPRNET-1119 -->
+  <object id="testObject4" type="TestObject">
+    <constructor-arg name="name" value="Bruno"/>
+    <constructor-arg name="age">
+      <value type="intAlias">30</value>
+    </constructor-arg>
   </object>
 
 </objects>

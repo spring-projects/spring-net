@@ -124,6 +124,13 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual(typeof(TestObject), obj3.GetType());
             Assert.AreEqual("Bruno", ((TestObject)obj3).Name);
             Assert.AreEqual(26, ((TestObject)obj3).Age);
+
+            // SPRNET-1119
+            object obj4 = ctx.GetObject("testObject4");
+            Assert.IsNotNull(obj4);
+            Assert.AreEqual(typeof(TestObject), obj4.GetType());
+            Assert.AreEqual("Bruno", ((TestObject)obj4).Name);
+            Assert.AreEqual(30, ((TestObject)obj4).Age);
         }
 
         private void CreateConfigurerAndTestLinkedList(IDictionary typeAliases)

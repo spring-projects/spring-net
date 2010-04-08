@@ -239,14 +239,11 @@ namespace Spring.Objects.Factory.Support
         /// <returns>The resolved target type, if any. <see lang="null" /> otherwise.</returns>
         protected virtual Type ResolveTargetType(TypedStringValue value)
         {
-            if (value.HasTargetType)
+            if (value.HasTargetType) 
             {
-                return value.TargetType;
+			    return value.TargetType;
             }
-            else
-            {
-                return null;
-            }
+            return value.ResolveTargetType();
         }
 
         /// <summary>
