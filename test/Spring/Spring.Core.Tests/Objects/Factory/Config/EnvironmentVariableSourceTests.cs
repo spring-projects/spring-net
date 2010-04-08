@@ -49,13 +49,5 @@ namespace Spring.Objects.Factory.Config
             Assert.IsNull(vs.ResolveVariable("dummy"));
         }
 
-	    [Test]
-	    public void EnviornmentStuff()
-	    {
-	        long size = Environment.WorkingSet;
-	        int procCount = Environment.ProcessorCount;
-            Console.WriteLine("working set : " + size);
-            Console.WriteLine("Processor count : " + procCount);
-	    }
     }
 }
