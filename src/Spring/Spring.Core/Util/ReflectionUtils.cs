@@ -1221,7 +1221,7 @@ namespace Spring.Util
                     object[] attrs = type.Assembly.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false);
                     foreach (InternalsVisibleToAttribute ivta in attrs)
                     {
-                        if (ivta.AssemblyName == friendlyAssemblyName)
+                        if (ivta.AssemblyName.Split(',')[0] == friendlyAssemblyName)
                         {
                             return true;
                         }
