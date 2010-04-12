@@ -83,14 +83,21 @@ namespace Spring.Web.Services
             Type serviceType = null;
             if (nod != null)
             {
-                serviceType = appContext.GetType(nod.Name);
-
-                // check if the type defines a Web Service
-                object[] wsAttribute = serviceType.GetCustomAttributes(typeof(WebServiceAttribute), true);
-                if (wsAttribute.Length == 0)
+                if (appContext.IsTypeMatch(nod.Name, typeof(WebServiceExporter)))
                 {
-                    serviceType = null;
-                }                
+                    WebServiceExporter wse = (WebServiceExporter)appContext.GetObject(nod.Name);
+                    serviceType = wse.GetExportedType();
+                }
+                else
+                {
+                    serviceType = appContext.GetType(nod.Name);
+                    // check if the type defines a Web Service
+                    object[] wsAttribute = serviceType.GetCustomAttributes(typeof(WebServiceAttribute), true);
+                    if (wsAttribute.Length == 0)
+                    {
+                        serviceType = null;
+                    }
+                }
             }
 
             if (serviceType == null)

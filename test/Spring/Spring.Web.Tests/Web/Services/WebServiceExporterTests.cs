@@ -78,7 +78,7 @@ namespace Spring.Web.Services
             wse.TargetName = "noDecoratedService";
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             Assert.IsTrue(typeof(IService).IsAssignableFrom(proxyType));
         }
 
@@ -89,7 +89,7 @@ namespace Spring.Web.Services
             wse.TargetName = "noDecoratedService";
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
@@ -110,7 +110,7 @@ namespace Spring.Web.Services
             wse.Namespace = "http://www.springframework.net";
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
@@ -129,7 +129,7 @@ namespace Spring.Web.Services
             wse.TargetName = "noDecoratedService";
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
@@ -146,7 +146,7 @@ namespace Spring.Web.Services
             wse.WsiProfile = WsiProfiles.None;
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
@@ -162,7 +162,7 @@ namespace Spring.Web.Services
             wse.TargetName = "decoratedService";
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
@@ -179,7 +179,7 @@ namespace Spring.Web.Services
             wse.TargetName = "noDecoratedService";
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             MethodInfo method = proxyType.GetMethod("SomeMethod");
             Assert.IsNotNull(method);
 
@@ -196,7 +196,7 @@ namespace Spring.Web.Services
             wse.MemberAttributes.Add("SomeMethod", new WebMethodAttribute(true)); // default value is false
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             MethodInfo method = proxyType.GetMethod("SomeMethod");
             Assert.IsNotNull(method);
 
@@ -215,7 +215,7 @@ namespace Spring.Web.Services
             wse.TargetName = "decoratedService";
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
             Assert.IsNotEmpty(attrs);
             Assert.AreEqual(1, attrs.Length);
@@ -233,7 +233,7 @@ namespace Spring.Web.Services
             wse.TargetName = "decoratedService";
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             MethodInfo method = proxyType.GetMethod("SomeMethod");
             Assert.IsNotNull(method);
 
@@ -255,7 +255,7 @@ namespace Spring.Web.Services
             wse.MemberAttributes.Add("SomeMethod", new WebMethodAttribute(true)); // default value is false
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             MethodInfo method = proxyType.GetMethod("SomeMethod");
             Assert.IsNotNull(method);
 
@@ -277,7 +277,7 @@ namespace Spring.Web.Services
                 new CustomAttributeBuilder(typeof(WebServiceAttribute).GetConstructor(Type.EmptyTypes), ObjectUtils.EmptyObjects) };
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
 
             object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
             Assert.IsNotEmpty(attrs);
@@ -295,7 +295,7 @@ namespace Spring.Web.Services
             wse.WebServiceBaseType = typeof(CustomWebService);
             wse.AfterPropertiesSet();
 
-            Type proxyType = wse.ObjectType;
+            Type proxyType = wse.GetExportedType();
             Assert.IsTrue(typeof(CustomWebService).IsAssignableFrom(proxyType));
         }
 

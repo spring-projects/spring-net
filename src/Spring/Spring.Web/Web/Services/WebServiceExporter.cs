@@ -57,7 +57,7 @@ namespace Spring.Web.Services
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-    public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IFactoryObject, IObjectNameAware, IDisposable
+    public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObjectNameAware, IDisposable
     {
         /// <summary>
         /// Holds EXPORTER_ID to WebServiceExporter instance mappings.
@@ -330,58 +330,6 @@ namespace Spring.Web.Services
 
         #endregion
 
-        #region IFactoryObject Members
-
-        private object GetTargetInstance()
-        {
-            return objectFactory.GetObject( TargetName );
-        }
-
-        /// <summary>
-        /// Return an instance (possibly shared or independent) of the object
-        /// managed by this factory.
-        /// </summary>
-        /// <remarks>
-        /// <note type="caution">
-        /// If this method is being called in the context of an enclosing IoC container and
-        /// returns <see langword="null"/>, the IoC container will consider this factory
-        /// object as not being fully initialized and throw a corresponding (and most
-        /// probably fatal) exception.
-        /// </note>
-        /// </remarks>
-        /// <returns>
-        /// An instance (possibly shared or independent) of the object managed by
-        /// this factory.
-        /// </returns>
-        public virtual object GetObject()
-        {
-            // no sense to call this method, because the web service type 
-            // will be instantiated by the .NET infrastructure. (ObjectType is used instead)
-            // Users should use GetObject("TargetName") instead.
-            return new InvalidOperationException(
-                "The web service instance is created and managed by the .NET infrastructure.");
-        }
-
-        /// <summary>
-        /// Return the <see cref="System.Type"/> of object that this
-        /// <see cref="Spring.Objects.Factory.IFactoryObject"/> creates, or
-        /// <see langword="null"/> if not known in advance.
-        /// </summary>
-        public virtual Type ObjectType
-        {
-            get { return (proxyType != null ? proxyType : objectFactory.GetType(TargetName)); }
-        }
-
-        /// <summary>
-        /// Is the object managed by this factory a singleton or a prototype?
-        /// </summary>
-        public virtual bool IsSingleton
-        {
-            get { return false; }
-        }
-
-        #endregion
-
         #region IObjectNameAware Members
 
         /// <summary>
@@ -422,7 +370,16 @@ namespace Spring.Web.Services
 
         #endregion
 
-        #region Protected Methods
+        #region Methods
+
+        /// <summary>
+        /// Returns the Web Service wrapper type for the object that is to be exposed.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Type GetExportedType()
+        {
+            return (proxyType != null ? proxyType : objectFactory.GetType(TargetName));
+        }
 
         /// <summary>
         /// Validates the configuration.
@@ -458,6 +415,11 @@ namespace Spring.Web.Services
             proxyType = builder.BuildProxyType();
         }
 
+        private object GetTargetInstance()
+        {
+            return objectFactory.GetObject(TargetName);
+        }
+
         #endregion
 
         #region WebServiceProxyTypeBuilder inner class implementation
@@ -466,7 +428,7 @@ namespace Spring.Web.Services
         {
             #region Fields
 
-            private static readonly MethodInfo WebServiceExporter_GetTargetInstance = typeof( WebServiceExporter ).GetMethod( "GetTarget", new Type[] { typeof( string ) } );
+            private static readonly MethodInfo WebServiceExporter_GetTargetInstance = typeof(WebServiceExporter).GetMethod( "GetTarget", new Type[] { typeof( string ) } );
             private WebServiceExporter exporter;
             private CustomAttributeBuilder webServiceAttribute;
 #if NET_2_0

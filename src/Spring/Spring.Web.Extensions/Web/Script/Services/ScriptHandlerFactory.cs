@@ -95,7 +95,17 @@ namespace Spring.Web.Script.Services
 
                 if (nod != null)
                 {
-                    Type serviceType = appContext.GetType(nod.Name);
+                    Type serviceType = null;
+                    if (appContext.IsTypeMatch(nod.Name, typeof(WebServiceExporter)))
+                    {
+                        WebServiceExporter wse = (WebServiceExporter)appContext.GetObject(nod.Name);
+                        serviceType = wse.GetExportedType();
+                    }
+                    else
+                    {
+                        serviceType = appContext.GetType(nod.Name);
+                    }
+
                     object[] attrs = serviceType.GetCustomAttributes(typeof(ScriptServiceAttribute), false);
                     if (attrs.Length > 0)
                     {
