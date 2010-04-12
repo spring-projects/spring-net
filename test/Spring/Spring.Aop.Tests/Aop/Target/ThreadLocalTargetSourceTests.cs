@@ -155,6 +155,7 @@ namespace Spring.Aop.Target
 
         private static bool multiThreadedTestFailed = false;
 
+#if NET_2_0
         [Test]
         public virtual void MultiThreadedTest()
         {
@@ -226,5 +227,6 @@ namespace Spring.Aop.Target
         }
 
         #endregion
+#endif
     }
 }
