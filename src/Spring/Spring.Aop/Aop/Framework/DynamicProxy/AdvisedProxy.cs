@@ -60,9 +60,9 @@ namespace Spring.Aop.Framework.DynamicProxy
         public IAdvice[] m_introductions;
 
         /// <summary>
-        /// Target source wrapper
+        /// Target source 
         /// </summary>
-        public ITargetSourceWrapper m_targetSourceWrapper;
+        public ITargetSource m_targetSource;
 
         /// <summary>
         /// Type of target object.
@@ -127,7 +127,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             m_advised = (IAdvised)info.GetValue("advised", typeof(IAdvised));
             m_introductions = (IAdvice[])info.GetValue("introductions", typeof(IAdvice[]));
-            m_targetSourceWrapper = (ITargetSourceWrapper)info.GetValue("tsWrapper", typeof(ITargetSourceWrapper));
+            m_targetSource = (ITargetSource)info.GetValue("targetSource", typeof(ITargetSource));
             m_targetType = (Type)info.GetValue("targetType", typeof(Type));
         }
 
@@ -141,7 +141,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             info.AddValue("advised", m_advised);
             info.AddValue("introductions", m_introductions);
-            info.AddValue("tsWrapper", m_targetSourceWrapper);
+            info.AddValue("targetSource", m_targetSource);
             info.AddValue("targetType", m_targetType);
         }
 
@@ -159,17 +159,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         protected void Initialize(IAdvised advised, IAopProxy proxy)
         {
             this.m_advised = advised;
+            this.m_targetSource = advised.TargetSource;
             this.m_targetType = advised.TargetSource.TargetType;
-
-            // initialize target
-            if (advised.TargetSource.IsStatic)
-            {
-                this.m_targetSourceWrapper = new StaticTargetSourceWrapper(advised.TargetSource);
-            }
-            else
-            {
-                this.m_targetSourceWrapper = new DynamicTargetSourceWrapper(advised.TargetSource);
-            }
 
             // initialize introduction advice
             this.m_introductions = new IAdvice[advised.Introductions.Length];

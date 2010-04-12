@@ -94,31 +94,36 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <returns>true if the specified Object is equal to the current target object; otherwise, false</returns>
         public override bool Equals(object obj)
         {
+            bool equals = false;
+            object target = m_targetSource.GetTarget();
             AdvisedProxy otherProxy = obj as AdvisedProxy;
+            object otherTarget = null;
             if (otherProxy != null)
             {
-                using (m_targetSourceWrapper)
-                using (otherProxy.m_targetSourceWrapper)
-                {
-                    object target = m_targetSourceWrapper.GetTarget();
-                    object otherTarget = otherProxy.m_targetSourceWrapper.GetTarget();
-                    if (target == null)
-                    {
-                        return (otherTarget == null);
-                    }
-                    return target.Equals(otherTarget);
-                }
-            }
-
-            using (m_targetSourceWrapper)
-            {
-                object target = m_targetSourceWrapper.GetTarget();
+                otherTarget = otherProxy.m_targetSource.GetTarget();
                 if (target == null)
                 {
-                    return (obj == null);
+                    equals = (otherTarget == null);
                 }
-                return target.Equals(obj);
+                else
+                {
+                    equals = target.Equals(otherTarget);
+                }
             }
+            else if (target == null)
+            {
+                equals = (obj == null);
+            }
+            else
+            {
+                equals = target.Equals(obj);
+            }
+            m_targetSource.ReleaseTarget(target);
+            if (otherProxy != null)
+            {
+                otherProxy.m_targetSource.ReleaseTarget(otherTarget);
+            }
+            return equals;
         }
 
         /// <summary>
@@ -127,15 +132,14 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <returns>A hash code for the target object.</returns>
         public override int GetHashCode()
         {
-            using (m_targetSourceWrapper)
+            int hashCode = 0;
+            object target = m_targetSource.GetTarget();
+            if (target != null)
             {
-                object target = m_targetSourceWrapper.GetTarget();
-                if (target != null)
-                {
-                    return target.GetHashCode();
-                }
-                return 0;
+                hashCode = target.GetHashCode();
             }
+            m_targetSource.ReleaseTarget(target);
+            return hashCode;
         }
 
         /// <summary>
@@ -144,15 +148,18 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <returns>A String that represents the target object</returns>
         public override string ToString()
         {
-            using (m_targetSourceWrapper)
+            string str;
+            object target = m_targetSource.GetTarget();
+            if (target != null)
             {
-                object target = m_targetSourceWrapper.GetTarget();
-                if (target != null)
-                {
-                    return target.ToString();
-                }
-                return base.ToString();
+                str = target.ToString();
             }
+            else
+            {
+                str = base.ToString();
+            }
+            m_targetSource.ReleaseTarget(target);
+            return str;
         }
 
         #endregion

@@ -242,11 +242,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Aop\Framework\DynamicTargetSourceWrapper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Aop\Framework\HashtableCachingAdvisorChainFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -287,11 +282,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Aop\Framework\ITargetSourceWrapper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Aop\Framework\ProxyConfig.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -308,11 +298,6 @@
                 />
                 <File
                     RelPath = "Aop\Framework\ReflectiveMethodInvocation.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Aop\Framework\StaticTargetSourceWrapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

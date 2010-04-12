@@ -69,4 +69,13 @@
 			<ref local="threadLocalTs2" />
 		</property>
 	</object>
+
+  <object id="mtPrototype" type="Spring.Aop.Target.ThreadLocalTargetSourceTests+MultiThreadClass" singleton="false" />
+  <object id="mtTest" type="Spring.Aop.Framework.ProxyFactoryObject">
+    <property name="targetSource">
+      <object type="Spring.Aop.Target.ThreadLocalTargetSource">
+        <property name="targetObjectName" value="mtPrototype" />
+      </object>
+    </property>
+  </object>
 </objects>

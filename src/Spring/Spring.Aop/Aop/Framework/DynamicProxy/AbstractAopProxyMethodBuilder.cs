@@ -717,8 +717,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         public static readonly FieldInfo IntroductionsField =
             typeof(AdvisedProxy).GetField("m_introductions", BindingFlags.Instance | BindingFlags.Public);
 
-        public static readonly FieldInfo TargetSourceWrapperField =
-            typeof(AdvisedProxy).GetField("m_targetSourceWrapper", BindingFlags.Instance | BindingFlags.Public);
+        public static readonly FieldInfo TargetSourceField =
+            typeof(AdvisedProxy).GetField("m_targetSource", BindingFlags.Instance | BindingFlags.Public);
 
         // constructors
         public static readonly ConstructorInfo BaseCompositionAopProxyConstructor =
@@ -753,7 +753,10 @@ namespace Spring.Aop.Framework.DynamicProxy
             typeof(AdvisedProxy).GetMethod("GetInterceptors", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(Type), typeof(MethodInfo) }, null);
 
         public static readonly MethodInfo GetTargetMethod =
-            typeof(ITargetSourceWrapper).GetMethod("GetTarget", Type.EmptyTypes);
+            typeof(ITargetSource).GetMethod("GetTarget", Type.EmptyTypes);
+
+        public static readonly MethodInfo GetReleaseTargetMethod =
+            typeof(ITargetSource).GetMethod("ReleaseTarget", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(Object) }, null);
 
         public static readonly MethodInfo GetTypeMethod =
             typeof(Object).GetMethod("GetType", Type.EmptyTypes);

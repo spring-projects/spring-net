@@ -49,7 +49,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         public override void PushTarget(ILGenerator il)
         {
             PushAdvisedProxy(il);
-            il.Emit(OpCodes.Ldfld, References.TargetSourceWrapperField);
+            il.Emit(OpCodes.Ldfld, References.TargetSourceField);
             il.EmitCall(OpCodes.Callvirt, References.GetTargetMethod, null);
         }
 

@@ -42,10 +42,9 @@ namespace Spring.Aop.Framework.DynamicProxy
         #region Fields
 
         /// <summary>
-        /// The local variable to store
-        /// the <see cref="Spring.Aop.Framework.ITargetSourceWrapper"/> instance.
+        /// The local variable to store the target instance.
         /// </summary>
-        protected LocalBuilder targetSource;
+        protected LocalBuilder target;
 
         #endregion
 
@@ -84,11 +83,21 @@ namespace Spring.Aop.Framework.DynamicProxy
         protected override void DeclareLocals(ILGenerator il, MethodInfo method)
         {
             base.DeclareLocals(il, method);
-            targetSource = il.DeclareLocal(typeof(ITargetSourceWrapper));
+            target = il.DeclareLocal(typeof(object));
 
 #if DEBUG
-            targetSource.SetLocalSymInfo("targetSource");
+            target.SetLocalSymInfo("target");
 #endif
+        }
+
+        /// <summary>
+        /// Generates the IL instructions that pushes 
+        /// the target instance on which calls should be delegated to.
+        /// </summary>
+        /// <param name="il">The IL generator to use.</param>
+        protected override void PushTarget(ILGenerator il)
+        {
+            il.Emit(OpCodes.Ldloc, target);
         }
 
         /// <summary>
@@ -102,31 +111,17 @@ namespace Spring.Aop.Framework.DynamicProxy
         protected override void GenerateMethodLogic(
             ILGenerator il, MethodInfo method, MethodInfo interfaceMethod)
         {
-            Label jmpEndFinally = il.DefineLabel();
-
-            // save target source so we can call Dispose later
             PushAdvisedProxy(il);
-            il.Emit(OpCodes.Ldfld, References.TargetSourceWrapperField);
-            il.Emit(OpCodes.Stloc, targetSource);
-
-            // open try/finally block
-            il.BeginExceptionBlock();
+            il.Emit(OpCodes.Ldfld, References.TargetSourceField);
+            il.EmitCall(OpCodes.Callvirt, References.GetTargetMethod, null);
+            il.Emit(OpCodes.Stloc, target);
 
             base.GenerateMethodLogic(il, method, interfaceMethod);
 
-            // open finally block
-            il.BeginFinallyBlock();
-
-            // call Dispose on target source
-            il.Emit(OpCodes.Ldloc, targetSource);
-            il.Emit(OpCodes.Brfalse, jmpEndFinally);
-            il.Emit(OpCodes.Ldloc, targetSource);
-            il.EmitCall(OpCodes.Callvirt, References.DisposeMethod, null);
-            
-            il.MarkLabel(jmpEndFinally);
-
-            // close try/finally block
-            il.EndExceptionBlock();
+            PushAdvisedProxy(il);
+            il.Emit(OpCodes.Ldfld, References.TargetSourceField);
+            PushTarget(il);
+            il.EmitCall(OpCodes.Callvirt, References.GetReleaseTargetMethod, null);
         }
 
         /// <summary>

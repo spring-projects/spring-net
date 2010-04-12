@@ -270,17 +270,13 @@ namespace Spring.Proxy
         protected virtual void CallDirectTargetMethod(
             ILGenerator il, MethodInfo targetMethod)
         {
-            // setup target object for call
-            PushTarget(il);
-
             // TODO (EE): check for null and interface type and throw NotSupportedException
-            LocalBuilder targetRef = il.DeclareLocal(typeof(object));
-            il.Emit(OpCodes.Stloc, targetRef);
-
-            CallAssertUnderstands(il, targetMethod, targetRef, "target");
+            // setup target instance for CallAssertUnderstands
+            PushTarget(il);
+            CallAssertUnderstands(il, targetMethod, "target");
 
             // setup target and cast to type method is on
-            il.Emit(OpCodes.Ldloc, targetRef);
+            PushTarget(il);
             il.Emit(OpCodes.Castclass, targetMethod.DeclaringType);
 
             // setup parameters for call
@@ -295,17 +291,18 @@ namespace Spring.Proxy
         }
 
         /// <summary>
-        /// Emits code to ensure that target understands the method and throw a sensible exception otherwise.
+        /// Emits code to ensure that target on stack understands the method and throw a sensible exception otherwise.
         /// </summary>
-        protected virtual void CallAssertUnderstands(ILGenerator il, MethodInfo method, LocalBuilder targetRef, string targetName)
+        /// <param name="il">The IL generator to use.</param>
+        /// <param name="method">The method to test for</param>
+        /// <param name="targetName">the name of the target to be used in error messages</param>
+        protected virtual void CallAssertUnderstands(ILGenerator il, MethodInfo method, string targetName)
         {
-            // AssertArgumentType
-            il.Emit(OpCodes.Ldloc, targetRef);
             il.Emit(OpCodes.Ldstr, targetName);
             il.Emit(OpCodes.Ldtoken, method.DeclaringType);
-            il.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle", new Type[] { typeof(RuntimeTypeHandle) }));
-//            il.Emit(OpCodes.Ldstr, string.Format("Interface method '{0}.{1}()' was not handled by any interceptor and the target does not implement this method.", method.DeclaringType.FullName, method.Name));
-            il.Emit(OpCodes.Call, typeof(AssertUtils).GetMethod("Understands", new Type[] { typeof(object), typeof(string), typeof(Type) }));
+            il.Emit(OpCodes.Call, References.GetTypeFromHandleMethod);
+            //il.Emit(OpCodes.Ldstr, string.Format("Interface method '{0}.{1}()' was not handled by any interceptor and the target does not implement this method.", method.DeclaringType.FullName, method.Name));
+            il.Emit(OpCodes.Call, References.UnderstandsMethod);
         }
 
         /// <summary>
@@ -315,17 +312,13 @@ namespace Spring.Proxy
         /// <param name="method">The method to proxy.</param>
         protected virtual void CallDirectBaseMethod(ILGenerator il, MethodInfo method)
         {
-            // setup proxy instance for call
-            PushProxy(il);
-
             // TODO (EE): check for null and interface type and throw NotSupportedException
-            LocalBuilder targetRef = il.DeclareLocal(typeof(object));
-            il.Emit(OpCodes.Stloc, targetRef);
+            // setup proxy instance for CallAssertUnderstands
+            PushProxy(il);
+            CallAssertUnderstands(il, method, "base");
 
-            CallAssertUnderstands(il, method, targetRef, "base");
-
-            // setup target and cast to type method is on
-            il.Emit(OpCodes.Ldloc, targetRef);
+            // setup proxy and cast to type method is on
+            PushProxy(il);
             il.Emit(OpCodes.Castclass, method.DeclaringType);
 
             // setup parameters for call
@@ -389,4 +382,18 @@ namespace Spring.Proxy
 
         #endregion
     }
+
+    #region References helper class definition
+
+    internal struct References
+    {
+        // methods
+        public static readonly MethodInfo GetTypeFromHandleMethod =
+            typeof(Type).GetMethod("GetTypeFromHandle", new Type[] { typeof(RuntimeTypeHandle) });
+
+        public static readonly MethodInfo UnderstandsMethod =
+            typeof(AssertUtils).GetMethod("Understands", new Type[] { typeof(object), typeof(string), typeof(Type) });
+    }
+
+    #endregion
 }

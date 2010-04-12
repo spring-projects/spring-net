@@ -17,6 +17,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Collections;
 using Common.Logging;
 using NUnit.Framework;
 using Spring.Objects;
@@ -42,7 +43,6 @@ namespace Spring.Aop.Target
         {
             this.ObjectFactory = new XmlObjectFactory (
                 new ReadOnlyXmlTestResource ("threadLocalTests.xml", GetType ()));
-            //TODO-LOGGING XmlConfigurator.Configure (new FileInfo ("Spring.Aop.Tests.dll.config"));
             log = LogManager.GetLogger (MethodBase.GetCurrentMethod ().DeclaringType);
         }
 
@@ -152,5 +152,79 @@ namespace Spring.Aop.Target
             // Bound to two threads
             Assert.AreEqual (2, ((IThreadLocalTargetSourceStats) apartment).Objects);
         }
+
+        private static bool multiThreadedTestFailed = false;
+
+        [Test]
+        public virtual void MultiThreadedTest()
+        {
+            multiThreadedTestFailed = false;
+
+            this.ObjectFactory = new XmlObjectFactory(
+                new ReadOnlyXmlTestResource("threadLocalTests.xml", GetType()));
+            log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+            // Initialize property.
+            IMultiThreadInterface mtObject = (IMultiThreadInterface)ObjectFactory.GetObject("mtTest");
+
+            // Start threads.
+            ArrayList threads = new ArrayList();
+            for (int i = 0; i < 100; i++)
+            {
+                Thread thread = new Thread(new ParameterizedThreadStart(CheckName));
+                threads.Add(thread);
+                thread.Start(mtObject);
+            }
+
+            // Wait for threads to end.
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+
+            Assert.IsFalse(multiThreadedTestFailed);
+        }
+
+        private void CheckName(object mtObject)
+        {
+            string name = ((IMultiThreadInterface)mtObject).GenerateAndSetName(100);
+
+            // Returned name should be equal to property.
+            if (!name.Equals(((IMultiThreadInterface)mtObject).Name))
+            {
+                multiThreadedTestFailed = true;
+            }
+            //Console.WriteLine(String.Format("Expected: {0}; Actual: {1}",
+            //    name, ((IMultiThreadInterface)mtObject).Name));
+        }
+
+        #region Helper classes
+
+        public interface IMultiThreadInterface
+        {
+            string Name { get; }
+            string GenerateAndSetName(int sleep);
+        }
+
+        public class MultiThreadClass : IMultiThreadInterface
+        {
+            private string _name;
+
+            public string Name
+            {
+                get { return _name; }
+            }
+
+            public string GenerateAndSetName(int sleep)
+            {
+                string generated = "Thread_" + Thread.CurrentThread.ManagedThreadId;
+                _name = generated;
+
+                Thread.Sleep(sleep);
+                return generated;
+            }
+        }
+
+        #endregion
     }
 }

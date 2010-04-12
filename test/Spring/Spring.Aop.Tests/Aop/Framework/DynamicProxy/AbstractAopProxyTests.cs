@@ -847,8 +847,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 CreateProxy(advised) as AbstractProxyTypeBuilderTests.InterfaceWithGenericMethod;
             Assert.IsNotNull(proxy);
 
-            DynamicProxyManager.SaveAssembly();
-
             proxy.PolymorphicMethod<int>();
             proxy.PolymorphicMethod<string>();
 
@@ -870,6 +868,11 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             proxy.WithMixedConstraint<bool, DerivedTestObject>();
             Assert.AreEqual(10, ni.Count);
+
+            //if (this is DecoratorAopProxyTests)
+            //{
+            //    DynamicProxyManager.SaveAssembly();
+            //}
         }
 
         [Test]

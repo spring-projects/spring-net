@@ -233,7 +233,7 @@ namespace Spring.EnterpriseServices
             /// <summary>
             /// Suppress output to avoid Spring.Core dependency
             /// </summary>
-            protected override void CallAssertUnderstands(ILGenerator il, MethodInfo method, LocalBuilder targetRef, string targetName)
+            protected override void CallAssertUnderstands(ILGenerator il, MethodInfo method, string targetName)
             {
 //                base.CallAssertUnderstands(il, method, targetRef, targetName);
             }

@@ -205,9 +205,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Aop\Framework\DynamicProxy\TargetAopProxyMethodBuilder.cs" />
-    <Compile Include="Aop\Framework\DynamicTargetSourceWrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Aop\Framework\HashtableCachingAdvisorChainFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -232,7 +229,6 @@
     <Compile Include="Aop\Framework\ITargetAware.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Aop\Framework\ITargetSourceWrapper.cs" />
     <Compile Include="Aop\Framework\ProxyConfig.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -243,9 +239,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Aop\Framework\ReflectiveMethodInvocation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Aop\Framework\StaticTargetSourceWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Aop\IAdvisor.cs">
