@@ -111,6 +111,8 @@
     <Compile Include="EnterpriseServices\ExeConfigurationSystemTests.cs" />
     <Compile Include="EnterpriseServices\ExportedServicedComponentSample.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentExporterTests.cs" />
+    <Compile Include="ServiceModel\Config\ChannelFactoryObjectDefinitionParserTests.cs" />
+    <Compile Include="ServiceModel\Config\WcfNamespaceParserTests.cs" />
     <Compile Include="ServiceModel\SpringServiceHostTests.cs" />
     <Compile Include="ServicesCompilerOptionsTests.cs" />
     <Compile Include="Remoting\BaseRemotingTestFixture.cs" />
@@ -209,6 +211,10 @@
     <Content Include="ServiceComponentExporterTests.TestServicedComponents.Services.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="ServiceModel\Config\ChannelFactoryObjectDefinitionParserTests.WithTypeAlias.xml" />
+    <EmbeddedResource Include="ServiceModel\Config\ChannelFactoryObjectDefinitionParserTests.WithoutId.xml" />
+    <EmbeddedResource Include="ServiceModel\Config\ChannelFactoryObjectDefinitionParserTests.CustomProperties.xml" />
+    <EmbeddedResource Include="ServiceModel\Config\ChannelFactoryObjectDefinitionParserTests.BasicConfig.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

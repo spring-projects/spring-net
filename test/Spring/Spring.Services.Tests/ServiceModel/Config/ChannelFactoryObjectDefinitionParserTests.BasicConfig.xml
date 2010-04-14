@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net" 
+         xmlns:wcf="http://www.springframework.net/wcf">
+
+  <wcf:channelFactory id="channel"
+                      channelType="Spring.ServiceModel.Config.ChannelFactoryObjectDefinitionParserTests+IContract, Spring.Services.Tests"
+                      endpointConfigurationName="ecn" />
+
+</objects>

@@ -100,6 +100,7 @@ namespace Spring.Objects.Factory.Xml
             wellknownNamespaceParserTypeNames["http://www.springframework.net/aop"] = "Spring.Aop.Config.AopNamespaceParser, Spring.Aop";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/db"] = "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/remoting"] = "Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/wcf"] = "Spring.ServiceModel.Config.WcfNamespaceParser, Spring.Services";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/nms"] = "Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/ems"] = "Spring.Messaging.Ems.Config.EmsNamespaceParser, Spring.Messaging.Ems";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/validation"] = "Spring.Validation.Config.ValidationNamespaceParser, Spring.Core";

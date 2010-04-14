@@ -30,7 +30,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
     <DocumentationFile>Spring.Services.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -83,7 +83,6 @@
     <Reference Include="System.EnterpriseServices">
       <Name>system.enterpriseservices</Name>
     </Reference>
-    <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Services">
       <Name>system.web.services</Name>
     </Reference>
@@ -125,11 +124,6 @@
     <Compile Include="Remoting\SaoFactoryObject.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ServiceModel\Activation\ServiceHostFactory.cs" />
-    <Compile Include="ServiceModel\Activation\ServiceHostFactoryObject.cs" />
-    <Compile Include="ServiceModel\ServiceExporter.cs" />
-    <Compile Include="ServiceModel\SpringServiceHost.cs" />
-    <Compile Include="ServiceModel\Support\ServiceProxyTypeBuilder.cs" />
     <Compile Include="Web\Services\WebServiceProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net" 
+         xmlns:wcf="http://www.springframework.net/wcf">
+
+  <object type="Spring.Objects.Factory.Config.TypeAliasConfigurer, Spring.Core">
+    <property name="TypeAliases">
+      <dictionary>
+        <entry key="IContract" value="Spring.ServiceModel.Config.ChannelFactoryObjectDefinitionParserTests+IContract, Spring.Services.Tests" />
+      </dictionary>
+    </property>
+  </object>
+  
+  <wcf:channelFactory id="channel"
+                      channelType="IContract"
+                      endpointConfigurationName="ecn" />
+
+</objects>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns="http://www.springframework.net/wcf"
+          xmlns:objects="http://www.springframework.net"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
+          targetNamespace="http://www.springframework.net/wcf"
+          elementFormDefault="qualified" attributeFormDefault="unqualified"
+          vs:friendlyname="Spring.NET WCF Framework Configuration" vs:ishtmlschema="false" vs:iscasesensitive="true" vs:requireattributequotes="true" vs:defaultnamespacequalifier="" vs:defaultnsprefix="">
+
+  <xsd:import namespace="http://www.springframework.net"/>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      <![CDATA[
+  Defines the configuration elements for the Spring Framework's WCF support.
+      ]]>
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:complexType name="channelFactoryType">
+    <xsd:annotation>
+      <xsd:documentation>
+        <![CDATA[
+  Creates a channel that is used by clients to send messages to a specified endpoint address.
+        ]]>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="property" type="objects:property" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+  Defines properties of the factory that creates the channel.
+            ]]>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:ID" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>
+          <![CDATA[
+  The id of the created object.
+          ]]>
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="channelType" type="objects:nonNullString" use="required">
+      <xsd:annotation>
+        <xsd:documentation>
+          <![CDATA[
+  The type of channel produced by this channel factory.
+          ]]>
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="endpointConfigurationName" type="objects:nonNullString" use="required">
+      <xsd:annotation>
+        <xsd:documentation>
+          <![CDATA[
+  The configuration name in the application configuration file used for the endpoint.
+          ]]>
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="channelFactory" type="channelFactoryType"/>
+
+</xsd:schema>

@@ -30,7 +30,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -90,7 +90,6 @@
     </Reference>
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
@@ -102,7 +101,6 @@
     </Compile>
     <Compile Include="EnterpriseServices\ExportedServicedComponentSample.cs" />
     <Compile Include="EnterpriseServices\ServicedComponentExporterTests.cs" />
-    <Compile Include="ServiceModel\SpringServiceHostTests.cs" />
     <Compile Include="Remoting\BaseRemotingTestFixture.cs" />
     <Compile Include="Remoting\CaoExporterTests.cs">
       <SubType>Code</SubType>

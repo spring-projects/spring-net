@@ -1242,6 +1242,9 @@ Commandline Examples:
           file="src/Spring/Spring.Services/Remoting/Config/spring-remoting-1.1.xsd"/>
 
     <copy todir="${current.package.dir}/doc/schema"
+      file="src/Spring/Spring.Services/ServiceModel/Config/spring-wcf-1.3.xsd"/>
+
+    <copy todir="${current.package.dir}/doc/schema"
           file="src/Spring/Spring.Messaging.Nms/Messaging/Nms/Config/spring-nms-1.3.xsd"/>
 
     <copy todir="${current.package.dir}/doc/schema"

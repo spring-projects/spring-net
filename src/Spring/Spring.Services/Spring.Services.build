@@ -57,6 +57,9 @@
       <resources basedir="." prefix="Spring.Remoting.Config">
         <include name="Remoting/Config/spring-remoting-1.1.xsd" />
       </resources>
+      <resources basedir="." prefix="Spring.ServiceModel.Config">
+        <include if="${net-3.0.installed and net-3.0}" name="ServiceModel/Config/spring-wcf-1.3.xsd" />
+      </resources>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.keys" />
         <exclude name="**/obj/**" />
@@ -67,8 +70,7 @@
         <include name="Spring.Aop.dll" />
         <include name="Spring.Web.dll" />
         <include name="System.Web.Services.dll" />
-        <include if="${net-3.0.installed and net-3.0}" name="${net-3.0.ReferenceInstallPath}\System.ServiceModel.dll" />-->
-        
+        <include if="${net-3.0.installed and net-3.0}" name="${net-3.0.ReferenceInstallPath}\System.ServiceModel.dll" />        
       </references>
     </csc>
   </target>

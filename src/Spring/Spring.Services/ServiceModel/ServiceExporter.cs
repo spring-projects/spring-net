@@ -49,7 +49,7 @@ namespace Spring.ServiceModel
     {
         #region Logging
 
-        private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(ServiceExporter));
+        //private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(ServiceExporter));
 
         #endregion
 

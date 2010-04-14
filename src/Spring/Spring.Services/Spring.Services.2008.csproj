@@ -131,6 +131,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServiceModel\Activation\ServiceHostFactoryObject.cs" />
+    <Compile Include="ServiceModel\ChannelFactoryObject.cs" />
+    <Compile Include="ServiceModel\Config\ChannelFactoryObjectDefinitionParser.cs" />
+    <Compile Include="ServiceModel\Config\WcfNamespaceParser.cs" />
     <Compile Include="ServiceModel\ServiceExporter.cs" />
     <Compile Include="ServiceModel\SpringServiceHost.cs" />
     <Compile Include="ServiceModel\Support\ServiceProxyTypeBuilder.cs" />
@@ -142,6 +145,7 @@
       <SubType>
       </SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ServiceModel\Config\spring-wcf-1.3.xsd" />
     <None Include="Spring.Services.build" />
   </ItemGroup>
   <ItemGroup>
