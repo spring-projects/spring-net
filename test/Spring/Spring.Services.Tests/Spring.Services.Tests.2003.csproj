@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'echo "Copying .xml files for Spring.Services tests"&#xd;&#xa;xcopy "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2003\Spring.Services.Tests\$(ConfigurationName)\ /y /s /q /d&#xd;&#xa;xcopy  "$(ProjectDir)$(TargetFileName).config" ..\..\..\..\build\VS.Net.2003\Spring.Services.Tests\$(ConfigurationName)\ /y /s /q'
+                PostBuildEvent = 'echo "Copying .xml files for Spring.Services tests"&#xd;&#xa;xcopy "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2003\Spring.Services.Tests\$(ConfigurationName)\ /y /s /q /d&#xd;&#xa;xcopy  "$(ProjectDir)$(TargetFileName)-1.1.config" ..\..\..\..\build\VS.Net.2003\Spring.Services.Tests\$(ConfigurationName)\$(TargetFileName).config'
                 RootNamespace = "Spring"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -148,7 +148,7 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Spring.Services.Tests.dll.config"
+                    RelPath = "Spring.Services.Tests.dll-1.1.config"
                     BuildAction = "None"
                 />
                 <File
