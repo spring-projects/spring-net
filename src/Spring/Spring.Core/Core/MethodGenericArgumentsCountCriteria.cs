@@ -70,7 +70,7 @@ namespace Spring.Core
         /// must have to satisfy this criteria.
         /// </param>
         /// <exception cref="System.ArgumentException">
-        /// If the supplied <paramref name="expectedParameterCount"/> is less
+        /// If the supplied <paramref name="expectedGenericArgumentCount"/> is less
         /// than zero.
         /// </exception>
         public MethodGenericArgumentsCountCriteria(int expectedGenericArgumentCount)

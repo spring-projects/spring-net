@@ -146,7 +146,7 @@ namespace Spring.Web.Support
         /// <p>
         /// See both the class documentation (<see cref="Spring.Web.Support.Result"/>)
         /// and the reference documentation for the Spring.Web library for a
-        /// discussion and examples of what values the supplied <paramref name="result"/>
+        /// discussion and examples of what values the supplied <paramref name="resultText"/>
         /// can have.
         /// </p>
         /// </remarks>

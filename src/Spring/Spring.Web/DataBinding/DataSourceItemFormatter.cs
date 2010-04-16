@@ -107,7 +107,7 @@ namespace Spring.DataBinding
         /// Return the object with the specified key from the datasource.
         /// </summary>
         /// <param name="key">The key of the object.</param>
-        /// <returns>Parsed <paramref name="value"/>.</returns>
+        /// <returns>Parsed <paramref name="key"/>.</returns>
         public object Parse(string key)
         {
             object item = this._dataItemsByKey[key];

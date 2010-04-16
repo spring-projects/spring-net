@@ -718,12 +718,12 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Returns an <see cref="Enum"/> of type <paramref name="defaultValue.GetType()"/> that contains the value of the specified variable.
+        /// Returns an <see cref="Enum"/> of <paramref name="defaultValue"/>'s type that contains the value of the specified variable.
         /// </summary>
         /// <param name="name">The name of the variable to be read.</param>
         /// <param name="defaultValue">The value to be returned if <see cref="IVariableSource.ResolveVariable"/> returns <c>null</c>.</param>
         /// <returns>
-        /// An <see cref="Enum"/> of type <paramref name="defaultValue.GetType()"/> that contains the value of the specified variable 
+        /// An <see cref="Enum"/> of <paramref name="defaultValue"/>'s type that contains the value of the specified variable 
         /// or <paramref name="defaultValue"/>, if <see cref="IVariableSource.ResolveVariable"/> returns <c>null</c>.
         /// </returns>
         public Enum GetEnum(string name, Enum defaultValue)
@@ -732,7 +732,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Returns an <see cref="Enum"/> of type <paramref name="defaultValue.GetType()"/> that contains the value of the specified variable.
+        /// Returns an <see cref="Enum"/> of <paramref name="defaultValue"/>'s type that contains the value of the specified variable.
         /// </summary>
         /// <param name="name">The name of the variable to be read.</param>
         /// <param name="defaultValue">The value to be returned if <see cref="IVariableSource.ResolveVariable"/> returns <c>null</c>.</param>
@@ -741,7 +741,7 @@ namespace Spring.Objects.Factory.Config
         /// of <see cref="IVariableSource.ResolveVariable"/> cannot be parsed
         /// and returns <paramref name="defaultValue"/> instead.</param>
         /// <returns>
-        /// An <see cref="Enum"/> of type <paramref name="defaultValue.GetType()"/> that contains the value of the specified variable 
+        /// An <see cref="Enum"/> of <paramref name="defaultValue"/>'s type that contains the value of the specified variable 
         /// or <paramref name="defaultValue"/>, if <see cref="IVariableSource.ResolveVariable"/> cannot be parsed.
         /// </returns>
         public Enum GetEnum(string name, Enum defaultValue, bool throwOnInvalidValue)
