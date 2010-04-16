@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FA7A6931-7DBE-4A32-A312-51FAD2E80332}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spring</RootNamespace>
+    <AssemblyName>Spring.Messaging.Nms.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Messaging.Nms.Tests\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Messaging.Nms.Tests\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_2_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="Apache.NMS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Apache.NMS.dll</HintPath>
+    </Reference>
+    <Reference Include="Apache.NMS.ActiveMQ, Version=1.0.0.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Apache.NMS.ActiveMQ.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.2.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\net\2.0\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=2.9.6.40380, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">
+      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
+      <Name>Spring.Core.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2010.csproj">
+      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
+      <Name>Spring.Data.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2010.csproj">
+      <Project>{AEB1578C-9018-4D49-B440-789F38DD2F29}</Project>
+      <Name>Spring.Messaging.Nms.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.2010.csproj">
+      <Project>{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}</Project>
+      <Name>Spring.Testing.NUnit.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2010.csproj">
+      <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
+      <Name>Spring.Core.Tests.2010</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="NmsExceptionTests.cs" />
+    <Compile Include="NmsCompilerOptionsTests.cs" />
+    <Compile Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\CachingConnectionFactoryTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\MessageTransactionManagerTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\SingleConnectionFactoryTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestConnection.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestExceptionListener.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestMessageConsumer.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestMessageListener.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestMessageProducer.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestSession.cs" />
+    <Compile Include="Messaging\Nms\Core\MessageTemplateTests.cs" />
+    <Compile Include="Messaging\Nms\Core\SimpleMessageConverterTests.cs" />
+    <Compile Include="Messaging\Nms\Core\SimpleMessageListenerContainerTests.cs" />
+    <Compile Include="Messaging\Nms\Integration\LoggingExceptionHandler.cs" />
+    <Compile Include="Messaging\Nms\Integration\SimpleMessageListener.cs" />
+    <Compile Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\TestConnectionFactory.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\IMessageContentsHandler.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\MessageContentsHandler.cs" />
+    <Compile Include="Messaging\Nms\Listener\Adapter\MessageListenerAdapterTests.cs" />
+    <Compile Include="Messaging\Nms\StubQueue.cs" />
+    <Compile Include="Messaging\Nms\Support\Converter\TypeMapperTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.xml" />
+    <EmbeddedResource Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.xml" />
+    <Content Include="Spring.Messaging.Nms.Tests.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

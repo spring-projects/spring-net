@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{91766D21-C568-459F-9BEA-759B011F23CF}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Spring.Data.Integration.Tests</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Spring</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.Integration.Tests\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>67, 618</NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.Integration.Tests\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;NET_2_0</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging, Version=2.1.0.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetMock, Version=0.7.4.0, Culture=neutral, PublicKeyToken=805ea88df19095f6">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\DotNetMock.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.2.5.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2010.csproj">
+      <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
+      <Name>Spring.Aop.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">
+      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
+      <Name>Spring.Core.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2010.csproj">
+      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
+      <Name>Spring.Data.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.2010.csproj">
+      <Project>{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}</Project>
+      <Name>Spring.Testing.NUnit.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2010.csproj">
+      <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
+      <Name>Spring.Core.Tests.2010</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\AccountCreditDao.cs" />
+    <Compile Include="Data\AccountDebitDao.cs" />
+    <Compile Include="Data\AccountManager.cs" />
+    <Compile Include="Data\AdoDaoTests.cs" />
+    <Compile Include="Data\AdoTemplatePerformanceTests.cs" />
+    <Compile Include="Data\AdoTemplateTests.cs" />
+    <Compile Include="Data\AutoDeclarativeTxTests.cs" />
+    <Compile Include="Data\CallCreateTestObject.cs" />
+    <Compile Include="Data\ConsoleLoggingAroundAdvice.cs" />
+    <Compile Include="Data\OracleAdoTemplateTests.cs" />
+    <Compile Include="Data\TestTxIsolationLevelTests.cs" />
+    <Compile Include="Data\Generic\GenericAdoTemplateTests.cs" />
+    <Compile Include="Data\Generic\ITestObjectDao.cs" />
+    <Compile Include="Data\Objects\Generic\VacationRowMapper.cs" />
+    <Compile Include="Data\Objects\Generic\StoredProcedureTests.cs" />
+    <Compile Include="Data\Generic\TestObjectDao.cs" />
+    <Compile Include="Data\Generic\TestObjectRowMapper.cs" />
+    <Compile Include="Data\ITestCoordinator.cs" />
+    <Compile Include="Data\Objects\Generic\Vacation.cs" />
+    <Compile Include="Data\SimpleAccountManager.cs" />
+    <Compile Include="Data\SimpleAccountDebitDao.cs" />
+    <Compile Include="Data\SimpleAccountCreditDao.cs" />
+    <Compile Include="Data\DTCTestsNoInterfaces.cs" />
+    <Compile Include="Data\CreateTestObjectNonQuery.cs" />
+    <Compile Include="Data\DeclarativeTxTests.cs" />
+    <Compile Include="Data\DTCTests.cs" />
+    <Compile Include="Data\IAccountCreditDao.cs" />
+    <Compile Include="Data\IAccountDebitDao.cs" />
+    <Compile Include="Data\IAccountManager.cs" />
+    <Compile Include="Data\ITestObjectDao.cs" />
+    <Compile Include="Data\ITestObjectManager.cs" />
+    <Compile Include="Data\MappingAdoQueryTests.cs" />
+    <Compile Include="Data\NativeAdoTestObjectDao.cs" />
+    <Compile Include="Data\NativeAdoTests.cs" />
+    <Compile Include="Data\Northwind\AdoTemplateShipperDao.cs" />
+    <Compile Include="Data\Northwind\IShipperDao.cs" />
+    <Compile Include="Data\Northwind\NativeAdoShipperDao.cs" />
+    <Compile Include="Data\Northwind\Shipper.cs" />
+    <Compile Include="Data\SQLiteTests.cs" />
+    <Compile Include="Data\StoredProcedureTests.cs" />
+    <Compile Include="Data\Support\SimpleExceptionTranslationTests.cs" />
+    <Compile Include="Data\TestCoordinator.cs" />
+    <Compile Include="Data\TestObjectDao.cs" />
+    <Compile Include="Data\TestObjectManager.cs" />
+    <Compile Include="Data\TestObjectQuery.cs" />
+    <Compile Include="Data\TestObjectStoredProcedure.cs" />
+    <Compile Include="Data\TransactionTemplateTests.cs" />
+    <Compile Include="Data\NestedTxScopeTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\adoTemplateTests.xml" />
+    <EmbeddedResource Include="Data\declarativeServices.xml" />
+    <EmbeddedResource Include="Data\DTCAppContext.xml" />
+    <EmbeddedResource Include="Data\autoDeclarativeServices.xml" />
+    <EmbeddedResource Include="Data\DTCAppContextNoInterfaces.xml" />
+    <EmbeddedResource Include="Data\Generic\GenericAdoTemplateTests.xml" />
+    <EmbeddedResource Include="Data\nativeAdoTests.xml" />
+    <EmbeddedResource Include="Data\oracleAdoTemplateTests.xml" />
+    <EmbeddedResource Include="Data\templateTests.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Spring.Data.Integration.Tests.build" />
+    <None Include="Spring.Data.Integration.Tests.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\TestTxIsolationLevel.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\CreateTestObject.sql" />
+    <Content Include="Data\CreditsDebitsSchema.sql" />
+    <Content Include="Data\DTC1.1AppContext.xml" />
+    <Content Include="Data\testobjects-sqlserver.sql" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
