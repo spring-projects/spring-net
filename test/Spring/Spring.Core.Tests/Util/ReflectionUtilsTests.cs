@@ -980,7 +980,12 @@ namespace Spring.Util
         {
             IList attrs = ReflectionUtils.GetCustomAttributes(typeof(ClassWithAttributes));
 
+#if NET_1_1
+            // "GetCustomAttributes() does not return SecurityAttribute in .NET 1.x"
+            Assert.AreEqual(1, attrs.Count);
+#else
             Assert.AreEqual(2, attrs.Count);
+#endif
         }
 
         [Test]
@@ -988,7 +993,12 @@ namespace Spring.Util
         {
             IList attrs = ReflectionUtils.GetCustomAttributes(typeof(ClassWithAttributes).GetMethod("MethodWithAttributes"));
 
+#if NET_1_1
+            // "GetCustomAttributes() does not return SecurityAttribute in .NET 1.x"
+            Assert.AreEqual(1, attrs.Count);
+#else
             Assert.AreEqual(2, attrs.Count);
+#endif
         }
 
         #endregion
