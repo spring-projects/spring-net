@@ -1082,12 +1082,10 @@ namespace Spring.Util
         /// Calculates and returns the list of attributes that apply to the
         /// specified type or method.
         /// </summary>
-        /// <remarks>
-        /// Attributes can be instance of <see cref="CustomAttributeData"/> or <see cref="Attribute"/>.
-        /// </remarks>
         /// <param name="member">The type or method to find attributes for.</param>
         /// <returns>
-        /// A list of custom attributes that should be applied to type.
+        /// A list of custom attributes (CustomAttributeData or Attribute instances) 
+        /// that should be applied to type or method.
         /// </returns>
         public static IList GetCustomAttributes(MemberInfo member)
         {
