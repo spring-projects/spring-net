@@ -1149,6 +1149,7 @@ namespace Spring.Web.Services
             public WebServiceProxyProxyTypeBuilder()
             {
                 this.Name = "WebServiceProxyProxy";
+                this.DeclaredMembersOnly = true;
             }
 
             #endregion
