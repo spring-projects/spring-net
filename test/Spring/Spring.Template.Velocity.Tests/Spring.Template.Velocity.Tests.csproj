@@ -53,6 +53,7 @@
     <Compile Include="Template\Velocity\Config\TemplateNamespaceParserTests.cs" />
     <Compile Include="Template\Velocity\VelocityEngineFactoryObjectTests.cs" />
     <Compile Include="Template\Velocity\VelocityEngineTestBase.cs" />
+    <Compile Include="VelocityCompilerOptionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">

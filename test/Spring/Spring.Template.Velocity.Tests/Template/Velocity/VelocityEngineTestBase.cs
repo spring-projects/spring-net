@@ -29,7 +29,7 @@ using Spring.Objects.Factory.Xml;
 
 #endregion
 
-namespace Spring.Template.Velocity.Tests.Template.Velocity {
+namespace Spring.Template.Velocity {
 
     /// <summary>
     /// Base class for Velocity engine tests.

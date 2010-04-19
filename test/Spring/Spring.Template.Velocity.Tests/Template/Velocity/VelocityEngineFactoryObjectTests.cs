@@ -29,7 +29,7 @@ using NVelocity.Exception;
 
 #endregion
 
-namespace Spring.Template.Velocity.Tests.Template.Velocity {
+namespace Spring.Template.Velocity {
 
     /// <summary>
     /// This class contains tests for VelocityEngineFactoryObject
@@ -45,7 +45,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
         public void TestMergeUsingAssembly() {
             VelocityEngine velocityEngine = appContext.GetObject("assemblyBasedVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
-            AssertMergedValue(velocityEngine, "Spring.Template.Velocity.Tests.Template.Velocity.SimpleTemplate.vm");
+            AssertMergedValue(velocityEngine, "Spring.Template.Velocity.SimpleTemplate.vm");
          }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Spring.Template.Velocity.Tests.Template.Velocity {
             VelocityEngine velocityEngine =
                 appContext.GetObject("propertiesFileBasedVelocityEngine") as VelocityEngine;
             Assert.IsNotNull(velocityEngine, "velocityEngine is null");
-            AssertMergedValue(velocityEngine, "Spring.Template.Velocity.Tests.Template.Velocity.SimpleTemplate.vm");
+            AssertMergedValue(velocityEngine, "Spring.Template.Velocity.SimpleTemplate.vm");
         }
 
         /// <summary>

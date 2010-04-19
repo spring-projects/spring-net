@@ -17,7 +17,7 @@
     <nv:engine id="cnSpringVelocityEngine" prefer-file-system-access="false">
         <nv:resource-loader default-cache-size="200" modification-check-interval="30" template-caching="true">
             <nv:spring uri="file://Template/Velocity/"/>
-            <nv:spring uri="assembly://Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.Template.Velocity/"/>
+            <nv:spring uri="assembly://Spring.Template.Velocity.Tests/Spring.Template.Velocity/"/>
         </nv:resource-loader>
     </nv:engine>
 
@@ -34,7 +34,7 @@
         <nv:resource-loader default-cache-size="200" modification-check-interval="30" template-caching="true">
             <nv:custom name="myResourceLoader"
                        description="A custom resource loader"
-                       type="Spring.Template.Velocity.Tests.Template.Velocity.Config.TestCustomResourceLoader, Spring.Template.Velocity.Tests"
+                       type="Spring.Template.Velocity.Config.TestCustomResourceLoader, Spring.Template.Velocity.Tests"
                        path="Template/Velocity/"/>
         </nv:resource-loader>
     </nv:engine>
@@ -68,7 +68,7 @@
 
     <!-- Spring based defualt file fallback to spring definition -->
     <object id="springFallbackVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" >
-        <property name="ResourceLoaderPath " value="assembly://Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.Template.Velocity/" />
+        <property name="ResourceLoaderPath " value="assembly://Spring.Template.Velocity.Tests/Spring.Template.Velocity/" />
     </object>
 
 
