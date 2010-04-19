@@ -25,6 +25,7 @@ using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
+using System.Security.Permissions;
 
 using Common.Logging;
 using Spring.Collections;
@@ -364,39 +365,7 @@ namespace Spring.Proxy
             if (this.ProxyTargetAttributes)
             {
                 // add attributes that apply to the target type
-#if NET_2_0
-                object[] attrs = type.GetCustomAttributes(false);
-                try
-                {
-                    System.Collections.Generic.IList<CustomAttributeData> attrsData  = 
-                        CustomAttributeData.GetCustomAttributes(type);
-                    
-                    if (attrs.Length != attrsData.Count)
-                    {
-                        // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
-                        attributes.AddRange(attrs);
-                    }
-                    else
-                    {
-                        foreach (CustomAttributeData cad in attrsData)
-                        {
-                            attributes.Add(cad);
-                        }
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
-                    attributes.AddRange(attrs);
-                }
-                catch (CustomAttributeFormatException)
-                {
-                    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
-                    attributes.AddRange(attrs);
-                }
-#else
-                attributes.AddRange(type.GetCustomAttributes(false));
-#endif
+                attributes.AddRange(ReflectionUtils.GetCustomAttributes(type));
             }
 
             // add attributes defined by configuration
@@ -422,34 +391,7 @@ namespace Spring.Proxy
             if (this.ProxyTargetAttributes)
             {
                 // add attributes that apply to the target method
-#if NET_2_0
-                object[] attrs = method.GetCustomAttributes(false);
-                try
-                {
-                    System.Collections.Generic.IList<CustomAttributeData> attrsData = 
-                        CustomAttributeData.GetCustomAttributes(method);
-                    
-                    if (attrs.Length != attrsData.Count)
-                    {
-                        // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
-                        attributes.AddRange(attrs);
-                    }
-                    else
-                    {
-                        foreach (CustomAttributeData cad in attrsData)
-                        {
-                            attributes.Add(cad);
-                        }
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
-                    attributes.AddRange(attrs);
-                }
-#else
-                attributes.AddRange(method.GetCustomAttributes(false));
-#endif
+                attributes.AddRange(ReflectionUtils.GetCustomAttributes(method));
             }
 
             // add attributes defined by configuration
@@ -904,7 +846,7 @@ namespace Spring.Proxy
                                         ? type.FullName + "." + property.Name
                                         : property.Name;
                 PropertyBuilder pb = typeBuilder.DefineProperty(propertyName, PropertyAttributes.None,
-                                                property.PropertyType, Type.EmptyTypes);
+                                                property.PropertyType, null);
 
                 // set get/set methods
                 if (property.CanRead && getMethod != null)

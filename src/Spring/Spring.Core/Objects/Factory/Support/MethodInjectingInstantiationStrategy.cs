@@ -434,7 +434,7 @@ namespace Spring.Objects.Factory.Support
 					                           method.CallingConvention,
 					                           method.ReturnType,
 					                           ReflectionUtils.GetParameterTypes(methodParameters));
-				DefineOverrideMethodParameters(methodParameters, methodBuilder);
+                //DefineOverrideMethodParameters(methodParameters, methodBuilder);
 				ILGenerator il = methodBuilder.GetILGenerator();
 				LocalBuilder returnValue = DefineReturnValueIfAny(method, il);
 				// prepare the invocation of the 'Implement' method for the 'field' (an IMethodReplacer)...
@@ -447,6 +447,7 @@ namespace Spring.Objects.Factory.Support
 				il.Emit(OpCodes.Ret);
 			}
 
+            /* 
 			/// <summary>
 			/// Defines the parameters to the method that is being overridden.
 			/// </summary>
@@ -472,6 +473,7 @@ namespace Spring.Objects.Factory.Support
 					methodBuilder.DefineParameter(i + 1, parameter.Attributes, parameter.Name);
 				}
 			}
+            */
 
 			/// <summary>
 			/// Generates the MSIL for actually returning a return value if the

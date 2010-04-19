@@ -101,10 +101,11 @@ namespace Spring.Proxy
 
             il.Emit(OpCodes.Ret);
 
-			if (interfaceMethod != null)
-			{
-				typeBuilder.DefineMethodOverride(methodBuilder, interfaceMethod);
-			}
+            if (explicitImplementation || 
+                (interfaceMethod != null && interfaceMethod.Name != method.Name))
+            {
+                typeBuilder.DefineMethodOverride(methodBuilder, interfaceMethod);
+            }
 
             return methodBuilder;
         }
@@ -191,11 +192,12 @@ namespace Spring.Proxy
 #if NET_2_0
             DefineGenericParameters(methodBuilder, method);
 #endif
-            DefineParameters(methodBuilder, method);
+            //DefineParameters(methodBuilder, method);
 
             return methodBuilder;
         }
 
+        /*
         /// <summary>
         /// Defines method parameters based on proxied method metadata.
         /// </summary>
@@ -212,6 +214,7 @@ namespace Spring.Proxy
                 n++;
             }
         }
+        */
 
 #if NET_2_0
         /// <summary>

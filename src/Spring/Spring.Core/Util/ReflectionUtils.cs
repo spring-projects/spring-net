@@ -1079,6 +1079,84 @@ namespace Spring.Util
 #endif
 
         /// <summary>
+        /// Calculates and returns the list of attributes that apply to the
+        /// specified type or method.
+        /// </summary>
+        /// <remarks>
+        /// Attributes can be instance of <see cref="CustomAttributeData"/> or <see cref="Attribute"/>.
+        /// </remarks>
+        /// <param name="member">The type or method to find attributes for.</param>
+        /// <returns>
+        /// A list of custom attributes that should be applied to type.
+        /// </returns>
+        public static IList GetCustomAttributes(MemberInfo member)
+        {
+            ArrayList attributes = new ArrayList();
+
+            // add attributes that apply to the target type or method
+#if NET_2_0
+            object[] attrs = member.GetCustomAttributes(false);
+            try
+            {
+                System.Collections.Generic.IList<CustomAttributeData> attrsData =
+                    CustomAttributeData.GetCustomAttributes(member);
+
+                if (attrs.Length != attrsData.Count)
+                {
+                    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
+                    attributes.AddRange(attrs);
+                }
+                else if (attrsData.Count > 0)
+                {
+                    if (SystemUtils.Clr4Runtime)
+                    {
+                        bool hasSecurityAttribute = false;
+                        foreach (CustomAttributeData cad in attrsData)
+                        {
+                            if (typeof(SecurityAttribute).IsAssignableFrom(cad.Constructor.DeclaringType))
+                            {
+                                hasSecurityAttribute = true;
+                                break;
+                            }
+                        }
+                        if (hasSecurityAttribute)
+                        {
+                            attributes.AddRange(attrs);
+                        }
+                        else
+                        {
+                            foreach (CustomAttributeData cad in attrsData)
+                            {
+                                attributes.Add(cad);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (CustomAttributeData cad in attrsData)
+                        {
+                            attributes.Add(cad);
+                        }
+                    }
+                }
+            }
+            catch (ArgumentException)
+            {
+                // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
+                attributes.AddRange(attrs);
+            }
+            catch (CustomAttributeFormatException)
+            {
+                // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
+                attributes.AddRange(attrs);
+            }
+#else
+            attributes.AddRange(member.GetCustomAttributes(false));
+#endif
+            return attributes;
+        }
+
+        /// <summary>
         /// Tries to find matching methods in the specified <see cref="System.Type"/>
         /// for each method in the supplied <paramref name="methods"/> list.
         /// </summary>

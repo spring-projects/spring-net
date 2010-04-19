@@ -282,7 +282,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             il.EmitCall(OpCodes.Callvirt, References.AddSerializationValue, null);
             il.Emit(OpCodes.Ret);
 
-            typeBuilder.DefineMethodOverride(mb, typeof(ISerializable).GetMethod("GetObjectData"));
+            //typeBuilder.DefineMethodOverride(mb, typeof(ISerializable).GetMethod("GetObjectData"));
         }
 
         /// <summary>

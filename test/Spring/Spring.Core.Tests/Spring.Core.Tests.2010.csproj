@@ -37,7 +37,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0;DEBUG_DYNAMIC</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_4_0;DEBUG_DYNAMIC</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>

@@ -85,7 +85,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 #if NET_2_0
                 DefineGenericParameters(baseMethod, method);
 #endif
-                DefineParameters(baseMethod, method);
+                //DefineParameters(baseMethod, method);
 
                 ILGenerator localIL = baseMethod.GetILGenerator();
 
