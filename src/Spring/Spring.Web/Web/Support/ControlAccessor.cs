@@ -258,63 +258,99 @@ namespace Spring.Web.Support
 
         private static GetControlsDelegate GetGetControlsDelegate()
         {
-            FieldInfo occasionalFields = GetField("_occasionalFields");
-            MethodInfo ensureOccasionalFields = GetMethod("EnsureOccasionalFields");
-            FieldInfo controls = occasionalFields.FieldType.GetField("Controls");
-
             GetControlsDelegate handler = null;
 
-            SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
+            if (SystemUtils.Clr4Runtime)
             {
-                System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("get_Controls", typeof(ControlCollection), new Type[] { typeof(Control) }, typeof(Control).Module, true);
-                ILGenerator il = dm.GetILGenerator();
-                Label occFieldsNull = il.DefineLabel();
-                Label retControls = il.DefineLabel();
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Ldfld, occasionalFields);
-                il.Emit(OpCodes.Brfalse_S, occFieldsNull);
-                il.MarkLabel(retControls);
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Ldfld, occasionalFields);
-                il.Emit(OpCodes.Ldfld, controls);
-                il.Emit(OpCodes.Ret);
-                il.MarkLabel(occFieldsNull);
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Call, ensureOccasionalFields);
-                il.Emit(OpCodes.Br, retControls);
-                handler = (GetControlsDelegate) dm.CreateDelegate(typeof(GetControlsDelegate));
-            });
+                FieldInfo controls = GetField("_controls");
+
+                SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
+                {
+                    System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("get_Controls", typeof(ControlCollection), new Type[] { typeof(Control) }, typeof(Control).Module, true);
+                    ILGenerator il = dm.GetILGenerator();
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldfld, controls);
+                    il.Emit(OpCodes.Ret);
+                    handler = (GetControlsDelegate)dm.CreateDelegate(typeof(GetControlsDelegate));
+                });
+            }
+            else
+            {
+                FieldInfo occasionalFields = GetField("_occasionalFields");
+                MethodInfo ensureOccasionalFields = GetMethod("EnsureOccasionalFields");
+                FieldInfo controls = occasionalFields.FieldType.GetField("Controls");
+
+                SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
+                {
+                    System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("get_Controls", typeof(ControlCollection), new Type[] { typeof(Control) }, typeof(Control).Module, true);
+                    ILGenerator il = dm.GetILGenerator();
+                    Label occFieldsNull = il.DefineLabel();
+                    Label retControls = il.DefineLabel();
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldfld, occasionalFields);
+                    il.Emit(OpCodes.Brfalse_S, occFieldsNull);
+                    il.MarkLabel(retControls);
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldfld, occasionalFields);
+                    il.Emit(OpCodes.Ldfld, controls);
+                    il.Emit(OpCodes.Ret);
+                    il.MarkLabel(occFieldsNull);
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Call, ensureOccasionalFields);
+                    il.Emit(OpCodes.Br, retControls);
+                    handler = (GetControlsDelegate)dm.CreateDelegate(typeof(GetControlsDelegate));
+                });
+            }
             return handler;
         }
 
         private static SetControlsDelegate GetSetControlsDelegate()
         {
-            FieldInfo occasionalFields = GetField("_occasionalFields");
-            MethodInfo ensureOccasionalFields = GetMethod("EnsureOccasionalFields");
-            FieldInfo controls = occasionalFields.FieldType.GetField("Controls");
-
             SetControlsDelegate handler = null;
-            SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate 
+
+            if (SystemUtils.Clr4Runtime)
             {
-                System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("set_Controls", null, new Type[] { typeof(Control), typeof(ControlCollection) }, typeof(Control).Module, true);
-                ILGenerator il = dm.GetILGenerator();
-                Label occFieldsNull = il.DefineLabel();
-                Label setControls = il.DefineLabel();
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Ldfld, occasionalFields);
-                il.Emit(OpCodes.Brfalse_S, occFieldsNull);
-                il.MarkLabel(setControls);
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Ldfld, occasionalFields);
-                il.Emit(OpCodes.Ldarg_1);
-                il.Emit(OpCodes.Stfld, controls);
-                il.Emit(OpCodes.Ret);
-                il.MarkLabel(occFieldsNull);
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Call, ensureOccasionalFields);
-                il.Emit(OpCodes.Br, setControls);
-                handler = (SetControlsDelegate) dm.CreateDelegate(typeof(SetControlsDelegate));
-            });
+                FieldInfo controls = GetField("_controls");
+
+                SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
+                {
+                    System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("set_Controls ", null, new Type[] { typeof(Control), typeof(ControlCollection) }, typeof(Control).Module, true);
+                    ILGenerator il = dm.GetILGenerator();
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldarg_1);
+                    il.Emit(OpCodes.Stfld, controls);
+                    il.Emit(OpCodes.Ret);
+                    handler = (SetControlsDelegate)dm.CreateDelegate(typeof(SetControlsDelegate));
+                });
+            }
+            else
+            {
+                FieldInfo occasionalFields = GetField("_occasionalFields");
+                MethodInfo ensureOccasionalFields = GetMethod("EnsureOccasionalFields");
+                FieldInfo controls = occasionalFields.FieldType.GetField("Controls");
+
+                SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
+                {
+                    System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("set_Controls", null, new Type[] { typeof(Control), typeof(ControlCollection) }, typeof(Control).Module, true);
+                    ILGenerator il = dm.GetILGenerator();
+                    Label occFieldsNull = il.DefineLabel();
+                    Label setControls = il.DefineLabel();
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldfld, occasionalFields);
+                    il.Emit(OpCodes.Brfalse_S, occFieldsNull);
+                    il.MarkLabel(setControls);
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldfld, occasionalFields);
+                    il.Emit(OpCodes.Ldarg_1);
+                    il.Emit(OpCodes.Stfld, controls);
+                    il.Emit(OpCodes.Ret);
+                    il.MarkLabel(occFieldsNull);
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Call, ensureOccasionalFields);
+                    il.Emit(OpCodes.Br, setControls);
+                    handler = (SetControlsDelegate)dm.CreateDelegate(typeof(SetControlsDelegate));
+                });
+            }
             return handler;
         }
 #else
