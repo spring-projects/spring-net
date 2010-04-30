@@ -71,10 +71,10 @@
     </copy>
     <copy file="${project::get-base-directory()}/${project::get-name()}.dll-1.1.config" 
           tofile="${current.bin.dir}/${project::get-name()}.dll.config" 
-          if="${framework::get-target-framework() == 'net-1.1'}"/>
+          if="${framework::get-target-framework() != 'net-2.0'}"/>
     <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config" 
           tofile="${current.bin.dir}/${project::get-name()}.dll.config" 
-          if="${framework::get-target-framework() != 'net-1.1'}"/>
+          if="${framework::get-target-framework() == 'net-2.0'}"/>
   </target>
 
     <target name="test" depends="build">
