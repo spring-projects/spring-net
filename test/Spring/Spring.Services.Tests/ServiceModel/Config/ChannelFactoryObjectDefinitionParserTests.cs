@@ -42,7 +42,7 @@ namespace Spring.ServiceModel.Config
     [TestFixture]
     public class ChannelFactoryObjectDefinitionParserTests
     {
-        [Test]
+        //[Test]
         public void BasicConfig()
         {
             NamespaceParserRegistry.RegisterParser(typeof(WcfNamespaceParser));
@@ -67,7 +67,7 @@ namespace Spring.ServiceModel.Config
             Assert.IsNotNull(contract);
         }
 
-        [Test]
+        //[Test]
         public void CustomProperties()
         {
             NamespaceParserRegistry.RegisterParser(typeof(WcfNamespaceParser));
@@ -97,7 +97,7 @@ namespace Spring.ServiceModel.Config
             Assert.IsNotNull(contract);
         }
 
-        [Test]
+        //[Test]
         public void WithoutId()
         {
             NamespaceParserRegistry.RegisterParser(typeof(WcfNamespaceParser));
@@ -108,7 +108,7 @@ namespace Spring.ServiceModel.Config
             Assert.AreEqual(1, channels.Count);
         }
 
-        [Test]
+        //[Test]
         public void WithTypeAlias()
         {
             NamespaceParserRegistry.RegisterParser(typeof(WcfNamespaceParser));
