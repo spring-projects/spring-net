@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
  * Copyright 2002-2008 the original author or authors.
@@ -5510,7 +5510,7 @@ IApplicationContext context =
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
       &lt;!-- other configuration section handler defined here --&gt;
-      &lt;section name="parsers" type="Spring.Context.Support.TypeAliasesSectionHandler, Spring.Core"/&gt; 
+      &lt;section name="typeAliases" type="Spring.Context.Support.TypeAliasesSectionHandler, Spring.Core"/&gt; 
      &lt;/sectionGroup&gt;
   &lt;/configSections&gt;
 
