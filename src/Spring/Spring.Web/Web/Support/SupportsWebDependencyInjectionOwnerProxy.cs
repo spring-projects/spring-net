@@ -94,15 +94,22 @@ namespace Spring.Web.Support
     {
 #if NET_2_0
         private static readonly SafeField refOccasionalFields;
+        private static readonly SafeField refControls;
 
         static NamingContainerSupportsWebDependencyInjectionOwnerProxy()
         {
-            SafeField fld = null;
+            SafeField fld1 = null;
+            SafeField fld2 = null;
             SecurityCritical.ExecutePrivileged( new PermissionSet(PermissionState.Unrestricted), delegate 
             {
-                fld = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance | BindingFlags.NonPublic));
+                fld1 = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance | BindingFlags.NonPublic));
+                if (SystemUtils.Clr4Runtime)
+                {
+                    fld2 = new SafeField(typeof(Control).GetField("_controls", BindingFlags.Instance | BindingFlags.NonPublic));
+                }
             });
-            refOccasionalFields = fld;
+            refOccasionalFields = fld1;
+            refControls = fld2;
         }
 #endif
 
@@ -111,6 +118,11 @@ namespace Spring.Web.Support
 #if NET_2_0
             object targetOccasionalFields = refOccasionalFields.GetValue(targetControl);
             refOccasionalFields.SetValue(this, targetOccasionalFields);
+            if (SystemUtils.Clr4Runtime)
+            {
+                object targetControls = refControls.GetValue(targetControl);
+                refControls.SetValue(this, targetControls);
+            }
 #endif            
         }
     }
