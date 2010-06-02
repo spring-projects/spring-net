@@ -2,8 +2,13 @@
 <objects xmlns="http://www.springframework.net"
          xmlns:nms="http://www.springframework.net/nms">
 
-  <object id="ConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
-    <constructor-arg index="0" value="tcp://localhost:61616"/>
+  <object id="ConnectionFactory" type="Spring.Messaging.Nms.Connections.CachingConnectionFactory, Spring.Messaging.Nms">
+    <property name="SessionCacheSize" value="10" />
+    <property name="TargetConnectionFactory">
+      <object type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
+        <constructor-arg index="0" value="tcp://localhost:61616"/>
+      </object>
+    </property>
   </object>
 
   <object name="NmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">

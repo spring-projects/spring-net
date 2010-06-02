@@ -780,6 +780,8 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Nms.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Nms.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Nms.Integeration.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Ems.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Ems.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Tests/obj" failonerror="false"/>
@@ -1614,6 +1616,7 @@ Commandline Examples:
       <include name="test/Spring/Spring.Data.NHibernate21.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
+      <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Ems.Tests/**"/>
       <include name="test/Spring/Spring.Scheduling.Quartz.Tests/**"/>
       <include name="test/Spring/Spring.Template.Velocity.Tests/**"/>

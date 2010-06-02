@@ -19,7 +19,7 @@
   </object>
 
   <object id="nmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">
-    <property name="ConnectionFactory" ref="connectionFactory" />
+    <property name="ConnectionFactory" ref="nmsConnectionFactory" />
   </object>
 
 </objects>

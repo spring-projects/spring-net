@@ -19,7 +19,14 @@ namespace Spring.Messaging.Nms.Connections
             get { return closeCount; }
         }
 
+        public IConnectionMetaData MetaData
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public event ExceptionListener ExceptionListener;
+        public event ConnectionInterruptedListener ConnectionInterruptedListener;
+        public event ConnectionResumedListener ConnectionResumedListener;
 
         public ISession CreateSession()
         {
@@ -59,6 +66,12 @@ namespace Spring.Messaging.Nms.Connections
         {
             get { return null; }
             set { }
+        }
+
+        public IRedeliveryPolicy RedeliveryPolicy
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public void Dispose()

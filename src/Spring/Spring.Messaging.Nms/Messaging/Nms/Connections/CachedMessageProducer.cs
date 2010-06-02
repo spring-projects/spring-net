@@ -178,6 +178,15 @@ namespace Spring.Messaging.Nms.Connections
         {
             return target.CreateBytesMessage(body);
         }
+
+        /// <summary>
+        /// Creates the stream message.
+        /// </summary>
+        /// <returns>A new stream message.</returns>
+        public IStreamMessage CreateStreamMessage()
+        {
+            return target.CreateStreamMessage();
+        }
         #endregion
 
         /// <summary>

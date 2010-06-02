@@ -1,5 +1,6 @@
 
 
+using System;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Connections
@@ -16,6 +17,18 @@ namespace Spring.Messaging.Nms.Connections
         public IConnection CreateConnection(string userName, string password)
         {
             return new TestConnection();
+        }
+
+        public Uri BrokerUri
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public IRedeliveryPolicy RedeliveryPolicy
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         #endregion

@@ -200,6 +200,25 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// Get/or set the broker Uri.
+        /// </summary>
+        public Uri BrokerUri
+        {
+            get { return targetConnectionFactory.BrokerUri; }
+            set { targetConnectionFactory.BrokerUri = value; }
+        }
+
+        /// <summary>
+        /// Get/or set the redelivery policy that new IConnection objects are
+        /// assigned upon creation.
+        /// </summary>
+        public IRedeliveryPolicy RedeliveryPolicy
+        {
+            get { return targetConnectionFactory.RedeliveryPolicy; }
+            set { targetConnectionFactory.RedeliveryPolicy = value; }
+        }
+
+        /// <summary>
         /// Gets the connection monitor.
         /// </summary>
         /// <value>The connection monitor.</value>
@@ -511,6 +530,30 @@ namespace Spring.Messaging.Nms.Connections
             }
         }
 
+        public event ConnectionInterruptedListener ConnectionInterruptedListener
+        {
+            add
+            {
+                target.ConnectionInterruptedListener += value;
+            }
+            remove
+            {
+                target.ConnectionInterruptedListener -= value;
+            }
+        }
+
+        public event ConnectionResumedListener ConnectionResumedListener
+        {
+            add
+            {
+                target.ConnectionResumedListener += value;
+            }
+            remove
+            {
+                target.ConnectionResumedListener -= value;
+            }
+        }
+
 
         public AcknowledgementMode AcknowledgementMode
         {
@@ -527,6 +570,19 @@ namespace Spring.Messaging.Nms.Connections
         public bool IsStarted
         {
             get { return target.IsStarted; }
+        }
+
+
+        public IConnectionMetaData MetaData
+        {
+            get { return target.MetaData; }
+        }
+
+
+        public IRedeliveryPolicy RedeliveryPolicy
+        {
+            get { return target.RedeliveryPolicy; }
+            set { target.RedeliveryPolicy = value; }
         }
         #endregion
 

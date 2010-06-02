@@ -90,6 +90,11 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public IStreamMessage CreateStreamMessage()
+        {
+            throw new NotImplementedException();
+        }
+
         public MsgDeliveryMode DeliveryMode
         {
             get { return msgDeliveryMode; }

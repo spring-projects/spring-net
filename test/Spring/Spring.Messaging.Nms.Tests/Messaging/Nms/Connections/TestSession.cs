@@ -21,14 +21,12 @@
 using System;
 using Apache.NMS;
 using Apache.NMS.ActiveMQ.Commands;
-using Rhino.Mocks;
 
 namespace Spring.Messaging.Nms.Connections
 {
 
     public class TestSession : ISession
     {
-        private MockRepository mocks = new MockRepository();
         private int closeCount;
         private int createdCount;
 
@@ -114,6 +112,16 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public IQueueBrowser CreateBrowser(IQueue queue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueueBrowser CreateBrowser(IQueue queue, string selector)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteDurableConsumer(string name, TimeSpan requestTimeout)
         {
             throw new NotImplementedException();
@@ -179,6 +187,11 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         public IBytesMessage CreateBytesMessage(byte[] body)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IStreamMessage CreateStreamMessage()
         {
             throw new NotImplementedException();
         }

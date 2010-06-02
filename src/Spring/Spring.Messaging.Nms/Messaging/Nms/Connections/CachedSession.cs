@@ -507,6 +507,16 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// Creates the stream message.
+        /// </summary>
+        /// <returns></returns>
+        public IStreamMessage CreateStreamMessage()
+        {
+            this.transactionOpen = true;
+            return target.CreateStreamMessage();
+        }
+
+        /// <summary>
         /// Commits this instance.
         /// </summary>
         public void Commit()
@@ -567,6 +577,29 @@ namespace Spring.Messaging.Nms.Connections
         {
             this.transactionOpen = true;
             target.Dispose();
+        }
+
+        /// <summary>
+        /// Creates the queue browser with a specified selector
+        /// </summary>
+        /// <param name="queue">The queue.</param>
+        /// <param name="selector">The selector.</param>
+        /// <returns>The Queue browser</returns>
+        public IQueueBrowser CreateBrowser(IQueue queue, string selector)
+        {
+            this.transactionOpen = true;
+            return target.CreateBrowser(queue, selector);
+        }
+
+        /// <summary>
+        /// Creates the queue browser.
+        /// </summary>
+        /// <param name="queue">The queue.</param>
+        /// <returns>The Queue browser</returns>
+        public IQueueBrowser CreateBrowser(IQueue queue)
+        {
+            this.transactionOpen = true;
+            return target.CreateBrowser(queue);
         }
         #endregion
 

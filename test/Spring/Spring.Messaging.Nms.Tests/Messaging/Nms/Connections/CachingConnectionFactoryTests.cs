@@ -30,7 +30,7 @@ using Rhino.Mocks;
 namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
-    /// This class contains tests for 
+    /// This class contains tests for CachingConnectionFactory
     /// </summary>
     /// <author>Mark Pollack</author>
     [TestFixture]
@@ -242,8 +242,7 @@ namespace Spring.Messaging.Nms.Connections
             IMessageConsumer consumerB = sessionB.CreateConsumer(destination);
             TestMessageConsumer tmpB = GetTestMessageConsumer(consumerB);
 
-            Assert.AreSame(tmpA, tmpB);
-
+            Assert.AreSame(tmpA, tmpB);            
             mocks.VerifyAll();
         }
 

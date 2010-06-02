@@ -3,10 +3,15 @@
          xmlns:nms="http://www.springframework.net/nms">
 
 
-  <object id="ConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
-    <constructor-arg index="0" value="tcp://localhost:61616"/>
-  </object>
 
+  <object id="ConnectionFactory" type="Spring.Messaging.Nms.Connections.CachingConnectionFactory, Spring.Messaging.Nms">
+    <property name="SessionCacheSize" value="10" />
+    <property name="TargetConnectionFactory">
+      <object type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
+        <constructor-arg index="0" value="tcp://localhost:61616"/>
+      </object>
+    </property>
+  </object>
   <!-- NMS based implementation of technology neutral IStockServiceGateway -->
   <object name="StockServiceGateway" type="Spring.NmsQuickStart.Client.Gateways.NmsStockServiceGateway, Spring.NmsQuickStart.Client">
     <property name="NmsTemplate"  ref="NmsTemplate"/>

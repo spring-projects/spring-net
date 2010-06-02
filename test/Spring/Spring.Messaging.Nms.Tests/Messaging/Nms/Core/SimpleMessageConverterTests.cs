@@ -25,6 +25,7 @@ using System.Collections;
 using System.Text;
 using Apache.NMS;
 using Apache.NMS.ActiveMQ.OpenWire;
+using Apache.NMS.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Messaging.Nms.Support.Converter;
