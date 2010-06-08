@@ -311,15 +311,27 @@ namespace Spring.Web.Support
             if (SystemUtils.Clr4Runtime)
             {
                 FieldInfo controls = GetField("_controls");
+                FieldInfo occasionalFields = GetField("_occasionalFields");
+                MethodInfo ensureOccasionalFields = GetMethod("EnsureOccasionalFields");
 
                 SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
                 {
                     System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("set_Controls ", null, new Type[] { typeof(Control), typeof(ControlCollection) }, typeof(Control).Module, true);
                     ILGenerator il = dm.GetILGenerator();
+                    Label occFieldsNull = il.DefineLabel();
+                    Label setControls = il.DefineLabel();
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldfld, occasionalFields);
+                    il.Emit(OpCodes.Brfalse_S, occFieldsNull);
+                    il.MarkLabel(setControls);
                     il.Emit(OpCodes.Ldarg_0);
                     il.Emit(OpCodes.Ldarg_1);
                     il.Emit(OpCodes.Stfld, controls);
                     il.Emit(OpCodes.Ret);
+                    il.MarkLabel(occFieldsNull);
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Call, ensureOccasionalFields);
+                    il.Emit(OpCodes.Br, setControls);
                     handler = (SetControlsDelegate)dm.CreateDelegate(typeof(SetControlsDelegate));
                 });
             }
