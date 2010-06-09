@@ -20,7 +20,10 @@
 
 using System;
 using System.Collections;
+using System.Data;
+using System.Data.Common;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Dao;
 using Spring.Threading;
 
@@ -33,6 +36,14 @@ namespace Spring.Data.Common
     [TestFixture]
     public class MultiDelegatingDbProviderTests
     {
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+        }
+
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void CreationWhenNoRequiredPropertiesSet()
@@ -43,7 +54,7 @@ namespace Spring.Data.Common
 
 
 
-        [Test]   
+        [Test]
         public void CreationWithWrongTypeDictionaryKeys()
         {
             try
@@ -54,7 +65,8 @@ namespace Spring.Data.Common
                 dbProvider.TargetDbProviders = targetDbProviders;
                 dbProvider.AfterPropertiesSet();
                 Assert.Fail("Should have thrown ArgumentException");
-            } catch (ArgumentException ex)
+            }
+            catch (ArgumentException ex)
             {
                 Assert.AreEqual("Key identifying target IDbProvider in TargetDbProviders dictionary property is required to be of type string.  Key = [1], type = [System.Int32]", ex.Message);
             }
@@ -65,10 +77,10 @@ namespace Spring.Data.Common
         {
             try
             {
-                MultiDelegatingDbProvider dbProvider = new MultiDelegatingDbProvider();
                 IDictionary targetDbProviders = new Hashtable();
                 targetDbProviders.Add("foo", 1);
-                dbProvider.TargetDbProviders = targetDbProviders;
+                //Exercise the constructor
+                MultiDelegatingDbProvider dbProvider = new MultiDelegatingDbProvider(targetDbProviders);
                 dbProvider.AfterPropertiesSet();
                 Assert.Fail("Should have thrown ArgumentException");
             }
@@ -76,7 +88,7 @@ namespace Spring.Data.Common
             {
                 Assert.AreEqual("Value in TargetDbProviders dictionary is not of type IDbProvider.  Type = [System.Int32]", ex.Message);
             }
-        } 
+        }
 
         [Test]
         public void NoDefaultProvided()
@@ -92,10 +104,12 @@ namespace Spring.Data.Common
             {
                 Assert.AreEqual("connString1", multiDbProvider.ConnectionString);
                 Assert.Fail("InvalidDataAccessApiUsageException should have been thrown");
-            } catch (InvalidDataAccessApiUsageException exception)
+            }
+            catch (InvalidDataAccessApiUsageException exception)
             {
                 Assert.AreEqual("No provider name found in thread local storage.  Consider setting the property DefaultDbProvider to fallback to a default value.", exception.Message);
-            } finally
+            }
+            finally
             {
                 LogicalThreadContext.FreeNamedDataSlot(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME);
             }
@@ -109,7 +123,7 @@ namespace Spring.Data.Common
             MultiDelegatingDbProvider multiDbProvider = new MultiDelegatingDbProvider();
             IDictionary targetDbProviders = new Hashtable();
             targetDbProviders.Add("db1", provider);
-            multiDbProvider.TargetDbProviders = targetDbProviders;           
+            multiDbProvider.TargetDbProviders = targetDbProviders;
             multiDbProvider.AfterPropertiesSet();
             try
             {
@@ -141,6 +155,10 @@ namespace Spring.Data.Common
             multiDbProvider.DefaultDbProvider = provider1;
             multiDbProvider.TargetDbProviders = targetDbProviders;
             multiDbProvider.AfterPropertiesSet();
+
+            //an aside, set setter for connection string
+            multiDbProvider.ConnectionString = "connString1Reset";
+            Assert.AreEqual("connString1Reset", multiDbProvider.ConnectionString);
 
             MultiDelegatingDbProvider.CurrentDbProviderName = "db2";
             try
@@ -178,6 +196,68 @@ namespace Spring.Data.Common
                 LogicalThreadContext.FreeNamedDataSlot(MultiDelegatingDbProvider.CURRENT_DBPROVIDER_SLOTNAME);
             }
         }
-    }
 
+        [Test]
+        public void CreateOperations()
+        {
+            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
+            IDbConnection mockConnection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));            
+            Expect.Call(dbProvider.CreateConnection()).Return(mockConnection).Repeat.Once();
+
+            IDbCommand mockCommand = (IDbCommand)mocks.CreateMock(typeof(IDbCommand));
+            Expect.Call(dbProvider.CreateCommand()).Return(mockCommand).Repeat.Once();
+
+            IDbDataParameter mockParameter = (IDbDataParameter) mocks.CreateMock(typeof (IDbDataParameter));
+            Expect.Call(dbProvider.CreateParameter()).Return(mockParameter).Repeat.Once();
+
+            IDbDataAdapter mockDataAdapter = (IDbDataAdapter) mocks.CreateMock(typeof (IDbDataAdapter));
+            Expect.Call(dbProvider.CreateDataAdapter()).Return(mockDataAdapter).Repeat.Once();
+#if !NET_1_1
+
+            DbCommandBuilder mockDbCommandBuilder = (DbCommandBuilder) mocks.CreateMock(typeof (DbCommandBuilder));
+            Expect.Call(dbProvider.CreateCommandBuilder()).Return(mockDbCommandBuilder).Repeat.Once();
+#endif
+
+            Expect.Call(dbProvider.CreateParameterName("p1")).Return("@p1").Repeat.Once();
+            Expect.Call(dbProvider.CreateParameterNameForCollection("c1")).Return("cc1");
+
+            IDbMetadata mockDbMetaData = (IDbMetadata) mocks.CreateMock(typeof (IDbMetadata));
+            Expect.Call(dbProvider.DbMetadata).Return(mockDbMetaData);
+
+            Exception e = new Exception("foo");
+            Expect.Call(dbProvider.ExtractError(e)).Return("badsql").Repeat.Once();
+
+            DbException dbException = (DbException) mocks.CreateMock(typeof (DbException));
+
+
+            
+            MultiDelegatingDbProvider multiDbProvider = new MultiDelegatingDbProvider();
+            IDictionary targetDbProviders = new Hashtable();
+            targetDbProviders.Add("db1", dbProvider);
+            multiDbProvider.DefaultDbProvider = dbProvider;
+            multiDbProvider.TargetDbProviders = targetDbProviders;
+            multiDbProvider.AfterPropertiesSet();
+
+
+            mocks.ReplayAll();
+
+            Assert.IsNotNull(multiDbProvider.CreateConnection());
+            Assert.IsNotNull(multiDbProvider.CreateCommand());
+            Assert.IsNotNull(multiDbProvider.CreateParameter());
+            Assert.IsNotNull(multiDbProvider.CreateDataAdapter());
+           
+#if !NET_1_1
+
+            Assert.IsNotNull(multiDbProvider.CreateCommandBuilder() as DbCommandBuilder);
+#endif
+            Assert.AreEqual("@p1", multiDbProvider.CreateParameterName("p1"));
+            Assert.AreEqual("cc1", multiDbProvider.CreateParameterNameForCollection("c1"));
+            Assert.IsNotNull(multiDbProvider.DbMetadata);
+            Assert.AreEqual("badsql", multiDbProvider.ExtractError(e));
+
+            Assert.IsTrue(multiDbProvider.IsDataAccessException(dbException));
+            Assert.IsFalse(multiDbProvider.IsDataAccessException(e));
+            mocks.VerifyAll();
+        }
+    }
 }

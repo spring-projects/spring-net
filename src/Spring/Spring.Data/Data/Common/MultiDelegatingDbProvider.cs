@@ -168,7 +168,7 @@ namespace Spring.Data.Common
         /// be portable (but more loosely typed) across .NET 1.1/2.0</remarks>
         public object CreateCommandBuilder()
         {
-            return GetTargetProvider().CreateDataAdapter();
+            return GetTargetProvider().CreateCommandBuilder();
         }
 
         /// <summary>
