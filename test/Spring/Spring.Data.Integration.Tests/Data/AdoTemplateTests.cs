@@ -90,7 +90,22 @@ namespace Spring.Data
             
         }
 	    
-	    
+	    [Test]
+        public void FillDataSetWithTwoDataTables()
+        {
+            PopulateTestObjectsTable();
+	        PopulateCreditObjectsTable();
+            string testObjectsql = ValidateTestObjects(4);
+	        string creditObjectsql = ValidateCreditObjects(4);
+
+            DataSet dataSet;
+
+            dataSet = new DataSet();
+            adoOperations.DataSetFill(dataSet, CommandType.Text, testObjectsql + ";" + creditObjectsql, new string[] { "TestObjects", "CreditObjects" });
+            Assert.AreEqual(2, dataSet.Tables.Count);
+            Assert.AreEqual(4, dataSet.Tables["TestObjects"].Rows.Count);
+            Assert.AreEqual(4, dataSet.Tables["CreditObjects"].Rows.Count);
+        }
 	    
 	    [Test]
 	    public void FillDataSetNoParams()
@@ -162,9 +177,29 @@ namespace Spring.Data
             }
 	    }
 
+        private void PopulateCreditObjectsTable()
+        {
+            adoOperations.ExecuteNonQuery(CommandType.Text, "truncate table Credits");
+            for (int i=0; i<4; i++)
+            {
+                String sql = String.Format("insert into Credits(CreditAmount) VALUES ('{0}')", i+10);
+                adoOperations.ExecuteNonQuery(CommandType.Text, sql);
+            }
+        }
+
         private string ValidateTestObjects(int count)
         {
             String sql = "select TestObjectNo, Age, Name from TestObjects";
+            DataSet dataSet = new DataSet();
+            adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
+            Assert.AreEqual(1, dataSet.Tables.Count);
+            Assert.AreEqual(count, dataSet.Tables["Table"].Rows.Count);
+            return sql;
+        }
+
+        private string ValidateCreditObjects(int count)
+        {
+            String sql = "select CreditID, CreditAmount from Credits";
             DataSet dataSet = new DataSet();
             adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
             Assert.AreEqual(1, dataSet.Tables.Count);
@@ -223,13 +258,11 @@ namespace Spring.Data
 	    [Test]
 	    public void ExecuteQueryWithResultSetExtractor()
 	    {
+            PopulateTestObjectsTable();
 	        IResultSetExtractor rse = new TestObjectExtractor();
 	        String sql = "select TestObjectNo, Age, Name from TestObjects";
 	        IList testObjectList = (IList)adoOperations.QueryWithResultSetExtractor(CommandType.Text, sql, rse);
-	        Assert.AreEqual(1, testObjectList.Count);
-	        
-	        
-	        
+	        Assert.AreEqual(4, testObjectList.Count);	        	      	        
 	    }
 
 

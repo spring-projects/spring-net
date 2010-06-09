@@ -2129,12 +2129,14 @@ namespace Spring.Data.Core
             }
             mappingCollection = new DataTableMappingCollection();
             int counter = 0;
+            bool isFirstTable = true;
             foreach (string dataSetTableName in dataSetTableNames)
             {
                 string sourceTableName;
-                if (counter == 0)
+                if (isFirstTable)
                 {
                     sourceTableName = "Table";
+                    isFirstTable = false;
                 }
                 else
                 {
