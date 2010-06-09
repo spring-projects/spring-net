@@ -208,11 +208,9 @@
       </listitem>
 
       <listitem>
-        <para>
-          <literal>MySql-6.2.2</literal> (aliased to
-          <literal>MySql.Data.MySqlClient</literal>) - MySQL, MySQL provider
-          6.2.2.0
-        </para>
+        <para><literal>MySql-6.2.2</literal> (aliased to
+        <literal>MySql.Data.MySqlClient</literal>) - MySQL, MySQL provider
+        6.2.2.0</para>
       </listitem>
 
       <listitem>
@@ -574,21 +572,29 @@
       the multiple databases and can be used in DAO layer such that the DAO
       layer is unaware of the switching between databases.
       <literal>MultiDelegatingDbProvider</literal> does its job by looking
-      into thread local storage under the key dbProviderName. This storage
-      location stores the name of the dbProvider that is to be used for
-      processing the request. <literal>MultiDelegatingDbProvider</literal> is
-      configured using the dictionary property
-      <literal>TargetDbProviders</literal>. The key of this dictionary
-      contains the name of a dbProvider and its value is a dbProvider object.
-      (You can also provide this dictionary as a constructor argument.)</para>
+      into thread local storage. This storage location stores the name of the
+      dbProvider that is to be used for processing the request.
+      <literal></literal></para>
+
+      <para><literal>MultiDelegatingDbProvider</literal> is configured using
+      the dictionary property <literal>TargetDbProviders</literal>. The key of
+      this dictionary contains the name of a dbProvider and its value is a
+      dbProvider object. You can also provide this dictionary as a constructor
+      argument. The property <property>DefaultDbProvider</property> can be set
+      with the name of the DbProvider to use if no provider name is found in
+      thread local storage</para>
 
       <para>During request processing, once you have determined which target
       dbProvider should be use, in this example database1ProviderName, you
       should execute the following code is you are using Spring 1.2 M1 or
       later</para>
 
-      <programlisting language="csharp">// Spring 1.2 M1 or later
-<classname>LogicalThreadContext</classname>.SetData(<classname>MultiDelegatingDbProvider</classname>.CURRENT_DBPROVIDER_SLOTNAME, "database1ProviderName")</programlisting>
+      <programlisting language="csharp">// Spring 1.3.0 or later
+MultiDelegatingDbProvider.CurrentDbProviderName = "database1ProviderName"
+
+// Spring 1.2 M1 or later
+<classname>LogicalThreadContext</classname>.SetData(<classname>MultiDelegatingDbProvider</classname>.CURRENT_DBPROVIDER_SLOTNAME, "database1ProviderName")
+</programlisting>
 
       <para>and the following ocde if you are using earlier versions</para>
 
@@ -596,6 +602,16 @@
 <classname>LogicalThreadContext</classname>.SetData("dbProviderName", "database1ProviderName")</programlisting>
 
       <para>and then call the data access layer.</para>
+
+      <note>
+        <para>If you do not change the name of the IDbProvider stored in
+        thread local storage during request processing, say in the web tier
+        where a user is identified, then you will always refer to the default
+        provider if the property <property>DefaultDbProvider</property> has
+        been set. If the <property>DefaultDbProvider</property> property has
+        not been set than an InvalidDataAccessApiUsageException will be
+        thrown.</para>
+      </note>
 
       <para>Here is a sample configuration to build up an object definition
       for <literal>MultiDelegatingDbProvider</literal>.</para>
@@ -615,7 +631,28 @@
 
 &lt;object id="DbProvider" type="Spring.Data.MultiDelegatingDbProvider, Spring.Data"&gt;
   &lt;property name="TargetDbProviders" ref="dbProviderDictionary"/&gt;
+  &lt;property name="DefaultDbProvider" value="CreditDbProvider"/&gt;
 &lt;/object&gt;</programlisting>
+
+      <para>As seen above, MultidelegatingDbProvider works via a thread local
+      storage mechansims. If you prefer to place the logic to switch databases
+      in a single location, within a single class, then create a subclass
+      MultiDelegatingDbProvider and override the method GetTargetProvider. You
+      can then select which provider to return based on your own
+      implementation that does not involve thread local storage.</para>
+
+      <note>
+        <para>This class is not recommended for usage with NHibernate.
+        NHibernate usage typically involves caches that are scoped at the
+        level of the SessionFactory. If you switch the database that hibernate
+        is pointing to and do not also managed switching the cache, then the
+        cache will end up with results from two different databases - which of
+        course you don't want to have. The helper class contained in this
+        <link
+        ns6:href="http://forum.springframework.net/showthread.php?p=11234#post11234">post</link>
+        may help you if you when using NHibernate with multiple
+        databases.</para>
+      </note>
     </section>
   </section>
 </chapter>
