@@ -165,6 +165,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\AutoDeclarativeTxTests.xml" />
     <EmbeddedResource Include="Data\Common\AdditionalProviders.xml" />
+    <EmbeddedResource Include="Data\Common\DbProviderFactoryTests.xml" />
     <Content Include="Spring.Data.Tests.dll.config" />
     <EmbeddedResource Include="Transaction\Interceptor\MatchAlwaysTransactionAttributeSourceTests.xml" />
     <EmbeddedResource Include="Transaction\Config\TxNamespaceParserTests.xml" />
@@ -175,6 +176,7 @@
     <Compile Include="Dao\Attributes\PersistenceExceptionTranslationPostProcessorTests.cs" />
     <Compile Include="Dao\Support\DataAccessUtilsTests.cs" />
     <Compile Include="Data\Common\DbParametersTests.cs" />
+    <Compile Include="Data\Common\MultiDelegatingDbProviderTests.cs" />
     <Compile Include="Data\Common\UserCredentialsDbProviderTests.cs" />
     <Compile Include="Data\Core\ServiceDomainTransactionManagerTests.cs" />
     <Compile Include="Data\Core\TxScopeTransactionManagerIntegrationTests.cs" />

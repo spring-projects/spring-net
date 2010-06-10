@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="http://www.springframework.net/database"
+           xmlns:objects="http://www.springframework.net"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
+           targetNamespace="http://www.springframework.net/database"
+           elementFormDefault="qualified" attributeFormDefault="unqualified"
+           vs:friendlyname="Spring.NET Database Framework Configuration" vs:ishtmlschema="false" vs:iscasesensitive="true" vs:requireattributequotes="true" vs:defaultnamespacequalifier="" vs:defaultnsprefix="">
+
+  <xs:import namespace="http://www.springframework.net"/>
+
+  <xs:annotation>
+    <xs:documentation>
+      Spring.NET Database Framework Config Schema Definition
+
+      Author: Mark Pollack
+
+      This file defines a configuration schema for the database framework
+      object definitions. Using elements from this schema instead of the
+      standard object definitions can greatly simplify remoting configuration.
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:element name="provider">
+    <xs:annotation>
+      <xs:documentation>Defines a DbProvider instance</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>The id of the DbProvider instance to be referenced.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="provider" type="providerType" use="required">
+        <xs:annotation>
+          <xs:documentation>The name of the database provider.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="connectionString" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>The database connection string.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="additionalProviders">
+    <xs:annotation>
+      <xs:documentation>Defines location of configuration for that defines additional DbProviders</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="resource" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>The Spring IResource location that contains additional IDbProvider definitions.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  
+  
+  
+
+  <xs:simpleType name="providerType">
+    <xs:union>
+      <xs:simpleType id="customProvider">
+        <xs:restriction base="objects:nonNullString"/>
+      </xs:simpleType>
+      <xs:simpleType id="buildinProvider">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SqlServer-1.1">
+            <xs:annotation>
+              <xs:documentation>Microsoft SQL Server, provider V1.0.5000.0 in framework .NET V1.1</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SqlServer-2.0">
+            <xs:annotation>
+              <xs:documentation>Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="System.Data.SqlClient">
+            <xs:annotation>
+              <xs:documentation>Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SqlServerCe-3.1">
+            <xs:annotation>
+              <xs:documentation>Microsoft SQL Server Compact Edition, provider V9.0.242.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SqlServerCe-3.5.1">
+            <xs:annotation>
+              <xs:documentation>Microsoft SQL Server Compact Edition, provider V3.5.1.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="System.Data.SqlServerCe">
+            <xs:annotation>
+              <xs:documentation>Microsoft SQL Server Compact Edition, provider V3.5.1.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="OleDb-1.1">
+            <xs:annotation>
+              <xs:documentation>OleDb, provider V1.0.5000.0 in framework .NET V1.1</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="OleDb-2.0">
+            <xs:annotation>
+              <xs:documentation>OleDb, provider V2.0.0.0 in framework .NET V2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="System.Data.OleDb">
+            <xs:annotation>
+              <xs:documentation>OleDb, provider V2.0.0.0 in framework .NET V2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="OracleClient-2.0">
+            <xs:annotation>
+              <xs:documentation>Oracle, Microsoft provider V2.0.0.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="System.Data.OracleClient">
+            <xs:annotation>
+              <xs:documentation>Oracle, Oracle provider V2.102.2.20</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="OracleODP-2.0">
+            <xs:annotation>
+              <xs:documentation>Oracle, Oracle provider V2.102.2.20</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Oracle.DataAccess.Client">
+            <xs:annotation>
+              <xs:documentation>Oracle, Oracle provider V2.102.2.20</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="OracleODP-11-2.0">
+            <xs:annotation>
+              <xs:documentation>Oracle, Oracle provider V2.111.7.20</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>          
+          <xs:enumeration value="MySql">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 1.0.7.3007</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql-1.0.9">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 1.0.9.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql-5.0">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 5.0.7.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql-5.0.8.1">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 5.0.8.1</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql-5.1">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 5.1.2.2</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql-5.1.4">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 5.1.4.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql-5.2.3">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 5.2.3.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql-6.1.3">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 6.1.3.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql-6.2.2">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 6.2.2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MySql.Data.MySqlClient">
+            <xs:annotation>
+              <xs:documentation>MySQL provider 6.2.2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Npgsql-1.0">
+            <xs:annotation>
+              <xs:documentation>Npgsql provider 1.0.0.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Npgsql-2.0-beta1">
+            <xs:annotation>
+              <xs:documentation>Npgsql provider beta-1 1.98.1.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Npgsql-2.0">
+            <xs:annotation>
+              <xs:documentation>Npgsql provider 2.0.0.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="DB2-9.1.0-1.1">
+            <xs:annotation>
+              <xs:documentation>IBM DB2 Data Provider 9.1.0 for .NET Framework 1.1</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="DB2-9.1.0.2">
+            <xs:annotation>
+              <xs:documentation>IBM DB2 Data Provider 9.1.0 for .NET Framework 2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="IBM.Data.DB2.9.1.0">
+            <xs:annotation>
+              <xs:documentation>IBM DB2 Data Provider 9.1.0 for .NET Framework 2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="iDB2-10.0.0.0">
+            <xs:annotation>
+              <xs:documentation>IBM iSeries DB2 Data Provider 10.0.0.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>   
+          <xs:enumeration value="SQLite-1.0.43">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.43 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SQLite-1.0.44">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.44 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SQLite-1.0.47">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.47 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>          
+          <xs:enumeration value="SQLite-1.0.56">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.56 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SQLite-1.0.65">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.65 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="System.Data.SQLite">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.65 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Firebird-2.1">
+            <xs:annotation>
+              <xs:documentation>Firebird Server, provider V2.1.0.0 in framework .NET V2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="FirebirdSql.Data.FirebirdClient">
+            <xs:annotation>
+              <xs:documentation>Firebird Server, provider V2.1.0.0 in framework .NET V2.0</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SybaseAse-12">
+            <xs:annotation>
+              <xs:documentation>Sybase ASE 12.5, 1.1.411 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SybaseAse-15">
+            <xs:annotation>
+              <xs:documentation>Sybase ASE 15, 1.15.152 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SybaseAse-AdoNet2">
+            <xs:annotation>
+              <xs:documentation>Sybase ADO.NET ASE 12.5 and ASE 15, 1.15.192.0 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Odbc-1.1">
+            <xs:annotation>
+              <xs:documentation>Microsoft ODBC, provider V1.0.5000.0 in framework .NET V1.1</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Odbc-2.0">
+            <xs:annotation>
+              <xs:documentation>Microsoft ODBC, provider V2.0.0.0 in framework .NET V2</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Cache-2.0.0.1">
+            <xs:annotation>
+              <xs:documentation>InterSystems CacheConnection Version 2.0.0.1 in framework .NET V2</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="InterSystems.Data.CacheClient">
+            <xs:annotation>
+              <xs:documentation>InterSystems CacheConnection Version 2.0.0.1 in framework .NET V2</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+</xs:schema>

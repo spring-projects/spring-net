@@ -247,7 +247,6 @@ namespace Spring.Core.IO
             }
         }
 
-#if NET_2_0
         /// <summary>
         /// Returns the <see cref="System.Uri"/> handle for this resource.
         /// </summary>
@@ -259,7 +258,7 @@ namespace Spring.Core.IO
                 return new Uri(_fullResourceName);
             }
         }
-#endif
+
         #endregion
 
         /// <summary>

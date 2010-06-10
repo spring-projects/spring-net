@@ -124,8 +124,6 @@ namespace Spring.Data.Common
 					{
 						try
 						{
-
-							//TODO get from well know location in app.config....
 							ConfigurableResourceLoader loader = new ConfigurableResourceLoader(DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
 
 

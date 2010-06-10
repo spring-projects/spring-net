@@ -44,8 +44,6 @@ namespace Spring.Expressions
     [Serializable]
     public class PropertyOrFieldNode : BaseNode
     {
-        //private static readonly Common.Logging.ILog Log = Common.Logging.LogManager.GetLogger(typeof(PropertyOrFieldNode));
-
         private const BindingFlags BINDING_FLAGS =
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static |
             BindingFlags.IgnoreCase;

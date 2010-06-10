@@ -20,11 +20,12 @@
 
 using System;
 using System.Globalization;
+using System.Reflection;
 using System.Threading;
 using NUnit.Framework;
 using Spring.Context;
+using Spring.Context.Support;
 using Spring.Threading;
-using Spring.Util;
 
 namespace Spring.Data.Common
 {
@@ -56,13 +57,21 @@ namespace Spring.Data.Common
 
         #endregion
 
-        private static string altConfig = "assembly://Spring.Data.Tests/Spring.Data.Common/AdditionalProviders.xml";
-
+        private IApplicationContext ctx;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
-            DbProviderFactory.DBPROVIDER_ADDITIONAL_RESOURCE_NAME = altConfig; 
+            //Other tests in this assembly will have already initialized the internal context that is part of DbProviderFactory
+            //Reset it back to null so that tests for specifiying additional database providers will be able 're-initialize'
+            //the internal Context of DbProviderFactory.
+			//Spring.Objects.Factory.Xml.NamespaceParserRegistry.RegisterParser(typeof(Spring.Data.Config.DatabaseNamespaceParser));
+            if (DbProviderFactory.ApplicationContext != null)
+            {
+               FieldInfo fieldInfo = typeof (DbProviderFactory).GetField("ctx", BindingFlags.NonPublic | BindingFlags.Static);
+               fieldInfo.SetValue(null, null);
+            }           
+            ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Data.Common/DbProviderFactoryTests.xml");
         }
 
 #if NET_2_0   
@@ -83,16 +92,13 @@ namespace Spring.Data.Common
         }
 
         [Test]
-        [Ignore("Can't guarantee test order")]
         public void AdditionalResourceName()
-        {
-           
+        {           
             IDbProvider provider = DbProviderFactory.GetDbProvider("Test-SqlServer-2.0");
             Assert.IsNotNull(provider);
         }
 
         [Test]
-        [Ignore("Can't guarantee test order")]
         public void BadErrorExpression()
         {
 
@@ -106,8 +112,8 @@ namespace Spring.Data.Common
         public void DefaultInstanceWithSqlServer2005()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US", false);
-            IApplicationContext ctx = DbProviderFactory.ApplicationContext;            
-            Assert.IsNotNull(ctx);
+            //IApplicationContext ctx = DbProviderFactory.ApplicationContext;            
+            //Assert.IsNotNull(ctx);
             Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR", false);
             IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-2.0");
             AssertIsSqlServer2005(provider);
@@ -150,8 +156,8 @@ namespace Spring.Data.Common
         }
 #endif
        
-        [Test]   
-        [Ignore("until find out if can add oracle.dll to cvs repository")]
+        //[Test]   
+        //Comment in for specific testing with oracle as can't put oracle client in public code repository
         public void DefaultInstanceWithOracleClient20()
         {
             IDbProvider provider = DbProviderFactory.GetDbProvider("OracleODP-2.0");
@@ -181,11 +187,11 @@ namespace Spring.Data.Common
         [Test]
         public void TestDb2()
         {
+            //Initialize internal application context. factory
+            DbProviderFactory.GetDbProvider("SqlServer-2.0");
             IApplicationContext ctx = DbProviderFactory.ApplicationContext;
             string[] dbProviderNames = ctx.GetObjectNamesForType(typeof(IDbProvider));
-            Console.WriteLine(
-                String.Format("{0} DbProviders Available. [{1}]", dbProviderNames.Length,
-                              StringUtils.ArrayToCommaDelimitedString(dbProviderNames)));
+            Assert.IsTrue(dbProviderNames.Length > 0);           
 
         }
 

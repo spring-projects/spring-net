@@ -355,17 +355,20 @@
 
     <para>The default definitions of the providers are contained in the
     assembly resource
-    <code>assembly://Spring.Data/Spring.Data.Common/dbproviders.xml</code>.
-    Future additions to round out the database coverage are forthcoming. The
-    current crude mechanism to add additional providers, or to apply any
-    standard Spring <literal>IApplicationContext</literal> functionality, such
-    as applying AOP advice, is to set the public static property
+    <code>assembly://Spring.Data/Spring.Data.Common/dbproviders.xml</code>. If
+    the provider you want to use is not provided "out of the box" you can
+    provide additional definitions. To do this follow the format of object
+    definitions defined in the previously mentioned assembly resource.</para>
+
+    <para>From Spring 1.3.1 an on you can specify the additional Spring
+    IResource location where additional providers are defined within Spring's
+    XML configuration file. See the next section for an example.
+    Alternatively, you can set the public static property
     DBPROVIDER_ADDITIONAL_RESOURCE_NAME in
     <literal>DbProviderFactory</literal> to a Spring resource location. The
     default value is <code>file://dbProviders.xml</code>. (That isn't a typo,
-    there is a difference in case with the name of the embedded resource).
-    This crude mechanism will eventually be replaced with one based on a
-    custom configuration section in App.config/Web.config.</para>
+    there is a difference in case with the name of the embedded
+    resource).</para>
 
     <para>It may happen that the version number of an assembly you have
     downloaded is different than the one listed above. If it is a point
@@ -402,6 +405,27 @@
   &lt;object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data"&gt;  
     &lt;property name="DbProvider" ref="DbProvider"/&gt;                
   &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+
+    <para>If you need to register an additional IDbProvider defintions from
+    your own configuration file, set the attribute 'additonalDbProviders' to
+    the IResource location of those definitions. Examples of the format for
+    additional provider definitions can be found within the Spring.Data
+    assembly, location
+    <code>assembly://Spring.Data/Spring.Data.Common/dbproviders.xml</code>.
+    Open it up in Visual Studio or Reflector to see the contents of the
+    dbproviders.xml file.</para>
+
+    <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"&gt;
+
+  <emphasis role="bold">&lt;db:additionalProviders resource="assembly://MyAssembly/MyAssembly.MyNamespace/AdditionalProviders.xml"/&gt;</emphasis>
+ 
+  &lt;db:provider id="DbProvider" 
+      provider="System.Data.SqlClient" 
+      connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/&gt;
+
 
 &lt;/objects&gt;</programlisting>
 

@@ -28,6 +28,7 @@
 			</resources>
 			<resources basedir="." prefix="Spring.Data.Config" failonempty="true">
 				<include name="Data/Config/spring-database-1.1.xsd" />
+				<include name="Data/Config/spring-database-1.3.xsd" />
 			</resources>
 			<resources basedir="." prefix="Spring.Transaction.Config" failonempty="true">
 				<include name="Transaction/Config/spring-tx-1.1.xsd" />

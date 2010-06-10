@@ -439,6 +439,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Data\Common\DbProviderConfigurer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\Common\DbProviderFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -503,8 +508,13 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Data\Config\spring-database-1.1.xsd"
+                    RelPath = "Data\Config\spring-database-1.3.xsd"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Data\Config\spring-database-1.3.xsx"
+                    DependentUpon = "spring-database-1.3.xsd"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Data\Core\AdoAccessor.cs"

@@ -165,6 +165,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\AutoDeclarativeTxTests.xml" />
     <EmbeddedResource Include="Data\Common\AdditionalProviders.xml" />
+    <EmbeddedResource Include="Data\Common\DbProviderFactoryTests.xml" />
     <Content Include="Spring.Data.Tests.dll.config" />
     <Content Include="Transaction\Config\TxNamespaceParserTests_TxAttributeDriven.xml" />
     <EmbeddedResource Include="Transaction\Interceptor\MatchAlwaysTransactionAttributeSourceTests.xml" />

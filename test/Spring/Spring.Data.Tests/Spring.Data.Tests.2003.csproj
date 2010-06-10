@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'echo copying  "$(ProjectDir)$(TargetFileName).config" to  "..\..\..\..\build\VS.Net.2003\Spring.Core.Tests\$(ConfigurationName)\$(TargetFileName).config"&#xd;&#xa;copy  "$(ProjectDir)$(TargetFileName).config" ..\..\..\..\build\VS.Net.2003\Spring.Core.Tests\$(ConfigurationName)\$(TargetFileName).config'
                 RootNamespace = "Spring"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -154,7 +154,7 @@
                 />
                 <File
                     RelPath = "Spring.Data.Tests.dll.config"
-                    BuildAction = "None"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Dao\IncorrectResultSizeDataAccessExceptionTests.cs"
@@ -211,11 +211,30 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Data\Common\AdditonalProviders.xml"
+                    RelPath = "Data\Common\AdditionalProviders.xml"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Data\Common\DbParametersTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Data\Common\DbProviderFactoryTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\Common\DbProviderFactoryTests.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Data\Common\MultiDelegatingDbProviderTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Data\Common\UserCredentialsDbProviderTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

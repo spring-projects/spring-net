@@ -226,9 +226,9 @@ namespace Spring.Data.Common
 
             Exception e = new Exception("foo");
             Expect.Call(dbProvider.ExtractError(e)).Return("badsql").Repeat.Once();
-
+#if !NET_1_1
             DbException dbException = (DbException) mocks.CreateMock(typeof (DbException));
-
+#endif
 
             
             MultiDelegatingDbProvider multiDbProvider = new MultiDelegatingDbProvider();
@@ -255,7 +255,9 @@ namespace Spring.Data.Common
             Assert.IsNotNull(multiDbProvider.DbMetadata);
             Assert.AreEqual("badsql", multiDbProvider.ExtractError(e));
 
+#if !NET_1_1
             Assert.IsTrue(multiDbProvider.IsDataAccessException(dbException));
+#endif
             Assert.IsFalse(multiDbProvider.IsDataAccessException(e));
             mocks.VerifyAll();
         }
