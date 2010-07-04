@@ -142,6 +142,7 @@
     <Compile Include="Data\Common\DbParameter.cs" />
     <Compile Include="Data\Common\DbParameters.cs" />
     <Compile Include="Data\Common\DbProvider.cs" />
+    <Compile Include="Data\Common\DbProviderConfigurer.cs" />
     <Compile Include="Data\Common\DbProviderFactory.cs" />
     <Compile Include="Data\Common\DbProviderFactoryObject.cs" />
     <Compile Include="Data\Common\DbParametersBuilder.cs" />
