@@ -26,6 +26,7 @@ using Quartz.Spi;
 using Quartz.Util;
 
 using Spring.Context;
+using Spring.Context.Events;
 using Spring.Core.IO;
 using Spring.Data.Common;
 using Spring.Objects.Factory;
@@ -73,7 +74,8 @@ namespace Spring.Scheduling.Quartz
     /// <seealso cref="IScheduler" />
     /// <seealso cref="ISchedulerFactory" />
     /// <seealso cref="StdSchedulerFactory" />
-    public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObjectNameAware, IApplicationContextAware, IInitializingObject, IDisposable
+    public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObjectNameAware, 
+        IApplicationContextAware, IApplicationEventListener, IInitializingObject, IDisposable
     {
         /// <summary>
         /// Default thread count to be set to thread pool.
@@ -616,12 +618,6 @@ namespace Spring.Scheduling.Quartz
 
             RegisterListeners();
             RegisterJobsAndTriggers();
-
-            // Start Scheduler immediately, if demanded.
-            if (autoStartup)
-            {
-                StartScheduler(scheduler, startupDelay);
-            }
         }
 
         #endregion
@@ -841,5 +837,23 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
+        /// <summary>
+        /// Handles the application context's refresh event and starts the scheduler.
+        /// </summary>
+        public void HandleApplicationEvent(object sender, ApplicationEventArgs e)
+        {
+            // auto-start Scheduler if demanded
+            if (e is ContextRefreshedEventArgs && autoStartup)
+            {
+                try
+                {
+                    StartScheduler(scheduler, startupDelay);
+                }
+                catch (SchedulerException ex)
+                {
+                    throw new ObjectInitializationException("failed to auto-start scheduler", ex);
+                }
+            }
+        }
     }
 }

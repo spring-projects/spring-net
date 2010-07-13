@@ -158,6 +158,7 @@ namespace Spring.Scheduling.Quartz
             try
             {
                 schedulerFactoryObject.AfterPropertiesSet();
+                schedulerFactoryObject.Start();
             }
             finally
             {
@@ -254,6 +255,7 @@ namespace Spring.Scheduling.Quartz
             try
             {
                 schedulerFactoryObject.AfterPropertiesSet();
+                schedulerFactoryObject.Start();
             }
             finally
             {
@@ -359,6 +361,7 @@ namespace Spring.Scheduling.Quartz
             try
             {
                 schedulerFactoryObject.AfterPropertiesSet();
+                schedulerFactoryObject.Start();
             }
             finally
             {
@@ -405,6 +408,7 @@ namespace Spring.Scheduling.Quartz
             try
             {
                 schedulerFactoryObject.AfterPropertiesSet();
+                schedulerFactoryObject.Start();
             }
             finally
             {
@@ -570,6 +574,7 @@ namespace Spring.Scheduling.Quartz
             try
             {
                 schedulerFactoryObject.AfterPropertiesSet();
+                schedulerFactoryObject.Start();
             }
             finally
             {
@@ -605,6 +610,7 @@ namespace Spring.Scheduling.Quartz
             try
             {
                 schedulerFactoryObject.AfterPropertiesSet();
+                schedulerFactoryObject.Start();
                 IScheduler returnedScheduler = (IScheduler) schedulerFactoryObject.GetObject();
                 Assert.AreEqual(tb, returnedScheduler.Context["testObject"]);
                 Assert.AreEqual(ac, returnedScheduler.Context["appCtx"]);
@@ -715,17 +721,18 @@ namespace Spring.Scheduling.Quartz
             trigger.RepeatCount = (1);
             trigger.AfterPropertiesSet();
 
-            SchedulerFactoryObject bean = new SchedulerFactoryObject();
-            bean.TaskExecutor = (taskExecutor);
-            bean.Triggers = (new Trigger[] {trigger});
-            bean.JobDetails = (new JobDetail[] {jobDetail});
-            bean.AfterPropertiesSet();
+            SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
+            factoryObject.TaskExecutor = (taskExecutor);
+            factoryObject.Triggers = (new Trigger[] {trigger});
+            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.AfterPropertiesSet();
+            factoryObject.Start();
 
             Thread.Sleep(500);
             Assert.IsTrue(DummyJob.count > 0);
             Assert.AreEqual(DummyJob.count, taskExecutor.count);
 
-            bean.Dispose();
+            factoryObject.Dispose();
         }
 
         /// <summary>
@@ -747,15 +754,16 @@ namespace Spring.Scheduling.Quartz
             trigger.RepeatCount = (1);
             trigger.AfterPropertiesSet();
 
-            SchedulerFactoryObject bean = new SchedulerFactoryObject();
-            bean.Triggers = (new Trigger[] {trigger});
-            bean.JobDetails = (new JobDetail[] {jobDetail});
-            bean.AfterPropertiesSet();
+            SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
+            factoryObject.Triggers = (new Trigger[] {trigger});
+            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.AfterPropertiesSet();
+            factoryObject.Start();
 
             Thread.Sleep(500);
             Assert.IsTrue(DummyRunnable.count > 0);
 
-            bean.Dispose();
+            factoryObject.Dispose();
         }
 
         /// <summary>
@@ -779,16 +787,17 @@ namespace Spring.Scheduling.Quartz
             trigger.RepeatCount = (1);
             trigger.AfterPropertiesSet();
 
-            SchedulerFactoryObject sfo = new SchedulerFactoryObject();
-            sfo.Triggers = (new Trigger[] {trigger});
-            sfo.JobDetails = (new JobDetail[] {jobDetail});
-            sfo.AfterPropertiesSet();
+            SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
+            factoryObject.Triggers = (new Trigger[] {trigger});
+            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.AfterPropertiesSet();
+            factoryObject.Start();
 
             Thread.Sleep(500);
             Assert.AreEqual(10, DummyJobObject.param);
             Assert.IsTrue(DummyJobObject.count > 0);
 
-            sfo.Dispose();
+            factoryObject.Dispose();
         }
 
         /// <summary>
@@ -813,17 +822,18 @@ namespace Spring.Scheduling.Quartz
             trigger.RepeatCount = (1);
             trigger.AfterPropertiesSet();
 
-            SchedulerFactoryObject bean = new SchedulerFactoryObject();
-            bean.JobFactory = (new SpringObjectJobFactory());
-            bean.Triggers = (new Trigger[] {trigger});
-            bean.JobDetails = (new JobDetail[] {jobDetail});
-            bean.AfterPropertiesSet();
+            SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
+            factoryObject.JobFactory = (new SpringObjectJobFactory());
+            factoryObject.Triggers = (new Trigger[] {trigger});
+            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.AfterPropertiesSet();
+            factoryObject.Start();
 
             Thread.Sleep(500);
             Assert.AreEqual(10, DummyJob.param);
             Assert.IsTrue(DummyJob.count > 0);
 
-            bean.Dispose();
+            factoryObject.Dispose();
         }
 
         /// <summary>
@@ -884,17 +894,18 @@ namespace Spring.Scheduling.Quartz
             trigger.RepeatCount = (1);
             trigger.AfterPropertiesSet();
 
-            SchedulerFactoryObject bean = new SchedulerFactoryObject();
-            bean.JobFactory = (new SpringObjectJobFactory());
-            bean.Triggers = (new Trigger[] {trigger});
-            bean.JobDetails = (new JobDetail[] {jobDetail});
-            bean.AfterPropertiesSet();
+            SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
+            factoryObject.JobFactory = (new SpringObjectJobFactory());
+            factoryObject.Triggers = (new Trigger[] {trigger});
+            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.AfterPropertiesSet();
+            factoryObject.Start();
 
             Thread.Sleep(500);
             Assert.AreEqual(10, DummyRunnable.param);
             Assert.IsTrue(DummyRunnable.count > 0);
 
-            bean.Dispose();
+            factoryObject.Dispose();
         }
 
         ///<summary>
@@ -918,17 +929,18 @@ namespace Spring.Scheduling.Quartz
             trigger.RepeatCount = (1);
             trigger.AfterPropertiesSet();
 
-            SchedulerFactoryObject bean = new SchedulerFactoryObject();
-            bean.JobFactory = (new SpringObjectJobFactory());
-            bean.Triggers = (new Trigger[] {trigger});
-            bean.JobDetails = (new JobDetail[] {jobDetail});
-            bean.AfterPropertiesSet();
+            SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
+            factoryObject.JobFactory = (new SpringObjectJobFactory());
+            factoryObject.Triggers = (new Trigger[] {trigger});
+            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.AfterPropertiesSet();
+            factoryObject.Start();
 
             Thread.Sleep(500);
             Assert.AreEqual(10, DummyJobObject.param);
             Assert.IsTrue(DummyJobObject.count > 0);
 
-            bean.Dispose();
+            factoryObject.Dispose();
         }
 
         /// <summary>
@@ -940,17 +952,18 @@ namespace Spring.Scheduling.Quartz
             DummyJob.param = 0;
             DummyJob.count = 0;
 
-            SchedulerFactoryObject bean = new SchedulerFactoryObject();
-            bean.JobFactory = (new SpringObjectJobFactory());
-            bean.JobSchedulingDataLocation = ("job-scheduling-data.xml");
+            SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
+            factoryObject.JobFactory = (new SpringObjectJobFactory());
+            factoryObject.JobSchedulingDataLocation = ("job-scheduling-data.xml");
             // TODO bean.ResourceLoader = (new FileSystemResourceLoader());
-            bean.AfterPropertiesSet();
+            factoryObject.AfterPropertiesSet();
+            factoryObject.Start();
 
             Thread.Sleep(500);
             Assert.AreEqual(10, DummyJob.param);
             Assert.IsTrue(DummyJob.count > 0);
 
-            bean.Dispose();
+            factoryObject.Dispose();
         }
 
 
@@ -1037,6 +1050,33 @@ namespace Spring.Scheduling.Quartz
             {
                 ctx.Dispose();
             }
+        }
+
+        [Test]
+        public void TestSchedulerAutoStartsOnContextRefreshedEventByDefault()
+        {
+            StaticApplicationContext context = new StaticApplicationContext();
+            context.RegisterObjectDefinition("scheduler", new RootObjectDefinition(typeof (SchedulerFactoryObject)));
+            IScheduler scheduler = (IScheduler) context.GetObject("scheduler", typeof (IScheduler));
+            Assert.IsFalse(scheduler.IsStarted);
+            context.Refresh();
+            Assert.IsTrue(scheduler.IsStarted);
+        }
+
+        [Test]
+        public void TestSchedulerAutoStartupFalse()
+        {
+            StaticApplicationContext context = new StaticApplicationContext();
+            ObjectDefinitionBuilder beanDefinition = ObjectDefinitionBuilder
+                .GenericObjectDefinition(typeof(SchedulerFactoryObject))
+                .AddPropertyValue("autoStartup", false);
+
+            context.RegisterObjectDefinition("scheduler", beanDefinition.ObjectDefinition);
+            IScheduler scheduler = (IScheduler) context.GetObject("scheduler", typeof(IScheduler));
+            
+            Assert.IsFalse(scheduler.IsStarted);
+            context.Refresh();
+            Assert.IsFalse(scheduler.IsStarted);
         }
 
         /// <summary>
