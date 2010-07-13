@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 
+using System;
 using System.Collections;
 
 using NUnit.Framework;
@@ -83,6 +84,25 @@ namespace Spring.Scheduling.Quartz
             data["number"] = 123;
             cronTrigger.JobDataAsMap = data;
             CollectionAssert.AreEqual(data, cronTrigger.JobDataMap, "Data differed");
+        }
+
+        /// <summary>
+        /// Tests that StartDelay is respected.
+        /// </summary>
+        [Test]
+        public void TestStartDelay()
+        {
+            TimeSpan expectedDelay = TimeSpan.FromMinutes(10);
+            cronTrigger.StartDelay = expectedDelay;
+            Assert.AreEqual(expectedDelay, cronTrigger.StartDelay);
+
+            cronTrigger.AfterPropertiesSet();
+            DateTime now = DateTime.UtcNow;
+            TimeSpan delay = cronTrigger.StartTimeUtc - now;
+
+            // check roughly
+            Assert.IsTrue(delay > TimeSpan.FromMinutes(9).Add(TimeSpan.FromSeconds(55)));
+            Assert.IsTrue(delay < TimeSpan.FromMinutes(10).Add(TimeSpan.FromSeconds(5)));
         }
 
     }

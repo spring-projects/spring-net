@@ -20,6 +20,7 @@ using System.Reflection;
 
 using Quartz;
 using Spring.Objects.Factory;
+using Spring.Util;
 
 namespace Spring.Scheduling.Quartz
 {
@@ -52,9 +53,10 @@ namespace Spring.Scheduling.Quartz
 	/// <seealso cref="SchedulerAccessor.JobDetails" />
 	public class CronTriggerObject : CronTrigger, IJobDetailAwareTrigger, IObjectNameAware, IInitializingObject
 	{
-		private JobDetail jobDetail;
-		private string objectName;
         private readonly Constants constants = new Constants(typeof(MisfireInstruction.CronTrigger), typeof(MisfireInstruction));
+        private JobDetail jobDetail;
+		private string objectName;
+	    private TimeSpan startDelay;
 
 		/// <summary> 
 		/// Register objects in the JobDataMap via a given Map.
@@ -115,8 +117,32 @@ namespace Spring.Scheduling.Quartz
 			set { jobDetail = value; }
 		}
 
-
         /// <summary>
+        /// Set the start delay as <see cref="TimeSpan" />.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The start delay is added to the current system UTC time 
+        /// (when the object starts) to control the <see cref="Trigger.StartTimeUtc" />
+        /// of the trigger.
+        /// </para>
+        /// <para>
+        /// If the start delay is non-zero it will <strong>always</strong>
+        /// take precedence over start time.
+        /// </para>
+        /// </remarks>
+        /// <value>the start delay, as <see cref="TimeSpan" /> object.</value>
+	    public TimeSpan StartDelay
+        {
+            set
+	        {
+	            AssertUtils.State(value > TimeSpan.Zero, "Start delay cannot be negative.");
+	            startDelay = value;
+	        }
+            get { return startDelay; }
+        }
+
+	    /// <summary>
         /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
         /// after it has injected all of an object's dependencies.
         /// </summary>
@@ -144,6 +170,10 @@ namespace Spring.Scheduling.Quartz
         /// </exception>
 		public virtual void AfterPropertiesSet()
 		{
+            if (StartDelay > TimeSpan.Zero)
+            {
+                StartTimeUtc = DateTime.UtcNow.Add(startDelay);
+            }
 			if (Name == null)
 			{
 				Name = objectName;
