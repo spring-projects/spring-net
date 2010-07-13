@@ -83,7 +83,7 @@ namespace Spring.Scheduling.Quartz
             data["foo"] = "bar";
             data["number"] = 123;
             cronTrigger.JobDataAsMap = data;
-            CollectionAssert.AreEqual(data, cronTrigger.JobDataMap, "Data differed");
+            CollectionAssert.AreEquivalent(data, cronTrigger.JobDataMap, "Data differed");
         }
 
         /// <summary>

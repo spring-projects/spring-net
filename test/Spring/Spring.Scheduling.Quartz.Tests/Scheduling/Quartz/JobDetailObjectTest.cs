@@ -97,7 +97,7 @@ namespace Spring.Scheduling.Quartz
             values["bar"] = null;
             jobDetail.JobDataAsMap = values;
             Assert.AreEqual(values.Count, jobDetail.JobDataMap.Count, "Data of inequal size");
-            CollectionAssert.AreEqual(values.Keys, jobDetail.JobDataMap.Keys, "JobDataMap values not equal");
+            CollectionAssert.AreEquivalent(values.Keys, jobDetail.JobDataMap.Keys, "JobDataMap values not equal");
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Spring.Scheduling.Quartz
         {
             const string objectName = "springJobDetailObject";
             jobDetail.ObjectName = objectName;
-            XmlApplicationContext ctx = new XmlApplicationContext();
+            StaticApplicationContext ctx = new StaticApplicationContext();
             jobDetail.ApplicationContext = ctx;
             string key = "applicationContextJobDataKey";
             jobDetail.ApplicationContextJobDataKey = key;

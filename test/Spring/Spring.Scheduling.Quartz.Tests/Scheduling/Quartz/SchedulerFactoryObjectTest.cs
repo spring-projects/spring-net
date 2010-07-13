@@ -101,22 +101,6 @@ namespace Spring.Scheduling.Quartz
         /// Tests AfterPropertiesSet behavior.
         /// </summary>
         [Test]
-        public void TestAfterPropertiesSet_AutoStartup()
-        {
-            InitForAfterPropertiesSetTest();
-
-            TestSchedulerFactory.MockScheduler.Start();
-            TestSchedulerFactory.Mockery.ReplayAll();
-
-            factory.SchedulerFactoryType = typeof (TestSchedulerFactory);
-            factory.AutoStartup = true;
-            factory.AfterPropertiesSet();
-        }
-
-        /// <summary>
-        /// Tests AfterPropertiesSet behavior.
-        /// </summary>
-        [Test]
         public void TestAfterPropertiesSet_AddListeners()
         {
             mockery = new MockRepository();
@@ -222,24 +206,6 @@ namespace Spring.Scheduling.Quartz
             factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
             TestSchedulerFactory.MockScheduler.JobFactory = null;
             LastCall.IgnoreArguments();
-        }
-
-        /// <summary>
-        /// Tests AfterPropertiesSet behavior.
-        /// </summary>
-        [Test]
-        public void TestAfterPropertiesSet_AutoStartup_WithDelay()
-        {
-            // set expectations
-            TestSchedulerFactory.MockScheduler.JobFactory = null;
-            LastCall.IgnoreArguments();
-            TestSchedulerFactory.MockScheduler.StartDelayed(TimeSpan.FromSeconds(2));
-            TestSchedulerFactory.Mockery.ReplayAll();
-
-            factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
-            factory.AutoStartup = true;
-            factory.StartupDelay = TimeSpan.FromSeconds(2);
-            factory.AfterPropertiesSet();
         }
 
         /// <summary>

@@ -117,7 +117,7 @@ namespace Spring.Scheduling.Quartz
             data["foo"] = "bar";
             data["number"] = 123;
             simpleTrigger.JobDataAsMap = data;
-            CollectionAssert.AreEqual(data, simpleTrigger.JobDataMap, "Data differed");
+            CollectionAssert.AreEquivalent(data, simpleTrigger.JobDataMap, "Data differed");
         }
 
     }
