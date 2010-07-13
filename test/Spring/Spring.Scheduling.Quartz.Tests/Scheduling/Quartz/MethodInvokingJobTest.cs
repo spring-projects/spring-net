@@ -84,6 +84,24 @@ namespace Spring.Scheduling.Quartz
         }
 
         /// <summary>
+        /// Test that invocation result is set to execution context (SPRNET-1340).
+        /// </summary>
+        [Test]
+        public void TestMethodInvoker_ShouldSetResultToExecutionContext()
+        {
+            InvocationCountingJob job = new InvocationCountingJob();
+            MethodInvoker mi = new MethodInvoker();
+            mi.TargetObject = job;
+            mi.TargetMethod = "InvokeWithReturnValue";
+            mi.Prepare();
+            methodInvokingJob.MethodInvoker = mi;
+            JobExecutionContext context = CreateMinimalJobExecutionContext();
+            methodInvokingJob.Execute(context);
+
+            Assert.AreEqual(InvocationCountingJob.DefaultReturnValue, context.Result, "result value was not set to context");
+        }
+
+        /// <summary>
         /// Test method invoke via execute.
         /// </summary>
         [Test]
@@ -147,6 +165,7 @@ namespace Spring.Scheduling.Quartz
     public class InvocationCountingJob
     {
         private int counter;
+        internal const string DefaultReturnValue = "return value";
 
         /// <summary>
         /// Increments method invoke counter.
@@ -167,6 +186,14 @@ namespace Spring.Scheduling.Quartz
 
         private void PrivateMethod()
         {
+        }
+
+        /// <summary>
+        /// Returns <see cref="DefaultReturnValue" /> as return value.
+        /// </summary>
+        public string InvokeWithReturnValue()
+        {
+            return DefaultReturnValue;
         }
 
         /// <summary>

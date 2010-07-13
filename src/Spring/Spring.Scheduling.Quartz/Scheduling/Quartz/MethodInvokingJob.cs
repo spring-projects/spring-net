@@ -66,7 +66,7 @@ namespace Spring.Scheduling.Quartz
             }
             try
             {
-                methodInvoker.Invoke();
+                context.Result = methodInvoker.Invoke();
             }
             catch (TargetInvocationException ex)
             {
