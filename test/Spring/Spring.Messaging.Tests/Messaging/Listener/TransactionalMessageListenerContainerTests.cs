@@ -41,6 +41,16 @@ namespace Spring.Messaging.Listener
         private TransactionalMessageListenerContainer transactionalMessageListenerContainer;
         private SimpleHandler listener;
 
+
+        [SetUp]
+        public override void SetUp()
+        {
+            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxqueue", true);
+            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxretryqueue", true);
+            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxresponsequeue", true);
+            base.SetUp();
+        }
+
         public TransactionalMessageListenerContainer TransactionalMessageListenerContainer
         {
             set { transactionalMessageListenerContainer = value; }
@@ -52,7 +62,7 @@ namespace Spring.Messaging.Listener
             set { listener = value; }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Property 'DefaultMessageQueue' is required")]
+        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Property 'MessageQueueObjectName' is required")]
         public void EnsureMessageQueuePropertyIsSet()
         {
             TransactionalMessageListenerContainer container = new TransactionalMessageListenerContainer();

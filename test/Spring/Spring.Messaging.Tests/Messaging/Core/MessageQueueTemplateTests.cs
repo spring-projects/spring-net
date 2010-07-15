@@ -46,33 +46,12 @@ namespace Spring.Messaging.Core
         [SetUp]
         public override void SetUp()
         {
-            RecreateMessageQueue(@".\Private$\testqueue", false);
-            RecreateMessageQueue(@".\Private$\testtxqueue", true);
+            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testqueue", false);
+            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxqueue", true);
             base.SetUp();
         }
 
-        private void RecreateMessageQueue(string path, bool transactional)
-        {
-            bool defaultCacheEnabled = MessageQueue.EnableConnectionCache;
-            MessageQueue.ClearConnectionCache();
-            MessageQueue.EnableConnectionCache = false;
-            if (MessageQueue.Exists(path))
-            {
-                MessageQueue queue;
-// TODO (EE): delete/create doesn't work for some reason
-//                MessageQueue.Delete(path);
-//                queue = MessageQueue.Create(path, transactional);
-                queue = new MessageQueue(path);
-                queue.Purge();
-                queue.Dispose();
-            }
-            else
-            {
-                MessageQueue.Create(path, transactional).Dispose();
-            }
-            MessageQueue.ClearConnectionCache();
-            MessageQueue.EnableConnectionCache = defaultCacheEnabled; // set to default
-        }
+
 
 #if NET_2_0 || NET_3_0
         [Test]

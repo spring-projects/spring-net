@@ -13,12 +13,12 @@
 
   <object id='msmqtxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
     <property name='Path' value='.\Private$\testtxqueue'/>
-    <property name='MessageReadPropertyFilterSetAll' value='true'/>
+    <property name='MessageReadPropertyFilterSetAll' value='true'/>    
     <property name='ProductTemplate'>
       <object>
         <property name='Label' value='MyTxLabel'/>
       </object>
-    </property>
+    </property>    
   </object>
 
   <object id='msmqtxresponsequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
@@ -33,7 +33,7 @@
 
   <object id='msmqtxretryqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
     <property name='Path' value='.\Private$\testtxretryqueue'/>
-    <property name='MessageReadPropertyFilterSetAll' value='true'/>
+    <property name='MessageReadPropertyFilterSetAll' value='true'/>    
     <property name='ProductTemplate'>
       <object>
         <property name='Label' value='MyTxRetryLabel'/>
@@ -57,10 +57,10 @@
   </object>
 
   <object id="transactionalMessageListenerContainer" type="Spring.Messaging.Listener.DistributedTxMessageListenerContainer, Spring.Messaging">
-    <property name="DefaultMessageQueueObjectName" value="msmqtxqueue"/>
+    <property name="MessageQueueObjectName" value="msmqtxqueue"/>
     <property name="PlatformTransactionManager" ref="txScopeTransactionManager"/>
     <property name="MaxConcurrentListeners" value="1"/>
-    <property name="ListenerTimeLimitInMillis" value="20000"/>
+    <property name="ListenerTimeLimit" value="20000"/>
     <property name="MessageListener" ref="messageListenerAdapter"/>
     <property name="DistributedTransactionExceptionHandler" ref="distributedTransactionExceptionHandler"/>
     <property name="AutoStartup" value="false"/>

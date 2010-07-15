@@ -34,7 +34,7 @@
   </object>
 
   <object id='testremotequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='FormatName:Direct=OS:MARKT60\Private$\testqueue'/>
+    <property name='Path' value='FormatName:Direct=OS:MARK6500\Private$\testqueue'/>
     <property name='RemoteQueue' value="true"/>
   </object>
 

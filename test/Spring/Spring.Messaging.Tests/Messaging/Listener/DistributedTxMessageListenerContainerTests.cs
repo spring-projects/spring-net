@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System.Messaging;
 using System.Threading;
 using NUnit.Framework;
 using Spring.Messaging.Core;
@@ -36,9 +37,19 @@ namespace Spring.Messaging.Listener
     [TestFixture]
     public class DistributedTxMessageListenerContainerTests : AbstractDependencyInjectionSpringContextTests
     {
+
+
         private int waitInMillis = 20000;
         private DistributedTxMessageListenerContainer distributedTxMessageListenerContainer;
         private SimpleHandler listener;
+
+        [SetUp]
+        public override void SetUp()
+        {
+            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxqueue", true);
+            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxretryqueue", true);
+            base.SetUp();
+        }
 
 
         public DistributedTxMessageListenerContainer DistributedTxMessageListenerContainer
@@ -80,7 +91,6 @@ namespace Spring.Messaging.Listener
             Assert.AreEqual("Goodbye World 1", textMsg);
         }
 
-
         [Test]
         public void SendAndAsyncReceive()
         {
@@ -100,7 +110,7 @@ namespace Spring.Messaging.Listener
             distributedTxMessageListenerContainer.Start();
 
             Thread.Sleep(waitInMillis);
-            Assert.AreEqual(5, listener.MessageCount);
+            Assert.AreEqual(15, listener.MessageCount);
 
             distributedTxMessageListenerContainer.Stop();
             distributedTxMessageListenerContainer.Shutdown();
