@@ -324,19 +324,39 @@ namespace Spring.Objects.Factory.Config
             }
 
             Hashtable mods = new Hashtable();
+            bool entriesModified = false;
             foreach (DictionaryEntry entry in dictVal)
             {
+                /*
+
                 object oldValue = entry.Value;
                 object newValue = ResolveValue(oldValue);
                 if (!ObjectUtils.NullSafeEquals(newValue, oldValue))
                 {
                     mods[entry.Key] = newValue;
+                }*/
+
+                object key = entry.Key;                
+                object newKey = ResolveValue(key);
+                object oldValue = entry.Value;                
+                object newValue = ResolveValue(oldValue);
+
+                if (!ObjectUtils.NullSafeEquals(newValue, oldValue) || key != newKey)
+                {
+                    entriesModified = true;
+                }
+                mods[newKey] = newValue;
+
+            }
+            if (entriesModified)
+            {
+                dictVal.Clear();
+                foreach (DictionaryEntry entry in mods)
+                {
+                    dictVal[entry.Key] = entry.Value;
                 }
             }
-            foreach (DictionaryEntry entry in mods)
-            {
-                dictVal[entry.Key] = entry.Value;
-            }
+
         }
 
         /// <summary>

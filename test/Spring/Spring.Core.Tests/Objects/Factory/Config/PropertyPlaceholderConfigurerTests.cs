@@ -597,6 +597,7 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual(2, to.Pets.Count);
             Assert.AreEqual(2, to.PeriodicTable.Count);
             Assert.AreEqual(2, to.Computers.Count);
+            Assert.IsTrue(to.PeriodicTable.Contains("C"));
         }
     }
 }

@@ -11,6 +11,11 @@
     </property>
 		<!-- age should inherit value of 1 from parent -->
   </object>
+  <object id="inheritsFromParentFactoryUsingCtor"
+          parent="inheritedTestObjectUsingCtor">
+    <constructor-arg name="name" value="child-name"/>
+    <!-- age should inherit value of 1 from parent -->
+  </object>
 	
   <object id="protoypeInheritsFromParentFactorySingleton"
       parent="inheritedTestObject"

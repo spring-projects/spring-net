@@ -25,7 +25,7 @@ limitations under the License.
     </property>
     <property name="PeriodicTable">
       <dictionary key-type="${dictionaryKeyType}" value-type="${dictionaryValueType}">
-        <entry key="C" value="carbon"/>
+        <entry key="${entryKey}" value="carbon"/>
         <entry key="O" value="oxygen"/>        
       </dictionary>
     </property>
@@ -45,6 +45,7 @@ limitations under the License.
         <add key="dictionaryKeyType" value="string" />
         <add key="dictionaryValueType" value="string" />
         <add key="setElementType" value="string" />
+        <add key="entryKey" value="C"/>
       </name-values>
     </property>
   </object>

@@ -667,7 +667,21 @@ namespace Spring.Objects.Factory.Xml
             // Age property is inherited from object in parent factory
             Assert.IsTrue(inherits.Age == 1);
             TestObject inherits2 = (TestObject) child.GetObject("inheritsFromParentFactory");
-            Assert.IsTrue(inherits2 == inherits);
+            Assert.AreSame(inherits2,inherits);
+        }
+
+        [Test]
+        public void SingletonInheritanceFromParentFactorySingletonUsingCtor()
+        {
+            XmlObjectFactory parent = new XmlObjectFactory(new ReadOnlyXmlTestResource("parent.xml", GetType()));
+            XmlObjectFactory child = new XmlObjectFactory(new ReadOnlyXmlTestResource("child.xml", GetType()), parent);                                                                           
+            TestObject inherits = (TestObject)child.GetObject("inheritsFromParentFactoryUsingCtor");
+            // Name property value is overriden
+            Assert.IsTrue(inherits.Name.Equals("child-name"));
+            // Age property is inherited from object in parent factory
+            Assert.IsTrue(inherits.Age == 1);
+            TestObject inherits2 = (TestObject)child.GetObject("inheritsFromParentFactoryUsingCtor");
+            Assert.AreSame(inherits2,inherits);
         }
 
         [Test]
@@ -681,7 +695,7 @@ namespace Spring.Objects.Factory.Xml
             // Age property is inherited from object in parent factory
             Assert.IsTrue(inherits.Age == 2);
             TestObject inherits2 = (TestObject) child.GetObject("prototypeInheritsFromParentFactoryPrototype");
-            Assert.IsFalse(inherits2 == inherits);
+            Assert.AreNotSame(inherits2,inherits);
             inherits2.Age = 13;
             Assert.IsTrue(inherits2.Age == 13);
             // Shouldn't have changed first instance
@@ -699,7 +713,7 @@ namespace Spring.Objects.Factory.Xml
             // Age property is inherited from object in parent factory
             Assert.IsTrue(inherits.Age == 1);
             TestObject inherits2 = (TestObject) child.GetObject("protoypeInheritsFromParentFactorySingleton");
-            Assert.IsFalse(inherits2 == inherits);
+            Assert.AreNotSame(inherits2,inherits);
             inherits2.Age = 13;
             Assert.IsTrue(inherits2.Age == 13);
             // Shouldn't have changed first instance

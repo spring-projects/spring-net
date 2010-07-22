@@ -189,10 +189,22 @@ namespace Spring.Objects.Factory.Config
 				}
 				foreach (DictionaryEntry entry in other.NamedArgumentValues)
 				{
-					NamedArgumentValues.Add(entry.Key, entry.Value);
+				    AddOrMergeNamedArgumentValues(entry.Key, entry.Value);
+					//NamedArgumentValues.Add(entry.Key, entry.Value);
 				}
 			}
 		}
+
+	    private void AddOrMergeNamedArgumentValues(object key, object newValue)
+	    {
+	        if (_namedArgumentValues.Contains(key) )
+	        {
+	            _namedArgumentValues[key] = newValue;
+	        } else
+	        {	            
+                _namedArgumentValues.Add(key, newValue);
+	        }
+	    }
 
 	    private void AddOrMergeIndexedArgumentValues(int key, ValueHolder newValue)
 	    {

@@ -5,6 +5,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 
+
+  <object id="inheritedTestObjectUsingCtor" type="Spring.Objects.TestObject, Spring.Core.Tests" abstract="true">
+    <constructor-arg name="name" value="parent"/>
+    <constructor-arg name="age" value="1"/>
+  </object>
+  
 	<object id="inheritedTestObject" type="Spring.Objects.TestObject, Spring.Core.Tests" abstract="true">
 		<property name="name"><value>parent</value></property>
 		<property name="age"><value>1</value></property>
