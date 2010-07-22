@@ -30,7 +30,7 @@ namespace Spring.Objects.Factory.Config
         // TODO (EE): ComponentDefinitions are part of Spring/J 2.5
 
 	    /// <summary>
-	    /// Role hint indicating that a <see cref="IObjectDefinition"/> is a major part of the application. Typically corresponds to a user-defined bean.
+	    /// Role hint indicating that a <see cref="IObjectDefinition"/> is a major part of the application. Typically corresponds to a user-defined object.
 	    /// </summary>
 	    ROLE_APPLICATION = 0,
 

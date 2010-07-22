@@ -39,7 +39,7 @@ namespace Spring.Data.NHibernate.Support
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenSessionInViewModule"/> class.  Creates a SessionScope,
-        /// but does not yet associate a session with a thread, that is lef to the lifecycle of the request.
+        /// but does not yet associate a session with a thread, that is left to the lifecycle of the request.
         /// </summary>
         public OpenSessionInViewModule() : base("appSettings", typeof(OpenSessionInViewModule), false)
         {

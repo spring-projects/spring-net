@@ -166,7 +166,7 @@ namespace Spring.Messaging.Listener
         {
             if (MessageQueueObjectName == null)
             {
-                throw new ArgumentException("Property 'DefaultMessageQueueObjectName' is required");
+                throw new ArgumentException("Property 'MessageQueueObjectName' is required");
             }
             if (MessageQueueFactory == null)
             {

@@ -523,7 +523,7 @@ namespace Spring.Objects.Factory.Support
         /// ApplicationContext instance that the object is living in.
         /// <para>
         /// Note there are no such default types registered in a plain IObjectFactory,
-        /// not even for the BeanFactory interface itself.
+        /// not even for the IObjectFactory interface itself.
         /// </para>
         /// </remarks>
         public void RegisterResolvableDependency(Type dependencyType, object autowiredValue)
