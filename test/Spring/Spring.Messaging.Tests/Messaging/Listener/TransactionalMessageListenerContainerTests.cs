@@ -62,12 +62,14 @@ namespace Spring.Messaging.Listener
             set { listener = value; }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "Property 'MessageQueueObjectName' is required")]
+        [Test]
         public void EnsureMessageQueuePropertyIsSet()
         {
             TransactionalMessageListenerContainer container = new TransactionalMessageListenerContainer();
-            container.AfterPropertiesSet();
-            container.Start();
+
+            ArgumentException ex = Assert.Throws<ArgumentException>(() => container.AfterPropertiesSet());
+            Assert.AreEqual("Property 'MessageQueueObjectName' is required", ex.Message);
+
         }
 
         [Test]
@@ -75,12 +77,14 @@ namespace Spring.Messaging.Listener
         {
             TransactionalMessageListenerContainer container = applicationContext["transactionalMessageListenerContainer"] as TransactionalMessageListenerContainer;
             Assert.IsNotNull(container);
-            Assert.AreEqual(true, container.UseContainerManagedMessageQueueTransaction);  
+            Assert.AreEqual(true, container.UseContainerManagedMessageQueueTransaction);
         }
 
         [Test]
         public void SendAndAsyncReceiveWithExceptionHandling()
         {
+            listener.MessageCount = 0;
+
             MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
 
@@ -110,28 +114,28 @@ namespace Spring.Messaging.Listener
         [Test]
         public void SendAndAsyncReceive()
         {
+            listener.MessageCount = 0;
 
-           
             MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
-            
+
             q.ConvertAndSend("Hello World 1");
             q.ConvertAndSend("Hello World 2");
             q.ConvertAndSend("Hello World 3");
             q.ConvertAndSend("Hello World 4");
             q.ConvertAndSend("Hello World 5");
-            
+
             Assert.AreEqual(0, listener.MessageCount);
 
             transactionalMessageListenerContainer.Start();
 
-            Thread.Sleep(waitInMillis);
+            Thread.Sleep(waitInMillis * 2);
             Assert.AreEqual(5, listener.MessageCount);
 
             transactionalMessageListenerContainer.Stop();
             transactionalMessageListenerContainer.Shutdown();
             Thread.Sleep(2500);
-   
+
         }
 
 

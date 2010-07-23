@@ -36,7 +36,7 @@ namespace Spring.Objects.Factory.Config
         /// Creates a new, empty variable source
         /// </summary>
         public DictionaryVariableSource()
-            :this(null, true)
+            : this(null, true)
         {
         }
 
@@ -44,7 +44,7 @@ namespace Spring.Objects.Factory.Config
         /// Creates a new, empty and case-insensitive variable source
         /// </summary>
         public DictionaryVariableSource(bool ignoreCase)
-            :this(null, ignoreCase)
+            : this(null, ignoreCase)
         {
         }
 
@@ -61,16 +61,31 @@ namespace Spring.Objects.Factory.Config
         /// </remarks>
         /// <param name="args">the argument list containing pairs, or <c>null</c></param>
         public DictionaryVariableSource(params string[] args)
-            :this(true)
+            : this(true)
         {
             if (args != null)
             {
-                for (int i = 0; i < args.Length; i += 2)
+                if (args.Length % 2 != 0)
                 {
-                    Add(args[i], args[i + 1]);
+                    throw new ArgumentOutOfRangeException("Unbalanced Key-Value pairs of strings detected.  Verify that args contains pairs of key strings and value strings.");
                 }
+                
+                    for (int i = 0; i < args.Length; i += 2)
+                    {
+                        Add(args[i], args[i + 1]);
+                    }
+                
             }
         }
+
+        /// <summary>
+        /// Initializes a new instance of the DictionaryVariableSource class.
+        /// </summary>
+        public DictionaryVariableSource(IDictionary dictionary)
+            : this(dictionary, true)
+        {
+        }
+
 
         /// <summary>
         /// Creates a new variable source, reading values from another dictionary

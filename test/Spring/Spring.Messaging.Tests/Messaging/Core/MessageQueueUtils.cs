@@ -35,17 +35,27 @@ namespace Spring.Messaging.Core
             MessageQueue.EnableConnectionCache = false;
             if (MessageQueue.Exists(path))
             {
-                MessageQueue queue;
                 // TODO (EE): delete/create doesn't work for some reason
                 //                MessageQueue.Delete(path);
                 //                queue = MessageQueue.Create(path, transactional);
-                queue = new MessageQueue(path);
-                queue.Purge();
-                queue.Dispose();
+                using (MessageQueue queue = new MessageQueue(path))
+                {
+                    queue.Purge();
+                }
             }
             else
             {
-                MessageQueue.Create(path, transactional).Dispose();
+                /*
+                 * MSDN docs indicate that calls to the static .Create() method should include
+                 *   an explicit call to .Dispose() b/c unmanaged resources are involved
+                 * Here this req'ment is handled implicitly with the using() statement
+                 *  even though the empty using() block seems odd at first glance b/c it
+                 *  encloses a static method call
+                 */
+                using (MessageQueue.Create(path, transactional))
+                {
+                	
+                }
             }
             MessageQueue.ClearConnectionCache();
             MessageQueue.EnableConnectionCache = defaultCacheEnabled; // set to default

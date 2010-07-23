@@ -38,13 +38,8 @@ namespace Spring.Objects.Factory.Config
         {
             StaticApplicationContext ac = new StaticApplicationContext();
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer();
-            try
-            {
-                vphc.PostProcessObjectFactory(ac.ObjectFactory);
-                Assert.Fail();
-            }
-            catch (ArgumentException)
-            {}
+            
+            Assert.Throws<ArgumentException>(() => vphc.PostProcessObjectFactory(ac.ObjectFactory));
         }
 
         [Test]
@@ -52,15 +47,9 @@ namespace Spring.Objects.Factory.Config
         {
             StaticApplicationContext ac = new StaticApplicationContext();
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer();
-            vphc.VariableSources = new ArrayList( new object[] { new object() } );
+            vphc.VariableSources = new ArrayList(new object[] { new object() });
 
-            try
-            {
-                vphc.PostProcessObjectFactory(ac.ObjectFactory);
-                Assert.Fail();
-            }
-            catch (ArgumentException)
-            {}
+            Assert.Throws<ArgumentException>(() => vphc.PostProcessObjectFactory(ac.ObjectFactory));
         }
 
         [Test]
@@ -85,7 +74,7 @@ namespace Spring.Objects.Factory.Config
 
             pvs = new MutablePropertyValues();
             pvs.Add("VariableSources", variableSources);
-            
+
             ac.RegisterSingleton("configurer", typeof(VariablePlaceholderConfigurer), pvs);
             ac.Refresh();
 
@@ -106,7 +95,7 @@ namespace Spring.Objects.Factory.Config
             ac.RegisterSingleton("tb1", typeof(TestObject), pvs);
 
             IList variableSources = new ArrayList();
-            variableSources.Add( new DictionaryVariableSource( new string[] { "maxResults", "35", "name", "Erich" } ) );
+            variableSources.Add(new DictionaryVariableSource(new string[] { "maxResults", "35", "name", "Erich" }));
 
 
             pvs = new MutablePropertyValues();
@@ -119,9 +108,9 @@ namespace Spring.Objects.Factory.Config
 
             TestObject tb1 = (TestObject)ac.GetObject("tb1");
             Assert.AreEqual(35, tb1.Age);
-            Assert.AreEqual("Erich", tb1.Name);            
-        }  
-      
+            Assert.AreEqual("Erich", tb1.Name);
+        }
+
         [Test]
         public void MultiResolution()
         {
@@ -132,11 +121,11 @@ namespace Spring.Objects.Factory.Config
 
             IList variableSources = new ArrayList();
             variableSources.Add(new DictionaryVariableSource(new string[] { "firstname", "FirstName" }));
-            variableSources.Add(new DictionaryVariableSource(new string[] { "lastname", "LastName"}));
+            variableSources.Add(new DictionaryVariableSource(new string[] { "lastname", "LastName" }));
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer(variableSources);
             vphc.PostProcessObjectFactory(of);
 
-            RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
+            RootObjectDefinition rod = (RootObjectDefinition)of.GetObjectDefinition("tb1");
             Assert.AreEqual("Hello FirstName LastName!", rod.PropertyValues.GetPropertyValue("Greeting").Value);
         }
 
@@ -150,11 +139,11 @@ namespace Spring.Objects.Factory.Config
 
             IList variableSources = new ArrayList();
             variableSources.Add(new DictionaryVariableSource(new string[] { "name", "${nickname}" }));
-            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value"}));
+            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value" }));
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer(variableSources);
             vphc.PostProcessObjectFactory(of);
 
-            RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
+            RootObjectDefinition rod = (RootObjectDefinition)of.GetObjectDefinition("tb1");
             Assert.AreEqual("nickname-value", rod.PropertyValues.GetPropertyValue("NameProperty").Value);
         }
 
@@ -170,7 +159,7 @@ namespace Spring.Objects.Factory.Config
 
             IList variableSources = new ArrayList();
             variableSources.Add(new DictionaryVariableSource(new string[] { "name", "name-value" }));
-            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value"}));
+            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value" }));
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer(variableSources);
             ac.AddObjectFactoryPostProcessor(vphc);
             ac.Refresh();
@@ -192,11 +181,11 @@ namespace Spring.Objects.Factory.Config
 
             IList variableSources = new ArrayList();
             variableSources.Add(new DictionaryVariableSource(new string[] { "name", "name-value", "nickname", null }));
-            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value"}));
+            variableSources.Add(new DictionaryVariableSource(new string[] { "nickname", "nickname-value" }));
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer(variableSources);
 
             vphc.PostProcessObjectFactory(of);
-            RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
+            RootObjectDefinition rod = (RootObjectDefinition)of.GetObjectDefinition("tb1");
             Assert.AreEqual("name-value", rod.PropertyValues.GetPropertyValue("NameProperty").Value);
             Assert.AreEqual(null, rod.PropertyValues.GetPropertyValue("NickNameProperty").Value);
         }
@@ -245,7 +234,7 @@ namespace Spring.Objects.Factory.Config
             }
             catch (ObjectDefinitionStoreException ex)
             {
-                Assert.IsTrue( ex.Message.IndexOf("nickname") > -1 );
+                Assert.IsTrue(ex.Message.IndexOf("nickname") > -1);
             }
         }
 
@@ -261,12 +250,12 @@ namespace Spring.Objects.Factory.Config
 
             VariablePlaceholderConfigurer vpc = new VariablePlaceholderConfigurer();
             vpc.IgnoreUnresolvablePlaceholders = true;
-            vpc.VariableSource = new DictionaryVariableSource(new string[] {"name", "Erich"});
+            vpc.VariableSource = new DictionaryVariableSource(new string[] { "name", "Erich" });
             ac.AddObjectFactoryPostProcessor(vpc);
 
             ac.Refresh();
 
-            TestObject tb1 = (TestObject) ac.GetObject("tb1");
+            TestObject tb1 = (TestObject)ac.GetObject("tb1");
             Assert.AreEqual("Erich", tb1.Name);
             Assert.AreEqual("${nickname}", tb1.Nickname);
         }

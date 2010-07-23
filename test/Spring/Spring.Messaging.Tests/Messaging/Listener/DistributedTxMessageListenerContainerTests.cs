@@ -25,6 +25,7 @@ using System.Threading;
 using NUnit.Framework;
 using Spring.Messaging.Core;
 using Spring.Testing.NUnit;
+using System;
 
 #endregion
 
@@ -48,6 +49,11 @@ namespace Spring.Messaging.Listener
         {
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxqueue", true);
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxretryqueue", true);
+
+
+            if (listener != null)
+                listener.MessageCount = 0; //reset the property between tests b/c the object lifecycle is singleton!
+
             base.SetUp();
         }
 
@@ -74,7 +80,7 @@ namespace Spring.Messaging.Listener
 
             q.ConvertAndSend("Goodbye World 1");
 
-            Assert.AreEqual(0, listener.MessageCount);
+            Assert.AreEqual(0, listener.MessageCount, "PRECONDITION FAILURE: Unable to send the message!");
             distributedTxMessageListenerContainer.Start();
 
             Thread.Sleep(waitInMillis);
@@ -94,23 +100,28 @@ namespace Spring.Messaging.Listener
         [Test]
         public void SendAndAsyncReceive()
         {
+            const int MESSAGE_COUNT = 5;
 
+            //must match the retry count in the object registration for test to pass!
+            const int EXCEPTION_QUEUE_RETRY_COUNT = 2;
 
             MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
 
-            q.ConvertAndSend("Hello World 1");
-            q.ConvertAndSend("Hello World 2");
-            q.ConvertAndSend("Hello World 3");
-            q.ConvertAndSend("Hello World 4");
-            q.ConvertAndSend("Hello World 5");
+            for (int i = 0; i < MESSAGE_COUNT; i++)
+            {
+                q.ConvertAndSend(String.Format("Hello World {0}", (i + 1)));
+            }
 
             Assert.AreEqual(0, listener.MessageCount);
 
             distributedTxMessageListenerContainer.Start();
 
-            Thread.Sleep(waitInMillis);
-            Assert.AreEqual(15, listener.MessageCount);
+            //this test needs to wait somewhat longer than the others in order to consistently pass so
+            //artificially inflate the waiting period before attempting subsequent asserts:
+            Thread.Sleep((int)(waitInMillis * 1.5));
+
+            Assert.AreEqual(MESSAGE_COUNT + (MESSAGE_COUNT * EXCEPTION_QUEUE_RETRY_COUNT), listener.MessageCount);
 
             distributedTxMessageListenerContainer.Stop();
             distributedTxMessageListenerContainer.Shutdown();
