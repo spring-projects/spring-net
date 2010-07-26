@@ -28,7 +28,7 @@ namespace Spring.Objects.Factory.Config
     /// A very simple, hashtable-based implementation of <see cref="IVariableSource"/>
     /// </summary>
     /// <author>Erich Eichinger</author>
-    public class DictionaryVariableSource : IVariableSource
+    public class DictionaryVariableSource : IVariableSource, IEnumerable
     {
         private readonly Hashtable variables;
 
@@ -145,6 +145,11 @@ namespace Spring.Objects.Factory.Config
                 throw new ArgumentException(string.Format("variable '{0}' cannot be resolved", name));
             }
             return (string)variables[name];
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return (variables as IEnumerable).GetEnumerator() ;
         }
     }
 }

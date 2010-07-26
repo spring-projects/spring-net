@@ -9,14 +9,36 @@ namespace Spring.Objects.Factory.Config
     public class DictionaryVariableSourceTests
     {
         [Test]
-        public void Initialize_WithCaseSensitiveFlag_AddsCaseSensitiveKeys()
+        public void CanEnumerateDictionary()
         {
-            DictionaryVariableSource dvs = new DictionaryVariableSource(false);
-            dvs.Add("key1", "lowercasevalue");
-            dvs.Add("KEY1", "uppercasevalue");
+            DictionaryVariableSource dvs = new DictionaryVariableSource();
 
-            Assert.AreEqual("lowercasevalue", dvs.ResolveVariable("key1"));
-            Assert.AreEqual("uppercasevalue", dvs.ResolveVariable("KEY1"));
+            dvs.Add("key1", "theValue");
+            dvs.Add("key2", "theValue");
+
+            foreach (DictionaryEntry dv in dvs)
+            {
+                Assert.AreEqual("theValue", dv.Value);
+            }
+
+        }
+
+        [Test]
+        public void CanResolveVariable_RespectsCaseInsensitivity()
+        {
+            DictionaryVariableSource caseInsensitive = new DictionaryVariableSource();
+            caseInsensitive.Add("key1", "value1");
+
+            Assert.True(caseInsensitive.CanResolveVariable("KEY1"));
+        }
+
+        [Test]
+        public void CanResolveVariable_RespectsCaseSensitivity()
+        {
+            DictionaryVariableSource caseSensitive = new DictionaryVariableSource(false);
+            caseSensitive.Add("KEY1", "value1");
+
+            Assert.False(caseSensitive.CanResolveVariable("key1"));
         }
 
         [Test]
@@ -34,6 +56,16 @@ namespace Spring.Objects.Factory.Config
             Assert.Throws<ArgumentOutOfRangeException>(() => new DictionaryVariableSource(new string[] { "key1", "value1", "key2", "value2", "orphanedKey1" }));
         }
 
+        [Test]
+        public void Initialize_WithCaseSensitiveFlag_AddsCaseSensitiveKeys()
+        {
+            DictionaryVariableSource dvs = new DictionaryVariableSource(false);
+            dvs.Add("key1", "lowercasevalue");
+            dvs.Add("KEY1", "uppercasevalue");
+
+            Assert.AreEqual("lowercasevalue", dvs.ResolveVariable("key1"));
+            Assert.AreEqual("uppercasevalue", dvs.ResolveVariable("KEY1"));
+        }
 
         [Test]
         public void Initialize_WithDictionaryConstructor_AddsCaseInsensitiveKeys()
@@ -80,32 +112,14 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-        public void Test()
+        public void Initialize_WithInlineDictionarySyntax()
         {
-            Hashtable hashtable = new Hashtable();
-            hashtable.Add("KEY1", "value1");
+            DictionaryVariableSource dvs = new DictionaryVariableSource() { { "key1", "value1" }, { "key2", "value2" } };
 
-            Assert.False(hashtable.ContainsKey("key1"));
+            Assert.AreEqual("value1", dvs.ResolveVariable("key1"));
+            Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
+
         }
-
-        [Test]
-        public void CanResolveVariable_RespectsCaseSensitivity()
-        {
-            DictionaryVariableSource caseSensitive = new DictionaryVariableSource(false);
-            caseSensitive.Add("KEY1", "value1");
-
-            Assert.False(caseSensitive.CanResolveVariable("key1"));
-        }
-
-        [Test]
-        public void CanResolveVariable_RespectsCaseInsensitivity()
-        {
-            DictionaryVariableSource caseInsensitive = new DictionaryVariableSource();
-            caseInsensitive.Add("key1", "value1");
-
-            Assert.True(caseInsensitive.CanResolveVariable("KEY1"));
-        }
-
 
         [Test]
         public void Requesting_KeyNotFound_ThrowsException()
@@ -114,6 +128,15 @@ namespace Spring.Objects.Factory.Config
             dvs.Add("key-found", "value-found");
 
             Assert.Throws<ArgumentException>(() => dvs.ResolveVariable("key-not-found"));
+        }
+
+        [Test]
+        public void Test()
+        {
+            Hashtable hashtable = new Hashtable();
+            hashtable.Add("KEY1", "value1");
+
+            Assert.False(hashtable.ContainsKey("key1"));
         }
 
     }
