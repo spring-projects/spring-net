@@ -129,15 +129,5 @@ namespace Spring.Objects.Factory.Config
 
             Assert.Throws<ArgumentException>(() => dvs.ResolveVariable("key-not-found"));
         }
-
-        [Test]
-        public void Test()
-        {
-            Hashtable hashtable = new Hashtable();
-            hashtable.Add("KEY1", "value1");
-
-            Assert.False(hashtable.ContainsKey("key1"));
-        }
-
     }
 }
