@@ -84,16 +84,18 @@ namespace Spring.Core.IO
 		[Test]
 		public void ConvertFromWithEnvironmentVariableExpansion()
 		{
+            string filename = Guid.NewGuid().ToString();
+
 			// TODO : won't pass on anything other than Win9x boxes...
 			ResourceConverter vrt = new ResourceConverter();
-			string path = @"${userprofile}\foo.txt";
+			string path = string.Format(@"${{userprofile}}\{0}.txt", filename);
 			IResource resource = (IResource) vrt.ConvertFrom(path);
 
 			string userprofile = Environment.GetEnvironmentVariable("userprofile");
 
 			Assert.IsFalse(resource.Exists,
-			               "Darn. Should be supplying a rubbish non-existant resource. " +
-			               	"You don't actually have a file called 'foo.txt' in your user directory do you?");
+			               string.Format("Darn. Should be supplying a rubbish non-existant resource. " +
+			               	"You don't actually have a file called '{0}.txt' in your user directory do you?", filename));
 			Assert.IsTrue(resource.Description.IndexOf(userprofile) > -1,
 			              "Environment variable not expanded.");
 		}
@@ -101,15 +103,20 @@ namespace Spring.Core.IO
 		[Test]
 		public void DoesNotChokeOnUnresolvableEnvironmentVariableExpansion()
 		{
+            string foldername = Guid.NewGuid().ToString();
+            string filename = Guid.NewGuid().ToString();
+
 			ResourceConverter vrt = new ResourceConverter();
-			string path = @"${_go_ahead_I_wish_you_would_}\foo.txt";
+			string path = string.Format(@"${{{0}}}\{1}.txt", foldername, filename);
 			IResource resource = (IResource) vrt.ConvertFrom(path);
 
 			Assert.IsFalse(resource.Exists,
-			               "Darn. Should be supplying a rubbish non-existant resource. " +
-			               	"You don't actually have a file called 'foo.txt' in your user directory do you?");
-			Assert.IsTrue(resource.Description.IndexOf("_go_ahead_I_wish_you_would_") > -1,
+			               string.Format("Darn. Should be supplying a rubbish non-existant resource. " +
+			               	"You don't actually have a file called '{0}.txt' in your user directory do you?", filename));
+			Assert.IsTrue(resource.Description.IndexOf(foldername) > -1,
 			              "Rubbish environment variable not preserved as-is.");
+
+
 		}
 	}
 }
