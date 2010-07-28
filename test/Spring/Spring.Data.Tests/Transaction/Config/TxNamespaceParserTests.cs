@@ -61,6 +61,11 @@ namespace Spring.Transaction.Config
             {
                 get { return null; }
             }
+
+            protected override IResource[] ConfigurationResources
+            {
+                get { return null; }
+            }
         }
 
         private const string APPCTXCFG_PROLOG = @"<?xml version='1.0' encoding='utf-8' ?>";

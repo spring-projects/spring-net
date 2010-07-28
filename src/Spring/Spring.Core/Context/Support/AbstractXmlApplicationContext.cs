@@ -29,6 +29,7 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
+using Spring.Core.IO;
 
 #endregion
 
@@ -98,6 +99,24 @@ namespace Spring.Context.Support
         /// An array of resource locations, or <see langword="null"/> if none.
         /// </returns>
         protected abstract string[] ConfigurationLocations { get; }
+
+
+        /// <summary>
+        /// An array of resources that this context is to be built with.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Examples of the format of the various strings that would be
+        /// returned by accessing this property can be found in the overview
+        /// documentation of with the <see cref="XmlApplicationContext"/>
+        /// class.
+        /// </p>
+        /// </remarks>
+        /// <returns>
+        /// An array of <see cref="Spring.Core.IO.IResource"/>s, or <see langword="null"/> if none.
+        /// </returns>
+        protected abstract IResource[] ConfigurationResources { get; }
+
 
         /// <summary>
         /// Instantiates and populates the underlying
@@ -200,16 +219,23 @@ namespace Spring.Context.Support
         /// </exception>
         /// <exception cref="Spring.Objects.ObjectsException">
         /// In the case of errors encountered reading any of the resources
-        /// yielded by the <see cref="ConfigurationLocations"/> method.
+        /// yielded by either the <see cref="ConfigurationLocations"/> or
+        /// the <see cref="ConfigurationResources"/> methods.
         /// </exception>
-        protected virtual void LoadObjectDefinitions(
-            XmlObjectDefinitionReader objectDefinitionReader)
+        protected virtual void LoadObjectDefinitions(XmlObjectDefinitionReader objectDefinitionReader)
         {
             string[] locations = ConfigurationLocations;
             if (locations != null)
             {
-                objectDefinitionReader.LoadObjectDefinitions(ConfigurationLocations);
+                objectDefinitionReader.LoadObjectDefinitions(locations);
             }
+
+            IResource[] resources = ConfigurationResources;
+            if (resources != null)
+            {
+                objectDefinitionReader.LoadObjectDefinitions(resources);
+            }
+
         }
 
 

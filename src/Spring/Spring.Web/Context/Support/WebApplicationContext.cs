@@ -36,6 +36,7 @@ using Spring.Objects.Factory.Xml;
 using Spring.Objects.Support;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
+using Spring.Core.IO;
 
 namespace Spring.Context.Support
 {
@@ -59,6 +60,7 @@ namespace Spring.Context.Support
         private string _constructionUrl;
 
         private readonly string[] _configurationLocations;
+        private readonly IResource[] _configurationResources;
 
         /// <summary>
         /// Create a new WebApplicationContext, loading the definitions
@@ -66,7 +68,7 @@ namespace Spring.Context.Support
         /// </summary>
         /// <param name="configurationLocations">Names of configuration resources.</param>
         public WebApplicationContext(params string[] configurationLocations)
-            : this(null, false, null, configurationLocations)
+            : this(new WebApplicationContextArgs() { ConfigurationLocations = configurationLocations })
         {
         }
 
@@ -78,7 +80,20 @@ namespace Spring.Context.Support
         /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
         /// <param name="configurationLocations">Names of configuration resources.</param>
         public WebApplicationContext(string name, bool caseSensitive, params string[] configurationLocations)
-            : this(name, caseSensitive, null, configurationLocations)
+            : this(new WebApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ConfigurationLocations = configurationLocations })
+        {
+        }
+
+        /// <summary>
+        /// Create a new WebApplicationContext, loading the definitions
+        /// from the given XML resource.
+        /// </summary>
+        /// <param name="name">The application context name.</param>
+        /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
+        /// <param name="configurationLocations">Names of configuration resources.</param>
+        /// <param name="configurationResources">Configuration resources.</param>
+        public WebApplicationContext(string name, bool caseSensitive, string[] configurationLocations, IResource[] configurationResources)
+            : this(new WebApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ConfigurationLocations = configurationLocations, ConfigurationResources=configurationResources })
         {
         }
 
@@ -91,9 +106,15 @@ namespace Spring.Context.Support
         /// <param name="parentContext">The parent context.</param>
         /// <param name="configurationLocations">Names of configuration resources.</param>
         public WebApplicationContext(string name, bool caseSensitive, IApplicationContext parentContext,
-                                     params string[] configurationLocations) : base(name, caseSensitive, parentContext)
+                                     params string[] configurationLocations)
+            : this(new WebApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations })
+        { }
+
+
+        public WebApplicationContext(WebApplicationContextArgs args)
+            : base(args.Name, args.CaseSensitive, args.ParentContext)
         {
-            _configurationLocations = configurationLocations;
+            _configurationLocations = args.ConfigurationLocations;
             DefaultResourceProtocol = WebUtils.DEFAULT_RESOURCE_PROTOCOL;
             Refresh();
 
@@ -105,6 +126,7 @@ namespace Spring.Context.Support
                 log.Debug("created instance " + this.ToString());
             }
         }
+
 
         /// <summary>
         /// returns detailed instance information for debugging
@@ -154,11 +176,11 @@ namespace Spring.Context.Support
                     {
                         string firstRequestPath = HttpRuntime.AppDomainAppVirtualPath.TrimEnd('/') + "/dummy.context";
                         s_weblog.Info("Forcing first request " + firstRequestPath);
-                        SafeMethod fnProcessRequestNow = new SafeMethod(typeof(HttpRuntime).GetMethod("ProcessRequestNow", BindingFlags.Static|BindingFlags.NonPublic));
+                        SafeMethod fnProcessRequestNow = new SafeMethod(typeof(HttpRuntime).GetMethod("ProcessRequestNow", BindingFlags.Static | BindingFlags.NonPublic));
                         SimpleWorkerRequest wr = new SimpleWorkerRequest(firstRequestPath, string.Empty, new StringWriter());
                         fnProcessRequestNow.Invoke(null, new object[] { wr });
-//                        HttpRuntime.ProcessRequest(
-//                            wr);
+                        //                        HttpRuntime.ProcessRequest(
+                        //                            wr);
                         s_weblog.Info("Successfully processed first request!");
                     }
                     catch (Exception ex)
@@ -192,7 +214,7 @@ namespace Spring.Context.Support
         /// </summary>
         public static IApplicationContext GetRootContext()
         {
-            return GetContextInternal( ("" + HttpRuntime.AppDomainAppVirtualPath).TrimEnd('/') + "/dummy.context");
+            return GetContextInternal(("" + HttpRuntime.AppDomainAppVirtualPath).TrimEnd('/') + "/dummy.context");
         }
 
         /// <summary>
@@ -219,7 +241,7 @@ namespace Spring.Context.Support
         {
             string virtualDirectory = WebUtils.GetVirtualDirectory(virtualPath);
             string contextName = virtualDirectory;
-            if ( 0 == string.Compare( contextName , ("" + HttpRuntime.AppDomainAppVirtualPath).TrimEnd('/') + "/", true) )
+            if (0 == string.Compare(contextName, ("" + HttpRuntime.AppDomainAppVirtualPath).TrimEnd('/') + "/", true))
             {
                 contextName = DefaultRootContextName;
             }
@@ -234,7 +256,7 @@ namespace Spring.Context.Support
                     s_weblog.Debug(string.Format("looking up web context '{0}' in WebContextCache", contextName));
                 }
                 // first lookup in our own cache
-                IApplicationContext context = (IApplicationContext) s_webContextCache[contextName];
+                IApplicationContext context = (IApplicationContext)s_webContextCache[contextName];
                 if (context != null)
                 {
                     // found - nothing to do anymore
@@ -347,17 +369,32 @@ namespace Spring.Context.Support
         /// <param name="objectDefinitionReader">Reader to initialize.</param>
         protected override void InitObjectDefinitionReader(XmlObjectDefinitionReader objectDefinitionReader)
         {
-//            NamespaceParserRegistry.RegisterParser(typeof(WebObjectsNamespaceParser));
+            //            NamespaceParserRegistry.RegisterParser(typeof(WebObjectsNamespaceParser));
         }
 
         /// <summary>
-        /// Return an array of resource locations, referring to the XML object
-        /// definition files that this context should be built with.
+        /// An array of resource locations, referring to the XML object
+        /// definition files with which this context is to be built.
         /// </summary>
-        /// <returns>an array of resource locations, or null if none</returns>
+        /// <returns>
+        /// An array of resource locations, or <see langword="null"/> if none.
+        /// </returns>
+        /// <seealso cref="Spring.Context.Support.AbstractXmlApplicationContext.ConfigurationLocations"/>
         protected override string[] ConfigurationLocations
         {
             get { return _configurationLocations; }
+        }
+
+        /// <summary>
+        /// An array of resources instances with which this context is to be built.
+        /// </summary>
+        /// <returns>
+        /// An array of <see cref="Spring.Core.IO.IResource"/>s, or <see langword="null"/> if none.
+        /// </returns>
+        /// <seealso cref="Spring.Context.Support.AbstractXmlApplicationContext.ConfigurationLocations"/>
+        protected override IResource[] ConfigurationResources
+        {
+            get { return _configurationResources; }
         }
 
         /// <summary>

@@ -217,6 +217,7 @@
     <Compile Include="Context\Support\TypeAliasesSectionHandlerTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Support\XmlApplicationContentArgsTests.cs" />
     <Compile Include="Context\Support\XmlApplicationContextTests.cs">
       <SubType>Code</SubType>
     </Compile>

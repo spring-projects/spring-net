@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Caching\AspNetCacheTests.cs" />
     <Compile Include="Context\Support\HttpApplicationConfigurerTests.cs" />
+    <Compile Include="Context\Support\WebApplicationContextArgsTests.cs" />
     <Compile Include="Context\Support\WebApplicationContextTests.cs" />
     <Compile Include="Core\IO\WebResourceTests.cs" />
     <Compile Include="Data\Spring\Objects\Factory\Support\TestForm.aspx.cs">

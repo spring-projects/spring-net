@@ -74,15 +74,15 @@ namespace Spring.Core.IO
         [Test]
         public void ThrowsIoExceptionIfConfigSectionDoesNotExist()
         {
-            IResource res = new ConfigSectionResource("DOES NOT EXIST");
+            IResource res = new ConfigSectionResource(Guid.NewGuid().ToString());
+
             try
             {
                 Stream istm = res.InputStream;
-                Assert.Fail();
+                Assert.Fail("Did not receive expected IOException!");
             }
-            catch(IOException ioex)
-            {
-                Console.WriteLine(ioex);
+            catch(IOException)
+            {            
             }
         }
     }

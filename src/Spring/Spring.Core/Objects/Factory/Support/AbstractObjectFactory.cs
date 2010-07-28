@@ -1324,11 +1324,11 @@ namespace Spring.Objects.Factory.Support
             }
             else
             {
-                // No singleton instance found -> check bean definition.
+                // No singleton instance found -> check object definition.
                 IObjectFactory parentFactory = ParentObjectFactory;
                 if (parentFactory != null && !ContainsObjectDefinition(objectName))
                 {
-                    // No bean definition found in this factory -> delegate to parent.
+                    // No object definition found in this factory -> delegate to parent.
                     return parentFactory.GetType(this.OriginalObjectName(name));
                 }
 
@@ -1339,7 +1339,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     if (!IsFactoryDereference(name))
                     {
-                        // If it's a FactoryBean, we want to look at what it creates, not the factory class.
+                        // If it's a FactoryObject, we want to look at what it creates, not the factory class.
                         return GetTypeForFactoryObject(objectName, mod);
                     }
                     else

@@ -214,6 +214,7 @@
     <Compile Include="Context\Support\AbstractXmlApplicationContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Support\AbstractXmlApplicationContextArgs.cs" />
     <Compile Include="Context\Support\ApplicationContextAwareProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -265,6 +266,7 @@
     <Compile Include="Context\Support\XmlApplicationContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Support\XmlApplicationContextArgs.cs" />
     <Compile Include="Core\CannotLoadObjectTypeException.cs" />
     <Compile Include="Core\ComposedCriteria.cs" />
     <Compile Include="Core\ControlFlowFactory.cs">

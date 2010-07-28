@@ -19,70 +19,102 @@
 #endregion
 
 using Spring.Util;
+using Spring.Core.IO;
+using System;
 
 namespace Spring.Context.Support
 {
-	/// <summary>
-	/// An <see cref="Spring.Context.IApplicationContext"/> implementation that
-	/// reads context definitions from XML based resources.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Currently, the resources that are supported are the <c>file</c>,
-	/// <c>http</c>, <c>ftp</c>, <c>config</c> and <c>assembly</c> resource
-	/// types.
-	/// </p>
-	/// <p>
-	/// You can provide custom implementations of the
-	/// <see cref="Spring.Core.IO.IResource"/> interface and and register them
-	/// with any <see cref="Spring.Context.IApplicationContext"/> that inherits
-	/// from the
-	/// <see cref="Spring.Context.Support.AbstractApplicationContext"/>
-	/// interface.
-	/// </p>
-	/// <note>
-	/// In case of multiple config locations, later object definitions will
-	/// override ones defined in previously loaded resources. This can be
-	/// leveraged to deliberately override certain object definitions via an
-	/// extra XML file.
-	/// </note>
-	/// </remarks>
-	/// <example>
-	/// <p>
-	/// Find below some examples of instantiating an
-	/// <see cref="Spring.Context.Support.XmlApplicationContext"/> using a
-	/// variety of different XML resources.
-	/// </p>
-	/// <code language="C#">
-	/// // an XmlApplicationContext that reads its object definitions from an
-	/// //    XML file that has been embedded in an assembly...
-	/// IApplicationContext context = new XmlApplicationContext
-	///		(
-	///			"assembly://AssemblyName/NameSpace/ResourceName"
-	///		);
-	///		
-	/// // an XmlApplicationContext that reads its object definitions from a
-	/// //    number of disparate XML resources...
-	/// IApplicationContext context = new XmlApplicationContext
-	///		(
-	///			// from an XML file that has been embedded in an assembly...
-	///			"assembly://AssemblyName/NameSpace/ResourceName",
-	///			// and from a (relative) filesystem-based resource...
-	///			"file://Objects/services.xml",
-	///			// and from an App.config / Web.config resource...
-	///			"config://spring/objects"
-	///		);
-	/// </code>
-	/// </example>
-	/// <author>Rod Johnson</author>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	/// <seealso cref="Spring.Core.IO.IResource"/>
-	/// <seealso cref="Spring.Core.IO.IResourceLoader"/>
-	/// <seealso cref="Spring.Core.IO.ConfigurableResourceLoader"/>
-	public class XmlApplicationContext : AbstractXmlApplicationContext
-	{
-		private readonly string[] _configurationLocations;
+    /// <summary>
+    /// An <see cref="Spring.Context.IApplicationContext"/> implementation that
+    /// reads context definitions from XML based resources.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Currently, the resources that are supported are the <c>file</c>,
+    /// <c>http</c>, <c>ftp</c>, <c>config</c> and <c>assembly</c> resource
+    /// types.
+    /// </p>
+    /// <p>
+    /// You can provide custom implementations of the
+    /// <see cref="Spring.Core.IO.IResource"/> interface and and register them
+    /// with any <see cref="Spring.Context.IApplicationContext"/> that inherits
+    /// from the
+    /// <see cref="Spring.Context.Support.AbstractApplicationContext"/>
+    /// interface.
+    /// </p>
+    /// <note>
+    /// In case of multiple config locations, later object definitions will
+    /// override ones defined in previously loaded resources. This can be
+    /// leveraged to deliberately override certain object definitions via an
+    /// extra XML file.
+    /// </note>
+    /// </remarks>
+    /// <example>
+    /// <p>
+    /// Find below some examples of instantiating an
+    /// <see cref="Spring.Context.Support.XmlApplicationContext"/> using a
+    /// variety of different XML resources.
+    /// </p>
+    /// <code language="C#">
+    /// // an XmlApplicationContext that reads its object definitions from an
+    /// //    XML file that has been embedded in an assembly...
+    /// IApplicationContext context = new XmlApplicationContext
+    ///		(
+    ///			"assembly://AssemblyName/NameSpace/ResourceName"
+    ///		);
+    ///		
+    /// // an XmlApplicationContext that reads its object definitions from a
+    /// //    number of disparate XML resources...
+    /// IApplicationContext context = new XmlApplicationContext
+    ///		(
+    ///			// from an XML file that has been embedded in an assembly...
+    ///			"assembly://AssemblyName/NameSpace/ResourceName",
+    ///			// and from a (relative) filesystem-based resource...
+    ///			"file://Objects/services.xml",
+    ///			// and from an App.config / Web.config resource...
+    ///			"config://spring/objects"
+    ///		);
+    /// </code>
+    /// </example>
+    /// <author>Rod Johnson</author>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Griffin Caprio (.NET)</author>
+    /// <seealso cref="Spring.Core.IO.IResource"/>
+    /// <seealso cref="Spring.Core.IO.IResourceLoader"/>
+    /// <seealso cref="Spring.Core.IO.ConfigurableResourceLoader"/>
+    public class XmlApplicationContext : AbstractXmlApplicationContext
+    {
+        private readonly string[] _configurationLocations;
+        private readonly IResource[] _configurationResources;
+
+
+
+        /// <summary>
+        /// Initializes a new instance of the XmlApplicationContext class.
+        /// </summary>
+        public XmlApplicationContext(XmlApplicationContextArgs args)
+            : base(args.Name, args.CaseSensitive, args.ParentContext)
+        {
+            _configurationLocations = args.ConfigurationLocations;
+            _configurationResources = args.ConfigurationResources;
+
+            if (args.Refresh)
+            {
+                bool hasLocations = args.ConfigurationLocations.Length > 0;
+                bool hasResources = args.ConfigurationResources.Length > 0;
+
+                if (!hasLocations && !hasResources)
+                    throw new ArgumentException("You must provide either or both Configuration Locations and/or Configuration Resources!");
+
+                if (hasLocations || hasResources)
+                {
+                    Refresh();
+                }
+            }
+            
+        }
+
+
 
         /// <summary>
         /// Creates a new instance of the
@@ -94,36 +126,36 @@ namespace Spring.Context.Support
         /// Any number of XML based object definition resource locations.
         /// </param>
         public XmlApplicationContext(params string[] configurationLocations)
-            : this(true, null, true, null, configurationLocations)
+            : this(new XmlApplicationContextArgs() { ConfigurationLocations = configurationLocations })
         { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Context.Support.XmlApplicationContext"/> class,
-		/// loading the definitions from the supplied XML resource locations.
-		/// </summary>
-		/// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
-		/// <param name="configurationLocations">
-		/// Any number of XML based object definition resource locations.
-		/// </param>
-        public XmlApplicationContext(bool caseSensitive,
-            params string[] configurationLocations)
-            : this(true, null, caseSensitive, null, configurationLocations)
-        { }
-        
         /// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Context.Support.XmlApplicationContext"/> class,
-		/// loading the definitions from the supplied XML resource locations.
-		/// </summary>
-		/// <param name="name">The application context name.</param>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Context.Support.XmlApplicationContext"/> class,
+        /// loading the definitions from the supplied XML resource locations.
+        /// </summary>
         /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
         /// <param name="configurationLocations">
-		/// Any number of XML based object definition resource locations.
-		/// </param>
+        /// Any number of XML based object definition resource locations.
+        /// </param>
+        public XmlApplicationContext(bool caseSensitive,
+            params string[] configurationLocations)
+            : this(new XmlApplicationContextArgs() { CaseSensitive = caseSensitive, ConfigurationLocations = configurationLocations })
+        { }
+
+        /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Context.Support.XmlApplicationContext"/> class,
+        /// loading the definitions from the supplied XML resource locations.
+        /// </summary>
+        /// <param name="name">The application context name.</param>
+        /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
+        /// <param name="configurationLocations">
+        /// Any number of XML based object definition resource locations.
+        /// </param>
         public XmlApplicationContext(string name, bool caseSensitive,
             params string[] configurationLocations)
-            : this(true, name, caseSensitive, null, configurationLocations)
+            : this(new XmlApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ConfigurationLocations = configurationLocations })
         { }
 
         /// <summary>
@@ -141,50 +173,50 @@ namespace Spring.Context.Support
         public XmlApplicationContext(
             IApplicationContext parentContext,
             params string[] configurationLocations)
-            : this(true, null, true, parentContext, configurationLocations)
+            : this(new XmlApplicationContextArgs() { ParentContext = parentContext, ConfigurationLocations = configurationLocations })
         { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Context.Support.XmlApplicationContext"/> class,
-		/// loading the definitions from the supplied XML resource locations,
-		/// with the given <paramref name="parentContext"/>.
-		/// </summary>
-		/// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
-		/// <param name="parentContext">
-		/// The parent context (may be <see langword="null"/>).
-		/// </param>
-		/// <param name="configurationLocations">
-		/// Any number of XML based object definition resource locations.
-		/// </param>
+        /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Context.Support.XmlApplicationContext"/> class,
+        /// loading the definitions from the supplied XML resource locations,
+        /// with the given <paramref name="parentContext"/>.
+        /// </summary>
+        /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
+        /// <param name="parentContext">
+        /// The parent context (may be <see langword="null"/>).
+        /// </param>
+        /// <param name="configurationLocations">
+        /// Any number of XML based object definition resource locations.
+        /// </param>
         public XmlApplicationContext(
             bool caseSensitive,
             IApplicationContext parentContext,
             params string[] configurationLocations)
-            : this(true, null, caseSensitive, parentContext, configurationLocations)
+            : this(new XmlApplicationContextArgs() { CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations })
         { }
-        
+
         /// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Context.Support.XmlApplicationContext"/> class,
-		/// loading the definitions from the supplied XML resource locations,
-		/// with the given <paramref name="parentContext"/>.
-		/// </summary>
-		/// <param name="name">The application context name.</param>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Context.Support.XmlApplicationContext"/> class,
+        /// loading the definitions from the supplied XML resource locations,
+        /// with the given <paramref name="parentContext"/>.
+        /// </summary>
+        /// <param name="name">The application context name.</param>
         /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
         /// <param name="parentContext">
-		/// The parent context (may be <see langword="null"/>).
-		/// </param>
-		/// <param name="configurationLocations">
-		/// Any number of XML based object definition resource locations.
-		/// </param>
+        /// The parent context (may be <see langword="null"/>).
+        /// </param>
+        /// <param name="configurationLocations">
+        /// Any number of XML based object definition resource locations.
+        /// </param>
         public XmlApplicationContext(
             string name,
             bool caseSensitive,
             IApplicationContext parentContext,
             params string[] configurationLocations)
-            : this(true, name, caseSensitive, parentContext, configurationLocations)
-        {}
+            : this(new XmlApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations })
+        { }
 
         /// <summary>
         /// Creates a new instance of the
@@ -211,27 +243,44 @@ namespace Spring.Context.Support
             bool caseSensitive,
             IApplicationContext parentContext,
             params string[] configurationLocations)
-            : base(name, caseSensitive, parentContext )
+            : this(new XmlApplicationContextArgs() { Refresh = refresh, Name = name, CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations })
+        { }
+
+
+        public XmlApplicationContext(
+         bool refresh,
+         string name,
+         bool caseSensitive,
+         IApplicationContext parentContext,
+         string[] configurationLocations,
+         IResource[] configurationResources)
+            : this(new XmlApplicationContextArgs() { Refresh = refresh, Name = name, CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations, ConfigurationResources = configurationResources })
+        { }
+
+
+        /// <summary>
+        /// An array of resource locations, referring to the XML object
+        /// definition files with which this context is to be built.
+        /// </summary>
+        /// <returns>
+        /// An array of resource locations, or <see langword="null"/> if none.
+        /// </returns>
+        /// <seealso cref="Spring.Context.Support.AbstractXmlApplicationContext.ConfigurationLocations"/>
+        protected override string[] ConfigurationLocations
         {
-            _configurationLocations = configurationLocations;
-            if (refresh)
-            {
-                AssertUtils.ArgumentHasElements(configurationLocations, "configurationLocations");
-                Refresh();
-            }
+            get { return _configurationLocations; }
         }
 
-	    /// <summary>
-	    /// An array of resource locations, referring to the XML object
-	    /// definition files that this context is to be built with.
-	    /// </summary>
-	    /// <returns>
-	    /// An array of resource locations, or <see langword="null"/> if none.
-	    /// </returns>
-	    /// <seealso cref="Spring.Context.Support.AbstractXmlApplicationContext.ConfigurationLocations"/>
-	    protected override string[] ConfigurationLocations
-	    {
-	        get { return _configurationLocations; }
-	    }
-	}
+        /// <summary>
+        /// An array of resources instances with which this context is to be built.
+        /// </summary>
+        /// <returns>
+        /// An array of <see cref="Spring.Core.IO.IResource"/>s, or <see langword="null"/> if none.
+        /// </returns>
+        /// <seealso cref="Spring.Context.Support.AbstractXmlApplicationContext.ConfigurationLocations"/>
+        protected override IResource[] ConfigurationResources
+        {
+            get { return _configurationResources; }
+        }
+    }
 }
