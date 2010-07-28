@@ -1,0 +1,40 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.2008", "..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.2008", "..\..\..\src\Spring\Spring.Http\Spring.Http.2008.csproj", "{FAC04F79-4B1F-1D13-B30F-00EE04EC0FBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.Tests.2008", "..\..\..\test\Spring\Spring.Http.Tests\Spring.Http.Tests.2008.csproj", "{F04CEE18-3897-A399-46BF-459437475B21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.RestQuickStart.2008", "src\Spring.RestQuickStart\Spring.RestQuickStart.2008.csproj", "{5B47D309-31C9-4282-86E2-11FC63DFF55B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{710961A3-0DF4-49E4-A26E-F5B9C044AC84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{710961A3-0DF4-49E4-A26E-F5B9C044AC84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{710961A3-0DF4-49E4-A26E-F5B9C044AC84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{710961A3-0DF4-49E4-A26E-F5B9C044AC84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAC04F79-4B1F-1D13-B30F-00EE04EC0FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAC04F79-4B1F-1D13-B30F-00EE04EC0FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAC04F79-4B1F-1D13-B30F-00EE04EC0FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC04F79-4B1F-1D13-B30F-00EE04EC0FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F04CEE18-3897-A399-46BF-459437475B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F04CEE18-3897-A399-46BF-459437475B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F04CEE18-3897-A399-46BF-459437475B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F04CEE18-3897-A399-46BF-459437475B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B47D309-31C9-4282-86E2-11FC63DFF55B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B47D309-31C9-4282-86E2-11FC63DFF55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B47D309-31C9-4282-86E2-11FC63DFF55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B47D309-31C9-4282-86E2-11FC63DFF55B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		NAntAddinLastFileName = Spring.build
+	EndGlobalSection
+EndGlobal

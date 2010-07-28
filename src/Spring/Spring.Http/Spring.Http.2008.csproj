@@ -1,0 +1,146 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FAC04F79-4B1F-1D13-B30F-00EE04EC0FBC}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Spring.Http</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Spring</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <SignAssembly>false</SignAssembly>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\..\build\VS.Net.2008\Spring.Http\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0;NET_3_5</DefineConstants>
+    <DocumentationFile>Spring.Http.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\..\..\build\VS.Net.2008\Spring.Http\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;NET_2_0;NET_3_0;NET_3_5</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging, Version=2.1.0.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Feed\AbstractFeedHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Feed\RssFeedHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Json\JsonHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Xml\AbstractXmlHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Xml\XElementHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Xml\XmlDocumentHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Xml\XmlSerializableHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Xml\DataContractHttpMessageConverter.cs" />
+    <Compile Include="Http\DefaultHttpWebRequestFactory.cs" />
+    <Compile Include="Http\HttpResponseMessage.cs" />
+    <Compile Include="Http\IHttpWebRequestFactory.cs" />
+    <Compile Include="Http\HttpRequestMessage.cs" />
+    <Compile Include="Http\Rest\Support\AcceptHeaderRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\MethodRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\HttpMessageRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\HeadersResponseExtractor.cs" />
+    <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor.cs" />
+    <Compile Include="Http\Converters\AbstractHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\ByteArrayHttpMessageConverter.cs" />
+    <Compile Include="Http\Rest\Support\MessageConverterResponseExtractor.cs" />
+    <Compile Include="Http\HttpMethod.cs" />
+    <Compile Include="Http\Converters\IHttpMessageConverter.cs" />
+    <Compile Include="Http\Rest\IRequestCallback.cs" />
+    <Compile Include="Http\Rest\IResponseExtractor.cs" />
+    <Compile Include="Http\Rest\IRestOperations.cs" />
+    <Compile Include="Http\MediaType.cs" />
+    <Compile Include="Http\Rest\RestClientException.cs" />
+    <Compile Include="Http\Rest\RestTemplate.cs" />
+    <Compile Include="Http\Converters\StringHttpMessageConverter.cs" />
+    <Compile Include="Util\UriTemplate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.2008.csproj">
+      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
+      <Name>Spring.Core.2008</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
