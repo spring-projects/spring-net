@@ -68,7 +68,7 @@ namespace Spring.Context.Support
         /// </summary>
         /// <param name="configurationLocations">Names of configuration resources.</param>
         public WebApplicationContext(params string[] configurationLocations)
-            : this(new WebApplicationContextArgs() { ConfigurationLocations = configurationLocations })
+            : this(new WebApplicationContextArgs(string.Empty, null, configurationLocations, null, false))
         {
         }
 
@@ -80,7 +80,7 @@ namespace Spring.Context.Support
         /// <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
         /// <param name="configurationLocations">Names of configuration resources.</param>
         public WebApplicationContext(string name, bool caseSensitive, params string[] configurationLocations)
-            : this(new WebApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ConfigurationLocations = configurationLocations })
+            : this(new WebApplicationContextArgs(name, null, configurationLocations, null, caseSensitive))
         {
         }
 
@@ -93,7 +93,7 @@ namespace Spring.Context.Support
         /// <param name="configurationLocations">Names of configuration resources.</param>
         /// <param name="configurationResources">Configuration resources.</param>
         public WebApplicationContext(string name, bool caseSensitive, string[] configurationLocations, IResource[] configurationResources)
-            : this(new WebApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ConfigurationLocations = configurationLocations, ConfigurationResources=configurationResources })
+            : this(new WebApplicationContextArgs(name, null, configurationLocations, configurationResources, caseSensitive))
         {
         }
 
@@ -107,14 +107,20 @@ namespace Spring.Context.Support
         /// <param name="configurationLocations">Names of configuration resources.</param>
         public WebApplicationContext(string name, bool caseSensitive, IApplicationContext parentContext,
                                      params string[] configurationLocations)
-            : this(new WebApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations })
+            : this(new WebApplicationContextArgs(name, parentContext, configurationLocations, null, caseSensitive))
         { }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebApplicationContext"/> class.
+        /// </summary>
+        /// <param name="args">The args.</param>
         public WebApplicationContext(WebApplicationContextArgs args)
             : base(args.Name, args.CaseSensitive, args.ParentContext)
         {
             _configurationLocations = args.ConfigurationLocations;
+            _configurationResources = args.ConfigurationResources;
+
             DefaultResourceProtocol = WebUtils.DEFAULT_RESOURCE_PROTOCOL;
             Refresh();
 

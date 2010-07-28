@@ -11,7 +11,7 @@ namespace Spring.Context.Support
         [Test]
         public void Default_CaseSensitivity_isFalse()
         {
-            WebApplicationContextArgs args = new WebApplicationContextArgs();
+            WebApplicationContextArgs args = new WebApplicationContextArgs(string.Empty, null, null, null);
             Assert.False(args.CaseSensitive);
         }
     }

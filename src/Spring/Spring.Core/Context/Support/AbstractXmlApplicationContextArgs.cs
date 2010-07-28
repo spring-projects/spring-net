@@ -27,26 +27,94 @@ namespace Spring.Context.Support
 {
     public abstract class AbstractXmlApplicationContextArgs
     {
+        private bool _caseSensitive;
 
-        public virtual bool CaseSensitive { get; set; }
+        private string[] _configurationLocations;
 
-        public virtual string[] ConfigurationLocations { get; set; }
+        private IResource[] _configurationResources;
 
-        public virtual IResource[] ConfigurationResources { get; set; }
+        private string _name;
 
-        public virtual string Name { get; set; }
+        private IApplicationContext _parentContext;
 
-        public virtual IApplicationContext ParentContext { get; set; }
+        private bool _refresh;
 
-        public virtual bool Refresh { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the AbstractXmlApplicationContextArgs class.
-        /// </summary>
-        public AbstractXmlApplicationContextArgs()
+        public virtual bool CaseSensitive
         {
-            ConfigurationLocations = new string[0];
-            ConfigurationResources = new IResource[0];
+            get
+            {
+                return _caseSensitive;
+            }
+            set
+            {
+                _caseSensitive = value;
+            }
+        }
+
+        public virtual string[] ConfigurationLocations
+        {
+            get
+            {
+                if (_configurationLocations == null)
+                    _configurationLocations = new string[0];
+
+                return _configurationLocations;
+            }
+            set
+            {
+                _configurationLocations = value;
+            }
+        }
+
+        public virtual IResource[] ConfigurationResources
+        {
+            get
+            {
+                if (_configurationResources == null)
+                    _configurationResources = new IResource[0];
+
+                return _configurationResources;
+            }
+            set
+            {
+                _configurationResources = value;
+            }
+        }
+
+        public virtual string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
+
+        public virtual IApplicationContext ParentContext
+        {
+            get
+            {
+                return _parentContext;
+            }
+            set
+            {
+                _parentContext = value;
+            }
+        }
+
+        public virtual bool Refresh
+        {
+            get
+            {
+                return _refresh;
+            }
+            set
+            {
+                _refresh = value;
+            }
         }
 
     }

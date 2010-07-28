@@ -70,7 +70,9 @@ namespace Spring.Objects.Factory.Config
         [Test]
         public void Initialize_WithDictionaryConstructor_AddsCaseInsensitiveKeys()
         {
-            IDictionary dict = new Hashtable() { { "key1", "value1" }, { "KEY2", "value2" } };
+            IDictionary dict = new Hashtable();
+            dict.Add("key1", "value1");
+            dict.Add("KEY2", "value2");
 
             DictionaryVariableSource dvs = new DictionaryVariableSource(dict);
 
@@ -81,7 +83,9 @@ namespace Spring.Objects.Factory.Config
         [Test]
         public void Initialize_WithDictionaryConstructor_AddsKeys()
         {
-            IDictionary dict = new Hashtable() { { "key1", "value1" }, { "key2", "value2" } };
+            IDictionary dict = new Hashtable();
+            dict.Add("key1", "value1");
+            dict.Add("key2", "value2");
 
             DictionaryVariableSource dvs = new DictionaryVariableSource(dict);
 
@@ -92,7 +96,9 @@ namespace Spring.Objects.Factory.Config
         [Test]
         public void Initialize_WithDictionaryConstructorAndCaseSensitiveFlag_AddsCaseSensitiveKeys()
         {
-            IDictionary dict = new Hashtable() { { "key1", "lowecasevalue" }, { "KEY1", "uppercasevalue" } };
+            IDictionary dict = new Hashtable();
+            dict.Add("key1", "lowecasevalue");
+            dict.Add("KEY1", "uppercasevalue");
 
             DictionaryVariableSource dvs = new DictionaryVariableSource(dict, false);
 
@@ -111,6 +117,7 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
         }
 
+#if NET_2_0
         [Test]
         public void Initialize_WithInlineDictionarySyntax()
         {
@@ -120,14 +127,17 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
 
         }
+#endif
 
         [Test]
         public void Requesting_KeyNotFound_ThrowsException()
         {
-            DictionaryVariableSource dvs = new DictionaryVariableSource();
-            dvs.Add("key-found", "value-found");
+            const string THE_KEY = "key-found";
 
-            Assert.Throws<ArgumentException>(() => dvs.ResolveVariable("key-not-found"));
+            DictionaryVariableSource dvs = new DictionaryVariableSource();
+            dvs.Add(THE_KEY, "value-found");
+
+            Assert.Throws<ArgumentException>(() => dvs.ResolveVariable("not" + THE_KEY));
         }
     }
 }

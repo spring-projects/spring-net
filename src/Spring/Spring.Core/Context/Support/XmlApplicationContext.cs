@@ -111,7 +111,7 @@ namespace Spring.Context.Support
                     Refresh();
                 }
             }
-            
+
         }
 
 
@@ -126,7 +126,7 @@ namespace Spring.Context.Support
         /// Any number of XML based object definition resource locations.
         /// </param>
         public XmlApplicationContext(params string[] configurationLocations)
-            : this(new XmlApplicationContextArgs() { ConfigurationLocations = configurationLocations })
+            : this(new XmlApplicationContextArgs(string.Empty, null, configurationLocations, null, true, true))
         { }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Spring.Context.Support
         /// </param>
         public XmlApplicationContext(bool caseSensitive,
             params string[] configurationLocations)
-            : this(new XmlApplicationContextArgs() { CaseSensitive = caseSensitive, ConfigurationLocations = configurationLocations })
+            : this(new XmlApplicationContextArgs(string.Empty, null, configurationLocations, null, caseSensitive, true))
         { }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Spring.Context.Support
         /// </param>
         public XmlApplicationContext(string name, bool caseSensitive,
             params string[] configurationLocations)
-            : this(new XmlApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ConfigurationLocations = configurationLocations })
+            : this(new XmlApplicationContextArgs(name, null, configurationLocations, null, caseSensitive, true))
         { }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Spring.Context.Support
         public XmlApplicationContext(
             IApplicationContext parentContext,
             params string[] configurationLocations)
-            : this(new XmlApplicationContextArgs() { ParentContext = parentContext, ConfigurationLocations = configurationLocations })
+            : this(new XmlApplicationContextArgs(string.Empty, parentContext, configurationLocations, null, true, true))
         { }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Spring.Context.Support
             bool caseSensitive,
             IApplicationContext parentContext,
             params string[] configurationLocations)
-            : this(new XmlApplicationContextArgs() { CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations })
+            : this(new XmlApplicationContextArgs(string.Empty, parentContext, configurationLocations, null, caseSensitive, true))
         { }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace Spring.Context.Support
             bool caseSensitive,
             IApplicationContext parentContext,
             params string[] configurationLocations)
-            : this(new XmlApplicationContextArgs() { Name = name, CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations })
+            : this(new XmlApplicationContextArgs(name, parentContext, configurationLocations, null, caseSensitive, true))
         { }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Spring.Context.Support
             bool caseSensitive,
             IApplicationContext parentContext,
             params string[] configurationLocations)
-            : this(new XmlApplicationContextArgs() { Refresh = refresh, Name = name, CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations })
+            : this(new XmlApplicationContextArgs(name, parentContext, configurationLocations, null, true, refresh))
         { }
 
 
@@ -254,7 +254,7 @@ namespace Spring.Context.Support
          IApplicationContext parentContext,
          string[] configurationLocations,
          IResource[] configurationResources)
-            : this(new XmlApplicationContextArgs() { Refresh = refresh, Name = name, CaseSensitive = caseSensitive, ParentContext = parentContext, ConfigurationLocations = configurationLocations, ConfigurationResources = configurationResources })
+            : this(new XmlApplicationContextArgs(name, parentContext, configurationLocations, null, caseSensitive, refresh))
         { }
 
 
