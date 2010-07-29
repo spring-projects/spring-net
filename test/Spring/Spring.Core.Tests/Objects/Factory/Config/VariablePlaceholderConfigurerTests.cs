@@ -34,28 +34,40 @@ namespace Spring.Objects.Factory.Config
     public class VariablePlaceholderConfigurerTests
     {
 
-#if NET_2_0
         [Test]
         public void ThrowsOnMissingVariableSources()
         {
             StaticApplicationContext ac = new StaticApplicationContext();
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer();
-            
-            Assert.Throws<ArgumentException>(() => vphc.PostProcessObjectFactory(ac.ObjectFactory));
-        }
-#endif
 
-#if NET_2_0
+            try
+            {
+                vphc.PostProcessObjectFactory(ac.ObjectFactory);
+                Assert.Fail("Expected ArgumentException not thrown.");
+            }
+            catch (ArgumentException)
+            {
+            }
+        }
+
+
         [Test]
         public void ThrowsOnInvalidVariableSourcesElement()
         {
             StaticApplicationContext ac = new StaticApplicationContext();
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer();
             vphc.VariableSources = new ArrayList(new object[] { new object() });
-
-            Assert.Throws<ArgumentException>(() => vphc.PostProcessObjectFactory(ac.ObjectFactory));
+            
+            try
+            {
+                vphc.PostProcessObjectFactory(ac.ObjectFactory);
+                Assert.Fail("Expected ArgumentException not thrown.");
+            }
+            catch (ArgumentException)
+            {
+            }
         }
-#endif
+
 
         [Test]
         public void SunnyDay()

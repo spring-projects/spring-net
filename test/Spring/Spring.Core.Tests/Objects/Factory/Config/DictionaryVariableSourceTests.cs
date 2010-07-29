@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Text;
 using NUnit.Framework;
 
 namespace Spring.Objects.Factory.Config
@@ -50,13 +49,18 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
         }
 
-#if NET_2_0
         [Test]
         public void Iniitialize_WithStringArray_ThrowsException_WhenOddNumberOfStringsProvided()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new DictionaryVariableSource(new string[] { "key1", "value1", "key2", "value2", "orphanedKey1" }));
+            try
+            {
+                new DictionaryVariableSource(new string[] { "key1", "value1", "key2", "value2", "orphanedKey1" });
+                Assert.Fail("Expected ArgumentOutOfRangeException not thrown.");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+            }
         }
-#endif
 
         [Test]
         public void Initialize_WithCaseSensitiveFlag_AddsCaseSensitiveKeys()
@@ -119,7 +123,7 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
         }
 
-#if NET_2_0
+#if (!NET_2_0 && !NET_1_0 && !NET_1_1)
         [Test]
         public void Initialize_WithInlineDictionarySyntax()
         {
@@ -131,7 +135,6 @@ namespace Spring.Objects.Factory.Config
         }
 #endif
 
-#if NET_2_0
         [Test]
         public void Requesting_KeyNotFound_ThrowsException()
         {
@@ -140,8 +143,14 @@ namespace Spring.Objects.Factory.Config
             DictionaryVariableSource dvs = new DictionaryVariableSource();
             dvs.Add(THE_KEY, "value-found");
 
-            Assert.Throws<ArgumentException>(() => dvs.ResolveVariable("not" + THE_KEY));
+            try
+            {
+                dvs.ResolveVariable("not" + THE_KEY);
+                Assert.Fail("Expected ArgumentException not thrown.");
+            }
+            catch (ArgumentException)
+            {
+            }
         }
-#endif
     }
 }

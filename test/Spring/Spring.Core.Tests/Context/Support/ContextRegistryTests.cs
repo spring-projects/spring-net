@@ -58,14 +58,24 @@ namespace Spring.Context.Support
             {
                 return;
             }
-            FieldInfo initStateRef = typeof(ConfigurationManager).GetField("s_initState",BindingFlags.NonPublic|BindingFlags.Static);
+            FieldInfo initStateRef = typeof(ConfigurationManager).GetField("s_initState", BindingFlags.NonPublic | BindingFlags.Static);
             object notStarted = Activator.CreateInstance(initStateRef.FieldType);
-            initStateRef.SetValue(null,notStarted);
+            initStateRef.SetValue(null, notStarted);
 #endif
 #if NET_1_1
             FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_initState",BindingFlags.NonPublic|BindingFlags.Static);
-            object notStarted = Activator.CreateInstance(initStateRef.FieldType);
-            initStateRef.SetValue(null,notStarted);
+            
+            if (initStateRef!=null)
+            {
+                object notStarted = Activator.CreateInstance(initStateRef.FieldType);
+                initStateRef.SetValue(null,notStarted);
+            }
+            else
+            {
+                FieldInfo configurationInitializedRef = typeof(ConfigurationSettings).GetField("_configurationInitialized",BindingFlags.NonPublic|BindingFlags.Static);
+                configurationInitializedRef.SetValue(null, false);
+            }
+
 #endif
 #if NET_1_0
             FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_configurationInitialized",BindingFlags.NonPublic|BindingFlags.Static);
@@ -90,7 +100,7 @@ namespace Spring.Context.Support
         {
             return ContextRegistry.GetContext(); // this must fail!
         }
-
+#if !NET_1_1
         [Test]
         public void ThrowsInvalidOperationExceptionOnRecursiveCallsToGetContext()
         {
@@ -109,6 +119,7 @@ namespace Spring.Context.Support
                 }
             }
         }
+#endif
 
         [Test]
         public void RegisterRootContext()
@@ -163,7 +174,7 @@ namespace Spring.Context.Support
         }
 
         [Test]
-//        [Ignore("How can we test that one ???")]
+        //        [Ignore("How can we test that one ???")]
         [ExpectedException(typeof(ApplicationContextException),
             ExpectedMessage = "No context registered. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.")]
         public void GetRootContextNotRegisteredThrowsException()

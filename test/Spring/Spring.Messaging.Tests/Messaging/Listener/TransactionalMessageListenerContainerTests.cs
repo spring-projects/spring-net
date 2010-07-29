@@ -67,9 +67,15 @@ namespace Spring.Messaging.Listener
         {
             TransactionalMessageListenerContainer container = new TransactionalMessageListenerContainer();
 
-            ArgumentException ex = Assert.Throws<ArgumentException>(() => container.AfterPropertiesSet());
-            Assert.AreEqual("Property 'MessageQueueObjectName' is required", ex.Message);
-
+            try
+            {
+                container.AfterPropertiesSet();
+                Assert.Fail("Expected ArgumentException not thrown.");
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual("Property 'MessageQueueObjectName' is required", ex.Message);
+            }
         }
 
         [Test]
