@@ -20,8 +20,6 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Spring.Core.IO;
 
 namespace Spring.Context.Support
