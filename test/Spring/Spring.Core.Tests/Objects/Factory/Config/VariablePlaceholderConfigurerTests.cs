@@ -33,6 +33,8 @@ namespace Spring.Objects.Factory.Config
     [TestFixture]
     public class VariablePlaceholderConfigurerTests
     {
+
+#if NET_2_0
         [Test]
         public void ThrowsOnMissingVariableSources()
         {
@@ -41,7 +43,9 @@ namespace Spring.Objects.Factory.Config
             
             Assert.Throws<ArgumentException>(() => vphc.PostProcessObjectFactory(ac.ObjectFactory));
         }
+#endif
 
+#if NET_2_0
         [Test]
         public void ThrowsOnInvalidVariableSourcesElement()
         {
@@ -51,6 +55,7 @@ namespace Spring.Objects.Factory.Config
 
             Assert.Throws<ArgumentException>(() => vphc.PostProcessObjectFactory(ac.ObjectFactory));
         }
+#endif
 
         [Test]
         public void SunnyDay()

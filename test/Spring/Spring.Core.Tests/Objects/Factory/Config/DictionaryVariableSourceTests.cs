@@ -50,11 +50,13 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
         }
 
+#if NET_2_0
         [Test]
         public void Iniitialize_WithStringArray_ThrowsException_WhenOddNumberOfStringsProvided()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new DictionaryVariableSource(new string[] { "key1", "value1", "key2", "value2", "orphanedKey1" }));
         }
+#endif
 
         [Test]
         public void Initialize_WithCaseSensitiveFlag_AddsCaseSensitiveKeys()
@@ -129,6 +131,7 @@ namespace Spring.Objects.Factory.Config
         }
 #endif
 
+#if NET_2_0
         [Test]
         public void Requesting_KeyNotFound_ThrowsException()
         {
@@ -139,5 +142,6 @@ namespace Spring.Objects.Factory.Config
 
             Assert.Throws<ArgumentException>(() => dvs.ResolveVariable("not" + THE_KEY));
         }
+#endif
     }
 }
