@@ -79,7 +79,7 @@ namespace Spring.Validation.Validators
         [Test]
         public void CaseSensitiveStringMatching()
         {
-        	RegularExpressionValidator validator = new RegularExpressionValidator("ToString()", "true", @"[A-Z][a-z]*");
+            RegularExpressionValidator validator = new RegularExpressionValidator("ToString()", "true", @"^[A-Z]([a-z]{1})");
             Assert.IsTrue(validator.Validate("Aleksandar", new ValidationErrors()));
             Assert.IsFalse(validator.Validate("ALEKSANDAR", new ValidationErrors()));
             Assert.IsFalse(validator.Validate("aleksandar", new ValidationErrors()));
@@ -116,6 +116,15 @@ namespace Spring.Validation.Validators
         	RegularExpressionValidator validator = new RegularExpressionValidator("'ljwdf87cwbh'", "false", @"((\d{1,2}\.\d{1,3}\.\d{1,3}\.\d{1,3}))");
             bool valid = validator.Validate(null, new ValidationErrors());
             Assert.IsTrue(valid, "Validation should succeed when regex validator is not evaluated.");
+        }
+
+        [Test]
+        public void Test()
+        {
+            RegularExpressionValidator validator = new RegularExpressionValidator();
+            validator.Expression = "^[A-Za-z]";
+            Assert.True(validator.Validate("hello", new ValidationErrors()));
+
         }
 
 	}
