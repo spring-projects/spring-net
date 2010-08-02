@@ -229,6 +229,10 @@ namespace Spring.Data.Core
             {
                 txScopeOption = TransactionScopeOption.RequiresNew;
             }
+            else if (definition.PropagationBehavior == TransactionPropagation.NotSupported)
+            {
+                txScopeOption = TransactionScopeOption.Suppress;
+            }
             else
             {
                 throw new Spring.Transaction.TransactionSystemException("Transaction Propagation Behavior" +
