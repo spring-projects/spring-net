@@ -158,6 +158,11 @@ namespace Spring.Util
         {
             if (StringUtils.HasLength(relativePath))
             {
+                if (relativePath.ToLowerInvariant().StartsWith("http://") || relativePath.ToLowerInvariant().StartsWith("https://"))
+                {
+                    return relativePath;
+                }
+
                 if (relativePath.StartsWith("/"))
                 {
                     return relativePath;

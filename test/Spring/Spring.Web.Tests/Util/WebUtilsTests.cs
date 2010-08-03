@@ -104,27 +104,111 @@ namespace Spring.Util
         }
 
         [Test]
-        public void TestCreateAbsolutePath()
+        public void CreateAbsolutePath_EmptyApplicationPathAndNullRelativePath_ReturnsRootPath()
         {
             Assert.AreEqual("/", WebUtils.CreateAbsolutePath("", null));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_RootApplicationPathAndNullRelativePath_ReturnsRootPath()
+        {
             Assert.AreEqual("/", WebUtils.CreateAbsolutePath("/", null));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_NullRelativePath_ReturnsApplicationPath()
+        {
             Assert.AreEqual("/MyApp/", WebUtils.CreateAbsolutePath("/MyApp", null));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_EmptyRelativePath_ReturnsApplicationPath()
+        {
             Assert.AreEqual("/MyApp/", WebUtils.CreateAbsolutePath("/MyApp", string.Empty));
+        }
 
+        [Test]
+        public void CreateAbsolutePath_NullApplicationPath_ReturnsRelativePath()
+        {
             Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath(null, "/MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_NullApplicationPathAndAppRootRelativePath_ReturnsRelativePath()
+        {
             Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath(null, "~/MyPath"));
+        }
 
+        [Test]
+        public void CreateAbsolutePath_EmptyApplicationPath_ReturnsRelativePath()
+        {
             Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath(string.Empty, "/MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_EmptyApplicationPathAndAppRootRelativePath_ReturnsRelativePath()
+        {
             Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath(string.Empty, "~/MyPath"));
+        }
 
-            Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath("/", "MyPath"));
+        [Test]
+        public void CreateAbsolutePath_RootApplicationPath_ReturnsRelativePath()
+        {
+            Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath("/", "/MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_RootApplicationPathAndAppRootRelativePath_ReturnsRelativePath()
+        {
             Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath("/", "~/MyPath"));
+        }
 
+        [Test]
+        public void CreateAbsolutePath_ApplicationPathAndRelativePath_ReturnsConcatenatedPath()
+        {
             Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_ApplicationPathAndAppRootRelativePath_ReturnsConcatenatedPath()
+        {
             Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "~/MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_ApplicationPathWithTrailingSlashAndRelativePath_ReturnsConcatenatedPath()
+        {
             Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp/", "MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_ApplicationPathWithTrailingSlashAndAppRootRelativePath_ReturnsConcatenatedPath()
+        {
             Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp/", "~/MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_WhenRelativePathBeginsWithApplicationPath_ReturnsConcatenatedPath()
+        {
             Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "/MyApp/MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_WhenRelativePathIsHttpQualifiedUrl_ReturnsRelativePath()
+        {
+            Assert.AreEqual("http://MyApp/MyPath", WebUtils.CreateAbsolutePath(null, "http://MyApp/MyPath"));
+            Assert.AreEqual("http://MyApp/MyPath", WebUtils.CreateAbsolutePath("/", "http://MyApp/MyPath"));
+            Assert.AreEqual("http://MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "http://MyApp/MyPath"));
+            Assert.AreEqual("http://MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp/", "http://MyApp/MyPath"));
+        }
+
+        [Test]
+        public void CreateAbsolutePath_WhenRelativePathIsHttpsQualifiedUrl_ReturnsRelativePath()
+        {
+            Assert.AreEqual("https://MyApp/MyPath", WebUtils.CreateAbsolutePath(null, "https://MyApp/MyPath"));
+            Assert.AreEqual("https://MyApp/MyPath", WebUtils.CreateAbsolutePath("/", "https://MyApp/MyPath"));
+            Assert.AreEqual("https://MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "https://MyApp/MyPath"));
+            Assert.AreEqual("https://MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp/", "https://MyApp/MyPath"));
         }
 
         [Test]
