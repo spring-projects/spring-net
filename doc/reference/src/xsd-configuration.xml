@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<appendix id="xsd-config" xmlns="http://docbook.org/ns/docbook" version="5">
+<appendix id="xsd-config" version="5" xmlns="http://docbook.org/ns/docbook"
+          xmlns:ns6="http://www.w3.org/1999/xlink"
+          xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+          xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:ns3="http://www.w3.org/2000/svg"
+          xmlns:ns="http://docbook.org/ns/docbook">
   <title>XML Schema-based configuration</title>
 
   <section xml:id="xsd-config-introduction">
@@ -82,11 +87,10 @@
 
       <note>
         <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
-	configure the namespace parsers that come with Spring
-	via a custom section in App.config.  You will still need to register custom namespace
-	parsers if you are writing your own.</para>
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
       </note>
-
     </section>
 
     <section xml:id="xsd-config-body-schemas-tx">
@@ -142,9 +146,9 @@
 
       <note>
         <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
-	configure the namespace parsers that come with Spring
-	via a custom section in App.config.  You will still need to register custom namespace
-	parsers if you are writing your own.</para>
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
       </note>
 
       <programlisting language="myxml">&lt;configuration&gt;
@@ -194,9 +198,9 @@
 
       <note>
         <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
-	configure the namespace parsers that come with Spring
-	via a custom section in App.config.  You will still need to register custom namespace
-	parsers if you are writing your own.</para>
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
       </note>
 
       <programlisting language="myxml">&lt;configuration&gt;
@@ -242,9 +246,9 @@
 
       <note>
         <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
-	configure the namespace parsers that come with Spring
-	via a custom section in App.config.  You will still need to register custom namespace
-	parsers if you are writing your own.</para>
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
       </note>
 
       <programlisting language="myxml">&lt;configuration&gt;
@@ -259,6 +263,54 @@
   &lt;spring&gt;
     &lt;parsers&gt; 
       &lt;parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" /&gt; 
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
+    </section>
+
+    <section xml:id="xsd-config-body-schemas-wcf">
+      <title>The <literal>wcf</literal> schema</title>
+
+      <para>The <literal>wcf</literal> schema is used when you would like to
+      create a client channel to invoke a WCF service as compared to
+      generating a proxy using svcutil.exe. The channel factory approach
+      requires that you have a known interface which describes the service.
+      This approach is quite common to use when you are controlling both the
+      client and the server code, but is not exclusive to that case. The
+      advantage of coding to the interface is that it can be easily replaced
+      with another implementation, perhaps for testing purposes to facilitate
+      unit testing. </para>
+
+      <para>For example, the following code can be used to create an instance
+      of the ICaclulator interface that invokes the remote service.</para>
+
+      <programlisting language="myxml">ICalculator calculator = ChannelFactory&lt;ICalculator&gt;("calculatorEndpoint").CreateChannel();
+
+int result = calculator.Add(1,2);</programlisting>
+
+      <para>You need to configure the remoting namespace parser in the main
+      .NET application configuration file as shown below</para>
+
+      <note>
+        <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
+      </note>
+
+      <programlisting language="myxml">&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;     
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.ServiceModel.Config.WcfNamespaceParser, Spring.Services" /&gt;
     &lt;/parsers&gt; 
   &lt;/spring&gt;
 
@@ -288,9 +340,9 @@
 
       <note>
         <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
-	configure the namespace parsers that come with Spring
-	via a custom section in App.config.  You will still need to register custom namespace
-	parsers if you are writing your own.</para>
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
       </note>
 
       <programlisting language="myxml">&lt;configuration&gt;
@@ -333,9 +385,9 @@
 
       <note>
         <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
-	configure the namespace parsers that come with Spring
-	via a custom section in App.config.  You will still need to register custom namespace
-	parsers if you are writing your own.</para>
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
       </note>
 
       <programlisting language="myxml">&lt;configuration&gt;
@@ -379,9 +431,9 @@
 
       <note>
         <para>As of Spring.NET 1.2.0 it is no longer necessary to explicitly
-	configure the namespace parsers that come with Spring
-	via a custom section in App.config.  You will still need to register custom namespace
-	parsers if you are writing your own.</para>
+        configure the namespace parsers that come with Spring via a custom
+        section in App.config. You will still need to register custom
+        namespace parsers if you are writing your own.</para>
       </note>
 
       <programlisting language="myxml">&lt;configuration&gt;

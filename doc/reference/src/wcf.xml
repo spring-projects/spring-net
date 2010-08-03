@@ -224,26 +224,21 @@
     <title>Creating client side proxies declaratively</title>
 
     <para>To create a client side proxy based on the use of
-    ChannelFactory&lt;T&gt;, you can use this rather ugly 'boiler plate' XML
-    snippit that takes uses Spring's support for calling factory methods on
-    object instances.</para>
+    ChannelFactory&lt;T&gt;, you can use Spring's WCF schema to create an
+    instance of the interface that will communicate over a WCF channel. See
+    section on the <link linkend="xsd-config-body-schemas-wcf">Spring WCF
+    Schema</link> for more information.</para>
 
-    <programlisting language="myxml">  &lt;!-- returns ChannelFactory&lt;ICalculator&gt;("calculatorEndpoint").CreateChannel() --&gt;
+    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
+         xmlns:wcf="http://www.springframework.net/wcf"&gt;
 
-  &lt;object id="serverAppCalculator" type="Spring.WcfQuickStart.ICalculator, Spring.WcfQuickStart.ClientApp"
-          factory-object="serverAppCalculatorChannelFactory"
-          factory-method="CreateChannel" /&gt;
+  &lt;!-- returns ChannelFactory&lt;ICalculator&gt;("calculatorEndpoint").CreateChannel() --&gt;
 
-  &lt;object id="serverAppCalculatorChannelFactory"
-          type="System.ServiceModel.ChannelFactory&amp;lt;Spring.WcfQuickStart.ICalculator&gt;, System.ServiceModel"&gt;
-
-    &lt;constructor-arg name="endpointConfigurationName" value="serverAppCalculatorEndpoint" /&gt;
-
-  &lt;/object&gt;</programlisting>
-
-    <note>
-      <para>This will be shortened using a custom namespce in a future release</para>
-    </note>
+  &lt;wcf:channelFactory id="serverAppCalculator"
+       channelType="Spring.WcfQuickStart.ICalculator, Spring.WcfQuickStart.Contracts"
+       endpointConfigurationName="serverAppCalculatorEndpoint" /&gt;
+  
+&lt;/objects&gt;</programlisting>
 
     <para>The value 'serverAppCalculatorEndpoint' refers to the name of an
     enpoints in the &lt;client&gt; section of the standard WCF configuration

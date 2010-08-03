@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
  * Copyright 2002-2008 the original author or authors.
@@ -2783,16 +2783,16 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       <title>Method injection</title>
 
       <para>In most application scenarios, most object in the container are
-      singletons. When a singleton object needs to collaborate with (use)
-      another singleton object, or a non-singleton object needs to collaborate
-      with another non-singleton object, you typically handle the dependency
-      by defining one object as a property of the other. A problem arrises
-      when the object lifecycles are different. Suppose singleton object A
-      needs to use a non-singleton (prototype) object B, perhaps on each
-      method invocation on A. The container only creates the singleton object
-      A once, and thus only get the opportunity to set the properties. The
-      container cannot provide object A with a new instance of object B every
-      time one is needed.</para>
+      singletons. When a singleton object needs to collaborate with another
+      singleton object, or a non-singleton object needs to collaborate with
+      another non-singleton object, you typically handle the dependency by
+      defining one object as a property of the other. A problem arrises when
+      the object lifecycles are different. Suppose singleton object A needs to
+      use a non-singleton (prototype) object B, perhaps on each method
+      invocation on A. The container only creates the singleton object A once,
+      and thus only gets one opportunity to set the properties. The container
+      cannot provide object A with a new instance of object B every time one
+      is needed.</para>
 
       <para>A solution is to forego some inversion of control. You can <link
       linkend="objects-factory-aware-objectfactoryaware">make object A aware
