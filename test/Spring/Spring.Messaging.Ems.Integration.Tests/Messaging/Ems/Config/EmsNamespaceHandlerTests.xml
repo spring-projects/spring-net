@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <objects xmlns="http://www.springframework.net"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:nms="http://www.springframework.net/ems">
+		xmlns:ems="http://www.springframework.net/ems">
 
-  <nms:listener-container connection-factory="testConnectionFactory" 
+  <ems:listener-container connection-factory="testConnectionFactory" 
 			destination-resolver="testDestinationResolver" message-converter="testMessageConverter"
       auto-startup="false" concurrency="${concurrency}">
-    <nms:listener id="listener1" destination="testDestination" ref="testObject1" method="SetName"/>
-    <nms:listener id="listener2" destination="testDestination" ref="testObject2" method="SetName" 
+    <ems:listener id="listener1" destination="testDestination" ref="testObject1" method="SetName"/>
+    <ems:listener id="listener2" destination="testDestination" ref="testObject2" method="SetName" 
                   response-destination="responseDestination"/>
-  </nms:listener-container>
+  </ems:listener-container>
 
-  <nms:listener-container auto-startup="false">
-    <nms:listener destination="testDestination" ref="testObject3"/>
-  </nms:listener-container>
+  <ems:listener-container auto-startup="false">
+    <ems:listener destination="testDestination" ref="testObject3"/>
+  </ems:listener-container>
 
 
   <!-- the default ConnectionFactory -->
@@ -44,7 +44,7 @@
     <property name="VariableSources">
       <list>
         <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">
-          <property name="SectionNames" value="NmsConfiguration" />
+          <property name="SectionNames" value="EmsConfiguration" />
         </object>
       </list>
     </property>

@@ -293,7 +293,7 @@ namespace Spring.Messaging.Ems.Config
             string concurrency = ParseConcurrency(containerElement, parserContext);
             if (concurrency != null)
             {
-                containerDef.AddPropertyValue("ConcurrentConsumers", concurrency[1]);
+                containerDef.AddPropertyValue("ConcurrentConsumers", concurrency);
             }
             containerDef.AddPropertyValue("RecoveryInterval", ParseRecoveryInterval(containerElement, parserContext));
 

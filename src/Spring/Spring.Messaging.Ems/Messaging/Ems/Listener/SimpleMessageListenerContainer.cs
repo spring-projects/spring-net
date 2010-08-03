@@ -105,7 +105,11 @@ namespace Spring.Messaging.Ems.Listener
             set
             {
                 AssertUtils.IsTrue(value > 0, "'ConcurrentConsumer' value must be at least 1 (one)");
-                concurrentConsumers = value;
+               concurrentConsumers = value;
+            }
+            get
+            {
+                return concurrentConsumers;
             }
         }
 

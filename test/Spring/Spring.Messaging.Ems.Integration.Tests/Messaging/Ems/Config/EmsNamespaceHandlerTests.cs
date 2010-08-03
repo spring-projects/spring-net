@@ -90,6 +90,7 @@ namespace Spring.Messaging.Ems.Config
                 else if (container.ConnectionFactory.Equals(explicitConnectionFactory))
                 {
                     explicitConnectionFactoryCount++;
+                    Assert.AreEqual(4, container.ConcurrentConsumers);
                 }
             }
 

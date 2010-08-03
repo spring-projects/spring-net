@@ -93,7 +93,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Spring.Messaging.Ems.Integration.Tests.dll.config" />
+    <None Include="Spring.Messaging.Ems.Integration.Tests.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Ems\Core\EmsTemplateTests.xml" />
