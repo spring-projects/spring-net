@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Net;
 using System.Collections.Generic;
 
@@ -26,17 +27,17 @@ using Spring.Util;
 
 namespace Spring.Http.Converters
 {
-    /**
-     * Abstract base class for most {@link HttpMessageConverter} implementations.
-     *
-     * <p>This base class adds support for setting supported {@code MediaTypes}, through the
-     * {@link #setSupportedMediaTypes(List) supportedMediaTypes} bean property. It also adds
-     * support for {@code Content-Type} and {@code Content-Length} when writing to output messages.
-     *
-     * @author Arjen Poutsma
-     * @author Juergen Hoeller
-     * @since 3.0
-     */
+    /// <summary>
+    /// Base class for most <see cref="IHttpMessageConverter"/> implementations.
+    /// </summary>
+    /// <remarks>
+    /// This base class adds support for setting supported <see cref="MediaType"/>s, through the
+    /// <see cref="P:SupportedMediaTypes"/> property. 
+    /// It also adds support for 'Content-Type' when writing to the HTTP request.
+    /// </remarks>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Bruno Baia (.NET)</author>
     public abstract class AbstractHttpMessageConverter : IHttpMessageConverter
     {
         #region Logging
@@ -47,9 +48,9 @@ namespace Spring.Http.Converters
 
         private IList<MediaType> _supportedMediaTypes = new List<MediaType>();
 
-        /**
-         * Set the list of {@link MediaType} objects supported by this converter.
-         */
+        /// <summary>
+        /// Gets or sets the list of <see cref="MediaType"/> objects supported by this converter.
+        /// </summary>
         public IList<MediaType> SupportedMediaTypes
         {
             get { return _supportedMediaTypes; }
@@ -58,18 +59,19 @@ namespace Spring.Http.Converters
 
         #region Constructor(s)
 
-        /**
-         * Construct an {@code AbstractHttpMessageConverter} with no supported media types.
-         * @see #setSupportedMediaTypes
-         */
+        /// <summary>
+        /// Creates a new instance of the <see cref="AbstractHttpMessageConverter"/> 
+        /// with no supported media types.
+        /// </summary>
         protected AbstractHttpMessageConverter()
         {
         }
 
-        /**
-         * Construct an {@code AbstractHttpMessageConverter} with multiple supported media type.
-         * @param supportedMediaTypes the supported media types
-         */
+        /// <summary>
+        /// Creates a new instance of the <see cref="AbstractHttpMessageConverter"/> 
+        /// with multiple supported media type.
+        /// </summary>
+        /// <param name="supportedMediaTypes">The supported media types.</param>
         protected AbstractHttpMessageConverter(params MediaType[] supportedMediaTypes)
         {
             this._supportedMediaTypes = new List<MediaType>(supportedMediaTypes);
@@ -79,47 +81,80 @@ namespace Spring.Http.Converters
 
         #region IHttpMessageConverter Membres
 
-        /**
-	     * {@inheritDoc}
-	     * <p>This implementation checks if the given class is {@linkplain #supports(Class) supported},
-	     * and if the {@linkplain #getSupportedMediaTypes() supported media types}
-	     * {@linkplain MediaType#includes(MediaType) include} the given media type.
-	     */
-	    public bool CanRead(Type type, MediaType mediaType) 
+        /// <summary>
+        /// Indicates whether the given class can be read by this converter.
+        /// </summary>
+        /// <remarks>
+        /// This implementation checks if the given class is <see cref="M:Supports(Type)">supported</see>, 
+        /// and if the <see cref="P:SupportedMediaTypes">supported media types</see> <see cref="M:MediaType.Includes(MediaType)">include</see> 
+        /// the given media type.
+        /// </remarks>
+        /// <param name="type">The class to test for readability</param>
+        /// <param name="mediaType">
+        /// The media type to read, can be null if not specified. Typically the value of a 'Content-Type' header.
+        /// </param>
+        /// <returns><see langword="true"/> if readable; otherwise <see langword="false"/></returns>
+        public bool CanRead(Type type, MediaType mediaType) 
         {
             return Supports(type) && CanRead(mediaType);
 	    }
 
-        /**
-	     * {@inheritDoc}
-	     * <p>This implementation checks if the given class is {@linkplain #supports(Class) supported},
-	     * and if the {@linkplain #getSupportedMediaTypes() supported media types}
-	     * {@linkplain MediaType#includes(MediaType) include} the given media type.
-	     */
+        /// <summary>
+        /// Indicates whether the given class can be written by this converter.
+        /// </summary>
+        /// <remarks>
+        /// This implementation checks if the given class is <see cref="M:Supports(Type)">supported</see>, 
+        /// and if the <see cref="P:SupportedMediaTypes">supported media types</see> <see cref="M:MediaType.Includes(MediaType)">include</see> 
+        /// the given media type.
+        /// </remarks>
+        /// <param name="type">The class to test for writability</param>
+        /// <param name="mediaType">
+        /// The media type to write, can be null if not specified. Typically the value of an 'Accept' header.
+        /// </param>
+        /// <returns><see langword="true"/> if writable; otherwise <see langword="false"/></returns>
 	    public bool CanWrite(Type type, MediaType mediaType) 
         {
 		    return Supports(type) && CanWrite(mediaType);
 		}
 
-        /**
-         * {@inheritDoc}
-         * <p>This implementation simple delegates to {@link #readInternal(Class, HttpInputMessage)}.
-         * Future implementations might add some default behavior, however.
-         */
+        /// <summary>
+        /// Read an object of the given type form the given HTTP response, and returns it.
+        /// </summary>
+        /// <remarks>
+        /// This implementation simple delegates to <see cre="ReadInternal"/> method. 
+        /// Future implementations might add some default behavior, however.
+        /// </remarks>
+        /// <typeparam name="T">
+        /// The type of object to return. This type must have previously been passed to the 
+        /// <see cref="M:CanRead"/> method of this interface, which must have returned <see langword="true"/>.
+        /// </typeparam>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
         public T Read<T>(HttpWebResponse response) where T : class
         {
             return ReadInternal<T>(response);
         }
 
-        /**
-         * {@inheritDoc}
-         * <p>This implementation delegates to {@link #getDefaultContentType(Object)} if a content
-         * type was not provided, calls {@link #getContentLength}, and sets the corresponding headers
-         * on the output message. It then calls {@link #writeInternal}.
-         */
+        /// <summary>
+        /// Write an given object to the given HTTP request.
+        /// </summary>
+        /// <remarks>
+        /// This implementation delegates to <see cref="M:GetDefaultContentType"/> method if a content 
+        /// type was not provided, and calls <see cref="M:WriteInternal"/>.
+        /// </remarks>
+        /// <param name="content">
+        /// The object to write to the HTTP request. The type of this object must have previously been 
+        /// passed to the <see cref="M:CanWrite"/> method of this interface, which must have returned <see langword="true"/>.
+        /// </param>
+        /// <param name="mediaType">
+        /// The content type to use when writing. May be null to indicate that the default content type of the converter must be used. 
+        /// If not null, this media type must have previously been passed to the <see cref="M:CanWrite"/> method of this interface, 
+        /// which must have returned <see langword="true"/>.
+        /// </param>
+        /// <param name="request">The HTTP request to write to.</param>
         public void Write(object content, MediaType mediaType, HttpWebRequest request)
         {
-            if (!StringUtils.HasText(request.Headers[HttpRequestHeader.ContentType]))
+            if (!StringUtils.HasText(request.ContentType))
             {
                 if (mediaType == null || mediaType.IsWildcardType || mediaType.IsWildcardSubtype)
                 {
@@ -135,14 +170,16 @@ namespace Spring.Http.Converters
 
         #endregion
 
-    	/**
-	     * Returns true if any of the {@linkplain #setSupportedMediaTypes(List) supported media types}
-	     * include the given media type.
-	     * @param mediaType the media type to read, can be {@code null} if not specified. Typically the value of a
-	     *                  {@code Content-Type} header.
-	     * @return true if the supported media types include the media type, or if the media type is {@code null}
-	     */
-	    protected bool CanRead(MediaType mediaType) 
+        /// <summary>
+        /// Returns true if any of the <see cref="P:SupportedMediaTypes">supported media types</see> include the given media type.
+        /// </summary>
+        /// <param name="mediaType">
+        /// The media type to read, can be null if not specified. Typically the value of a 'Content-Type' header.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the supported media types include the media type, or if the media type is null.
+        /// </returns>        
+        protected bool CanRead(MediaType mediaType) 
         {
 		    if (mediaType == null) 
             {
@@ -158,13 +195,15 @@ namespace Spring.Http.Converters
 		    return false;
 	    }
 
-        /**
-         * Returns true if the given media type includes any of the
-         * {@linkplain #setSupportedMediaTypes(List) supported media types}.
-         * @param mediaType the media type to write, can be {@code null} if not specified. Typically the value of an
-         * 		  			{@code Accept} header.
-         * @return true if the supported media types are compatible with the media type, or if the media type is {@code null}
-         */
+        /// <summary>
+        /// Returns true if the given media type includes any of the <see cref="P:SupportedMediaTypes">supported media types</see>.
+        /// </summary>
+        /// <param name="mediaType">
+        /// The media type to write, can be {@code null} if not specified. Typically the value of an 'Accept' header.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the supported media types are compatible with the media type, or if the media type is null.
+        /// </returns>
         protected bool CanWrite(MediaType mediaType) 
         {
             if (mediaType == null || mediaType.Equals(MediaType.ALL)) 
@@ -181,44 +220,74 @@ namespace Spring.Http.Converters
 	        return false;
         }
 
-        /**
-	     * Returns the default content type for the given type. Called when {@link #write}
-	     * is invoked without a specified content type parameter.
-	     * <p>By default, this returns the first element of the
-	     * {@link #setSupportedMediaTypes(List) supportedMediaTypes} property, if any.
-	     * Can be overridden in subclasses.
-	     * @param t the type to return the content type for
-	     * @return the content type, or <code>null</code> if not known
-	     */
+        /// <summary>
+        /// Returns the default content type for the given type. 
+        /// Called when <see cref="M:Write"/> is invoked without a specified content type parameter.
+        /// </summary>
+        /// <remarks>
+        /// By default, this returns the first element of the <see cref="P:SupportedMediaTypes"/> property, if any.
+        /// </remarks>
+        /// <param name="type">The type to return the content type for.</param>
+        /// <returns>The <see cref="MediaType">content type</see>, or null if not known.</returns>
         protected virtual MediaType GetDefaultContentType(Type type)
         {
             return (this._supportedMediaTypes.Count > 0 ? this._supportedMediaTypes[0] : null);
         }
 
-        /**
-         * Indicates whether the given class is supported by this converter.
-         * @param clazz the class to test for support
-         * @return <code>true</code> if supported; <code>false</code> otherwise
-         */
+        /// <summary>
+        /// Indicates whether the given class is supported by this converter.
+        /// </summary>
+        /// <param name="type">The type to test for support.</param>
+        /// <returns><see langword="true"/> if supported; otherwise <see langword="false"/></returns>
         protected abstract bool Supports(Type type);
 
-        /**
-         * Abstract template method that reads the actualy object. Invoked from {@link #read}.
-         * @param clazz the type of object to return
-         * @param inputMessage the HTTP input message to read from
-         * @return the converted object
-         * @throws IOException in case of I/O errors
-         * @throws HttpMessageNotReadableException in case of conversion errors
-         */
+        /// <summary>
+        /// Abstract template method that reads the actualy object. Invoked from <see cref="M:Read"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return.</typeparam>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
         protected abstract T ReadInternal<T>(HttpWebResponse response) where T : class;
 
-        /**
-         * Abstract template method that writes the actual body. Invoked from {@link #write}.
-         * @param t the object to write to the output message
-         * @param outputMessage the message to write to
-         * @throws IOException in case of I/O errors
-         * @throws HttpMessageNotWritableException in case of conversion errors
-         */
+        /// <summary>
+        /// Abstract template method that writes the actual body. Invoked from <see cref="M:Write"/>.
+        /// </summary>
+        /// <param name="content">The object to write to the HTTP request.</param>
+        /// <param name="request">The HTTP request to write to.</param>
         protected abstract void WriteInternal(object content, HttpWebRequest request);
+
+        #region Inner class definitions
+
+        // TODO : Move this class
+        internal class IgnoreCloseMemoryStream : MemoryStream
+        {
+            public IgnoreCloseMemoryStream()
+                : base()
+            {
+            }
+
+            public override void Close()
+            {
+            }
+
+            public void CopyToAndClose(Stream dest)
+            {
+                this.Position = 0;
+
+                int bufferSize = 65536;
+                byte[] buffer = new byte[bufferSize];
+
+                int bytesCount;
+                while ((bytesCount = this.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    dest.Write(buffer, 0, bytesCount);
+                }
+                dest.Flush();
+
+                base.Close();
+            }
+        }
+
+        #endregion
     }
 }

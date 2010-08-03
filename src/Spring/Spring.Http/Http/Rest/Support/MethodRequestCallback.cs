@@ -25,9 +25,10 @@ using Spring.Http;
 
 namespace Spring.Http.Rest.Support
 {
-    /**
-     * Request callback implementation that sets the Http method.
-     */
+    /// <summary>
+    /// Request callback implementation that sets the HTTP method.
+    /// </summary>
+    /// <author>Bruno Baia</author>
     public class MethodRequestCallback : IRequestCallback
     {
         #region Logging
@@ -36,13 +37,26 @@ namespace Spring.Http.Rest.Support
 
         #endregion
 
+        /// <summary>
+        /// The HTTP method.
+        /// </summary>
         protected HttpMethod method;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="MethodRequestCallback"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method.</param>
         public MethodRequestCallback(HttpMethod method)
         {
             this.method = method;
         }
 
+        /// <summary>
+        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebRequest"/> to write data. 
+        /// Does not need to care about closing the request or about handling errors: 
+        /// this will all be handled by the <see cref="RestTemplate"/> class.
+        /// </summary>
+        /// <param name="request">The active HTTP request.</param>
         public virtual void DoWithRequest(HttpWebRequest request)
         {
             #region Instrumentation

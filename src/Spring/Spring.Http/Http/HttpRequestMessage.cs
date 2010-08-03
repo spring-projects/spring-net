@@ -22,7 +22,11 @@ using System.Net;
 
 namespace Spring.Http
 {
-    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5
+    /// <summary>
+    /// Represents a HTTP request message, as defined in the HTTP specification. 
+    /// <a href="http://tools.ietf.org/html/rfc2616#section-5">HTTP 1.1, section 5</a>
+    /// </summary>
+    /// <author>Bruno Baia</author>
     public class HttpRequestMessage
     {
         //private string requestUri;
@@ -43,87 +47,94 @@ namespace Spring.Http
         //    set { httpVersion = value; }
         //}
 
+        /// <summary>
+        /// Gets the HTTP method.
+        /// </summary>
         public HttpMethod Method
         {
             get { return this.method; }
             set { this.method = value; }
         }
 
-        /**
-         * Returns the headers of this message.
-         */
+        /// <summary>
+        /// Gets the request headers.
+        /// </summary>
         public WebHeaderCollection Headers
         {
             get { return this.headers; }
         }
 
-        /**
-         * Returns the body of this message.
-         */
+        /// <summary>
+        /// Gets the response body.
+        /// </summary>
         public object Body
         {
             get { return this.body; }
         }
 
-        /**
-         * Create a new {@code HttpRequestMessage} with no body and no headers.
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpRequestMessage"/> with the given Http method.
+        /// </summary>
+        /// <param name="method">The HTTP method.</param>
         public HttpRequestMessage(HttpMethod method) :
             this(null, new WebHeaderCollection(), method)
         {
         }
 
-        /**
-         * Create a new {@code HttpRequestMessage} with the given headers and no body.
-         * @param headers the message headers
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpRequestMessage"/> with the given headers.
+        /// </summary>
+        /// <param name="headers">The request headers.</param>
         public HttpRequestMessage(WebHeaderCollection headers) :
             this(null, headers, HttpMethod.GET)
         {
         }
 
-        /**
-         * Create a new {@code HttpRequestMessage} with the given headers and no body.
-         * @param headers the message headers
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpRequestMessage"/> with the given headers and HTTP method.
+        /// </summary>
+        /// <param name="headers">The request headers.</param>
+        /// <param name="method">The HTTP method.</param>
         public HttpRequestMessage(WebHeaderCollection headers, HttpMethod method) :
             this(null, headers, method)
         {
         }
 
-        /**
-         * Create a new {@code HttpRequestMessage} with the given body and no headers.
-         * @param body the message body
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpRequestMessage"/> with the given body.
+        /// </summary>
+        /// <param name="body">The response body.</param>
         public HttpRequestMessage(object body) :
             this(body, new WebHeaderCollection(), HttpMethod.GET)
         {
         }
 
-        /**
-         * Create a new {@code HttpRequestMessage} with the given body and no headers.
-         * @param body the message body
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpRequestMessage"/> with the given body and HTTP method.
+        /// </summary>
+        /// <param name="body">The response body.</param>
+        /// <param name="method">The HTTP method.</param>
         public HttpRequestMessage(object body, HttpMethod method) :
             this(body, new WebHeaderCollection(), method)
         {
         }
 
-        /**
-         * Create a new {@code HttpRequestMessage} with the given body and headers.
-         * @param body the messagae body
-         * @param headers the message headers
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpRequestMessage"/> with the given body and headers.
+        /// </summary>
+        /// <param name="body">The response body.</param>
+        /// <param name="headers">The response headers.</param>
         public HttpRequestMessage(object body, WebHeaderCollection headers) :
             this(body, headers, HttpMethod.GET)
         {
         }
 
-        /**
-         * Create a new {@code HttpRequestMessage} with the given body and headers.
-         * @param body the messagae body
-         * @param headers the message headers
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpRequestMessage"/> with the given body, headers and HTTP method.
+        /// </summary>
+        /// <param name="body">The response body.</param>
+        /// <param name="headers">The response headers.</param>
+        /// <param name="method">The HTTP method.</param>
         public HttpRequestMessage(object body, WebHeaderCollection headers, HttpMethod method)
         {
             this.method = method;

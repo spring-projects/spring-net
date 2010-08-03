@@ -49,13 +49,18 @@ namespace Spring.Http.Converters
         public void CanRead() 
         {
             Assert.IsTrue(converter.CanRead(typeof(byte[]), new MediaType("application", "octet-stream")));
+            Assert.IsTrue(converter.CanRead(typeof(byte[]), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(byte[]), MediaType.ALL));
+            Assert.IsFalse(converter.CanRead(typeof(string), new MediaType("application", "octet-stream")));
         }
 
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanWrite(typeof(byte[]), new MediaType("application", "octet-stream")));
+            Assert.IsTrue(converter.CanRead(typeof(byte[]), new MediaType("application", "octet-stream")));
+            Assert.IsTrue(converter.CanRead(typeof(byte[]), new MediaType("application", "xml")));
             Assert.IsTrue(converter.CanWrite(typeof(byte[]), MediaType.ALL));
+            Assert.IsFalse(converter.CanRead(typeof(string), new MediaType("application", "octet-stream")));
         }
 
         [Test]
@@ -64,8 +69,8 @@ namespace Spring.Http.Converters
             byte[] body = new byte[] { 0x1, 0x2 };
 
             HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
-            Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(body)).Repeat.Once();
-            Expect.Call<long>(webResponse.ContentLength).Return(2).Repeat.Once();
+            Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(body));
+            Expect.Call<long>(webResponse.ContentLength).Return(2);
 
             mocks.ReplayAll();
             
@@ -80,20 +85,23 @@ namespace Spring.Http.Converters
         [Test]
         public void Write()
         {
+            MemoryStream requestStream = new MemoryStream();
+
             byte[] body = new byte[] { 0x1, 0x2 };
-            
-            HttpWebRequest webRequest = WebRequest.Create("http://localhost") as HttpWebRequest;
-            webRequest.Method = "POST";
+
+            HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
+            Expect.Call(webRequest.ContentType = "application/octet-stream").PropertyBehavior();
+            Expect.Call(webRequest.ContentLength = 2).PropertyBehavior();
+            Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
+
+            mocks.ReplayAll();
 
             converter.Write(body, null, webRequest);
 
-            using (Stream postStream = webRequest.GetRequestStream())
-            {
-                //Assert.AreEqual(body.Length, postStream.Length, "Invalid result");
-            }
-           
-            Assert.AreEqual(new MediaType("application", "octet-stream"), MediaType.ParseMediaType(webRequest.ContentType), "Invalid content-type");
-            Assert.AreEqual(2, webRequest.ContentLength, "Invalid content-length");
+            byte[] result = requestStream.ToArray();
+            Assert.AreEqual(body, result, "Invalid result");
+
+            mocks.VerifyAll();
         }
     }
 }

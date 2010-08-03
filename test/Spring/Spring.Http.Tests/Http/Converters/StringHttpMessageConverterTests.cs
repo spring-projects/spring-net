@@ -50,13 +50,18 @@ namespace Spring.Http.Converters
         public void CanRead() 
         {
             Assert.IsTrue(converter.CanRead(typeof(string), new MediaType("text", "plain")));
+            Assert.IsTrue(converter.CanWrite(typeof(string), MediaType.ALL));
+            Assert.IsTrue(converter.CanRead(typeof(string), new MediaType("application", "xml")));
+            Assert.IsFalse(converter.CanRead(typeof(int[]), new MediaType("text", "plain")));
         }
 
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanWrite(typeof(string), new MediaType("text", "plain")));
+            Assert.IsTrue(converter.CanRead(typeof(string), new MediaType("text", "plain")));
             Assert.IsTrue(converter.CanWrite(typeof(string), MediaType.ALL));
+            Assert.IsTrue(converter.CanRead(typeof(string), new MediaType("application", "xml")));
+            Assert.IsFalse(converter.CanRead(typeof(int[]), new MediaType("text", "plain")));
         }
 
         [Test]
@@ -65,7 +70,7 @@ namespace Spring.Http.Converters
             string body = "Hello Bruno Baïa";
 
             HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
-            Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(Encoding.UTF8.GetBytes(body))).Repeat.Once();
+            Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
             Expect.Call<string>(webResponse.CharacterSet).Return("utf-8").Repeat.Twice();
 
             mocks.ReplayAll();
@@ -79,48 +84,50 @@ namespace Spring.Http.Converters
         [Test]
         public void WriteDefaultCharset()
         {
-            string body = "H\u00e9llo W\u00f6rld";
+            MemoryStream requestStream = new MemoryStream();
 
+            string body = "H\u00e9llo W\u00f6rld";
             string charSet = "ISO-8859-1";
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
 
-            HttpWebRequest webRequest = WebRequest.Create("http://localhost") as HttpWebRequest;
-            webRequest.Method = "POST";
+            HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
+            Expect.Call(webRequest.ContentType = "text/plain;charset=ISO-8859-1").PropertyBehavior();
+            Expect.Call(webRequest.ContentLength = 1337).PropertyBehavior();
+            Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
+
+            mocks.ReplayAll();
 
             converter.Write(body, null, webRequest);
 
-            using (Stream postStream = webRequest.GetRequestStream())
-            {
-                //Assert.AreEqual(body.Length, postStream.Length, "Invalid result");
-            }
+            byte[] result = requestStream.ToArray();
+            Assert.AreEqual(body, charSetEncoding.GetString(result), "Invalid result");
 
-            Assert.AreEqual(new MediaType("text", "plain", charSet), MediaType.ParseMediaType(webRequest.ContentType), "Invalid content-type");
-            Assert.AreEqual(charSetEncoding.GetBytes(body).Length, webRequest.ContentLength, "Invalid content-length");
-            //Assert.IsFalse(String.IsNullOrEmpty(webRequest.Headers[HttpRequestHeader.AcceptCharset]), "Invalid accept-charset");
+            mocks.VerifyAll();
         }
 
         [Test]
         public void WriteUTF8()
         {
-            string body = "H\u00e9llo W\u00f6rld";
+            MemoryStream requestStream = new MemoryStream();
 
+            string body = "H\u00e9llo W\u00f6rld";
             string charSet = "UTF-8";
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
             MediaType mediaType = new MediaType("text", "plain", charSet);
 
-            HttpWebRequest webRequest = WebRequest.Create("http://localhost") as HttpWebRequest;
-            webRequest.Method = "POST";
+            HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
+            Expect.Call(webRequest.ContentType = mediaType.ToString()).PropertyBehavior();
+            Expect.Call(webRequest.ContentLength = 1337).PropertyBehavior();
+            Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
+
+            mocks.ReplayAll();
 
             converter.Write(body, mediaType, webRequest);
 
-            using (Stream postStream = webRequest.GetRequestStream())
-            {
-                //Assert.AreEqual(body.Length, postStream.Length, "Invalid result");
-            }
+            byte[] result = requestStream.ToArray();
+            Assert.AreEqual(body, charSetEncoding.GetString(result), "Invalid result");
 
-            Assert.AreEqual(mediaType, MediaType.ParseMediaType(webRequest.ContentType), "Invalid content-type");
-            Assert.AreEqual(charSetEncoding.GetBytes(body).Length, webRequest.ContentLength, "Invalid content-length");
-            //Assert.IsFalse(String.IsNullOrEmpty(webRequest.Headers[HttpRequestHeader.AcceptCharset]), "Invalid accept-charset");
+            mocks.VerifyAll();
         }
     }
 }

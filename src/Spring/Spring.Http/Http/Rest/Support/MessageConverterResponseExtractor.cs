@@ -28,14 +28,12 @@ using Spring.Http.Converters;
 
 namespace Spring.Http.Rest.Support
 {
-    /**
-     * Response extractor that uses the given {@linkplain HttpMessageConverter entity converters} to convert the response
-     * into a type <code>T</code>.
-     *
-     * @author Arjen Poutsma
-     * @see RestTemplate
-     * @since 3.0
-     */
+    /// <summary>
+    /// Response extractor that uses the given HTTP message converters to convert the response into a type.
+    /// </summary>
+    /// <typeparam name="T">The response body type.</typeparam>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Bruno Baia (.NET)</author>
     public class MessageConverterResponseExtractor<T> : IResponseExtractor<T> where T : class
     {
         #region Logging
@@ -46,25 +44,32 @@ namespace Spring.Http.Rest.Support
 
         private IList<IHttpMessageConverter> messageConverters;
 
-        /**
-         * Creates a new instance of the {@code HttpMessageConverterExtractor} with the given response type and message
-         * converters. The given converters must support the response type.
-         */
+        /// <summary>
+        /// Creates a new instance of the <see cref="MessageConverterResponseExtractor{T}"/> class.
+        /// </summary>
+        /// <param name="messageConverters">The list of <see cref="IHttpMessageConverter"/> to use.</param>
         public MessageConverterResponseExtractor(IList<IHttpMessageConverter> messageConverters)
         {
             this.messageConverters = messageConverters;
         }
 
+        /// <summary>
+        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebResponse"/> to extract data. 
+        /// Does not need to care about closing the request or about handling errors: 
+        /// this will all be handled by the <see cref="RestTemplate"/> class.
+        /// </summary>
+        /// <param name="response">The active HTTP request.</param>
         public T ExtractData(HttpWebResponse response)
         {
-            if (!StringUtils.HasText(response.Headers[HttpResponseHeader.ContentType]))
+            string contentType = response.Headers[HttpResponseHeader.ContentType];
+            if (!StringUtils.HasText(contentType))
             {
                 throw new RestClientException("Could not extract response: no Content-Type found");
             }
-            MediaType contentType = MediaType.ParseMediaType(response.Headers[HttpResponseHeader.ContentType]);
+            MediaType mediaType = MediaType.ParseMediaType(contentType);
             foreach(IHttpMessageConverter messageConverter in messageConverters) 
             {
-                if (messageConverter.CanRead(typeof(T), contentType))
+                if (messageConverter.CanRead(typeof(T), mediaType))
                 {
                     #region Instrumentation
 
@@ -72,7 +77,7 @@ namespace Spring.Http.Rest.Support
                     {
                         LOG.Debug(String.Format(
                             "Reading [{0}] as '{1}' using [{2}]", 
-                            typeof(T).FullName, contentType, messageConverter));
+                            typeof(T).FullName, mediaType, messageConverter));
                     }
 
                     #endregion
@@ -82,7 +87,7 @@ namespace Spring.Http.Rest.Support
             }
             throw new RestClientException(String.Format(
                 "Could not extract response: no suitable HttpMessageConverter found for response type [{0}] and content type [{1}]", 
-                typeof(T).FullName, contentType));
+                typeof(T).FullName, mediaType));
         }
     }
 }

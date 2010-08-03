@@ -23,26 +23,31 @@ using System.Net;
 
 namespace Spring.Http.Rest
 {
-    /**
-     * Generic callback interface used by {@link RestTemplate}'s retrieval methods
-     * Implementations of this interface perform the actual work of extracting data
-     * from a {@link ClientHttpResponse}, but don't need to worry about exception
-     * handling or closing resources.
-     *
-     * <p>Used internally by the {@link RestTemplate}, but also useful for application code.
-     *
-     * @author Arjen Poutsma
-     * @since 3.0
-     * @see RestTemplate#execute
-     */
+    /// <summary>
+    /// Callback interface for code that operates on a <see cref="HttpWebResponse"/>. 
+    /// Allows to manipulate the response headers, and extract the response body.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Generic callback interface used by <see cref="RestTemplate"/>'s retrieval methods. 
+    /// Implementations of this interface perform the actual work of extracting data 
+    /// from a <see cref="HttpWebResponse"/>, but don't need to worry about exception 
+    /// handling or closing resources.
+    /// </para>
+    /// <para>
+    /// Used internally by the <see cref="RestTemplate"/>, but also useful for application code.
+    /// </para>
+    /// </remarks>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Bruno Baia (.NET)</author>
     public interface IResponseExtractor<T> where T : class
     {
-        /**
-         * Extract data from the given {@code ClientHttpResponse} and return it.
-         * @param response the HTTP response
-         * @return the extracted data
-         * @throws IOException in case of I/O errors
-         */
-        T ExtractData(HttpWebResponse response); // throws IOException;
+        /// <summary>
+        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebResponse"/> to extract data. 
+        /// Does not need to care about closing the request or about handling errors: 
+        /// this will all be handled by the <see cref="RestTemplate"/> class.
+        /// </summary>
+        /// <param name="response">The active HTTP request.</param>
+        T ExtractData(HttpWebResponse response);
     }
 }

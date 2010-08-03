@@ -28,88 +28,88 @@ using Spring.Util;
 
 namespace Spring.Http
 {
-    /**
-     * Represents an Internet Media Type, as defined in the HTTP specification.
-     *
-     * <p>Consists of a {@linkplain #getType() type} and a {@linkplain #getSubtype() subtype}.
-     * Also has functionality to parse media types from a string using {@link #parseMediaType(String)},
-     * or multiple comma-separated media types using {@link #parseMediaTypes(String)}.
-     *
-     * @author Arjen Poutsma
-     * @author Juergen Hoeller
-     * @since 3.0
-     * @see <a href="http://tools.ietf.org/html/rfc2616#section-3.7">HTTP 1.1, section 3.7</a>
-     */
+    /// <summary>
+    /// Represents an Internet Media Type, as defined in the HTTP specification. 
+    /// <a href="http://tools.ietf.org/html/rfc2616#section-3.7">HTTP 1.1, section 3.7</a>
+    /// </summary>
+    /// <remarks>
+    /// Consists of a <see cref="P:Type"/> and a <see cref="P:SubType"/>. 
+    /// Also has functionality to parse media types from a string using <see cref="M:ParseMediaType(string)"/>, 
+    /// or multiple comma-separated media types using <see cref="M:ParseMediaTypes(string)"/>.
+    /// </remarks>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Bruno Baia (.NET)</author>
     public class MediaType : IComparable<MediaType> 
     {
-        /**
-         * Public constant media type that includes all media ranges (i.e. <code>&#42;/&#42;</code>).
-         */
+        /// <summary>
+        /// Public constant media type that includes all media ranges (i.e. '*/*').
+        /// </summary>
         public static readonly MediaType ALL = new MediaType("*", "*");
 
-        /**
-         *  Public constant media type for {@code application/atom+xml}.
-         */
+        /// <summary>
+        /// Public constant media type for 'application/atom+xml'.
+        /// </summary>
         public static readonly MediaType APPLICATION_ATOM_XML = new MediaType("application", "atom+xml");
 
-        /**
-         * Public constant media type for {@code application/x-www-form-urlencoded}.
-         *  */
+        /// <summary>
+        /// Public constant media type for 'application/x-www-form-urlencoded'.
+        /// </summary>
         public static readonly MediaType APPLICATION_FORM_URLENCODED = new MediaType("application", "x-www-form-urlencoded");
 
-        /**
-         * Public constant media type for {@code application/json}.
-         * */
+        /// <summary>
+        /// Public constant media type for 'application/json'.
+        /// </summary>
         public static readonly MediaType APPLICATION_JSON = new MediaType("application", "json");
 
-        /**
-         * Public constant media type for {@code application/octet-stream}.
-         *  */
+        /// <summary>
+        /// Public constant media type for 'application/octet-stream'.
+        /// </summary>
         public static readonly MediaType APPLICATION_OCTET_STREAM = new MediaType("application", "octet-stream");
 
-        /**
-         * Public constant media type for {@code application/xhtml+xml}.
-         *  */
+        /// <summary>
+        /// Public constant media type for 'application/xhtml+xml'.
+        /// </summary>
         public static readonly MediaType APPLICATION_XHTML_XML = new MediaType("application", "xhtml+xml");
 
-        /**
-         * Public constant media type for {@code image/gif}.
-         */
+        /// <summary>
+        /// Public constant media type for 'image/gif'.
+        /// </summary>
         public static readonly MediaType IMAGE_GIF = new MediaType("image", "gif");
 
-        /**
-         * Public constant media type for {@code image/jpeg}.
-         */
+        /// <summary>
+        /// Public constant media type for 'image/jpeg'.
+        /// </summary>
         public static readonly MediaType IMAGE_JPEG = new MediaType("image", "jpeg");
 
-        /**
-         * Public constant media type for {@code image/png}.
-         */
+        /// <summary>
+        /// Public constant media type for 'image/png'.
+        /// </summary>
         public static readonly MediaType IMAGE_PNG = new MediaType("image", "png");
 
-        /**
-         * Public constant media type for {@code image/xml}.
-         */
+        /// <summary>
+        /// Public constant media type for 'image/xml'.
+        /// </summary>
         public static readonly MediaType APPLICATION_XML = new MediaType("application", "xml");
 
-        /**
-         * Public constant media type for {@code multipart/form-data}.
-         *  */
+        /// <summary>
+        /// Public constant media type for 'multipart/form-data'.
+        /// </summary>
         public static readonly MediaType MULTIPART_FORM_DATA = new MediaType("multipart", "form-data");
 
-        /**
-         * Public constant media type for {@code text/html}.
-         *  */
+        /// <summary>
+        /// Public constant media type for 'text/html'.
+        /// </summary>
         public static readonly MediaType TEXT_HTML = new MediaType("text", "html");
 
-        /**
-         * Public constant media type for {@code text/plain}.
-         *  */
+        /// <summary>
+        /// Public constant media type for 'text/plain'.
+        /// </summary>
         public static readonly MediaType TEXT_PLAIN = new MediaType("text", "plain");
 
-        /**
-         * Public constant media type for {@code text/xml}.
-         *  */
+        /// <summary>
+        /// Public constant media type for 'text/xml'.
+        /// </summary>
         public static readonly MediaType TEXT_XML = new MediaType("text", "xml");
 
 
@@ -125,43 +125,41 @@ namespace Spring.Http
 
         private IDictionary<string, string> parameters;
 
-        /**
-         * Return the primary type.
-         */
+        /// <summary>
+        /// Gets the primary type.
+        /// </summary>
         public string Type
         {
             get { return this.type; }
         }
 
-        /**
-         * Return the subtype.
-         */
+        /// <summary>
+        /// Gets the subtype.
+        /// </summary>
         public string Subtype
         {
             get { return this.subtype; }
         }
 
-        /**
-         * Indicate whether the {@linkplain #getType() type} is the wildcard character <code>&#42;</code> or not.
-         */
+        /// <summary>
+        /// Indicate whether the type is the wildcard character '*', or not.
+        /// </summary>
         public bool IsWildcardType
         {
             get { return WILDCARD_TYPE == type; }
         }
 
-        /**
-         * Indicate whether the {@linkplain #getSubtype() subtype} is the wildcard character <code>&#42;</code> or not.
-         * @return whether the subtype is <code>&#42;</code>
-         */
+        /// <summary>
+        /// Indicate whether the subtype is the wildcard character '*', or not.
+        /// </summary>
         public bool IsWildcardSubtype
         {
             get { return WILDCARD_TYPE == subtype; }
         }
 
-        /**
-         * Return the character set, as indicated by a <code>charset</code> parameter, if any.
-         * @return the character set; or <code>null</code> if not available
-         */
+        /// <summary>
+        /// Gets the character set, as indicated by a 'charset' parameter, if any.
+        /// </summary>
         public string CharSet
         {
             get
@@ -174,11 +172,10 @@ namespace Spring.Http
             }
         }
 
-        /**
-         * Return the quality value, as indicated by a <code>q</code> parameter, if any.
-         * Defaults to <code>1.0</code>.
-         * @return the quality factory
-         */
+        /// <summary>
+        /// Gets the quality value, as indicated by a 'q' parameter, if any. 
+        /// Defaults to '1.0'.
+        /// </summary>
         public double QualityValue
         {
             get
@@ -190,75 +187,68 @@ namespace Spring.Http
             }
         }
 
-        /**
-         * Create a new {@link MediaType} for the given primary type.
-         * <p>The {@linkplain #getSubtype() subtype} is set to <code>&#42;</code>, parameters empty.
-         * @param type the primary type
-         * @throws IllegalArgumentException if any of the parameters contain illegal characters
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="MediaType"/> for the given primary type. 
+        /// The subtype is set to '*', parameters are empty.
+        /// </summary>
+        /// <param name="type">The primary type.</param>
         public MediaType(string type) :
             this(type, WILDCARD_TYPE)
         {
         }
 
-        /**
-         * Create a new {@link MediaType} for the given primary type and subtype.
-         * <p>The parameters are empty.
-         * @param type the primary type
-         * @param subtype the subtype
-         * @throws IllegalArgumentException if any of the parameters contain illegal characters
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="MediaType"/> for the given primary type and subtype. 
+        /// The parameters are empty.
+        /// </summary>
+        /// <param name="type">The primary type.</param>
+        /// <param name="subtype">The subtype.</param>
         public MediaType(string type, string subtype) :
             this(type, subtype, new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase))
         {
         }
 
-        /**
-         * Create a new {@link MediaType} for the given type, subtype, and character set.
-         * @param type the primary type
-         * @param subtype the subtype
-         * @param charSet the character set
-         * @throws IllegalArgumentException if any of the parameters contain illegal characters
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="MediaType"/> for the given primary type, subtype and character set. 
+        /// </summary>
+        /// <param name="type">The primary type.</param>
+        /// <param name="subtype">The subtype.</param>
+        /// <param name="charSet">The character set</param>
         public MediaType(string type, string subtype, string charSet) :
             this(type, subtype)
         {
             this.parameters.Add(PARAM_CHARSET, charSet);
         }
 
-        /**
-         * Create a new {@link MediaType} for the given type, subtype, and quality value.
-         *
-         * @param type the primary type
-         * @param subtype the subtype
-         * @param qualityValue the quality value
-         * @throws IllegalArgumentException if any of the parameters contain illegal characters
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="MediaType"/> for the given primary type, subtype and quality value. 
+        /// </summary>
+        /// <param name="type">The primary type.</param>
+        /// <param name="subtype">The subtype.</param>
+        /// <param name="qualityValue">The quality value</param>
         public MediaType(String type, String subtype, double qualityValue) :
             this(type, subtype)
         {
             this.parameters.Add(PARAM_QUALITY_FACTOR, qualityValue.ToString(CultureInfo.InvariantCulture));
         }
 
-        /**
-         * Copy-constructor that copies the type and subtype of the given {@link MediaType},
-         * and allows for different parameter.
-         * @param other the other media type
-         * @param parameters the parameters, may be <code>null</code>
-         * @throws IllegalArgumentException if any of the parameters contain illegal characters
-         */
-        public MediaType(MediaType other, IDictionary<string, string> parameters) :
-            this(other.Type, other.Subtype, parameters)
+        /// <summary>
+        /// Creates a new instance of <see cref="MediaType"/> by copying the type and subtype of the given MediaType, 
+        /// and allows for different parameter.
+        /// </summary>
+        /// <param name="otherMediaType">The other media type.</param>
+        /// <param name="parameters">The parameters, may be null.</param>
+        public MediaType(MediaType otherMediaType, IDictionary<string, string> parameters) :
+            this(otherMediaType.Type, otherMediaType.Subtype, parameters)
         {
         }
 
-        /**
-         * Create a new {@link MediaType} for the given type, subtype, and parameters.
-         * @param type the primary type
-         * @param subtype the subtype
-         * @param parameters the parameters, may be <code>null</code>
-         * @throws IllegalArgumentException if any of the parameters contain illegal characters
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="MediaType"/> for the given primary type, subtype and parameters. 
+        /// </summary>
+        /// <param name="type">The primary type.</param>
+        /// <param name="subtype">The subtype.</param>
+        /// <param name="parameters">The parameters, may be null.</param>
         public MediaType(string type, string subtype, IDictionary<string, string> parameters)
         {
             AssertUtils.ArgumentHasText(type, "'type' must not be empty");
@@ -285,6 +275,15 @@ namespace Spring.Http
             //}
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <param name="obj">
+        /// The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.
+        /// </param>
+        /// <returns>
+        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (this == obj)
@@ -314,6 +313,15 @@ namespace Spring.Http
             return false;
         }
 
+        /// <summary>
+        /// Serves as a hash function for a particular type.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="M:System.Object.GetHashCode"/> is suitable for use in hashing algorithms and data structures like a hash table.
+        /// </remarks>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
         public override int GetHashCode()
         {
             int result = this.type.GetHashCode();
@@ -322,6 +330,12 @@ namespace Spring.Http
             return result;
         }
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object."/>
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object."/>.
+        /// </returns>
         public override string ToString() 
         {
             StringBuilder builder = new StringBuilder();
@@ -338,11 +352,11 @@ namespace Spring.Http
             return builder.ToString();
         }
 
-        /**
-         * Checks the given token string for illegal characters, as defined in RFC 2616, section 2.2.
-         * @throws IllegalArgumentException in case of illegal characters
-         * @see <a href="http://tools.ietf.org/html/rfc2616#section-2.2">HTTP 1.1, section 2.2</a>
-         */
+        // **
+        // * Checks the given token string for illegal characters, as defined in RFC 2616, section 2.2.
+        // * @throws IllegalArgumentException in case of illegal characters
+        // * @see <a href="http://tools.ietf.org/html/rfc2616#section-2.2">HTTP 1.1, section 2.2</a>
+        // */
         //private void checkToken(String s) {
         //    for (int i=0; i < s.length(); i++ ) {
         //        char ch = s.charAt(i);
@@ -382,26 +396,31 @@ namespace Spring.Http
         //    return isQuotedString(s) ? s.substring(1, s.length() - 1) : s;
         //}
 
-        /**
-         * Return a generic parameter value, given a parameter name.
-         * @param name the parameter name
-         * @return the parameter value; or <code>null</code> if not present
-         */
+        /// <summary>
+        /// Return a generic parameter value, given a parameter name.
+        /// </summary>
+        /// <param name="name">The parameter name.</param>
+        /// <returns>The parameter value; or null if not present.</returns>
         public string GetParameter(string name)
         {
             return this.parameters[name];
         }
 
-        /**
-         * Indicate whether this {@link MediaType} includes the given media type.
-         * <p>For instance, {@code text/*} includes {@code text/plain}, {@code text/html}, and {@code application/*+xml}
-         * includes {@code application/soap+xml}, etc. This method is non-symmetic.
-         * @param other the reference media type with which to compare
-         * @return <code>true</code> if this media type includes the given media type; <code>false</code> otherwise
-         */
-        public bool Includes(MediaType other)
+        /// <summary>
+        /// Indicate whether this <see cref="T:MediaType"/> includes the given media type.
+        /// </summary>
+        /// <remarks>
+        /// For instance, 'text/*' includes 'text/plain', 'text/html', and 
+        /// 'application/*+xml' includes 'application/soap+xml', etc. 
+        /// This method is non-symmetric.
+        /// </remarks>
+        /// <param name="otherMediaType">The reference media type with which to compare.</param>
+        /// <returns>
+        /// <see langword="true"/> if this media type includes the given media type; otherwise <see langword="false"/>.
+        /// </returns>
+        public bool Includes(MediaType otherMediaType)
         {
-            if (other == null)
+            if (otherMediaType == null)
             {
                 return false;
             }
@@ -410,21 +429,21 @@ namespace Spring.Http
                 // */* includes anything
                 return true;
             }
-            else if (this.type == other.type)
+            else if (this.type == otherMediaType.type)
             {
-                if (this.subtype == other.subtype || this.IsWildcardSubtype)
+                if (this.subtype == otherMediaType.subtype || this.IsWildcardSubtype)
                 {
                     return true;
                 }
                 // application/*+xml includes application/soap+xml
                 int thisPlusIdx = this.subtype.IndexOf('+');
-                int otherPlusIdx = other.subtype.IndexOf('+');
+                int otherPlusIdx = otherMediaType.subtype.IndexOf('+');
                 if (thisPlusIdx != -1 && otherPlusIdx != -1)
                 {
                     string thisSubtypeNoSuffix = this.subtype.Substring(0, thisPlusIdx);
 
                     string thisSubtypeSuffix = this.subtype.Substring(thisPlusIdx + 1);
-                    string otherSubtypeSuffix = other.subtype.Substring(otherPlusIdx + 1);
+                    string otherSubtypeSuffix = otherMediaType.subtype.Substring(otherPlusIdx + 1);
                     if (thisSubtypeSuffix == otherSubtypeSuffix && WILDCARD_TYPE == thisSubtypeNoSuffix)
                     {
                         return true;
@@ -434,39 +453,43 @@ namespace Spring.Http
             return false;
         }
 
-        /**
-         * Indicate whether this {@link MediaType} is compatible with the given media type.
-         * <p>For instance, {@code text/*} is compatible with {@code text/plain}, {@code text/html}, and vice versa.
-         * In effect, this method is similar to {@link #includes(MediaType)}, except that it's symmetric.
-         * @param other the reference media type with which to compare
-         * @return <code>true</code> if this media type is compatible with the given media type; <code>false</code> otherwise
-         */
-        public bool IsCompatibleWith(MediaType other)
+        /// <summary>
+        /// Indicate whether this <see cref="T:MediaType"/> is compatible with the given media type.
+        /// </summary>
+        /// <remarks>
+        /// For instance, 'text/*' is compatible 'text/plain', 'text/html', and vice versa.
+        /// In effect, this method is similar to <see cref="M:Includes(MediaType)"/>, except that it's symmetric.
+        /// </remarks>
+        /// <param name="otherMediaType">The reference media type with which to compare.</param>
+        /// <returns>
+        /// <see langword="true"/> if this media type is compatible with the given media type; otherwise <see langword="false"/>.
+        /// </returns>
+        public bool IsCompatibleWith(MediaType otherMediaType)
         {
-            if (other == null)
+            if (otherMediaType == null)
             {
                 return false;
             }
-            if (this.IsWildcardType || other.IsWildcardType)
+            if (this.IsWildcardType || otherMediaType.IsWildcardType)
             {
                 return true;
             }
-            else if (this.type == other.type)
+            else if (this.type == otherMediaType.type)
             {
-                if (this.subtype == other.subtype || this.IsWildcardSubtype || other.IsWildcardSubtype)
+                if (this.subtype == otherMediaType.subtype || this.IsWildcardSubtype || otherMediaType.IsWildcardSubtype)
                 {
                     return true;
                 }
                 // application/*+xml is compatible with application/soap+xml, and vice-versa
                 int thisPlusIdx = this.subtype.IndexOf('+');
-                int otherPlusIdx = other.subtype.IndexOf('+');
+                int otherPlusIdx = otherMediaType.subtype.IndexOf('+');
                 if (thisPlusIdx != -1 && otherPlusIdx != -1)
                 {
                     string thisSubtypeNoSuffix = this.subtype.Substring(0, thisPlusIdx);
-                    string otherSubtypeNoSuffix = other.subtype.Substring(0, otherPlusIdx);
+                    string otherSubtypeNoSuffix = otherMediaType.subtype.Substring(0, otherPlusIdx);
 
                     string thisSubtypeSuffix = this.subtype.Substring(thisPlusIdx + 1);
-                    string otherSubtypeSuffix = other.subtype.Substring(otherPlusIdx + 1);
+                    string otherSubtypeSuffix = otherMediaType.subtype.Substring(otherPlusIdx + 1);
 
                     if (thisSubtypeSuffix == otherSubtypeSuffix &&
                         (WILDCARD_TYPE == thisSubtypeNoSuffix || WILDCARD_TYPE == otherSubtypeNoSuffix))
@@ -480,11 +503,16 @@ namespace Spring.Http
 
         #region IComparable<MediaType> Membres
 
-        /**
-         * Compares this {@link MediaType} to another alphabetically.
-         * @param other media type to compare to
-         * @see #sortBySpecificity(List)
-         */
+        /// <summary>
+        /// Compares this <see cref="MediaType"/> to another alphabetically.
+        /// </summary>
+        /// <param name="other">The media type to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects 
+        /// being compared. The return value has the following meanings: Value Meaning 
+        /// Less than zero This object is less than the other parameter.  Zero This object 
+        /// is equal to other. Greater than zero This object is greater than other.
+        /// </returns>
         public int CompareTo(MediaType other)
         {
             int comp = this.type.CompareTo(other.type);
@@ -519,15 +547,17 @@ namespace Spring.Http
 
         #endregion
 
-        /**
-         * Parse the given String into a single {@link MediaType}.
-         * @param mediaType the string to parse
-         * @return the media type
-         * @throws IllegalArgumentException if the string cannot be parsed
-         */
+        /// <summary>
+        /// Parse the given String into a single <see cref="MediaType"/>.
+        /// </summary>
+        /// <param name="mediaType">The string to parse.</param>
+        /// <returns>The media type.</returns>
         public static MediaType ParseMediaType(string mediaType)
         {
-            AssertUtils.ArgumentHasText(mediaType, "'mediaType' must not be empty");
+            if (!StringUtils.HasText(mediaType))
+            {
+                return null;
+            }
             
             string[] parts = mediaType.Split(';');
             string fullType = parts[0].Trim();
@@ -570,17 +600,18 @@ namespace Spring.Http
             return new MediaType(type, subtype, parameters);
         }
 
-        /**
-         * Parse the given, comma-seperated string into a list of {@link MediaType} objects.
-         * <p>This method can be used to parse an Accept or Content-Type header.
-         * @param mediaTypes the string to parse
-         * @return the list of media types
-         * @throws IllegalArgumentException if the string cannot be parsed
-         */
+        /// <summary>
+        /// Parse the given, comma-seperated string into a list of <see cref="MediaType"/> objects.
+        /// </summary>
+        /// <remarks>
+        /// This method can be used to parse an 'Accept' or 'Content-Type' header.
+        /// </remarks>
+        /// <param name="mediaTypes">The string to parse.</param>
+        /// <returns>The list of media types.</returns>
         public static List<MediaType> ParseMediaTypes(string mediaTypes)
         {
             List<MediaType> mediaTypeList = new List<MediaType>();
-            if (!StringUtils.HasLength(mediaTypes))
+            if (!StringUtils.HasText(mediaTypes))
             {
                 return mediaTypeList;
             }
@@ -592,13 +623,14 @@ namespace Spring.Http
             return mediaTypeList;
         }
 
-        /**
-         * Return a string representation of the given list of {@link MediaType} objects.
-         * <p>This method can be used to for an {@code Accept} or {@code Content-Type} header.
-         * @param mediaTypes the string to parse
-         * @return the list of media types
-         * @throws IllegalArgumentException if the String cannot be parsed
-         */
+        /// <summary>
+        /// Return a string representation of the given list of <see cref="MediaType"/> objects.
+        /// </summary>
+        /// <remarks>
+        /// This method can be used to for an 'Accept' or 'Content-Type' header.
+        /// </remarks>
+        /// <param name="mediaTypes">The list of media types to convert.</param>
+        /// <returns>The string representation of the given list.</returns>
         public static string ToString(IEnumerable<MediaType> mediaTypes)
         {
             StringBuilder builder = new StringBuilder();
@@ -613,32 +645,38 @@ namespace Spring.Http
             return builder.ToString();
         }
 
-        /**
-         * Sorts the given list of {@link MediaType} objects by specificity.
-         * <p>Given two media types:
-         * <ol>
-         *   <li>if either media type has a {@linkplain #isWildcardType() wildcard type}, then the media type without the
-         *   wildcard is ordered before the other.</li>
-         *   <li>if the two media types have different {@linkplain #getType() types}, then they are considered equal and
-         *   remain their current order.</li>
-         *   <li>if either media type has a {@linkplain #isWildcardSubtype() wildcard subtype}, then the media type without
-         *   the wildcard is sorted before the other.</li>
-         *   <li>if the two media types have different {@linkplain #getSubtype() subtypes}, then they are considered equal
-         *   and remain their current order.</li>
-         *   <li>if the two media types have different {@linkplain #getQualityValue() quality value}, then the media type
-         *   with the highest quality value is ordered before the other.</li>
-         *   <li>if the two media types have a different amount of {@linkplain #getParameter(String) parameters}, then the
-         *   media type with the most parameters is ordered before the other.</li>
-         * </ol>
-         * <p>For example:
-         * <blockquote>audio/basic &lt; audio/* &lt; *&#047;*</blockquote>
-         * <blockquote>audio/* &lt; audio/*;q=0.7; audio/*;q=0.3</blockquote>
-         * <blockquote>audio/basic;level=1 &lt; audio/basic</blockquote>
-         * <blockquote>audio/basic == text/html</blockquote>
-         * <blockquote>audio/basic == audio/wave</blockquote>
-         * @param mediaTypes the list of media types to be sorted
-         * @see <a href="http://tools.ietf.org/html/rfc2616#section-14.1">HTTP 1.1, section 14.1</a>
-         */
+        /// <summary>
+        /// Sorts the given list of <see cref="MediaType"/> objects by specificity. 
+        /// <a href="http://tools.ietf.org/html/rfc2616#section-14.1">HTTP 1.1, section 14.1</a>
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Given two media types:
+        /// <ol>
+        ///     <li>if either media type has a wildcard type, then the media type without the 
+        ///     wildcard is ordered before the other.</li>
+        ///     <li>if the two media types have different types, then they are considered equal and 
+        ///     remain their current order.</li>
+        ///     <li>if either media type has a wildcard subtype, then the media type without 
+        ///     the wildcard is sorted before the other.</li>
+        ///     <li>if the two media types have different subtypes, then they are considered equal 
+        ///     and remain their current order.</li>
+        ///     <li>if the two media types have different quality value, then the media type 
+        ///     with the highest quality value is ordered before the other.</li>
+        ///     <li>if the two media types have a different amount of parameters, then the 
+        ///     media type with the most parameters is ordered before the other.</li>
+        /// </ol>
+        /// </para>
+        /// <para>
+        /// For example:
+        /// <blockquote>audio/basic &lt; audio/* &lt; *&#047;*</blockquote>
+        /// <blockquote>audio/* &lt; audio/*;q=0.7; audio/*;q=0.3</blockquote>
+        /// <blockquote>audio/basic;level=1 &lt; audio/basic</blockquote>
+        /// <blockquote>audio/basic == text/html</blockquote>
+        /// <blockquote>audio/basic == audio/wave</blockquote>
+        /// </para>
+        /// </remarks>
+        /// <param name="mediaTypes">The list of media types to be sorted.</param>
         public static void SortBySpecificity(List<MediaType> mediaTypes)
         {
             AssertUtils.ArgumentNotNull(mediaTypes, "mediaTypes");
@@ -649,26 +687,29 @@ namespace Spring.Http
             }
         }
 
-        /**
-         * Sorts the given list of {@link MediaType} objects by quality value.
-         * <p>Given two media types:
-         * <ol>
-         *   <li>if the two media types have different {@linkplain #getQualityValue() quality value}, then the media type
-         *   with the highest quality value is ordered before the other.</li>
-         *   <li>if either media type has a {@linkplain #isWildcardType() wildcard type}, then the media type without the
-         *   wildcard is ordered before the other.</li>
-         *   <li>if the two media types have different {@linkplain #getType() types}, then they are considered equal and
-         *   remain their current order.</li>
-         *   <li>if either media type has a {@linkplain #isWildcardSubtype() wildcard subtype}, then the media type without
-         *   the wildcard is sorted before the other.</li>
-         *   <li>if the two media types have different {@linkplain #getSubtype() subtypes}, then they are considered equal
-         *   and remain their current order.</li>
-         *   <li>if the two media types have a different amount of {@linkplain #getParameter(String) parameters}, then the
-         *   media type with the most parameters is ordered before the other.</li>
-         * </ol>
-         * @param mediaTypes the list of media types to be sorted
-         * @see #getQualityValue()
-         */
+        /// <summary>
+        /// Sorts the given list of <see cref="MediaType"/> objects by quality value.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Given two media types:
+        /// <ol>
+        ///     <li>if the two media types have different quality value, then the media type 
+        ///     with the highest quality value is ordered before the other.</li>
+        ///     <li>if either media type has a wildcard type, then the media type without the 
+        ///     wildcard is ordered before the other.</li>
+        ///     <li>if the two media types have different types, then they are considered equal and 
+        ///     remain their current order.</li>
+        ///     <li>if either media type has a wildcard subtype, then the media type without 
+        ///     the wildcard is sorted before the other.</li>
+        ///     <li>if the two media types have different subtypes, then they are considered equal 
+        ///     and remain their current order.</li>
+        ///     <li>if the two media types have a different amount of parameters, then the 
+        ///     media type with the most parameters is ordered before the other.</li>
+        /// </ol>
+        /// </para>
+        /// </remarks>
+        /// <param name="mediaTypes">The list of media types to be sorted</param>
         public static void SortByQualityValue(List<MediaType> mediaTypes)
         {
             AssertUtils.ArgumentNotNull(mediaTypes, "mediaTypes");
@@ -679,7 +720,14 @@ namespace Spring.Http
             }
         }
 
+        /// <summary>
+        /// <see cref="IComparer&lt;MediaType>"/> implementation by specificity value.
+        /// </summary>
         public static IComparer<MediaType> SPECIFICITY_COMPARER = new SpecificityComparer();
+
+        /// <summary>
+        /// <see cref="IComparer&lt;MediaType>"/> implementation by quality value.
+        /// </summary>
         public static IComparer<MediaType> QUALITY_VALUE_COMPARER = new QualityValueComparer();
 
         #region SpecificityComparer

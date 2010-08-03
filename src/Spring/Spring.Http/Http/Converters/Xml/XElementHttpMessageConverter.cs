@@ -27,23 +27,55 @@ using System.Xml.Linq;
 namespace Spring.Http.Converters.Xml
 {
     // TODO : Support XElement.Load options
+
+    /// <summary>
+    /// Implementation of <see cref="IHttpMessageConverter"/> that can read and write XML 
+    /// from a <see cref="XElement"/> (Linq to XML).
+    /// </summary>
+    /// <remarks>
+    /// By default, this converter supports 'text/xml', 'application/xml', and 'application/*-xml' media types. 
+    /// This can be overridden by setting the <see cref="P:SupportedMediaTypes"/> property.
+    /// </remarks>
+    /// <author>Bruno Baia</author>
     public class XElementHttpMessageConverter : AbstractXmlHttpMessageConverter
     {
+        /// <summary>
+        /// Creates a new instance of the <see cref="XElementHttpMessageConverter"/> 
+        /// with 'text/xml', 'application/xml', and 'application/*-xml' media types.
+        /// </summary>
         public XElementHttpMessageConverter() :
-            base(new MediaType("application", "xml"), new MediaType("text", "xml"), new MediaType("application", "*+xml"))
+            base()
         {
         }
 
+        /// <summary>
+        /// Indicates whether the given class is supported by this converter.
+        /// </summary>
+        /// <param name="type">The type to test for support.</param>
+        /// <returns><see langword="true"/> if supported; otherwise <see langword="false"/></returns>
         protected override bool Supports(Type type)
         {
             return type.Equals(typeof(XElement));
         }
 
+        /// <summary>
+        /// Abstract template method that reads the actualy object using a <see cref="XmlReader"/>. Invoked from <see cref="M:ReadInternal"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return.</typeparam>
+        /// <param name="xmlReader">The XmlReader to use.</param>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
         protected override T ReadXml<T>(XmlReader xmlReader, HttpWebResponse response)
         {
             return XElement.Load(xmlReader) as T;
         }
 
+        /// <summary>
+        /// Abstract template method that writes the actual body using a <see cref="XmlWriter"/>. Invoked from <see cref="M:WriteInternal"/>.
+        /// </summary>
+        /// <param name="xmlWriter">The XmlWriter to use.</param>
+        /// <param name="content">The object to write to the HTTP request.</param>
+        /// <param name="request">The HTTP request to write to.</param>
         protected override void WriteXml(XmlWriter xmlWriter, object content, HttpWebRequest request)
         {
             XElement xElement = content as XElement;

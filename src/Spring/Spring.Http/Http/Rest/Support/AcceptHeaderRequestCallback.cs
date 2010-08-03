@@ -22,14 +22,17 @@ using System;
 using System.Net;
 using System.Collections.Generic;
 
+using Spring.Util;
 using Spring.Http;
 using Spring.Http.Converters;
 
 namespace Spring.Http.Rest.Support
 {
-    /**
-     * Request callback implementation that prepares the request's accept headers.
-     */
+    /// <summary>
+    /// Request callback implementation that prepares the request's accept headers.
+    /// </summary>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Bruno Baia (.NET)</author>
     public class AcceptHeaderRequestCallback : MethodRequestCallback
     {
         #region Logging
@@ -38,9 +41,22 @@ namespace Spring.Http.Rest.Support
 
         #endregion
 
+        /// <summary>
+        /// The expected response body type.
+        /// </summary>
         protected Type responseType;
+
+        /// <summary>
+        /// The list of <see cref="IHttpMessageConverter"/> to use.
+        /// </summary>
         protected IList<IHttpMessageConverter> messageConverters;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="AcceptHeaderRequestCallback"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method.</param>
+        /// <param name="responseType">The expected response body type.</param>
+        /// <param name="messageConverters">The list of <see cref="IHttpMessageConverter"/> to use.</param>
         public AcceptHeaderRequestCallback(HttpMethod method, Type responseType, IList<IHttpMessageConverter> messageConverters) :
             base(method)
         {
@@ -48,6 +64,12 @@ namespace Spring.Http.Rest.Support
             this.messageConverters = messageConverters;
         }
 
+        /// <summary>
+        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebRequest"/> to write data. 
+        /// Does not need to care about closing the request or about handling errors: 
+        /// this will all be handled by the <see cref="RestTemplate"/> class.
+        /// </summary>
+        /// <param name="request">The active HTTP request.</param>
         public override void DoWithRequest(HttpWebRequest request)
         {
             base.DoWithRequest(request);
@@ -61,7 +83,7 @@ namespace Spring.Http.Rest.Support
                     {
                         foreach (MediaType supportedMediaType in messageConverter.SupportedMediaTypes)
                         {
-                            if (!String.IsNullOrEmpty(supportedMediaType.CharSet))
+                            if (StringUtils.HasText(supportedMediaType.CharSet))
                             {
                                 allSupportedMediaTypes.Add(new MediaType(
                                     supportedMediaType.Type, supportedMediaType.Subtype));

@@ -108,19 +108,30 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Http\Converters\ByteArrayHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\Feed\FeedHttpMessageConverterIntegrationTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\Json\JsonHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\Json\JsonHttpMessageConverterIntegrationTests.cs" />
     <Compile Include="Http\Converters\StringHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\Xml\XmlHttpMessageConverterIntegrationTests.cs" />
+    <Compile Include="Http\Converters\Xml\XElementHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\Xml\XmlSerializableHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Xml\DataContractHttpMessageConverterTests.cs" />
-    <Compile Include="Http\Converters\Xml\DataContractHttpMessageConverterIntegrationTests.cs" />
     <Compile Include="Http\Converters\Xml\XmlDocumentHttpMessageConverterTests.cs" />
     <Compile Include="Http\MediaTypeTests.cs" />
     <Compile Include="Http\Rest\RestTemplateIntegrationTests.cs" />
@@ -128,10 +139,6 @@
     <Compile Include="Util\UriTemplateTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">
-      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2010</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Http\Spring.Http.2010.csproj">
       <Project>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Project>
       <Name>Spring.Http.2010</Name>

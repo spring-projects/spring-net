@@ -28,27 +28,58 @@ using Spring.Http.Converters.Xml;
 
 namespace Spring.Http.Converters.Feed
 {
+    /// <summary>
+    /// Base class for Atom and RSS Feed message converters 
+    /// using the <see cref="System.ServiceModel.Syndication.SyndicationFeed"/> class.
+    /// </summary>
+    /// <author>Bruno Baia</author>
     public abstract class AbstractFeedHttpMessageConverter : AbstractXmlHttpMessageConverter
-    {
-        /**
-         * Construct an {@code AbstractHttpMessageConverter} with multiple supported media type.
-         * @param supportedMediaTypes the supported media types
-         */
+    {  
+        /// <summary>
+        /// Creates a new instance of the <see cref="AbstractXmlHttpMessageConverter"/> 
+        /// with multiple supported media type.
+        /// </summary>
+        /// <param name="supportedMediaTypes">The supported media types.</param>
         protected AbstractFeedHttpMessageConverter(params MediaType[] supportedMediaTypes) :
             base(supportedMediaTypes)
         {
         }
 
+        /// <summary>
+        /// Indicates whether the given class is supported by this converter.
+        /// </summary>
+        /// <param name="type">The type to test for support.</param>
+        /// <returns><see langword="true"/> if supported; otherwise <see langword="false"/></returns>
         protected override bool Supports(Type type)
         {
-            return type.Equals(typeof(SyndicationFeed));
+            return type.Equals(typeof(SyndicationFeed)) || type.Equals(typeof(SyndicationItem));
         }
 
+        /// <summary>
+        /// Abstract template method that reads the actualy object using a <see cref="XmlReader"/>. Invoked from <see cref="M:ReadInternal"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return.</typeparam>
+        /// <param name="xmlReader">The XmlReader to use.</param>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
         protected override T ReadXml<T>(XmlReader xmlReader, HttpWebResponse response)
         {
-            return SyndicationFeed.Load(xmlReader) as T;
+            if (typeof(SyndicationFeed).Equals(typeof(T)))
+            {
+                return SyndicationFeed.Load(xmlReader) as T;
+            }
+            if (typeof(SyndicationItem).Equals(typeof(T)))
+            {
+                return SyndicationItem.Load(xmlReader) as T;
+            }
+            return null;
         }
 
+        /// <summary>
+        /// Returns the default <see cref="XmlReaderSettings">XmlReader settings</see> 
+        /// used by this converter to read from the HTTP response.
+        /// </summary>
+        /// <returns>The XmlReader settings.</returns>
         protected override XmlReaderSettings GetDefaultXmlReaderSettings()
         {
             XmlReaderSettings settings = new XmlReaderSettings();

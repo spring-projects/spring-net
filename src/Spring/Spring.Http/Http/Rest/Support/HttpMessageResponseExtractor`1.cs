@@ -19,25 +19,41 @@
 #endregion
 
 using System.Net;
+using System.Collections.Generic;
+
+using Spring.Http;
+using Spring.Http.Converters;
 
 namespace Spring.Http.Rest.Support
 {
     /// <summary>
-    /// Response extractor that extracts the response HTTP headers.
+    /// Response extractor that extracts the HTTP response message with no body.
     /// </summary>
     /// <author>Arjen Poutsma</author>
     /// <author>Bruno Baia (.NET)</author>
-    public class HeadersResponseExtractor : IResponseExtractor<WebHeaderCollection>
+    public class HttpMessageResponseExtractor<T> : IResponseExtractor<HttpResponseMessage<T>> where T : class
     {
+        private MessageConverterResponseExtractor<T> httpMessageConverterExtractor;
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="HttpMessageResponseExtractor{T}"/> class.
+        /// </summary>
+        /// <param name="messageConverters">The list of <see cref="IHttpMessageConverter"/> to use.</param>
+        public HttpMessageResponseExtractor(IList<IHttpMessageConverter> messageConverters)
+        {
+            httpMessageConverterExtractor = new MessageConverterResponseExtractor<T>(messageConverters);
+        }
+
         /// <summary>
         /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebResponse"/> to extract data. 
         /// Does not need to care about closing the request or about handling errors: 
         /// this will all be handled by the <see cref="RestTemplate"/> class.
         /// </summary>
         /// <param name="response">The active HTTP request.</param>
-        public WebHeaderCollection ExtractData(HttpWebResponse response)
+        public HttpResponseMessage<T> ExtractData(HttpWebResponse response)
         {
-            return response.Headers;
+            T body = httpMessageConverterExtractor.ExtractData(response);
+            return new HttpResponseMessage<T>(body, response.Headers, response.StatusCode, response.StatusDescription);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿#region License
+﻿#if NET_3_5
+#region License
 
 /*
  * Copyright 2002-2010 the original author or authors.
@@ -22,7 +23,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Xml;
+using System.Linq;
+using System.Xml.Linq;
 
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -30,59 +32,62 @@ using Rhino.Mocks;
 namespace Spring.Http.Converters.Xml
 {
     /// <summary>
-    /// Unit tests for the XmlDocumentHttpMessageConverter class.
+    /// Unit tests for the XElementHttpMessageConverter class.
     /// </summary>
     /// <author>Bruno Baia</author>
     [TestFixture]
-    public class XmlDocumentHttpMessageConverterTests
+    public class XElementHttpMessageConverterTests
     {
-        private XmlDocumentHttpMessageConverter converter;
+        private XElementHttpMessageConverter converter;
         private MockRepository mocks;
 
 	    [SetUp]
 	    public void SetUp() 
         {
             mocks = new MockRepository();
-            converter = new XmlDocumentHttpMessageConverter();
+            converter = new XElementHttpMessageConverter();
 	    }
 
         [Test]
         public void CanRead() 
         {
-            Assert.IsTrue(converter.CanRead(typeof(XmlDocument), new MediaType("application", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(XmlDocument), new MediaType("text", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(XmlDocument), new MediaType("application", "soap+xml"))); // application/*+xml
-            Assert.IsFalse(converter.CanRead(typeof(XmlDocument), new MediaType("text", "plain")));
+            Assert.IsTrue(converter.CanRead(typeof(XElement), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanRead(typeof(XElement), new MediaType("text", "xml")));
+            Assert.IsTrue(converter.CanRead(typeof(XElement), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsFalse(converter.CanRead(typeof(XElement), new MediaType("text", "plain")));
             Assert.IsFalse(converter.CanRead(typeof(String), new MediaType("application", "xml")));
         }
 
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanWrite(typeof(XmlDocument), new MediaType("application", "xml")));
-            Assert.IsTrue(converter.CanWrite(typeof(XmlDocument), new MediaType("text", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(XmlDocument), new MediaType("application", "soap+xml"))); // application/*+xml
-            Assert.IsFalse(converter.CanRead(typeof(XmlDocument), new MediaType("text", "plain")));
+            Assert.IsTrue(converter.CanWrite(typeof(XElement), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(XElement), new MediaType("text", "xml")));
+            Assert.IsTrue(converter.CanRead(typeof(XElement), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsFalse(converter.CanRead(typeof(XElement), new MediaType("text", "plain")));
             Assert.IsFalse(converter.CanRead(typeof(String), new MediaType("application", "xml")));
         }
 
         [Test]
         public void Read()
         {
-            string body = "<?xml version='1.0' encoding='UTF-8' ?><TestElement testAttribute='value' />";
+            string body = "<?xml version='1.0' encoding='UTF-8' ?><Root><TestElement testAttribute='value'/><TestElement testAttribute='novalue'/></Root>";
 
             HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
             Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
 
             mocks.ReplayAll();
 
-            XmlDocument result = converter.Read<XmlDocument>(webResponse);
+            XElement result = converter.Read<XElement>(webResponse);
             Assert.IsNotNull(result, "Invalid result");
-            XmlNode xmlNodeResult = result.SelectSingleNode("//TestElement");
-            Assert.IsNotNull(xmlNodeResult, "Invalid result");
-            Assert.AreEqual("TestElement", xmlNodeResult.LocalName, "Invalid result");
-            Assert.IsNotNull(xmlNodeResult.Attributes["testAttribute"], "Invalid result");
-            Assert.AreEqual("value", xmlNodeResult.Attributes["testAttribute"].Value, "Invalid result");
+            //XElement xResult = result.Elements()
+            //    .Where(x => x.Name == "TestElement" && x.Attribute("testAttribute").Value == "value")
+            //    .Single();
+            XElement xResult = (from el in result.Elements()
+                                where el.Name == "TestElement" && el.Attribute("testAttribute").Value == "value"
+                                select el)
+                               .Single();
+            Assert.IsNotNull(xResult, "Invalid result");
 
             mocks.VerifyAll();
         }
@@ -92,8 +97,9 @@ namespace Spring.Http.Converters.Xml
         {
             MemoryStream requestStream = new MemoryStream();
 
-            XmlDocument body = new XmlDocument();
-            body.LoadXml("<?xml version='1.0' encoding='UTF-8' ?><TestElement testAttribute='value' />");
+            XElement body = new XElement("Root",
+                new XElement("TestElement", 1),
+                new XElement("TestElement", 2));
 
             HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
             Expect.Call(webRequest.ContentType = "application/xml").PropertyBehavior();
@@ -108,10 +114,11 @@ namespace Spring.Http.Converters.Xml
             using (StreamReader reader = new StreamReader(requestStream, Encoding.UTF8))
             {
                 string result = reader.ReadToEnd();
-                Assert.AreEqual(body.OuterXml, result, "Invalid result");
+                Assert.AreEqual(body.ToString(SaveOptions.DisableFormatting), result, "Invalid result");
             }
 
             mocks.VerifyAll();
         }
     }
 }
+#endif

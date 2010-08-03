@@ -32,6 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -40,10 +44,6 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">
-      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2008</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Http\Spring.Http.2008.csproj">
       <Project>{FAC04F79-4B1F-1D13-B30F-00EE04EC0FBC}</Project>
       <Name>Spring.Http.2008</Name>

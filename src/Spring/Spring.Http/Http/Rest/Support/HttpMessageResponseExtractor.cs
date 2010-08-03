@@ -19,37 +19,24 @@
 #endregion
 
 using System.Net;
-using System.Collections.Generic;
-
-using Spring.Util;
-using Spring.Http;
-using Spring.Http.Converters;
 
 namespace Spring.Http.Rest.Support
 {
-    /**
-     * Response extractor for {@link HttpEntity}.
-     */
-    public class HttpMessageResponseExtractor<T> : IResponseExtractor<HttpResponseMessage<T>> where T : class
+    /// <summary>
+    /// Response extractor that extracts the HTTP response message with no body.
+    /// </summary>
+    /// <author>Bruno Baia</author>
+    public class HttpMessageResponseExtractor : IResponseExtractor<HttpResponseMessage>
     {
-        private MessageConverterResponseExtractor<T> httpMessageConverterExtractor;
-
-        public HttpMessageResponseExtractor(IList<IHttpMessageConverter> messageConverters)
+        /// <summary>
+        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebResponse"/> to extract data. 
+        /// Does not need to care about closing the request or about handling errors: 
+        /// this will all be handled by the <see cref="RestTemplate"/> class.
+        /// </summary>
+        /// <param name="response">The active HTTP request.</param>
+        public HttpResponseMessage ExtractData(HttpWebResponse response)
         {
-            httpMessageConverterExtractor = new MessageConverterResponseExtractor<T>(messageConverters);
-        }
-
-        public HttpResponseMessage<T> ExtractData(HttpWebResponse response)
-        {
-            if (StringUtils.HasText(response.Headers[HttpResponseHeader.ContentType]))
-            {
-                T body = httpMessageConverterExtractor.ExtractData(response);
-                return new HttpResponseMessage<T>(body, response.Headers, response.StatusCode, response.StatusDescription);
-            }
-            else
-            {
-                return new HttpResponseMessage<T>(response.Headers, response.StatusCode, response.StatusDescription);
-            }
+            return new HttpResponseMessage(response.Headers, response.StatusCode, response.StatusDescription);
         }
     }
 }

@@ -158,6 +158,7 @@ namespace Spring.Http.Rest
             Expect.Call<WebHeaderCollection>(request.Headers).Return(requestHeaders).Repeat.Any();
             ExpectGetResponse();
             //Expect.Call(errorHandler.hasError(response)).andReturn(false);
+            //Expect.Call<string>(response.ContentType).Return(textPlain.ToString()).Repeat.AtLeastOnce();
             WebHeaderCollection responseHeaders = new WebHeaderCollection();
             responseHeaders[HttpResponseHeader.ContentType] = textPlain.ToString();
             Expect.Call<WebHeaderCollection>(response.Headers).Return(responseHeaders).Repeat.Any();
@@ -181,7 +182,7 @@ namespace Spring.Http.Rest
             IList<MediaType> mediaTypes = new List<MediaType>(1);
             mediaTypes.Add(textPlain);
             Expect.Call<IList<MediaType>>(converter.SupportedMediaTypes).Return(mediaTypes);
-             Expect.Call<HttpWebRequest>(requestFactory.CreateRequest(new Uri("http://example.com/resource"))).Return(request);
+            Expect.Call<HttpWebRequest>(requestFactory.CreateRequest(new Uri("http://example.com/resource"))).Return(request);
             Expect.Call(request.Method = "GET");
             Expect.Call(request.Accept = "foo/bar");
             WebHeaderCollection requestHeaders = new WebHeaderCollection();
@@ -279,6 +280,7 @@ namespace Spring.Http.Rest
             Expect.Call<HttpWebRequest>(requestFactory.CreateRequest(new Uri("http://example.com"))).Return(request);
             Expect.Call(request.Method = "POST");
             MediaType contentType = new MediaType("text", "plain");
+            Expect.Call(request.ContentType = contentType.ToString());
             Expect.Call<bool>(converter.CanWrite(typeof(string), contentType)).Return(true);
             WebHeaderCollection requestHeaders = new WebHeaderCollection();
             Expect.Call<WebHeaderCollection>(request.Headers).Return(requestHeaders).Repeat.Any();
@@ -301,7 +303,7 @@ namespace Spring.Http.Rest
         }
 
         [Test]
-        public void PostForLocationEntityCustomHeader() 
+        public void PostForLocationMessageCustomHeader() 
         {
             string helloWorld = "Hello World";
             Expect.Call<HttpWebRequest>(requestFactory.CreateRequest(new Uri("http://example.com"))).Return(request);
@@ -399,7 +401,7 @@ namespace Spring.Http.Rest
         }
 
         [Test]
-        public void PostForEntity() 
+        public void PostForMessage() 
         {
             Expect.Call<bool>(converter.CanRead(typeof(Version), null)).Return(true);
             MediaType textPlain = new MediaType("text", "plain");
@@ -432,6 +434,31 @@ namespace Spring.Http.Rest
             Assert.AreEqual(textPlain, MediaType.ParseMediaType(result.Headers[HttpResponseHeader.ContentType]), "Invalid Content-Type");
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Invalid status code");
             Assert.AreEqual("OK", result.StatusDescription, "Invalid status description");
+        }
+
+        [Test]
+        public void PostForMessageNoBody()
+        {
+            Expect.Call<HttpWebRequest>(requestFactory.CreateRequest(new Uri("http://example.com"))).Return(request);
+            Expect.Call(request.Method = "POST");
+            WebHeaderCollection requestHeaders = new WebHeaderCollection();
+            Expect.Call<WebHeaderCollection>(request.Headers).Return(requestHeaders).Repeat.Any();
+            string helloWorld = "Hello World";
+            Expect.Call<bool>(converter.CanWrite(typeof(string), null)).Return(true);
+            converter.Write(helloWorld, null, request);
+            ExpectGetResponse();
+            //Expect.Call(errorHandler.hasError(response)).andReturn(false);
+            WebHeaderCollection responseHeaders = new WebHeaderCollection();
+            Expect.Call<WebHeaderCollection>(response.Headers).Return(responseHeaders);
+            Expect.Call<HttpStatusCode>(response.StatusCode).Return(HttpStatusCode.Created);
+            Expect.Call<string>(response.StatusDescription).Return("CREATED");
+
+            mocks.ReplayAll();
+
+            HttpResponseMessage result = template.PostForMessage("http://example.com", helloWorld);
+            Assert.IsNull(result.Body, "Invalid POST result");
+            Assert.AreEqual(HttpStatusCode.Created, result.StatusCode, "Invalid status code");
+            Assert.AreEqual("CREATED", result.StatusDescription, "Invalid status description");
         }
 
         [Test]

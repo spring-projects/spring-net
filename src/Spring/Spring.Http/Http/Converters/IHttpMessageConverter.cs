@@ -24,62 +24,65 @@ using System.Collections.Generic;
 
 namespace Spring.Http.Converters
 {
-    /**
-     * Strategy interface that specifies a converter that can convert from and to HTTP requests and responses.
-     *
-     * @author Arjen Poutsma
-     * @author Juergen Hoeller
-     * @since 3.0
-     */
+    // TODO: HttpMessageNotReadableException & HttpMessageNotWritableException exceptions ?
+
+    /// <summary>
+    /// Strategy interface that specifies a converter that can convert from and to HTTP requests and responses.
+    /// </summary>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Bruno Baia (.NET)</author>
     public interface IHttpMessageConverter
     {
-        /**
-         * Indicates whether the given class can be read by this converter.
-         * @param clazz the class to test for readability
-         * @param mediaType the media type to read, can be {@code null} if not specified. Typically the value of a
-         *                  {@code Content-Type} header.
-         * @return {@code true} if readable; {@code false} otherwise
-         */
+        /// <summary>
+        /// Indicates whether the given class can be read by this converter.
+        /// </summary>
+        /// <param name="type">The class to test for readability</param>
+        /// <param name="mediaType">
+        /// The media type to read, can be null if not specified. Typically the value of a 'Content-Type' header.
+        /// </param>
+        /// <returns><see langword="true"/> if readable; otherwise <see langword="false"/></returns>
         bool CanRead(Type type, MediaType mediaType);
 
-        /**
-         * Indicates whether the given class can be written by this converter.
-         * @param clazz the class to test for writability
-         * @param mediaType the media type to write, can be {@code null} if not specified. Typically the value of an
-         * 		  			{@code Accept} header.
-         * @return {@code true} if writable; {@code false} otherwise
-         */
+        /// <summary>
+        /// Indicates whether the given class can be written by this converter.
+        /// </summary>
+        /// <param name="type">The class to test for writability</param>
+        /// <param name="mediaType">
+        /// The media type to write, can be null if not specified. Typically the value of an 'Accept' header.
+        /// </param>
+        /// <returns><see langword="true"/> if writable; otherwise <see langword="false"/></returns>
         bool CanWrite(Type type, MediaType mediaType);
-
-        /**
-         * Return the list of {@link MediaType} objects supported by this converter.
-         * @return the list of supported media types
-         */
+ 
+        /// <summary>
+        /// Gets the list of <see cref="MediaType"/> objects supported by this converter.
+        /// </summary>        
         IList<MediaType> SupportedMediaTypes { get; }
-
-        /**
-         * Read an object of the given type form the given input message, and returns it.
-         * @param clazz the type of object to return. This type must have previously been passed to the
-         * {@link #canRead canRead} method of this interface, which must have returned {@code true}.
-         * @param inputMessage the HTTP input message to read from
-         * @return the converted object
-         * @throws IOException in case of I/O errors
-         * @throws HttpMessageNotReadableException in case of conversion errors
-         */
+        
+        /// <summary>
+        /// Read an object of the given type form the given HTTP response, and returns it.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of object to return. This type must have previously been passed to the 
+        /// <see cref="M:CanRead"/> method of this interface, which must have returned <see langword="true"/>.
+        /// </typeparam>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
         T Read<T>(HttpWebResponse response) where T : class;
 
-        /**
-         * Write an given object to the given output message.
-         * @param t the object to write to the output message. The type of this object must have previously been
-         * passed to the {@link #canWrite canWrite} method of this interface, which must have returned {@code true}.
-         * @param contentType the content type to use when writing. May be {@code null} to indicate that the
-         * default content type of the converter must be used. If not {@code null}, this media type must have
-         * previously been passed to the {@link #canWrite canWrite} method of this interface, which must have
-         * returned {@code true}.
-         * @param outputMessage the message to write to
-         * @throws IOException in case of I/O errors
-         * @throws HttpMessageNotWritableException in case of conversion errors
-         */
+        /// <summary>
+        /// Write an given object to the given HTTP request.
+        /// </summary>
+        /// <param name="content">
+        /// The object to write to the HTTP request. The type of this object must have previously been 
+        /// passed to the <see cref="M:CanWrite"/> method of this interface, which must have returned <see langword="true"/>.
+        /// </param>
+        /// <param name="mediaType">
+        /// The content type to use when writing. May be null to indicate that the default content type of the converter must be used. 
+        /// If not null, this media type must have previously been passed to the <see cref="M:CanWrite"/> method of this interface, 
+        /// which must have returned <see langword="true"/>.
+        /// </param>
+        /// <param name="request">The HTTP request to write to.</param>
         void Write(object content, MediaType mediaType, HttpWebRequest request);
     }
 }

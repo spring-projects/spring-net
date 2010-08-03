@@ -28,16 +28,13 @@ namespace Spring.Util
     // TODO : Check .NET 3.5 class
     // TODO : Back to original Java behavior Expand(params string[]) method ?
 
-    /**
-     * Represents a URI template. An URI template is a URI-like String that contained variables marked of in braces
-     * (<code>{</code>, <code>}</code>), which can be expanded to produce a URI. <p>See {@link #expand(Map)},
-     * {@link #expand(Object[])}, and {@link #match(String)} for example usages.
-     *
-     * @author Arjen Poutsma
-     * @author Juergen Hoeller
-     * @since 3.0
-     * @see <a href="http://bitworking.org/projects/URI-Templates/">URI Templates</a>
-     */
+    /// <summary>
+    /// Represents a URI template. An URI template is a URI-like String that contained variables 
+    /// marked of in braces {}, which can be expanded to produce a URI.
+    /// </summary>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Bruno Baia (.NET)</author>
     public class UriTemplate
     {
         /** Captures URI template variable names. */
@@ -54,11 +51,18 @@ namespace Spring.Util
         private string[] variableNames;
         private Regex matchRegex;
 
+        /// <summary>
+        /// Gets the names of the variables in the template, in order.
+        /// </summary>
         public string[] VariableNames
         {
             get { return this.variableNames; }
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="UriTemplate"/> with the given URI String.
+        /// </summary>
+        /// <param name="uriTemplate">The URI template string.</param>
         public UriTemplate(string uriTemplate)
         {
             this.uriTemplate = uriTemplate;
@@ -67,6 +71,23 @@ namespace Spring.Util
             this.matchRegex = parser.GetMatchRegex();
         }
 
+        /// <summary>
+        /// Given the dictionary of variables, expands this template into a full URI. 
+        /// The dictionary keys represent variable names, the dicitonary values variable values. 
+        /// The order of variables is not significant.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
+        /// IDictionary&lt;string, string&gt; uriVariables = new Dictionary&lt;String, String&gt;();
+        /// uriVariables.Add("booking", "42");
+        /// uriVariables.Add("hotel", "1");
+        /// Console.Out.WriteLine(template.Expand(uriVariables));
+        /// </code>
+        /// will print: <blockquote>http://example.com/hotels/1/bookings/42</blockquote>
+        /// </example>
+        /// <param name="uriVariables">The dictionary of URI variables.</param>
+        /// <returns>The expanded URI</returns>
         public Uri Expand(IDictionary<string, string> uriVariables)
         {
             if (uriVariables.Count != this.variableNames.Length)
@@ -105,6 +126,19 @@ namespace Spring.Util
             //return Expand(uriVariableValues);
         }
 
+        /// <summary>
+        /// Given an array of variables, expands this template into a full URI. 
+        /// The array represent variable values. The order of variables is significant.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
+        /// Console.Out.WriteLine(template.Expand("1", "42"));
+        /// </code>
+        /// will print: <blockquote>http://example.com/hotels/1/bookings/42</blockquote>
+        /// </example>
+        /// <param name="uriVariableValues">The array of URI variables.</param>
+        /// <returns>The expanded URI</returns>
         public Uri Expand(params string[] uriVariableValues)
         {
             if (uriVariableValues.Length != this.variableNames.Length)
@@ -123,11 +157,11 @@ namespace Spring.Util
             return new Uri(uri, UriKind.RelativeOrAbsolute);
         }
 
-        /**
-         * Indicate whether the given URI matches this template.
-         * @param uri the URI to match to
-         * @return <code>true</code> if it matches; <code>false</code> otherwise
-         */
+        /// <summary>
+        /// Indicates whether the given URI matches this template.
+        /// </summary>
+        /// <param name="uri">The URI to match to.</param>
+        /// <returns><see langword="true"/> if it matches; otherwise <see langword="false"/></returns>
         public bool Matches(string uri)
         {
             if (uri == null)
@@ -137,14 +171,19 @@ namespace Spring.Util
             return this.matchRegex.IsMatch(uri);
         }
 
-        /**
-         * Match the given URI to a map of variable values. Keys in the returned map are variable names, values are variable
-         * values, as occurred in the given URI. <p>Example: <pre class="code"> UriTemplate template = new
-         * UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}"); System.out.println(template.match("http://example.com/hotels/1/bookings/42"));
-         * </pre> will print: <blockquote><code>{hotel=1, booking=42}</code></blockquote>
-         * @param uri the URI to match to
-         * @return a map of variable values
-         */
+        /// <summary>
+        /// Match the given URI to a dictionary of variable values. Keys in the returned map are variable names, 
+        /// values are variable values, as occurred in the given URI
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
+        /// Console.Out.WriteLine(template.Match("http://example.com/hotels/1/bookings/42"));
+        /// </code>
+        /// will print: <blockquote>{hotel=1, booking=42}</blockquote>
+        /// </example>
+        /// <param name="uri">The URI to match to.</param>
+        /// <returns>A dictionary of variable values.</returns>
         public IDictionary<string, string> Match(string uri)
         {
             AssertUtils.ArgumentNotNull(uri, "uri");
@@ -158,6 +197,12 @@ namespace Spring.Util
             return result;
         }
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object."/>
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object."/>.
+        /// </returns>
         public override string ToString()
         {
             return this.uriTemplate;

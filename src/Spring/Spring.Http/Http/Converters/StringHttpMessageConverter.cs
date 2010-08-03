@@ -23,37 +23,57 @@ using System.IO;
 using System.Net;
 using System.Text;
 
+using Spring.Util;
+
 namespace Spring.Http.Converters
 {
-    /**
-     * Implementation of {@link HttpMessageConverter} that can read and write strings.
-     *
-     * <p>By default, this converter supports all media types (<code>&#42;&#47;&#42;</code>), and writes with a {@code
-     * Content-Type} of {@code text/plain}. This can be overridden by setting the {@link
-     * #setSupportedMediaTypes(java.util.List) supportedMediaTypes} property.
-     *
-     * @author Arjen Poutsma
-     * @since 3.0
-     */
+    /// <summary>
+    /// Implementation of <see cref="IHttpMessageConverter"/> that can read and write strings.
+    /// </summary>
+    /// <remarks>
+    /// By default, this converter supports all media types '*/*', and writes with a 'Content-Type' 
+    /// of 'text/plain'. 
+    /// This can be overridden by setting the <see cref="P:SupportedMediaTypes"/> property.
+    /// </remarks>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Bruno Baia (.NET)</author>
     public class StringHttpMessageConverter : AbstractHttpMessageConverter
     {
+        /// <summary>
+        /// Default encoding for strings.
+        /// </summary>
         public static readonly Encoding DEFAULT_CHARSET = Encoding.GetEncoding("ISO-8859-1");
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="ByteArrayHttpMessageConverter"/> 
+        /// with 'text/plain; charset=ISO-8859-1', and '*/*' media types.
+        /// </summary>
         public StringHttpMessageConverter() :
             base(new MediaType("text", "plain", "ISO-8859-1"), MediaType.ALL)
         {
         }
 
+        /// <summary>
+        /// Indicates whether the given class is supported by this converter.
+        /// </summary>
+        /// <param name="type">The type to test for support.</param>
+        /// <returns><see langword="true"/> if supported; otherwise <see langword="false"/></returns>
         protected override bool Supports(Type type)
         {
             return type.Equals(typeof(string));
         }
 
+        /// <summary>
+        /// Abstract template method that reads the actualy object. Invoked from <see cref="M:Read"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return.</typeparam>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
         protected override T ReadInternal<T>(HttpWebResponse response)
         {
             // Get the response encoding
             Encoding encoding;
-            if (String.IsNullOrEmpty(response.CharacterSet))
+            if (!StringUtils.HasText(response.CharacterSet))
             {
                 encoding = DEFAULT_CHARSET;
             }
@@ -69,12 +89,17 @@ namespace Spring.Http.Converters
             }
         }
 
+        /// <summary>
+        /// Abstract template method that writes the actual body. Invoked from <see cref="M:Write"/>.
+        /// </summary>
+        /// <param name="content">The object to write to the HTTP request.</param>
+        /// <param name="request">The HTTP request to write to.</param>
         protected override void WriteInternal(object content, HttpWebRequest request)
         {
             // Get the request encoding
-            MediaType mediaType = MediaType.ParseMediaType(request.Headers[HttpRequestHeader.ContentType]);
             Encoding encoding;
-            if (mediaType == null || String.IsNullOrEmpty(mediaType.CharSet))
+            MediaType mediaType = MediaType.ParseMediaType(request.ContentType);
+            if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
             }
@@ -89,7 +114,7 @@ namespace Spring.Http.Converters
             // Set the content length in the request headers  
             request.ContentLength = byteData.Length;
 
-            // Write data  
+            // Write to the request
             using (Stream postStream = request.GetRequestStream())
             {
                 postStream.Write(byteData, 0, byteData.Length);

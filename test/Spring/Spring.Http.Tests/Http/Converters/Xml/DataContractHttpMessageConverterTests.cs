@@ -19,15 +19,14 @@
 
 #endregion
 
-using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 using NUnit.Framework;
 using Rhino.Mocks;
-using System.Xml;
-using System.Runtime.Serialization;
 
 namespace Spring.Http.Converters.Xml
 {
@@ -51,66 +50,102 @@ namespace Spring.Http.Converters.Xml
         [Test]
         public void CanRead() 
         {
-            Assert.IsTrue(converter.CanRead(typeof(CustomClass), new MediaType("application", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(CustomClass), new MediaType("text", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(CustomClass), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsTrue(converter.CanRead(typeof(DataContractClass), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanRead(typeof(DataContractClass), new MediaType("text", "xml")));
+            Assert.IsTrue(converter.CanRead(typeof(DataContractClass), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsFalse(converter.CanRead(typeof(DataContractClass), new MediaType("text", "plain")));
+            Assert.IsFalse(converter.CanRead(typeof(NonDataContractClass), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanRead(typeof(CollectionDataContractClass), new MediaType("application", "xml")));
         }
 
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanWrite(typeof(CustomClass), new MediaType("application", "xml")));
-            Assert.IsTrue(converter.CanWrite(typeof(CustomClass), new MediaType("text", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(CustomClass), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsTrue(converter.CanWrite(typeof(DataContractClass), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(DataContractClass), new MediaType("text", "xml")));
+            Assert.IsTrue(converter.CanRead(typeof(DataContractClass), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsFalse(converter.CanRead(typeof(DataContractClass), new MediaType("text", "plain")));
+            Assert.IsFalse(converter.CanRead(typeof(NonDataContractClass), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanRead(typeof(CollectionDataContractClass), new MediaType("application", "xml")));
         }
 
-        //[Test]
-        //public void Read()
-        //{
-        //    string body = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><TestElement testAttribute=\"value\" />";
+        [Test]
+        public void Read()
+        {
+            string body = @"<?xml version='1.0' encoding='UTF-8' ?>
+                <DataContractHttpMessageConverterTests.DataContractClass xmlns='http://schemas.datacontract.org/2004/07/Spring.Http.Converters.Xml' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'>
+                    <ID>1</ID><Name>Bruno Baïa</Name>
+                </DataContractHttpMessageConverterTests.DataContractClass>";
 
-        //    HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
-        //    Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(Encoding.UTF8.GetBytes(body))).Repeat.Once();
+            HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
+            Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
 
-        //    mocks.ReplayAll();
+            mocks.ReplayAll();
 
-        //    XmlDocument result = converter.Read<XmlDocument>(webResponse);
-        //    Assert.IsNotNull(result, "Invalid result");
+            DataContractClass result = converter.Read<DataContractClass>(webResponse);
+            Assert.IsNotNull(result, "Invalid result");
+            Assert.AreEqual("1", result.ID, "Invalid result");
+            Assert.AreEqual("Bruno Baïa", result.Name, "Invalid result");
 
-        //    mocks.VerifyAll();
-        //}
+            mocks.VerifyAll();
+        }
 
-        //[Test]
-        //public void Write()
-        //{
-        //    XmlDocument body = new XmlDocument();
-        //    body.CreateElement("TestElement");
+        [Test]
+        public void Write()
+        {
+            MemoryStream requestStream = new MemoryStream();
 
-        //    HttpWebRequest webRequest = WebRequest.Create("http://localhost") as HttpWebRequest;
-        //    webRequest.Method = "POST";
+            string expectedBody = "<DataContractHttpMessageConverterTests.DataContractClass xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/Spring.Http.Converters.Xml\"><ID>1</ID><Name>Bruno Baïa</Name></DataContractHttpMessageConverterTests.DataContractClass>";
+            DataContractClass body = new DataContractClass("1", "Bruno Baïa");
 
-        //    converter.Write(body, null, webRequest);
+            HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
+            Expect.Call(webRequest.ContentType = "application/xml").PropertyBehavior();
+            Expect.Call(webRequest.ContentLength = 1337).PropertyBehavior();
+            Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
 
-        //    Assert.AreEqual(new MediaType("application", "xml"), MediaType.ParseMediaType(webRequest.ContentType), "Invalid content-type");
+            mocks.ReplayAll();
 
-        //    using (Stream postStream = webRequest.GetRequestStream())
-        //    {
-        //        using (StreamReader reader = new StreamReader(postStream))
-        //        {
-        //            string result = reader.ReadToEnd();
-        //            Assert.AreEqual(result.Length, webRequest.ContentLength, "Invalid content-length");
-        //        }
-                
-        //    }
-        //}
+            converter.Write(body, null, webRequest);
+
+            requestStream.Position = 0;
+            using (StreamReader reader = new StreamReader(requestStream, Encoding.UTF8))
+            {
+                string result = reader.ReadToEnd();
+                Assert.AreEqual(expectedBody, result, "Invalid result");
+            }
+
+            mocks.VerifyAll();
+        }
 
         #region Test classes
-
+        
         [DataContract]
-        public class CustomClass
+        public class DataContractClass
         {
             [DataMember]
             public string ID { get; set; }
+
+            [DataMember]
+            public string Name { get; set; }
+
+            public DataContractClass(string id, string name)
+            {
+                this.ID = id;
+                this.Name = name;
+            }
+        }
+
+        [CollectionDataContract]
+        public class CollectionDataContractClass : List<string>
+        {
+            public CollectionDataContractClass()
+                : base()
+            {
+            }
+        }
+
+        public class NonDataContractClass
+        {
         }
 
         #endregion

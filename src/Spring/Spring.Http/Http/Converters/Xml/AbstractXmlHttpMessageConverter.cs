@@ -18,20 +18,36 @@
 
 #endregion
 
-using System;
 using System.IO;
 using System.Xml;
 using System.Net;
 using System.Text;
 
+using Spring.Util;
+
 namespace Spring.Http.Converters.Xml
 {
+    /// <summary>
+    /// Base class for <see cref="IHttpMessageConverter"/> that convert from/to XML.
+    /// </summary>
+    /// <remarks>
+    /// By default, subclasses of this converter support 'text/xml', 'application/xml', and 'application/*-xml' media types. 
+    /// This can be overridden by setting the <see cref="P:SupportedMediaTypes"/> property.
+    /// </remarks>
+    /// <author>Bruno Baia</author>
     public abstract class AbstractXmlHttpMessageConverter : AbstractHttpMessageConverter
     {
+        /// <summary>
+        /// Default encoding for XML.
+        /// </summary>
         public static readonly Encoding DEFAULT_CHARSET = Encoding.UTF8;
 
         private XmlReaderSettings _xmlReaderSettings;
 
+        /// <summary>
+        /// Gets or sets the <see cref="XmlReaderSettings">XmlReader settings</see> 
+        /// used by this converter to read from the HTTP response.
+        /// </summary>
         public XmlReaderSettings XmlReaderSettings
         {
             get 
@@ -45,15 +61,31 @@ namespace Spring.Http.Converters.Xml
             set { _xmlReaderSettings = value; }
         }
 
-        /**
-         * Construct an {@code AbstractHttpMessageConverter} with multiple supported media type.
-         * @param supportedMediaTypes the supported media types
-         */
+        /// <summary>
+        /// Creates a new instance of the <see cref="AbstractHttpMessageConverter"/> 
+        /// with multiple supported media type.
+        /// </summary>
+        /// <param name="supportedMediaTypes">The supported media types.</param>
         protected AbstractXmlHttpMessageConverter(params MediaType[] supportedMediaTypes) :
             base(supportedMediaTypes)
         {
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="AbstractHttpMessageConverter"/> that sets 
+        /// the <see cref="P:SupportedMediaTypes"/> to 'text/xml' and 'application/xml', and 'application/*-xml'.
+        /// </summary>
+        protected AbstractXmlHttpMessageConverter() :
+            base(new MediaType("application", "xml"), new MediaType("text", "xml"), new MediaType("application", "*+xml"))
+        {
+        }
+
+        /// <summary>
+        /// Abstract template method that reads the actualy object. Invoked from <see cref="M:Read"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return.</typeparam>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
         protected override T ReadInternal<T>(HttpWebResponse response)
         {
             using (Stream stream = response.GetResponseStream())
@@ -65,12 +97,17 @@ namespace Spring.Http.Converters.Xml
             }
         }
 
+        /// <summary>
+        /// Abstract template method that writes the actual body. Invoked from <see cref="M:Write"/>.
+        /// </summary>
+        /// <param name="content">The object to write to the HTTP request.</param>
+        /// <param name="request">The HTTP request to write to.</param>
         protected override void WriteInternal(object content, HttpWebRequest request)
         {
             // Get the request encoding
-            MediaType mediaType = MediaType.ParseMediaType(request.Headers[HttpRequestHeader.ContentType]);
             Encoding encoding;
-            if (mediaType == null || String.IsNullOrEmpty(mediaType.CharSet))
+            MediaType mediaType = MediaType.ParseMediaType(request.ContentType);
+            if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
             }
@@ -79,20 +116,44 @@ namespace Spring.Http.Converters.Xml
                 encoding = Encoding.GetEncoding(mediaType.CharSet);
             }
 
-            using (Stream postStream = request.GetRequestStream())
+            // Write to the request
+            using (IgnoreCloseMemoryStream requestStream = new IgnoreCloseMemoryStream())
             {
-                using (XmlTextWriter xmlWriter = new XmlTextWriter(postStream, encoding))
+                using (XmlTextWriter xmlWriter = new XmlTextWriter(requestStream, encoding))
                 {
                     WriteXml(xmlWriter, content, request);
                     xmlWriter.Flush();
                 }
 
-                // TODO : Don't work
                 // Set the content length in the request headers  
-                request.ContentLength = postStream.Length;
+                request.ContentLength = requestStream.Length;
+
+                requestStream.CopyToAndClose(request.GetRequestStream());
             }
         }
 
+        /// <summary>
+        /// Abstract template method that reads the actualy object using a <see cref="XmlReader"/>. Invoked from <see cref="M:ReadInternal"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return.</typeparam>
+        /// <param name="xmlReader">The XmlReader to use.</param>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
+        protected abstract T ReadXml<T>(XmlReader xmlReader, HttpWebResponse response) where T : class;
+
+        /// <summary>
+        /// Abstract template method that writes the actual body using a <see cref="XmlWriter"/>. Invoked from <see cref="M:WriteInternal"/>.
+        /// </summary>
+        /// <param name="xmlWriter">The XmlWriter to use.</param>
+        /// <param name="content">The object to write to the HTTP request.</param>
+        /// <param name="request">The HTTP request to write to.</param>
+        protected abstract void WriteXml(XmlWriter xmlWriter, object content, HttpWebRequest request);
+
+        /// <summary>
+        /// Returns the default <see cref="XmlReaderSettings">XmlReader settings</see> 
+        /// used by this converter to read from the HTTP response.
+        /// </summary>
+        /// <returns>The XmlReader settings.</returns>
         protected virtual XmlReaderSettings GetDefaultXmlReaderSettings()
         {
             XmlReaderSettings settings = new XmlReaderSettings();
@@ -102,9 +163,5 @@ namespace Spring.Http.Converters.Xml
             settings.IgnoreWhitespace = true;
             return settings;
         }
-
-        protected abstract T ReadXml<T>(XmlReader xmlReader, HttpWebResponse response) where T : class;
-
-        protected abstract void WriteXml(XmlWriter xmlWriter, object content, HttpWebRequest request);
     }
 }

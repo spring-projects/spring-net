@@ -22,86 +22,31 @@ using System.Net;
 
 namespace Spring.Http
 {
-    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html#sec6
-    public class HttpResponseMessage<T> where T : class
+    /// <summary>
+    /// Represents a HTTP response message with no entity.
+    /// </summary>
+    /// <author>Bruno Baia</author>
+    public class HttpResponseMessage : HttpResponseMessage<object>
     {
-        private WebHeaderCollection headers;
-        private T body;
-        private HttpStatusCode statusCode;
-        private string statusDescription;
-
-        /**
-         * Returns the headers of this entity.
-         */
-        public WebHeaderCollection Headers
-        {
-            get { return this.headers; }
-        }
-
-        /**
-         * Returns the body of this entity.
-         */
-        public T Body
-        {
-            get { return this.body; }
-        }
-
-        /**
-         * Return the HTTP status code of the response.
-         * @return the HTTP status as an HttpStatus enum value
-         */
-        public HttpStatusCode StatusCode
-        {
-            get { return statusCode; }
-        }
-
-        public string StatusDescription
-        {
-            get { return statusDescription; }
-        }
-
-        /**
-         * Create a new {@code ResponseEntity} with the given status code, and no body, no headers.
-         * @param body the entity body
-         * @param statusCode the status code
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpResponseMessage"/> with the given status code and status description.
+        /// </summary>
+        /// <param name="statusCode">The HTTP status code.</param>
+        /// <param name="statusDescription">The HTTP status description.</param>
         public HttpResponseMessage(HttpStatusCode statusCode, string statusDescription) :
-            this(null, null, statusCode, statusDescription)
+            base(null, null, statusCode, statusDescription)
         {
         }
 
-        /**
-         * Create a new {@code ResponseEntity} with the given body and status code, and no headers.
-         * @param body the entity body
-         * @param statusCode the status code
-         */
-        public HttpResponseMessage(T body, HttpStatusCode statusCode, string statusDescription) :
-            this(body, null, statusCode, statusDescription)
-        {
-        }
-
-        /**
-         * Create a new {@code HttpEntity} with the given headers and status code, and no body.
-         * @param headers the entity headers
-         * @param statusCode the status code
-         */
+        /// <summary>
+        /// Creates a new instance of <see cref="HttpResponseMessage"/> with the given headers, status code and status description.
+        /// </summary>
+        /// <param name="headers">The response headers.</param>
+        /// <param name="statusCode">The HTTP status code.</param>
+        /// <param name="statusDescription">The HTTP status description.</param>
         public HttpResponseMessage(WebHeaderCollection headers, HttpStatusCode statusCode, string statusDescription) :
-            this(null, headers, statusCode, statusDescription)
+            base(null, headers, statusCode, statusDescription)
         {
-        }
-
-        /**
-         * Create a new {@code HttpEntity} with the given body, headers, and status code.
-         * @param body the entity body
-         * @param headers the entity headers
-         * @param statusCode the status code
-         */
-        public HttpResponseMessage(T body, WebHeaderCollection headers, HttpStatusCode statusCode, string statusDescription)
-        {
-            this.statusCode = statusCode;
-            this.statusDescription = statusDescription;
-            this.body = body;
-            this.headers = headers;
         }
     }
 }

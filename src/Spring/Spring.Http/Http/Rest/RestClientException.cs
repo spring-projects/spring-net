@@ -23,19 +23,23 @@ using System.Runtime.Serialization;
 
 namespace Spring.Http.Rest
 {
+    /// <summary>
+    /// Base class for exceptions thrown by <see cref="RestTemplate"/> whenever it encounters client-side HTTP errors.
+    /// </summary>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Bruno Baia (.NET)</author>
     [Serializable]
     public class RestClientException : Exception
     {
         /// <summary>
-        /// Creates a new instance of the
-        /// RestClientException class.
+        /// Creates a new instance of the <see cref="RestClientException"/> class.
         /// </summary>
         public RestClientException()
         {
         }
 
         /// <summary>
-        /// Creates a new instance of the RestClientException class.
+        /// Creates a new instance of the <see cref="RestClientException"/> class.
         /// </summary>
         /// <param name="message">
         /// A message about the exception.
@@ -46,7 +50,7 @@ namespace Spring.Http.Rest
         }
 
         /// <summary>
-        /// Creates a new instance of the RestClientException class.
+        /// Creates a new instance of the <see cref="RestClientException"/> class.
         /// </summary>
         /// <param name="message">
         /// A message about the exception.
@@ -60,7 +64,7 @@ namespace Spring.Http.Rest
         }
 
         /// <summary>
-        /// Creates a new instance of the RestClientException class.
+        /// Creates a new instance of the <see cref="RestClientException"/> class.
         /// </summary>
         /// <param name="info">
         /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>

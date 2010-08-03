@@ -222,7 +222,7 @@ namespace Spring.Http.Rest
         [Test]
         public void ExchangePut()
         {
-            HttpResponseMessage<string> result = template.Exchange<string>(
+            HttpResponseMessage result = template.Exchange(
                 "user/1", new HttpRequestMessage("Bruno Baia", HttpMethod.PUT));
 
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Invalid status code");
@@ -458,7 +458,6 @@ namespace Spring.Http.Rest
 
                 context.OutgoingResponse.StatusCode = HttpStatusCode.OK;
                 context.OutgoingResponse.StatusDescription = String.Format("User id '{0}' updated with '{1}'", id, name);
-                //context.OutgoingResponse.ContentType = "text/plain";
             }
 
             [WebInvoke(UriTemplate = "user/{id}", Method = "DELETE")]

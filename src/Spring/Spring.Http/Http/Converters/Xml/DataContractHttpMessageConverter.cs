@@ -26,67 +26,72 @@ using System.Xml;
 using System.Text;
 using System.Runtime.Serialization;
 
-using Spring.Util;
-
 namespace Spring.Http.Converters.Xml
 {
-    // TODO : Derive from AbstractXmlHttpMessageConverter ?
     // TODO : Support for known types, etc...
-    public class DataContractHttpMessageConverter : AbstractHttpMessageConverter
-    {
-        public static readonly Encoding DEFAULT_CHARSET = Encoding.UTF8;
 
+    /// <summary>
+    /// Implementation of <see cref="IHttpMessageConverter"/> that can read and write XML 
+    /// using <see cref="DataContractSerializer"/>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// By default, this converter supports 'text/xml', 'application/xml', and 'application/*-xml' media types. 
+    /// This can be overridden by setting the <see cref="P:SupportedMediaTypes"/> property.
+    /// </para>
+    /// <para>
+    /// This converter can read classes annotated with <see cref="DataContractAttribute"/> and <see cref="CollectionDataContractAttribute"/>, and write classes 
+    /// annotated with with {@link XmlRootElement}, or subclasses thereof.
+    /// </para>
+    /// </remarks>
+    /// <author>Bruno Baia</author>
+    public class DataContractHttpMessageConverter : AbstractXmlHttpMessageConverter
+    {
+        /// <summary>
+        /// Creates a new instance of the <see cref="DataContractHttpMessageConverter"/> 
+        /// with 'text/xml', 'application/xml', and 'application/*-xml' media types.
+        /// </summary>
         public DataContractHttpMessageConverter() :
-            base(new MediaType("application", "xml"), new MediaType("text", "xml"), new MediaType("application", "*+xml"))
+            base()
         {
         }
 
+        /// <summary>
+        /// Indicates whether the given class is supported by this converter.
+        /// </summary>
+        /// <param name="type">The type to test for support.</param>
+        /// <returns><see langword="true"/> if supported; otherwise <see langword="false"/></returns>
         protected override bool Supports(Type type)
         {
-            return true;
-            //return (
-            //    AttributeUtils.FindAttribute(type, typeof(DataContractAttribute)) != null ||
-            //    AttributeUtils.FindAttribute(type, typeof(SerializableAttribute)) != null ||
-            //    typeof(ISerializable).IsAssignableFrom(type));
+            return (
+                Attribute.GetCustomAttributes(type, typeof(DataContractAttribute), true).Length > 0 ||
+                Attribute.GetCustomAttributes(type, typeof(CollectionDataContractAttribute), true).Length > 0
+                );
         }
 
-        protected override T ReadInternal<T>(HttpWebResponse response)
+        /// <summary>
+        /// Abstract template method that reads the actualy object using a <see cref="XmlReader"/>. Invoked from <see cref="M:ReadInternal"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return.</typeparam>
+        /// <param name="xmlReader">The XmlReader to use.</param>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
+        protected override T ReadXml<T>(XmlReader xmlReader, HttpWebResponse response)
         {
             DataContractSerializer serializer = new DataContractSerializer(typeof(T));
-            using (Stream stream = response.GetResponseStream())
-            {
-                return (T)serializer.ReadObject(stream) as T;
-            }
+            return serializer.ReadObject(xmlReader) as T;
         }
 
-        protected override void WriteInternal(object content, HttpWebRequest request)
+        /// <summary>
+        /// Abstract template method that writes the actual body using a <see cref="XmlWriter"/>. Invoked from <see cref="M:WriteInternal"/>.
+        /// </summary>
+        /// <param name="xmlWriter">The XmlWriter to use.</param>
+        /// <param name="content">The object to write to the HTTP request.</param>
+        /// <param name="request">The HTTP request to write to.</param>
+        protected override void WriteXml(XmlWriter xmlWriter, object content, HttpWebRequest request)
         {
-            // Get the request encoding
-            MediaType mediaType = MediaType.ParseMediaType(request.Headers[HttpRequestHeader.ContentType]);
-            Encoding encoding;
-            if (mediaType == null || String.IsNullOrEmpty(mediaType.CharSet))
-            {
-                encoding = DEFAULT_CHARSET;
-            }
-            else
-            {
-                encoding = Encoding.GetEncoding(mediaType.CharSet);
-            }
-
             DataContractSerializer serializer = new DataContractSerializer(content.GetType());
-            
-            // Write data  
-            using (Stream postStream = request.GetRequestStream())
-            {
-                using (XmlTextWriter xmlWriter = new XmlTextWriter(postStream, encoding))
-                {
-                    serializer.WriteObject(xmlWriter, content);
-                    xmlWriter.Flush();
-                }
-                
-                // Set the content length in the request headers  
-                request.ContentLength = postStream.Length;
-            }
+            serializer.WriteObject(xmlWriter, content);
         }
     }
 }

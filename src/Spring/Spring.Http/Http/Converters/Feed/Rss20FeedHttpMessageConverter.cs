@@ -27,22 +27,22 @@ using System.ServiceModel.Syndication;
 namespace Spring.Http.Converters.Feed
 {
     /// <summary>
-    /// Implementation of <see cref="IHttpMessageConverter"/> that can read and write Atom feeds 
+    /// Implementation of <see cref="IHttpMessageConverter"/> that can read and write RSS feeds 
     /// using the <see cref="System.ServiceModel.Syndication.SyndicationFeed"/> class.
     /// </summary>
     /// <remarks>
-    /// By default, this converter reads and writes the media type 'application/atom+xml' media type. 
+    /// By default, this converter reads and writes the media type 'application/rss+xml' media type. 
     /// This can be overridden by setting the <see cref="P:SupportedMediaTypes"/> property.
     /// </remarks>
     /// <author>Bruno Baia</author>
-    public class Atom10FeedHttpMessageConverter : AbstractFeedHttpMessageConverter
+    public class Rss20FeedHttpMessageConverter : AbstractFeedHttpMessageConverter
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="Atom10FeedHttpMessageConverter"/> 
-        /// with 'application/atom+xml', 'application/xml' and 'text/xml' media types. 
+        /// Creates a new instance of the <see cref="Rss20FeedHttpMessageConverter"/> 
+        /// with 'application/rss+xml', 'application/xml' and 'text/xml' media types. 
         /// </summary>
-        public Atom10FeedHttpMessageConverter() : 
-            base(new MediaType("application", "atom+xml"), new MediaType("application", "xml"), new MediaType("text", "xml"))
+        public Rss20FeedHttpMessageConverter() :
+            base(new MediaType("application", "rss+xml"), new MediaType("application", "xml"), new MediaType("text", "xml"))
         {
         }
 
@@ -56,13 +56,13 @@ namespace Spring.Http.Converters.Feed
         {
             if (content is SyndicationFeed)
             {
-                SyndicationFeed atomFeed = content as SyndicationFeed;
-                atomFeed.SaveAsAtom10(xmlWriter);
+                SyndicationFeed rssFeed = content as SyndicationFeed;
+                rssFeed.SaveAsRss20(xmlWriter);
             }
             else if (content is SyndicationItem)
             {
-                SyndicationItem atomItem = content as SyndicationItem;
-                atomItem.SaveAsAtom10(xmlWriter);
+                SyndicationItem rssItem = content as SyndicationItem;
+                rssItem.SaveAsRss20(xmlWriter);
             }
         }
     }

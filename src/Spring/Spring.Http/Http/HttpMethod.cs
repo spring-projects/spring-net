@@ -22,23 +22,52 @@ using System;
 
 namespace Spring.Http
 {
-    /**
-     * Java 5 enumeration of HTTP request methods. Intended for use
-     * with {@link org.springframework.http.client.ClientHttpRequest}
-     * and {@link org.springframework.web.client.RestTemplate}.
-     *
-     * @author Arjen Poutsma
-     * @since 3.0
-     */
+    /// <summary>
+    /// Enumeration of HTTP request methods as defined in the HTTP specification. 
+    /// <a href="http://tools.ietf.org/html/rfc2616#section-5.1.1">HTTP 1.1, section 6</a>
+    /// </summary>
+    /// <author>Arjen Poutsma</author>
+    /// <author>Bruno Baia</author>
     public enum HttpMethod
     {
+        /// <summary>
+        /// The OPTIONS method.
+        /// </summary>
         OPTIONS,
+
+        /// <summary>
+        /// The GET method.
+        /// </summary>
         GET,
-        HEAD, 
-        POST, 
-        PUT, 
-        DELETE, 
+
+        /// <summary>
+        /// The HEAD method.
+        /// </summary>
+        HEAD,
+
+        /// <summary>
+        /// The POST method.
+        /// </summary>
+        POST,
+
+        /// <summary>
+        /// The PUT method.
+        /// </summary>
+        PUT,
+
+        /// <summary>
+        /// The DELETE method.
+        /// </summary>
+        DELETE,
+
+        /// <summary>
+        /// The TRACE method.
+        /// </summary>
         TRACE,
+
+        /// <summary>
+        /// The CONNECT method.
+        /// </summary>
         CONNECT
     }
 }

@@ -31,20 +31,48 @@ using Spring.Util;
 namespace Spring.Http.Converters.Json
 {
     // TODO : Support for known types, etc...
+    // TODO : Fix Write method
+
+    /// <summary>
+    /// Implementation of <see cref="IHttpMessageConverter"/> that can read and write JSON.
+    /// </summary>
+    /// <remarks>
+    /// By default, this converter supports 'application/json' media type. 
+    /// This can be overridden by setting the <see cref="P:SupportedMediaTypes"/> property.
+    /// </remarks>
+    /// <author>Bruno Baia</author>
     public class JsonHttpMessageConverter : AbstractHttpMessageConverter
     {
+        /// <summary>
+        /// Default encoding for JSON.
+        /// </summary>
         public static readonly Encoding DEFAULT_CHARSET = Encoding.UTF8;
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="JsonHttpMessageConverter"/> 
+        /// with the media type 'application/json'. 
+        /// </summary>
         public JsonHttpMessageConverter() :
             base(new MediaType("application", "json"))
         {
         }
 
+        /// <summary>
+        /// Indicates whether the given class is supported by this converter.
+        /// </summary>
+        /// <param name="type">The type to test for support.</param>
+        /// <returns><see langword="true"/> if supported; otherwise <see langword="false"/></returns>
         protected override bool Supports(Type type)
         {
             return true;
         }
 
+        /// <summary>
+        /// Abstract template method that reads the actualy object. Invoked from <see cref="M:Read"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of object to return.</typeparam>
+        /// <param name="response">The HTTP response to read from.</param>
+        /// <returns>The converted object.</returns>
         protected override T ReadInternal<T>(HttpWebResponse response)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
@@ -54,12 +82,17 @@ namespace Spring.Http.Converters.Json
             }
         }
 
+        /// <summary>
+        /// Abstract template method that writes the actual body. Invoked from <see cref="M:Write"/>.
+        /// </summary>
+        /// <param name="content">The object to write to the HTTP request.</param>
+        /// <param name="request">The HTTP request to write to.</param>
         protected override void WriteInternal(object content, HttpWebRequest request)
         {
             // Get the request encoding
-            MediaType mediaType = MediaType.ParseMediaType(request.Headers[HttpRequestHeader.ContentType]);
+            MediaType mediaType = MediaType.ParseMediaType(request.ContentType);
             Encoding encoding;
-            if (mediaType == null || String.IsNullOrEmpty(mediaType.CharSet))
+            if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
             }
@@ -70,18 +103,19 @@ namespace Spring.Http.Converters.Json
 
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(content.GetType());
             
-            // Write data  
-            using (Stream postStream = request.GetRequestStream())
+            // Write to the request
+            using (IgnoreCloseMemoryStream requestStream = new IgnoreCloseMemoryStream())
             {
-                using (XmlDictionaryWriter jsonWriter = JsonReaderWriterFactory.CreateJsonWriter(postStream, encoding, false))
+                using (XmlDictionaryWriter jsonWriter = JsonReaderWriterFactory.CreateJsonWriter(requestStream, encoding, false))
                 {
                     serializer.WriteObject(jsonWriter, content);
                     jsonWriter.Flush();
                 }
-                postStream.Flush();
-                
+
                 // Set the content length in the request headers  
-                request.ContentLength = postStream.Length;
+                request.ContentLength = requestStream.Length;
+
+                requestStream.CopyToAndClose(request.GetRequestStream());
             }
         }
     }

@@ -111,7 +111,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverter.cs" />
     <Compile Include="Http\HttpResponseMessage.cs" />
+    <Compile Include="Http\HttpResponseMessage`1.cs" />
     <Compile Include="Http\DefaultHttpWebRequestFactory.cs" />
     <Compile Include="Http\Converters\AbstractHttpMessageConverter.cs">
       <SubType>Code</SubType>
@@ -121,7 +123,6 @@
     </Compile>
     <Compile Include="Http\Converters\Feed\AbstractFeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\Feed\RssFeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\IHttpMessageConverter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -144,18 +145,17 @@
     <Compile Include="Http\Rest\RestClientException.cs" />
     <Compile Include="Http\Rest\RestTemplate.cs" />
     <Compile Include="Http\Rest\Support\AcceptHeaderRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor`1.cs" />
     <Compile Include="Http\Rest\Support\HeadersResponseExtractor.cs" />
     <Compile Include="Http\Rest\Support\HttpMessageRequestCallback.cs" />
     <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor.cs" />
     <Compile Include="Http\Rest\Support\MessageConverterResponseExtractor.cs" />
     <Compile Include="Http\Rest\Support\MethodRequestCallback.cs" />
+    <Compile Include="Util\AssertUtils.cs" />
+    <Compile Include="Util\StringUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Util\UriTemplate.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Spring.Core\Spring.Core.2010.csproj">
-      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2010</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
