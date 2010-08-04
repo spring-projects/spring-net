@@ -254,9 +254,17 @@ namespace Spring.Context
 			_mockName = name;
 			factory = new DefaultListableObjectFactory();
 //			factory.AddObjectPostProcessor(new ApplicationContextAwareProcessor(this));
-		}
+        }
 
-		public MockApplicationContext(string name, IApplicationContext parentContext) : base(name, true, parentContext)
+        /// <summary>
+        /// Initializes a new instance of the MockApplicationContext class.
+        /// </summary>
+        public MockApplicationContext(IApplicationContext parentContext)
+        {
+            factory = new DefaultListableObjectFactory(parentContext);
+        }
+
+        public MockApplicationContext(string name, IApplicationContext parentContext) : base(name, true, parentContext)
 		{
 			_mockName = name;
 			factory = new DefaultListableObjectFactory(GetInternalParentObjectFactory());

@@ -249,6 +249,7 @@ namespace Spring.Context.Support
             ContextRegistry.RegisterContext(duplicate);
         }
 
+        
         [Test]
         public void RemovesContextFromRegistryWhenContextCloses()
         {
@@ -259,5 +260,95 @@ namespace Spring.Context.Support
             appCtx.Dispose();
             Assert.IsFalse(ContextRegistry.IsContextRegistered(appCtx.Name));
         }
+
+        [TestFixture]
+        public class WhenHierarchicalContextsAllHaveDefaultNames
+        {
+            private MockApplicationContext _parentContext;
+            private MockApplicationContext _childContext;
+            private MockApplicationContext _grandChildContext;
+            private MockApplicationContext _greatGrandChildContext;
+
+            private string _expectedParentName;
+            private string _expectedChildName;
+            private string _expectedGrandChildName;
+            private string _expectedGreatGrandChildName;
+
+
+            [TestFixtureSetUp]
+            public void InitializeAllTests()
+            {
+                _expectedParentName = AbstractApplicationContext.DefaultRootContextName;
+                _expectedChildName = string.Format("{0}/{1}", _expectedParentName, AbstractApplicationContext.DefaultRootContextName);
+                _expectedGrandChildName = string.Format("{0}/{1}/{2}",_expectedParentName, _expectedChildName, AbstractApplicationContext.DefaultRootContextName);
+                _expectedGreatGrandChildName = string.Format("{0}/{1}/{2}/{3}",_expectedParentName, _expectedChildName, _expectedGrandChildName, AbstractApplicationContext.DefaultRootContextName);
+            }
+
+            [SetUp]
+            public void Setup()
+            {
+                //ensure prior-registered contexts are removed
+                ContextRegistry.Clear();
+
+                _parentContext = new MockApplicationContext();
+                _parentContext.MockName = "parent";
+
+                _childContext = new MockApplicationContext(_parentContext);
+                _childContext.MockName = "child";
+                _childContext.ParentContext = _parentContext;
+
+                _grandChildContext = new MockApplicationContext(_childContext);
+                _grandChildContext.MockName = "grandchild";
+                _grandChildContext.ParentContext = _childContext;
+
+                _greatGrandChildContext = new MockApplicationContext(_grandChildContext);
+                _greatGrandChildContext.MockName = "greatgrandchild";
+                _greatGrandChildContext.ParentContext = _grandChildContext;
+            }
+
+
+            [Test]
+            public void RegisterContext_ConstructsNestedPathBasedNames_IfRegisterdInHierarchicalOrder()
+            {
+                ContextRegistry.RegisterContext(_parentContext);
+                ContextRegistry.RegisterContext(_childContext);
+                ContextRegistry.RegisterContext(_grandChildContext);
+                ContextRegistry.RegisterContext(_greatGrandChildContext);
+
+                Assert.AreEqual(_expectedParentName, ContextRegistry.GetContext().Name);
+                Assert.AreEqual(_expectedChildName, ContextRegistry.GetContext(_expectedChildName).Name);
+                Assert.AreEqual(_expectedGrandChildName, ContextRegistry.GetContext(_expectedGrandChildName).Name);
+                Assert.AreEqual(_expectedGreatGrandChildName, ContextRegistry.GetContext(_expectedGreatGrandChildName).Name);
+            }
+
+            [Test]
+            public void RegisterContext_ConstructsNestedPathBasedNames_IfRegisteringAMixOfDefaultAndExplicitNamedContexts()
+            {
+                //modify the expected names for the decendent contexts for this one test
+                string childContextInitialName = AbstractApplicationContext.DefaultRootContextName + "_CUSTOM";
+                _expectedChildName = string.Format("{0}/{1}", _expectedParentName, childContextInitialName);
+                _expectedGrandChildName = string.Format("{0}/{1}/{2}", _expectedParentName, _expectedChildName, AbstractApplicationContext.DefaultRootContextName);
+                _expectedGreatGrandChildName = string.Format("{0}/{1}/{2}/{3}", _expectedParentName, _expectedChildName, _expectedGrandChildName, AbstractApplicationContext.DefaultRootContextName);
+
+                //setup custom child instance for this one test
+                _childContext = new MockApplicationContext(_expectedChildName);
+                _childContext.MockName = "child";
+                _childContext.ParentContext = _parentContext;
+                _grandChildContext.ParentContext = _childContext;
+
+                //register contexts in conflict with hierarchical order
+                ContextRegistry.RegisterContext(_parentContext);
+                ContextRegistry.RegisterContext(_childContext);
+                ContextRegistry.RegisterContext(_grandChildContext);
+                ContextRegistry.RegisterContext(_greatGrandChildContext);
+
+
+                Assert.AreEqual(_expectedParentName, ContextRegistry.GetContext(_expectedParentName).Name);
+                Assert.AreEqual(_expectedChildName, ContextRegistry.GetContext(_expectedChildName).Name);
+                Assert.AreEqual(_expectedGrandChildName, ContextRegistry.GetContext(_expectedGrandChildName).Name);
+                Assert.AreEqual(_expectedGreatGrandChildName, ContextRegistry.GetContext(_expectedGreatGrandChildName).Name);
+            }
+        }
+
     }
 }

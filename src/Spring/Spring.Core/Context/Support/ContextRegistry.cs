@@ -27,6 +27,8 @@ using System.Configuration;
 using Common.Logging;
 using Spring.Context.Events;
 using Spring.Util;
+using Spring.Objects.Factory;
+using Spring.Objects.Factory.Support;
 
 #endregion
 
@@ -102,6 +104,51 @@ namespace Spring.Context.Support
             get { return syncRoot; }
         }
 
+        private static void ConstructNestedDefaultContextName(IApplicationContext context)
+        {
+            IApplicationContext parent = context.ParentContext;
+
+            Hashtable contexts = new Hashtable();
+
+            int contextIndex = 0;
+
+            contexts.Add(contextIndex, context);
+
+            while (parent != null)
+            {
+                contextIndex++;
+                contexts.Add(contextIndex, parent);
+                parent = parent.ParentContext;
+            }
+
+            string prefix = string.Empty;
+
+            for (int i = contextIndex; i > 0; i--)
+            {
+                IApplicationContext contextToUpdate = (IApplicationContext)contexts[i];
+
+                if (prefix != string.Empty)
+                    prefix = string.Format("{0}/{1}", prefix, contextToUpdate.Name);
+                else
+                    prefix = contextToUpdate.Name;
+
+            }
+
+            context.Name = string.Format("{0}/{1}", prefix, context.Name);
+        }
+
+        private static void EnsureHierarchicalNameIfDefault(IApplicationContext context)
+        {
+            //if there is no parent context there is no change needed
+            if (context.ParentContext == null)
+                return;
+
+            if (context.Name == AbstractApplicationContext.DefaultRootContextName)
+                ConstructNestedDefaultContextName(context);
+
+        }
+
+
         /// <summary> 
         /// Registers an instance of an
         /// <see cref="Spring.Context.IApplicationContext"/>. 
@@ -119,6 +166,9 @@ namespace Spring.Context.Support
         /// </exception>
         public static void RegisterContext(IApplicationContext context)
         {
+
+            EnsureHierarchicalNameIfDefault(context);
+
             lock (syncRoot)
             {
                 if (instance.contextMap.Contains(context.Name))
