@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 #if NET_2_0
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 #endif
 using System.Globalization;
 using System.Reflection;
@@ -32,6 +33,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Text;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 #endregion
 
@@ -935,7 +937,7 @@ namespace Spring.Util
             for (int i = 0; i < attributeData.ConstructorArguments.Count; i++)
             {
                 parameterTypes[i] = attributeData.ConstructorArguments[i].ArgumentType;
-                parameterValues[i] = ConvertValueIfNecessary(attributeData.ConstructorArguments[i].Value);
+                parameterValues[i] = ConvertConstructorArgsToObjectArrayIfNecessary(attributeData.ConstructorArguments[i].Value);
             }
 
             Type attributeType = attributeData.Constructor.DeclaringType;
@@ -968,7 +970,7 @@ namespace Spring.Util
                     if (attributeProperties[j].Name == namedArgument.MemberInfo.Name)
                     {
                         propertiesToSet.Add(attributeProperties[j]);
-                        namedParameterValues.Add(ConvertValueIfNecessary(namedArgument.TypedValue.Value));
+                        namedParameterValues.Add(ConvertConstructorArgsToObjectArrayIfNecessary(namedArgument.TypedValue.Value));
                         break;
                     }
                     else
@@ -995,7 +997,7 @@ namespace Spring.Util
                         if (attributeFields[j].Name == namedArgument.MemberInfo.Name)
                         {
                             fieldsToSet.Add(attributeFields[j]);
-                            namedFieldValues.Add(ConvertValueIfNecessary(namedArgument.TypedValue.Value));
+                            namedFieldValues.Add(ConvertConstructorArgsToObjectArrayIfNecessary(namedArgument.TypedValue.Value));
                             break;
                         }
                         else
@@ -1043,39 +1045,26 @@ namespace Spring.Util
 
         }
 
-        private static object ConvertValueIfNecessary(object value)
+        private static object ConvertConstructorArgsToObjectArrayIfNecessary(object value)
         {
-            if (value == null)
+             if (value == null)
                 return value;
 
-            // We are only hunting for the case of the ReadOnlyCollection<T> here.
-            ReadOnlyCollection<CustomAttributeTypedArgument> sourceArray =
-                value as ReadOnlyCollection<CustomAttributeTypedArgument>;
+            IList<CustomAttributeTypedArgument> constructorArguments = value as IList<CustomAttributeTypedArgument>;
 
-            if (sourceArray == null)
+            if (constructorArguments == null)
                 return value;
 
-            Type underlyingType = null; // type to be used for arguments
-            Array returnArray = null;
-            for (int i = 0; i < sourceArray.Count; i++)
+            var arguments = new object[constructorArguments.Count];
+            
+            for (int i = 0; i < constructorArguments.Count; i++)
             {
-                if (underlyingType == null)
-                {
-                    underlyingType = sourceArray[i].ArgumentType;
-                    returnArray = Array.CreateInstance(underlyingType, sourceArray.Count);
-                }
-                if (!underlyingType.Equals(sourceArray[i].ArgumentType))
-                {
-                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
-                        "Types for the same named parameter of array type are expected to be same"));
-                }
-
-                returnArray.SetValue(sourceArray[i].Value, i);
+                arguments[i] = constructorArguments[i].Value;
             }
 
-            return returnArray;
-
+            return arguments;
         }
+        
 #endif
 
         /// <summary>
