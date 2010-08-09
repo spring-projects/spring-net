@@ -160,6 +160,73 @@ namespace Spring.Context.Support
             HttpApplicationConfigurer.Configure(appContext, appObject);
         }
 
+        ////////////////////////////////////////////////////
+
+        public class GrandParentHttpModule : IHttpModule
+        {
+
+            private string[] _grandParentProperty;
+            public string[] GrandParentProperty
+            {
+                get { return _grandParentProperty; }
+                set
+                {
+                    _grandParentProperty = value;
+                }
+            }
+
+
+            public void Dispose()
+            {
+
+            }
+
+            public void Init(HttpApplication context)
+            {
+
+            }
+        }
+
+        public class ParentHttpModule : GrandParentHttpModule
+        {
+            private string[] _parentProperty;
+            public string[] ParentProperty
+            {
+                get { return _parentProperty; }
+                set
+                {
+                    _parentProperty = value;
+                }
+            }
+            
+        }
+   
+        [Test]
+        public void ConfigureUsingXmlApplicationContext_CanMergePropertyValues()
+        {
+            XmlApplicationContext appContext = new XmlApplicationContext(false, ReadOnlyXmlTestResource.GetFilePath("HttpApplicationConfigurerMergablePropertiesTests.xml", typeof(HttpApplicationConfigurerTests)));
+
+            ParentHttpModule module = new ParentHttpModule();
+
+            TestApplication appObject = new TestApplication(new ModuleEntry[]
+                                                                {
+                                                                    new ModuleEntry("DirectoryServicesAuthentication", module)
+                                                                });
+            HttpApplicationConfigurer.Configure(appContext, appObject);
+            
+            //base class property has carried through successfully
+            Assert.Contains("GrandParentValue1", module.GrandParentProperty);
+
+            //parent property values remain in the final instance
+            Assert.Contains("ParentValue1", module.ParentProperty);
+            Assert.Contains("ParentValue2", module.ParentProperty);
+            Assert.Contains("ParentValue3", module.ParentProperty);
+            Assert.Contains("ParentValue4", module.ParentProperty);
+
+            //the new additional value has been merged into the property
+            Assert.Contains("MergedValueToFind", module.ParentProperty);
+        }
+
         [Test]
         public void ConfigureUsingXmlApplicationContext()
         {
@@ -173,7 +240,7 @@ namespace Spring.Context.Support
                                                                     new ModuleEntry("TestModule1", m1)
                                                                     , new ModuleEntry("TestModule2", m2),
                                                                 });
-            HttpApplicationConfigurer.Configure( appContext, appObject );
+            HttpApplicationConfigurer.Configure(appContext, appObject);
             // app configured
             Assert.AreEqual(appContext.GetObject("testObject"), appObject.TestObject);
             // modules configured
@@ -225,7 +292,7 @@ namespace Spring.Context.Support
                     for (int i = 0; i < testModule.Length; i++)
                     {
                         moduleEntry = testModule[i];
-                        miAddModule.Invoke(modules, new object[] {moduleEntry.Name, moduleEntry.Module});
+                        miAddModule.Invoke(modules, new object[] { moduleEntry.Name, moduleEntry.Module });
                     }
                 }
             }

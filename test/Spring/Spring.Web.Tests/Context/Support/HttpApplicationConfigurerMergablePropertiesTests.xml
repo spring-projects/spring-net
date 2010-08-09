@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx"
+         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.3.xsd
+         http://www.springframework.net/database http://www.springframework.net/schema/db/spring-database-1.1.xsd
+         http://www.springframework.net/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd">
+
+  <object name="GrandParentHttpModule" abstract="true">
+    <property name="GrandParentProperty">
+      <list element-type="string">
+        <value>GrandParentValue1</value>
+      </list>
+    </property>
+  </object>
+
+  <object name="ParentHttpModule" abstract="true" parent="GrandParentHttpModule">
+    <property name="ParentProperty">
+      <list element-type="string">
+        <value>ParentValue1</value>
+        <value>ParentValue2</value>
+        <value>ParentValue3</value>
+        <value>ParentValue4</value>
+      </list>
+    </property>
+  </object>
+
+  <object name="HttpApplicationConfigurer" type="Spring.Context.Support.HttpApplicationConfigurer, Spring.Web">
+    <property name="ModuleTemplates">
+      <dictionary>
+        <entry key="DirectoryServicesAuthentication">
+          <object id="theModule" parent="ParentHttpModule">
+            <property name="ParentProperty">
+              <list element-type="string" merge="true">
+                <value>MergedValueToFind</value>
+              </list>
+            </property>
+          </object>
+        </entry>
+      </dictionary>
+    </property>
+  </object>
+</objects>
