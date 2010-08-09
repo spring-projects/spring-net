@@ -1055,7 +1055,7 @@ namespace Spring.Util
             if (constructorArguments == null)
                 return value;
 
-            var arguments = new object[constructorArguments.Count];
+            object[] arguments = new object[constructorArguments.Count];
             
             for (int i = 0; i < constructorArguments.Count; i++)
             {
