@@ -594,6 +594,32 @@ namespace Spring.Util
             }
         }
 
+        [Test]
+        public void CreatCustomAttriubtesFromCustomAttributeDataWithSimpleTypeSetInConstructor()
+        {
+            MethodInfo mi = typeof(TestClassHavingAttributeWithSimpleTypeSetInConstructor).GetMethod("SomeMethod");
+            System.Collections.Generic.IList<CustomAttributeData> attributes = CustomAttributeData.GetCustomAttributes(mi);
+            CustomAttributeBuilder builder = null;
+            foreach (CustomAttributeData customAttributeData in attributes)
+            {
+                builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
+                Assert.IsNotNull(builder);
+            }
+        }
+
+        [Test]
+        public void CreatCustomAttriubtesFromCustomAttributeDataWithGenericCollectionTypeSetInConstructor()
+        {
+            MethodInfo mi = typeof(TestClassHavingAttributeWithGenericCollectionTypeSetInConstructor).GetMethod("SomeMethod");
+            System.Collections.Generic.IList<CustomAttributeData> attributes = CustomAttributeData.GetCustomAttributes(mi);
+            CustomAttributeBuilder builder = null;
+            foreach (CustomAttributeData customAttributeData in attributes)
+            {
+                builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
+                Assert.IsNotNull(builder);
+            }
+        }
+
         internal interface IHaveSomeMethod
         {
             void SomeMethod();
@@ -604,14 +630,33 @@ namespace Spring.Util
             [AttributeWithEnum(SomeProperty = TheTestEnumThing.One)]
             public void SomeMethod()
             {
-                
+
             }
         }
 
 
         internal class TestClassHavingAttributeWithEnumArraySetInConstructor : IHaveSomeMethod
         {
-            [AttributeWithEnumArraySetInConstructor(new[] { TheTestEnumThing.One, TheTestEnumThing.Three })]
+            
+            [AttributeWithEnumArraySetInConstructor(new TheTestEnumThing[]{TheTestEnumThing.One, TheTestEnumThing.Two})]
+            public void SomeMethod()
+            {
+
+            }
+        }
+
+        internal class TestClassHavingAttributeWithSimpleTypeSetInConstructor : IHaveSomeMethod
+        {
+            [AttributeWithType(typeof(int))]
+            public void SomeMethod()
+            {
+
+            }
+        }
+
+        internal class TestClassHavingAttributeWithGenericCollectionTypeSetInConstructor : IHaveSomeMethod
+        {
+            [AttributeWithType(typeof(System.Collections.Generic.List<int>))]
             public void SomeMethod()
             {
 
@@ -620,7 +665,7 @@ namespace Spring.Util
 
         internal class TestClassHavingAttributeWithEnumArraySetOnProperty : IHaveSomeMethod
         {
-            [AttributeWithEnumArray(SomeProperty = new[] { TheTestEnumThing.One, TheTestEnumThing.Three })]
+            [AttributeWithEnumArray(SomeProperty = new TheTestEnumThing[] { TheTestEnumThing.One, TheTestEnumThing.Three })]
             public void SomeMethod()
             {
 
@@ -631,7 +676,19 @@ namespace Spring.Util
         {
             One, Two, Three
         }
-        
+
+        internal class AttributeWithTypeAttribute : Attribute
+        {
+            public AttributeWithTypeAttribute(Type T)
+            {
+                
+
+
+            }
+
+        }
+
+
         internal class AttributeWithEnumArrayAttribute : Attribute
         {
             private TheTestEnumThing[] _someProperty;
@@ -653,7 +710,7 @@ namespace Spring.Util
             /// </summary>
             public AttributeWithEnumArraySetInConstructorAttribute(TheTestEnumThing[] things)
             {
-                
+
             }
 
         }
@@ -669,7 +726,7 @@ namespace Spring.Util
                     _someProperty = value;
                 }
             }
-            
+
         }
 
 
