@@ -123,7 +123,6 @@ namespace Spring.Objects.Factory.Xml
             schemas.XmlResolver = new XmlResourceUrlResolver();
 #endif
 
-            //TODO - externalize default list of parsers.
             RegisterParser(new ObjectsNamespaceParser());
             // register custom config parsers
             ConfigurationUtils.GetSection(ConfigParsersSectionName);
