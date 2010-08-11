@@ -33,18 +33,18 @@ using Spring.Util;
 
 namespace Spring.Reflection.Dynamic
 {
-	/// <summary>
+    /// <summary>
     /// Unit tests for the DynamicMethod class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-	[TestFixture]
+    [TestFixture]
     public sealed class DynamicMethodTests
     {
         private Inventor tesla;
         private Inventor pupin;
         private Society ieee;
 
-	    #region SetUp and TearDown
+        #region SetUp and TearDown
 
         /// <summary>
         /// The setup logic executed before the execution of each individual test.
@@ -74,22 +74,22 @@ namespace Spring.Reflection.Dynamic
             ieee.Officers["president"] = pupin;
             ieee.Officers["advisors"] = new Inventor[] { tesla, pupin }; // not historically accurate, but I need an array in the map ;-)
         }
-	    
+
         [TestFixtureTearDown]
         public void TearDown()
         {
             //DynamicReflectionManager.SaveAssembly();
         }
-	    
+
         #endregion
 
 #if NET_2_0
-	    private string RespectsPermissionsPrivateMethod()
-	    {
-	        return "Result";
-	    }
+        private string RespectsPermissionsPrivateMethod()
+        {
+            return "Result";
+        }
 
-        public void RespectsPermissionsPublicMethod() {}
+        public void RespectsPermissionsPublicMethod() { }
 
         [Test]
         public void CanCreateWithRestrictedPermissions()
@@ -98,26 +98,26 @@ namespace Spring.Reflection.Dynamic
         }
 
         private void CanCreateWithRestrictedPermissionsImpl()
-	    {
-	        MethodInfo method = this.GetType().GetMethod("RespectsPermissionsPublicMethod");
-	        IDynamicMethod m = DynamicMethod.Create(method);
-	        m.Invoke(this, null);
-	    }
+        {
+            MethodInfo method = this.GetType().GetMethod("RespectsPermissionsPublicMethod");
+            IDynamicMethod m = DynamicMethod.Create(method);
+            m.Invoke(this, null);
+        }
 
-	    [Test]
+        [Test]
         public void CanCreatePrivateMethodButThrowsOnInvoke()
         {
             SecurityTemplate.MediumTrustInvoke(new ThreadStart(CanCreatePrivateMethodButThrowsOnInvokeImpl));
         }
 
         private void CanCreatePrivateMethodButThrowsOnInvokeImpl()
-	    {
-	        MethodInfo privateMethod = this.GetType().GetMethod("RespectsPermissionsPrivateMethod", BindingFlags.NonPublic | BindingFlags.Instance);
-	        IDynamicMethod m = DynamicMethod.Create(privateMethod);
+        {
+            MethodInfo privateMethod = this.GetType().GetMethod("RespectsPermissionsPrivateMethod", BindingFlags.NonPublic | BindingFlags.Instance);
+            IDynamicMethod m = DynamicMethod.Create(privateMethod);
 
-	        try
-	        {
-	            object result = m.Invoke(this, null);
+            try
+            {
+                object result = m.Invoke(this, null);
                 if (SystemUtils.MonoRuntime)
                 {
                     Assert.AreEqual("Result", result);
@@ -127,39 +127,63 @@ namespace Spring.Reflection.Dynamic
                     Assert.Fail("shoud throw a security exception");
                 }
 
-	        }
-	        catch(MethodAccessException)
-	        {}
-	    }
+            }
+            catch (MethodAccessException)
+            { }
+        }
 #endif
 
-	    [Test]
-        public void TestInstanceMethods() 
+        [Test]
+        public void TestInstanceMethods()
         {
             IDynamicMethod getAge = DynamicMethod.Create(typeof(Inventor).GetMethod("GetAge"));
-            Assert.AreEqual(tesla.GetAge(DateTime.Today), getAge.Invoke(tesla, new object[] {DateTime.Today}));
+            Assert.AreEqual(tesla.GetAge(DateTime.Today), getAge.Invoke(tesla, new object[] { DateTime.Today }));
 
-	        MethodTarget target = new MethodTarget();
+            MethodTarget target = new MethodTarget();
             IDynamicMethod test = DynamicMethod.Create(typeof(MethodTarget).GetMethod("MethodReturningString"));
-            Assert.AreEqual(tesla.Name, test.Invoke(target, new object[] { 5, DateTime.Today, new String[] {"xyz", "abc"}, tesla}));
+            Assert.AreEqual(tesla.Name, test.Invoke(target, new object[] { 5, DateTime.Today, new String[] { "xyz", "abc" }, tesla }));
 
-	        ArrayList list = new ArrayList(new string[] {"one", "two", "three"});
+            ArrayList list = new ArrayList(new string[] { "one", "two", "three" });
             IDynamicMethod removeAt = DynamicMethod.Create(typeof(ArrayList).GetMethod("RemoveAt"));
-            removeAt.Invoke(list, new object[] {1});
-	        Assert.AreEqual(2, list.Count);
-	        Assert.AreEqual("three", list[1]);
+            removeAt.Invoke(list, new object[] { 1 });
+            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual("three", list[1]);
         }
 
-	    [Test]
+        [Test]
         public void TestStaticMethods()
         {
             IDynamicMethod isNullOrEmpty = DynamicMethod.Create(typeof(StringUtils).GetMethod("IsNullOrEmpty"));
-            Assert.IsTrue((bool) isNullOrEmpty.Invoke(null, new object[] { null }));
-            Assert.IsTrue((bool) isNullOrEmpty.Invoke(null, new object[] { String.Empty }));
-            Assert.IsFalse((bool) isNullOrEmpty.Invoke(null, new object[] { "Ana Maria" }));
+            Assert.IsTrue((bool)isNullOrEmpty.Invoke(null, new object[] { null }));
+            Assert.IsTrue((bool)isNullOrEmpty.Invoke(null, new object[] { String.Empty }));
+            Assert.IsFalse((bool)isNullOrEmpty.Invoke(null, new object[] { "Ana Maria" }));
         }
 
 #if NET_2_0
+
+        internal class TheClassAsArgument { }
+
+        internal class TheClassDerivedFromTheArgumentClass : TheClassAsArgument { }
+
+        internal class TheClassWithMethod
+        {
+            public bool TheMethod(TheClassAsArgument arg)
+            {
+                return true;
+            }
+        }
+
+        [Test]
+        public void CanAcceptImplicitlyConvertedTypesAsSubstitutesForArguments()
+        {
+            IDynamicMethod method = DynamicMethod.Create(typeof(TheClassWithMethod).GetMethod("TheMethod"));
+
+            bool ret = (bool)(method.Invoke(new TheClassWithMethod(), new object[] { new TheClassDerivedFromTheArgumentClass() }));
+
+            Assert.IsTrue(ret);
+        }
+
+
         [Test]
         public void PassNullableArguments()
         {
@@ -171,20 +195,20 @@ namespace Spring.Reflection.Dynamic
 #endif
         [Test]
         public void PassInvalidNumberOfArguments()
-        { 
+        {
             IDynamicMethod dm = DynamicMethod.Create(typeof(TestMethods).GetMethod("PassReferenceArgumentStatic"));
             DateTime dt = DateTime.Now;
 
             Assert.IsNull(dm.Invoke(null, null)); // this is ok
             try
             {
-                dm.Invoke( null ); // this is not ok 
+                dm.Invoke(null); // this is not ok 
                 Assert.Fail();
             }
             catch (ArgumentException) { }
             try
             {
-                dm.Invoke( null, null, null ); // this is not ok 
+                dm.Invoke(null, null, null); // this is not ok 
                 Assert.Fail();
             }
             catch (ArgumentException) { }
@@ -194,12 +218,12 @@ namespace Spring.Reflection.Dynamic
         public void TestArgumentTypeCasts()
         {
             IDynamicMethod sqrt = DynamicMethod.Create(typeof(Math).GetMethod("Sqrt"));
-            object result = sqrt.Invoke(null, new object[] { 4 } );
-            Assert.AreEqual( Math.Sqrt(4), result );
+            object result = sqrt.Invoke(null, new object[] { 4 });
+            Assert.AreEqual(Math.Sqrt(4), result);
 
             try
             {
-                sqrt.Invoke(null, new object[] { null } );
+                sqrt.Invoke(null, new object[] { null });
                 Assert.Fail();
             }
             catch (InvalidCastException)
@@ -208,28 +232,28 @@ namespace Spring.Reflection.Dynamic
 
             try
             {
-                sqrt.Invoke(null, new object[] { "4" } );
+                sqrt.Invoke(null, new object[] { "4" });
                 Assert.Fail();
             }
             catch (InvalidCastException)
-            {}
+            { }
         }
 
         private void CodeForReflection()
         {
             object val = 4;
             Type argType = typeof(double);
-            Math.Sqrt( (double)Convert.ChangeType(val, argType) );            
+            Math.Sqrt((double)Convert.ChangeType(val, argType));
         }
 
-	    [Test]
+        [Test]
         public void TestRefOutMethods()
-	    {
+        {
             IDynamicMethod refMethod = DynamicMethod.Create(typeof(MethodTarget).GetMethod("MethodWithRefParameter"));
 
             MethodTarget target = new MethodTarget();
-            object[] args = new object[] {"aleks", 5};
-	        refMethod.Invoke(target, args);
+            object[] args = new object[] { "aleks", 5 };
+            refMethod.Invoke(target, args);
             Assert.AreEqual("ALEKS", args[0]);
             Assert.AreEqual(25, args[1]);
 
@@ -249,13 +273,13 @@ namespace Spring.Reflection.Dynamic
             Assert.AreEqual(3, args[1]);
             Assert.AreEqual("done", args[2]);
 
-	        int count = 0;
-	        string done;
+            int count = 0;
+            string done;
             target.DoItCaller(0, ref count, out done);
             Assert.AreEqual(1, count);
             Assert.AreEqual("done", done);
         }
-	    
+
         #region Performance tests
 
         private DateTime start, stop;
@@ -312,23 +336,23 @@ namespace Spring.Reflection.Dynamic
 
         public class TestMethods
         {
-            public static object PassReferenceArgumentStatic( object arg )
-            { 
+            public static object PassReferenceArgumentStatic(object arg)
+            {
                 return arg;
             }
 #if NET_2_0
-            public static object Invoke( object target, object[] args )
-            { 
-                return PassNullableArgumentStatic( (DateTime?)(args[0]) );
+            public static object Invoke(object target, object[] args)
+            {
+                return PassNullableArgumentStatic((DateTime?)(args[0]));
             }
 
-            public DateTime? PassNullableArgument( DateTime? arg )
-            { 
-                return PassNullableArgumentStatic( arg );
+            public DateTime? PassNullableArgument(DateTime? arg)
+            {
+                return PassNullableArgumentStatic(arg);
             }
 
-            public static DateTime? PassNullableArgumentStatic( DateTime? arg )
-            { 
+            public static DateTime? PassNullableArgumentStatic(DateTime? arg)
+            {
                 return arg;
             }
 #endif
@@ -342,28 +366,28 @@ namespace Spring.Reflection.Dynamic
     {
         public object Invoke(object target, object[] args)
         {
-            return ((MethodTarget) target).MethodReturningString(
-                (int) args[0], (DateTime) args[1], (string[]) args[2], (Inventor) args[3]);
+            return ((MethodTarget)target).MethodReturningString(
+                (int)args[0], (DateTime)args[1], (string[])args[2], (Inventor)args[3]);
         }
 
         public object InvokeVoid(object target, object[] args)
         {
-            ((MethodTarget) target).RemoveAt(5);
+            ((MethodTarget)target).RemoveAt(5);
             return null;
         }
 
         public object InvokeWithOut(object target, object[] args)
         {
             string outVar = null;
-            ((MethodTarget)target).MethodWithOutParameter((string) args[0], out outVar);
+            ((MethodTarget)target).MethodWithOutParameter((string)args[0], out outVar);
             args[1] = outVar;
             return null;
         }
 
         public object InvokeWithRef(object target, object[] args)
         {
-            string refVar1 = (string) args[0];
-            int refVar2 = (int) args[0];
+            string refVar1 = (string)args[0];
+            int refVar2 = (int)args[0];
             ((MethodTarget)target).MethodWithRefParameter(ref refVar1, ref refVar2);
             args[0] = refVar1;
             args[1] = refVar2;
@@ -372,9 +396,9 @@ namespace Spring.Reflection.Dynamic
 
         public object InvokeDoIt(object target, object[] args)
         {
-            int reference = (int) args[1];
+            int reference = (int)args[1];
             string output;
-            ((RefOutTestObject) target).DoIt((int) args[0], ref reference, out output);
+            ((RefOutTestObject)target).DoIt((int)args[0], ref reference, out output);
             args[1] = reference;
             args[2] = output;
             return null;
@@ -387,9 +411,9 @@ namespace Spring.Reflection.Dynamic
         {
             return arg4.Name;
         }
-        
+
         public void RemoveAt(int index)
-        {}
+        { }
 
         public void MethodWithOutParameter(string lower, out string upper)
         {
@@ -407,11 +431,11 @@ namespace Spring.Reflection.Dynamic
             InstanceMethod caller = new InstanceMethod();
 
             RefOutTestObject target = new RefOutTestObject();
-            object[] args = new object[] {count, reference, null};
+            object[] args = new object[] { count, reference, null };
             caller.InvokeDoIt(target, args);
 
-            reference = (int) args[1];
-            output = (string) args[2];
+            reference = (int)args[1];
+            output = (string)args[2];
         }
     }
 
@@ -430,6 +454,6 @@ namespace Spring.Reflection.Dynamic
     }
 
     #endregion
- 
-   
+
+
 }
