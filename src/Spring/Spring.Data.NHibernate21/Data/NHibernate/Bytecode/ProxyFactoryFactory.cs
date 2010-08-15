@@ -21,6 +21,7 @@
 
 #region Imports
 
+using System;
 using NHibernate.Bytecode;
 using NHibernate.Proxy;
 
@@ -41,6 +42,13 @@ namespace Spring.Data.NHibernate.Bytecode
         public IProxyFactory BuildProxyFactory()
         {
             return new ProxyFactory();
+        }
+
+        /// <summary>
+        /// </summary>
+        public bool IsInstrumented(Type entityClass)
+        {
+            return false;
         }
 
         ///<summary>
