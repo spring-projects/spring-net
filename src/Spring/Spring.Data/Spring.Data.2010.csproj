@@ -321,6 +321,14 @@
       <Name>Spring.Core.2010</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Config\spring-database-1.3.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Data\Config\spring-database-1.3.xsx">
+      <DependentUpon>spring-database-1.3.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
