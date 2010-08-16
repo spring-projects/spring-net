@@ -70,6 +70,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate30.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate21.Integration.Tests.2010", "test\Spring\Spring.Data.NHibernate21.Integration.Tests\Spring.Data.NHibernate21.Integration.Tests.2010.csproj", "{4A07E150-ED90-407C-8CAD-4760444DDFD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Ems.2010", "src\Spring\Spring.Messaging.Ems\Spring.Messaging.Ems.2010.csproj", "{900E3839-301E-48B1-BAEB-B6645620ACFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -410,6 +412,16 @@ Global
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Release|.NET.ActiveCfg = Release|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
