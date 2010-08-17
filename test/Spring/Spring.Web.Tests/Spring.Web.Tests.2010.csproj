@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Caching\AspNetCacheTests.cs" />
     <Compile Include="Context\Support\HttpApplicationConfigurerTests.cs" />
+    <Compile Include="Context\Support\WebApplicationContextArgsTests.cs" />
     <Compile Include="Context\Support\WebApplicationContextTests.cs" />
     <Compile Include="Core\IO\WebResourceTests.cs" />
     <Compile Include="Data\Spring\Objects\Factory\Support\TestForm.aspx.cs">
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Context\Support\HttpApplicationConfigurerTests.xml" />
+    <EmbeddedResource Include="Context\Support\HttpApplicationConfigurerMergablePropertiesTests.xml" />
     <Content Include="Data\Spring\Context\Support\WebApplicationContextTests\Dummy.aspx" />
     <Content Include="Data\Spring\Objects\Factory\Support\TestForm.aspx" />
     <Content Include="Data\Spring\Web\Support\LocalResourceManagerTests\WithoutResources.aspx" />
