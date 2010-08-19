@@ -42,7 +42,7 @@ namespace Spring.Objects.Factory.Support
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack</author>
-    internal class ConstructorResolver
+    public class ConstructorResolver
     {
         private readonly ILog log = LogManager.GetLogger(typeof(ConstructorResolver));
 
@@ -89,8 +89,42 @@ namespace Spring.Objects.Factory.Support
         public IObjectWrapper AutowireConstructor(string objectName, RootObjectDefinition rod,
                                                   ConstructorInfo[] chosenCtors, object[] explicitArgs)
         {
+
             ObjectWrapper wrapper = new ObjectWrapper();
 
+            ConstructorInstantiationInfo constructorInstantiationInfo = GetConstructorInstantiationInfo(
+                objectName, rod, chosenCtors, explicitArgs);
+
+            wrapper.WrappedInstance = instantiationStrategy.Instantiate(rod, objectName, this.objectFactory,
+                    constructorInstantiationInfo.ConstructorInfo, constructorInstantiationInfo.ArgInstances);
+
+            #region Instrumentation
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug(string.Format(CultureInfo.InvariantCulture, "Object '{0}' instantiated via constructor [{1}].", objectName, constructorInstantiationInfo.ConstructorInfo));
+            }
+
+            #endregion
+
+            return wrapper;
+        }
+
+
+        /// <summary>
+        /// Gets the constructor instantiation info given the object definition.
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <param name="rod">The RootObjectDefinition</param>
+        /// <param name="chosenCtors">The explicitly chosen ctors.</param>
+        /// <param name="explicitArgs">The explicit chose ctor args.</param>
+        /// <returns>A ConstructorInstantiationInfo containg the specified constructor in the RootObjectDefinition or
+        /// one based on type matching.</returns>
+        public ConstructorInstantiationInfo GetConstructorInstantiationInfo(string objectName, RootObjectDefinition rod,
+                                                  ConstructorInfo[] chosenCtors, object[] explicitArgs)
+        {
+
+            ObjectWrapper wrapper = new ObjectWrapper();
 
             ConstructorInfo constructorToUse = null;
             object[] argsToUse = null;
@@ -198,19 +232,9 @@ namespace Spring.Objects.Factory.Support
                 throw new ObjectCreationException(rod.ResourceDescription, objectName, "Could not resolve matching constructor.");
             }
 
-            wrapper.WrappedInstance = instantiationStrategy.Instantiate(rod, objectName, this.objectFactory, constructorToUse, argsToUse);
+            return new ConstructorInstantiationInfo(constructorToUse, argsToUse);
 
-            #region Instrumentation
-
-            if (log.IsDebugEnabled)
-            {
-                log.Debug(string.Format(CultureInfo.InvariantCulture, "Object '{0}' instantiated via constructor [{1}].", objectName, constructorToUse));
-            }
-
-            #endregion
-
-            return wrapper;
-
+            
         }
 
         /// <summary>
@@ -636,7 +660,5 @@ namespace Spring.Objects.Factory.Support
             }
         }
     }
-
-
 }
 

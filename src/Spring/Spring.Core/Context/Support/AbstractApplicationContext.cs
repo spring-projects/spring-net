@@ -489,31 +489,57 @@ namespace Spring.Context.Support
         /// <exception cref="ObjectsException">In the case of errors.</exception>
         private void InvokeObjectFactoryPostProcessors()
         {
-            // do NOT include IFactoryObjects; they (typically) need to be instantiated
+            // Do NOT include IFactoryObjects; they (typically) need to be instantiated
             // to determine the Type of object that they create, and if they are instantiated
             // then we won't be able to do any factory post processin' on 'em...
-            string[] factoryProcessorNames
-                = GetObjectNamesForType(typeof(IObjectFactoryPostProcessor), true, false);
-            ArrayList orderedFactoryProcessors = new ArrayList();
-            IList nonOrderedFactoryProcessorNames = new ArrayList();
-            for (int i = 0; i < factoryProcessorNames.Length; ++i)
+            ArrayList factoryProcessorNames = new ArrayList();
+            string[] names = GetObjectNamesForType(typeof (IObjectFactoryPostProcessor), true, false);
+            foreach (string s in names)
             {
-                string processorName = factoryProcessorNames[i];
-                object processor = GetObject(processorName);
-                if (typeof(IOrdered).IsAssignableFrom(GetType(processorName)))
+                factoryProcessorNames.Add(s);
+            }
+                        
+            ArrayList priorityOrderedFactoryProcessors = new ArrayList();
+            ArrayList orderedFactoryProcessorsNames = new ArrayList();
+            ArrayList nonOrderedFactoryProcessorNames = new ArrayList();
+            
+            for (int i = 0; i < factoryProcessorNames.Count; ++i)
+            {
+                string processorName = (string) factoryProcessorNames[i];
+                if (IsTypeMatch(processorName, typeof(IPriorityOrdered)))
                 {
-                    orderedFactoryProcessors.Add(processor);
+                    priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject(processorName, typeof(IObjectFactoryPostProcessor)));
                 }
+                else if (IsTypeMatch(processorName, typeof(IOrdered)))
+                {
+                    orderedFactoryProcessorsNames.Add(processorName);
+                }                
                 else
                 {
-                    nonOrderedFactoryProcessorNames.Add(processor);
+                    nonOrderedFactoryProcessorNames.Add(processorName);
                 }
             }
-            // first, invoke those IObjectFactoryPostProcessors that implement IOrdered...
+            // First, invoke the IObjectFactoryPostProcessors that implement IPriorityOrdered.
+            InvokePriorityOrderedObjectFactoryPostProcessors(factoryProcessorNames, priorityOrderedFactoryProcessors);
+
+            // Second, invoke those IObjectFactoryPostProcessors that implement IOrdered...
+            ArrayList orderedFactoryProcessors = new ArrayList();
+            foreach (string orderedFactoryProcessorsName in orderedFactoryProcessorsNames)
+            {
+                orderedFactoryProcessors.Add(ObjectFactory.GetObject(orderedFactoryProcessorsName,
+                                                                     typeof (IObjectFactoryPostProcessor)));
+            }
             orderedFactoryProcessors.Sort(new OrderComparator());
-            ProcessObjectFactoryPostProcessors(orderedFactoryProcessors);
+            InvokeObjectFactoryPostProcessors(orderedFactoryProcessors, ObjectFactory);
+            
             // and then the unordered ones...
-            ProcessObjectFactoryPostProcessors(nonOrderedFactoryProcessorNames);
+            ArrayList nonOrderedPostProcessors = new ArrayList();
+            foreach (string nonOrderedFactoryProcessorName in nonOrderedFactoryProcessorNames)
+            {
+                nonOrderedPostProcessors.Add(ObjectFactory.GetObject(nonOrderedFactoryProcessorName,
+                                                                     typeof (IObjectFactoryPostProcessor)));
+            }
+            InvokeObjectFactoryPostProcessors(nonOrderedPostProcessors, ObjectFactory);
 
             #region Instrumentation
 
@@ -522,18 +548,42 @@ namespace Spring.Context.Support
                 log.Debug(string.Format(
                               CultureInfo.InvariantCulture,
                               "processed {0} IFactoryObjectPostProcessors defined in application context [{1}].",
-                              factoryProcessorNames.Length,
+                              factoryProcessorNames.Count,
                               Name));
             }
 
             #endregion
         }
 
-        private void ProcessObjectFactoryPostProcessors(IList objectFactoryPostProcessors)
+        protected virtual void InvokePriorityOrderedObjectFactoryPostProcessors(ArrayList factoryProcessorNames, ArrayList priorityOrderedFactoryProcessors)
+        {
+            priorityOrderedFactoryProcessors.Sort(new OrderComparator());
+            InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, ObjectFactory);
+
+            // Now will find any additional IObjectFactoryPostProcessors that implement IPriorityOrdered that may have been
+            // resolved due to using TypeAlias
+            string[] factoryProcessorNamesAfterTypeAlias = GetObjectNamesForType(typeof(IObjectFactoryPostProcessor), true, false);
+            priorityOrderedFactoryProcessors.Clear();            
+            foreach (string factoryProcessorName in factoryProcessorNamesAfterTypeAlias)
+            {
+                if (!factoryProcessorNames.Contains(factoryProcessorName))
+                {
+                    if (IsTypeMatch(factoryProcessorName, typeof(IPriorityOrdered)))
+                    {
+                        priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject(factoryProcessorName, typeof(IObjectFactoryPostProcessor)));
+                    }
+                }
+            }
+            // Second, invoke newly discovered IObjectFactoryPostProcessors that implement IPriorityOrdered.
+            priorityOrderedFactoryProcessors.Sort(new OrderComparator());
+            InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, ObjectFactory);
+        }
+
+        private void InvokeObjectFactoryPostProcessors(IList objectFactoryPostProcessors, IConfigurableListableObjectFactory objectFactory)
         {
             foreach (IObjectFactoryPostProcessor processor in objectFactoryPostProcessors)
             {
-                processor.PostProcessObjectFactory(ObjectFactory);
+                processor.PostProcessObjectFactory(objectFactory);
             }
         }
 

@@ -62,7 +62,7 @@ namespace Spring.Objects.Factory.Config
     /// will be thrown. </para>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public class VariablePlaceholderConfigurer : IObjectFactoryPostProcessor, IOrdered
+    public class VariablePlaceholderConfigurer : IObjectFactoryPostProcessor, IPriorityOrdered
     {
         /// <summary>
         /// The default placeholder prefix.

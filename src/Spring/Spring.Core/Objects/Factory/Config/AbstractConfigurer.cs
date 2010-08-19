@@ -31,7 +31,7 @@ namespace Spring.Objects.Factory.Config
     /// </summary>
     /// <author>Mark Pollack</author>
     [Serializable]
-    public abstract class AbstractConfigurer : IOrdered, IObjectFactoryPostProcessor
+    public abstract class AbstractConfigurer : IPriorityOrdered, IObjectFactoryPostProcessor
     {
         private int order = Int32.MaxValue; // default: same as non-Ordered
 

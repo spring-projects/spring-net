@@ -69,7 +69,7 @@ namespace Spring.Objects.Factory.Config
         /// <returns>
         /// The variable value if able to resolve, <c>null</c> otherwise.
         /// </returns>
-        public string ResolveVariable(string name)
+        public virtual string ResolveVariable(string name)
         {
 			object res = Key.GetValue(name);
 			if (res is string)

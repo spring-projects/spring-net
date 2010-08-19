@@ -202,6 +202,7 @@
     <Compile Include="Context\Support\AbstractXmlApplicationContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Support\AbstractXmlApplicationContextArgs.cs" />
     <Compile Include="Context\Support\ApplicationContextAwareProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -253,6 +254,7 @@
     <Compile Include="Context\Support\XmlApplicationContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Support\XmlApplicationContextArgs.cs" />
     <Compile Include="Core\CannotLoadObjectTypeException.cs" />
     <Compile Include="Core\ComposedCriteria.cs" />
     <Compile Include="Core\ControlFlowFactory.cs">
@@ -260,6 +262,7 @@
     </Compile>
     <Compile Include="Core\Conventions.cs" />
     <Compile Include="Core\IO\EncodedResource.cs" />
+    <Compile Include="Core\IPriorityOrdered.cs" />
     <Compile Include="Core\MethodArgumentsCriteria.cs" />
     <Compile Include="Core\IO\AbstractResource.cs" />
     <Compile Include="Core\IO\AssemblyResource.cs" />
@@ -681,6 +684,7 @@
     <Compile Include="Objects\Factory\Config\VariableAccessor.cs" />
     <Compile Include="Objects\Factory\Config\VariablePlaceholderConfigurer.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
+    <Compile Include="Objects\Factory\Support\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
     <Compile Include="Objects\Factory\Support\ConstructorResolver.cs" />

@@ -35,7 +35,8 @@ namespace Spring.Objects.Factory.Config
     public class ConfigSectionVariableSource : IVariableSource
     {
         private string[] sectionNames;
-        private NameValueCollection variables;
+        protected NameValueCollection variables;
+        private readonly object objectMonitor = new object();
 
         /// <summary>
         /// Initializes a new instance of <see cref="ConfigSectionVariableSource"/>
@@ -100,11 +101,15 @@ namespace Spring.Objects.Factory.Config
         /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
         public bool CanResolveVariable(string name)
         {
-            if (variables == null)
+            lock (objectMonitor)
             {
-                InitVariables();
-            }
-            return CollectionUtils.Contains(variables.AllKeys, name);
+                if (variables == null)
+                {
+                    variables = new NameValueCollection();
+                    InitVariables();
+                }
+                return CollectionUtils.Contains(variables.AllKeys, name);
+            }            
         }
 
         /// <summary>
@@ -118,20 +123,23 @@ namespace Spring.Objects.Factory.Config
         /// </returns>
         public string ResolveVariable(string name)
         {
-            if (variables == null)
+            lock (objectMonitor)
             {
-                InitVariables();
-            }
-            return variables.Get(name);
+                if (variables == null)
+                {
+                    variables = new NameValueCollection();
+                    InitVariables();
+                }
+                return variables.Get(name);
+            }            
         }
 
         /// <summary>
         /// Initializes properties based on the specified 
         /// property file locations.
         /// </summary>
-        private void InitVariables()
-        {
-            variables = new NameValueCollection();
+        protected virtual void InitVariables()
+        {            
             foreach (string sectionName in sectionNames)
             {
                 object section = ConfigurationUtils.GetSection(sectionName);

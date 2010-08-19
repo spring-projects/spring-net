@@ -18,7 +18,9 @@
 
 #endregion
 
+using System;
 using Apache.NMS;
+using Apache.NMS.ActiveMQ;
 using NUnit.Framework;
 using Spring.Testing.NUnit;
 
@@ -39,6 +41,14 @@ namespace Spring.Messaging.Nms.Core
         public NmsTemplateTests()
         {
             this.PopulateProtectedVariables = true;
+        }
+
+        [Test]
+        public void ConnectionThrowException()
+        {
+            ConnectionFactory cf = new ConnectionFactory();
+            cf.BrokerUri = new Uri("tcp://localaaahost:61616");
+            IConnection c = cf.CreateConnection();
         }
 
 

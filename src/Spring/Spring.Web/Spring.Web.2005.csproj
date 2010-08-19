@@ -107,6 +107,7 @@
     <Compile Include="Context\Support\WebApplicationContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Support\WebApplicationContextArgs.cs" />
     <Compile Include="Context\Support\WebContextHandler.cs" />
     <Compile Include="Context\Support\WebSupportModule.cs" />
     <Compile Include="Core\IO\WebResource.cs" />

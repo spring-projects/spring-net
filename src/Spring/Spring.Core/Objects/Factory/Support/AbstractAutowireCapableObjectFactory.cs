@@ -1025,7 +1025,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Determines candidate constructors to use for the given bean, checking all registered
+        /// Determines candidate constructors to use for the given object, checking all registered
         /// <see cref="SmartInstantiationAwareObjectPostProcessor"/>
         /// </summary>
         /// <param name="objectType">Raw type of the object.</param>

@@ -39,7 +39,9 @@ namespace Spring.Objects.Factory.Config
         private string valueSeparator = DEFAULT_VALUE_SEPARATOR;
 
         private string[] commandLineArgs;
-        private IDictionary arguments;
+        protected IDictionary arguments;
+
+        private object objectMonitor = new object();
 
         /// <summary>
         /// Default constructor. 
@@ -95,11 +97,14 @@ namespace Spring.Objects.Factory.Config
         /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
         public bool CanResolveVariable(string name)
         {
-            if (arguments == null)
+            lock (objectMonitor)
             {
-                InitArguments();
+                if (arguments == null)
+                {
+                    InitArguments();
+                }
+                return arguments.Contains(name);
             }
-            return arguments.Contains(name);
         }
 
         /// <summary>
@@ -113,17 +118,20 @@ namespace Spring.Objects.Factory.Config
         /// </returns>
         public string ResolveVariable(string name)
         {
-            if (arguments == null)
+            lock (objectMonitor)
             {
-                InitArguments();
+                if (arguments == null)
+                {
+                    InitArguments();
+                }
+                return (string) this.arguments[name];
             }
-            return (string) this.arguments[name];
         }
 
         /// <summary>
         /// Initializes command line arguments dictionary.
         /// </summary>
-        private void InitArguments()
+        protected virtual void InitArguments()
         {
             this.arguments = CollectionsUtil.CreateCaseInsensitiveHashtable(commandLineArgs.Length);
 

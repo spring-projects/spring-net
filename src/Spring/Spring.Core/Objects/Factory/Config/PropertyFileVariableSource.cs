@@ -19,7 +19,6 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.IO;
 using Spring.Core.IO;
 using Spring.Util;
@@ -36,7 +35,9 @@ namespace Spring.Objects.Factory.Config
     public class PropertyFileVariableSource : IVariableSource
     {
         private IResource[] locations;
-        private Properties properties;
+        protected Properties properties;
+        private readonly object objectMonitor = new object();
+        private bool ignoreMissingResources;
 
         /// <summary>
         /// Gets or sets the locations of the property files 
@@ -65,6 +66,18 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
+        /// Sets a value indicating whether to ignore resource locations that do not exist.  This will call 
+        /// the <see cref="IResource"/> Exists property.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if one should ignore missing resources; otherwise, <c>false</c>.
+        /// </value>
+        public bool IgnoreMissingResources
+        {
+            set { ignoreMissingResources = value; }
+        }
+
+        /// <summary>
         /// Before requesting a variable resolution, a client should
         /// ask, whether the source can resolve a particular variable name.
         /// </summary>
@@ -72,11 +85,15 @@ namespace Spring.Objects.Factory.Config
         /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
         public bool CanResolveVariable(string name)
         {
-            if (properties == null)
+            lock (objectMonitor)
             {
-                InitProperties();
+                if (properties == null)
+                {
+                    properties = new Properties();
+                    InitProperties();
+                }
+                return properties.Contains(name);
             }
-            return properties.Contains(name);
         }
 
         /// <summary>
@@ -90,27 +107,35 @@ namespace Spring.Objects.Factory.Config
         /// </returns>
         public string ResolveVariable(string name)
         {
-            if (properties == null)
+            lock (objectMonitor)
             {
-                InitProperties();
+                if (properties == null)
+                {
+                    properties = new Properties();
+                    InitProperties();
+                }                
+                return properties.GetProperty(name);
             }
-            return properties.GetProperty(name);
         }
 
         /// <summary>
         /// Initializes properties based on the specified 
         /// property file locations.
         /// </summary>
-        private void InitProperties()
-        {
-            properties = new Properties();
+        protected virtual void InitProperties()
+        {            
             foreach (IResource location in locations)
             {
+                bool exists = location.Exists;
+                if (!exists && ignoreMissingResources)
+                {
+                    continue;
+                }
                 using (Stream input = location.InputStream)
                 {
                     properties.Load(input);
-                }
-            }
+                }                
+            }            
         }
     }
 }

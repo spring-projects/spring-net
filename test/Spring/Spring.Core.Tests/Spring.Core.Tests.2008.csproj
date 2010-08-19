@@ -821,6 +821,7 @@
     <Content Include="Data\Spring\Objects\Factory\Xml\array-autowire.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\collectionMergingGeneric.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\collectionMerging.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Xml\ctor-args.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\objectNameGeneration.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\simple-constructor-arg.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\expressions.xml" />
@@ -860,7 +861,9 @@
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithThreeRequiredPropertiesOmitted.xml" />
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithAllRequiredPropertiesProvided.xml" />
     <EmbeddedResource Include="Objects\Factory\Attributes\RequiredWithCustomAttribute.xml" />
-    <Content Include="Spring.Core.Tests.dll.config" />
+    <Content Include="Spring.Core.Tests.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Resources\Spring.Context.Tests.de-AT.resx" />
     <EmbeddedResource Include="Resources\Spring.Context.Tests.de.resx" />
     <EmbeddedResource Include="Validation\ValidationNamespaceParserTests_WhenConfigFileIsNotValid.xml" />

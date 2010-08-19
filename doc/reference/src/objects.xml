@@ -5028,13 +5028,22 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         value will be used. <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core"&gt;
    &lt;property name="VariableSources"&gt;
       &lt;list&gt;
+         &lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
+           &lt;property name="Location" value="~\application.properties" /&gt;
+           &lt;property name="IgnoreMissingResources" value="true"/&gt;
+         &lt;/object&gt;
          &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
             &lt;property name="SectionNames" value="CryptedConfiguration" /&gt;
          &lt;/object&gt;
       &lt;/list&gt;
    &lt;/property&gt;
 &lt;/object&gt;
-        </programlisting>The IVariableSource interface is shown below</para>
+        </programlisting><note>
+            <para>The use of the <property>IgnoreMissingResources</property>
+            property above will mean that if the property file is not found it
+            will be silently ignored and the resolution will continue to
+            <classname>ConfigSectionVariableSource</classname>. </para>
+          </note>The IVariableSource interface is shown below</para>
 
         <programlisting language="csharp">public interface IVariableSource
 {

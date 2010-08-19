@@ -108,8 +108,7 @@ namespace Spring.Objects.Factory.Config
         [Test]
         public void WithinApplicationContext()
         {
-            IApplicationContext ctx = new XmlApplicationContext(
-                "file://Spring/Objects/Factory/Config/typeAliases.xml");
+            IApplicationContext ctx = new XmlApplicationContext("file://Spring/Objects/Factory/Config/typeAliases.xml");
 
             object obj1 = ctx.GetObject("testObject1");
             Assert.IsNotNull(obj1);
@@ -131,6 +130,26 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual(typeof(TestObject), obj4.GetType());
             Assert.AreEqual("Bruno", ((TestObject)obj4).Name);
             Assert.AreEqual(30, ((TestObject)obj4).Age);
+
+
+            object obj6 = ctx.GetObject("testObject6");
+            Assert.IsNotNull(obj6);
+            Assert.AreEqual(typeof(TestObject), obj6.GetType());
+            Assert.AreEqual("name from section", ((TestObject)obj6).Name);
+            Assert.AreEqual(27, ((TestObject)obj6).Age);
+
+
+            object obj5 = ctx.GetObject("testObject5");
+            Assert.IsNotNull(obj5);
+            Assert.AreEqual(typeof(TestObject), obj5.GetType());
+            Assert.AreEqual("overide-name", ((TestObject)obj5).Name);
+            Assert.AreEqual(26, ((TestObject)obj5).Age);
+
+            object vpc = ctx.GetObject("vpc");
+            Assert.IsNotNull(vpc);
+            Assert.AreEqual(typeof(VariablePlaceholderConfigurer), vpc.GetType());
+
+
         }
 
         private void CreateConfigurerAndTestLinkedList(IDictionary typeAliases)

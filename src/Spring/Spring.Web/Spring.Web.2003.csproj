@@ -136,6 +136,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Context\Support\WebApplicationContextArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Context\Support\WebContextHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

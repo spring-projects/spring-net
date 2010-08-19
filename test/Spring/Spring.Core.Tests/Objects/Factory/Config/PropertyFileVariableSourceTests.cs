@@ -18,7 +18,7 @@
 
 #endregion
 
-#region Imports
+#region
 
 using NUnit.Framework;
 using Spring.Core.IO;
@@ -27,7 +27,7 @@ using Spring.Core.IO;
 
 namespace Spring.Objects.Factory.Config
 {
-	/// <summary>
+    /// <summary>
     /// Unit tests for the PropertyFileVariableSource class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
@@ -51,16 +51,38 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
+        public void TestMissingResourceLocation()
+        {
+            PropertyFileVariableSource vs = new PropertyFileVariableSource();
+            vs.IgnoreMissingResources = true;
+            vs.Locations = new IResource[]
+                               {
+                                   new AssemblyResource(
+                                       "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/non-existent.properties")
+                                   ,
+                                   new AssemblyResource(
+                                       "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties")
+                                   ,
+                               };
+
+            // existing vars
+            Assert.AreEqual("Aleks Seovic", vs.ResolveVariable("name"));
+            Assert.AreEqual("32", vs.ResolveVariable("age"));
+        }
+
+
+        [Test]
         public void TestVariablesResolutionWithTwoLocations()
         {
             PropertyFileVariableSource vs = new PropertyFileVariableSource();
             vs.Locations = new IResource[]
-                {
-                    new AssemblyResource(
-                        "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties"),
-                    new AssemblyResource(
-                        "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/two.properties")
-                };
+                               {
+                                   new AssemblyResource(
+                                       "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties")
+                                   ,
+                                   new AssemblyResource(
+                                       "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/two.properties")
+                               };
 
             // existing vars
             Assert.AreEqual("Aleksandar Seovic", vs.ResolveVariable("name")); // should be overriden by the second file

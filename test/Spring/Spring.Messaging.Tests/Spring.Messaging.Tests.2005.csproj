@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Messaging\Core\MessageQueueMetadataCacheTests.cs" />
+    <Compile Include="Messaging\Core\MessageQueueUtils.cs" />
     <Compile Include="Messaging\Core\ThreadingTests.cs" />
     <Compile Include="Messaging\Listener\Adapter\MessageListenerAdapterTests.cs" />
     <Compile Include="Messaging\Listener\DistributedTxMessageListenerContainerTests.cs" />

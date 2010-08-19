@@ -343,6 +343,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Context\Support\AbstractXmlApplicationContextArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Context\Support\ApplicationContextAwareProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -438,6 +443,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Context\Support\XmlApplicationContextArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\CannotLoadObjectTypeException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -484,6 +494,11 @@
                 />
                 <File
                     RelPath = "Core\IOrdered.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\IPriorityOrdered.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2387,6 +2402,11 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Support\ChildObjectDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Support\ConstructorInstantiationInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

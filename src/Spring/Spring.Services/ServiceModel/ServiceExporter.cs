@@ -27,7 +27,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.ServiceModel;
 using System.Net.Security;
-
+using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Context;
 using Spring.Core.TypeResolution;
@@ -76,7 +76,7 @@ namespace Spring.ServiceModel
         /// <summary>
         /// The owning factory.
         /// </summary>
-        protected IObjectFactory objectFactory;
+        protected DefaultListableObjectFactory objectFactory;
 
         /// <summary>
         /// The generated WCF service wrapper type.
@@ -260,7 +260,17 @@ namespace Spring.ServiceModel
         /// </exception>
         public virtual IObjectFactory ObjectFactory
         {
-            set { this.objectFactory = value; }
+            set
+            {
+                if (value is DefaultListableObjectFactory)
+                {
+                    this.objectFactory = (DefaultListableObjectFactory)value;
+                } else
+                {
+                    //TODO verify type of exception thrown
+                    throw new ArgumentException("ObjectFactory must of type DefaultListableObjectFactory");
+                }
+            }
         }
 
         #endregion
@@ -368,7 +378,7 @@ namespace Spring.ServiceModel
         {
             IProxyTypeBuilder builder = new ConfigurableServiceProxyTypeBuilder(
                 TargetName, objectFactory.GetType(TargetName), this.objectName, _useServiceProxyTypeCache, 
-                Name, Namespace, ConfigurationName, CallbackContract, ProtectionLevel, SessionMode);
+                Name, Namespace, ConfigurationName, CallbackContract, ProtectionLevel, SessionMode, this.objectFactory);
 
             if (ContractInterface != null)
             {
@@ -397,12 +407,12 @@ namespace Spring.ServiceModel
         private sealed class ConfigurableServiceProxyTypeBuilder : ServiceProxyTypeBuilder
         {
             private CustomAttributeBuilder serviceContractAttribute;
+            private DefaultListableObjectFactory objectFactory;
 
-            public ConfigurableServiceProxyTypeBuilder(string targetName, Type targetType, string objectName, bool useServiceProxyTypeCache, 
-                string name, string ns, string configurationName, Type callbackContract, ProtectionLevel protectionLevel, SessionMode sessionMode)
+            public ConfigurableServiceProxyTypeBuilder(string targetName, Type targetType, string objectName, bool useServiceProxyTypeCache, string name, string ns, string configurationName, Type callbackContract, ProtectionLevel protectionLevel, SessionMode sessionMode, DefaultListableObjectFactory objectFactory)
                 : base(targetName, targetType, objectName, useServiceProxyTypeCache)
             {
-
+                this.objectFactory = objectFactory;
                 if (!StringUtils.HasText(configurationName))
                 {
                     name = this.Interfaces[0].Name;
@@ -498,6 +508,84 @@ namespace Spring.ServiceModel
                 Type[] proxiableInterfaces = base.GetProxiableInterfaces(interfaces);
 
                 return proxiableInterfaces;
+            }
+
+            /// <summary>
+            /// Applies attributes to the proxy class.
+            /// </summary>
+            /// <param name="typeBuilder">The type builder to use.</param>
+            /// <param name="targetType">The proxied class.</param>
+            /// <see cref="IProxyTypeBuilder.ProxyTargetAttributes"/>
+            /// <see cref="IProxyTypeBuilder.TypeAttributes"/>
+            protected override void ApplyTypeAttributes(TypeBuilder typeBuilder, Type targetType)
+            {
+                foreach (object attr in GetTypeAttributes(targetType))
+                {
+                    if (attr is CustomAttributeBuilder)
+                    {
+                        typeBuilder.SetCustomAttribute((CustomAttributeBuilder)attr);
+                    }
+#if NET_2_0
+                    else if (attr is CustomAttributeData)
+                    {
+                        typeBuilder.SetCustomAttribute(
+                            ReflectionUtils.CreateCustomAttribute((CustomAttributeData)attr));
+                    }
+#endif
+                    else if (attr is Attribute)
+                    {
+                        typeBuilder.SetCustomAttribute(
+                            ReflectionUtils.CreateCustomAttribute((Attribute)attr));
+                    }
+                    else if (attr is IObjectDefinition)
+                    {
+                        RootObjectDefinition objectDefinition = (RootObjectDefinition) attr;
+
+                        //TODO check that object definition is for an Attribute type.
+
+                        //Change object definition so it can be instantiated and make prototype scope.
+                        objectDefinition.IsAbstract = false;
+                        objectDefinition.IsSingleton = false;
+                        string objectName = ObjectDefinitionReaderUtils.GenerateObjectName(objectDefinition, objectFactory);
+                        objectFactory.RegisterObjectDefinition(objectName, objectDefinition);
+                        
+
+                        //find constructor and constructor arg values to create this attribute.                       
+                        ConstructorResolver constructorResolver = new ConstructorResolver(objectFactory, objectFactory,
+                                                                               new SimpleInstantiationStrategy(),
+                                                                               new ObjectDefinitionValueResolver(objectFactory));
+
+                        
+                        ConstructorInstantiationInfo ci = constructorResolver.GetConstructorInstantiationInfo(objectName,
+                                                                                                              objectDefinition,
+                                                                                                              null, null);
+
+                        if (objectDefinition.PropertyValues.PropertyValues.Length == 0)
+                        {
+                            CustomAttributeBuilder cab = new CustomAttributeBuilder(ci.ConstructorInfo,
+                                                                                    ci.ArgInstances);
+                            typeBuilder.SetCustomAttribute(cab);
+                        }
+                        else
+                        {
+                            object attributeInstance = objectFactory.GetObject(objectName);
+                            IObjectWrapper wrappedAttributeInstance = new ObjectWrapper(attributeInstance);
+                            PropertyInfo[] namedProperties = wrappedAttributeInstance.GetPropertyInfos();
+                            object[] propertyValues = new object[namedProperties.Length];
+                            for (int i = 0; i < namedProperties.Length; i++)
+                            {
+                                propertyValues[i] =
+                                    wrappedAttributeInstance.GetPropertyValue(namedProperties[i].Name);
+                            }
+                            CustomAttributeBuilder cab = new CustomAttributeBuilder(ci.ConstructorInfo, ci.ArgInstances, 
+                                                                                    namedProperties, propertyValues);
+                            typeBuilder.SetCustomAttribute(cab);
+                        }
+
+
+                    }
+                    
+                }
             }
         }
 

@@ -56,6 +56,29 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
+        public void WalkThrough()
+        {
+            IResource resource = new ReadOnlyXmlTestResource("ctor-args.xml", GetType());
+            XmlObjectFactory xof = new XmlObjectFactory(resource);
+            TestObject rod = (TestObject)xof.GetObject("rod");
+            Assert.AreEqual(1, rod.Age);
+
+            RootObjectDefinition def = (RootObjectDefinition) xof.GetObjectDefinition("rod");
+            ConstructorResolver resolver = new ConstructorResolver(xof, xof, new SimpleInstantiationStrategy(), 
+                                                    new ObjectDefinitionValueResolver(xof));
+            ConstructorInstantiationInfo ci = resolver.GetConstructorInstantiationInfo("rod", def, null, null);
+
+            AbstractObjectDefinition objDef = (AbstractObjectDefinition)xof.GetObjectDefinition("foo");
+            objDef.IsAbstract = false;
+
+            TestObject foo = (TestObject) xof.GetObject("foo");
+
+
+            Assert.AreEqual(2, foo.Age);
+        }
+
+
+        [Test]
         public void RefSubelementsBuildCollection()
         {
             IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
