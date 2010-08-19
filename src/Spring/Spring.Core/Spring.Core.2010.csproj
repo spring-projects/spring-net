@@ -279,6 +279,7 @@
     </Compile>
     <Compile Include="Core\Conventions.cs" />
     <Compile Include="Core\IO\EncodedResource.cs" />
+    <Compile Include="Core\IPriorityOrdered.cs" />
     <Compile Include="Core\MethodArgumentsCriteria.cs" />
     <Compile Include="Core\IO\AbstractResource.cs" />
     <Compile Include="Core\IO\AssemblyResource.cs" />
@@ -695,6 +696,7 @@
     <Compile Include="Objects\Factory\Config\VariableAccessor.cs" />
     <Compile Include="Objects\Factory\Config\VariablePlaceholderConfigurer.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
+    <Compile Include="Objects\Factory\Support\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
     <Compile Include="Objects\Factory\Support\ConstructorResolver.cs" />
