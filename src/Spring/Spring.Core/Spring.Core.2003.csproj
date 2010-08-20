@@ -2406,7 +2406,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Objects\Factory\Support\ConstructorInstantiationInfo.cs"
+                    RelPath = "Util\ConstructorInstantiationInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -691,7 +691,7 @@
     <Compile Include="Objects\Factory\Config\VariableAccessor.cs" />
     <Compile Include="Objects\Factory\Config\VariablePlaceholderConfigurer.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
-    <Compile Include="Objects\Factory\Support\ConstructorInstantiationInfo.cs" />
+    <Compile Include="Util\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
     <Compile Include="Objects\Factory\Support\ConstructorResolver.cs" />
