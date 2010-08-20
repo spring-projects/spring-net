@@ -50,9 +50,12 @@ namespace Spring.ServiceModel
         public void CanCreateHostTwice()
         {
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
-            of.RegisterObjectDefinition("service", new RootObjectDefinition(new RootObjectDefinition(typeof(Service))));
-            SpringServiceHost ssh = new SpringServiceHost("service", of, true);
-            SpringServiceHost ssh1 = new SpringServiceHost("service", of, true);
+
+            string svcRegisteredName = System.Guid.NewGuid().ToString();
+
+            of.RegisterObjectDefinition(svcRegisteredName, new RootObjectDefinition(new RootObjectDefinition(typeof(Service))));
+            SpringServiceHost ssh = new SpringServiceHost(svcRegisteredName, of, true);
+            SpringServiceHost ssh1 = new SpringServiceHost(svcRegisteredName, of, true);
         }
     }
 }
