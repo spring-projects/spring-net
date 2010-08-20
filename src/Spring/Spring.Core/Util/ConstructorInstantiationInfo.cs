@@ -20,7 +20,7 @@
 
 using System.Reflection;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Util
 {
     /// <summary>
     /// Collects information on the constructor to use to create the instance and the argument instances to pass into the

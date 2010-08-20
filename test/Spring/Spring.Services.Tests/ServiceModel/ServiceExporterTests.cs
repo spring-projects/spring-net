@@ -34,6 +34,7 @@ using Spring.ServiceModel;
 using Spring.Core.IO;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
+using System.Collections.Generic;
 
 #endregion
 
@@ -53,16 +54,73 @@ namespace Spring.ServiceModel
         {
             const string xml =
     @"<?xml version='1.0' encoding='UTF-8' ?>
-<objects xmlns='http://www.springframework.net'>
-	<object id='service' type='Spring.ServiceModel.ServiceExporterTests+Service, Spring.Services.Tests'/>
-	<object id='serviceWithMultipleInterfaces' type='Spring.ServiceModel.ServiceExporterTests+ServiceWithMultipleInterfaces, Spring.Services.Tests'/>
-    <object id='decoratedService' type='Spring.ServiceModel.ServiceExporterTests+DecoratedService, Spring.Services.Tests'/>
-</objects>";
-            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml));
-            IObjectFactory objectFactory = new XmlObjectFactory(new InputStreamResource(stream, string.Empty));
+        <objects xmlns='http://www.springframework.net'>
+	        <object id='service' type='Spring.ServiceModel.ServiceExporterTests+Service, Spring.Services.Tests'/>
+	        <object id='serviceWithMultipleInterfaces' type='Spring.ServiceModel.ServiceExporterTests+ServiceWithMultipleInterfaces, Spring.Services.Tests'/>
+            <object id='decoratedService' type='Spring.ServiceModel.ServiceExporterTests+DecoratedService, Spring.Services.Tests'/>
+        </objects>";
 
-            se = new ServiceExporter();
-            se.ObjectFactory = objectFactory;
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+            {
+                IObjectFactory objectFactory = new XmlObjectFactory(new InputStreamResource(stream, string.Empty));
+                se = new ServiceExporter();
+                se.ObjectFactory = objectFactory;
+            }
+
+
+
+            
+
+
+
+        }
+
+
+        [Test]
+        //SPRNET-1262
+        public void ProxiesDeclarativeAttributeWithConstructorArguments()
+        {
+            XmlObjectFactory objectFactory = null;
+
+            const string xml =
+                @"<?xml version='1.0' encoding='UTF-8' ?>
+                <objects xmlns='http://www.springframework.net'>
+                <object id='theService' type='Spring.ServiceModel.ServiceExporterTests+Service, Spring.Services.Tests'/>	
+                <object id='service' type='Spring.ServiceModel.ServiceExporter, Spring.Services'>
+	                    <property name='TargetName' value='theService'/>
+	                    <property name='TypeAttributes'>
+                            <list>
+                                <object type='System.ServiceModel.ServiceKnownTypeAttribute, System.ServiceModel' abstract='true'>
+                                    <constructor-arg name='type' value='System.Collections.Generic.List&lt;int>' />
+                                </object>
+                            </list>
+                        </property>
+                    </object>
+                </objects>";
+
+
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+            {
+                objectFactory = new XmlObjectFactory(new InputStreamResource(stream, string.Empty));
+            }
+
+            Type proxyType = (Type)objectFactory.GetObject("service");
+            object[] attrs = proxyType.GetCustomAttributes(false);
+
+            ServiceKnownTypeAttribute attrib = null;
+
+            //loop thru all retreived attributes, attempting to find the one that is of the expected type
+            for (int i = 0; i < attrs.Length; i++)
+            {
+                attrib = attrs[i] as ServiceKnownTypeAttribute;
+
+                //break out of the loop once we find the one we want
+                if (attrib != null)
+                    break;
+            }
+
+            Assert.NotNull(attrib, String.Format("No attributes of the expecte type {0} were found.", typeof(ServiceKnownTypeAttribute)));
+            Assert.AreEqual(typeof(List<int>), attrib.Type, "Property 'Type' on Target Attribute not set!");
         }
 
         [Test]

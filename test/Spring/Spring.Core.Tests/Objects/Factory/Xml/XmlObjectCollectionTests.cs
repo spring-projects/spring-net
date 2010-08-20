@@ -32,6 +32,7 @@ using Spring.Core.IO;
 using Spring.Expressions;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
+using Spring.Util;
 
 #endregion
 
@@ -56,7 +57,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        public void WalkThrough()
+        public void CanApplyConstructorArgsToAbstractType()
         {
             IResource resource = new ReadOnlyXmlTestResource("ctor-args.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
@@ -66,6 +67,7 @@ namespace Spring.Objects.Factory.Xml
             RootObjectDefinition def = (RootObjectDefinition) xof.GetObjectDefinition("rod");
             ConstructorResolver resolver = new ConstructorResolver(xof, xof, new SimpleInstantiationStrategy(), 
                                                     new ObjectDefinitionValueResolver(xof));
+            
             ConstructorInstantiationInfo ci = resolver.GetConstructorInstantiationInfo("rod", def, null, null);
 
             AbstractObjectDefinition objDef = (AbstractObjectDefinition)xof.GetObjectDefinition("foo");
