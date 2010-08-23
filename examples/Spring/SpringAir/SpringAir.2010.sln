@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SpringAir.Web.2005", "src\SpringAir.Web.2005\", "{839602F5-8077-497D-9CCB-C9F02741CA55}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv2.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		ProjectReferences = "{5E3427D8-62FC-483F-A86B-B44A79A46BCC}|SpringAir.Core.dll;{78B285FE-27F3-44F4-84B1-7A589AB48EF3}|SpringAir.Data.Ado.dll;{0925F8C7-B2AB-4DD7-AF6D-10DD028C5910}|SpringAir.Web.2010.References.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/SpringAir.Web.2005"
 		Debug.AspNetCompiler.PhysicalPath = "src\SpringAir.Web.2005\"

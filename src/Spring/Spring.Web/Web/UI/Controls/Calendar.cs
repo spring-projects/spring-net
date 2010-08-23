@@ -179,7 +179,6 @@ namespace Spring.Web.UI.Controls
 
         private void RenderTextBox(HtmlTextWriter writer)
         {
-            writer.AddAttribute(HtmlTextWriterAttribute.Id, ClientID);
             writer.AddAttribute(HtmlTextWriterAttribute.Type, "text");
             writer.AddAttribute(HtmlTextWriterAttribute.Name, UniqueID);
             writer.AddAttribute(HtmlTextWriterAttribute.Value, (SelectedDate != DateTime.MinValue ? SelectedDate.ToString(Format) : ""));
@@ -188,7 +187,9 @@ namespace Spring.Web.UI.Controls
             {
                 writer.AddAttribute(HtmlTextWriterAttribute.ReadOnly, "readonly");
             }
+
             base.AddAttributesToRender(writer);
+
 
             writer.RenderBeginTag(HtmlTextWriterTag.Input);
             writer.RenderEndTag();
