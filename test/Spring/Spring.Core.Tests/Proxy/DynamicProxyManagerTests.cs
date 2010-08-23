@@ -24,6 +24,7 @@ using System;
 using System.Reflection.Emit;
 using System.Threading;
 using NUnit.Framework;
+using System.Reflection;
 
 #endregion
 
@@ -82,11 +83,19 @@ namespace Spring.Proxy
         #endregion WorkerThread Class
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void CreateTypeBuilderMustNotBeCalledTwiceWithSameArguments()
         {
             TypeBuilder tb1 = DynamicProxyManager.CreateTypeBuilder("testtypename", null);
-            TypeBuilder tb2 = DynamicProxyManager.CreateTypeBuilder("testtypename", typeof(AbstractProxyTypeBuilder) );
+            
+            try
+            {
+                TypeBuilder tb2 = DynamicProxyManager.CreateTypeBuilder("testtypename", typeof(AbstractProxyTypeBuilder));
+                Assert.Fail("Did not throw expected ArgumentException.");
+            }
+            catch (ArgumentException)
+            {
+            }
+            
         }
 
         [Test]

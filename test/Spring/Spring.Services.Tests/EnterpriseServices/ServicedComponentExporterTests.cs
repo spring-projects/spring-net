@@ -54,11 +54,19 @@ namespace Spring.EnterpriseServices
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void BailsWhenNotConfigured()
         {
             ServicedComponentExporter exp = new ServicedComponentExporter();
-            exp.AfterPropertiesSet();
+            try
+            {
+                exp.AfterPropertiesSet();
+                Assert.Fail("Did not throw expected ArgumentException!");
+            }
+            catch (ArgumentException)
+            {
+                
+            }
+           
         }
 
         [Test]

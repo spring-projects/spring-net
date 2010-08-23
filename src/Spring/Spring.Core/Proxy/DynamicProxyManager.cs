@@ -30,9 +30,9 @@ using Spring.Util;
 
 namespace Spring.Proxy
 {
-	/// <summary>
+    /// <summary>
     /// Allows easy access to existing and creation of new dynamic proxies.
-	/// </summary>
+    /// </summary>
     /// <author>Aleksandar Seovic</author>
     /// <author>Bruno Baia</author>
     public sealed class DynamicProxyManager
@@ -43,7 +43,7 @@ namespace Spring.Proxy
         /// The name of the assembly that defines proxy types created.
         /// </summary>
         public const string ASSEMBLY_NAME = "Spring.Proxy";
-        
+
         /// <summary>
         /// The attributes of the proxy type to generate.
         /// </summary>
@@ -62,14 +62,30 @@ namespace Spring.Proxy
         public static TypeBuilder CreateTypeBuilder(string typeName, Type baseType)
         {
             ModuleBuilder module = DynamicCodeManager.GetModuleBuilder(ASSEMBLY_NAME);
-            
-            if (baseType == null)
+
+            try
             {
-                return module.DefineType(typeName, TYPE_ATTRIBUTES);
+                if (baseType == null)
+                {
+                    return module.DefineType(typeName, TYPE_ATTRIBUTES);
+                }
+                else
+                {
+                    return module.DefineType(typeName, TYPE_ATTRIBUTES, baseType);
+                }
             }
-            else
+            catch (ArgumentException ex)
             {
-                return module.DefineType(typeName, TYPE_ATTRIBUTES, baseType);
+                Type alreadyRegisteredType = module.GetType(typeName, true);
+
+                string msg;
+                
+                if (alreadyRegisteredType != null)
+                    msg = "Proxy already registered for \"{0}\" as Type \"{1}\".";
+                else
+                    msg = "Proxy already registered for \"{0}\".";
+
+                throw new ArgumentException(string.Format(msg, typeName, alreadyRegisteredType.FullName), ex);
             }
         }
 
@@ -80,7 +96,7 @@ namespace Spring.Proxy
         [Conditional("DEBUG_DYNAMIC")]
         public static void SaveAssembly()
         {
-            DynamicCodeManager.SaveAssembly( ASSEMBLY_NAME );
+            DynamicCodeManager.SaveAssembly(ASSEMBLY_NAME);
         }
 
         #endregion
