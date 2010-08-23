@@ -1,0 +1,49 @@
+﻿<%@ Master Language="C#" AutoEventWireup="false" CodeFile="StandardTemplate.master.cs" Inherits="StandardTemplate" %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+       
+<html>
+  <spring:Head ID="Head2" runat="server">
+    <title>
+      <spring:ContentPlaceHolder id="title" runat="server">
+            <%= GetMessage("default.title") %>  
+      </spring:ContentPlaceHolder>
+    </title>
+    <link href="<%= Page.CssRoot %>/default.css" type="text/css" rel="stylesheet">
+    <spring:ContentPlaceHolder id="head" runat="server"></spring:ContentPlaceHolder>
+  </spring:Head>
+  <body>
+    <form id="form" method="post" runat="server">
+      <div id="container">
+        <div id="logo">
+          <spring:LocalizedImage id="logoImage" imageName="spring-air-logo.jpg" borderWidth="0" runat="server" />
+        </div>
+        <div id="content">
+          <div class="panel11" style="BACKGROUND: url(<%= Page.ImagesRoot %>/panel-top-left.gif)"></div>
+          <div class="panel12" style="BACKGROUND: url(<%= Page.ImagesRoot %>/panel-top-middle.gif)"></div>
+          <div class="panel13" style="BACKGROUND: url(<%= Page.ImagesRoot %>/panel-top-right.gif)"></div>
+          <div class="panel21" style="BACKGROUND: url(<%= Page.ImagesRoot %>/panel-left-middle.gif)"></div>
+          <div class="panel23" style="BACKGROUND: url(<%= Page.ImagesRoot %>/panel-right-middle.gif)"></div>
+          <div class="panel31" style="BACKGROUND: url(<%= Page.ImagesRoot %>/panel-bottom-left.gif)"></div>
+          <div class="panel32" style="BACKGROUND: url(<%= Page.ImagesRoot %>/panel-bottom-middle.gif)"></div>
+          <div class="panel33" style="BACKGROUND: url(<%= Page.ImagesRoot %>/panel-bottom-right.gif)"></div>
+          <div class="panelContent">
+            <asp:ContentPlaceHolder id="body" runat="server" />
+            <br/>
+            <br/>
+          </div>
+        </div>
+        <div id="copyright">
+          <img class="divider" src="<%= Page.ImagesRoot %>/line.jpg" alt="" width="500" height="1"/>
+          <br/>
+          <%= CopyrightText %>
+          <br/>
+          
+          <asp:LinkButton ID="english" Runat="server" CommandArgument="en-US" CausesValidation="False">English</asp:LinkButton>&nbsp;
+          <asp:LinkButton ID="serbianLatin" Runat="server" CommandArgument="sr-SP-Latn" CausesValidation="False">Srpski</asp:LinkButton>&nbsp;
+          <asp:LinkButton ID="serbianCyrillic" Runat="server" CommandArgument="sr-SP-Cyrl" CausesValidation="False">Српски</asp:LinkButton>
+        </div>
+      </div>
+    </form>
+  </body>
+</html>
