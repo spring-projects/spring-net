@@ -203,7 +203,7 @@ namespace Spring.Web.UI.Controls
 
     	private void RenderSetupScript(HtmlTextWriter writer)
     	{    	    
-    		writer.AddAttribute("language", "javascript");    	
+    		writer.AddAttribute("type", "text/javascript");    	
     	    
             writer.RenderBeginTag(HtmlTextWriterTag.Script);
     		writer.WriteLine("Calendar.setup({");
