@@ -87,9 +87,9 @@ namespace Spring.Util
         /// A validating <see cref="System.Xml.XmlReader"/> implementation.
         /// </returns>
         public static XmlReader CreateValidatingReader(Stream stream, XmlSchemaSet schemas, ValidationEventHandler eventHandler)
-		{
-			return CreateValidatingReader(stream, new XmlUrlResolver(), schemas, eventHandler);
-		}
+        {
+            return CreateValidatingReader(stream, new XmlUrlResolver(), schemas, eventHandler);
+        }
 
         /// <summary>
         /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
@@ -104,20 +104,28 @@ namespace Spring.Util
         /// </returns>
         public static XmlReader CreateValidatingReader(Stream stream, XmlResolver xmlResolver, XmlSchemaSet schemas, ValidationEventHandler eventHandler)
         {
-            XmlReaderSettings settings = new XmlReaderSettings();
-		    settings.Schemas.XmlResolver = xmlResolver;
-            settings.Schemas.Add(schemas);
-            settings.ValidationType = ValidationType.Schema;
-            if (eventHandler != null)
+            lock (typeof(XmlUtils))
             {
-                settings.ValidationEventHandler += eventHandler;
-            }
+                if (!schemas.IsCompiled)
+                {
+                    schemas.Compile();
+                }
 
-            return XmlReader.Create(stream, settings);
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.Schemas.XmlResolver = xmlResolver;
+                settings.Schemas.Add(schemas);
+                settings.ValidationType = ValidationType.Schema;
+                if (eventHandler != null)
+                {
+                    settings.ValidationEventHandler += eventHandler;
+                }
+
+                return XmlReader.Create(stream, settings);
+            }
         }
 #endif
 
-        
+
 #if !NET_2_0
         /// <summary>
         /// Gets an <see cref="System.Xml.XmlTextReader"/> implementation 
@@ -142,7 +150,7 @@ namespace Spring.Util
         /// A non-validating <see cref="System.Xml.XmlReader"/> implementation.
         /// </returns>
         public static XmlReader CreateReader(Stream stream)
-        {            
+        {
             return XmlReader.Create(stream);
         }
 #endif
