@@ -68,14 +68,53 @@ namespace Spring.Objects.Factory.Xml
                     new DefaultListableObjectFactory());
             reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("/dev/null"));
         }
+#if NET_2_0
 
         [Test]
+        public void AutoRegistersAllWellknownNamespaceParsers_Common()
+        {
+            string[] namespaces = {
+                "http://www.springframework.net/tx",
+                "http://www.springframework.net/aop",
+                "http://www.springframework.net/db",
+                "http://www.springframework.net/database",
+                "http://www.springframework.net/remoting",
+                "http://www.springframework.net/nms",
+                "http://www.springframework.net/validation",
+                "http://www.springframework.net/nvelocity" };
+
+            foreach (string ns in namespaces)
+            {
+                Assert.IsNotNull(NamespaceParserRegistry.GetParser(ns),
+                    string.Format("Parser for Namespace {0} could not be auto-registered.", ns));
+            }
+        }
+    
+#endif
+
+#if NET_3_0
+
+        [Test]
+        public void AutoRegistersAllWellknownNamespaceParsers_3_0()
+        {
+            string[] namespaces = { "http://www.springframework.net/wcf" };
+
+            foreach (string ns in namespaces)
+            {
+                Assert.IsNotNull(NamespaceParserRegistry.GetParser(ns),
+                    string.Format("Parser for Namespace {0} could not be auto-registered.", ns));
+            }
+        }
+#endif
+
+        [Test]
+        [Ignore] //this test cannot co-exist with AutoRegistersAllWellknownNamespaceParsers b/c that test will have already loaded the Spring.Data ass'y
         public void AutoRegistersWellknownNamespaceParser()
         {
             try
             {
                 Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-                foreach(Assembly assembly in loadedAssemblies)
+                foreach (Assembly assembly in loadedAssemblies)
                 {
                     if (assembly.GetName(true).Name.StartsWith("Spring.Data"))
                     {
@@ -89,17 +128,17 @@ namespace Spring.Objects.Factory.Xml
                 XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
                 reader.LoadObjectDefinitions(new StringResource(
                                                  @"<?xml version='1.0' encoding='UTF-8' ?>
-<objects xmlns='http://www.springframework.net' 
-         xmlns:tx='http://www.springframework.net/tx'>  
-      <tx:attribute-driven />
-</objects>
-"));
+                                                    <objects xmlns='http://www.springframework.net' 
+                                                             xmlns:tx='http://www.springframework.net/tx'>  
+                                                          <tx:attribute-driven />
+                                                    </objects>
+                                                    "));
                 object apc = of.GetObject(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME);
                 Assert.NotNull(apc);
             }
             finally
             {
-                NamespaceParserRegistry.Reset();                
+                NamespaceParserRegistry.Reset();
             }
         }
 
@@ -135,7 +174,7 @@ namespace Spring.Objects.Factory.Xml
 	</object>
 </objects>
 "));
-            Assert.AreEqual(" \n\r\t", ((TestObject) of.GetObject("test")).Name);
+            Assert.AreEqual(" \n\r\t", ((TestObject)of.GetObject("test")).Name);
         }
 
         [Test]
@@ -157,9 +196,9 @@ namespace Spring.Objects.Factory.Xml
 	</object>
 </objects>
 "));
-            Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test2")).Name);
-            Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test3")).Name);
-            Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test4")).Name);
+            Assert.AreEqual(string.Empty, ((TestObject)of.GetObject("test2")).Name);
+            Assert.AreEqual(string.Empty, ((TestObject)of.GetObject("test3")).Name);
+            Assert.AreEqual(string.Empty, ((TestObject)of.GetObject("test4")).Name);
         }
 
 
@@ -176,13 +215,13 @@ namespace Spring.Objects.Factory.Xml
 	</object>
 </objects>
 "));
-            Assert.AreEqual(" \n\r\t", ((TestObject) of.GetObject("test4")).Name);
+            Assert.AreEqual(" \n\r\t", ((TestObject)of.GetObject("test4")).Name);
         }
 
         [Test]
         public void ThrowsObjectDefinitionStoreExceptionOnValidationError()
         {
-            try 
+            try
             {
                 DefaultListableObjectFactory of = new DefaultListableObjectFactory();
                 XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
@@ -191,12 +230,12 @@ namespace Spring.Objects.Factory.Xml
                                                 <objects xmlns='http://www.springframework.net'>  
 	                                                <INVALIDELEMENT id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' />
                                                 </objects>
-                                                "));                       
+                                                "));
                 Assert.Fail();
             }
-            catch(ObjectDefinitionStoreException ex)
+            catch (ObjectDefinitionStoreException ex)
             {
-                Assert.IsTrue( ex.Message.IndexOf("Line 3 in XML document from  violates the schema.") > -1);
+                Assert.IsTrue(ex.Message.IndexOf("Line 3 in XML document from  violates the schema.") > -1);
             }
         }
 
@@ -215,9 +254,9 @@ namespace Spring.Objects.Factory.Xml
                                                 "));
                 Assert.Fail();
             }
-            catch(ObjectDefinitionStoreException ex)
+            catch (ObjectDefinitionStoreException ex)
             {
-                Assert.IsTrue( ex.Message.IndexOf("Line 4 in XML document from  is not well formed.") > -1);
+                Assert.IsTrue(ex.Message.IndexOf("Line 4 in XML document from  is not well formed.") > -1);
             }
         }
 
@@ -225,8 +264,9 @@ namespace Spring.Objects.Factory.Xml
 
         private class TestXmlObjectDefinitionReader : XmlObjectDefinitionReader
         {
-            public TestXmlObjectDefinitionReader(IObjectDefinitionRegistry registry) : base(registry)
-            {}
+            public TestXmlObjectDefinitionReader(IObjectDefinitionRegistry registry)
+                : base(registry)
+            { }
 
             private class ThrowingObjectDefinitionDocumentReader : IObjectDefinitionDocumentReader
             {
@@ -256,7 +296,7 @@ namespace Spring.Objects.Factory.Xml
 <objects xmlns='http://www.springframework.net'>  
 	<object id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' />
 </objects>
-"));                       
+"));
         }
 
         [Test]
@@ -278,7 +318,7 @@ namespace Spring.Objects.Factory.Xml
     </core:object>
 </core:objects>
 "));
-                TestObject test2 = (TestObject) of.GetObject("test2");
+                TestObject test2 = (TestObject)of.GetObject("test2");
                 Assert.AreEqual(typeof(TestObject), test2.GetType());
                 Assert.IsNotNull(test2.Sibling);
             }
@@ -305,12 +345,12 @@ namespace Spring.Objects.Factory.Xml
     />
 </objects>
 "));
-            AbstractObjectDefinition od1 = (AbstractObjectDefinition) of.GetObjectDefinition("test1");
+            AbstractObjectDefinition od1 = (AbstractObjectDefinition)of.GetObjectDefinition("test1");
             Assert.IsFalse(od1.IsSingleton);
             Assert.IsTrue(od1.IsAbstract);
             Assert.IsFalse(od1.IsLazyInit);
 
-            AbstractObjectDefinition od2 = (AbstractObjectDefinition) of.GetObjectDefinition("test2");
+            AbstractObjectDefinition od2 = (AbstractObjectDefinition)of.GetObjectDefinition("test2");
             Assert.IsTrue(od2.IsSingleton);
             Assert.IsFalse(od2.IsAbstract);
             Assert.IsTrue(od2.IsLazyInit);

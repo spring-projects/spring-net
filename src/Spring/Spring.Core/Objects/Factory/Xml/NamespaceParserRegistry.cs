@@ -99,6 +99,7 @@ namespace Spring.Objects.Factory.Xml
             wellknownNamespaceParserTypeNames["http://www.springframework.net/tx"] = "Spring.Transaction.Config.TxNamespaceParser, Spring.Data";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/aop"] = "Spring.Aop.Config.AopNamespaceParser, Spring.Aop";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/db"] = "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/database"] = "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/remoting"] = "Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/wcf"] = "Spring.ServiceModel.Config.WcfNamespaceParser, Spring.Services";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/nms"] = "Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms";
@@ -120,7 +121,7 @@ namespace Spring.Objects.Factory.Xml
             schemas = new XmlSchemaCollection();
 #else
             schemas = new XmlSchemaSet();
-            schemas.XmlResolver = new XmlResourceUrlResolver();
+            schemas.XmlResolver = new XmlResourceUrlResolver();            
 #endif
 
             RegisterParser(new ObjectsNamespaceParser());
@@ -185,6 +186,12 @@ namespace Spring.Objects.Factory.Xml
                 if (ok)
                 {
                     parser = (INamespaceParser)parsers[namespaceURI];
+                    
+                    //work-around for SPRNET-1277 where we're inconsistent re: exposing /db or /database as the final namespace element
+                    if (parser == null && namespaceURI == "http://www.springframework.net/db")
+                    {
+                        parser = (INamespaceParser)parsers["http://www.springframework.net/database"];
+                    }
                 }
             }
             return parser;
@@ -404,6 +411,7 @@ namespace Spring.Objects.Factory.Xml
 #else
                 XmlTextReader schemaDocument = new XmlTextReader(schema.Uri.AbsoluteUri, schema.InputStream);
                 schemas.Add(namespaceUri, schemaDocument);
+
 #endif
             }
             catch (Exception e)

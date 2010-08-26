@@ -924,6 +924,18 @@
       <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
       <Name>Spring.Data.2008</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2008.csproj">
+      <Project>{AEB1578C-9018-4D49-B440-789F38DD2F29}</Project>
+      <Name>Spring.Messaging.Nms.2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Services\Spring.Services.2008.csproj">
+      <Project>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Project>
+      <Name>Spring.Services.2008</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.2008.csproj">
+      <Project>{BF3AB954-8375-407C-9E98-4C51D8072784}</Project>
+      <Name>Spring.Template.Velocity.2008</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
