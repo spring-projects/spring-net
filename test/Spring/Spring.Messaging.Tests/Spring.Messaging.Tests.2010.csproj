@@ -56,6 +56,8 @@
   <ItemGroup>
     <Compile Include="Messaging\Core\MessageQueueTemplateTests.cs" />
     <Compile Include="Messaging\Core\MessageQueueUtils.cs" />
+    <Compile Include="Messaging\Listener\WaitingHandler.cs" />
+    <Compile Include="Messaging\Listener\MultiThreadedNonTransactionalMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Support\MessageQueueFactoryObjectTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -88,6 +90,9 @@
     <EmbeddedResource Include="Messaging\Core\MessageQueueTemplateTests.xml" />
     <EmbeddedResource Include="Messaging\Listener\DistributedTxMessageListenerContainerTests.xml" />
     <EmbeddedResource Include="Messaging\Core\MessageQueueMetadataCacheTests.xml" />
+    <EmbeddedResource Include="Messaging\Listener\MultiThreadedNonTransactionalMessageListenerContainerTests.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="Spring.Messaging.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -81,10 +81,10 @@ namespace Spring.Messaging.Listener
             q.ConvertAndSend("Goodbye World 1");
 
             Assert.AreEqual(0, listener.MessageCount, "PRECONDITION FAILURE: Unable to send the message!");
+
             distributedTxMessageListenerContainer.Start();
 
             Thread.Sleep(waitInMillis);
-
 
             distributedTxMessageListenerContainer.Stop();
             distributedTxMessageListenerContainer.Shutdown();
@@ -105,6 +105,8 @@ namespace Spring.Messaging.Listener
             //must match the retry count in the object registration for test to pass!
             const int EXCEPTION_QUEUE_RETRY_COUNT = 2;
 
+            int expectedMessageCount = MESSAGE_COUNT + (MESSAGE_COUNT * EXCEPTION_QUEUE_RETRY_COUNT);
+
             MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
 
@@ -115,13 +117,22 @@ namespace Spring.Messaging.Listener
 
             Assert.AreEqual(0, listener.MessageCount);
 
+            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+            timer.Start();
+
             distributedTxMessageListenerContainer.Start();
 
-            //this test needs to wait somewhat longer than the others in order to consistently pass so
-            //artificially inflate the waiting period before attempting subsequent asserts:
-            Thread.Sleep((int)(waitInMillis * 1.5));
+            while (listener.MessageCount < expectedMessageCount)
+            {
+                if (timer.ElapsedMilliseconds > 60000)
+                    Assert.Fail("Did not receive expected number of messages within the permitted time limit.");
+            }
 
-            Assert.AreEqual(MESSAGE_COUNT + (MESSAGE_COUNT * EXCEPTION_QUEUE_RETRY_COUNT), listener.MessageCount);
+            timer.Stop();
+
+            System.Diagnostics.Debug.WriteLine("elapsed time = " + timer.ElapsedMilliseconds);
+
+            Assert.AreEqual(expectedMessageCount, listener.MessageCount);
 
             distributedTxMessageListenerContainer.Stop();
             distributedTxMessageListenerContainer.Shutdown();

@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+         xmlns:db="http://www.springframework.net/database">
+
+  
+  <db:provider id="DbProvider"                
+               provider="System.Data.SqlClient"
+               connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa"/>
+  
+  <object id="adoTransactionManager"
+          type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
+
+    <property name="DbProvider" ref="DbProvider"/>
+  </object>
+
+  <object id='msmqTestQueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+    <property name='Path' value='.\Private$\testqueue'/>
+    <property name='MessageReadPropertyFilterSetAll' value='true'/>
+    <property name='ProductTemplate'>
+      <object>
+        <property name='Label' value='MyTestQueueLabel'/>
+      </object>
+    </property>
+  </object>
+
+  <object id='msmqTestResponseQueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+    <property name='Path' value='.\Private$\testresponsequeue'/>
+    <property name='MessageReadPropertyFilterSetAll' value='true'/>
+    <property name='ProductTemplate'>
+      <object>
+        <property name='Label' value='MyTestResponseQueueLabel'/>
+      </object>
+    </property>
+  </object>
+
+  <object id='testremotequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+    <property name='Path' value='FormatName:Direct=OS:RAVEN\Private$\testqueue'/>
+    <property name='RemoteQueue' value="true"/>
+  </object>
+
+  <object id="testRemoteTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+    <property name="DefaultMessageQueueObjectName" value="testremotequeue"/>
+    <property name="MessageConverterObjectName" value="binaryMessageConverter"/>
+  </object>
+
+  <object id="testQueueTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+    <property name="DefaultMessageQueueObjectName" value="msmqTestQueue"/>
+    <property name="MessageConverterObjectName" value="binaryMessageConverter"/>
+  </object>
+  
+  
+  <!-- Message Converters -->
+  
+  <object id="messageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"
+          singleton="false">
+    <property name="TargetTypes" value="System.String"/>
+  </object>
+
+  <object id="binaryMessageConverter" type="Spring.Messaging.Support.Converters.BinaryMessageConverter,  Spring.Messaging" singleton="false">
+    
+  </object>
+
+  <object id="nonTransactionalMessageListenerContainer" type="Spring.Messaging.Listener.NonTransactionalMessageListenerContainer, Spring.Messaging">
+    <property name="MessageQueueObjectName" value="testremotequeue"/>
+    <property name="MaxConcurrentListeners" value="5"/>
+    <property name="ListenerTimeLimit" value="20s"/>
+    <property name="MessageListener" ref="messageListenerAdapter"/>
+    <property name="ExceptionHandler" ref="exceptionHandler"/>
+    <property name="AutoStartup" value="false"/>
+  </object>
+
+  
+  <!-- Adapter -->
+  <object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging">
+    <property name="DefaultResponseQueueName" value="msmqTestResponseQueue"/>
+    <property name="MessageConverterObjectName" value="binaryMessageConverter"/>
+    <property name="HandlerObject" ref="waitingHandler"/>
+  </object>
+
+
+  <!-- Message and Exception Handlers -->
+  <object id="waitingHandler" type="Spring.Messaging.Listener.WaitingHandler, Spring.Messaging.Tests">
+    
+  </object>
+
+  <object id="exceptionHandler" type="Spring.Messaging.Listener.SimpleExceptionHandler, Spring.Messaging.Tests">
+
+  </object>
+  
+  
+</objects>

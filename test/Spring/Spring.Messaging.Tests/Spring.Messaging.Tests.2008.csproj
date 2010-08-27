@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Listener\NonTransactionalMessageListenerContainerTests.xml" />
+	<EmbeddedResource Include="Messaging\Listener\MultiThreadedNonTransactionalMessageListenerContainerTests.xml" />
     <EmbeddedResource Include="Messaging\Listener\TransactionalMessageListenerContainerTests.xml" />
     <EmbeddedResource Include="Messaging\queue-context.xml" />
     <EmbeddedResource Include="Messaging\Core\MessageQueueTemplateTests.xml" />
@@ -88,13 +89,15 @@
   <ItemGroup>
     <Compile Include="MessagingCompilerOptionsTests.cs" />
     <Compile Include="MessagingExceptionTests.cs" />
+	<Compile Include="Messaging\Listener\WaitingHandler.cs" />
     <Compile Include="Messaging\Core\MessageQueueMetadataCacheTests.cs" />
     <Compile Include="Messaging\Core\MessageQueueUtils.cs" />
     <Compile Include="Messaging\Core\ThreadingTests.cs" />
     <Compile Include="Messaging\Listener\Adapter\MessageListenerAdapterTests.cs" />
     <Compile Include="Messaging\Listener\DistributedTxMessageListenerContainerTests.cs" />
     <Compile Include="Messaging\Listener\LoggingExceptionHandler.cs" />
-    <Compile Include="Messaging\Listener\NonTransactionalMessageListenerContainerTests.cs">
+    <Compile Include="Messaging\Listener\NonTransactionalMessageListenerContainerTests.cs" />
+	<Compile Include="Messaging\Listener\MultiThreadedNonTransactionalMessageListenerContainerTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Messaging\Listener\SimpleExceptionHandler.cs" />

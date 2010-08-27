@@ -95,6 +95,8 @@ namespace Spring.Expressions
         {
             string methodName = this.getText();
             object[] argValues = ResolveArguments(evalContext);
+            ICollectionProcessor localCollectionProcessor = null;
+            IMethodCallProcessor methodCallProcessor = null;
 
             // resolve method, if necessary
             lock (this)
@@ -102,34 +104,23 @@ namespace Spring.Expressions
                 // check if it is a collection and the methodname denotes a collection processor
                 if ((context == null || context is ICollection))
                 {
-                    ICollectionProcessor localCollectionProcessor;
                     // predefined collection processor?
-                    localCollectionProcessor = (ICollectionProcessor) collectionProcessorMap[methodName];
+                    localCollectionProcessor = (ICollectionProcessor)collectionProcessorMap[methodName];
 
                     // user-defined collection processor?
                     if (localCollectionProcessor == null && evalContext.Variables != null)
                     {
                         localCollectionProcessor = evalContext.Variables[methodName] as ICollectionProcessor;
                     }
-
-                    if (localCollectionProcessor != null)
-                    {
-                        return localCollectionProcessor.Process((ICollection) context, argValues);
-                    }
                 }
 
                 // try extension methods
-                IMethodCallProcessor methodCallProcessor = (IMethodCallProcessor)extensionMethodProcessorMap[methodName];
+                methodCallProcessor = (IMethodCallProcessor)extensionMethodProcessorMap[methodName];
                 {
                     // user-defined extension method processor?
                     if (methodCallProcessor == null && evalContext.Variables != null)
                     {
                         methodCallProcessor = evalContext.Variables[methodName] as IMethodCallProcessor;
-                    }
-
-                    if (methodCallProcessor != null)
-                    {
-                        return methodCallProcessor.Process(context, argValues);
                     }
                 }
 
@@ -148,18 +139,28 @@ namespace Spring.Expressions
                         Initialize(methodName, argValues, context);
                         initialized = true;
                     }
-
-                    if (cachedInstanceMethod != null)
-                    {
-                        object[] paramValues = (cachedIsParamArray)
-                                                ? ReflectionUtils.PackageParamArray(argValues, argumentCount, paramArrayType)
-                                                : argValues;
-                        return cachedInstanceMethod.Invoke(context, paramValues);
-                    }
                 }
             }
-            
-            throw new ArgumentException(string.Format("Method '{0}' with the specified number and types of arguments does not exist.", methodName));
+
+            if (localCollectionProcessor != null)
+            {
+                return localCollectionProcessor.Process((ICollection)context, argValues);
+            }
+            else if (methodCallProcessor != null)
+            {
+                return methodCallProcessor.Process(context, argValues);
+            }
+            else if (cachedInstanceMethod != null)
+            {
+                object[] paramValues = (cachedIsParamArray)
+                                        ? ReflectionUtils.PackageParamArray(argValues, argumentCount, paramArrayType)
+                                        : argValues;
+                return cachedInstanceMethod.Invoke(context, paramValues);
+            }
+            else
+            {
+                throw new ArgumentException(string.Format("Method '{0}' with the specified number and types of arguments does not exist.", methodName));
+            }
         }
 
         private int CalculateMethodHash(Type contextType, object[] argValues)
