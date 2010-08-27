@@ -33,6 +33,7 @@ using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Threading;
 using Spring.Util;
+using System.Threading;
 
 #endregion
 
@@ -1748,7 +1749,7 @@ namespace Spring.Objects.Factory.Support
         {
             string objectName = TransformedObjectName(name);
 
-            if (ContainsSingleton(objectName) ||ContainsObjectDefinition(objectName))
+            if (ContainsSingleton(objectName) || ContainsObjectDefinition(objectName))
             {
                 return (!ObjectFactoryUtils.IsFactoryDereference(name) || IsFactoryObject(name));
             }
@@ -1930,14 +1931,20 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type, object[])"/>
         protected object GetObjectInternal(string name, Type requiredType, object[] arguments, bool suppressConfigure)
         {
+            object monitor = new object();
             const int INDENT = 3;
             bool hasErrors = false;
             try
             {
                 string objectName = TransformedObjectName(name);
-
-                nestingCount++;
-
+#if NET_1_1
+                lock (monitor)
+                {
+                    nestingCount++;
+                }
+#else
+                Interlocked.Increment(ref nestingCount);
+#endif
                 #region Instrumentation
                 if (log.IsDebugEnabled)
                 {
@@ -2035,7 +2042,15 @@ namespace Spring.Objects.Factory.Support
             }
             catch
             {
-                nestingCount--;
+
+                lock (monitor)
+                {
+                    if (nestingCount > 0)
+                    {
+                        nestingCount--;
+                    }
+                }
+
                 hasErrors = true;
                 #region Instrumentation
                 if (log.IsErrorEnabled)
@@ -2049,7 +2064,13 @@ namespace Spring.Objects.Factory.Support
             {
                 if (!hasErrors)
                 {
-                    nestingCount--;
+                    lock (monitor)
+                    {
+                        if (nestingCount > 0)
+                        {
+                            nestingCount--;
+                        }
+                    }
                     #region Instrumentation
                     if (log.IsDebugEnabled)
                     {
@@ -2060,7 +2081,6 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
-        [ThreadStatic]
         private int nestingCount;
 
         /// <summary>
@@ -2074,9 +2094,9 @@ namespace Spring.Objects.Factory.Support
         /// if <paramref name="instance"/> is null or not assignable to <paramref name="requiredType"/>.
         /// </exception>
         private object EnsureObjectIsOfRequiredType(string name, object instance, Type requiredType)
-        {           
+        {
             // check that any required type matches the type of the actual object instance...
-            if (requiredType != null && instance!= null && !requiredType.IsAssignableFrom(instance.GetType()))
+            if (requiredType != null && instance != null && !requiredType.IsAssignableFrom(instance.GetType()))
             {
                 throw new ObjectNotOfRequiredTypeException(name, requiredType, instance);
             }
@@ -2169,7 +2189,7 @@ namespace Spring.Objects.Factory.Support
             #endregion
 
             this.prototypesInCreation.Dispose();
-            
+
             lock (singletonCache)
             {
                 // copy the keys into a new set, 'cos we are going to modifying the
