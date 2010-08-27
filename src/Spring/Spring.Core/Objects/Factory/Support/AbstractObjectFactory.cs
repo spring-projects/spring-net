@@ -2522,7 +2522,7 @@ namespace Spring.Objects.Factory.Support
         /// Gets the singleton lock for a given object name.
         /// </summary>
         /// <param name="objectName">Name of the object.</param>
-        /// <returns>lock object<returns>
+        /// <returns>lock object</returns>
         private object GetSingletonLockFor(string objectName)
         {
             lock (singletonCache)
