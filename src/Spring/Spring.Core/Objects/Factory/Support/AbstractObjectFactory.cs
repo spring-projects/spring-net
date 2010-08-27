@@ -142,6 +142,12 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         private readonly Hashtable factoryObjectProductCache = new Hashtable();
 
+
+        /// <summary>
+        /// Collection of singleton-specific locks to support locking singleton-specific critical sections
+        /// </summary>
+        private IDictionary singletonLocks = new Hashtable();
+
         #region Constructor (s) / Destructor
 
         /// <summary>
@@ -1438,16 +1444,28 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Support.AbstractObjectFactory.DestroyObject"/>
         protected virtual void DestroySingleton(string name)
         {
+            object tempObject;
+
             lock (singletonCache)
             {
-                object tempObject = singletonCache[name];
-                singletonCache.Remove(name);
-                registeredSingletons.Remove(name);
-
-                object singletonInstance = tempObject;
-                if (singletonInstance != null)
+                tempObject = singletonCache[name];
+                
+                if (tempObject!=null)
                 {
-                    DestroyObject(name, singletonInstance);
+                    singletonCache.Remove(name);
+                    registeredSingletons.Remove(name);
+                }
+
+                if (tempObject!=null)
+                {
+                    lock(GetSingletonLockFor(name))
+                    {
+                        object singletonInstance = tempObject;
+                        if (singletonInstance != null)
+                        {
+                            DestroyObject(name, singletonInstance);
+                        }
+                    }
                 }
             }
         }
@@ -2122,35 +2140,48 @@ namespace Spring.Objects.Factory.Support
                                                                  RootObjectDefinition objectDefinition,
                                                                  object[] arguments)
         {
+            object sharedInstance;
+
             lock (singletonCache)
             {
-                object sharedInstance = singletonCache[objectName];
+                sharedInstance = singletonCache[objectName];
+                
                 if (sharedInstance == null)
                 {
-                    #region Instrumentation
-                    if (log.IsDebugEnabled)
+                    lock (GetSingletonLockFor(objectName))
                     {
-                        log.Debug(string.Format("Creating shared instance of singleton object '{0}'", objectName));
-                    }
-                    #endregion
+                        lock (singletonCache)
+                        {
+                            if (singletonCache.Contains(objectName))
+                            {
+                                return singletonCache[objectName];
+                            }
+                        }
+                        #region Instrumentation
+                        if (log.IsDebugEnabled)
+                        {
+                            log.Debug(string.Format("Creating shared instance of singleton object '{0}'", objectName));
+                        }
+                        #endregion
 
-                    BeforeSingletonCreation(objectName);
-                    try
-                    {
-                        sharedInstance = InstantiateObject(objectName, objectDefinition, arguments, true, false);
-                    }
-                    finally
-                    {
-                        AfterSingletonCreation(objectName);
-                    }
-                    AddSingleton(objectName, sharedInstance);
+                        BeforeSingletonCreation(objectName);
+                        try
+                        {
+                            sharedInstance = InstantiateObject(objectName, objectDefinition, arguments, true, false);
+                        }
+                        finally
+                        {
+                            AfterSingletonCreation(objectName);
+                        }
+                        AddSingleton(objectName, sharedInstance);
 
-                    #region Instrumentation
-                    if (log.IsDebugEnabled)
-                    {
-                        log.Debug(string.Format("Cached shared instance of singleton object '{0}'", objectName));
+                        #region Instrumentation
+                        if (log.IsDebugEnabled)
+                        {
+                            log.Debug(string.Format("Cached shared instance of singleton object '{0}'", objectName));
+                        }
+                        #endregion
                     }
-                    #endregion
                 }
                 return sharedInstance;
             }
@@ -2484,6 +2515,24 @@ namespace Spring.Objects.Factory.Support
         public bool IsObjectNameInUse(string objectName)
         {
             return IsAlias(objectName) || ContainsLocalObject(objectName);
+        }
+
+
+        /// <summary>
+        /// Gets the singleton lock for a given object name.
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <returns>lock object<returns>
+        private object GetSingletonLockFor(string objectName)
+        {
+            lock (singletonCache)
+            {
+                if (!singletonLocks.Contains(objectName))
+                {
+                    singletonLocks.Add(objectName, new object());
+                }
+                return singletonLocks[objectName];
+            }
         }
     }
 }
