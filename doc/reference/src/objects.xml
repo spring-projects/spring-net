@@ -4219,21 +4219,13 @@ Console.WriteLine (three == four);        // prints 'false'
         </listitem>
 
         <listitem>
-          <para><literal>void ConfigureObject(object target):</literal>
-          Injects dependencies into the supplied target instance. The name of
-          the abstract object definition is the
-          <literal>System.Type.FullName</literal> of the target instance. This
-          method is typically used when objects are instantiated outside the
-          control of a developer, for example when ASP.NET instantiates web
-          controls and when a WinForms application creates
-          UserControls.</para>
-        </listitem>
-
-        <listitem>
           <para><literal>void ConfigureObject(object target, string
-          name):</literal> Offers the same functionality as the previously
-          listed Configure method but uses a named object definition instead
-          of using the type's full name.</para>
+          name):</literal> Injects dependencies into the supplied target
+          instance assigning the supplied name to the abstract object
+          definition. This method is typically used when objects are
+          instantiated outside the control of a developer, for example when
+          ASP.NET instantiates web controls and when a WinForms application
+          creates UserControls.</para>
         </listitem>
       </itemizedlist></para>
 
@@ -5042,7 +5034,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
             <para>The use of the <property>IgnoreMissingResources</property>
             property above will mean that if the property file is not found it
             will be silently ignored and the resolution will continue to
-            <classname>ConfigSectionVariableSource</classname>. </para>
+            <classname>ConfigSectionVariableSource</classname>.</para>
           </note>The IVariableSource interface is shown below</para>
 
         <programlisting language="csharp">public interface IVariableSource
