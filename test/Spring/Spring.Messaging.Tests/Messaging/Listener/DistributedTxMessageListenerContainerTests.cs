@@ -49,6 +49,7 @@ namespace Spring.Messaging.Listener
         {
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxqueue", true);
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxretryqueue", true);
+            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxresponsequeue", true);
 
 
             if (listener != null)
@@ -105,7 +106,7 @@ namespace Spring.Messaging.Listener
             //must match the retry count in the object registration for test to pass!
             const int EXCEPTION_QUEUE_RETRY_COUNT = 2;
 
-            int expectedMessageCount = MESSAGE_COUNT + (MESSAGE_COUNT * EXCEPTION_QUEUE_RETRY_COUNT);
+            int expectedMessageCount = MESSAGE_COUNT; // +(MESSAGE_COUNT * EXCEPTION_QUEUE_RETRY_COUNT);
 
             MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
@@ -117,26 +118,42 @@ namespace Spring.Messaging.Listener
 
             Assert.AreEqual(0, listener.MessageCount);
 
-            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
-            timer.Start();
-
             distributedTxMessageListenerContainer.Start();
 
+            Thread.Sleep(10000);
+            /*
+            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+            timer.Start();
+            
             while (listener.MessageCount < expectedMessageCount)
             {
-                if (timer.ElapsedMilliseconds > 60000)
-                    Assert.Fail("Did not receive expected number of messages within the permitted time limit.");
+                if (timer.ElapsedMilliseconds > 10000)
+                {
+                    break;
+                }                       
+                    //Assert.Fail("Did not receive expected number of messages within the permitted time limit.");
+                Thread.Sleep(1000);
             }
 
             timer.Stop();
 
             System.Diagnostics.Debug.WriteLine("elapsed time = " + timer.ElapsedMilliseconds);
+            */
 
             Assert.AreEqual(expectedMessageCount, listener.MessageCount);
 
             distributedTxMessageListenerContainer.Stop();
             distributedTxMessageListenerContainer.Shutdown();
             Thread.Sleep(2500);
+
+            MessageQueueTemplate responseQ = applicationContext["responseQueueTemplate"] as MessageQueueTemplate;
+            responseQ.ReceiveTimeout = new System.TimeSpan(0, 0, 2);
+
+            Assert.IsNotNull(responseQ);
+            for (int i = 0; i < MESSAGE_COUNT; i++)
+            {
+                Assert.IsNotNull(responseQ.ReceiveAndConvert());
+            }
 
         }
 

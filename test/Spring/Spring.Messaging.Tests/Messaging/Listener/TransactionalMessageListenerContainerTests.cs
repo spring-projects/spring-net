@@ -48,6 +48,8 @@ namespace Spring.Messaging.Listener
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxqueue", true);
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxretryqueue", true);
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testtxresponsequeue", true);
+            if (listener != null)
+                listener.MessageCount = 0; //reset the property between tests b/c the object lifecycle is singleton!
             base.SetUp();
         }
 

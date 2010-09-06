@@ -50,6 +50,11 @@
     <property name="DefaultMessageQueueObjectName" value="msmqtxretryqueue"/>
     <property name="MessageConverterObjectName" value="messageConverter"/>
   </object>
+
+  <object id="responseQueueTemplate" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+    <property name="DefaultMessageQueueObjectName" value="msmqtxresponsequeue"/>
+    <property name="MessageConverterObjectName" value="messageConverter"/>
+  </object>
   
   <object id="messageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"
           singleton="false">

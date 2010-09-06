@@ -2,11 +2,11 @@
 <objects xmlns="http://www.springframework.net"
          xmlns:db="http://www.springframework.net/database">
 
-  
-  <db:provider id="DbProvider"                
-               provider="System.Data.SqlClient"
-               connectionString="Data Source=.\SQLExpress;Initial Catalog=springqa;Persist Security Info=True;User ID=springqa;Password=springqa"/>
-  
+
+  <db:provider id="DbProvider"
+             provider="System.Data.SqlClient"
+             connectionString="Data Source=SPRINGQA;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa"/>
+
   
   <object id="adoTransactionManager"
           type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
