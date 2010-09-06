@@ -104,7 +104,7 @@ namespace Spring.Messaging.Listener
             const int MESSAGE_COUNT = 5;
 
             //must match the retry count in the object registration for test to pass!
-            const int EXCEPTION_QUEUE_RETRY_COUNT = 2;
+            //const int EXCEPTION_QUEUE_RETRY_COUNT = 2;
 
             int expectedMessageCount = MESSAGE_COUNT; // +(MESSAGE_COUNT * EXCEPTION_QUEUE_RETRY_COUNT);
 
