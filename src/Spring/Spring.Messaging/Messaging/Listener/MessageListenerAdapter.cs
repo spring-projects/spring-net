@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using System.Messaging;
 using Common.Logging;
@@ -191,8 +192,18 @@ namespace Spring.Messaging.Listener
             get { return defaultHandlerMethod; }
             set { 
                 defaultHandlerMethod = value;
-                processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
+                ProcessingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the processing expression for use in custom subclasses
+        /// </summary>
+        /// <value>The processing expression.</value>
+        protected IExpression ProcessingExpression
+        {
+            get { return processingExpression; }
+            set { processingExpression = value; }
         }
 
         #region IInitializingObject Members
@@ -384,11 +395,16 @@ namespace Spring.Messaging.Listener
         {
             object convertedMessage = ExtractMessage(message);
 
-            IDictionary vars = new Hashtable();
-            vars["convertedObject"] = convertedMessage;
+            //IDictionary vars = new Hashtable();
+            //vars["convertedObject"] = convertedMessage;
 
+            string methodName = GetHandlerMethodName(message, convertedMessage);
+            object[] listenerArguments = BuildListenerArguments(convertedMessage);
+            object result = InvokeListenerMethod(methodName, listenerArguments);
+            
+            
             //Invoke message handler method and get result.
-            object result = processingExpression.GetValue(handlerObject, vars);
+            //object result = processingExpression.GetValue(handlerObject, vars);
             if (result != null)
             {
                 HandleResult(result, message);
@@ -413,11 +429,54 @@ namespace Spring.Messaging.Listener
         }
 
         /// <summary>
+        /// Builds an array of arguments to be passed into the taret listener method.
+        /// </summary>
+        /// <remarks>
+        /// Allows for multiple method arguments to be built from a single message object.
+        /// <p>The default implementation builds an array with the given message object
+        /// as sole element. This means that the extracted message will always be passed
+        /// into a <i>single</i> method argument, even if it is an array, with the target
+        /// method having a corresponding single argument of the array's type declared.</p>
+        /// <p>This can be overridden to treat special message content such as arrays
+        /// differently, for example passing in each element of the message array
+        /// as distinct method argument.</p>        
+        /// </remarks>
+        /// <param name="convertedMessage">The converted message.</param>
+        /// <returns>the array of arguments to be passed into the
+        /// listener method (each element of the array corresponding
+        /// to a distinct method argument)</returns>
+        protected virtual object[] BuildListenerArguments(object convertedMessage)
+        {
+            return new object[] { convertedMessage };
+        }
+
+        /// <summary>
+        /// Invokes the specified listener method.  This default implementation can only handle invoking a 
+        /// single argument method.
+        /// </summary>
+        /// <param name="methodName">Name of the listener method.</param>
+        /// <param name="arguments">The arguments to be passed in. Only the first argument in the list is currently
+        /// supported in this implementation.</param>
+        /// <returns>The result returned from the listener method</returns>
+        protected virtual object InvokeListenerMethod(string methodName, object[] arguments)
+        {
+            IDictionary vars = new Hashtable();
+            vars["convertedObject"] = arguments[0];
+            if (methodName.CompareTo(DefaultHandlerMethod) != 0)
+            {
+                //This is just to handle the case of overriding GetHandlerMethodName in a subclass and nothing else.
+                return ExpressionEvaluator.GetValue(handlerObject, methodName + "(#convertedObject)", vars);                
+            }
+            // the normal case of using the cached expression.
+            return processingExpression.GetValue(handlerObject, vars);
+        }
+
+        /// <summary>
         /// Initialize the default implementations for the adapter's strategies.
         /// </summary>
         protected virtual void InitDefaultStrategies()
         {
-            processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
+            ProcessingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
         }
 
         /// <summary>
@@ -436,7 +495,7 @@ namespace Spring.Messaging.Listener
             return message;
         }
 
-        private void HandleResult(object result, Message request)
+        protected virtual void HandleResult(object result, Message request)
         {
             if (logger.IsDebugEnabled)
             {

@@ -69,7 +69,10 @@
 
   
   <!-- Adapter -->
+  <!--
   <object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging">
+  -->
+  <object id="messageListenerAdapter" type="Spring.Messaging.Listener.Adapter.StandardReflectionMessageListenerAdapter, Spring.Messaging.Tests">
     <property name="DefaultResponseQueueName" value="msmqTestResponseQueue"/>
     <property name="MessageConverterObjectName" value="binaryMessageConverter"/>
     <property name="HandlerObject" ref="simpleHandler"/>

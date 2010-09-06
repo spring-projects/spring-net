@@ -49,6 +49,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Messaging\Core\MessageQueueMetadata.cs" />
     <Compile Include="Messaging\Core\MessageQueueMetadataCache.cs" />
+    <Compile Include="Messaging\Listener\ListenerExecutionFailedException.cs" />
     <Compile Include="Messaging\Support\Converters\MessageConverterCreatorDelegate.cs" />
     <Compile Include="Messaging\Core\DefaultMessageQueueFactory.cs" />
     <Compile Include="Messaging\Support\MessageQueueCreatorDelegate.cs" />

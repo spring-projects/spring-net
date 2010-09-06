@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="MessagingCompilerOptionsTests.cs" />
     <Compile Include="MessagingExceptionTests.cs" />
+    <Compile Include="Messaging\Listener\Adapter\StandardReflectionMessageListenerAdapter.cs" />
     <Compile Include="Messaging\Listener\WaitingHandler.cs" />
     <Compile Include="Messaging\Core\MessageQueueMetadataCacheTests.cs" />
     <Compile Include="Messaging\Core\MessageQueueUtils.cs" />
