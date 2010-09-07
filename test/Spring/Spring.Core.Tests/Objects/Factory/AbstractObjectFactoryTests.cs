@@ -27,6 +27,7 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Threading;
 using System.Threading;
+using System.Diagnostics;
 
 #endregion
 
@@ -556,7 +557,6 @@ namespace Spring.Objects.Factory
             theSpouse.IsSingleton = false;
             ObjectFactory.RegisterObjectDefinition("theSpouse", theSpouse);
 
-
             GenericObjectDefinition theObject = new GenericObjectDefinition();
             theObject.ObjectTypeName = typeof(TestObject).FullName;
             theObject.IsSingleton = false;
@@ -572,6 +572,108 @@ namespace Spring.Objects.Factory
             t2.AssertNoException();
             t3.AssertNoException();
             t4.AssertNoException();
+        }
+
+    }
+
+    [TestFixture]
+    [Ignore]
+    public class SPRNET_1338
+    {
+        private static AbstractObjectFactory _cachedFactory;
+
+        protected static AbstractObjectFactory ObjectFactory
+        {
+            get { return _cachedFactory; }
+            set { _cachedFactory = value; }
+        }
+
+        [SetUp]
+        public void _SetUp()
+        {
+            ObjectFactory = CreateObjectFactory(true);
+
+            GenericObjectDefinition threadCreatorInsideConstructor = new GenericObjectDefinition();
+            threadCreatorInsideConstructor.ObjectTypeName = typeof(ThreadCreatorInsideConstructor).FullName;
+            threadCreatorInsideConstructor.IsSingleton = true;
+            ObjectFactory.RegisterObjectDefinition("threadCreatorInsideConstructor", threadCreatorInsideConstructor);
+
+            GenericObjectDefinition threadCreatorInsideDispose = new GenericObjectDefinition();
+            threadCreatorInsideDispose.ObjectTypeName = typeof(ThreadCreatorInsideDispose).FullName;
+            threadCreatorInsideDispose.IsSingleton = true;
+            ObjectFactory.RegisterObjectDefinition("threadCreatorInsideDispose", threadCreatorInsideDispose);
+        }
+
+        [Test]
+        public void CanAvoidLockContentionDuringObjectFactoryDisposal()
+        {
+            Thread t = new Thread(CreateThreadContentionFromDispose);
+            t.Start();
+            t.Join(20000);
+
+            if (t.ThreadState == System.Threading.ThreadState.WaitSleepJoin)
+                Assert.Fail("Lock Contention Blocked Successful Dispose of ObjectFactory!");
+        }
+
+        [Test]
+        public void CanAvoidLockContentionDuringObjectInstantiation()
+        {
+            Thread t = new Thread(CreateThreadContentionFromConstructor);
+            t.Start();
+            t.Join(20000);
+
+            if (t.ThreadState == System.Threading.ThreadState.WaitSleepJoin)
+                Assert.Fail("Lock Contention Blocked Successful Instantiation of Singleton Test Object!");
+        }
+
+        public static AbstractObjectFactory CreateObjectFactory(bool caseSensitive)
+        {
+            return new DefaultListableObjectFactory(caseSensitive);
+        }
+
+        private void CreateThreadContentionFromConstructor()
+        {
+            ObjectFactory.GetObject("threadCreatorInsideConstructor");
+        }
+
+        private void CreateThreadContentionFromDispose()
+        {
+            ObjectFactory.GetObject("threadCreatorInsideDispose");
+            ObjectFactory.Dispose();
+        }
+
+        internal class ThreadCreatorInsideDispose : IDisposable
+        {
+            public ThreadCreatorInsideDispose()
+            {
+            }
+
+            public void Dispose()
+            {
+                Thread t = new Thread(ConcurentThreadDisposeProc);
+                t.Start();
+                t.Join();
+            }
+
+            private static void ConcurentThreadDisposeProc()
+            {
+                ObjectFactory.GetObject("threadCreatorInsideConstructor");
+            }
+        }
+
+        internal class ThreadCreatorInsideConstructor
+        {
+            public ThreadCreatorInsideConstructor()
+            {
+                Thread t = new Thread(ConcurentThreadProc);
+                t.Start();
+                t.Join();
+            }
+
+            private static void ConcurentThreadProc()
+            {
+                ObjectFactory.GetObject("threadCreatorInsideDispose");
+            }
         }
 
     }
