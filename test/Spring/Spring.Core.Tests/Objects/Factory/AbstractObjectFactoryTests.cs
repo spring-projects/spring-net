@@ -575,7 +575,7 @@ namespace Spring.Objects.Factory
         }
 
     }
-
+#if NET_2_0
     [TestFixture]
     [Ignore]
     public class SPRNET_1338
@@ -677,4 +677,5 @@ namespace Spring.Objects.Factory
         }
 
     }
+#endif
 }
