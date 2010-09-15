@@ -142,12 +142,6 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         private readonly Hashtable factoryObjectProductCache = new Hashtable();
 
-
-        /// <summary>
-        /// Collection of singleton-specific locks to support locking singleton-specific critical sections
-        /// </summary>
-        private IDictionary singletonLocks = new Hashtable();
-
         #region Constructor (s) / Destructor
 
         /// <summary>
@@ -190,18 +184,21 @@ namespace Spring.Objects.Factory.Support
             {
                 this.aliasMap = new Hashtable();
                 this.singletonCache = new Hashtable();
+                this.singletonLocks = new Hashtable();
                 this.singletonsInCreation = new Hashtable();
             }
             else
             {
                 this.aliasMap = new CaseInsensitiveHashtable();
                 this.singletonCache = new CaseInsensitiveHashtable();
+                this.singletonLocks = new CaseInsensitiveHashtable();
                 this.singletonsInCreation = new CaseInsensitiveHashtable();
             }
 #else
             IEqualityComparer comparer = (caseSensitive) ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
             this.aliasMap = new OrderedDictionary(comparer);
             this.singletonCache = new OrderedDictionary(comparer);
+            this.singletonLocks = new OrderedDictionary(comparer);
             this.singletonsInCreation = new OrderedDictionary(comparer);
 #endif
             this.prototypesInCreation = new LogicalThreadContextSetVariable();
@@ -514,7 +511,7 @@ namespace Spring.Objects.Factory.Support
         {
             AssertUtils.ArgumentHasText(name, "The object name must not be empty.");
             AssertUtils.ArgumentNotNull(singleton, "singleton");
-            lock (singletonCache)
+            lock (GetSingletonLockFor(name))
             {
                 singletonCache[name] = singleton;
                 registeredSingletons.Add(name);
@@ -1160,7 +1157,7 @@ namespace Spring.Objects.Factory.Support
         protected void RemoveSingleton(string name)
         {
             AssertUtils.ArgumentHasText(name, "name");
-            lock (singletonCache)
+            lock (GetSingletonLockFor(name))
             {
                 this.singletonCache.Remove(name);
             }
@@ -1444,28 +1441,16 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Support.AbstractObjectFactory.DestroyObject"/>
         protected virtual void DestroySingleton(string name)
         {
-            object tempObject;
-
-            lock (singletonCache)
+            lock (singletonLocks)
             {
-                tempObject = singletonCache[name];
-                
-                if (tempObject!=null)
-                {
-                    singletonCache.Remove(name);
-                    registeredSingletons.Remove(name);
-                }
+                object tempObject = singletonCache[name];
+                singletonCache.Remove(name);
+                registeredSingletons.Remove(name);
 
-                if (tempObject!=null)
+                object singletonInstance = tempObject;
+                if (singletonInstance != null)
                 {
-                    lock(GetSingletonLockFor(name))
-                    {
-                        object singletonInstance = tempObject;
-                        if (singletonInstance != null)
-                        {
-                            DestroyObject(name, singletonInstance);
-                        }
-                    }
+                    DestroyObject(name, singletonInstance);
                 }
             }
         }
@@ -1583,6 +1568,7 @@ namespace Spring.Objects.Factory.Support
         private bool caseSensitive;
         private IDictionary aliasMap;
         private IDictionary singletonCache;
+        private IDictionary singletonLocks;
 
         /// <summary>
         /// Set of registered singletons, containing the bean names in registration order 
@@ -2140,48 +2126,35 @@ namespace Spring.Objects.Factory.Support
                                                                  RootObjectDefinition objectDefinition,
                                                                  object[] arguments)
         {
-            object sharedInstance;
-
-            lock (singletonCache)
+            lock (GetSingletonLockFor(objectName))
             {
-                sharedInstance = singletonCache[objectName];
-                
+                object sharedInstance = singletonCache[objectName];
                 if (sharedInstance == null)
                 {
-                    lock (GetSingletonLockFor(objectName))
+                    #region Instrumentation
+                    if (log.IsDebugEnabled)
                     {
-                        lock (singletonCache)
-                        {
-                            if (singletonCache.Contains(objectName))
-                            {
-                                return singletonCache[objectName];
-                            }
-                        }
-                        #region Instrumentation
-                        if (log.IsDebugEnabled)
-                        {
-                            log.Debug(string.Format("Creating shared instance of singleton object '{0}'", objectName));
-                        }
-                        #endregion
-
-                        BeforeSingletonCreation(objectName);
-                        try
-                        {
-                            sharedInstance = InstantiateObject(objectName, objectDefinition, arguments, true, false);
-                        }
-                        finally
-                        {
-                            AfterSingletonCreation(objectName);
-                        }
-                        AddSingleton(objectName, sharedInstance);
-
-                        #region Instrumentation
-                        if (log.IsDebugEnabled)
-                        {
-                            log.Debug(string.Format("Cached shared instance of singleton object '{0}'", objectName));
-                        }
-                        #endregion
+                        log.Debug(string.Format("Creating shared instance of singleton object '{0}'", objectName));
                     }
+                    #endregion
+
+                    BeforeSingletonCreation(objectName);
+                    try
+                    {
+                        sharedInstance = InstantiateObject(objectName, objectDefinition, arguments, true, false);
+                    }
+                    finally
+                    {
+                        AfterSingletonCreation(objectName);
+                    }
+                    AddSingleton(objectName, sharedInstance);
+
+                    #region Instrumentation
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug(string.Format("Cached shared instance of singleton object '{0}'", objectName));
+                    }
+                    #endregion
                 }
                 return sharedInstance;
             }
@@ -2399,7 +2372,7 @@ namespace Spring.Objects.Factory.Support
         public void RegisterSingleton(string name, object singletonObject)
         {
             AssertUtils.ArgumentHasText(name, "name", "The singleton object cannot be registered under an empty name.");
-            lock (singletonCache)
+            lock (GetSingletonLockFor(name))
             {
                 object oldObject = singletonCache[name];
                 if (oldObject != null)
@@ -2421,7 +2394,7 @@ namespace Spring.Objects.Factory.Support
         public bool ContainsSingleton(string name)
         {
             AssertUtils.ArgumentHasText(name, "name");
-            lock (singletonCache)
+            lock (GetSingletonLockFor(name))
             {
                 return singletonCache.Contains(name);
             }
@@ -2494,7 +2467,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>The cached object if found, <see langword="null"/> otherwise.</returns>
         public virtual object GetSingleton(string objectName)
         {
-            lock (singletonCache)
+            lock (GetSingletonLockFor(objectName))
             {
                 return singletonCache[objectName];
             }
@@ -2517,7 +2490,6 @@ namespace Spring.Objects.Factory.Support
             return IsAlias(objectName) || ContainsLocalObject(objectName);
         }
 
-
         /// <summary>
         /// Gets the singleton lock for a given object name.
         /// </summary>
@@ -2525,7 +2497,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>lock object</returns>
         private object GetSingletonLockFor(string objectName)
         {
-            lock (singletonCache)
+            lock (singletonLocks)
             {
                 if (!singletonLocks.Contains(objectName))
                 {

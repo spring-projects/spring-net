@@ -28,6 +28,7 @@ using Spring.Objects.Factory.Support;
 using Spring.Threading;
 using System.Threading;
 using System.Diagnostics;
+using System.Collections;
 
 #endregion
 
@@ -577,7 +578,6 @@ namespace Spring.Objects.Factory
     }
 #if NET_2_0
     [TestFixture]
-    [Ignore]
     public class SPRNET_1338
     {
         private static AbstractObjectFactory _cachedFactory;
@@ -605,6 +605,7 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
+        [Ignore("Test fails -- waiting for verification re: if bug exists in Java impl")]
         public void CanAvoidLockContentionDuringObjectFactoryDisposal()
         {
             Thread t = new Thread(CreateThreadContentionFromDispose);
@@ -677,5 +678,260 @@ namespace Spring.Objects.Factory
         }
 
     }
+
+    [TestFixture]
+    public class SPRNET_1315
+    {
+        private static AbstractObjectFactory _cachedFactory;
+
+        private static int _childCounter;
+
+        private static int _parentCounter;
+
+        private static ArrayList invocationLog = new ArrayList();
+
+        protected static AbstractObjectFactory ObjectFactory
+        {
+            get { return _cachedFactory; }
+            set { _cachedFactory = value; }
+        }
+
+        [SetUp]
+        public void _Setup()
+        {
+            ObjectFactory = new DefaultListableObjectFactory(true);
+            invocationLog.Clear();
+            _parentCounter = 0;
+            _childCounter = 0;
+        }
+
+        [Test]
+        public void When_ParentAndChildArePrototypes_ConstructorInjection_DoesNotEnforceDestructionOrder()
+        {
+            WireParentAndChildWWithImpliedDependencyByConstructorInjection(false, false);
+
+            Parent theParent = ObjectFactory.GetObject("parent") as Parent;
+            theParent.Dispose();
+
+            Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
+            Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+            Assert.IsNotNull(theParent.InjectedChild, "Parent's child dependency not set as expected");
+            Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
+            Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        }
+
+        [Test]
+        public void When_ParentAndChildArePrototypes_ConstructorInjection_EnforcesConstructionOrder()
+        {
+            WireParentAndChildWWithImpliedDependencyByConstructorInjection(false, false);
+
+            Parent theParent = ObjectFactory.GetObject("parent") as Parent;
+
+            Assert.AreEqual(1, _parentCounter, "Should have exactly ONE parent object");
+            Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+            Assert.IsNotNull(theParent.InjectedChild, "Parent's child dependency not set as expected");
+            Assert.AreEqual("Child Constructor", invocationLog[0], "Child Constructor wasn't called first!");
+            Assert.AreEqual("Parent Constructor", invocationLog[1], "Parent Constructor wasn't called second!");
+
+        }
+
+        [Test]
+        public void When_ParentAndChildArePrototypes_DependsOn_DoesNotEnforceDestructionOrder()
+        {
+            WireParentAndChildWithDependsOnDeclarationDependency(false, false);
+
+            Parent theParent = ObjectFactory.GetObject("parent") as Parent;
+            theParent.Dispose();
+
+            Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
+            Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+
+            Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
+            Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        }
+
+        [Test]
+        public void When_ParentAndChildArePrototypes_DependsOn_EnforcesConstructionOrder()
+        {
+            WireParentAndChildWithDependsOnDeclarationDependency(false, false);
+
+            Parent theParent = ObjectFactory.GetObject("parent") as Parent;
+
+            Assert.AreEqual(1, _parentCounter, "Should have exactly ONE parent object");
+            Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+            Assert.AreEqual("Child Constructor", invocationLog[0], "Child Constructor wasn't called first!");
+            Assert.AreEqual("Parent Constructor", invocationLog[1], "Parent Constructor wasn't called second!");
+
+        }
+
+        [Test]
+        public void When_ParentAndChildAreSingletons_ConstructorInjection_EnforcesDestructionOrder()
+        {
+            WireParentAndChildWWithImpliedDependencyByConstructorInjection(true, true);
+
+            //triger the construction of the singletons
+            ObjectFactory.GetObject("parent");
+
+            //trigger the disposal of the singletons
+            ObjectFactory.Dispose();
+
+            Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
+            Assert.AreEqual(0, _childCounter, "Should have no remaining child objects after dispose");
+            Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
+            Assert.AreEqual("Child Destructor", invocationLog[3], "Child Destructor wasn't called fourth!");
+            Assert.AreEqual(4, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        }
+
+        [Test]
+        public void When_ParentAndChildAreSingletons_DependsOn_EnforcesDestructionOrder()
+        {
+            WireParentAndChildWithDependsOnDeclarationDependency(true, true);
+
+            //triger the construction of the singletons
+            ObjectFactory.GetObject("parent");
+
+            //make certain they are created successfully
+            Assert.AreEqual(1, _parentCounter, "Should have exactly ONE parent object");
+            Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+
+            //trigger the disposal of the singletons
+            ObjectFactory.Dispose();
+
+            Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
+            Assert.AreEqual(0, _childCounter, "Should have no remaining child objects after dispose");
+            Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
+            Assert.AreEqual("Child Destructor", invocationLog[3], "Child Destructor wasn't called fourth!");
+            Assert.AreEqual(4, invocationLog.Count, "Should have no further object lifecycle behavior after child destruction!");
+        }
+
+        [Test]
+        public void When_ParentIsProttpyeAndChildIsSingleton_ConstructorInjection_DoesNotEnforcesDestructionOrder()
+        {
+            WireParentAndChildWWithImpliedDependencyByConstructorInjection(false, true);
+
+            //triger the construction of the singletons
+            ObjectFactory.GetObject("parent");
+
+            //trigger the disposal of the singletons
+            ObjectFactory.Dispose();
+
+            Assert.AreEqual(1, _parentCounter, "Should have ONE remaining parent objects after dispose");
+            Assert.AreEqual(0, _childCounter, "Should have no remaining child objects after dispose");
+            Assert.AreEqual("Child Destructor", invocationLog[2], "Child Destructor wasn't called third!");
+            Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after child destruction!");
+        }
+
+        [Test]
+        public void When_ParentIsSingletonAndChildIsPrototype_ConstructorInjection_DoesNotEnforcesDestructionOrder()
+        {
+            WireParentAndChildWWithImpliedDependencyByConstructorInjection(true, false);
+
+            //triger the construction of the singletons
+            ObjectFactory.GetObject("parent");
+
+            //trigger the disposal of the singletons
+            ObjectFactory.Dispose();
+
+            Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
+            Assert.AreEqual(1, _childCounter, "Should have ONE remaining child object after dispose");
+            Assert.AreEqual("Parent Destructor", invocationLog[2], "Child Destructor wasn't called third!");
+            Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        }
+
+        [Test]
+        public void When_ParentIsSingletonAndChildIsPrototype_DependsOn_EnforcesDestructionOrder()
+        {
+            WireParentAndChildWithDependsOnDeclarationDependency(true, false);
+
+            //triger the construction of the singletons
+            ObjectFactory.GetObject("parent");
+
+            //make certain they are created successfully
+            Assert.AreEqual(1, _parentCounter, "Should have exactly ONE parent object");
+            Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+
+            //trigger the disposal of the singletons
+            ObjectFactory.Dispose();
+
+            Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
+            Assert.AreEqual(1, _childCounter, "Should have no remaining child objects after dispose");
+            Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
+            Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        }
+
+        private void WireParentAndChildWithDependsOnDeclarationDependency(bool parentIsSingleton, bool childIsSingleton)
+        {
+            GenericObjectDefinition child = new GenericObjectDefinition();
+            child.ObjectTypeName = typeof(Child).FullName;
+            child.IsSingleton = childIsSingleton;
+            ObjectFactory.RegisterObjectDefinition("child", child);
+
+            GenericObjectDefinition parent = new GenericObjectDefinition();
+            parent.ObjectTypeName = typeof(Parent).FullName;
+            parent.IsSingleton = parentIsSingleton;
+            parent.DependsOn = new string[] { "child" };
+            ObjectFactory.RegisterObjectDefinition("parent", parent);
+        }
+
+        private static void WireParentAndChildWWithImpliedDependencyByConstructorInjection(bool parentIsSingleton, bool childIsSingleton)
+        {
+            GenericObjectDefinition child = new GenericObjectDefinition();
+            child.ObjectTypeName = typeof(Child).FullName;
+            child.IsSingleton = childIsSingleton;
+            ObjectFactory.RegisterObjectDefinition("child", child);
+
+            GenericObjectDefinition parent = new GenericObjectDefinition();
+            parent.ObjectTypeName = typeof(Parent).FullName;
+            parent.IsSingleton = parentIsSingleton;
+            parent.ConstructorArgumentValues.AddIndexedArgumentValue(0, new RuntimeObjectReference("child"));
+            ObjectFactory.RegisterObjectDefinition("parent", parent);
+        }
+
+        public class Parent : IDisposable
+        {
+
+            private Child _child;
+
+            public Parent()
+                : this(null)
+            {
+            }
+
+            public Parent(Child child)
+            {
+                _child = child;
+                _parentCounter++;
+                invocationLog.Add("Parent Constructor");
+            }
+
+            public Child InjectedChild
+            {
+                get { return _child; }
+            }
+
+            public void Dispose()
+            {
+                _parentCounter--;
+                invocationLog.Add("Parent Destructor");
+            }
+        }
+
+        public class Child : IDisposable
+        {
+            public Child()
+            {
+                _childCounter++;
+                invocationLog.Add("Child Constructor");
+            }
+
+            public void Dispose()
+            {
+                _childCounter--;
+                invocationLog.Add("Child Destructor");
+            }
+        }
+
+    }
+
 #endif
 }
