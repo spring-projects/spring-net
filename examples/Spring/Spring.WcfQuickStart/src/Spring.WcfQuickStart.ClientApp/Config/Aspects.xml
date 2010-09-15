@@ -3,7 +3,7 @@
          xmlns:aop="http://www.springframework.net/aop">
 
   <!--<object id="serviceOperation" type="Spring.Aop.Support.SdkRegularExpressionMethodPointcut, Spring.Aop">
-    <property name="pattern" value="Spring.WcfQuickStart.*"/>
+    <property name="pattern" value="^Spring.WcfQuickStart.*"/>
   </object>
 
   <object id="perfAdvice" type="Spring.WcfQuickStart.SimplePerformanceInterceptor, Spring.WcfQuickStart.Aspects">
