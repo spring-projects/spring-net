@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="migration" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="migration" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Migrating from 1.1 M2</title>
 
   <sect1 xml:id="M2RC1-introduction">
@@ -77,15 +82,13 @@
       <para>Renamed from <literal>DatabaseConfigParser</literal> to
       <literal>DatabaseNamespaceParser</literal></para>
 
-      <para>Renamed/Moved <literal>Remoting.RemotingConfigParser</literal>
-      to
+      <para>Renamed/Moved <literal>Remoting.RemotingConfigParser</literal> to
       <literal>Remoting.Config.RemotingNamespaceParser</literal><parameter></parameter></para>
 
       <para>A typical registration of custom parsers within your configuration
       file looks like this</para>
 
       <programlisting language="myxml">&lt;configuration&gt;
-
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
       &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;         
@@ -144,5 +147,36 @@ NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
       ServiceDomainPlatformTransactionManager, and TxScopeTransactionManager
       from Spring.Data to Spring.Data.Core</para>
     </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Support for .NET 4</title>
+
+    <para>Beginning with the 1.3.1 release of Spring.NET, initial
+    compatibility with the .NET 4 Common Language Runtime (CLR) is provided
+    via the .NET 4 Framework's support for In-Process Side-by-Side deployment
+    of .NET assemblies. This approach is typically refered to as
+    <emphasis>In-Proc SxS</emphasis>.</para>
+
+    <note>
+      <para>For more information on the In-Process Side-by-Side support
+      introduced into the .NET 4 Framework, see the MSDN Magazine article
+      located here:
+      <uri>http://msdn.microsoft.com/en-us/magazine/ee819091.aspx</uri>
+      </para>
+    </note>
+
+    <para><emphasis>In-Prox SxS</emphasis> permits applicaitons that target
+    the .NET 4 Framework (and later) to reference and execute assemblies that
+    target earlier versions of the .NET Framework CLR transparently within the
+    same process space. By using this approach, Spring.NET ensures maximum
+    backwards-compatibility with prior .NET Framework releases.</para>
+
+    <para>Subsequent releases of Spring.NET will be compiled to target the
+    .NET 4 Framework directly but during this transition period where
+    significant users are using Spring.NET to target pre-.NET 4 applications
+    while at the same time other users are beginning to target the .NET 4
+    Framework CLR, supporting <emphasis>In-Proc SxS</emphasis> will permit
+    maximum flexibility for Spring.NET users.</para>
   </sect1>
 </chapter>
