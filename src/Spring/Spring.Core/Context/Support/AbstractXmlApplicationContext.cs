@@ -146,6 +146,7 @@ namespace Spring.Context.Support
             try
             {
                 DefaultListableObjectFactory objectFactory = CreateObjectFactory();
+                CustomizeObjectFactory(objectFactory);
                 LoadObjectDefinitions(objectFactory);
 
                 _objectFactory = objectFactory;
