@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;touch&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;touch&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Touches a file or set of files -- corresponds to the Unix touch command. </p>
     <p> If the file specified does not exist, the task will create it. </p>
     <h3>Parameters</h3>
@@ -97,24 +98,24 @@
       <li>
         <p>Touch the <code>Main.cs</code> file. The current time is used.</p>
         <pre class="code">
-&lt;touch file="Main.cs" /&gt;
-    </pre>
+            &lt;touch file="Main.cs" /&gt;
+                </pre>
       </li>
       <li>
         <p> Touch all executable files in the project base directory and its subdirectories. </p>
         <pre class="code">
-&lt;touch&gt;
-    &lt;fileset&gt;
-        &lt;include name="**/*.exe" /&gt;
-        &lt;include name="**/*.dll" /&gt;
-    &lt;/fileset&gt;
-&lt;/touch&gt;
-    </pre>
+            &lt;touch&gt;
+                &lt;fileset&gt;
+                    &lt;include name="**/*.exe" /&gt;
+                    &lt;include name="**/*.dll" /&gt;
+                &lt;/fileset&gt;
+            &lt;/touch&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

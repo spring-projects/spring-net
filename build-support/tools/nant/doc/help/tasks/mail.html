@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;mail&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;mail&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Sends an SMTP message. </p>
     <p> Text and text files to include in the message body may be specified as well as binary attachments. </p>
     <h3>Parameters</h3>
@@ -141,26 +142,26 @@
       <li>
         <p> Sends an email from <code>nant@sourceforge.net</code> to three recipients with a subject about the attachments. The body of the message will be the combined contents of all <code>.txt</code> files in the base directory. All zip files in the base directory will be included as attachments. The message will be sent using the <code>smtpserver.anywhere.com</code> SMTP server. </p>
         <pre class="code">
-&lt;mail 
-    from="nant@sourceforge.net" 
-    tolist="recipient1@sourceforge.net" 
-    cclist="recipient2@sourceforge.net" 
-    bcclist="recipient3@sourceforge.net" 
-    subject="Msg 7: With attachments" 
-    mailhost="smtpserver.anywhere.com"&gt;
-    &lt;files&gt;
-        &lt;include name="*.txt" /&gt;
-    &lt;/files&gt;   
-    &lt;attachments&gt;
-        &lt;include name="*.zip" /&gt;
-    &lt;/attachments&gt;
-&lt;/mail&gt;
-    </pre>
+            &lt;mail 
+                from="nant@sourceforge.net" 
+                tolist="recipient1@sourceforge.net" 
+                cclist="recipient2@sourceforge.net" 
+                bcclist="recipient3@sourceforge.net" 
+                subject="Msg 7: With attachments" 
+                mailhost="smtpserver.anywhere.com"&gt;
+                &lt;files&gt;
+                    &lt;include name="*.txt" /&gt;
+                &lt;/files&gt;   
+                &lt;attachments&gt;
+                    &lt;include name="*.zip" /&gt;
+                &lt;/attachments&gt;
+            &lt;/mail&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

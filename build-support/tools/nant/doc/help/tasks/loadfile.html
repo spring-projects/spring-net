@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;loadfile&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;loadfile&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Load a text file into a single property. </p>
     <p> Unless an encoding is specified, the encoding associated with the system's current ANSI code page is used. </p>
     <p> An UTF-8, little-endian Unicode, and big-endian Unicode encoded text file is automatically recognized, if the file starts with the appropriate byte order marks. </p>
@@ -100,36 +101,36 @@
       <li>
         <p> Load file <code>message.txt</code> into property "message". </p>
         <pre class="code">
-&lt;loadfile
-    file="message.txt"
-    property="message" /&gt;
-    </pre>
+            &lt;loadfile
+                file="message.txt"
+                property="message" /&gt;
+                </pre>
       </li>
       <li>
         <p> Load a file using the "latin-1" encoding. </p>
         <pre class="code">
-&lt;loadfile
-    file="loadfile.xml"
-    property="encoded-file"
-    encoding="iso-8859-1" /&gt;
-    </pre>
+            &lt;loadfile
+                file="loadfile.xml"
+                property="encoded-file"
+                encoding="iso-8859-1" /&gt;
+                </pre>
       </li>
       <li>
         <p> Load a file, replacing all <code>@NOW@</code> tokens with the current date/time. </p>
         <pre class="code">
-&lt;loadfile file="token.txt" property="token-file"&gt;
-    &lt;filterchain&gt;
-        &lt;replacetokens&gt;
-            &lt;token key="NOW" value="${datetime::now()}" /&gt;
-        &lt;/replacetokens&gt;
-    &lt;/filterchain&gt;
-&lt;/loadfile&gt;
-    </pre>
+            &lt;loadfile file="token.txt" property="token-file"&gt;
+                &lt;filterchain&gt;
+                    &lt;replacetokens&gt;
+                        &lt;token key="NOW" value="${datetime::now()}" /&gt;
+                    &lt;/replacetokens&gt;
+                &lt;/filterchain&gt;
+            &lt;/loadfile&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

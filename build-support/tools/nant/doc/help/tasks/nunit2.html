@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;nunit2&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;nunit2&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Runs tests using the NUnit V2.2 framework. </p>
     <p> The <code>haltonfailure</code> attribute is only useful when more than one test suite is used, and you want to continue running other test suites although a test failed. </p>
     <p> Set <code>failonerror</code> to <b>false</b> to ignore any errors and continue the build. </p>
@@ -97,6 +98,10 @@
                     &lt;<a href="../types/assemblyfileset.html">assemblies</a>&gt;
                 </h4><div class="nested-element"> Assemblies to include in test. <p /></div><h4><a id="assemblies"></a>
                     &lt;/<a href="../types/assemblyfileset.html">assemblies</a>&gt;
+                </h4><!--Element--><h4><a id="references"></a>
+                    &lt;<a href="../types/assemblyfileset.html">references</a>&gt;
+                </h4><div class="nested-element"> Assemblies to scan for missing assembly references. <p /></div><h4><a id="references"></a>
+                    &lt;/<a href="../types/assemblyfileset.html">references</a>&gt;
                 </h4><!--Element--><h4><a id="categories"></a>
                     &lt;<a href="../types/categories.html">categories</a>&gt;
                 </h4><div class="nested-element"> Categories of test cases to include or exclude. <p /></div><h4><a id="categories"></a>
@@ -143,6 +148,10 @@
         &lt;categories&gt;
             &lt;exclude name="NotWorking" /&gt;
         &lt;/categories&gt;
+        &lt;references basedir="build"&gt;
+            &lt;include name="Cegeka.Income.Services.dll" /&gt;
+            &lt;include name="Cegeka.Util.dll" /&gt;
+        &lt;/references&gt;
     &lt;/test&gt;
 &lt;/nunit2&gt;
     </pre>
@@ -150,7 +159,7 @@
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.NUnit2Tasks (0.85.2478.0)
+      <b>Assembly:</b> NAnt.NUnit2Tasks (0.91.3881.0)
             </div>
   </body>
 </html>

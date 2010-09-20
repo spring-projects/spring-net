@@ -20,10 +20,11 @@
           <a href="../types/index.html">Type Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;path&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;path&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p>
       <p> Paths are groups of files and/or directories that need to be passed as a single unit. The order in which parts of the path are specified in the build file is retained, and duplicate parts are automatically suppressed. </p>
     </p>
@@ -80,16 +81,16 @@
       <li>
         <p> Define a global <code>&lt;path&gt;</code> that can be referenced by other tasks or types. </p>
         <pre class="code">
-      &lt;path id="includes-path"&gt;
-          &lt;pathelement path="%INCLUDE%" /&gt;
-          &lt;pathelement dir="${build.dir}/include" /&gt;
-      &lt;/path&gt;
-  </pre>
+                    &lt;path id="includes-path"&gt;
+                        &lt;pathelement path="%INCLUDE%" /&gt;
+                        &lt;pathelement dir="${build.dir}/include" /&gt;
+                    &lt;/path&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

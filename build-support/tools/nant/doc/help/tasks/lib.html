@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;lib&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;lib&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Run <code>lib.exe</code>, Microsoft's Library Manager. </p>
     <h3>Parameters</h3>
     <div class="table">
@@ -100,9 +101,18 @@
           <td style="text-align: center;">False</td>
         </tr>
         <tr>
+          <td valign="top">managed</td>
+          <td style="text-align: center;">
+            <a href="../enums/NAnt.Core.Types.ManagedExecution.html">ManagedExecution</a>
+          </td>
+          <td> Specifies whether the external program should be treated as a managed application, possibly forcing it to be executed under the currently targeted version of the CLR. </td>
+          <td style="text-align: center;">False</td>
+        </tr>
+        <tr>
           <td valign="top">useruntimeengine</td>
           <td style="text-align: center;">bool</td>
-          <td> Specifies whether the external program should be executed using a runtime engine, if configured. The default is <b>false</b>. </td>
+          <td>
+            <i>Deprecated.</i>  Specifies whether the external program is a managed application which should be executed using a runtime engine, if configured. The default is <b>false</b>. </td>
           <td style="text-align: center;">False</td>
         </tr>
       </table>
@@ -155,7 +165,7 @@
       </a>
                     &lt;arg&gt;
                 </h4>
-    <div class="nested-element"> The command-line arguments for the external program. <p> Represents a command-line argument. </p><h3>Parameters</h3><div class="table"><table><tr><th>Attribute</th><th style="text-align: center;">Type</th><th>Description</th><th style="text-align: center;">Required</th></tr><tr><td valign="top">dir</td><td style="text-align: center;">directory</td><td> The value for a directory-based command-line argument; will be replaced with the absolute path of the directory. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">file</td><td style="text-align: center;">file</td><td> The name of a file as a single command-line argument; will be replaced with the absolute filename of the file. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">if</td><td style="text-align: center;">bool</td><td> Indicates if the argument should be passed to the external program. If <b>true</b> then the argument will be passed; otherwise, skipped. The default is <b>true</b>. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">line</td><td style="text-align: center;">string</td><td> List of command-line arguments; will be passed to the executable as is. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">path</td><td style="text-align: center;">&lt;path&gt;</td><td> The value for a PATH-like command-line argument; you can use <code>:</code> or <code>;</code> as path separators and NAnt will convert it to the platform's local conventions, while resolving references to environment variables. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">unless</td><td style="text-align: center;">bool</td><td> Indicates if the argument should not be passed to the external program. If <b>false</b> then the argument will be passed; otherwise, skipped. The default is <b>false</b>. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">value</td><td style="text-align: center;">string</td><td> A single command-line argument; can contain space characters. </td><td style="text-align: center;">False</td></tr></table></div><h3>Nested Elements:</h3><!--Element--><h4><a id="path"></a>
+    <div class="nested-element"> The command-line arguments for the external program. <p> Represents a command-line argument. </p><p> When passed to an external application, the argument will be quoted when appropriate. This does not apply to the <code>line</code> parameter, which is always passed as is. </p><h3>Parameters</h3><div class="table"><table><tr><th>Attribute</th><th style="text-align: center;">Type</th><th>Description</th><th style="text-align: center;">Required</th></tr><tr><td valign="top">dir</td><td style="text-align: center;">directory</td><td> The value for a directory-based command-line argument; will be replaced with the absolute path of the directory. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">file</td><td style="text-align: center;">file</td><td> The name of a file as a single command-line argument; will be replaced with the absolute filename of the file. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">if</td><td style="text-align: center;">bool</td><td> Indicates if the argument should be passed to the external program. If <b>true</b> then the argument will be passed; otherwise, skipped. The default is <b>true</b>. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">line</td><td style="text-align: center;">string</td><td> List of command-line arguments; will be passed to the executable as is. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">path</td><td style="text-align: center;">&lt;path&gt;</td><td> The value for a PATH-like command-line argument; you can use <code>:</code> or <code>;</code> as path separators and NAnt will convert it to the platform's local conventions, while resolving references to environment variables. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">unless</td><td style="text-align: center;">bool</td><td> Indicates if the argument should not be passed to the external program. If <b>false</b> then the argument will be passed; otherwise, skipped. The default is <b>false</b>. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">value</td><td style="text-align: center;">string</td><td> A single command-line argument; can contain space characters. </td><td style="text-align: center;">False</td></tr></table></div><h3>Nested Elements:</h3><!--Element--><h4><a id="path"></a>
                     &lt;<a href="../types/path.html">path</a>&gt;
                 </h4><div class="nested-element"> Sets a single command-line argument and treats it like a PATH - ensures the right separator for the local platform is used. <p /></div><h4><a id="path"></a>
                     &lt;/<a href="../types/path.html">path</a>&gt;
@@ -176,17 +186,17 @@
       <li>
         <p>Create a library.</p>
         <pre class="code">
-&lt;lib output="library.lib"&gt;
-    &lt;sources&gt;
-        &lt;include name="library.obj" /&gt;
-    &lt;/sources&gt;
-&lt;/lib&gt;
-    </pre>
+            &lt;lib output="library.lib"&gt;
+                &lt;sources&gt;
+                    &lt;include name="library.obj" /&gt;
+                &lt;/sources&gt;
+            &lt;/lib&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.VisualCppTasks (0.85.2478.0)
+      <b>Assembly:</b> NAnt.VisualCppTasks (0.91.3881.0)
             </div>
   </body>
 </html>

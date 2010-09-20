@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;xmlpeek&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;xmlpeek&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Extracts text from an XML file at the location specified by an XPath expression. </p>
     <p> If the XPath expression specifies multiple nodes the node index is used to determine which of the nodes' text is returned. </p>
     <h3>Parameters</h3>
@@ -99,31 +100,31 @@
       <li>
         <p> The example provided assumes that the following XML file (App.config) exists in the current build directory. </p>
         <pre class="code">
-&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;configuration xmlns="http://www.gordic.cz/shared/project-config/v_1.0.0.0"&gt;
-    &lt;appSettings&gt;
-        &lt;add key="server" value="testhost.somecompany.com" /&gt;
-    &lt;/appSettings&gt;
-&lt;/configuration&gt;
-    </pre>
+            &lt;?xml version="1.0" encoding="utf-8" ?&gt;
+            &lt;configuration xmlns="http://www.gordic.cz/shared/project-config/v_1.0.0.0"&gt;
+                &lt;appSettings&gt;
+                    &lt;add key="server" value="testhost.somecompany.com" /&gt;
+                &lt;/appSettings&gt;
+            &lt;/configuration&gt;
+                </pre>
       </li>
       <li>
         <p> The example will read the server value from the above configuration file. </p>
         <pre class="code">
-&lt;xmlpeek
-    file="App.config"
-    xpath="/x:configuration/x:appSettings/x:add[@key = 'server']/@value"
-    property="configuration.server"&gt;
-    &lt;namespaces&gt;
-        &lt;namespace prefix="x" uri="http://www.gordic.cz/shared/project-config/v_1.0.0.0" /&gt;
-    &lt;/namespaces&gt;
-&lt;/xmlpeek&gt;
-    </pre>
+            &lt;xmlpeek
+                file="App.config"
+                xpath="/x:configuration/x:appSettings/x:add[@key = 'server']/@value"
+                property="configuration.server"&gt;
+                &lt;namespaces&gt;
+                    &lt;namespace prefix="x" uri="http://www.gordic.cz/shared/project-config/v_1.0.0.0" /&gt;
+                &lt;/namespaces&gt;
+            &lt;/xmlpeek&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

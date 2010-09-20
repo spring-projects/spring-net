@@ -20,12 +20,13 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;unzip&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;unzip&gt;</h1>
-    <p> Extracts files from a zip file. </p>
-    <p>Uses <a href="http://www.icsharpcode.net/OpenSource/SharpZipLib/">#ziplib</a> (SharpZipLib), an open source Zip/GZip library written entirely in C#.</p>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
+    <p> Extracts files from a zip archive. </p>
+    <p> Uses <a href="http://www.icsharpcode.net/OpenSource/SharpZipLib/">#ziplib</a> (SharpZipLib), an open source Zip/GZip library written entirely in C#. </p>
     <h3>Parameters</h3>
     <div class="table">
       <table>
@@ -68,6 +69,12 @@
           <td style="text-align: center;">False</td>
         </tr>
         <tr>
+          <td valign="top">overwrite</td>
+          <td style="text-align: center;">bool</td>
+          <td> Overwrite files, even if they are newer than the corresponding entries in the archive. The default is <b>true</b>. </td>
+          <td style="text-align: center;">False</td>
+        </tr>
+        <tr>
           <td valign="top">unless</td>
           <td style="text-align: center;">bool</td>
           <td> Opposite of <code>if</code>. If <b>false</b> then the task will be executed; otherwise, skipped. The default is <b>false</b>. </td>
@@ -86,13 +93,13 @@
       <li>
         <p>Extracts all the file from the zip, preserving the directory structure.</p>
         <pre class="code">
-&lt;unzip zipfile="backup.zip"/&gt;
-    </pre>
+            &lt;unzip zipfile="backup.zip"/&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.CompressionTasks (0.85.2478.0)
+      <b>Assembly:</b> NAnt.CompressionTasks (0.91.3881.0)
             </div>
   </body>
 </html>

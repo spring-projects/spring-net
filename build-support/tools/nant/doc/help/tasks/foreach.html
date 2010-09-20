@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;foreach&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;foreach&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Loops over a set of items. </p>
     <p> Can loop over files in directory, lines in a file, etc. </p>
     <p> The property value is stored before the loop is done, and restored when the loop is finished. </p>
@@ -131,69 +132,69 @@
       <li>
         <p>Loops over the files in <code>c:\</code>.</p>
         <pre class="code">
-&lt;foreach item="File" in="c:\" property="filename"&gt;
-    &lt;echo message="${filename}" /&gt;
-&lt;/foreach&gt;
-    </pre>
+            &lt;foreach item="File" in="c:\" property="filename"&gt;
+                &lt;echo message="${filename}" /&gt;
+            &lt;/foreach&gt;
+                </pre>
       </li>
       <li>
         <p>Loops over all files in the project directory.</p>
         <pre class="code">
-&lt;foreach item="File" property="filename"&gt;
-    &lt;in&gt;
-        &lt;items&gt;
-            &lt;include name="**" /&gt;
-        &lt;/items&gt;
-    &lt;/in&gt;
-    &lt;do&gt;
-        &lt;echo message="${filename}" /&gt;
-    &lt;/do&gt;
-&lt;/foreach&gt;
-    </pre>
+            &lt;foreach item="File" property="filename"&gt;
+                &lt;in&gt;
+                    &lt;items&gt;
+                        &lt;include name="**" /&gt;
+                    &lt;/items&gt;
+                &lt;/in&gt;
+                &lt;do&gt;
+                    &lt;echo message="${filename}" /&gt;
+                &lt;/do&gt;
+            &lt;/foreach&gt;
+                </pre>
       </li>
       <li>
         <p>Loops over the folders in <code>c:\</code>.</p>
         <pre class="code">
-&lt;foreach item="Folder" in="c:\" property="foldername"&gt;
-    &lt;echo message="${foldername}" /&gt;
-&lt;/foreach&gt;
-    </pre>
+            &lt;foreach item="Folder" in="c:\" property="foldername"&gt;
+                &lt;echo message="${foldername}" /&gt;
+            &lt;/foreach&gt;
+                </pre>
       </li>
       <li>
         <p>Loops over all folders in the project directory.</p>
         <pre class="code">
-&lt;foreach item="Folder" property="foldername"&gt;
-    &lt;in&gt;
-        &lt;items&gt;
-            &lt;include name="**" /&gt;
-        &lt;/items&gt;
-    &lt;/in&gt;
-    &lt;do&gt;
-        &lt;echo message="${foldername}" /&gt;
-    &lt;/do&gt;
-&lt;/foreach&gt;
-    </pre>
+            &lt;foreach item="Folder" property="foldername"&gt;
+                &lt;in&gt;
+                    &lt;items&gt;
+                        &lt;include name="**" /&gt;
+                    &lt;/items&gt;
+                &lt;/in&gt;
+                &lt;do&gt;
+                    &lt;echo message="${foldername}" /&gt;
+                &lt;/do&gt;
+            &lt;/foreach&gt;
+                </pre>
       </li>
       <li>
         <p>Loops over a list.</p>
         <pre class="code">
-&lt;foreach item="String" in="1 2,3" delim=" ," property="count"&gt;
-    &lt;echo message="${count}" /&gt;
-&lt;/foreach&gt;
-    </pre>
+            &lt;foreach item="String" in="1 2,3" delim=" ," property="count"&gt;
+                &lt;echo message="${count}" /&gt;
+            &lt;/foreach&gt;
+                </pre>
       </li>
       <li>
         <p> Loops over lines in the file <code>properties.csv</code>, where each line is of the format name,value. </p>
         <pre class="code">
-&lt;foreach item="Line" in="properties.csv" delim="," property="x,y"&gt;
-    &lt;echo message="Read pair ${x}=${y}" /&gt;
-&lt;/foreach&gt;
-    </pre>
+            &lt;foreach item="Line" in="properties.csv" delim="," property="x,y"&gt;
+                &lt;echo message="Read pair ${x}=${y}" /&gt;
+            &lt;/foreach&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

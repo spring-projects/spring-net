@@ -20,12 +20,12 @@
                     Tasks
                 </td>
                 <td class="NavBar-Cell" align="right">
-                    v0.85
+                    v0.91-alpha2
                 </td>
             </tr>
         </table>
         <h1>Tasks</h1>
-        
+        <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
         <h2><a id="contents" />Contents</h2>
         <div>
             1 <a href="#introduction">Introduction</a><br />
@@ -128,9 +128,9 @@
                         <td>NAnt test assemblies</td>
                     </tr>
                     <tr>
-                        <td>tasks/*.dll</td>
+                        <td>extensions/common/neutral/**/*.dll</td>
                         <td>include</td>
-                        <td>Framework-neutral assemblies</td>
+                        <td>Framework and version-neutral assemblies</td>
                     </tr>
                     <tr>
                         <td>NAnt.MSNetTasks.dll</td>
@@ -175,9 +175,9 @@
                         <td>NAnt test assemblies</td>
                     </tr>
                     <tr>
-                        <td>tasks/*.dll</td>
+                        <td>extensions/common/neutral/**/*.dll</td>
                         <td>include</td>
-                        <td>Framework-neutral assemblies</td>
+                        <td>Framework and version-neutral assemblies</td>
                     </tr>
                     <tr>
                         <td>NAnt.MSNetTasks.dll</td>
@@ -188,11 +188,6 @@
                         <td>NAnt.MSNet.Tests.dll</td>
                         <td>exclude</td>
                         <td>Microsoft.NET specific test assembly</td>
-                    </tr>
-                    <tr>
-                        <td>NAnt.VSNetTasks.dll</td>
-                        <td>exclude</td>
-                        <td>Assembly containing <a href="../tasks/solution.html"><code>&lt;solution&gt;</code></a> task</td>
                     </tr>
                     <tr>
                         <td>NAnt.Win32Tasks.dll</td>
@@ -218,8 +213,9 @@
             In general, the following include patterns are applied:
         </p>
         <div style="margin-left: 20px;">
-            tasks/&lt;framework family&gt;/*.dll<br/>
-            tasks/&lt;framework family&gt;/&lt;framework version&gt;/**/*.dll<br/>
+            extensions/common/&lt;CLR version&gt;/**/*.dll<br/>
+            extensions/&lt;framework family&gt;/neutral/**/*.dll<br/>
+            extensions/&lt;framework family&gt;/&lt;framework version&gt;/**/*.dll<br/>
         </div>
         <p>
             <b>Example:</b>
@@ -228,8 +224,9 @@
             When running NAnt on Microsoft .NET Framework 1.0, assemblies matching the following pattern would be scanned:
         </p>
         <div style="margin-left: 20px;">
-            tasks/net/*.dll<br />
-            tasks/net/1.0/**/*.dll
+            extensions/common/1.0/**/*.dll<br />
+            extensions/net/neutral/**/*.dll<br />
+            extensions/net/1.0/**/*.dll
         </div>
         <p>
             <b>NOTE:</b> the exact set of patterns that are used for a given runtime framework is defined in the NAnt configuration file (NAnt.exe.config).
@@ -240,13 +237,16 @@
         </p>
         <ul>
             <li>
-                &lt;Project Base Directory&gt;\tasks\
+                &lt;Project Base Directory&gt;/extensions/common/neutral/
             </li>
             <li>
-                &lt;Project Base Directory&gt;\tasks\&lt;framework family&gt;\
+                &lt;Project Base Directory&gt;/extensions/common/&lt;CLR version&gt;/
             </li>
             <li>
-                &lt;Project Base Directory&gt;\tasks\&lt;framework family&gt;\&lt;framework version&gt;\
+                &lt;Project Base Directory&gt;/extensions/&lt;framework family&gt;/neutral/
+            </li>
+            <li>
+                &lt;Project Base Directory&gt;/tasks/&lt;framework family&gt;/&lt;framework version&gt;/
             </li>
         </ul>
         <p>
@@ -257,13 +257,16 @@
         </p>
         <ul>
             <li>
-                c:\projects\log4net\tasks\
+                c:\projects\log4net\extensions\common\neutral\
             </li>
             <li>
-                c:\projects\log4net\tasks\net\
+                c:\projects\log4net\extensions\common\2.0\
             </li>
             <li>
-                c:\projects\log4net\tasks\net\2.0\
+                c:\projects\log4net\extensions\net\neutral\
+            </li>
+            <li>
+                c:\projects\log4net\extensions\net\2.0\
             </li>
         </ul>
         <h3><a id="taskloader-forced" />2.2 Forced scan</h3>

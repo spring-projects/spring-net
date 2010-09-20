@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;style&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;style&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Processes a document via XSLT. </p>
     <h3>Parameters</h3>
     <div class="table">
@@ -138,56 +139,56 @@
       <li>
         <p>Create a report in HTML.</p>
         <pre class="code">
-&lt;style style="report.xsl" in="data.xml" out="report.html" /&gt;
-    </pre>
+            &lt;style style="report.xsl" in="data.xml" out="report.html" /&gt;
+                </pre>
       </li>
       <li>
         <p>Create a report in HTML, with a param.</p>
         <pre class="code">
-&lt;style style="report.xsl" in="data.xml" out="report.html"&gt;
-    &lt;parameters&gt;
-        &lt;parameter name="reportType" namespaceuri="" value="Plain" /&gt;
-    &lt;/parameters&gt;
-&lt;/style&gt;
-    </pre>
+            &lt;style style="report.xsl" in="data.xml" out="report.html"&gt;
+                &lt;parameters&gt;
+                    &lt;parameter name="reportType" namespaceuri="" value="Plain" /&gt;
+                &lt;/parameters&gt;
+            &lt;/style&gt;
+                </pre>
       </li>
       <li>
         <p>Create a report in HTML, with a expanded param.</p>
         <pre class="code">
-&lt;style style="report.xsl" in="data.xml" out="report.html"&gt;
-    &lt;parameters&gt;
-        &lt;parameter name="reportType" namespaceuri="" value="${report.type}" /&gt;
-    &lt;/parameters&gt;
-&lt;/style&gt;
-    </pre>
+            &lt;style style="report.xsl" in="data.xml" out="report.html"&gt;
+                &lt;parameters&gt;
+                    &lt;parameter name="reportType" namespaceuri="" value="${report.type}" /&gt;
+                &lt;/parameters&gt;
+            &lt;/style&gt;
+                </pre>
       </li>
       <li>
         <p>Create some code based on a directory of templates.</p>
         <pre class="code">
-&lt;style style="CodeGenerator.xsl" extension="java"&gt;
-    &lt;infiles&gt;
-        &lt;include name="*.xml" /&gt;
-    &lt;/infiles&gt;
-    &lt;parameters&gt;
-        &lt;parameter name="reportType" namespaceuri="" value="Plain" if="${report.plain}" /&gt;
-    &lt;/parameters&gt;
-&lt;style&gt;
-    </pre>
+            &lt;style style="CodeGenerator.xsl" extension="java"&gt;
+                &lt;infiles&gt;
+                    &lt;include name="*.xml" /&gt;
+                &lt;/infiles&gt;
+                &lt;parameters&gt;
+                    &lt;parameter name="reportType" namespaceuri="" value="Plain" if="${report.plain}" /&gt;
+                &lt;/parameters&gt;
+            &lt;style&gt;
+                </pre>
       </li>
       <li>
         <p>Create a report in HTML, with an extension object.</p>
         <pre class="code">
-&lt;style style="report.xsl" in="data.xml" out="report.html"&gt;
-    &lt;extensionobjects&gt;
-        &lt;extensionobject namespaceuri="urn:Formatter" typename="XsltExtensionObjects.Formatter" assembly="XsltExtensionObjects.dll" /&gt;
-    &lt;/extensionobjects&gt;
-&lt;/style&gt;
-    </pre>
+            &lt;style style="report.xsl" in="data.xml" out="report.html"&gt;
+                &lt;extensionobjects&gt;
+                    &lt;extensionobject namespaceuri="urn:Formatter" typename="XsltExtensionObjects.Formatter" assembly="XsltExtensionObjects.dll" /&gt;
+                &lt;/extensionobjects&gt;
+            &lt;/style&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

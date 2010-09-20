@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;license&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;license&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Generates a <code>.licence</code> file from a <code>.licx</code> file. </p>
     <p> If no output file is specified, the default filename is the name of the target file with the extension <code>.licenses</code> appended. </p>
     <h3>Parameters</h3>
@@ -114,6 +115,14 @@
           <td style="text-align: center;">False</td>
         </tr>
         <tr>
+          <td valign="top">managed</td>
+          <td style="text-align: center;">
+            <a href="../enums/NAnt.Core.Types.ManagedExecution.html">ManagedExecution</a>
+          </td>
+          <td> Specifies whether the external program should be treated as a managed application, possibly forcing it to be executed under the currently targeted version of the CLR. </td>
+          <td style="text-align: center;">False</td>
+        </tr>
+        <tr>
           <td valign="top">supportsassemblyreferences</td>
           <td style="text-align: center;">bool</td>
           <td> Indicates whether assembly references are supported by the current target framework. The default is <b>false</b>. </td>
@@ -122,7 +131,8 @@
         <tr>
           <td valign="top">useruntimeengine</td>
           <td style="text-align: center;">bool</td>
-          <td> Specifies whether the external program should be executed using a runtime engine, if configured. The default is <b>false</b>. </td>
+          <td>
+            <i>Deprecated.</i>  Specifies whether the external program is a managed application which should be executed using a runtime engine, if configured. The default is <b>false</b>. </td>
           <td style="text-align: center;">False</td>
         </tr>
       </table>
@@ -145,13 +155,13 @@
       <li>
         <p> Generate the file <code>component.exe.licenses</code> file from <code>component.licx</code>. </p>
         <pre class="code">
-&lt;license input="component.licx" licensetarget="component.exe" /&gt;
-    </pre>
+            &lt;license input="component.licx" licensetarget="component.exe" /&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.DotNetTasks (0.85.2478.0)
+      <b>Assembly:</b> NAnt.DotNetTasks (0.91.3881.0)
             </div>
   </body>
 </html>

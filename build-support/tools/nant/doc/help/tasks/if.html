@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;if&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;if&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Checks the conditional attributes and executes the children if <b>true</b>. </p>
     <p> If no conditions are checked, all child tasks are executed. </p>
     <p> If more than one attribute is used, they are &amp;&amp;'d. The first to fail stops the check. </p>
@@ -38,13 +39,13 @@
         </tr>
         <tr>
           <td>
-            <a href="../functions/property.exists.html">property::exists()</a>
+            <a href="../functions/property.exists(System.String).html">property::exists()</a>
           </td>
           <td>Checks whether the specified property exists.</td>
         </tr>
         <tr>
           <td>
-            <a href="../functions/target.exists.html">target::exists()</a>
+            <a href="../functions/target.exists(System.String).html">target::exists()</a>
           </td>
           <td>Checks whether the specified target exists.</td>
         </tr>
@@ -158,7 +159,7 @@
       <li>
         <p>Tests the value of a property using expressions.</p>
         <pre class="code">
-&lt;if test="${build.configuration='release'}"&gt;
+&lt;if test="${build.configuration=='release'}"&gt;
     &lt;echo&gt;Build release configuration&lt;/echo&gt;
 &lt;/if&gt;
     </pre>
@@ -249,7 +250,7 @@
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

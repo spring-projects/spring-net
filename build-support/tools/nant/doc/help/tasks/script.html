@@ -20,23 +20,29 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;script&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;script&gt;</h1>
-    <p> Executes the code contained within the task. This code can include custom extension function definitions. Once the script task has executed those custom functions will be available for use in the buildfile. </p>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
+    <p> Executes the code contained within the task. </p>
+    <h5 xmlns="">Code</h5>
     <p> The <a href="../tasks/script.html">&lt;script&gt;</a> task must contain a single <code>code</code> element, which in turn contains the script code. </p>
-    <p> A static entry point named <code>ScriptMain</code> is required if no custom functions have been defined. It must have a single <a href="../../sdk/NAnt.Core.Project.html">Project</a> parameter. </p>
-    <p> The following namespaces are loaded by default: </p>
+    <p> This code can include extensions such as functions, or tasks. Once the script task has executed those extensions will be available for use in the buildfile. </p>
+    <p> If no extensions have been defined, a static entry point named <code>ScriptMain</code> - which must have a single <a href="../../sdk/NAnt.Core.Project.html">Project</a> argument - is required. </p>
+    <h5 xmlns="">Namespaces</h5>
+    <p> The following namespaces are imported by default: </p>
     <ul style="list-style-type: disc;">
       <li>System</li>
       <li>System.Collections</li>
-      <li>System.Collections.Specialized</li>
       <li>System.IO</li>
       <li>System.Text</li>
-      <li>System.Text.RegularExpressions</li>
       <li>NAnt.Core</li>
+      <li>NAnt.Core.Attributes</li>
     </ul>
+    <h5 xmlns="">Assembly References</h5>
+    <p> The assembly references that are specified will be used to compile the script, and will be loaded into the NAnt appdomain. </p>
+    <p> By default, only the <code>NAnt.Core</code> and <code>mscorlib</code> assemblies are referenced. </p>
     <h3>Parameters</h3>
     <div class="table">
       <table>
@@ -211,39 +217,32 @@
       </li>
       <li>
         <p>Define a custom task and call it using C#.</p>
-        <pre class="code">        &lt;script language="C#" prefix="test" &gt;
-            &lt;code&gt;
-              &lt;![CDATA[
-                [TaskName("usertask")]
-                public class TestTask : Task {
-                  #region Private Instance Fields
-
-                  private string _message;
-
-                  #endregion Private Instance Fields
-
-                  #region Public Instance Properties
-
-                  [TaskAttribute("message", Required=true)]
-                  public string FileName {
-                      get { return _message; }
-                      set { _message = value; }
-                  }
-
-                  #endregion Public Instance Properties
-
-                  #region Override implementation of Task
-
-                  protected override void ExecuteTask() {
-                      Log(Level.Info, _message.ToUpper());
-                  }
-                  #endregion Override implementation of Task
+        <pre class="code">      &lt;script language="C#" prefix="test" &gt;
+          &lt;code&gt;
+            &lt;![CDATA[
+              [TaskName("usertask")]
+              public class TestTask : Task {
+                #region Private Instance Fields
+                            private string _message;
+                            #endregion Private Instance Fields
+                            #region Public Instance Properties
+                            [TaskAttribute("message", Required=true)]
+                public string FileName {
+                    get { return _message; }
+                    set { _message = value; }
                 }
-              ]]&gt;
-            &lt;/code&gt;
-        &lt;/script&gt;
-        &lt;usertask message='Hello from UserTask'/&gt;
-  </pre>
+                            #endregion Public Instance Properties
+                            #region Override implementation of Task
+                            protected override void ExecuteTask() {
+                    Log(Level.Info, _message.ToUpper());
+                }
+                #endregion Override implementation of Task
+              }
+            ]]&gt;
+          &lt;/code&gt;
+      &lt;/script&gt;
+      &lt;usertask message='Hello from UserTask'/&gt;
+</pre>
       </li>
       <li>
         <p> Define a custom function and call it using <a href="http://boo.codehaus.org/">Boo</a>. </p>
@@ -264,7 +263,7 @@
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.DotNetTasks (0.85.2478.0)
+      <b>Assembly:</b> NAnt.DotNetTasks (0.91.3881.0)
             </div>
   </body>
 </html>

@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;property&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;property&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Sets a property in the current project. </p>
     <p class="i2">
       <b>Note:</b> NAnt uses a number of predefined properties.</p>
@@ -99,38 +100,38 @@
       <li>
         <p> Define a <code>debug</code> property with value <b>true</b>. </p>
         <pre class="code">
-&lt;property name="debug" value="true" /&gt;
-    </pre>
+            &lt;property name="debug" value="true" /&gt;
+                </pre>
       </li>
       <li>
         <p> Use the user-defined <code>debug</code> property. </p>
         <pre class="code">
-&lt;property name="trace" value="${debug}" /&gt;
-    </pre>
+            &lt;property name="trace" value="${debug}" /&gt;
+                </pre>
       </li>
       <li>
         <p> Define a read-only property. This is just like passing in the param on the command line. </p>
         <pre class="code">
-&lt;property name="do_not_touch_ME" value="hammer" readonly="true" /&gt;
-    </pre>
+            &lt;property name="do_not_touch_ME" value="hammer" readonly="true" /&gt;
+                </pre>
       </li>
       <li>
         <p> Define a property, but do not overwrite the value if the property already exists (eg. it was specified on the command line). </p>
         <pre class="code">
-&lt;project name="property-example"&gt;
-  &lt;property name="debug" value="true" overwrite="false" /&gt;
-  &lt;echo message="debug: ${debug}" /&gt;
-&lt;/project&gt;
-    </pre>
+            &lt;project name="property-example"&gt;
+              &lt;property name="debug" value="true" overwrite="false" /&gt;
+              &lt;echo message="debug: ${debug}" /&gt;
+            &lt;/project&gt;
+                </pre>
         <p> Executing this build file with the command line option <code>-D:debug=false</code>, would cause the value specified on the command line to remain unaltered. </p>
         <pre class="code">
-[echo] debug: false
-    </pre>
+            [echo] debug: false
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>

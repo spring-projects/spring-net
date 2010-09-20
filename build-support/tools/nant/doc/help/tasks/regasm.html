@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;regasm&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;regasm&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Registers an assembly, or set of assemblies for use from COM clients. </p>
     <p> Refer to the <a href="ms-help://MS.VSCC/MS.MSDNVS/cptools/html/cpgrfassemblyregistrationtoolregasmexe.htm">Regasm</a> documentation for more information on the regasm tool. </p>
     <h3>Parameters</h3>
@@ -119,9 +120,18 @@
           <td style="text-align: center;">False</td>
         </tr>
         <tr>
+          <td valign="top">managed</td>
+          <td style="text-align: center;">
+            <a href="../enums/NAnt.Core.Types.ManagedExecution.html">ManagedExecution</a>
+          </td>
+          <td> Specifies whether the external program should be treated as a managed application, possibly forcing it to be executed under the currently targeted version of the CLR. </td>
+          <td style="text-align: center;">False</td>
+        </tr>
+        <tr>
           <td valign="top">useruntimeengine</td>
           <td style="text-align: center;">bool</td>
-          <td> Specifies whether the external program should be executed using a runtime engine, if configured. The default is <b>false</b>. </td>
+          <td>
+            <i>Deprecated.</i>  Specifies whether the external program is a managed application which should be executed using a runtime engine, if configured. The default is <b>false</b>. </td>
           <td style="text-align: center;">False</td>
         </tr>
       </table>
@@ -158,7 +168,7 @@
       </a>
                     &lt;arg&gt;
                 </h4>
-    <div class="nested-element"> The command-line arguments for the external program. <p> Represents a command-line argument. </p><h3>Parameters</h3><div class="table"><table><tr><th>Attribute</th><th style="text-align: center;">Type</th><th>Description</th><th style="text-align: center;">Required</th></tr><tr><td valign="top">dir</td><td style="text-align: center;">directory</td><td> The value for a directory-based command-line argument; will be replaced with the absolute path of the directory. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">file</td><td style="text-align: center;">file</td><td> The name of a file as a single command-line argument; will be replaced with the absolute filename of the file. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">if</td><td style="text-align: center;">bool</td><td> Indicates if the argument should be passed to the external program. If <b>true</b> then the argument will be passed; otherwise, skipped. The default is <b>true</b>. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">line</td><td style="text-align: center;">string</td><td> List of command-line arguments; will be passed to the executable as is. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">path</td><td style="text-align: center;">&lt;path&gt;</td><td> The value for a PATH-like command-line argument; you can use <code>:</code> or <code>;</code> as path separators and NAnt will convert it to the platform's local conventions, while resolving references to environment variables. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">unless</td><td style="text-align: center;">bool</td><td> Indicates if the argument should not be passed to the external program. If <b>false</b> then the argument will be passed; otherwise, skipped. The default is <b>false</b>. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">value</td><td style="text-align: center;">string</td><td> A single command-line argument; can contain space characters. </td><td style="text-align: center;">False</td></tr></table></div><h3>Nested Elements:</h3><!--Element--><h4><a id="path"></a>
+    <div class="nested-element"> The command-line arguments for the external program. <p> Represents a command-line argument. </p><p> When passed to an external application, the argument will be quoted when appropriate. This does not apply to the <code>line</code> parameter, which is always passed as is. </p><h3>Parameters</h3><div class="table"><table><tr><th>Attribute</th><th style="text-align: center;">Type</th><th>Description</th><th style="text-align: center;">Required</th></tr><tr><td valign="top">dir</td><td style="text-align: center;">directory</td><td> The value for a directory-based command-line argument; will be replaced with the absolute path of the directory. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">file</td><td style="text-align: center;">file</td><td> The name of a file as a single command-line argument; will be replaced with the absolute filename of the file. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">if</td><td style="text-align: center;">bool</td><td> Indicates if the argument should be passed to the external program. If <b>true</b> then the argument will be passed; otherwise, skipped. The default is <b>true</b>. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">line</td><td style="text-align: center;">string</td><td> List of command-line arguments; will be passed to the executable as is. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">path</td><td style="text-align: center;">&lt;path&gt;</td><td> The value for a PATH-like command-line argument; you can use <code>:</code> or <code>;</code> as path separators and NAnt will convert it to the platform's local conventions, while resolving references to environment variables. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">unless</td><td style="text-align: center;">bool</td><td> Indicates if the argument should not be passed to the external program. If <b>false</b> then the argument will be passed; otherwise, skipped. The default is <b>false</b>. </td><td style="text-align: center;">False</td></tr><tr><td valign="top">value</td><td style="text-align: center;">string</td><td> A single command-line argument; can contain space characters. </td><td style="text-align: center;">False</td></tr></table></div><h3>Nested Elements:</h3><!--Element--><h4><a id="path"></a>
                     &lt;<a href="../types/path.html">path</a>&gt;
                 </h4><div class="nested-element"> Sets a single command-line argument and treats it like a PATH - ensures the right separator for the local platform is used. <p /></div><h4><a id="path"></a>
                     &lt;/<a href="../types/path.html">path</a>&gt;
@@ -179,33 +189,33 @@
       <li>
         <p> Register types in a single assembly. </p>
         <pre class="code">
-&lt;regasm assembly="myAssembly.dll" /&gt;
-    </pre>
+            &lt;regasm assembly="myAssembly.dll" /&gt;
+                </pre>
       </li>
       <li>
         <p> Register types of an assembly and generate a type library containing definitions of accessible types defined within the assembly. </p>
         <pre class="code">
-&lt;regasm assembly="myAssembly.dll" typelib="myAssembly.tlb" /&gt;
-    </pre>
+            &lt;regasm assembly="myAssembly.dll" typelib="myAssembly.tlb" /&gt;
+                </pre>
       </li>
       <li>
         <p> Register types of set of assemblies at once, while specifying a set of reference assemblies. </p>
         <pre class="code">
-&lt;regasm codebase="true"&gt;
-    &lt;assemblies&gt;
-        &lt;include name="OutlookAddin.dll" /&gt;
-        &lt;include name="OfficeCoreAddin.dll" /&gt;
-    &lt;/assemblies&gt;
-    &lt;references&gt;
-        &lt;include name="CommonTypes.dll" /&gt;
-    &lt;/references&gt;
-&lt;/regasm&gt;
-    </pre>
+            &lt;regasm codebase="true"&gt;
+                &lt;assemblies&gt;
+                    &lt;include name="OutlookAddin.dll" /&gt;
+                    &lt;include name="OfficeCoreAddin.dll" /&gt;
+                &lt;/assemblies&gt;
+                &lt;references&gt;
+                    &lt;include name="CommonTypes.dll" /&gt;
+                &lt;/references&gt;
+            &lt;/regasm&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Win32Tasks (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Win32Tasks (0.91.3881.0)
             </div>
   </body>
 </html>

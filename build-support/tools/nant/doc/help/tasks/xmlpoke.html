@@ -20,10 +20,11 @@
           <a href="../tasks/index.html">Task Reference</a>
           <img alt="-&gt;" src="../images/arrow.gif" /> &lt;xmlpoke&gt;</td>
         <td class="NavBar-Cell" align="right">
-                        v0.85</td>
+                        v0.91-alpha2</td>
       </tr>
     </table>
     <h1>&lt;xmlpoke&gt;</h1>
+    <p class="topicstatus">[This is preliminary documentation and subject to change.]</p>
     <p> Replaces text in an XML file at the location specified by an XPath expression. </p>
     <p> The location specified by the XPath expression must exist, it will not create the parent elements for you. However, provided you have a root element you could use a series of the tasks to build the XML file up if necessary. </p>
     <h3>Parameters</h3>
@@ -52,6 +53,12 @@
           <td style="text-align: center;">string</td>
           <td> The XPath expression used to select which nodes are to be modified. </td>
           <td style="text-align: center;">True</td>
+        </tr>
+        <tr>
+          <td valign="top">preserveWhitespace</td>
+          <td style="text-align: center;">bool</td>
+          <td> Namespace definitions to resolve prefixes in the XPath expression. </td>
+          <td style="text-align: center;">False</td>
         </tr>
         <tr>
           <td valign="top">failonerror</td>
@@ -94,42 +101,42 @@
         <p> Change the <code>server</code> setting in the configuration from <code>testhost.somecompany.com</code> to <code>productionhost.somecompany.com</code>. </p>
         <p>XML file:</p>
         <pre class="code">
-&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;configuration&gt;
-    &lt;appSettings&gt;
-        &lt;add key="server" value="testhost.somecompany.com" /&gt;
-    &lt;/appSettings&gt;
-&lt;/configuration&gt;
-    </pre>
+            &lt;?xml version="1.0" encoding="utf-8" ?&gt;
+            &lt;configuration&gt;
+                &lt;appSettings&gt;
+                    &lt;add key="server" value="testhost.somecompany.com" /&gt;
+                &lt;/appSettings&gt;
+            &lt;/configuration&gt;
+                </pre>
         <p>Build fragment:</p>
         <pre class="code">
-&lt;xmlpoke
-    file="App.config"
-    xpath="/configuration/appSettings/add[@key = 'server']/@value"
-    value="productionhost.somecompany.com" /&gt;
-    </pre>
+            &lt;xmlpoke
+                file="App.config"
+                xpath="/configuration/appSettings/add[@key = 'server']/@value"
+                value="productionhost.somecompany.com" /&gt;
+                </pre>
       </li>
       <li>
         <p> Modify the <code>noNamespaceSchemaLocation</code> in an XML file. </p>
         <p>XML file:</p>
         <pre class="code">
-&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;Commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Path Value"&gt;
-&lt;/Commands&gt;
-    </pre>
+            &lt;?xml version="1.0" encoding="utf-8" ?&gt;
+            &lt;Commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Path Value"&gt;
+            &lt;/Commands&gt;
+                </pre>
         <p>Build fragment:</p>
         <pre class="code">
-&lt;xmlpoke file="test.xml" xpath="/Commands/@xsi:noNamespaceSchemaLocation" value="d:\Commands.xsd"&gt;
-    &lt;namespaces&gt;
-        &lt;namespace prefix="xsi" uri="http://www.w3.org/2001/XMLSchema-instance" /&gt;
-    &lt;/namespaces&gt;
-&lt;/xmlpoke&gt;
-    </pre>
+            &lt;xmlpoke file="test.xml" xpath="/Commands/@xsi:noNamespaceSchemaLocation" value="d:\Commands.xsd"&gt;
+                &lt;namespaces&gt;
+                    &lt;namespace prefix="xsi" uri="http://www.w3.org/2001/XMLSchema-instance" /&gt;
+                &lt;/namespaces&gt;
+            &lt;/xmlpoke&gt;
+                </pre>
       </li>
     </ul>
     <h3>Requirements</h3>
     <div style="margin-left: 20px;">
-      <b>Assembly:</b> NAnt.Core (0.85.2478.0)
+      <b>Assembly:</b> NAnt.Core (0.91.3881.0)
             </div>
   </body>
 </html>
