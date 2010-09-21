@@ -21,7 +21,6 @@
 #region Imports 
 
 using System;
-using DotNetMock;
 using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Core.IO;
