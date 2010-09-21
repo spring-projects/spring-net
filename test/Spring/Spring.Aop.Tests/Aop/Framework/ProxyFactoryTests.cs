@@ -46,6 +46,15 @@ namespace Spring.Aop.Framework
     [TestFixture]
     public sealed class ProxyFactoryTests
     {
+
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+        }
+
         public interface IDoubleClickable
         {
             event EventHandler DoubleClick;
@@ -516,14 +525,21 @@ namespace Spring.Aop.Framework
         [Test]
         public void AddAdvisedSupportListener()
         {
-            IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
-            IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
+            //MLP SPRNET-1367
+            //IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
+            //IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
+            IAdvisedSupportListener listener =
+                (IAdvisedSupportListener) mocks.CreateMock(typeof (IAdvisedSupportListener));
+            listener.Activated(null);
+            LastCall.On(listener).IgnoreArguments();
+            //listener.Activated();
+            //mock.Expect("Activated");
 
-            mock.Expect("Activated");
+            mocks.ReplayAll();
             ProxyFactory factory = new ProxyFactory(new TestObject());
             factory.AddListener(listener);
             factory.GetProxy();
-            mock.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
