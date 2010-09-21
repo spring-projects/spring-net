@@ -62,14 +62,14 @@ namespace Spring.Aspects.Cache
             ProxyFactory pf = new ProxyFactory(new InventorStore());
             pf.AddAdvisors(cacheAspect);
 
-            IInventorStore store = (IInventorStore) pf.GetProxy();
+            IInventorStore store = (IInventorStore)pf.GetProxy();
 
             Assert.AreEqual(0, cache.Count);
-            
+
             IList inventors = store.GetAll();
             Assert.AreEqual(2, cache.Count);
 
-            store.Delete((Inventor) inventors[0]);
+            store.Delete((Inventor)inventors[0]);
             Assert.AreEqual(1, cache.Count);
 
             Inventor tesla = store.Load("Nikola Tesla");
@@ -81,6 +81,24 @@ namespace Spring.Aspects.Cache
 
             store.DeleteAll();
             Assert.AreEqual(0, cache.Count);
+        }
+
+        [Test]
+        public void TestCacheResultDoesNotReturnInvalidType()
+        {
+            ICache cache = new NonExpiringCache();
+            context.ObjectFactory.RegisterSingleton("inventors", cache);
+
+            ProxyFactory pf = new ProxyFactory(new InventorStore());
+            pf.AddAdvisors(cacheAspect);
+
+            IInventorStore store = (IInventorStore)pf.GetProxy();
+
+            cache.Insert("Nikola Tesla", "WrongTypeForMethodSignature");
+
+            Inventor value = store.Load("Nikola Tesla");
+
+            Assert.That(value, Is.AssignableTo(typeof(Inventor)), "CacheAspect returned a cached type that is incompatible with the method signature return type");
         }
 
         /// <summary>

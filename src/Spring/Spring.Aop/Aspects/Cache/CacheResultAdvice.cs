@@ -84,8 +84,26 @@ namespace Spring.Aspects.Cache
 
         #endregion
 
+        /// <summary>
+        /// Inner class to help cache null values.
+        /// </summary>
+        [Serializable] public sealed class NullValueMarkerType
+        {
+            /// <returns>true when other object is of same type.</returns>
+            public override bool Equals(object obj)
+            {
+                return obj is NullValueMarkerType;
+            }
+
+            /// <returns>13</returns>
+            public override int GetHashCode()
+            {
+                return 13;
+            }
+        }
+
         // NullValue
-        private static readonly object NullValue = new object();
+        private static readonly object NullValue = new NullValueMarkerType();
 
         /// <summary>
         /// Applies caching around a method invocation.
@@ -170,6 +188,26 @@ namespace Spring.Aspects.Cache
                 ICache cache = GetCache(resultInfo.CacheName);
                 returnValue = cache.Get(resultKey);
                 cacheHit = (returnValue != null);
+
+                if (NullValue.Equals(returnValue))
+                {
+                    returnValue = null;
+                }
+
+                Type returnType = invocation.Method.ReturnType;
+                if (returnValue != null && !returnType.IsInstanceOfType(returnValue))
+                {
+                    #region Instrumentation
+                    if (isLogDebugEnabled)
+                    {
+                        logger.Debug(String.Format("Object for key [{0}] was of type [{1}] which is not compatible with return type [{2}]. Proceeding...", resultKey, returnValue.GetType(), returnType));
+                    }
+                    #endregion
+
+                    cacheHit = false;
+                    returnValue = null;
+                }
+                
                 if (!cacheHit)
                 {
                     #region Instrumentation
@@ -201,7 +239,7 @@ namespace Spring.Aspects.Cache
                     #endregion
                 }
 
-                return (returnValue == NullValue) ? null : returnValue;
+                return returnValue;
             }
 
             cacheHit = false;

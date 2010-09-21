@@ -21,7 +21,9 @@
 #region Imports
 
 using System.Collections;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using AopAlliance.Intercept;
 using DotNetMock.Dynamic;
 using NUnit.Framework;
@@ -46,6 +48,7 @@ namespace Spring.Aspects.Cache
         private CacheResultAdvice advice;
         private ICache resultCache;
         private ICache itemCache;
+        private ICache binaryFormatterCache;
         private CacheResultTarget cacheResultTarget = new CacheResultTarget();
 
         [SetUp]
@@ -59,6 +62,7 @@ namespace Spring.Aspects.Cache
 
             resultCache = new NonExpiringCache();
             itemCache = new NonExpiringCache();
+            binaryFormatterCache = new BinaryFormatterCache();
         }
 
         /// <summary>
@@ -84,6 +88,36 @@ namespace Spring.Aspects.Cache
 
             mockInvocation.Verify();
             mockContext.Verify();
+        }
+
+        [Test]
+        public void CacheResultOfMethodThatReturnsNullWithSerializingCache()
+        {
+		    MethodInfo method = new VoidMethod(cacheResultTarget.ReturnsNothing).Method;
+		    object expectedReturnValue = null;
+
+		    ExpectAttributeRetrieval(method);
+		    ExpectCacheKeyGeneration(method, null);
+		    ExpectCacheInstanceRetrieval("results", binaryFormatterCache);
+		    ExpectCallToProceed(expectedReturnValue);
+
+		    // check that the null retVal is cached as well - it might be 
+		    // the result of an expensive webservice/database call etc.
+		    object returnValue = advice.Invoke((IMethodInvocation) mockInvocation.Object);
+		    Assert.AreEqual(expectedReturnValue, returnValue);
+            Assert.AreEqual(1, binaryFormatterCache.Count);
+
+            // and again, but without Proceed()...
+            ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, null);
+            ExpectCacheInstanceRetrieval("results", binaryFormatterCache);
+
+            // cached value should be returned
+            object cachedValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
+            Assert.IsNull(cachedValue, "Should recognize cached value as null-value marker.");
+
+		    mockInvocation.Verify();
+		    mockContext.Verify();
         }
 
         [Test]
@@ -571,4 +605,33 @@ namespace Spring.Aspects.Cache
     }
 
     #endregion
+
+    class BinaryFormatterCache : NonExpiringCache
+    {
+        protected override void DoInsert(object key, object value, System.TimeSpan timeToLive)
+        {
+            BinaryFormatter fmt = new BinaryFormatter();
+            using (MemoryStream stream = new MemoryStream())
+            {
+                fmt.Serialize(stream, value);
+                stream.Seek(0, SeekOrigin.Begin);
+                value = stream.ToArray();
+            }
+
+            base.DoInsert(key, value, timeToLive);
+        }
+
+        public override object Get(object key)
+        {
+            byte[] bytes = (byte[]) base.Get(key);
+
+            if (bytes == null)
+            {
+                return null;
+            }
+
+            BinaryFormatter fmt = new BinaryFormatter();
+            return fmt.Deserialize(new MemoryStream(bytes));
+        }
+    }
 }
