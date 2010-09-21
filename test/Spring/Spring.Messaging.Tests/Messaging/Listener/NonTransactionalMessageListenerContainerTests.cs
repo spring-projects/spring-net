@@ -48,7 +48,12 @@ namespace Spring.Messaging.Listener
         {
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testqueue", false);
             MessageQueueUtils.RecreateMessageQueue(@".\Private$\testresponsequeue", false);
+                   
             base.SetUp();
+
+            //Reset the state so that running all tests together will succeed.
+            exceptionHandler.MessageCount = 0;
+            listener.MessageCount = 0;
         }
 
         public SimpleExceptionHandler ExceptionHandler
@@ -71,10 +76,6 @@ namespace Spring.Messaging.Listener
         [Test]
         public void SendAndAsyncReceiveWithExceptionHandling()
         {
-            //Reset the state so that running all tests together will succeed.
-            exceptionHandler.MessageCount = 0;
-
-
             MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
             Assert.IsNotNull(q);
             q.ConvertAndSend("Goodbye World 1");
