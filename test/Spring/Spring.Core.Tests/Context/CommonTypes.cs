@@ -21,6 +21,7 @@
 #region Imports 
 
 using System;
+using DotNetMock;
 using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Core.IO;
@@ -75,11 +76,9 @@ namespace Spring.Context
 		private DefaultListableObjectFactory factory;
 	    private int expectedCloseCalls;
 	    private int actualCloseCalls;
-		//private ExpectationCounter _closeCalls = new ExpectationCounter("MockConfigurableApplicationContext.CloseCalls");
 
 		public void SetCloseCalls(int expectedCalls)
 		{
-			//_closeCalls.Expected = expectedCalls;
 		    expectedCloseCalls = expectedCalls;
 		}
 
@@ -91,7 +90,6 @@ namespace Spring.Context
 		{
 			_mockName = name;
 			factory = new DefaultListableObjectFactory();
-//			factory.AddObjectPostProcessor(new ApplicationContextAwareProcessor(this));
         }
 
         /// <summary>
@@ -106,7 +104,6 @@ namespace Spring.Context
 		{
 			_mockName = name;
 			factory = new DefaultListableObjectFactory(GetInternalParentObjectFactory());
-//			factory.AddObjectPostProcessor(new ApplicationContextAwareProcessor(this));
 		}
 
         public override bool IsObjectNameInUse(string objectName)
@@ -138,7 +135,6 @@ namespace Spring.Context
 		public override void Dispose()
 		{
 		    actualCloseCalls++;
-			//_closeCalls.Inc();
 		}
 
 		#region IMockObject Members
@@ -159,10 +155,8 @@ namespace Spring.Context
 		#region IVerifiable Members
 
 		public void Verify()
-		{
-			//Verifier.Verify(this);
+		{			
             Assert.AreEqual(actualCloseCalls, expectedCloseCalls, "Did not receive the expected Count for object " + MockName);
-
 			_isVerified = true;
 		}
 
