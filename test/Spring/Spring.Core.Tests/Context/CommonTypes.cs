@@ -21,13 +21,10 @@
 #region Imports 
 
 using System;
-using System.Collections;
-using System.Globalization;
-using DotNetMock;
+using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Core.IO;
 using Spring.Objects;
-using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
@@ -39,168 +36,6 @@ namespace Spring.Context
 	/// This class contains common mock implementations of Context interfaces,
 	/// used for testing.
 	/// </summary>
-	public class MockMessageSource : MockObject, IMessageSource
-	{
-		private ExpectationCounter _getMessageCalls = new ExpectationCounter("MockMessageSource.GetMessageCounter");
-		private ExpectationString _getMessageCode = new ExpectationString("MockMessageSource.GetMessageCode");
-        private ExpectationString _getMessageDefaultMessage = new ExpectationString("MockMessageSource.GetMessageDefaultMessage");
-		private ExpectationArray _getMessageArguments = new ExpectationArray("MockMessageSource.GetMessageArguments");
-
-		private string _getMessageReturn = null;
-
-
-	    public MockMessageSource()
-	    {
-            // this is to ensure, that no expectations may be violated
-	        _getMessageCalls.Expected = -1;
-	        _getMessageCode.Expected = "something very, very unlikely " + Guid.NewGuid();
-	        _getMessageDefaultMessage.Expected = "something very, very unlikely " + Guid.NewGuid();
-	        _getMessageArguments.Expected = new object[] { "something very, very unlikely " + Guid.NewGuid() };
-	    }
-
-	    public void SetExpectedGetMessageCalls(int calls)
-		{
-			_getMessageCalls.Expected = calls;
-		}
-
-        public void SetExpectedGetMessageDefaultMessage(string defaultMessage)
-        {
-            _getMessageDefaultMessage.Expected = defaultMessage;
-        }
-
-		public void SetExpectedGetMessageArguments(object[] arguments)
-		{
-			_getMessageArguments.Expected = arguments;
-		}
-
-		public void SetExpectedGetMessageReturn(string message)
-		{
-			_getMessageReturn = message;
-		}
-
-		public void SetExpectedGetMessageCode(string code)
-		{
-			_getMessageCode.Expected = code;
-		}
-
-		#region IMessageSource Members
-
-		public string GetMessage(IMessageSourceResolvable resolvable, CultureInfo culture)
-		{
-			_getMessageCalls.Inc();
-			return _getMessageReturn;
-		}
-
-		public string GetMessage(string name, CultureInfo culture, params object[] args)
-		{
-			_getMessageCalls.Inc();
-			_getMessageCode.Actual = name;
-			_getMessageArguments.Actual = args;
-			return _getMessageReturn;
-		}
-
-		public string GetMessage(string name)
-		{
-			_getMessageCalls.Inc();
-			_getMessageCode.Actual = name;
-			return _getMessageReturn;
-		}
-
-		public string GetMessage(string name, params object[] args)
-		{
-			_getMessageCalls.Inc();
-			_getMessageCode.Actual = name;
-			_getMessageArguments.Actual = args;
-			return _getMessageReturn;
-		}
-
-
-	    public string GetMessage(string name, string defaultMessage, CultureInfo culture, params object[] arguments)
-	    {
-            _getMessageCalls.Inc();
-            _getMessageCode.Actual = name;
-	        _getMessageDefaultMessage.Actual = defaultMessage;
-            _getMessageArguments.Actual = arguments;
-            return _getMessageReturn;
-	    }
-
-	    public string GetMessage(string name, CultureInfo cultureInfo)
-		{
-			_getMessageCalls.Inc();
-			_getMessageCode.Actual = name;
-			return _getMessageReturn;
-		}
-
-		public object GetResourceObject(string name, CultureInfo culture)
-		{
-			return null;
-		}
-
-		public object GetResourceObject(string name)
-		{
-			return null;
-		}
-
-		public void ApplyResources(object value, string objectName, CultureInfo cultureInfo)
-		{
-		}
-
-		#endregion
-	}
-
-	public class MockMessageResolvable : MockObject, IMessageSourceResolvable
-	{
-		private string[] _codes;
-		private string _defaultMessage;
-		private object[] _arguments;
-		private ExpectationCounter _getCodesCalls = new ExpectationCounter("MockMessageSource.Codes");
-
-		public void SetExpectedCodesCalls(int calls)
-		{
-			_getCodesCalls.Expected = calls;
-		}
-
-		public void SetCode(string code)
-		{
-			SetCodes(new string[] {code});
-		}
-
-		public void SetCodes(string[] codes)
-		{
-			_codes = codes;
-		}
-
-		public void SetDefaultMessage(String defaultMessage)
-		{
-			_defaultMessage = defaultMessage;
-		}
-
-		public void SetArguments(object[] arguments)
-		{
-			_arguments = arguments;
-		}
-
-		#region IMessageSourceResolvable Members
-
-		public object[] GetArguments()
-		{
-			return _arguments;
-		}
-
-		public string[] GetCodes()
-		{
-			_getCodesCalls.Inc();
-			return _codes;
-		}
-
-		public string DefaultMessage
-		{
-			get { return _defaultMessage; }
-		}
-
-		#endregion
-	}
-
 	[Serializable]
 	public class MockContextAwareObject : MarshalByRefObject,
 		IApplicationContextAware, IMessageSourceAware,  IResourceLoaderAware
@@ -233,16 +68,19 @@ namespace Spring.Context
 		}
 	}
 
-	public class MockApplicationContext : AbstractApplicationContext, IMockObject
+	public class MockApplicationContext : AbstractApplicationContext
 	{
 		private string _mockName;
 		private bool _isVerified;
 		private DefaultListableObjectFactory factory;
-		private ExpectationCounter _closeCalls = new ExpectationCounter("MockConfigurableApplicationContext.CloseCalls");
+	    private int expectedCloseCalls;
+	    private int actualCloseCalls;
+		//private ExpectationCounter _closeCalls = new ExpectationCounter("MockConfigurableApplicationContext.CloseCalls");
 
 		public void SetCloseCalls(int expectedCalls)
 		{
-			_closeCalls.Expected = expectedCalls;
+			//_closeCalls.Expected = expectedCalls;
+		    expectedCloseCalls = expectedCalls;
 		}
 
 		public MockApplicationContext() : this(null, null)
@@ -299,7 +137,8 @@ namespace Spring.Context
 
 		public override void Dispose()
 		{
-			_closeCalls.Inc();
+		    actualCloseCalls++;
+			//_closeCalls.Inc();
 		}
 
 		#region IMockObject Members
@@ -321,7 +160,9 @@ namespace Spring.Context
 
 		public void Verify()
 		{
-			Verifier.Verify(this);
+			//Verifier.Verify(this);
+            Assert.AreEqual(actualCloseCalls, expectedCloseCalls, "Did not receive the expected Count for object " + MockName);
+
 			_isVerified = true;
 		}
 
@@ -333,291 +174,4 @@ namespace Spring.Context
 		#endregion
 	}
 
-	public class MockDefaultApplicationContext : MockObject, IApplicationContext
-	{
-		public void Dispose()
-		{
-		}
-
-		#region IApplicationContext Members
-
-		public DateTime StartupDate
-		{
-			get { return new DateTime(); }
-		}
-
-		public event ApplicationEventHandler ContextEvent;
-
-		public long StartupDateMilliseconds
-		{
-			get { return 0; }
-		}
-
-		public string Name
-		{
-			get { return AbstractApplicationContext.DefaultRootContextName; }
-			set
-			{
-			}
-		}
-
-		public IApplicationContext ParentContext
-		{
-			get { return null; }
-			set
-			{
-			}
-		}
-
-		#endregion
-
-		#region IListableObjectFactory Members
-
-		public string[] GetObjectDefinitionNames(Type type)
-		{
-			return null;
-		}
-
-		public IObjectDefinition GetObjectDefinition(string name)
-		{
-			return null;
-		}
-
-		public IObjectDefinition GetObjectDefinition(string name, bool includeAncestors)
-		{
-			return null;
-		}
-
-		string[] IListableObjectFactory.GetObjectDefinitionNames()
-		{
-			return null;
-		}
-
-		public string[] GetObjectNamesForType(Type type)
-		{
-			return null;
-		}
-
-		public string[] GetObjectNamesForType(
-			Type type, bool includePrototypes, bool includeFactoryObjects)
-		{
-			return null;
-		}
-
-		public IDictionary GetObjectsOfType(Type type)
-		{
-			return null;
-		}
-
-		public IDictionary GetObjectsOfType(
-			Type type, bool includePrototypes, bool includeFactoryObjects)
-		{
-			return null;
-		}
-
-		public int ObjectDefinitionCount
-		{
-			get { return 0; }
-		}
-
-		public bool ContainsObjectDefinition(string name)
-		{
-			return false;
-		}
-
-		#endregion
-
-		#region IObjectFactory Members
-
-	    public bool IsCaseSensitive
-	    {
-	        get { return true; }
-	    }
-
-	    public object this[string name]
-		{
-			get { return null; }
-		}
-
-		public bool ContainsObject(string name)
-		{
-			return false;
-		}
-
-		public string[] GetAliases(string name)
-		{
-			return null;
-		}
-
-	    public object CreateObject(string name, Type requiredType, object[] arguments)
-	    {
-            return null;
-	    }
-
-		public object GetObject(string name, Type requiredType)
-		{
-			return null;
-		}
-
-		object IObjectFactory.GetObject(string name)
-		{
-			return null;
-		}
-
-	    public object GetObject(string name, object[] arguments)
-	    {
-	        return null;
-	    }
-
-	    public object GetObject(string name, Type requiredType, object[] arguments)
-	    {
-	        return null;
-	    }
-
-	    public bool IsSingleton(string name)
-		{
-			return false;
-		}
-
-
-	    public bool IsPrototype(string name)
-	    {
-	        return false;
-	    }
-
-	    public Type GetType(string name)
-		{
-			return null;
-		}
-
-
-	    public bool IsTypeMatch(string name, Type targetType)
-	    {
-	        return false;
-	    }
-
-	    public object ConfigureObject(object target)
-		{
-            return null;
-        }
-
-		public object ConfigureObject(object target, string name)
-		{
-            return null;
-        }
-
-        public object ConfigureObject(object target, string name, IObjectDefinition definition)
-        {
-            return null;
-        }
-
-		#endregion
-
-		#region IHierarchicalObjectFactory Members
-
-		public IObjectFactory ParentObjectFactory
-		{
-			get { return null; }
-		}
-
-	    public bool ContainsLocalObject(string name)
-	    {
-	        throw new NotImplementedException();
-	    }
-
-	    #endregion
-
-		#region IMessageSource Members
-
-		string IMessageSource.GetMessage(IMessageSourceResolvable resolvable, CultureInfo culture)
-		{
-			return null;
-		}
-
-		string IMessageSource.GetMessage(string name, CultureInfo culture, params object[] args)
-		{
-			return null;
-		}
-
-		string IMessageSource.GetMessage(string name)
-		{
-			return null;
-		}
-
-		string IMessageSource.GetMessage(string name, params object[] args)
-		{
-			return null;
-		}
-
-		string IMessageSource.GetMessage(string name, CultureInfo cultureInfo)
-		{
-			return null;
-		}
-
-		object IMessageSource.GetResourceObject(string name, CultureInfo culture)
-		{
-			return null;
-		}
-
-		object IMessageSource.GetResourceObject(string name)
-		{
-			return null;
-		}
-
-
-	    public string GetMessage(string name, string defaultMessage, CultureInfo culture, params object[] arguments)
-	    {
-	        return null;
-	    }
-
-	    void IMessageSource.ApplyResources(object value, string objectName, CultureInfo cultureInfo)
-		{
-		}
-
-		#endregion
-
-		#region IResourceLoader Members
-
-		public IResource GetResource(string location)
-		{
-			return null;
-		}
-
-		#endregion
-
-		#region IEventRegistry Members
-
-		public void PublishEvents(object sourceObject)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Subscribe(object subscriber)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Subscribe(object subscriber, Type targetSourceType)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void PublishEvent(object sender, ApplicationEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-
-	    public void Unsubscribe(object subscriber)
-	    {
-	        throw new NotImplementedException();
-	    }
-
-	    public void Unsubscribe(object subscriber, Type targetSourceType)
-	    {
-	        throw new NotImplementedException();
-        }
-
-        #endregion
-    }
 }

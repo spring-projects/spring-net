@@ -23,6 +23,7 @@
 using System;
 using System.Text;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 #endregion
 
@@ -34,6 +35,14 @@ namespace Spring.Context.Support
 	[TestFixture]
 	public sealed class DefaultMessageSourceResolvableTests
 	{
+        private MockRepository mocks;
+        [SetUp]
+        public void Init()
+        {
+            mocks = new MockRepository();
+        }
+
+
 		[Test]
 		public void InstantiationWithASingleCodeDefaultsToEmptyDefaultMessage()
 		{
@@ -78,16 +87,16 @@ namespace Spring.Context.Support
 		[Test]
 		public void DefaultResolvableFromExistingResolvable()
 		{
-			MockMessageResolvable mockResolvable = new MockMessageResolvable();
-			mockResolvable.SetExpectedCodesCalls(1);
-			mockResolvable.SetCode("code1FromMock");
-			mockResolvable.SetDefaultMessage("defaultMessageFromMock");
-			mockResolvable.SetArguments(new object[] {"ArgumentFromMock"});
-			DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(mockResolvable);
+            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            Expect.Call(res.DefaultMessage).Return("defaultMessageFromMock").Repeat.AtLeastOnce();
+            Expect.Call(res.GetCodes()).Return(new string[] { "code1FromMock" });
+            Expect.Call(res.GetArguments()).Return(new object[] { "ArgumentFromMock" }).Repeat.AtLeastOnce();
+            mocks.ReplayAll();
+			DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(res);
 			Assert.AreEqual("defaultMessageFromMock", dmr.DefaultMessage, "default");
 			Assert.AreEqual("code1FromMock", dmr.LastCode, "codes");
 			Assert.AreEqual("ArgumentFromMock", (dmr.GetArguments())[0], "arguments");
-			mockResolvable.Verify();
+			mocks.VerifyAll();
 		}
 
 		private string getResolvableString()

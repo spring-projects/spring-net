@@ -22,8 +22,8 @@
 
 using System;
 using System.Globalization;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 #endregion
 
@@ -35,19 +35,18 @@ namespace Spring.Context.Support
     /// <author>Rick Evans</author>
 	[TestFixture]
     public sealed class DelegatingMessageSourceTests
-    {
-		private const string LookupKey = "rick";
-		private DynamicMock _mock;
-		private IMessageSource _messageSource;
+	{
+	    private MockRepository mocks;
 
-		private DynamicMock TheMock
-		{
-			get { return _mock; }
-		}
+		private const string LookupKey = "rick";
+		private IMessageSource _messageSource;
 
 		private IMessageSource MockMessageSource
 		{
-			get { return _messageSource; }
+			get
+			{
+			    return _messageSource;                
+			}
 		}
 
         /// <summary>
@@ -56,8 +55,8 @@ namespace Spring.Context.Support
         [SetUp]
         public void SetUp()
         {
-			_mock = new DynamicMock(typeof(IMessageSource));
-			_messageSource = (IMessageSource) _mock.Object;
+            mocks = new MockRepository();
+            _messageSource = (IMessageSource)mocks.CreateMock(typeof(IMessageSource));
         }
 
         [Test]
@@ -81,13 +80,14 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessage()
 		{
-			const string expectedName = "Rick Evans";
-			TheMock.ExpectAndReturn("GetMessage", expectedName, LookupKey);
+			const string expectedName = "Rick Evans";	   
+		    Expect.Call(MockMessageSource.GetMessage(LookupKey)).Return(expectedName);
 			DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);
+            mocks.ReplayAll();
 			string name = source.GetMessage(LookupKey);
 			Assert.AreEqual(expectedName, name);
-			TheMock.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -102,12 +102,13 @@ namespace Spring.Context.Support
 		public void GetMessageWithCulture()
 		{
 			const string expectedName = "Rick Evans";
-			TheMock.ExpectAndReturn("GetMessage", expectedName, LookupKey, CultureInfo.InvariantCulture);
+		    Expect.Call(MockMessageSource.GetMessage(LookupKey, CultureInfo.InvariantCulture)).Return(expectedName);
 			DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);
+            mocks.ReplayAll();		   
 			string name = source.GetMessage(LookupKey, CultureInfo.InvariantCulture);
 			Assert.AreEqual(expectedName, name);
-			TheMock.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -122,12 +123,13 @@ namespace Spring.Context.Support
 		public void GetMessageWithParams()
 		{
 			const string expectedName = "Rick Evans";
-			TheMock.ExpectAndReturn("GetMessage", expectedName, LookupKey, new string[] { "Rick", "Evans" });
+		    Expect.Call(MockMessageSource.GetMessage(LookupKey, new string[] {"Rick", "Evans"})).Return(expectedName);
 			DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);
+            mocks.ReplayAll();
 			string name = source.GetMessage(LookupKey, "Rick", "Evans");
 			Assert.AreEqual(expectedName, name);
-			TheMock.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -142,12 +144,14 @@ namespace Spring.Context.Support
 		public void GetMessageWithCultureAndParams()
 		{
 			const string expectedName = "Rick Evans";
-			TheMock.ExpectAndReturn("GetMessage", expectedName, LookupKey, CultureInfo.InvariantCulture, new string[] { "Rick", "Evans" });
+		    Expect.Call(MockMessageSource.GetMessage(LookupKey, CultureInfo.InvariantCulture, new string[] {"Rick", "Evans"}))
+		        .Return(expectedName);
 			DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);
+            mocks.ReplayAll();
 			string name = source.GetMessage(LookupKey, CultureInfo.InvariantCulture, "Rick", "Evans");
 			Assert.AreEqual(expectedName, name);
-			TheMock.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -164,25 +168,30 @@ namespace Spring.Context.Support
 			const string expectedName = "Rick Evans";
 			DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);
-			TheMock.ExpectAndReturn("GetMessage", expectedName, null, CultureInfo.InvariantCulture);
+		    Expect.Call(MockMessageSource.GetMessage((IMessageSourceResolvable)null, CultureInfo.InvariantCulture)).Return(expectedName);
+            mocks.ReplayAll();
 			string name = source.GetMessage(
 				(IMessageSourceResolvable) null, CultureInfo.InvariantCulture);
 			Assert.AreEqual(expectedName, name);
-			TheMock.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
 		public void GetMessageWithNoParentMessageSourceAndMessageSourceResolvableAndCulture()
 		{
 			const string expectedName = "Rick Evans";
-			DynamicMock mock = new DynamicMock(typeof(IMessageSourceResolvable));
-			IMessageSourceResolvable resolvable = (IMessageSourceResolvable) mock.Object;
-			mock.ExpectAndReturn("DefaultMessage", "Rick Evans");
-			mock.ExpectAndReturn("DefaultMessage", "Rick Evans");
+
+		    IMessageSourceResolvable resolvable =
+		        (IMessageSourceResolvable) mocks.CreateMock(typeof (IMessageSourceResolvable));
+		    Expect.Call(resolvable.DefaultMessage).Return(expectedName);
+		    Expect.Call(resolvable.DefaultMessage).Return(expectedName);          
+
 			DelegatingMessageSource source = new DelegatingMessageSource();
+            mocks.ReplayAll();
 			string name = source.GetMessage(resolvable, CultureInfo.InvariantCulture);
 			Assert.AreEqual(expectedName, name);
-			mock.Verify();
+			//mock.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -209,12 +218,13 @@ namespace Spring.Context.Support
 		public void GetResourceObject()
 		{
 			const string expectedName = "Rick Evans";
-			TheMock.ExpectAndReturn("GetResourceObject", expectedName, LookupKey);
-			DelegatingMessageSource source
+		    Expect.Call(MockMessageSource.GetResourceObject(LookupKey)).Return(expectedName);
+		    DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);
+            mocks.ReplayAll();
 			string name = (string) source.GetResourceObject(LookupKey);
 			Assert.AreEqual(expectedName, name);
-			TheMock.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -229,12 +239,13 @@ namespace Spring.Context.Support
 		public void GetResourceObjectWithCulture()
 		{
 			const string expectedName = "Rick Evans";
-			TheMock.ExpectAndReturn("GetResourceObject", expectedName, LookupKey, CultureInfo.InvariantCulture);
+		    Expect.Call(MockMessageSource.GetResourceObject(LookupKey, CultureInfo.InvariantCulture)).Return(expectedName);
 			DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);
+            mocks.ReplayAll();
 			string name = (string) source.GetResourceObject(LookupKey, CultureInfo.InvariantCulture);
 			Assert.AreEqual(expectedName, name);
-			TheMock.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -249,11 +260,12 @@ namespace Spring.Context.Support
 		public void ApplyResources()
 		{
 			const string expectedName = "Rick Evans";
-			TheMock.ExpectAndReturn("ApplyResources", expectedName, 12, "rick", CultureInfo.InvariantCulture);
+		    MockMessageSource.ApplyResources((object) 12, "rick", CultureInfo.InvariantCulture);
 			DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);
+            mocks.ReplayAll();
 			source.ApplyResources(12, "rick", CultureInfo.InvariantCulture);
-			TheMock.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]

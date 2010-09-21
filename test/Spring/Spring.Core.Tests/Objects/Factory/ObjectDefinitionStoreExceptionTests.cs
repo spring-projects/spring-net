@@ -20,9 +20,8 @@
 
 #region Imports
 
-using System;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Core.IO;
 using Spring.Util;
 
@@ -37,17 +36,24 @@ namespace Spring.Objects.Factory
 	[TestFixture]
 	public sealed class ObjectDefinitionStoreExceptionTests
 	{
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+        }
 		[Test]
 		public void FromResource()
 		{
 			string expectedName = "bing";
-			string expectedResourceDescription = "mock.resource";
-			DynamicMock mock = new DynamicMock(typeof(IResource));
-			mock.ExpectAndReturn("Description", expectedResourceDescription);
-			IResource resource = (IResource) mock.Object;
+			string expectedResourceDescription = "mock.resource";			
+		    IResource resource = (IResource) mocks.CreateMock(typeof (IResource));
+		    Expect.Call(resource.Description).Return(expectedResourceDescription);
+            mocks.ReplayAll();		    
 			ObjectDefinitionStoreException inex
 				= new ObjectDefinitionStoreException(resource, expectedName, "mmm...");
-			mock.Verify();
+		    mocks.VerifyAll();
 			CheckSerialization(inex, expectedName, expectedResourceDescription);
 		}
 

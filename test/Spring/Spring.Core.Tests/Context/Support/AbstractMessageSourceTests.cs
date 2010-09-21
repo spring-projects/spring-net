@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -43,11 +42,13 @@ namespace Spring.Context.Support
 		[Test]
 		[ExpectedException(typeof (NoSuchMessageException))]
 		public void GetResolvableNullCodes()
-		{
-			MockMessageResolvable res = new MockMessageResolvable();
-			res.SetExpectedCodesCalls(1);
-			GetMessage(res, CultureInfo.CurrentCulture);
-			res.Verify();
+		{            
+		    IMessageSourceResolvable res = (IMessageSourceResolvable) mocks.CreateMock(typeof (IMessageSourceResolvable));
+		    Expect.Call(res.GetCodes()).Return(null);
+		    Expect.Call(res.DefaultMessage).Return(null);
+            mocks.ReplayAll();
+		    GetMessage(res, CultureInfo.CurrentCulture);
+            mocks.VerifyAll();		    
 		}
 
 		[Test]
@@ -56,86 +57,93 @@ namespace Spring.Context.Support
 		    string MSGCODE = "nullCode";
             object[] MSGARGS = new object[] { "arg1", "arg2" };
 
-            MockMessageResolvable res = new MockMessageResolvable();
-            res.SetExpectedCodesCalls(1);
-            res.SetArguments(MSGARGS);
-            res.SetCode(MSGCODE);
-
-			MockMessageSource parentSource = new MockMessageSource();
-			parentSource.SetExpectedGetMessageCalls(1);
-            parentSource.SetExpectedGetMessageCode(MSGCODE);
-            parentSource.SetExpectedGetMessageDefaultMessage(null);
-            parentSource.SetExpectedGetMessageArguments(res.GetArguments());
-			parentSource.SetExpectedGetMessageReturn("MockMessageSource");
+            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            Expect.Call(res.GetArguments()).Return(MSGARGS);
+		    Expect.Call(res.GetCodes()).Return(new string[] {MSGCODE}).Repeat.Once();
+		                           
+            IMessageSource parentSource = (IMessageSource)mocks.CreateMock(typeof(IMessageSource));
+            Expect.Call(parentSource.GetMessage(MSGCODE, null, CultureInfo.CurrentCulture, MSGARGS)).Return(
+		        "MockMessageSource");
 			ParentMessageSource = parentSource;
 
+            mocks.ReplayAll();
 			Assert.AreEqual("MockMessageSource", GetMessage(res, CultureInfo.CurrentCulture), "My Message");
-			parentSource.Verify();
-			res.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
 		public void GetMessageParentMessageSource()
 		{
 		    object[] args = new object[] {"arguments"};
-			MockMessageSource parentSource = new MockMessageSource();
-			parentSource.SetExpectedGetMessageCalls(1);
-            parentSource.SetExpectedGetMessageCode("null");
-            parentSource.SetExpectedGetMessageDefaultMessage(null);
-            parentSource.SetExpectedGetMessageArguments(args);
-			parentSource.SetExpectedGetMessageReturn("my parent message");
+            IMessageSource parentSource = (IMessageSource)mocks.CreateMock(typeof(IMessageSource));
+            Expect.Call(parentSource.GetMessage("null", null, CultureInfo.CurrentCulture, args)).Return(
+                "my parent message");
 			ParentMessageSource = parentSource;
+            mocks.ReplayAll();
 			Assert.AreEqual("my parent message", GetMessage("null", "message", CultureInfo.CurrentCulture, args[0]));
-			parentSource.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void GetMessageResolvableDefaultMessage()
 		{
-			MockMessageResolvable res = new MockMessageResolvable();
-			res.SetDefaultMessage("MyDefaultMessage");
-			res.SetCode(null);
+		    IMessageSourceResolvable res = (IMessageSourceResolvable) mocks.CreateMock(typeof (IMessageSourceResolvable));
+		    Expect.Call(res.DefaultMessage).Return("MyDefaultMessage").Repeat.AtLeastOnce();
+		    Expect.Call(res.GetCodes()).Return(null);
+		    Expect.Call(res.GetArguments()).Return(null);
+            mocks.ReplayAll();
+			
 			Assert.AreEqual("MyDefaultMessage", GetMessage(res, CultureInfo.CurrentCulture), "Default");
-			res.Verify();
+			
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void GetMessageResolvableReturnsFirstCode()
 		{
-			MockMessageResolvable res = new MockMessageResolvable();
+			
+            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            Expect.Call(res.DefaultMessage).Return(null).Repeat.AtLeastOnce();
+            Expect.Call(res.GetCodes()).Return(new string[] {"null"});
+		    Expect.Call(res.GetArguments()).Return(null).Repeat.AtLeastOnce();
+            mocks.ReplayAll();
 			UseCodeAsDefaultMessage = true;
-			res.SetCode("null");
-			Assert.AreEqual("null", GetMessage(res, CultureInfo.CurrentCulture), "Code");
-			res.Verify();
+		    Assert.AreEqual("null", GetMessage(res, CultureInfo.CurrentCulture), "Code");			
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		[ExpectedException(typeof (NoSuchMessageException))]
 		public void GetMessageResolvableNoValidMessage()
 		{
-			MockMessageResolvable res = new MockMessageResolvable();
-			res.SetCode(null);
+            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            Expect.Call(res.DefaultMessage).Return(null).Repeat.AtLeastOnce();
+            Expect.Call(res.GetCodes()).Return(null);
+            Expect.Call(res.GetArguments()).Return(null).Repeat.AtLeastOnce();
+            mocks.ReplayAll();
 			GetMessage(res, CultureInfo.CurrentCulture);
 		}
 
 		[Test]
 		public void GetMessageResolvableValidMessageAndCode()
 		{
-			MockMessageResolvable res = new MockMessageResolvable();
-			res.SetCode("code1");
-			res.SetArguments(new object[] {"my", "arguments"});
+            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            Expect.Call(res.GetCodes()).Return(new string[] {"code1"});
+            Expect.Call(res.GetArguments()).Return(new object[] { "my", "arguments" }).Repeat.AtLeastOnce();
+            mocks.ReplayAll();
 			Assert.AreEqual("my arguments", GetMessage(res, CultureInfo.CurrentCulture), "Resolve");
-			res.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
 		public void GetMessageResolvableValidMessageAndCodeNullCulture()
 		{
-			MockMessageResolvable res = new MockMessageResolvable();
-			res.SetCode("code1");
-			res.SetArguments(new object[] {"my", "arguments"});
+            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            Expect.Call(res.GetCodes()).Return(new string[] { "code1" });
+            Expect.Call(res.GetArguments()).Return(new object[] { "my", "arguments" }).Repeat.AtLeastOnce();
+            mocks.ReplayAll();
 			Assert.AreEqual("my arguments", GetMessage(res, null), "Resolve");
-			res.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -175,21 +183,25 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessageWithResolvableArguments()
 		{
-			MockMessageResolvable res = new MockMessageResolvable();
-			res.SetCode("code1");
-			res.SetArguments(new object[] {"my", "resolvable"});
+            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            Expect.Call(res.GetCodes()).Return(new string[] { "code1" });
+            Expect.Call(res.GetArguments()).Return(new object[] { "my", "resolvable" }).Repeat.AtLeastOnce();
+            mocks.ReplayAll();
 			Assert.AreEqual("spring my resolvable", GetMessage("code2", CultureInfo.CurrentCulture, new object[] {"spring", res}), "Resolve");
-			res.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
 		public void GetMessageResolvableValidMessageAndCodNullMessageFormat()
 		{
-			MockMessageResolvable res = new MockMessageResolvable();
-			res.SetDefaultMessage("myDefaultMessage");
-			res.SetCode("nullCode");
+            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+		    Expect.Call(res.DefaultMessage).Return("myDefaultMessage").Repeat.AtLeastOnce();
+            Expect.Call(res.GetCodes()).Return(new string[] { "nullCode" });
+            Expect.Call(res.GetArguments()).Return(null).Repeat.AtLeastOnce();
+            mocks.ReplayAll();
+
 			Assert.AreEqual("myDefaultMessage", GetMessage(res, null), "Resolve");
-			res.Verify();
+			mocks.VerifyAll();
 		}
 
 		private void resetMe()

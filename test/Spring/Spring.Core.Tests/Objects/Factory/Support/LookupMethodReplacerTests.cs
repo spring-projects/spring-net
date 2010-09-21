@@ -22,9 +22,8 @@
 
 using System;
 using System.Reflection;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
-using Spring.Objects.Factory.Config;
+using Rhino.Mocks;
 
 #endregion
 
@@ -37,46 +36,56 @@ namespace Spring.Objects.Factory.Support
 	[TestFixture]
 	public sealed class LookupMethodReplacerTests
 	{
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+        }
+
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullDefinition()
 		{
-			IDynamicMock mock = new DynamicMock(typeof (IObjectFactory));
-			new LookupMethodReplacer(null, (IObjectFactory) mock.Object);
+		    IObjectFactory objectFactory = (IObjectFactory) mocks.CreateMock(typeof (IObjectFactory));
+			new LookupMethodReplacer(null, objectFactory);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullFactory()
 		{
-            IDynamicMock mock = new DynamicMock(typeof(IConfigurableObjectDefinition));
-            new LookupMethodReplacer((IConfigurableObjectDefinition)mock.Object, null);
+		    IConfigurableObjectDefinition configurableObjectDefinition =
+		        (IConfigurableObjectDefinition) mocks.CreateMock(typeof (IConfigurableObjectDefinition));
+            new LookupMethodReplacer(configurableObjectDefinition, null);
 		}
 
 		[Test]
 		public void SunnyDayPath()
 		{
-			IDynamicMock mockFactory = new DynamicMock(typeof (IObjectFactory));
-			IDynamicMock mockDefinition = new DynamicMock(typeof (IConfigurableObjectDefinition));
-
-			object expectedLookup = new object();
+            IObjectFactory objectFactory = (IObjectFactory)mocks.CreateMock(typeof(IObjectFactory));
+            IConfigurableObjectDefinition configurableObjectDefinition =
+                            (IConfigurableObjectDefinition)mocks.CreateMock(typeof(IConfigurableObjectDefinition));
+			
+            object expectedLookup = new object();
 			const string LookupObjectName = "foo";
-			mockFactory.ExpectAndReturn("GetObject", expectedLookup, LookupObjectName);
+			
+		    Expect.Call(objectFactory.GetObject(LookupObjectName)).Return(expectedLookup);
 
 			LookupMethodOverride ovr = new LookupMethodOverride("SunnyDayPath", LookupObjectName);
 			MethodOverrides overrides = new MethodOverrides();
 			overrides.Add(ovr);
-			mockDefinition.ExpectAndReturn("MethodOverrides", overrides);
+		    Expect.Call(configurableObjectDefinition.MethodOverrides).Return(overrides);
 
-            LookupMethodReplacer replacer = new LookupMethodReplacer((IConfigurableObjectDefinition)mockDefinition.Object, (IObjectFactory)mockFactory.Object);
-
+            LookupMethodReplacer replacer = new LookupMethodReplacer(configurableObjectDefinition, objectFactory);
+            mocks.ReplayAll();		    
 			MethodInfo method = (MethodInfo) MethodBase.GetCurrentMethod();
 
 			object lookup = replacer.Implement(this, method, new object[] {});
 			Assert.AreSame(expectedLookup, lookup);
 
-			mockFactory.Verify();
-			mockDefinition.Verify();
+			mocks.VerifyAll();
 		}
 	}
 }

@@ -23,8 +23,8 @@
 using System.Collections.Specialized;
 using Common.Logging;
 using Common.Logging.Simple;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Spring.Context.Support;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Xml;
@@ -40,6 +40,15 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
 	public sealed class PropertyOverrideConfigurerTests
 	{
+
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+        }
+
 		/// <summary>
 		/// The setup logic executed before the execution of this test fixture.
 		/// </summary>
@@ -135,13 +144,15 @@ namespace Spring.Objects.Factory.Config
 		[Test]
 		public void MalformedOverrideKey()
 		{
-			IDynamicMock mock = new DynamicMock(typeof (IConfigurableListableObjectFactory));
-			IConfigurableListableObjectFactory fac = (IConfigurableListableObjectFactory) mock.Object;
+			IConfigurableListableObjectFactory objectFactory =
+		        (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
+		    IConfigurableListableObjectFactory fac = (IConfigurableListableObjectFactory) objectFactory;
 
 			PropertyOverrideConfigurer cfg = new PropertyOverrideConfigurer();
 			NameValueCollection defaultProperties = new NameValueCollection();
 			defaultProperties.Add("malformedKey", "Rick Evans");
 			cfg.Properties = defaultProperties;
+            mocks.ReplayAll();
 			try
 			{
 				cfg.PostProcessObjectFactory(fac);
@@ -150,7 +161,7 @@ namespace Spring.Objects.Factory.Config
 			catch (FatalObjectException)
 			{
 			}
-			mock.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -158,20 +169,21 @@ namespace Spring.Objects.Factory.Config
 		{
 			const string valueTo_NOT_BeOveridden = "Jenny Lewis";
 			TestObject foo = new TestObject(valueTo_NOT_BeOveridden, 30);
-
-			IDynamicMock mock = new DynamicMock(typeof (IConfigurableListableObjectFactory));
-			mock.ExpectAndReturn("GetObjectDefinition", null, "rubbish");
-			IConfigurableListableObjectFactory fac = (IConfigurableListableObjectFactory) mock.Object;
+            IConfigurableListableObjectFactory objectFactory =
+                (IConfigurableListableObjectFactory)mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
+		    Expect.Call(objectFactory.GetObjectDefinition("rubbish")).Return(null);
+		    IConfigurableListableObjectFactory fac = (IConfigurableListableObjectFactory) objectFactory;
 
 			PropertyOverrideConfigurer cfg = new PropertyOverrideConfigurer();
 			NameValueCollection defaultProperties = new NameValueCollection();
 			defaultProperties.Add("rubbish.Name", "Rick Evans");
 			cfg.Properties = defaultProperties;
+            mocks.ReplayAll();
 			cfg.PostProcessObjectFactory(fac);
 			Assert.AreEqual(valueTo_NOT_BeOveridden, foo.Name,
 			                "Property value was overridden, but a rubbish objectName root was supplied.");
 
-			mock.Verify();
+		    mocks.VerifyAll();
 		}
 
 		[Test]

@@ -25,9 +25,8 @@ using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
-using Spring.Core.IO;
+using Rhino.Mocks;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -46,6 +45,13 @@ namespace Spring.Objects.Factory
     [TestFixture]
     public sealed class DefaultListableObjectFactoryTests
     {
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+        }
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
@@ -286,10 +292,8 @@ namespace Spring.Objects.Factory
         [Test]
         public void GetObjectPostProcessorCount()
         {
-            DynamicMock mock1 = new DynamicMock(typeof(IObjectPostProcessor));
-            IObjectPostProcessor proc1 = (IObjectPostProcessor)mock1.Object;
-            DynamicMock mock2 = new DynamicMock(typeof(IObjectPostProcessor));
-            IObjectPostProcessor proc2 = (IObjectPostProcessor)mock2.Object;
+            IObjectPostProcessor proc1 = (IObjectPostProcessor) mocks.CreateMock(typeof (IObjectPostProcessor));
+            IObjectPostProcessor proc2 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
 
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 
@@ -299,6 +303,7 @@ namespace Spring.Objects.Factory
             Assert.AreEqual(1, lof.ObjectPostProcessorCount, errMsg);
             lof.AddObjectPostProcessor(proc2);
             Assert.AreEqual(2, lof.ObjectPostProcessorCount, errMsg);
+
         }
 
         /// <summary>
@@ -309,10 +314,9 @@ namespace Spring.Objects.Factory
         [Test]
         public void GetObjectPostProcessorCountDoesntRespectHierarchy()
         {
-            DynamicMock mock1 = new DynamicMock(typeof(IObjectPostProcessor));
-            IObjectPostProcessor proc1 = (IObjectPostProcessor)mock1.Object;
-            DynamicMock mock2 = new DynamicMock(typeof(IObjectPostProcessor));
-            IObjectPostProcessor proc2 = (IObjectPostProcessor)mock2.Object;
+
+            IObjectPostProcessor proc1 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
+            IObjectPostProcessor proc2 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
 
             DefaultListableObjectFactory child = new DefaultListableObjectFactory();
             DefaultListableObjectFactory parent = new DefaultListableObjectFactory(child);
@@ -1631,8 +1635,7 @@ namespace Spring.Objects.Factory
         [Test]
         public void IgnoreObjectPostProcessorDuplicates()
         {
-            DynamicMock mock1 = new DynamicMock(typeof(IObjectPostProcessor));
-            IObjectPostProcessor proc1 = (IObjectPostProcessor)mock1.Object;
+            IObjectPostProcessor proc1 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
 
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 

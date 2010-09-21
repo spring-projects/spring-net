@@ -21,8 +21,8 @@
 #region Imports
 
 using System;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 #endregion
 
@@ -35,27 +35,38 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
     public sealed class AbstractFactoryObjectTests
     {
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+        }
+
         [Test]
         public void DisposeCallbackIsNotInvokedOnDisposeIfInPrototypeMode()
         {
-        	IDynamicMock mock = new DynamicMock(typeof(IDisposable));
-            DummyFactoryObject factory = new DummyFactoryObject(mock.Object);
+            IDisposable disposable = (IDisposable) mocks.CreateMock(typeof (IDisposable));            
+            DummyFactoryObject factory = new DummyFactoryObject(disposable);
+            mocks.ReplayAll();
             factory.IsSingleton = false;
             factory.GetObject();
             factory.Dispose();
 			// in prototype mode, so the Dispose() method of the object must not be called...
-			mock.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
         public void DisposeCallbackIsInvokedOnDispose()
         {
-			IDynamicMock mock = new DynamicMock(typeof(IDisposable));
-			mock.Expect("Dispose");
-			DummyFactoryObject factory = new DummyFactoryObject(mock.Object);
+            IDisposable disposable = (IDisposable)mocks.CreateMock(typeof(IDisposable));
+            disposable.Dispose();
+            LastCall.On(disposable).Repeat.Once();            
+			DummyFactoryObject factory = new DummyFactoryObject(disposable);
+            mocks.ReplayAll();
             factory.AfterPropertiesSet();
             factory.Dispose();
-			mock.Verify();
+            mocks.VerifyAll();
         }
 
         private sealed class DummyFactoryObject : AbstractFactoryObject 
