@@ -8,7 +8,7 @@ Main build targets:
   builds debug builds for all projects for all available target platforms
 
 "compile-build-<framework id>":
-  builds all projects for a specific platform, e.g. compile-build-net-2.0 for net-2.0
+  builds all projects for a specific platform, e.g. compile-build-2.0 for net-2.0
 
 "doc":
   builds the reference and sdk documentation
@@ -317,7 +317,9 @@ Commandline Examples:
     <call target="compile-build-2.0"/>
     <call target="compile-build-3.0"/>
     <call target="compile-build-3.5"/>
-
+    <!--
+    <call target="compile-build-4.0"/>
+    -->
     <!-- Ignore Compact Framework 1.0 for now -->
     <!-- call target="compile-build-netcf-1.0"/ -->
     <call target="compile-build-mono-2.0"/>
@@ -394,6 +396,26 @@ Commandline Examples:
   </target>
 
 
+  <target name="compile-build-4.0" description="Builds for .NET 4.0 if available">
+
+    <if test="${net-4.0.installed}">
+      <call target="compile-net-4.0"/>
+    </if>
+
+    <if test="${not net-4.0.installed}">
+      <if test="${property::exists('project.build.package') and project.build.package}">
+        .NET 4.0 Build Skipped for Package
+        <fail message="The .NET Framework 4.0 is not available."/>
+        <echo message="The .NET Framework 4.0 is not available. Build skipped during package."/>
+      </if>
+      <if test="${not(property::exists('project.build.package') and project.build.package)}">
+        <echo message="The .NET Framework 4.0 is not available. Build skipped."/>
+      </if>
+    </if>
+  </target>
+
+
+
   <!-- Targets for other .NET frameworks -->
 
   <target name="compile-build-netcf-1.0" description="Builds for .NET 1.0 Compact Framework if available">
@@ -449,6 +471,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services and not net-3.5}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0')}"/>
@@ -552,6 +575,19 @@ Commandline Examples:
     <property name="build-msmq" value="false" overwrite="true" />
     <property name="build-msmq-tests" value="false" overwrite="true" />
     <property name="build-velocity" value="false" overwrite="true" />
+    <call target="compile-test" />
+  </target>
+
+  <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
+        depends="set-net-4.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
+    <call target="copykeys" if="${project.build.sign}"/>
+    <call target="common.generate-assemblyinfo"/>
+    <property name="build-ems" value="true" overwrite="true" />
+    <property name="build-nms" value="true" overwrite="true" />
+    <property name="build-quartz" value="true" overwrite="true" />
+    <property name="build-msmq" value="true" overwrite="true" />
+    <property name="build-msmq-tests" value="true" overwrite="true" />
+    <property name="build-velocity" value="true" overwrite="true" />
     <call target="compile-test" />
   </target>
 
@@ -680,6 +716,24 @@ Commandline Examples:
       <echo message="--------------------------"/>
       <call target="set-release-build-configuration"/>
       <call target="compile-build-3.5"/>
+    </if>
+  </target>
+
+  <target name="build-4.0">
+    <call target="set-build-namespaces-release"/>
+    <echo message="------------------------"/>
+    <echo message="Building .NET 4.0 DEBUG "/>
+    <echo message="------------------------"/>
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-4.0"/>
+
+
+    <if test="${property::exists('project.build.package') and project.build.package}">
+      <echo message="--------------------------"/>
+      <echo message="Building .NET 4.0 RELEASE "/>
+      <echo message="--------------------------"/>
+      <call target="set-release-build-configuration"/>
+      <call target="compile-build-4.0"/>
     </if>
   </target>
 

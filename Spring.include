@@ -17,29 +17,32 @@
               value="${spring.basedir}/bin/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}/${current.build.config}"
               dynamic="true"/>
 
-        <property name="net-3.0" value="false"/>
-	<property name="registry.net-3.0.installed" value="0" overwrite="false"/>
 
-	<readregistry property="registry.net-3.0.installed"
-		      key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Install"
-		      hive="LocalMachine"
-		      failonerror="false" />
+  <!-- detect if .net 3.0 is installed -->
+    <property name="net-3.0" value="false"/>
+    <property name="registry.net-3.0.installed" value="0" overwrite="false"/>
 
-	<readregistry property="registry.dotnet.v3.0.Installed"
-		      key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\InstallSuccess"
-		      hive="LocalMachine"
-		      unless="${property::exists('registry.net-3.0.installed')}"
-		      failonerror="false" />
+    <readregistry property="registry.net-3.0.installed"
+		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Install"
+		  hive="LocalMachine"
+		  failonerror="false" />
 
-	<property name="net-3.0.installed" value="${registry.net-3.0.installed == '1'}" />
+    <readregistry property="registry.dotnet.v3.0.Installed"
+		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\InstallSuccess"
+		  hive="LocalMachine"
+		  unless="${property::exists('registry.net-3.0.installed')}"
+		  failonerror="false" />
 
-	<if test="${net-3.0.installed}">
-		<readregistry property="net-3.0.ReferenceInstallPath"
-			  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\Windows Communication Foundation\ReferenceInstallPath"
-			  hive="LocalMachine"
-			  if="${net-3.0.installed}" />
-	</if>
+    <property name="net-3.0.installed" value="${registry.net-3.0.installed == '1'}" />
 
+    <if test="${net-3.0.installed}">
+      <readregistry property="net-3.0.ReferenceInstallPath"
+		    key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\Windows Communication Foundation\ReferenceInstallPath"
+		    hive="LocalMachine"
+		    if="${net-3.0.installed}" />
+    </if>
+
+  <!-- detect if .net 3.5 is installed -->
   <property name="net-3.5" value="false"/>
   <property name="registry.net-3.5.installed" value="0" overwrite="false"/>
 
@@ -49,6 +52,19 @@
 		      failonerror="false" />
 
   <property name="net-3.5.installed" value="${registry.net-3.5.installed == '1'}" />
+
+  <!-- detect if .net 4.0 is installed -->
+  <property name="net-4.0" value="false"/>
+  <property name="registry.net-4.0.installed" value="0" overwrite="false"/>
+
+  <readregistry property="registry.net-4.0.installed"
+		      key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Install"
+		      hive="LocalMachine"
+		      failonerror="false" />
+
+  <property name="net-4.0.installed" value="${registry.net-4.0.installed == '1'}" />
+
+
 
   <readregistry property="vs-net90.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
 
@@ -213,7 +229,7 @@
         </imports>
 
         <code>
-	<!-- format for assembly revision is RRXXX where RR = framework number (1.0=10; 1.1=11; 2.0=20, 3.0=30, 3.5=35, etc.) and
+	<!-- format for assembly revision is RRXXX where RR = framework number (1.0=10; 1.1=11; 2.0=20, 3.0=30, 3.5=35, 4.0=40 etc.) and
              XXX is the number of days from the year the project 'started', property project.year.  -->
             <![CDATA[
                 public static void ScriptMain(Project project) {
@@ -427,6 +443,28 @@
       <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
       <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default},1701"/>
     </target>
+
+    <target name="set-net-4.0-runtime-configuration"
+            depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+      <property name="nant.settings.currentframework" value="net-4.0"/>
+      <property name="nant.settings.currentframework.number" value="4.0"/>
+      <!-- revision number used when generating assembly info -->
+      <property name="nant.settings.currentframework.revisionnumber" value="40"/>
+      <property name="net-2.0" value="true"/>
+      <property name="net-3.0" value="true"/>
+      <property name="net-3.5" value="true"/>
+      <property name="net-4.0" value="true"/>
+      <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
+      <property name="current.build.defines.csc" value="${build.defines.csc},NET,NET_2_0,NET_3_0,NET_3_5,NET_4_0" dynamic="true"/>
+      <property name="current.build.defines.cl" value="${build.defines.cl} /D NET /D NET_2_0 /D NET_3_0 /D NET_3_5 /D NET_4_0" dynamic="true"/>
+      <property name="current.bin.dir"
+                value="${bin.dir}/${framework::get-family(framework::get-target-framework())}/4.0/${current.build.config}"/>
+      <property name="current.sdkdoc.dir"
+                value="${sdkdoc.dir}/${framework::get-family(framework::get-target-framework())}/4.0"/>
+      <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
+      <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default},1701"/>
+    </target>
+
     <target name="set-netcf-1.0-runtime-configuration"
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="nant.settings.currentframework" value="netcf-1.0"/>

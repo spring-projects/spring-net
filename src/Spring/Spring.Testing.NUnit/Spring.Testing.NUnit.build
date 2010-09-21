@@ -25,8 +25,11 @@
                 <include name="../GenCommonAssemblyInfo.cs" />
             </sources>
 		        <references basedir="${current.bin.dir}">
+			        <include name="Common.Logging.dll"/>
+			        <include name="nunit.framework.dll"/>
+				<include name="Spring.Core.dll" />
+				<include name="Spring.Data.dll" />
 			        <include name="System.Data.dll" />
-			        <include name="*.dll" />
 			        <exclude name="${project::get-name()}.dll" />
 				<exclude name="CloverRuntime.dll" />
 		        </references>

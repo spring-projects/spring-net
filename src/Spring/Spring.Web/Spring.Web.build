@@ -35,6 +35,7 @@
 				<include name="System.Configuration.dll" />
  				<include name="System.Web.dll" />
  				<include name="System.Web.Services.dll" />
+				<include if="${net-4.0.installed and net-4.0}" name="System.Web.ApplicationServices.dll" />        
 			</references>
 		</csc>
 	</target>
