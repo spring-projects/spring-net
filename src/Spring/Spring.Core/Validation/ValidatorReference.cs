@@ -22,6 +22,7 @@ using System.Collections;
 
 using Spring.Expressions;
 using Spring.Objects.Factory;
+using System;
 
 namespace Spring.Validation
 {
@@ -47,6 +48,7 @@ namespace Spring.Validation
 
         private string name;
         private IExpression context;
+        private IExpression when;
         private IValidator validator;
 
         #endregion
@@ -54,10 +56,31 @@ namespace Spring.Validation
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidatorReference"/> class.
+        /// Creates a new instance of the <see cref="ValidatorReference"/> class.
         /// </summary>
         public ValidatorReference()
         {}
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="ValidatorReference"/> class.
+        /// </summary>
+        /// <param name="when">
+        /// The expression that determines if this validator should be evaluated.
+        /// </param>
+        public ValidatorReference(string when)
+            : this((when != null ? Expression.Parse(when) : null))
+        {}
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="ValidatorReference"/> class.
+        /// </summary>
+        /// <param name="when">
+        /// The expression that determines if this validator should be evaluated.
+        /// </param>
+        public ValidatorReference(IExpression when)
+        {
+            this.when = when;
+        }
 
         #endregion
 
@@ -83,6 +106,16 @@ namespace Spring.Validation
             set { context = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the expression that determines if this validator should be evaluated.
+        /// </summary>
+        /// <value>The expression that determines if this validator should be evaluated.</value>
+        public IExpression When
+        {
+            get { return when; }
+            set { when = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -105,17 +138,23 @@ namespace Spring.Validation
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
         public bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
         {
-            if (Context != null)
+            bool valid = true;
+
+            if (When == null || 
+                Convert.ToBoolean(When.GetValue(validationContext, contextParams)))
             {
-                validationContext = Context.GetValue(validationContext, contextParams);
+                if (Context != null)
+                {
+                    validationContext = Context.GetValue(validationContext, contextParams);
+                }
+                if (validator == null)
+                {
+                    validator = (IValidator)objectFactory.GetObject(Name);
+                }
+                valid = validator.Validate(validationContext, contextParams, errors);
             }
 
-            if (validator == null)
-            {
-                validator = (IValidator) objectFactory.GetObject(Name);
-            }
-
-            return validator.Validate(validationContext, contextParams, errors);
+            return valid;
         }
 
         /// <summary>

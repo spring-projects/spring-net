@@ -341,12 +341,17 @@ namespace Spring.Validation.Config
             string typeName = "Spring.Validation.ValidatorReference, Spring.Core";
             string name = GetAttributeValue(element, ValidatorDefinitionConstants.ReferenceNameAttribute);
             string context = GetAttributeValue(element, ValidatorDefinitionConstants.ReferenceContextAttribute);
+            string when = GetAttributeValue(element, ValidatorDefinitionConstants.WhenAttribute);
 
             MutablePropertyValues properties = new MutablePropertyValues();
             properties.Add("Name", name);
             if (StringUtils.HasText(context))
             {
                 properties.Add("Context", context);
+            }
+            if (StringUtils.HasText(when))
+            {
+                properties.Add("When", when);
             }
 
             IConfigurableObjectDefinition reference =

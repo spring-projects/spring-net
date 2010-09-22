@@ -107,6 +107,11 @@
                 <xs:documentation><![CDATA[A SpEL expression evaluating to the context to switch to when evaluating the referenced validator.]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
+        <xs:attribute name="when" type="objects:nonNullString" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[A boolean SpEL expression that determines if this validator shall be executed.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="baseValidatorType">

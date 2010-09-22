@@ -40,7 +40,7 @@ namespace Spring.Validation
             StaticListableObjectFactory factory = new StaticListableObjectFactory();
             factory.AddObject("validator", new TrueValidator());
 
-            ValidatorReference v = new ValidatorReference();
+            ValidatorReference v = new ValidatorReference("true");
             v.ObjectFactory = factory;
             v.Name = "validator";
 
@@ -63,6 +63,21 @@ namespace Spring.Validation
             IValidationErrors errors = new ValidationErrors();
             Assert.IsFalse(v.Validate(null, null, errors));
             Assert.IsFalse(v.Validate(null, errors));
+        }
+
+        [Test]
+        public void FalseValidatorReferenceNotEvaluatedBecauseWhenExpressionReturnsFalse()
+        {
+            StaticListableObjectFactory factory = new StaticListableObjectFactory();
+            factory.AddObject("validator", new FalseValidator());
+
+            ValidatorReference v = new ValidatorReference("false");
+            v.ObjectFactory = factory;
+            v.Name = "validator";
+
+            IValidationErrors errors = new ValidationErrors();
+            Assert.IsTrue(v.Validate(null, null, errors));
+            Assert.IsTrue(v.Validate(null, errors));
         }
 
         [Test]
@@ -93,7 +108,13 @@ namespace Spring.Validation
 
             Assert.IsTrue(v2.Validate(context, null, errors));
             Assert.IsTrue(v2.Validate(context, errors));
-        }
 
+            ValidatorReference v3 = new ValidatorReference("false");
+            v3.ObjectFactory = factory;
+            v3.Name = "cv2";
+            v3.Context = Expression.Parse("DOB");
+
+            Assert.IsTrue(v3.Validate(null, errors));
+        }
     }
 }
