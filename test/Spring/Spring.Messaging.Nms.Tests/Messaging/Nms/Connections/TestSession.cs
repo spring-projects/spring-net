@@ -211,6 +211,18 @@ namespace Spring.Messaging.Nms.Connections
 
         }
 
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public ProducerTransformerDelegate ProducerTransformer
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public TimeSpan RequestTimeout
         {
             get { throw new NotImplementedException(); }

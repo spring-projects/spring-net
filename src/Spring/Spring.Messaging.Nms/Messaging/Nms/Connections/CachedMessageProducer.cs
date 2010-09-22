@@ -187,6 +187,19 @@ namespace Spring.Messaging.Nms.Connections
         {
             return target.CreateStreamMessage();
         }
+
+        /// <summary>
+        /// A delegate that is called each time a Message is sent from this Producer which allows
+        /// the application to perform any needed transformations on the Message before it is sent.
+        /// The Session instance sets the delegate on each Producer it creates.
+        /// </summary>
+        /// <value></value>
+        public ProducerTransformerDelegate ProducerTransformer
+        {
+            get { return target.ProducerTransformer; }
+            set { target.ProducerTransformer = value; }
+        }
+
         #endregion
 
         /// <summary>

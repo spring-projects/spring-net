@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using Apache.NMS;
 using Apache.NMS.ActiveMQ;
 using NUnit.Framework;
@@ -44,6 +45,7 @@ namespace Spring.Messaging.Nms.Core
         }
 
         [Test]
+        [ExpectedException(typeof(Apache.NMS.NMSConnectionException))]
         public void ConnectionThrowException()
         {
             ConnectionFactory cf = new ConnectionFactory();
@@ -62,6 +64,7 @@ namespace Spring.Messaging.Nms.Core
 
             //Use with destination set at runtime
             nmsTemplate.ConvertAndSend("APP.TESTING", msgText);
+            
             AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert("APP.TESTING"));
 
             //Now using default destination set via property

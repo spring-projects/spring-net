@@ -958,8 +958,8 @@ namespace Spring.Messaging.Nms.Core
         /// </returns>
         /// <throws>NMSException if there is any problem</throws>
         public IMessage Receive(IDestination destination)
-        {
-            return Execute(new ReceiveCallback(this, destination)) as IMessage;
+        {            
+            return ReceiveSelected(destination, null);
         }
 
 
@@ -976,7 +976,7 @@ namespace Spring.Messaging.Nms.Core
         /// <throws>NMSException if there is any problem</throws>
         public IMessage Receive(string destinationName)
         {
-            return Execute(new ReceiveCallback(this, destinationName)) as IMessage;
+            return ReceiveSelected(destinationName, null);
         }
 
         /// <summary> Receive a message synchronously from the default destination, but only
@@ -1038,8 +1038,7 @@ namespace Spring.Messaging.Nms.Core
         /// <throws>NMSException if there is any problem</throws>
         public IMessage ReceiveSelected(string destinationName, string messageSelector)
         {
-            return Execute(new ReceiveSelectedCallback(this, destinationName, messageSelector), true) as IMessage;
-        
+            return Execute(new ReceiveSelectedCallback(this, destinationName, messageSelector), true) as IMessage;        
         }
 
         /// <summary>

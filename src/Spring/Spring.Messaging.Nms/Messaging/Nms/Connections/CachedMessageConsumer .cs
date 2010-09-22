@@ -103,6 +103,16 @@ namespace Spring.Messaging.Nms.Connections
             // It's a cached MessageConsumer...
         }
 
+        /// <summary>
+        /// A Delegate that is called each time a Message is dispatched to allow the client to do
+        /// any necessary transformations on the received message before it is delivered.
+        /// </summary>
+        /// <value></value>
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { return target.ConsumerTransformer; }
+            set { target.ConsumerTransformer = value; }
+        }
 
         /// <summary>
         /// Dispose of wrapped MessageConsumer

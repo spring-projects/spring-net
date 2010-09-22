@@ -535,6 +535,29 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// A Delegate that is called each time a Message is dispatched to allow the client to do
+        /// any necessary transformations on the received message before it is delivered.
+        /// The Session instance sets the delegate on each Consumer it creates.
+        /// </summary>
+        /// <value></value>
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { return target.ConsumerTransformer; }
+            set { target.ConsumerTransformer = value; }
+        }
+
+        /// <summary>
+        /// A delegate that is called each time a Message is sent from this Producer which allows
+        /// the application to perform any needed transformations on the Message before it is sent.
+        /// The Session instance sets the delegate on each Producer it creates.
+        /// </summary>
+        /// <value></value>
+        public ProducerTransformerDelegate ProducerTransformer
+        {
+            get { return target.ProducerTransformer; }
+            set { target.ProducerTransformer = value; }
+        }
+        /// <summary>
         /// Gets or sets the request timeout.
         /// </summary>
         /// <value>The request timeout.</value>

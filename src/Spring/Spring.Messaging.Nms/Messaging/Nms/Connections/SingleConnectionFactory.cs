@@ -219,6 +219,34 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// A Delegate that is called each time a Message is dispatched to allow the client to do
+        /// any necessary transformations on the received message before it is delivered.  The
+        /// ConnectionFactory sets the provided delegate instance on each Connection instance that
+        /// is created from this factory, each connection in turn passes the delegate along to each
+        /// Session it creates which then passes that along to the Consumers it creates.
+        /// </summary>
+        /// <value></value>
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { return targetConnectionFactory.ConsumerTransformer; }
+            set { targetConnectionFactory.ConsumerTransformer = value; }
+        }
+
+        /// <summary>
+        /// A delegate that is called each time a Message is sent from this Producer which allows
+        /// the application to perform any needed transformations on the Message before it is sent.
+        /// The ConnectionFactory sets the provided delegate instance on each Connection instance that
+        /// is created from this factory, each connection in turn passes the delegate along to each
+        /// Session it creates which then passes that along to the Producers it creates.
+        /// </summary>
+        /// <value></value>
+        public ProducerTransformerDelegate ProducerTransformer
+        {
+            get { return targetConnectionFactory.ProducerTransformer; }
+            set { targetConnectionFactory.ProducerTransformer = value; }
+        }
+
+        /// <summary>
         /// Gets the connection monitor.
         /// </summary>
         /// <value>The connection monitor.</value>
@@ -476,6 +504,18 @@ namespace Spring.Messaging.Nms.Connections
         public void Close()
         {
             // don't pass the call to the target.
+        }
+
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { return target.ConsumerTransformer; }
+            set { target.ConsumerTransformer = value; }
+        }
+
+        public ProducerTransformerDelegate ProducerTransformer
+        {
+            get { return target.ProducerTransformer; }
+            set { target.ProducerTransformer = value; }
         }
 
         public TimeSpan RequestTimeout

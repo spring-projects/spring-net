@@ -53,6 +53,12 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public void Dispose()
         {
             throw new NotImplementedException();

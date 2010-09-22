@@ -31,6 +31,18 @@ namespace Spring.Messaging.Nms.Connections
             set { throw new NotImplementedException(); }
         }
 
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public ProducerTransformerDelegate ProducerTransformer
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         #endregion
     }
 }

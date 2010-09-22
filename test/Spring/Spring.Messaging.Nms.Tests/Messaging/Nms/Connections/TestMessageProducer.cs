@@ -95,6 +95,12 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public ProducerTransformerDelegate ProducerTransformer
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public MsgDeliveryMode DeliveryMode
         {
             get { return msgDeliveryMode; }

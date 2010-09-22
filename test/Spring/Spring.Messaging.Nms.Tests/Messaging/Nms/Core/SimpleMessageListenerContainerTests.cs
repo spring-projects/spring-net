@@ -182,6 +182,12 @@ namespace Spring.Messaging.Nms.Core
             throw new NotImplementedException();
         }
 
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public void Dispose()
         {
             throw new NotImplementedException();
