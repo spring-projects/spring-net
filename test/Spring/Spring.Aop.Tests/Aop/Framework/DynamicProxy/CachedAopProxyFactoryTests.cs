@@ -81,6 +81,20 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        public void DoesNotCacheWithDifferentProxyTargetAttributes()
+        {
+            ProxyFactory advisedSupport = new ProxyFactory(new GoodCommand());
+            advisedSupport.ProxyTargetAttributes = true;
+            CreateAopProxy(advisedSupport);
+
+            advisedSupport = new ProxyFactory(new GoodCommand());
+            advisedSupport.ProxyTargetAttributes = false;
+            CreateAopProxy(advisedSupport);
+
+            AssertAopProxyTypeCacheCount(2);
+        }
+
+        [Test]
         public void DoesNotCacheWithDifferentInterfaces()
         {
             ProxyFactory advisedSupport = new ProxyFactory(new TestObject());

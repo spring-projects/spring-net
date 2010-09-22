@@ -254,7 +254,6 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             ProxyFactory proxyFactory = new ProxyFactory();
             proxyFactory.ProxyTargetAttributes = this.ProxyTargetAttributes;
-            proxyFactory.ProxyTargetAttributes = this.ProxyDeclaredMembersOnly;
             proxyFactory.TargetSource = new InheritanceBasedAopTargetSource(objectType);
             if (!ProxyInterfaces)
             {

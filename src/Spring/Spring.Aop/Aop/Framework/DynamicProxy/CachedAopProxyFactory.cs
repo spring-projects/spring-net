@@ -90,7 +90,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         protected override Type BuildProxyType(IProxyTypeBuilder typeBuilder)
         {
             ProxyTypeCacheKey cacheKey = new ProxyTypeCacheKey(
-                typeBuilder.BaseType, typeBuilder.TargetType, typeBuilder.Interfaces);
+                typeBuilder.BaseType, typeBuilder.TargetType, typeBuilder.Interfaces, typeBuilder.ProxyTargetAttributes);
             Type proxyType = null;
             lock (typeCache)
             {
@@ -136,13 +136,15 @@ namespace Spring.Aop.Framework.DynamicProxy
             private Type baseType;
             private Type targetType;
             private Type[] interfaceTypes;
+            private bool proxyTargetAttributes;
 
-            public ProxyTypeCacheKey(Type baseType, Type targetType, Type[] interfaceTypes)
+            public ProxyTypeCacheKey(Type baseType, Type targetType, Type[] interfaceTypes, bool proxyTargetAttributes)
             {
                 this.baseType = baseType;
                 this.targetType = targetType;
                 Array.Sort(interfaceTypes, interfaceComparer); // sort by GetHashcode()? to have a defined order
                 this.interfaceTypes = interfaceTypes;
+                this.proxyTargetAttributes = proxyTargetAttributes;
             }
 
             public override bool Equals(object obj)
@@ -171,6 +173,10 @@ namespace Spring.Aop.Framework.DynamicProxy
                         return false;
                     }
                 }
+                if (proxyTargetAttributes != proxyTypeCacheKey.proxyTargetAttributes)
+                {
+                    return false;
+                }
                 return true;
             }
 
@@ -182,6 +188,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 {
                     result = 29 * result + interfaceTypes[i].GetHashCode();
                 }
+                result = 29 * result + proxyTargetAttributes.GetHashCode();
                 return result;
             }
 
@@ -196,6 +203,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                     buffer.Append(intf + ";");
                 }
                 buffer.Append("]; ");
+                buffer.Append("proxyTargetAttributes=" + proxyTargetAttributes + "; ");
                 return buffer.ToString();
             }
         }
