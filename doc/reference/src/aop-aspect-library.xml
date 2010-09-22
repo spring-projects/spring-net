@@ -196,14 +196,14 @@ public <classname>Airport</classname> GetAirport(long id)
 
     <para>The first parameter is the cache name. The second string parameter
     is the cache key and is a string expression that incorporates the argument
-    passed into the method, the id. The method parameter names are exposed as
-    variables to the key expression. If you do not specify a key, then all the
-    parameter values will be used to cache the returned value. The expression
-    may also call out to other objects in the Spring container allowing for a
-    more complex key algorithm to be encapsulated. The end result is that the
-    Airport object is cached by id for 60 seconds in a cache named
-    AspNetCache. The TimetoLive property could also have been specified on the
-    configuration of the AspNetCache object.</para>
+    passed into the method, the id. The cache key value cannot be null or an
+    empty string (""). The method parameter names are exposed as variables to
+    the key expression. The expression may also call out to other objects in
+    the Spring container allowing for a more complex key algorithm to be
+    encapsulated. The end result is that the Airport object is cached by id
+    for 60 seconds in a cache named AspNetCache. The TimetoLive property could
+    also have been specified on the configuration of the AspNetCache
+    object.</para>
 
     <para>The configuration to enable the caching aspect is shown below</para>
 

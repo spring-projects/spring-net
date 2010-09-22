@@ -38,6 +38,16 @@ namespace Spring.Caching
 
         private class DerivedCacheAttribute : BaseCacheAttribute
         {
+            public DerivedCacheAttribute()
+            {
+                
+            }
+
+            public DerivedCacheAttribute(string cacheName, string key)
+                : base(cacheName, key)
+            {
+                
+            }
         }
 
         public string TestProperty
@@ -78,7 +88,21 @@ namespace Spring.Caching
         public void AllowsForExtendedTimeSpanConverterSyntax()
         {
             att.TimeToLive = "5ms";
-            Assert.AreEqual( new TimeSpan(0,0,0,0,5), att.TimeToLiveTimeSpan );
+            Assert.AreEqual(new TimeSpan(0, 0, 0, 0, 5), att.TimeToLiveTimeSpan);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void KeyCannotBeEmptyString()
+        {
+            att = new DerivedCacheAttribute("someName", string.Empty);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void KeyCannotBeNull()
+        {
+            att = new DerivedCacheAttribute("someName", null);
         }
     }
 }

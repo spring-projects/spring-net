@@ -49,8 +49,19 @@ namespace Spring.Caching
         /// An expression string that should be evaluated in order to determine
         /// the cache key for the item.
         /// </param>
+        /// <remarks>The cache key cannot evaluate be null or an empty string.</remarks>
         public BaseCacheAttribute(string cacheName, string key)
         {
+            if (null == key)
+            {
+                throw new ArgumentNullException("key", "The expression for the Cache Key cannot be null.");
+            }
+
+            if (key.Trim() == string.Empty)
+            {
+                throw new ArgumentOutOfRangeException("key", "The expression for the Cache Key cannot be an empty string.");
+            }
+
             this.CacheName = cacheName;
             this.Key = key;
         }
@@ -170,5 +181,6 @@ namespace Spring.Caching
             get { return timeToLiveTimeSpan; }
         }
 
-        #endregion    }
+        #endregion
+    }
 }
