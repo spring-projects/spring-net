@@ -106,6 +106,7 @@ namespace Spring.Web.Support
             }
         }
 
+#if !NET_4_0
         /// <summary>
         /// Tests the behavior of our PageHandlerFactory class
         /// </summary>
@@ -114,6 +115,7 @@ namespace Spring.Web.Support
         {
             Host.Execute(new TestAction(PageHandlerFactoryBehavesLikeSystemPageHandlerFactoryImpl));
         }
+#endif
 
         public static void PageHandlerFactoryBehavesLikeSystemPageHandlerFactoryImpl()
         {
@@ -138,7 +140,7 @@ namespace Spring.Web.Support
             }
         }
 
-#if NET_2_0
+#if NET_2_0 && ! NET_4_0
         [Test]
         public void TransferAfterSetResult()
         {

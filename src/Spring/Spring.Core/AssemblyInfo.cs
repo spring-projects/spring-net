@@ -34,9 +34,13 @@ using System.Security;
 //[assembly: ReflectionPermission(SecurityAction.RequestMinimum, Unrestricted = true)]
 //[assembly: AssemblyKeyFile(@"C:\users\aseovic\projects\OpenSource\Spring.Net\Spring.Net.PrivateKey.keys")]
 //[assembly: AssemblyKeyFile(@"C:\projects\Spring.Net\Spring.Net.snk")]
+
+#if !NET_4_0
 [assembly: AllowPartiallyTrustedCallers]
 
 [assembly: SecurityCritical]
+
+#endif
 
 #if NET_1_0 || NET_1_1
 namespace System.Security

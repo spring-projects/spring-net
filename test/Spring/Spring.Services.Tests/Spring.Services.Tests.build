@@ -54,6 +54,7 @@
         <include if="${net-3.0.installed and net-3.0}" name="${net-3.0.ReferenceInstallPath}\System.ServiceModel.dll" />
         <exclude name="${project::get-name()}.dll" />
         <exclude name="CloverRuntime.dll" />
+		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
       </references>
     </csc>
     <copy todir="${current.bin.dir}">

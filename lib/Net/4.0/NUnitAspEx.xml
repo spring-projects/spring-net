@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NUnitAspEx</name>
+    </assembly>
+    <members>
+        <member name="T:NUnitAspEx.Client.AspFixtureRequest">
+            <summary>
+            Encapsulates a request from within a testsuite using the "asptest://" pseudo-protocol.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.Client.CustomizableHttpWebRequest">
+            <summary>
+            Encapsulates the ugly details of deriving from HttpWebRequest.
+            </summary>
+            <remarks>
+            Since various frameworks like NUnitAsp rely on the output of WebRequest.Create() being of type HttpWebRequest
+            but HttpWebRequest is not customizable the easy way, this class shields further derived classes from the ugly reflection details.
+            </remarks>
+        </member>
+        <member name="M:NUnitAspEx.Client.CustomizableHttpWebRequest.#ctor(System.Uri)">
+            <summary>
+            Creates a new instance for the given uri.
+            </summary>
+            <param name="uri">the <see cref="P:NUnitAspEx.Client.CustomizableHttpWebRequest.Uri"/> to create this request for.</param>
+        </member>
+        <member name="M:NUnitAspEx.Client.CustomizableHttpWebRequest.CreateHttpWebRequestSerializationInfo(System.Uri)">
+            <summary>
+            
+            </summary>
+            <param name="uri"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NUnitAspEx.Client.CustomizableHttpWebRequest.SubmitRequest(System.Byte[],System.IO.Stream)">
+            <summary>
+            Override this method in your derived class and call <see cref="M:NUnitAspEx.Client.CustomizableHttpWebRequest.SetResponse(System.Net.HttpWebResponse)"/> to set the response object.
+            </summary>
+        </member>
+        <member name="M:NUnitAspEx.Client.CustomizableHttpWebRequest.CreateOutputStream">
+            <summary>
+            Create the stream to be used for uploading content.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NUnitAspEx.Client.AspFixtureResponse">
+            <summary>
+            Encapsulates a response from an <see cref="T:NUnitAspEx.Client.AspFixtureRequest"/>.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.Client.CustomizableHttpWebResponse">
+            <summary>
+            Encapsulates the ugly details of deriving from HttpWebResponse.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.Client.HttpReflectionUtils">
+            <summary>
+            Summary description for HttpReflectionUtils.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.Client.HttpWebClient">
+            <summary>
+            Summary description for HttpWebClient.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.Core.AspFixtureHost">
+            <summary>
+            An AspFixtureHost lives inside it's own AppDomain with an initialized HttpRuntime.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.IAspFixtureHost">
+            <summary>
+            Summary description for IAspFixtureHost.
+            </summary>
+        </member>
+        <member name="M:NUnitAspEx.Core.AspFixtureHost.CreateInstance(System.String,System.String,System.String)">
+            <summary>
+            Creates a new Host instance within a new AppDomain based on the passed in Properties.
+            </summary>
+            <remarks>
+            You must not call this method from within an existing Host's AppDomain.
+            </remarks>
+        </member>
+        <member name="M:NUnitAspEx.Core.AspFixtureHost.ShutDown(NUnitAspEx.Core.AspFixtureHost)">
+            <summary>
+            Unload the passed Host's AppDomain.
+            </summary>
+        </member>
+        <member name="M:NUnitAspEx.Core.AspFixtureHost.InitializeLifetimeService">
+            <summary>
+            Return null to avoid timing out of remoting references
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NUnitAspEx.Core.AspFixtureHost.Initialize(System.String,System.AppDomain,System.IO.TextWriter,System.String[])">
+            <summary>
+            Initializes the newly created host instance.
+            </summary>
+        </member>
+        <member name="P:NUnitAspEx.Core.AspFixtureHost.Current">
+            <summary>
+            Use this property to gain access to the Host from within the Host's AppDomain
+            </summary>
+            <remarks>
+            This property is set only within the Host's AppDomain. 
+            Outside the AppDomain it will always return null.
+            </remarks>
+        </member>
+        <member name="P:NUnitAspEx.Core.AspFixtureHost.SyncRoot">
+            <summary>
+            Use to synchronize access to this host instance
+            </summary>
+        </member>
+        <member name="P:NUnitAspEx.Core.AspFixtureHost.CreatorDomain">
+            <summary>
+            Returns a reference to the AppDomain, that created this Host instance
+            </summary>
+        </member>
+        <member name="P:NUnitAspEx.Core.AspFixtureHost.RootLocation">
+            <summary>
+            Returns the physical assembly reference location this AppDomain has been created from.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.AspTestClient">
+            <summary>
+            Summary description for AspTestClient.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.AspTestContext">
+            <summary>
+            Summary description for AspTestContext.
+            </summary>
+        </member>
+        <member name="T:NUnitAspEx.AspTestExecutionModule">
+            <summary>
+            Summary description for AspTestExecutionModule.
+            </summary>
+        </member>
+    </members>
+</doc>

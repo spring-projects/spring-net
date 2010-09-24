@@ -42,6 +42,8 @@
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
 				<exclude name="CloverRuntime.dll" />
+				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
+				
 			</references>
 		</csc>
 		<copy todir="${current.bin.dir}">

@@ -44,6 +44,7 @@
                 <exclude name="${project::get-name()}.dll" />
                 <exclude name="CloverRuntime.dll" />
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />
+				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
             </references>
         </csc>
         <copy todir="${current.bin.dir}">

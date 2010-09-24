@@ -38,6 +38,7 @@
         <include name="System.Logging.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
         <include name="System.Data.OracleClient.dll" />
         <exclude name="${project::get-name()}.dll" />
+		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
       </references>
     </csc>
   </target>

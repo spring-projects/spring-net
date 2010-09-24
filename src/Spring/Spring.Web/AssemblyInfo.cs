@@ -6,8 +6,11 @@ using System.Web.UI;
 [assembly: AssemblyDescription("Interfaces and classes that provide web application support in Spring.Net")]
 [assembly: TagPrefix("Spring.Web.UI.Controls", "spring")]
 //[assembly: AssemblyKeyFile(@"C:\users\aseovic\projects\OpenSource\Spring.Net\Spring.Net.PrivateKey.keys")]
+
+#if !NET_4_0
 [assembly: AllowPartiallyTrustedCallers]
 [assembly: SecurityCritical]
+#endif
 
 #if NET_1_0 || NET_1_1
 namespace System.Security

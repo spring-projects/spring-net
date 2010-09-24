@@ -28,6 +28,7 @@
 				<include name="*.dll" />
 				<include name="Nvelocity.dll" />
 				<exclude name="${project::get-name()}.dll" />
+				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
 				<include name="**/*.xml" />

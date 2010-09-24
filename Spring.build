@@ -472,7 +472,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services and not net-3.5}"/>
+    <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-2.0')}"/>
@@ -1187,7 +1187,7 @@ Commandline Examples:
           <include name="**/NUnitAspEx.dll"/>
           <include name="**/Rhino.Mocks.dll"/>
           <include name="**/NVelocity.*"/>
-          <include name="**/System.Web.Extensions.dll"/>
+          <include if="${not net-4.0}" name="**/System.Web.Extensions.dll"/>
           <include name="**/Apache.NMS.dll"/>
           <include name="**/Apache.NMS.pdb"/>
           <include name="**/Apache.NMS.ActiveMQ.dll"/>
