@@ -381,7 +381,7 @@ namespace Spring.Validation.Config
             public const string ReferenceNameAttribute = "name";
             public const string ReferenceContextAttribute = "context";
 
-            public const string RegexExpressionAttribute = "fast-validate";
+            public const string RegexExpressionAttribute = "expression";
 
             public const string GroupFastValidateAttribute = "fast-validate";
 

@@ -123,6 +123,14 @@ namespace Spring.Validation
             IObjectDefinition actionDefinition = (IObjectDefinition)actions[2];
             Assert.AreEqual(typeof(ExpressionAction), actionDefinition.ObjectType);
             Assert.AreEqual("#now = DateTime.Now", actionDefinition.PropertyValues.GetPropertyValue("Valid").Value);
+
+            def = registry.GetObjectDefinition("regex");
+            Assert.IsTrue(def.IsSingleton);
+            Assert.IsTrue(def.IsLazyInit);
+            Assert.IsTrue(typeof(IValidator).IsAssignableFrom(def.ObjectType));
+            PropertyValue expressionProperty = def.PropertyValues.GetPropertyValue("Expression");
+            Assert.IsNotNull(expressionProperty);
+            Assert.AreEqual("RegExp", expressionProperty.Value);
         }
 
         private XmlDocument GetValidatedXmlResource(string resourceExtension)

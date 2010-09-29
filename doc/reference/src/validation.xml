@@ -449,7 +449,7 @@
           has been added in 1.3.1 to support the correct behavior.
         </para>
         <para>
-          This property will be removed for next major/minor version 2.0 and implementation 
+          This property will be removed for next major/minor version and implementation 
           will be fixed to get the intented behavior.
         </para>
       </note>
