@@ -281,7 +281,8 @@ namespace Spring.EnterpriseServices
         {
             string ext = (ActivationMode == ActivationOption.Library) ? ".dll" : ".exe";
             string moduleName = assemblyName + ext;
-            string assemblyFileName = AppDomain.CurrentDomain.DynamicDirectory.Trim('\\', '/') + "\\" + moduleName;
+            string basePath = !StringUtils.IsNullOrEmpty(AppDomain.CurrentDomain.DynamicDirectory) ? AppDomain.CurrentDomain.DynamicDirectory : AppDomain.CurrentDomain.BaseDirectory;
+            string assemblyFileName = String.Format("{0}\\{1}", basePath.Trim('\\', '/'), moduleName);
             FileInfo assemblyFile = new FileInfo(assemblyFileName);
 
             GenerateComponentAssembly(assemblyFile);
