@@ -426,16 +426,14 @@
 
       <para>The syntax is</para>
 
-      <programlisting language="myxml">&lt;v:regex id="id" test="valueToEvaluate" when="applicabilityCondition" parent="parentValidator"&gt;
-  &lt;v:property name="Expression" value="regularExpressionToMatch"/&gt;
+      <programlisting language="myxml">&lt;v:regex id="id" test="valueToEvaluate" expression="regularExpressionToMatch" when="applicabilityCondition" parent="parentValidator"&gt;
   &lt;v:property name="Options" value="regexOptions"/&gt;
   actions
 &lt;/v:regex&gt;</programlisting>
 
       <para>An example is shown below</para>
 
-      <programlisting language="myxml">&lt;v:regex test="ReturningFrom.AirportCode"&gt;
-   &lt;v:property name="Expression" value="[A-Z][A-Z][A-Z]"/&gt;
+      <programlisting language="myxml">&lt;v:regex test="ReturningFrom.AirportCode" expression="[A-Z][A-Z][A-Z]"&gt;
    &lt;v:message id="error.destinationAirport.threeCharacters" providers="destinationAirportErrors, validationSummary"/&gt;
 &lt;/v:regex&gt;</programlisting>
 
@@ -443,10 +441,18 @@
       that need to conform to some predefined format, such as telephone
       numbers, email addresses, URLs, etc.</para>
 
-      <para>One major difference of the regular expression validator compared
-      to other built-in validator types is that you need to set a required
-      <literal>Expression</literal> property to a regular expression to match
-      against.</para>
+      <note>
+        <para>
+          Note that current behavior limits the Regular Expression Validator to expressions
+          to being full matches, i.e., ^(expression)$, thus limiting functionality.
+          To not change this behavior in a point release, a property <literal>AllowPartialMatching</literal> 
+          has been added in 1.3.1 to support the correct behavior.
+        </para>
+        <para>
+          This property will be removed for next major/minor version 2.0 and implementation 
+          will be fixed to get the intented behavior.
+        </para>
+      </note>
     </section>
 
     <section>

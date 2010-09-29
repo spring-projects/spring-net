@@ -45,6 +45,7 @@ namespace Spring.Validation
         #region Fields
 
         private string expression = string.Empty;
+        private bool allowPartialMatching = false;
         private RegexOptions options;
 
         #endregion
@@ -99,6 +100,16 @@ namespace Spring.Validation
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to do a partial match instead of a full match.  
+        /// Default is false.
+        /// </summary>
+        public bool AllowPartialMatching
+        {
+            get { return allowPartialMatching; }
+            set { allowPartialMatching = value; }
+        }
+
+        /// <summary>
         /// The <see cref="RegexOptions"/> for the regular expression evaluation.
         /// </summary>
         /// <value>The regular expression evaluation options.</value>
@@ -143,7 +154,14 @@ namespace Spring.Validation
             }
 
             Match match = Regex.Match(text, this.Expression, this.Options);
-            return match.Success;
+            if (allowPartialMatching)
+            {
+                return match.Success;
+            }
+            else
+            {
+                return match.Success && match.Index == 0 && match.Length == text.Length;
+            }            
         }
     }
 }
