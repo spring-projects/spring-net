@@ -33,6 +33,17 @@ using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Web.Support;
 
+#if NET_2_0
+using WSConfig = System.Web.Services.Configuration.WebServicesSection;
+using WSProtocol = System.Web.Services.Configuration.WebServiceProtocols;
+#endif
+
+#if MONO_2_0
+using System.Web.Compilation;
+using System.CodeDom.Compiler;
+using System.Collections;
+#endif
+
 #endregion
 
 namespace Spring.Web.Services
@@ -50,9 +61,11 @@ namespace Spring.Web.Services
     [PermissionSet(SecurityAction.InheritanceDemand, Unrestricted=true)]
     public class WebServiceHandlerFactory : System.Web.Services.Protocols.WebServiceHandlerFactory, IHttpHandlerFactory
     {
+		#if !MONO_2_0
         private static readonly MethodInfo CoreGetHandler =
             typeof(System.Web.Services.Protocols.WebServiceHandlerFactory).GetMethod("CoreGetHandler", BindingFlags.NonPublic | BindingFlags.Instance, null,
                                                                                      new Type[] {typeof(Type), typeof(HttpContext), typeof(HttpRequest), typeof(HttpResponse)}, null);
+		#endif
 
         /// <summary>
         /// Retrieves instance of the page from Spring web application context.
@@ -83,6 +96,7 @@ namespace Spring.Web.Services
             Type serviceType = null;
             if (nod != null)
             {
+#if !MONO
                 if (appContext.IsTypeMatch(nod.Name, typeof(WebServiceExporter)))
                 {
                     WebServiceExporter wse = (WebServiceExporter)appContext.GetObject(nod.Name);
@@ -98,6 +112,16 @@ namespace Spring.Web.Services
                         serviceType = null;
                     }
                 }
+#else
+                serviceType = appContext.GetType(nod.Name);
+
+                // check if the type defines a Web Service
+                object[] wsAttribute = serviceType.GetCustomAttributes(typeof(WebServiceAttribute), true);
+                if (wsAttribute.Length == 0)
+                {
+                    serviceType = null;
+                }  
+#endif
             }
 
             if (serviceType == null)
@@ -108,8 +132,74 @@ namespace Spring.Web.Services
                 serviceType = WebServiceParser.GetCompiledType(path, context);
 #endif
             }
+			
 
+#if !MONO_2_0
             return (IHttpHandler) CoreGetHandler.Invoke(this, new object[] {serviceType, context, context.Request, context.Response});
+#else		
+
+			// find if the BuildManager already contains a cached value of the service type
+			var buildCacheField = typeof(BuildManager).GetField("buildCache", BindingFlags.Static | BindingFlags.NonPublic);
+			var buildCache = (IDictionary)buildCacheField.GetValue(null);
+			
+			if(!buildCache.Contains(appRelativeVirtualPath))
+			{
+				// create new fake BuildManagerCacheItem wich represent the target type
+				var buildManagerCacheItemType = Type.GetType("System.Web.Compilation.BuildManagerCacheItem, System.Web");
+				var cacheItemCtor = buildManagerCacheItemType.GetConstructor(new Type[]{typeof(Assembly), typeof(BuildProvider), typeof(CompilerResults)});
+				var buildProvider = new FakeBuildProvider(serviceType);
+				var cacheItem = cacheItemCtor.Invoke(new object[]{serviceType.Assembly, buildProvider, null });
+					
+				// store it in the BuildManager
+				buildCache [appRelativeVirtualPath] = cacheItem;
+			}
+			
+			// now that the target type is in the cache, let the default process continue
+			return base.GetHandler(context, requestType, url, path);			
+#endif
         }
     }
+
+#if MONO_2_0
+	public class FakeBuildProvider : BuildProvider
+	{
+		// Define an internal member for the compiler type.
+	    protected CompilerType _compilerType = null;
+		private Type _type;
+		
+	    public FakeBuildProvider(Type type)
+	    {
+			_type = type;
+	        _compilerType = GetDefaultCompilerTypeForLanguage("C#");
+	    }
+	
+	    // Return the internal CompilerType member 
+	    // defined in this implementation.
+	    public override CompilerType CodeCompilerType
+	    {
+	        get { return _compilerType; }
+	    }
+	
+	    // Define the build provider implementation of the GenerateCode method.
+	    public override void GenerateCode(AssemblyBuilder assemBuilder)
+	    {
+	        
+	    }
+	
+	    public override System.Type GetGeneratedType(CompilerResults results)
+	    {
+	        return _type;
+	    }
+		
+		public override string GetCustomString (System.CodeDom.Compiler.CompilerResults results)
+		{
+			return "No source code";
+		}
+		
+		public override BuildProviderResultFlags GetResultFlags (System.CodeDom.Compiler.CompilerResults results)
+		{
+			return BuildProviderResultFlags.Default;
+		}
+	}
+#endif
 }
