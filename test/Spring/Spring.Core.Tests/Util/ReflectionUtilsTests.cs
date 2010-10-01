@@ -1222,6 +1222,15 @@ namespace Spring.Util
             Assert.AreEqual(ex, appEx);
         }
 
+#if NET_2_0
+        [Test]
+        public void CanGetFriendlyNamesForGenericTypes()
+        {
+            Type t = typeof(System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>);
+            
+            Assert.AreEqual("System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>", ReflectionUtils.GetTypeFriendlyName(t));
+        }
+#endif
         #endregion
 
         #region Helper Methods

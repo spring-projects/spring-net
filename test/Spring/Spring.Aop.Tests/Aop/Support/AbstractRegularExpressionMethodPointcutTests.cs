@@ -74,12 +74,46 @@ namespace Spring.Aop.Support
 			ExactMatchTests(pointcut);
 		}
 
-		protected void ExactMatchTests(AbstractRegularExpressionMethodPointcut rpc)
-		{
-			// assumes rpc.setPattern("java.lang.Object.hashCode");
-			Assert.IsTrue(rpc.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)));
-			Assert.IsFalse(rpc.Matches(typeof(object).GetMethod("GetType"), typeof(Type)));
-		}
+#if NET_2_0
+        protected void ExactMatchWithGenericTypeTests(AbstractRegularExpressionMethodPointcut rpc)
+        {
+            // assumes rpc.setPattern("System.Collections.Generic.List<string>");
+            Assert.IsTrue(rpc.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)));
+            Assert.IsFalse(rpc.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)));
+        }
+
+        [Test]
+        public void ExactMatchWithGenericType()
+        {
+            pointcut.Pattern = "System.Collections.Generic.List<string>.Add";
+            ExactMatchWithGenericTypeTests(pointcut);
+            pointcut = (AbstractRegularExpressionMethodPointcut)SerializationTestUtils.SerializeAndDeserialize(pointcut);
+            ExactMatchWithGenericTypeTests(pointcut);
+        }
+
+        [Test]
+        public void WildcardWithGenericType()
+        {
+            pointcut.Pattern = ".*List<string>.Add";
+            Assert.IsTrue(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)));
+            Assert.IsFalse(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)));
+        }
+
+        [Test]
+        public void WildcardForOneClassWithGenericType()
+        {
+            pointcut.Pattern = "System.Collections.*";
+            Assert.IsTrue(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)));
+            Assert.IsFalse(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)));
+        }
+#endif
+
+        protected void ExactMatchTests(AbstractRegularExpressionMethodPointcut rpc)
+        {
+            // assumes rpc.setPattern("java.lang.Object.hashCode");
+            Assert.IsTrue(rpc.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)));
+            Assert.IsFalse(rpc.Matches(typeof(object).GetMethod("GetType"), typeof(Type)));
+        }
 
 		[Test]
 		public void Wildcard()
@@ -88,7 +122,7 @@ namespace Spring.Aop.Support
 			Assert.IsTrue(pointcut.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)));
 			Assert.IsFalse(pointcut.Matches(typeof(object).GetMethod("GetType"), typeof(Type)));
 		}
-
+        
 		[Test]
 		public void WildcardForOneClass()
 		{
@@ -100,10 +134,11 @@ namespace Spring.Aop.Support
 		[Test]
 		public void MatchesObjectClass()
 		{
-			pointcut.Pattern = "System.Object.*";
+			pointcut.Pattern = "Object.*";
 			Assert.IsTrue(pointcut.Matches(typeof(Exception).GetMethod("GetHashCode"), typeof(TargetException)));
 			// Doesn't match
 			Assert.IsFalse(pointcut.Matches(typeof(Exception).GetMethod("ToString"), typeof(Exception)));
 		}
+
 	}
 }

@@ -669,6 +669,33 @@ namespace Spring.Util
             return paramsType;
         }
 
+
+        /// <summary>
+        /// Given the <see cref="System.Type"/> return its representation as
+        /// it would appear in the source code files.
+        /// </summary>
+        /// <remarks>
+        /// Largely intended to handle generic types where .ToString() will typically return:
+        /// "System.Collections.Generic.List`1[System.Collections.Generic.Dictionary`2[System.String,System.Int32]]"
+        /// and this method will instead return:
+        /// "System.Collections.Generic.List&lt;System.Collections.Generic.Dictionary&lt;string,int&gt;&gt;"
+        /// </remarks>
+        /// <param name="type">The type.</param>
+        /// <returns>Friendly string representing the Type</returns>
+        public static string GetTypeFriendlyName(Type type)
+        {
+#if MONO
+            //no csharp services in mono (verify this!) so have to fall back to returning the ToString() for now
+            //TODO: investigate whether there is another equivalent manner of providing this functionality under MONO
+            return type.ToString();
+#endif
+#if NET_2_0
+            return (new Microsoft.CSharp.CSharpCodeProvider()).GetTypeOutput(new System.CodeDom.CodeTypeReference(type));
+#endif
+            return type.ToString();
+        }
+
+
         /// <summary>
         /// Does the given <see cref="System.Type"/> and/or it's superclasses
         /// have at least one or more methods with the given name (with any
