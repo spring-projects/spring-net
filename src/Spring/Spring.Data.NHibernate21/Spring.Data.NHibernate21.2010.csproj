@@ -167,6 +167,9 @@
     <Compile Include="Data\NHibernate\Bytecode\ReflectionOptimizer.cs" />
     <Compile Include="Data\NHibernate\Bytecode\BytecodeProvider.cs" />
     <Compile Include="Data\NHibernate\Bytecode\ObjectsFactory.cs" />
+    <Compile Include="Data\NHibernate\DelegatingLocalSessionFactoryObject.cs" />
+    <Compile Include="Data\NHibernate\DelegatingSessionFactory.cs" />
+    <Compile Include="Data\NHibernate\SimpleDelegatingSessionFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Aop\Spring.Aop.2010.csproj">

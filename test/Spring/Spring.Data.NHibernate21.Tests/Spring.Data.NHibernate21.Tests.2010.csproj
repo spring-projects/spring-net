@@ -98,6 +98,7 @@
       <Link>Data\NHibernate\TestObject.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Data\NHibernate\DelegatingLocalSessionFactoryObjectTests.cs" />
     <Compile Include="HibernateCompilerOptionsTests.cs" />
     <Compile Include="HibernateExceptionTests.cs" />
   </ItemGroup>

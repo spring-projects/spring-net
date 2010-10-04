@@ -107,6 +107,15 @@
     <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ReflectionOptimizer.cs">
       <Link>Data\NHibernate\Bytecode\ReflectionOptimizer.cs</Link>
     </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\DelegatingLocalSessionFactoryObject.cs">
+      <Link>Data\NHibernate\DelegatingLocalSessionFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\DelegatingSessionFactory.cs">
+      <Link>Data\NHibernate\DelegatingSessionFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\SimpleDelegatingSessionFactory.cs">
+      <Link>Data\NHibernate\SimpleDelegatingSessionFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateAdoException.cs">
       <Link>Data\NHibernate\HibernateAdoException.cs</Link>
     </Compile>

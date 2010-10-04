@@ -30,7 +30,6 @@
 				<include name="../Spring.Data.NHibernate12/Support/**/*.cs" />
 				<include name="../Spring.Data.NHibernate20/Data/**/*.cs" />				
 				<include name="../Spring.Data.NHibernate21/Data/**/*.cs" />				
-				<include name="../Spring.Data.NHibernate21/Data/**/*.cs" />				
 				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateAccessor.cs" />
 				<exclude name="../Spring.Data.NHibernate/Data/**/SpringSessionSynchronization.cs" />
 				<exclude name="../Spring.Data.NHibernate/Data/**/LocalSessionFactoryObject.cs" />
