@@ -383,17 +383,28 @@
         to each <literal>ISessionFactory</literal> instance. As such, they are
         only useful for selecting at runtime a single database instance.
         Cleaning up an existing session factory when switching to a new
-        database is left to user code. Creating a new session factory per
-        connection string (assuming the same mapping files can be used across
-        all databases connections) is not currently supported. To support this
-        functionality, you can subclass
-        <literal>LocalSessionFactoryObject</literal> and override the method
+        database is left to user code.</para>
+      </note>
+
+      <section>
+        <title>Creating a new SessionFactory per Connection String with
+        DelegatingLocalSessionFactory Object</title>
+
+        <para>Beginning with Spring.NET 1.3.1 there is direct support for
+        creating a new session factory per connection string (assuming the
+        same mapping files can be used across all databases connections). To
+        support this functionality,
+        <literal>DelegatingLocalSessionFactoryObject</literal> subclasses
+        <literal>LocalSessionFactoryObject</literal> and overrides the method
         <literal>ISessionFactory NewSessionFactory(Configuration
         config)</literal> so that it returns an implementation of
         <literal>ISessionFactory</literal> that selects among multiple
         instances based on values in thread local storage, much like the
-        implementation of <literal>MultiDelegatingDbProvider</literal>.</para>
-      </note>
+        implementation of <literal>MultiDelegatingDbProvider</literal>. Note
+        that due to variations in the NHibernate project's
+        <literal>ISessionFactory</literal> API, this approach is only
+        supported under NHibernate 2.1.2 and NHibernate 3.0</para>
+      </section>
 
       <section>
         <title>Using FluentNHibernate to configure mappings with
