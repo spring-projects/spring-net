@@ -144,6 +144,7 @@
     <Compile Include="Data\NHibernate\Bytecode\NHibernateTestImports.cs" />
     <Compile Include="Data\NHibernate\Bytecode\Product.cs" />
     <Compile Include="Data\NHibernate\AccountController.cs" />
+    <Compile Include="Data\NHibernate\HibernateTxScopeTransactionManagerTests.cs" />
     <Compile Include="Data\NHibernate\IAccountController.cs" />
     <Compile Include="Setup.cs" />
   </ItemGroup>
@@ -202,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\NHibernate\Bytecode\Foo.Spechbm.xml" />
+    <EmbeddedResource Include="Data\NHibernate\HibernateTxScopeTransactionManagerTests.xml" />
     <Content Include="TestEnbeddedConfig.cfg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

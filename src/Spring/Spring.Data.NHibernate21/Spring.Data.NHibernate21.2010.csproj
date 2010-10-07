@@ -26,8 +26,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Spring.Data.NHibernate21.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,6 +59,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -170,6 +170,7 @@
     <Compile Include="Data\NHibernate\DelegatingLocalSessionFactoryObject.cs" />
     <Compile Include="Data\NHibernate\DelegatingSessionFactory.cs" />
     <Compile Include="Data\NHibernate\SimpleDelegatingSessionFactory.cs" />
+    <Compile Include="Data\NHibernate\HibernateTxScopeTransactionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Aop\Spring.Aop.2010.csproj">
