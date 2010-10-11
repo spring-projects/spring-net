@@ -977,7 +977,10 @@ namespace Spring.Data.NHibernate
 
             public void SetRollbackOnly()
             {
-                SessionHolder.RollbackOnly = true;
+                if (SessionHolder != null)
+                {
+                    SessionHolder.RollbackOnly = true;
+                }
                 if (ConnectionHolder != null)
                 {
                     ConnectionHolder.RollbackOnly = true;
@@ -993,8 +996,8 @@ namespace Spring.Data.NHibernate
             {
                 get
                 {
-                    return SessionHolder.RollbackOnly ||
-                           (ConnectionHolder != null && ConnectionHolder.RollbackOnly);
+                    return ((SessionHolder != null && SessionHolder.RollbackOnly) ||
+                           (ConnectionHolder != null && ConnectionHolder.RollbackOnly));
                 }
             }
         }

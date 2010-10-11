@@ -34,6 +34,7 @@ using Spring.Transaction;
 using Spring.Transaction.Support;
 using Spring.Transaction.Interceptor;
 using System.Transactions;
+using System.Collections.Generic;
 
 #endregion
 
@@ -46,26 +47,46 @@ namespace Spring.Data.NHibernate
     [TestFixture]
     public class HibernateTxScopeTransactionManagerTests
     {
-        #region Fields
-        private IDbProvider dbProvider;
-
-        private IPlatformTransactionManager transactionManager;
-
-        private IApplicationContext ctx;
-        #endregion
-
-        #region Constants
-
         /// <summary>
         /// The shared <see cref="log4net.ILog"/> instance for this class (and derived classes). 
         /// </summary>
         protected static readonly ILog log =
-            LogManager.GetLogger(typeof(TemplateTests));
+            LogManager.GetLogger(typeof(HibernateTxScopeTransactionManagerTests));
 
-        //// force Spring.Data.NHibernate to be preloaded by runtime
-        //private Type TLocalSessionFactoryObject = typeof(LocalSessionFactoryObject);
+        private IApplicationContext ctx;
 
-        #endregion
+        private IDbProvider dbProvider;
+
+        private IPlatformTransactionManager transactionManager;
+
+        [Test]
+        public void CanProperlyReleaseConnectionsWhenTransactionsAreRolledBack()
+        {
+            for (int i = 0; i < 200; i++)
+            {
+                try
+                {
+                    DoSave(true);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        [Test]
+        [Ignore("Test harness left in place to demonstrate the leaking connection issue present in NH2.1 and later")]
+        public void DoesNotLeakConnection()
+        {
+            DoPreventConnectionLeaksPreventionPattern();
+        }
+
+        [Test]
+        [Ignore("Test harness left in place to demonstrate the leaking connection issue present in NH2.1 and later")]
+        public void LeaksConnection()
+        {
+            DoConnectionLeakingAntiPattern();
+        }
 
         [SetUp]
         public void SetUp()
@@ -92,14 +113,66 @@ namespace Spring.Data.NHibernate
             }
         }
 
-        private static void ExecuteSql(IDbConnection conn, string sql)
+        /// <summary>
+        /// this method will fail the test as it follows the anti-pattern of failing to use the (mandatory) NH Transaction to wrap the session call
+        /// </summary>
+        private void DoConnectionLeakingAntiPattern()
         {
-            IDbCommand cmd;
-            cmd = conn.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.ExecuteNonQuery();
+            //this counter must be larger than the 'Max Pool Size' setting in the connection string for this test to demonstrate the issue
+            int counter = 200;
+
+            for (int i = 0; i < counter; i++)
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    using (ISession session = ((ISessionFactory)ctx["SessionFactory"]).OpenSession())
+                    {
+                        IList<TestObject> to = session.CreateCriteria<TestObject>().List<TestObject>();
+                    }
+
+                    //because scope.Complete() is never called, the Transaction is rolled back and this results in the orpahned connections
+                }
+
+            }
+
         }
 
+        /// <summary>
+        /// this method demonstrates the proper pattern to follow w NH 2.1 and later, mandating the use of an NH transaction wrapping the session
+        /// </summary>
+        private void DoPreventConnectionLeaksPreventionPattern()
+        {
+            //this counter must be larger than the 'Max Pool Size' setting in the connection string for this test to demonstrate the issue
+            int counter = 200;
+
+            for (int i = 0; i < counter; i++)
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    using (ISession session = ((ISessionFactory)ctx["SessionFactory"]).OpenSession())
+                    {
+                        using (ITransaction tx = session.BeginTransaction())
+                        {
+                            try
+                            {
+                                IList<TestObject> to = session.CreateCriteria<TestObject>().List<TestObject>();
+                                throw new Exception("this exception simulates something going wrong!");
+
+                            }
+                            catch (Exception)
+                            {
+                                tx.Rollback();
+                            }
+                        }
+                    }
+
+                    //because scope.Complete() is never called, the Transaction is rolled back but the presence of the NH transaction and its
+                    // associated Rollback() call will enable NH to properly release the connection
+                }
+            }
+        }
 
         [Transaction]
         private void DoSave(bool simulateException)
@@ -118,22 +191,16 @@ namespace Spring.Data.NHibernate
 
                 tx.Complete();
             }
-         
+
         }
 
-        [Test]
-        public void CanProperlyReleaseConnectionsWhenTransactionsAreRolledBack()
+        private static void ExecuteSql(IDbConnection conn, string sql)
         {
-            for (int i = 0; i < 200; i++)
-            {
-                try
-                {
-                    DoSave(true);
-                }
-                catch (Exception)
-                {
-                }
-            }
+            IDbCommand cmd;
+            cmd = conn.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.ExecuteNonQuery();
         }
+
     }
 }

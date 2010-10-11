@@ -3,13 +3,12 @@
 		 xmlns:db="http://www.springframework.net/database"
 		 xmlns:tx="http://www.springframework.net/tx">
 
-
+<!-- NOTE: Critical that the Max Pool Size parameter is present in the connection string to limit conn pool size for these tests-->
   <db:provider   id="DbProvider"
                  provider="SqlServer-2.0"
                  connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False;Max Pool Size=10;"/>
 
   <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
-    <!-- TODO Provide dedicated NHibernate Schema -->
     <property name="DbProvider" ref="DbProvider"/>
     <property name="MappingResources">
       <list>
@@ -32,57 +31,5 @@
   </object>
 
   <tx:attribute-driven />
-  
-  
-  <!--<object id="nativeNHTestObjectDao" type="Spring.Data.NHibernate.NativeNHTestObjectDao, Spring.Data.NHibernate21.Integration.Tests">
-    <property name="SessionFactory" ref="SessionFactory"/>
-  </object>
-
-  <object id="NHTestObjectDao" type="Spring.Data.NHibernate.NHTestObjectDao, Spring.Data.NHibernate21.Integration.Tests">
-    <property name="SessionFactory" ref="SessionFactory"/>
-  </object>-->
-
-
-
-  <!-- Transactional Proxy for TestObjectDao using transaction attributes -->
-  <!--<object id="testObjectDaoViaTxAttributes"
-          type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data">
-
-    <property name="PlatformTransactionManager" ref="hibernateTransactionManager"/>
-    <property name="Target">
-      <object type="Spring.Data.NHibernate.NHTestObjectDao">
-        <property name="SessionFactory" ref="SessionFactory"/>
-      </object>
-    </property>
-
-    <property name="ProxyInterfaces" value="Spring.Data.NHibernate.ITestObjectDao"/>
-
-    <property name="TransactionAttributeSource">
-      <object type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource" />
-    </property>
-  </object>
-
-  --><!-- Transactional Proxy for TestObjectDao using the TransactionProxyFactory --><!--
-  <object id="testObjectDaoTransProxy"
-          type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data">
-
-    <property name="PlatformTransactionManager" ref="hibernateTransactionManager"/>
-    <property name="Target">
-      <object type="Spring.Data.NHibernate.NHTestObjectDao, Spring.Data.NHibernate21.Integration.Tests">
-        <property name="SessionFactory" ref="SessionFactory"/>
-      </object>
-    </property>
-
-    <property name="ProxyInterfaces" value="Spring.Data.NHibernate.ITestObjectDao"/>
-
-    <property name="TransactionAttributes">
-      <name-values>
-        <add key="Create*" value="PROPAGATION_REQUIRED"/>
-        <add key="Delete*" value="PROPAGATION_REQUIRED"/>
-        <add key="Update*" value="PROPAGATION_REQUIRED"/>
-        <add key="Find*" value="PROPAGATION_REQUIRED"/>
-      </name-values>
-    </property>
-  </object>-->
 
 </objects>
