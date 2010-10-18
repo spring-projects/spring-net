@@ -63,23 +63,31 @@ namespace Spring.Expressions
         protected override object Get(object context, EvaluationContext evalContext)
         {
             object l = GetLeftValue(context, evalContext);
-            object r = GetRightValue(context, evalContext);
+            
+            if (NumberUtils.IsInteger(l))
+            {
+                object r = GetRightValue(context, evalContext);
+                if (NumberUtils.IsInteger(r))
+                {
+                    return NumberUtils.BitwiseOr(l, r);
+                }
+            }
+            else if (l is Enum)
+            {
+                object r = GetRightValue(context, evalContext);
+                if (l.GetType() == r.GetType())
+                {
+                    Type enumType = l.GetType();
+                    Type integralType = Enum.GetUnderlyingType(enumType);
+                    l = Convert.ChangeType(l, integralType);
+                    r = Convert.ChangeType(r, integralType);
+                    object result = NumberUtils.BitwiseOr(l, r);
+                    return Enum.ToObject(enumType, result);
+                }
+            }
 
-            if (NumberUtils.IsInteger(l) && NumberUtils.IsInteger(r))
-            {
-                return NumberUtils.BitwiseOr(l, r);
-            }
-            else if (l is Enum && l.GetType() == r.GetType())
-            {
-                Type enumType = l.GetType();
-                Type integralType = Enum.GetUnderlyingType(enumType);
-                l = Convert.ChangeType(l, integralType);
-                r = Convert.ChangeType(r, integralType);
-                object result = NumberUtils.BitwiseOr(l, r);
-                return Enum.ToObject(enumType, result);
-            }
-            else
-                return Convert.ToBoolean(l) || Convert.ToBoolean(r);
+            return Convert.ToBoolean(l) || 
+                Convert.ToBoolean(GetRightValue(context, evalContext));
         }
     }
 }

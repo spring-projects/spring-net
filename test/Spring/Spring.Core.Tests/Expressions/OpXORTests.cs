@@ -23,6 +23,7 @@ using NUnit.Framework;
 namespace Spring.Expressions
 {
     /// <summary>
+    /// Unit tests for the OpXOR class.
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
@@ -33,8 +34,16 @@ namespace Spring.Expressions
         {
             OpXOR bxor = new OpXOR(new IntLiteralNode("2"), new IntLiteralNode("3"));
             Assert.AreEqual(2 ^ 3, bxor.GetValue(null, null));
-            bxor = new OpXOR(new BooleanLiteralNode("true"), new BooleanLiteralNode("false"));
-            Assert.AreEqual(true ^ false, bxor.GetValue(null, null));
+        }
+
+        [Test]
+        public void XorsBooleans()
+        {
+            OpXOR bxor1 = new OpXOR(new BooleanLiteralNode("true"), new BooleanLiteralNode("false"));
+            Assert.AreEqual(true ^ false, bxor1.GetValue(null, null));
+
+            OpXOR bxor2 = new OpXOR(new BooleanLiteralNode("true"), new BooleanLiteralNode("true"));
+            Assert.AreEqual(true ^ true, bxor2.GetValue(null, null));
         }
     }
 }

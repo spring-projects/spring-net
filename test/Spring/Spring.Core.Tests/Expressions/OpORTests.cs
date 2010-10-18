@@ -24,6 +24,7 @@ using NUnit.Framework;
 namespace Spring.Expressions
 {
     /// <summary>
+    /// Unit tests for the OpOR class.
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
@@ -41,6 +42,13 @@ namespace Spring.Expressions
         {
             OpOR bor = new OpOR(new BooleanLiteralNode("false"), new BooleanLiteralNode("true"));
             Assert.AreEqual(false || true , bor.GetValue(null, null));
+        }
+
+        [Test(Description = "SPRNET-1381")]
+        public void TestShortcircuitOrOperator()
+        {
+            object boolean = ExpressionEvaluator.GetValue(new Inventor(), "Name == null or Name.Length == 0");
+            Assert.AreEqual(true, boolean);
         }
     }
 }

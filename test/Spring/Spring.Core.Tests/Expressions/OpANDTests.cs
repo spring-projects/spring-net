@@ -23,6 +23,7 @@ using NUnit.Framework;
 namespace Spring.Expressions
 {
     /// <summary>
+    /// Unit tests for the OpAND class.
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
@@ -33,6 +34,23 @@ namespace Spring.Expressions
         {
             OpAND band = new OpAND(new IntLiteralNode("2"), new IntLiteralNode("3"));
             Assert.AreEqual( 2 & 3, band.GetValue(null,null) );
+        }
+
+        [Test]
+        public void AndsBooleans()
+        {
+            OpAND band1 = new OpAND(new BooleanLiteralNode("true"), new BooleanLiteralNode("true"));
+            Assert.AreEqual(true, band1.GetValue(null, null));
+
+            OpAND band2 = new OpAND(new BooleanLiteralNode("true"), new BooleanLiteralNode("false"));
+            Assert.AreEqual(false, band2.GetValue(null, null));
+        }
+
+        [Test(Description = "SPRNET-1381")]
+        public void TestShortcircuitAndOperator()
+        {
+            object boolean = ExpressionEvaluator.GetValue(new Inventor(), "Name != null and Name.Length == 0");
+            Assert.AreEqual(false, boolean);
         }
     }
 }

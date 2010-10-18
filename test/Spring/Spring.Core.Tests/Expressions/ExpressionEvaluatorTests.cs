@@ -272,13 +272,6 @@ namespace Spring.Expressions
 
         #endregion Serialization Tests
 
-        [Test(Description = "SPRNET-1381")]
-        public void TestShortcircuitAndOperator()
-        {
-            object boolean = ExpressionEvaluator.GetValue(new Inventor(), "Name != null and Name.Length == 0");
-            Assert.AreEqual(false, boolean);
-        }
-
         [Test]
         public void TestBitwiseXOR()
         {
