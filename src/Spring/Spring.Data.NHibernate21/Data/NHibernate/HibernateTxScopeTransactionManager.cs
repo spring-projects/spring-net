@@ -676,6 +676,10 @@ namespace Spring.Data.NHibernate
 
         }
 
+        /// <summary>
+        /// Does the tx scope commit.
+        /// </summary>
+        /// <param name="status">The status.</param>
         protected void DoTxScopeCommit(DefaultTransactionStatus status)
         {
             TxScopeTransactionManager.PromotableTxScopeTransactionObject txObject =
@@ -742,6 +746,10 @@ namespace Spring.Data.NHibernate
             }
         }
 
+        /// <summary>
+        /// Does the tx scope rollback.
+        /// </summary>
+        /// <param name="status">The status.</param>
         protected void DoTxScopeRollback(DefaultTransactionStatus status)
         {
             TxScopeTransactionManager.PromotableTxScopeTransactionObject txObject =
@@ -779,6 +787,10 @@ namespace Spring.Data.NHibernate
             DoTxScopeSetRollbackOnly(status);
         }
 
+        /// <summary>
+        /// Does the tx scope set rollback only.
+        /// </summary>
+        /// <param name="status">The status.</param>
         protected void DoTxScopeSetRollbackOnly(DefaultTransactionStatus status)
         {
             if (status.Debug)

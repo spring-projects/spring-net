@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<project name="Spring.Web.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+
+    <include buildfile="${spring.basedir}/common-project.include" />
+    <!--
+        Required properties:
+            * current.bin.dir           - (path) root level to build to
+            * build.debug               - (true|false) debug build?
+            * current.build.defines.csc - framework-specific build defines
+            * lib.dir                   - framework-specific assembly references
+    -->
+    <target name="build">
+        <!-- build Spring.Web.Mvc -->
+        <csc target="library" define="${current.build.defines.csc}" 
+	     warnaserror="true" 
+             optimize="${build.optimize}"
+	     debug="${current.build.debug}"
+             output="${current.bin.dir}/${project::get-name()}.dll" 
+	     doc="${current.bin.dir}/${project::get-name()}.xml">
+            <nowarn>
+                <warning number="${nowarn.numbers.test}" /> <!-- 1701 -->
+                <warning number="${nowarn.numbers.test},1587" if="${nant.settings.currentframework=='mono-2.0'}"/>
+            </nowarn>
+            <sources failonempty="true">
+                <include name="**/*.cs" />
+                <include name="../CommonAssemblyInfo.cs" />
+            </sources>
+            <resources prefix="Spring" dynamicprefix="true" failonempty="true">
+                <include name="**/*.resx" />
+                <include name="**/*.xsd" />
+                <include name="**/*.txt" />
+                <include name="**/*.xml" />
+                <exclude name="Data/**/*" />
+                <exclude name="obj/**/*" />
+            </resources>
+            <references basedir="${current.bin.dir}">
+                <include name="*.dll" />
+		<include name="System.Configuration.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Drawing.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Web.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Web.Services.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+		<include name="System.Data.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+                <exclude name="${project::get-name()}.dll" />
+                <exclude name="CloverRuntime.dll" />
+                <include name="${lib.dir}/nunit.core.interfaces.dll" />
+				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
+            </references>
+        </csc>
+        <copy todir="${current.bin.dir}">
+            <fileset basedir="${project::get-base-directory()}/Data">
+                <include name="**/*.*" />
+            </fileset>
+        </copy>
+
+    </target>
+
+    <target name="test" depends="build">
+        <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
+        <call target="common.run-tests" />
+    </target>
+<!--
+    <target name="test" depends="build">
+        <nunit2outproc>
+            <formatter type="Plain" />
+            <formatter type="Xml" usefile="true" extension=".xml" outputdir="${current.bin.dir}/results" />
+            <test assemblyname="${current.bin.dir}/${project::get-name()}.dll" />
+        </nunit2outproc>
+    </target>
+-->
+</project>

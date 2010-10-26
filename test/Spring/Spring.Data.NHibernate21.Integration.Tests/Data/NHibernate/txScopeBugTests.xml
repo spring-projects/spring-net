@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns='http://www.springframework.net'
+		 xmlns:db="http://www.springframework.net/database"
+     xmlns:tx="http://www.springframework.net/tx">
+
+
+  <!--<db:provider   id="DbProvider"
+                 provider="SqlServer-2.0"
+                 connectionString="Data Source=(local);Initial Catalog=rewards;Integrated Security=True;Max Pool Size=10"/>-->
+
+  <db:provider   id="DbProvider"
+                 provider="SqlServer-2.0"
+                 connectionString="Data Source=(local)\sql2005;Initial Catalog=rewards;user id=sa;password=password"/>
+
+  <!--<db:provider   id="DbProvider"
+                 provider="SqlServer-2.0"
+                 connectionString="Data Source=MARK6500\NR2007;Initial Catalog=spring;user id=springqa;password=springqa;Max Pool Size=10"/>-->
+
+  <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
+    <property name="DbProvider" ref="DbProvider"/>
+    <property name="ExposeTransactionAwareSessionFactory" value="true" />
+
+    <property name="MappingResources">
+      <list>
+        <value>assembly://Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate/TestObject.hbm.xml</value>
+      </list>
+    </property>
+    <property name="HibernateProperties">
+      <dictionary>
+        <entry key="dialect"
+               value="NHibernate.Dialect.MsSql2000Dialect"/>
+
+        <entry key="connection.driver_class"
+               value="NHibernate.Driver.SqlClientDriver"/>
+
+      </dictionary>
+    </property>
+  </object>
+
+  <object id="SimpleTestDao" type="Spring.Data.NHibernate.SimpleTestDao, Spring.Data.NHibernate21.Integration.Tests">
+    <property name="SessionFactory" ref="SessionFactory"/>
+    <property name="SecondsToSleepBeforeException" value="0" />
+  </object>
+
+  
+  <!--<object id="TransactionManager" type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate21">
+    <property name="DbProvider" ref="DbProvider"/>
+    <property name="sessionFactory" ref="SessionFactory"/>
+  </object>-->
+
+  <!--<object id="TransactionManager" type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data" />-->
+    
+
+  
+  <object id="TransactionManager" type="Spring.Data.NHibernate.HibernateTxScopeTransactionManager, Spring.Data.NHibernate21">
+    <property name="DbProvider" ref="DbProvider"/>
+    <property name="sessionFactory" ref="SessionFactory"/>
+  </object>
+  
+
+  <tx:attribute-driven transaction-manager="TransactionManager"/>
+ 
+</objects>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+  
+  <!--id/name intentionally excluded from this definition so that we can ensure retrieve-by-type-match works-->
+  <object singleton="false" type="Spring.Web.Mvc.Tests.Controllers.FirstContainerRegisteredController, Spring.Web.Mvc.Tests">
+    <property name="TestValue" value="Should_Be_Matched_By_Type" />
+  </object>
+   
+</objects>
+

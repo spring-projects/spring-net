@@ -29,12 +29,14 @@ using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.Common;
-using Spring.Data.Support;
 using Spring.Transaction;
-using Spring.Transaction.Support;
 using Spring.Transaction.Interceptor;
 using System.Transactions;
 using System.Collections.Generic;
+using Spring.Core.IO;
+using NHibernate.Cfg;
+using System.Diagnostics;
+using System.Threading;
 
 #endregion
 
@@ -202,5 +204,135 @@ namespace Spring.Data.NHibernate
             cmd.ExecuteNonQuery();
         }
 
+        [Test]
+        public void Test2()
+        {
+            for (int i = 0; i < 200; i++)
+            {
+                //DaoOperationsViaProxyFactoryWithTxAttributes();
+                try
+                {
+                    zzzExecuteDaoOperations();
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+        private void zzzExecuteDaoOperations()
+        {
+            ITestObjectDao dao = (ITestObjectDao)ctx["SimpleTestDao"];
+
+            TestObject toGeorge = new TestObject();
+            toGeorge.Name = "George";
+            toGeorge.Age = 33;
+            dao.Create(toGeorge);
+        }
+
+
+        //private void MethodForThread()
+        //{
+        //    
+        //    MethodForThread((0));
+        //}
+
+        private void MethodForThread(object taskCounter)
+        {
+            int counter = (int)taskCounter;
+
+            for (int i = 0; i < 200; i++)
+            {
+                try
+                {
+                    Debug.WriteLine(String.Format("Task: {0} | Loop Count: {1}", counter, i));
+                    zzzExecuteDaoOperations();
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+
+            Debug.WriteLine(String.Format("\n---------\nCompleting Task Number {0}\n---------\n", taskCounter));
+        }
+
+
+        [Test]
+        public void Test()
+        {
+            BasicConfigurator.Configure();
+            string assemblyName = GetType().Assembly.GetName().Name;
+            ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/txScopeBugTests.xml");
+
+            dbProvider = ctx["DbProvider"] as IDbProvider;
+            transactionManager = ctx["TransactionManager"] as IPlatformTransactionManager;
+            CleanupDatabase(dbProvider.CreateConnection());
+
+            List<Thread> threads = new List<Thread>();
+
+            for (int i = 0; i < 200; i++)
+            {
+                int taskCounter = i;
+                Debug.WriteLine(String.Format("\n---------\nSpawning Task Number {0}\n---------\n", taskCounter));
+
+                Thread t = new Thread(MethodForThread);
+                threads.Add(t);
+                t.Start(taskCounter);
+                
+            }
+
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+        }
+
+        public void DoNothing()
+        {
+            ConfigurableResourceLoader loader = new ConfigurableResourceLoader();
+            Configuration c = new Configuration();
+            String resourceName =
+                "assembly://Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate/TestObject.hbm.xml";
+            c.AddInputStream(loader.GetResource(resourceName).InputStream);
+            ISessionFactory sf = c.BuildSessionFactory();
+        }
+
+
+
+        [Test]
+        public void LeaksConnectionSampleCodeFromBlogPost()
+        {
+
+            int counter = 200;
+
+            for (int i = 0; i < counter; i++)
+            {
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    using (ISession session = ((ISessionFactory)ctx["SessionFactory"]).OpenSession())
+                    {
+                        /*
+                        IQuery q = session.CreateQuery("from Spring.Data.NHibernate.TestObject");
+                        q.List();
+                        */
+
+                        using (ITransaction transaction = session.BeginTransaction())
+                        {
+                            IQuery q = session.CreateQuery("from Spring.Data.NHibernate.TestObject");
+                            q.List();
+                            //transaction.Rollback();
+                        }
+
+                    }
+                }
+
+            }
+
+        }
+
     }
+
 }
