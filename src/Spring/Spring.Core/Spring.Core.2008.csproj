@@ -46,7 +46,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0;DEBUG_DYNAMICX</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0;DEBUG_DYNAMIC_DISABLED</DefineConstants>
     <DocumentationFile>Spring.Core.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
