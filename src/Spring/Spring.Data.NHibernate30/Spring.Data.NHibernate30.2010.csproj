@@ -52,6 +52,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -112,6 +113,9 @@
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\DelegatingSessionFactory.cs">
       <Link>Data\NHibernate\DelegatingSessionFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\HibernateTxScopeTransactionManager.cs">
+      <Link>Data\NHibernate\HibernateTxScopeTransactionManager.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\SimpleDelegatingSessionFactory.cs">
       <Link>Data\NHibernate\SimpleDelegatingSessionFactory.cs</Link>

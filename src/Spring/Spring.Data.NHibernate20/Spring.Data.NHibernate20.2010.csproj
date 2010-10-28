@@ -88,9 +88,6 @@
     <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\SpringSessionSynchronization.cs">
       <Link>Data\NHibernate\SpringSessionSynchronization.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\HibernateTxScopeTransactionManager.cs">
-      <Link>Data\NHibernate\HibernateTxScopeTransactionManager.cs</Link>
-    </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateAdoException.cs">
       <Link>Data\NHibernate\HibernateAdoException.cs</Link>
     </Compile>
