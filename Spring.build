@@ -294,22 +294,23 @@ Commandline Examples:
   </target>
 
   <!-- Target for compiling all build configurations for all runtime configurations -->
-  <target name="compile-build-all" description="Compile all build configurations for all runtime configurations">
+ <!-- <target name="compile-build-all" description="Compile all build configurations for all runtime configurations">
     <echo message="Compiling all build configurations for all runtime configurations."/>
 
     <call target="set-debug-build-configuration"/>
     <call target="compile-build"/>
-
+-->
     <!-- make the release build, which requires Spring.Net.snk, only if making an distributable release -->
-    <if test="${property::exists('project.build.package') and project.build.package}">
+    <!--<if test="${property::exists('project.build.package') and project.build.package}">
       <call target="set-release-build-configuration"/>
       <call target="compile-build"/>
     </if>
 
 
   </target>
-
+-->
   <!-- Target for compiling all runtime configurations in the current build configuration -->
+  <!--
   <target name="compile-build" description="Compile current build configurations for all runtime configurations">
     <echo message="Compiling all framework versions for the ${current.build.config} build configuration."/>
 
@@ -317,15 +318,12 @@ Commandline Examples:
     <call target="compile-build-2.0"/>
     <call target="compile-build-3.0"/>
     <call target="compile-build-3.5"/>
-    <!--
     <call target="compile-build-4.0"/>
-    -->
-    <!-- Ignore Compact Framework 1.0 for now -->
-    <!-- call target="compile-build-netcf-1.0"/ -->
+  
     <call target="compile-build-mono-2.0"/>
 
   </target>
-
+-->
   <target name="compile-build-1.1" description="Builds for .NET 1.1 if available">>
     <if test="${framework::exists('net-1.1')}">
       <call target="compile-net-1.1"/>
@@ -459,7 +457,7 @@ Commandline Examples:
     <property name="nh20.lib.dir" value="${spring.basedir}/lib/NHibernate20/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh21.lib.dir" value="${spring.basedir}/lib/NHibernate21/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh30.lib.dir" value="${spring.basedir}/lib/NHibernate30/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <call target="copylibs"/>
+    <call target="copylibtobin"/>
 
     <!-- build assemblies -->
     <nant buildfile="src/Spring/Spring.Core/Spring.Core.build" target="build" />
@@ -559,7 +557,7 @@ Commandline Examples:
 
     <!-- Do not call compile-test target - only build Spring.Services and tests which uses WCF in .NET 3.0 -->
     <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <call target="copylibs"/>
+    <call target="copylibtobin"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services and not net-3.5}"/>
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services and not net-3.5}"/>
 
@@ -567,20 +565,25 @@ Commandline Examples:
 
   <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
         depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
+	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copykeys" if="${project.build.sign}"/>
-    <call target="common.generate-assemblyinfo"/>
+	<call target="copylibs" />
+	<call target="common.generate-assemblyinfo"/>
     <property name="build-ems" value="false" overwrite="true" />
     <property name="build-nms" value="false" overwrite="true" />
     <property name="build-quartz" value="false" overwrite="true" />
     <property name="build-msmq" value="false" overwrite="true" />
     <property name="build-msmq-tests" value="false" overwrite="true" />
     <property name="build-velocity" value="false" overwrite="true" />
+	
     <call target="compile-test" />
   </target>
 
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
         depends="set-net-4.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
+    	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copykeys" if="${project.build.sign}"/>
+	<call target="copylibs" />
     <call target="common.generate-assemblyinfo"/>
     <property name="build-ems" value="true" overwrite="true" />
     <property name="build-nms" value="true" overwrite="true" />
@@ -618,7 +621,7 @@ Commandline Examples:
 
   </target>
 
-  <target name="copylibs">
+  <target name="copylibtobin">
     <echo message="Current bin dir = ${current.bin.dir}"/>
     <echo message="Current lib dir = ${lib.dir}"/>
     <!-- copy framework-neutral libraries -->
@@ -638,7 +641,23 @@ Commandline Examples:
     </copy>
   </target>
 
+  <target name="copylibs">
+	<property name="lib20.dir" value="${spring.basedir}\lib\${framework::get-family(framework::get-target-framework())}\2.0"/>
+	<echo message="Current lib20 dir = ${lib20.dir}"/>
+    <echo message="Current lib dir = ${lib.dir}"/>
+	<mkdir dir="${lib.dir}" failonerror="false" />
+	
+    <copy todir="${lib.dir}" verbose="true">
+      <fileset basedir="${lib20.dir}">
+        <include name="*.dll"/>
+		<exclude if="${net-4.0}" name="**/System.Web.Extensions.dll"/>
+        <include name="*.xml"/>
+      </fileset>
+    </copy>
+  </target>
 
+  
+  
   <!-- Top level targets -->
   <!-- target for developers to do just debug build and test everything in CVS -->
   <target name="test">
@@ -983,8 +1002,9 @@ Commandline Examples:
 
     <call target="${nant.target.root.name}-3.0" />
 
-    <!-- ignore .NET 3.5, nothing in code base dependent on 3.5 libs -->
-    <!-- call target="${nant.target.root.name}-3.5" / -->
+    <call target="${nant.target.root.name}-3.5" />
+	
+	<call target="${nant.target.root.name}-4.0" />
 
     <!-- ignore Mono 2.0 -->
     <!-- <call target="${nant.target.root.name}-mono-2.0" /> -->
