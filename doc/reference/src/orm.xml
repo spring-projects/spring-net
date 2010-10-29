@@ -237,13 +237,26 @@
       SessionFactory set up.</para>
 
       <para>The second strategy is to use the class
-      <literal>Sping.Data.TxScopeTransactionManager</literal> that uses .NET
+      <literal>Spring.Data.TxScopeTransactionManager</literal> that uses .NET
       2.0 System.Transaction namespace and its corresponding TransactionScope
       API. This is preferred when you are using multiple transactional
-      resources, such as multiple databases.</para>
+      resources, such as multiple databases. Note that due to changes in the
+      manner in which NHibernate manages its own transactions introduced in
+      NHibernate 2.1.2 (and later), when using NHibernate 2.1.2 (and later) in
+      the context of the .NET System.Transaction class and its
+      TransactionScope API Spring.NET users are advised to use the
+      <literal>Spring.Data.HibernateTxScopeTransactionManager</literal> class
+      which is specifically designed to manage the new NHibernate
+      transcational model when used in the context of the System.Transaction
+      API. The API of the
+      <literal>Spring.Data.HibernateTxScopeTransactionManager</literal> class
+      is functionally equivalent to that of the
+      <literal>Spring.Data.HibernateTransactionManager</literal> class but it
+      is designed to cooperate with the .NET System.Transaction
+      TransactionScope API for NHibernate 2.1.2 (and later).</para>
 
-      <para>Both strategies associate one Hibernate Session for the scope of
-      the transaction (scope in the general demarcation sense, not
+      <para>All of these strategies associate one Hibernate Session for the
+      scope of the transaction (scope in the general demarcation sense, not
       System.Transaction sense). If there is no transaction then a new Session
       will be opened for each operation. The exception to this rule is when
       using the <literal>OpenSessionInViewModule</literal> in a web
