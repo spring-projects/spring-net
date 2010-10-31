@@ -202,6 +202,15 @@ namespace Spring.Context.Support
 			get { return true; }
 		}
 		
+        /// <summary>
+        /// Specifies, whether the instantiated context will be automatically registered in the 
+        /// global <see cref="ContextRegistry"/>.
+        /// </summary>
+	    protected virtual bool AutoRegisterWithContextRegistry
+	    {
+            get { return true;  }
+	    }
+
 	    /// <summary>
 	    /// Creates an <see cref="Spring.Context.IApplicationContext"/> instance
 	    /// using the context definitions supplied in a custom
@@ -278,6 +287,11 @@ namespace Spring.Context.Support
 	        	
 	        	// finally create the context instance
 				context = InstantiateContext(parentContext, configContext, contextName, contextType, caseSensitive, resources);
+                // and register with global context registry
+                if (AutoRegisterWithContextRegistry)
+                {
+                    ContextRegistry.RegisterContext(context);                    
+                }
 
 				// get and create child context definitions
                 XmlNode[] childContexts = GetChildContexts(contextElement);
@@ -492,7 +506,6 @@ namespace Spring.Context.Support
                     throw ConfigurationUtils.CreateConfigurationException(errorMessage);
                 }
                 IApplicationContext context = InvokeContextConstructor(ctor);
-                ContextRegistry.RegisterContext(context);
                 return context;
             }
 
