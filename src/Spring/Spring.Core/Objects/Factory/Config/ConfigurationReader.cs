@@ -173,39 +173,13 @@ namespace Spring.Objects.Factory.Config
             {
                 properties = new NameValueCollection();
             }
-            Stream stream = null;
-            try
-            {
-                ConfigXmlDocument doc = new ConfigXmlDocument();
-                stream = resource.InputStream;
-                doc.Load(stream);
-                NameValueCollection newProperties = ReadFromXmlDocument(doc, configSection);
-                if (newProperties != null)
-                {
-                    PopulateProperties(overrideValues, properties, newProperties);
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    try
-                    {
-                        stream.Close();
-                    }
-                    catch (IOException ex)
-                    {
-                        #region Instrumentation
 
-                        if (_log.IsWarnEnabled)
-                        {
-                            _log.Warn("Could not close stream from resource " + resource.Description, ex);
-                        }
-
-                        #endregion
-                    }
-                }
+            NameValueCollection newProperties = (NameValueCollection)GetSection(resource, configSection, typeof(NameValueFileSectionHandler));
+            if (newProperties != null)
+            {
+                PopulateProperties(overrideValues, properties, newProperties);
             }
+
             return properties;
         }
 
@@ -253,11 +227,20 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         public static object GetSection(IResource resource, string configSectionName)
         {
+            return GetSection(resource, configSectionName, null);
+        }
+
+        /// <summary>
+        /// Returns the section from the specified resource with the given section name. Use <paramref name="defaultConfigurationSectionHandlerType"/>
+        /// in case no section handler is specified.
+        /// </summary>
+        public static object GetSection(IResource resource, string configSectionName, Type defaultConfigurationSectionHandlerType)
+        {
             using (Stream istm = resource.InputStream)
             {
                 ConfigXmlDocument doc = new ConfigXmlDocument();
                 doc.Load(istm);
-                return GetSectionFromXmlDocument(doc, configSectionName);
+                return GetSectionFromXmlDocument(doc, configSectionName, defaultConfigurationSectionHandlerType);
             }
         }
 
@@ -267,17 +250,21 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         public static TResult GetSection<TResult>(IResource resource, string configSectionName)
         {
-            using (Stream istm = resource.InputStream)
+            return GetSection<TResult>(resource, configSectionName, null);
+        }
+
+        /// <summary>
+        /// Returns the section from the specified resource with the given section name. Use <paramref name="defaultConfigurationSectionHandlerType"/>
+        /// in case no section handler is specified.
+        /// </summary>
+        public static TResult GetSection<TResult>(IResource resource, string configSectionName, Type defaultConfigurationSectionHandlerType)
+        {
+            object result = GetSection(resource, configSectionName, defaultConfigurationSectionHandlerType);
+            if (result != null && !(result is TResult))
             {
-                ConfigXmlDocument doc = new ConfigXmlDocument();
-                doc.Load(istm);
-                object result = GetSectionFromXmlDocument(doc, configSectionName);
-                if (result != null && !(result is TResult))
-                {
-                    throw new ArgumentException(string.Format("evaluating configuration sectoin {0} does not result in an instance of type {1}", configSectionName, typeof(TResult)));
-                }
-                return (TResult)result;
+                throw new ArgumentException(string.Format("evaluating configuration section {0} does not result in an instance of type {1}", configSectionName, typeof(TResult)));
             }
+            return (TResult) result;
         }
 
         /// <summary>
@@ -302,8 +289,53 @@ namespace Spring.Objects.Factory.Config
         /// <returns></returns>
         public static object GetSectionFromXmlDocument(XmlDocument document, string configSectionName)
         {
-            string[] sectionNameParts = configSectionName.Split('/');
+            return GetSectionFromXmlDocument(document, configSectionName, null);
+        }
 
+        /// <summary>
+        /// Reads the specified configuration section from the given <see cref="XmlDocument"/>
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="configSectionName"></param>
+        /// <param name="defaultConfigurationSectionHandlerType"></param>
+        /// <returns></returns>
+        public static object GetSectionFromXmlDocument(XmlDocument document, string configSectionName, Type defaultConfigurationSectionHandlerType)
+        {
+            Type handlerType = GetSectionHandlerType(document, configSectionName, defaultConfigurationSectionHandlerType);
+
+            // obtain Xml node with section content
+            XmlNode sectionContent = document.SelectSingleNode(string.Format("//{0}/{1}", ConfigurationElement, configSectionName));
+            if (sectionContent == null)
+            {
+                // TODO: review if we shouldn't better simply return null here to match the ConfigurationManager's behaviour?
+                throw ConfigurationUtils.CreateConfigurationException("Cannot read config section '" + configSectionName + "' - section not found.");
+            }
+
+            // IConfigurationSectionHandler
+            if (typeof(IConfigurationSectionHandler).IsAssignableFrom(handlerType))
+            {
+                IConfigurationSectionHandler handler = (IConfigurationSectionHandler)ObjectUtils.InstantiateType(handlerType);
+                return ((IConfigurationSectionHandler)handler).Create(null, null, sectionContent);
+            }
+
+#if !NET_1_0 && !NET_1_1
+            // NET 2.0 ConfigurationSection
+            if (typeof(ConfigurationSection).IsAssignableFrom(handlerType))
+            {
+                ConfigurationSection section = CreateConfigurationSection(handlerType, new XmlNodeReader(sectionContent));
+                return section;
+            }
+#endif
+            // Not supported
+            throw ConfigurationUtils.CreateConfigurationException("Configuration section '" + configSectionName + "' is neither of type IConfigurationSectionHandler nor ConfigurationSection.");
+        }
+
+        /// <summary>
+        /// Determine the configuration section handler type
+        /// </summary>
+        private static Type GetSectionHandlerType(XmlDocument document, string configSectionName, Type defaultConfigurationSectionHandlerType)
+        {
+            string[] sectionNameParts = configSectionName.Split('/');
             string sectionHandlerPath = string.Format("//{0}/{1}", ConfigurationElement, ConfigSectionsElement);
 
             if (sectionNameParts.Length > 1)
@@ -329,7 +361,7 @@ namespace Spring.Objects.Factory.Config
                 if (xmlConfig == null)
                 {
                     // TOOD: better throw a sensible exception in case of a missing handler configuration?
-                    handlerType = typeof(NameValueFileSectionHandler);
+                    handlerType = defaultConfigurationSectionHandlerType;
                 }
             }
             
@@ -341,33 +373,9 @@ namespace Spring.Objects.Factory.Config
 
             if (handlerType == null)
             {
-                throw new ConfigurationException(string.Format("missing 'type' attribute on section definition for '{0}'", configSectionName));
+                throw new ConfigurationException(string.Format("missing handler-'type' attribute on configuration section definition for section '{0}'", configSectionName));
             }
-
-            // obtain Xml node with section content
-            XmlNode sectionContent = document.SelectSingleNode(string.Format("//{0}/{1}", ConfigurationElement, configSectionName));
-            if (sectionContent == null)
-            {
-                throw ConfigurationUtils.CreateConfigurationException("Cannot read properties; config section '" + configSectionName + "' not found.");
-            }
-
-            // IConfigurationSectionHandler
-            if (typeof(IConfigurationSectionHandler).IsAssignableFrom(handlerType))
-            {
-                IConfigurationSectionHandler handler = (IConfigurationSectionHandler)ObjectUtils.InstantiateType(handlerType);
-                return ((IConfigurationSectionHandler)handler).Create(null, null, sectionContent);
-            }
-
-#if !NET_1_0 && !NET_1_1
-            // NET 2.0 ConfigurationSection
-            if (typeof(ConfigurationSection).IsAssignableFrom(handlerType))
-            {
-                ConfigurationSection section = CreateConfigurationSection(handlerType, new XmlNodeReader(sectionContent));
-                return section;
-            }
-#endif
-            // Not supported
-            throw ConfigurationUtils.CreateConfigurationException("Configuration section '" + configSectionName + "' is neither of type IConfigurationSectionHandler nor ConfigurationSection.");
+            return handlerType;
         }
 
 
