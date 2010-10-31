@@ -228,9 +228,9 @@ namespace Spring.Objects.Factory.Config
 
         [Test]
 #if !NET_2_0
-        [ExpectedException(typeof(ConfigurationException), ExpectedMessage = "Cannot read properties; config section 'ELNOMBRE' not found.")]
+        [ExpectedException(typeof(ConfigurationException), ExpectedMessage = "Cannot read config section 'ELNOMBRE' - section not found.")]
 #else
-        [ExpectedException(typeof(ConfigurationErrorsException), ExpectedMessage = "Cannot read properties; config section 'ELNOMBRE' not found.")]
+        [ExpectedException(typeof(ConfigurationErrorsException), ExpectedMessage = "Cannot read config section 'ELNOMBRE' - section not found.")]
 #endif
         public void TryReadFromNonExistantConfigSection()
         {
