@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<spring>
-  <context>
-    <resource uri="Config/services.xml" />
-  </context>
-</spring>

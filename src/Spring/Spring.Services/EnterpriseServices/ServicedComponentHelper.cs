@@ -68,59 +68,80 @@ namespace Spring.EnterpriseServices
             {
                 if (isInitialized) return;
 
-                isInitialized = true;
-
-                // this is to ensure, that assemblies placed next to the component assembly can be loaded
-                // even when they are not strong named.
-                AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-                FileInfo componentAssemblyFile = new FileInfo(componentType.Assembly.Location);
-                componentDirectory = componentAssemblyFile.Directory.FullName;
-                // switch to component assembly's directory (affects resolving relative paths during context instantiation!)
-                Environment.CurrentDirectory = componentDirectory;
-                // read in config file if any
-                FileInfo configFile = new FileInfo(componentAssemblyFile.FullName);
-                if (configFile.Exists)
+                try
                 {
-                    bool isRunningOutOfProcess = IsRunningOutOfProcess();
+                    Initialize(componentType);
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine("Error configuring application context for COM component of type " + componentType + ": " + e);
+                    throw;
+                }
 
-#if NET_2_0
-                    ExeConfigurationSystem comConfig = new ExeConfigurationSystem(configFile.FullName);
+                isInitialized = true;
+            }
+        }
 
-                    if (isRunningOutOfProcess)
+        private static void Initialize(Type componentType)
+        {
+            // this is to ensure, that assemblies placed next to the component assembly can be loaded
+            // even when they are not strong named.
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            FileInfo componentAssemblyFile = new FileInfo(componentType.Assembly.Location);
+            FileInfo assemblyFile = new FileInfo(componentAssemblyFile.FullName);
+
+            bool isRunningOutOfProcess = IsRunningOutOfProcess();
+            FileInfo configFile = new FileInfo(componentAssemblyFile.FullName + ".config");
+
+            // no config file and in-proc -> reuse app's context, error otherwise
+            if (!configFile.Exists)
+            {
+                if (!isRunningOutOfProcess)
+                {
+                    // check for context with component's name
+                    if (ContextRegistry.IsContextRegistered(componentType.Name))
                     {
-                        Trace.WriteLine(string.Format("configuring COM OutProc Server '{0}' using '{1}'", componentAssemblyFile.FullName, componentAssemblyFile.FullName + ".config"));
-
-                        // make the config "global"
-                        ConfigurationUtils.SetConfigurationSystem(comConfig, true);
-                        _appContext = ContextRegistry.GetContext();
-                        if (_appContext == null)
-                        {
-                            throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section");
-                        }
-
-                    }
+                        Trace.WriteLine(string.Format("configuring COM InProc Server '{0}' using section <spring/context name={1}> from app.config", componentAssemblyFile.FullName, componentType.Name));
+                        _appContext = ContextRegistry.GetContext(componentType.Name);
+                    } 
                     else
                     {
-                        Trace.WriteLine(string.Format("configuring COM InProc Server '{0}' using section <spring/context> from file '{1}'", componentAssemblyFile.FullName, componentAssemblyFile.FullName + ".config"));
-                        _appContext = (IApplicationContext)comConfig.GetSection("spring/context");
-                        if (_appContext == null)
-                        {
-                            throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section in configuration file");
-                        }
+                        Trace.WriteLine(string.Format("configuring COM InProc Server '{0}' using section <spring/context> from file '{1}'", componentAssemblyFile.FullName, configFile.FullName));
+                        _appContext = ContextRegistry.GetContext();                        
                     }
-#else
-                    _appContext = (IApplicationContext) ConfigurationReader.GetSection(new FileSystemResource(configFile.FullName + ".config"),"spring/context");
-                    if (_appContext == null)
-                    {
-                        throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section in configuration file");
-                    }
-#endif
+                    return;                    
                 }
-                else
-                {
-                    Trace.WriteLine(string.Format("No configuration file '{0}' for COM component '{1}' found - bypassing configuration", componentAssemblyFile.FullName + ".config", componentAssemblyFile.FullName));
-                }
+                throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section in configuration file '" + configFile.FullName + "'");
             }
+
+            // set and switch to component assembly's directory (affects resolving relative paths during context instantiation!)
+            componentDirectory = componentAssemblyFile.Directory.FullName;
+            Environment.CurrentDirectory = componentDirectory;
+
+            if (isRunningOutOfProcess)
+            {
+#if NET_2_0
+                Trace.WriteLine(string.Format("configuring COM OutProc Server '{0}' using '{1}'", componentAssemblyFile.FullName, configFile.FullName));
+                // read in config file
+                ExeConfigurationSystem comConfig = new ExeConfigurationSystem(assemblyFile.FullName);
+                // make the config "global" for this process, replacing any 
+                // existing configuration that might already have been loaded
+                ConfigurationUtils.SetConfigurationSystem(comConfig, true);
+                _appContext = ContextRegistry.GetContext();
+#else
+                _appContext = (IApplicationContext) ConfigurationReader.GetSection(new FileSystemResource(configFile.FullName),"spring/context");
+#endif
+            }
+            else
+            {
+                Trace.WriteLine(string.Format("configuring COM InProc Server '{0}' using section <spring/context> from file '{1}'", componentAssemblyFile.FullName, configFile.FullName));
+                _appContext = (IApplicationContext)ConfigurationReader.GetSection(new FileSystemResource(configFile.FullName), "spring/context");
+            }
+            if (_appContext == null)
+            {
+                throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section in configuration file");
+            }
+            Trace.WriteLine(string.Format("completed configuring COM Component '{0}' using '{1}'", componentAssemblyFile.FullName, configFile.FullName));
         }
 
         private static bool IsRunningOutOfProcess()
@@ -128,6 +149,7 @@ namespace Spring.EnterpriseServices
             // TODO: checkout a prob. better way to find out, whether we are executing as a com server or library
             return AppDomain.CurrentDomain.SetupInformation.ApplicationName == "dllhost.exe";
         }
+
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             string name = args.Name.Split(',')[0];
@@ -142,11 +164,16 @@ namespace Spring.EnterpriseServices
         public static object GetObject(ServicedComponent sender, string targetName)
         {
             EnsureComponentContextRegistryInitialized(sender.GetType());
-            if (_appContext == null)
+            try
             {
-                throw ConfigurationUtils.CreateConfigurationException("Spring-exported COM components require <spring/context> section in configuration file");
+                return _appContext.GetObject(targetName);
+
             }
-            return _appContext.GetObject(targetName);
+            catch (Exception e)
+            {
+                Trace.WriteLine("Error configuring application context for COM component of type " + sender.GetType() + ": " + e);
+                throw;
+            }
         }
     }
 }

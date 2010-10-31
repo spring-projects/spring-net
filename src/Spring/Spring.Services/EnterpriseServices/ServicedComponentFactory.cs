@@ -23,7 +23,8 @@
 #region Imports
 
 using System;
-
+using System.Diagnostics;
+using System.Reflection;
 using Spring.Util;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
@@ -152,6 +153,7 @@ namespace Spring.EnterpriseServices
         {
             ValidateConfiguration();
             componentType = Type.GetTypeFromProgID(Name, Server);
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
         }
 
         #endregion
@@ -173,6 +175,11 @@ namespace Spring.EnterpriseServices
         private object CreateInstance()
         {
             return Activator.CreateInstance(componentType);
+        }
+
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            return Assembly.LoadFrom(componentType.Assembly.CodeBase);
         }
 
         #endregion
