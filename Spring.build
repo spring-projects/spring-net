@@ -569,14 +569,20 @@ Commandline Examples:
     <call target="copykeys" if="${project.build.sign}"/>
 	<call target="copylibs" />
 	<call target="common.generate-assemblyinfo"/>
-    <property name="build-ems" value="true" overwrite="true" />
-    <property name="build-nms" value="true" overwrite="true" />
-    <property name="build-quartz" value="true" overwrite="true" />
-    <property name="build-msmq" value="true" overwrite="true" />
-    <property name="build-msmq-tests" value="true" overwrite="true" />
-    <property name="build-velocity" value="true" overwrite="true" />
+    <property name="build-ems" value="false" overwrite="true" />
+    <property name="build-nms" value="false" overwrite="true" />
+    <property name="build-quartz" value="false" overwrite="true" />
+    <property name="build-msmq" value="false" overwrite="true" />
+    <property name="build-msmq-tests" value="false" overwrite="true" />
+    <property name="build-velocity" value="false" overwrite="true" />
 	
-    <call target="compile-test" />
+	<!-- Do not call compile-test target - only build Spring.Services and Spring.Scheduling.Quartz and related tests in .NET 3.5 -->
+    <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <call target="copylibtobin"/>
+    <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
+    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
+	<nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
+	<nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz}"/>
   </target>
 
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
