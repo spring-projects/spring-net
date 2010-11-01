@@ -24,11 +24,12 @@
     <StartupObject>
     </StartupObject>
     <SignAssembly>false</SignAssembly>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\build\VS.Net.2010\Spring.Services\Debug\</OutputPath>
@@ -37,7 +38,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0;NET_3_5</DefineConstants>
     <DocumentationFile>Spring.Services.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -91,6 +92,7 @@
       <Name>system.enterpriseservices</Name>
     </Reference>
     <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.Services">
       <Name>system.web.services</Name>
     </Reference>
@@ -132,6 +134,7 @@
     <Compile Include="Remoting\SaoFactoryObject.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ServiceModel\Activation\WebServiceHostFactory.cs" />
     <Compile Include="ServiceModel\Activation\ServiceHostFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -139,6 +142,7 @@
     <Compile Include="ServiceModel\ChannelFactoryObject.cs" />
     <Compile Include="ServiceModel\Config\ChannelFactoryObjectDefinitionParser.cs" />
     <Compile Include="ServiceModel\Config\WcfNamespaceParser.cs" />
+    <Compile Include="ServiceModel\SpringWebServiceHost.cs" />
     <Compile Include="ServiceModel\ServiceExporter.cs" />
     <Compile Include="ServiceModel\SpringServiceHost.cs" />
     <Compile Include="ServiceModel\Support\ServiceProxyTypeBuilder.cs" />
