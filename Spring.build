@@ -569,12 +569,12 @@ Commandline Examples:
     <call target="copykeys" if="${project.build.sign}"/>
 	<call target="copylibs" />
 	<call target="common.generate-assemblyinfo"/>
-    <property name="build-ems" value="false" overwrite="true" />
-    <property name="build-nms" value="false" overwrite="true" />
-    <property name="build-quartz" value="false" overwrite="true" />
-    <property name="build-msmq" value="false" overwrite="true" />
-    <property name="build-msmq-tests" value="false" overwrite="true" />
-    <property name="build-velocity" value="false" overwrite="true" />
+    <property name="build-ems" value="true" overwrite="true" />
+    <property name="build-nms" value="true" overwrite="true" />
+    <property name="build-quartz" value="true" overwrite="true" />
+    <property name="build-msmq" value="true" overwrite="true" />
+    <property name="build-msmq-tests" value="true" overwrite="true" />
+    <property name="build-velocity" value="true" overwrite="true" />
 	
     <call target="compile-test" />
   </target>
