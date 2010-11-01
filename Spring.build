@@ -1061,6 +1061,15 @@ Commandline Examples:
     <call target="compile-build-3.5"/>
   </target>
 
+  
+  <target name="daily-build-4.0">
+    <call target="set-build-namespaces-all"/>
+    <call target="set-package-configuration"/>
+    <call target="set-debug-build-configuration"/>
+    <call target="compile-build-4.0"/>
+    <call target="set-release-build-configuration"/>
+    <call target="compile-build-4.0"/>
+  </target>
 
   <!-- Target to use when packaging everything in CVS -->
   <target name="package-cvs" description="Build and Package distribution">
