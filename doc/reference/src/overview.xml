@@ -16,7 +16,13 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="introduction" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter version="5" xml:id="introduction"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Introduction</title>
 
   <sect1 xml:id="introduction-overview">
@@ -96,8 +102,8 @@
     started to use the term Dependency Injection. His article then continued
     to explain the ideas underpinning the Inversion of Control (IoC) and
     Dependency Injection (DI) principle. If you need a decent insight into IoC
-    and DI, please do refer to the article : 
-    <ulink url="http://martinfowler.com/articles/injection.html">
+    and DI, please do refer to the article : <ulink
+    url="http://martinfowler.com/articles/injection.html">
     http://martinfowler.com/articles/injection.html</ulink>.</para>
   </sect1>
 
@@ -110,7 +116,7 @@
 
     <para><mediaobject>
         <imageobject>
-          <imagedata fileref="images/overview.gif" format="GIF" />
+          <imagedata fileref="images/overview.gif" format="GIF"></imagedata>
         </imageobject>
       </mediaobject></para>
 
@@ -129,7 +135,7 @@
     logging, performance monitoring, caching, method retry, and exception
     handling.</para>
 
-    <para><link linkend="spring-middle-tier">Spring.Data</link> - Use this
+    <para><link linkend="data-quickstart.xml">Spring.Data</link> - Use this
     module to achieve greater efficiency and consistency in writing data
     access functionality in ADO.NET and to perform declarative transaction
     management.</para>
@@ -140,10 +146,26 @@
     within the same transaction. NHibernate 1.0 users will benefit from ease
     of use APIs to perform data access operations.</para>
 
+    <para><link linkend="messaging">Spring.Messaging</link> - Use this module
+    to raise the level of abstraction when interacting with the Microsoft MSMQ
+    message queing middleware</para>
+
+    <para><link linkend="messaging">Spring.Messaging.NMS</link> - Use this
+    module to raise the level of abstraction when interacting with the Apache
+    ActiveMQ (NMS) message queing middleware</para>
+
+    <para><link linkend="messaging-ems">Spring.Messaging.EMS</link> - Use this
+    module to raise the level of abstraction when interacting with the Tibco
+    Enterprise Message Service (EMS) message queing middleware</para>
+
     <para><link linkend="web">Spring.Web</link> - Use this module to raise the
     level of abstraction when writing ASP.NET web applications allowing you to
     effectively address common pain-points in ASP.NET such as data binding,
     validation, and ASP.NET page/control/module/provider configuration.</para>
+
+    <para>Spring.Web.Mvc - Use this module to integrate the functionality of
+    the Spring.Core and Spring.Aop modules into your ASP.NET MVC 2
+    projects.</para>
 
     <para><link linkend="ajax">Spring.Web.Extensions</link> - Use this module
     to raise the level of abstraction when writing ASP.NET web applications
@@ -159,6 +181,13 @@
 
     <para><link linkend="testing">Spring.Testing.NUnit</link> - Use this
     module to perform integration testing with NUnit.</para>
+
+    <para><link linkend="???">Spring.Testing.MSTest</link> - Use this module
+    to perform integration testing with MSTest</para>
+
+    <para><link linkend="scheduling">Spring.Scheduling.Quartz</link> - Use
+    this module to support interacting with the Quartz.NET job scheduler
+    infrastructure.</para>
 
     <para>The Spring.Core module also includes the following additional
     features</para>
@@ -302,10 +331,11 @@
       </listitem>
 
       <listitem>
-        <para><link linkend="nh-quickstart">NHibernate Northwind</link>: Demonstrates use of Spring's NHibernate
-        integration to simplify the use of NHibernate. Web tier is also
-        included showing how to use the Open-Session In View approach to
-        session management in the web tier.</para>
+        <para><link linkend="nh-quickstart">NHibernate Northwind</link>:
+        Demonstrates use of Spring's NHibernate integration to simplify the
+        use of NHibernate. Web tier is also included showing how to use the
+        Open-Session In View approach to session management in the web
+        tier.</para>
       </listitem>
 
       <listitem>
