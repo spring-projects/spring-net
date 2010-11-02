@@ -497,6 +497,10 @@ Commandline Examples:
                  if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate30.Integration.Tests/Spring.Data.NHibernate30.Integration.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
+	<nant buildfile="test/Spring/Spring.Data.NHibernate30.Tests/Spring.Data.NHibernate30.Tests.build" target="test"
+                 if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate30.Integration.Tests/Spring.Data.NHibernate30.Integration.Tests.build" target="test"
+                 if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services and not net-3.5}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
@@ -1271,6 +1275,18 @@ Commandline Examples:
         </fileset>
       </copy>
     </if>
+	
+	<mkdir dir="${current.package.dir}/lib/NHibernate30"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib/NHibernate30">
+        <fileset basedir="lib/NHibernate30">
+          <include name="**/*.dll"/>
+          <include name="**/*.xml"/>
+          <include name="**/*.license.txt"/>
+	  <exclude name="mono/**"/>
+        </fileset>
+      </copy>
+    </if>
 
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
       <copy todir="${current.package.dir}/lib">
@@ -1421,6 +1437,10 @@ Commandline Examples:
           <include name="*/*/Spring.Data.NHibernate21.xml"/>
           <include name="*/*/Spring.Data.NHibernate21.pdb"/>
 
+          <include name="*/*/Spring.Data.NHibernate30.dll"/>
+          <include name="*/*/Spring.Data.NHibernate30.xml"/>
+          <include name="*/*/Spring.Data.NHibernate30.pdb"/>		  
+		  
           <include name="*/*/Spring.Web.dll"/>
           <include name="*/*/Spring.Web.xml"/>
           <include name="*/*/Spring.Web.pdb"/>
@@ -1682,6 +1702,7 @@ Commandline Examples:
       <include name="src/Spring/Spring.Data.NHibernate12/**"/>
       <include name="src/Spring/Spring.Data.NHibernate20/**"/>
       <include name="src/Spring/Spring.Data.NHibernate21/**"/>
+	  <include name="src/Spring/Spring.Data.NHibernate30/**"/>
       <include name="src/Spring/Spring.Messaging/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
       <include name="src/Spring/Spring.Messaging.Ems/**"/>
@@ -1703,6 +1724,8 @@ Commandline Examples:
       <include name="test/Spring/Spring.Data.NHibernate20.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate21.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate21.Integration.Tests/**"/>
+<include name="test/Spring/Spring.Data.NHibernate30.Tests/**"/>
+      <include name="test/Spring/Spring.Data.NHibernate30.Integration.Tests/**"/>	  
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>
