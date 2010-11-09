@@ -183,7 +183,7 @@
       are usable on their own but integrate nicely with Spring's application
       context concept, providing XML-based configuration and cross-referencing
       of plain object instances that don't need to be Spring-aware. In a
-      typical Spring application, many important objects are plain .NET
+      typical Spring application, many important objects are plain CLR
       objects: data access templates, data access objects (that use the
       templates), transaction managers, business services (that use the data
       access objects and transaction managers), ASP.NET web pages (that use

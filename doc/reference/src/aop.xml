@@ -2421,7 +2421,7 @@ object oldTarget = swapper.swap(newTarget);</programlisting></para>
 
       <para>A crucial difference between Spring.NET pooling and pooling in
       .NET Enterprise Services pooling is that Spring.NET pooling can be
-      applied to any PONO. (Plain old .NET object). As with Spring.NET in
+      applied to any POCO. (Plain old CLR object). As with Spring.NET in
       general, this service can be applied in a non-invasive way.</para>
 
       <para>Spring.NET provides out-of-the-box support using a pooling

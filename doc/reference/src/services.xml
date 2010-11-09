@@ -23,7 +23,7 @@
     <title>Introduction</title>
 
     <para>Spring's .NET Enterprise Services support allows you to export a
-    'plain .NET object' as a .NET Remoted object. By "plain .NET object" we
+    'plain CLR object' as a .NET Remoted object. By "plain CLR object" we
     mean classes that do not inherit from a specific infrastructure base class
     such as ServicedComponent..</para>
 
@@ -217,10 +217,10 @@
 
     <para>You can then inject this instance of the IUserManager into a client
     class and use it just like you would use original SimpleUserManager
-    implementation. As you can see, by coding your services as plain .Net
+    implementation. As you can see, by coding your services as plain CLR
     objects, against well defined service interfaces, you gain easy
     pluggability for your service implementation though this configuration,
-    while keeping the core business logic in a technology agnostic PONO, i.e.
-    Plain Ordinary .Net Object.</para>
+    while keeping the core business logic in a technology agnostic POCO, i.e.
+    Plain Old CLR Object.</para>
   </sect1>
 </chapter>

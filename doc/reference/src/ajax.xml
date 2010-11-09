@@ -22,8 +22,8 @@
   <sect1 xml:id="introduction-ajax">
     <title>Introduction</title>
 
-    <para>Spring's ASP.NET AJAX integration allows for a plain .NET object
-    (PONO), that is one that doesn't have any attributes or special base
+    <para>Spring's ASP.NET AJAX integration allows for a plain CLR object
+    (POCO), that is one that doesn't have any attributes or special base
     classes, to be exported as a web service, configured via dependency
     injection, 'decorated' by applying AOP, and then exposed to client side
     JavaScript.</para>
@@ -54,7 +54,7 @@
       <title>Exposing Web Services</title>
 
       <para>The <literal>WebServiceExporter</literal> combined with the
-      new HTTP handler exposes PONOs as Web Services in your ASP.NET AJAX
+      new HTTP handler exposes POCOs as Web Services in your ASP.NET AJAX
       application.</para>
 
       <para>In order for a Web service to be accessed from script, the

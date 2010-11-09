@@ -226,7 +226,7 @@
 
 &lt;/object&gt;
 
-&lt;!-- Delegate to plain .NET object for message handling --&gt;
+&lt;!-- Delegate to plain CLR object for message handling --&gt;
 &lt;object id="<emphasis role="bold">messageListenerAdapter</emphasis>" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
   &lt;property name="HandlerObject" ref="stockAppHandler"/&gt;
   &lt;property name="DefaultHandlerMethod" value="Handle"/&gt;

@@ -36,7 +36,7 @@
     practices in designing a messaging application by promoting a clear
     separation between the messaging middleware specific code and business
     processing that is technology agnostic. This is generally referred to a
-    "plain old .NET object" (or PONO) programming model.</para>
+    "plain old CLR object" (or POCO) programming model.</para>
 
     <para>This chapter discusses Spring's messaging support for providers
     whose API was modeled after the Java Message Service (JMS) API. Vendors
@@ -88,12 +88,12 @@
       is used. Asynchronous message consumption is performed though a
       multi-threaded message listener container,
       <literal>SimpleMessageListenerContainer</literal>. This message listener
-      container is used to create Message-Driven PONOs (MDPs) which refer to a
-      messaging callback class that consists of just 'plain .NET object's and
+      container is used to create Message-Driven POCOs (MDPs) which refer to a
+      messaging callback class that consists of just 'plain CLR object's and
       is devoid of any specific messaging types or other artifacts. The
       <literal>IMessageConverter</literal> interface is used by both the
       template class and the message listener container to convert between
-      provider message types and PONOs.</para>
+      provider message types and POCOs.</para>
 
       <para>The namespace
       <literal>Spring.Messaging.&lt;Vendor&gt;.Core</literal> contains the
@@ -156,7 +156,7 @@
     <section xml:id="activemq-intro-soc">
       <title>Separation of Concerns</title>
 
-      <para>The use of MessageConverters and a PONO programming model promote
+      <para>The use of MessageConverters and a POCO programming model promote
       messaging best practices by applying the principal of Separation of
       Concerns to messaging based architectures. The infrastructure concern of
       publishing and consuming messages is separated from the concern of
@@ -166,12 +166,12 @@
       business processing is decoupled from the messaging technology, making
       it more likely to survive technological changes over time and also
       easier to test. Spring's MessageConverters provides support for mapping
-      messaging data types to PONOs. Aside from being the link between the two
+      messaging data types to POCOs. Aside from being the link between the two
       layers, MessageConverters provide a pluggable strategy to help support
       the evolution of a loosely coupled architecture over time. Message
       formats will change over time, typically by the addition of new fields.
       MessageConverters can be implemented to detect different versions of
-      messages and perform the appropriate mapping logic to PONOs such so that
+      messages and perform the appropriate mapping logic to POCOs such so that
       multiple versions of a message can be supported simultaneously, a common
       requirement in enterprise messaging architectures.</para>
     </section>
@@ -439,7 +439,7 @@
       <literal>IMessageListener</literal> that is injected into it. The
       listener container is responsible for all threading of message reception
       and dispatches into the listener for processing. A message listener
-      container is the intermediary between an Message-Driven PONO (MDP) and a
+      container is the intermediary between an Message-Driven POCO (MDP) and a
       messaging provider, and takes care of registering to receive messages,
       resource acquisition and release, exception conversion and suchlike.
       This allows you as an application developer to write the (possibly
@@ -448,7 +448,7 @@
       infrastructure concerns to the framework.</para>
 
       <para>A subclass of <literal>AbstractMessageListenerContainer</literal>
-      is used to receive messages from JMS and drive the Message-Driven PONOs
+      is used to receive messages from JMS and drive the Message-Driven POCOs
       (MDPs) that are injected into it. There are one subclasses of
       <literal>AbstractMessageListenerContainer</literal> packaged with Spring
       - <literal>SimpleMessageListenerContainer</literal>. Additional
@@ -1009,7 +1009,7 @@ namespace MyApp
       <para>Consider the following interface definition. Notice that although
       the interface extends neither the <literal>IMessageListener</literal>
       nor <literal>ISessionAwareMessageListener</literal> interfaces, it can
-      still be used as a Message-Driven PONOs (MDP) via the use of the
+      still be used as a Message-Driven POCOs (MDP) via the use of the
       <literal>MessageListenerAdapter</literal> class. Notice also how the
       various message handling methods are strongly typed according to the
       contents of the various Message types that they can receive and
@@ -1033,7 +1033,7 @@ namespace MyApp
 
       <para>In particular, note how the above implementation of the
       IMessageHandler interface (the above DefaultMessageHandler class) has no
-      messaging provider API dependencies at all. It truly is a PONO that we
+      messaging provider API dependencies at all. It truly is a POCO that we
       will make into an MDP via the following configuration.</para>
 
       <programlisting language="myxml">&lt;object id="MessagleHandler" type="MyApp.DefaultMessageHandler, MyApp"/&gt;

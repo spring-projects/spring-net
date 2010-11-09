@@ -22,8 +22,8 @@
   <section xml:id="remoting-introduction">
     <title>Introduction</title>
 
-    <para>Spring's .NET Remoting support allows you to export a 'plain .NET
-    object' as a .NET Remoted object. By "plain .NET object" we mean classes
+    <para>Spring's .NET Remoting support allows you to export a 'plain CLR
+    object' as a .NET Remoted object. By "plain CLR object" we mean classes
     that do not inherit from a specific infrastructure base class such as
     MarshalByRefObject. On the server side, Spring's .NET Remoting exporters
     will automatically create a proxy that implements MarshalByRefObject. You
@@ -138,7 +138,7 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
   &lt;property name="ServiceName" value="RemotedSaoSingleCallCalculator" /&gt;
 &lt;/object&gt;</programlisting></para>
 
-    <para>Note that we change the singleton attribute of the plain .NET object
+    <para>Note that we change the singleton attribute of the plain CLR object
     as configured by Spring in the &lt;object&gt; definition and not an
     attribute on the SaoExporter. The object referred to in the
     <literal>TargetName</literal> parameter can be an AOP proxy to a business

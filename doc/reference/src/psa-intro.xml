@@ -23,7 +23,7 @@
     <title>Introduction</title>
 
     <para>The goal of Spring's integration with distributed technologies is to
-    adapt plain .NET objects so they can be used with a specific distributed
+    adapt plain CLR objects so they can be used with a specific distributed
     technology. This integration is designed to be as non-intrusive as
     possible. If you need to expose an object to a remote process then you can
     define an exporter for that object. Similarly, on the client side you
@@ -49,8 +49,8 @@
 
     <para>The diagram shown below is a useful way to demonstrate the key
     abstractions in the Spring tool chest and their interrelationships. The
-    four key concepts are; plain .NET objects, Dependency Injection, AOP, and
-    Portable Service Abstractions. At the heart sits the plain .NET object
+    four key concepts are; plain CLR objects, Dependency Injection, AOP, and
+    Portable Service Abstractions. At the heart sits the plain CLR object
     that can be instantiated and configured using dependency injection. Then,
     optionally, the plain object can be adapted to a specific distributed
     technology. Lastly, additional behavior can be applied to objects. This

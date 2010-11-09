@@ -979,7 +979,7 @@ public class ServiceCommand : ICommand
         <title>Configuring advice</title>
 
         <para>In case it is not immediately apparent, remember that advice is
-        just a plain old .NET object (a PONO); advice can have constructors
+        just a plain old CLR object (a POCO); advice can have constructors
         that can take any number of parameters, and like any other .NET class,
         advice can have properties. What this means is that one can leverage
         the power of the Spring.NET IoC container to apply the IoC principle

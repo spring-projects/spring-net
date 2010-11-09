@@ -246,12 +246,12 @@
   </section>
 
   <section>
-    <title>Exporting PONOs as WCF Services</title>
+    <title>Exporting POCOs as WCF Services</title>
 
     <para>Much like the approach taken for .asmx web services Spring provides
     an exporter that will add <literal>[ServiceContract] </literal>and
     <literal>[OperationContract]</literal> attributes by default to all public
-    interface methods on a given (PONO) class. The exporter class is
+    interface methods on a given (POCO) class. The exporter class is
     <literal>Spring.ServiceModel.ServiceExporter</literal> and has various
     options to fine-tune what interfaces are exported and the specific
     attributes that get applied to each method and on that class. Here is a

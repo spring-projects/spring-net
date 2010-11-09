@@ -174,7 +174,7 @@
     configuration.</para>
 
     <para><link linkend="spring-services">Spring.Services</link> - Use this
-    module to adapt plain .NET objects so they can be used with a specific
+    module to adapt plain CLR objects so they can be used with a specific
     distributed communication technology, such as .NET Remoting, Enterprise
     Services, and ASMX Web Services. These services can be configured via
     dependency injection and ‘decorated’ by applying AOP.</para>
@@ -289,7 +289,7 @@
       <listitem>
         <para><link linkend="remoting-quickstart">Distributed Computing</link>
         - A calculator demonstrating remote service abstractions that let you
-        'export' a plain .NET object (PONO) via .NET Remoting, Web Services,
+        'export' a plain CLR object (POCO) via .NET Remoting, Web Services,
         or an EnterpriseService ServiceComponent. Corresponding client side
         proxies are also demonstrated.</para>
       </listitem>
@@ -326,7 +326,7 @@
       </listitem>
 
       <listitem>
-        <para>AJAX : Demonstrates how to access a plain .NET object as a
+        <para>AJAX : Demonstrates how to access a plain CLR object as a
         webservice in client side JavaScript</para>
       </listitem>
 

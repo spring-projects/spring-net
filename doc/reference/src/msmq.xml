@@ -46,8 +46,8 @@
     from the core business processing.</para>
 
     <para>Spring's approach to distributed computing has always been to
-    promote a plain old .NET object approach or a PONO programming model. In
-    this approach plain .NET objects are those that are devoid of any
+    promote a plain old CLR object approach or a POCO programming model. In
+    this approach plain CLR objects are those that are devoid of any
     reference to a particular middleware technology. Spring provides the
     'adapter' classes that converts between the middleware world, in this case
     MSMQ, and the oo-world of your business processing. This is done through
@@ -218,12 +218,12 @@
     &lt;property name="MessageListener" ref="messageListenerAdapter"/&gt;
   &lt;/object&gt;
  
-  &lt;!-- Adapter to call a PONO as a messaging callback --&gt;
+  &lt;!-- Adapter to call a POCO as a messaging callback --&gt;
   &lt;object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
     &lt;property name="HandlerObject" ref="questionHandler"/&gt;
   &lt;/object&gt;
 
-  &lt;!-- The PONO class that you write --&gt;
+  &lt;!-- The POCO class that you write --&gt;
   &lt;object id="questionHandler" type="MyNamespace.QuestionHandler, MyAssembly"/&gt;
   </programlisting>
 
@@ -687,7 +687,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     &lt;property name="ExceptionHandler" ref="exceptionHandler"/&gt;
   &lt;/object&gt;
 
-  &lt;!-- Delegate to plain .NET object for message handling --&gt;
+  &lt;!-- Delegate to plain CLR object for message handling --&gt;
   &lt;object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
     &lt;property name="DefaultResponseQueueName" value="msmqTestResponseQueue"/&gt;
     &lt;property name="HandlerObject" ref="simpleHandler"/&gt;
@@ -815,7 +815,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
     &lt;property name="MessageTransactionExceptionHandler" ref="messageTransactionExceptionHandler"/&gt;
   &lt;/object&gt;
 
-  &lt;!-- Delegate to plain .NET object for message handling --&gt;
+  &lt;!-- Delegate to plain CLR object for message handling --&gt;
   &lt;object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
     &lt;property name="DefaultResponseQueueName" value="msmqTestResponseQueue"/&gt;
     &lt;property name="HandlerObject" ref="simpleHandler"/&gt;
@@ -1147,7 +1147,7 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
         process incoming MSMQ messages using the default message
         converter.</para>
 
-        <programlisting language="myxml">  &lt;!-- Delegate to plain .NET object for message handling --&gt;
+        <programlisting language="myxml">  &lt;!-- Delegate to plain CLR object for message handling --&gt;
   &lt;object id="messageListenerAdapter" type="Spring.Messaging.Listener.MessageListenerAdapter, Spring.Messaging"&gt;
     &lt;property name="DefaultResponseQueueName" value="msmqTestResponseQueue"/&gt;
     &lt;property name="HandlerObject" ref="myHandler"/&gt;
@@ -1161,17 +1161,17 @@ void Send(MessageQueue messageQueue, Message message);</programlisting>
 
     <para>The goals of Spring's MSMQ messaging support are quite similar to
     those of WCF with its MSMQ related bindings, in as much as a WCF service
-    contract is a PONO (minus the attributes if you really picky about what
-    you call a PONO). Spring's messaging support can give you the programming
-    convenience of dealing with PONO contracts for message receiving but does
-    not (at the moment) provide a similar PONO contract for sending, instead
+    contract is a POCO (minus the attributes if you really picky about what
+    you call a POCO). Spring's messaging support can give you the programming
+    convenience of dealing with POCO contracts for message receiving but does
+    not (at the moment) provide a similar POCO contract for sending, instead
     relying on explicit use of the MessageQueueTemplate class. This feature
     exists - some question whether it should for messaging - in the Java
     version of the Spring framework, see JmsInvokerServiceExporter and
     JmsInvokerProxyFactoryBean.</para>
 
     <para>The good news is that if and when it comes time to move from a
-    Spring MSMQ solution to WCF, you will be in a great position as the PONO
+    Spring MSMQ solution to WCF, you will be in a great position as the POCO
     interface used for business processing when receiving in a Spring based
     MSMQ application can easily be adapted to a WCF environment. There may
     also be some features unique to MSMQ and/or Spring's MSMQ support that you

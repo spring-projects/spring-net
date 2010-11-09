@@ -32,8 +32,8 @@
     excellent, there are a few areas that the Spring.NET thought could use
     some improvement. Spring adds the ability to perform dependency injection
     on standard asmx web services. Spring's .NET Web Services support also
-    allows you to export a 'plain .NET object' as a .NET web service By "plain
-    .NET object" we mean classes that do not contain infrastructure specific
+    allows you to export a 'plain CLR object' as a .NET web service By "plain
+    CLR object" we mean classes that do not contain infrastructure specific
     attributes, such as WebMethod. On the server side, Spring's .NET web
     service exporters will automatically create a proxy that adds web service
     attributes. On the client side you can use Spring IoC container to
@@ -255,7 +255,7 @@ namespace MyApp.Services
     </sect2>
 
     <sect2 xml:id="web-services-exporter">
-      <title>Exposing PONOs as Web Services</title>
+      <title>Exposing POCOs as Web Services</title>
 
       <para>Now that we are generating a server-side proxy for the service,
       there is really no need for it to have all the attributes that web
@@ -268,7 +268,7 @@ namespace MyApp.Services
       <para>This means that we can safely remove the
       <literal>WebService</literal> and <literal>WebMethod</literal> attribute
       declarations from the service implementation, and what we are left with
-      is a plain old .NET object (a PONO). The example above would still work,
+      is a plain old CLR object (a POCO). The example above would still work,
       because the proxy generator will automatically add
       <literal>WebMethod</literal> attributes to all methods of the exported
       interfaces.</para>
