@@ -39,15 +39,15 @@ namespace Spring.Context.Annotation
             return false;
         }
 
-        public void LoadBeanDefinitions(ISet<ConfigurationClass> configurationModel)
+        public void LoadObjectDefinitions(ISet<ConfigurationClass> configurationModel)
         {
             foreach (ConfigurationClass configClass in configurationModel)
             {
-                LoadBeanDefinitionsForConfigurationClass(configClass);
+                LoadObjectDefinitionsForConfigurationClass(configClass);
             }
         }
 
-        private void LoadBeanDefinitionForConfigurationClassIfNecessary(ConfigurationClass configClass)
+        private void LoadObjectDefinitionForConfigurationClassIfNecessary(ConfigurationClass configClass)
         {
             if (configClass.ObjectName != null)
             {
@@ -70,29 +70,29 @@ namespace Spring.Context.Annotation
             }
         }
 
-        private void LoadBeanDefinitionsForConfigurationClass(ConfigurationClass configClass)
+        private void LoadObjectDefinitionsForConfigurationClass(ConfigurationClass configClass)
         {
-            LoadBeanDefinitionForConfigurationClassIfNecessary(configClass);
+            LoadObjectDefinitionForConfigurationClassIfNecessary(configClass);
 
             foreach (ConfigurationClassMethod method in configClass.Methods)
             {
-                LoadBeanDefinitionsForModelMethod(method);
+                LoadObjectDefinitionsForModelMethod(method);
             }
 
-            LoadBeanDefinitionsFromImportedResources(configClass.ImportedResources);
+            LoadObjectDefinitionsFromImportedResources(configClass.ImportedResources);
         }
 
-        private void LoadBeanDefinitionsForModelMethod(ConfigurationClassMethod method)
+        private void LoadObjectDefinitionsForModelMethod(ConfigurationClassMethod method)
         {
             ConfigurationClass configClass = method.ConfigurationClass;
             MethodInfo metadata = method.MethodMetadata;
 
-            RootObjectDefinition beanDef = new ConfigurationClassObjectDefinition();
+            RootObjectDefinition objDef = new ConfigurationClassObjectDefinition();
             //beanDef.Resource = configClass.Resource;
             //beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
-            beanDef.FactoryObjectName = configClass.ObjectName;
-            beanDef.FactoryMethodName = metadata.Name;
-            beanDef.AutowireMode = Objects.Factory.Config.AutoWiringMode.Constructor;
+            objDef.FactoryObjectName = configClass.ObjectName;
+            objDef.FactoryMethodName = metadata.Name;
+            objDef.AutowireMode = Objects.Factory.Config.AutoWiringMode.Constructor;
             //beanDef.setAttribute(RequiredAnnotationBeanPostProcessor.SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);
 
             // consider name and any aliases
@@ -109,16 +109,16 @@ namespace Spring.Context.Annotation
 
             }
 
-            string beanName = (names.Count > 0 ? names[0] : method.MethodMetadata.Name);
+            string objectName = (names.Count > 0 ? names[0] : method.MethodMetadata.Name);
             for (int i = 1; i < names.Count; i++)
             {
-                _registry.RegisterAlias(beanName, names[i]);
+                _registry.RegisterAlias(objectName, names[i]);
             }
 
             // has this already been overridden (e.g. via XML)?
-            if (_registry.ContainsObjectDefinition(beanName))
+            if (_registry.ContainsObjectDefinition(objectName))
             {
-                IObjectDefinition existingBeanDef = _registry.GetObjectDefinition(beanName);
+                IObjectDefinition existingBeanDef = _registry.GetObjectDefinition(objectName);
                 // is the existing bean definition one that was created from a configuration class?
                 if (!(existingBeanDef is ConfigurationClassObjectDefinition))
                 {
@@ -127,7 +127,7 @@ namespace Spring.Context.Annotation
                     if (_logger.IsDebugEnabled)
                     {
                         _logger.Debug(String.Format("Skipping loading bean definition for {0}: a definition for object " +
-                                "'{1}' already exists. This is likely due to an override in XML.", method, beanName));
+                                "'{1}' already exists. This is likely due to an override in XML.", method, objectName));
                     }
                     return;
                 }
@@ -142,13 +142,12 @@ namespace Spring.Context.Annotation
             // is this bean to be instantiated lazily?
             if (Attribute.GetCustomAttribute(metadata, typeof(LazyAttrribute)) != null)
             {
-                beanDef.IsLazyInit = (Attribute.GetCustomAttribute(metadata, typeof(LazyAttrribute)) as LazyAttrribute).LazyInitialize;
+                objDef.IsLazyInit = (Attribute.GetCustomAttribute(metadata, typeof(LazyAttrribute)) as LazyAttrribute).LazyInitialize;
             }
 
             if (Attribute.GetCustomAttribute(metadata, typeof(DependsOnAttribute)) != null)
             {
-                DependsOnAttribute attrib = Attribute.GetCustomAttribute(metadata, typeof(DependsOnAttribute)) as DependsOnAttribute;
-                beanDef.DependsOn = (Attribute.GetCustomAttribute(metadata, typeof(DependsOnAttribute)) as DependsOnAttribute).Name;
+                objDef.DependsOn = (Attribute.GetCustomAttribute(metadata, typeof(DependsOnAttribute)) as DependsOnAttribute).Name;
             }
 
             //Autowire autowire = (Autowire) beanAttributes.get("autowire");
@@ -169,19 +168,18 @@ namespace Spring.Context.Annotation
             // consider scoping
             if (Attribute.GetCustomAttribute(metadata, typeof(ScopeAttribute)) != null)
             {
-                ScopeAttribute attrib = Attribute.GetCustomAttribute(metadata, typeof(ScopeAttribute)) as ScopeAttribute;
-                beanDef.Scope = (Attribute.GetCustomAttribute(metadata, typeof(ScopeAttribute)) as ScopeAttribute).ObjectScope.ToString();
+                objDef.Scope = (Attribute.GetCustomAttribute(metadata, typeof(ScopeAttribute)) as ScopeAttribute).ObjectScope.ToString();
             }
 
             if (_logger.IsDebugEnabled)
             {
-                _logger.Debug(String.Format("Registering bean definition for [Definition] method {0}.{1}()", configClass.ConfigurationClassType.Name, beanName));
+                _logger.Debug(String.Format("Registering bean definition for [Definition] method {0}.{1}()", configClass.ConfigurationClassType.Name, objectName));
             }
 
-            _registry.RegisterObjectDefinition(beanName, beanDef);
+            _registry.RegisterObjectDefinition(objectName, objDef);
         }
 
-        private void LoadBeanDefinitionsFromImportedResources(IDictionary<string, Type> importedResources)
+        private void LoadObjectDefinitionsFromImportedResources(IDictionary<string, Type> importedResources)
         {
             IDictionary<Type, IObjectDefinitionReader> readerInstanceCache = new Dictionary<Type, IObjectDefinitionReader>();
             foreach (KeyValuePair<string, Type> entry in importedResources)
@@ -198,7 +196,7 @@ namespace Spring.Context.Annotation
 
                         readerInstanceCache.Add(readerClass, readerInstance);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw new InvalidOperationException(String.Format("Could not instantiate IObjectDefinitionReader class {0}", readerClass.FullName));
                     }

@@ -44,6 +44,25 @@ namespace Spring.Context.Annotation
             ProcessConfigObjectDefinitions(registry);
         }
 
+        /*
+                public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+                {
+                    if (this.postProcessBeanFactoryCalled)
+                    {
+                        throw new IllegalStateException(
+                                "postProcessBeanFactory already called for this post-processor");
+                    }
+                    this.postProcessBeanFactoryCalled = true;
+                    if (!this.postProcessBeanDefinitionRegistryCalled)
+                    {
+                        // BeanDefinitionRegistryPostProcessor hook apparently not supported...
+                        // Simply call processConfigBeanDefinitions lazily at this point then.
+                        processConfigBeanDefinitions((BeanDefinitionRegistry)beanFactory);
+                    }
+                    enhanceConfigurationClasses(beanFactory);
+                }
+        */
+
         private void ProcessConfigObjectDefinitions(IObjectDefinitionRegistry registry)
         {
             ISet<ObjectDefinitionHolder> configCandidates = new HashedSet<ObjectDefinitionHolder>();
@@ -83,7 +102,7 @@ namespace Spring.Context.Annotation
 
             // Read the model and create bean definitions based on its content
             ConfigurationClassObjectDefinitionReader reader = new ConfigurationClassObjectDefinitionReader(registry, _problemReporter);
-            reader.LoadBeanDefinitions(parser.ConfigurationClasses);
+            reader.LoadObjectDefinitions(parser.ConfigurationClasses);
         }
 
     }
