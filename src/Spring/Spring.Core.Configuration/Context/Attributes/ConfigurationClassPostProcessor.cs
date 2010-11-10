@@ -7,10 +7,11 @@ using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Config;
 using Spring.Collections.Generic;
 using Spring.Objects.Factory;
+using Spring.Core;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
-    public class ConfigurationClassPostProcessor : IObjectDefinitionRegistryPostProcessor
+    public class ConfigurationClassPostProcessor : IObjectDefinitionRegistryPostProcessor, IOrdered
     {
         private ILog _logger = LogManager.GetLogger(typeof(ConfigurationClassPostProcessor));
 
@@ -25,10 +26,7 @@ namespace Spring.Context.Annotation
             set { _problemReporter = (value ?? new FailFastProblemReporter()); }
         }
 
-        //public int getOrder()
-        //{
-        //    return Ordered.HIGHEST_PRECEDENCE;
-        //}
+
 
         public void PostProcessObjectDefinitionRegistry(IObjectDefinitionRegistry registry)
         {
@@ -44,24 +42,64 @@ namespace Spring.Context.Annotation
             ProcessConfigObjectDefinitions(registry);
         }
 
-        /*
-                public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+
+        private Type GenerateProxyType(Type objectType)
+        {
+            /*
+            ProxyFactory proxyFactory = new ProxyFactory();
+            proxyFactory.ProxyTargetAttributes = true;
+            proxyFactory.Interfaces = Type.EmptyTypes;
+            proxyFactory.TargetSource = new ObjectFactoryTargetSource(originalBeanName, owningObjectFactory);
+            SpringObjectMethodInterceptor methodInterceptor = new SpringObjectMethodInterceptor(owningObjectFactory, objectNamingStrategy);
+            proxyFactory.AddAdvice(methodInterceptor);
+
+            //TODO check type of object isn't infrastructure type.
+
+            InheritanceAopProxyTypeBuilder iaptb = new InheritanceAopProxyTypeBuilder(proxyFactory);
+            //iaptb.ProxyDeclaredMembersOnly = true; // make configurable.
+            Type type = iaptb.BuildProxyType();
+             */
+
+            return null;
+        }
+        private void EnhanceConfigurationClasses(IConfigurableListableObjectFactory objectFactory)
+        {
+            string[] objectNames = objectFactory.GetObjectDefinitionNames();
+
+            for (int i = 0; i < objectNames.Length; i++)
+            {
+                IObjectDefinition objDef = objectFactory.GetObjectDefinition(objectNames[i]);
+                if (Attribute.GetCustomAttribute(objDef.ObjectType, typeof(ConfigurationAttribute)) != null)
                 {
-                    if (this.postProcessBeanFactoryCalled)
-                    {
-                        throw new IllegalStateException(
-                                "postProcessBeanFactory already called for this post-processor");
-                    }
-                    this.postProcessBeanFactoryCalled = true;
-                    if (!this.postProcessBeanDefinitionRegistryCalled)
-                    {
-                        // BeanDefinitionRegistryPostProcessor hook apparently not supported...
-                        // Simply call processConfigBeanDefinitions lazily at this point then.
-                        processConfigBeanDefinitions((BeanDefinitionRegistry)beanFactory);
-                    }
-                    enhanceConfigurationClasses(beanFactory);
+                    //configNames.Add(objectNames[i]);
+
+                    //ObjectType is READONLY :(
+                    //objDef.ObjectType = GenerateProxyType(objDef.ObjectType);
                 }
-        */
+            }
+
+            
+
+
+        }
+        public void PostProcessObjectFactory(IConfigurableListableObjectFactory objectFactory)
+        {
+            if (_postProcessObjectFactoryCalled)
+            {
+                throw new InvalidOperationException(
+                        "PostProcessObjectFactory already called for this post-processor");
+            }
+            _postProcessObjectFactoryCalled = true;
+            if (!_postProcessObjectDefinitionRegistryCalled)
+            {
+                // BeanDefinitionRegistryPostProcessor hook apparently not supported...
+                // Simply call processConfigBeanDefinitions lazily at this point then.
+                ProcessConfigObjectDefinitions((IObjectDefinitionRegistry)objectFactory);
+            }
+            
+            EnhanceConfigurationClasses(objectFactory);
+        }
+
 
         private void ProcessConfigObjectDefinitions(IObjectDefinitionRegistry registry)
         {
@@ -105,5 +143,10 @@ namespace Spring.Context.Annotation
             reader.LoadObjectDefinitions(parser.ConfigurationClasses);
         }
 
+
+        public int Order
+        {
+            get { return int.MinValue; }
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Spring.Objects.Factory.Config;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class DefinitionAttribute : Attribute

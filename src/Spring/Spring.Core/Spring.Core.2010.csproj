@@ -171,19 +171,6 @@
     <Compile Include="Collections\SynchronizedSet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Context\Annotation\ConfigurationAttribute.cs" />
-    <Compile Include="Context\Annotation\ConfigurationClass.cs" />
-    <Compile Include="Context\Annotation\ConfigurationClassMethod.cs" />
-    <Compile Include="Context\Annotation\ConfigurationClassObjectDefinitionReader.cs" />
-    <Compile Include="Context\Annotation\ConfigurationClassParser.cs" />
-    <Compile Include="Context\Annotation\ConfigurationClassPostProcessor.cs" />
-    <Compile Include="Context\Annotation\DefinitionAttribute.cs" />
-    <Compile Include="Context\Annotation\DependsOnAttribute.cs" />
-    <Compile Include="Context\Annotation\ImportAttribute.cs" />
-    <Compile Include="Context\Annotation\ImportResourceAttribute.cs" />
-    <Compile Include="Context\Annotation\LazyAttrribute.cs" />
-    <Compile Include="Context\Annotation\PrimaryAttribute.cs" />
-    <Compile Include="Context\Annotation\ScopeAttribute.cs" />
     <Compile Include="Context\ApplicationContextException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1274,6 +1261,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>rem $(ProjectDir)..\..\..\build-support\tools\antlr-2.7.6\antlr-2.7.6.exe -o $(ProjectDir)Expressions\Parser $(ProjectDir)Expressions\Expression.g

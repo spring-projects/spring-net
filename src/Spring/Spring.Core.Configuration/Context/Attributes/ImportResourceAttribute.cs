@@ -4,7 +4,7 @@ using System.Text;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
     /// <summary>
     /// 

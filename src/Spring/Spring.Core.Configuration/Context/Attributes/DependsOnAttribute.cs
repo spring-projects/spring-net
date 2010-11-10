@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
     /// <summary>
     /// objects on which the current object depends. Any objects specified are guaranteed to be

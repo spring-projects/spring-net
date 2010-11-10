@@ -5,7 +5,7 @@ using Spring.Core.IO;
 using Spring.Collections.Generic;
 using Spring.Objects.Factory.Parsing;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
     public class ConfigurationClass
     {

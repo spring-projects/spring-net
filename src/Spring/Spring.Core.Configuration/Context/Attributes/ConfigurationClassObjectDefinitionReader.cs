@@ -8,7 +8,7 @@ using System.Reflection;
 using Spring.Objects.Factory.Config;
 using Common.Logging;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
     public class ConfigurationClassObjectDefinitionReader
     {
@@ -33,7 +33,7 @@ namespace Spring.Context.Annotation
         {
             if (type != null)
             {
-                return (Attribute.GetCustomAttribute(type.GetType(), typeof(ConfigurationAttribute)) != null);
+                return (Attribute.GetCustomAttribute(type, typeof(ConfigurationAttribute)) != null);
             }
 
             return false;
@@ -58,14 +58,14 @@ namespace Spring.Context.Annotation
             // no bean definition exists yet -> this must be an imported configuration class (@Import).
             GenericObjectDefinition configBeanDef = new GenericObjectDefinition();
             String className = configClass.ConfigurationClassType.Name;
-            configBeanDef.ObjectTypeName = className;
+            configBeanDef.ObjectType = configClass.GetType();
             if (CheckConfigurationClassCandidate(configClass.ConfigurationClassType))
             {
                 String configObjectName = ObjectDefinitionReaderUtils.RegisterWithGeneratedName(configBeanDef, _registry);
                 configClass.ObjectName = configObjectName;
                 if (_logger.IsDebugEnabled)
                 {
-                    _logger.Debug(String.Format("Registered bean definition for imported [Configuration] class {0}", configObjectName));
+                    _logger.Debug(String.Format("Registered object definition for imported [Configuration] class {0}", configObjectName));
                 }
             }
         }
@@ -102,6 +102,10 @@ namespace Spring.Context.Annotation
             for (int i = 0; i < objectAttributes.Length; i++)
             {
                 string[] namesAndAliases = ((DefinitionAttribute)objectAttributes[i]).Name;
+
+                if (namesAndAliases == null)
+                    namesAndAliases = new[] { metadata.Name };
+
                 for (int j = 0; j > namesAndAliases.Length; j++)
                 {
                     names.Add(namesAndAliases[j]);

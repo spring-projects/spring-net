@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
     /// <summary>
     /// Indicates that a class declares one or more <see cref="Definition"/> methods and may be processed
@@ -27,6 +27,15 @@ namespace Spring.Context.Annotation
     [AttributeUsage(AttributeTargets.Class)]
     public class ConfigurationAttribute : Attribute
     {
+
+        /// <summary>
+        /// Initializes a new instance of the ConfigurationAttribute class.
+        /// </summary>
+        public ConfigurationAttribute()
+        {
+            
+        }
+
         private string _name;
 
         /// <summary>

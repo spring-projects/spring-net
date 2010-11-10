@@ -25,7 +25,7 @@ using Spring.Core.IO;
 using System.Reflection;
 using Spring.Objects.Factory.Parsing;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
 
     /**

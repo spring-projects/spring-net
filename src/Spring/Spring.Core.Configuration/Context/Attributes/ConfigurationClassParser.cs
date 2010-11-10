@@ -6,7 +6,7 @@ using Spring.Collections.Generic;
 using Spring.Util;
 using System.Reflection;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
 
     public class ConfigurationClassParser

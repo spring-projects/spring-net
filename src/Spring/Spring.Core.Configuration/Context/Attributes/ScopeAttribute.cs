@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
     /// <summary>
     /// When used as a type-level attribute, indicates the name of a scope to use

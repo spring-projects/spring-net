@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Spring.Context.Annotation
+namespace Spring.Context.Attributes
 {
     /// <summary>
     /// Indicates whether a object is to be lazily initialized.
