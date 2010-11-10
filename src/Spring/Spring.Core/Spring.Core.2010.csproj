@@ -125,7 +125,15 @@
     <Compile Include="Collections\DictionarySet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\Generic\DictionarySet.cs" />
+    <Compile Include="Collections\Generic\HashedSet.cs" />
+    <Compile Include="Collections\Generic\ImmutableSet.cs" />
+    <Compile Include="Collections\Generic\ISet.cs" />
+    <Compile Include="Collections\Generic\OrderedSet.cs" />
     <Compile Include="Collections\Generic\ReadOnlyDictionary.cs" />
+    <Compile Include="Collections\Generic\Set.cs" />
+    <Compile Include="Collections\Generic\SortedSet.cs" />
+    <Compile Include="Collections\Generic\SynchronizedSet.cs" />
     <Compile Include="Collections\HashedSet.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -163,6 +171,19 @@
     <Compile Include="Collections\SynchronizedSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Annotation\ConfigurationAttribute.cs" />
+    <Compile Include="Context\Annotation\ConfigurationClass.cs" />
+    <Compile Include="Context\Annotation\ConfigurationClassMethod.cs" />
+    <Compile Include="Context\Annotation\ConfigurationClassObjectDefinitionReader.cs" />
+    <Compile Include="Context\Annotation\ConfigurationClassParser.cs" />
+    <Compile Include="Context\Annotation\ConfigurationClassPostProcessor.cs" />
+    <Compile Include="Context\Annotation\DefinitionAttribute.cs" />
+    <Compile Include="Context\Annotation\DependsOnAttribute.cs" />
+    <Compile Include="Context\Annotation\ImportAttribute.cs" />
+    <Compile Include="Context\Annotation\ImportResourceAttribute.cs" />
+    <Compile Include="Context\Annotation\LazyAttrribute.cs" />
+    <Compile Include="Context\Annotation\PrimaryAttribute.cs" />
+    <Compile Include="Context\Annotation\ScopeAttribute.cs" />
     <Compile Include="Context\ApplicationContextException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -695,7 +716,14 @@
     <Compile Include="Objects\Factory\Config\IVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\VariableAccessor.cs" />
     <Compile Include="Objects\Factory\Config\VariablePlaceholderConfigurer.cs" />
+    <Compile Include="Objects\Factory\Parsing\FailFastProblemReporter.cs" />
+    <Compile Include="Objects\Factory\Parsing\IProblemReporter.cs" />
+    <Compile Include="Objects\Factory\Parsing\Location.cs" />
+    <Compile Include="Objects\Factory\Parsing\ObjectDefinitionParsingException.cs" />
+    <Compile Include="Objects\Factory\Parsing\Problem.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
+    <Compile Include="Objects\Factory\Support\IObjectDefinitionRegistryPostProcessor.cs" />
+    <Compile Include="Objects\Factory\Support\ObjectScope.cs" />
     <Compile Include="Util\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />

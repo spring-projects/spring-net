@@ -143,7 +143,7 @@ namespace Spring.Objects.Factory.Support
             {
                 if (objectDefinition is ChildObjectDefinition)
                 {
-                    generatedObjectName = ((ChildObjectDefinition) objectDefinition).ParentName + "$child";
+                    generatedObjectName = ((ChildObjectDefinition)objectDefinition).ParentName + "$child";
                 }
                 else if (objectDefinition.FactoryObjectName != null)
                 {
@@ -157,7 +157,7 @@ namespace Spring.Objects.Factory.Support
                     throw new ObjectDefinitionStoreException(
                         objectDefinition.ResourceDescription, String.Empty,
                         "Unnamed object definition specifies neither 'Type' nor 'Parent' " +
-                        "nor 'FactoryObject' property values so a unique name cannot be generated.");                    
+                        "nor 'FactoryObject' property values so a unique name cannot be generated.");
                 }
                 generatedObjectName = "$nested";
             }
@@ -166,14 +166,15 @@ namespace Spring.Objects.Factory.Support
             if (isInnerObject)
             {
                 id = generatedObjectName + GENERATED_OBJECT_NAME_SEPARATOR + ObjectUtils.GetIdentityHexString(objectDefinition);
-            } else
+            }
+            else
             {
                 int counter = -1;
                 while (counter == -1 || registry.ContainsObjectDefinition(id))
                 {
                     counter++;
                     id = generatedObjectName + GENERATED_OBJECT_NAME_SEPARATOR + counter;
-                } 
+                }
             }
 
             return id;
@@ -256,6 +257,15 @@ namespace Spring.Objects.Factory.Support
             myHandler.MethodName = methodName;
             return myHandler;
         }
+
+
+        public static String RegisterWithGeneratedName(AbstractObjectDefinition definition, IObjectDefinitionRegistry registry)
+        {
+            String generatedName = GenerateObjectName(definition, registry, false);
+            registry.RegisterObjectDefinition(generatedName, definition);
+            return generatedName;
+        }
+
 
         #region Constructor (s) / Destructor
 
