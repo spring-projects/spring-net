@@ -85,7 +85,8 @@ namespace Spring.Context.Attributes
 
         public void Validate(IProblemReporter problemReporter)
         {
-            if (Attribute.GetCustomAttribute(ConfigurationClass.GetType(), typeof(ConfigurationAttribute)) != null)
+            //TODO: shouldn't this be "if method has Definition attribute" instead of "if class has Configuration attribute" --????
+            if (Attribute.GetCustomAttribute(ConfigurationClass.ConfigurationClassType, typeof(ConfigurationAttribute)) != null)
             {
                 if (!MethodMetadata.IsVirtual)
                 {
@@ -113,7 +114,7 @@ namespace Spring.Context.Attributes
         private class NonVirtualMethodError : Problem
         {
             public NonVirtualMethodError(string methodName, Location location)
-                : base(String.Format("Method '{0}' must not be private, final or static; change the method's modifiers to continue",
+                : base(String.Format("Method '{0}' must be public virtual; change the method's modifiers to continue",
                 methodName), location)
             { }
         }

@@ -11,67 +11,87 @@ namespace Spring.Context.Annotation
     {
         private GenericApplicationContext _ctx;
 
-        private ConfigurationClassPostProcessor _postProcessor;
-
         [SetUp]
         public void _SetUp()
         {
             _ctx = new GenericApplicationContext();
 
-            var builder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(ObjectDefinitions));
+            var builder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(TheConfigurationClass));
             _ctx.RegisterObjectDefinition("whoCares", builder.ObjectDefinition);
 
-            _postProcessor = new ConfigurationClassPostProcessor();
-            _postProcessor.PostProcessObjectDefinitionRegistry(_ctx);
+            var b2 = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(ConfigurationClassPostProcessor));
+            _ctx.RegisterObjectDefinition("ccpp", b2.ObjectDefinition);
+
+            _ctx.Refresh();
         }
 
         [Test]
-        public void CanRegisterDefintions()
+        public void Can_Parse_and_Register_Defintions()
         {
-            Assert.That(_ctx.ObjectDefinitionCount, Is.EqualTo(3));
+            Assert.That(_ctx.ObjectDefinitionCount, Is.EqualTo(4));
         }
 
         [Test]
-        public void CanRetreiveActualObjectsFromContext()
+        public void Can_Retreive_Actual_Objects_From_Context()
         {
-            Assert.That(_ctx[typeof(Parent).Name], Is.TypeOf<Parent>());
-            Assert.That(_ctx[typeof(Child).Name], Is.TypeOf<Child>());
+            Assert.That(_ctx[typeof(SingletonParent).Name], Is.TypeOf<SingletonParent>());
+            Assert.That(_ctx[typeof(PrototypeChild).Name], Is.TypeOf<PrototypeChild>());
         }
 
         [Test]
-        public void CanSatisfyDependenciesOfObjects()
+        public void Can_Satisfy_Dependencies_Of_Objects()
         {
-            Assert.That(((Parent)_ctx[typeof(Parent).Name]).Child, Is.Not.Null);
+            Assert.That(((SingletonParent)_ctx[typeof(SingletonParent).Name]).Child, Is.Not.Null);
+        }
+
+        [Test]
+        public void Can_Respect_Default_Singleton_Scope()
+        {
+            var firstObject = (SingletonParent)_ctx[typeof(SingletonParent).Name];
+            var secondObject = (SingletonParent)_ctx[typeof(SingletonParent).Name];
+
+            Assert.That(firstObject, Is.SameAs(secondObject));
+        }
+
+        [Test]
+        public void Can_Respect_Explicit_PrototypeScope()
+        {
+            var firstObject = (PrototypeChild)_ctx[typeof(PrototypeChild).Name];
+            var secondObject = (PrototypeChild)_ctx[typeof(PrototypeChild).Name];
+
+            Assert.That(firstObject, Is.Not.SameAs(secondObject));
         }
 
     }
 
     [Configuration]
-    public class ObjectDefinitions
+    public class TheConfigurationClass
     {
         [Definition]
-        public Parent Parent()
+        [Scope(ObjectScope.Prototype)]
+        public virtual PrototypeChild PrototypeChild()
         {
-            return new Parent(Child());
+            return new PrototypeChild();
         }
 
         [Definition]
-        public Child Child()
+        public virtual SingletonParent SingletonParent()
         {
-            return new Child();
+            return new SingletonParent(PrototypeChild());
         }
+
     }
 
-    public class Parent
+    public class SingletonParent
     {
-        private Child _child;
+        private PrototypeChild _child;
 
-        public Parent(Child child)
+        public SingletonParent(PrototypeChild child)
         {
             _child = child;
         }
 
-        public Child Child
+        public PrototypeChild Child
         {
             get
             {
@@ -80,5 +100,6 @@ namespace Spring.Context.Annotation
         }
 
     }
-    public class Child { }
+
+    public class PrototypeChild { }
 }

@@ -18,7 +18,8 @@ namespace Spring.Objects.Factory.Parsing
         /// <param name="source"></param>
         public Location(IResource resource, object source)
         {
-            AssertUtils.ArgumentNotNull(resource, "resource");
+            //TODO: look into re-enabling this since resource *is* NULL when parsing config classes vs. acquiring IResources
+            //AssertUtils.ArgumentNotNull(resource, "resource");
             this.resource = resource;
             this.source = source;
         }

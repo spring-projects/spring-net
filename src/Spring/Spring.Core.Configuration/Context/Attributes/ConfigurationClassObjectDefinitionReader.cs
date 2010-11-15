@@ -7,6 +7,7 @@ using Spring.Collections.Generic;
 using System.Reflection;
 using Spring.Objects.Factory.Config;
 using Common.Logging;
+using Spring.Objects;
 
 namespace Spring.Context.Attributes
 {
@@ -90,9 +91,14 @@ namespace Spring.Context.Attributes
             RootObjectDefinition objDef = new ConfigurationClassObjectDefinition();
             //beanDef.Resource = configClass.Resource;
             //beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
+            
+            // ???? if we don't do this here, how is the type supposed to be set?
+            //objDef.ObjectType = metadata.ReturnType;
+            
             objDef.FactoryObjectName = configClass.ObjectName;
             objDef.FactoryMethodName = metadata.Name;
             objDef.AutowireMode = Objects.Factory.Config.AutoWiringMode.Constructor;
+            
             //beanDef.setAttribute(RequiredAnnotationBeanPostProcessor.SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);
 
             // consider name and any aliases
@@ -214,6 +220,7 @@ namespace Spring.Context.Attributes
 
         private class ConfigurationClassObjectDefinition : RootObjectDefinition
         {
+
         }
 
     }

@@ -8,6 +8,10 @@ using Spring.Objects.Factory.Config;
 using Spring.Collections.Generic;
 using Spring.Objects.Factory;
 using Spring.Core;
+using Spring.Aop.Framework;
+using Spring.Context.Advice;
+using Spring.Aop.Framework.DynamicProxy;
+using Spring.Aop;
 
 namespace Spring.Context.Attributes
 {
@@ -21,12 +25,15 @@ namespace Spring.Context.Attributes
 
         private IProblemReporter _problemReporter = new FailFastProblemReporter();
 
+        public int Order
+        {
+            get { return int.MinValue; }
+        }
+
         public IProblemReporter ProblemReporter
         {
             set { _problemReporter = (value ?? new FailFastProblemReporter()); }
         }
-
-
 
         public void PostProcessObjectDefinitionRegistry(IObjectDefinitionRegistry registry)
         {
@@ -42,46 +49,6 @@ namespace Spring.Context.Attributes
             ProcessConfigObjectDefinitions(registry);
         }
 
-
-        private Type GenerateProxyType(Type objectType)
-        {
-            /*
-            ProxyFactory proxyFactory = new ProxyFactory();
-            proxyFactory.ProxyTargetAttributes = true;
-            proxyFactory.Interfaces = Type.EmptyTypes;
-            proxyFactory.TargetSource = new ObjectFactoryTargetSource(originalBeanName, owningObjectFactory);
-            SpringObjectMethodInterceptor methodInterceptor = new SpringObjectMethodInterceptor(owningObjectFactory, objectNamingStrategy);
-            proxyFactory.AddAdvice(methodInterceptor);
-
-            //TODO check type of object isn't infrastructure type.
-
-            InheritanceAopProxyTypeBuilder iaptb = new InheritanceAopProxyTypeBuilder(proxyFactory);
-            //iaptb.ProxyDeclaredMembersOnly = true; // make configurable.
-            Type type = iaptb.BuildProxyType();
-             */
-
-            return null;
-        }
-        private void EnhanceConfigurationClasses(IConfigurableListableObjectFactory objectFactory)
-        {
-            string[] objectNames = objectFactory.GetObjectDefinitionNames();
-
-            for (int i = 0; i < objectNames.Length; i++)
-            {
-                IObjectDefinition objDef = objectFactory.GetObjectDefinition(objectNames[i]);
-                if (Attribute.GetCustomAttribute(objDef.ObjectType, typeof(ConfigurationAttribute)) != null)
-                {
-                    //configNames.Add(objectNames[i]);
-
-                    //ObjectType is READONLY :(
-                    //objDef.ObjectType = GenerateProxyType(objDef.ObjectType);
-                }
-            }
-
-            
-
-
-        }
         public void PostProcessObjectFactory(IConfigurableListableObjectFactory objectFactory)
         {
             if (_postProcessObjectFactoryCalled)
@@ -96,10 +63,60 @@ namespace Spring.Context.Attributes
                 // Simply call processConfigBeanDefinitions lazily at this point then.
                 ProcessConfigObjectDefinitions((IObjectDefinitionRegistry)objectFactory);
             }
-            
+
             EnhanceConfigurationClasses(objectFactory);
         }
 
+        private void EnhanceConfigurationClasses(IConfigurableListableObjectFactory objectFactory)
+        {
+            string[] objectNames = objectFactory.GetObjectDefinitionNames();
+
+            for (int i = 0; i < objectNames.Length; i++)
+            {
+                IObjectDefinition objDef = objectFactory.GetObjectDefinition(objectNames[i]);
+
+                if (((AbstractObjectDefinition)objDef).HasObjectType)
+                {
+                    if (Attribute.GetCustomAttribute(objDef.ObjectType, typeof(ConfigurationAttribute)) != null)
+                    {
+
+                        ProxyFactory proxyFactory = new ProxyFactory();
+                        proxyFactory.ProxyTargetAttributes = true;
+                        proxyFactory.Interfaces = Type.EmptyTypes;
+                        proxyFactory.TargetSource = new ObjectFactoryTargetSource(objectNames[i], objectFactory);
+                        SpringObjectMethodInterceptor methodInterceptor = new SpringObjectMethodInterceptor(objectFactory);
+                        proxyFactory.AddAdvice(methodInterceptor);
+
+                        //TODO check type of object isn't infrastructure type.
+
+                        InheritanceAopProxyTypeBuilder iaptb = new InheritanceAopProxyTypeBuilder(proxyFactory);
+                        //iaptb.ProxyDeclaredMembersOnly = true; // make configurable.
+                        ((IConfigurableObjectDefinition)objDef).ObjectType = iaptb.BuildProxyType();
+
+                        objDef.ConstructorArgumentValues.AddIndexedArgumentValue(objDef.ConstructorArgumentValues.ArgumentCount, proxyFactory);
+
+                    }
+                }
+
+            }
+
+        }
+
+        private Type GenerateProxyType(string objectName, IConfigurableListableObjectFactory objectFactory)
+        {
+            ProxyFactory proxyFactory = new ProxyFactory();
+            proxyFactory.ProxyTargetAttributes = true;
+            proxyFactory.Interfaces = Type.EmptyTypes;
+            proxyFactory.TargetSource = new ObjectFactoryTargetSource(objectName, objectFactory);
+            SpringObjectMethodInterceptor methodInterceptor = new SpringObjectMethodInterceptor(objectFactory);
+            proxyFactory.AddAdvice(methodInterceptor);
+
+            //TODO check type of object isn't infrastructure type.
+
+            InheritanceAopProxyTypeBuilder iaptb = new InheritanceAopProxyTypeBuilder(proxyFactory);
+            //iaptb.ProxyDeclaredMembersOnly = true; // make configurable.
+            return iaptb.BuildProxyType();
+        }
 
         private void ProcessConfigObjectDefinitions(IObjectDefinitionRegistry registry)
         {
@@ -143,10 +160,39 @@ namespace Spring.Context.Attributes
             reader.LoadObjectDefinitions(parser.ConfigurationClasses);
         }
 
-
-        public int Order
+        public class ObjectFactoryTargetSource : ITargetSource
         {
-            get { return int.MinValue; }
+            private readonly string _objectName;
+            private readonly IConfigurableListableObjectFactory _objectFactory;
+
+            public ObjectFactoryTargetSource(string objectName, IConfigurableListableObjectFactory objectFactory)
+            {
+                _objectName = objectName;
+                _objectFactory = objectFactory;
+            }
+
+            #region ITargetSource Members
+
+            public object GetTarget()
+            {
+                return _objectFactory.GetObject(_objectName);
+            }
+
+            public bool IsStatic
+            {
+                get { return _objectFactory.IsSingleton(_objectName); }
+            }
+
+            public void ReleaseTarget(object target)
+            {
+            }
+
+            public Type TargetType
+            {
+                get { return _objectFactory.GetType(_objectName); }
+            }
+
+            #endregion
         }
     }
 }

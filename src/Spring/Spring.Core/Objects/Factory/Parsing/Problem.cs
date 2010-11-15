@@ -59,7 +59,7 @@ namespace Spring.Objects.Factory.Parsing
 
         public string ResourceDescription
         {
-            get { return _location.Resource.Description; }
+            get { return  _location.Resource!=null ? _location.Resource.Description : string.Empty; }
         }
 
         public override string ToString()

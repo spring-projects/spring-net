@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\Advice\SpringObjectMethodInterceptor.cs" />
     <Compile Include="Context\Attributes\ConfigurationAttribute.cs" />
     <Compile Include="Context\Attributes\ConfigurationClass.cs" />
     <Compile Include="Context\Attributes\ConfigurationClassMethod.cs" />
