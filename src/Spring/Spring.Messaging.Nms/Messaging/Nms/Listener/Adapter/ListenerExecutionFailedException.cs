@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Runtime.Serialization;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Listener.Adapter
@@ -28,8 +29,15 @@ namespace Spring.Messaging.Nms.Listener.Adapter
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
+    [Serializable]
     public class ListenerExecutionFailedException : NMSException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class.
+        /// </summary>
+        public ListenerExecutionFailedException()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class, with the specified message
@@ -47,6 +55,16 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         /// <param name="innerException">The inner exception.</param>
         public ListenerExecutionFailedException(string message, Exception innerException)
             : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class.
+        /// </summary>
+        /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        protected ListenerExecutionFailedException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

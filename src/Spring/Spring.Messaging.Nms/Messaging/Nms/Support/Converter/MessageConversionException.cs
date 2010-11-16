@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Runtime.Serialization;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Support.Converter
@@ -27,10 +28,17 @@ namespace Spring.Messaging.Nms.Support.Converter
     /// of an object to/from a Message fails.
     /// </summary>
     /// <author>Mark Pollack</author>
+    [Serializable]
     public class MessageConversionException : NMSException
     {
         #region Constructor (s) / Destructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageConversionException"/> class.
+        /// </summary>
+        public MessageConversionException()
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of the IMessageConverterException class. with the specified message.
@@ -55,6 +63,15 @@ namespace Spring.Messaging.Nms.Support.Converter
         /// </param>
         public MessageConversionException(string message, Exception rootCause)
             : base(message, rootCause)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageConversionException"/> class.
+        /// </summary>
+        /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        protected MessageConversionException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 

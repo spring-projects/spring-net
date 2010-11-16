@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Runtime.Serialization;
 using Apache.NMS;
 using Common.Logging;
 using Spring.Context;
@@ -532,13 +533,41 @@ namespace Spring.Messaging.Nms.Listener
     /// shared Connection failed. This is indicating to invokers that they need
     /// to establish the shared Connection themselves on first access.
     /// </summary>
+    [Serializable]
     public class SharedConnectionNotInitializedException : NMSException
     {
+                /// <summary>
+        /// Initializes a new instance of the <see cref="SharedConnectionNotInitializedException"/> class.
+        /// </summary>
+        public SharedConnectionNotInitializedException()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SharedConnectionNotInitializedException"/> class.
         /// </summary>
         /// <param name="message">The message.</param>
         public SharedConnectionNotInitializedException(string message) : base(message)
+        {
+        }
+
+                /// <summary>
+        /// Initializes a new instance of the <see cref="SharedConnectionNotInitializedException"/> class, with the specified message
+        /// and root cause exception
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public SharedConnectionNotInitializedException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SharedConnectionNotInitializedException"/> class.
+        /// </summary>
+        /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        protected SharedConnectionNotInitializedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

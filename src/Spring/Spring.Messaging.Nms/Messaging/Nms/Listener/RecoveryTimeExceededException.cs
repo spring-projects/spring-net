@@ -18,9 +18,13 @@
 
 #endregion
 
+#region
+
 using System;
 using System.Runtime.Serialization;
 using Apache.NMS;
+
+#endregion
 
 namespace Spring.Messaging.Nms.Listener
 {
@@ -31,11 +35,10 @@ namespace Spring.Messaging.Nms.Listener
     [Serializable]
     public class RecoveryTimeExceededException : NMSException
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class.
         /// </summary>
-        public RecoveryTimeExceededException(): base()
+        public RecoveryTimeExceededException()
         {
         }
 
@@ -59,7 +62,13 @@ namespace Spring.Messaging.Nms.Listener
         {
         }
 
-        /* Note, can not add this exception since the signature is not present in the base class.  
-           protected RecoveryTimeExceededException(SerializationInfo info, StreamingContext context ) : base( info, context ) {} */
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class.
+        /// </summary>
+        /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        protected RecoveryTimeExceededException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

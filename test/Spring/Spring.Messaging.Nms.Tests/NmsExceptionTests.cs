@@ -33,7 +33,7 @@ namespace Spring
     /// </summary>
     /// <author>Rick Evans</author>
     [TestFixture]
-    [Ignore("Spring inherits from NMS Exceptions which do not ")]
+    //[Ignore("Spring inherits from NMS Exceptions which do not ")]
     public sealed class NmsExceptionTests : ExceptionsTest
     {
         [TestFixtureSetUp]

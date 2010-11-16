@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Runtime.Serialization;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Connections
@@ -32,6 +33,13 @@ namespace Spring.Messaging.Nms.Connections
     public class SynchedLocalTransactionFailedException : NMSException
     {
         #region Constructor (s) / Destructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SynchedLocalTransactionFailedException"/> class.
+        /// </summary>
+        public SynchedLocalTransactionFailedException()
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of the SynchedLocalTransactionFailedException class. with the specified message.
@@ -55,6 +63,16 @@ namespace Spring.Messaging.Nms.Connections
         /// </param>
         public SynchedLocalTransactionFailedException (string message, Exception rootCause)
             : base(message, rootCause)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SynchedLocalTransactionFailedException"/> class.
+        /// </summary>
+        /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        protected SynchedLocalTransactionFailedException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 
