@@ -40,7 +40,7 @@ namespace Spring.Messaging.Ems.Jndi
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public abstract class JndiObjectLocator : JndiLocatorSupport, IInitializingObject
+    public abstract class JndiObjectLocator : JndiLocatorSupport
     {
         private string jndiName;
 

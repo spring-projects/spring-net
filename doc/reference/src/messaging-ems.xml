@@ -224,7 +224,7 @@
       application context the class <classname>JndiFactoryObject</classname>
       is used. This allows you look configure the location of the JNDI
       registry and to retrieve objects by name. The objects are retrieved from
-      JNDI at application startup. </para>
+      JNDI at application startup.</para>
 
       <para>These retrieved objetcts from JNDI in turn can be dependency
       injected into other collaborating objects such as Spring's
@@ -237,11 +237,16 @@
     &lt;property name="JndiProperties[LookupContext.PROVIDER_URL]" value="tibjmsnaming://localhost:7222"/&gt;
   &lt;/object&gt;</programlisting>
 
-      <para>JndiLookupFactory object implements the IFactoryObject interface,
-      so the type that is associated with the name 'jndiConnectionFactory' is
-      not JndiLookupFactoryObject, but the type returned from this factory's
-      'GetType' method, in this case the type of what was retrieved from
-      JNDI.</para>
+      <para>JndiLookupFactory object implements the
+      <interfacename>IConfigurableFactoryObject</interfacename> interface, so
+      the type that is associated with the name 'jndiConnectionFactory' is not
+      JndiLookupFactoryObject, but the type returned from this factory's
+      'GetType' method, in this case the type of what was retrieved from JNDI.
+      The <interfacename>IConfigurableFactoryObject</interfacename> interface
+      also allows for the object that was returned to be dependency injected.
+      Please refer to the documentation on
+      <interfacename>IConfigurableFactoryObject</interfacename> for more
+      information.</para>
 
       <note>
         <para>The dictionary JndiProperties is set using Spring Expression
@@ -253,7 +258,7 @@
 
       <para>The use of this object retrieved from JNDI to configure Spring's
       CachingConnectionFactory set the property TargetConnectionFactory as
-      shown below </para>
+      shown below</para>
 
       <programlisting language="myxml">  &lt;object id="cachingJndiConnectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems"&gt;
     &lt;property name="SessionCacheSize" value="10" /&gt;
@@ -329,7 +334,7 @@
       <para>Spring's MessageListenerContainer's are used to process messages
       asynchronously and concurrently. MessageListenerContainers are described
       more in <link linkend="activemq-listener-containers">this</link>
-      section. </para>
+      section.</para>
     </section>
 
     <section>
@@ -352,7 +357,7 @@
       linkend="activemq-sending-messages">section</link> aside from the use of
       type destination type TIBCO.EMS.Destination instead of
       Apache.NMS.IDestination and switching of the namespace from Apache.NMS
-      to Spring.Messaging.Ems.Common. </para>
+      to Spring.Messaging.Ems.Common.</para>
 
       <para>Shown below is the code example for a SimplePublisher using
       Spring's TIBCO EMS classes. This does now show the 'one-liner' send
@@ -482,7 +487,7 @@ namespace Spring.Messaging.Ems.Core
     </section>
 
     <section xml:id="ems-async">
-      <title>Asynchronous Reception </title>
+      <title>Asynchronous Reception</title>
 
       <para>Please refer to <link linkend="???"
       xml:id="activemq-async-reception">this</link> section for an

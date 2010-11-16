@@ -21,13 +21,14 @@
 using System;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
+using Spring.Objects.Factory.Config;
 using Spring.Util;
 using TIBCO.EMS;
 using Common.Logging;
 
 namespace Spring.Messaging.Ems.Jndi
 {
-    public class JndiLookupFactoryObject : JndiObjectLocator, IFactoryObject
+    public class JndiLookupFactoryObject : JndiObjectLocator, IConfigurableFactoryObject
     {
         static JndiLookupFactoryObject()
         {
@@ -37,6 +38,7 @@ namespace Spring.Messaging.Ems.Jndi
 
         private object defaultObject;
         private Object jndiObject;
+        private IObjectDefinition productTemplate;
 
         public JndiLookupFactoryObject()
         {
@@ -142,6 +144,17 @@ namespace Spring.Messaging.Ems.Jndi
                 }
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Gets the template object definition that should be used
+        /// to configure the instance of the object managed by this factory.
+        /// </summary>
+        /// <value></value>
+        public IObjectDefinition ProductTemplate
+        {
+            get { return productTemplate; }
+            set { productTemplate = value; }
         }
     }
 }
