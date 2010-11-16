@@ -20,6 +20,10 @@ namespace Spring.Messaging.Nms.Support.Converter
 
         private ITypeMapper typeMapper = new TypeMapper();
 
+        private bool encoderShouldEmitUTF8Identifier = false;
+
+        private bool throwOnInvalidBytes = true;
+
 
         /// <summary>
         /// Sets the type mapper.
@@ -28,6 +32,29 @@ namespace Spring.Messaging.Nms.Support.Converter
         public ITypeMapper TypeMapper
         {
             set { typeMapper = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether encoder should emit UTF8 byte order mark.  Default is false.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> to specify that a Unicode byte order mark is provided; otherwise, <c>false</c>.
+        /// </value>
+        public bool EncoderShouldEmitUtf8Identifier
+        {
+            get { return encoderShouldEmitUTF8Identifier; }
+            set { encoderShouldEmitUTF8Identifier = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to throw an exception on invalid bytes.  Default is true. </summary>
+        /// <value>
+        /// 	<c>true</c> to specify that an exception be thrown when an invalid encoding is detected; otherwise, <c>false</c>.
+        /// </value>
+        public bool ThrowOnInvalidBytes
+        {
+            get { return throwOnInvalidBytes; }
+            set { throwOnInvalidBytes = value; }
         }
 
         /// <summary>
@@ -53,13 +80,10 @@ namespace Spring.Messaging.Nms.Support.Converter
                 {
                     return defaultMessageConverter.ToMessage(objectToConvert, session);
                 }
-                else
-                {
-                    string xmlString = GetXmlString(objectToConvert);
-                    IMessage msg = session.CreateTextMessage(xmlString);
-                    msg.Properties.SetString(typeMapper.TypeIdFieldName, typeMapper.FromType(objectToConvert.GetType()));
-                    return msg;
-                }
+                string xmlString = GetXmlString(objectToConvert);
+                IMessage msg = session.CreateTextMessage(xmlString);
+                msg.Properties.SetString(typeMapper.TypeIdFieldName, typeMapper.FromType(objectToConvert.GetType()));
+                return msg;
             } catch (Exception e)
             {
                 throw new MessageConversionException("Can't convert object of type " + objectToConvert.GetType(), e);
@@ -74,21 +98,21 @@ namespace Spring.Messaging.Nms.Support.Converter
         protected virtual string GetXmlString(object objectToConvert)
         {
             string xmlString;
-            XmlTextWriter xmlTextWriter = null;
-            MemoryStream memoryStream = null;
             try
             {
-                memoryStream = new MemoryStream();
-                xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
-                XmlSerializer xs = new XmlSerializer(objectToConvert.GetType());                        
-                xs.Serialize(xmlTextWriter, objectToConvert);
-                xmlString = UTF8ByteArrayToString(((MemoryStream) xmlTextWriter.BaseStream).ToArray());
-            } catch (Exception e)
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8))
+                    {
+                        XmlSerializer xs = new XmlSerializer(objectToConvert.GetType());
+                        xs.Serialize(xmlTextWriter, objectToConvert);
+                        xmlString = UTF8ByteArrayToString(((MemoryStream)xmlTextWriter.BaseStream).ToArray());
+                    }
+                }
+            }
+            catch (Exception e)
             {
-                throw new MessageConversionException("Can't convert object of type " + objectToConvert.GetType(), e);           
-            } finally
-            {
-                if (memoryStream != null) memoryStream.Close();
+                throw new MessageConversionException("Can't convert object of type " + objectToConvert.GetType(), e);
             }
             return xmlString;
         }
@@ -112,22 +136,19 @@ namespace Spring.Messaging.Nms.Support.Converter
                 {
                     return defaultMessageConverter.FromMessage(messageToConvert);
                 }
-                else
+                ITextMessage textMessage = messageToConvert as ITextMessage;
+                if (textMessage == null)
                 {
-                    ITextMessage textMessage = messageToConvert as ITextMessage;
-                    if (textMessage == null)
-                    {
-                        throw new MessageConversionException("Can't convert message of type " +
-                                                             messageToConvert.GetType());
-                    }
+                    throw new MessageConversionException("Can't convert message of type " +
+                                                         messageToConvert.GetType());
+                }
 
-                    using (MemoryStream memoryStream = new MemoryStream(StringToUTF8ByteArray(textMessage.Text)))
-                    {
+                using (MemoryStream memoryStream = new MemoryStream(StringToUTF8ByteArray(textMessage.Text)))
+                {
 
-                        XmlSerializer xs = new XmlSerializer(GetTargetType(textMessage));
-                        XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);                        
-                        return xs.Deserialize(memoryStream);
-                    }
+                    XmlSerializer xs = new XmlSerializer(GetTargetType(textMessage));
+                    XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);                        
+                    return xs.Deserialize(memoryStream);
                 }
             } catch (Exception e)
             {
@@ -153,7 +174,7 @@ namespace Spring.Messaging.Nms.Support.Converter
         /// <returns>UTF8 string</returns>
         protected virtual String UTF8ByteArrayToString(Byte[] characters)
         {
-            UTF8Encoding encoding = new UTF8Encoding();
+            UTF8Encoding encoding = new UTF8Encoding(EncoderShouldEmitUtf8Identifier, ThrowOnInvalidBytes);
 
             String constructedString = encoding.GetString(characters);
 
