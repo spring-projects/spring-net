@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
+using Spring.Util;
 
 namespace Spring.Context.Attributes
 {
@@ -12,19 +13,33 @@ namespace Spring.Context.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class ImportResourceAttribute : Attribute
     {
-        private IObjectDefinitionReader _objectDefinitionReader;
+        private Type _objectDefinitionReader = typeof(XmlObjectDefinitionReader);
 
         private string[] _resources;
 
         /// <summary>
-        /// Initializes a new instance of the ImportResource class.
+        /// Initializes a new instance of the ImportResourceAttribute class.
         /// </summary>
-        /// <param name="objectDefinitionReader"></param>
         /// <param name="resources"></param>
-        public ImportResourceAttribute(IObjectDefinitionReader objectDefinitionReader, string[] resources)
+        public ImportResourceAttribute(string[] resources)
         {
-            _objectDefinitionReader = objectDefinitionReader;
+            if (resources ==null || resources.Length ==0)
+                throw new ArgumentException("resources cannot be null or empty!");
+
             _resources = resources;
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the ImportResourceAttribute class.
+        /// </summary>
+        /// <param name="resource"></param>
+        public ImportResourceAttribute(string resource)
+        {
+            if (StringUtils.IsNullOrEmpty(resource))
+                throw new ArgumentException("resource cannot be null or empty!");
+            	
+            _resources = new[] { resource };
         }
 
         /// <summary>
@@ -32,11 +47,17 @@ namespace Spring.Context.Attributes
         /// by the <see cref="Resources"/> attribute.
         /// </summary>
         /// <value>The <see cref="IObjectDefinitionReader"/>.</value>
-        public IObjectDefinitionReader DefinitionReader
+        public Type DefinitionReader
         {
-            get { return _objectDefinitionReader; }
+            get
+            {
+                return _objectDefinitionReader;
+            }
             set
             {
+                if (!((typeof(IObjectDefinitionReader).IsAssignableFrom(value))))
+                    throw new ArgumentException(string.Format("DefinitionReader must be of type IObjectDefinitionReader but was of type {0}", value.Name));
+                
                 _objectDefinitionReader = value;
             }
         }

@@ -23,17 +23,25 @@ namespace Spring.Context.Attributes
     /// </para>
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
-    public class LazyAttrribute : Attribute
+    public class LazyAttribute : Attribute
     {
         private bool _lazyInitialize = true;
 
         /// <summary>
-        /// Initializes a new instance of the Lazy class.
+        /// Initializes a new instance of the LazyAttribute class.
         /// </summary>
         /// <param name="lazyInitialize"></param>
-        public LazyAttrribute(bool lazyInitialize)
+        public LazyAttribute(bool lazyInitialize)
         {
             _lazyInitialize = lazyInitialize;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the LazyAttribute class.
+        /// </summary>
+        public LazyAttribute()
+        {
+            
         }
 
         /// <summary>

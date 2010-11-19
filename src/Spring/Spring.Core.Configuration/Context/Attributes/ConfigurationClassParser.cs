@@ -31,9 +31,9 @@ namespace Spring.Context.Attributes
             get { return _configurationClasses; }
         }
 
-        //public void Parse(String className, String beanName)
+        //public void Parse(String className, String ObjectName)
         //{
-        //    ProcessConfigurationClass(new ConfigurationClass(className, beanName));
+        //    ProcessConfigurationClass(new ConfigurationClass(className, ObjectName));
         //}
 
         public void Parse(Type type, string objectName)
@@ -66,17 +66,17 @@ namespace Spring.Context.Attributes
         {
             if (Attribute.GetCustomAttribute(configurationClass.ConfigurationClassType, typeof(ImportAttribute)) != null)
             {
-                ImportAttribute attrib = Attribute.GetCustomAttribute(configurationClass.ConfigurationClassType.GetType(), typeof(ImportAttribute)) as ImportAttribute;
+                ImportAttribute attrib = Attribute.GetCustomAttribute(configurationClass.ConfigurationClassType, typeof(ImportAttribute)) as ImportAttribute;
                 ProcessImport(configurationClass, attrib.Types);
             }
 
             if (Attribute.GetCustomAttribute(configurationClass.ConfigurationClassType, typeof(ImportResourceAttribute)) != null)
             {
-                ImportResourceAttribute attrib = Attribute.GetCustomAttribute(configurationClass.ConfigurationClassType.GetType(), typeof(ImportResourceAttribute)) as ImportResourceAttribute;
+                ImportResourceAttribute attrib = Attribute.GetCustomAttribute(configurationClass.ConfigurationClassType, typeof(ImportResourceAttribute)) as ImportResourceAttribute;
 
                 foreach (string resource in attrib.Resources)
                 {
-                    configurationClass.AddImportedResource(resource, attrib.DefinitionReader.GetType());
+                    configurationClass.AddImportedResource(resource, attrib.DefinitionReader);
                 }
             }
 

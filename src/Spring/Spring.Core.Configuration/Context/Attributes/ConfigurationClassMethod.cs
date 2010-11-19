@@ -29,14 +29,14 @@ namespace Spring.Context.Attributes
 {
 
     /**
- * Represents a {@link Configuration} class method marked with the {@link Bean} annotation.
+ * Represents a {@link Configuration} class method marked with the {@link Object} annotation.
  *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.0
  * @see ConfigurationClass
  * @see ConfigurationClassParser
- * @see ConfigurationClassBeanDefinitionReader
+ * @see ConfigurationClassObjectDefinitionReader
  */
 
     public class ConfigurationClassMethod

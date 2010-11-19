@@ -59,8 +59,8 @@ namespace Spring.Context.Attributes
             _postProcessObjectFactoryCalled = true;
             if (!_postProcessObjectDefinitionRegistryCalled)
             {
-                // BeanDefinitionRegistryPostProcessor hook apparently not supported...
-                // Simply call processConfigBeanDefinitions lazily at this point then.
+                // ObjectDefinitionRegistryPostProcessor hook apparently not supported...
+                // Simply call processConfigObjectDefinitions lazily at this point then.
                 ProcessConfigObjectDefinitions((IObjectDefinitionRegistry)objectFactory);
             }
 
@@ -155,7 +155,7 @@ namespace Spring.Context.Attributes
             }
             parser.Validate();
 
-            // Read the model and create bean definitions based on its content
+            // Read the model and create Object definitions based on its content
             ConfigurationClassObjectDefinitionReader reader = new ConfigurationClassObjectDefinitionReader(registry, _problemReporter);
             reader.LoadObjectDefinitions(parser.ConfigurationClasses);
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Spring.Objects.Factory.Config;
+using Spring.Util;
 
 namespace Spring.Context.Attributes
 {
@@ -10,9 +11,11 @@ namespace Spring.Context.Attributes
     {
         private AutoWiringMode _autoWire = AutoWiringMode.No;
 
+        private string _destroyMethod;
+
         private string _initMethod;
 
-        private string[] _name;
+        private string _names;
 
         /// <summary>
         /// Are dependencies to be injected via autowiring?
@@ -26,9 +29,9 @@ namespace Spring.Context.Attributes
                 _autoWire = value;
             }
         }
-        private string _destroyMethod;
+
         /// <summary>
-        /// The optional name of a method to call on the bean instance upon closing the
+        /// The optional name of a method to call on the Object instance upon closing the
         /// application context, for example a Close() method on a DataSource.
         /// The method must have no arguments but may throw any exception.
         /// <para>
@@ -47,11 +50,11 @@ namespace Spring.Context.Attributes
                 _destroyMethod = value;
             }
         }
-        
+
         /// <summary>
         /// The optional name of a method to call on the object instance during initialization.
         /// Not commonly used, given that the method may be called programmatically directly
-        /// within the body of a Bean-annotated method.
+        /// within the body of a Object-annotated method.
         /// </summary>
         /// <value>The init method.</value>
         public string InitMethod
@@ -69,15 +72,23 @@ namespace Spring.Context.Attributes
         /// name is ignored.
         /// </summary>
         /// <value>The name.</value>
-        public string[] Name
+        public string Names
         {
             get
             {
-                return _name;
+                return _names;
             }
             set
             {
-                _name = value;
+                _names = value;
+            }
+        }
+
+        public string[] NamesToArray
+        {
+            get
+            {
+                return StringUtils.DelimitedListToStringArray(_names, ",");
             }
         }
 

@@ -96,8 +96,8 @@ namespace Spring.Context.Attributes
 
         public void Validate(IProblemReporter problemReporter)
         {
-            // An @Bean method may only be overloaded through inheritance. No single
-            // @Configuration class may declare two @Bean methods with the same name.
+            // A [Definition] method may only be overloaded through inheritance. No single
+            // [Configuration] class may declare two [Definition] methods with the same name.
             char hashDelim = '#';
             Dictionary<String, int> methodNameCounts = new Dictionary<String, int>();
             foreach (ConfigurationClassMethod method in _methods)

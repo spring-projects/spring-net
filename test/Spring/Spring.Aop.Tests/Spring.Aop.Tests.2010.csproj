@@ -277,7 +277,9 @@
     <Compile Include="AopCompilerOptionsTests.cs" />
     <None Include="Spring.Aop.Tests.build" />
     <None Include="Spring.Aop.Tests.dll.config" />
-    <EmbeddedResource Include="Aop\Config\AopNamespaceParserTests.xml" />
+    <EmbeddedResource Include="Aop\Config\AopNamespaceParserTests.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Spring\Aop\Framework\adapter\withBPPContext.xml" />
     <EmbeddedResource Include="Data\Spring\Aop\Framework\adapter\withoutBPPContext.xml" />
     <EmbeddedResource Include="Aop\Framework\AutoProxy\advisorAutoProxyCreatorCircularReferencesTests.xml" />

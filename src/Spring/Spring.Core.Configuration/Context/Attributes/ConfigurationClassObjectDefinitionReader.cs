@@ -8,6 +8,7 @@ using System.Reflection;
 using Spring.Objects.Factory.Config;
 using Common.Logging;
 using Spring.Objects;
+using Spring.Util;
 
 namespace Spring.Context.Attributes
 {
@@ -52,17 +53,17 @@ namespace Spring.Context.Attributes
         {
             if (configClass.ObjectName != null)
             {
-                // a bean definition already exists for this configuration class -> nothing to do
+                // a Object definition already exists for this configuration class -> nothing to do
                 return;
             }
 
-            // no bean definition exists yet -> this must be an imported configuration class (@Import).
-            GenericObjectDefinition configBeanDef = new GenericObjectDefinition();
+            // no Object definition exists yet -> this must be an imported configuration class (@Import).
+            GenericObjectDefinition configObjectDef = new GenericObjectDefinition();
             String className = configClass.ConfigurationClassType.Name;
-            configBeanDef.ObjectType = configClass.GetType();
+            configObjectDef.ObjectType = configClass.ConfigurationClassType;
             if (CheckConfigurationClassCandidate(configClass.ConfigurationClassType))
             {
-                String configObjectName = ObjectDefinitionReaderUtils.RegisterWithGeneratedName(configBeanDef, _registry);
+                String configObjectName = ObjectDefinitionReaderUtils.RegisterWithGeneratedName(configObjectDef, _registry);
                 configClass.ObjectName = configObjectName;
                 if (_logger.IsDebugEnabled)
                 {
@@ -89,34 +90,38 @@ namespace Spring.Context.Attributes
             MethodInfo metadata = method.MethodMetadata;
 
             RootObjectDefinition objDef = new ConfigurationClassObjectDefinition();
-            //beanDef.Resource = configClass.Resource;
-            //beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
-            
-            // ???? if we don't do this here, how is the type supposed to be set?
-            //objDef.ObjectType = metadata.ReturnType;
-            
+            //ObjectDef.Resource = configClass.Resource;
+            //ObjectDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
+
+
+
             objDef.FactoryObjectName = configClass.ObjectName;
             objDef.FactoryMethodName = metadata.Name;
             objDef.AutowireMode = Objects.Factory.Config.AutoWiringMode.Constructor;
-            
-            //beanDef.setAttribute(RequiredAnnotationBeanPostProcessor.SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);
+
+            //ObjectDef.setAttribute(RequiredAnnotationObjectPostProcessor.SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);
 
             // consider name and any aliases
-            //Dictionary<String, Object> beanAttributes = metadata.getAnnotationAttributes(Bean.class.getName());
+            //Dictionary<String, Object> ObjectAttributes = metadata.getAnnotationAttributes(Object.class.getName());
             object[] objectAttributes = metadata.GetCustomAttributes(typeof(DefinitionAttribute), true);
             List<string> names = new List<string>();
             for (int i = 0; i < objectAttributes.Length; i++)
             {
-                string[] namesAndAliases = ((DefinitionAttribute)objectAttributes[i]).Name;
+                string[] namesAndAliases = ((DefinitionAttribute)objectAttributes[i]).NamesToArray;
 
-                if (namesAndAliases == null)
+                if (namesAndAliases != null)
+                {
+                    names.Add(metadata.Name);
+                }
+                else
+                {
                     namesAndAliases = new[] { metadata.Name };
+                }
 
-                for (int j = 0; j > namesAndAliases.Length; j++)
+                for (int j = 0; j < namesAndAliases.Length; j++)
                 {
                     names.Add(namesAndAliases[j]);
                 }
-
             }
 
             string objectName = (names.Count > 0 ? names[0] : method.MethodMetadata.Name);
@@ -128,15 +133,15 @@ namespace Spring.Context.Attributes
             // has this already been overridden (e.g. via XML)?
             if (_registry.ContainsObjectDefinition(objectName))
             {
-                IObjectDefinition existingBeanDef = _registry.GetObjectDefinition(objectName);
-                // is the existing bean definition one that was created from a configuration class?
-                if (!(existingBeanDef is ConfigurationClassObjectDefinition))
+                IObjectDefinition existingObjectDef = _registry.GetObjectDefinition(objectName);
+                // is the existing Object definition one that was created from a configuration class?
+                if (!(existingObjectDef is ConfigurationClassObjectDefinition))
                 {
                     // no -> then it's an external override, probably XML
                     // overriding is legal, return immediately
                     if (_logger.IsDebugEnabled)
                     {
-                        _logger.Debug(String.Format("Skipping loading bean definition for {0}: a definition for object " +
+                        _logger.Debug(String.Format("Skipping loading Object definition for {0}: a definition for object " +
                                 "'{1}' already exists. This is likely due to an override in XML.", method, objectName));
                     }
                     return;
@@ -146,13 +151,13 @@ namespace Spring.Context.Attributes
             if (Attribute.GetCustomAttribute(metadata, typeof(PrimaryAttribute)) != null)
             {
                 //TODO: determine how to respond to this attribute's presence
-                //beanDef.isPrimary = true;
+                //ObjectDef.isPrimary = true;
             }
 
-            // is this bean to be instantiated lazily?
-            if (Attribute.GetCustomAttribute(metadata, typeof(LazyAttrribute)) != null)
+            // is this Object to be instantiated lazily?
+            if (Attribute.GetCustomAttribute(metadata, typeof(LazyAttribute)) != null)
             {
-                objDef.IsLazyInit = (Attribute.GetCustomAttribute(metadata, typeof(LazyAttrribute)) as LazyAttrribute).LazyInitialize;
+                objDef.IsLazyInit = (Attribute.GetCustomAttribute(metadata, typeof(LazyAttribute)) as LazyAttribute).LazyInitialize;
             }
 
             if (Attribute.GetCustomAttribute(metadata, typeof(DependsOnAttribute)) != null)
@@ -160,20 +165,16 @@ namespace Spring.Context.Attributes
                 objDef.DependsOn = (Attribute.GetCustomAttribute(metadata, typeof(DependsOnAttribute)) as DependsOnAttribute).Name;
             }
 
-            //Autowire autowire = (Autowire) beanAttributes.get("autowire");
+            //Autowire autowire = (Autowire) ObjectAttributes.get("autowire");
             //if (autowire.isAutowire()) {
-            //	beanDef.setAutowireMode(autowire.value());
+            //	ObjectDef.setAutowireMode(autowire.value());
             //}
 
-            //String initMethodName = (String) beanAttributes.get("initMethod");
-            //if (StringUtils.hasText(initMethodName)) {
-            //	beanDef.setInitMethodName(initMethodName);
-            //}
-
-            //String destroyMethodName = (String) beanAttributes.get("destroyMethod");
-            //if (StringUtils.hasText(destroyMethodName)) {
-            //	beanDef.setDestroyMethodName(destroyMethodName);
-            //}
+            if (Attribute.GetCustomAttribute(metadata, typeof(DefinitionAttribute)) != null)
+            {
+                objDef.InitMethodName = (Attribute.GetCustomAttribute(metadata, typeof(DefinitionAttribute)) as DefinitionAttribute).InitMethod;
+                objDef.DestroyMethodName = (Attribute.GetCustomAttribute(metadata, typeof(DefinitionAttribute)) as DefinitionAttribute).DestroyMethod;
+            }
 
             // consider scoping
             if (Attribute.GetCustomAttribute(metadata, typeof(ScopeAttribute)) != null)
@@ -183,7 +184,7 @@ namespace Spring.Context.Attributes
 
             if (_logger.IsDebugEnabled)
             {
-                _logger.Debug(String.Format("Registering bean definition for [Definition] method {0}.{1}()", configClass.ConfigurationClassType.Name, objectName));
+                _logger.Debug(String.Format("Registering Object definition for [Definition] method {0}.{1}()", configClass.ConfigurationClassType.Name, objectName));
             }
 
             _registry.RegisterObjectDefinition(objectName, objDef);
@@ -201,8 +202,8 @@ namespace Spring.Context.Attributes
                 {
                     try
                     {
-                        IObjectDefinitionReader readerInstance =
-                               (IObjectDefinitionReader)Activator.CreateInstance(readerClass.GetType(), _registry);
+                        IObjectDefinitionReader readerInstance = 
+                               (IObjectDefinitionReader)Activator.CreateInstance(readerClass, _registry);
 
                         readerInstanceCache.Add(readerClass, readerInstance);
                     }
