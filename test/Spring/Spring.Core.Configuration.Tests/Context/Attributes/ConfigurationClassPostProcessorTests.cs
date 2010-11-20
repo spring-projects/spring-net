@@ -18,11 +18,11 @@ namespace Spring.Context.Attributes
         {
             _ctx = new GenericApplicationContext();
 
-            var builder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(TheConfigurationClass));
-            _ctx.RegisterObjectDefinition("theConfigClass", builder.ObjectDefinition);
+            var configDefinitionBuilder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(TheConfigurationClass));
+            _ctx.RegisterObjectDefinition(configDefinitionBuilder.ObjectDefinition.ObjectTypeName, configDefinitionBuilder.ObjectDefinition);
 
-            var b2 = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(ConfigurationClassPostProcessor));
-            _ctx.RegisterObjectDefinition("thePostProcessor", b2.ObjectDefinition);
+            var postProcessorDefintionBuilder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(ConfigurationClassPostProcessor));
+            _ctx.RegisterObjectDefinition(postProcessorDefintionBuilder.ObjectDefinition.ObjectTypeName, postProcessorDefintionBuilder.ObjectDefinition);
 
             Assert.That(_ctx.ObjectDefinitionCount, Is.EqualTo(2));
 

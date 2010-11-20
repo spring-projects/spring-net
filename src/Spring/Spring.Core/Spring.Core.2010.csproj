@@ -1218,6 +1218,7 @@
     <Compile Include="Validation\Validators\UrlValidator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="ContextClassDiagram.cd" />
     <None Include="Expressions\Expression.g" />
     <EmbeddedResource Include="Objects\Factory\Xml\spring-tool-1.1.xsd">
       <SubType>

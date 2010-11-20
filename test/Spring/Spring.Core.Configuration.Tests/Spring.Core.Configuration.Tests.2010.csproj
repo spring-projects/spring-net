@@ -44,6 +44,7 @@
     <Compile Include="Context\Attributes\DefinitionAttributeTests.cs" />
     <Compile Include="Context\Attributes\ImportResourceAttributeTests.cs" />
     <Compile Include="Context\Config\ContextNamespaceParserTests.cs" />
+    <Compile Include="Objects\Factory\Support\AssemblyScanningExtensionMethodsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
