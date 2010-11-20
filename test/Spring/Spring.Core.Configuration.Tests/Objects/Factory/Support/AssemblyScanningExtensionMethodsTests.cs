@@ -14,20 +14,30 @@ namespace Spring.Objects.Factory.Support
     public class AssemblyScanningExtensionMethodsTests
     {
         [Test]
-        public void Integration_Scenario_With_Defaults()
+        public void Integration_Scenario_With_Assembly_Filename_And_Assembly_Metadata_Filtering()
         {
             GenericApplicationContext context = new GenericApplicationContext();
-            context.ScanAssembliesAndRegisterDefinitions();// (assy => assy.GetTypes().Any(type => type.FullName.Contains("SomeType")));
+            context.ScanAssembliesAndRegisterDefinitions(fn => fn.StartsWith("Spring."), assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(MarkerTypeForScannerToFind).Name)));
             context.Refresh();
 
             AssertExpectedObjectsAreRegisteredWith(context);
         }
 
         [Test]
-        public void Integration_Scenario_With_Filtering_Example()
+        public void Integration_Scenario_With_Assembly_Metadata_Filtering()
         {
             GenericApplicationContext context = new GenericApplicationContext();
             context.ScanAssembliesAndRegisterDefinitions(assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(MarkerTypeForScannerToFind).Name)));
+            context.Refresh();
+
+            AssertExpectedObjectsAreRegisteredWith(context);
+        }
+
+        [Test]
+        public void Integration_Scenario_With_Default_of_No_Filtering()
+        {
+            GenericApplicationContext context = new GenericApplicationContext();
+            context.ScanAssembliesAndRegisterDefinitions();
             context.Refresh();
 
             AssertExpectedObjectsAreRegisteredWith(context);
@@ -37,17 +47,8 @@ namespace Spring.Objects.Factory.Support
         {
             Assert.That(context.DefaultListableObjectFactory.ObjectDefinitionCount, Is.EqualTo(13));
         }
-        [Test]
-        public void Integration_Scenario_With_Complex_Filtering_Example()
-        {
-            GenericApplicationContext context = new GenericApplicationContext();
-            context.ScanAssembliesAndRegisterDefinitions(fn => fn.StartsWith("Spring."), assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(MarkerTypeForScannerToFind).Name)));
-            context.Refresh();
 
-            AssertExpectedObjectsAreRegisteredWith(context);
-        }
     }
-
 
     public class MarkerTypeForScannerToFind
     {
