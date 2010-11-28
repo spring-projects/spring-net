@@ -270,17 +270,21 @@ namespace Spring.Http.Converters
             {
             }
 
-            public void CopyToAndClose(Stream dest)
+            public void CopyToAndClose(Stream destination)
             {
                 this.Position = 0;
 
+#if NET_4_0
+                this.CopyTo(destination);
+#else
                 // From .NET 4.0 Stream.CopyTo method
                 int bytesCount;
                 byte[] buffer = new byte[0x1000];
                 while ((bytesCount = this.Read(buffer, 0, buffer.Length)) != 0)
                 {
-                    dest.Write(buffer, 0, bytesCount);
+                    destination.Write(buffer, 0, bytesCount);
                 }
+#endif
 
                 base.Close();
             }

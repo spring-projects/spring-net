@@ -1,10 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectGuid>
+    <ProjectGuid>{EE04EC0F-4B1F-1D13-B30F-00FAC04F79BC}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
@@ -24,36 +23,15 @@
     <StartupObject>
     </StartupObject>
     <SignAssembly>false</SignAssembly>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <TargetFrameworkProfile />
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Http\Debug\</OutputPath>
+    <OutputPath>..\..\..\build\VS.Net.2005\Spring.Http\Debug\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
     <DocumentationFile>Spring.Http.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -69,13 +47,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Http\Release\</OutputPath>
+    <OutputPath>..\..\..\build\VS.Net.2005\Spring.Http\Release\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <DefineConstants>TRACE;NET_2_0</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -99,13 +77,9 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Web" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -113,69 +87,42 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\UrlEncodedFormHttpMessageConverter.cs" />
-    <Compile Include="Http\HttpResponseMessage.cs" />
-    <Compile Include="Http\HttpResponseMessage`1.cs" />
-    <Compile Include="Http\DefaultHttpWebRequestFactory.cs" />
-    <Compile Include="Http\Converters\AbstractHttpMessageConverter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Http\Converters\ByteArrayHttpMessageConverter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Http\Converters\Feed\AbstractFeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\IHttpMessageConverter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Http\Converters\Feed\AbstractFeedHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Json\JsonHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\StringHttpMessageConverter.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Http\Converters\Xml\AbstractXmlHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\Xml\DataContractHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Xml\XElementHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Xml\XmlDocumentHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Xml\XmlSerializableHttpMessageConverter.cs" />
-    <Compile Include="Http\HttpMethod.cs" />
-    <Compile Include="Http\HttpRequestMessage.cs" />
+    <Compile Include="Http\Converters\Xml\DataContractHttpMessageConverter.cs" />
+    <Compile Include="Http\DefaultHttpWebRequestFactory.cs" />
+    <Compile Include="Http\HttpResponseMessage.cs" />
+    <Compile Include="Http\HttpResponseMessage`1.cs" />
     <Compile Include="Http\IHttpWebRequestFactory.cs" />
-    <Compile Include="Http\MediaType.cs" />
+    <Compile Include="Http\HttpRequestMessage.cs" />
+    <Compile Include="Http\Rest\Support\AcceptHeaderRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor`1.cs" />
+    <Compile Include="Http\Rest\Support\MethodRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\HttpMessageRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\HeadersResponseExtractor.cs" />
+    <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor.cs" />
+    <Compile Include="Http\Converters\AbstractHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\ByteArrayHttpMessageConverter.cs" />
+    <Compile Include="Http\Rest\Support\MessageConverterResponseExtractor.cs" />
+    <Compile Include="Http\HttpMethod.cs" />
+    <Compile Include="Http\Converters\IHttpMessageConverter.cs" />
     <Compile Include="Http\Rest\IRequestCallback.cs" />
     <Compile Include="Http\Rest\IResponseExtractor.cs" />
     <Compile Include="Http\Rest\IRestOperations.cs" />
+    <Compile Include="Http\MediaType.cs" />
     <Compile Include="Http\Rest\RestClientException.cs" />
     <Compile Include="Http\Rest\RestTemplate.cs" />
-    <Compile Include="Http\Rest\Support\AcceptHeaderRequestCallback.cs" />
-    <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor`1.cs" />
-    <Compile Include="Http\Rest\Support\HeadersResponseExtractor.cs" />
-    <Compile Include="Http\Rest\Support\HttpMessageRequestCallback.cs" />
-    <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor.cs" />
-    <Compile Include="Http\Rest\Support\MessageConverterResponseExtractor.cs" />
-    <Compile Include="Http\Rest\Support\MethodRequestCallback.cs" />
+    <Compile Include="Http\Converters\StringHttpMessageConverter.cs" />
     <Compile Include="Util\AssertUtils.cs" />
-    <Compile Include="Util\StringUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Util\StringUtils.cs" />
     <Compile Include="Util\UriTemplate.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -85,7 +85,11 @@ namespace Spring.Http.Converters.Feed
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.CloseInput = true;
             settings.IgnoreProcessingInstructions = true;
+#if NET_4_0
+            settings.DtdProcessing = DtdProcessing.Ignore;
+#else
             settings.ProhibitDtd = false;            
+#endif
             settings.XmlResolver = null;
             return settings;
         }

@@ -1,5 +1,4 @@
-﻿#if NET_3_0
-#region License
+﻿#region License
 
 /*
  * Copyright 2002-2010 the original author or authors.
@@ -112,9 +111,20 @@ namespace Spring.Http.Converters.Xml
         
         public class CustomClass
         {
-            public string ID { get; set; }
+            private string _id;
+            private string _name;
 
-            public string Name { get; set; }
+            public string ID
+            {
+                get { return _id; }
+                set { _id = value; }
+            }
+
+            public string Name
+            {
+                get { return _name; }
+                set { _name = value; }
+            }
 
             public CustomClass()
             {
@@ -122,12 +132,11 @@ namespace Spring.Http.Converters.Xml
 
             public CustomClass(string id, string name)
             {
-                this.ID = id;
-                this.Name = name;
+                this._id = id;
+                this._name = name;
             }
         }
 
         #endregion
     }
 }
-#endif

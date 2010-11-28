@@ -24,7 +24,9 @@ using System.Collections.Generic;
 
 using Spring.Http.Converters;
 using Spring.Http.Converters.Xml;
+#if NET_3_5
 using Spring.Http.Converters.Feed;
+#endif
 using Spring.Http.Rest.Support;
 using UriTemplate = Spring.Util.UriTemplate; // UriTemplate in .NET Framework since 3.5
 using AssertUtils = Spring.Util.AssertUtils;
@@ -199,15 +201,18 @@ namespace Spring.Http.Rest
             this._messageConverters.Add(new ByteArrayHttpMessageConverter());
             this._messageConverters.Add(new StringHttpMessageConverter());
             this._messageConverters.Add(new UrlEncodedFormHttpMessageConverter());
-            //this._messageConverters.Add(new XmlSerializableHttpMessageConverter());
             this._messageConverters.Add(new XmlDocumentHttpMessageConverter());
-#if NET_3_5
+#if NET_3_0
             this._messageConverters.Add(new DataContractHttpMessageConverter());
+#else // NET_2_0 only
+            this._messageConverters.Add(new XmlSerializableHttpMessageConverter());
+#endif
+#if NET_3_5
             this._messageConverters.Add(new XElementHttpMessageConverter());
             this._messageConverters.Add(new Rss20FeedHttpMessageConverter());
             this._messageConverters.Add(new Atom10FeedHttpMessageConverter());
             //this._messageConverters.Add(new JsonHttpMessageConverter());            
-#endif  
+#endif
         }
 
         #endregion
