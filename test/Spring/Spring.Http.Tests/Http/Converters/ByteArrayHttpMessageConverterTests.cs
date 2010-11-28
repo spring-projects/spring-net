@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.IO;
 using System.Net;
 
@@ -50,17 +49,17 @@ namespace Spring.Http.Converters
         {
             Assert.IsTrue(converter.CanRead(typeof(byte[]), new MediaType("application", "octet-stream")));
             Assert.IsTrue(converter.CanRead(typeof(byte[]), new MediaType("application", "xml")));
-            Assert.IsTrue(converter.CanWrite(typeof(byte[]), MediaType.ALL));
+            Assert.IsTrue(converter.CanRead(typeof(byte[]), MediaType.ALL));
             Assert.IsFalse(converter.CanRead(typeof(string), new MediaType("application", "octet-stream")));
         }
 
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanRead(typeof(byte[]), new MediaType("application", "octet-stream")));
-            Assert.IsTrue(converter.CanRead(typeof(byte[]), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(byte[]), new MediaType("application", "octet-stream")));
+            Assert.IsTrue(converter.CanWrite(typeof(byte[]), new MediaType("application", "xml")));
             Assert.IsTrue(converter.CanWrite(typeof(byte[]), MediaType.ALL));
-            Assert.IsFalse(converter.CanRead(typeof(string), new MediaType("application", "octet-stream")));
+            Assert.IsFalse(converter.CanWrite(typeof(string), new MediaType("application", "octet-stream")));
         }
 
         [Test]

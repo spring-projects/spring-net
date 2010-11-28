@@ -55,8 +55,8 @@ namespace Spring.Http.Converters.Json
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanRead(typeof(CustomClass), new MediaType("application", "json")));
-            Assert.IsFalse(converter.CanRead(typeof(CustomClass), new MediaType("text", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(CustomClass), new MediaType("application", "json")));
+            Assert.IsFalse(converter.CanWrite(typeof(CustomClass), new MediaType("text", "xml")));
         }
 
         [Test]

@@ -63,10 +63,10 @@ namespace Spring.Http.Converters.Xml
         {
             Assert.IsTrue(converter.CanWrite(typeof(DataContractClass), new MediaType("application", "xml")));
             Assert.IsTrue(converter.CanWrite(typeof(DataContractClass), new MediaType("text", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(DataContractClass), new MediaType("application", "soap+xml"))); // application/*+xml
-            Assert.IsFalse(converter.CanRead(typeof(DataContractClass), new MediaType("text", "plain")));
-            Assert.IsFalse(converter.CanRead(typeof(NonDataContractClass), new MediaType("application", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(CollectionDataContractClass), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(DataContractClass), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsFalse(converter.CanWrite(typeof(DataContractClass), new MediaType("text", "plain")));
+            Assert.IsFalse(converter.CanWrite(typeof(NonDataContractClass), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(CollectionDataContractClass), new MediaType("application", "xml")));
         }
 
         [Test]
@@ -107,12 +107,8 @@ namespace Spring.Http.Converters.Xml
 
             converter.Write(body, null, webRequest);
 
-            requestStream.Position = 0;
-            using (StreamReader reader = new StreamReader(requestStream, Encoding.UTF8))
-            {
-                string result = reader.ReadToEnd();
-                Assert.AreEqual(expectedBody, result, "Invalid result");
-            }
+            byte[] result = requestStream.ToArray();
+            Assert.AreEqual(expectedBody, Encoding.UTF8.GetString(result), "Invalid result");
 
             mocks.VerifyAll();
         }

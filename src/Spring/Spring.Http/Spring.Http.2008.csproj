@@ -87,6 +87,7 @@
     <Reference Include="System.ServiceModel.Web">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -98,6 +99,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Http\Converters\UrlEncodedFormHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Feed\AbstractFeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverter.cs" />

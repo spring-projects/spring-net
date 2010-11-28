@@ -107,6 +107,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Http\Converters\ByteArrayHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\UrlEncodedFormHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Feed\FeedHttpMessageConverterIntegrationTests.cs" />
     <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverterTests.cs" />

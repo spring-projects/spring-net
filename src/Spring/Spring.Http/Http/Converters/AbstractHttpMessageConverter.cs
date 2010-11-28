@@ -258,7 +258,7 @@ namespace Spring.Http.Converters
 
         #region Inner class definitions
 
-        // TODO : Move this class
+        // TODO : Move this class ?
         internal class IgnoreCloseMemoryStream : MemoryStream
         {
             public IgnoreCloseMemoryStream()
@@ -274,15 +274,13 @@ namespace Spring.Http.Converters
             {
                 this.Position = 0;
 
-                int bufferSize = 65536;
-                byte[] buffer = new byte[bufferSize];
-
+                // From .NET 4.0 Stream.CopyTo method
                 int bytesCount;
-                while ((bytesCount = this.Read(buffer, 0, buffer.Length)) > 0)
+                byte[] buffer = new byte[0x1000];
+                while ((bytesCount = this.Read(buffer, 0, buffer.Length)) != 0)
                 {
                     dest.Write(buffer, 0, bytesCount);
                 }
-                dest.Flush();
 
                 base.Close();
             }

@@ -40,7 +40,7 @@ namespace Spring.Http.Converters.Xml
         /// <summary>
         /// Default encoding for XML.
         /// </summary>
-        public static readonly Encoding DEFAULT_CHARSET = Encoding.UTF8;
+        public static readonly Encoding DEFAULT_CHARSET = new UTF8Encoding(false); // Remove byte Order Mask (BOM) when using XmlTextWriter
 
         private XmlReaderSettings _xmlReaderSettings;
 
@@ -122,13 +122,15 @@ namespace Spring.Http.Converters.Xml
                 using (XmlTextWriter xmlWriter = new XmlTextWriter(requestStream, encoding))
                 {
                     WriteXml(xmlWriter, content, request);
-                    xmlWriter.Flush();
                 }
 
                 // Set the content length in the request headers  
                 request.ContentLength = requestStream.Length;
 
-                requestStream.CopyToAndClose(request.GetRequestStream());
+                using (Stream postStream = request.GetRequestStream())
+                {
+                    requestStream.CopyToAndClose(postStream);
+                }
             }
         }
 

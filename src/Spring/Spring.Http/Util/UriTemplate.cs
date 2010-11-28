@@ -241,7 +241,7 @@ namespace Spring.Util
 
 		    public Parser(string uriTemplate) 
             {
-			    AssertUtils.ArgumentHasText(uriTemplate, "'uriTemplate' must not be null");
+			    AssertUtils.ArgumentNotNull(uriTemplate, "'uriTemplate' must not be null");
 
                 int index = 0;
                 this.patternBuilder.Append("^");

@@ -19,14 +19,11 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Net;
 using System.Collections.Generic;
 
-using Spring.Http;
 using Spring.Http.Converters;
 using Spring.Http.Converters.Xml;
-using Spring.Http.Converters.Json;
 using Spring.Http.Converters.Feed;
 using Spring.Http.Rest.Support;
 using UriTemplate = Spring.Util.UriTemplate; // UriTemplate in .NET Framework since 3.5
@@ -201,6 +198,7 @@ namespace Spring.Http.Rest
 
             this._messageConverters.Add(new ByteArrayHttpMessageConverter());
             this._messageConverters.Add(new StringHttpMessageConverter());
+            this._messageConverters.Add(new UrlEncodedFormHttpMessageConverter());
             //this._messageConverters.Add(new XmlSerializableHttpMessageConverter());
             this._messageConverters.Add(new XmlDocumentHttpMessageConverter());
 #if NET_3_5

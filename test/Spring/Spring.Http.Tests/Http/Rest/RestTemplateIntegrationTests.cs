@@ -28,9 +28,6 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Channels;
 
-using Spring.Http;
-using Spring.Http.Rest.Support;
-
 using NUnit.Framework;
 
 namespace Spring.Http.Rest
@@ -242,98 +239,6 @@ namespace Spring.Http.Rest
         {
             template.Execute<object>("servererror", null, null);
         }
-
-
-        //@BeforeClass
-        //public static void startJettyServer() throws Exception {
-        //    jettyServer = new Server(8889);
-        //    Context jettyContext = new Context(jettyServer, "/");
-        //    byte[] bytes = helloWorld.getBytes("UTF-8");
-        //    contentType = new MediaType("text", "plain", Collections.singletonMap("charset", "utf-8"));
-        //    jettyContext.addServlet(new ServletHolder(new GetServlet(bytes, contentType)), "/get");
-        //    jettyContext.addServlet(new ServletHolder(new GetServlet(new byte[0], contentType)), "/get/nothing");
-        //    jettyContext.addServlet(
-        //            new ServletHolder(new PostServlet(helloWorld, URI + "/post/1", bytes, contentType)),
-        //            "/post");
-        //    jettyContext.addServlet(new ServletHolder(new ErrorServlet(404)), "/errors/notfound");
-        //    jettyContext.addServlet(new ServletHolder(new ErrorServlet(500)), "/errors/server");
-        //    jettyContext.addServlet(new ServletHolder(new UriServlet()), "/uri/*");
-        //    jettyContext.addServlet(new ServletHolder(new MultipartServlet()), "/multipart");
-        //    jettyServer.start();
-        //}
-
-        //@Test
-        //public void uri() throws InterruptedException, URISyntaxException {
-        //    String result = template.getForObject(URI + "/uri/{query}", String.class, "Z\u00fcrich");
-        //    Assert.AreEqual("Invalid request URI", "/uri/Z%C3%BCrich", result);
-
-        //    result = template.getForObject(URI + "/uri/query={query}", String.class, "foo@bar");
-        //    Assert.AreEqual("Invalid request URI", "/uri/query=foo@bar", result);
-
-        //    result = template.getForObject(URI + "/uri/query={query}", String.class, "T\u014dky\u014d");
-        //    Assert.AreEqual("Invalid request URI", "/uri/query=T%C5%8Dky%C5%8D", result);
-        //}
-
-        //@Test
-        //public void multipart() throws UnsupportedEncodingException {
-        //    MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
-        //    parts.add("name 1", "value 1");
-        //    parts.add("name 2", "value 2+1");
-        //    parts.add("name 2", "value 2+2");
-        //    Resource logo = new ClassPathResource("/org/springframework/http/converter/logo.jpg");
-        //    parts.add("logo", logo);
-
-        //    template.postForLocation(URI + "/multipart", parts);
-        //}
-
-
-        //private static class UriServlet extends HttpServlet {
-
-        //    @Override
-        //    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //        resp.setContentType("text/plain");
-        //        resp.setCharacterEncoding("UTF-8");
-        //        resp.getWriter().write(req.getRequestURI());
-        //    }
-        //}
-
-        //private static class MultipartServlet extends HttpServlet {
-
-        //    @Override
-        //    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //        assertTrue(ServletFileUpload.isMultipartContent(req));
-        //        FileItemFactory factory = new DiskFileItemFactory();
-        //        ServletFileUpload upload = new ServletFileUpload(factory);
-        //        try {
-        //            List items = upload.parseRequest(req);
-        //            Assert.AreEqual(4, items.size());
-        //            FileItem item = (FileItem) items.get(0);
-        //            assertTrue(item.isFormField());
-        //            Assert.AreEqual("name 1", item.getFieldName());
-        //            Assert.AreEqual("value 1", item.getString());
-
-        //            item = (FileItem) items.get(1);
-        //            assertTrue(item.isFormField());
-        //            Assert.AreEqual("name 2", item.getFieldName());
-        //            Assert.AreEqual("value 2+1", item.getString());
-
-        //            item = (FileItem) items.get(2);
-        //            assertTrue(item.isFormField());
-        //            Assert.AreEqual("name 2", item.getFieldName());
-        //            Assert.AreEqual("value 2+2", item.getString());
-
-        //            item = (FileItem) items.get(3);
-        //            Assert.IsFalse(item.isFormField());
-        //            Assert.AreEqual("logo", item.getFieldName());
-        //            Assert.AreEqual("logo.jpg", item.getName());
-        //            Assert.AreEqual("image/jpeg", item.getContentType());
-        //        }
-        //        catch (FileUploadException ex) {
-        //            throw new ServletException(ex);
-        //        }
-
-        //    }
-        //}
 
         #region REST test service
 

@@ -57,10 +57,10 @@ namespace Spring.Http.Converters.Xml
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanRead(typeof(CustomClass), new MediaType("application", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(CustomClass), new MediaType("text", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(CustomClass), new MediaType("application", "soap+xml"))); // application/*+xml
-            Assert.IsFalse(converter.CanRead(typeof(CustomClass), new MediaType("text", "plain")));
+            Assert.IsTrue(converter.CanWrite(typeof(CustomClass), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(CustomClass), new MediaType("text", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(CustomClass), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsFalse(converter.CanWrite(typeof(CustomClass), new MediaType("text", "plain")));
         }
 
         [Test]
@@ -102,12 +102,8 @@ namespace Spring.Http.Converters.Xml
 
             converter.Write(body, null, webRequest);
 
-            requestStream.Position = 0;
-            using (StreamReader reader = new StreamReader(requestStream, Encoding.UTF8))
-            {
-                string result = reader.ReadToEnd();
-                Assert.AreEqual(expectedBody, result, "Invalid result");
-            }
+            byte[] result = requestStream.ToArray();
+            Assert.AreEqual(expectedBody, Encoding.UTF8.GetString(result), "Invalid result");
 
             mocks.VerifyAll();
         }

@@ -73,13 +73,14 @@ namespace Spring.Http.Converters
         {
             // Get the response encoding
             Encoding encoding;
-            if (!StringUtils.HasText(response.CharacterSet))
+            MediaType mediaType = MediaType.ParseMediaType(response.ContentType);
+            if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
             }
             else
             {
-                encoding = Encoding.GetEncoding(response.CharacterSet);
+                encoding = Encoding.GetEncoding(mediaType.CharSet);
             }
 
             // Get the response stream  

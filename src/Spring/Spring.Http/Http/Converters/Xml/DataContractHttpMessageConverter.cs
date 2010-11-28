@@ -20,10 +20,8 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Net;
 using System.Xml;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace Spring.Http.Converters.Xml

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -50,7 +49,7 @@ namespace Spring.Http.Converters
         public void CanRead() 
         {
             Assert.IsTrue(converter.CanRead(typeof(string), new MediaType("text", "plain")));
-            Assert.IsTrue(converter.CanWrite(typeof(string), MediaType.ALL));
+            Assert.IsTrue(converter.CanRead(typeof(string), MediaType.ALL));
             Assert.IsTrue(converter.CanRead(typeof(string), new MediaType("application", "xml")));
             Assert.IsFalse(converter.CanRead(typeof(int[]), new MediaType("text", "plain")));
         }
@@ -58,20 +57,23 @@ namespace Spring.Http.Converters
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanRead(typeof(string), new MediaType("text", "plain")));
+            Assert.IsTrue(converter.CanWrite(typeof(string), new MediaType("text", "plain")));
             Assert.IsTrue(converter.CanWrite(typeof(string), MediaType.ALL));
-            Assert.IsTrue(converter.CanRead(typeof(string), new MediaType("application", "xml")));
-            Assert.IsFalse(converter.CanRead(typeof(int[]), new MediaType("text", "plain")));
+            Assert.IsTrue(converter.CanWrite(typeof(string), new MediaType("application", "xml")));
+            Assert.IsFalse(converter.CanWrite(typeof(int[]), new MediaType("text", "plain")));
         }
 
         [Test]
 	    public void Read() 
         {
             string body = "Hello Bruno Baïa";
+            string charSet = "utf-8";
+            Encoding charSetEncoding = Encoding.GetEncoding(charSet);
+            MediaType mediaType = new MediaType("text", "plain", charSet);
 
             HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
             Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
-            Expect.Call<string>(webResponse.CharacterSet).Return("utf-8").Repeat.Twice();
+            Expect.Call<string>(webResponse.ContentType).Return(mediaType.ToString());
 
             mocks.ReplayAll();
             
@@ -89,9 +91,10 @@ namespace Spring.Http.Converters
             string body = "H\u00e9llo W\u00f6rld";
             string charSet = "ISO-8859-1";
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
+            MediaType mediaType = new MediaType("text", "plain", charSet);
 
             HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
-            Expect.Call(webRequest.ContentType = "text/plain;charset=ISO-8859-1").PropertyBehavior();
+            Expect.Call(webRequest.ContentType = mediaType.ToString()).PropertyBehavior();
             Expect.Call(webRequest.ContentLength = 1337).PropertyBehavior();
             Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
 

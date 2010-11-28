@@ -21,8 +21,6 @@
 using System;
 using System.Net;
 
-using Spring.Http;
-
 namespace Spring.Http.Rest.Support
 {
     /// <summary>

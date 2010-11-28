@@ -128,6 +128,7 @@
     <Compile Include="Http\Converters\Json\JsonHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Json\JsonHttpMessageConverterIntegrationTests.cs" />
     <Compile Include="Http\Converters\StringHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\UrlEncodedFormHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Xml\XmlHttpMessageConverterIntegrationTests.cs" />
     <Compile Include="Http\Converters\Xml\XElementHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Xml\XmlSerializableHttpMessageConverterTests.cs" />

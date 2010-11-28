@@ -62,11 +62,11 @@ namespace Spring.Http.Converters.Feed
         [Test]
         public void CanWrite() 
         {
-            Assert.IsTrue(converter.CanRead(typeof(SyndicationFeed), new MediaType("application", "atom+xml")));
-            Assert.IsTrue(converter.CanRead(typeof(SyndicationItem), new MediaType("application", "atom+xml")));
-            Assert.IsTrue(converter.CanRead(typeof(SyndicationFeed), new MediaType("text", "xml")));
-            Assert.IsFalse(converter.CanRead(typeof(string), new MediaType("application", "atom+xml")));
-            Assert.IsFalse(converter.CanRead(typeof(SyndicationFeed), new MediaType("text", "plain")));
+            Assert.IsTrue(converter.CanWrite(typeof(SyndicationFeed), new MediaType("application", "atom+xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(SyndicationItem), new MediaType("application", "atom+xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(SyndicationFeed), new MediaType("text", "xml")));
+            Assert.IsFalse(converter.CanWrite(typeof(string), new MediaType("application", "atom+xml")));
+            Assert.IsFalse(converter.CanWrite(typeof(SyndicationFeed), new MediaType("text", "plain")));
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace Spring.Http.Converters.Feed
         {
             DateTime now = DateTime.Now;
 
-            string body = String.Format("﻿<feed xmlns=\"http://www.w3.org/2005/Atom\"><title type=\"text\">Test Feed</title><subtitle type=\"text\">This is a test feed</subtitle><id>Atom10FeedHttpMessageConverterTests.Write</id><rights type=\"text\">Copyright 2010</rights><updated>{0}</updated><author><name>Bruno Baïa</name><uri>http://www.springframework.net/bbaia</uri><email>bruno.baia@springframework.net</email></author><link rel=\"alternate\" href=\"http://www.springframework.net/Feed\" /></feed>",
+            string body = String.Format("<feed xmlns=\"http://www.w3.org/2005/Atom\"><title type=\"text\">Test Feed</title><subtitle type=\"text\">This is a test feed</subtitle><id>Atom10FeedHttpMessageConverterTests.Write</id><rights type=\"text\">Copyright 2010</rights><updated>{0}</updated><author><name>Bruno Baïa</name><uri>http://www.springframework.net/bbaia</uri><email>bruno.baia@springframework.net</email></author><link rel=\"alternate\" href=\"http://www.springframework.net/Feed\" /></feed>",
                 now.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture));
 
             HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
@@ -105,7 +105,7 @@ namespace Spring.Http.Converters.Feed
 
             DateTime now = DateTime.Now;
 
-            string expectedBody = String.Format("﻿<feed xmlns=\"http://www.w3.org/2005/Atom\"><title type=\"text\">Test Feed</title><subtitle type=\"text\">This is a test feed</subtitle><id>Atom10FeedHttpMessageConverterTests.Write</id><rights type=\"text\">Copyright 2010</rights><updated>{0}</updated><author><name>Bruno Baïa</name><uri>http://www.springframework.net/bbaia</uri><email>bruno.baia@springframework.net</email></author><link rel=\"alternate\" href=\"http://www.springframework.net/Feed\" /></feed>", 
+            string expectedBody = String.Format("<feed xmlns=\"http://www.w3.org/2005/Atom\"><title type=\"text\">Test Feed</title><subtitle type=\"text\">This is a test feed</subtitle><id>Atom10FeedHttpMessageConverterTests.Write</id><rights type=\"text\">Copyright 2010</rights><updated>{0}</updated><author><name>Bruno Baïa</name><uri>http://www.springframework.net/bbaia</uri><email>bruno.baia@springframework.net</email></author><link rel=\"alternate\" href=\"http://www.springframework.net/Feed\" /></feed>", 
                 now.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture));
             
             SyndicationFeed body = new SyndicationFeed("Test Feed", "This is a test feed", new Uri("http://www.springframework.net/Feed"), "Atom10FeedHttpMessageConverterTests.Write", now);

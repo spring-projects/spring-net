@@ -22,7 +22,6 @@ using System;
 using System.Net;
 using System.Collections.Generic;
 
-using Spring.Http;
 using Spring.Http.Converters;
 
 using NUnit.Framework;

@@ -31,7 +31,6 @@ using Spring.Util;
 namespace Spring.Http.Converters.Json
 {
     // TODO : Support for known types, etc...
-    // TODO : Fix Write method
 
     /// <summary>
     /// Implementation of <see cref="IHttpMessageConverter"/> that can read and write JSON.
@@ -90,8 +89,8 @@ namespace Spring.Http.Converters.Json
         protected override void WriteInternal(object content, HttpWebRequest request)
         {
             // Get the request encoding
-            MediaType mediaType = MediaType.ParseMediaType(request.ContentType);
             Encoding encoding;
+            MediaType mediaType = MediaType.ParseMediaType(request.ContentType);
             if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
@@ -109,13 +108,15 @@ namespace Spring.Http.Converters.Json
                 using (XmlDictionaryWriter jsonWriter = JsonReaderWriterFactory.CreateJsonWriter(requestStream, encoding, false))
                 {
                     serializer.WriteObject(jsonWriter, content);
-                    jsonWriter.Flush();
                 }
 
                 // Set the content length in the request headers  
                 request.ContentLength = requestStream.Length;
 
-                requestStream.CopyToAndClose(request.GetRequestStream());
+                using (Stream postStream = request.GetRequestStream())
+                {
+                    requestStream.CopyToAndClose(postStream);
+                }
             }
         }
     }

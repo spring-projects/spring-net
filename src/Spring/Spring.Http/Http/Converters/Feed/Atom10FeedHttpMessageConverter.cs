@@ -19,7 +19,6 @@
 
 #endregion
 
-using System;
 using System.Net;
 using System.Xml;
 using System.ServiceModel.Syndication;

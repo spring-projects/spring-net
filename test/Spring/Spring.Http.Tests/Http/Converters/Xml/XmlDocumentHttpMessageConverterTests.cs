@@ -61,9 +61,9 @@ namespace Spring.Http.Converters.Xml
         {
             Assert.IsTrue(converter.CanWrite(typeof(XmlDocument), new MediaType("application", "xml")));
             Assert.IsTrue(converter.CanWrite(typeof(XmlDocument), new MediaType("text", "xml")));
-            Assert.IsTrue(converter.CanRead(typeof(XmlDocument), new MediaType("application", "soap+xml"))); // application/*+xml
-            Assert.IsFalse(converter.CanRead(typeof(XmlDocument), new MediaType("text", "plain")));
-            Assert.IsFalse(converter.CanRead(typeof(String), new MediaType("application", "xml")));
+            Assert.IsTrue(converter.CanWrite(typeof(XmlDocument), new MediaType("application", "soap+xml"))); // application/*+xml
+            Assert.IsFalse(converter.CanWrite(typeof(XmlDocument), new MediaType("text", "plain")));
+            Assert.IsFalse(converter.CanWrite(typeof(String), new MediaType("application", "xml")));
         }
 
         [Test]
@@ -102,14 +102,10 @@ namespace Spring.Http.Converters.Xml
 
             mocks.ReplayAll();
 
-            converter.Write(body, null, webRequest);
+            converter.Write(body, null, webRequest);            
 
-            requestStream.Position = 0;
-            using (StreamReader reader = new StreamReader(requestStream, Encoding.UTF8))
-            {
-                string result = reader.ReadToEnd();
-                Assert.AreEqual(body.OuterXml, result, "Invalid result");
-            }
+            byte[] result = requestStream.ToArray();
+            Assert.AreEqual(body.OuterXml, Encoding.UTF8.GetString(result), "Invalid result");
 
             mocks.VerifyAll();
         }

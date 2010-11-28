@@ -21,7 +21,6 @@
 using System.Net;
 using System.Collections.Generic;
 
-using Spring.Http;
 using Spring.Http.Converters;
 
 namespace Spring.Http.Rest.Support
