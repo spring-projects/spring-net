@@ -27,20 +27,15 @@ namespace Spring.Context.Config
     ]
     public class ContextNamespaceParser : NamespaceParserSupport
     {
-
-
         /// <summary>
         /// Register the <see cref="IObjectDefinitionParser"/> for the '<code>advice</code>' and
         /// '<code>attribute-driven'</code> tags.
         /// </summary>
         public override void Init()
         {
-           
-
             RegisterObjectDefinitionParser("attribute-config", new AttributeConfigObjectDefinitionParser());
-
+            
             //RegisterObjectDefinitionParser("component-scan", new ComponentScanObjectDefinitionParser());
-
         }
     }
 }

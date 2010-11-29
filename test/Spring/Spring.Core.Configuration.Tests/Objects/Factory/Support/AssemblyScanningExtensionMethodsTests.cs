@@ -43,7 +43,7 @@ namespace Spring.Objects.Factory.Support
             AssertExpectedObjectsAreRegisteredWith(context);
         }
 
-        private static void AssertExpectedObjectsAreRegisteredWith(GenericApplicationContext context)
+        private void AssertExpectedObjectsAreRegisteredWith(GenericApplicationContext context)
         {
             Assert.That(context.DefaultListableObjectFactory.ObjectDefinitionCount, Is.EqualTo(13));
         }

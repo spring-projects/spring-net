@@ -8,10 +8,10 @@
 		elementFormDefault="qualified"
 		attributeFormDefault="unqualified">
 
-  <xsd:import namespace="http://www.springframework.net"/>
-  <xsd:import namespace="http://www.springframework.net/tool"/>
+	<xsd:import namespace="http://www.springframework.net"/>
+	<xsd:import namespace="http://www.springframework.net/tool"/>
 
-  <xsd:annotation>
+	<xsd:annotation>
 		<xsd:documentation><![CDATA[
 	Defines the configuration elements for the Spring Framework's application
 	context support. Effects the activation of various configuration styles
