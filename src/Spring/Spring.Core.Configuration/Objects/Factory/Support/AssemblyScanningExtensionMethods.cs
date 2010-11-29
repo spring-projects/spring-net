@@ -11,23 +11,9 @@ namespace Spring.Objects.Factory.Support
 {
     public static class AssemblyScanningExtensionMethods
     {
-        private static ILog _logger = LogManager.GetLogger(typeof(AssemblyScanningExtensionMethods));
-
-        /// <summary>
-        /// Scans the assemblies for definitions.
-        /// </summary>
-        /// <param name="registry">The registry.</param>
-        /// <param name="assemblyScanPath">The assembly scan path.</param>
-        /// <param name="assemblyFilenamePredicate">The assembly filename predicate.</param>
-        /// <param name="assemblyMetadataPredicate">The assembly metadata predicate.</param>
-        /// <returns></returns>
-        public static void ScanAssembliesAndRegisterDefinitions(this IObjectDefinitionRegistry registry, string assemblyScanPath, Func<string, bool> assemblyFilenamePredicate, Func<Assembly, bool> assemblyMetadataPredicate)
+        public static void Scan(this IObjectDefinitionRegistry registry, IAssemblyObjectDefinitionScanner scanner)
         {
-            IEnumerable<Assembly> assemblies = GetAllMatchingAssemblies(assemblyScanPath, assemblyFilenamePredicate);
-
-            assemblies = assemblies.Where(assembly => assemblyMetadataPredicate(assembly));
-
-            IEnumerable<Type> configTypes = GetAllConfigurationTypesDefinedIn(assemblies);
+            IEnumerable<Type> configTypes = scanner.Scan();
 
             //if we have at least one config class, ensure the post-processor is registered
             if (configTypes.Count() > 0)
@@ -38,32 +24,45 @@ namespace Spring.Objects.Factory.Support
             RegisiterDefintionsForConfigTypes(configTypes, registry);
         }
 
-        /// <summary>
-        /// Scans the assemblies for definitions.
-        /// </summary>
-        /// <param name="registry">The registry.</param>
-        /// <param name="assemblyMetadataPredicate">The assembly metadata predicate.</param>
-        /// <returns></returns>
-        public static void ScanAssembliesAndRegisterDefinitions(this IObjectDefinitionRegistry registry, Func<Assembly, bool> assemblyMetadataPredicate)
+        public static void Scan(this IObjectDefinitionRegistry registry, Predicate<Type> typePredicate)
         {
-            ScanAssembliesAndRegisterDefinitions(registry, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), fn => true, assemblyMetadataPredicate);
+            Scan(registry, string.Empty, ta => true, typePredicate);
         }
 
-        /// <summary>
-        /// Scans the assemblies for definitions.
-        /// </summary>
-        /// <param name="registry">The registry.</param>
-        /// <param name="assemblyFilenamePredicate">The assembly filename predicate.</param>
-        /// <param name="assemblyMetadataPredicate">The assembly metadata predicate.</param>
-        /// <returns></returns>
-        public static void ScanAssembliesAndRegisterDefinitions(this IObjectDefinitionRegistry registry, Func<string, bool> assemblyFilenamePredicate, Func<Assembly, bool> assemblyMetadataPredicate)
+        public static void Scan(this IObjectDefinitionRegistry registry, string assemblyScanPath, Predicate<Assembly> assemblyPredicate, Predicate<Type> typePredicate)
         {
-            ScanAssembliesAndRegisterDefinitions(registry, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), assemblyFilenamePredicate, assemblyMetadataPredicate);
+            IAssemblyObjectDefinitionScanner scanner;
+
+            //create a scanner instance using the scan path (or not!) as appropropriate
+            if (string.IsNullOrEmpty(assemblyScanPath))
+            {
+                scanner = new AssemblyObjectDefinitionScanner();
+            }
+            else
+            {
+                scanner = new AssemblyObjectDefinitionScanner(assemblyScanPath);
+            }
+
+            //configure the scanner per the provided constraints
+            scanner.WithAssemblyFilter(assemblyPredicate).WithIncludeFilter(typePredicate);
+
+            //pass the scanner to primary Scan method to actually do the work
+            Scan(registry, scanner);
         }
 
-        public static void ScanAssembliesAndRegisterDefinitions(this IObjectDefinitionRegistry registry)
+        public static void Scan(this IObjectDefinitionRegistry registry, Predicate<Assembly> assemblyPredicate)
         {
-            ScanAssembliesAndRegisterDefinitions(registry, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), fn => true, a => true);
+            Scan(registry, string.Empty, assemblyPredicate, t => true);
+        }
+
+        public static void Scan(this IObjectDefinitionRegistry registry, Predicate<Assembly> assemblyPredicate, Predicate<Type> typePredicate)
+        {
+            Scan(registry, string.Empty, assemblyPredicate, typePredicate);
+        }
+
+        public static void Scan(this IObjectDefinitionRegistry registry)
+        {
+            Scan(registry, new AssemblyObjectDefinitionScanner());
         }
 
         /// <summary>
@@ -77,59 +76,6 @@ namespace Spring.Objects.Factory.Support
             {
                 registry.RegisterObjectDefinition(postProcessorBuilder.ObjectDefinition.ObjectTypeName, postProcessorBuilder.ObjectDefinition);
             }
-        }
-
-        /// <summary>
-        /// Gets all configuration types defined in the assemblies.
-        /// </summary>
-        /// <param name="assemblies">The assemblies.</param>
-        /// <returns></returns>
-        private static IEnumerable<Type> GetAllConfigurationTypesDefinedIn(IEnumerable<Assembly> assemblies)
-        {
-            IList<Type> types = new List<Type>();
-
-            foreach (Assembly assembly in assemblies)
-            {
-                foreach (Type type in assembly.GetTypes())
-                {
-                    if (Attribute.GetCustomAttribute(type, typeof(ConfigurationAttribute), true) != null)
-                    {
-                        types.Add(type);
-                    }
-                }
-            }
-
-            return types;
-        }
-
-        /// <summary>
-        /// Gets all matching assemblies.
-        /// </summary>
-        /// <param name="assemblyScanPath">The assembly scan path.</param>
-        /// <param name="assemblyFilenamePredicate">The assembly filename predicate.</param>
-        /// <returns></returns>
-        private static IEnumerable<Assembly> GetAllMatchingAssemblies(string assemblyScanPath, Func<string, bool> assemblyFilenamePredicate)
-        {
-            IList<Assembly> assemblies = new List<Assembly>();
-
-            IEnumerable<string> files = Directory.GetFiles(assemblyScanPath, "*.dll").Where(s => assemblyFilenamePredicate(Path.GetFileName(s)));
-
-            foreach (string file in files)
-            {
-                try
-                {
-                    assemblies.Add(Assembly.LoadFrom(file));
-                }
-                catch (Exception ex)
-                {
-                    //log and swallow everything that might go wrong here...
-                    if (_logger.IsDebugEnabled)
-                        _logger.Debug("Failed to load type while scanning Assemblies for Defintions!", ex);
-
-                }
-            }
-
-            return assemblies;
         }
 
         /// <summary>

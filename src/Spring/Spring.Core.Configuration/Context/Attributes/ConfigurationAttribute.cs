@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Spring.Stereotype;
 
 namespace Spring.Context.Attributes
 {
@@ -25,7 +26,7 @@ namespace Spring.Context.Attributes
     /// </ul>
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class ConfigurationAttribute : Attribute
+    public class ConfigurationAttribute : ComponentAttribute
     {
 
         /// <summary>
