@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\Attributes\AssemblyTypeScannerTests.cs" />
     <Compile Include="Context\Attributes\ConfigurationClassPostProcessorTests.cs" />
     <Compile Include="Context\Attributes\DefinitionAttributeTests.cs" />
     <Compile Include="Context\Attributes\ImportResourceAttributeTests.cs" />

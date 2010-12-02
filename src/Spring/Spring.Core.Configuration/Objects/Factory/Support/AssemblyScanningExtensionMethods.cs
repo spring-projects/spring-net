@@ -11,7 +11,7 @@ namespace Spring.Objects.Factory.Support
 {
     public static class AssemblyScanningExtensionMethods
     {
-        public static void Scan(this IObjectDefinitionRegistry registry, IAssemblyObjectDefinitionScanner scanner)
+        public static void Scan(this IObjectDefinitionRegistry registry, IAssemblyTypeScanner scanner)
         {
             IEnumerable<Type> configTypes = scanner.Scan();
 
@@ -21,27 +21,23 @@ namespace Spring.Objects.Factory.Support
                 EnsureConfigurationClassPostProcessorIsRegisteredFor(registry);
             }
 
-            RegisiterDefintionsForConfigTypes(configTypes, registry);
+            RegisiterDefintionsForTypes(configTypes, registry);
+        }
+
+        public static void Scan(this IObjectDefinitionRegistry registry)
+        {
+            Scan(registry, new AssemblyObjectDefinitionScanner());
         }
 
         public static void Scan(this IObjectDefinitionRegistry registry, Predicate<Type> typePredicate)
         {
-            Scan(registry, string.Empty, ta => true, typePredicate);
+            Scan(registry, null, ta => true, typePredicate);
         }
 
         public static void Scan(this IObjectDefinitionRegistry registry, string assemblyScanPath, Predicate<Assembly> assemblyPredicate, Predicate<Type> typePredicate)
         {
-            IAssemblyObjectDefinitionScanner scanner;
-
-            //create a scanner instance using the scan path (or not!) as appropropriate
-            if (string.IsNullOrEmpty(assemblyScanPath))
-            {
-                scanner = new AssemblyObjectDefinitionScanner();
-            }
-            else
-            {
-                scanner = new AssemblyObjectDefinitionScanner(assemblyScanPath);
-            }
+            //create a scanner instance using the scan path
+            IAssemblyTypeScanner scanner = new AssemblyObjectDefinitionScanner(assemblyScanPath);
 
             //configure the scanner per the provided constraints
             scanner.WithAssemblyFilter(assemblyPredicate).WithIncludeFilter(typePredicate);
@@ -50,19 +46,14 @@ namespace Spring.Objects.Factory.Support
             Scan(registry, scanner);
         }
 
-        public static void Scan(this IObjectDefinitionRegistry registry, Predicate<Assembly> assemblyPredicate)
-        {
-            Scan(registry, string.Empty, assemblyPredicate, t => true);
-        }
-
         public static void Scan(this IObjectDefinitionRegistry registry, Predicate<Assembly> assemblyPredicate, Predicate<Type> typePredicate)
         {
-            Scan(registry, string.Empty, assemblyPredicate, typePredicate);
+            Scan(registry, null, assemblyPredicate, typePredicate);
         }
 
-        public static void Scan(this IObjectDefinitionRegistry registry)
+        public static void Scan(this IObjectDefinitionRegistry registry, Predicate<Assembly> assemblyPredicate)
         {
-            Scan(registry, new AssemblyObjectDefinitionScanner());
+            Scan(registry, null, assemblyPredicate, t => true);
         }
 
         /// <summary>
@@ -79,15 +70,15 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Regisiters the defintions for config types.
+        /// Regisiters the defintions for types.
         /// </summary>
-        /// <param name="configTypes">The config types.</param>
+        /// <param name="typesToRegister">The types to register.</param>
         /// <param name="registry">The registry.</param>
-        private static void RegisiterDefintionsForConfigTypes(IEnumerable<Type> configTypes, IObjectDefinitionRegistry registry)
+        private static void RegisiterDefintionsForTypes(IEnumerable<Type> typesToRegister, IObjectDefinitionRegistry registry)
         {
-            foreach (Type configType in configTypes)
+            foreach (Type type in typesToRegister)
             {
-                ObjectDefinitionBuilder definition = ObjectDefinitionBuilder.GenericObjectDefinition(configType);
+                ObjectDefinitionBuilder definition = ObjectDefinitionBuilder.GenericObjectDefinition(type);
                 registry.RegisterObjectDefinition(definition.ObjectDefinition.ObjectTypeName, definition.ObjectDefinition);
             }
         }
