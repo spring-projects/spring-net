@@ -690,7 +690,14 @@
     <Compile Include="Objects\Factory\Config\IVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\VariableAccessor.cs" />
     <Compile Include="Objects\Factory\Config\VariablePlaceholderConfigurer.cs" />
+    <Compile Include="Objects\Factory\Parsing\FailFastProblemReporter.cs" />
+    <Compile Include="Objects\Factory\Parsing\IProblemReporter.cs" />
+    <Compile Include="Objects\Factory\Parsing\Location.cs" />
+    <Compile Include="Objects\Factory\Parsing\ObjectDefinitionParsingException.cs" />
+    <Compile Include="Objects\Factory\Parsing\Problem.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
+    <Compile Include="Objects\Factory\Support\IObjectDefinitionRegistryPostProcessor.cs" />
+    <Compile Include="Objects\Factory\Support\ObjectScope.cs" />
     <Compile Include="Util\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
