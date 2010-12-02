@@ -406,7 +406,7 @@ namespace Spring.Context.Support
             if (exceptions.HasExceptions)
             {
                 Delegate target = ContextEvent.GetInvocationList()[0];
-                Exception exception = (Exception) exceptions[target];
+                Exception exception = (Exception)exceptions[target];
                 throw new ApplicationContextException(string.Format("An unhandled exception occured during processing application event {0} in handler {1}", e.GetType(), target.Method), exception);
             }
         }
@@ -487,33 +487,92 @@ namespace Spring.Context.Support
         /// </note>
         /// </remarks>
         /// <exception cref="ObjectsException">In the case of errors.</exception>
-        private void InvokeObjectFactoryPostProcessors()
+        private void InvokeObjectFactoryPostProcessors(IConfigurableListableObjectFactory objectFactory)
         {
-            // Do NOT include IFactoryObjects; they (typically) need to be instantiated
-            // to determine the Type of object that they create, and if they are instantiated
-            // then we won't be able to do any factory post processin' on 'em...
-            ArrayList factoryProcessorNames = new ArrayList();
-            string[] names = GetObjectNamesForType(typeof (IObjectFactoryPostProcessor), true, false);
-            foreach (string s in names)
+            // Invoke BeanDefinitionRegistryPostProcessors first, if any.
+            ArrayList processedObjects = new ArrayList();
+
+            if (objectFactory is IObjectDefinitionRegistry)
             {
-                factoryProcessorNames.Add(s);
+                IObjectDefinitionRegistry registry = (IObjectDefinitionRegistry)objectFactory;
+                ArrayList regularPostProcessors = new ArrayList();
+                ArrayList registryPostProcessors = new ArrayList();
+
+                foreach (IObjectFactoryPostProcessor factoryProcessor in ObjectFactoryPostProcessors)
+                {
+                    if (factoryProcessor is IObjectDefinitionRegistryPostProcessor)
+                    {
+                        ((IObjectDefinitionRegistryPostProcessor)factoryProcessor).PostProcessObjectDefinitionRegistry(registry);
+                        registryPostProcessors.Add(factoryProcessor);
+                    }
+                    else
+                    {
+                        regularPostProcessors.Add(factoryProcessor);
+                    }
+                }
+
+                IDictionary objectMap = objectFactory.GetObjectsOfType(typeof(IObjectDefinitionRegistryPostProcessor), true, false);
+
+                ArrayList registryPostProcessorObjects = new ArrayList(objectMap.Values);
+                registryPostProcessorObjects.Sort(new OrderComparator());
+
+                foreach (System.Object processor in registryPostProcessorObjects)
+                {
+                    ((IObjectDefinitionRegistryPostProcessor)processor).PostProcessObjectDefinitionRegistry(registry);
+                }
+
+                InvokeObjectFactoryPostProcessors(registryPostProcessors, objectFactory);
+                InvokeObjectFactoryPostProcessors(registryPostProcessorObjects, objectFactory);
+                InvokeObjectFactoryPostProcessors(regularPostProcessors, objectFactory);
+
+               // processedObjects.Add(objectMap.Keys);
+                 
+                foreach (DictionaryEntry entry in objectMap)
+                {
+                    processedObjects.Add(entry.Key);
+                }
+
             }
-                        
+            else
+            {
+                foreach (IObjectFactoryPostProcessor factoryProcessor in ObjectFactoryPostProcessors)
+                {
+                    // Invoke factory processors registered with the context instance.
+                    factoryProcessor.PostProcessObjectFactory(objectFactory);
+                }
+            }
+
+            // Do not initialize FactoryBeans here: We need to leave all regular beans
+            // uninitialized to let the bean factory post-processors apply to them!
+            ArrayList factoryProcessorNames = new ArrayList();
+            string[] names = GetObjectNamesForType(typeof(IObjectFactoryPostProcessor), true, false);
+            foreach (string name in names)
+            {
+                factoryProcessorNames.Add(name);
+            }
+
+            // Separate between ObjectFactoryPostProcessors that implement PriorityOrdered,
+            // Ordered, and the rest.
             ArrayList priorityOrderedFactoryProcessors = new ArrayList();
             ArrayList orderedFactoryProcessorsNames = new ArrayList();
             ArrayList nonOrderedFactoryProcessorNames = new ArrayList();
-            
+
             for (int i = 0; i < factoryProcessorNames.Count; ++i)
             {
-                string processorName = (string) factoryProcessorNames[i];
-                if (IsTypeMatch(processorName, typeof(IPriorityOrdered)))
+                string processorName = (string)factoryProcessorNames[i];
+                if (processedObjects.Contains(processorName))
+                {
+                    //skip  -- already processed in first phase above
+                    Debug.WriteLine("");
+                }
+                else if (IsTypeMatch(processorName, typeof(IPriorityOrdered)))
                 {
                     priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject(processorName, typeof(IObjectFactoryPostProcessor)));
                 }
                 else if (IsTypeMatch(processorName, typeof(IOrdered)))
                 {
                     orderedFactoryProcessorsNames.Add(processorName);
-                }                
+                }
                 else
                 {
                     nonOrderedFactoryProcessorNames.Add(processorName);
@@ -527,17 +586,17 @@ namespace Spring.Context.Support
             foreach (string orderedFactoryProcessorsName in orderedFactoryProcessorsNames)
             {
                 orderedFactoryProcessors.Add(ObjectFactory.GetObject(orderedFactoryProcessorsName,
-                                                                     typeof (IObjectFactoryPostProcessor)));
+                                                                     typeof(IObjectFactoryPostProcessor)));
             }
             orderedFactoryProcessors.Sort(new OrderComparator());
             InvokeObjectFactoryPostProcessors(orderedFactoryProcessors, ObjectFactory);
-            
+
             // and then the unordered ones...
             ArrayList nonOrderedPostProcessors = new ArrayList();
             foreach (string nonOrderedFactoryProcessorName in nonOrderedFactoryProcessorNames)
             {
                 nonOrderedPostProcessors.Add(ObjectFactory.GetObject(nonOrderedFactoryProcessorName,
-                                                                     typeof (IObjectFactoryPostProcessor)));
+                                                                     typeof(IObjectFactoryPostProcessor)));
             }
             InvokeObjectFactoryPostProcessors(nonOrderedPostProcessors, ObjectFactory);
 
@@ -563,7 +622,7 @@ namespace Spring.Context.Support
             // Now will find any additional IObjectFactoryPostProcessors that implement IPriorityOrdered that may have been
             // resolved due to using TypeAlias
             string[] factoryProcessorNamesAfterTypeAlias = GetObjectNamesForType(typeof(IObjectFactoryPostProcessor), true, false);
-            priorityOrderedFactoryProcessors.Clear();            
+            priorityOrderedFactoryProcessors.Clear();
             foreach (string factoryProcessorName in factoryProcessorNamesAfterTypeAlias)
             {
                 if (!factoryProcessorNames.Contains(factoryProcessorName))
@@ -912,10 +971,7 @@ namespace Spring.Context.Support
 
                 #endregion
 
-                foreach (IObjectFactoryPostProcessor factoryProcessor in ObjectFactoryPostProcessors)
-                {
-                    factoryProcessor.PostProcessObjectFactory(objectFactory);
-                }
+
 
                 #region Instrumentation
 
@@ -939,7 +995,7 @@ namespace Spring.Context.Support
 
                 #endregion
 
-                InvokeObjectFactoryPostProcessors();
+                InvokeObjectFactoryPostProcessors(objectFactory);
 
                 RegisterObjectPostProcessors(objectFactory);
                 InitEventRegistry();

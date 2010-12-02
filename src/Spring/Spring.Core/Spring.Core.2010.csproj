@@ -125,7 +125,15 @@
     <Compile Include="Collections\DictionarySet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\Generic\DictionarySet.cs" />
+    <Compile Include="Collections\Generic\HashedSet.cs" />
+    <Compile Include="Collections\Generic\ImmutableSet.cs" />
+    <Compile Include="Collections\Generic\ISet.cs" />
+    <Compile Include="Collections\Generic\OrderedSet.cs" />
     <Compile Include="Collections\Generic\ReadOnlyDictionary.cs" />
+    <Compile Include="Collections\Generic\Set.cs" />
+    <Compile Include="Collections\Generic\SortedSet.cs" />
+    <Compile Include="Collections\Generic\SynchronizedSet.cs" />
     <Compile Include="Collections\HashedSet.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -695,7 +703,14 @@
     <Compile Include="Objects\Factory\Config\IVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\VariableAccessor.cs" />
     <Compile Include="Objects\Factory\Config\VariablePlaceholderConfigurer.cs" />
+    <Compile Include="Objects\Factory\Parsing\FailFastProblemReporter.cs" />
+    <Compile Include="Objects\Factory\Parsing\IProblemReporter.cs" />
+    <Compile Include="Objects\Factory\Parsing\Location.cs" />
+    <Compile Include="Objects\Factory\Parsing\ObjectDefinitionParsingException.cs" />
+    <Compile Include="Objects\Factory\Parsing\Problem.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
+    <Compile Include="Objects\Factory\Support\IObjectDefinitionRegistryPostProcessor.cs" />
+    <Compile Include="Objects\Factory\Support\ObjectScope.cs" />
     <Compile Include="Util\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
@@ -1203,6 +1218,7 @@
     <Compile Include="Validation\Validators\UrlValidator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="ContextClassDiagram.cd" />
     <None Include="Expressions\Expression.g" />
     <EmbeddedResource Include="Objects\Factory\Xml\spring-tool-1.1.xsd">
       <SubType>
@@ -1246,6 +1262,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>rem $(ProjectDir)..\..\..\build-support\tools\antlr-2.7.6\antlr-2.7.6.exe -o $(ProjectDir)Expressions\Parser $(ProjectDir)Expressions\Expression.g

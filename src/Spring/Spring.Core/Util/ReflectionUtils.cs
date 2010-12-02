@@ -1417,6 +1417,65 @@ namespace Spring.Util
             MemberwiseCopyInternal(fromObject, toObject, smallerType);
         }
 
+
+        /// <summary>
+        /// Convenience method that uses reflection to return the value of a non-public field of a given object.
+        /// </summary>
+        /// <remarks>Useful in certain instances during testing to avoid the need to add protected properties, etc. to a class just to facilitate testing.</remarks>
+        /// <param name="obj">The instance of the object from which to retrieve the field value.</param>
+        /// <param name="fieldName">Name of the field on the object from which to retrieve the value.</param>
+        /// <returns></returns>
+        public static object GetInstanceFieldValue(object obj, string fieldName)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj", "obj is null.");
+            if (String.IsNullOrEmpty(fieldName))
+                throw new ArgumentException("fieldName is null or empty.", "fieldName");
+
+            FieldInfo f = obj.GetType().GetField(fieldName, BindingFlags.SetField | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            if (f != null)
+                return f.GetValue(obj);
+            else
+            {
+                throw new ArgumentException(string.Format("Non-public instance field '{0}' could not be found in class of type '{1}'", fieldName, obj.GetType().ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Convenience method that uses reflection to set the value of a non-public field of a given object.
+        /// </summary>
+        /// <remarks>Useful in certain instances during testing to avoid the need to add protected properties, etc. to a class just to facilitate testing.</remarks>
+        /// <param name="obj">The instance of the object from which to set the field value.</param>
+        /// <param name="fieldName">Name of the field on the object to which to set the value.</param>
+        /// <param name="fieldValue">The field value to set.</param>
+        public static void SetInstanceFieldValue(object obj, string fieldName, object fieldValue)
+        {
+
+            if (obj == null)
+                throw new ArgumentNullException("obj", "obj is null.");
+            if (String.IsNullOrEmpty(fieldName))
+                throw new ArgumentException("fieldName is null or empty.", "fieldName");
+            if (fieldValue == null)
+                throw new ArgumentNullException("fieldValue", "fieldValue is null.");
+
+            FieldInfo f = obj.GetType().GetField(fieldName, BindingFlags.SetField | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+
+            if (f != null)
+            {
+                if (f.FieldType != fieldValue.GetType())
+                    throw new ArgumentException(string.Format("fieldValue for fieldName '{0}' of object type '{1}' must be of type '{2}' but was of type '{3}'", fieldName, obj.GetType().ToString(), f.FieldType.ToString(), fieldValue.GetType().ToString()), "fieldValue");
+
+                f.SetValue(obj, fieldValue);
+            }
+            else
+            {
+                throw new ArgumentException(string.Format("Non-public instance field '{0}' could not be found in class of type '{1}'", fieldName, obj.GetType().ToString()));
+            }
+        }
+
+
+
+
 #if NET_2_0
         private static void MemberwiseCopyInternal(object fromObject, object toObject, Type smallerType)
         {
