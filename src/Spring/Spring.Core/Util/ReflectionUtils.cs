@@ -63,7 +63,7 @@ namespace Spring.Util
         /// Avoid BeforeFieldInit problem
         /// </summary>
         static ReflectionUtils()
-        {}
+        { }
 
         /// <summary>
         /// Checks, if the specified type is a nullable
@@ -1074,7 +1074,7 @@ namespace Spring.Util
 
         private static object ConvertConstructorArgsToObjectArrayIfNecessary(object value)
         {
-             if (value == null)
+            if (value == null)
                 return value;
 
             IList<CustomAttributeTypedArgument> constructorArguments = value as IList<CustomAttributeTypedArgument>;
@@ -1083,7 +1083,7 @@ namespace Spring.Util
                 return value;
 
             object[] arguments = new object[constructorArguments.Count];
-            
+
             for (int i = 0; i < constructorArguments.Count; i++)
             {
                 arguments[i] = constructorArguments[i].Value;
@@ -1091,7 +1091,7 @@ namespace Spring.Util
 
             return arguments;
         }
-        
+
 #endif
 
         /// <summary>
@@ -1429,7 +1429,7 @@ namespace Spring.Util
         {
             if (obj == null)
                 throw new ArgumentNullException("obj", "obj is null.");
-            if (String.IsNullOrEmpty(fieldName))
+            if (StringUtils.IsNullOrEmpty(fieldName))
                 throw new ArgumentException("fieldName is null or empty.", "fieldName");
 
             FieldInfo f = obj.GetType().GetField(fieldName, BindingFlags.SetField | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
@@ -1453,7 +1453,7 @@ namespace Spring.Util
 
             if (obj == null)
                 throw new ArgumentNullException("obj", "obj is null.");
-            if (String.IsNullOrEmpty(fieldName))
+            if (StringUtils.IsNullOrEmpty(fieldName))
                 throw new ArgumentException("fieldName is null or empty.", "fieldName");
             if (fieldValue == null)
                 throw new ArgumentNullException("fieldValue", "fieldValue is null.");

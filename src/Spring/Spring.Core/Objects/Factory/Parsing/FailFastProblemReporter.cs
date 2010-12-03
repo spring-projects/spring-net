@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if NET_2_0
+
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Common.Logging;
@@ -29,8 +32,11 @@ namespace Spring.Objects.Factory.Parsing
         public void Warning(Problem problem)
         {
             _logger.Warn(problem.Message);
-         
+
         }
 
     }
 }
+
+
+#endif

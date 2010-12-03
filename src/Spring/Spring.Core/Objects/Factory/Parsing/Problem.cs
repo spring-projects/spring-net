@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if NET_2_0
+
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Spring.Core.IO;
@@ -14,11 +17,12 @@ namespace Spring.Objects.Factory.Parsing
 
         private Exception _rootCause;
 
+
         /// <summary>
-        /// Initializes a new instance of the Problem class.
+        /// Initializes a new instance of the <see cref="Problem"/> class.
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="resource"></param>
+        /// <param name="message">The message.</param>
+        /// <param name="location">The location.</param>
         public Problem(string message, Location location)
             : this(message, location, null)
         {
@@ -59,7 +63,7 @@ namespace Spring.Objects.Factory.Parsing
 
         public string ResourceDescription
         {
-            get { return  _location.Resource!=null ? _location.Resource.Description : string.Empty; }
+            get { return _location.Resource != null ? _location.Resource.Description : string.Empty; }
         }
 
         public override string ToString()
@@ -76,3 +80,5 @@ namespace Spring.Objects.Factory.Parsing
 
     }
 }
+
+#endif

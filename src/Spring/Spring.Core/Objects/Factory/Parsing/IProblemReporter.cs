@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#if NET_2_0
+
+using System;
 using System.Text;
 
 namespace Spring.Objects.Factory.Parsing
@@ -11,3 +12,5 @@ namespace Spring.Objects.Factory.Parsing
         void Error(Problem problem);
     }
 }
+
+#endif

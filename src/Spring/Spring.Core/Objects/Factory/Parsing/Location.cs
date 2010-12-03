@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if NET_2_0
+
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Spring.Core.IO;
@@ -31,7 +34,7 @@ namespace Spring.Objects.Factory.Parsing
         public Location(IResource resource)
             : this(resource, null)
         {
-            
+
         }
         public IResource Resource
         {
@@ -51,3 +54,5 @@ namespace Spring.Objects.Factory.Parsing
 
     }
 }
+
+#endif
