@@ -155,8 +155,9 @@
       <arg value="${basedir}/${doc.ref.dir}/src/index.xml" />
       <arg value="${basedir}/${doc.ref.dir}/styles/htmlhelp.xsl" />
     </java>
+	<readregistry property="hhc.path" key="software\microsoft\html help workshop\installdir" hive="currentuser" />
     <exec dir="${doc.ref.output.dir}/htmlhelp" executable="cmd.exe">
-      <arg line="/c 'C:\Program Files\HTML Help Workshop\hhc.exe' htmlhelp.hhp"/>
+      <arg line="/c '${hhc.path}\hhc.exe' htmlhelp.hhp"/>
     </exec>
     <delete includeEmptyDirs="true">
       <fileset dir="${doc.ref.output.dir}/htmlhelp">

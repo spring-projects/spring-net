@@ -69,7 +69,7 @@ set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\jai_imageio.jar
 set LOCALCLASSPATH=%LOCALCLASSPATH%;%LIBDIR%\fop-hyph.jar
 set LOCALCLASSPATH=%LOCALCLASSPATH%;%FOP_HYPHENATION_PATH%
 
-set JAVAOPTS=-Denv.windir=%WINDIR% -Xmx256m
+set JAVAOPTS=-Denv.windir=%WINDIR% -Xmx1024m
 
 if "%JAVA_HOME%" == "" goto noJavaHome
 if not exist "%JAVA_HOME%\bin\java.exe" goto noJavaHome
