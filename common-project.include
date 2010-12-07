@@ -318,4 +318,8 @@ ${tool.dir}       : dir for tools
 
     </target>
 
+	<readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
+  <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
+	
+	
 </project>

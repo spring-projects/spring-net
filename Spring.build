@@ -463,6 +463,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop}"/>
     <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web}"/>
     <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+	<nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
@@ -502,6 +503,7 @@ Commandline Examples:
                  if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services and not net-3.5}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
+	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
     <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and nant.settings.currentframework == 'net-2.0'}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
@@ -537,6 +539,7 @@ Commandline Examples:
     <property name="build-msmq-tests" value="false" overwrite="true" />
     <property name="build-velocity" value="false" overwrite="true" />
     <property name="build-testing-microsoft" value="false" overwrite="true" />
+	<property name="build-quartz" value="false" overwrite="true" />
     <call target="compile-test" />
   </target>
 
@@ -574,7 +577,7 @@ Commandline Examples:
 	<call target="common.generate-assemblyinfo"/>
     <property name="build-ems" value="false" overwrite="true" />
     <property name="build-nms" value="false" overwrite="true" />
-    <property name="build-quartz" value="false" overwrite="true" />
+    <property name="build-quartz" value="true" overwrite="true" />
     <property name="build-msmq" value="false" overwrite="true" />
     <property name="build-msmq-tests" value="false" overwrite="true" />
     <property name="build-velocity" value="false" overwrite="true" />
@@ -585,7 +588,9 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
 	<nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
-	<nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz}"/>
+	<nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="test" if="${build-quartz}"/>
+	<nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build"/>
+	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test"/>
   </target>
 
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"

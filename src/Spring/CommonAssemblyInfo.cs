@@ -30,25 +30,37 @@ using System.Reflection;
 //
 //
 // This is to support side-by-side deployment of .NET 1.1 and .NET 2.0 versions of the assembly.
-#if !NET_2_0
-[assembly: AssemblyVersion("1.3.1.11001")]
-#endif
 
-#if NET_2_0
-[assembly: AssemblyVersion("1.3.1.20001")]
-#endif
-
-#if NET_3_0
-[assembly: AssemblyVersion("1.3.1.30001")]
-#endif
-
-#if NET_3_5
-[assembly: AssemblyVersion("1.3.1.35001")]
-#endif
+//note that this #if #elif #endif contstruct requires NET_#_# values be checked in DESCENDING order to work properly
+// (e.g., add any new ones at the TOP of this construct!)
 
 #if NET_4_0
 [assembly: AssemblyVersion("1.3.1.40001")]
+#elif NET_3_5
+[assembly: AssemblyVersion("1.3.1.35001")]
+#elif NET_3_0
+[assembly: AssemblyVersion("1.3.1.30001")]
+#elif NET_2_0
+[assembly: AssemblyVersion("1.3.1.20001")]
+#elif NET_1_1
+[assembly: AssemblyVersion("1.3.1.11001")]
+#elif NET_1_0
+[assembly: AssemblyVersion("1.3.1.10001")]
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
 // Microsoft .NET Framework documentation for more information on assembly signing.
