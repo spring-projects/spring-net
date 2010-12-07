@@ -23,8 +23,7 @@ Build properties that may be set:
   signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
 
 "mstest.exe":
-  value: bool: true:false
-  set to true to build Spring.Testing.Microsoft
+  value: string, fully-qualiifed location of mstest.exe, for example, C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\mstest.exe
 
 "vs-net.mstest.bin.dir":
   value: string: location of mstest.exe, for example C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE

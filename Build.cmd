@@ -3,7 +3,8 @@
 @echo ..
 @echo ...
 @echo Running full Build Script, capturing output to buildlog.txt file...
-build-support\tools\nant\bin\nant %1 %2 %3 %4 %5 %6 %7 %8 %9 > buildlog.txt
+@echo Start Time: %time%
+build-support\tools\nant\bin\nant %1 %2 %3 %4 %5 %6 %7 %8 %9 >> buildlog.txt
 @echo .
 @echo ..
 @echo ...
@@ -15,4 +16,5 @@ start "ignored but required placeholder window title argument" buildlog.txt
 @echo ************************
 @echo Build Complete!
 @echo ************************
+@echo End Time: %time%
 @echo    

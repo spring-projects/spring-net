@@ -14,8 +14,8 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("net-2.0.win32; Release")]
 #endif
 [assembly: AssemblyCompany("http://www.springframework.net")]
-[assembly: AssemblyProduct("Spring.NET Framework 1.3.0")]
-[assembly: AssemblyCopyright("Copyright 2002-2009 Spring.NET Framework Team.")]
+[assembly: AssemblyProduct("Spring.NET Framework 1.3.1")]
+[assembly: AssemblyCopyright("Copyright 2002-2010 Spring.NET Framework Team.")]
 [assembly: AssemblyTrademark("Apache License, Version 2.0")]
 [assembly: AssemblyCulture("")]
 
@@ -31,11 +31,24 @@ using System.Reflection;
 //
 // This is to support side-by-side deployment of .NET 1.1 and .NET 2.0 versions of the assembly.
 #if !NET_2_0
-[assembly: AssemblyVersion("1.3.0.11001")]
-#else
-[assembly: AssemblyVersion("1.3.0.20001")]
+[assembly: AssemblyVersion("1.3.1.11001")]
 #endif
 
+#if NET_2_0
+[assembly: AssemblyVersion("1.3.1.20001")]
+#endif
+
+#if NET_3_0
+[assembly: AssemblyVersion("1.3.1.30001")]
+#endif
+
+#if NET_3_5
+[assembly: AssemblyVersion("1.3.1.35001")]
+#endif
+
+#if NET_4_0
+[assembly: AssemblyVersion("1.3.1.40001")]
+#endif
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
 // Microsoft .NET Framework documentation for more information on assembly signing.

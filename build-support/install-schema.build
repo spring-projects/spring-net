@@ -4,6 +4,14 @@
   <target name="locations"
 	  descriptions="Shows directories where .xsd files will be copied">
 
+	  
+	<property name="vsXXXX.version" value="VS.NET 2010"/>
+    <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\10.0\InstallDir"/>
+    <property name="vsXXXX.relative.dir" value="..\..\Xml\Schemas"/>
+    <!-- retrieve location of VS.NET 2010 schema store -->
+    <readregistry property="vs2010.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
+                  failonerror="false"/>
+    <echo message="VS.NET 2010 xsd install directory = ${vs2010.xml.schemas}${vsXXXX.relative.dir}"/>	  
 
     <property name="vsXXXX.version" value="VS.NET 2008"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir"/>
@@ -34,6 +42,24 @@
   <target name="deploy-schema"
           description="Deploys the Schema to VS.Net schemas dirs. Copies VS 7.0, 7.1, 8.0, 9.0">
 
+<!-- deploy spring schema to the VS.NET 2010 schema store -->
+    <property name="vsXXXX.version" value="VS.NET 2010"/>
+    <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\10.0\InstallDir"/>
+    <property name="vsXXXX.relative.dir" value="..\..\Xml\Schemas"/>
+    <!-- retrieve location of VS.NET 2010 schema store -->
+    <readregistry property="vs2010.xml.schemas" key="${vsXXXX.xml.schemas.install.dir}" hive="LocalMachine"
+                  failonerror="false"/>
+    <property name="vsXXXX.xml.schemas.notinstalled" value="true"/>
+    <if test="${property::exists('vs2010.xml.schemas')}">
+      <property name="vsXXXX.xml.schemas" value="${vs2010.xml.schemas}"/>
+      <call target="_deploy-schema"/>
+    </if>
+    <if test="${vsXXXX.xml.schemas.notinstalled}">
+      <echo message=""/>
+      <echo message="Failed installing schema files for VS.NET 2010."/>
+      <echo message=""/>
+    </if>    		  
+		  
     <!-- deploy spring schema to the VS.NET 2008 schema store -->
     <property name="vsXXXX.version" value="VS.NET 2008"/>
     <property name="vsXXXX.xml.schemas.install.dir" value="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir"/>

@@ -1,11 +1,11 @@
-THE SPRING.NET FRAMEWORK, Release 1.3.0  (December 17, 2009)
+THE SPRING.NET FRAMEWORK, Release 1.3.1  (December 10, 2010)
 --------------------------------------------------------------------
 http://www.springframework.net/
 
 
 1. INTRODUCTION
 
-The 1.3.0 release of Spring.NET contains
+The 1.3.1 release of Spring.NET contains
 
      * A full featured Inversion of Control container
      * An Aspect Oriented Programming framework
@@ -20,7 +20,7 @@ The 1.3.0 release of Spring.NET contains
      * Portable Service Abstractions
        - Export plain .NET objects via .NET Remoting, Web Service or .NET Serviced Component and create client side proxies based on endpoint URL and service interface.
      * NHibernate Integation
-       - NHibernate 1.0, 1.2, 2.0 and 2.1 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
+       - NHibernate 1.0, 1.2, 2.0, 2.1, and 3.0 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
      * ASP.NET AJAX Integration
        - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
      * NUnit and MSTest integration
@@ -44,7 +44,7 @@ Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE 
 
 2. SUPPORTED .NET FRAMEWORK VERSIONS
 
-Spring.NET 1.3 supports .NET 1.1, 2.0, 3.0 and 3.5.  Note, there are no specific .DLLs for .NET 3.5 as we do not use any features or libraries from that framework version.  For .NET 3.0 in the directory bin\net\3.0 is the Spring.Services.dll that should be used if you are using .NET 3.0 or higher as contains Spring's WCF integration.
+Spring.NET 1.3.1 supports .NET 1.1, 2.0, 3.0, 3.5, and 4.0.  In the directories bin\net\3.0, bin\net\3.5, and bin\net\4.0  are framework-specific DLLs for each of .NET 3.0, 3.5, and 4.0 framework versions.
 
 
 3. KNOWN ISSUES
@@ -64,6 +64,7 @@ Release contents:
 * "lib/NHibernate12" contains NHibernate 1.2 dlls
 * "lib/NHibernate20" contains NHibernate 2.0 dlls
 * "lib/NHibernate21" contains NHibernate 2.1 dlls
+* "lib/NHibernate30" contains NHibernate 3.0 dlls
 * "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
 * "examples" contains sample applications.
 * "build-support" contains additonal applications need to build using NAnt as some convenience
@@ -76,8 +77,6 @@ The VS.NET solution for the framework and examples are provided.
 
 Latest info is available at the public website: http://www.springframework.net/
 
-Project info at the SourceForge site: http://sourceforge.net/projects/springnet/
-
 The Spring Framework is released under the terms of the Apache Software License (see license.txt).
 
 
@@ -85,7 +84,7 @@ The Spring Framework is released under the terms of the Apache Software License 
 
 The "bin" directory contains the following distinct dll files for use in applications. Dependencies are those other than on the .NET BCL.
 
-* "Spring.Core" (~615 KB)
+* "Spring.Core" (~765 KB)
 - Contents: Inversion of control container. Collection classes.
 - Dependencies: Common.Logging
 
@@ -109,6 +108,10 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: NHibernate 2.1 integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
+* "Spring.Data.NHibernate30" (~90 KB)
+- Contents: NHibernate 3.0 integration
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
+
 * "Spring.Services" (~70 KB)
 - Contents: Web Services, Remoting, and Enterprise Component based services.
 - Dependencies: Spring.Core, Spring.Aop
@@ -120,6 +123,10 @@ The "bin" directory contains the following distinct dll files for use in applica
 * "Spring.Web.Extensions" (~8 KB)
 - Contents: ASP.NET AJAX Integartion
 - Dependencies: Spring.Core, Spring.Aop, System.Web.Extensions
+
+* "Spring.Web.Mvc" (~8 KB)
+- Contents: ASP.NET MVC Integartion
+- Dependencies: Spring.Core
 
 * "Spring.Testing.NUnit" (~24 KB)
 - Contents: NUnit Integration
@@ -177,13 +184,13 @@ There are four solution file for different version of VS.NET
 * Spring.Net.2003.sln for use with VS.NET 2003
 * Spring.Net.2005.sln for use with VS.NET 2005
 * Spring.Net.2008.sln for use with VS.NET 2008
+* Spring.Net.2010.sln for use with VS.NET 2010
 
 Note:
 When building on Vista with activated UAC, you might get an error:
 
 xcopy
-"C:\Spring.Net\Spring.NET-1.3.0\Spring.NET\test\Spring\Spring.Co
-re.Tests\Spring.Core.Tests.dll.config"
+"C:\Spring.Net\Spring.NET-1.3.0\Spring.NET\test\Spring\Spring.Core.Tests\Spring.Core.Tests.dll.config"
 ..\..\..\..\build\VS.Net.2008\Spring.Core.Tests\Debug\ /y /s /q-Command exited with Code 9009.	Spring.Core.Tests.2008
 
 In this case you need to run Visual Studio with Administrator-permissions.
@@ -191,49 +198,35 @@ In this case you need to run Visual Studio with Administrator-permissions.
 NAnt
 ----
 
-A NAnt build script can be obtained via CVS or nightly builds.   You will need to
-get the supporting tools directory from CVS as well.
+Build scripts are delivered with the download package.
 
 To build the source and run the unit tests type
 
-nant test
+build test
 
-If you want to run the build to create strongly
-signed assemblies you can generate a key file by executing the following command
+If you want to run the build to create strongly signed assemblies you can generate a key file by executing the following command
 
 sn -k Spring.Net.snk
 
-You need to place the Spring.NET.snk file into the root folder of the source tree. All builds are strongly named using this key file
-when executing the following nant command:
+You need to place the Spring.NET.snk file into the root folder of the source tree. All builds are strongly named using this key file when executing the following nant command:
 
 nant -D:project.build.sign=true
 
-The installation of the docbook toolchain is required to generate the reference
-documentation and make a final release build. Refer to the Spring.NET Wiki at
-http://opensource.atlassian.com/confluence/spring/display/NET/Docbook+Reference
-for information on how to install the docbook toolchain.
-
-NDoc3 and InnovaSys Document X! are used to generate the SDK documentation.
+InnovaSys Document X! is used to generate the SDK documentation.
 
 
 8. Support
 
-The user forums at http://forum.springframework.net/ are available for you to submit questions, support requests,
-and interact with other Spring.NET users.
+The user forums at http://forum.springframework.net/ are available for you to submit questions, support requests, and interact with other Spring.NET users.
 
 Bug and issue tracking can be found at http://jira.springframework.org/secure/BrowseProject.jspa?id=10020
 
-The Spring.NET wiki is located at http://opensource.atlassian.com/confluence/spring/display/NET/Home
+A Fisheye repository browser is located at https://fisheye.springframework.org/browse/spring-net
 
-A Fisheye repository browser is located at http://fisheye1.cenqua.com/viewrep/springnet
+To get the sources, check them out at the Subversion repository at https://src.springframework.org/svn/spring-net
+We are always happy to receive your feedback on the forums. If you think you found a bug, have an improvement suggestion or feature request, please submit a ticket in JIRA (see link above).
 
-To get the sources, check them out at the Subversion repository at https://src.springframework.org/svn/spring-net/trunk
-We are always happy to receive your feedback on the forums. If you think you found a bug, have an improvement suggestion
-or feature request, please submit a ticket in JIRA (see link above).
-
-A word on bug reports: If at all possible, try to download one of the nightly snapshots at http://www.springframework.net/downloads/nightly/
-and see, if this bug has already been fixed. If the problem still persists, don't forget to mention the version of Spring.NET
-you are using (check the file versions of Spring.NET dlls), the .NET version you are running on and a description how to reproduce the problem.
+A word on bug reports: If at all possible, try to download one of the nightly snapshots at http://www.springframework.net/downloads/nightly/ and see, if this bug has already been fixed. If the problem still persists, don't forget to mention the version of Spring.NET you are using (check the file versions of Spring.NET dlls), the .NET version you are running on and a description how to reproduce the problem.
 Ideally attach some sample code reproducing the problem to the JIRA ticket.
 
 
@@ -243,9 +236,3 @@ InnovaSys Document X!
 ---------------------
 InnovSys has kindly provided a license to generate the SDK documentation and supporting utilities for
 integration with Visual Studio.
-
-
-
-
-
-
