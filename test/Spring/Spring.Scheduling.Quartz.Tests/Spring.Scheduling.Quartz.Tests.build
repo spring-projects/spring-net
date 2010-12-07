@@ -30,15 +30,17 @@
 				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
 			</references>
 		</csc>
-		<copy todir="${current.bin.dir}">
-			<fileset basedir="${project::get-name()}/Data">
-				<include name="**/*.xml" />
-			        <include name="**/*.test" />
+		
+		<copy todir="${current.bin.dir}" verbose="true">
+			<fileset basedir="${project::get-base-directory()}">
+				<include name="**/*.config" />
 			</fileset>
 		</copy>
-		<copy todir="${current.bin.dir}">
-			<fileset basedir="${project::get-name()}">
-				<include name="**/*.config" />
+		<echo message="DIAGNOSTIC bin dir ************${current.bin.dir}**********************"/>
+		<echo message="DIAGNOSTIC Project get dir ************${project::get-base-directory()}**********************"/>
+		<copy todir="${current.bin.dir}" verbose="true">
+			<fileset basedir="${project::get-base-directory()}">
+				<include name="**/*.xml" />
 			</fileset>
 		</copy>
 	</target>
