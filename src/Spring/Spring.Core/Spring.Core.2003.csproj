@@ -2366,6 +2366,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Parsing\FailFastProblemReporter.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Parsing\IProblemReporter.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Parsing\Location.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Parsing\ObjectDefinitionParsingException.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Parsing\Problem.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Parsing\ReaderContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2402,11 +2422,6 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Support\ChildObjectDefinition.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Util\ConstructorInstantiationInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2476,6 +2491,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Support\IObjectDefinitionRegistryPostProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Support\IObjectNameGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -2522,6 +2542,11 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Support\ObjectDefinitionValueResolver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects\Factory\Support\ObjectScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2959,6 +2984,11 @@
                 />
                 <File
                     RelPath = "Util\ConfigXmlElement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\ConstructorInstantiationInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

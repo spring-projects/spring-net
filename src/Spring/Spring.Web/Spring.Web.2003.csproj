@@ -221,11 +221,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Objects\Factory\Support\ObjectScope.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Objects\Factory\Support\RootWebObjectDefinition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
