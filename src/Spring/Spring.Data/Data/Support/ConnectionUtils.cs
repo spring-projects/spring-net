@@ -233,9 +233,9 @@ namespace Spring.Data.Support
                 // Remaining transaction timeout overrides specified value.
                 command.CommandTimeout = conHolder.TimeToLiveInSeconds;
             }
-            else if (timeout > 0)
+            else if (timeout >= 0)
             {
-                // No current transaction timeout -> apply specified value.
+                // No current transaction timeout -> apply specified value.  0 = infinite timeout in some drivers.
                 command.CommandTimeout = timeout;
             }
 	        
