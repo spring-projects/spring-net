@@ -35,19 +35,26 @@
             </resources>
             <references basedir="${current.bin.dir}">
                 <include name="*.dll" />
-		<include name="System.Configuration.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Drawing.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Web.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Web.Services.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Data.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 2\Assemblies\System.Web.Mvc.dll" />
-		<include name="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\System.Web.Routing.dll" if="${nant.settings.currentframework=='net-3.5'}" />
-		<include name="System.Web.Routing.dll" if="${nant.settings.currentframework=='net-4.0'}" />
-		<include name="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\System.Web.Abstractions.dll"  if="${nant.settings.currentframework=='net-3.5'}" />
-		<include name="System.Web.Abstractions.dll"  if="${nant.settings.currentframework=='net-4.0'}" />
+				<include name="System.Configuration.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+				<include name="System.Drawing.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+				<include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+				<include name="System.Web.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+				<include name="System.Web.Services.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+				<include name="System.Data.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+				
+				<include name="System.Web.Abstractions.dll"  if="${nant.settings.currentframework=='net-4.0'}" />
+				<include name="System.Web.Routing.dll" if="${nant.settings.currentframework=='net-4.0'}" />
+
+				<include name="C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 2\Assemblies\System.Web.Mvc.dll" />
+				<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 2\Assemblies\System.Web.Mvc.dll" />
+				<include name="C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\System.Web.Routing.dll" if="${nant.settings.currentframework=='net-3.5'}" />
+				<include name="C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\System.Web.Abstractions.dll"  if="${nant.settings.currentframework=='net-3.5'}" />
+					
+			
+
+				
                 <exclude name="${project::get-name()}.dll" />
-                <exclude name="CloverRuntime.dll" />
+            
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />
 				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
             </references>

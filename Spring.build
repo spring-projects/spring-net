@@ -1798,7 +1798,8 @@ Commandline Examples:
       <include name="examples/Spring/Spring.Calculator/**"/>
       <include name="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2005/Bin/*.refresh"/>
       <include name="examples/Spring/Spring.WebQuickStart/**"/>
-      <include name="examples/Spring/Spring.Web.Extensions.Example/**"/>
+      <include name="examples/Spring/Spring.MvcQuickStart/**"/>
+	  <include name="examples/Spring/Spring.Web.Extensions.Example/**"/>
       <include name="examples/Spring/Spring.Web.Extensions.Example/src/Spring.Web.Extensions.Example.2005/Bin/*.refresh"/>
       <include name="examples/Spring/SpringAir/**"/>
       <include name="examples/SpringAir/src/SpringAir.Web.2005/bin/*.refresh"/>
