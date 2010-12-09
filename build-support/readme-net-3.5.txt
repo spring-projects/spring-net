@@ -1,8 +1,8 @@
-Spring.NET 1.3 supports .NET 1.1, 2.0, 3.0 and 3.5. 
+Spring.NET 1.3.1 supports .NET 1.1, 2.0, 3.0, 3.5 and 4.0
 
-There no specific .NET 3.5 DLLs since Spring.NET does not use any features from the .NET 3.5 Framework.  
+To use Spring.NET with .NET 3.5 use the assemblies in the bin\net\3.5\debug or bin\net\3.5\release directory.  
 
-You should use the Spring.Services.dll library from the bin\net\3.0 directory and all other Spring DLLs from the bin\net\2.0 directory
+All other Spring DLLs should be taken from the directory bin\net\2.0\debug.
 
-The Spring.Services.dll in the bin\net\3.0 directory is built against Spring DLLs in the corresponding bin\net\2.0 directory.
+The seesmblies in the bin\net\3.5 directory are built against Spring DLLs in the corresponding bin\net\2.0 directory.
 

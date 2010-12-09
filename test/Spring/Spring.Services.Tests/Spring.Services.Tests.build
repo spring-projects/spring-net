@@ -24,6 +24,8 @@
           <include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
           <exclude name="System.Web.Extensions.dll" if="${net-3.5}"/>
 			<exclude name="System.Web.Extensions.dll" if="${net-4.0}"/>	
+			<exclude name="Quartz.dll" if="${net-3.5}"/>
+			<exclude name="Quartz.dll" if="${net-4.0}"/>	
 		  <exclude name="Spring.Services.dll"/>
           <exclude name="Spring.Services.pdb"/>
           <exclude name="Spring.Services.xml"/>

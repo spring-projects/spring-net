@@ -1224,6 +1224,7 @@ Commandline Examples:
         <include name="html/**/*"/>
         <include name="pdf/**/*"/>
         <include name="htmlhelp/**/*"/>
+		<exclude name="**/*.ppt*" />
       </fileset>
     </copy>
 
