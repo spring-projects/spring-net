@@ -36,7 +36,7 @@ namespace Spring.Data.Core
     {
         protected object AdoUtils;
 
-        protected int commandTimeout;
+        protected int commandTimeout = -1;
 
         #region Properties
 
@@ -55,7 +55,7 @@ namespace Spring.Data.Core
         /// Gets or sets a value indicating whether to lazily initialize the 
         /// IAdoExceptionTranslator for this accessor, on first encounter of a 
         /// exception from the data provider.  Default is "true"; can be switched to
-	    /// "false" for initialization on startup.
+        /// "false" for initialization on startup.
         /// </summary>
         /// <value><c>true</c> if to lazy initialize the IAdoExceptionTranslator; 
         /// otherwise, <c>false</c>.</value>

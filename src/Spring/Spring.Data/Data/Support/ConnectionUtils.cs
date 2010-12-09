@@ -27,31 +27,32 @@ using Spring.Util;
 
 namespace Spring.Data.Support
 {
-	/// <summary>
-	/// Summary description for DbProviderUtils.
-	/// </summary>
-	public abstract class ConnectionUtils
-	{
-	    #region Logging
+    /// <summary>
+    /// Summary description for DbProviderUtils.
+    /// </summary>
+    public abstract class ConnectionUtils
+    {
+        #region Logging
 
-	    private static readonly ILog LOG = LogManager.GetLogger(typeof (ConnectionUtils));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(ConnectionUtils));
 
-	    #endregion
+        #endregion
 
-	    public static readonly int CONNECTION_SYNCHRONIZATION_ORDER = 1000;
+        public static readonly int CONNECTION_SYNCHRONIZATION_ORDER = 1000;
         /// <summary>
         /// Dispose of the given Connection, created via the given IDbProvider,
-	    /// if it is not managed externally (that is, not bound to the thread).
+        /// if it is not managed externally (that is, not bound to the thread).
         /// </summary>
         /// <param name="conn">The connection to close if necessary.  If
         /// this is null the call will be ignored. </param>
         /// <param name="dbProvider">The IDbProvider the connection came from</param>
-	    public static void DisposeConnection(IDbConnection conn, IDbProvider dbProvider)
+        public static void DisposeConnection(IDbConnection conn, IDbProvider dbProvider)
         {
             try
             {
                 DoDisposeConnection(conn, dbProvider);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 LOG.Warn("Could not close connection", e);
             }
@@ -66,7 +67,7 @@ namespace Spring.Data.Support
 
             if (dbProvider != null)
             {
-                ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.GetResource(dbProvider);
+                ConnectionHolder conHolder = (ConnectionHolder)TransactionSynchronizationManager.GetResource(dbProvider);
                 if (conHolder != null && ConnectionEquals(conHolder.Connection, conn))
                 {
                     // It's the transactional connection bound to the thread so don't close it.
@@ -90,22 +91,23 @@ namespace Spring.Data.Support
         /// </summary>
         /// <remarks>
         /// Is aware of a corresponding Connection/Transaction bound to the current thread, for example
-	    /// when using AdoPlatformTransactionManager. Will bind a IDbConnection to the thread
-	    /// if transaction synchronization is active
+        /// when using AdoPlatformTransactionManager. Will bind a IDbConnection to the thread
+        /// if transaction synchronization is active
         /// </remarks>
         /// <param name="provider">The provider.</param>
         /// <returns>A Connection/Transaction pair.</returns>
-	    public static ConnectionTxPair GetConnectionTxPair(IDbProvider provider)
-	    {
+        public static ConnectionTxPair GetConnectionTxPair(IDbProvider provider)
+        {
             try
             {
                 return DoGetConnection(provider);
-            } catch  (Exception e)
+            }
+            catch (Exception e)
             {
                 throw new CannotGetAdoConnectionException("Could not get ADO.NET connection.", e);
             }
-            
-	    }
+
+        }
 
 
         /// <summary>
@@ -120,82 +122,82 @@ namespace Spring.Data.Support
         /// </remarks>
         /// <param name="provider">The provider.</param>
         /// <returns></returns>
-	    public static ConnectionTxPair DoGetConnection(IDbProvider provider)
-	    {
-	        AssertUtils.ArgumentNotNull(provider, "provider");
-	        ConnectionHolder conHolder = (ConnectionHolder)TransactionSynchronizationManager.GetResource(provider);
-	        if (conHolder != null && (conHolder.HasConnection || conHolder.SynchronizedWithTransaction))
-	        {
-	            conHolder.Requested();
-	            if (!conHolder.HasConnection)
-	            {
-	                if (LOG.IsDebugEnabled)
-	                {
-	                    LOG.Debug("Fetching resumed ADO.NET connection from DbProvider");
-	                }
-	                conHolder.Connection = provider.CreateConnection();
-	            }    
-	            return new ConnectionTxPair(conHolder.Connection, conHolder.Transaction);
-	        }
-	        
-	        // Else we either got no holder or an empty thread-bound holder here.
-	        if (LOG.IsDebugEnabled)
-	        {
-	            LOG.Debug("Fetching Connection from DbProvider");
-	        }
-	        IDbConnection conn = provider.CreateConnection();
-            conn.Open();            
+        public static ConnectionTxPair DoGetConnection(IDbProvider provider)
+        {
+            AssertUtils.ArgumentNotNull(provider, "provider");
+            ConnectionHolder conHolder = (ConnectionHolder)TransactionSynchronizationManager.GetResource(provider);
+            if (conHolder != null && (conHolder.HasConnection || conHolder.SynchronizedWithTransaction))
+            {
+                conHolder.Requested();
+                if (!conHolder.HasConnection)
+                {
+                    if (LOG.IsDebugEnabled)
+                    {
+                        LOG.Debug("Fetching resumed ADO.NET connection from DbProvider");
+                    }
+                    conHolder.Connection = provider.CreateConnection();
+                }
+                return new ConnectionTxPair(conHolder.Connection, conHolder.Transaction);
+            }
+
+            // Else we either got no holder or an empty thread-bound holder here.
+            if (LOG.IsDebugEnabled)
+            {
+                LOG.Debug("Fetching Connection from DbProvider");
+            }
+            IDbConnection conn = provider.CreateConnection();
+            conn.Open();
 
             if (TransactionSynchronizationManager.SynchronizationActive)
-	        {
-	            LOG.Debug("Registering transaction synchronization for IDbConnection");
-	            //Use same connection for further ADO.NET actions with the transaction.
-	            //Thread-bound object will get removed by manager at transaction completion.
-	            
-	            ConnectionHolder holderToUse = conHolder;
-	            if (holderToUse == null)
-	            {
-	                holderToUse = new ConnectionHolder(conn, null);
-	            }
-	            else
-	            {
-	                holderToUse.Connection = conn;
-	            }
-	            holderToUse.Requested();                
-	            TransactionSynchronizationManager.RegisterSynchronization(
-	                new ConnectionSynchronization(holderToUse, provider));
-	            holderToUse.SynchronizedWithTransaction = true;
-	            if (holderToUse != conHolder)
-	            {
-	                TransactionSynchronizationManager.BindResource(provider, holderToUse);
-	            }
+            {
+                LOG.Debug("Registering transaction synchronization for IDbConnection");
+                //Use same connection for further ADO.NET actions with the transaction.
+                //Thread-bound object will get removed by manager at transaction completion.
 
-	        }
-	        return new ConnectionTxPair(conn, null);
-	    }
+                ConnectionHolder holderToUse = conHolder;
+                if (holderToUse == null)
+                {
+                    holderToUse = new ConnectionHolder(conn, null);
+                }
+                else
+                {
+                    holderToUse.Connection = conn;
+                }
+                holderToUse.Requested();
+                TransactionSynchronizationManager.RegisterSynchronization(
+                    new ConnectionSynchronization(holderToUse, provider));
+                holderToUse.SynchronizedWithTransaction = true;
+                if (holderToUse != conHolder)
+                {
+                    TransactionSynchronizationManager.BindResource(provider, holderToUse);
+                }
+
+            }
+            return new ConnectionTxPair(conn, null);
+        }
 
         /// <summary>
         /// Do the connection mgmt.
         /// </summary>
         /// <param name="provider"></param>
         /// <returns></returns>
-	    public static IDbConnection GetConnection(IDbProvider provider)
-	    {
+        public static IDbConnection GetConnection(IDbProvider provider)
+        {
             AssertUtils.ArgumentNotNull(provider, "provider");
 
             return GetConnectionTxPair(provider).Connection;
 
-	    }
+        }
 
-	    private static bool ConnectionEquals(IDbConnection heldCon, IDbConnection passedInCon)
-	    {
-	        return (heldCon == passedInCon || heldCon.Equals(passedInCon) ||
+        private static bool ConnectionEquals(IDbConnection heldCon, IDbConnection passedInCon)
+        {
+            return (heldCon == passedInCon || heldCon.Equals(passedInCon) ||
                 getTargetConnection(heldCon).Equals(passedInCon));
-	    }
+        }
 
-	    private static IDbConnection getTargetConnection(IDbConnection con)
-	    {
-	        IDbConnection conToUse = con;
+        private static IDbConnection getTargetConnection(IDbConnection con)
+        {
+            IDbConnection conToUse = con;
             /*
             while (conToUse is ConnectionProxy)
             {
@@ -203,7 +205,7 @@ namespace Spring.Data.Support
             }
             */
             return conToUse;
-	    }
+        }
 
         /// <summary>
         /// Applies the current transaction timeout, if any, to the given ADO.NET IDbCommand object.
@@ -222,8 +224,8 @@ namespace Spring.Data.Support
         /// <param name="command">The command.</param>
         /// <param name="dbProvider">The db provider the command was obtained from.</param>
         /// <param name="timeout">The timeout to apply (or 0 for no timeout outside of a transaction.</param>
-	    public static void ApplyTransactionTimeout(IDbCommand command, IDbProvider dbProvider, int timeout)
-	    {
+        public static void ApplyTransactionTimeout(IDbCommand command, IDbProvider dbProvider, int timeout)
+        {
             AssertUtils.ArgumentNotNull(command, "command", "No IDbCommand specified.");
             AssertUtils.ArgumentNotNull(dbProvider, "dbProvider", "No IDbProvider specified.");
 
@@ -233,12 +235,12 @@ namespace Spring.Data.Support
                 // Remaining transaction timeout overrides specified value.
                 command.CommandTimeout = conHolder.TimeToLiveInSeconds;
             }
-            else if (timeout >= 0)
+            else if (timeout != -1)
             {
                 // No current transaction timeout -> apply specified value.  0 = infinite timeout in some drivers.
                 command.CommandTimeout = timeout;
             }
-	        
-	    }
-	}
+
+        }
+    }
 }
