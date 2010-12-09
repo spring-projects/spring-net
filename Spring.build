@@ -1416,6 +1416,7 @@ Commandline Examples:
         <fileset basedir="dev-support">
           <include name="resharper/**"/>
           <include name="vs.net-2008/**"/>
+		  <exclude name="**/App.AdoQuickStart/**" />
         </fileset>
     </copy>
 
