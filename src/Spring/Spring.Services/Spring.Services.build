@@ -16,9 +16,10 @@
       <echo message="-----------------"/>
       <copy todir="${current.bin.dir}" overwrite="true" failonerror="true" verbose="${copy-verbose}">
 	<fileset basedir="${bin.dir.to.use}">
-	  <include name="*.dll"/>
-	  <include name="*.pdb"/>
-	  <include name="*.xml"/>
+	  <include name="Spring.**.dll"/>
+	  <include name="Spring.**.pdb"/>
+	  <include name="Spring.**.xml"/>
+	  <include name="Common.Logging.*"/>
 	  <exclude name="System.Web.Extensions.dll" if="${net-3.5}"/>
 	  <exclude name="System.Web.Extensions.dll" if="${net-4.0}"/>
 	  <exclude name="Spring.Services.dll"/>
@@ -31,9 +32,10 @@
     <if test="${net-3.0.installed and net-3.0 and not net-4.0}">
       <copy todir="${current.bin.dir}" overwrite="true" failonerror="true" verbose="${copy-verbose}">
 	<fileset basedir="${bin.dir.to.use}">
-	  <include name="*.dll"/>
-	  <include name="*.pdb"/>
-	  <include name="*.xml"/>
+	  <include name="Spring.**.dll"/>
+	  <include name="Spring.**.pdb"/>
+	  <include name="Spring.**.xml"/>
+	  <include name="Common.Logging.*"/>
 	  <exclude name="System.Web.Extensions.dll" if="${net-3.5}"/>
 	  <exclude name="System.Web.Extensions.dll" if="${net-4.0}"/>	  
 	  <exclude name="Spring.Services.dll"/>
