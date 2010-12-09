@@ -9,6 +9,11 @@
 	<target name="build">
 
 		<echo message="${nh30.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${nh30.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
 
 		<!-- build Spring.Data.NHibernate30 -->
 		<csc target="library" define="${current.build.defines.csc},NH_2_0,NH_2_1"
@@ -42,17 +47,13 @@
 				<include name="../GenCommonAssemblyInfo.cs" />
 			</sources>
 			<references basedir="${current.bin.dir}">
-				<include name="${nh30.lib.dir}/NHibernate.dll"/>
 				<include name="System.Data.dll" />
 				<include name="System.Web.dll" />
 				<include name="System.EnterpriseServices.dll" />
 				<include name="*NHibernate.dll" />
 				<include name="*.dll" />
-				<exclude name="${project::get-name()}.dll" />
-				<exclude name="Spring.Data.NHibernate.dll" />
-				<exclude name="Spring.Data.NHibernate12.dll" />
-				<exclude name="Spring.Data.NHibernate20.dll" />
-				<exclude name="Spring.Data.NHibernate21.dll" />
+				<exclude name="Spring.Data.NHibernate*.dll" />
+				<exclude name="Spring.Data.NHibernate*.*.dll" />
 				<exclude name="CloverRuntime.dll" />
 			</references>
 		</csc>
