@@ -99,6 +99,10 @@ Commandline Examples:
 
 -->
 
+<!--
+  global DIAGNOSTICS setting, applied to EVERY instance of <copy> task via verbose="${copy-verbose}" attribute
+  so as to be toggled in ONE place and affect ALL copy operations; leave FALSE except for debugging/troubleshooting the build
+-->
   <property name="copy-verbose" value="true" />
 
   <!-- global project settings -->
@@ -1504,7 +1508,7 @@ Commandline Examples:
         </fileset>
       </copy>
 
-      <if test="${net-3.0.installed}">
+<!--      <if test="${net-3.0.installed}"> -->
         <mkdir dir="${current.package.dir}/bin/net/3.0"/>
         <copy todir="${current.package.dir}/bin/net/3.0" verbose="${copy-verbose}">
           <fileset basedir="./build/net/3.0">
@@ -1513,7 +1517,32 @@ Commandline Examples:
             <include name="*/Spring.Services.pdb"/>
           </fileset>
         </copy>
-      </if>
+<!--      </if> -->
+	  
+	  
+        <mkdir dir="${current.package.dir}/bin/net/3.5"/>
+        <copy todir="${current.package.dir}/bin/net/3.5" verbose="${copy-verbose}">
+          <fileset basedir="./build/net/3.5">
+            
+			<include name="*/Spring.Services.dll"/>
+            <include name="*/Spring.Services.xml"/>
+            <include name="*/Spring.Services.pdb"/>
+			
+			<include name="*/Spring.Scheduling.Quartz.dll"/>
+            <include name="*/Spring.Scheduling.Quartz.xml"/>
+            <include name="*/Spring.Scheduling.Quartz.pdb"/>
+			
+			<include name="*/Spring.Web.Mvc.dll"/>
+            <include name="*/Spring.Web.Mvc.xml"/>
+            <include name="*/Spring.Web.Mvc.pdb"/>
+			
+			<include name="*/Spring.Web.Extensions.dll"/>
+            <include name="*/Spring.Web.Extensions.xml"/>
+            <include name="*/Spring.Web.Extensions.pdb"/>
+			
+          </fileset>
+        </copy>
+      
    </if>
 
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
