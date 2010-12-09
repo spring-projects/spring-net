@@ -11,12 +11,12 @@ namespace Spring.Context.Support
     /// </summary>
     public class MvcContextHandler : ContextHandler
     {
+
         /// <summary>
         /// The <see cref="System.Type"/> of <see cref="Spring.Context.IApplicationContext"/>
         /// created if no <c>type</c> attribute is specified on a <c>context</c> element.
         /// </summary>
-        /// <value></value>
-        /// <seealso cref="GetContextType"/>
+        /// <value></value>        
         protected override Type DefaultApplicationContextType
         {
             get { return typeof(MvcApplicationContext); }

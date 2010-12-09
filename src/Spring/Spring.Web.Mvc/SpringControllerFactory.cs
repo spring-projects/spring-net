@@ -17,6 +17,10 @@ namespace Spring.Web.Mvc
     {
         private static IApplicationContext _context;
 
+        /// <summary>
+        /// Gets the application context.
+        /// </summary>
+        /// <value>The application context.</value>
         public static IApplicationContext ApplicationContext
         {
             get
@@ -36,6 +40,9 @@ namespace Spring.Web.Mvc
                 return _context;
             }
         }
+
+
+
 
         /// <summary>
         /// Creates the specified controller by using the specified request context.

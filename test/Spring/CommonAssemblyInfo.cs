@@ -24,7 +24,19 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.3.0.0")]
+#if NET_4_0
+[assembly: AssemblyVersion("1.3.1.40001")]
+#elif NET_3_5
+[assembly: AssemblyVersion("1.3.1.35001")]
+#elif NET_3_0
+[assembly: AssemblyVersion("1.3.1.30001")]
+#elif NET_2_0
+[assembly: AssemblyVersion("1.3.1.20001")]
+#elif NET_1_1
+[assembly: AssemblyVersion("1.3.1.11001")]
+#elif NET_1_0
+[assembly: AssemblyVersion("1.3.1.10001")]
+#endif
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the

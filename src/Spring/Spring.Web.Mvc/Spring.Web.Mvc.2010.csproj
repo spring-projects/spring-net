@@ -10,17 +10,20 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.Web.Mvc</RootNamespace>
     <AssemblyName>Spring.Web.Mvc</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\net\3.5\debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Web.Mvc\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_3_5;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>Spring.Web.Mvc.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +36,7 @@
   <ItemGroup>
     <Reference Include="Common.Logging">
       <HintPath>..\..\..\lib\Net\3.5\Common.Logging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,10 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Context\Support\MvcApplicationContext.cs" />
     <Compile Include="Context\Support\MvcApplicationContextArgs.cs" />
     <Compile Include="Context\Support\MvcContextHandler.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpringControllerFactory.cs" />
     <Compile Include="SpringMvcApplication.cs" />
   </ItemGroup>
@@ -57,7 +63,11 @@
     <ProjectReference Include="..\Spring.Core\Spring.Core.2010.csproj">
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
       <Name>Spring.Core.2010</Name>
+      <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

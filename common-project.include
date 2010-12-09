@@ -106,28 +106,28 @@ ${current.build.defines}
 
         <property name="compile.lib.dir.tmp" value="${lib.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
         <echo message="copying libs from ${compile.lib.dir.tmp}" />
-        <copy todir="${compile.bin.dir}">
+        <copy todir="${compile.bin.dir}" verbose="${copy-verbose}">
             <fileset>
                 <include name="${compile.lib.dir.tmp}/*.dll" />
             </fileset>
         </copy>
         <property name="compile.lib.dir.tmp" value="${lib.dir}/${framework::get-family(framework::get-target-framework())}" dynamic="true" />
         <echo message="copying libs from ${compile.lib.dir.tmp}" />
-        <copy todir="${compile.bin.dir}">
+        <copy todir="${compile.bin.dir}" verbose="${copy-verbose}">
             <fileset>
                 <include name="${compile.lib.dir.tmp}/*.dll" />
             </fileset>
         </copy>
         <property name="compile.lib.dir.tmp" value="${lib.dir}" dynamic="true" />
         <echo message="copying libs from ${compile.lib.dir.tmp}" />
-        <copy todir="${compile.bin.dir}">
+        <copy todir="${compile.bin.dir}" verbose="${copy-verbose}">
             <fileset>
                 <include name="${compile.lib.dir.tmp}/*.dll" />
             </fileset>
         </copy>
         <property name="compile.lib.dir.tmp" value="${current.bin.dir}" dynamic="true" />
         <echo message="copying libs from ${compile.lib.dir.tmp}" />
-        <copy todir="${compile.bin.dir}">
+        <copy todir="${compile.bin.dir}" verbose="${copy-verbose}">
             <fileset>
                 <!-- exclude name="${current.lib.dir}/*.Tests.dll" / -->
                 <include name="${compile.lib.dir.tmp}/*.dll" />
@@ -166,7 +166,7 @@ ${current.build.defines}
               tofile="${current.bin.dir}/${project::get-name()}.dll.config" failonerror="false"/>
 
         <!-- copy 'TestData' directory -->
-        <copy todir="${current.bin.dir}/TestData" failonerror="false">
+        <copy todir="${current.bin.dir}/TestData" failonerror="false" verbose="${copy-verbose}">
           <fileset basedir="${project::get-base-directory()}/TestData">
             <include name="**/*.*"/>
           </fileset>

@@ -99,6 +99,8 @@ Commandline Examples:
 
 -->
 
+  <property name="copy-verbose" value="true" />
+
   <!-- global project settings -->
   <property name="project.name" value="Spring.NET"/>
   <property name="project.name.full" value="Spring.NET Framework"/>
@@ -131,7 +133,7 @@ Commandline Examples:
        that we are not allowed to redistribute -->
   <if test="${directory::exists(spring.nonredistdir)}">
     <echo message="Copying non-redistributables into source tree"/>
-    <copy todir="${spring.basedir}">
+    <copy todir="${spring.basedir}" verbose="${copy-verbose}">
       <fileset basedir="${spring.nonredistdir}">
         <include name="**/*.*"/>
       </fileset>
@@ -591,6 +593,7 @@ Commandline Examples:
 	<nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="test" if="${build-quartz}"/>
 	<nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test"/>
+	<nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build"/>
   </target>
 
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
@@ -639,14 +642,14 @@ Commandline Examples:
     <echo message="Current bin dir = ${current.bin.dir}"/>
     <echo message="Current lib dir = ${lib.dir}"/>
     <!-- copy framework-neutral libraries -->
-    <copy todir="${current.bin.dir}">
+    <copy todir="${current.bin.dir}" verbose="${copy-verbose}">
       <fileset basedir="lib">
         <include name="*.dll"/>
         <include name="*.xml"/>
       </fileset>
     </copy>
     <!-- copy framework-specific libraries -->
-    <copy todir="${current.bin.dir}">
+    <copy todir="${current.bin.dir}" verbose="${copy-verbose}">
       <fileset basedir="${lib.dir}">
         <include name="*.dll"/>
         <include name="*.xml"/>
@@ -661,10 +664,13 @@ Commandline Examples:
     <echo message="Current lib dir = ${lib.dir}"/>
 	<mkdir dir="${lib.dir}" failonerror="false" />
 	
-    <copy todir="${lib.dir}" verbose="true">
+    <copy todir="${lib.dir}" verbose="${copy-verbose}">
       <fileset basedir="${lib20.dir}">
         <include name="*.dll"/>
 		<exclude if="${net-4.0}" name="**/System.Web.Extensions.dll"/>
+		<exclude if="${net-3.5}" name="**/System.Web.Extensions.dll"/>
+		<exclude if="${net-3.5}" name="**/Quartz.dll"/>
+		<exclude if="${net-4.0}" name="**/Quartz.dll"/>
         <include name="*.xml"/>
       </fileset>
     </copy>
@@ -1010,14 +1016,15 @@ Commandline Examples:
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
 
     <!-- net-1.0 dropped since 1.3.0 -->
-    <call target="${nant.target.root.name}-1.1" />
-
+<!--
+	<call target="${nant.target.root.name}-1.1" />
+-->
     <call target="${nant.target.root.name}-2.0" />
 
     <call target="${nant.target.root.name}-3.0" />
 
     <call target="${nant.target.root.name}-3.5" />
-	
+
 	<call target="${nant.target.root.name}-4.0" />
 
     <!-- ignore Mono 2.0 -->
@@ -1112,7 +1119,7 @@ Commandline Examples:
   <target name="package-tools">
     <!-- copy third-party tools -->
     <mkdir dir="${current.package.dir}/build-support/tools"/>
-    <copy todir="${current.package.dir}/build-support/tools">
+    <copy todir="${current.package.dir}/build-support/tools" verbose="${copy-verbose}">
       <fileset basedir="build-support/tools">
         <include name="antlr-2.7.6/**/*"/>
         <include name="nunit/**/*"/>
@@ -1177,11 +1184,12 @@ Commandline Examples:
 
   <target name="package-release-files" depends="set-package-configuration">
     <echo message="Current package directory = ${current.package.dir}"/>
-    <copy todir="${current.package.dir}">
+    <copy todir="${current.package.dir}" verbose="${copy-verbose}">
       <fileset>
         <include name="${solution.file.2003}"/>
         <include name="${solution.file.2005}"/>
         <include name="${solution.file.2008}"/>
+		<include name="${solution.file.2010}"/>
         <include name="readme.txt"/>
         <include name="changelog.txt"/>
         <include name="license.txt"/>
@@ -1206,7 +1214,7 @@ Commandline Examples:
 
     <!-- copy user reference documentation -->
     <mkdir dir="${current.package.dir}/doc/reference"/>
-    <copy todir="${current.package.dir}/doc/reference">
+    <copy todir="${current.package.dir}/doc/reference" verbose="${copy-verbose}">
       <fileset basedir="doc/reference/target">
         <include name="html/**/*"/>
         <include name="pdf/**/*"/>
@@ -1218,7 +1226,7 @@ Commandline Examples:
     <mkdir dir="${current.package.dir}/lib/Net"/>
 
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/Net">
+      <copy todir="${current.package.dir}/lib/Net" verbose="${copy-verbose}">
         <fileset basedir="lib/Net">
           <include name="**/DotNetMock*.dll"/>
           <include name="**/log4net.dll"/>
@@ -1246,7 +1254,7 @@ Commandline Examples:
 
     <mkdir dir="${current.package.dir}/lib/NHibernate12"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/NHibernate12">
+      <copy todir="${current.package.dir}/lib/NHibernate12" verbose="${copy-verbose}">
         <fileset basedir="lib/NHibernate12">
           <include name="**/*.dll"/>
           <include name="**/*.xml"/>
@@ -1258,7 +1266,7 @@ Commandline Examples:
 
     <mkdir dir="${current.package.dir}/lib/NHibernate20"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/NHibernate20">
+      <copy todir="${current.package.dir}/lib/NHibernate20" verbose="${copy-verbose}">
         <fileset basedir="lib/NHibernate20">
           <include name="**/*.dll"/>
           <include name="**/*.xml"/>
@@ -1270,7 +1278,7 @@ Commandline Examples:
 
     <mkdir dir="${current.package.dir}/lib/NHibernate21"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/NHibernate21">
+      <copy todir="${current.package.dir}/lib/NHibernate21" verbose="${copy-verbose}">
         <fileset basedir="lib/NHibernate21">
           <include name="**/*.dll"/>
           <include name="**/*.xml"/>
@@ -1282,7 +1290,7 @@ Commandline Examples:
 	
 	<mkdir dir="${current.package.dir}/lib/NHibernate30"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/NHibernate30">
+      <copy todir="${current.package.dir}/lib/NHibernate30" verbose="${copy-verbose}">
         <fileset basedir="lib/NHibernate30">
           <include name="**/*.dll"/>
           <include name="**/*.xml"/>
@@ -1293,7 +1301,7 @@ Commandline Examples:
     </if>
 
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib">
+      <copy todir="${current.package.dir}/lib" verbose="${copy-verbose}">
         <fileset basedir="lib">
           <include name="**/*.dll"/>
           <include name="**/*.xml"/>
@@ -1303,7 +1311,7 @@ Commandline Examples:
 
     <!-- copy additional scripts -->
     <mkdir dir="${current.package.dir}/build-support"/>
-    <copy todir="${current.package.dir}/build-support">
+    <copy todir="${current.package.dir}/build-support" verbose="${copy-verbose}">
       <fileset basedir="build-support">
         <include name="solutions.build.nant"/>
       </fileset>
@@ -1311,7 +1319,7 @@ Commandline Examples:
 
     <!-- copy third-party icons -->
     <mkdir dir="${current.package.dir}/build-support/icons"/>
-    <copy todir="${current.package.dir}/build-support/icons">
+    <copy todir="${current.package.dir}/build-support/icons" verbose="${copy-verbose}">
       <fileset basedir="build-support/icons">
         <include name="*.ico"/>
         <include name="*.pal"/>
@@ -1320,7 +1328,7 @@ Commandline Examples:
 
     <!-- copy additional convenience solution files -->
     <mkdir dir="${current.package.dir}/build-support/solutions"/>
-    <copy todir="${current.package.dir}/build-support/solutions">
+    <copy todir="${current.package.dir}/build-support/solutions" verbose="${copy-verbose}">
       <fileset basedir="build-support/solutions">
         <include name="*.sln"/>
       </fileset>
@@ -1385,12 +1393,12 @@ Commandline Examples:
     <echo message="copying source code for release..."/>
 
     <!-- copy source code -->
-    <copy todir="${current.package.dir}" verbose="false">
+    <copy todir="${current.package.dir}" verbose="${copy-verbose}">
       <fileset refid="src.to.copy"/>
     </copy>
 
     <!-- copy examples -->
-    <copy todir="${current.package.dir}/examples">
+    <copy todir="${current.package.dir}/examples" verbose="${copy-verbose}">
         <fileset basedir="examples">
           <include name="**/*.refresh"/>
           <include name="**/*.refresh"/>
@@ -1398,7 +1406,7 @@ Commandline Examples:
     </copy>
 
     <!-- copy templates -->
-    <copy todir="${current.package.dir}/dev-support">
+    <copy todir="${current.package.dir}/dev-support" verbose="${copy-verbose}">
         <fileset basedir="dev-support">
           <include name="resharper/**"/>
           <include name="vs.net-2008/**"/>
@@ -1412,7 +1420,7 @@ Commandline Examples:
     <!-- copy built assemblies -->
     <mkdir dir="${current.package.dir}/bin/net"/>
     <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/bin/net">
+      <copy todir="${current.package.dir}/bin/net" verbose="${copy-verbose}">
         <fileset basedir="./build/net">
 
           <include name="*/*/Common.Logging.dll"/>
@@ -1448,6 +1456,10 @@ Commandline Examples:
           <include name="*/*/Spring.Web.dll"/>
           <include name="*/*/Spring.Web.xml"/>
           <include name="*/*/Spring.Web.pdb"/>
+		  
+		  <include name="*/*/Spring.Web.Mvc.dll"/>
+          <include name="*/*/Spring.Web.Mvc.xml"/>
+          <include name="*/*/Spring.Web.Mvc.pdb"/>
 
           <include name="*/*/Spring.Web.Extensions.dll"/>
           <include name="*/*/Spring.Web.Extensions.xml"/>
@@ -1493,7 +1505,7 @@ Commandline Examples:
 
       <if test="${net-3.0.installed}">
         <mkdir dir="${current.package.dir}/bin/net/3.0"/>
-        <copy todir="${current.package.dir}/bin/net/3.0">
+        <copy todir="${current.package.dir}/bin/net/3.0" verbose="${copy-verbose}">
           <fileset basedir="./build/net/3.0">
             <include name="*/Spring.Services.dll"/>
             <include name="*/Spring.Services.xml"/>
@@ -1504,7 +1516,7 @@ Commandline Examples:
    </if>
 
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
-      <copy todir="${current.package.dir}/bin/net">
+      <copy todir="${current.package.dir}/bin/net" verbose="${copy-verbose}">
         <fileset basedir="./build/net">
           <include name="**/Spring.Services.*.exe"/>
           <include name="**/Spring.*.dll"/>
@@ -1573,7 +1585,7 @@ Commandline Examples:
 
     <!-- Copy generated htmlhelp 2.x files, install scripts, -->
     <!-- and install utility for .NET 1.1 assemblies         -->
-    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003">
+    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003" verbose="${copy-verbose}">
       <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/htmlhelp1and2">
         <include name="COL_*.*"/>
       </fileset>
@@ -1589,7 +1601,7 @@ Commandline Examples:
 
     <!-- Copy generated htmlhelp 2.x files, install scripts, -->
     <!-- and install utility for .NET 2.0 assemblies         -->
-    <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005">
+    <copy todir="${current.package.dir}/doc/sdk/2.0/vsnet2005" verbose="${copy-verbose}">
       <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-2.0/htmlhelp1and2">
         <include name="COL_*.*"/>
       </fileset>
@@ -1695,10 +1707,12 @@ Commandline Examples:
     <property name="solution.file.2003" value="Spring.Net.2003.sln"/>
     <property name="solution.file.2005" value="Spring.Net.2005.sln"/>
     <property name="solution.file.2008" value="Spring.Net.2008.sln"/>
+	<property name="solution.file.2010" value="Spring.Net.2010.sln"/>
     <fileset id="src.to.copy">
       <include name="src/Spring/Spring.Core/**"/>
       <include name="src/Spring/Spring.Aop/**"/>
       <include name="src/Spring/Spring.Web/**"/>
+	  <include name="src/Spring/Spring.Web.Mvc/**"/>
       <include name="src/Spring/Spring.Web.Extensions/**"/>
       <include name="src/Spring/Spring.Services/**"/>
       <include name="src/Spring/Spring.Data/**"/>
@@ -1719,6 +1733,7 @@ Commandline Examples:
       <include name="test/Spring/Spring.Core.Tests/**"/>
       <include name="test/Spring/Spring.Aop.Tests/**"/>
       <include name="test/Spring/Spring.Web.Tests/**"/>
+	  <include name="test/Spring/Spring.Web.Mvc.Tests/**"/>
       <include name="test/Spring/Spring.Services.Tests/**"/>
       <include name="test/Spring/Spring.Data.Tests/**"/>
       <include name="test/Spring/Spring.Data.Integration.Tests/**"/>

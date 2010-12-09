@@ -82,11 +82,42 @@ namespace Spring.Context.Support
         {
         }
 
+        /// <summary>
+        /// An array of resource locations, referring to the XML object
+        /// definition files that this context is to be built with.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// 	<p>
+        /// Examples of the format of the various strings that would be
+        /// returned by accessing this property can be found in the overview
+        /// documentation of with the <see cref="XmlApplicationContext"/>
+        /// class.
+        /// </p>
+        /// </remarks>
+        /// <returns>
+        /// An array of resource locations, or <see langword="null"/> if none.
+        /// </returns>
         protected override string[] ConfigurationLocations
         {
             get { return _configurationLocations; }
         }
 
+        /// <summary>
+        /// An array of resources that this context is to be built with.
+        /// </summary>
+        /// <value></value>
+        /// <remarks>
+        /// 	<p>
+        /// Examples of the format of the various strings that would be
+        /// returned by accessing this property can be found in the overview
+        /// documentation of with the <see cref="XmlApplicationContext"/>
+        /// class.
+        /// </p>
+        /// </remarks>
+        /// <returns>
+        /// An array of <see cref="Spring.Core.IO.IResource"/>s, or <see langword="null"/> if none.
+        /// </returns>
         protected override IResource[] ConfigurationResources
         {
             get { return _configurationResources; }

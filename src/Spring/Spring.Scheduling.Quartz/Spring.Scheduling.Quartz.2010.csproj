@@ -10,11 +10,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring</RootNamespace>
     <AssemblyName>Spring.Scheduling.Quartz</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,9 +41,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\net\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Quartz, Version=0.6.0.21049, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\net\2.0\Quartz.dll</HintPath>
+    <Reference Include="Quartz">
+      <HintPath>..\..\..\lib\Net\3.5\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

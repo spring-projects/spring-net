@@ -28,8 +28,8 @@ namespace Spring.Web.Mvc.Tests
         public void _TestSetup()
         {
             ContextRegistry.Clear();
-            _context = new MvcApplicationContext("assembly://Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests/objects.xml");
-            _mvcNamedContext = new MvcApplicationContext("named", false, "assembly://Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests/namedContextObjects.xml");
+            _context = new MvcApplicationContext("file://objects.xml");
+            _mvcNamedContext = new MvcApplicationContext("named", false, "file://namedContextObjects.xml");
 
             ContextRegistry.RegisterContext(_context);
             ContextRegistry.RegisterContext(_mvcNamedContext);
@@ -68,7 +68,7 @@ namespace Spring.Web.Mvc.Tests
         [Test]
         public void CanRevertToTypeMatchIfIdMatchUnsuccessful()
         {
-            MvcApplicationContext context = new MvcApplicationContext("assembly://Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests/objectsMatchByType.xml");
+            MvcApplicationContext context = new MvcApplicationContext("file://objectsMatchByType.xml");
 
             ContextRegistry.Clear();
             ContextRegistry.RegisterContext(context);

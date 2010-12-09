@@ -12,7 +12,7 @@
   <target name="build">
     <if test="${net-3.0.installed and net-3.0}">
       <property name="bin.dir.to.use" value="${current.bin.dir}\..\..\2.0\${project.build.config}"/>
-      <copy todir="${current.bin.dir}">
+      <copy todir="${current.bin.dir}" verbose="${copy-verbose}">
         <fileset basedir="${bin.dir.to.use}">
           <include name="*.dll"/>
           <include name="*.pdb"/>
@@ -22,7 +22,9 @@
           <include name="System.Web.Services.Description.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
           <include name="System.ServiceModel.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
           <include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-          <exclude name="Spring.Services.dll"/>
+          <exclude name="System.Web.Extensions.dll" if="${net-3.5}"/>
+			<exclude name="System.Web.Extensions.dll" if="${net-4.0}"/>	
+		  <exclude name="Spring.Services.dll"/>
           <exclude name="Spring.Services.pdb"/>
           <exclude name="Spring.Services.xml"/>
         </fileset>
@@ -57,14 +59,14 @@
 		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
       </references>
     </csc>
-    <copy todir="${current.bin.dir}">
+    <copy todir="${current.bin.dir}" verbose="${copy-verbose}" >
       <fileset basedir="${project::get-base-directory()}/Data">
         <include name="**/*.xml" />
         <include name="**/*.wsdl" />
         <include name="**/*.xsd" />
       </fileset>
     </copy>
-    <copy todir="${current.bin.dir}">
+    <copy todir="${current.bin.dir}" verbose="${copy-verbose}">
       <fileset basedir="${project::get-base-directory()}">
         <include name="**/*.config" />
         <include name="**/*.xml" />

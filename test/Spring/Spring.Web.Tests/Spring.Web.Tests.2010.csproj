@@ -169,13 +169,19 @@
     <Content Include="Data\Spring\Web\Support\LocalResourceManagerTests\WithoutResources.aspx" />
     <Content Include="Data\Spring\Web\Support\LocalResourceManagerTests\WithResources.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\ReadOnlySession.aspx" />
-    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResult.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResult.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession1.aspx" />
     <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession2.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\DisablesSession.aspx" />
-    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResultSave.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\DisablesSession.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResultSave.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <EmbeddedResource Include="Data\Spring\Web\Support\LocalResourceManagerTests\App_LocalResources\WithResources.aspx.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -12,8 +12,16 @@ using Spring.Context.Support;
 
 namespace Spring.Web.Mvc
 {
+    /// <summary>
+    /// Spring.NET-specific HttpApplication for ASP.NET MVC integration.
+    /// </summary>
     public abstract class SpringMvcApplication : HttpApplication
     {
+        /// <summary>
+        /// Handles the Start event of the Application control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected virtual void Application_Start(object sender, EventArgs e)
         {
             RegisterAreas();
@@ -21,18 +29,21 @@ namespace Spring.Web.Mvc
         }
 
         /// <summary>
-        /// Configures the <see cref="ApplicationContext"/> instance.
+        /// Configures the <see cref="Spring.Context.IApplicationContext"/> instance.
         /// </summary>
         /// <remarks>
         /// You must override this method in a derived class to control the manner in which the
-        /// <see cref="ApplicationContext"/> is configured.
+        /// <see cref="Spring.Context.IApplicationContext"/> is configured.
         /// </remarks>        
         protected virtual void ConfigureApplicationContext()
         {
-            
+
         }
 
 
+        /// <summary>
+        /// Executes custom initialization code after all event handler modules have been added.
+        /// </summary>
         public override void Init()
         {
             base.Init();
