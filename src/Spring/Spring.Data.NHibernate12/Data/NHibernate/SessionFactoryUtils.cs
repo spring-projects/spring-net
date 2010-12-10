@@ -431,7 +431,6 @@ namespace Spring.Data.NHibernate
                 }
                 throw new UncategorizedAdoException(e.Message, "", "", e);
             }
-
         }
 
         /// <summary>

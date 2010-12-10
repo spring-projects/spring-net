@@ -869,7 +869,7 @@ namespace Spring.Data.NHibernate
         /// </returns>
         protected virtual DataAccessException ConvertAdoAccessException(ADOException ex, IAdoExceptionTranslator translator)
         {
-            return translator.Translate("Hibernate flusing: " + ex.Message, null, ex.InnerException);
+            return translator.Translate("Hibernate flushing: " + ex.Message, null, ex.InnerException);
         }
 
         /// <summary>
