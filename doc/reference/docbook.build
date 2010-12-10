@@ -73,7 +73,11 @@
     <!-- docbook -> HTML Help Workshop project (.hhp) -->
     <exec workingdir="${project.targetdir}" program="java" commandline='-cp "..\lib\saxon6-5-5\saxon.jar;..\lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet ../src/index.xml "..\lib\docbook-xsl-snapshot\htmlhelp\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"' />
     <!-- HTML Help Workshop project (.hhp) -> HTML Help file (.chm) -->
-    <readregistry property="hhc.path" key="SOFTWARE\Microsoft\HTML Help Workshop\InstallDir" hive="CurrentUser" />
+    <property name="hhc.path" value="c:\program files\HTML Help Workshop" />
+		
+	<if test="${not file::exists(hhc.path}">
+		<readregistry property="hhc.path" key="SOFTWARE\Microsoft\HTML Help Workshop\InstallDir" hive="CurrentUser" />
+	</if>
     <exec program="${hhc.path}\hhc.exe" commandline="${project.targetdir}\htmlhelp\htmlhelp.hhp" failonerror="false" />
     <!-- cleanup -->
 
