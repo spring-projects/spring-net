@@ -75,7 +75,7 @@
     <!-- HTML Help Workshop project (.hhp) -> HTML Help file (.chm) -->
     <property name="hhc.path" value="c:\program files\HTML Help Workshop" />
 		
-	<if test="${not file::exists(hhc.path}">
+	<if test="${not file::exists(hhc.path)}">
 		<readregistry property="hhc.path" key="SOFTWARE\Microsoft\HTML Help Workshop\InstallDir" hive="CurrentUser" />
 	</if>
     <exec program="${hhc.path}\hhc.exe" commandline="${project.targetdir}\htmlhelp\htmlhelp.hhp" failonerror="false" />
