@@ -99,7 +99,6 @@ namespace Spring.Data.Support
 	        set
 	        {
 	            dbProvider = value;
-                fallbackTranslator = new FallbackExceptionTranslator();
                 errorCodes = dbProvider.DbMetadata.ErrorCodes;
 	            
 	        }
@@ -165,8 +164,7 @@ namespace Spring.Data.Support
                 sql = "";
             }
             string errorCode = ExtractErrorCode(exception);
-
-            // First, try custom translation from overridden method.
+            
             DataAccessException dex = DoTranslate(task, sql, errorCode, exception);
             if (dex != null)
             {
@@ -176,7 +174,7 @@ namespace Spring.Data.Support
             // Looking for a fallback...
             if (log.IsDebugEnabled)
             {
-                log.Debug("Unable to translate exception eith errorCode '" + errorCode + "', will use the fallback translator");
+                log.Debug("Unable to translate exception with errorCode '" + errorCode + "', will use the fallback translator");
             }
             IAdoExceptionTranslator fallback = FallbackTranslator;
             if (fallback != null)

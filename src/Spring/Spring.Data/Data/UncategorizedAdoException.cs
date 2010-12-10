@@ -84,7 +84,7 @@ namespace Spring.Data
         /// <param name="sql">The offending SQL statment</param>
         /// <param name="ex">The root cause.</param>
         public UncategorizedAdoException(string task, string sql, string errorCode, Exception ex) : base(task + "; uncategorized DataException for SQL [" + sql + "]; " + "ErrorCode [" + errorCode + "]; " + ex.Message, ex)           
-        {
+        {            
              this.sql = sql;
              this.errorCode = errorCode;
         }
@@ -108,7 +108,23 @@ namespace Spring.Data
 
 		#region Properties
 
-		#endregion
+        /// <summary>
+        /// Return the underlying error code if available from the underlying provider.
+        /// </summary>
+	    public string ErrorCode
+	    {
+	        get { return errorCode; }
+	    }
+
+        /// <summary>
+        /// Return the SQL that resulted in this exception.
+        /// </summary>
+	    public string Sql
+	    {
+	        get { return sql; }
+	    }
+
+	    #endregion
 
 		#region Methods
 
