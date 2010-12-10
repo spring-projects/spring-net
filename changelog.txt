@@ -2,6 +2,148 @@ SPRING.NET FRAMEWORK CHANGELOG
 ==============================
 http://www.springframework.net
 
+Release Version 1.3.1 December 10, 2010
+
+Release Notes - Spring.NET - Version 1.3.1
+
+Bug
+[SPRNET-576] - Allow formatting null values for .NET 2.0 Nullable Types
+[SPRNET-694] - Error creating hierarchical IAppliationContext when using default names.
+[SPRNET-951] - AmbiguousMatchException when use overriden 'New' properties on a subclass ( like 
+[SPRNET-962] - Request is not available in this context exception with IIS7 in integrated mode
+[SPRNET-984] - Cannot specify full URL on a different domain for Page class ImagesRoot, CssRoot, and/or ScriptsRoot
+[SPRNET-998] - Exception is thrown when creating object instance for class with custom attribute on method.
+[SPRNET-1075] - AdoTemplate DataSetCreateWithParams not working as expected
+[SPRNET-1105] - Lifecycle methods should only be called once
+[SPRNET-1107] - Improve DynamicReflectionManager.ConvertValueTypeArgumentIfNecessary handling of implicit conversion operators
+[SPRNET-1122] - RegularExpressionValidator fails if full string is not matched
+[SPRNET-1123] - AbstractXmlApplicationContext.CustomizeObjectFactory never called after CreateObjectFactory() called.
+[SPRNET-1124] - No ability to load pure IResource objects for application contexts as in java version
+[SPRNET-1129] - Dependant singleton object isn't constructed when it doesn't define its type
+[SPRNET-1138] - Cache Aspect on Generic Method goes on StackOverFlowException
+[SPRNET-1156] - Method AbstractXmlApplicationContext.CustomizeObjectFactory(DefaultListableObjectFactory objectFactory) not used in code
+[SPRNET-1157] - EntryPointNotFoundException for DI using VB and Windows 2000
+[SPRNET-1161] - Only render datepicker Button if the Calendar control is enabled
+[SPRNET-1166] - API documentation generator generates wrong property definitions
+[SPRNET-1184] - Fix TypeNameAutoProxyCreator to use <list/> element for the TypeNames property
+[SPRNET-1187] - inconsistent behaviour getting/setting database parameters
+[SPRNET-1188] - Calendar control's javascript reference is not correct
+[SPRNET-1189] - Calendar control generates duplicate id attribute
+[SPRNET-1200] - Default names for DataTables not generated correctly when filling DataSet from query that returns multiple result sets.
+[SPRNET-1202] - spring fails to concurrently create XmlApplicationContexts with ObjectDefinitionStoreException
+[SPRNET-1205] - ExecuteFind trys to throw ConvertADOAccessException but throws NullReferenceException
+[SPRNET-1212] - NamespaceParserRegistry: System.UriFormatException: Invalid
+[SPRNET-1214] - Constructor arguments not merged correctly from the parent object
+[SPRNET-1226] - BaseCacheAttribute does not allow null key
+[SPRNET-1227] - TypeLoadException when using methods with type parameters
+[SPRNET-1248] - Request is not available in this context
+[SPRNET-1249] - HibernateTemplate 1.3rc + NH21 AST parser -- type guessing on params not working
+[SPRNET-1256] - DefaultAdvisorAutoProxyCreator should cache FindCandidateAdvisors() list on a per-type basis
+[SPRNET-1258] - ResourceConverterTests fail if a user has a file called foo.txt in their home folder
+[SPRNET-1262] - Should create right CustomAttributeBuilder for proxies
+[SPRNET-1264] - Exception EnterpriseServiceExporter 
+[SPRNET-1271] - Spring.Web.Support.HandlerMap
+[SPRNET-1277] - Wellknown Namespacesparsers don't get loaded automatically without prior explicit registration
+[SPRNET-1284] - IL code generation can result in System.BadImageFormatException in Windows 2008
+[SPRNET-1289] - A target retrieved from a dynamic target source, is not entirely thread safe, e.g.ThreadLocalTargetSource
+[SPRNET-1306] - Exception parsing concurrency attribute in ems listener-container config
+[SPRNET-1307] - TransactionPropagation.NotSupported should run with new TransactionScopeOption.Suppress 
+[SPRNET-1308] - Received error: ObjectCurrentlyInCreationException ("FactoryObject which is currently in creation returned null from GetObject.")
+[SPRNET-1309] - Cannot load saoFactory using the new synthax
+[SPRNET-1312] - DbProvider configuration references renamed property
+[SPRNET-1314] - AttributeMatchMethodPointcut should support explicitly implemented interfaces
+[SPRNET-1315] - make dependant objects dispose in a certain order
+[SPRNET-1317] - CLONE -Should create right CustomAttributeBuilder for proxies
+[SPRNET-1322] - Support proxying internal interfaces with InternalsVisibleTo attribute and Strong-Named assemblies
+[SPRNET-1323] - Fix WebServiceExporter to allow type-based auto-wiring and auto-proxying
+[SPRNET-1325] - Regular expression method pointcut does not support generics
+[SPRNET-1329] - NullReferenceException using Spring.Web.Services.WebServiceExporter with Mono
+[SPRNET-1330] - AbstractObjectFactory: nestingCount causes exceptions in a multithreaded environment
+[SPRNET-1332] - StackOverFlow when processing messages that take a long time to complete in MSMQ integration
+[SPRNET-1335] - MultiDelegatingDbProvider CreateCommandBuilder returns IDbDataAdapter instead of DbCommandBuilder
+[SPRNET-1337] - Locking up object method under multi-threaded
+[SPRNET-1346] - Collection merging fails when doing DI on HTTP modules
+[SPRNET-1355] - TypeAlias usage with other IObjectFactoryPostProcessor object definitions not working.
+[SPRNET-1356] - Introduce IPriorityOrdered interface to ensure correct ordering among IObjectFactoryPostProcessors
+[SPRNET-1357] - TransientDataAccessResourceCodes node cannot be resolved for the specified context [Spring.Data.Common.ErrorCodes]
+[SPRNET-1361] - documentation refers to nonexistent methods
+[SPRNET-1368] - CacheResultAdvice may return incompatible objects
+[SPRNET-1369] - NmsTemplate was not attempting to start the connection when calling RecieveAndConvert
+[SPRNET-1371] - CachedAopProxyFactory doesn't take into account the ProxyTargetAttributes property for cache key generation
+[SPRNET-1377] - Attribute 'expression' for 'regex' element in the validation schema is not parsed correctly
+[SPRNET-1379] - Enterprise Services Exporter sample application no longer runs
+[SPRNET-1380] - NHibernate 2.1.2 leaks connections on TX ROLLBACK if (System.Transactions)TransactionScope is used
+[SPRNET-1381] - short-circuit evaluation of logic operators in SpEL
+[SPRNET-1398] - Command timeout can't be set to infinite value
+
+Improvement
+[SPRNET-577] - Allow for registration of custom parsers in COM+ components
+[SPRNET-579] - Add NHibernate DAO implementation to SpringAir example application
+[SPRNET-791] - Logging of parameter values in AdoTemplate, in particular on exception.
+[SPRNET-987] - entry key should work with property configurer
+[SPRNET-1042] - Specify location of additional DbProvider definitions in Spring XML database namespace
+[SPRNET-1101] - Exception translation for NHibernate ADOException can be improved.
+[SPRNET-1119] - Support type alias resolution in <value/> element
+[SPRNET-1180] - Document use of HttpApplicationConfigurer.ApplicationTemplate for configuring HttpApplication instances
+[SPRNET-1232] - Document how to support for using Fluent NHibernate in LocalSessionFactoryObject
+[SPRNET-1268] - Exceptions in Spring should pass tests to ensure compliance with .NET framework guidelines.
+[SPRNET-1297] - DictionaryVariableSource cannot be initialized from an IDictionary
+[SPRNET-1304] - Lack of error code information in translated exceptions
+[SPRNET-1310] - Update to use Apache NMS 1.3
+[SPRNET-1320] - Add partial (InProc SxS) support for .NET 4.0 Framework
+[SPRNET-1340] - MethodInvokingJobDetailFactoryObject does not set the result in JobContext
+[SPRNET-1341] - CronTriggerObject start delay support
+[SPRNET-1342] - Quartz scheduler should not start until context is refreshed
+[SPRNET-1358] - Allow for ignoring of resources not found in PropertyFileVariableSource
+[SPRNET-1360] - DynamicProxyManager Attempted Construction of Multiple instances of types with same names results in unhelpful exception
+[SPRNET-1362] - Spring.EmsQuickStart contain generate-classes.bat puts in namespace for Spring.NmsQuickStart
+[SPRNET-1364] - DEBUG_DYNAMICX instead of DEBUG_DYNAMIC in debug VS2008 configuration of Spring.Core.2008
+[SPRNET-1366] - Allow for configuration of UTF8 preamble generation and the check for invalid bytes in XmlMessageConverter.
+[SPRNET-1367] - Remove dependency of unit tests on DotNetMock framework
+[SPRNET-1370] - Add 'when' condition to the Reference Validator
+[SPRNET-1375] - Update to ActiveMQ NMS 1.4.1
+[SPRNET-1390] - Allow for dependency injection on object returned from TIBCO EMS's JndiLookupFactoryObject
+[SPRNET-1392] - Introduce Changes to support Code-Based Configuration in the Core container infrastructure
+[SPRNET-1394] - Update Spring.Data.NHibernate to support NH3.0 GA
+
+New Feature
+[SPRNET-1301] - Provide support for switching among multiple databases at runtime when using NHibernate
+[SPRNET-1324] - Add namespace parser for WCF integration
+[SPRNET-1343] - Provide initial ASPNET MVC Integration for core DI capabilites
+[SPRNET-1354] - Add support for DI using WCF's WebServiceHostFacotory
+[SPRNET-1359] - Upgrade Quartz.NET to version 1.0.3
+[SPRNET-1372] - Provide Native .NET 4 compilation assemblies
+[SPRNET-1389] - Update to Apache.NMS.ActiveMQ 1.4.1
+[SPRNET-1393] - NHibernate 3.0 support
+
+Task
+[SPRNET-754] - Investigate calling of oracle functions with StoredProcedure class
+[SPRNET-1096] - Show example configuraiton using TxScopeTransactionMansager with NHibernate
+[SPRNET-1199] - Documentation error about AdoQuery
+[SPRNET-1250] - Document use of  'DelegatingLocalSessionFactoryObject' and 'UserCredentialsDbProvider'
+[SPRNET-1269] - Time based test in NHibernate.Test failed on bamboo CI machine
+[SPRNET-1311] - Update 'intro-modules' section to refer to all current modules.
+[SPRNET-1313] - MessageQueueGatewaySupport.cs is not included in the project, but present in directory.
+[SPRNET-1316] - Correct typo in Spring.Data documentation
+[SPRNET-1319] - Add VS2008 solutions/projects for all examples
+[SPRNET-1321] - Add MySql 6.2.2 ado.net provider
+[SPRNET-1327] - Fix build configuration to link .NET 3.5 build with Quartz.NET 3.5 libraries
+[SPRNET-1336] - Update documentation for MultiDelegatingDbProvider to show preferred way to set DbProvider name and notes for (not) using with NHibernate.
+[SPRNET-1353] - Support System.Transactions with NHibernate Session Management
+[SPRNET-1365] - Update to ActiveMQ NMS 1.4
+[SPRNET-1378] - SQLite requires different assembly to support x64 platforms
+[SPRNET-1382] - Document HibernateTxScopeTransactionManager
+[SPRNET-1384] - Add .NET 3.5 and .NET 4.0 builds to build script
+[SPRNET-1395] - Verify VS2003 SLN file compiles
+[SPRNET-1396] - Add Spring.Web.Mvc to build output targets
+[SPRNET-1397] - update version references for VS2008 templates in dev-support\vs.net-2008\templates\
+[SPRNET-1399] - Add missing LICENSE header to several new files
+[SPRNET-1401] - Add documentation for Spring.Web.Mvc
+[SPRNET-1402] - Add documentation for LocalDelegatingSessionFactoryObject for NH
+[SPRNET-1403] - Fix build configuration to link .NET 3.5 build with System.Web.Extensions 3.5 libraries
+[SPRNET-1404] - Add custom ActionInvoker to SpringControllerFactory impl
+
+
 Release Version 1.3.0 December 17, 2009
 
 Release Notes - Spring.NET - Version 1.3.0

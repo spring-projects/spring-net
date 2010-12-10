@@ -187,7 +187,7 @@ There are four solution file for different version of VS.NET
 * Spring.Net.2010.sln for use with VS.NET 2010
 
 Note:
-When building on Vista with activated UAC, you might get an error:
+When building on Vista/Windows7 with activated UAC, you might get an error:
 
 xcopy
 "C:\Spring.Net\Spring.NET-1.3.0\Spring.NET\test\Spring\Spring.Core.Tests\Spring.Core.Tests.dll.config"

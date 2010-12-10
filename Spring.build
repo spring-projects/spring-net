@@ -477,7 +477,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
-    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (not nant.settings.currentframework == 'net-1.1')}"/>
+    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and nant.settings.currentframework != 'net-1.1'}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
@@ -510,7 +510,7 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
-    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and not nant.settings.currentframework == 'net-1.1'}"/>
+    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and nant.settings.currentframework != 'net-1.1'}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
