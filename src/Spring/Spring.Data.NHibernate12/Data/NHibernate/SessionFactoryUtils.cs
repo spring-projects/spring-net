@@ -402,6 +402,39 @@ namespace Spring.Data.NHibernate
         #endregion
 
         /// <summary>
+        /// Converts a Hibernate ADOException to a Spring DataAccessExcption, extracting the underlying error code from 
+        /// ADO.NET.  Will extract the ADOException Message and SqlString properties and pass them to the translate method
+        /// of the provided IAdoExceptionTranslator.
+        /// </summary>
+        /// <param name="translator">The IAdoExceptionTranslator, may be a user provided implementation as configured on
+        /// HibernateTemplate.
+        /// </param>
+        /// <param name="ex">The ADOException throw</param>
+        /// <returns>The translated DataAccessException or UncategorizedAdoException in case of an error in translation
+        /// itself.</returns>
+        public static DataAccessException ConvertAdoAccessException(IAdoExceptionTranslator translator, ADOException ex)
+        {
+            try
+            {
+                string sqlString = (ex.SqlString != null)
+                                       ? ex.SqlString.ToString()
+                                       : string.Empty;
+                return translator.Translate(
+                    "Hibernate operation: " + ex.Message, sqlString, ex.InnerException);
+            } catch (Exception e)
+            {
+                log.Error("Exception thrown during exception translation. Message = [" + e.Message + "]", e);
+                log.Error("Exception that was attempted to be translated was [" + ex.Message + "]", ex);                
+                if (ex.InnerException != null)
+                {
+                    log.Error("  Inner Exception was [" + ex.InnerException.Message + "]", ex.InnerException);
+                }
+                throw new UncategorizedAdoException(e.Message, "", "", e);
+            }
+
+        }
+
+        /// <summary>
         /// Convert the given HibernateException to an appropriate exception from the
         /// <code>Spring.Dao</code> hierarchy. Note that it is advisable to
         /// handle AdoException specifically by using a AdoExceptionTranslator for the

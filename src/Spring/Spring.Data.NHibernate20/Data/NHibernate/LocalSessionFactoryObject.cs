@@ -1062,11 +1062,7 @@ namespace Spring.Data.NHibernate
         /// </returns>
         protected virtual DataAccessException ConvertAdoAccessException(ADOException ex)
         {
-
-            string sqlString = (ex.SqlString != null) ? ex.SqlString.ToString() : string.Empty;
-            return AdoExceptionTranslator.Translate(
-                "Hibernate operation: " + ex.Message, sqlString, ex.InnerException);
-
+            return SessionFactoryUtils.ConvertAdoAccessException(AdoExceptionTranslator, ex);            
         }
 
 	    #endregion
