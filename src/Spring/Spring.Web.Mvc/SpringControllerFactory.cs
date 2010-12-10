@@ -61,8 +61,14 @@ namespace Spring.Web.Mvc
             }
         }
 
-
-
+        /// <summary>
+        /// Gets or sets the name of the application context.
+        /// </summary>
+        /// <remarks>
+        /// Defaults to using the root (default) Application Context.
+        /// </remarks>
+        /// <value>The name of the application context.</value>
+        public static string ApplicationContextName { get; set; }
 
         /// <summary>
         /// Creates the specified controller by using the specified request context.
@@ -74,21 +80,21 @@ namespace Spring.Web.Mvc
         /// <exception cref="T:System.ArgumentException">The <paramref name="controllerName"/> parameter is null or empty.</exception>
         public override IController CreateController(RequestContext requestContext, string controllerName)
         {
+            IController controller;
+
             if (ApplicationContext.ContainsObjectDefinition(controllerName))
-                return ApplicationContext.GetObject(controllerName) as IController;
+            {
+                controller = ApplicationContext.GetObject(controllerName) as IController;
+            }
+            else
+            {
+                controller = base.CreateController(requestContext, controllerName);
+            }
 
-            return base.CreateController(requestContext, controllerName);
+            AddActionInvokerTo(controller);
+
+            return controller;
         }
-
-
-        /// <summary>
-        /// Gets or sets the name of the application context.
-        /// </summary>
-        /// <remarks>
-        /// Defaults to using the root (default) Application Context.
-        /// </remarks>
-        /// <value>The name of the application context.</value>
-        public static string ApplicationContextName { get; set; }
 
         /// <summary>
         /// Retrieves the controller instance for the specified request context and controller type.
@@ -103,17 +109,40 @@ namespace Spring.Web.Mvc
         /// <exception cref="T:System.InvalidOperationException">An instance of <paramref name="controllerType"/> cannot be created.</exception>
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
+            IController controller = null;
+
             if (controllerType != null)
             {
                 var controllers = ApplicationContext.GetObjectsOfType(controllerType);
                 if (controllers.Count > 0)
                 {
-                    return (IController)controllers.Cast<DictionaryEntry>().First<DictionaryEntry>().Value;
+                    controller = (IController)controllers.Cast<DictionaryEntry>().First<DictionaryEntry>().Value;
                 }
             }
+            else
+            {
+                //pass to base class for remainder of handling if can't find it in the context
+                controller = base.GetControllerInstance(requestContext, controllerType);
+            }
 
-            //pass to base class for remainder of handling if can't find it in the context
-            return base.GetControllerInstance(requestContext, controllerType);
+            AddActionInvokerTo(controller);
+
+            return controller;
+        }
+
+        /// <summary>
+        /// Adds the action invoker to the controller instance.
+        /// </summary>
+        /// <param name="controller">The controller.</param>
+        protected virtual void AddActionInvokerTo(IController controller)
+        {
+            if (controller == null)
+                return;
+
+            if (typeof(Controller).IsAssignableFrom(controller.GetType()))
+            {
+                ((Controller)controller).ActionInvoker = new SpringActionInvoker(ApplicationContext);
+            }
         }
 
     }

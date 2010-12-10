@@ -56,6 +56,7 @@
     <Compile Include="Context\Support\MvcApplicationContext.cs" />
     <Compile Include="Context\Support\MvcApplicationContextArgs.cs" />
     <Compile Include="Context\Support\MvcContextHandler.cs" />
+    <Compile Include="SpringActionInvoker.cs" />
     <Compile Include="SpringControllerFactory.cs" />
     <Compile Include="SpringMvcApplication.cs" />
   </ItemGroup>

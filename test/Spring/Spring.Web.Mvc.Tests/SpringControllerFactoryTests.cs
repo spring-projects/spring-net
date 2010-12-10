@@ -41,8 +41,10 @@ namespace Spring.Web.Mvc.Tests
     public class SpringControllerFactoryTests
     {
         private MvcApplicationContext _context;
-        private MvcApplicationContext _mvcNamedContext;
+
         private SpringControllerFactory _factory;
+
+        private MvcApplicationContext _mvcNamedContext;
 
         [SetUp]
         public void _TestSetup()
@@ -65,16 +67,8 @@ namespace Spring.Web.Mvc.Tests
                 typeof(NotInContainerController),
                 typeof(NamedContextController),
             });
-        }
 
-        [Test]
-        public void ProperlyResolvesCaseInsensitiveControllerNames()
-        {
-            IController pascalcaseController = _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "FirstContainerRegistered");
-            IController lowercaseController = _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "firstcontainerregistered");
-
-            Assert.AreEqual(typeof(FirstContainerRegisteredController), pascalcaseController.GetType());
-            Assert.AreEqual(typeof(FirstContainerRegisteredController), lowercaseController.GetType());
+            SpringControllerFactory.ApplicationContextName = string.Empty;
         }
 
         [Test]
@@ -84,6 +78,11 @@ namespace Spring.Web.Mvc.Tests
             Assert.AreEqual("Should_Be_Matched_By_Id", ((FirstContainerRegisteredController)controller).TestValue);
         }
 
+        [Test]
+        public void CanRetrieveControllersNotRegisteredWithContainer()
+        {
+            _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "NotInContainer");
+        }
 
         [Test]
         public void CanRevertToTypeMatchIfIdMatchUnsuccessful()
@@ -98,14 +97,6 @@ namespace Spring.Web.Mvc.Tests
             Assert.AreEqual("Should_Be_Matched_By_Type", ((FirstContainerRegisteredController)controller).TestValue);
         }
 
-
-        [Test]
-        public void CanRetrieveControllersNotRegisteredWithContainer()
-        {
-            _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "NotInContainer");
-        }
-
-
         [Test]
         public void CanUseNamedContextToResolveController()
         {
@@ -114,5 +105,16 @@ namespace Spring.Web.Mvc.Tests
 
             Assert.NotNull(controller);
         }
+
+        [Test]
+        public void ProperlyResolvesCaseInsensitiveControllerNames()
+        {
+            IController pascalcaseController = _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "FirstContainerRegistered");
+            IController lowercaseController = _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "firstcontainerregistered");
+
+            Assert.AreEqual(typeof(FirstContainerRegisteredController), pascalcaseController.GetType());
+            Assert.AreEqual(typeof(FirstContainerRegisteredController), lowercaseController.GetType());
+        }
+
     }
 }
