@@ -468,7 +468,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Core/Spring.Core.build" target="build" />
     <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop}"/>
     <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web}"/>
-    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
 	<nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
@@ -477,7 +477,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
-    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (nant.settings.currentframework == 'net-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and (not nant.settings.currentframework == 'net-1.1')}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
@@ -510,7 +510,7 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
-    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and nant.settings.currentframework == 'net-2.0'}"/>
+    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and not nant.settings.currentframework == 'net-1.1'}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
@@ -1021,9 +1021,9 @@ Commandline Examples:
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
 
     <!-- net-1.0 dropped since 1.3.0 -->
-<!--
+
 	<call target="${nant.target.root.name}-1.1" />
--->
+
     <call target="${nant.target.root.name}-2.0" />
 
     <call target="${nant.target.root.name}-3.0" />
