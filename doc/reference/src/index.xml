@@ -20,6 +20,7 @@
   <!ENTITY scheduling           SYSTEM "scheduling.xml">
   <!ENTITY templating           SYSTEM "templating.xml">
   <!ENTITY web                  SYSTEM "web.xml">
+  <!ENTITY web-mvc              SYSTEM "web-mvc.xml">
   <!ENTITY ajax                 SYSTEM "ajax.xml">
   <!ENTITY services             SYSTEM "services.xml">
   <!ENTITY webservices          SYSTEM "webservices.xml">
@@ -277,10 +278,14 @@
         <listitem>
           <xref linkend="ajax" />
         </listitem>
+		<listitem>
+          <xref linkend="web-mvc" />
+        </listitem>
       </itemizedlist>
     </partintro>
     &web;
     &ajax;
+	&web-mvc;
   </part>
   <part xml:id="spring-services">
     <title>Services</title>
