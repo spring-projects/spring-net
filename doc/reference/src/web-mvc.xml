@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright 2002-2010 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<chapter version="5" xml:id="web-mvc" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Spring.NET ASP.NET MVC Infrastructure</title>
+
+  <sect1 xml:id="web-mvc-introduction">
+    <title>Introduction to Spring.NET ASP.NET MVC Infrastructure</title>
+
+    <para>The Spring.NET for ASP.NET MVC Infrastructure increases your
+    productivity when you write ASP.NET MVC 2.0 applications by making the
+    full power of the Spring.NET framework available to your MVC
+    projects.</para>
+
+    <para>Highlights of the Spring.NET for ASP.NET MVC Infrastructure (also
+    referred to in this document as Spring.Web.Mvc) are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Dependency Injection of Controllers and ActionFilters. <!--GLOBAL: In pdf, these links are not highlighted in any way, so the reader does not know to click on them. Can we fix this?-->ASP.NET
+        MVC 2.0 provides two primary extensbility points for Dependency
+        Injection: <literal>Controllers</literal> and
+        <literal>ActionFilters</literal>. Spring.Web.Mvc makes it extremely
+        simple to inject dependencies into either your MVC
+        <literal>Controllers</literal> or <literal>ActionFilters</literal>.
+        Simply register your <literal>Controllers</literal> and
+        <literal>ActionFilters</literal> with the context using any one of the
+        typical object definition approaches supported by Spring.NET and the
+        Spring.Web.Mvc infrastructure will ensure these objects are assembled
+        correctly when the ASP.NET MVC run-time has need of them.</para>
+      </listitem>
+
+      <listitem>
+        <para><link linkend="web-mvc-objectscope">Web object scopes</link>.
+        Just as with the Spring.NET Web Infrastructure for ASP.NET Webforms,
+        Spring.Web.Mvc objects can be defined at the application, session, or
+        request scope. This capability makes it easy to inject, for example, a
+        session scoped shopping cart, into your controllers without any lower
+        level programming.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Spring.NET distribution ships with a Web.Mvc Quick Start
+    application. The Web.Mvc QuickStart is the best way to see how to
+    integrate Spring.Web.Mvc into your own ASP.NET MVC applications.</para>
+  </sect1>
+
+  <sect1 xml:id="web-mvc-contexts">
+    <title>Automatic context loading and hierarchical contexts</title>
+
+    <sect2 xml:id="web-mvc-configuration">
+      <title>Configuration of a ASP.NET MVC Application</title>
+
+      <para>Spring.Web.Mvc builds on top of the Spring.NET IoC container.
+      <literal>Controllers</literal> and <literal>ActionFilters</literal> that
+      make up a typical Spring.Web.Mvc-enabled application are configured with
+      the same standard Spring.NET XML configuration syntax used for non web
+      objects. To integrate with the ASP.NET MVC runtime you need to make a
+      few modifications to your <literal>Web.config</literal> file and your
+      <literal>Global.asax</literal>.</para>
+
+      <para>The instantiation and configuration of the Spring.NET IoC
+      container by the Spring.Web.Mvc infrastructure is wholly transparent to
+      application developers, who typically never have to explicitly
+      instantiate and configure an IoC container manually (by, for example,
+      using the <literal>new</literal> operator in C#). To effect the
+      transparent bootstrapping of the IoC container, you need to modify the
+      primary <literal>Application</literal> class in the
+      <literal>Global.asax</literal> so as to derive it from the special
+      <literal>SpringMvcApplication</literal> class as shown in the following
+      snippet:</para>
+
+      <programlisting language="csharp">    public class MvcApplication : SpringMvcApplication
+    {
+        
+    }
+</programlisting>
+
+      <para>Note that the <literal>SpringMvcApplication</literal> class is
+      abstract so that developers may only use it indirectly as a superclass
+      of their own global application class in the
+      <literal>Global.asax</literal> of their ASP.NET MVC applications.</para>
+
+      <para>After the <literal>Global.asax</literal> is modified as indicated
+      above, you also need to define a root application context by adding a
+      Spring.NET configuration section to your <literal>Web.config</literal>
+      file. The final configuration file should resemble the following; your
+      exact configuration may vary in particulars and the following snippet
+      illustrates only the Spring-specfic entries and excludes the remainder
+      of the content (typically) required by ASP.NET MVC.</para>
+
+      <programlisting language="myxml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;configuration&gt;
+
+    &lt;configSections&gt;
+        &lt;sectionGroup name="spring"&gt;
+          &lt;section name="context" type="Spring.Context.Support.MvcContextHandler, Spring.Web.Mvc"/&gt;
+        &lt;/sectionGroup&gt;
+    &lt;/configSections&gt;
+
+    &lt;spring&gt;
+        &lt;context&gt;
+            &lt;resource uri="~/Config/Controllers.xml"/&gt;
+            &lt;resource uri="~/Config/Filters.xml"/&gt;
+            &lt;resource uri="~/Config/Production/Services.xml"/&gt;
+            &lt;resource uri="~/Config/Production/Dao.xml"/&gt;
+        &lt;/context&gt;
+    &lt;/spring&gt;
+
+&lt;/configuration&gt;
+</programlisting>
+
+      <para>Notes about the preceding configuration:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Define a custom configuration section handler for the
+          <literal>&lt;context</literal><code>&gt;</code> element. If you use
+          Spring.NET for many applications on the same web server, it might be
+          easier to move the whole definition of the Spring.NET section group
+          to your <literal>machine.config</literal> file.</para>
+        </listitem>
+
+        <listitem>
+          <para>The custom configuration section handler is of the type
+          <literal>Spring.Context.Support.MvcContextHandler</literal> which in
+          turn instantiates an IoC container of the type
+          <literal>Spring.Context.Support.MvcApplicationContext</literal>.
+          This ensures that all features provided by Spring.Web.Mvc, such as
+          request and session-scoped object definitions, are handled
+          properly.</para>
+        </listitem>
+
+        <listitem>
+          <para>Within the <code>&lt;spring&gt;</code> element, define a root
+          context element. Next, specify resource locations that contain the
+          object definitions that are used within the web application (such as
+          service or business tier objects) as child elements within the
+          <classname>&lt;context&gt;</classname> element. Object definition
+          resources can be fully-qualified paths or URLs, or non-qualified, as
+          in the example above. Non-qualified resources are loaded using the
+          default resource type for the context, which for the
+          <literal>MvcApplicationContext</literal> is the
+          <literal>WebResource</literal> type.</para>
+        </listitem>
+
+        <listitem>
+          <para>The object definition resources do not have to be the same
+          resource type (for example, all <literal>file://</literal>, all
+          <literal>http://</literal>, all <literal>assembly://</literal>, and
+          so on). This means that you can load some object definitions from
+          resources embedded directly within application assemblies
+          (<literal>assembly://</literal>) while continuing to load other
+          object definitions from web resources that can be more easily
+          edited.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+
+    <sect2>
+      <title>Customizing the Behavior of the ASP.NET MVC Application
+      Class</title>
+
+      <para>The default behavior, settings, ASP.NET MVC start-up related and
+      Spring.NET container-configuration behaviors can be modified and
+      controlled by overriding various methods of the
+      <literal>SpringMvcApplication</literal> in your own derived instance.
+      The following section describes these overridable methods and their
+      existing behavior provided in the base
+      <literal>SpringMvcApplication</literal> class. Please note that if you
+      choose to override any of these methods and do not subsequently invoke
+      the base <literal>SpringMvcApplication</literal> class' implementation
+      of that same method, then you are completely responsible for ensuring
+      that the underlying reponsibilities of that method in the base class are
+      satisfied by your overloaded implementation. Without either ensuring
+      this or invoking the base class implementation within your overridden
+      method, the underlying behavior of the ASP.NET MVC runtime (and its
+      integration with Spring.NET) is unlikley to function as intended.</para>
+
+      <sect3 xml:id="mvc-application-start-method">
+        <title>Application_Start(object sender, EventArgs e)</title>
+
+        <para>This method is provided by the Microsoft base
+        <literal>HttpApplication</literal> class and is overridden in the
+        <literal>SpringMvcApplication</literal> base class to be responsible
+        for invoking the <link
+        linkend="mvc-register-routes-method"><literal>RegisterRoutes()</literal></link>
+        and <link
+        linkend="mvc-register-areas-method"><literal>RegisterAreas()</literal></link>
+        methods. If you choose to override the
+        <literal>Application_Start()</literal> implementation of the
+        <literal>SpringMvcApplication</literal> class in your own
+        implementation, ensure that you either call
+        <literal>base.Application_Start()</literal> or explicitly invoke both
+        the <literal><link
+        linkend="mvc-register-routes-method">RegisterRoutes()</link></literal>
+        and <link
+        linkend="mvc-register-areas-method"><literal>RegisterAreas()</literal></link>
+        methods within your within your override of this method.</para>
+      </sect3>
+
+      <sect3 xml:id="mvc-configure-application-context-method">
+        <title>ConfigureApplicationContext()</title>
+
+        <para>This method is invoked by the
+        <literal>SpringMvcApplication</literal> class after it has been
+        configured with all of its object definitions and other settings (as
+        detailed in <link linkend="web-mvc-configuration">Configuration of a
+        ASP.NET MVC Application)</link> but immediately prior to its being
+        handed off to the ASP.NET MVC infrastructure for its use. Overridding
+        this method provides you with your last possible moment to make any
+        additional modifications to the <literal>IApplicationContext</literal>
+        before it is put into service for the ASP.NET MVC framework's use. In
+        the <literal>SpringMvcApplication</literal> base class, this method is
+        a no-op and thus does nothing. It exists only to provide an
+        extensibility point for developers wishing to interact with the
+        <literal>IApplicationContext</literal> at this point in the
+        application startup/context configuration lifecycle.</para>
+      </sect3>
+
+      <sect3 xml:id="mvc-register-spring-controller-factory-method">
+        <title>RegisterSpringControllerFactory()</title>
+
+        <para>This method is responsible for registering the
+        <literal>SpringControllerFactory</literal> with the ASP.NET MVC
+        framework, in effect telling ASP.NET MVC "please use the
+        <literal>SpringControllerFactory</literal> to create
+        <literal>Controllers</literal>." This is the manner in which the
+        Spring.NET container is subsequently invoked to satisfy dependencies
+        on <literal>Controllers</literal> when they are instantiated by
+        ASP.NET MVC in response to an Http Request. Generally, there should be
+        little need for the developer to override this method, but if you do
+        you must ensure that your either invoke the base implementation of
+        <literal>RegisterSpringControllerFactory()</literal> from within your
+        implementation or that you explicitly register the
+        <literal>SpringControllerFactory</literal> with the ASP.NET MVC
+        infrastructure yourself from witihin this method (or elsewhere at the
+        appropriate time).</para>
+      </sect3>
+
+      <sect3 xml:id="mvc-register-routes-method">
+        <title>RegisterRoutes(RouteCollection routes)</title>
+
+        <para>This method is responsible for registering ASP.NET MVC Routes
+        during application startup and is automatically invoked from within
+        the <link
+        linkend="mvc-application-start-method"><literal>Application_Start()</literal></link>
+        method in the <literal>SpringMvcApplication</literal> base class. The
+        provided implementation of this method in the
+        <literal>SpringMvcApplication</literal> class merely registers the
+        same <literal>Default</literal> route as is present in any new ASP.NET
+        MVC project that Visual Studio creates (e.g.,
+        "<literal>{controller}/{action}/{id}</literal>"). As such it is
+        expected that most developers will override this method and provide
+        their own implementation wherein they will register their own routes.
+        Unless you desire to retain the out-of-the-box
+        <literal>Default</literal> routing configuration of
+        "<literal>{controller}/{action}/{id}</literal>" it is not necessary
+        for developers to call the <literal>RegisterRoutes() </literal>method
+        of the <literal>SpringMvcApplication</literal> base class from within
+        their own overrides of this method.</para>
+      </sect3>
+
+      <sect3 xml:id="mvc-register-areas-method">
+        <title>RegisterAreas()</title>
+
+        <para>This method is responsible for registering ASP.NET MVC Areas
+        during application startup and is automatically invoked from within
+        the <link
+        linkend="mvc-application-start-method"><literal>Application_Start()</literal></link>
+        method in the <literal>SpringMvcApplication</literal> base class. The
+        provided implementation of this method in the
+        <literal>SpringMvcApplication</literal> class merely invokes
+        <literal>AreaRegistration.RegisterAllAreas()</literal> in the ASP.NET
+        MVC framework. As such, it is not common to have to override this
+        method as provided in the <literal>SpringMvcApplication</literal> base
+        class unless you desire more fine-grained control over registering
+        areas. If you choose to override this method in your own derived
+        class, you are assuming the responsibility of registering all Areas
+        with the ASP.NET MVC runtime.</para>
+      </sect3>
+    </sect2>
+  </sect1>
+
+  <sect1 xml:id="web-mvc-objectscope">
+    <title>Web object scopes</title>
+
+    <para>Spring.NET web applications support an additional attribute within
+    object definition elements that allows you to control the scope of an
+    object: <programlisting language="myxml">&lt;object id="myObject" type="MyType, MyAssembly" scope="application | session | request"/&gt;</programlisting>Possible
+    values for the scope attribute are <classname>application</classname>,
+    <classname>session,</classname> and <code>request</code>. Application
+    scope is the default, and is used for all objects with an undefined scope
+    attribute. This scope creates a single instance of an object for the
+    duration of the IIS application, so that the objects works exactly like
+    the standard singleton objects in non-web applications. Session scope
+    defines objects so that an instance is created for each HttpSession. This
+    scope is ideal for objects such as user profile, shopping cart, and so on
+    that you want bound to a single user.</para>
+
+    <para>Request scope creates one instance per HTTP request. Unlike calls to
+    prototype objects, calls to
+    <literal>IApplicationContext.GetObject</literal> return the same instance
+    of the request-scoped object during a single HTTP request. This allows
+    you, for example, to inject the same request-scoped object into multiple
+    pages and then use server-side transfer to move from one page to another.
+    As all the pages are executed within the single HTTP request in this case,
+    they share the same instance of the injected object.</para>
+
+    <para>Objects can only reference other objects that are in the same or
+    broader scope. This means that application-scoped objects can only
+    reference other application-scoped objects, session-scoped objects can
+    reference both session and application-scoped objects, and request-scoped
+    objects can reference other request-, session-, or application-scoped
+    objects. Also, prototype objects (including all ASP.NET web pages defined
+    within Spring.NET context) can reference singleton objects from any scope,
+    as well as other prototype objects.</para>
+  </sect1>
+</chapter>
