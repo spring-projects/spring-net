@@ -1,20 +1,20 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.Web.Extensions.Example.2008", "src\Spring.Web.Extensions.Example.2008\", "{DE2A587C-01A4-49E2-A3CD-664B293A8A6F}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.Web.Extensions.Example.2010", "src\Spring.Web.Extensions.Example.2010\", "{DE2A587C-01A4-49E2-A3CD-664B293A8A6F}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFramework = "3.5"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		ProjectReferences = ""
-		Debug.AspNetCompiler.VirtualPath = "/Spring.Web.Extensions.Example.2008"
-		Debug.AspNetCompiler.PhysicalPath = "src\Spring.Web.Extensions.Example.2008\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Spring.Web.Extensions.Example.2008\"
+		Debug.AspNetCompiler.VirtualPath = "/Spring.Web.Extensions.Example.2010"
+		Debug.AspNetCompiler.PhysicalPath = "src\Spring.Web.Extensions.Example.2010\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Spring.Web.Extensions.Example.2010\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/Spring.Web.Extensions.Example.2008"
-		Release.AspNetCompiler.PhysicalPath = "src\Spring.Web.Extensions.Example.2008\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Spring.Web.Extensions.Example.2008\"
+		Release.AspNetCompiler.VirtualPath = "/Spring.Web.Extensions.Example.2010"
+		Release.AspNetCompiler.PhysicalPath = "src\Spring.Web.Extensions.Example.2010\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Spring.Web.Extensions.Example.2010\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
