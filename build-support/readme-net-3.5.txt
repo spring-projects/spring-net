@@ -4,5 +4,5 @@ To use Spring.NET with .NET 3.5 use the assemblies in the bin\net\3.5\debug or b
 
 All other Spring DLLs should be taken from the directory bin\net\2.0\debug.
 
-The seesmblies in the bin\net\3.5 directory are built against Spring DLLs in the corresponding bin\net\2.0 directory.
+The Assemblies in the bin\net\3.5 directory are built against Spring DLLs in the corresponding bin\net\2.0 directory.
 

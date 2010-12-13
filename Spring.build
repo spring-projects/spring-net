@@ -472,8 +472,8 @@ Commandline Examples:
 	<nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
