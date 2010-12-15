@@ -1015,9 +1015,7 @@ Commandline Examples:
     <!-- build all binaries -->
     <call target="build-all-function"/>
     <call target="package-cvs"/>
-    <!-- disabled until change from contegix is addressed in upload targeting
 	<call target="upload-cvs-release"/>
-	-->
   </target>
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
