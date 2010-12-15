@@ -1,4 +1,4 @@
-/* Copyright © 2002-2004 by Aidant Systems, Inc., and by Jason Smith. */
+/* Copyright © 2002-2010 by Aidant Systems, Inc., and by Jason Smith. */
 
 #if NET_2_0
 
